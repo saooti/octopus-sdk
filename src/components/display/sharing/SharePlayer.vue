@@ -23,8 +23,14 @@
             <option value="default">{{$t('Default version')}}</option>
             <option value="large">{{$t('Large version')}}</option>
             <option value="emission" v-if="podcast && podcast.podcastId">{{$t('Emission version')}}</option>
-            <option value="largeEmission" v-if="podcast && podcast.podcastId">{{$t('Large emission version')}}</option>
-            <option value="largeSuggestion" v-if="podcast && podcast.podcastId">{{$t('Large suggestion version')}}</option>
+            <option
+              value="largeEmission"
+              v-if="podcast && podcast.podcastId"
+            >{{$t('Large emission version')}}</option>
+            <option
+              value="largeSuggestion"
+              v-if="podcast && podcast.podcastId"
+            >{{$t('Large suggestion version')}}</option>
           </select>
         </div>
         <div class="d-flex justify-content-between mt-3 flex-grow" >
@@ -71,7 +77,6 @@
       :embedLink="iFrame"
       :embedlyLink="iFrameSrc"
       :directLink="podcast"
-      :colorLink ="colorLink"
     ></ShareModal>
   </div>
 </template>
@@ -112,7 +117,9 @@
 import ShareModal from "../../misc/modal/ShareModal.vue";
 import { state } from "../../../store/paramStore.js";
 import Swatches from "vue-swatches";
-import "vue-swatches/dist/vue-swatches.min.css"
+import "vue-swatches/dist/vue-swatches.min.css";
+import profile from '@/api/profile';
+
 
 export default {
   props: ["podcast", "emissionId", "organisationId", "exclusive"],
@@ -120,6 +127,22 @@ export default {
   components: {
     ShareModal,
     Swatches
+  },
+
+  created() {
+    profile.fetchOrganisationAttibutes(this.$store, this.podcast.organisation.id)
+    .then(data => {
+      if(data.hasOwnProperty('COLOR')) {
+        this.color = data.COLOR;
+      } else {
+        this.color = "#50b684";
+      }
+      if(data.hasOwnProperty('THEME')) {
+        this.theme = data.THEME;
+      } else {
+        this.theme = "#ffffff";
+      }
+    })
   },
 
   data() {
@@ -150,6 +173,7 @@ export default {
     authenticated() {
       return state.generalParameters.authenticated;
     },
+
     iFrameSrc() {
       let url = "";
       if (!this.podcast) {
@@ -196,31 +220,43 @@ export default {
 
     iFrameHeight() {
       switch (this.iFrameModel) {
-        case 'large':
-          if(this.podcast){
-            return '180px';
-          } else{
-            switch(this.iFrameNumberPriv){
-              case "1": return '185px';
-              case "2": return '240px';
-              case "3": return '290px';
-              case "4": return '345px';
-              case "5": return '390px';
-              default: return '435px';
+        case "large":
+          if (this.podcast) {
+            return "180px";
+          } else {
+            switch (this.iFrameNumberPriv) {
+              case "1":
+                return "185px";
+              case "2":
+                return "240px";
+              case "3":
+                return "290px";
+              case "4":
+                return "345px";
+              case "5":
+                return "390px";
+              default:
+                return "435px";
             }
           }
-        case 'largeEmission':
-        case 'largeSuggestion':
-          switch(this.iFrameNumberPriv){
-            case "1": return '260px';
-            case "2": return '315px';
-            case "3": return '365px';
-            case "4": return '420px';
-            case "5": return '465px';
-            default: return '510px';
+        case "largeEmission":
+        case "largeSuggestion":
+          switch (this.iFrameNumberPriv) {
+            case "1":
+              return "260px";
+            case "2":
+              return "315px";
+            case "3":
+              return "365px";
+            case "4":
+              return "420px";
+            case "5":
+              return "465px";
+            default:
+              return "510px";
           }
-        case 'emission':
-          return '530px';
+        case "emission":
+          return "530px";
         default:
           if (this.podcast) {
             return "520px";
@@ -235,6 +271,7 @@ export default {
     }
   },
 
-  methods: {}
+  methods: {},
+
 };
 </script>
