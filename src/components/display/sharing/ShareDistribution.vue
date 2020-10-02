@@ -16,6 +16,9 @@
       <router-link v-bind:to="'/main/priv/distribution/tuneIn/' + emissionId" class="text-dark">
         <span class="saooti-tunin"/>TuneIn
       </router-link>
+    <router-link v-bind:to="'/main/priv/distribution/audioNow/' + emissionId" class="text-dark">
+      <span class="saooti-audioNow"/>Audio Now
+    </router-link>
       <router-link v-bind:to="'/main/priv/distribution/tootak/' + emissionId" class="text-dark">
         <span class="saooti-tootak"/>Tootak
       </router-link>
