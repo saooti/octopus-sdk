@@ -89,7 +89,7 @@ export default {
       resetRubriquage: false,
       includeHidden : false,
       sortEmission : 'LAST_PODCAST_DESC',
-      noRubrique: false,
+      noRubrique: true,
     };
   },
 

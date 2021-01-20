@@ -1,5 +1,5 @@
 <template>
-  <li class="mt-3" :class="lightItems? 'noList emission-light-max-size':'emission-item-container shadow-element'">
+  <li class="mt-3" :class="lightItems? 'noList emission-light-max-size':'emission-item-container shadow-element'" v-if="activeEmission || editRight">
     <router-link 
     :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
     :aria-label="$t('Emission')"
@@ -15,7 +15,7 @@
       :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
       class="text-dark">
         <div class="emission-name" v-if="!lightItems">
-        <img class="icon-caution" src="/img/caution.png" v-if="!activeEmission && !isPodcastmaker" :title="$t('Emission have not podcasts')"/>{{ name }}</div>
+        <img class="icon-caution" src="/img/caution.png" v-if="!activeEmission && !isPodcastmaker && editRight" :title="$t('Emission have not podcasts')"/>{{ name }}</div>
         <div class="emission-description" :class="lightItems?'emission-small-description':''" v-html="description">{{ description }}</div>
       </router-link>
       <div class="flex-grow"></div>
@@ -180,8 +180,12 @@ export default {
 
    methods:{
     async hasPodcast(){
-      const data = await octopusApi.fetchPodcasts({emissionId: this.emission.emissionId,});
-      if(data.count === 0 && this.editRight){
+      const data = await octopusApi.fetchPodcasts({
+        emissionId: this.emission.emissionId,
+        first: 0,
+        size: 0,
+        });
+      if(data.count === 0){
         this.activeEmission = false;
       }
     }

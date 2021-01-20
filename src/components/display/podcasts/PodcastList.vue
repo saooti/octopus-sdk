@@ -81,7 +81,7 @@ export default {
     after: {default:undefined},
     includeHidden:{default:false},
     showCount:{default:false},
-    noRubrique:{default:false},
+    noRubrique:{default:true},
     sortCriteria:{default:undefined}
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <li class="mt-3 emission-item-container shadow-element">
+  <li class="mt-3 emission-item-container shadow-element" v-if="editRight || activePlaylist">
     <router-link 
     :to="{ name: 'playlist', params: {playlistId:playlist.playlistId}, query:{productor: $store.state.filter.organisationId}}"
     :aria-label="$t('Playlist')"

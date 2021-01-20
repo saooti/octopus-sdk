@@ -1,5 +1,5 @@
 <template>
-  <li class="participant-item-container" v-if="participant">
+  <li class="participant-item-container" v-if="participant && (activeParticipant || editRight)">
     <router-link 
     :to="{ name: 'participant', params: {participantId:participant.participantId}, query:{productor: $store.state.filter.organisationId}}"
     class="mt-3"
@@ -10,7 +10,7 @@
     :to="{ name: 'participant', params: {participantId:participant.participantId}, query:{productor: $store.state.filter.organisationId}}"
     class="text-dark mt-3">
       <div class="participant-name">
-      <img src="/img/caution.png" class="icon-caution" v-if="!activeParticipant && !isPodcastmaker" :title="$t('Participant have not podcasts')"/>{{ name }}</div>
+      <img src="/img/caution.png" class="icon-caution" v-if="!activeParticipant && !isPodcastmaker && editRight" :title="$t('Participant have not podcasts')"/>{{ name }}</div>
       <div class="description-fade" :class="description? '': 'description-fade-hid'" v-html="description">{{ description }}</div>
     </router-link>
     <router-link 
@@ -109,8 +109,10 @@ export default {
     async hasPodcast(){
       const data = await octopusApi.fetchPodcasts({
         participantId: this.participant.participantId,
+        first:0,
+        size:0,
       });
-      if(data.count === 0 && this.editRight){
+      if(data.count === 0){
         this.activeParticipant = false;
       }
     }

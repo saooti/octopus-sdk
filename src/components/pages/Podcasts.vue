@@ -94,7 +94,7 @@ export default {
       toDate: undefined,
       resetRubriquage: false,
       includeHidden : false,
-      noRubrique: false,
+      noRubrique: true,
       sortCriteria : 'DATE',
     };
   },
