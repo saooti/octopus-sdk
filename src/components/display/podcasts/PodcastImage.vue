@@ -6,7 +6,7 @@
   >
   <div class="live-image-status" :class="fetchConference && fetchConference!=='null' ? fetchConference.status.toLowerCase()+'-bg' : ''" v-if="fetchConference">{{statusText}}</div>
   <div class="live-image-status recording-bg" v-if="isRecordedInLive">{{"Enregistré en live"}}</div>
-  <template v-if="podcast && (podcast.availability.visibility || (podcast.processingStatus === 'READY_TO_RECORD'))&& !isLiveToBeRecorded">
+  <template v-if="podcast && (podcast.availability.visibility  && (podcast.processingStatus === 'READY_TO_RECORD' || podcast.processingStatus === 'READY'))&& !isLiveToBeRecorded">
     <div class="podcast-image-play-button" v-on:click="play" v-if="hidePlay || recordingLive">
       <div class="icon-container">
         <div

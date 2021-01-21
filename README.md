@@ -360,6 +360,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.21.35 - 0.21.39 Comment number
 
  * 0.22.0 Nouveau sprint
+ * 0.22.3 Condition épisode en erreur
 
 
 
