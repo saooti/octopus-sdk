@@ -361,6 +361,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
  * 0.22.0 Nouveau sprint
  * 0.22.3 Condition épisode en erreur
+ * 0.22.4 Api
+
 
 
 

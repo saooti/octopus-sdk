@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "0.22.3",
+  "version": "0.22.4",
   "description": "Javascript SDK for using octopus",
   "main": "./dist/octopus.common.js",
   "private": false,
@@ -21,7 +21,7 @@
     "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js"
   },
   "dependencies": {
-    "@saooti/octopus-api": "0.0.29",
+    "@saooti/octopus-api": "0.0.30",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.4.0",
