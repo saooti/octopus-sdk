@@ -17,6 +17,7 @@ import LeftMenu from "./src/components/misc/LeftMenu.vue";
 import Player from "./src/components/misc/Player.vue";
 import Snackbar from "./src/components/misc/Snackbar.vue";
 import TopBar from "./src/components/misc/TopBar.vue";
+import HomeDropdown from "./src/components/misc/HomeDropdown.vue";
 import MessageModal from "./src/components/misc/modal/MessageModal.vue";
 //Display
 import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
@@ -81,7 +82,8 @@ const components = {
     cookies,
     MessageModal,
     CommentList,
-    CommentInput
+    CommentInput,
+    HomeDropdown
 }
 
 export default components;
@@ -119,5 +121,6 @@ export {
     cookies,
     MessageModal,
     CommentList,
-    CommentInput
+    CommentInput,
+    HomeDropdown
 };
