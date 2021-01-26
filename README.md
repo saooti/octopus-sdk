@@ -363,6 +363,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.22.3 Condition épisode en erreur
  * 0.22.4 Api
  * 0.22.5 Home dropdown component
+ * 0.22.6 Merge Fabien
 
 
 
