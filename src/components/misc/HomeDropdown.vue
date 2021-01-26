@@ -47,14 +47,14 @@
 
 	.btn-group .dropdown-toggle-split {
 		align-items: center;
-		border-radius: 50%;
-		width: 40px;
-		height: 40px;
+		border-radius: 50% !important;
+		width: 40px !important;
+		height: 40px !important;
 		display: flex;
 		justify-content: center;
 		position: absolute;
 		right: 5px;
-		border: 4px solid white;
+		border: 4px solid white !important;
 		z-index: 2;
 		@media (max-width: 650px) {
 			position: relative;
