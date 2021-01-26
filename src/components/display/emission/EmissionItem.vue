@@ -1,5 +1,5 @@
 <template>
-  <li class="mt-3" :class="lightItems? 'noList emission-light-max-size':'emission-item-container shadow-element'" v-if="activeEmission || editRight">
+  <li class="mt-3" :class="lightItems? 'noList emission-light-max-size':'emission-item-container shadow-element'" v-if="activeEmission ||editRight">
     <router-link 
     :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
     :aria-label="$t('Emission')"

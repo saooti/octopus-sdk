@@ -1,5 +1,5 @@
 <template>
-  <li class="participant-item-container" v-if="participant && (activeParticipant || editRight)">
+  <li class="participant-item-container" v-if="participant && (activeParticipant ||editRight)">
     <router-link 
     :to="{ name: 'participant', params: {participantId:participant.participantId}, query:{productor: $store.state.filter.organisationId}}"
     class="mt-3"

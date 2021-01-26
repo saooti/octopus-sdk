@@ -204,7 +204,7 @@ export default {
       }
       let index = this.comments.findIndex(element => element.comId === data.comment.comId);
       if(index !== -1){
-        if(data.status !== "Valid" && (!this.editRight || (this.status && this.status !== data.status))){
+        if(data.status !== "Valid" && (!this.editRight ||(this.status && this.status !== data.status))){
           this.comments.splice(index, 1);
         }else{
           this.comments.splice(index, 1, data.comment);

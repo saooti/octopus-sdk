@@ -45,41 +45,7 @@
       <div class="d-flex flex-column">
         <div class="d-flex justify-content-end hostedBy hide-phone"><span>{{$t('Hosted by')}}</span><span class="ml-1 mr-1 primary-color">Saooti</span></div>
         <div class="d-flex align-items-center justify-content-end flex-no-wrap">
-          <b-dropdown
-            class="split-dropdown"
-            split
-            right
-            split-variant="primary main-button-dropdown"
-            variant="primary data-selenium-dropdown-topbar"
-            @click="goToUrl('/main/priv/backoffice')"
-            :text="$t('My space')"
-            v-if="authenticated"
-          >
-            <b-dropdown-text>
-              <router-link to="/main/priv/upload" v-if="isProduction && !isPodcastmaker" class="align-self-center w-100 mb-2">
-                <button class="btn btn-primary w-100">{{ $t('Upload') }}</button>
-              </router-link>
-              <template @click="displayMenuPhone(true)">
-                <b-dropdown-item to="/main/priv/backoffice" class="linkSpace" v-if="!isPodcastmaker">{{ $t('My space') }}</b-dropdown-item>
-                <b-dropdown-item to="/main/priv/edit/profile" v-if="!isPodcastmaker">{{ $t('Edit my profile') }}</b-dropdown-item>
-                <b-dropdown-item to="/main/priv/edit/organisation" v-if="!isPodcastmaker && isOrganisation">{{$t('Edit my organisation')}}</b-dropdown-item>
-                <b-dropdown-divider v-if="!isEducation"></b-dropdown-divider>
-                <b-dropdown-item href="https://help.octopus.saooti.com/Aide/" target="_blank" v-if="!isEducation">{{$t('Help')}}</b-dropdown-item>
-                <b-dropdown-item href="https://help.octopus.saooti.com/" target="_blank" v-if="!isEducation">{{ $t('TutoMag') }}</b-dropdown-item>
-                <!-- <b-dropdown-item >{{ $t('News') }}</b-dropdown-item>
-                <b-dropdown-item >{{ $t('Known issues') }}</b-dropdown-item> -->
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item href="/sso/logout">{{ $t('Logout') }}</b-dropdown-item>
-              </template>
-            </b-dropdown-text>
-          </b-dropdown>
-          <b-dropdown right toggle-class="text-decoration-none  m-1 admin-button btn-rounded-icon" no-caret v-else>
-            <template v-slot:button-content>
-              <i class="saooti-user-octopus text-dark"></i><span class="sr-only">Profile</span>
-            </template>
-              <b-dropdown-item href="/sso/login">{{ $t('Login') }}</b-dropdown-item>
-              <b-dropdown-item to="/main/pub/create" v-if="!isPodcastmaker">{{$t('Create an account')}}</b-dropdown-item>
-          </b-dropdown>
+          <HomeDropdown :isEducation="isEducation"/>
           <router-link 
           :aria-label ="$t('Search')"
           :to="{ name: 'podcasts', query:{productor: $store.state.filter.organisationId}}">
@@ -113,14 +79,6 @@
     height: 5rem;
     position: relative;
 
-    .main-button-dropdown {
-          padding-bottom: 0.4rem;
-          width: 140px;
-          text-align: left;
-          padding-left: 25px;
-          margin-right: 30px;
-    }
-
     .top-bar-logo{
       margin: 1rem 2rem 1rem 1rem !important;
       img{
@@ -138,23 +96,6 @@
       padding: 6px 40px 0 10px;
     }
 
-    .btn-group .dropdown-toggle-split {
-      align-items: center;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      position: absolute;
-      right: 5px;
-      border: 4px solid white;
-      z-index: 2;
-      @media (max-width: 650px) {
-        position: relative;
-        right: auto;
-      }
-    }
-   
     .hamburger-menu {
       display: none;
       margin: 0 1rem;
@@ -200,35 +141,17 @@
       }
     }
   }
-  .b-dropdown-text{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .dropdown-header{
-    display: flex;
-    align-items: center;
-  }
   .hostedBy{
     font-size: 0.6rem;
     position: absolute;
     top: 5px;
     right: 0;
   }
-  .dropdown-header{
-    font-weight: bold;
-  }
-  .linkSpace{
-    display: none;
-  }
-  
+
   /** PHONES*/
   @media (max-width: 1200px) {
     .hide-top-bar {
       display: none !important;
-    }
-    .linkSpace{
-      display: block;
     }
     .hostedBy{
       display: none !important;
@@ -255,16 +178,6 @@
     }
   }
   @media (max-width: 650px) {
-    .dropdown{
-      .main-button-dropdown{
-        display: none;
-      }
-    }
-    .btn-group .dropdown-toggle-split {
-        height: 30px;
-        width: 30px;
-        border-radius: 50% !important;
-      }
     .top-bar {
       .top-bar-logo {
         img {
@@ -279,13 +192,15 @@
 <script>
 import {state} from "../../store/paramStore.js";
 import OrganisationChooserLight from '../display/organisation/OrganisationChooserLight.vue';
+import HomeDropdown from './HomeDropdown.vue';
 import octopusApi from "@saooti/octopus-api";
 
 export default {
   name: "TopBar",
 
   components:{
-    OrganisationChooserLight
+    OrganisationChooserLight,
+    HomeDropdown
   },
 
   mounted() {
@@ -324,18 +239,6 @@ export default {
     },
     isLiveTab(){
       return state.generalParameters.isLiveTab;
-    },
-    authenticated(){
-      return this.$store.state.authentication.isAuthenticated;
-    },
-    isOrganisation(){
-      return state.generalParameters.isOrganisation;
-    },
-    isProduction(){
-      return state.generalParameters.isProduction;
-    },
-    name(){
-      return state.organisation.userName;
     },
     filterOrga(){
       return this.$store.state.filter.organisationId;
@@ -380,14 +283,6 @@ export default {
       }
     },
 
-    displayMenuPhone(hidden) {
-      if (hidden) {
-        this.$refs.menu.className = "menu hid";
-      } else {
-        this.$refs.menu.className = "menu";
-      }
-    },
-
     async onOrganisationSelected(organisation){
       if (organisation && organisation.id) {
         if(this.$route.query.productor !== organisation.id){
@@ -404,11 +299,6 @@ export default {
         this.$store.commit('filterOrga', {orgaId: undefined});
       }
     },
-    goToUrl(url){
-      if(this.authenticated){
-        this.$router.push(url);
-      }
-    }
   },
 
   watch:{
