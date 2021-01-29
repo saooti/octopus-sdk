@@ -22,7 +22,7 @@
         :key="p.podcastId"
       />
     </ul>
-    <a
+    <button
       class="btn"
       :class="buttonPlus? 'btn-linkPlus mt-3': 'btn-more'"
       @click="displayMore"
@@ -31,7 +31,7 @@
     >
       <template v-if="buttonPlus">{{$t('See more')}}</template>
       <div class="saooti-plus"></div>
-    </a>
+    </button>
   </div>
 </template>
 
@@ -124,6 +124,7 @@ export default {
       this.podcastsQuery = this.podcasts;
       this.loading = false;
       this.loaded = true;
+
     },
 
     displayMore(event) {

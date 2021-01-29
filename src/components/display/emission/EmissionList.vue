@@ -22,17 +22,17 @@
         :rubriqueName="rubriquesId(e)"
       />
     </ul>
-    <a
+    <button
       class="btn"
-      v-bind:href="'/main/pub/emissions?first=' + dfirst + '&size=' + dsize"
       :class="buttonPlus? 'btn-linkPlus': 'btn-more'"
       @click="displayMore"
+      :disabled="inFetching"
       v-show="!allFetched && loaded"
       :aria-label="$t('See more')"
     >
       <template v-if="buttonPlus">{{$t('See more')}}</template>
       <div class="saooti-plus"></div>
-    </a>
+    </button>
   </div>
 </template>
 
@@ -103,6 +103,7 @@ export default {
       totalCount: 0,
       emissions: [],
       rubriques:undefined,
+      inFetching: false,
     };
   },
 
@@ -148,6 +149,7 @@ export default {
 
   methods: {
     async fetchContent(reset) {
+      this.inFetching=true;
       var self = this;
       if (reset) {
         self.$data.emissions = [];
@@ -190,6 +192,7 @@ export default {
       });
       this.dfirst += this.dsize;
       this.totalCount = data.count;
+      this.inFetching=false;
     },
 
     displayMore(event) {

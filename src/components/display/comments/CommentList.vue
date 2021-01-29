@@ -19,14 +19,15 @@
         @updateComment="updateComment"
       />
     </transition-group>
-    <a
+    <button
       class="btn btn-primary mt-2"
       :class="comId? 'align-self-start':'align-self-center'"
       @click="displayMore"
+      :disabled="inFetching"
       v-show="!allFetched && loaded"
       :aria-label="$t('See more comments')"
     >{{$t('See more comments')}}
-    </a>
+    </button>
   </div>
 </template>
 
@@ -107,6 +108,7 @@ export default {
       dsize: this.$props.size,
       totalCount: 0,
       comments: [],
+      inFetching: false,
     };
   },
 
@@ -132,6 +134,7 @@ export default {
 
   methods: {
     async fetchContent(reset) {
+      this.inFetching=true;
       this.resetData(reset);
       let data; 
       try {
@@ -169,6 +172,7 @@ export default {
         this.loading = false;
         this.error = true;
       }
+      this.inFetching=false;
     },
 
     resetData(reset){

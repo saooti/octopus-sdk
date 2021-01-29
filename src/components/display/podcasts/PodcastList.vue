@@ -15,17 +15,17 @@
         v-bind:key="p.podcastId"
       />
     </ul>
-    <a
+    <button
       class="btn"
-      v-bind:href="'/main/pub/podcasts?first=' + dfirst + '&size=' + dsize"
       :class="buttonPlus? 'btn-linkPlus mt-3': 'btn-more'"
       @click="displayMore"
+      :disabled="inFetching"
       v-show="!allFetched && loaded"
       :aria-label="$t('See more')"
     >
       <template v-if="buttonPlus">{{$t('See more')}}</template>
       <div class="saooti-plus"></div>
-    </a>
+    </button>
   </div>
 </template>
 
@@ -101,6 +101,7 @@ export default {
       dsize: this.$props.size,
       totalCount: 0,
       podcasts: [],
+      inFetching: false,
     };
   },
 
@@ -143,6 +144,7 @@ export default {
 
   methods: {
     async fetchContent(reset) {
+      this.inFetching=true;
       if (reset) {
         this.podcasts = [];
         this.dfirst = 0;
@@ -194,6 +196,7 @@ export default {
       if(this.podcasts.length === 0){
         this.$emit('emptyList');
       }
+      this.inFetching=false;
     },
 
     displayMore(event) {

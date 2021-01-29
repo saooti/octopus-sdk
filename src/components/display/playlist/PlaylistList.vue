@@ -12,17 +12,17 @@
         v-bind:key="p.playlistId"
       />
     </ul>
-    <a
+    <button
       class="btn"
-      v-bind:href="'/main/pub/playlists?first=' + dfirst + '&size=' + dsize"
       :class="buttonPlus? 'btn-linkPlus': 'btn-more'"
       @click="displayMore"
       v-show="!allFetched && loaded"
+      :disabled="inFetching"
       :aria-label="$t('See more')"
     >
       <template v-if="buttonPlus">{{$t('See more')}}</template>
       <div class="saooti-plus"></div>
-    </a>
+    </button>
   </div>
 </template>
 
@@ -55,6 +55,7 @@ export default {
       dsize: this.$props.size,
       totalCount: 0,
       playlists: [],
+      inFetching: false,
     };
   },
 
@@ -87,6 +88,7 @@ export default {
 
   methods: {
     async fetchContent(reset) {
+      this.inFetching=true;
       if (reset) {
         this.dfirst = 0;
         this.loading = true;
@@ -115,6 +117,7 @@ export default {
       });
       this.dfirst += this.dsize;
       this.totalCount = data.count;
+      this.inFetching=false;
     },
 
     displayMore(event) {

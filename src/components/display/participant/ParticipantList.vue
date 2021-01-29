@@ -12,15 +12,15 @@
         v-bind:key="p.participantId"
       />
     </ul>
-    <a
+    <button
       class="btn btn-more"
-      v-bind:href="'/main/pub/participants?first=' + dfirst + '&size=' + dsize"
       @click="displayMore"
       v-show="!allFetched && loaded"
       :aria-label="$t('See more')"
+      :disabled="inFetching"
     >
       <div class="saooti-plus"></div>
-    </a>
+    </button>
   </div>
 </template>
 
@@ -74,6 +74,7 @@ export default {
       dsize: this.$props.size,
       totalCount: 0,
       participants: [],
+      inFetching: false,
     };
   },
 
@@ -95,6 +96,7 @@ export default {
 
   methods: {
     async fetchContent(reset) {
+      this.inFetching=true;
       var self = this;
       if (reset) {
         self.$data.participants = [];
@@ -115,6 +117,7 @@ export default {
       });
       self.$data.dfirst += self.$data.dsize;
       self.$data.totalCount = data.count;
+      this.inFetching=false;
     },
 
     displayMore(event) {

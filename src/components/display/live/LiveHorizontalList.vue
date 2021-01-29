@@ -11,6 +11,7 @@
     <button class="btn" :class="buttonPlus? 'btn-linkPlus mt-3': 'btn-more'" 
     @click="displayMore" 
     v-show="!allFetched" 
+    :disabled="inFetching"
     :aria-label="$t('See more')"
     >
       <template v-if="buttonPlus">{{$t('See more')}}</template>
@@ -51,6 +52,7 @@ export default {
       totalCount: 0,
       lives: [],
       notEmpty: false,
+      inFetching: false,
     };
   },
 
@@ -65,6 +67,7 @@ export default {
 
   methods: {
     async fetchContent(reset) {
+      this.inFetching=true;
       if (reset) {
         this.lives = [];
         this.dfirst = 0;
@@ -93,6 +96,7 @@ export default {
       if(this.lives.length !== 0){
         this.notEmpty = true;
       }
+      this.inFetching=false;
     },
 
     displayMore(event) {
