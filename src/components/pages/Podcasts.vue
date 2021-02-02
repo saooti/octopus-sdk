@@ -94,7 +94,7 @@ export default {
       toDate: undefined,
       resetRubriquage: false,
       includeHidden : false,
-      noRubrique: true,
+      noRubrique: undefined,
       sortCriteria : 'DATE',
     };
   },
@@ -124,28 +124,32 @@ export default {
     updateFromDate(value){
       this.fromDate = value;
     },
-    updateRubriquage(value){
+     updateRubriquage(value){
       if(value !== -1){
         this.rubriquageId = value;
-        this.noRubrique = false;
       }else{
         this.rubriquageId = undefined;
-        this.noRubrique = true;
       }
+      this.noRubrique = undefined;
       this.rubriqueId = undefined;
     },
     updateRubrique(value){
-      if(value !== -1){
-        this.rubriqueId = value;
-        this.noRubrique = false;
-      }else{
+      if(value === -1){
         this.noRubrique = true;
+        this.rubriqueId = undefined;
+      }else if(value === 0){
+        this.rubriqueId = undefined;
+        this.noRubrique = undefined;
+      }else{
+        this.rubriqueId = value;
+        this.noRubrique = undefined;
       }
     },
     updateOrganisationId(value){
       this.resetRubriquage = !this.resetRubriquage;
       this.rubriquageId = undefined;
       this.rubriqueId= undefined;
+      this.noRubrique = undefined;
       this.organisationId = value;
     },
     updateSearchPattern(value){

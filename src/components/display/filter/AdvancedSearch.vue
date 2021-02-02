@@ -171,7 +171,7 @@
 		margin:0;
 	}
   }
-	input:not(#rubriqueChooser){
+	input:not([id*='rubriqueChooser']){
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 0.2em 0.5em;
@@ -330,7 +330,6 @@ export default {
 		async fetchTopics(){
 			if(!this.organisation)
 				return;
-
 			const data = await octopusApi.fetchTopics(this.organisation);
 			this.rubriquageData = data;
 			if(data.length === 0)
