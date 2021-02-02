@@ -115,6 +115,10 @@ export default {
       if(data.count === 0){
         this.activeParticipant = false;
       }
+      if(this.participant &&(this.editRight || this.activeParticipant)){
+        return;
+      }
+      this.$emit("participantNotVisible");
     }
   },
 };

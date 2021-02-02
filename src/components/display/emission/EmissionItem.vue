@@ -188,6 +188,10 @@ export default {
       if(data.count === 0){
         this.activeEmission = false;
       }
+      if(this.editRight || this.activeEmission){
+        return;
+      }
+      this.$emit("emissionNotVisible");
     }
   },
 };

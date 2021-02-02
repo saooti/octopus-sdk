@@ -4,12 +4,13 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
     </div>
-    <div v-if="showCount && loaded && emissions.length > 1" class="text-secondary mb-2">{{$t('Number emissions',{nb :totalCount}) + sortText}}</div>
+    <div v-if="showCount && loaded && emissions.length > 1" class="text-secondary mb-2">{{$t('Number emissions',{nb :displayCount}) + sortText}}</div>
     <ul class="emission-list" :class="smallItems? 'threeEmissions': 'twoEmissions'" v-if="!itemPlayer">
       <EmissionItem
         v-bind:emission="e"
         v-for="e in emissions"
         v-bind:key="e.emissionId"
+        @emissionNotVisible="displayCount--"
       />
     </ul>
     <ul class="d-flex flex-wrap justify-content-around" v-show="(displayRubriquage && rubriques) || !(displayRubriquage &&loaded)" v-else>
@@ -20,6 +21,7 @@
         class="m-3 flex-shrink"
         :class="mainRubriquage(e)" 
         :rubriqueName="rubriquesId(e)"
+        @emissionNotVisible="displayCount--"
       />
     </ul>
     <button
@@ -101,6 +103,7 @@ export default {
       dfirst: this.$props.first,
       dsize: this.$props.size,
       totalCount: 0,
+      displayCount:0,
       emissions: [],
       rubriques:undefined,
       inFetching: false,
@@ -187,7 +190,11 @@ export default {
       }
       this.loading = false;
       this.loaded = true;
+      this.displayCount = data.count;
       this.emissions = this.emissions.concat(data.result).filter((e)=>{
+        if(e===null){
+          this.displayCount--;
+        }
         return e!== null;
       });
       this.dfirst += this.dsize;

@@ -35,6 +35,13 @@ export default {
 
   props: ['playlist'],
 
+  mounted(){
+    if(this.editRight || this.activePlaylist){
+      return;
+    }
+    this.$emit("playlistNotVisible");
+  },
+
   data() {
     return {
       dummyParam : new Date().getTime().toString(),

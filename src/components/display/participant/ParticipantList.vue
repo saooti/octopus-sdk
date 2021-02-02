@@ -4,12 +4,13 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading participants ...') }}</h3>
     </div>
-    <div v-if="showCount && loaded && participants.length > 1" class="text-secondary mb-2">{{$t('Number participants',{nb :totalCount}) + $t('sort by score')}}</div>
+    <div v-if="showCount && loaded && participants.length > 1" class="text-secondary mb-2">{{$t('Number participants',{nb :displayCount}) + $t('sort by score')}}</div>
     <ul class="participant-list" v-show="loaded">
       <ParticipantItem
         v-bind:participant="p"
         v-for="p in participants"
         v-bind:key="p.participantId"
+        @participantNotVisible="displayCount--"
       />
     </ul>
     <button
@@ -73,6 +74,7 @@ export default {
       dfirst: this.$props.first,
       dsize: this.$props.size,
       totalCount: 0,
+      displayCount:0,
       participants: [],
       inFetching: false,
     };
@@ -97,26 +99,29 @@ export default {
   methods: {
     async fetchContent(reset) {
       this.inFetching=true;
-      var self = this;
       if (reset) {
-        self.$data.participants = [];
-        self.$data.dfirst = 0;
-        self.$data.loading = true;
-        self.$data.loaded = false;
+        this.participants = [];
+        this.dfirst = 0;
+        this.loading = true;
+        this.loaded = false;
       }
       const data = await octopusApi.fetchParticipants({
-        first: self.dfirst,
-        size: self.dsize,
-        query: self.query,
-        organisationId: self.organisation,
+        first: this.dfirst,
+        size: this.dsize,
+        query: this.query,
+        organisationId: this.organisation,
       });
-      self.$data.loading = false;
-      self.$data.loaded = true;
-      self.$data.participants = self.$data.participants.concat(data.result).filter((p)=>{
+      this.loading = false;
+      this.loaded = true;
+      this.displayCount = data.count;
+      this.participants = this.participants.concat(data.result).filter((p)=>{
+        if(p===null){
+          this.displayCount--;
+        }
         return p!== null;
       });
-      self.$data.dfirst += self.$data.dsize;
-      self.$data.totalCount = data.count;
+      this.dfirst += this.dsize;
+      this.totalCount = data.count;
       this.inFetching=false;
     },
 

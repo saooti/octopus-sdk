@@ -1,5 +1,5 @@
 <template>
-  <li class="emission-player-container shadow-element">
+  <li class="emission-player-container shadow-element" v-if="activeEmission ||editRight">
     <router-link 
     :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
     class="d-flex flex-column text-dark">
@@ -102,6 +102,11 @@ export default {
     buttonMore(){
       return state.emissionsPage.buttonMore;
     },
+    editRight() {
+      if ((this.authenticated && this.organisationId === this.emission.orga.id) ||state.generalParameters.isAdmin)
+        return true;
+      return false;
+    }
   },
 
    methods:{
@@ -111,10 +116,14 @@ export default {
         emissionId: this.emission.emissionId,
         size: nb
       });
-      if(data.count === 0 && this.editRight){
+      if(data.count === 0){
         this.activeEmission = false;
       }
       this.podcasts=data.result;
+      if(this.editRight || this.activeEmission){
+        return;
+      }
+      this.$emit("emissionNotVisible");
     },
     play(podcast){
       if(podcast === this.$store.state.player.podcast){

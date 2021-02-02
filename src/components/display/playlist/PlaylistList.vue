@@ -4,12 +4,13 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
     </div>
-    <div v-if="loaded && playlists.length > 1" class="text-secondary mb-2">{{$t('Number playlists',{nb :totalCount})+ $t('sort by score')}}</div>
+    <div v-if="loaded && playlists.length > 1" class="text-secondary mb-2">{{$t('Number playlists',{nb :displayCount})+ $t('sort by score')}}</div>
     <ul class="emission-list twoEmissions">
       <PlaylistItem
         v-bind:playlist="p"
         v-for="p in playlists"
         v-bind:key="p.playlistId"
+        @playlistNotVisible="displayCount--"
       />
     </ul>
     <button
@@ -54,6 +55,7 @@ export default {
       dfirst: this.$props.first,
       dsize: this.$props.size,
       totalCount: 0,
+      displayCount:0,
       playlists: [],
       inFetching: false,
     };
@@ -112,7 +114,11 @@ export default {
       }
       this.loading = false;
       this.loaded = true;
+      this.displayCount = data.count;
       this.playlists = this.playlists.concat(data.result).filter((e)=>{
+        if(e===null){
+          this.displayCount--;
+        }
         return e!== null;
       });
       this.dfirst += this.dsize;
