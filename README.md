@@ -367,6 +367,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.22.8 Click rapide "see more"
  * 0.22.9 Count emission, playlists, participants when not display
  * 0.22.10 Rubriquage filter
+ * 0.22.11 Update participant 
 
 
 

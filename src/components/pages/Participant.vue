@@ -12,7 +12,7 @@
           </a>
         </div>
         <div class="d-flex">
-          <EditBox :participant='participant' v-if="editRight && isEditBox" @participantUpdate="getParticipantDetails"></EditBox>
+          <EditBox :participant='participant' v-if="editRight && isEditBox" @participantUpdate="updateParticipant"></EditBox>
           <ShareButtons :participantId="participantId" v-if="isShareButtons"></ShareButtons>
         </div>
       </div>
@@ -136,6 +136,10 @@ export default {
         this.loaded = true;
       }
     },
+    updateParticipant(participant){
+      this.participant = participant;
+      this.$emit('participantTitle', this.name);
+    }
   },
   watch:{
     participant(){
