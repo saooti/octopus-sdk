@@ -88,8 +88,8 @@ export default {
   props: {
     width: { default: "100%" },
     defaultanswer: { default: false },
-    organisationId: { default: false },
-    emissionChosen: { default: false },
+    organisationId: { default: undefined },
+    emissionChosen: { default: undefined },
     displayArrow: { default: true },
     distributedBy: {default:undefined},
     organisationDistributedBy: {default:undefined},
