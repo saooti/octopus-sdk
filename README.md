@@ -374,6 +374,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.23.3 Participant popup
  * 0.23.6 Changer "Mon espace" en "Administration"
  * 0.23.8 Contribution
+ * 0.23.9 Afficher podcast
 
 
 
