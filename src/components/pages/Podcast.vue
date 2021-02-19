@@ -35,7 +35,7 @@
                 <h3 v-if="isOuestFrance">{{ this.podcast.title }}</h3>
                 <div class="date-text-zone" :class="isLiveReady?'justify-content-between':''">
                   <div :class="!isLiveReady?'mr-5':''" v-if="!isOuestFrance && 0 !== date.length">{{ date }}</div>
-                  <div class="ml-2 mr-2"><span class="saooti-clock3" v-if="isOuestFrance"></span>{{ $t('Duration', { duration: duration }) }}</div>
+                  <div class="ml-2 mr-2 duration"><span class="saooti-clock3" v-if="isOuestFrance"></span>{{ $t('Duration', { duration: duration }) }}</div>
                   <div class="text-danger" v-if="isLiveReady">{{$t('Episode record in live')}}</div>
                 </div>
                 <div class="descriptionText html-wysiwyg-content" v-html="urlify(this.podcast.description)"></div>
@@ -135,8 +135,13 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom:1rem;
-  @media (max-width: 600px) {
+    @media (max-width: 600px) {
     display: initial;
+  }
+   @media (max-width: 600px) {
+  .duration {
+    margin-left: 0 !important;
+  }
   }
 }
 .share-container{

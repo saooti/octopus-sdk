@@ -12,7 +12,7 @@
           </a>
         </div>
         <div class="d-flex">
-          <EditBox :participant='participant' v-if="editRight && isEditBox" @participantUpdate="updateParticipant"></EditBox>
+          <EditBox :participant='participant' v-if="editRight && isEditBox" @participantUpdate="updateParticipant" class="flex-grow-1"></EditBox>
           <ShareButtons :participantId="participantId" v-if="isShareButtons"></ShareButtons>
         </div>
       </div>

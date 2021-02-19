@@ -21,8 +21,8 @@
 @import '../../../sass/_variables.scss';
 .comment-item-container{
   .btn-circle{
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     background: $octopus-secondary-color;
     padding: 0;
 	display: flex;

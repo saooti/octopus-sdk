@@ -22,7 +22,7 @@
         :reset='reset'
         v-if="!isPodcastmaker"
         />
-      <div class="d-flex align-items-center justify-content-center flex-grow">
+      <div class="d-flex align-items-center justify-content-center flex-grow main-menu">
         <router-link v-if="isLiveTab && !isPodcastmaker && ((filterOrga && filterOrgaLive) || !filterOrga)"
         :to="{ name: 'lives', query:{productor: $store.state.filter.organisationId}}"
         class="linkHover p-3 text-dark font-weight-bold">{{ $t('Live') }}</router-link>
@@ -132,7 +132,7 @@
         align-items: center;
         display: flex;
         img {
-          height: 2rem;
+          height: 2.5rem;
           width: auto;
         }
       }

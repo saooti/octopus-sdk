@@ -38,7 +38,7 @@
   border: 0.05rem solid #dee2e6;
   border-radius: 0.3rem;
   padding: 0.4rem;
-  margin: 0.2rem 1rem;
+  margin: 0.2rem 1rem 0.2rem 0;
   display: flex;
   font-weight: 500;
   align-items: center;

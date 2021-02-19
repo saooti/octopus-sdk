@@ -110,7 +110,7 @@ button.btn.btn-primary.share-btn.m-3 {
   font-size: 1rem;
   width: 2.5rem;
   height: 2.5rem !important;
-  margin: 0 0.5rem 0 0.5rem !important;
+  margin: 0 0.8rem 0 0 !important;
 }
 /** PHONES*/
 @media (max-width: 680px) {
@@ -126,6 +126,7 @@ button.btn.btn-primary.share-btn.m-3 {
 @media (max-width: 450px) {
 .emission-item-text {
     padding: 0.5rem 0;
+    text-align: center;
   }
 }
 </style>
