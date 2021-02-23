@@ -206,7 +206,11 @@ export default {
       return undefined === this.fetchConference && undefined !== this.podcast.conferenceId && "READY_TO_RECORD" === this.podcast.processingStatus;
     },
     classicPodcastPlay(){
-      return this.podcast && (false !== this.podcast.valid && ('READY_TO_RECORD' === this.podcast.processingStatus || 'READY' === this.podcast.processingStatus))&& !this.isLiveToBeRecorded;
+      return this.podcast && (
+        false !== this.podcast.valid &&
+        ('READY_TO_RECORD' === this.podcast.processingStatus || 'READY' === this.podcast.processingStatus)) &&
+        !this.isLiveToBeRecorded && 
+        this.podcast.availability.visibility;
     },
     iconName(){
       if(this.isLiveToBeRecorded)

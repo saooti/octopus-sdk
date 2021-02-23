@@ -128,10 +128,10 @@ export default {
       this.rubriqueId = undefined;
     },
     updateRubrique(value){
-      if(-1 !== value){
+      if(-1 === value){
         this.noRubrique = true;
         this.rubriqueId = undefined;
-      }else if(value === 0){
+      }else if(0 === value){
         this.rubriqueId = undefined;
         this.noRubrique = undefined;
       }else{
