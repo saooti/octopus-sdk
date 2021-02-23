@@ -207,16 +207,16 @@ export default {
 		Datetime
 	},
 	
-	props: ['organisationId', 'isEmission', 'resetRubriquage', 'isSearchBar', 'sortCriteria', 'isEducation'],
+	props: ['organisationId', 'isEmission', 'resetRubriquage', 'isSearchBar', 'sortCriteria', 'isEducation', 'includeHidden'],
 
   created() {
 		this.fetchTopics();
+		if(!this.isEmission){
+			this.isNotVisible = this.includeHidden;
+		}
 	},
 	
 	mounted(){
-		if(this.organisation && this.organisationRight && !this.isEmission){
-			this.isNotVisible = true;
-		}
 		this.sort = this.sortCriteria;
 	},
 

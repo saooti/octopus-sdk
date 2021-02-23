@@ -376,7 +376,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.23.8 Contribution
  * 0.23.9 Afficher podcast
  * 0.23.10 Divers bugs
-
+ * 0.23.11 Recherche avancée
 
 
 

@@ -80,6 +80,9 @@ export default {
     } else if (this.$store.state.filter.organisationId) {
       this.$data.organisationId = this.$store.state.filter.organisationId;
     }
+    if(this.organisation && this.organisationRight){
+			this.includeHidden = true;
+		}
   },
 
   data() {
@@ -103,6 +106,27 @@ export default {
   },
 
   computed:{
+    authenticated(){
+      return state.generalParameters.authenticated;
+		},
+    myOrganisationId(){
+      return state.generalParameters.organisationId;
+    },
+    organisationRight() {
+			if ((this.authenticated && this.myOrganisationId === this.organisationId) ||state.generalParameters.isAdmin)
+				return true;
+      return false;
+		},
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
+    },
+    organisation(){
+      if(this.organisationId)
+        return this.organisationId;
+      if(this.filterOrga)
+        return this.filterOrga;
+      return undefined;
+		},
     isProductorSearch(){
       return state.podcastsPage.ProductorSearch;
     },
