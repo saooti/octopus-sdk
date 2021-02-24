@@ -9,7 +9,11 @@
 		@click="displayContent = c"
 		>
 			<div :style="'margin-left: '+ percentPosition(c.timeline) + '%'" class="comment-border"></div>
-			<div :style="'margin-left: calc('+ percentPosition(c.timeline) +'% - 7px)'" :class="'status-'+c.status"></div>
+			<div 
+				:style="'margin-left: calc('+ percentPosition(c.timeline) +'% - 7px)'" 
+				:class="'status-'+c.status"
+				:data-selenium='"comment-"+seleniumFormat(c.name)'
+			></div>
 		</div>
 		<div class="comment-content" v-if="displayContent">
 			<div class="primary-color flex-shrink">{{displayContent.name}}</div>
@@ -47,7 +51,7 @@
 </style>
 
 <script>
-
+import { selenium } from '../../mixins/functions'
 export default {
   name: 'CommentPlayer',
 
@@ -55,6 +59,8 @@ export default {
 
   components:{
 	},
+
+	mixins: [selenium],
 
   data() {
     return {
