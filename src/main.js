@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { createApp, h } from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import App from './App.vue';
 import VueI18n from 'vue-i18n';
@@ -11,7 +11,6 @@ let paramStore = require('./store/paramStore');
 moment.locale('fr');
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
-Vue.config.productionTip = false;
 
 //Gestion de l'i18n
 Vue.use(VueI18n);
@@ -45,10 +44,8 @@ paramStore
     footer: {},
   })
   .then(() => {
-    new Vue({
+    createApp({
       i18n,
-      store,
-      router,
-      render: h => h(App),
-    }).$mount('#app');
+      render: () => h(App)
+    }).use(router).use(store).mount('#app');
   });

@@ -27,14 +27,14 @@
       @close="onClose"
       @select="onRubriqueSelected"
     >
-      <template slot="singleLabel" slot-scope="props">
+      <template v-slot:singleLabel="props" >
         <div class="multiselect-octopus-proposition">
           <span class="option__title">
             {{ props.option.name }}
           </span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template v-slot:option="props" >
         <div
           class="multiselect-octopus-proposition"
           :class="props.option.rubriqueId <= 0 ? 'primary-dark' : ''"
@@ -43,14 +43,15 @@
           <span class="option__title">{{ props.option.name }}</span>
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <span slot="noResult">
+      <template v-slot:noOptions>{{ $t('List is empty') }}</template>
+      <template v-slot:noResult>
+      <span>
         {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
+      </span></template>
+      <template v-slot:caret>
       <span
         class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top"
-        slot="caret"
-      ></span>
+      ></span></template>
     </Multiselect>
   </div>
 </template>

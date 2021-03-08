@@ -1,14 +1,13 @@
 <template>
   <div class="snack-bar-wrap" :style="style.wrap">
-    <template v-for="(msg, i) in msgs">
+    <template v-for="(msg, i) in msgs" :key="i">
       <div
-        :key="i"
         class="snack-bar"
         :style="style.bar(msg.color)"
         @click="pop(i)"
         v-html="msg.msg.message || msg.msg"
       ></div>
-      <br :key="i + '1'" />
+      <br/>
     </template>
   </div>
 </template>

@@ -16,7 +16,7 @@
       <CommentItem
         :ref="'comItem' + c.comId"
         :isFlat="isFlat"
-        :comment.sync="c"
+        :comment="c"
         :podcast="podcast"
         :fetchConference="fetchConference"
         :organisation="organisation"

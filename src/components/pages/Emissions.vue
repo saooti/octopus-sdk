@@ -3,7 +3,7 @@
     <h1 v-if="undefined === titlePage">{{ $t('All emissions') }}</h1>
     <h1 v-else>{{ titlePage }}</h1>
     <ProductorSearch
-      :organisationId.sync="organisationId"
+      v-model:organisationId="organisationId"
       :searchPattern="searchPattern"
       type="emission"
       @updateOrganisationId="updateOrganisationId"

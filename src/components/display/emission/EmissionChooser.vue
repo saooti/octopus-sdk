@@ -33,27 +33,29 @@
       @close="onClose"
       @select="onEmissionSelected"
     >
-      <template slot="clear" slot-scope="props">
+      <template v-slot:clear="props" >
         <div
           class="multiselect__clear"
           v-if="emission.length"
           @mousedown.prevent.stop="clearAll(props.search)"
         ></div>
       </template>
-      <template slot="singleLabel" slot-scope="props">
+      <template v-slot:singleLabel="props" >
         <div class="multiselect-octopus-proposition">
           <span class="option__title">{{ props.option.name }}</span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template v-slot:option="props" >
         <div class="multiselect-octopus-proposition">
           <span class="option__title">{{ props.option.name }}</span>
         </div>
       </template>
-      <span slot="noResult">{{
+      <template v-slot:noResult>
+      <span>{{
         $t('No elements found. Consider changing the search query.')
       }}</span>
-      <template slot="afterList">
+      </template>
+      <template v-slot:afterList>
         <div v-if="remainingElements" class="multiselect-remaining-elements">
           {{
             $t(
@@ -63,12 +65,14 @@
           }}
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <div class="position-relative" slot="caret">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
-        ></span>
-      </div>
+      <template v-slot:noOptions>{{ $t('List is empty') }}</template>
+      <template v-slot:caret>
+        <div class="position-relative">
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+          ></span>
+        </div>
+      </template>
     </Multiselect>
   </div>
 </template>

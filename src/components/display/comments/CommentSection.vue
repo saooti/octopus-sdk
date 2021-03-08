@@ -18,7 +18,7 @@
     </div>
     <CommentInput
       :podcast="podcast"
-      :knownIdentity.sync="knownIdentity"
+      v-model:knownIdentity="knownIdentity"
       :fetchConference="fetchConference"
       @newComment="newComment"
     />

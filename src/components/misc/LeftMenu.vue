@@ -2,7 +2,7 @@
   <div class="left-menu-container" v-show="displayMenu">
     <div class="routes-container h5">
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone"
         :to="{
           name: 'home',
@@ -11,7 +11,7 @@
         >{{ $t('Home') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         v-if="isLiveTab && !isPodcastmaker && filterOrga && filterOrgaLive"
         class="text-dark font-weight-bold mb-3"
         :to="{
@@ -21,7 +21,7 @@
         >{{ $t('Live') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'podcasts',
@@ -30,7 +30,7 @@
         >{{ $t('Podcasts') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'emissions',
@@ -39,7 +39,7 @@
         >{{ $t('Emissions') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         v-if="!isPodcastmaker && (!filterOrga || isEducation)"
         class="text-dark font-weight-bold mb-3"
         :to="{
@@ -49,7 +49,7 @@
         >{{ $t('Productors') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'participants',
@@ -78,7 +78,7 @@
       />
       <hr class="divided-line show-phone" />
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone"
         v-for="category in categories"
         v-bind:key="category.id"

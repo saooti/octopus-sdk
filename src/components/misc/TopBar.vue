@@ -270,7 +270,7 @@ export default {
     this.init = true;
     window.addEventListener('scroll', this.handleScroll);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   },
 

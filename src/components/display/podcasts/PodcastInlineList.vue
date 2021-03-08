@@ -171,12 +171,12 @@ export default {
       this.popularSort = this.requirePopularSort;
     }
     if (undefined !== this.isArrow) {
-      this.isArrow = true;
+      this.$emit('update:isArrow', true)
     }
     window.addEventListener('resize', this.handleResize);
   },
 
-  destroyed() {
+  unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
 

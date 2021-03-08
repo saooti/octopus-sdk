@@ -10,7 +10,7 @@
       <span></span>
     </template>
     <template v-slot:default>
-      <div class="content" v-html="message">{{ message }}</div>
+      <div class="content" v-html="message"></div>
     </template>
     <template v-slot:modal-footer v-if="validatetext">
       <button v-if="canceltext" class="btn btn-light m-1" @click="onCancel">

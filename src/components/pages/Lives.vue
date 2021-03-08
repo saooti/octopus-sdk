@@ -43,9 +43,9 @@ export default {
 
   created() {
     if (this.$route.query.productor) {
-      this.organisationId = this.$route.query.productor;
+      this.$emit('update:organisationId',this.$route.query.productor);
     } else if (this.$store.state.filter.organisationId) {
-      this.organisationId = this.$store.state.filter.organisationId;
+      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
     }
     if (
       this.$store.state.organisation &&

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <TopBar v-bind:displayMenu.sync="displayMenu" :isEducation="false" />
-    <LeftMenu v-bind:displayMenu.sync="displayMenu" :isEducation="false" />
+    <TopBar v-model:displayMenu="displayMenu" :isEducation="false" />
+    <LeftMenu v-model:displayMenu="displayMenu" :isEducation="false" />
     <CategoryList />
     <router-view />
     <Footer />

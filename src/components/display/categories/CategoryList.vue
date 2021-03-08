@@ -150,7 +150,7 @@ export default {
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.resizeWindow);
   },
 

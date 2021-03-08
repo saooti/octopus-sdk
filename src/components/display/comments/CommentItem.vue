@@ -122,7 +122,7 @@
         v-if="!isFlat || (isFlat && !comment.commentIdReferer)"
         :focus="focus"
         :podcast="podcast"
-        :knownIdentity.sync="knownIdentity"
+        v-model:knownIdentity="knownIdentity"
         :comId="comment.comId"
         :fetchConference="fetchConference"
         @cancelAction="collapseVisible = false"

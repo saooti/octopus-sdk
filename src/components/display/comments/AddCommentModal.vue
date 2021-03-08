@@ -72,7 +72,7 @@ export default {
     this.$bvModal.show('add-comment-modal');
   },
 
-  destroyed() {
+  unmounted() {
     document.getElementsByClassName('grecaptcha-badge')[0].style.display =
       'none';
   },

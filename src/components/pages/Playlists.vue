@@ -9,7 +9,7 @@
       <button class="btn btn-primary">{{ $t('Create playlist') }}</button>
     </router-link>
     <ProductorSearch
-      :organisationId.sync="organisationId"
+      v-model:organisationId="organisationId"
       :searchPattern="searchPattern"
       type="playlist"
       @updateOrganisationId="updateOrganisationId"
