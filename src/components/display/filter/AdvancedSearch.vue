@@ -275,7 +275,8 @@ import { state } from '../../../store/paramStore.js';
 import octopusApi from '@saooti/octopus-api';
 const moment = require('moment');
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     MonetizableFilter,
     RubriqueChooser,
@@ -523,5 +524,5 @@ export default {
       this.sort = this.sortCriteria;
     },
   },
-};
+});
 </script>

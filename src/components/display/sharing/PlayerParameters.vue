@@ -130,7 +130,8 @@
 }
 </style>
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: ['podcast', 'playlist', 'iFrameModel', 'isVisible'],
 
   data() {
@@ -196,5 +197,5 @@ export default {
       this.$emit('iFrameNumber', this.iFrameNumberPriv);
     },
   },
-};
+});
 </script>

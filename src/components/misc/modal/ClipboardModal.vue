@@ -43,7 +43,8 @@
 <script>
 import RssSection from '@/components/display/aggregator/RssSection.vue';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ClipboardModal',
 
   components: {
@@ -74,5 +75,5 @@ export default {
       this.$emit('validate');
     },
   },
-};
+});
 </script>

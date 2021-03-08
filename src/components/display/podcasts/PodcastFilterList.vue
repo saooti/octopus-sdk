@@ -74,7 +74,8 @@
 import CategoryChooser from '../categories/CategoryChooser.vue';
 import PodcastList from './PodcastList.vue';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     CategoryChooser,
     PodcastList,
@@ -138,5 +139,5 @@ export default {
       this.reloadList = !this.reloadList;
     },
   },
-};
+});
 </script>

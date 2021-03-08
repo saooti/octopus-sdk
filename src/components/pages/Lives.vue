@@ -31,7 +31,8 @@ import { state } from '../../store/paramStore.js';
 import LiveList from '../display/live/LiveList.vue';
 import OrganisationChooser from '../display/organisation/OrganisationChooser.vue';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     LiveList,
     OrganisationChooser,
@@ -87,5 +88,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

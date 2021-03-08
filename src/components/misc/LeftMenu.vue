@@ -159,7 +159,8 @@ import OrganisationChooserLight from '../display/organisation/OrganisationChoose
 import { state } from '../../store/paramStore.js';
 import octopusApi from '@saooti/octopus-api';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'LeftMenu',
 
   components: {
@@ -237,5 +238,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

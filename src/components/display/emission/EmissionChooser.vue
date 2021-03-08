@@ -96,7 +96,8 @@ const getDefaultEmission = defaultName => {
   };
 };
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     Multiselect,
   },
@@ -193,5 +194,5 @@ export default {
       this.emission = getDefaultEmission(this.defaultanswer);
     },
   },
-};
+});
 </script>

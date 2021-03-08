@@ -117,7 +117,8 @@ import OrganisationChooser from '../organisation/OrganisationChooser.vue';
 import { state } from '../../../store/paramStore.js';
 import octopusApi from '@saooti/octopus-api';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     OrganisationChooser,
   },
@@ -223,5 +224,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

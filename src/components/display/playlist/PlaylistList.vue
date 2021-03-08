@@ -36,7 +36,8 @@ import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlaylistList',
 
   props: ['first', 'size', 'query', 'organisationId'],
@@ -137,5 +138,5 @@ export default {
       },
     },
   },
-};
+});
 </script>

@@ -145,7 +145,8 @@ import PodcastItem from './PodcastItem.vue';
 
 const PHONE_WIDTH = 960;
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastInlineList',
 
   props: [
@@ -359,5 +360,5 @@ export default {
       },
     },
   },
-};
+});
 </script>

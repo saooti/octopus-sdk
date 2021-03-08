@@ -180,7 +180,8 @@ button.btn.btn-primary.share-btn.m-3 {
 import { state } from '../../../store/paramStore.js';
 import octopusApi from '@saooti/octopus-api';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionItem',
 
   props: ['emission'],
@@ -272,5 +273,5 @@ export default {
       this.$emit('emissionNotVisible');
     },
   },
-};
+});
 </script>

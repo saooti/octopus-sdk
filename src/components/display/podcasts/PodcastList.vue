@@ -66,7 +66,8 @@ import podcastApi from '@/api/podcasts';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastList',
 
   props: {
@@ -232,5 +233,5 @@ export default {
       },
     },
   },
-};
+});
 </script>

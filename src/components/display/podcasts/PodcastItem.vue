@@ -147,7 +147,8 @@ import { state } from '../../../store/paramStore.js';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastItem',
 
   props: ['podcast'],
@@ -280,5 +281,5 @@ export default {
       this.hover = false;
     },
   },
-};
+});
 </script>

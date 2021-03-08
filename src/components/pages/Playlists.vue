@@ -32,7 +32,8 @@ import PlaylistList from '../display/playlist/PlaylistList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import { state } from '../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ProductorSearch,
     PlaylistList,
@@ -86,5 +87,5 @@ export default {
       this.searchPattern = value;
     },
   },
-};
+});
 </script>

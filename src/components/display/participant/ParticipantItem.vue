@@ -115,7 +115,8 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore.js';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ParticpantItem',
 
   props: ['participant'],
@@ -204,5 +205,5 @@ export default {
       this.$emit('participantNotVisible');
     },
   },
-};
+});
 </script>

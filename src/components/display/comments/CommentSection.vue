@@ -49,7 +49,8 @@ import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
 import { cookies } from '../../mixins/functions';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentSection',
 
   props: {
@@ -155,5 +156,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

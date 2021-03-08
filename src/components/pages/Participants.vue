@@ -24,7 +24,8 @@ import ParticipantList from '../display/participant/ParticipantList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 /* import {state} from "../../store/paramStore.js"; */
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ProductorSearch,
     ParticipantList,
@@ -65,5 +66,5 @@ export default {
       this.searchPattern = value;
     },
   },
-};
+});
 </script>

@@ -35,7 +35,8 @@
 <script>
 import octopusApi from '@saooti/octopus-api';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {},
 
   created() {
@@ -86,5 +87,5 @@ export default {
       this.actual = -1;
     },
   },
-};
+});
 </script>

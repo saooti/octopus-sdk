@@ -168,7 +168,8 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore.js';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionPlayerItem',
 
   props: ['emission', 'nbPodcasts', 'rubriqueName'],
@@ -258,5 +259,5 @@ export default {
       this.$store.commit('playerPause', true);
     },
   },
-};
+});
 </script>

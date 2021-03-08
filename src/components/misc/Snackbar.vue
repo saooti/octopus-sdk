@@ -46,7 +46,8 @@ const getStyle = (baseSize, position) => {
     }),
   };
 };
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'Snackbar',
   props: {
     colors: {
@@ -127,5 +128,5 @@ export default {
       this.msgs.splice(i, 1);
     },
   },
-};
+});
 </script>

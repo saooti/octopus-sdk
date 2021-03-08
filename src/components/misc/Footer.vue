@@ -136,7 +136,8 @@
 import Player from './Player.vue';
 import { state } from '../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'Footer',
   components: {
     Player,
@@ -163,5 +164,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

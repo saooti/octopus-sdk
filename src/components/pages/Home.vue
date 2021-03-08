@@ -15,7 +15,8 @@
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'home',
 
   components: {
@@ -35,5 +36,5 @@ export default {
       });
     },
   },
-};
+});
 </script>

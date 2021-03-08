@@ -208,7 +208,8 @@ import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: [
     'podcast',
     'emission',
@@ -457,5 +458,5 @@ export default {
       this.isVisible = value;
     },
   },
-};
+});
 </script>

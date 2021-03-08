@@ -78,7 +78,8 @@
 </style>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: ['podcastId', 'emission'],
 
   components: {},
@@ -132,5 +133,5 @@ export default {
       return link;
     },
   },
-};
+});
 </script>

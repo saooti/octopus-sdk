@@ -36,7 +36,8 @@
 </style>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'AnimatorsItem',
 
   props: ['animators'],
@@ -54,5 +55,5 @@ export default {
       return (first + ' ' + last).trim();
     },
   },
-};
+});
 </script>

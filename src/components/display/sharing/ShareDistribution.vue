@@ -166,7 +166,8 @@ import Snackbar from '../../misc/Snackbar.vue';
 import RssSection from '@/components/display/aggregator/RssSection.vue';
 import { displayMethods } from '../../mixins/functions';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     Snackbar,
     RssSection,
@@ -225,5 +226,5 @@ export default {
       this.rss = this.baseRss;
     },
   },
-};
+});
 </script>

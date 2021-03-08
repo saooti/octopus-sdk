@@ -84,7 +84,8 @@ import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore.js';
 import { displayMethods } from '../mixins/functions';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ShareButtons,
     PodcastFilterList,
@@ -185,5 +186,5 @@ export default {
       this.reload = !this.reload;
     },
   },
-};
+});
 </script>

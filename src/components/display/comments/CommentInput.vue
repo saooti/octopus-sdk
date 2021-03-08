@@ -94,7 +94,8 @@ import commentApi from '@/api/comments';
 import { cookies } from '../../mixins/functions';
 import { state } from '../../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentInput',
 
   props: {
@@ -291,5 +292,5 @@ export default {
         padding;
     },
   },
-};
+});
 </script>

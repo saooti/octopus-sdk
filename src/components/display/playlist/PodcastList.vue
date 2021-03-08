@@ -65,7 +65,8 @@ import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastList',
 
   props: ['playlist'],
@@ -169,5 +170,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

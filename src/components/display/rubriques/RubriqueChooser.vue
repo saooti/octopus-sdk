@@ -66,7 +66,8 @@ const getDefaultRubrique = defaultName => {
   return '';
 };
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     Multiselect,
   },
@@ -206,5 +207,5 @@ export default {
       this.rubrique = getDefaultRubrique(this.defaultanswer);
     },
   },
-};
+});
 </script>

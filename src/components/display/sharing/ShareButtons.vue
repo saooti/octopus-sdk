@@ -167,7 +167,8 @@ import ClipboardModal from '../../misc/modal/ClipboardModal.vue';
 import NewsletterModal from '../../misc/modal/NewsletterModal.vue';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: [
     'podcast',
     'emission',
@@ -244,5 +245,5 @@ export default {
       this.dataRSSSave = false;
     },
   },
-};
+});
 </script>

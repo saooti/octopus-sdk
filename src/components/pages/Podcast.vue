@@ -279,7 +279,8 @@ const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../mixins/functions';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastInlineList,
     PodcastImage,
@@ -585,5 +586,5 @@ export default {
       this.getPodcastDetails(val);
     },
   },
-};
+});
 </script>

@@ -17,7 +17,8 @@
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastList,
   },
@@ -56,5 +57,5 @@ export default {
       this.extractTitle(val);
     },
   },
-};
+});
 </script>

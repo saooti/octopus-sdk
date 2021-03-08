@@ -69,7 +69,8 @@ import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import EmissionChooser from '../display/emission/EmissionChooser.vue';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastList,
     ProductorSearch,
@@ -217,5 +218,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

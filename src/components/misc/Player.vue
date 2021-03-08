@@ -292,7 +292,8 @@ import Hls from 'hls.js';
 const moment = require('moment');
 //const axios = require("axios");
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'Player',
 
   components: {
@@ -780,5 +781,5 @@ export default {
       this.initComments(true);
     },
   },
-};
+});
 </script>

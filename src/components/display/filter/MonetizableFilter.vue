@@ -21,7 +21,8 @@
 </template>
 <style lang="scss"></style>
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: ['isEmission', 'isEducation'],
 
   data() {
@@ -35,5 +36,5 @@ export default {
       this.$emit('updateMonetization', this.monetization);
     },
   },
-};
+});
 </script>

@@ -81,7 +81,8 @@ import { state } from '../../../store/paramStore.js';
 
 const PHONE_WIDTH = 960;
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionInlineList',
 
   props: [
@@ -260,5 +261,5 @@ export default {
       return '';
     },
   },
-};
+});
 </script>

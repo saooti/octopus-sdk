@@ -105,7 +105,8 @@ const moment = require('moment');
 import Swatches from 'vue-swatches';
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'NewsletterModal',
 
   props: ['podcast'],
@@ -283,5 +284,5 @@ export default {
       element.target.select();
     },
   },
-};
+});
 </script>

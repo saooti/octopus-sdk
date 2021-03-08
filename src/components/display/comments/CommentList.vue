@@ -84,7 +84,8 @@ import { state } from '../../../store/paramStore.js';
 import octopusApi from '@saooti/octopus-api';
 const moment = require('moment');
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentList',
 
   props: {
@@ -311,5 +312,5 @@ export default {
       this.$emit('fetch', { count: this.totalCount, comments: this.comments });
     },
   },
-};
+});
 </script>

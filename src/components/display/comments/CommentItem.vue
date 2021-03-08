@@ -169,7 +169,8 @@ import EditCommentBox from '@/components/display/edit/EditCommentBox.vue';
 import { state } from '../../../store/paramStore.js';
 import { displayMethods } from '../../mixins/functions';
 const moment = require('moment');
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentItem',
 
   props: ['comment', 'podcast', 'fetchConference', 'organisation', 'isFlat'],
@@ -332,5 +333,5 @@ export default {
   },
 
   watch: {},
-};
+});
 </script>

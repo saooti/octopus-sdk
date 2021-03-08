@@ -53,7 +53,8 @@ import { state } from '../../../store/paramStore.js';
 import api from '@/api/initialize';
 import Vue from 'vue';
 Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' });
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'AddCommentModal',
 
   props: [],
@@ -125,5 +126,5 @@ export default {
       this.$emit('validate', this.name);
     },
   },
-};
+});
 </script>

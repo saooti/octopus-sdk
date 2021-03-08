@@ -255,7 +255,8 @@ import OrganisationChooserLight from '../display/organisation/OrganisationChoose
 import HomeDropdown from './HomeDropdown.vue';
 import octopusApi from '@saooti/octopus-api';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'TopBar',
 
   components: {
@@ -381,5 +382,5 @@ export default {
       }
     },
   },
-};
+});
 </script>

@@ -35,7 +35,8 @@
 
 <style lang="scss"></style>
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'MessageModal',
 
   props: [
@@ -67,5 +68,5 @@ export default {
       this.$emit('thirdEvent');
     },
   },
-};
+});
 </script>

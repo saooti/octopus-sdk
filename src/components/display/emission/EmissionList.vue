@@ -94,7 +94,8 @@ import EmissionItem from './EmissionItem.vue';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
 import { state } from '../../../store/paramStore.js';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionList',
 
   props: [
@@ -271,5 +272,5 @@ export default {
       },
     },
   },
-};
+});
 </script>

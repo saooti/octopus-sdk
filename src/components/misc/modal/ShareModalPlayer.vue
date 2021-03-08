@@ -86,7 +86,8 @@
 <script>
 import Snackbar from '../Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ShareModalPlayer',
 
   props: ['embedLink', 'embedlyLink', 'directLink'],
@@ -112,5 +113,5 @@ export default {
       this.$emit('close');
     },
   },
-};
+});
 </script>

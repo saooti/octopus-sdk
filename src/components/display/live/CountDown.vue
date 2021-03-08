@@ -16,7 +16,8 @@
 </template>
 <style lang="scss"></style>
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {},
 
   mounted() {
@@ -64,5 +65,5 @@ export default {
       return n < 10 ? '0' + n : n;
     },
   },
-};
+});
 </script>

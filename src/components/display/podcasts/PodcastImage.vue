@@ -204,7 +204,8 @@
 
 <script>
 import { mapState } from 'vuex';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastImage',
 
   props: [
@@ -380,5 +381,5 @@ export default {
       }
     },
   },
-};
+});
 </script>
