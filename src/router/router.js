@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 /*--------------------------------------------------------------------------
 Composants publics
@@ -18,7 +17,6 @@ import LivesPage from '@/components/pages/Lives.vue';
 import PlaylistPage from '@/components/pages/Playlist.vue';
 import PlaylistsPage from '@/components/pages/Playlists.vue';
 
-Vue.use(VueRouter);
 
 const routes = [
   /*--------------------------------------------------------------------------
@@ -160,12 +158,9 @@ const routes = [
     }),
   },
 ];
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
 
-export default new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: routes,
-  scrollBehavior() {
-    return { x: 0, y: 0 };
-  },
-});
+export default router;

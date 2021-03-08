@@ -6,6 +6,7 @@ import I18nResources from './locale/messages';
 import router from '@/router/router';
 import moment from 'moment';
 import store from '@/store/AppStore';
+import router from './router'
 let paramStore = require('./store/paramStore');
 
 moment.locale('fr');
@@ -47,5 +48,5 @@ paramStore
     createApp({
       i18n,
       render: () => h(App)
-    }).use(router).use(store).mount('#app');
+    }).use(router).use(router).use(store).mount('#app');
   });
