@@ -189,7 +189,7 @@ const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
 
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 export default defineComponent({
   name: 'LiveItem',
 
@@ -286,21 +286,20 @@ export default defineComponent({
         );
       }
     },
-    handleDescription() {
-      this.$nextTick(() => {
-        let liveDesc = document.getElementById(
-          'description-live-' + this.live.podcastId
-        );
-        let liveDescContainer:any = document.getElementById(
-          'description-live-container-' + this.live.podcastId
-        );
-        if (
-          null !== liveDesc &&
-          liveDesc.clientHeight > liveDescContainer.clientHeight
-        ) {
-          liveDescContainer.classList.add('after-live-description');
-        }
-      });
+    async handleDescription() {
+      await nextTick();
+      let liveDesc = document.getElementById(
+        'description-live-' + this.live.podcastId
+      );
+      let liveDescContainer:any = document.getElementById(
+        'description-live-container-' + this.live.podcastId
+      );
+      if (
+        null !== liveDesc &&
+        liveDesc.clientHeight > liveDescContainer.clientHeight
+      ) {
+        liveDescContainer.classList.add('after-live-description');
+      }
     },
     deleteItem() {
       this.$emit('deleteItem', this.index);

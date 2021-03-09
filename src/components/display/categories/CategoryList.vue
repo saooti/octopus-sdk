@@ -83,7 +83,7 @@
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
 
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 export default defineComponent({
   name: 'CategoryList',
 
@@ -156,10 +156,9 @@ export default defineComponent({
   },
 
   watch: {
-    categories() {
-      this.$nextTick(() => {
-        this.resizeWindow();
-      });
+    async categories() {
+      await nextTick();
+      this.resizeWindow();
     },
     filterOrga(newVal) {
       if (newVal) {

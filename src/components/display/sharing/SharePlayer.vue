@@ -204,7 +204,8 @@
 import ShareModalPlayer from '../../misc/modal/ShareModalPlayer.vue';
 import PlayerParameters from './PlayerParameters.vue';
 import { state } from '../../../store/paramStore';
-const Swatches = require('vue-swatches');
+//@ts-ignore
+import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
 

@@ -49,7 +49,7 @@ var initialize = function initialize(initObject: any) {
       state.generalParameters.ApiUri =
         'undefined' !== typeof param.ApiUri
           ? param.ApiUri
-          : 'https://api.dev2.saooti.org/';
+          : 'https://api.staging.saooti.org/';
       state.generalParameters.isIE11 =
         'undefined' !== typeof param.isIE11 ? param.isIE11 : false;
       state.generalParameters.podcastmaker =
@@ -78,7 +78,7 @@ var initialize = function initialize(initObject: any) {
       state.podcastPage.MiniplayerUri =
         'undefined' !== typeof param.MiniplayerUri
           ? param.MiniplayerUri
-          : 'https://player.dev2.saooti.org/';
+          : 'https://player.staging.saooti.org/';
       state.podcastPage.ouestFranceStyle =
         'undefined' !== typeof param.ouestFranceStyle
           ? param.ouestFranceStyle
@@ -92,7 +92,7 @@ var initialize = function initialize(initObject: any) {
       state.podcastPage.hlsUri =
         'undefined' !== typeof param.hlsUri
           ? param.hlsUri
-          : 'https://hls.dev2.saooti.org/';
+          : 'https://hls.staging.saooti.org/';
     }
     if (initObject.podcastsPage) {
       let param = initObject.podcastsPage;
@@ -195,13 +195,13 @@ var initialize = function initialize(initObject: any) {
       state.octopusApi.url =
         'undefined' !== typeof param.url
           ? param.url
-          : 'http://api.dev2.saooti.org/';
+          : 'http://api.staging.saooti.org/';
       state.octopusApi.oAuthParam =
         'undefined' !== typeof param.oAuthParam ? param.oAuthParam : undefined;
       state.octopusApi.commentsUrl =
         'undefined' !== typeof param.commentsUrl
           ? param.commentsUrl
-          : 'http://comments.dev2.saooti.org/';
+          : 'http://comments.staging.saooti.org/';
       if (state.generalParameters.podcastmaker) {
         state.octopusApi.organisationId =
           'undefined' !== typeof param.organisationId

@@ -270,7 +270,7 @@
 
 import MonetizableFilter from './MonetizableFilter.vue';
 import RubriqueChooser from '../rubriques/RubriqueChooser.vue';
-const Datetime = require('vue-datetime');
+import Datetime from 'vue-datetime';
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');

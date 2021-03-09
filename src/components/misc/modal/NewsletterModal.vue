@@ -102,7 +102,8 @@
 <script lang="ts">
 import Snackbar from '../../misc/Snackbar.vue';
 const moment = require('moment');
-const Swatches = require('vue-swatches');
+//@ts-ignore
+import Swatches from 'vue-swatches';
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'

@@ -169,7 +169,7 @@ const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
 
@@ -229,26 +229,25 @@ export default defineComponent({
         this.activeEmission = false;
       }
       this.podcasts = data.result;
-      this.$nextTick(() => {
-        for (let index = 0, len = this.podcasts.length; index < len; index++) {
-          let podcastDesc = document.getElementById(
-            'description-podcast-' + this.podcasts[index].podcastId
-          );
-          let podcastDescContainer:any = document.getElementById(
-            'description-podcast-container-' + this.podcasts[index].podcastId
-          );
-          if (
-            null !== podcastDesc &&
-            podcastDesc.clientHeight > podcastDescContainer.clientHeight
-          ) {
-            podcastDescContainer.classList.add('after-emission-description');
-          }
-        }
-      });
       if (this.editRight || this.activeEmission) {
         return;
       }
       this.$emit('emissionNotVisible');
+      await nextTick();
+      for (let index = 0, len = this.podcasts.length; index < len; index++) {
+        let podcastDesc = document.getElementById(
+          'description-podcast-' + this.podcasts[index].podcastId
+        );
+        let podcastDescContainer:any = document.getElementById(
+          'description-podcast-container-' + this.podcasts[index].podcastId
+        );
+        if (
+          null !== podcastDesc &&
+          podcastDesc.clientHeight > podcastDescContainer.clientHeight
+        ) {
+          podcastDescContainer.classList.add('after-emission-description');
+        }
+      }
     },
     play(podcast: any) {
       if (podcast === this.$store.state.player.podcast) {
