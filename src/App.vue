@@ -51,5 +51,5 @@ export default {
       displayMenu: false,
     };
   },
-});
+};
 </script>

@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import {AppStoreData} from './typeAppStore';
+import {AppStoreData} from './typeAppStore.ts';
 
 
 export default createStore({

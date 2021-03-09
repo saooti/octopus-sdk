@@ -1,20 +1,15 @@
-import Vue, { createApp, h } from 'vue';
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
-import App from './App.vue';
-import VueI18n from 'vue-i18n';
+/* import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'; */
+import { createApp, h } from 'vue';
+import { createI18n, useI18n } from 'vue-i18n'
 import I18nResources from './locale/messages';
-import router from '@/router/router';
+import router from './router/router';
 import moment from 'moment';
-import store from '@/store/AppStore';
-import router from './router'
+import store from '@/store/AppStore.js';
 let paramStore = require('./store/paramStore');
+import App from './App.vue';
 
 moment.locale('fr');
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
-
 //Gestion de l'i18n
-Vue.use(VueI18n);
 let messages = I18nResources;
 if (store.state.general.education) {
   messages = {
@@ -22,7 +17,7 @@ if (store.state.general.education) {
     en: I18nResources.en,
   };
 }
-const i18n = new VueI18n({
+const i18n = createI18n({
   locale: 'fr',
   messages: messages,
 });
@@ -45,8 +40,21 @@ paramStore
     footer: {},
   })
   .then(() => {
-    createApp({
-      i18n,
-      render: () => h(App)
-    }).use(router).use(router).use(store).mount('#app');
+    let app = createApp({
+      store,
+      router,
+      components: {
+        App,
+      },
+      setup() {
+        const { t } = useI18n()
+        return { t }
+      },
+      render: () => h(App),
+    })
+    /* app.use(BootstrapVue);
+    app.use(IconsPlugin); */
+    app.use(i18n);
+
+    app.mount('#app');
   });
