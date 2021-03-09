@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-const getStyle = (baseSize: any, position:any) => {
+/* const getStyle = (baseSize: any, position:any) => {
   const c = (f: number) => `calc(${f} * ${baseSize})`;
   const { pos, textAlign } = position;
   return {
@@ -45,10 +45,10 @@ const getStyle = (baseSize: any, position:any) => {
       userSelect: 'none',
     }),
   };
-};
+}; */
 import { defineComponent } from 'vue';
 export default defineComponent({
-  name: 'Snackbar',
+ /*  name: 'Snackbar',
   props: {
     colors: {
       default() {
@@ -127,6 +127,6 @@ export default defineComponent({
       if (this.msgs[i]) clearTimeout(this.msgs[i].timer);
       this.msgs.splice(i, 1);
     },
-  },
+  }, */
 });
 </script>

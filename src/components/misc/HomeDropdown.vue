@@ -136,10 +136,9 @@
 </style>
 
 <script lang="ts">
-import { state } from '../../store/paramStore.js';
-import store from '@/store/AppStore';
+import { state } from '../../store/paramStore';
+
 import { defineComponent } from 'vue'
-import { RouteLocationRaw } from 'vue-router';
 export default defineComponent({
   name: 'HomeDropdown',
 
@@ -153,8 +152,8 @@ export default defineComponent({
     isPodcastmaker() {
       return state.generalParameters.podcastmaker;
     },
-    authenticated() {
-      return store.state.authentication.isAuthenticated;
+    authenticated():boolean {
+      return this.$store.state.authentication.isAuthenticated;
     },
     isOrganisation() {
       return state.generalParameters.isOrganisation;
@@ -173,7 +172,7 @@ export default defineComponent({
         ref.className = 'menu';
       }
     },
-    goToUrl(url: RouteLocationRaw) {
+    goToUrl(url: any) {
       if (this.authenticated) {
         this.$router.push(url);
       }

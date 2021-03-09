@@ -93,7 +93,7 @@ import PodcastFilterList from '../display/podcasts/PodcastFilterList.vue';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import LiveHorizontalList from '../display/live/LiveHorizontalList.vue';
 const octopusApi = require('@saooti/octopus-api');
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 
 import { defineComponent } from 'vue'
@@ -136,7 +136,7 @@ export default defineComponent({
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
 

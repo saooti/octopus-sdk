@@ -120,8 +120,8 @@ import studioApi from '@/api/studio';
 import LiveItem from './LiveItem.vue';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
-import { state } from '../../../store/paramStore.js';
-import store from '@/store/AppStore';
+import { state } from '../../../store/paramStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveList',
@@ -166,8 +166,8 @@ export default defineComponent({
       if (this.organisationId) return this.organisationId;
       return undefined;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     displayNextLiveMessage():string {
       if (0 !== this.lives.length) return '';
@@ -210,7 +210,7 @@ export default defineComponent({
       this.loading = true;
       this.loaded = false;
       let dataLives = await studioApi.listConferences(
-        store,
+        this.$store,
         true,
         this.filterOrgaUsed,
         'RECORDING'
@@ -219,7 +219,7 @@ export default defineComponent({
         return null !== p;
       });
       let dataLivesToBe = await studioApi.listConferences(
-        store,
+        this.$store,
         true,
         this.filterOrgaUsed,
         'PENDING'
@@ -234,7 +234,7 @@ export default defineComponent({
         }
       }
       let dataLivesPlanned = await studioApi.listConferences(
-        store,
+        this.$store,
         true,
         this.filterOrgaUsed,
         'PLANNED'
@@ -247,7 +247,7 @@ export default defineComponent({
         });
       if (this.organisationRight) {
         let dataLivesTerminated = await studioApi.listConferences(
-          store,
+          this.$store,
           true,
           this.filterOrgaUsed,
           'DEBRIEFING'
@@ -256,7 +256,7 @@ export default defineComponent({
           return null !== p;
         });
         let dataLivesError = await studioApi.listConferences(
-          store,
+          this.$store,
           true,
           this.filterOrgaUsed,
           'ERROR'
@@ -265,7 +265,7 @@ export default defineComponent({
           return null !== p;
         });
         let dataLivesPublishing = await studioApi.listConferences(
-          store,
+          this.$store,
           true,
           this.filterOrgaUsed,
           'PUBLISHING'
@@ -343,7 +343,7 @@ export default defineComponent({
         this.loaded = true;
       }
     },
-    filterOrga() {
+    filterOrga():any {
       this.initArrays();
       this.fetchContent();
     },

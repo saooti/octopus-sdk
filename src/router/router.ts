@@ -23,10 +23,15 @@ const routes = [
   Liens publics
   --------------------------------------------------------------------------*/
   {
+    path: '/',
+    name: '',
+    component: Home,
+  },
+  {
     path: '/main/pub/home:productor?',
     name: 'home',
     component: Home,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
     }),
   },
@@ -34,7 +39,7 @@ const routes = [
     path: '/main/pub/search/:query?/:productor?',
     name: 'search',
     component: SearchPage,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
       query: route.params.query,
     }),
@@ -43,7 +48,7 @@ const routes = [
     path: '/main/pub/podcasts/:productor?',
     name: 'podcasts',
     component: PodcastsPage,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
     }),
   },
@@ -51,7 +56,7 @@ const routes = [
     path: '/main/pub/emissions/:productor?',
     name: 'emissions',
     component: EmissionsPage,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
     }),
   },
@@ -59,7 +64,7 @@ const routes = [
     path: '/main/pub/participants/:productor?',
     name: 'participants',
     component: ParticpantsPage,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
     }),
   },
@@ -67,7 +72,7 @@ const routes = [
     path: '/main/pub/emission/:emissionId/:productor?',
     name: 'emission',
     component: EmissionPage,
-    props: route => ({
+    props: (route:any) => ({
       first: parseInt(route.query.first, 10) || 0,
       size: parseInt(route.query.size, 10) || 12,
       emissionId: parseInt(route.params.emissionId, 10),
@@ -78,7 +83,7 @@ const routes = [
     path: '/main/pub/podcast/:podcastId/:productor?',
     name: 'podcast',
     component: PodcastPage,
-    props: route => ({
+    props: (route:any) => ({
       podcastId: parseInt(route.params.podcastId, 10),
       productor: route.params.productor,
     }),
@@ -87,7 +92,7 @@ const routes = [
     path: '/main/pub/participant/:participantId/:productor?',
     name: 'participant',
     component: ParticipantPage,
-    props: route => ({
+    props: (route:any) => ({
       first: parseInt(route.query.first, 10) || 0,
       size: parseInt(route.query.size, 10) || 12,
       participantId: parseInt(route.params.participantId, 10),
@@ -98,7 +103,7 @@ const routes = [
     path: '/main/pub/category/:iabId/:productor?',
     name: 'category',
     component: CategoryPage,
-    props: route => ({
+    props: (route:any) => ({
       first: parseInt(route.query.first, 10) || 0,
       size: parseInt(route.query.size, 10) || 12,
       iabId: parseInt(route.params.iabId, 10),
@@ -109,7 +114,7 @@ const routes = [
     path: '/main/pub/rubrique/:rubriqueId/:productor?',
     name: 'rubrique',
     component: RubriquePage,
-    props: route => ({
+    props: (route:any) => ({
       first: parseInt(route.query.first, 10) || 0,
       size: parseInt(route.query.size, 10) || 12,
       rubriqueId: parseInt(route.params.rubriqueId, 10),
@@ -120,7 +125,7 @@ const routes = [
     path: '/main/pub/lives/:productor?',
     name: 'lives',
     component: LivesPage,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
     }),
   },
@@ -144,7 +149,7 @@ const routes = [
     path: '/main/pub/playlists/:productor?',
     name: 'playlists',
     component: PlaylistsPage,
-    props: route => ({
+    props: (route:any) => ({
       productor: route.params.productor,
     }),
   },
@@ -152,7 +157,7 @@ const routes = [
     path: '/main/pub/playlist/:playlistId/:productor?',
     name: 'playlist',
     component: PlaylistPage,
-    props: route => ({
+    props: (route:any) => ({
       playlistId: parseInt(route.params.playlistId, 10),
       productor: route.params.productor,
     }),

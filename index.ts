@@ -47,9 +47,9 @@ import CommentList from "./src/components/display/comments/CommentList.vue";
 import CommentInput from "./src/components/display/comments/CommentInput.vue";
 
 //mixins
-import {selenium} from "./src/components/mixins/functions.js";
-import {cookies} from "./src/components/mixins/functions.js";
-import {displayMethods} from "./src/components/mixins/functions.js";
+import {selenium} from "./src/components/mixins/functions";
+import {cookies} from "./src/components/mixins/functions";
+import {displayMethods} from "./src/components/mixins/functions";
 
 const components = {
     Lives,

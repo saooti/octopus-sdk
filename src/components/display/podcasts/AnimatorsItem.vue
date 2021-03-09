@@ -7,7 +7,7 @@
       :to="{
         name: 'participant',
         params: { participantId: animator.participantId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       class="animator-item"
       v-for="(animator, index) in animators"

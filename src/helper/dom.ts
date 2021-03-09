@@ -1,5 +1,5 @@
 export default {
-  convertRemToPixels(rem) {
+  convertRemToPixels(rem: number) {
     return (
       rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
     );

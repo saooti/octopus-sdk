@@ -64,11 +64,11 @@
 <script lang="ts">
 // @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import EmissionChooser from '../display/emission/EmissionChooser.vue';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -93,8 +93,8 @@ export default defineComponent({
     }
     if (this.$route.query.productor) {
       this.organisationId = this.$route.query.productor;
-    } else if (store.state.filter.organisationId) {
-      this.organisationId = store.state.filter.organisationId;
+    } else if (this.$store.state.filter.organisationId) {
+      this.organisationId = this.$store.state.filter.organisationId;
     }
     if (this.organisation && this.organisationRight) {
       this.includeHidden = true;
@@ -122,7 +122,7 @@ export default defineComponent({
   },
 
   computed: {
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     myOrganisationId() {
@@ -136,8 +136,8 @@ export default defineComponent({
         return true;
       return false;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     organisation():any {
       if (this.organisationId) return this.organisationId;

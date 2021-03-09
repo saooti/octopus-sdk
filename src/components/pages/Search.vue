@@ -60,7 +60,7 @@
 
 <script lang="ts">
 // @ is an alias to /src
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
 import { defineComponent } from 'vue'

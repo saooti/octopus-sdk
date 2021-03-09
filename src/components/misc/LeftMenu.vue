@@ -6,7 +6,7 @@
         class="text-dark font-weight-bold mb-3 show-phone"
         :to="{
           name: 'home',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ $t('Home') }}</router-link
       >
@@ -16,7 +16,7 @@
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'lives',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ $t('Live') }}</router-link
       >
@@ -25,7 +25,7 @@
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'podcasts',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ $t('Podcasts') }}</router-link
       >
@@ -34,7 +34,7 @@
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'emissions',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ $t('Emissions') }}</router-link
       >
@@ -44,7 +44,7 @@
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'productors',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ $t('Productors') }}</router-link
       >
@@ -53,14 +53,14 @@
         class="text-dark font-weight-bold mb-3"
         :to="{
           name: 'participants',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ $t('Speakers') }}</router-link
       >
       <router-link
         :to="{
           name: 'playlists',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="linkHover pb-3 text-dark font-weight-bold"
         >{{ $t('Playlists') }}</router-link
@@ -85,7 +85,7 @@
         :to="{
           name: 'category',
           params: { iabId: category.id },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
       >
         {{ category.name }}</router-link
@@ -156,11 +156,10 @@
 </style>
 <script lang="ts">
 import OrganisationChooserLight from '../display/organisation/OrganisationChooserLight.vue';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
-import { LocationQueryValue } from 'vue-router';
 export default defineComponent({
   name: 'LeftMenu',
 
@@ -169,6 +168,8 @@ export default defineComponent({
   },
 
   props: ['displayMenu', 'isEducation'],
+
+  emits: ['update:displayMenu'],
 
   mounted() {
     if (this.filterOrga) {
@@ -192,19 +193,19 @@ export default defineComponent({
         if (this.$route.query.productor !== organisation.id) {
           this.$router.push({ query: { productor: organisation.id } });
         }
-        store.commit('filterOrga', {
+        this.$store.commit('filterOrga', {
           orgaId: organisation.id,
           imgUrl: organisation.imageUrl,
         });
         const isLive = await octopusApi.liveEnabledOrganisation(
           organisation.id
         );
-        store.commit('filterOrgaLive', isLive);
+        this.$store.commit('filterOrgaLive', isLive);
       } else {
         if (this.$route.query.productor) {
           this.$router.push({ query: { productor: undefined } });
         }
-        store.commit('filterOrga', { orgaId: undefined });
+        this.$store.commit('filterOrga', { orgaId: undefined });
       }
     },
   },
@@ -222,11 +223,11 @@ export default defineComponent({
     isPodcastmaker() {
       return state.generalParameters.podcastmaker;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
-    filterOrgaLive() {
-      return store.state.filter.live;
+    filterOrgaLive():any {
+      return this.$store.state.filter.live;
     },
   },
 

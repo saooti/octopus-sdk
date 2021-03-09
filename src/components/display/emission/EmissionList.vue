@@ -92,8 +92,8 @@ const octopusApi = require('@saooti/octopus-api');
 import emissionApi from '@/api/emissions';
 import EmissionItem from './EmissionItem.vue';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
-import store from '@/store/AppStore';
-import { state } from '../../../store/paramStore.js';
+
+import { state } from '../../../store/paramStore';
 
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -173,8 +173,8 @@ export default defineComponent({
           return this.$t('sort by date');
       }
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     organisation():any {
       if (this.organisationId) return this.organisationId;
@@ -207,7 +207,7 @@ export default defineComponent({
       };
       if (this.includeHidden) {
         param.includeHidden = this.includeHidden;
-        const data = await emissionApi.fetchEmissionsAdmin(store, param);
+        const data = await emissionApi.fetchEmissionsAdmin(this.$store, param);
         this.afterFetching(reset, data);
       } else {
         const data = await octopusApi.fetchEmissions(param);

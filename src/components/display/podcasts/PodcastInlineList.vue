@@ -142,7 +142,7 @@
 const octopusApi = require('@saooti/octopus-api');
 import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
-import store from '@/store/AppStore';
+
 const PHONE_WIDTH = 960;
 
 import { defineComponent } from 'vue'
@@ -205,8 +205,8 @@ export default defineComponent({
     podcasts():any {
       return this.allPodcasts.slice(this.index, this.index + this.size);
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     organisation():any {
       if (this.organisationId) return this.organisationId;
@@ -218,7 +218,7 @@ export default defineComponent({
       return {
         name: 'category',
         params: { iabId: this.iabId },
-        query: { productor: store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       };
     },
     previousAvailable():boolean {

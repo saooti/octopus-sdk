@@ -51,7 +51,7 @@ import ShareButtons from '../display/sharing/ShareButtons.vue';
 import SharePlayer from '../display/sharing/SharePlayer.vue';
 import PodcastList from '../display/playlist/PodcastList.vue';
 const octopusApi = require('@saooti/octopus-api');
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 
 import { defineComponent } from 'vue'
@@ -83,7 +83,7 @@ export default defineComponent({
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     isEditBox() {

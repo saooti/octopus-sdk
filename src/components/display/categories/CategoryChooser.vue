@@ -58,9 +58,9 @@
 <style lang="scss"></style>
 <script lang="ts">
 import Multiselect from 'vue-multiselect';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 
-const getDefaultCategory = defaultName => {
+const getDefaultCategory = (defaultName: any) => {
   if (undefined !== defaultName) return { name: defaultName, id: 0 };
   return '';
 };
@@ -83,11 +83,11 @@ export default defineComponent({
 
   computed: {
     allCategories() {
-      return state.generalParameters.allCategories.sort((a, b) =>
+      return state.generalParameters.allCategories.sort((a:any, b:any) =>
         a.name > b.name ? 1 : -1
       );
     },
-    id() {
+    id():string {
       if (this.multiple) return 'categoryChooser' + this.multiple;
       return 'categoryChooser';
     },
@@ -96,7 +96,7 @@ export default defineComponent({
   data() {
     return {
       categories: [] as any,
-      category: getDefaultCategory(this.defaultanswer),
+      category: getDefaultCategory(this.defaultanswer) as any,
       isLoading: false,
       totalCategories: undefined as any,
       init: true,
@@ -114,7 +114,8 @@ export default defineComponent({
 
   methods: {
     clearAll() {
-      this.$refs.multiselectRef.$refs.search.setAttribute(
+      let ref:any = this.$refs.multiselectRef;
+      ref.$refs.search.setAttribute(
         'autocomplete',
         'off'
       );
@@ -128,7 +129,7 @@ export default defineComponent({
       ) {
         this.totalCategories = this.allCategories;
       } else {
-        this.totalCategories = this.allCategories.filter(c => {
+        this.totalCategories = this.allCategories.filter((c: { podcastCount: any; }) => {
           return c.podcastCount;
         });
       }
@@ -148,7 +149,7 @@ export default defineComponent({
       }
     },
 
-    onSearchCategory(query) {
+    onSearchCategory(query: string) {
       this.isLoading = true;
       let list = [getDefaultCategory(this.defaultanswer)].concat(
         this.totalCategories
@@ -162,22 +163,22 @@ export default defineComponent({
       this.isLoading = false;
     },
 
-    onEmissionSelected(category) {
+    onEmissionSelected(category: any) {
       if (undefined !== this.categorySelected) {
         this.$emit('update:categorySelected', category.id);
       } else if (undefined === this.categoryArray) {
         this.$emit('selected', category);
       }
     },
-    initCategorySelected(val) {
-      this.category = state.generalParameters.allCategories.find(el => {
+    initCategorySelected(val: any) {
+      this.category = state.generalParameters.allCategories.find((el: { id: any; }) => {
         return el.id === val;
       });
     },
-    initCategoryArray(val) {
+    initCategoryArray(val: any[]) {
       this.category.length = 0;
-      val.forEach(element => {
-        let item = state.generalParameters.allCategories.find(el => {
+      val.forEach((element: any) => {
+        let item = state.generalParameters.allCategories.find((el: { id: any; }) => {
           return el.id === element;
         });
         this.category.push(item);
@@ -191,8 +192,8 @@ export default defineComponent({
     category(newVal) {
       if (undefined === this.categoryArray) return;
 
-      let idsArray = [];
-      newVal.forEach(el => {
+      let idsArray: any[] = [];
+      newVal.forEach((el: { id: any; }) => {
         idsArray.push(el.id);
       });
       this.$emit('selected', idsArray);

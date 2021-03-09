@@ -203,11 +203,11 @@
 <script lang="ts">
 import ShareModalPlayer from '../../misc/modal/ShareModalPlayer.vue';
 import PlayerParameters from './PlayerParameters.vue';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 const Swatches = require('vue-swatches');
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: [
@@ -282,7 +282,7 @@ export default defineComponent({
       }
       return false;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     iFrameSrc() {
@@ -428,7 +428,7 @@ export default defineComponent({
         orgaId = this.emission.orga.id;
       }
       const data:any = await profileApi.fetchOrganisationAttibutes(
-        store,
+        this.$store,
         orgaId
       );
       if (data.hasOwnProperty('COLOR')) {

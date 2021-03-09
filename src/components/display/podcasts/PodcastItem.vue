@@ -45,7 +45,7 @@
         :to="{
           name: 'podcast',
           params: { podcastId: podcast.podcastId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="text-dark d-flex flex-column flex-grow"
       >
@@ -57,7 +57,7 @@
           :to="{
             name: 'productor',
             params: { productorId: podcast.organisation.id },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="text-dark producer-podcast-item"
         >
@@ -143,7 +143,7 @@
 <script lang="ts">
 import AnimatorsItem from './AnimatorsItem.vue';
 import PodcastImage from './PodcastImage.vue';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 
@@ -222,7 +222,7 @@ export default defineComponent({
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     editRight() {

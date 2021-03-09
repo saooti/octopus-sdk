@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 
 import { defineComponent } from 'vue'
 export default defineComponent({

@@ -5,7 +5,7 @@
       :to="{
         name: 'podcast',
         params: { podcastId: live.podcastId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
     >
       <div class="font-weight-bold">{{ date }}</div>
@@ -18,7 +18,7 @@
       :to="{
         name: 'podcast',
         params: { podcastId: live.podcastId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
     >
       <PodcastImage
@@ -43,7 +43,7 @@
         :to="{
           name: 'podcast',
           params: { podcastId: live.podcastId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ live.title }}</router-link
       >
@@ -52,7 +52,7 @@
         :to="{
           name: 'emission',
           params: { emissionId: live.emission.emissionId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         >{{ live.emission.name }}</router-link
       >
@@ -75,7 +75,7 @@
           :to="{
             name: 'participant',
             params: { participantId: animator.participantId },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           >{{ getName(animator) }}</router-link
         >
@@ -87,7 +87,7 @@
           :to="{
             name: 'productor',
             params: { productorId: live.organisation.id },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           >{{ live.organisation.name }}</router-link
         >
@@ -180,7 +180,7 @@
 </style>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 import PodcastImage from '../podcasts/PodcastImage.vue';
 import studioApi from '@/api/studio';
@@ -188,7 +188,7 @@ import RecordingItemButton from '@/components/display/studio/RecordingItemButton
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveItem',
@@ -280,7 +280,7 @@ export default defineComponent({
       } catch {
         this.$emit('deleteItem', this.index);
         studioApi.deleteConference(
-          store,
+          this.$store,
           this.fetchConference.conferenceId
         );
       }

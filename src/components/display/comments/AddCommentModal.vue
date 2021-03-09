@@ -49,9 +49,9 @@
 <style lang="scss"></style>
 <script lang="ts">
 import { useReCaptcha } from "vue-recaptcha-v3";
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'AddCommentModal',
@@ -76,9 +76,9 @@ export default defineComponent({
     captcha.style.display ='block';
     if (this.authenticated) {
       this.name = (
-        (store.state.profile.firstname || '') +
+        (this.$store.state.profile.firstname || '') +
         ' ' +
-        (store.state.profile.lastname || '')
+        (this.$store.state.profile.lastname || '')
       ).trim();
       this.needVerify = false;
     }
@@ -100,7 +100,7 @@ export default defineComponent({
   },
 
   computed: {
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     isCaptchaTest() {

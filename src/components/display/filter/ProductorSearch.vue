@@ -114,9 +114,9 @@
 <script lang="ts">
 // @ is an alias to /src
 import OrganisationChooser from '../organisation/OrganisationChooser.vue';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
-import store from '@/store/AppStore';
+
 import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components: {
@@ -137,11 +137,11 @@ export default defineComponent({
 
   async created() {
     if (!this.organisationId) return;
-    store.commit('filterOrga', { orgaId: this.organisationId });
+    this.$store.commit('filterOrga', { orgaId: this.organisationId });
     const isLive = await octopusApi.liveEnabledOrganisation(
       this.organisationId
     );
-    store.commit('filterOrgaLive', isLive);
+    this.$store.commit('filterOrgaLive', isLive);
     this.keepOrganisation = true;
     if (!this.$route.query.productor) {
       this.$router.replace({ query: { productor: this.organisationId } });
@@ -173,8 +173,8 @@ export default defineComponent({
       if ('playlist' === this.type) return this.$t('Look for playlist name');
       return this.$t('Look for podcast name');
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
   },
 
@@ -184,7 +184,7 @@ export default defineComponent({
         this.$router.push({ query: { productor: undefined } });
       }
       this.imgUrl = organisation.imageUrl;
-      store.commit('filterOrga', {
+      this.$store.commit('filterOrga', {
         orgaId: undefined as any,
         imgUrl: this.imgUrl,
       });
@@ -204,24 +204,24 @@ export default defineComponent({
         if (this.$route.query.productor !== this.organisationId) {
           this.$router.push({ query: { productor: this.organisationId } });
         }
-        store.commit('filterOrga', {
+        this.$store.commit('filterOrga', {
           orgaId: this.organisationId,
           imgUrl: this.imgUrl,
         });
         const isLive = await octopusApi.liveEnabledOrganisation(
           this.organisationId
         );
-        store.commit('filterOrgaLive', isLive);
+        this.$store.commit('filterOrgaLive', isLive);
         return;
       }
       if (this.$route.query.productor) {
         this.$router.push({ query: { productor: undefined } });
       }
-      store.commit('filterOrga', { orgaId: undefined });
+      this.$store.commit('filterOrga', { orgaId: undefined });
     },
   },
   watch: {
-    filterOrga() {
+    filterOrga():any {
       if (this.filterOrga) {
         this.keepOrganisation = true;
         this.$emit('updateOrganisationId', this.filterOrga);

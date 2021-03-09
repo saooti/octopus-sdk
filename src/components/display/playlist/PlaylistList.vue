@@ -34,8 +34,8 @@
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PlaylistItem from './PlaylistItem.vue';
-import { state } from '../../../store/paramStore.js';
-import store from '@/store/AppStore';
+import { state } from '../../../store/paramStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistList',
@@ -73,8 +73,8 @@ export default defineComponent({
     changed():any {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}`;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     sort() {
       if (!this.query) return 'NAME';

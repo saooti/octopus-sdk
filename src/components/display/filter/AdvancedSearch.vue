@@ -271,10 +271,10 @@
 import MonetizableFilter from './MonetizableFilter.vue';
 import RubriqueChooser from '../rubriques/RubriqueChooser.vue';
 const Datetime = require('vue-datetime');
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue';
 export default defineComponent({
   components: {
@@ -350,7 +350,7 @@ export default defineComponent({
     myOrganisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     isProduction() {
@@ -370,8 +370,8 @@ export default defineComponent({
     isPodcastmaker() {
       return state.generalParameters.podcastmaker;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     organisation():any {
       if (this.organisationId) return this.organisationId;

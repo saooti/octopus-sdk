@@ -48,7 +48,7 @@
 import EmissionList from '../display/emission/EmissionList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 
 import { defineComponent } from 'vue'
 export default defineComponent({

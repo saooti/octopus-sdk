@@ -284,12 +284,12 @@
 
 <script lang="ts">
 import { mapState } from 'vuex';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import DurationHelper from '../../helper/duration';
 import CommentPlayer from '../display/comments/CommentPlayer.vue';
 const octopusApi = require('@saooti/octopus-api');
 import Hls from 'hls.js';
-import store from '@/store/AppStore';
+
 const moment = require('moment');
 //const axios = require("axios");
 
@@ -405,11 +405,11 @@ export default defineComponent({
       parameters.push('origin=octopus');
       parameters.push('cookieName=player_' + this.podcast.podcastId);
       if (
-        store.state.authentication &&
-        store.state.authentication.organisationId
+        this.$store.state.authentication &&
+        this.$store.state.authentication.organisationId
       ) {
         parameters.push(
-          'distributorId=' + store.state.authentication.organisationId
+          'distributorId=' + this.$store.state.authentication.organisationId
         );
       }
       return this.podcast.audioUrl + '?' + parameters.join('&');
@@ -420,7 +420,7 @@ export default defineComponent({
         return {
           name: 'podcast',
           params: { podcastId: this.podcast.podcastId },
-          query: { productor: store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         };
       }
       return '';
@@ -453,9 +453,9 @@ export default defineComponent({
 
   methods: {
     watchPlayerStatus() {
-      store.watch(
-        state => state.player.status,
-        newValue => {
+      this.$store.watch(
+        (state:any) => state.player.status,
+        (newValue:any) => {
           const audioPlayer:any = document.querySelector('#audio-player');
           if (!audioPlayer) return;
           if (this.live && !this.hlsReady) {
@@ -473,12 +473,16 @@ export default defineComponent({
       );
     },
     getDownloadId() {
-      return this._downloadId;
+      //TODO 
+      return undefined;
+      /* return this._downloadId; */
     },
 
-    setDownloadId(newValue: any) {
+    setDownloadId(newValue?: any) {
       this.endListeningProgress();
-      this._downloadId = newValue;
+      //TODO 
+      console.log(newValue);
+      /* this._downloadId = newValue; */
     },
 
     onError() {
@@ -499,7 +503,7 @@ export default defineComponent({
     },
 
     stopPlayer() {
-      store.commit('playerPlayPodcast');
+      this.$store.commit('playerPlayPodcast');
     },
 
     seekTo(event: { currentTarget: { getBoundingClientRect: () => any; clientWidth: any; }; clientX: number; }) {
@@ -511,7 +515,7 @@ export default defineComponent({
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
 
-      const seekTime = store.state.player.total * percentPosition;
+      const seekTime = this.$store.state.player.total! * percentPosition;
       if (this.podcast || this.live) {
         this.notListenTime = seekTime - this.listenTime;
       }
@@ -544,8 +548,8 @@ export default defineComponent({
       if (!this.live) {
         this.displayAlertBar = false;
         this.percentLiveProgress = 100;
-        store.commit('playerTotalTime', streamDuration);
-        store.commit('playerElapsed', playerCurrentTime / streamDuration);
+        this.$store.commit('playerTotalTime', streamDuration);
+        this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
         return;
       }
 
@@ -553,8 +557,8 @@ export default defineComponent({
       if (scheduledDuration > streamDuration) {
         this.displayAlertBar = false;
         this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
-        store.commit('playerTotalTime', scheduledDuration);
-        store.commit(
+        this.$store.commit('playerTotalTime', scheduledDuration);
+        this.$store.commit(
           'playerElapsed',
           playerCurrentTime / scheduledDuration
         );
@@ -562,17 +566,17 @@ export default defineComponent({
         this.percentLiveProgress = 100;
         this.displayAlertBar = true;
         this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
-        store.commit('playerTotalTime', streamDuration);
-        store.commit('playerElapsed', playerCurrentTime / streamDuration);
+        this.$store.commit('playerTotalTime', streamDuration);
+        this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
       }
     },
 
     onPlay() {
-      store.commit('playerPause', false);
+      this.$store.commit('playerPause', false);
     },
 
     onPause() {
-      store.commit('playerPause', true);
+      this.$store.commit('playerPause', true);
     },
 
     onFinished() {
@@ -586,7 +590,7 @@ export default defineComponent({
 
     onHidden() {
       if (this.forceHide) {
-        store.commit('playerPlayPodcast');
+        this.$store.commit('playerPlayPodcast');
         this.forceHide = false;
       }
     },
@@ -635,7 +639,7 @@ export default defineComponent({
               this.live.livePodcastId,
               downloadId,
               'octopus',
-              store.state.authentication.organisationId
+              this.$store.state.authentication.organisationId
             );
             this.setDownloadId(downloadId);
           } catch (error) {
@@ -694,7 +698,7 @@ export default defineComponent({
       if (
         refresh &&
         podcastId &&
-        store.state.comments.actualPodcastId !== podcastId
+        this.$store.state.comments.actualPodcastId !== podcastId
       ) {
         return;
       }
@@ -703,20 +707,20 @@ export default defineComponent({
       let size = 50;
       if (
         podcastId &&
-        store.state.comments.actualPodcastId === podcastId
+        this.$store.state.comments.actualPodcastId === podcastId
       ) {
         this.comments = this.commentsLoaded;
         if (
           this.commentsLoaded &&
-          this.commentsLoaded.length < store.state.comments.totalCount
+          this.commentsLoaded.length < this.$store.state.comments.totalCount
         ) {
           first = this.commentsLoaded.length;
-          count = store.state.comments.totalCount;
+          count = this.$store.state.comments.totalCount;
         }
       }
       if (
         (!podcastId ||
-          store.state.comments.actualPodcastId === podcastId) &&
+          this.$store.state.comments.actualPodcastId === podcastId) &&
         0 === first
       )
         return;

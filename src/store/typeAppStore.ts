@@ -232,6 +232,7 @@ export function emptyPodcastData(): Podcast{
         knownIdentity: any,
         actualPodcastId: number | undefined,
         loadedComments: any,
+        totalCount: any,
       },
   }
 
@@ -375,6 +376,7 @@ export function emptyPodcastData(): Podcast{
             knownIdentity: null,
             actualPodcastId: undefined as any,
             loadedComments: [] as any,
+            totalCount:undefined as any,
           },
     }
   }

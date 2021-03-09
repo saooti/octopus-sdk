@@ -15,7 +15,7 @@
       <router-link
         :to="{
           name: 'home',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
       >
         <div class="top-bar-logo m-3" v-on:click="onDisplayMenu(true)">
@@ -48,7 +48,7 @@
           "
           :to="{
             name: 'lives',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Live') }}</router-link
@@ -56,7 +56,7 @@
         <router-link
           :to="{
             name: 'podcasts',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Podcasts') }}</router-link
@@ -64,7 +64,7 @@
         <router-link
           :to="{
             name: 'emissions',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Emissions') }}</router-link
@@ -72,7 +72,7 @@
         <router-link
           :to="{
             name: 'participants',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Speakers') }}</router-link
@@ -80,7 +80,7 @@
         <router-link
           :to="{
             name: 'playlists',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Playlists') }}</router-link
@@ -88,7 +88,7 @@
         <router-link
           :to="{
             name: 'productors',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           v-if="!isPodcastmaker && (!filterOrga || isEducation)"
@@ -106,7 +106,7 @@
             :aria-label="$t('Search')"
             :to="{
               name: 'podcasts',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: this.$store.state.filter.organisationId },
             }"
           >
             <div class="btn admin-button m-1">
@@ -250,13 +250,12 @@
 </style>
 
 <script lang="ts">
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import OrganisationChooserLight from '../display/organisation/OrganisationChooserLight.vue';
 import HomeDropdown from './HomeDropdown.vue';
 const octopusApi = require('@saooti/octopus-api');
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
-import { LocationQueryValue } from 'vue-router';
 export default defineComponent({
   name: 'TopBar',
 
@@ -277,6 +276,7 @@ export default defineComponent({
   },
 
   props: ['displayMenu', 'isEducation'],
+  emits: ['update:displayMenu'],
 
   data() {
     return {
@@ -301,18 +301,18 @@ export default defineComponent({
     isLiveTab() {
       return state.generalParameters.isLiveTab;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
-    filterOrgaLive() {
-      return store.state.filter.live;
+    filterOrgaLive():any {
+      return this.$store.state.filter.live;
     },
     imgUrl():any {
       if (
-        store.state.filter.imgUrl &&
-        !store.state.filter.imgUrl.includes('emptypodcast')
+        this.$store.state.filter.imgUrl &&
+        !this.$store.state.filter.imgUrl.includes('emptypodcast')
       )
-        return store.state.filter.imgUrl + '?dummy=' + this.dummyParam;
+        return this.$store.state.filter.imgUrl + '?dummy=' + this.dummyParam;
       return undefined;
     },
   },
@@ -356,20 +356,20 @@ export default defineComponent({
         if (this.$route.query.productor !== organisation.id) {
           this.$router.push({ query: { productor: organisation.id } });
         }
-        store.commit('filterOrga', {
+        this.$store.commit('filterOrga', {
           orgaId: organisation.id,
           imgUrl: organisation.imageUrl,
         });
         const isLive = await octopusApi.liveEnabledOrganisation(
           organisation.id
         );
-        store.commit('filterOrgaLive', isLive);
+        this.$store.commit('filterOrgaLive', isLive);
       } else {
         this.organisationId = undefined;
         if (this.$route.query.productor) {
           this.$router.push({ query: { productor: undefined } });
         }
-        store.commit('filterOrga', { orgaId: undefined });
+        this.$store.commit('filterOrga', { orgaId: undefined });
       }
     },
   },

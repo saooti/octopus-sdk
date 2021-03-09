@@ -204,7 +204,7 @@
 
 <script lang="ts">
 import { mapState } from 'vuex';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'PodcastImage',
@@ -349,10 +349,10 @@ export default defineComponent({
         return;
       }
       if (!this.recordingLive) {
-        store.commit('playerPlayPodcast', this.podcast);
+        this.$store.commit('playerPlayPodcast', this.podcast);
         return;
       }
-      store.commit('playerPlayPodcast', {
+      this.$store.commit('playerPlayPodcast', {
         title: this.podcast.title,
         audioUrl: this.podcast.audioUrl,
         duration: this.podcast.duration,

@@ -7,7 +7,7 @@
       :to="{
         name: 'playlist',
         params: { playlistId: playlist.playlistId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       :aria-label="$t('Playlist')"
       class="text-dark"
@@ -25,7 +25,7 @@
         :to="{
           name: 'playlist',
           params: { playlistId: playlist.playlistId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="text-dark"
       >
@@ -52,7 +52,7 @@
         :to="{
           name: 'productor',
           params: { productorId: playlist.organisation.id },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="text-dark"
         v-if="!isPodcastmaker && playlist.organisation"
@@ -68,7 +68,7 @@
 <style lang="scss"></style>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 /* import octopusApi from "@saooti/octopus-api"; */
 import { defineComponent } from 'vue'

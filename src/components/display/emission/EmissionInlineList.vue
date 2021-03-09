@@ -77,7 +77,7 @@
 const octopusApi = require('@saooti/octopus-api');
 import domHelper from '../../../helper/dom';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 
 const PHONE_WIDTH = 960;
 

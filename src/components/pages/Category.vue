@@ -15,8 +15,8 @@
 <script lang="ts">
 // @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
-import { state } from '../../store/paramStore.js';
-import store from '@/store/AppStore';
+import { state } from '../../store/paramStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -39,8 +39,8 @@ export default defineComponent({
     categories() {
       return state.generalParameters.allCategories;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
   },
 

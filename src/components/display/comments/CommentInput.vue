@@ -91,9 +91,9 @@ import AddCommentModal from './AddCommentModal.vue';
 import MessageModal from '../../misc/modal/MessageModal.vue';
 const octopusApi = require('@saooti/octopus-api');
 import commentApi from '@/api/comments';
-import store from '@/store/AppStore';
+
 import { cookies } from '../../mixins/functions';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 
 import { defineComponent, ref } from 'vue';
 export default defineComponent({
@@ -162,7 +162,7 @@ export default defineComponent({
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     isCertified() {
@@ -175,7 +175,7 @@ export default defineComponent({
       return false;
     },
     userId():any {
-      if (this.authenticated) return store.state.profile.userId;
+      if (this.authenticated) return this.$store.state.profile.userId;
       return undefined;
     },
     phase() {
@@ -228,20 +228,20 @@ export default defineComponent({
       }
       let timeline = 0;
       if (
-        (store.state.player.podcast &&
-          store.state.player.podcast.podcastId ===
+        (this.$store.state.player.podcast &&
+          this.$store.state.player.podcast.podcastId ===
             this.podcast.podcastId) ||
-        (store.state.player.live &&
-          store.state.player.live.livePodcastId ===
+        (this.$store.state.player.live &&
+          this.$store.state.player.live.livePodcastId ===
             this.podcast.podcastId)
       ) {
         timeline = Math.round(
-          store.state.player.elapsed * store.state.player.total
+          this.$store.state.player.elapsed! * this.$store.state.player.total!
         );
-        if (this.podcast.duration && store.state.player.podcast) {
+        if (this.podcast.duration && this.$store.state.player.podcast) {
           timeline = Math.round(
             timeline -
-              (store.state.player.total - this.podcast.duration / 1000)
+              (this.$store.state.player.total! - this.podcast.duration / 1000)
           );
         }
         if (timeline < 0) {
@@ -267,7 +267,7 @@ export default defineComponent({
         let data;
         if (this.isCertified) {
           comment.status = 'Valid';
-          data = await commentApi.postComment(store, comment);
+          data = await commentApi.postComment(this.$store, comment);
         } else {
           data = await octopusApi.postComment(comment);
         }

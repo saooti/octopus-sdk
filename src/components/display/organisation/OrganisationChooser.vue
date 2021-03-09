@@ -107,8 +107,8 @@
 import { selenium } from '../../mixins/functions';
 import Multiselect from 'vue-multiselect';
 const octopusApi = require('@saooti/octopus-api');
-import { state } from '../../../store/paramStore.js';
-import store from '@/store/AppStore';
+import { state } from '../../../store/paramStore';
+
 const ELEMENTS_COUNT = 50;
 const DEFAULT_ORGANISATION_ID = 0;
 const DEFAULT_ORGANISATION_IMAGE = '/img/emptypodcast.png';
@@ -130,7 +130,7 @@ export default defineComponent({
   async created() {
     if (
       this.authenticated &&
-      undefined === store.state.organisation.imageUrl
+      undefined === this.$store.state.organisation.imageUrl
     ) {
       const data = await octopusApi.fetchOrganisation(this.organisationId);
       this.myImage = data.imageUrl;
@@ -172,7 +172,7 @@ export default defineComponent({
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     myOrganisation():any {

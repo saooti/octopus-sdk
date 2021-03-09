@@ -27,7 +27,7 @@
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 
 import { defineComponent } from 'vue'
 export default defineComponent({

@@ -48,7 +48,7 @@
 import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
 import { cookies } from '../../mixins/functions';
-import store from '@/store/AppStore';
+
 import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'CommentSection',
@@ -106,11 +106,11 @@ export default defineComponent({
       );
     },
     knownIdentity: {
-      get() {
-        return store.state.comments.knownIdentity;
+      get():any {
+        return this.$store.state.comments.knownIdentity;
       },
       set(value: any) {
-        store.commit('setCommentIdentity', value);
+        this.$store.commit('setCommentIdentity', value);
       },
     },
     isLive():boolean {
@@ -126,7 +126,7 @@ export default defineComponent({
   methods: {
     updateFetch(value: { count: number; }) {
       this.loaded = true;
-      store.commit('setCommentLoaded', {
+      this.$store.commit('setCommentLoaded', {
         ...value,
         podcastId: this.podcast.podcastId,
       });

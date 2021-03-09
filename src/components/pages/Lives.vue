@@ -27,10 +27,10 @@
 <style lang="scss"></style>
 <script lang="ts">
 // @ is an alias to /src
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import LiveList from '../display/live/LiveList.vue';
 import OrganisationChooser from '../display/organisation/OrganisationChooser.vue';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -45,13 +45,13 @@ export default defineComponent({
   created() {
     if (this.$route.query.productor) {
       this.$emit('update:organisationId',this.$route.query.productor);
-    } else if (store.state.filter.organisationId) {
-      this.$emit('update:organisationId',store.state.filter.organisationId);
+    } else if (this.$store.state.filter.organisationId) {
+      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
     }
     if (
-      store.state.organisation &&
-      store.state.organisation.attributes &&
-      !store.state.organisation.attributes['live.active']
+      this.$store.state.organisation &&
+      this.$store.state.organisation.attributes &&
+      !this.$store.state.organisation.attributes['live.active']
     ) {
       this.live = false;
     }
@@ -71,8 +71,8 @@ export default defineComponent({
     isRoleLive() {
       return state.generalParameters.isRoleLive;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
   },
 

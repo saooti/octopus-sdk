@@ -12,7 +12,7 @@
       :to="{
         name: 'emission',
         params: { emissionId: emission.emissionId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       :aria-label="$t('Emission')"
       class="text-dark"
@@ -35,7 +35,7 @@
         :to="{
           name: 'emission',
           params: { emissionId: emission.emissionId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="text-dark"
       >
@@ -63,7 +63,7 @@
         :to="{
           name: 'productor',
           params: { productorId: emission.orga.id },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="text-dark"
         v-if="!isPodcastmaker"
@@ -177,7 +177,7 @@ button.btn.btn-primary.share-btn.m-3 {
 </style>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
@@ -243,7 +243,7 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
 
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
 

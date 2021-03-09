@@ -36,7 +36,7 @@
               :to="{
                 name: 'emission',
                 params: { emissionId: podcast.emission.emissionId },
-                query: { productor: $store.state.filter.organisationId },
+                query: { productor: this.$store.state.filter.organisationId },
               }"
               v-else
             >
@@ -99,7 +99,7 @@
                         name: 'participant',
                         params: { participantId: animator.participantId },
                         query: {
-                          productor: $store.state.filter.organisationId,
+                          productor: this.$store.state.filter.organisationId,
                         },
                       }"
                       >{{ getName(animator) }}</router-link
@@ -113,7 +113,7 @@
                         name: 'emission',
                         params: { emissionId: podcast.emission.emissionId },
                         query: {
-                          productor: $store.state.filter.organisationId,
+                          productor: this.$store.state.filter.organisationId,
                         },
                       }"
                       >{{ this.podcast.emission.name }}</router-link
@@ -127,7 +127,7 @@
                         name: 'productor',
                         params: { productorId: podcast.organisation.id },
                         query: {
-                          productor: $store.state.filter.organisationId,
+                          productor: this.$store.state.filter.organisationId,
                         },
                       }"
                       >{{ this.podcast.organisation.name }}</router-link
@@ -143,7 +143,7 @@
                         name: 'participant',
                         params: { participantId: guest.participantId },
                         query: {
-                          productor: $store.state.filter.organisationId,
+                          productor: this.$store.state.filter.organisationId,
                         },
                       }"
                       >{{ getName(guest) }}</router-link
@@ -273,12 +273,12 @@ import SubscribeButtons from '../display/sharing/SubscribeButtons.vue';
 import Countdown from '../display/live/CountDown.vue';
 const octopusApi = require('@saooti/octopus-api');
 import studioApi from '@/api/studio';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 import ErrorMessage from '../misc/ErrorMessage.vue';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../mixins/functions';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -302,7 +302,7 @@ export default defineComponent({
     if (!this.isLiveReadyToRecord) return;
     if (this.isOctopusAndAnimator) {
       let data = await studioApi.getConference(
-        store,
+        this.$store,
         this.podcast.conferenceId
       );
       if ('' !== data.data) {
@@ -312,7 +312,7 @@ export default defineComponent({
       }
     } else {
       let data = await studioApi.getRealConferenceStatus(
-        store,
+        this.$store,
         this.podcast.conferenceId
       );
       this.fetchConference = {
@@ -361,7 +361,7 @@ export default defineComponent({
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     isOuestFrance() {

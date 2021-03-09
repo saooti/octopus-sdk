@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentPlayer',
@@ -81,11 +81,11 @@ export default defineComponent({
     percentPosition(time: number) {
       let realDuration = this.totalTime;
       if (
-        store.state.player.podcast &&
-        store.state.player.podcast.duration
+        this.$store.state.player.podcast &&
+        this.$store.state.player.podcast.duration
       ) {
         realDuration = Math.round(
-          store.state.player.podcast.duration / 1000
+          this.$store.state.player.podcast.duration / 1000
         );
       }
       if (realDuration < this.totalTime) {

@@ -7,7 +7,7 @@
       :to="{
         name: 'emission',
         params: { emissionId: emission.emissionId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       class="d-flex flex-column text-dark"
     >
@@ -47,7 +47,7 @@
           :to="{
             name: 'podcast',
             params: { podcastId: p.podcastId },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: this.$store.state.filter.organisationId },
           }"
           class="d-flex flex-column define-width text-dark"
         >
@@ -66,9 +66,9 @@
           class="play-button-box bg-secondary"
           @click="play(p)"
           v-if="
-            $store.state.player.podcast !== p ||
-              ($store.state.player.podcast === p &&
-                'PAUSED' === $store.state.player.status)
+            this.$store.state.player.podcast !== p ||
+              (this.$store.state.player.podcast === p &&
+                'PAUSED' === this.$store.state.player.status)
           "
         >
           <div
@@ -92,7 +92,7 @@
         :to="{
           name: 'emission',
           params: { emissionId: emission.emissionId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: this.$store.state.filter.organisationId },
         }"
         class="btn"
         >{{ $t('More episodes') }}</router-link
@@ -166,9 +166,9 @@
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-import store from '@/store/AppStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
@@ -250,14 +250,14 @@ export default defineComponent({
       this.$emit('emissionNotVisible');
     },
     play(podcast: any) {
-      if (podcast === store.state.player.podcast) {
-        store.commit('playerPause', false);
+      if (podcast === this.$store.state.player.podcast) {
+        this.$store.commit('playerPause', false);
       } else {
-        store.commit('playerPlayPodcast', podcast);
+        this.$store.commit('playerPlayPodcast', podcast);
       }
     },
     pause() {
-      store.commit('playerPause', true);
+      this.$store.commit('playerPause', true);
     },
   },
 });

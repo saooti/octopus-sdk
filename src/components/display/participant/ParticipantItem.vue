@@ -7,7 +7,7 @@
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       class="mt-3"
       :aria-label="$t('Participant')"
@@ -21,7 +21,7 @@
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       class="text-dark mt-3"
     >
@@ -47,7 +47,7 @@
       :to="{
         name: 'productor',
         params: { productorId: participant.orga.id },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: this.$store.state.filter.organisationId },
       }"
       class="text-dark participant-producer"
       v-if="!isPodcastmaker"
@@ -113,7 +113,7 @@
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -175,7 +175,7 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
 
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
 

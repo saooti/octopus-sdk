@@ -162,7 +162,7 @@
 </style>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 import ClipboardModal from '../../misc/modal/ClipboardModal.vue';
 import NewsletterModal from '../../misc/modal/NewsletterModal.vue';
 import Snackbar from '../../misc/Snackbar.vue';
@@ -211,7 +211,7 @@ export default defineComponent({
         !this.notExclusive
       );
     },
-    authenticated() {
+    authenticated():boolean {
       return state.generalParameters.authenticated;
     },
     rssUrl():any {

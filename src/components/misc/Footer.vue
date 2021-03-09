@@ -9,7 +9,7 @@
           <router-link
             :to="{
               name: 'home',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: this.$store.state.filter.organisationId },
             }"
             class="linkHover"
             >{{ $t('Home') }}</router-link
@@ -17,7 +17,7 @@
           <router-link
             :to="{
               name: 'podcasts',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: this.$store.state.filter.organisationId },
             }"
             class="linkHover"
             >{{ $t('Podcasts') }}</router-link
@@ -25,7 +25,7 @@
           <router-link
             :to="{
               name: 'emissions',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: this.$store.state.filter.organisationId },
             }"
             class="linkHover"
             >{{ $t('Emissions') }}</router-link
@@ -33,7 +33,7 @@
           <router-link
             :to="{
               name: 'productors',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: this.$store.state.filter.organisationId },
             }"
             class="linkHover"
             v-if="!isPodcastmaker"
@@ -42,7 +42,7 @@
           <router-link
             :to="{
               name: 'participants',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: this.$store.state.filter.organisationId },
             }"
             class="linkHover"
             >{{ $t('Speakers') }}</router-link
@@ -134,7 +134,7 @@
 
 <script lang="ts">
 import Player from './Player.vue';
-import { state } from '../../store/paramStore.js';
+import { state } from '../../store/paramStore';
 
 import { defineComponent } from 'vue'
 export default defineComponent({

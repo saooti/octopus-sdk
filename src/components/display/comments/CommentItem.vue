@@ -166,10 +166,10 @@ import CommentInput from './CommentInput.vue';
 import CommentList from './CommentList.vue';
 import CommentParentInfo from './CommentParentInfo.vue';
 import EditCommentBox from '@/components/display/edit/EditCommentBox.vue';
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 const moment = require('moment');
-import store from '@/store/AppStore';
+
 import { defineComponent, ref } from 'vue';
 export default defineComponent({
   name: 'CommentItem',
@@ -239,11 +239,11 @@ export default defineComponent({
       return false;
     },
     knownIdentity: {
-      get() {
-        return store.state.comments.knownIdentity;
+      get():any {
+        return this.$store.state.comments.knownIdentity;
       },
       set(value: any) {
-        store.commit('setCommentIdentity', value);
+        this.$store.commit('setCommentIdentity', value);
       },
     },
     recordingInLive():boolean {

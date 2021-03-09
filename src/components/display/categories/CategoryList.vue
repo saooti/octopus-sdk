@@ -81,7 +81,7 @@
 </style>
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
-import { state } from '../../../store/paramStore.js';
+import { state } from '../../../store/paramStore';
 
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -107,26 +107,26 @@ export default defineComponent({
     },
     categories() {
       if (this.filterOrga) {
-        return store.state.categoriesOrga.filter(c => {
+        return this.$store.state.categoriesOrga.filter((c:any) => {
           return c.podcastOrganisationCount;
         });
       }
-      return state.generalParameters.allCategories.filter(c => {
+      return state.generalParameters.allCategories.filter((c:any) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
   },
 
   methods: {
     resizeWindow() {
       let categoryList = document.getElementById('category-list-container');
-      categoryList.style.justifyContent = 'flex-start';
+      categoryList!.style.justifyContent = 'flex-start';
       this.hidenCategories.length = 0;
-      this.categories.forEach(element => {
+      this.categories.forEach((element:any) => {
         let el = document.getElementById('category' + element.id);
         if (!el) return;
         const parent:any = el.parentNode;
@@ -140,14 +140,14 @@ export default defineComponent({
         }
       });
       if (!this.hidenCategories.length) {
-        categoryList.style.justifyContent = 'center';
+        categoryList!.style.justifyContent = 'center';
       }
     },
-    async fetchCategories(organisationId) {
+    async fetchCategories(organisationId:string) {
       const data = await octopusApi.fetchCategoriesOrga(organisationId, {
         lang: 'fr',
       });
-      store.commit('categoriesOrgaSet', data);
+      this.$store.commit('categoriesOrgaSet', data);
     },
   },
 

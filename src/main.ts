@@ -4,13 +4,13 @@ import { createI18n, useI18n } from 'vue-i18n'
 import I18nResources from './locale/messages';
 import router from './router/router';
 import moment from 'moment';
-import store from '@/store/AppStore.js';
+import store from '@/store/AppStore';
 let paramStore = require('./store/paramStore');
 import App from './App.vue';
 import { VueReCaptcha } from "vue-recaptcha-v3";
 moment.locale('fr');
 //Gestion de l'i18n
-let messages = {};
+let messages:any = I18nResources;
 if (store.state.general.education) {
   messages = {
     fr: { ...I18nResources.fr, ...I18nResources.educationfr },
@@ -41,8 +41,6 @@ paramStore
   })
   .then(() => {
     let app = createApp({
-      store,
-      router,
       components: {
         App,
       },
@@ -54,6 +52,8 @@ paramStore
     })
     /* app.use(BootstrapVue);
     app.use(IconsPlugin); */
+    app.use(router);
+    app.use(store);
     app.use(i18n);
     app.use(VueReCaptcha as any, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' });
 

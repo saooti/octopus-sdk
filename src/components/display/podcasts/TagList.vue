@@ -7,7 +7,7 @@
             name: 'search',
             query: {
               query: tag,
-              productor: $store.state.filter.organisationId,
+              productor: this.$store.state.filter.organisationId,
             },
           }"
           class="tagListLink"

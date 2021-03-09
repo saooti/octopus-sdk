@@ -64,8 +64,8 @@
 const octopusApi = require('@saooti/octopus-api');
 import podcastApi from '@/api/podcasts';
 import PodcastItem from './PodcastItem.vue';
-import { state } from '../../../store/paramStore.js';
-import store from '@/store/AppStore';
+import { state } from '../../../store/paramStore';
+
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastList',
@@ -124,8 +124,8 @@ export default defineComponent({
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetization}|${this.popularSort}|
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubrique}|${this.notValid}`;
     },
-    filterOrga() {
-      return store.state.filter.organisationId;
+    filterOrga():any {
+      return this.$store.state.filter.organisationId;
     },
     organisation():any {
       if (this.organisationId) return this.organisationId;
@@ -182,11 +182,11 @@ export default defineComponent({
         param.validity = !this.notValid;
       }
       if (this.notValid && !this.isProduction) {
-        param.publisherId = store.state.profile.userId;
+        param.publisherId = this.$store.state.profile.userId;
       }
       if (this.includeHidden) {
         param.includeHidden = this.includeHidden;
-        const data = await podcastApi.fetchPodcastsAdmin(store, param);
+        const data = await podcastApi.fetchPodcastsAdmin(this.$store, param);
         this.afterFetching(reset, data);
       } else {
         const data = await octopusApi.fetchPodcasts(param);
