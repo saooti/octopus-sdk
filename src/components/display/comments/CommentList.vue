@@ -99,6 +99,8 @@ export default defineComponent({
     isFlat: { default: false },
   },
 
+  emits: ['updateStatus', 'fetch'],
+
   components: {
     CommentItem: () => import('./CommentItem.vue'),
   },

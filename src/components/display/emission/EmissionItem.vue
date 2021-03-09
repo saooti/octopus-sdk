@@ -185,6 +185,7 @@ export default defineComponent({
   name: 'EmissionItem',
 
   props: ['emission'],
+  emits: ['emissionNotVisible'],
 
   mixins: [displayMethods],
 

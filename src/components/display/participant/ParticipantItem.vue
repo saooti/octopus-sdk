@@ -120,6 +120,7 @@ export default defineComponent({
   name: 'ParticpantItem',
 
   props: ['participant'],
+  emits: ['participantNotVisible'],
 
   mixins: [displayMethods],
 

@@ -69,6 +69,7 @@ export default defineComponent({
   },
 
   props: ['playlistId', 'isEducation'],
+  emits: ['playlistTitle'],
 
   data() {
     return {

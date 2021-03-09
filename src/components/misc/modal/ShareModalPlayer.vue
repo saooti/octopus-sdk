@@ -91,6 +91,7 @@ export default defineComponent({
   name: 'ShareModalPlayer',
 
   props: ['embedLink', 'embedlyLink', 'directLink'],
+  emits: ['close'],
 
   components: {
     Snackbar,

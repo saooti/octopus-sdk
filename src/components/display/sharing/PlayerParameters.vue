@@ -134,6 +134,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   props: ['podcast', 'playlist', 'iFrameModel', 'isVisible'],
 
+  emits: ['startTime', 'episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber'],
   data() {
     return {
       proceedReading: true,

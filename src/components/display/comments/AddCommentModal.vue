@@ -56,7 +56,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'AddCommentModal',
 
-  props: [] as any,
+  props: [],
+  emits: ['close', 'validate'],
 
   setup() {
     const { executeRecaptcha, recaptchaLoaded }:any = useReCaptcha();

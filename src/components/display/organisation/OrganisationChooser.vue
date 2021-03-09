@@ -150,6 +150,7 @@ export default defineComponent({
     reset: { default: false },
     all: { default: false },
   },
+  emits: ['selected'],
 
   mixins: [selenium],
 

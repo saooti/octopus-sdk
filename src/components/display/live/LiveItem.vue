@@ -194,6 +194,7 @@ export default defineComponent({
   name: 'LiveItem',
 
   props: ['fetchConference', 'index'],
+  emits: ['deleteItem'],
   mixins: [displayMethods],
 
   components: {

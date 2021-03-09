@@ -51,6 +51,7 @@ export default defineComponent({
     reset: { default: false },
     page: { default: '' },
   },
+  emits: ['selected'],
 
   data() {
     let _return = {

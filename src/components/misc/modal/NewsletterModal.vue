@@ -110,6 +110,7 @@ export default defineComponent({
   name: 'NewsletterModal',
 
   props: ['podcast'],
+  emits: ['close'],
   mixins: [displayMethods],
 
   components: {

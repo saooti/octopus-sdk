@@ -113,6 +113,8 @@ export default defineComponent({
     reset: { default: false },
   },
 
+  emits: ['selected'],
+
   data() {
     let _return:any = {
       emission: '',

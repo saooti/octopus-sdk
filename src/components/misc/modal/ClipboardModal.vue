@@ -50,6 +50,7 @@ export default defineComponent({
   components: {
     RssSection,
   },
+  emits: ['close', 'validate'],
 
   mixins: [displayMethods],
 

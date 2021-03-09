@@ -100,6 +100,7 @@ export default defineComponent({
   },
 
   props: ['participantId'],
+  emits: ['participantTitle'],
 
   data() {
     return {

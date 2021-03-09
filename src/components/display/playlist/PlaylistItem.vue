@@ -76,6 +76,7 @@ export default defineComponent({
   name: 'PlaylistItem',
 
   props: ['playlist'],
+  emits: ['playlistNotVisible'],
 
   mixins: [displayMethods],
 

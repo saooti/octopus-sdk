@@ -128,6 +128,7 @@ export default defineComponent({
     searchPattern: { default: '' },
     type: { default: 'podcast' },
   },
+  emits: ['updateOrganisationId', 'updateSearchPattern'],
   setup() {
     const search : any = ref(null);
     return {

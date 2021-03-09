@@ -301,6 +301,8 @@ export default defineComponent({
     CommentPlayer,
   },
 
+  emits: ['hide'],
+
   mounted() {
     moment.locale('fr');
     if (this.isClock) {

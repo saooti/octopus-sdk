@@ -162,6 +162,7 @@ export default defineComponent({
     'rubriqueId',
     'rubriquageId',
   ],
+  emits: ['update:isArrow'],
 
   components: {
     PodcastItem,

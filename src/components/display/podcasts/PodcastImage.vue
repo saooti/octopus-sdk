@@ -217,6 +217,7 @@ export default defineComponent({
     'fetchConference',
     'isAnimatorLive',
   ],
+  emits: ['hideDescription', 'showDescription'],
   computed: {
     ...mapState({
       playingPodcast(state:any) {

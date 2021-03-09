@@ -91,6 +91,7 @@ export default defineComponent({
     sortCriteria: { default: undefined as any },
     notValid: { default: undefined as any },
   },
+  emits: ['fetch', 'emptyList'],
 
   components: {
     PodcastItem,

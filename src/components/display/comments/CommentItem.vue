@@ -175,6 +175,7 @@ export default defineComponent({
   name: 'CommentItem',
 
   props: ['comment', 'podcast', 'fetchConference', 'organisation', 'isFlat'],
+  emits: ['deleteComment', 'updateComment', 'update:comment'],
 
   mixins: [displayMethods],
 

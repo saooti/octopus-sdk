@@ -53,6 +53,8 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   props: ['comment'],
 
+  emits: ['editComment'],
+
   methods: {
     editComment() {
       this.$emit('editComment');

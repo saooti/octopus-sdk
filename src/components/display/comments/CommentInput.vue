@@ -106,6 +106,7 @@ export default defineComponent({
     comId: { default: undefined as any },
     fetchConference: { default: undefined as any },
   },
+  emits: ['update:knowIdentity', 'cancelAction', 'newComment'],
 
   mixins: [cookies],
 

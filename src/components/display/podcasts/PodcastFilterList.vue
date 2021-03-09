@@ -103,6 +103,7 @@ export default defineComponent({
     'reload',
     'editRight',
   ],
+  emits: ['fetch'],
 
   data() {
     return {

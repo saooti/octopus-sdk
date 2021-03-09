@@ -130,6 +130,7 @@ export default defineComponent({
     conferenceWatched: { default: [] },
     organisationId: { default: undefined as any },
   },
+  emits: ['initConferenceIds'],
 
   components: {
     LiveItem,

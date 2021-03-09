@@ -48,6 +48,7 @@ export default defineComponent({
     'canceltext',
     'thirdText',
   ],
+  emits: ['close', 'validate', 'cancel','thirdEvent'],
 
   mounted() {
     /* this.$bvModal.show('message-modal'); */

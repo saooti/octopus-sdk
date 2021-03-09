@@ -296,6 +296,7 @@ export default defineComponent({
   },
 
   mixins: [displayMethods],
+  emits: ['podcastTitle', 'playPodcast', 'initConferenceId'],
 
   async mounted() {
     await this.getPodcastDetails(this.podcastId);

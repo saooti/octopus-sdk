@@ -292,6 +292,7 @@ export default defineComponent({
     'isEducation',
     'includeHidden',
   ],
+  emits: ['updateFromDate', 'updateToDate', 'updateRubrique', 'updateRubriquage', 'updateMonetization', 'updateSortCriteria', 'includeHidden', 'notValid'],
 
   created() {
     this.fetchTopics();

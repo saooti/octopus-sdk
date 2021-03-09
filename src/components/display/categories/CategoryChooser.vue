@@ -80,6 +80,7 @@ export default defineComponent({
     displayAllCategories: { default: false },
     isDisabled: { default: false },
   },
+  emits: ['update:categorySelected', 'selected'],
 
   computed: {
     allCategories() {

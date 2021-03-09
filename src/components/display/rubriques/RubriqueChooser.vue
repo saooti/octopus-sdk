@@ -84,6 +84,7 @@ export default defineComponent({
     withoutRubrique: { default: false },
     isDisabled: { default: false },
   },
+  emits: ['update:rubrique', 'selected'],
   mixins: [selenium],
 
   data() {

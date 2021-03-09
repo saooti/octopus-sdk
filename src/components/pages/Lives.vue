@@ -41,6 +41,7 @@ export default defineComponent({
     conferenceWatched: { default: [] },
     organisationId: { default: undefined as any },
   },
+  emits: ['update:organisationId', 'initConferenceIds'],
 
   created() {
     if (this.$route.query.productor) {

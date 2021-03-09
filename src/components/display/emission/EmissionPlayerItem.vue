@@ -174,6 +174,7 @@ export default defineComponent({
   name: 'EmissionPlayerItem',
 
   props: ['emission', 'nbPodcasts', 'rubriqueName'],
+  emits: ['emissionNotVisible'],
 
   mixins: [displayMethods],
 

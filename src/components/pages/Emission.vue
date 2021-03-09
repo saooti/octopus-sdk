@@ -116,6 +116,7 @@ export default defineComponent({
   },
 
   props: ['emissionId', 'isEducation'],
+  emits: ['emissionTitle'],
 
   data() {
     return {
