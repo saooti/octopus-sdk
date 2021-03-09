@@ -79,8 +79,8 @@
   font-size: 0.5rem;
 }
 </style>
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore.js';
 
 import { defineComponent } from 'vue'
@@ -97,7 +97,7 @@ export default defineComponent({
 
   data() {
     return {
-      hidenCategories: [],
+      hidenCategories: [] as any,
     };
   },
 
@@ -107,7 +107,7 @@ export default defineComponent({
     },
     categories() {
       if (this.filterOrga) {
-        return this.$store.state.categoriesOrga.filter(c => {
+        return store.state.categoriesOrga.filter(c => {
           return c.podcastOrganisationCount;
         });
       }
@@ -117,7 +117,7 @@ export default defineComponent({
       });
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
   },
 
@@ -129,7 +129,7 @@ export default defineComponent({
       this.categories.forEach(element => {
         let el = document.getElementById('category' + element.id);
         if (!el) return;
-        const parent = el.parentNode;
+        const parent:any = el.parentNode;
         if (el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
           el.classList.remove('hid');
           return;
@@ -147,7 +147,7 @@ export default defineComponent({
       const data = await octopusApi.fetchCategoriesOrga(organisationId, {
         lang: 'fr',
       });
-      this.$store.commit('categoriesOrgaSet', data);
+      store.commit('categoriesOrgaSet', data);
     },
   },
 

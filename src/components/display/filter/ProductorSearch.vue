@@ -111,31 +111,37 @@
   }
 }
 </style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import OrganisationChooser from '../organisation/OrganisationChooser.vue';
 import { state } from '../../../store/paramStore.js';
-import octopusApi from '@saooti/octopus-api';
-
-import { defineComponent } from 'vue'
+const octopusApi = require('@saooti/octopus-api');
+import store from '@/store/AppStore';
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components: {
     OrganisationChooser,
   },
 
   props: {
-    organisationId: { default: undefined },
+    organisationId: { default: undefined as any },
     searchPattern: { default: '' },
     type: { default: 'podcast' },
+  },
+  setup() {
+    const search : any = ref(null);
+    return {
+      search,
+    };
   },
 
   async created() {
     if (!this.organisationId) return;
-    this.$store.commit('filterOrga', { orgaId: this.organisationId });
+    store.commit('filterOrga', { orgaId: this.organisationId });
     const isLive = await octopusApi.liveEnabledOrganisation(
       this.organisationId
     );
-    this.$store.commit('filterOrgaLive', isLive);
+    store.commit('filterOrgaLive', isLive);
     this.keepOrganisation = true;
     if (!this.$route.query.productor) {
       this.$router.replace({ query: { productor: this.organisationId } });
@@ -143,8 +149,8 @@ export default defineComponent({
   },
 
   mounted() {
-    if (this.$refs.search) {
-      this.$refs.search.focus();
+    if (this.search) {
+      this.search.focus();
     }
   },
 
@@ -152,7 +158,7 @@ export default defineComponent({
     return {
       keepOrganisation: false,
       showBubble: false,
-      imgUrl: undefined,
+      imgUrl: undefined as any,
     };
   },
 
@@ -160,7 +166,7 @@ export default defineComponent({
     isPodcastmaker() {
       return state.generalParameters.podcastmaker;
     },
-    searchText() {
+    searchText():string {
       if ('emission' === this.type) return this.$t('Look for emission name');
       if ('participant' === this.type)
         return this.$t('Look for participant name');
@@ -168,18 +174,18 @@ export default defineComponent({
       return this.$t('Look for podcast name');
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
   },
 
   methods: {
-    onOrganisationSelected(organisation) {
+    onOrganisationSelected(organisation: any) {
       if (this.$route.query.productor) {
         this.$router.push({ query: { productor: undefined } });
       }
       this.imgUrl = organisation.imageUrl;
-      this.$store.commit('filterOrga', {
-        orgaId: undefined,
+      store.commit('filterOrga', {
+        orgaId: undefined as any,
         imgUrl: this.imgUrl,
       });
       this.keepOrganisation = false;
@@ -198,20 +204,20 @@ export default defineComponent({
         if (this.$route.query.productor !== this.organisationId) {
           this.$router.push({ query: { productor: this.organisationId } });
         }
-        this.$store.commit('filterOrga', {
+        store.commit('filterOrga', {
           orgaId: this.organisationId,
           imgUrl: this.imgUrl,
         });
         const isLive = await octopusApi.liveEnabledOrganisation(
           this.organisationId
         );
-        this.$store.commit('filterOrgaLive', isLive);
+        store.commit('filterOrgaLive', isLive);
         return;
       }
       if (this.$route.query.productor) {
         this.$router.push({ query: { productor: undefined } });
       }
-      this.$store.commit('filterOrga', { orgaId: undefined });
+      store.commit('filterOrga', { orgaId: undefined });
     },
   },
   watch: {

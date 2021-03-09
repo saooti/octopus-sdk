@@ -132,7 +132,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import Player from './Player.vue';
 import { state } from '../../store/paramStore.js';
 
@@ -156,11 +156,11 @@ export default defineComponent({
   },
 
   methods: {
-    showBlackBorder(hide) {
+    showBlackBorder(hide:any) {
       if (hide) {
-        document.getElementById('footer').classList.remove('border-round');
+        document.getElementById('footer')!.classList.remove('border-round');
       } else if (!this.isBarTop) {
-        document.getElementById('footer').className += ' border-round';
+        document.getElementById('footer')!.className += ' border-round';
       }
     },
   },

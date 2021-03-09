@@ -69,7 +69,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import CategoryChooser from '../categories/CategoryChooser.vue';
 import PodcastList from './PodcastList.vue';
@@ -106,30 +106,30 @@ export default defineComponent({
 
   data() {
     return {
-      first: undefined,
-      size: undefined,
+      first: undefined as any,
+      size: undefined as any,
       searchPattern: '',
-      iabId: undefined,
+      iabId: undefined as any,
       reloadList: false,
     };
   },
 
   computed: {
-    query() {
+    query():string {
       if (this.searchPattern.length >= 3) return this.searchPattern;
       return '';
     },
   },
 
   methods: {
-    onCategorySelected(category) {
+    onCategorySelected(category:any) {
       if (category && category.id) {
         this.iabId = category.id;
       } else {
         this.iabId = undefined;
       }
     },
-    fetch(podcasts) {
+    fetch(podcasts:any) {
       this.$emit('fetch', podcasts);
     },
   },

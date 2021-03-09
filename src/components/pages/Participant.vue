@@ -74,11 +74,11 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import EditBox from '@/components/display/edit/EditBox.vue';
 import ShareButtons from '../display/sharing/ShareButtons.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import PodcastFilterList from '../display/podcasts/PodcastFilterList.vue';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore.js';
@@ -104,7 +104,7 @@ export default defineComponent({
   data() {
     return {
       loaded: false,
-      participant: undefined,
+      participant: undefined as any,
       error: false,
       reload: false,
     };
@@ -129,12 +129,12 @@ export default defineComponent({
     isRssButton() {
       return state.intervenantPage.rssButton;
     },
-    rssUrl() {
+    rssUrl():any {
       return (
         state.generalParameters.ApiUri + 'rss/participant/' + this.participantId
       );
     },
-    description() {
+    description():string {
       let description;
       description = this.participant.description || '';
       if (state.generalParameters.isIE11)
@@ -142,7 +142,7 @@ export default defineComponent({
       return description;
     },
 
-    name() {
+    name():string {
       const fullName = (
         (this.participant.firstName || '') +
         ' ' +
@@ -176,7 +176,7 @@ export default defineComponent({
         this.loaded = true;
       }
     },
-    updateParticipant(participant) {
+    updateParticipant(participant:any) {
       this.participant = participant;
       this.$emit('participantTitle', this.name);
     },

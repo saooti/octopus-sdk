@@ -31,11 +31,11 @@
 
 <style lang="scss"></style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore.js';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistList',
@@ -58,29 +58,29 @@ export default defineComponent({
       dsize: this.$props.size,
       totalCount: 0,
       displayCount: 0,
-      playlists: [],
+      playlists: [] as any,
       inFetching: false,
     };
   },
 
   computed: {
-    allFetched() {
+    allFetched():boolean {
       return this.dfirst >= this.totalCount;
     },
     buttonPlus() {
       return state.generalParameters.buttonPlus;
     },
-    changed() {
+    changed():any {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}`;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
     sort() {
       if (!this.query) return 'NAME';
       return 'SCORE';
     },
-    organisation() {
+    organisation():any {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
@@ -88,7 +88,7 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchContent(reset) {
+    async fetchContent(reset: boolean) {
       this.inFetching = true;
       if (reset) {
         this.dfirst = 0;
@@ -106,7 +106,7 @@ export default defineComponent({
       this.afterFetching(reset, data);
     },
 
-    afterFetching(reset, data) {
+    afterFetching(reset: any, data:any) {
       if (reset) {
         this.playlists.length = 0;
         this.dfirst = 0;
@@ -114,7 +114,7 @@ export default defineComponent({
       this.loading = false;
       this.loaded = true;
       this.displayCount = data.count;
-      this.playlists = this.playlists.concat(data.result).filter(e => {
+      this.playlists = this.playlists.concat(data.result).filter((e: null) => {
         if (null === e) {
           this.displayCount--;
         }
@@ -125,7 +125,7 @@ export default defineComponent({
       this.inFetching = false;
     },
 
-    displayMore(event) {
+    displayMore(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.fetchContent(false);
     },

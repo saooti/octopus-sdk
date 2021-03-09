@@ -15,7 +15,7 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {},
@@ -33,8 +33,8 @@ export default defineComponent({
 
   data() {
     return {
-      seconds: undefined,
-      countdownTimer: undefined,
+      seconds: undefined as any,
+      countdownTimer: undefined as any,
       days: 0,
       hours: 0,
       minutes: 0,
@@ -61,7 +61,7 @@ export default defineComponent({
         this.seconds--;
       }
     },
-    pad(n) {
+    pad(n: string|number) {
       return n < 10 ? '0' + n : n;
     },
   },

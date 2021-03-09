@@ -12,9 +12,9 @@
   </div>
 </template>
 
-<script>
-const getStyle = (baseSize, position) => {
-  const c = f => `calc(${f} * ${baseSize})`;
+<script lang="ts">
+const getStyle = (baseSize: any, position:any) => {
+  const c = (f: number) => `calc(${f} * ${baseSize})`;
   const { pos, textAlign } = position;
   return {
     wrap: {
@@ -27,7 +27,7 @@ const getStyle = (baseSize, position) => {
       pointerEvents: 'none',
       textAlign,
     },
-    bar: bg => ({
+    bar: (bg: any) => ({
       display: 'inline-block',
       width: 'auto',
       minWidth: baseSize,
@@ -46,7 +46,7 @@ const getStyle = (baseSize, position) => {
     }),
   };
 };
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'Snackbar',
   props: {
@@ -68,13 +68,13 @@ export default defineComponent({
   },
   data() {
     return {
-      msgs: [],
+      msgs: [] as any,
       holdTime: 3000,
       baseSize: '5rem',
     };
   },
   computed: {
-    $_position() {
+    $_position():any {
       const [p, textAlign] = this.position.toString().split('-');
       return {
         pos: ['top', 'bottom'].includes(p) ? p : 'top',
@@ -88,22 +88,22 @@ export default defineComponent({
     },
   },
   methods: {
-    info(msg) {
+    info(msg: any) {
       const color = this.colors.info;
       this.open({ color, msg }, false);
       return true;
     },
-    error(msg) {
+    error(msg: any) {
       const color = this.colors.error;
       this.open({ color, msg }, false);
       return false;
     },
-    warn(msg) {
+    warn(msg: any) {
       const color = this.colors.warn;
       this.open({ color, msg }, false);
       return true;
     },
-    open(message, isOpen = true) {
+    open(message: { color?: any; msg?: any; }, isOpen = true) {
       let msg;
       let color;
       if (!isOpen) {

@@ -1,5 +1,5 @@
 export default {
-  checkToken(token) {
+  checkToken(token: any) {
     console.log(token);
   },
 };

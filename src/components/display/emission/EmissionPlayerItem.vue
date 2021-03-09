@@ -164,10 +164,11 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore.js';
 import { displayMethods } from '../../mixins/functions';
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
@@ -183,7 +184,7 @@ export default defineComponent({
     let emissionDesc = document.getElementById(
       'description-emission-' + this.emission.emissionId
     );
-    let emissionDescContainer = document.getElementById(
+    let emissionDescContainer:any = document.getElementById(
       'description-emission-container-' + this.emission.emissionId
     );
     if (
@@ -197,7 +198,7 @@ export default defineComponent({
   data() {
     return {
       activeEmission: true,
-      podcasts: [],
+      podcasts: [] as any,
       dummyParam: new Date().getTime().toString(),
     };
   },
@@ -232,7 +233,7 @@ export default defineComponent({
           let podcastDesc = document.getElementById(
             'description-podcast-' + this.podcasts[index].podcastId
           );
-          let podcastDescContainer = document.getElementById(
+          let podcastDescContainer:any = document.getElementById(
             'description-podcast-container-' + this.podcasts[index].podcastId
           );
           if (
@@ -248,15 +249,15 @@ export default defineComponent({
       }
       this.$emit('emissionNotVisible');
     },
-    play(podcast) {
-      if (podcast === this.$store.state.player.podcast) {
-        this.$store.commit('playerPause', false);
+    play(podcast: any) {
+      if (podcast === store.state.player.podcast) {
+        store.commit('playerPause', false);
       } else {
-        this.$store.commit('playerPlayPodcast', podcast);
+        store.commit('playerPlayPodcast', podcast);
       }
     },
     pause() {
-      this.$store.commit('playerPause', true);
+      store.commit('playerPause', true);
     },
   },
 });

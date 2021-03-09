@@ -67,7 +67,7 @@
 
 <style lang="scss"></style>
 
-<script>
+<script lang="ts">
 import { state } from '../../../store/paramStore.js';
 import { displayMethods } from '../../mixins/functions';
 /* import octopusApi from "@saooti/octopus-api"; */
@@ -83,7 +83,7 @@ export default defineComponent({
     let playlistDesc = document.getElementById(
       'description-playlist-' + this.playlist.playlistId
     );
-    let playlistDescContainer = document.getElementById(
+    let playlistDescContainer:any = document.getElementById(
       'description-playlist-container-' + this.playlist.playlistId
     );
     if (
@@ -109,11 +109,11 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
 
-    organisation() {
+    organisation():string {
       return '' + this.playlist.publisher.organisation.name;
     },
 
-    description() {
+    description():string {
       let description;
       description = this.playlist.description || '';
       if (state.generalParameters.isIE11)
@@ -121,7 +121,7 @@ export default defineComponent({
       return description;
     },
 
-    name() {
+    name():string {
       if (state.generalParameters.isIE11)
         return this.playlist.title.substring(0, 50) + '...';
       return this.playlist.title;
@@ -140,7 +140,7 @@ export default defineComponent({
         return true;
       return false;
     },
-    activePlaylist() {
+    activePlaylist():boolean {
       return 0 !== Object.keys(this.playlist.podcasts).length;
     },
   },

@@ -34,7 +34,7 @@
 </template>
 
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'MessageModal',
@@ -50,11 +50,11 @@ export default defineComponent({
   ],
 
   mounted() {
-    this.$bvModal.show('message-modal');
+    /* this.$bvModal.show('message-modal'); */
   },
 
   methods: {
-    closePopup(event) {
+    closePopup(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.$emit('close');
     },

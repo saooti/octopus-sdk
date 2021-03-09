@@ -282,13 +282,14 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { mapState } from 'vuex';
 import { state } from '../../store/paramStore.js';
 import DurationHelper from '../../helper/duration';
 import CommentPlayer from '../display/comments/CommentPlayer.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import Hls from 'hls.js';
+import store from '@/store/AppStore';
 const moment = require('moment');
 //const axios = require("axios");
 
@@ -325,19 +326,19 @@ export default defineComponent({
       durationLivePosition: 0,
       displayAlertBar: false,
       hlsReady: false,
-      comments: [],
+      comments: [] as any,
       showTimeline: false,
     };
   },
 
   computed: {
-    isPlaying() {
+    isPlaying():boolean {
       return 'PLAYING' === this.status;
     },
-    isPaused() {
+    isPaused():boolean {
       return 'PAUSED' === this.status;
     },
-    isLoading() {
+    isLoading():boolean {
       return 'LOADING' === this.status;
     },
     isImage() {
@@ -353,27 +354,27 @@ export default defineComponent({
       return state.player.barTop;
     },
     ...mapState({
-      display: state => 'STOPPED' !== state.player.status,
-      playerHeight(state) {
+      display: (state:any) => 'STOPPED' !== state.player.status,
+      playerHeight(state:any) {
         if ('STOPPED' === state.player.status || this.forceHide) return 0;
         if (window.innerWidth > 450 && !this.showTimeline) return '5rem';
         if (window.innerWidth > 450 && this.showTimeline) return '6rem';
         return '3.5rem';
       },
-      status: state => state.player.status,
-      podcast: state => state.player.podcast,
-      media: state => state.player.media,
-      live: state => state.player.live,
-      volume: state => state.player.volume,
-      isStop: state => state.player.stop,
-      commentsLoaded: state => state.comments.loadedComments,
+      status: (state:any) => state.player.status,
+      podcast: (state:any) => state.player.podcast,
+      media: (state:any) => state.player.media,
+      live: (state:any) => state.player.live,
+      volume: (state:any) => state.player.volume,
+      isStop: (state:any) => state.player.stop,
+      commentsLoaded: (state:any) => state.comments.loadedComments,
 
-      podcastImage: state => {
+      podcastImage: (state:any) => {
         if (state.player.podcast) return state.player.podcast.imageUrl;
         return '';
       },
 
-      playedTime: state => {
+      playedTime: (state:any) => {
         if (state.player.elapsed > 0 && state.player.total > 0) {
           return DurationHelper.formatDuration(
             Math.round(state.player.elapsed * state.player.total)
@@ -382,19 +383,19 @@ export default defineComponent({
         return '--:--';
       },
 
-      percentProgress: state => {
+      percentProgress: (state:any) => {
         return state.player.elapsed * 100;
       },
 
-      totalTime: state => {
+      totalTime: (state:any) => {
         if (state.player.elapsed > 0 && state.player.total > 0)
           return DurationHelper.formatDuration(Math.round(state.player.total));
         return '--:--';
       },
-      totalSecondes: state => state.player.total,
+      totalSecondes: (state:any) => state.player.total,
     }),
 
-    audioUrl() {
+    audioUrl():any {
       if (this.media) return this.media.audioUrl;
       if (!this.podcast) return '';
       if (!this.podcast.availability.visibility)
@@ -404,28 +405,28 @@ export default defineComponent({
       parameters.push('origin=octopus');
       parameters.push('cookieName=player_' + this.podcast.podcastId);
       if (
-        this.$store.state.authentication &&
-        this.$store.state.authentication.organisationId
+        store.state.authentication &&
+        store.state.authentication.organisationId
       ) {
         parameters.push(
-          'distributorId=' + this.$store.state.authentication.organisationId
+          'distributorId=' + store.state.authentication.organisationId
         );
       }
       return this.podcast.audioUrl + '?' + parameters.join('&');
     },
 
-    podcastShareUrl() {
+    podcastShareUrl():any {
       if (this.podcast) {
         return {
           name: 'podcast',
           params: { podcastId: this.podcast.podcastId },
-          query: { productor: this.$store.state.filter.organisationId },
+          query: { productor: store.state.filter.organisationId },
         };
       }
       return '';
     },
 
-    podcastTitle() {
+    podcastTitle():string {
       if (this.podcast) {
         if (this.isEmissionName)
           return this.emissionName + ' - ' + this.podcast.title;
@@ -440,7 +441,7 @@ export default defineComponent({
       return '';
     },
 
-    emissionName() {
+    emissionName():string {
       if (this.podcast) return this.podcast.emission.name;
       return '';
     },
@@ -452,10 +453,10 @@ export default defineComponent({
 
   methods: {
     watchPlayerStatus() {
-      this.$store.watch(
+      store.watch(
         state => state.player.status,
         newValue => {
-          const audioPlayer = document.querySelector('#audio-player');
+          const audioPlayer:any = document.querySelector('#audio-player');
           if (!audioPlayer) return;
           if (this.live && !this.hlsReady) {
             audioPlayer.pause();
@@ -475,7 +476,7 @@ export default defineComponent({
       return this._downloadId;
     },
 
-    setDownloadId(newValue) {
+    setDownloadId(newValue: any) {
       this.endListeningProgress();
       this._downloadId = newValue;
     },
@@ -489,7 +490,7 @@ export default defineComponent({
     },
 
     switchPausePlay() {
-      const audioPlayer = document.querySelector('#audio-player');
+      const audioPlayer:any = document.querySelector('#audio-player');
       if (audioPlayer.paused) {
         this.onPlay();
       } else {
@@ -498,11 +499,11 @@ export default defineComponent({
     },
 
     stopPlayer() {
-      this.$store.commit('playerPlayPodcast');
+      store.commit('playerPlayPodcast');
     },
 
-    seekTo(event) {
-      const audioPlayer = document.querySelector('#audio-player');
+    seekTo(event: { currentTarget: { getBoundingClientRect: () => any; clientWidth: any; }; clientX: number; }) {
+      const audioPlayer:any = document.querySelector('#audio-player');
       const rect = event.currentTarget.getBoundingClientRect();
       const barWidth = event.currentTarget.clientWidth;
       const x = event.clientX - rect.left; //x position within the element.
@@ -510,14 +511,14 @@ export default defineComponent({
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
 
-      const seekTime = this.$store.state.player.total * percentPosition;
+      const seekTime = store.state.player.total * percentPosition;
       if (this.podcast || this.live) {
         this.notListenTime = seekTime - this.listenTime;
       }
       audioPlayer.currentTime = seekTime;
     },
 
-    onTimeUpdate(event) {
+    onTimeUpdate(event: { currentTarget: { currentTime: number; duration: any; }; }) {
       if (this.podcast || this.live) {
         if (!this.getDownloadId()) {
           this.loadDownloadId();
@@ -543,8 +544,8 @@ export default defineComponent({
       if (!this.live) {
         this.displayAlertBar = false;
         this.percentLiveProgress = 100;
-        this.$store.commit('playerTotalTime', streamDuration);
-        this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
+        store.commit('playerTotalTime', streamDuration);
+        store.commit('playerElapsed', playerCurrentTime / streamDuration);
         return;
       }
 
@@ -552,8 +553,8 @@ export default defineComponent({
       if (scheduledDuration > streamDuration) {
         this.displayAlertBar = false;
         this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
-        this.$store.commit('playerTotalTime', scheduledDuration);
-        this.$store.commit(
+        store.commit('playerTotalTime', scheduledDuration);
+        store.commit(
           'playerElapsed',
           playerCurrentTime / scheduledDuration
         );
@@ -561,23 +562,23 @@ export default defineComponent({
         this.percentLiveProgress = 100;
         this.displayAlertBar = true;
         this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
-        this.$store.commit('playerTotalTime', streamDuration);
-        this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
+        store.commit('playerTotalTime', streamDuration);
+        store.commit('playerElapsed', playerCurrentTime / streamDuration);
       }
     },
 
     onPlay() {
-      this.$store.commit('playerPause', false);
+      store.commit('playerPause', false);
     },
 
     onPause() {
-      this.$store.commit('playerPause', true);
+      store.commit('playerPause', true);
     },
 
     onFinished() {
       this.setDownloadId(null);
       if (this.live) {
-        let audio = document.getElementById('audio-player');
+        let audio:any = document.getElementById('audio-player');
         audio.src = '';
       }
       this.forceHide = true;
@@ -585,7 +586,7 @@ export default defineComponent({
 
     onHidden() {
       if (this.forceHide) {
-        this.$store.commit('playerPlayPodcast');
+        store.commit('playerPlayPodcast');
         this.forceHide = false;
       }
     },
@@ -618,8 +619,8 @@ export default defineComponent({
       this.listenTime = 0;
     },
 
-    async initHls(hlsStreamUrl) {
-      return new Promise((resolve, reject) => {
+    async initHls(hlsStreamUrl: string) {
+      return new Promise<void>((resolve, reject) => {
         if (!Hls.isSupported()) {
           reject('Hls is not supported ! ');
         }
@@ -634,14 +635,14 @@ export default defineComponent({
               this.live.livePodcastId,
               downloadId,
               'octopus',
-              this.$store.state.authentication.organisationId
+              store.state.authentication.organisationId
             );
             this.setDownloadId(downloadId);
           } catch (error) {
             console.log('ERROR downloadId');
           }
           this.hlsReady = true;
-          let audio = document.getElementById('audio-player');
+          let audio:any = document.getElementById('audio-player');
           hls.attachMedia(audio);
           await audio.play();
           this.onPlay();
@@ -671,7 +672,7 @@ export default defineComponent({
       }
     },
 
-    editRight(organisation) {
+    editRight(organisation: any) {
       if (
         (state.generalParameters.isCommments &&
           this.organisationId === organisation) ||
@@ -693,7 +694,7 @@ export default defineComponent({
       if (
         refresh &&
         podcastId &&
-        this.$store.state.comments.actualPodcastId !== podcastId
+        store.state.comments.actualPodcastId !== podcastId
       ) {
         return;
       }
@@ -702,25 +703,25 @@ export default defineComponent({
       let size = 50;
       if (
         podcastId &&
-        this.$store.state.comments.actualPodcastId === podcastId
+        store.state.comments.actualPodcastId === podcastId
       ) {
         this.comments = this.commentsLoaded;
         if (
           this.commentsLoaded &&
-          this.commentsLoaded.length < this.$store.state.comments.totalCount
+          this.commentsLoaded.length < store.state.comments.totalCount
         ) {
           first = this.commentsLoaded.length;
-          count = this.$store.state.comments.totalCount;
+          count = store.state.comments.totalCount;
         }
       }
       if (
         (!podcastId ||
-          this.$store.state.comments.actualPodcastId === podcastId) &&
+          store.state.comments.actualPodcastId === podcastId) &&
         0 === first
       )
         return;
       while (0 === first || this.comments.length < count) {
-        let param = {
+        let param:any = {
           first: first,
           size: size,
           podcastId: podcastId,
@@ -731,7 +732,7 @@ export default defineComponent({
         const data = await octopusApi.fetchRootComments(param);
         first += size;
         count = data.totalElements;
-        this.comments = this.comments.concat(data.content).filter(c => {
+        this.comments = this.comments.concat(data.content).filter((c: null) => {
           return null !== c;
         });
       }

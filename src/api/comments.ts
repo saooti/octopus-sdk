@@ -1,6 +1,6 @@
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 export default {
-  postComment(store, parameters) {
+  postComment(store: any, parameters: any) {
     console.log(store);
     octopusApi.postComment(parameters);
   },

@@ -43,7 +43,7 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import EmissionList from '../display/emission/EmissionList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
@@ -78,20 +78,20 @@ export default defineComponent({
 
   data() {
     return {
-      first: undefined,
-      size: undefined,
+      first: undefined as any,
+      size: undefined as any,
       searchPattern: '',
-      organisationId: undefined,
-      monetization: undefined,
-      rubriquageId: undefined,
-      rubriqueId: undefined,
-      emissionId: undefined,
-      fromDate: undefined,
-      toDate: undefined,
+      organisationId: undefined as any,
+      monetization: undefined as any,
+      rubriquageId: undefined as any,
+      rubriqueId: undefined as any,
+      emissionId: undefined as any,
+      fromDate: undefined as any,
+      toDate: undefined as any,
       resetRubriquage: false,
       includeHidden: false,
       sortEmission: 'LAST_PODCAST_DESC',
-      noRubrique: undefined,
+      noRubrique: undefined as any,
     };
   },
 
@@ -108,19 +108,19 @@ export default defineComponent({
   },
 
   methods: {
-    updateHidden(value) {
+    updateHidden(value: boolean) {
       this.includeHidden = value;
     },
-    updateSortEmission(value) {
+    updateSortEmission(value: string) {
       this.sortEmission = value;
     },
-    updateToDate(value) {
+    updateToDate(value: any) {
       this.toDate = value;
     },
-    updateFromDate(value) {
+    updateFromDate(value: any) {
       this.fromDate = value;
     },
-    updateRubriquage(value) {
+    updateRubriquage(value: number) {
       if (-1 !== value) {
         this.rubriquageId = value;
       } else {
@@ -129,7 +129,7 @@ export default defineComponent({
       this.noRubrique = undefined;
       this.rubriqueId = undefined;
     },
-    updateRubrique(value) {
+    updateRubrique(value: number) {
       if (-1 === value) {
         this.noRubrique = true;
         this.rubriqueId = undefined;
@@ -141,14 +141,14 @@ export default defineComponent({
         this.noRubrique = undefined;
       }
     },
-    updateOrganisationId(value) {
+    updateOrganisationId(value: any) {
       this.resetRubriquage = !this.resetRubriquage;
       this.rubriquageId = undefined;
       this.rubriqueId = undefined;
       this.noRubrique = undefined;
       this.organisationId = value;
     },
-    updateSearchPattern(value) {
+    updateSearchPattern(value: string) {
       if ('' !== value) {
         this.sortEmission = 'SCORE';
       } else {
@@ -156,7 +156,7 @@ export default defineComponent({
       }
       this.searchPattern = value;
     },
-    updateMonetization(value) {
+    updateMonetization(value: any) {
       this.monetization = value;
     },
   },

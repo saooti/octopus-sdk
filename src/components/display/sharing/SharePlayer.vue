@@ -200,14 +200,14 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import ShareModalPlayer from '../../misc/modal/ShareModalPlayer.vue';
 import PlayerParameters from './PlayerParameters.vue';
 import { state } from '../../../store/paramStore.js';
-import Swatches from 'vue-swatches';
+const Swatches = require('vue-swatches');
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: [
@@ -247,20 +247,20 @@ export default defineComponent({
     };
   },
   computed: {
-    isEmission() {
+    isEmission():boolean {
       return 'emission' === this.iFrameModel;
     },
-    isLargeEmission() {
+    isLargeEmission():boolean {
       return 'largeEmission' === this.iFrameModel;
     },
-    isLargeSuggestion() {
+    isLargeSuggestion():boolean {
       return 'largeSuggestion' === this.iFrameModel;
     },
-    titleStillAvailable() {
+    titleStillAvailable():string {
       if (this.isPodcastNotVisible) return this.$t('Podcast still available');
       return this.$t('Podcasts still available');
     },
-    isLiveReadyToRecord() {
+    isLiveReadyToRecord():boolean {
       if (this.podcast)
         return (
           this.podcast.conferenceId &&
@@ -401,7 +401,7 @@ export default defineComponent({
       return `<iframe src="${this.iFrameSrc}" width="${this.iFrameWidth}" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
     },
 
-    isPodcastNotVisible() {
+    isPodcastNotVisible():boolean {
       return (
         this.podcast &&
         !this.podcast.availability.visibility &&
@@ -409,7 +409,7 @@ export default defineComponent({
       );
     },
 
-    dataTitle() {
+    dataTitle():any {
       if (this.podcast) return this.podcast.podcastId;
       if (this.emission) return this.emission.emissionId;
       return this.playlist.playlistId;
@@ -427,8 +427,8 @@ export default defineComponent({
       } else {
         orgaId = this.emission.orga.id;
       }
-      const data = await profileApi.fetchOrganisationAttibutes(
-        this.$store,
+      const data:any = await profileApi.fetchOrganisationAttibutes(
+        store,
         orgaId
       );
       if (data.hasOwnProperty('COLOR')) {
@@ -442,19 +442,19 @@ export default defineComponent({
         this.theme = '#ffffff';
       }
     },
-    updateEpisodeNumber(value) {
+    updateEpisodeNumber(value: string) {
       this.episodeNumbers = value;
     },
-    updateProceedReading(value) {
+    updateProceedReading(value: boolean) {
       this.proceedReading = value;
     },
-    updateIframeNumber(value) {
+    updateIframeNumber(value: string) {
       this.iFrameNumber = value;
     },
-    updateStartTime(value) {
+    updateStartTime(value: number) {
       this.startTime = value;
     },
-    updateIsVisible(value) {
+    updateIsVisible(value: boolean) {
       this.isVisible = value;
     },
   },

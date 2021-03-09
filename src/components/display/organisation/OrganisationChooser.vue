@@ -103,17 +103,17 @@
 
 <style lang="scss"></style>
 
-<script>
+<script lang="ts">
 import { selenium } from '../../mixins/functions';
 import Multiselect from 'vue-multiselect';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore.js';
-
+import store from '@/store/AppStore';
 const ELEMENTS_COUNT = 50;
 const DEFAULT_ORGANISATION_ID = 0;
 const DEFAULT_ORGANISATION_IMAGE = '/img/emptypodcast.png';
 
-const getDefaultOrganistion = defaultName => {
+const getDefaultOrganistion = (defaultName: any) => {
   return {
     name: defaultName,
     id: DEFAULT_ORGANISATION_ID,
@@ -130,7 +130,7 @@ export default defineComponent({
   async created() {
     if (
       this.authenticated &&
-      undefined === this.$store.state.organisation.imageUrl
+      undefined === store.state.organisation.imageUrl
     ) {
       const data = await octopusApi.fetchOrganisation(this.organisationId);
       this.myImage = data.imageUrl;
@@ -154,9 +154,9 @@ export default defineComponent({
   mixins: [selenium],
 
   data() {
-    let _return = {
+    let _return:any = {
       organisation: '',
-      organisations: [],
+      organisations: [] as any,
       remainingElements: 0,
       isLoading: false,
       init: false,
@@ -175,7 +175,7 @@ export default defineComponent({
     authenticated() {
       return state.generalParameters.authenticated;
     },
-    myOrganisation() {
+    myOrganisation():any {
       if (!this.authenticated) return undefined;
       return {
         id: this.organisationId,
@@ -208,11 +208,11 @@ export default defineComponent({
       this.$emit('selected', this.organisation);
     },
 
-    onEmissionSelected(organisation) {
+    onEmissionSelected(organisation: any) {
       this.$emit('selected', organisation);
     },
 
-    async onSearchOrganisation(query) {
+    async onSearchOrganisation(query: undefined) {
       this.isLoading = true;
       const response = await octopusApi.fetchOrganisations({
         query: query,
@@ -234,7 +234,7 @@ export default defineComponent({
         }
       }
 
-      let notNull = orga.filter(o => {
+      let notNull = orga.filter((o: null) => {
         return null !== o;
       });
 
@@ -247,13 +247,13 @@ export default defineComponent({
       }
       if (this.myOrganisation) {
         if (undefined === query) {
-          this.organisations = this.organisations.filter(obj => {
+          this.organisations = this.organisations.filter((obj: { id: any; }) => {
             return obj.id !== this.organisationId;
           });
           this.organisations.splice(1, 0, this.myOrganisation);
         } else {
           let foundIndex = this.organisations.findIndex(
-            obj => obj.id === this.organisationId
+            (            obj: { id: any; }) => obj.id === this.organisationId
           );
           if (foundIndex) {
             this.organisations[foundIndex] = this.myOrganisation;

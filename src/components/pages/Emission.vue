@@ -82,7 +82,7 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import EditBox from '@/components/display/edit/EditBox.vue';
 import SharePlayer from '../display/sharing/SharePlayer.vue';
@@ -92,7 +92,7 @@ import ShareDistribution from '../display/sharing/ShareDistribution.vue';
 import PodcastFilterList from '../display/podcasts/PodcastFilterList.vue';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import LiveHorizontalList from '../display/live/LiveHorizontalList.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore.js';
 import { displayMethods } from '../mixins/functions';
 
@@ -121,7 +121,7 @@ export default defineComponent({
     return {
       loaded: false,
       title: '',
-      emission: undefined,
+      emission: undefined as any,
       error: false,
       rssEmission: false,
       exclusive: false,
@@ -161,20 +161,20 @@ export default defineComponent({
     isPodcastmaker() {
       return state.generalParameters.podcastmaker;
     },
-    rssUrl() {
+    rssUrl():string {
       return state.generalParameters.ApiUri + 'rss/emission/' + this.emissionId;
     },
-    name() {
+    name():string {
       return this.emission ? this.emission.name : '';
     },
 
-    imageUrl() {
+    imageUrl():string {
       return this.emission
         ? this.emission.imageUrl + '?dummy=' + this.dummyParam
         : '';
     },
 
-    description() {
+    description():string {
       return this.emission ? this.emission.description : '';
     },
 
@@ -209,7 +209,7 @@ export default defineComponent({
   },
 
   methods: {
-    async getEmissionDetails(emissionId) {
+    async getEmissionDetails(emissionId:number) {
       try {
         const data = await octopusApi.fetchEmission(emissionId);
         this.emission = data;

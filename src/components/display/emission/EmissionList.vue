@@ -87,11 +87,12 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import emissionApi from '@/api/emissions';
 import EmissionItem from './EmissionItem.vue';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
+import store from '@/store/AppStore';
 import { state } from '../../../store/paramStore.js';
 
 import { defineComponent } from 'vue'
@@ -134,14 +135,14 @@ export default defineComponent({
       dsize: this.$props.size,
       totalCount: 0,
       displayCount: 0,
-      emissions: [],
-      rubriques: undefined,
+      emissions: [] as any,
+      rubriques: undefined as any,
       inFetching: false,
     };
   },
 
   computed: {
-    allFetched() {
+    allFetched():boolean {
       return this.dfirst >= this.totalCount;
     },
     buttonPlus() {
@@ -156,11 +157,11 @@ export default defineComponent({
     displayRubriquage() {
       return state.emissionsPage.rubriquage;
     },
-    changed() {
+    changed():any {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}|${this.monetization}|${this.includeHidden}
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubrique}`;
     },
-    sortText() {
+    sortText():string {
       switch (this.sort) {
         case 'SCORE':
           return this.$t('sort by score');
@@ -173,9 +174,9 @@ export default defineComponent({
       }
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
-    organisation() {
+    organisation():any {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
@@ -183,7 +184,7 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchContent(reset) {
+    async fetchContent(reset: boolean) {
       this.inFetching = true;
       if (reset) {
         this.emissions.length = 0;
@@ -191,7 +192,7 @@ export default defineComponent({
         this.loading = true;
         this.loaded = false;
       }
-      let param = {
+      let param:any = {
         first: this.dfirst,
         size: this.dsize,
         query: this.query,
@@ -206,7 +207,7 @@ export default defineComponent({
       };
       if (this.includeHidden) {
         param.includeHidden = this.includeHidden;
-        const data = await emissionApi.fetchEmissionsAdmin(this.$store, param);
+        const data = await emissionApi.fetchEmissionsAdmin(store, param);
         this.afterFetching(reset, data);
       } else {
         const data = await octopusApi.fetchEmissions(param);
@@ -214,7 +215,7 @@ export default defineComponent({
       }
     },
 
-    afterFetching(reset, data) {
+    afterFetching(reset: any, data: any) {
       if (reset) {
         this.emissions.length = 0;
         this.dfirst = 0;
@@ -222,7 +223,7 @@ export default defineComponent({
       this.loading = false;
       this.loaded = true;
       this.displayCount = data.count;
-      this.emissions = this.emissions.concat(data.result).filter(e => {
+      this.emissions = this.emissions.concat(data.result).filter((e:any) => {
         if (null === e) {
           this.displayCount--;
         }
@@ -233,7 +234,7 @@ export default defineComponent({
       this.inFetching = false;
     },
 
-    displayMore(event) {
+    displayMore(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.fetchContent(false);
     },
@@ -241,7 +242,7 @@ export default defineComponent({
       const data = await octopusApi.fetchTopic(this.displayRubriquage);
       this.rubriques = data.rubriques;
     },
-    mainRubriquage(emission) {
+    mainRubriquage(emission: { rubriqueIds: any[]; }) {
       if (
         emission.rubriqueIds &&
         emission.rubriqueIds[0] === state.emissionsPage.mainRubrique
@@ -249,7 +250,7 @@ export default defineComponent({
         return 'partenaireRubrique';
       return '';
     },
-    rubriquesId(emission) {
+    rubriquesId(emission: { rubriqueIds: string|any[]; }) {
       if (
         !this.displayRubriquage ||
         !emission.rubriqueIds ||
@@ -259,7 +260,7 @@ export default defineComponent({
       )
         return undefined;
       let rubrique = this.rubriques.find(
-        element => element.rubriqueId === emission.rubriqueIds[0]
+        (        element: { rubriqueId: any; }) => element.rubriqueId === emission.rubriqueIds[0]
       );
       return rubrique.name;
     },

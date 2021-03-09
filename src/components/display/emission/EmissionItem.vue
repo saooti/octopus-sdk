@@ -176,9 +176,9 @@ button.btn.btn-primary.share-btn.m-3 {
 }
 </style>
 
-<script>
+<script lang="ts">
 import { state } from '../../../store/paramStore.js';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -195,7 +195,7 @@ export default defineComponent({
     let emissionDesc = document.getElementById(
       'description-emission-' + this.emission.emissionId
     );
-    let emissionDescContainer = document.getElementById(
+    let emissionDescContainer:any = document.getElementById(
       'description-emission-container-' + this.emission.emissionId
     );
     if (
@@ -217,7 +217,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
 
-    organisation() {
+    organisation():string {
       return '' + this.emission.publisher.organisation.name;
     },
 
@@ -225,7 +225,7 @@ export default defineComponent({
       return state.emissionsPage.lightItems;
     },
 
-    description() {
+    description():string {
       let description;
       description = this.emission.description || '';
       if (state.generalParameters.isIE11)
@@ -233,7 +233,7 @@ export default defineComponent({
       return description;
     },
 
-    name() {
+    name():string {
       if (state.generalParameters.isIE11)
         return this.emission.name.substring(0, 50) + '...';
       return this.emission.name;

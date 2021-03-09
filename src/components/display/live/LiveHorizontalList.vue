@@ -24,8 +24,8 @@
 
 <style lang="scss"></style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore.js';
 
@@ -36,7 +36,7 @@ export default defineComponent({
   props: {
     first: { default: 0 },
     size: { default: 12 },
-    emissionId: { default: undefined },
+    emissionId: { default: undefined as any },
   },
 
   components: {
@@ -52,14 +52,14 @@ export default defineComponent({
       dfirst: this.$props.first,
       dsize: this.$props.size,
       totalCount: 0,
-      lives: [],
+      lives: [] as any,
       notEmpty: false,
       inFetching: false,
     };
   },
 
   computed: {
-    allFetched() {
+    allFetched():boolean {
       return this.dfirst >= this.totalCount;
     },
     buttonPlus() {
@@ -68,7 +68,7 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchContent(reset) {
+    async fetchContent(reset: boolean) {
       this.inFetching = true;
       if (reset) {
         this.lives.length = 0;
@@ -85,12 +85,12 @@ export default defineComponent({
       this.afterFetching(reset, data);
     },
 
-    afterFetching(reset, data) {
+    afterFetching(reset: any, data: { result: any; count: number; }) {
       if (reset) {
         this.lives.length = 0;
         this.dfirst = 0;
       }
-      this.lives = this.lives.concat(data.result).filter(l => {
+      this.lives = this.lives.concat(data.result).filter((l: null) => {
         return null !== l;
       });
       this.dfirst += this.dsize;
@@ -101,7 +101,7 @@ export default defineComponent({
       this.inFetching = false;
     },
 
-    displayMore(event) {
+    displayMore(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.fetchContent(false);
     },

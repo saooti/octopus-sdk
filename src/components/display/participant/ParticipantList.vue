@@ -57,10 +57,10 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import ParticipantItem from './ParticipantItem.vue';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ParticipantList',
@@ -83,19 +83,19 @@ export default defineComponent({
       dsize: this.$props.size,
       totalCount: 0,
       displayCount: 0,
-      participants: [],
+      participants: [] as any,
       inFetching: false,
     };
   },
 
   computed: {
-    allFetched() {
+    allFetched():boolean {
       return this.dfirst >= this.totalCount;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
-    organisation() {
+    organisation():any {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
@@ -103,7 +103,7 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchContent(reset) {
+    async fetchContent(reset: boolean) {
       this.inFetching = true;
       if (reset) {
         this.participants.length = 0;
@@ -120,7 +120,7 @@ export default defineComponent({
       this.loading = false;
       this.loaded = true;
       this.displayCount = data.count;
-      this.participants = this.participants.concat(data.result).filter(p => {
+      this.participants = this.participants.concat(data.result).filter((p: null) => {
         if (null === p) {
           this.displayCount--;
         }
@@ -131,7 +131,7 @@ export default defineComponent({
       this.inFetching = false;
     },
 
-    displayMore(event) {
+    displayMore(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.fetchContent(false);
     },

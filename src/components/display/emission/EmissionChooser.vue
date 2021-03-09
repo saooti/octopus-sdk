@@ -82,21 +82,21 @@
   width: 100%;
 }
 </style>
-<script>
+<script lang="ts">
 import Multiselect from 'vue-multiselect';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 
 const ELEMENTS_COUNT = 50;
 const DEFAULT_EMISSION_ID = 0;
 
-const getDefaultEmission = defaultName => {
+const getDefaultEmission = (defaultName: any) => {
   return {
     name: defaultName,
     id: DEFAULT_EMISSION_ID,
   };
 };
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components: {
     Multiselect,
@@ -104,19 +104,19 @@ export default defineComponent({
 
   props: {
     width: { default: '100%' },
-    defaultanswer: { default: false },
-    organisationId: { default: undefined },
-    emissionChosen: { default: undefined },
+    defaultanswer: { default: undefined as any },
+    organisationId: { default: undefined as any },
+    emissionChosen: { default: undefined as any },
     displayArrow: { default: true },
-    distributedBy: { default: undefined },
-    organisationDistributedBy: { default: undefined },
+    distributedBy: { default: undefined as any },
+    organisationDistributedBy: { default: undefined as any },
     reset: { default: false },
   },
 
   data() {
-    let _return = {
+    let _return:any = {
       emission: '',
-      emissions: [],
+      emissions: [] as any,
       remainingElements: 0,
       isLoading: false,
     };
@@ -126,9 +126,16 @@ export default defineComponent({
     return _return;
   },
 
+  setup() {
+    const multiselectRef : any = ref(null);
+    return {
+      multiselectRef,
+    };
+  },
+
   methods: {
     onOpen() {
-      this.$refs.multiselectRef.$refs.search.setAttribute(
+      this.multiselectRef.$refs.search.setAttribute(
         'autocomplete',
         'off'
       );
@@ -144,13 +151,13 @@ export default defineComponent({
       this.$emit('selected', this.emission);
     },
 
-    onEmissionSelected(emission) {
+    onEmissionSelected(emission: any) {
       this.$emit('selected', emission);
     },
 
-    async onSearchEmission(query) {
+    async onSearchEmission(query: undefined) {
       this.isLoading = true;
-      let standardParam = {
+      let standardParam:any = {
         query: query,
         first: 0,
         size: ELEMENTS_COUNT,

@@ -26,12 +26,12 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import PlaylistList from '../display/playlist/PlaylistList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import { state } from '../../store/paramStore.js';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -52,17 +52,17 @@ export default defineComponent({
     }
     if (this.$route.query.productor) {
       this.organisationId = this.$route.query.productor;
-    } else if (this.$store.state.filter.organisationId) {
-      this.organisationId = this.$store.state.filter.organisationId;
+    } else if (store.state.filter.organisationId) {
+      this.organisationId = store.state.filter.organisationId;
     }
   },
 
   data() {
     return {
-      first: undefined,
-      size: undefined,
+      first: undefined as any,
+      size: undefined as any,
       searchPattern: '',
-      organisationId: undefined,
+      organisationId: undefined as any,
     };
   },
 
@@ -80,10 +80,10 @@ export default defineComponent({
   },
 
   methods: {
-    updateOrganisationId(value) {
+    updateOrganisationId(value: any) {
       this.organisationId = value;
     },
-    updateSearchPattern(value) {
+    updateSearchPattern(value: string) {
       this.searchPattern = value;
     },
   },

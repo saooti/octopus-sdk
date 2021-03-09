@@ -202,9 +202,10 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { mapState } from 'vuex';
-import { defineComponent } from 'vue'
+import store from '@/store/AppStore';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'PodcastImage',
 
@@ -218,7 +219,7 @@ export default defineComponent({
   ],
   computed: {
     ...mapState({
-      playingPodcast(state) {
+      playingPodcast(state:any) {
         return (
           (state.player.podcast &&
             state.player.podcast.podcastId === this.podcast.podcastId) ||
@@ -235,7 +236,7 @@ export default defineComponent({
       return window.matchMedia('(hover: none)').matches;
     },
 
-    isRecordedInLive() {
+    isRecordedInLive():boolean {
       return (
         undefined === this.fetchConference &&
         undefined !== this.podcast.conferenceId &&
@@ -243,14 +244,14 @@ export default defineComponent({
       );
     },
 
-    isLiveToBeRecorded() {
+    isLiveToBeRecorded():boolean {
       return (
         undefined === this.fetchConference &&
         undefined !== this.podcast.conferenceId &&
         'READY_TO_RECORD' === this.podcast.processingStatus
       );
     },
-    classicPodcastPlay() {
+    classicPodcastPlay():boolean {
       return (
         this.podcast &&
         false !== this.podcast.valid &&
@@ -280,7 +281,7 @@ export default defineComponent({
         return 'saooti-cancel-circle';
       return 'saooti-warning';
     },
-    textVisible() {
+    textVisible():string {
       if (this.isLiveToBeRecorded)
         return this.$t('Podcast linked to waiting live');
       if ('READY' === this.podcast.processingStatus || this.fetchConference) {
@@ -302,7 +303,7 @@ export default defineComponent({
       return this.$t('Podcast in error');
     },
 
-    statusText() {
+    statusText():string {
       if (!this.fetchConference) return '';
       switch (this.fetchConference.status) {
         case 'PLANNED':
@@ -326,7 +327,7 @@ export default defineComponent({
       }
     },
 
-    recordingLive() {
+    recordingLive():boolean {
       return (
         this.fetchConference &&
         'null' !== this.fetchConference &&
@@ -348,10 +349,10 @@ export default defineComponent({
         return;
       }
       if (!this.recordingLive) {
-        this.$store.commit('playerPlayPodcast', this.podcast);
+        store.commit('playerPlayPodcast', this.podcast);
         return;
       }
-      this.$store.commit('playerPlayPodcast', {
+      store.commit('playerPlayPodcast', {
         title: this.podcast.title,
         audioUrl: this.podcast.audioUrl,
         duration: this.podcast.duration,

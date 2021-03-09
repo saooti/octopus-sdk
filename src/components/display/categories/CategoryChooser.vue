@@ -56,7 +56,7 @@
 </template>
 
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 import Multiselect from 'vue-multiselect';
 import { state } from '../../../store/paramStore.js';
 
@@ -73,10 +73,10 @@ export default defineComponent({
 
   props: {
     width: { default: '100%' },
-    defaultanswer: { default: undefined },
-    categorySelected: { default: undefined },
+    defaultanswer: { default: undefined as any },
+    categorySelected: { default: undefined as any },
     multiple: { default: false },
-    categoryArray: { default: undefined },
+    categoryArray: { default: undefined as any },
     displayAllCategories: { default: false },
     isDisabled: { default: false },
   },
@@ -95,10 +95,10 @@ export default defineComponent({
 
   data() {
     return {
-      categories: [],
+      categories: [] as any,
       category: getDefaultCategory(this.defaultanswer),
       isLoading: false,
-      totalCategories: undefined,
+      totalCategories: undefined as any,
       init: true,
     };
   },
@@ -156,7 +156,7 @@ export default defineComponent({
       if (undefined === this.defaultanswer) {
         list = this.totalCategories;
       }
-      this.categories = list.filter(item => {
+      this.categories = list.filter((item:any) => {
         return item.name.toUpperCase().includes(query.toUpperCase());
       });
       this.isLoading = false;

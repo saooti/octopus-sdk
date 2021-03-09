@@ -1,25 +1,25 @@
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 
 var state = {
-  generalParameters: {},
+  generalParameters: {} as any,
   filter: {
-    organisationId: undefined,
-  },
-  podcastPage: {},
-  podcastsPage: {},
-  emissionsPage: {},
-  emissionPage: {},
-  intervenantPage: {},
-  searchPage: {},
-  player: {},
-  footer: {},
-  organisation: {},
-  octopusApi: {},
-  oAuthParam: {},
+    organisationId: undefined as any,
+  } as any,
+  podcastPage: {} as any,
+  podcastsPage: {} as any,
+  emissionsPage: {} as any,
+  emissionPage: {} as any,
+  intervenantPage: {} as any,
+  searchPage: {} as any,
+  player: {} as any,
+  footer: {} as any,
+  organisation: {} as any,
+  octopusApi: {}as any,
+  oAuthParam: {} as any,
 };
 
-var initialize = function initialize(initObject) {
-  return new Promise((resolve, reject) => {
+var initialize = function initialize(initObject: any) {
+  return new Promise<void>((resolve, reject) => {
     if (initObject.generalParameters) {
       let param = initObject.generalParameters;
       state.generalParameters.organisationId =
@@ -212,7 +212,7 @@ var initialize = function initialize(initObject) {
       if (error) {
         reject();
       } else if (0 === state.generalParameters.allCategories.length) {
-        octopusApi.fetchCategories({ lang: 'fr' }).then(data => {
+        octopusApi.fetchCategories({ lang: 'fr' }).then((data: any) => {
           state.generalParameters.allCategories = data;
           resolve();
         });

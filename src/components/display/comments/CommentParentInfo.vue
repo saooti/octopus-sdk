@@ -28,8 +28,8 @@
 
 <style lang="scss"></style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -48,26 +48,26 @@ export default defineComponent({
     return {
       loading: true,
       summary: true,
-      comment: undefined,
+      comment: undefined as any,
     };
   },
 
   computed: {
-    date() {
+    date():string {
       if (this.comment.date)
         return moment(this.comment.date).format('D MMMM YYYY HH[h]mm');
       return '';
     },
-    limitContent() {
+    limitContent():string {
       if (!this.comment.content) return '';
       if (this.comment.content.length <= 300) return this.comment.content;
       return this.comment.content.substring(0, 300) + '...';
     },
-    readMore() {
+    readMore():string {
       if (this.summary) return this.$t('Read more');
       return this.$t('Read less');
     },
-    contentDisplay() {
+    contentDisplay():string {
       if (this.summary) return this.limitContent;
       return this.comment.content;
     },

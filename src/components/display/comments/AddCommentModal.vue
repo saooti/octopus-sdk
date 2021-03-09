@@ -32,7 +32,7 @@
         <button
           class="btn btn-primary m-1"
           :disabled="name.length <= 2"
-          @click="recaptcha"
+          @click="recaptchaHandle"
         >
           {{ $t('Validate') }}
         </button>
@@ -47,35 +47,47 @@
 </template>
 
 <style lang="scss"></style>
-<script>
-import { VueReCaptcha } from 'vue-recaptcha-v3';
+<script lang="ts">
+import { useReCaptcha } from "vue-recaptcha-v3";
 import { state } from '../../../store/paramStore.js';
 import api from '@/api/initialize';
-import Vue from 'vue';
-Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' });
-import { defineComponent } from 'vue'
+import store from '@/store/AppStore';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'AddCommentModal',
 
-  props: [],
+  props: [] as any,
+
+  setup() {
+    const { executeRecaptcha, recaptchaLoaded }:any = useReCaptcha();
+
+    const recaptcha = async () => {
+      await recaptchaLoaded();
+      const token = await executeRecaptcha("login");
+      return token;
+    }
+    return {
+      recaptcha
+    }
+  },
 
   mounted() {
-    document.getElementsByClassName('grecaptcha-badge')[0].style.display =
-      'block';
+    let captcha:any = document.getElementsByClassName('grecaptcha-badge')[0];
+    captcha.style.display ='block';
     if (this.authenticated) {
       this.name = (
-        (this.$store.state.profile.firstname || '') +
+        (store.state.profile.firstname || '') +
         ' ' +
-        (this.$store.state.profile.lastname || '')
+        (store.state.profile.lastname || '')
       ).trim();
       this.needVerify = false;
     }
-    this.$bvModal.show('add-comment-modal');
+    /* this.$bvModal.show('add-comment-modal'); */
   },
 
   unmounted() {
-    document.getElementsByClassName('grecaptcha-badge')[0].style.display =
-      'none';
+    let captcha:any = document.getElementsByClassName('grecaptcha-badge')[0];
+    captcha.style.display ='none';
   },
 
   data() {
@@ -97,16 +109,15 @@ export default defineComponent({
   },
 
   methods: {
-    async recaptcha() {
+    async recaptchaHandle() {
       if (!this.needVerify || this.isCaptchaTest) {
         this.sendComment();
         return;
       }
-      await this.$recaptchaLoaded();
-      const token = await this.$recaptcha('login');
+      const token = await this.recaptcha();
       try {
         this.sendError = false;
-        const ok = await api.checkToken(token);
+        const ok:any = await api.checkToken(token);
         if (!ok) {
           this.sendError = true;
           return;
@@ -117,7 +128,7 @@ export default defineComponent({
       }
       this.sendComment();
     },
-    closePopup(event) {
+    closePopup(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.$emit('close');
     },

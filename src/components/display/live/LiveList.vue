@@ -115,20 +115,20 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import studioApi from '@/api/studio';
 import LiveItem from './LiveItem.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { state } from '../../../store/paramStore.js';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveList',
 
   props: {
     conferenceWatched: { default: [] },
-    organisationId: { default: undefined },
+    organisationId: { default: undefined as any },
   },
 
   components: {
@@ -151,25 +151,25 @@ export default defineComponent({
     return {
       loading: true,
       loaded: true,
-      lives: [],
-      livesNotStarted: [],
-      livesToBe: [],
-      livesTerminated: [],
-      livesError: [],
-      livesPublishing: [],
+      lives: [] as any,
+      livesNotStarted: [] as any,
+      livesToBe: [] as any,
+      livesTerminated: [] as any,
+      livesError: [] as any,
+      livesPublishing: [] as any,
     };
   },
 
   computed: {
-    filterOrgaUsed() {
+    filterOrgaUsed():any {
       if (this.filterOrga) return this.filterOrga;
       if (this.organisationId) return this.organisationId;
       return undefined;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
-    displayNextLiveMessage() {
+    displayNextLiveMessage():string {
       if (0 !== this.lives.length) return '';
       if (this.livesNotStarted.length > 0)
         return this.$t('A live can start any moment');
@@ -210,16 +210,16 @@ export default defineComponent({
       this.loading = true;
       this.loaded = false;
       let dataLives = await studioApi.listConferences(
-        this.$store,
+        store,
         true,
         this.filterOrgaUsed,
         'RECORDING'
       );
-      this.lives = dataLives.filter(p => {
+      this.lives = dataLives.filter((p:any) => {
         return null !== p;
       });
       let dataLivesToBe = await studioApi.listConferences(
-        this.$store,
+        store,
         true,
         this.filterOrgaUsed,
         'PENDING'
@@ -234,7 +234,7 @@ export default defineComponent({
         }
       }
       let dataLivesPlanned = await studioApi.listConferences(
-        this.$store,
+        store,
         true,
         this.filterOrgaUsed,
         'PLANNED'
@@ -242,35 +242,35 @@ export default defineComponent({
       this.livesToBe = dataLivesToBe
         .slice(indexPast)
         .concat(dataLivesPlanned)
-        .filter(p => {
+        .filter((p: null) => {
           return null !== p;
         });
       if (this.organisationRight) {
         let dataLivesTerminated = await studioApi.listConferences(
-          this.$store,
+          store,
           true,
           this.filterOrgaUsed,
           'DEBRIEFING'
         );
-        this.livesTerminated = dataLivesTerminated.filter(p => {
+        this.livesTerminated = dataLivesTerminated.filter((p:any) => {
           return null !== p;
         });
         let dataLivesError = await studioApi.listConferences(
-          this.$store,
+          store,
           true,
           this.filterOrgaUsed,
           'ERROR'
         );
-        this.livesError = dataLivesError.filter(p => {
+        this.livesError = dataLivesError.filter((p:any) => {
           return null !== p;
         });
         let dataLivesPublishing = await studioApi.listConferences(
-          this.$store,
+          store,
           true,
           this.filterOrgaUsed,
           'PUBLISHING'
         );
-        this.livesPublishing = dataLivesPublishing.filter(p => {
+        this.livesPublishing = dataLivesPublishing.filter((p:any) => {
           return null !== p;
         });
       }
@@ -281,22 +281,22 @@ export default defineComponent({
       this.loading = false;
       this.loaded = true;
     },
-    deleteLive(index) {
+    deleteLive(index: any) {
       this.lives.splice(index, 1);
     },
-    deleteLiveToBe(index) {
+    deleteLiveToBe(index: any) {
       this.livesToBe.splice(index, 1);
     },
-    deleteLiveTerminated(index) {
+    deleteLiveTerminated(index: any) {
       this.livesTerminated.splice(index, 1);
     },
-    deleteLiveError(index) {
+    deleteLiveError(index: any) {
       this.livesError.splice(index, 1);
     },
-    deleteLiveNotStarted(index) {
+    deleteLiveNotStarted(index: any) {
       this.livesNotStarted.splice(index, 1);
     },
-    deleteLivePublishing(index) {
+    deleteLivePublishing(index: any) {
       this.livesPublishing.splice(index, 1);
     },
     updateLiveLocal() {
@@ -305,13 +305,13 @@ export default defineComponent({
         index < len;
         index++
       ) {
-        const element = this.conferenceWatched[index];
+        const element:any = this.conferenceWatched[index];
         let indexLivesToBe = this.livesToBe.findIndex(
-          el => el.conferenceId === element.conferenceId
+          (          el: { conferenceId: any; }) => el.conferenceId === element.conferenceId
         );
         if (-1 === indexLivesToBe) {
           let indexLives = this.lives.findIndex(
-            el => el.conferenceId === element.conferenceId
+            (            el: { conferenceId: any; }) => el.conferenceId === element.conferenceId
           );
           if (-1 === indexLives || 'DEBRIEFING' !== element.status) continue;
           let newConf = this.lives[indexLives];

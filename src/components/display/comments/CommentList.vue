@@ -79,11 +79,11 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { state } from '../../../store/paramStore.js';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentList',
@@ -91,12 +91,12 @@ export default defineComponent({
   props: {
     first: { default: 0 },
     size: { default: 50 },
-    podcast: { default: undefined },
-    comId: { default: undefined },
+    podcast: { default: undefined as any },
+    comId: { default: undefined as any },
     reload: { default: false },
-    fetchConference: { default: undefined },
-    organisation: { default: undefined },
-    status: { default: undefined },
+    fetchConference: { default: undefined as any },
+    organisation: { default: undefined as any },
+    status: { default: undefined as any },
     isFlat: { default: false },
   },
 
@@ -116,19 +116,19 @@ export default defineComponent({
       dfirst: this.$props.first,
       dsize: this.$props.size,
       totalCount: 0,
-      comments: [],
+      comments: [] as any,
       inFetching: false,
     };
   },
 
   computed: {
-    allFetched() {
+    allFetched():boolean {
       return this.dfirst >= this.totalCount;
     },
     organisationId() {
       return state.generalParameters.organisationId;
     },
-    podcastId() {
+    podcastId():any {
       if (this.podcast) return this.podcast.podcastId;
       return undefined;
     },
@@ -147,7 +147,7 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchContent(reset) {
+    async fetchContent(reset: boolean) {
       this.inFetching = true;
       this.resetData(reset);
       let data;
@@ -155,7 +155,7 @@ export default defineComponent({
         if (this.comId) {
           data = await octopusApi.fetchCommentAnswers(this.comId);
         } else {
-          let param = {
+          let param :any = {
             first: this.dfirst,
             size: this.dsize,
             podcastId: this.podcastId,
@@ -178,7 +178,7 @@ export default defineComponent({
         this.loading = false;
         this.loaded = true;
         this.totalCount = data.totalElements;
-        this.comments = this.comments.concat(data.content).filter(c => {
+        this.comments = this.comments.concat(data.content).filter((c:any) => {
           return null !== c;
         });
         this.dfirst += this.dsize;
@@ -189,30 +189,29 @@ export default defineComponent({
       this.inFetching = false;
     },
 
-    resetData(reset) {
+    resetData(reset: any) {
       if (!reset) return;
       this.comments.length = 0;
       this.dfirst = 0;
       this.loading = true;
       this.loaded = false;
     },
-    displayMore(event) {
+    displayMore(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.fetchContent(false);
     },
-    deleteComment(comment) {
+    deleteComment(comment: { commentIdReferer: string; comId: any; }) {
       if (
         !this.isFlat &&
         comment.commentIdReferer &&
         this.comId !== comment.commentIdReferer
       ) {
-        this.$refs[
-          'comItem' + comment.commentIdReferer
-        ][0].receiveCommentEvent({ type: 'Delete', comment: comment });
+        let ref :any = this.$refs['comItem' + comment.commentIdReferer];
+        ref[0].receiveCommentEvent({ type: 'Delete', comment: comment });
         return;
       }
       let index = this.comments.findIndex(
-        element => element.comId === comment.comId
+        (element:any) => element.comId === comment.comId
       );
       if (-1 === index) return;
       this.totalCount -= 1;
@@ -221,19 +220,18 @@ export default defineComponent({
       }
       this.comments.splice(index, 1);
     },
-    updateComment(data) {
+    updateComment(data: any) {
       if (
         !this.isFlat &&
         data.comment.commentIdReferer &&
         this.comId !== data.comment.commentIdReferer
       ) {
-        this.$refs[
-          'comItem' + data.comment.commentIdReferer
-        ][0].receiveCommentEvent({ ...data, type: 'Update' });
+        let ref :any = this.$refs['comItem' +  data.comment.commentIdReferer];
+        ref[0].receiveCommentEvent({ ...data, type: 'Update' });
         return;
       }
       let index = this.comments.findIndex(
-        element => element.comId === data.comment.comId
+        (element:any) => element.comId === data.comment.comId
       );
       if (-1 !== index) {
         if (
@@ -274,7 +272,7 @@ export default defineComponent({
         this.$emit('updateStatus', data.status);
       }
     },
-    addNewComment(comment, myself = false) {
+    addNewComment(comment: { status: string; commentIdReferer: string; comId: any; }, myself = false) {
       if (!myself && !this.editRight && 'Valid' !== comment.status) {
         return;
       }
@@ -283,13 +281,12 @@ export default defineComponent({
         comment.commentIdReferer &&
         this.comId !== comment.commentIdReferer
       ) {
-        this.$refs[
-          'comItem' + comment.commentIdReferer
-        ][0].receiveCommentEvent({ type: 'Create', comment: comment });
+        let ref :any = this.$refs['comItem' +  comment.commentIdReferer];
+        ref[0].receiveCommentEvent({ type: 'Create', comment: comment });
         return;
       }
       let index = this.comments.findIndex(
-        element => element.comId === comment.comId
+        (element:any) => element.comId === comment.comId
       );
       if (-1 === index) {
         this.totalCount += 1;

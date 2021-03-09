@@ -35,7 +35,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AnimatorsItem',
@@ -49,7 +49,7 @@ export default defineComponent({
   },
 
   methods: {
-    getAnimatorName(animator) {
+    getAnimatorName(animator:any) {
       const first = animator.firstName || '';
       const last = animator.lastName || '';
       return (first + ' ' + last).trim();

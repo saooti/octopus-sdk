@@ -73,8 +73,8 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import domHelper from '../../../helper/dom';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
 import { state } from '../../../store/paramStore.js';
@@ -124,30 +124,30 @@ export default defineComponent({
       size: 5,
       totalCount: 0,
       popularSort: true,
-      allEmissions: [],
+      allEmissions: [] as any,
       direction: 1,
       alignLeft: false,
-      rubriques: undefined,
+      rubriques: undefined as any,
     };
   },
 
   computed: {
-    emissions() {
+    emissions():any {
       return this.allEmissions.slice(this.index, this.index + this.size);
     },
     overflowScroll() {
       return state.emissionsPage.overflowScroll;
     },
-    previousAvailable() {
+    previousAvailable():boolean {
       return this.index > 0;
     },
-    nextAvailable() {
+    nextAvailable():boolean {
       return this.index + this.size < this.totalCount;
     },
     displayRubriquage() {
       return state.emissionsPage.rubriquage;
     },
-    transitionName: ({ direction }) =>
+    transitionName: ({ direction }:any) =>
       direction > 0 ? 'out-left' : 'out-right',
   },
 
@@ -230,7 +230,7 @@ export default defineComponent({
       this.allEmissions.length = 0;
     },
 
-    preloadImage(url) {
+    preloadImage(url: string) {
       let img = new Image();
       img.src = url;
     },
@@ -238,7 +238,7 @@ export default defineComponent({
       const data = await octopusApi.fetchTopic(this.displayRubriquage);
       this.rubriques = data.rubriques;
     },
-    rubriquesId(emission) {
+    rubriquesId(emission:any) {
       if (
         !this.displayRubriquage ||
         !emission.rubriqueIds ||
@@ -248,11 +248,11 @@ export default defineComponent({
       )
         return undefined;
       let rubrique = this.rubriques.find(
-        element => element.rubriqueId === emission.rubriqueIds[0]
+        (        element: { rubriqueId: any; }) => element.rubriqueId === emission.rubriqueIds[0]
       );
       return rubrique.name;
     },
-    mainRubriquage(emission) {
+    mainRubriquage(emission: { rubriqueIds: any[]; }) {
       if (
         emission.rubriqueIds &&
         emission.rubriqueIds[0] === state.emissionsPage.mainRubrique

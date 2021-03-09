@@ -265,17 +265,17 @@
   }
 }
 </style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 
 import MonetizableFilter from './MonetizableFilter.vue';
 import RubriqueChooser from '../rubriques/RubriqueChooser.vue';
-import { Datetime } from 'vue-datetime';
+const Datetime = require('vue-datetime');
 import { state } from '../../../store/paramStore.js';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
-
-import { defineComponent } from 'vue'
+import store from '@/store/AppStore';
+import { defineComponent } from 'vue';
 export default defineComponent({
   components: {
     MonetizableFilter,
@@ -307,9 +307,9 @@ export default defineComponent({
   data() {
     return {
       isRubriquage: false,
-      rubriquageId: undefined,
-      rubriqueId: undefined,
-      rubriquageData: [],
+      rubriquageId: undefined as any,
+      rubriqueId: undefined as any,
+      rubriquageData: [] as any,
       isFrom: false,
       isTo: false,
       lang: {
@@ -371,18 +371,18 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
-    organisation() {
+    organisation():any {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
-    textNotVisible() {
+    textNotVisible():string {
       if (this.isEmission) return this.$t('Consider podcasts no visible');
       return this.$t('See podcasts no visible');
     },
-    isCheckboxNotValidate() {
+    isCheckboxNotValidate():boolean {
       return (
         this.organisation &&
         this.organisationRight &&
@@ -392,7 +392,7 @@ export default defineComponent({
         this.isNotVisible
       );
     },
-    textNotValidate() {
+    textNotValidate():string {
       if (this.isProduction) return this.$t('Display all podcasts to validate');
       return this.$t('Display my podcasts to validate');
     },
@@ -434,13 +434,13 @@ export default defineComponent({
         this.isTo = true;
       }
     },
-    getRubriques(rubriquageId) {
+    getRubriques(rubriquageId: any) {
       let topicIndex = this.rubriquageData.findIndex(
-        element => element.rubriquageId === rubriquageId
+        (        element: any) => element.rubriquageId === rubriquageId
       );
       return this.rubriquageData[topicIndex].rubriques;
     },
-    onRubriqueSelected(rubrique) {
+    onRubriqueSelected(rubrique: any) {
       if (rubrique.rubriqueId === this.rubriqueId) return;
       this.rubriqueId = rubrique.rubriqueId;
       if (0 === this.rubriqueId) {
@@ -456,7 +456,7 @@ export default defineComponent({
         this.$emit('updateRubriquage', this.rubriquageId);
       }
     },
-    updateMonetization(value) {
+    updateMonetization(value: any) {
       this.$emit('updateMonetization', value);
     },
     async fetchTopics() {

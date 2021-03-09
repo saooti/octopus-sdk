@@ -154,12 +154,13 @@
   }
 }
 </style>
-<script>
+<script lang="ts">
 import OrganisationChooserLight from '../display/organisation/OrganisationChooserLight.vue';
 import { state } from '../../store/paramStore.js';
-import octopusApi from '@saooti/octopus-api';
-
+const octopusApi = require('@saooti/octopus-api');
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
+import { LocationQueryValue } from 'vue-router';
 export default defineComponent({
   name: 'LeftMenu',
 
@@ -177,7 +178,7 @@ export default defineComponent({
 
   data() {
     return {
-      organisationId: undefined,
+      organisationId: undefined as any,
       reset: false,
     };
   },
@@ -186,24 +187,24 @@ export default defineComponent({
     onMenuClick() {
       this.$emit('update:displayMenu', false);
     },
-    async onOrganisationSelected(organisation) {
+    async onOrganisationSelected(organisation: any) {
       if (organisation && organisation.id) {
         if (this.$route.query.productor !== organisation.id) {
           this.$router.push({ query: { productor: organisation.id } });
         }
-        this.$store.commit('filterOrga', {
+        store.commit('filterOrga', {
           orgaId: organisation.id,
           imgUrl: organisation.imageUrl,
         });
         const isLive = await octopusApi.liveEnabledOrganisation(
           organisation.id
         );
-        this.$store.commit('filterOrgaLive', isLive);
+        store.commit('filterOrgaLive', isLive);
       } else {
         if (this.$route.query.productor) {
           this.$router.push({ query: { productor: undefined } });
         }
-        this.$store.commit('filterOrga', { orgaId: undefined });
+        store.commit('filterOrga', { orgaId: undefined });
       }
     },
   },
@@ -213,7 +214,7 @@ export default defineComponent({
       return state.generalParameters.isLiveTab;
     },
     categories() {
-      return state.generalParameters.allCategories.filter(c => {
+      return state.generalParameters.allCategories.filter((c: { podcastOrganisationCount: any; podcastCount: any; }) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });
@@ -222,10 +223,10 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
     filterOrgaLive() {
-      return this.$store.state.filter.live;
+      return store.state.filter.live;
     },
   },
 

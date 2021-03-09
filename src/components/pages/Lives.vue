@@ -25,12 +25,12 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import { state } from '../../store/paramStore.js';
 import LiveList from '../display/live/LiveList.vue';
 import OrganisationChooser from '../display/organisation/OrganisationChooser.vue';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -39,19 +39,19 @@ export default defineComponent({
   },
   props: {
     conferenceWatched: { default: [] },
-    organisationId: { default: undefined },
+    organisationId: { default: undefined as any },
   },
 
   created() {
     if (this.$route.query.productor) {
       this.$emit('update:organisationId',this.$route.query.productor);
-    } else if (this.$store.state.filter.organisationId) {
-      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
+    } else if (store.state.filter.organisationId) {
+      this.$emit('update:organisationId',store.state.filter.organisationId);
     }
     if (
-      this.$store.state.organisation &&
-      this.$store.state.organisation.attributes &&
-      !this.$store.state.organisation.attributes['live.active']
+      store.state.organisation &&
+      store.state.organisation.attributes &&
+      !store.state.organisation.attributes['live.active']
     ) {
       this.live = false;
     }
@@ -72,15 +72,15 @@ export default defineComponent({
       return state.generalParameters.isRoleLive;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
   },
 
   methods: {
-    initConferenceIds(listIds) {
+    initConferenceIds(listIds: any) {
       this.$emit('initConferenceIds', listIds);
     },
-    onOrganisationSelected(organisation) {
+    onOrganisationSelected(organisation: any) {
       if (organisation && organisation.id) {
         this.$emit('update:organisationId', organisation.id);
       } else {

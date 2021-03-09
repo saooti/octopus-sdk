@@ -135,10 +135,11 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { state } from '../../store/paramStore.js';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
+import { RouteLocationRaw } from 'vue-router';
 export default defineComponent({
   name: 'HomeDropdown',
 
@@ -153,7 +154,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
     authenticated() {
-      return this.$store.state.authentication.isAuthenticated;
+      return store.state.authentication.isAuthenticated;
     },
     isOrganisation() {
       return state.generalParameters.isOrganisation;
@@ -164,14 +165,15 @@ export default defineComponent({
   },
 
   methods: {
-    displayMenuPhone(hidden) {
+    displayMenuPhone(hidden: any) {
+      let ref :any = this.$refs.menu;
       if (hidden) {
-        this.$refs.menu.className = 'menu hid';
+       ref.className = 'menu hid';
       } else {
-        this.$refs.menu.className = 'menu';
+        ref.className = 'menu';
       }
     },
-    goToUrl(url) {
+    goToUrl(url: RouteLocationRaw) {
       if (this.authenticated) {
         this.$router.push(url);
       }

@@ -60,8 +60,8 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore.js';
 
@@ -88,18 +88,18 @@ export default defineComponent({
     return {
       loading: true,
       loaded: true,
-      podcasts: [],
-      podcastsQuery: [],
+      podcasts: [] as any,
+      podcastsQuery: [] as any,
       size: 12,
       searchPattern: '',
     };
   },
 
   computed: {
-    notEmptyPlaylist() {
+    notEmptyPlaylist():boolean {
       return 0 !== Object.keys(this.playlist.podcasts).length;
     },
-    podcastsDisplay() {
+    podcastsDisplay():any {
       if (this.size < this.podcastsQuery.length)
         return this.podcastsQuery.slice(0, this.size);
       return this.podcastsQuery.slice(0, this.podcasts.length);
@@ -139,7 +139,7 @@ export default defineComponent({
       }
       this.podcasts = content;
       if (!this.editRight) {
-        this.podcasts = this.podcasts.filter(p => {
+        this.podcasts = this.podcasts.filter((p:any) => {
           return (
             null !== p &&
             (!p.availability || true === p.availability.visibility)
@@ -152,7 +152,7 @@ export default defineComponent({
       this.loaded = true;
     },
 
-    displayMore(event) {
+    displayMore(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.size += 12;
     },
@@ -160,7 +160,7 @@ export default defineComponent({
   watch: {
     searchPattern() {
       if ('' !== this.searchPattern) {
-        this.podcastsQuery = this.podcasts.filter(el => {
+        this.podcastsQuery = this.podcasts.filter((el:any) => {
           return el.title
             .toLowerCase()
             .includes(this.searchPattern.toLowerCase());

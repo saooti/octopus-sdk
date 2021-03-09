@@ -12,11 +12,11 @@
 
 <style lang="scss"></style>
 
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore.js';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -40,13 +40,13 @@ export default defineComponent({
       return state.generalParameters.allCategories;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
   },
 
   methods: {
-    extractTitle(iabId) {
-      const matchCategories = this.categories.filter(c => c.id === iabId);
+    extractTitle(iabId: any) {
+      const matchCategories = this.categories.filter((c: any) => c.id === iabId);
       if (1 !== matchCategories.length) return '';
       this.title = matchCategories[0]['name'];
     },

@@ -58,7 +58,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import { state } from '../../store/paramStore.js';
 import PodcastList from '../display/podcasts/PodcastList.vue';
@@ -73,20 +73,21 @@ export default defineComponent({
     if (this.$route.query.query) {
       this.rawQuery = this.$route.query.query;
     }
-    if (this.$refs.search) {
-      this.$refs.search.focus();
+    let ref:any = this.$refs.search;
+    if (ref) {
+      ref.focus();
     }
   },
 
   data() {
     return {
-      rawQuery: '',
+      rawQuery: '' as any,
       noResult: false,
     };
   },
 
   computed: {
-    query() {
+    query():string {
       if (this.rawQuery && this.rawQuery.length >= 3) return this.rawQuery;
       return '';
     },

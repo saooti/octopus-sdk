@@ -1,5 +1,5 @@
 export default {
-  fetchOrganisationAttibutes(store, organisationId) {
+  fetchOrganisationAttibutes(store: any, organisationId: any) {
     return new Promise(resolve => {
       console.log(store, organisationId);
       resolve({});

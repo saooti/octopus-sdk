@@ -140,7 +140,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import AnimatorsItem from './AnimatorsItem.vue';
 import PodcastImage from './PodcastImage.vue';
 import { state } from '../../../store/paramStore.js';
@@ -162,7 +162,7 @@ export default defineComponent({
     let podcastDesc = document.getElementById(
       'description-podcast-' + this.podcast.podcastId
     );
-    let podcastDescContainer = document.getElementById(
+    let podcastDescContainer:any = document.getElementById(
       'description-podcast-container-' + this.podcast.podcastId
     );
     if (
@@ -191,30 +191,30 @@ export default defineComponent({
     podcastBorderBottom() {
       return state.podcastsPage.podcastBorderBottom;
     },
-    date() {
+    date():string {
       return moment(this.podcast.pubDate).format('D/MM/YYYY [à] HH[h]mm');
     },
-    displayDate() {
+    displayDate():string {
       return moment(this.podcast.pubDate).format('X');
     },
     category() {
       const catIds = this.podcast.emission.iabIds;
       return state.generalParameters.allCategories
-        .filter(c => {
+        .filter((c:any) => {
           return catIds.includes(c.id);
         })
-        .map(c => {
+        .map((c:any) => {
           return c.name;
         })
         .join(', ');
     },
 
-    description() {
+    description():any {
       if (!this.podcast.description) return null;
       return this.podcast.description;
     },
 
-    title() {
+    title():string {
       if (state.generalParameters.isIE11)
         return this.podcast.title.substring(0, 50) + '...';
       return this.podcast.title;
@@ -235,7 +235,7 @@ export default defineComponent({
       return false;
     },
 
-    duration() {
+    duration():string {
       if (this.podcast.duration <= 1) return '';
 
       if (this.podcast.duration > 600000) {

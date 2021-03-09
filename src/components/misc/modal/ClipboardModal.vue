@@ -22,7 +22,7 @@
               type="button"
               :value="$t('Copy')"
               class="btn btn-primary"
-              @click="onCopyCode(rss, undefined, false)"
+              @click="onCopyCode(rss, afterCopy)"
               :aria-label="$t('Copy')"
             />
           </p>
@@ -40,7 +40,7 @@
 
 <style lang="scss" scoped></style>
 
-<script>
+<script lang="ts">
 import RssSection from '@/components/display/aggregator/RssSection.vue';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
@@ -66,7 +66,7 @@ export default defineComponent({
   },
 
   methods: {
-    closePopup(event) {
+    closePopup(event: { preventDefault: () => void; }) {
       event.preventDefault();
       this.$emit('close');
     },
@@ -74,6 +74,10 @@ export default defineComponent({
     onValid() {
       this.$emit('validate');
     },
+
+    afterCopy(){
+      //Nothing
+    }
   },
 });
 </script>

@@ -179,16 +179,16 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { state } from '../../../store/paramStore.js';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import PodcastImage from '../podcasts/PodcastImage.vue';
 import studioApi from '@/api/studio';
 import RecordingItemButton from '@/components/display/studio/RecordingItemButton.vue';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveItem',
@@ -207,7 +207,7 @@ export default defineComponent({
 
   data() {
     return {
-      live: undefined,
+      live: undefined as any,
     };
   },
 
@@ -218,16 +218,16 @@ export default defineComponent({
     isPodcastmaker() {
       return state.generalParameters.podcastmaker;
     },
-    hours() {
+    hours():string {
       return moment(this.live.pubDate).format('À HH[H]mm');
     },
-    date() {
+    date():string {
       return moment(this.live.pubDate).format('D/MM/YYYY');
     },
-    displayDate() {
+    displayDate():string {
       return moment(this.live.pubDate).format('X');
     },
-    description() {
+    description():string {
       if (this.live.description) return this.live.description;
       return '';
     },
@@ -246,7 +246,7 @@ export default defineComponent({
       return state.generalParameters.isRoleLive;
     },
 
-    duration() {
+    duration():string {
       if (this.live.duration <= 1) return '';
       if (this.live.duration > 600000) {
         return humanizeDuration(this.live.duration, {
@@ -263,10 +263,10 @@ export default defineComponent({
     },
   },
   methods: {
-    updatePodcast(podcastUpdated) {
+    updatePodcast(podcastUpdated: any) {
       this.live = podcastUpdated;
     },
-    getName(person) {
+    getName(person: any) {
       const first = person.firstName || '';
       const last = person.lastName || '';
       return (first + ' ' + last).trim();
@@ -280,7 +280,7 @@ export default defineComponent({
       } catch {
         this.$emit('deleteItem', this.index);
         studioApi.deleteConference(
-          this.$store,
+          store,
           this.fetchConference.conferenceId
         );
       }
@@ -290,7 +290,7 @@ export default defineComponent({
         let liveDesc = document.getElementById(
           'description-live-' + this.live.podcastId
         );
-        let liveDescContainer = document.getElementById(
+        let liveDescContainer:any = document.getElementById(
           'description-live-container-' + this.live.podcastId
         );
         if (

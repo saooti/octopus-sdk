@@ -44,18 +44,18 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
 import { cookies } from '../../mixins/functions';
-
-import { defineComponent } from 'vue'
+import store from '@/store/AppStore';
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'CommentSection',
 
   props: {
-    podcast: { default: undefined },
-    fetchConference: { default: undefined },
+    podcast: { default: undefined as any },
+    fetchConference: { default: undefined as any },
   },
 
   mixins: [cookies],
@@ -63,6 +63,12 @@ export default defineComponent({
   components: {
     CommentList,
     CommentInput,
+  },
+  setup() {
+    const commentList : any = ref(null);
+    return {
+      commentList,
+    };
   },
 
   created() {
@@ -78,7 +84,7 @@ export default defineComponent({
   },
 
   computed: {
-    isComments() {
+    isComments():boolean {
       if (!this.podcast) return true;
       let podcastComment = 'INHERIT';
       if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
@@ -101,13 +107,13 @@ export default defineComponent({
     },
     knownIdentity: {
       get() {
-        return this.$store.state.comments.knownIdentity;
+        return store.state.comments.knownIdentity;
       },
-      set(value) {
-        this.$store.commit('setCommentIdentity', value);
+      set(value: any) {
+        store.commit('setCommentIdentity', value);
       },
     },
-    isLive() {
+    isLive():boolean {
       return (
         this.fetchConference &&
         'null' !== this.fetchConference &&
@@ -118,9 +124,9 @@ export default defineComponent({
   },
 
   methods: {
-    updateFetch(value) {
+    updateFetch(value: { count: number; }) {
       this.loaded = true;
-      this.$store.commit('setCommentLoaded', {
+      store.commit('setCommentLoaded', {
         ...value,
         podcastId: this.podcast.podcastId,
       });
@@ -129,26 +135,26 @@ export default defineComponent({
     reloadComments() {
       this.reload = !this.reload;
     },
-    newComment(comment) {
-      this.$refs.commentList.addNewComment(comment, true);
+    newComment(comment: any) {
+      this.commentList.addNewComment(comment, true);
     },
-    receiveCommentEvent(event) {
+    receiveCommentEvent(event: { type: any; comment: { status: any; }; oldStatus: any; }) {
       let statusUpdated = undefined;
       switch (event.type) {
         case 'Create':
-          this.$refs.commentList.addNewComment(event.comment);
+          this.commentList.addNewComment(event.comment);
           break;
         case 'Update':
           if (event.comment.status !== event.oldStatus) {
             statusUpdated = event.comment.status;
           }
-          this.$refs.commentList.updateComment({
+          this.commentList.updateComment({
             comment: event.comment,
             status: statusUpdated,
           });
           break;
         case 'Delete':
-          this.$refs.commentList.deleteComment(event.comment);
+          this.commentList.deleteComment(event.comment);
           break;
         default:
           console.log('Event not handle');

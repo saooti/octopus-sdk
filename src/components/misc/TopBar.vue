@@ -249,13 +249,14 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { state } from '../../store/paramStore.js';
 import OrganisationChooserLight from '../display/organisation/OrganisationChooserLight.vue';
 import HomeDropdown from './HomeDropdown.vue';
-import octopusApi from '@saooti/octopus-api';
-
+const octopusApi = require('@saooti/octopus-api');
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
+import { LocationQueryValue } from 'vue-router';
 export default defineComponent({
   name: 'TopBar',
 
@@ -282,7 +283,7 @@ export default defineComponent({
       scrolled: false,
       oldScrollY: 0,
       minScroll: 0,
-      organisationId: undefined,
+      organisationId: undefined as any,
       reset: false,
       init: false,
       dummyParam: new Date().getTime().toString(),
@@ -301,17 +302,17 @@ export default defineComponent({
       return state.generalParameters.isLiveTab;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
     filterOrgaLive() {
-      return this.$store.state.filter.live;
+      return store.state.filter.live;
     },
-    imgUrl() {
+    imgUrl():any {
       if (
-        this.$store.state.filter.imgUrl &&
-        !this.$store.state.filter.imgUrl.includes('emptypodcast')
+        store.state.filter.imgUrl &&
+        !store.state.filter.imgUrl.includes('emptypodcast')
       )
-        return this.$store.state.filter.imgUrl + '?dummy=' + this.dummyParam;
+        return store.state.filter.imgUrl + '?dummy=' + this.dummyParam;
       return undefined;
     },
   },
@@ -342,7 +343,7 @@ export default defineComponent({
       }
     },
 
-    onDisplayMenu(param) {
+    onDisplayMenu(param: boolean) {
       if (true === param) {
         this.$emit('update:displayMenu', false);
       } else {
@@ -350,25 +351,25 @@ export default defineComponent({
       }
     },
 
-    async onOrganisationSelected(organisation) {
+    async onOrganisationSelected(organisation: any) {
       if (organisation && organisation.id) {
         if (this.$route.query.productor !== organisation.id) {
           this.$router.push({ query: { productor: organisation.id } });
         }
-        this.$store.commit('filterOrga', {
+        store.commit('filterOrga', {
           orgaId: organisation.id,
           imgUrl: organisation.imageUrl,
         });
         const isLive = await octopusApi.liveEnabledOrganisation(
           organisation.id
         );
-        this.$store.commit('filterOrgaLive', isLive);
+        store.commit('filterOrgaLive', isLive);
       } else {
         this.organisationId = undefined;
         if (this.$route.query.productor) {
           this.$router.push({ query: { productor: undefined } });
         }
-        this.$store.commit('filterOrga', { orgaId: undefined });
+        store.commit('filterOrga', { orgaId: undefined });
       }
     },
   },

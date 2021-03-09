@@ -10,15 +10,15 @@
 <style lang="scss" src="@/assets/octopus-library.scss"></style>
 <style lang="scss"></style>
 
-<script>
+<script lang="ts">
 import TopBar from '@/components/misc/TopBar.vue';
 import LeftMenu from '@/components/misc/LeftMenu.vue';
 import Footer from '@/components/misc/Footer.vue';
 import CategoryList from '@/components/display/categories/CategoryList.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import { state } from './store/paramStore.js';
-
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'app',
   components: {
     TopBar,
@@ -38,12 +38,12 @@ export default {
       orgaId = state.generalParameters.authenticated;
     }
     const response = await octopusApi.fetchOrganisation(orgaId);
-    this.$store.commit('filterOrga', {
+    store.commit('filterOrga', {
       orgaId: orgaId,
       imgUrl: response.imageUrl,
     });
     const isLive = await octopusApi.liveEnabledOrganisation(orgaId);
-    this.$store.commit('filterOrgaLive', isLive);
+    store.commit('filterOrgaLive', isLive);
   },
 
   data() {
@@ -51,5 +51,5 @@ export default {
       displayMenu: false,
     };
   },
-};
+});
 </script>

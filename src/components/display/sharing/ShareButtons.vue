@@ -102,7 +102,7 @@
           verticalDisplay ? '' : 'mr-2 ml-2',
         ]"
         aria-label="copy"
-        @click="onCopyCode(window.location.href, snackbarRef, true)"
+        @click="onCopyCode(window.location.href, afterCopy)"
       >
         <span class="saooti-link" v-if="!bigRound"></span>
         <div class="saooti-link" v-else></div>
@@ -161,7 +161,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { state } from '../../../store/paramStore.js';
 import ClipboardModal from '../../misc/modal/ClipboardModal.vue';
 import NewsletterModal from '../../misc/modal/NewsletterModal.vue';
@@ -200,10 +200,10 @@ export default defineComponent({
   },
 
   computed: {
-    snackbarRef() {
+    snackbarRef():any {
       return this.$refs.snackbar;
     },
-    verticalDisplay() {
+    verticalDisplay():boolean {
       return (
         !this.authenticated &&
         !this.participantId &&
@@ -214,7 +214,7 @@ export default defineComponent({
     authenticated() {
       return state.generalParameters.authenticated;
     },
-    rssUrl() {
+    rssUrl():any {
       if (this.emission)
         return (
           state.generalParameters.ApiUri +
@@ -244,6 +244,9 @@ export default defineComponent({
     closeModal() {
       this.dataRSSSave = false;
     },
+    afterCopy(){
+      this.snackbarRef.open(this.$t('Link in clipboard'));
+    }
   },
 });
 </script>

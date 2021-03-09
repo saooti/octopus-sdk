@@ -111,8 +111,8 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore.js';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
@@ -130,7 +130,7 @@ export default defineComponent({
     let participantDesc = document.getElementById(
       'description-participant-' + this.participant.participantId
     );
-    let participantDescContainer = document.getElementById(
+    let participantDescContainer:any = document.getElementById(
       'description-participant-container-' + this.participant.participantId
     );
     if (
@@ -152,7 +152,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
 
-    description() {
+    description():string {
       let description;
       description = this.participant.description || '';
       if (state.generalParameters.isIE11)
@@ -160,7 +160,7 @@ export default defineComponent({
       return description;
     },
 
-    name() {
+    name():string {
       const fullName = (
         (this.participant.firstName || '') +
         ' ' +

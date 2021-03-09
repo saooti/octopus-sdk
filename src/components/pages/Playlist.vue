@@ -44,13 +44,13 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import EditBox from '@/components/display/edit/EditBox.vue';
 import ShareButtons from '../display/sharing/ShareButtons.vue';
 import SharePlayer from '../display/sharing/SharePlayer.vue';
 import PodcastList from '../display/playlist/PodcastList.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore.js';
 import { displayMethods } from '../mixins/functions';
 
@@ -73,7 +73,7 @@ export default defineComponent({
   data() {
     return {
       loaded: false,
-      playlist: undefined,
+      playlist: undefined as any,
       error: false,
       isReady: true,
     };
@@ -95,16 +95,16 @@ export default defineComponent({
     isSharePlayer() {
       return state.podcastPage.SharePlayer;
     },
-    name() {
+    name():string {
       return this.playlist ? this.playlist.title : '';
     },
 
-    imageUrl() {
+    imageUrl():string {
       let dummy = new Date().getTime().toString();
       return this.playlist ? this.playlist.imageUrl + '?dummy=' + dummy : '';
     },
 
-    description() {
+    description():string {
       return this.playlist ? this.playlist.description : '';
     },
 
@@ -120,10 +120,10 @@ export default defineComponent({
   },
 
   watch: {
-    playlistId(val) {
+    playlistId() {
       this.loaded = false;
       this.error = false;
-      this.getPlaylistDetails(val);
+      this.getPlaylistDetails();
     },
   },
 

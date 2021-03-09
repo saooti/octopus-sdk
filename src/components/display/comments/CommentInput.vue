@@ -86,24 +86,25 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import AddCommentModal from './AddCommentModal.vue';
 import MessageModal from '../../misc/modal/MessageModal.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import commentApi from '@/api/comments';
+import store from '@/store/AppStore';
 import { cookies } from '../../mixins/functions';
 import { state } from '../../../store/paramStore.js';
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue';
 export default defineComponent({
   name: 'CommentInput',
 
   props: {
-    podcast: { default: undefined },
-    knownIdentity: { default: null },
+    podcast: { default: undefined as any },
+    knownIdentity: { default: null as any },
     focus: { default: false },
-    comId: { default: undefined },
-    fetchConference: { default: undefined },
+    comId: { default: undefined as any },
+    fetchConference: { default: undefined as any },
   },
 
   mixins: [cookies],
@@ -111,6 +112,13 @@ export default defineComponent({
   components: {
     AddCommentModal,
     MessageModal,
+  },
+
+  setup() {
+    const textarea : any = ref(null);
+    return {
+      textarea,
+    };
   },
 
   data() {
@@ -147,7 +155,7 @@ export default defineComponent({
       }
       return true;
     },
-    placeholder() {
+    placeholder():string {
       if (this.comId) return this.$t('Answer a comment');
       return this.$t('Write a comment');
     },
@@ -166,8 +174,8 @@ export default defineComponent({
         return true;
       return false;
     },
-    userId() {
-      if (this.authenticated) return this.$store.state.profile.userId;
+    userId():any {
+      if (this.authenticated) return store.state.profile.userId;
       return undefined;
     },
     phase() {
@@ -197,11 +205,11 @@ export default defineComponent({
       this.$emit('update:knownIdentity', this.temporaryName);
       this.editName = false;
     },
-    inputExceeded(text, font) {
-      this.element = document.createElement('canvas');
-      this.context = this.element.getContext('2d');
-      this.context.font = font;
-      return this.context.measureText(text).width;
+    inputExceeded(text: string, font: string) {
+      let element = document.createElement('canvas');
+      let context = element.getContext('2d');
+      context!.font = font;
+      return context!.measureText(text).width;
     },
     requestToSend() {
       if (this.knownIdentity) {
@@ -213,27 +221,27 @@ export default defineComponent({
     cancelAction() {
       this.$emit('cancelAction');
     },
-    async postComment(name) {
+    async postComment(name?: string) {
       if (name) {
         this.setCookie('comment-octopus-name', name);
         this.$emit('update:knownIdentity', name);
       }
       let timeline = 0;
       if (
-        (this.$store.state.player.podcast &&
-          this.$store.state.player.podcast.podcastId ===
+        (store.state.player.podcast &&
+          store.state.player.podcast.podcastId ===
             this.podcast.podcastId) ||
-        (this.$store.state.player.live &&
-          this.$store.state.player.live.livePodcastId ===
+        (store.state.player.live &&
+          store.state.player.live.livePodcastId ===
             this.podcast.podcastId)
       ) {
         timeline = Math.round(
-          this.$store.state.player.elapsed * this.$store.state.player.total
+          store.state.player.elapsed * store.state.player.total
         );
-        if (this.podcast.duration && this.$store.state.player.podcast) {
+        if (this.podcast.duration && store.state.player.podcast) {
           timeline = Math.round(
             timeline -
-              (this.$store.state.player.total - this.podcast.duration / 1000)
+              (store.state.player.total - this.podcast.duration / 1000)
           );
         }
         if (timeline < 0) {
@@ -244,7 +252,7 @@ export default defineComponent({
       if (null === sendName && name) {
         sendName = name;
       }
-      let comment = {
+      let comment:any = {
         content: this.newComment,
         name: sendName,
         podcastId: this.podcast.podcastId,
@@ -259,7 +267,7 @@ export default defineComponent({
         let data;
         if (this.isCertified) {
           comment.status = 'Valid';
-          data = await commentApi.postComment(this.$store, comment);
+          data = await commentApi.postComment(store, comment);
         } else {
           data = await octopusApi.postComment(comment);
         }
@@ -278,13 +286,13 @@ export default defineComponent({
       this.newComment = this.newComment.trim();
     },
     focus() {
-      this.$refs.textarea.focus();
+      this.textarea.focus();
     },
     newComment() {
       let padding =
         1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
       this.isOneLine =
-        this.$refs.textarea.$el.clientWidth -
+        this.textarea.$el.clientWidth -
           this.inputExceeded(
             this.newComment,
             '18px Montserrat, sans-serif, Helvetica Neue'

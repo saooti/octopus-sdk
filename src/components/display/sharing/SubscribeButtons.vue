@@ -77,7 +77,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: ['podcastId', 'emission'],
@@ -98,34 +98,34 @@ export default defineComponent({
       applePodcast:
         this.emission && this.emission.annotations
           ? this.emission.annotations.applePodcast
-          : undefined,
+          : undefined as any,
       deezer:
         this.emission && this.emission.annotations
           ? this.emission.annotations.deezer
-          : undefined,
+          : undefined as any,
       spotify:
         this.emission && this.emission.annotations
           ? this.emission.annotations.spotify
-          : undefined,
+          : undefined as any,
       tunein:
         this.emission && this.emission.annotations
           ? this.emission.annotations.tunein
-          : undefined,
+          : undefined as any,
       tootak:
         this.emission && this.emission.annotations
           ? this.emission.annotations.tootak
-          : undefined,
+          : undefined as any,
       radioline:
         this.emission && this.emission.annotations
           ? this.emission.annotations.radioline
-          : undefined,
+          : undefined as any,
     };
   },
 
   computed: {},
 
   methods: {
-    externaliseLinks(link) {
+    externaliseLinks(link?: string) {
       if (!link) return link;
       link = link.trim();
       if (!link.startsWith('http') && !link.startsWith('//'))

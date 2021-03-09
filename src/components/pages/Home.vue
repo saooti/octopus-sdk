@@ -11,7 +11,7 @@
 </template>
 <style lang="scss"></style>
 
-<script>
+<script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../store/paramStore.js';
 
@@ -30,7 +30,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
     categories() {
-      return state.generalParameters.allCategories.filter(c => {
+      return state.generalParameters.allCategories.filter((c:any) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });

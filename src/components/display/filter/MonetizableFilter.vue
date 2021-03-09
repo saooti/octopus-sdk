@@ -20,7 +20,7 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: ['isEmission', 'isEducation'],

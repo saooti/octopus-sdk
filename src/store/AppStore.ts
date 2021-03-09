@@ -150,9 +150,9 @@ export default createStore({
       if (!podcast) {
         state.player = {
           status: 'STOPPED', //STOPPED, LOADING, PLAYING, PAUSED
-          podcast: undefined,
-          media: undefined,
-          live: undefined,
+          podcast: undefined as any,
+          media: undefined as any,
+          live: undefined as any,
           elapsed: 0,
         };
         return;
@@ -177,8 +177,8 @@ export default createStore({
       ) {
         state.player = {
           status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
-          podcast: undefined,
-          media: undefined,
+          podcast: undefined as any,
+          media: undefined as any,
           live: podcast,
           elapsed: 0,
         };
@@ -186,16 +186,16 @@ export default createStore({
         state.player = {
           status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
           podcast: podcast,
-          media: undefined,
-          live: undefined,
+          media: undefined as any,
+          live: undefined as any,
           elapsed: 0,
         };
       } else if (podcast.mediaId) {
         state.player = {
           status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
-          podcast: undefined,
+          podcast: undefined as any,
           media: podcast,
-          live: undefined,
+          live: undefined as any,
           elapsed: 0,
         };
       }

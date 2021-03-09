@@ -61,14 +61,14 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore.js';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import EmissionChooser from '../display/emission/EmissionChooser.vue';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -93,8 +93,8 @@ export default defineComponent({
     }
     if (this.$route.query.productor) {
       this.organisationId = this.$route.query.productor;
-    } else if (this.$store.state.filter.organisationId) {
-      this.organisationId = this.$store.state.filter.organisationId;
+    } else if (store.state.filter.organisationId) {
+      this.organisationId = store.state.filter.organisationId;
     }
     if (this.organisation && this.organisationRight) {
       this.includeHidden = true;
@@ -103,19 +103,19 @@ export default defineComponent({
 
   data() {
     return {
-      first: undefined,
-      size: undefined,
+      first: undefined as any,
+      size: undefined as any,
       searchPattern: '',
-      organisationId: undefined,
-      monetization: undefined,
-      rubriquageId: undefined,
-      rubriqueId: undefined,
-      emissionId: undefined,
-      fromDate: undefined,
-      toDate: undefined,
+      organisationId: undefined as any,
+      monetization: undefined as any,
+      rubriquageId: undefined as any,
+      rubriqueId: undefined as any,
+      emissionId: undefined as any,
+      fromDate: undefined as any,
+      toDate: undefined as any,
       resetRubriquage: false,
       includeHidden: false,
-      noRubrique: undefined,
+      noRubrique: undefined as any,
       sortCriteria: 'DATE',
       notValid: false,
     };
@@ -137,9 +137,9 @@ export default defineComponent({
       return false;
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
-    organisation() {
+    organisation():any {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
@@ -156,19 +156,19 @@ export default defineComponent({
   },
 
   methods: {
-    updateSortCriteria(value) {
+    updateSortCriteria(value: string) {
       this.sortCriteria = value;
     },
-    updateHidden(value) {
+    updateHidden(value: boolean) {
       this.includeHidden = value;
     },
-    updateToDate(value) {
+    updateToDate(value: any) {
       this.toDate = value;
     },
-    updateFromDate(value) {
+    updateFromDate(value: any) {
       this.fromDate = value;
     },
-    updateRubriquage(value) {
+    updateRubriquage(value: number) {
       if (-1 !== value) {
         this.rubriquageId = value;
       } else {
@@ -177,7 +177,7 @@ export default defineComponent({
       this.noRubrique = undefined;
       this.rubriqueId = undefined;
     },
-    updateRubrique(value) {
+    updateRubrique(value: number) {
       if (-1 === value) {
         this.noRubrique = true;
         this.rubriqueId = undefined;
@@ -189,14 +189,14 @@ export default defineComponent({
         this.noRubrique = undefined;
       }
     },
-    updateOrganisationId(value) {
+    updateOrganisationId(value: any) {
       this.resetRubriquage = !this.resetRubriquage;
       this.rubriquageId = undefined;
       this.rubriqueId = undefined;
       this.noRubrique = undefined;
       this.organisationId = value;
     },
-    updateSearchPattern(value) {
+    updateSearchPattern(value: string) {
       if ('' !== value) {
         this.sortCriteria = 'SCORE';
       } else {
@@ -204,13 +204,13 @@ export default defineComponent({
       }
       this.searchPattern = value;
     },
-    updateMonetization(value) {
+    updateMonetization(value: any) {
       this.monetization = value;
     },
-    updateNotValid(value) {
+    updateNotValid(value: boolean) {
       this.notValid = value;
     },
-    emissionSelected(emission) {
+    emissionSelected(emission: { emissionId: any; }) {
       if (emission && emission.emissionId) {
         this.emissionId = emission.emissionId;
       } else {

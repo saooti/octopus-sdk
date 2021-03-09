@@ -259,7 +259,7 @@
   }
 }
 </style>
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import RecordingItemButton from '@/components/display/studio/RecordingItemButton.vue';
 import EditBox from '@/components/display/edit/EditBox.vue';
@@ -271,14 +271,14 @@ import CommentSection from '../display/comments/CommentSection.vue';
 import TagList from '../display/podcasts/TagList.vue';
 import SubscribeButtons from '../display/sharing/SubscribeButtons.vue';
 import Countdown from '../display/live/CountDown.vue';
-import octopusApi from '@saooti/octopus-api';
+const octopusApi = require('@saooti/octopus-api');
 import studioApi from '@/api/studio';
 import { state } from '../../store/paramStore.js';
 import ErrorMessage from '../misc/ErrorMessage.vue';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../mixins/functions';
-
+import store from '@/store/AppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -302,7 +302,7 @@ export default defineComponent({
     if (!this.isLiveReadyToRecord) return;
     if (this.isOctopusAndAnimator) {
       let data = await studioApi.getConference(
-        this.$store,
+        store,
         this.podcast.conferenceId
       );
       if ('' !== data.data) {
@@ -312,7 +312,7 @@ export default defineComponent({
       }
     } else {
       let data = await studioApi.getRealConferenceStatus(
-        this.$store,
+        store,
         this.podcast.conferenceId
       );
       this.fetchConference = {
@@ -334,11 +334,11 @@ export default defineComponent({
   data() {
     return {
       loaded: false,
-      podcast: undefined,
+      podcast: undefined as any,
       error: false,
       exclusive: false,
       notExclusive: false,
-      fetchConference: undefined,
+      fetchConference: undefined as any,
     };
   },
 
@@ -373,7 +373,7 @@ export default defineComponent({
     isDownloadButton() {
       return state.podcastPage.downloadButton;
     },
-    emissionMainCategory() {
+    emissionMainCategory():any {
       if (
         this.podcast.emission.annotations &&
         this.podcast.emission.annotations.mainIabId
@@ -388,29 +388,29 @@ export default defineComponent({
       return 0;
     },
 
-    categories() {
+    categories():any {
       if ('undefined' === typeof this.podcast) return '';
       return this.allCategories
-        .filter(item => {
+        .filter((item:any) => {
           return (
             this.podcast.emission.iabIds &&
             -1 !== this.podcast.emission.iabIds.indexOf(item.id)
           );
         })
-        .sort((a, b) => {
+        .sort((a:any, b:any) => {
           if (a.id === this.emissionMainCategory) return -1;
           if (b.id === this.emissionMainCategory) return 1;
           return 0;
         });
     },
 
-    date() {
+    date():string {
       if (1970 !== moment(this.podcast.pubDate).year())
         return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
       return '';
     },
 
-    duration() {
+    duration():string {
       if (this.podcast.duration <= 1) return '';
       if (this.podcast.duration > 600000) {
         return humanizeDuration(this.podcast.duration, {
@@ -456,21 +456,21 @@ export default defineComponent({
       }
       return count;
     },
-    isLiveReadyToRecord() {
+    isLiveReadyToRecord():boolean {
       return (
         this.podcast.conferenceId &&
         0 !== this.podcast.conferenceId &&
         'READY_TO_RECORD' === this.podcast.processingStatus
       );
     },
-    isLiveReady() {
+    isLiveReady():boolean {
       return (
         this.podcast.conferenceId &&
         0 !== this.podcast.conferenceId &&
         'READY' === this.podcast.processingStatus
       );
     },
-    isCounter() {
+    isCounter():boolean {
       return (
         this.isLiveReadyToRecord &&
         this.fetchConference &&
@@ -478,7 +478,7 @@ export default defineComponent({
           'PENDING' === this.fetchConference.status)
       );
     },
-    isNotRecorded() {
+    isNotRecorded():boolean {
       return (
         this.isLiveReadyToRecord &&
         this.fetchConference &&
@@ -492,11 +492,11 @@ export default defineComponent({
         state.generalParameters.isRoleLive
       );
     },
-    titlePage() {
+    titlePage():string {
       if (this.isLiveReadyToRecord) return this.$t('Live episode');
       return this.$t('Episode');
     },
-    timeRemaining() {
+    timeRemaining():string {
       return moment(this.podcast.pubDate).diff(moment(), 'seconds');
     },
     podcastNotValid() {
@@ -511,10 +511,10 @@ export default defineComponent({
   },
 
   methods: {
-    updatePodcast(podcastUpdated) {
+    updatePodcast(podcastUpdated: any) {
       this.podcast = podcastUpdated;
     },
-    async getPodcastDetails(podcastId) {
+    async getPodcastDetails(podcastId: any) {
       try {
         let data = await octopusApi.fetchPodcast(podcastId);
         this.podcast = data;
@@ -555,12 +555,12 @@ export default defineComponent({
         this.loaded = true;
       }
     },
-    getName(person) {
+    getName(person: { firstName: string; lastName: string; }) {
       const first = person.firstName || '';
       const last = person.lastName || '';
       return (first + ' ' + last).trim();
     },
-    playPodcast(podcast) {
+    playPodcast(podcast: any) {
       this.$emit('playPodcast', podcast);
     },
     removeDeleted() {
@@ -570,8 +570,9 @@ export default defineComponent({
         this.$router.push('/');
       }
     },
-    receiveCommentEvent(event) {
-      this.$refs.commentSection.receiveCommentEvent(event);
+    receiveCommentEvent(event: any) {
+      let ref:any = this.$refs.commentSection;
+      ref.receiveCommentEvent(event);
     },
   },
   watch: {

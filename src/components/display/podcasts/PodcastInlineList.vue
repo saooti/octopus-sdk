@@ -138,11 +138,11 @@
 }
 </style>
 
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
-
+import store from '@/store/AppStore';
 const PHONE_WIDTH = 960;
 
 import { defineComponent } from 'vue'
@@ -195,39 +195,39 @@ export default defineComponent({
       size: 5,
       totalCount: 0,
       popularSort: true,
-      allPodcasts: [],
+      allPodcasts: [] as any,
       direction: 1,
       alignLeft: false,
     };
   },
 
   computed: {
-    podcasts() {
+    podcasts():any {
       return this.allPodcasts.slice(this.index, this.index + this.size);
     },
     filterOrga() {
-      return this.$store.state.filter.organisationId;
+      return store.state.filter.organisationId;
     },
-    organisation() {
+    organisation():any {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
-    refTo() {
+    refTo():any {
       if (this.href) return this.href;
       return {
         name: 'category',
         params: { iabId: this.iabId },
-        query: { productor: this.$store.state.filter.organisationId },
+        query: { productor: store.state.filter.organisationId },
       };
     },
-    previousAvailable() {
+    previousAvailable():boolean {
       return this.index > 0;
     },
-    nextAvailable() {
+    nextAvailable():boolean {
       return this.index + this.size < this.totalCount;
     },
-    transitionName: ({ direction }) =>
+    transitionName: ({ direction }:any) =>
       direction > 0 ? 'out-left' : 'out-right',
   },
 
@@ -251,7 +251,7 @@ export default defineComponent({
         this.preloadImage(nexEl.imageUrl);
       }
       this.allPodcasts = this.allPodcasts.concat(
-        data.result.filter(pod => null !== pod)
+        data.result.filter((pod:any) => null !== pod)
       );
       if (this.allPodcasts.length <= 3) {
         this.alignLeft = true;
@@ -316,7 +316,7 @@ export default defineComponent({
       this.allPodcasts.length = 0;
     },
 
-    preloadImage(url) {
+    preloadImage(url:string) {
       let img = new Image();
       img.src = url;
     },

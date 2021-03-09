@@ -8,7 +8,7 @@
         type="button"
         :value="$t('Copy')"
         class="btn btn-primary"
-        @click="onCopyCode(rss, snackbarRef, true, true)"
+        @click="onCopyCode(rss,afterCopy)"
         :aria-label="$t('Copy')"
       />
     </p>
@@ -160,8 +160,8 @@
   }
 }
 </style>
-<script>
-import octopusApi from '@saooti/octopus-api';
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
 import Snackbar from '../../misc/Snackbar.vue';
 import RssSection from '@/components/display/aggregator/RssSection.vue';
 import { displayMethods } from '../../mixins/functions';
@@ -184,7 +184,7 @@ export default defineComponent({
 
   data() {
     return {
-      emission: undefined,
+      emission: undefined as any,
       error: false,
       baseRss: '',
       rss: '',
@@ -192,39 +192,28 @@ export default defineComponent({
   },
 
   computed: {
-    snackbarRef() {
+    snackbarRef():any {
       return this.$refs.snackbar;
     },
   },
 
   methods: {
-    async getEmissionDetails(emissionId) {
+    async getEmissionDetails(emissionId: any) {
       try {
         const data = await octopusApi.fetchEmission(emissionId);
         this.emission = data;
-        this.loaded = true;
-        if (!this.emission.annotations) return;
-        if (this.emission.annotations.RSS) {
-          this.rssEmission = true;
-        }
-        if (this.emission.annotations.exclusive) {
-          this.exclusive =
-            'true' === this.emission.annotations.exclusive ? true : false;
-          this.exclusive =
-            this.exclusive && this.organisationId !== this.emission.orga.id;
-        }
       } catch {
         this.error = true;
-        this.loaded = true;
       }
     },
     getRSS() {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
-
-      /* this.emissionPage=octopusApi.fetchEmissionPath(this.emissionId); */
       this.baseRss = octopusApi.fetchRSS(this.emissionId);
       this.rss = this.baseRss;
     },
+    afterCopy(){
+      this.snackbarRef.open(this.$t('Link in clipboard'));
+    }
   },
 });
 </script>
