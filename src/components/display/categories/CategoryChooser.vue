@@ -65,7 +65,7 @@ const getDefaultCategory = (defaultName: any) => {
   return '';
 };
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components: {
     Multiselect,
@@ -104,6 +104,13 @@ export default defineComponent({
     };
   },
 
+  setup() {
+    const multiselect : any = ref(null);
+    return {
+      multiselect,
+    };
+  },
+
   mounted() {
     if (undefined !== this.categorySelected) {
       this.initCategorySelected(this.categorySelected);
@@ -115,8 +122,7 @@ export default defineComponent({
 
   methods: {
     clearAll() {
-      let ref:any = this.$refs.multiselectRef;
-      ref.$refs.search.setAttribute(
+      this.multiselect.$refs.search.setAttribute(
         'autocomplete',
         'off'
       );

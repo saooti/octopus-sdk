@@ -138,7 +138,7 @@
 <script lang="ts">
 import { state } from '../../store/paramStore';
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'HomeDropdown',
 
@@ -146,6 +146,12 @@ export default defineComponent({
 
   data() {
     return {};
+  },
+  setup() {
+    const menu:any =ref(null);
+    return {
+      menu,
+    };
   },
 
   computed: {
@@ -165,11 +171,10 @@ export default defineComponent({
 
   methods: {
     displayMenuPhone(hidden: any) {
-      let ref :any = this.$refs.menu;
       if (hidden) {
-       ref.className = 'menu hid';
+        this.menu.className = 'menu hid';
       } else {
-        ref.className = 'menu';
+        this.menu.className = 'menu';
       }
     },
     goToUrl(url: any) {

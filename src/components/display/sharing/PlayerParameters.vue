@@ -130,7 +130,7 @@
 }
 </style>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   props: ['podcast', 'playlist', 'iFrameModel', 'isVisible'],
 
@@ -144,6 +144,13 @@ export default defineComponent({
       secondes: 0,
       startTime: true,
       isVisibleTemp: this.isVisible,
+    };
+  },
+  setup() {
+    const minutesRef:any =ref(null);
+    const secondesRef:any =ref(null);
+    return {
+      minutesRef,secondesRef
     };
   },
   computed: {
@@ -172,10 +179,8 @@ export default defineComponent({
   methods: {
     onDurationChange() {
       if (this.startTime) {
-        let ref:any = this.$refs.minutesRef;
-        let refSec:any = this.$refs.secondesRef;
-        let minutes = parseInt(ref.value, 10);
-        let secondes = parseInt(refSec.value, 10);
+        let minutes = parseInt(this.minutesRef.value, 10);
+        let secondes = parseInt(this.secondesRef.value, 10);
         this.$emit('startTime', minutes * 60 + secondes);
       } else {
         this.$emit('startTime', 0);

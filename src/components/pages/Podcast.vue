@@ -279,7 +279,7 @@ const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../mixins/functions';
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components: {
     PodcastInlineList,
@@ -340,6 +340,12 @@ export default defineComponent({
       exclusive: false,
       notExclusive: false,
       fetchConference: undefined as any,
+    };
+  },
+  setup() {
+    const commentSection:any =ref(null);
+    return {
+      commentSection,
     };
   },
 
@@ -572,8 +578,7 @@ export default defineComponent({
       }
     },
     receiveCommentEvent(event: any) {
-      let ref:any = this.$refs.commentSection;
-      ref.receiveCommentEvent(event);
+      this.commentSection.receiveCommentEvent(event);
     },
   },
   watch: {

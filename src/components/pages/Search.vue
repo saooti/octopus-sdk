@@ -63,19 +63,24 @@
 import { state } from '../../store/paramStore';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components: {
     PodcastList,
+  },
+  setup() {
+    const search:any =ref(null);
+    return {
+      search,
+    };
   },
 
   mounted() {
     if (this.$route.query.query) {
       this.rawQuery = this.$route.query.query;
     }
-    let ref:any = this.$refs.search;
-    if (ref) {
-      ref.focus();
+    if (this.search) {
+      this.search.focus();
     }
   },
 

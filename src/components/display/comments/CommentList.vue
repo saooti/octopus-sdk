@@ -14,13 +14,13 @@
       v-show="loaded"
     >
       <CommentItem
-        :ref="'comItem' + c.comId"
+        :class="'comItem' + c.comId"
         :isFlat="isFlat"
-        :comment="c"
+        v-model:comment="comments[index]"
         :podcast="podcast"
         :fetchConference="fetchConference"
         :organisation="organisation"
-        v-for="c in comments"
+        v-for="(c, index) in comments"
         :key="c.comId"
         @deleteComment="deleteComment(c)"
         @updateComment="updateComment"
@@ -207,8 +207,8 @@ export default defineComponent({
         comment.commentIdReferer &&
         this.comId !== comment.commentIdReferer
       ) {
-        let ref :any = this.$refs['comItem' + comment.commentIdReferer];
-        ref[0].receiveCommentEvent({ type: 'Delete', comment: comment });
+        let comItem :any = document.getElementsByClassName('comItem' + comment.commentIdReferer);
+        comItem[0].receiveCommentEvent({ type: 'Delete', comment: comment });
         return;
       }
       let index = this.comments.findIndex(
@@ -227,8 +227,8 @@ export default defineComponent({
         data.comment.commentIdReferer &&
         this.comId !== data.comment.commentIdReferer
       ) {
-        let ref :any = this.$refs['comItem' +  data.comment.commentIdReferer];
-        ref[0].receiveCommentEvent({ ...data, type: 'Update' });
+        let comItem :any = document.getElementsByClassName('comItem' + data.comment.commentIdReferer);
+        comItem[0].receiveCommentEvent({ ...data, type: 'Update' });
         return;
       }
       let index = this.comments.findIndex(
@@ -282,8 +282,8 @@ export default defineComponent({
         comment.commentIdReferer &&
         this.comId !== comment.commentIdReferer
       ) {
-        let ref :any = this.$refs['comItem' +  comment.commentIdReferer];
-        ref[0].receiveCommentEvent({ type: 'Create', comment: comment });
+        let comItem :any = document.getElementsByClassName('comItem' + comment.commentIdReferer);
+        comItem[0].receiveCommentEvent({ type: 'Create', comment: comment });
         return;
       }
       let index = this.comments.findIndex(
