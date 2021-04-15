@@ -102,7 +102,7 @@
           verticalDisplay ? '' : 'mr-2 ml-2',
         ]"
         aria-label="copy"
-        @click="onCopyCode(window.location.href,afterCopy)"
+        @click="onCopyCode(urlPage,afterCopy)"
       >
         <span class="saooti-link" v-if="!bigRound"></span>
         <div class="saooti-link" v-else></div>
@@ -197,6 +197,9 @@ export default displayMethods.extend({
   },
 
   computed: {
+    urlPage(): string{
+      return window.location.href;
+    },
     verticalDisplay(): boolean {
       return (
         !this.authenticated &&
