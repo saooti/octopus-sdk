@@ -80,7 +80,7 @@
         >
           <img
             class="acpm_image"
-            src="/img/ACPM.PNG"
+            src="/img/ACPM.png"
             :title="$t('Octopus is ACPM Podcast accredited')"
             :alt="$t('Octopus is ACPM Podcast accredited')"
           />

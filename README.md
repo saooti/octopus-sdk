@@ -414,6 +414,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.25.18 Responsive
  * 0.25.20 amazon distribution button missing from new emission
  * 0.25.21 Commentaire api
+ * 0.25.22 Cherry pick ACPM logo
 
 
 
