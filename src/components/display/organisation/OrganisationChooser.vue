@@ -45,7 +45,7 @@
       <template slot="singleLabel" slot-scope="props">
         <div class="multiselect-octopus-proposition">
           <img
-            v-if="!light && !stats"
+            v-if="!light &&!stats"
             class="option__image"
             :src="props.option.imageUrl"
             :alt="props.option.name"
@@ -63,7 +63,7 @@
           "
         >
           <img
-            v-if="!light && !stats"
+            v-if="!light &&!stats"
             class="option__image"
             :src="props.option.imageUrl"
             :alt="props.option.name"

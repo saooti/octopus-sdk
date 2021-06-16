@@ -162,7 +162,7 @@ export default Vue.extend({
             status: this.status,
           };
           if (!this.editRight) {
-            param.status = 'Valid';
+            param.status = ['Valid'];
           }
           if (undefined === this.podcastId) {
             param.organisationId = this.organisation;

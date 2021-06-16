@@ -705,7 +705,7 @@ export default Vue.extend({
           podcastId: podcastId,
         };
         if (!this.editRight(organisation)) {
-          param.status = 'Valid';
+          param.status = ['Valid'];
         }
         const data = await octopusApi.fetchRootComments(param);
         first += size;
