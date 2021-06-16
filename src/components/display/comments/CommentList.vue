@@ -159,7 +159,7 @@ export default Vue.extend({
             first: this.dfirst,
             size: this.dsize,
             podcastId: this.podcastId,
-            status: this.status,
+            status: [this.status],
           };
           if (!this.editRight) {
             param.status = ['Valid'];
