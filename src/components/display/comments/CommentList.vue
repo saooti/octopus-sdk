@@ -152,27 +152,25 @@ export default Vue.extend({
       this.resetData(reset);
       let data;
       try {
+        const param: any = {
+          first: this.dfirst,
+          size: this.dsize,
+          podcastId: this.podcastId,
+        };
+        if (!this.editRight) {
+          param.status = ['Valid'];
+        }else if(this.status){
+          param.status = [this.status];
+        }
+        if (undefined === this.podcastId) {
+          param.organisationId = this.organisation;
+        }
         if (this.comId) {
-          data = await octopusApi.fetchCommentAnswers(this.comId);
+          data = await octopusApi.fetchCommentAnswers(this.comId, {first: this.dfirst,size: this.dsize});
+        } else if (!this.isFlat) {
+          data = await octopusApi.fetchRootComments(param);
         } else {
-          const param: any = {
-            first: this.dfirst,
-            size: this.dsize,
-            podcastId: this.podcastId,
-          };
-          if (!this.editRight) {
-            param.status = ['Valid'];
-          }else if(this.status){
-            param.status = [this.status];
-          }
-          if (undefined === this.podcastId) {
-            param.organisationId = this.organisation;
-          }
-          if (!this.isFlat) {
-            data = await octopusApi.fetchRootComments(param);
-          } else {
-            data = await octopusApi.fetchComments(param);
-          }
+          data = await octopusApi.fetchComments(param);
         }
         this.resetData(reset);
         this.loading = false;

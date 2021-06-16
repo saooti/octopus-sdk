@@ -417,7 +417,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.25.22 Cherry pick ACPM logo
  * 0.25.23 Commentaires
  * 0.25.24 Commentaires
- * 0.25.25 Commentaires
+ * 0.25.26 Commentaires
 
 
 
