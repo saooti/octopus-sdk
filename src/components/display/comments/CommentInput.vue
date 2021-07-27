@@ -93,6 +93,7 @@ import { cookies } from '../../mixins/functions';
 import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
+import { CommentPodcast } from '@/store/class/comment';
 
 export default cookies.extend({
   name: 'CommentInput',
@@ -105,7 +106,7 @@ export default cookies.extend({
     podcast: { default: undefined as Podcast|undefined },
     knownIdentity: { default: null as string|null },
     focus: { default: false as boolean },
-    comId: { default: undefined as number|undefined },
+    comment: { default: undefined as CommentPodcast|undefined },
     fetchConference: { default: undefined as Conference|undefined },
   },
 
@@ -144,7 +145,7 @@ export default cookies.extend({
       return true;
     },
     placeholder(): string {
-      if (this.comId) return this.$t('Answer a comment').toString();
+      if (this.comment && this.comment.comId) return this.$t('Answer a comment').toString();
       return this.$t('Write a comment').toString();
     },
     organisationId(): string {
@@ -156,7 +157,7 @@ export default cookies.extend({
     isCertified(): boolean {
       if (
         (state.generalParameters.isCommments &&
-          this.organisationId === this.podcast.organisation.id) ||
+          this.organisationId === this.podcastOrga) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -166,7 +167,10 @@ export default cookies.extend({
       if (this.authenticated) return this.$store.state.profile.userId;
       return undefined;
     },
-    phase(): string {
+    phase(): string|undefined {
+      if(undefined === this.podcast){
+        return this.comment.phase;
+      }
       if (
         !this.podcast.conferenceId ||
         0 === this.podcast.conferenceId ||
@@ -181,6 +185,9 @@ export default cookies.extend({
         return 'Prelive';
       return 'Live';
     },
+    podcastOrga(): string|undefined{
+      return this.podcast ? this.podcast.organisation.id : this.comment.organisationId;
+    }
   },
   methods: {
     changeIdentity(): void {
@@ -242,10 +249,10 @@ export default cookies.extend({
       const comment: any = {
         content: this.newComment,
         name: sendName,
-        podcastId: this.podcast.podcastId,
+        podcastId: this.podcast ? this.podcast.podcastId : this.comment.podcastId,
         timeline: timeline,
-        organisationId: this.podcast.organisation.id,
-        commentIdReferer: this.comId,
+        organisationId: this.podcastOrga,
+        commentIdReferer: this.comment ? this.comment.comId : undefined,
         certified: this.isCertified,
         userId: this.userId,
         phase: this.phase,

@@ -129,7 +129,7 @@
         :focus="focus"
         :podcast="podcast"
         :knownIdentity.sync="knownIdentity"
-        :comId="comment.comId"
+        :comment="comment"
         :fetchConference="fetchConference"
         @cancelAction="collapseVisible = false"
         @newComment="newComment"

@@ -417,6 +417,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.25.22 Cherry pick ACPM logo
  * 0.25.23 Commentaires
  * 0.25.24 Commentaires
+ * 0.25.26 Commentaires
+ * 0.25.27 Respond to comment on comment page
 
  * 0.26.0 Nouveau sprint
  * 0.26.2 Icone ACPM
@@ -425,6 +427,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.26.5 Ajout data selenium
  * 0.26.6 Newsletter modale
  * 0.26.7 Newsletter Icone
+ * 0.26.8 Mettre un tooltip sur le bouton de copie de l'adresse d'une page de podcast
+
 
 
 
