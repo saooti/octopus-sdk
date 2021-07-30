@@ -7,6 +7,7 @@
           <EditBox
             :emission="emission"
             :rssEmission="rssEmission"
+            :ftpEmission="ftpEmission"
             :isReady="isReady"
             v-if="editRight && isEditBox"
           ></EditBox>
@@ -112,6 +113,7 @@ export default displayMethods.extend({
       emission: undefined as Emission | undefined,
       error: false as boolean,
       rssEmission: false as boolean,
+      ftpEmission: false as boolean,
       exclusive: false as boolean,
       notExclusive: false as boolean,
       isReady: true as boolean,
@@ -200,6 +202,9 @@ export default displayMethods.extend({
         if (!this.emission!.annotations) return;
         if (this.emission!.annotations.RSS) {
           this.rssEmission = true;
+        }
+        if (this.emission!.annotations.FTP) {
+          this.ftpEmission = true;
         }
         if (this.emission!.annotations.exclusive) {
           this.exclusive =
