@@ -52,6 +52,7 @@ import {selenium} from "./src/components/mixins/functions";
 import {cookies} from "./src/components/mixins/functions";
 import {displayMethods} from "./src/components/mixins/functions";
 import {cookiesAndMethods} from "./src/components/mixins/functions";
+import {seleniumAndMethods} from "./src/components/mixins/functions";
 
 const components = {
     Lives,
@@ -91,6 +92,7 @@ const components = {
     ErrorMessage,
     displayMethods,
     cookiesAndMethods,
+    seleniumAndMethods,
     Rubrique
 }
 
@@ -134,5 +136,6 @@ export {
     ErrorMessage,
     displayMethods,
     cookiesAndMethods,
+    seleniumAndMethods,
     Rubrique
 };
