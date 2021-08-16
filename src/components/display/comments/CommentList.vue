@@ -174,10 +174,11 @@ export default Vue.extend({
             first: this.dfirst,
             size: this.dsize,
             podcastId: this.podcastId,
-            status: [this.status],
           };
           if (!this.editRight) {
             param.status = ['Valid'];
+          }else if(this.status){
+            param.status = [this.status];
           }
           if (undefined === this.podcastId) {
             param.organisationId = this.organisation;
