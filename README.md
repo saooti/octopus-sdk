@@ -432,6 +432,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
  * 0.27.0 Nouveau sprint
  * 0.27.1 Export mixins
+ * 0.27.2 Player listernerId parameter
 
 
 

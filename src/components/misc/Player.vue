@@ -292,9 +292,9 @@ let Hls: any= null;
 const moment = require('moment');
 //const axios = require("axios");
 import { CommentPodcast } from '@/store/class/comment';
-import Vue from 'vue';
+import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
-export default Vue.extend({
+export default cookies.extend({
   name: 'Player',
 
   components: {
@@ -402,6 +402,7 @@ export default Vue.extend({
       const parameters = [];
       parameters.push('origin=octopus');
       parameters.push('cookieName=player_' + this.podcast.podcastId);
+      parameters.push('listenerId='+this.getListenerId());
       if (
         this.$store.state.authentication &&
         this.$store.state.authentication.organisationId
@@ -445,6 +446,15 @@ export default Vue.extend({
     },
   },
   methods: {
+    getListenerId(): string{
+      let listenerId = this.getCookie("octopus_listenerId");
+      if(!listenerId){
+        listenerId = new Date().valueOf().toString() + Math.random();
+        let domain = window.location.host.split(".").pop();
+        this.setCookie("octopus_listenerId", listenerId, ';domain='+domain);
+      }
+      return listenerId;
+    },
     watchPlayerStatus(): void {
       this.$store.watch(
         (state: StoreState) => state.player.status,
