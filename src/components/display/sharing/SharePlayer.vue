@@ -179,7 +179,7 @@ import { state } from '../../../store/paramStore';
 import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
-const octopusApi = require('@saooti/octopus-api');
+/* const octopusApi = require('@saooti/octopus-api'); */
 import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
@@ -212,26 +212,19 @@ export default Vue.extend({
       startTime: 0 as number,
       isVisible: false as boolean,
       displayArticle: true as boolean,
+      displayBetaChoice: false as boolean,
       isBeta: false as boolean,
       colors: ['#000000', '#ffffff'],
     };
   },
   async created() {
-    const isInit = await this.initColor();
-    if(!isInit){
-      await this.initBeta();
-    }
+    await this.initColor();
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = 'large';
     }
   },
   
   computed: {
-    displayBetaChoice(): boolean{
-      debugger;
-      console.log(this.$store);
-      return false;
-    },
     miniplayerBaseUrl(): string{
       if(this.isBeta){
         return state.podcastPage.MiniplayerBetaUri;  
@@ -407,7 +400,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    getOrganisationId(): string{
+    /* getOrganisationId(): string{
       let orgaId = undefined;
       if (this.podcast) {
         orgaId = this.podcast.organisation.id;
@@ -424,14 +417,18 @@ export default Vue.extend({
       if (data.hasOwnProperty('playerBeta')) {
         this.isBeta = data.playerBeta;
       }
-    },
-    async initColor(): Promise<boolean> {
-      if (!this.authenticated) return false;
-      const orgaId = this.getOrganisationId();
-      const data: any = await profileApi.fetchOrganisationAttibutes(
-        this.$store.state,
-        orgaId
-      );
+    }, */
+    async initColor(): Promise<void> {
+      if (!this.authenticated) return;
+      let data;
+      if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
+        data = this.$store.state.organisation.attributes;
+      }else{
+        data= await profileApi.fetchOrganisationAttibutes(
+          this.$store.state,
+          state.generalParameters.organisationId
+        );
+      }
       if (data.hasOwnProperty('COLOR')) {
         this.color = data.COLOR;
       } else {
@@ -443,9 +440,9 @@ export default Vue.extend({
         this.theme = '#ffffff';
       }
       if (data.hasOwnProperty('playerBeta')) {
-        this.isBeta = data.playerBeta;
+        this.displayBetaChoice = data.playerBeta;
       }
-      return true;
+      return;
     },
     updateEpisodeNumber(value: string): void {
       this.episodeNumbers = value;
