@@ -78,6 +78,10 @@ const initialize = function initialize(initObject: any) {
         'undefined' !== typeof param.MiniplayerUri
           ? param.MiniplayerUri
           : 'https://player.dev2.saooti.org/';
+      state.podcastPage.MiniplayerBetaUri =
+        'undefined' !== typeof param.MiniplayerBetaUri
+          ? param.MiniplayerBetaUri
+          : 'https://playerbeta.dev2.saooti.org/';
       state.podcastPage.ouestFranceStyle =
         'undefined' !== typeof param.ouestFranceStyle
           ? param.ouestFranceStyle

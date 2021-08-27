@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "0.27.3",
+  "version": "0.27.4",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -14,7 +14,7 @@
   },
   "main": "./dist/octopus.common.js",
   "dependencies": {
-    "@saooti/octopus-api": "^0.25.3",
+    "@saooti/octopus-api": "^0.27.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.4.0",
@@ -70,7 +70,7 @@
     "rules": {
       "no-console": "off",
       "no-debugger": "off",
-      "no-useless-escape":"off",
+      "no-useless-escape": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/camelcase": "off",

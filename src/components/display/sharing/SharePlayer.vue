@@ -68,9 +68,7 @@
             <div class="d-flex flex-column align-items-center">
               <div class="font-weight-600">{{ $t('Choose theme') }}</div>
               <div class="d-flex">
-                <swatches
-                  v-model="theme"
-                  :data-theme="theme"
+                <swatches v-for="color in colors" :key="color" v-model="theme" :data-theme="theme"
                   class="c-hand input-no-outline mr-1"
                   :swatch-style="{
                     padding: '0px 0px',
@@ -84,30 +82,24 @@
                     paddingRight: '0px',
                     paddingBottom: '0px',
                   }"
-                  :colors="['#000000']"
-                  inline
-                ></swatches>
-                <swatches
-                  v-model="theme"
-                  :data-theme="theme"
-                  class="c-hand input-no-outline"
-                  :swatch-style="{
-                    padding: '0px 0px',
-                    marginRight: '0px',
-                    marginBottom: '0px',
-                    border: '1px gray solid',
-                  }"
-                  :wrapper-style="{
-                    paddingTop: '0px',
-                    paddingLeft: '0px',
-                    paddingRight: '0px',
-                    paddingBottom: '0px',
-                  }"
-                  :colors="['#ffffff']"
+                  :colors="[color]"
                   inline
                 ></swatches>
               </div>
             </div>
+          </div>
+          <div class="checkbox-saooti" v-if="displayBetaChoice">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="isBetaCheckbox"
+              v-model="isBeta"
+            />
+            <label
+              class="custom-control-label mr-2"
+              for="isBetaCheckbox"
+              >{{ $t('Use beta version') }}</label
+            >
           </div>
           <div
             class="d-flex align-items-center flex-wrap"
@@ -187,7 +179,7 @@ import { state } from '../../../store/paramStore';
 import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
-
+const octopusApi = require('@saooti/octopus-api');
 import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
@@ -220,16 +212,32 @@ export default Vue.extend({
       startTime: 0 as number,
       isVisible: false as boolean,
       displayArticle: true as boolean,
+      isBeta: false as boolean,
+      colors: ['#000000', '#ffffff'],
     };
   },
   async created() {
-    await this.initColor();
+    const isInit = await this.initColor();
+    if(!isInit){
+      await this.initBeta();
+    }
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = 'large';
     }
   },
   
   computed: {
+    displayBetaChoice(): boolean{
+      debugger;
+      console.log(this.$store);
+      return false;
+    },
+    miniplayerBaseUrl(): string{
+      if(this.isBeta){
+        return state.podcastPage.MiniplayerBetaUri;  
+      }
+      return state.podcastPage.MiniplayerUri;
+    },
     isEmission(): boolean {
       return 'emission' === this.iFrameModel;
     },
@@ -280,35 +288,35 @@ export default Vue.extend({
       if (!this.podcast && !this.playlist) {
         if ('default' === this.iFrameModel) {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
+            `${this.miniplayerBaseUrl}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
           );
         } else {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`
+            `${this.miniplayerBaseUrl}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`
           );
         }
       } else if (this.playlist) {
         if ('default' === this.iFrameModel) {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/playlist/${this.playlist.playlistId}`
+            `${this.miniplayerBaseUrl}miniplayer/playlist/${this.playlist.playlistId}`
           );
         } else {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/playlistLarge/${this.playlist.playlistId}`
+            `${this.miniplayerBaseUrl}miniplayer/playlistLarge/${this.playlist.playlistId}`
           );
         }
       } else {
         if (this.isEmission || this.isLargeEmission) {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`
+            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`
           );
         } else if (this.isLargeSuggestion) {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}${iFrameNumber}`
+            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}${iFrameNumber}`
           );
         } else {
           url.push(
-            `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`
+            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`
           );
         }
       }
@@ -399,8 +407,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    async initColor(): Promise<void> {
-      if (!this.authenticated) return;
+    getOrganisationId(): string{
       let orgaId = undefined;
       if (this.podcast) {
         orgaId = this.podcast.organisation.id;
@@ -409,6 +416,18 @@ export default Vue.extend({
       } else {
         orgaId = this.emission.orga.id;
       }
+      return orgaId;
+    },
+    async initBeta(): Promise<void> {
+      const orgaId = this.getOrganisationId();
+      const data: any = await octopusApi.fetchOrganisationAttributes(orgaId);
+      if (data.hasOwnProperty('playerBeta')) {
+        this.isBeta = data.playerBeta;
+      }
+    },
+    async initColor(): Promise<boolean> {
+      if (!this.authenticated) return false;
+      const orgaId = this.getOrganisationId();
       const data: any = await profileApi.fetchOrganisationAttibutes(
         this.$store.state,
         orgaId
@@ -423,6 +442,10 @@ export default Vue.extend({
       } else {
         this.theme = '#ffffff';
       }
+      if (data.hasOwnProperty('playerBeta')) {
+        this.isBeta = data.playerBeta;
+      }
+      return true;
     },
     updateEpisodeNumber(value: string): void {
       this.episodeNumbers = value;

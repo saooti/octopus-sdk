@@ -10,7 +10,7 @@ export const selenium = Vue.extend({
 export const cookies = Vue.extend(
 {
   methods: {
-    setCookie(name: string, value: string, domain: string = "") {
+    setCookie(name: string, value: string, domain= "") {
       const date = new Date();
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
       const expires = '; expires=' + date.toUTCString();
@@ -60,7 +60,7 @@ export const displayMethods =Vue.extend({
 export const cookiesAndMethods = displayMethods.extend(
   {
     methods: {
-      setCookie(name: string, value: string, domain: string = "") {
+      setCookie(name: string, value: string, domain = "") {
         const date = new Date();
         date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
         const expires = '; expires=' + date.toUTCString();
