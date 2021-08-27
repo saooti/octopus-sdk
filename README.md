@@ -436,7 +436,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.27.3 Player listernerId parameter
  * 0.27.4 Sauvegarde player beta
  * 0.27.5 Player beta
-
+ * 0.27.6 Category choser
 
 
 

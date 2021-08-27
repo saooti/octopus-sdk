@@ -76,6 +76,7 @@ export default Vue.extend({
     categoryArray: { default: undefined as Array<number>|undefined },
     displayAllCategories: { default: false as boolean },
     isDisabled: { default: false as boolean },
+    initCategories: { default: undefined as Array<Category>|undefined },
   },
    data() {
     return {
@@ -91,8 +92,14 @@ export default Vue.extend({
 
 
   computed: {
+    categoriesChosen(): Array<Category>{
+      if(this.initCategories){
+        return this.initCategories;
+      }
+      return this.$store.state.categories;
+    },
     allCategories(): Array<Category> {
-      return [...this.$store.state.categories].sort((a: Category, b: Category) =>
+      return [...this.categoriesChosen].sort((a: Category, b: Category) =>
         a.name > b.name ? 1 : -1
       );
     },
@@ -182,17 +189,17 @@ export default Vue.extend({
       }
     },
     initCategorySelected(val: number): void {
-      this.category = this.$store.state.categories.find((el: Category) => {
+      this.category = this.categoriesChosen.find((el: Category) => {
         return el.id === val;
       });
     },
     initCategoryArray(val: Array<number>): void {
       this.categoryForArray!.length = 0;
       val.forEach((element: number) => {
-        const item = this.$store.state.categories.find((el: Category) => {
+        const item = this.categoriesChosen.find((el: Category) => {
           return el.id === element;
         });
-        this.categoryForArray!.push(item);
+        this.categoryForArray!.push(item!);
       });
     },
   },
