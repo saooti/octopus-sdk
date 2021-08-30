@@ -37,6 +37,7 @@
               >
                 <option value="default">{{ $t('Default version') }}</option>
                 <option value="large">{{ $t('Large version') }}</option>
+                <option value="custom" v-if="podcast && podcast.podcastId && isBeta">{{ $t('Custom version') }}</option>
                 <option value="emission" v-if="podcast && podcast.podcastId">{{
                   $t('Emission version')
                 }}</option>
@@ -67,7 +68,7 @@
             </div>
             <div class="d-flex flex-column align-items-center">
               <div class="font-weight-600">{{ $t('Choose theme') }}</div>
-              <div class="d-flex">
+              <div class="d-flex" v-if="!isBeta">
                 <swatches v-for="color in colors" :key="color" v-model="theme" :data-theme="theme"
                   class="c-hand input-no-outline mr-1"
                   :swatch-style="{
@@ -86,6 +87,15 @@
                   inline
                 ></swatches>
               </div>
+              <swatches
+                v-model="theme"
+                class="c-hand input-no-outline"
+                show-fallback
+                colors="text-advanced"
+                popover-to="right"
+                :data-color="theme"
+                v-else
+              ></swatches>
             </div>
           </div>
           <div class="checkbox-saooti" v-if="displayBetaChoice">
@@ -205,7 +215,7 @@ export default Vue.extend({
       iFrameModel: 'default' as string,
       isShareModal: false as boolean,
       color: '#40a372' as string,
-      theme: '#ffffff' as string,
+      theme: '#000000' as string,
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumber: '3' as string,
@@ -283,9 +293,9 @@ export default Vue.extend({
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
           );
-        } else {
+        }else {
           url.push(
-            `${this.miniplayerBaseUrl}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`
+            `${this.miniplayerBaseUrl}miniplayer/leSoir/${this.emission.emissionId}${iFrameNumber}`
           );
         }
       } else if (this.playlist) {
@@ -307,7 +317,11 @@ export default Vue.extend({
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}${iFrameNumber}`
           );
-        } else {
+        }  else if ('custom' === this.iFrameModel) {
+          url.push(
+            `${this.miniplayerBaseUrl}miniplayer/leSoir/${this.podcast.podcastId}`
+          );
+        }else {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`
           );

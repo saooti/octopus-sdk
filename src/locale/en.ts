@@ -288,4 +288,5 @@ export default {
   "Display associated article":"Display associated article",
   "Copy this page URL":"Copy this page URL",
   "Use beta version":"Use beta version player",
+  "Custom version":"Custom version",
 };
