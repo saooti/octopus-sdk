@@ -295,7 +295,7 @@ export default Vue.extend({
           );
         }else {
           url.push(
-            `${this.miniplayerBaseUrl}miniplayer/leSoir/${this.emission.emissionId}${iFrameNumber}`
+            `${this.miniplayerBaseUrl}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`
           );
         }
       } else if (this.playlist) {
