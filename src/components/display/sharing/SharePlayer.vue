@@ -37,7 +37,14 @@
               >
                 <option value="default">{{ $t('Default version') }}</option>
                 <option value="large">{{ $t('Large version') }}</option>
-                <option value="custom" v-if="podcast && podcast.podcastId && isBeta">{{ $t('Custom version') }}</option>
+                <template v-if="isBeta">
+                    <option
+                    v-for="player in customPlayers" :key="player.customId"
+                    :value="player.customId" 
+                    v-if="(('EPISODE' === player.typePlayer || 'SUGGESTION' === player.typePlayer) && podcast && podcast.podcastId) ||
+                          ('EMISSION' === player.typePlayer && emission )|| ('PLAYLIST' === player.typePlayer && playlist )"
+                    >{{ $t('Custom version') + " «" +player.name+"»" }}</option>
+                </template>
                 <option value="emission" v-if="podcast && podcast.podcastId">{{
                   $t('Emission version')
                 }}</option>
@@ -189,11 +196,12 @@ import { state } from '../../../store/paramStore';
 import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
-/* const octopusApi = require('@saooti/octopus-api'); */
+const octopusApi = require('@saooti/octopus-api');
 import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import { Playlist } from '@/store/class/playlist';
+import { CustomPlayer } from '@/store/class/customPlayer';
 export default Vue.extend({
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -223,6 +231,7 @@ export default Vue.extend({
       isVisible: false as boolean,
       displayArticle: true as boolean,
       displayBetaChoice: false as boolean,
+      customPlayers: [] as Array<CustomPlayer>,
       isBeta: false as boolean,
       colors: ['#000000', '#ffffff'],
     };
@@ -317,11 +326,7 @@ export default Vue.extend({
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}${iFrameNumber}`
           );
-        }  else if ('custom' === this.iFrameModel) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/leSoir/${this.podcast.podcastId}`
-          );
-        }else {
+        }  else {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`
           );
@@ -455,6 +460,15 @@ export default Vue.extend({
       }
       if (data.hasOwnProperty('playerBeta')) {
         this.displayBetaChoice = data.playerBeta;
+        let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!);
+        this.customPlayers = dataFetched.content;
+        let totalCount = dataFetched.totalElements;
+        let index = 1;
+        while (totalCount > this.customPlayers.length) {
+          dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!+'?start='+index);
+          this.customPlayers = this.customPlayers.concat(dataFetched.content);
+          ++index;
+        }
       }
       return;
     },
