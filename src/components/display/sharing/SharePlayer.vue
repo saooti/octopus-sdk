@@ -39,10 +39,9 @@
                 <option value="large">{{ $t('Large version') }}</option>
                 <template v-if="isBeta">
                     <option
-                    v-for="player in customPlayers" :key="player.customId"
+                    v-for="player in customPlayersDisplay" :key="player.customId"
                     :value="player.customId" 
-                    v-if="(('EPISODE' === player.typePlayer || 'SUGGESTION' === player.typePlayer) && podcast && podcast.podcastId) ||
-                          ('EMISSION' === player.typePlayer && emission )|| ('PLAYLIST' === player.typePlayer && playlist )"
+                    
                     >{{ $t('Custom version') + " «" +player.name+"»" }}</option>
                 </template>
                 <option value="emission" v-if="podcast && podcast.podcastId">{{
@@ -244,6 +243,12 @@ export default Vue.extend({
   },
   
   computed: {
+    customPlayersDisplay(): Array<CustomPlayer>{
+      return this.customPlayers.filter((player: CustomPlayer)=>{
+        return (('EPISODE' === player.typePlayer || 'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
+                          ('EMISSION' === player.typePlayer && this.emission  && !this.podcast)|| ('PLAYLIST' === player.typePlayer && this.playlist );
+      });
+    },
     miniplayerBaseUrl(): string{
       if(this.isBeta){
         return state.podcastPage.MiniplayerBetaUri;  
@@ -302,9 +307,14 @@ export default Vue.extend({
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
           );
-        }else {
+        }else if('large' === this.iFrameModel) {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`
+          );
+        }
+        else {
+          url.push(
+            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}`
           );
         }
       } else if (this.playlist) {
@@ -312,9 +322,13 @@ export default Vue.extend({
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/playlist/${this.playlist.playlistId}`
           );
-        } else {
+        } else if('large' === this.iFrameModel) {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/playlistLarge/${this.playlist.playlistId}`
+          );
+        }else {
+          url.push(
+            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.playlist.playlistId}`
           );
         }
       } else {

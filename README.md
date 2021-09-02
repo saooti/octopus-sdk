@@ -441,6 +441,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.27.8 Player beta
  * 0.27.9 Octopus Api
  * 0.27.10 Player beta
-
+ * 0.27.11 Player beta
 
 
