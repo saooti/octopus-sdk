@@ -24,6 +24,7 @@ import ErrorMessage from "./src/components/misc/ErrorMessage.vue";
 //Display
 import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
 import CategoryList from "./src/components/display/categories/CategoryList.vue";
+import CategoryFilter from "./src/components/display/categories/CategoryFilter.vue";
 /*import EditBox from "./src/components/display/edit/EditBox.vue"; */
 import EmissionChooser from "./src/components/display/emission/EmissionChooser.vue";
 /* import EmissionItem from "./src/components/display/emission/EmissionItem.vue"; */
