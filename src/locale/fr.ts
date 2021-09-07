@@ -290,4 +290,5 @@ export default {
   "Use beta version":"Utiliser la version beta du player",
   "Custom version":"Version customisée",
   "All":"Tous",
+  'By category': 'Selon la catégorie IAB',
 };

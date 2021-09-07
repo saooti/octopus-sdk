@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100" :style="{ width: width }">
+  <div class="default-multiselect-width" :style="{ width: width }">
     <label :for="id" class="d-inline" aria-label="select category"></label>
     <Multiselect
       v-model="model"
@@ -189,9 +189,13 @@ export default Vue.extend({
       }
     },
     initCategorySelected(val: number): void {
-      this.category = this.categoriesChosen.find((el: Category) => {
+      let categorySelected = this.categoriesChosen.find((el: Category) => {
         return el.id === val;
       });
+      if(!categorySelected){
+        categorySelected = getDefaultCategory(this.defaultanswer);
+      }
+      this.category = categorySelected;
     },
     initCategoryArray(val: Array<number>): void {
       this.categoryForArray!.length = 0;

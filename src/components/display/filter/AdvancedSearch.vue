@@ -21,6 +21,8 @@
           :isEmission="isEmission"
           v-if="isMonetizableFilter"
         />
+        <CategoryFilter @updateCategory="updateCategory"/>
+        
         <div
           class="d-flex mt-3 align-items-center"
           v-if="organisationId && rubriquageDisplay"
@@ -261,16 +263,18 @@
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
-
+import CategoryFilter from './CategoryFilter.vue';
 import Vue from 'vue';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
+import { Category } from '@/store/class/category';
 export default Vue.extend({
   components: {
     MonetizableFilter: () => import('./MonetizableFilter.vue'),
     RubriqueChooser: () => import('../rubriques/RubriqueChooser.vue'),
     // @ts-ignore
     DatePicker: () => import('v-calendar/lib/components/date-picker.umd.min.js'),
+    CategoryFilter
   },
   props: {
     organisationId: { default: undefined as string|undefined},
@@ -315,8 +319,10 @@ export default Vue.extend({
     this.sort = this.sortCriteria;
   },
 
-  
   computed: {
+    categoryFilter(): Category|undefined{
+      return this.$store.state.filter.iab;
+    },
     isMonetizableFilter(): boolean {
       return state.podcastsPage.MonetizableFilter;
     },
@@ -458,6 +464,13 @@ export default Vue.extend({
           this.rubriquageId = this.rubriquageData[index].rubriquageId;
           break;
         }
+      }
+    },
+    updateCategory(value: number){
+      if(0!==value){
+        this.$emit('updateCategory', value);
+      }else{
+        this.$emit('updateCategory', undefined);
       }
     },
   },

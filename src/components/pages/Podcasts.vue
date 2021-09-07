@@ -31,6 +31,7 @@
       :resetRubriquage="resetRubriquage"
       :isSearchBar="isProductorSearch"
       :sortCriteria="sortCriteria"
+      @updateCategory="updateCategory"
       @updateRubriquage="updateRubriquage"
       @updateRubrique="updateRubrique"
       @updateMonetization="updateMonetization"
@@ -57,7 +58,7 @@
       :includeHidden="includeHidden"
       :noRubrique="noRubrique"
       :notValid="notValid"
-      :iabId="categoryFilter?categoryFilter.id:undefined"
+      :iabId="iabId"
     />
   </div>
 </template>
@@ -103,6 +104,7 @@ export default Vue.extend({
       noRubrique: undefined as boolean|undefined,
       sortCriteria: 'DATE' as string, // SCORE, DATE, POPULARITY, NAME, LAST_PODCAST_DESC
       notValid: false as boolean,
+      iabId: undefined as number | undefined,
     };
   },
 
@@ -124,9 +126,6 @@ export default Vue.extend({
   },
   
   computed: {
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
     authenticated(): boolean {
       return state.generalParameters.authenticated;
     },
@@ -160,6 +159,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    updateCategory(value: number|undefined){
+      this.iabId = value;
+    },
     updateSortCriteria(value: string): void {
       this.sortCriteria = value;
     },

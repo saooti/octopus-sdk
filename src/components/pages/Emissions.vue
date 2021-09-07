@@ -16,6 +16,7 @@
       :isEmission="true"
       :isSearchBar="isProductorSearch"
       :sortCriteria="sortEmission"
+      @updateCategory="updateCategory"
       @updateRubriquage="updateRubriquage"
       @updateRubrique="updateRubrique"
       @updateMonetization="updateMonetization"
@@ -39,7 +40,7 @@
       :sort="sortEmission"
       :noRubrique="noRubrique"
       :includeHidden="includeHidden"
-      :iabId="categoryFilter?categoryFilter.id:undefined"
+      :iabId="iabId"
     />
   </div>
 </template>
@@ -51,7 +52,6 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
 
 import Vue from 'vue';
-import { Category } from '@/store/class/category';
 export default Vue.extend({
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
@@ -75,6 +75,7 @@ export default Vue.extend({
       rubriquageId: undefined as number | undefined,
       rubriqueId: undefined as number | undefined,
       emissionId: undefined as number | undefined,
+      iabId: undefined as number | undefined,
       fromDate: undefined as string | undefined,
       toDate: undefined as string | undefined,
       resetRubriquage: false as boolean,
@@ -99,9 +100,6 @@ export default Vue.extend({
   },
   
   computed: {
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
     isProductorSearch(): boolean {
       return state.podcastsPage.ProductorSearch;
     },
@@ -124,6 +122,9 @@ export default Vue.extend({
     },
     updateFromDate(value: string): void {
       this.fromDate = value;
+    },
+    updateCategory(value: number|undefined){
+      this.iabId = value;
     },
     updateRubriquage(value: number): void {
       if (-1 !== value) {
