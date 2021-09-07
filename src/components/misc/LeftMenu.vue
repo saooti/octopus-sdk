@@ -16,7 +16,8 @@
         class="text-dark font-weight-bold mb-3 live-route"
         :to="{
           name: 'lives',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
         }"
         >{{ $t('Live') }}</router-link
       >
@@ -25,7 +26,8 @@
         class="text-dark font-weight-bold mb-3 podcasts-route"
         :to="{
           name: 'podcasts',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
         }"
         >{{ $t('Podcasts') }}</router-link
       >
@@ -34,7 +36,8 @@
         class="text-dark font-weight-bold mb-3 emissions-route"
         :to="{
           name: 'emissions',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
         }"
         >{{ $t('Emissions') }}</router-link
       >

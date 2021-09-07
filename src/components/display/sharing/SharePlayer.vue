@@ -245,7 +245,7 @@ export default Vue.extend({
   computed: {
     customPlayersDisplay(): Array<CustomPlayer>{
       return this.customPlayers.filter((player: CustomPlayer)=>{
-        return (('EPISODE' === player.typePlayer || 'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
+        return (('EPISODE' === player.typePlayer ||'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
                           ('EMISSION' === player.typePlayer && this.emission  && !this.podcast)|| ('PLAYLIST' === player.typePlayer && this.playlist );
       });
     },
@@ -476,7 +476,7 @@ export default Vue.extend({
         this.displayBetaChoice = data.playerBeta;
         let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!);
         this.customPlayers = dataFetched.content;
-        let totalCount = dataFetched.totalElements;
+        const totalCount = dataFetched.totalElements;
         let index = 1;
         while (totalCount > this.customPlayers.length) {
           dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!+'?start='+index);

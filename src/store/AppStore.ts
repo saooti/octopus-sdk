@@ -96,6 +96,10 @@ export default new Vuex.Store({
       state.filter.live = isLive;
     },
 
+    filterIab(state, iab) {
+      state.filter.iab = iab;
+    },
+
     categoriesSet(state, categories) {
       state.categories = categories;
     },

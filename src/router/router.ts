@@ -31,11 +31,12 @@ const routes: any = [
       component: Home,
     },
     {
-      path: '/main/pub/home:productor?',
+      path: '/main/pub/home:productor?:iabId?',
       name: 'home',
       component: Home,
       props: (route: any) => ({
         productor: route.params.productor,
+        iabId: route.params.iabId,
       }),
     },
     {
@@ -48,19 +49,21 @@ const routes: any = [
       }),
     },
     {
-      path: '/main/pub/podcasts/:productor?',
+      path: '/main/pub/podcasts/:productor?:iabId?',
       name: 'podcasts',
       component: PodcastsPage,
       props: (route: any) => ({
         productor: route.params.productor,
+        iabId: route.params.iabId,
       }),
     },
     {
-      path: '/main/pub/emissions/:productor?',
+      path: '/main/pub/emissions/:productor?:iabId?',
       name: 'emissions',
       component: EmissionsPage,
       props: (route: any) => ({
         productor: route.params.productor,
+        iabId: route.params.iabId,
       }),
     },
     {

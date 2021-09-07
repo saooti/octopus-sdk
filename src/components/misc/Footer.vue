@@ -9,7 +9,8 @@
           <router-link
             :to="{
               name: 'home',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: $store.state.filter.organisationId,
+                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
             }"
             class="linkHover"
             >{{ $t('Home') }}</router-link
@@ -17,7 +18,8 @@
           <router-link
             :to="{
               name: 'podcasts',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: $store.state.filter.organisationId,
+                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
             }"
             class="linkHover"
             >{{ $t('Podcasts') }}</router-link
@@ -25,7 +27,8 @@
           <router-link
             :to="{
               name: 'emissions',
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: $store.state.filter.organisationId,
+                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
             }"
             class="linkHover"
             >{{ $t('Emissions') }}</router-link

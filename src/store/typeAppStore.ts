@@ -1,3 +1,4 @@
+import { Category } from "./class/category"
 import { CommentPodcast } from "./class/comment"
 import { Emission } from "./class/emission"
 import { Media } from "./class/media"
@@ -73,6 +74,7 @@ export function emptyPodcastData(): Podcast{
     sortOrder: string | undefined;
     sortField: string | undefined;
     live: any;
+    iab: Category |undefined;
   }
 
   export interface StoreState{
@@ -286,6 +288,7 @@ export function emptyPodcastData(): Podcast{
             sortOrder: undefined ,
             sortField: undefined ,
             live: false,
+            iab: undefined
           },
       
           liveUpdate: {

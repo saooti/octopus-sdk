@@ -1,17 +1,13 @@
 <template>
   <div class="d-inline-flex w-100 mb-3 pl-3 pr-3 hide-phone category-list">
     <div class="category-list-container" id="category-list-container">
-      <router-link
+      <button
         :id="'category' + category.id"
-        :to="{
-          name: 'category',
-          params: { iabId: category.id },
-          query: { productor: filterOrga },
-        }"
+        @click="checkIfFilter(category)"
         class="category-item text-dark secondary-bg"
         v-for="category in categories"
-        v-bind:key="category.id"
-        >{{ category.name }}</router-link
+        :key="category.id"
+        >{{ category.name }}</button
       >
     </div>
     <b-dropdown
@@ -26,11 +22,7 @@
       </template>
       <template>
         <b-dropdown-item
-          :to="{
-            name: 'category',
-            params: { iabId: category.id },
-            query: { productor: filterOrga },
-          }"
+          @click="checkIfFilter(category)"
           v-for="category in hidenCategories"
           v-bind:key="category.id"
           class="mr-3"
@@ -57,6 +49,7 @@
   display: block;
   height: 1.5rem;
   border-radius: 1.5rem;
+  border: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,6 +80,10 @@ import Vue from 'vue';
 import { Category } from '@/store/class/category';
 export default Vue.extend({
   name: 'CategoryList',
+
+  props: {
+    isFilter: { default: false as boolean },
+  },
 
   data() {
     return {
@@ -125,6 +122,20 @@ export default Vue.extend({
     },
   },
   methods: {
+    checkIfFilter(category: Category): void{
+      if(!this.isFilter){
+        this.$router.push({
+          name: 'category',
+          params: { iabId: category.id.toString() },
+          query: { productor: this.filterOrga },
+        });
+        return;
+      }
+      if(!this.$route.query.iabId || ('string'===typeof this.$route.query.iabId &&  parseInt( this.$route.query.iabId ,10) !== category.id)) {
+        this.$router.push({ query: { iabId: category.id.toString() } });
+      }
+      this.$store.commit('filterIab',category);
+    },
     resizeWindow(): void {
       const categoryList = document.getElementById('category-list-container');
       categoryList!.style.justifyContent = 'flex-start';

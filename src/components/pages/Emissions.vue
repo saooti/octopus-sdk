@@ -39,6 +39,7 @@
       :sort="sortEmission"
       :noRubrique="noRubrique"
       :includeHidden="includeHidden"
+      :iabId="categoryFilter?categoryFilter.id:undefined"
     />
   </div>
 </template>
@@ -50,6 +51,7 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
 
 import Vue from 'vue';
+import { Category } from '@/store/class/category';
 export default Vue.extend({
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
@@ -97,6 +99,9 @@ export default Vue.extend({
   },
   
   computed: {
+    categoryFilter(): Category|undefined{
+      return this.$store.state.filter.iab;
+    },
     isProductorSearch(): boolean {
       return state.podcastsPage.ProductorSearch;
     },

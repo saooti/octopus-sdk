@@ -289,4 +289,5 @@ export default {
   "Copy this page URL":"Copy this page URL",
   "Use beta version":"Use beta version player",
   "Custom version":"Custom version",
+  "All":"All",
 };

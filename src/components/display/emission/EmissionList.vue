@@ -74,6 +74,7 @@ export default Vue.extend({
     first: { default: 0 as number },
     size: { default: 12 as number },
     query: { default: undefined as string|undefined },
+    iabId: { default: undefined as number | undefined },
     organisationId: { default: undefined as string|undefined },
     monetization: { default: 'UNDEFINED' as string },
     rubriqueId: { default: undefined as number|undefined },
@@ -127,7 +128,7 @@ export default Vue.extend({
     },
     changed(): string {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}|${this.monetization}|${this.includeHidden}
-      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubrique}`;
+      ${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubrique}`;
     },
     sortText(): string {
       switch (this.sort) {
@@ -165,6 +166,7 @@ export default Vue.extend({
         query: this.query,
         organisationId: this.organisation,
         monetisable: this.monetization,
+        iabId: this.iabId,
         rubriqueId: this.rubriqueId,
         rubriquageId: this.rubriquageId,
         before: this.before,

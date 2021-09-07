@@ -57,6 +57,7 @@
       :includeHidden="includeHidden"
       :noRubrique="noRubrique"
       :notValid="notValid"
+      :iabId="categoryFilter?categoryFilter.id:undefined"
     />
   </div>
 </template>
@@ -70,6 +71,7 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 
 import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
+import { Category } from '@/store/class/category';
 export default Vue.extend({
   components: {
     PodcastList,
@@ -122,6 +124,9 @@ export default Vue.extend({
   },
   
   computed: {
+    categoryFilter(): Category|undefined{
+      return this.$store.state.filter.iab;
+    },
     authenticated(): boolean {
       return state.generalParameters.authenticated;
     },

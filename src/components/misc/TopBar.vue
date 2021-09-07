@@ -15,7 +15,8 @@
       <router-link
         :to="{
           name: 'home',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
         }"
       >
         <div class="top-bar-logo m-3" v-on:click="onDisplayMenu(true)">
@@ -56,7 +57,8 @@
         <router-link
           :to="{
             name: 'podcasts',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Podcasts') }}</router-link
@@ -64,7 +66,8 @@
         <router-link
           :to="{
             name: 'emissions',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Emissions') }}</router-link

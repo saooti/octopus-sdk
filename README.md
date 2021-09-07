@@ -443,4 +443,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.27.10 Player beta
  * 0.27.11 Player beta
 
+ * 0.28.0 Nouveau sprint
+
 

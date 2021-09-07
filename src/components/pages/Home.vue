@@ -22,11 +22,18 @@ export default Vue.extend({
   components: {
     PodcastInlineList,
   },
+  data() {
+    return {
+    };
+  },
   computed: {
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
     },
     categories(): any {
+      if(this.$store.state.filter.iab){
+        return [this.$store.state.filter.iab];
+      }
       return this.$store.state.categories.filter((c: any) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
