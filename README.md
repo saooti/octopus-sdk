@@ -445,5 +445,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
  * 0.28.0 Nouveau sprint
  * 0.28.1 Version category filtre
+ * 0.28.2 Version category filtre
 
 

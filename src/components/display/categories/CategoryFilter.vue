@@ -32,8 +32,9 @@ export default Vue.extend({
   },
   methods:{
     removeFilter(event: { preventDefault: () => void }): void{
-      if (this.$route.query.iabId) {
-        this.$router.push({ query: { iabId: undefined } });
+      const queries = this.$route.query;
+      if (queries.iabId) {
+        this.$router.push({ query: {...queries, ...{iabId: undefined} } });
       }
       this.$store.commit('filterIab', undefined);
       event.preventDefault();

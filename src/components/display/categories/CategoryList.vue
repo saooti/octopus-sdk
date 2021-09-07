@@ -131,8 +131,9 @@ export default Vue.extend({
         });
         return;
       }
-      if(!this.$route.query.iabId || ('string'===typeof this.$route.query.iabId &&  parseInt( this.$route.query.iabId ,10) !== category.id)) {
-        this.$router.push({ query: { iabId: category.id.toString() } });
+      const queries = this.$route.query;
+      if(!queries.iabId || ('string'===typeof queries.iabId &&  parseInt(queries.iabId ,10) !== category.id)) {
+        this.$router.push({ query: { ...queries, ...{ iabId: category.id.toString() }} });
       }
       this.$store.commit('filterIab',category);
     },

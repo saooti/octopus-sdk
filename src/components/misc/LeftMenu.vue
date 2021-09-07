@@ -190,9 +190,10 @@ export default Vue.extend({
       this.$emit('update:displayMenu', false);
     },
     async onOrganisationSelected(organisation: any) {
+      const queries = this.$route.query;
       if (organisation && organisation.id) {
-        if (this.$route.query.productor !== organisation.id) {
-          this.$router.push({ query: { productor: organisation.id } });
+        if (queries.productor !== organisation.id) {
+          this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
         }
         this.$store.commit('filterOrga', {
           orgaId: organisation.id,
@@ -204,7 +205,7 @@ export default Vue.extend({
         this.$store.commit('filterOrgaLive', isLive);
       } else {
         if (this.$route.query.productor) {
-          this.$router.push({ query: { productor: undefined } });
+          this.$router.push({ query: {...queries, ...{productor: undefined} } });
         }
         this.$store.commit('filterOrga', { orgaId: undefined });
       }

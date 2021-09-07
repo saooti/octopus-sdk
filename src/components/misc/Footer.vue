@@ -182,6 +182,14 @@ export default Vue.extend({
       moment.locale(this.$i18n.locale);
       octopusApi.fetchCategories({ lang: this.$i18n.locale }).then((data: Array<Category>) => {
         this.$store.commit('categoriesSet', data);
+        if(this.$store.state.filter.iab){
+          const category = this.$store.state.categories.filter((c: any) => {
+            return c.id === this.$store.state.filter.iab.id;
+          });
+          if(category.length){
+            this.$store.commit('filterIab', category[0]);
+          }
+        }
       });
     }
   },

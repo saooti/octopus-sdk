@@ -356,9 +356,10 @@ export default Vue.extend({
       }
     },
     async onOrganisationSelected(organisation: Organisation | undefined): Promise<void> {
+      const queries = this.$route.query;
       if (organisation && organisation.id) {
         if (this.$route.query.productor !== organisation.id) {
-          this.$router.push({ query: { productor: organisation.id } });
+          this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
         }
         this.$store.commit('filterOrga', {
           orgaId: organisation.id,
@@ -371,7 +372,7 @@ export default Vue.extend({
       } else {
         this.organisationId = undefined;
         if (this.$route.query.productor) {
-          this.$router.push({ query: { productor: undefined } });
+          this.$router.push({ query: { ...queries, ...{productor: undefined} } });
         }
         this.$store.commit('filterOrga', { orgaId: undefined });
       }

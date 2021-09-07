@@ -94,7 +94,8 @@ const components = {
     displayMethods,
     cookiesAndMethods,
     seleniumAndMethods,
-    Rubrique
+    Rubrique,
+    CategoryFilter
 }
 
 export default components;
@@ -138,5 +139,6 @@ export {
     displayMethods,
     cookiesAndMethods,
     seleniumAndMethods,
-    Rubrique
+    Rubrique,
+    CategoryFilter
 };
