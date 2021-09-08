@@ -160,6 +160,7 @@ const octopusApi = require('@saooti/octopus-api');
 
 import Vue from 'vue';
 import { Category } from '@/store/class/category';
+import { Rubriquage } from '@/store/class/rubriquage';
 export default Vue.extend({
   name: 'LeftMenu',
 
@@ -195,14 +196,18 @@ export default Vue.extend({
         if (queries.productor !== organisation.id) {
           this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
         }
-        this.$store.commit('filterOrga', {
-          orgaId: organisation.id,
-          imgUrl: organisation.imageUrl,
-        });
         const isLive = await octopusApi.liveEnabledOrganisation(
           organisation.id
         );
-        this.$store.commit('filterOrgaLive', isLive);
+        const data = await octopusApi.fetchTopics(this.organisationId);
+        this.$store.commit('filterOrga', {
+          orgaId: organisation.id,
+          imgUrl: organisation.imageUrl,
+          isLive: isLive,
+          rubriquageArray: data.filter((element: Rubriquage)=>{
+            return element.rubriques.length;
+          })
+        });
       } else {
         if (this.$route.query.productor) {
           this.$router.push({ query: {...queries, ...{productor: undefined} } });

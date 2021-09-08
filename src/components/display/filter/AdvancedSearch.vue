@@ -23,61 +23,11 @@
         />
         <CategoryFilter @updateCategory="updateCategory"/>
         
-        <div
-          class="d-flex mt-3 align-items-center"
-          v-if="organisationId && rubriquageDisplay"
-        >
-          <div class="checkbox-saooti flex-shrink">
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="search-rubriquage-checkbox"
-              v-model="isRubriquage"
-            />
-            <label
-              class="custom-control-label"
-              for="search-rubriquage-checkbox"
-              >{{ $t('By topic') }}</label
-            >
-          </div>
-          <template v-if="isRubriquage">
-            <label class="wrap">
-              <select
-                class="basic-select ml-2 mb-0 border c-hand"
-                v-model="rubriquageId"
-                @change="onRubriquageSelected"
-              >
-                <option :value="-1" class="primary-dark">{{
-                  $t('Without topic')
-                }}</option>
-                <option
-                  v-for="rubriquage in rubriquageData"
-                  v-show="0 !== rubriquage.rubriques.length"
-                  :key="rubriquage.rubriquageId"
-                  :value="rubriquage.rubriquageId"
-                  >{{ rubriquage.title }}</option
-                >
-              </select>
-              <div
-                class="saooti-arrow_down octopus-arrow-down-2 classic-select"
-              ></div>
-            </label>
-            <template v-if="rubriquageId && -1 !== rubriquageId">
-              <div class="ml-3 flex-shrink">{{ $t('By rubric') }}</div>
-              <RubriqueChooser
-                class="ml-2"
-                :multiple="false"
-                :rubriquageId="rubriquageId"
-                :allRubriques="getRubriques(rubriquageId)"
-                :defaultanswer="$t('No rubric filter')"
-                :reset="reset"
-                :withoutRubrique="true"
-                width="auto"
-                @selected="onRubriqueSelected"
-              />
-            </template>
-          </template>
-        </div>
+        <RubriqueFilter 
+          :resetRubriquage="resetRubriquage"
+          :organisationId="organisationId"
+          @updateRubriquageFilter="updateRubriquageFilter"
+        />
         <div class="d-flex mt-3 align-items-center flex-wrap">
           <div class="mr-2" v-if="isEmission">
             {{ $t('Emission with episode published :') }}
@@ -261,20 +211,18 @@
 <script lang="ts">
 // @ is an alias to /src
 import { state } from '../../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import CategoryFilter from './CategoryFilter.vue';
+import RubriqueFilter from './RubriqueFilter.vue';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import Vue from 'vue';
-import { Rubriquage } from '@/store/class/rubriquage';
-import { Rubrique } from '@/store/class/rubrique';
-import { Category } from '@/store/class/category';
 export default Vue.extend({
   components: {
     MonetizableFilter: () => import('./MonetizableFilter.vue'),
-    RubriqueChooser: () => import('../rubriques/RubriqueChooser.vue'),
     // @ts-ignore
     DatePicker: () => import('v-calendar/lib/components/date-picker.umd.min.js'),
-    CategoryFilter
+    CategoryFilter,
+    RubriqueFilter
   },
   props: {
     organisationId: { default: undefined as string|undefined},
@@ -288,10 +236,6 @@ export default Vue.extend({
 
   data() {
     return {
-      isRubriquage: false as boolean,
-      rubriquageId: undefined as number|undefined,
-      rubriqueId: undefined as number|undefined,
-      rubriquageData: [] as Array<Rubriquage>,
       isFrom: false as boolean,
       isTo: false as boolean,
       lang: {
@@ -303,13 +247,11 @@ export default Vue.extend({
       isNotVisible: false as boolean,
       isNotValidate: false as boolean,
       showFilters: false as boolean,
-      reset: false as boolean,
       sort: '' as string,
     };
   },
 
   created() {
-    this.fetchTopics();
     if (!this.isEmission) {
       this.isNotVisible = this.includeHidden;
     }
@@ -320,26 +262,8 @@ export default Vue.extend({
   },
 
   computed: {
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
     isMonetizableFilter(): boolean {
       return state.podcastsPage.MonetizableFilter;
-    },
-    rubriquageDisplay(): boolean {
-      if (0 === this.rubriquageData.length) return false;
-      let found = false;
-      for (
-        let index = 0, len = this.rubriquageData.length;
-        index < len;
-        index++
-      ) {
-        if (0 !== this.rubriquageData[index].rubriques.length) {
-          found = true;
-          break;
-        }
-      }
-      return found;
     },
     myOrganisationId(): string {
       return state.generalParameters.organisationId;
@@ -425,46 +349,8 @@ export default Vue.extend({
         this.isTo = true;
       }
     },
-    getRubriques(rubriquageId: number): Array<Rubrique> {
-      const topicIndex = this.rubriquageData.findIndex(
-        ( element: Rubriquage) => element.rubriquageId === rubriquageId
-      );
-      return this.rubriquageData[topicIndex].rubriques;
-    },
-    onRubriqueSelected(rubrique: Rubrique): void {
-      if (rubrique.rubriqueId === this.rubriqueId) return;
-      this.rubriqueId = rubrique.rubriqueId;
-      if (0 === this.rubriqueId) {
-        this.$emit('updateRubrique', undefined);
-      } else {
-        this.$emit('updateRubrique', rubrique.rubriqueId);
-      }
-    },
-    onRubriquageSelected(): void {
-      this.reset = !this.reset;
-      this.rubriqueId = 0;
-      if (this.isRubriquage) {
-        this.$emit('updateRubriquage', this.rubriquageId);
-      }
-    },
     updateMonetization(value: string): void {
       this.$emit('updateMonetization', value);
-    },
-    async fetchTopics(): Promise<void> {
-      if (!this.organisation) return;
-      const data = await octopusApi.fetchTopics(this.organisation);
-      this.rubriquageData = data;
-      if (0 === data.length) return;
-      for (
-        let index = 0, len = this.rubriquageData.length;
-        index < len;
-        index++
-      ) {
-        if (0 !== this.rubriquageData[index].rubriques.length) {
-          this.rubriquageId = this.rubriquageData[index].rubriquageId;
-          break;
-        }
-      }
     },
     updateCategory(value: number){
       if(0!==value){
@@ -472,6 +358,9 @@ export default Vue.extend({
       }else{
         this.$emit('updateCategory', undefined);
       }
+    },
+    updateRubriquageFilter(value: Array<RubriquageFilter>){
+      this.$emit('updateRubriquageFilter', value);
     },
   },
   watch: {
@@ -481,7 +370,6 @@ export default Vue.extend({
       } else {
         this.isNotVisible = false;
       }
-      this.fetchTopics();
     },
     isFrom(): void {
       if (this.isFrom) {
@@ -497,19 +385,8 @@ export default Vue.extend({
         this.$emit('updateToDate', undefined);
       }
     },
-    isRubriquage(): void {
-      if (this.isRubriquage) {
-        this.$emit('updateRubriquage', this.rubriquageId);
-      } else {
-        this.$emit('updateRubriquage', undefined);
-        this.$emit('updateRubrique', undefined);
-      }
-    },
     sort(): void {
       this.$emit('updateSortCriteria', this.sort);
-    },
-    resetRubriquage(): void {
-      this.isRubriquage = false;
     },
     isNotVisible(): void{
       this.$emit('includeHidden', this.isNotVisible);

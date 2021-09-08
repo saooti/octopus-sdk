@@ -119,6 +119,7 @@ const octopusApi = require('@saooti/octopus-api');
 
 import Vue from 'vue';
 import { Organisation } from '@/store/class/organisation';
+import { Rubriquage } from '@/store/class/rubriquage';
 export default Vue.extend({
   components: {
     OrganisationChooser: () => import('../organisation/OrganisationChooser.vue'),
@@ -140,11 +141,11 @@ export default Vue.extend({
   },
   async created() {
     if (!this.organisationId) return;
-    this.$store.commit('filterOrga', { orgaId: this.organisationId });
     const isLive = await octopusApi.liveEnabledOrganisation(
       this.organisationId
     );
-    this.$store.commit('filterOrgaLive', isLive);
+    console.log("QUAND EST CE QUON PASSE ICI");
+    this.$store.commit('filterOrga', { orgaId: this.organisationId, isLive:isLive });
     this.keepOrganisation = true;
     if (!this.$route.query.productor) {
       this.$router.replace({ query: { productor: this.organisationId } });
@@ -180,7 +181,6 @@ export default Vue.extend({
       this.imgUrl = organisation.imageUrl;
       this.$store.commit('filterOrga', {
         orgaId: undefined,
-        imgUrl: this.imgUrl,
       });
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
@@ -198,14 +198,18 @@ export default Vue.extend({
         if (this.$route.query.productor !== this.organisationId) {
           this.$router.push({ query: { productor: this.organisationId } });
         }
-        this.$store.commit('filterOrga', {
-          orgaId: this.organisationId,
-          imgUrl: this.imgUrl,
-        });
         const isLive = await octopusApi.liveEnabledOrganisation(
           this.organisationId
         );
-        this.$store.commit('filterOrgaLive', isLive);
+        const data = await octopusApi.fetchTopics(this.organisationId);
+        this.$store.commit('filterOrga', {
+          orgaId: this.organisationId,
+          imgUrl: this.imgUrl,
+          rubriquageArray: data.filter((element: Rubriquage)=>{
+            return element.rubriques.length;
+          }),
+          isLive: isLive
+        });
         return;
       }
       if (this.$route.query.productor) {

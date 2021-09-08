@@ -32,13 +32,18 @@ export default Vue.extend({
       isCategory: false as boolean,
       iabId: 0 as number,
       isInternChanged: false as boolean,
+      isInit: true as boolean,
     };
   },
 
   created() {
     if(this.categoryFilter){
       this.iabId = this.categoryFilter.id;
+      this.isCategory = true;
     }
+    this.$nextTick(() => {
+      this.isInit = false;
+    });
   },
   computed: {
     categoryFilter(): Category|undefined{
@@ -47,7 +52,7 @@ export default Vue.extend({
   },
   methods: {
     resetCategoryFilter(): void{
-      if(!this.categoryFilter){
+      if(!this.categoryFilter || this.isInit){
         return;
       }
       const queries = this.$route.query;
@@ -59,7 +64,7 @@ export default Vue.extend({
   },
   watch: {
     isCategory(): void {
-      if(this.isInternChanged){
+      if(this.isInternChanged ||this.isInit){
         return;
       }
       this.isInternChanged = true;
@@ -74,7 +79,7 @@ export default Vue.extend({
       });
     },
     iabId(): void {
-      if(this.isInternChanged){
+      if(this.isInternChanged ||this.isInit){
         return;
       }
       this.isInternChanged = true;

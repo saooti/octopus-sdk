@@ -32,8 +32,7 @@
       :isSearchBar="isProductorSearch"
       :sortCriteria="sortCriteria"
       @updateCategory="updateCategory"
-      @updateRubriquage="updateRubriquage"
-      @updateRubrique="updateRubrique"
+      @updateRubriquageFilter="updateRubriquageFilter"
       @updateMonetization="updateMonetization"
       @updateFromDate="updateFromDate"
       @updateToDate="updateToDate"
@@ -73,6 +72,7 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
 import { Category } from '@/store/class/category';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 export default Vue.extend({
   components: {
     PodcastList,
@@ -123,9 +123,15 @@ export default Vue.extend({
     if (this.organisation && this.organisationRight) {
       this.includeHidden = true;
     }
+    if(this.categoryFilter){
+      this.iabId = this.categoryFilter.id;
+    }
   },
   
   computed: {
+    categoryFilter(): Category|undefined{
+      return this.$store.state.filter.iab;
+    },
     authenticated(): boolean {
       return state.generalParameters.authenticated;
     },
@@ -174,7 +180,25 @@ export default Vue.extend({
     updateFromDate(value: string): void {
       this.fromDate = value;
     },
-    updateRubriquage(value: number): void {
+    updateRubriquageFilter(value: Array<RubriquageFilter>){
+      const length = value.length;
+      const allRubriquageId: Array<number>= [];
+      const noRubriquageId: Array<number>= [];
+      const rubriqueId: Array<number>= [];
+      for (let index = 0; index < length; index++) {
+        if(-1===value[index].rubriqueId){
+          noRubriquageId.push(value[index].rubriquageId);
+        } else if(0===value[index].rubriqueId){
+          allRubriquageId.push(value[index].rubriquageId);
+        }else{
+          rubriqueId.push(value[index].rubriqueId);
+        }
+      }
+      console.log("allRubriquageId : " + allRubriquageId);
+      console.log("noRubriquageId : " + noRubriquageId);
+      console.log("rubriqueId : " + rubriqueId );
+    },
+    /* updateRubriquage(value: number): void {
       if (-1 !== value) {
         this.rubriquageId = value;
       } else {
@@ -194,7 +218,7 @@ export default Vue.extend({
         this.rubriqueId = value;
         this.noRubrique = undefined;
       }
-    },
+    }, */
     updateOrganisationId(value: string): void {
       this.resetRubriquage = !this.resetRubriquage;
       this.rubriquageId = undefined;

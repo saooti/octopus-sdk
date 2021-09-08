@@ -17,8 +17,7 @@
       :isSearchBar="isProductorSearch"
       :sortCriteria="sortEmission"
       @updateCategory="updateCategory"
-      @updateRubriquage="updateRubriquage"
-      @updateRubrique="updateRubrique"
+      @updateRubriquageFilter="updateRubriquageFilter"
       @updateMonetization="updateMonetization"
       @updateFromDate="updateFromDate"
       @updateToDate="updateToDate"
@@ -52,6 +51,8 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
 
 import Vue from 'vue';
+import { Category } from '@/store/class/category';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 export default Vue.extend({
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
@@ -92,6 +93,9 @@ export default Vue.extend({
     if (this.sizeRoute) {
       this.size = this.sizeRoute;
     }
+    if(this.categoryFilter){
+      this.iabId = this.categoryFilter.id;
+    }
     if (this.productor) {
       this.organisationId = this.productor;
     } else if (this.$store.state.filter.organisationId) {
@@ -100,6 +104,9 @@ export default Vue.extend({
   },
   
   computed: {
+    categoryFilter(): Category|undefined{
+      return this.$store.state.filter.iab;
+    },
     isProductorSearch(): boolean {
       return state.podcastsPage.ProductorSearch;
     },
@@ -126,12 +133,26 @@ export default Vue.extend({
     updateCategory(value: number|undefined){
       this.iabId = value;
     },
-    updateRubriquage(value: number): void {
-      if (-1 !== value) {
-        this.rubriquageId = value;
-      } else {
-        this.rubriquageId = undefined;
+    updateRubriquageFilter(value: Array<RubriquageFilter>){
+      const length = value.length;
+      const allRubriquageId: Array<number>= [];
+      const noRubriquageId: Array<number>= [];
+      const rubriqueId: Array<number>= [];
+      for (let index = 0; index < length; index++) {
+        if(-1===value[index].rubriqueId){
+          noRubriquageId.push(value[index].rubriquageId);
+        } else if(0===value[index].rubriqueId){
+          allRubriquageId.push(value[index].rubriquageId);
+        }else{
+          rubriqueId.push(value[index].rubriqueId);
+        }
       }
+      console.log("allRubriquageId : " + allRubriquageId);
+      console.log("noRubriquageId : " + noRubriquageId);
+      console.log("rubriqueId : " + rubriqueId );
+    },
+/*     updateRubriquage(value: number|undefined): void {
+      this.rubriquageId = value;
       this.noRubrique = undefined;
       this.rubriqueId = undefined;
     },
@@ -139,14 +160,11 @@ export default Vue.extend({
       if (-1 === value) {
         this.noRubrique = true;
         this.rubriqueId = undefined;
-      } else if (0 === value) {
-        this.rubriqueId = undefined;
-        this.noRubrique = undefined;
-      } else {
+      }else{
         this.rubriqueId = value;
         this.noRubrique = undefined;
       }
-    },
+    }, */
     updateOrganisationId(value: string | undefined): void {
       this.resetRubriquage = !this.resetRubriquage;
       this.rubriquageId = undefined;

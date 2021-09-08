@@ -291,4 +291,5 @@ export default {
   "Custom version":"Version customisée",
   "All":"Tous",
   'By category': 'Selon la catégorie IAB',
+  "Add a sort criterion by topic":"Ajouter un critère de tri par rubrique",
 };

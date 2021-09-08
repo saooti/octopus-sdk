@@ -90,14 +90,16 @@ export default new Vuex.Store({
       if (filter.imgUrl || !filter.orgaId) {
         state.filter.imgUrl = filter.imgUrl;
       }
+      if(filter.rubriquageArray){
+        state.filter.rubriquageArray = filter.rubriquageArray;
+      }
+      state.filter.live= filter.isLive;
     },
-
-    filterOrgaLive(state, isLive) {
-      state.filter.live = isLive;
-    },
-
     filterIab(state, iab) {
       state.filter.iab = iab;
+    },
+    filterRubrique(state, rubriqueFilter) {
+      state.filter.rubriqueFilter = rubriqueFilter;
     },
 
     categoriesSet(state, categories) {
