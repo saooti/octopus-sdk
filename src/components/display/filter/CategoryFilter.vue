@@ -71,9 +71,9 @@ export default Vue.extend({
       if (this.isCategory) {
         this.$emit('updateCategory', this.iabId);
       } else {
-        this.$emit('updateCategory', 0);
-        this.resetCategoryFilter();
+        this.$emit('updateCategory', 0); 
       }
+      this.resetCategoryFilter();
       this.$nextTick(() => {
         this.isInternChanged = false;
       });

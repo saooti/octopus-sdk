@@ -23,6 +23,7 @@
         class="ml-2"
         :multiple="false"
         :rubriquageId="rubriquageId"
+        :rubriqueSelected="0 < rubriqueIdSelected? rubriqueIdSelected: undefined"
         :allRubriques="getRubriques(rubriquageId)"
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
@@ -54,6 +55,7 @@ export default Vue.extend({
   },
   props: {
     rubriquageDisplay: { default: () => ([]) as Array<Rubriquage>},
+    rubriqueIdSelected: { default: 0 as number},
     index: { default: 0 as number},
   },
 
