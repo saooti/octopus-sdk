@@ -6,7 +6,9 @@
         class="text-dark font-weight-bold mb-3 show-phone home-route"
         :to="{
           name: 'home',
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: $store.state.filter.organisationId,
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                  rubriquesId: rubriqueQueryParam},
         }"
         >{{ $t('Home') }}</router-link
       >
@@ -16,8 +18,7 @@
         class="text-dark font-weight-bold mb-3 live-route"
         :to="{
           name: 'lives',
-          query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+          query: { productor: $store.state.filter.organisationId},
         }"
         >{{ $t('Live') }}</router-link
       >
@@ -27,7 +28,8 @@
         :to="{
           name: 'podcasts',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                  rubriquesId: rubriqueQueryParam},
         }"
         >{{ $t('Podcasts') }}</router-link
       >
@@ -37,7 +39,8 @@
         :to="{
           name: 'emissions',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined ,
+                  rubriquesId: rubriqueQueryParam},
         }"
         >{{ $t('Emissions') }}</router-link
       >
@@ -161,6 +164,7 @@ const octopusApi = require('@saooti/octopus-api');
 import Vue from 'vue';
 import { Category } from '@/store/class/category';
 import { Rubriquage } from '@/store/class/rubriquage';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 export default Vue.extend({
   name: 'LeftMenu',
 
@@ -185,37 +189,7 @@ export default Vue.extend({
       this.organisationId = this.filterOrga;
     }
   },
-  
-  methods: {
-    onMenuClick() {
-      this.$emit('update:displayMenu', false);
-    },
-    async onOrganisationSelected(organisation: any) {
-      const queries = this.$route.query;
-      if (organisation && organisation.id) {
-        if (queries.productor !== organisation.id) {
-          this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
-        }
-        const isLive = await octopusApi.liveEnabledOrganisation(
-          organisation.id
-        );
-        const data = await octopusApi.fetchTopics(this.organisationId);
-        this.$store.commit('filterOrga', {
-          orgaId: organisation.id,
-          imgUrl: organisation.imageUrl,
-          isLive: isLive,
-          rubriquageArray: data.filter((element: Rubriquage)=>{
-            return element.rubriques.length;
-          })
-        });
-      } else {
-        if (this.$route.query.productor) {
-          this.$router.push({ query: {...queries, ...{productor: undefined} } });
-        }
-        this.$store.commit('filterOrga', { orgaId: undefined });
-      }
-    },
-  },
+
   computed: {
     isLiveTab(): boolean {
       return state.generalParameters.isLiveTab;
@@ -234,6 +208,43 @@ export default Vue.extend({
     },
     filterOrgaLive(): string {
       return this.$store.state.filter.live;
+    },
+    rubriqueQueryParam(): string|undefined{
+      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      }
+      return undefined;
+    },
+  },
+  
+  methods: {
+    onMenuClick() {
+      this.$emit('update:displayMenu', false);
+    },
+    async onOrganisationSelected(organisation: any) {
+      const queries = this.$route.query;
+      if (organisation && organisation.id) {
+        if (queries.productor !== organisation.id) {
+          this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
+        }
+        const isLive = await octopusApi.liveEnabledOrganisation(
+          organisation.id
+        );
+        const data = await octopusApi.fetchTopics(organisation.id);
+        this.$store.commit('filterOrga', {
+          orgaId: organisation.id,
+          imgUrl: organisation.imageUrl,
+          isLive: isLive,
+          rubriquageArray: data.filter((element: Rubriquage)=>{
+            return element.rubriques.length;
+          })
+        });
+      } else {
+        if (this.$route.query.productor) {
+          this.$router.push({ query: {...queries, ...{productor: undefined} } });
+        }
+        this.$store.commit('filterOrga', { orgaId: undefined });
+      }
     },
   },
   watch: {

@@ -32,14 +32,15 @@
       :query="searchPattern"
       :organisationId="organisationId"
       :monetization="monetization"
-      :rubriqueId="rubriqueId"
-      :rubriquageId="rubriquageId"
       :before="toDate"
       :after="fromDate"
       :sort="sortEmission"
-      :noRubrique="noRubrique"
       :includeHidden="includeHidden"
       :iabId="iabId"
+
+      :rubriqueId="rubriqueId"
+      :rubriquageId="rubriquageId"
+      :noRubriquageId="noRubriquageId"
     />
   </div>
 </template>
@@ -73,8 +74,6 @@ export default Vue.extend({
       searchPattern: '' as string,
       organisationId: undefined as string | undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
-      rubriquageId: undefined as number | undefined,
-      rubriqueId: undefined as number | undefined,
       emissionId: undefined as number | undefined,
       iabId: undefined as number | undefined,
       fromDate: undefined as string | undefined,
@@ -82,7 +81,9 @@ export default Vue.extend({
       resetRubriquage: false as boolean,
       includeHidden: false as boolean,
       sortEmission: 'LAST_PODCAST_DESC' as string, //  SCORE, DATE, POPULARITY, NAME, LAST_PODCAST_DESC
-      noRubrique: undefined as boolean | undefined,
+      noRubriquageId: [] as Array<number>,
+      rubriquageId: [] as Array<number>,
+      rubriqueId: [] as Array<number>,
     };
   },
 
@@ -101,9 +102,15 @@ export default Vue.extend({
     } else if (this.$store.state.filter.organisationId) {
       this.organisationId = this.$store.state.filter.organisationId;
     }
+    if(this.rubriqueFilter.length){
+      this.updateRubriquageFilter(this.rubriqueFilter);
+    }
   },
   
   computed: {
+    rubriqueFilter(): Array<RubriquageFilter>{
+      return this.$store.state.filter.rubriqueFilter;
+    },
     categoryFilter(): Category|undefined{
       return this.$store.state.filter.iab;
     },
@@ -147,29 +154,15 @@ export default Vue.extend({
           rubriqueId.push(value[index].rubriqueId);
         }
       }
-      console.log("allRubriquageId : " + allRubriquageId);
-      console.log("noRubriquageId : " + noRubriquageId);
-      console.log("rubriqueId : " + rubriqueId );
+      this.rubriquageId = allRubriquageId;
+      this.rubriqueId = rubriqueId;
+      this.noRubriquageId = noRubriquageId;
     },
-/*     updateRubriquage(value: number|undefined): void {
-      this.rubriquageId = value;
-      this.noRubrique = undefined;
-      this.rubriqueId = undefined;
-    },
-    updateRubrique(value: number): void {
-      if (-1 === value) {
-        this.noRubrique = true;
-        this.rubriqueId = undefined;
-      }else{
-        this.rubriqueId = value;
-        this.noRubrique = undefined;
-      }
-    }, */
     updateOrganisationId(value: string | undefined): void {
       this.resetRubriquage = !this.resetRubriquage;
-      this.rubriquageId = undefined;
-      this.rubriqueId = undefined;
-      this.noRubrique = undefined;
+      this.rubriquageId = [];
+      this.rubriqueId = [];
+      this.noRubriquageId = [];
       this.organisationId = value;
     },
     updateSearchPattern(value: string): void {

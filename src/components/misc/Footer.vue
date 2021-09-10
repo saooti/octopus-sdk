@@ -10,7 +10,8 @@
             :to="{
               name: 'home',
               query: { productor: $store.state.filter.organisationId,
-                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                       rubriquesId: rubriqueQueryParam },
             }"
             class="linkHover"
             >{{ $t('Home') }}</router-link
@@ -19,7 +20,8 @@
             :to="{
               name: 'podcasts',
               query: { productor: $store.state.filter.organisationId,
-                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                       rubriquesId: rubriqueQueryParam},
             }"
             class="linkHover"
             >{{ $t('Podcasts') }}</router-link
@@ -147,6 +149,7 @@ const octopusApi = require('@saooti/octopus-api');
 import Vue from 'vue';
 const moment = require('moment');
 import { Category } from '@/store/class/category';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 export default Vue.extend({
   name: 'Footer',
   components: {
@@ -162,6 +165,12 @@ export default Vue.extend({
     },
     isContactLink(): string {
       return state.footer.contactLink;
+    },
+    rubriqueQueryParam(): string|undefined{
+      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      }
+      return undefined;
     },
   },
 

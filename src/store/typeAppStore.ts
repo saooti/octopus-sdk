@@ -6,6 +6,8 @@ import { Organisation } from "./class/organisation"
 import { Player } from "./class/player"
 import { Podcast } from "./class/podcast"
 import { Rubriquage } from "./class/rubriquage"
+import { RubriquageFilter } from "./class/rubriquageFilter"
+import { Rubrique } from "./class/rubrique"
 export function emptyEmissionData(): Emission{
   return {
       emissionId: 0 ,
@@ -72,7 +74,8 @@ export function emptyPodcastData(): Podcast{
     organisationId: string | undefined;
     imgUrl: string | undefined;
     rubriquageArray: Array<Rubriquage>;
-    rubriqueFilter: Array<any>;
+    rubriqueFilter: Array<RubriquageFilter>;
+    rubriqueDisplay: Array<Rubrique>;
     typeMedia: string | undefined;
     sortOrder: string | undefined;
     sortField: string | undefined;
@@ -289,6 +292,7 @@ export function emptyPodcastData(): Podcast{
             imgUrl: undefined ,
             rubriquageArray: [],
             rubriqueFilter: [],
+            rubriqueDisplay:[],
             typeMedia: undefined ,
             sortOrder: undefined ,
             sortField: undefined ,

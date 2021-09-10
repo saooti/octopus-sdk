@@ -77,14 +77,14 @@ export default Vue.extend({
     iabId: { default: undefined as number | undefined },
     organisationId: { default: undefined as string|undefined },
     monetization: { default: 'UNDEFINED' as string },
-    rubriqueId: { default: undefined as number|undefined },
-    rubriquageId:{ default: undefined as number|undefined },
     before: { default: undefined as string|undefined },
     after: { default: undefined as string|undefined },
     sort: { default: 'DATE' as string },
     showCount: { default: false as boolean },
-    noRubrique: { default: undefined as boolean|undefined },
     includeHidden: { default: false as boolean },
+    rubriqueId: { default: () => ([]) as Array<number> },
+    rubriquageId:{ default: () => ([]) as Array<number> },
+    noRubriquageId: { default: () => ([]) as Array<number> },
   },
 
   data() {
@@ -128,7 +128,7 @@ export default Vue.extend({
     },
     changed(): string {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}|${this.monetization}|${this.includeHidden}
-      ${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubrique}`;
+      ${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubriquageId}`;
     },
     sortText(): string {
       switch (this.sort) {
@@ -167,12 +167,12 @@ export default Vue.extend({
         organisationId: this.organisation,
         monetisable: this.monetization,
         iabId: this.iabId,
-        rubriqueId: this.rubriqueId,
-        rubriquageId: this.rubriquageId,
         before: this.before,
         after: this.after,
         sort: this.sort,
-        noRubrique: this.noRubrique,
+        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
+        rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
+        rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
       };
       if (this.includeHidden) {
         param.includeHidden = this.includeHidden;

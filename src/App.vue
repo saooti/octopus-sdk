@@ -41,8 +41,8 @@ export default Vue.extend({
     async initApp(){
       await this.handleDisplayCategory();
       this.handleCaptcha();
-      this.handleIabIdFilter();
       await this.handleOrganisationFilter();
+      this.handleIabIdFilter();
       this.handleRubriquesFilter();
     },
     handleCaptcha(){
@@ -82,6 +82,9 @@ export default Vue.extend({
       });
     },
     handleIabIdFilter(){
+      if(this.$store.state.filter.organisationId){
+        return;
+      }
       if (this.$route.query.iabId && 'string'===typeof this.$route.query.iabId) {
         const iabId = parseInt(this.$route.query.iabId, 10);
         const category = this.$store.state.categories.filter((c: any) => {

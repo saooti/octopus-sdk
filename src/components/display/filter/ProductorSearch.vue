@@ -141,14 +141,8 @@ export default Vue.extend({
   },
   async created() {
     if (!this.organisationId) return;
-    const isLive = await octopusApi.liveEnabledOrganisation(
-      this.organisationId
-    );
-    console.log("QUAND EST CE QUON PASSE ICI");
-    this.$store.commit('filterOrga', { orgaId: this.organisationId, isLive:isLive });
-    this.keepOrganisation = true;
-    if (!this.$route.query.productor) {
-      this.$router.replace({ query: { productor: this.organisationId } });
+    if(this.$store.state.filter.organisationId === this.organisationId){
+      this.keepOrganisation = true;
     }
   },
   mounted() {

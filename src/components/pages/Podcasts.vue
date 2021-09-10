@@ -49,15 +49,15 @@
       :query="searchPattern"
       :monetization="monetization"
       :emissionId="emissionId"
-      :rubriqueId="rubriqueId"
-      :rubriquageId="rubriquageId"
       :before="toDate"
       :after="fromDate"
       :sortCriteria="sortCriteria"
       :includeHidden="includeHidden"
-      :noRubrique="noRubrique"
       :notValid="notValid"
       :iabId="iabId"
+      :rubriqueId="rubriqueId"
+      :rubriquageId="rubriquageId"
+      :noRubriquageId="noRubriquageId"
     />
   </div>
 </template>
@@ -94,17 +94,17 @@ export default Vue.extend({
       searchPattern: '' as string,
       organisationId: undefined as string|undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
-      rubriquageId: undefined as number|undefined,
-      rubriqueId: undefined as number|undefined,
       emissionId: undefined as number|undefined,
       fromDate: undefined as string|undefined,
       toDate: undefined as string|undefined,
       resetRubriquage: false as boolean,
       includeHidden: false as boolean,
-      noRubrique: undefined as boolean|undefined,
       sortCriteria: 'DATE' as string, // SCORE, DATE, POPULARITY, NAME, LAST_PODCAST_DESC
       notValid: false as boolean,
       iabId: undefined as number | undefined,
+      noRubriquageId: [] as Array<number>,
+      rubriquageId: [] as Array<number>,
+      rubriqueId: [] as Array<number>,
     };
   },
 
@@ -126,9 +126,15 @@ export default Vue.extend({
     if(this.categoryFilter){
       this.iabId = this.categoryFilter.id;
     }
+    if(this.rubriqueFilter.length){
+      this.updateRubriquageFilter(this.rubriqueFilter);
+    }
   },
   
   computed: {
+    rubriqueFilter(): Array<RubriquageFilter>{
+      return this.$store.state.filter.rubriqueFilter;
+    },
     categoryFilter(): Category|undefined{
       return this.$store.state.filter.iab;
     },
@@ -194,36 +200,15 @@ export default Vue.extend({
           rubriqueId.push(value[index].rubriqueId);
         }
       }
-      console.log("allRubriquageId : " + allRubriquageId);
-      console.log("noRubriquageId : " + noRubriquageId);
-      console.log("rubriqueId : " + rubriqueId );
+      this.rubriquageId = allRubriquageId;
+      this.rubriqueId = rubriqueId;
+      this.noRubriquageId = noRubriquageId;
     },
-    /* updateRubriquage(value: number): void {
-      if (-1 !== value) {
-        this.rubriquageId = value;
-      } else {
-        this.rubriquageId = undefined;
-      }
-      this.noRubrique = undefined;
-      this.rubriqueId = undefined;
-    },
-    updateRubrique(value: number): void {
-      if (-1 === value) {
-        this.noRubrique = true;
-        this.rubriqueId = undefined;
-      } else if (0 === value) {
-        this.rubriqueId = undefined;
-        this.noRubrique = undefined;
-      } else {
-        this.rubriqueId = value;
-        this.noRubrique = undefined;
-      }
-    }, */
     updateOrganisationId(value: string): void {
       this.resetRubriquage = !this.resetRubriquage;
-      this.rubriquageId = undefined;
-      this.rubriqueId = undefined;
-      this.noRubrique = undefined;
+      this.rubriquageId = [];
+      this.rubriqueId = [];
+      this.noRubriquageId = [];
       this.organisationId = value;
     },
     updateSearchPattern(value: string): void {

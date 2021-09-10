@@ -62,15 +62,15 @@ export default Vue.extend({
     monetization: { default: undefined as string | undefined },
     popularSort: { default: false as boolean },
     reload: { default: false as boolean },
-    rubriqueId: { default: undefined as number | undefined },
-    rubriquageId: { default: undefined as number | undefined },
     before: { default: undefined as string | undefined },
     after: { default: undefined as string | undefined },
     includeHidden: { default: false as boolean},
     showCount: { default: false as boolean },
-    noRubrique: { default: undefined as boolean | undefined },
     sortCriteria: { default: undefined as string | undefined },
     notValid: { default: undefined as boolean | undefined },
+    rubriqueId: { default: () => ([]) as Array<number> },
+    rubriquageId:{ default: () => ([]) as Array<number> },
+    noRubriquageId: { default: () => ([]) as Array<number> },
   },
 
   data() {
@@ -99,7 +99,7 @@ export default Vue.extend({
     changed(): string {
       return `${this.first}|${this.size}|${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetization}|${this.popularSort}|
-      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubrique}|${this.notValid}`;
+      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -148,11 +148,11 @@ export default Vue.extend({
         query: this.query,
         monetisable: this.monetization,
         sort: this.sort,
-        rubriqueId: this.rubriqueId,
-        rubriquageId: this.rubriquageId,
         before: this.before,
         after: this.after,
-        noRubrique: this.noRubrique,
+        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
+        rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
+        rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
       };
       if (undefined !== this.notValid) {
         param.validity = !this.notValid;

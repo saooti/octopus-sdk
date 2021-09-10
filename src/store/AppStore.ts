@@ -94,12 +94,16 @@ export default new Vuex.Store({
         state.filter.rubriquageArray = filter.rubriquageArray;
       }
       state.filter.live= filter.isLive;
+      state.filter.iab = undefined;
     },
     filterIab(state, iab) {
       state.filter.iab = iab;
     },
     filterRubrique(state, rubriqueFilter) {
       state.filter.rubriqueFilter = rubriqueFilter;
+    },
+    filterRubriqueDisplay(state, rubriques) {
+      state.filter.rubriqueDisplay = rubriques;
     },
 
     categoriesSet(state, categories) {

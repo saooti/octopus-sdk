@@ -124,6 +124,21 @@ export default selenium.extend({
     }
   },
   methods: {
+    initRubriquesArray(): Array<Rubrique>{
+      if ('' === this.defaultanswer) {
+        return this.allRubriques;
+      }
+      if (this.withoutRubrique) {
+        return [
+          getDefaultRubrique(this.defaultanswer),
+          this.withoutItem,
+        ].concat(this.allRubriques);
+      } else {
+        return [(getDefaultRubrique(this.defaultanswer) as Rubrique)].concat(
+          this.allRubriques
+        );
+      }
+    },
     clearAll(): void {
       (this.$refs.multiselectRef as any).$refs.search.setAttribute(
         'autocomplete',
@@ -131,22 +146,8 @@ export default selenium.extend({
       );
       if (undefined === this.rubriqueArray) {
         this.rubrique = undefined;
-        /* this.rubriqueForArray.length = 0; */
       }
-      if ('' === this.defaultanswer) {
-        this.rubriques = this.allRubriques;
-        return;
-      }
-      if (this.withoutRubrique) {
-        this.rubriques = [
-          getDefaultRubrique(this.defaultanswer),
-          this.withoutItem,
-        ].concat(this.allRubriques);
-      } else {
-        this.rubriques = [(getDefaultRubrique(this.defaultanswer) as Rubrique)].concat(
-          this.allRubriques
-        );
-      }
+      this.rubriques = this.initRubriquesArray();
     },
     onClose(): void {
       if (this.rubrique || undefined !== this.rubriqueArray) return;
@@ -159,42 +160,28 @@ export default selenium.extend({
     },
     onSearchRubrique(query?: string): void {
       this.isLoading = true;
-      let list;
-      if (undefined !== this.defaultanswer) {
-        if (this.withoutRubrique) {
-          list = [
-            (getDefaultRubrique(this.defaultanswer) as Rubrique),
-            this.withoutItem,
-          ].concat(this.allRubriques);
-        } else {
-          list = [(getDefaultRubrique(this.defaultanswer)! as Rubrique)].concat(
-            this.allRubriques
-          );
-        }
-      } else {
-        list = this.allRubriques;
-      }
-      this.rubriques = list.filter((item: Rubrique) => {
+      this.rubriques = this.initRubriquesArray().filter((item: Rubrique) => {
         return item.name!.toUpperCase().includes(query!.toUpperCase());
       });
       this.isLoading = false;
     },
     onRubriqueSelected(rubrique: Rubrique|undefined): void {
       if (undefined !== this.rubriqueSelected) {
-        this.$emit('update:rubrique', rubrique!.rubriqueId);
-      } else if (false === this.multiple) {
+        this.$emit('update:rubriqueSelected', rubrique!.rubriqueId);
+      }
+      if (false === this.multiple) {
         this.$emit('selected', rubrique);
       }
     },
     initRubriqueSelected(val: number): void {
-      this.rubrique = this.allRubriques.find((el: Rubrique) => {
+      this.rubrique = this.initRubriquesArray().find((el: Rubrique) => {
         return el.rubriqueId === val;
       });
     },
     initRubriqueArray(val: number[]): void {
       this.rubriqueForArray = [];
       val.forEach((element: number) => {
-        const item = this.allRubriques.find((el: Rubrique) => {
+        const item = this.initRubriquesArray().find((el: Rubrique) => {
           return el.rubriqueId === element;
         });
         if(undefined!==item){
@@ -208,7 +195,6 @@ export default selenium.extend({
       if(false===this.multiple){
         return;
       }
-      /* console.log(this.model); */
       const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
       const idsArray: Array<number> = [];
       selected.forEach((el: Rubrique) => {

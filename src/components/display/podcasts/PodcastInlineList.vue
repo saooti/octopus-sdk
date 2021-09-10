@@ -80,6 +80,7 @@ const PHONE_WIDTH = 960;
 
 import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 export default Vue.extend({
   name: 'PodcastInlineList',
   props: {
@@ -92,8 +93,8 @@ export default Vue.extend({
     isArrow: { default: false as boolean},
     requirePopularSort: { default:undefined as boolean|undefined},
     buttonPlus: { default:false as boolean},
-    rubriqueId: { default: undefined as number|undefined},
-    rubriquageId: { default: undefined as number|undefined},
+    rubriqueId: { default: () => ([]) as Array<number> },
+    rubriquageId:{ default: () => ([]) as Array<number> },
   },
 
   components: {
@@ -144,13 +145,27 @@ export default Vue.extend({
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
+    rubriqueQueryParam(): string|undefined{
+      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      }
+      return undefined;
+    },
     refTo(): any {
       if (this.href) return this.href;
+      if(this.iabId){
+        return {
+          name: 'category',
+          params: { iabId: this.iabId },
+          query: { productor: this.$store.state.filter.organisationId },
+        };
+      }
       return {
-        name: 'category',
-        params: { iabId: this.iabId },
-        query: { productor: this.$store.state.filter.organisationId },
-      };
+          name: 'podcasts',
+          query: { productor: this.$store.state.filter.organisationId, 
+                  iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
+                  rubriquesId: this.rubriqueQueryParam},
+        };
     },
     previousAvailable(): boolean {
       return this.index > 0;

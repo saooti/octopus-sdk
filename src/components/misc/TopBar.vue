@@ -16,7 +16,8 @@
         :to="{
           name: 'home',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                  rubriquesId: rubriqueQueryParam},
         }"
       >
         <div class="top-bar-logo m-3" v-on:click="onDisplayMenu(true)">
@@ -58,7 +59,8 @@
           :to="{
             name: 'podcasts',
             query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                  rubriquesId: rubriqueQueryParam},
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Podcasts') }}</router-link
@@ -67,7 +69,8 @@
           :to="{
             name: 'emissions',
             query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
+                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                  rubriquesId: rubriqueQueryParam },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
           >{{ $t('Emissions') }}</router-link
@@ -260,6 +263,7 @@ const octopusApi = require('@saooti/octopus-api');
 import Vue from 'vue';
 import { Organisation } from '@/store/class/organisation';
 import { Rubriquage } from '@/store/class/rubriquage';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 export default Vue.extend({
   name: 'TopBar',
 
@@ -299,6 +303,12 @@ export default Vue.extend({
 
  
   computed: {
+    rubriqueQueryParam(): string|undefined{
+      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      }
+      return undefined;
+    },
     logoUrl(): string {
       if (this.isEducation) return '/img/logo_education.png';
       return '/img/logo_octopus_final.svg';
@@ -365,7 +375,7 @@ export default Vue.extend({
         const isLive = await octopusApi.liveEnabledOrganisation(
           organisation.id
         );
-        const data = await octopusApi.fetchTopics(this.organisationId);
+        const data = await octopusApi.fetchTopics(organisation.id);
         this.$store.commit('filterOrga', {
           orgaId: organisation.id,
           imgUrl: organisation.imageUrl,

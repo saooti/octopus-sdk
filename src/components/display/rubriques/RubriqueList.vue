@@ -17,7 +17,7 @@
         :id="'rubrique' + rubrique.rubriqueId"
         @click="addFilter(rubrique)"
         class="rubrique-item"
-        v-for="rubrique in rubriques"
+        v-for="rubrique in rubriqueDisplay"
         :key="rubrique.rubriqueId"
         >{{ rubrique.name }}</button
       >
@@ -126,11 +126,14 @@ export default Vue.extend({
     rubriqueFilter(): Array<RubriquageFilter>{
       return this.$store.state.filter.rubriqueFilter;
     },
+    rubriqueDisplay(): Array<Rubrique>{
+      return this.$store.state.filter.rubriqueDisplay;
+    },
   },
   methods: {
     initRubriques(): void{
       if(!this.rubriquage){ return ;}
-      this.rubriques = this.rubriquage.rubriques;
+      this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);
       window.addEventListener('resize', this.resizeWindow);
       this.resizeWindow();
     },
@@ -164,7 +167,7 @@ export default Vue.extend({
       const rubriqueList = document.getElementById('rubrique-list-container');
       rubriqueList!.style.justifyContent = 'flex-start';
       this.hidenRubriques.length = 0;
-      this.rubriques.forEach((element: Rubrique) => {
+      this.rubriqueDisplay.forEach((element: Rubrique) => {
         const el = document.getElementById('rubrique' + element.rubriqueId);
         if (!el) return;
         const parent = el.parentElement;

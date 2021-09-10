@@ -23,7 +23,7 @@
         class="ml-2"
         :multiple="false"
         :rubriquageId="rubriquageId"
-        :rubriqueSelected="0 < rubriqueIdSelected? rubriqueIdSelected: undefined"
+        :rubriqueSelected="0 < this.rubriqueIdSelected? this.rubriqueIdSelected : undefined"
         :allRubriques="getRubriques(rubriquageId)"
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
