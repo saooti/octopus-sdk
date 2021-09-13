@@ -54,6 +54,7 @@ import {cookies} from "./src/components/mixins/functions";
 import {displayMethods} from "./src/components/mixins/functions";
 import {cookiesAndMethods} from "./src/components/mixins/functions";
 import {seleniumAndMethods} from "./src/components/mixins/functions";
+import {orgaFilter} from "./src/components/mixins/organisationFilter";
 
 const components = {
     Lives,
@@ -95,7 +96,8 @@ const components = {
     cookiesAndMethods,
     seleniumAndMethods,
     Rubrique,
-    CategoryFilter
+    CategoryFilter,
+    orgaFilter
 }
 
 export default components;
@@ -140,5 +142,6 @@ export {
     cookiesAndMethods,
     seleniumAndMethods,
     Rubrique,
-    CategoryFilter
+    CategoryFilter,
+    orgaFilter
 };
