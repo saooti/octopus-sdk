@@ -450,5 +450,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.4 Rubrique filtre
  * 0.28.5 Expose new mixins
  * 0.28.6 Rubrique filtre
+ * 0.28.7 Rubrique filtre
 
 

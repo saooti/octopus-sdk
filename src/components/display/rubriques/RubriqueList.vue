@@ -7,7 +7,7 @@
         @change="onRubriquageSelected"
       >
         <option
-          v-for="rubriquage in rubriquages"
+          v-for="rubriquage in rubriquageDisplay"
           :key="rubriquage.rubriquageId"
           :value="rubriquage"
           >{{ rubriquage.title }}</option
@@ -129,8 +129,19 @@ export default Vue.extend({
     rubriqueDisplay(): Array<Rubrique>{
       return this.$store.state.filter.rubriqueDisplay;
     },
+    rubriquageDisplay(): Array<Rubriquage>{
+      const elementToNotShow = Array.from(this.rubriqueFilter);
+      if(elementToNotShow.length){
+        const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
+        return this.rubriquages.filter((element)=>{
+          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+        });
+      }
+      return this.rubriquages;
+    },
   },
   methods: {
+    
     initRubriques(): void{
       if(!this.rubriquage){ return ;}
       this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);

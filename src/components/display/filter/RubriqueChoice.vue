@@ -29,6 +29,7 @@
         :reset="reset"
         :withoutRubrique="true"
         width="auto"
+        v-if="getRubriques(rubriquageId).length"
         @selected="onRubriqueSelected"
       />
     </template>
@@ -80,7 +81,10 @@ export default Vue.extend({
       const topicIndex = this.rubriquageDisplay.findIndex(
         ( element: Rubriquage) => element.rubriquageId === rubriquageId
       );
-      return this.rubriquageDisplay[topicIndex].rubriques;
+      if(-1 !== topicIndex){
+        return this.rubriquageDisplay[topicIndex].rubriques;
+      }
+      return [];
     },
     onRubriqueSelected(rubrique: Rubrique): void {
       if (rubrique.rubriqueId === this.rubriqueId) return;
