@@ -202,7 +202,11 @@ export default Vue.extend({
         this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""}];
         this.isRubriquage = false;
       }
-      this.$emit('updateRubriquageFilter', this.arrayFilter);
+      if(this.isRubriquage){
+        this.$emit('updateRubriquageFilter', this.arrayFilter);
+      }else{
+        this.$emit('updateRubriquageFilter', []);
+      }
       this.$nextTick(() => {
         this.isInternChanged = false;
       });
