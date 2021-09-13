@@ -58,7 +58,7 @@ const initialize = function initialize(initObject: any) {
       state.generalParameters.allCategories =
         'undefined' !== typeof param.allCategories ? param.allCategories : [];
       state.generalParameters.isLiveTab =
-        'undefined' !== typeof param.isLiveTab ? param.isLiveTab : true;
+        'undefined' !== typeof param.isLiveTab ? param.isLiveTab : false;
       state.generalParameters.isCaptchaTest =
         'undefined' !== typeof param.isCaptchaTest ? param.isCaptchaTest : true;
     }

@@ -429,6 +429,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.26.7 Newsletter Icone
  * 0.26.8 Mettre un tooltip sur le bouton de copie de l'adresse d'une page de podcast
  * 0.26.9 Commentaires
+ * 0.26.10 Animé par
+ * 0.26.11 LiveTab
+
+
 
  * 0.27.0 Nouveau sprint
  * 0.27.1 Export mixins

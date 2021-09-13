@@ -45,7 +45,6 @@
         <router-link
           v-if="
             isLiveTab &&
-              !isPodcastmaker &&
               ((filterOrga && filterOrgaLive) || !filterOrga)
           "
           :to="{

@@ -14,7 +14,7 @@
       >
       <router-link
         @click.native="onMenuClick"
-        v-if="isLiveTab && !isPodcastmaker && filterOrga && filterOrgaLive"
+        v-if="isLiveTab && filterOrga && filterOrgaLive"
         class="text-dark font-weight-bold mb-3 live-route"
         :to="{
           name: 'lives',
