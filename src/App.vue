@@ -18,12 +18,12 @@ import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from './store/paramStore';
 
-import Vue from 'vue';
 import { Category } from './store/class/category';
 import { Rubriquage } from './store/class/rubriquage';
 import { RubriquageFilter } from './store/class/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique';
-export default Vue.extend({
+import { orgaFilter } from './components/mixins/organisationFilter';
+export default orgaFilter.extend({
   name: 'app',
   components: {
     TopBar,
@@ -69,17 +69,7 @@ export default Vue.extend({
       if(''===orgaId){
         return;
       }
-      const response = await octopusApi.fetchOrganisation(orgaId);
-      const data = await octopusApi.fetchTopics(orgaId);
-      const isLive = await octopusApi.liveEnabledOrganisation(orgaId);
-      this.$store.commit('filterOrga', {
-        orgaId: orgaId,
-        imgUrl: response.imageUrl,
-        rubriquageArray: data.filter((element: Rubriquage)=>{
-          return element.rubriques.length;
-        }),
-        isLive: isLive
-      });
+      await this.selectOrganisation(orgaId);
     },
     handleIabIdFilter(){
       if(this.$store.state.filter.organisationId){

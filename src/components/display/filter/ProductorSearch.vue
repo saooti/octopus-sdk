@@ -115,12 +115,9 @@
 <script lang="ts">
 // @ is an alias to /src
 import { state } from '../../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
-
-import Vue from 'vue';
+import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/organisation';
-import { Rubriquage } from '@/store/class/rubriquage';
-export default Vue.extend({
+export default orgaFilter.extend({
   components: {
     OrganisationChooser: () => import('../organisation/OrganisationChooser.vue'),
   },
@@ -192,18 +189,7 @@ export default Vue.extend({
         if (this.$route.query.productor !== this.organisationId) {
           this.$router.push({ query: { productor: this.organisationId } });
         }
-        const isLive = await octopusApi.liveEnabledOrganisation(
-          this.organisationId
-        );
-        const data = await octopusApi.fetchTopics(this.organisationId);
-        this.$store.commit('filterOrga', {
-          orgaId: this.organisationId,
-          imgUrl: this.imgUrl,
-          rubriquageArray: data.filter((element: Rubriquage)=>{
-            return element.rubriques.length;
-          }),
-          isLive: isLive
-        });
+        await this.selectOrganisation(this.organisationId);
         return;
       }
       if (this.$route.query.productor) {

@@ -252,19 +252,25 @@
       }
     }
   }
+  @media (max-width: 290px) {
+    .top-bar {
+      .top-bar-logo {
+        img {
+          display: none;
+        }
+      }
+    }
+  }
 }
 </style>
 
 <script lang="ts">
 import { state } from '../../store/paramStore';
 import HomeDropdown from './HomeDropdown.vue';
-const octopusApi = require('@saooti/octopus-api');
-
-import Vue from 'vue';
 import { Organisation } from '@/store/class/organisation';
-import { Rubriquage } from '@/store/class/rubriquage';
+import { orgaFilter } from '../mixins/organisationFilter';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default orgaFilter.extend({
   name: 'TopBar',
 
   components: {
@@ -372,18 +378,7 @@ export default Vue.extend({
         if (this.$route.query.productor !== organisation.id) {
           this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
         }
-        const isLive = await octopusApi.liveEnabledOrganisation(
-          organisation.id
-        );
-        const data = await octopusApi.fetchTopics(organisation.id);
-        this.$store.commit('filterOrga', {
-          orgaId: organisation.id,
-          imgUrl: organisation.imageUrl,
-          isLive: isLive,
-          rubriquageArray: data.filter((element: Rubriquage)=>{
-            return element.rubriques.length;
-          })
-        });
+        await this.selectOrganisation(organisation.id);
       } else {
         this.organisationId = undefined;
         if (this.$route.query.productor) {

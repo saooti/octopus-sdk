@@ -55,6 +55,7 @@ export default Vue.extend({
   },
   props: {
     rubriquageDisplay: { default: () => ([]) as Array<Rubriquage>},
+    rubriquageIdSelected:{default: 0 as number},
     rubriqueIdSelected: { default: 0 as number},
     index: { default: 0 as number},
   },
@@ -68,9 +69,7 @@ export default Vue.extend({
   },
 
   created(){
-    if(this.rubriquageDisplay.length){
-      this.rubriquageId = this.rubriquageDisplay[0].rubriquageId;
-    }
+    this.rubriquageId = this.rubriquageIdSelected;
   },
 
   methods: {

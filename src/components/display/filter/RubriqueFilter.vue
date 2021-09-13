@@ -23,6 +23,7 @@
         :index="index"
         :rubriquageDisplay="getRubriquage(index)"
         :rubriqueIdSelected="filter.rubriqueId"
+        :rubriquageIdSelected="filter.rubriquageId"
         @updateRubrique="updateRubrique"
         @updateRubriquage="updateRubriquage"
         @deleteRubriqueChoice="deleteRubriqueChoice(index)"
@@ -89,7 +90,7 @@ export default Vue.extend({
       if(this.arrayFilter.length){
         const rubriquageIdToNotShow = this.arrayFilter.map(a => a.rubriquageId);
         return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId);
+          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
         });
       }
       return this.rubriquageData;
@@ -105,13 +106,13 @@ export default Vue.extend({
       if(elementToNotShow.length){
         const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
         return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId);
+          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
         });
       }
       return this.rubriquageData;
     },
     addFilter(): void{
-      this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0, name:""});
+      this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
     },
     updateRubrique(newValue: {rubriqueId: number; index: number}): void{
       const item = this.arrayFilter[newValue.index];
@@ -128,18 +129,14 @@ export default Vue.extend({
         this.arrayFilter.length = 0;
       }
       if (!this.organisation) return;
-      if(this.filterOrga){
-        this.rubriquageData = this.$store.state.filter.rubriquageArray;
-      }else{
-        const data = await octopusApi.fetchTopics(this.organisation);
-        this.rubriquageData = data.filter((element: Rubriquage)=>{
-          return element.rubriques.length;
-        });
-      }
+      const data = await octopusApi.fetchTopics(this.organisation);
+      this.rubriquageData = data.filter((element: Rubriquage)=>{
+        return element.rubriques.length;
+      });
       this.saveOrganisation = this.organisation;
       if (0 === this.rubriquageData.length) return;
       if(initArrayFilter){
-        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, name:""});
+        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""});
       }
     },
     resetRubriqueFilter(): void{
@@ -190,20 +187,19 @@ export default Vue.extend({
         this.isInternChanged = false;
       });
     },
-    rubriqueFilter(): void{
+    async rubriqueFilter(): Promise<void>{
       if(this.isInternChanged){
         return;
       }
       this.isInternChanged = true;
       if(this.saveOrganisation !== this.filterOrga){
-        this.rubriquageData = this.$store.state.filter.rubriquageArray;
-        this.saveOrganisation = this.filterOrga;
+        await this.fetchTopics(false);
       }
       if(this.rubriqueFilter.length){
         this.arrayFilter = Array.from(this.rubriqueFilter);
         this.isRubriquage = true;
       }else{
-        this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, name:""}];
+        this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""}];
         this.isRubriquage = false;
       }
       this.$emit('updateRubriquageFilter', this.arrayFilter);

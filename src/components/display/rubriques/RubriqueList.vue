@@ -139,7 +139,7 @@ export default Vue.extend({
     },
     addFilter(rubrique: Rubrique): void{
       if(!this.rubriquage){ return ;}
-      const filterToAdd = {rubriquageId: this.rubriquage.rubriquageId, rubriqueId: rubrique.rubriqueId, name: this.rubriquage.title +": "+rubrique.name};
+      const filterToAdd = {rubriquageId: this.rubriquage.rubriquageId!, rubriqueId: rubrique.rubriqueId!, name: this.rubriquage.title +": "+rubrique.name};
       const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
       newFilter.push(filterToAdd);
       this.$store.commit('filterRubrique', newFilter);
@@ -156,7 +156,7 @@ export default Vue.extend({
       let index = 0;
       const rubriquageAlreadyFilter = this.rubriqueFilter.map(a => a.rubriquageId);
       for (index; index < rubriquageLength; index++) {
-        if(!rubriquageAlreadyFilter.includes(this.rubriquages[index].rubriquageId)){
+        if(!rubriquageAlreadyFilter.includes(this.rubriquages[index].rubriquageId!)){
           break;
         }
       }
