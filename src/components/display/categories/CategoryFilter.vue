@@ -43,7 +43,7 @@ export default Vue.extend({
       return this.$store.state.filter.rubriqueFilter;
     },
     isDisplay(): boolean {
-      return "home" === this.$route.name ||"podcasts" === this.$route.name||"emissions" === this.$route.name;
+      return "homePriv" === this.$route.name ||"home" === this.$route.name ||"podcasts" === this.$route.name||"emissions" === this.$route.name;
     },
     rubriquageFilter(): Array<Rubriquage>{
       if(this.$store.state.filter.organisationId){
