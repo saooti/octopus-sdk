@@ -144,8 +144,8 @@
         @click="qrCode = true"
         :title="$t('Share QR Code')"
       >
-        <span class="saooti-newsletter" v-if="!bigRound"></span>
-        <div class="saooti-newsletter" v-else></div>
+        <span class="saooti-qrcode" v-if="!bigRound"></span>
+        <div class="saooti-qrcode" v-else></div>
       </a>
       <a
         rel="noopener"
