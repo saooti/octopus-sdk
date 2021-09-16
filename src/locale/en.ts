@@ -291,5 +291,9 @@ export default {
   "Custom version":"Custom version",
   "All":"All",
   'By category': 'By IAB category',
-  "Add a sort criterion by topic":"Add a sort criterion by topic"
+  "Add a sort criterion by topic":"Add a sort criterion by topic",
+  'Share QR Code': "Share QR Code",
+  "Download":"Download",
+  "Download started": 'Download started',
+  'From RSS': "From an RSS feed",
 };

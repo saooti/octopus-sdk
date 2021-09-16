@@ -17,11 +17,16 @@
             ></div>
           </b-tab>
           <b-tab :title="$t('Embedly link')" class="tab-pane">
-            <p>{{ embedlyLink }}</p>
-            <div
-              class="saooti-copy"
-              @click="onCopyCode(embedlyLink, afterCopy)"
-            ></div>
+            <div class="d-flex flex-column">
+              <div class="d-flex">
+                <p>{{ embedlyLink }}</p>
+                <div
+                  class="saooti-copy"
+                  @click="onCopyCode(embedlyLink, afterCopy)"
+                ></div>
+              </div>
+              <QrCode :url="embedlyLink"/>
+            </div>
           </b-tab>
           <b-tab :title="$t('Direct link')" class="tab-pane" v-if="directLink">
             <p>{{ directLink.audioUrl }}</p>
@@ -86,6 +91,7 @@
 <script lang="ts">
 import Snackbar from '../Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
+import QrCode from '../../display/sharing/QrCode.vue';
 export default displayMethods.extend({
   name: 'ShareModalPlayer',
   props: {
@@ -96,6 +102,7 @@ export default displayMethods.extend({
 
   components: {
     Snackbar,
+    QrCode
   },
 
   mounted() {

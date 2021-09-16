@@ -135,6 +135,21 @@
       <a
         rel="noopener"
         target="_blank"
+        v-if="podcast || emission"
+        :class="[
+          bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
+          verticalDisplay ? '' : 'mr-2 ml-2',
+        ]"
+        :aria-label="$t('Share QR Code')"
+        @click="qrCode = true"
+        :title="$t('Share QR Code')"
+      >
+        <span class="saooti-newsletter" v-if="!bigRound"></span>
+        <div class="saooti-newsletter" v-else></div>
+      </a>
+      <a
+        rel="noopener"
+        target="_blank"
         :href="whatsappURL"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-whatsapp share-btn mb-2',
@@ -169,6 +184,13 @@
       :closable="true"
       :podcast="podcast"
       @close="newsletter = false"
+    />
+    <QrCodeModal
+      v-if="qrCode"
+      :closable="true"
+      :podcast="podcast"
+      :emission="emission"
+      @close="qrCode = false"
     />
     <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
   </div>
@@ -217,6 +239,7 @@ export default displayMethods.extend({
   components: {
     ClipboardModal: () => import('../../misc/modal/ClipboardModal.vue'),
     NewsletterModal: () => import('../../misc/modal/NewsletterModal.vue'),
+    QrCodeModal: () => import('../../misc/modal/QrCodeModal.vue'),
     Snackbar,
   },
 
@@ -229,6 +252,7 @@ export default displayMethods.extend({
       dataRSSSave: false as boolean,
       newsletter: false as boolean,
       isMobile: false as boolean,
+      qrCode: false as boolean
     };
   },
 

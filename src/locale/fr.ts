@@ -292,4 +292,8 @@ export default {
   "All":"Tous",
   'By category': 'Selon la catégorie IAB',
   "Add a sort criterion by topic":"Ajouter un critère de tri par rubrique",
+  'Share QR Code': "Partage d'un QR Code",
+  "Download":"Télécharger",
+  "Download started": 'Téléchargement lancé',
+  'From RSS': "Issu d'un flux RSS",
 };
