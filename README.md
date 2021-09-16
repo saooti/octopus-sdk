@@ -448,7 +448,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.27.11 Player beta
  * 0.27.12 Merge release 26
  * 0.27.13 Podcastmaker
-
+ * 0.27.14 Podcastmaker resource url
 
  * 0.28.0 Nouveau sprint
  * 0.28.1 Version category filtre
@@ -459,5 +459,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.6 Rubrique filtre
  * 0.28.7 Rubrique filtre
  * 0.28.8 Rubrique filtre
+
+
 
 

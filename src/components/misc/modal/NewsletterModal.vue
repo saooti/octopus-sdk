@@ -108,6 +108,7 @@ const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
 import { Participant } from '@/store/class/participant';
 import { Podcast } from '@/store/class/podcast';
+import { state } from '../../../store/paramStore';
 export default displayMethods.extend({
   name: 'NewsletterModal',
   props: {
@@ -133,6 +134,9 @@ export default displayMethods.extend({
   },
  
   computed: {
+    resourcesUrl(): string{
+      return state.podcastPage.resourceUrl? state.podcastPage.resourceUrl : window.location.origin;
+    },
     emissionName(): string {
       if (this.displayEmissionName)
         return (
@@ -150,8 +154,7 @@ export default displayMethods.extend({
           this.$t('See associated article') +
           `">
           <img width="44" height="44" style="display: inline-block;vertical-align: middle; margin-right:3px" src="` +
-          window.location.origin +
-          `/img/article.png">
+          this.resourcesUrl + `/img/article.png">
         </a>
         <a style="color: #000;text-decoration: none;" href="` +
           this.podcast.article +
@@ -247,7 +250,7 @@ export default displayMethods.extend({
           this.$t('Listen this episode') +
           `">
           <img width="44" height="44" style="display: inline-block;vertical-align: middle" src="` +
-          window.location.origin +
+          this.resourcesUrl +
           `/img/play-podcast.png">
         </a>
         <a style="color: #000;text-decoration: none; margin-right:8px" href="` +

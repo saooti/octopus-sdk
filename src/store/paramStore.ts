@@ -100,6 +100,10 @@ const initialize = function initialize(initObject: any) {
         'undefined' !== typeof param.mainRubrique
           ? param.mainRubrique
           : 0;
+      state.podcastPage.resourceUrl =
+        'undefined' !== typeof param.resourceUrl
+          ? param.resourceUrl
+          : undefined;
     }
     if (initObject.podcastsPage) {
       const param = initObject.podcastsPage;
