@@ -15,15 +15,12 @@ import TopBar from '@/components/misc/TopBar.vue';
 import LeftMenu from '@/components/misc/LeftMenu.vue';
 import Footer from '@/components/misc/Footer.vue';
 import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
-const octopusApi = require('@saooti/octopus-api');
 import { state } from './store/paramStore';
-
-import { Category } from './store/class/category';
 import { Rubriquage } from './store/class/rubriquage';
 import { RubriquageFilter } from './store/class/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique';
-import { orgaFilter } from './components/mixins/organisationFilter';
-export default orgaFilter.extend({
+import { initSDK } from './components/mixins/init';
+export default initSDK.extend({
   name: 'app',
   components: {
     TopBar,
@@ -39,25 +36,10 @@ export default orgaFilter.extend({
   },
   methods:{
     async initApp(){
-      await this.handleDisplayCategory();
-      this.handleCaptcha();
+      await this.initSdk();
       await this.handleOrganisationFilter();
       this.handleIabIdFilter();
       this.handleRubriquesFilter();
-    },
-    handleCaptcha(){
-      const captcha = (document.getElementsByClassName('grecaptcha-badge')[0] as HTMLElement);
-      if (captcha) {
-        captcha.style.display = 'none';
-      }
-    },
-    async handleDisplayCategory(){
-      if (0 === state.generalParameters.allCategories.length) {
-        const categories: Array<Category>= await octopusApi.fetchCategories({ lang: this.$i18n.locale });
-        this.$store.commit('categoriesSet', categories);
-      }else{
-        this.$store.commit('categoriesSet', state.generalParameters.allCategories);
-      }
     },
     async handleOrganisationFilter(){
       let orgaId = '';

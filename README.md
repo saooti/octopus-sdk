@@ -446,6 +446,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.27.9 Octopus Api
  * 0.27.10 Player beta
  * 0.27.11 Player beta
+ * 0.27.12 Merge release 26
+ * 0.27.13 Podcastmaker
+
 
  * 0.28.0 Nouveau sprint
  * 0.28.1 Version category filtre
