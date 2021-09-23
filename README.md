@@ -461,6 +461,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.8 Rubrique filtre
  * 0.28.9 QrCode
  * 0.28.10 QrCode icone
+ * 0.28.11 Podcastmaker modif
 
 
 

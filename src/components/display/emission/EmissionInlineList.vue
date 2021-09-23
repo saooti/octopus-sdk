@@ -245,14 +245,14 @@ export default Vue.extend({
       )
         return undefined;
       const rubrique = this.rubriques.find(
-        (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0]
+        (element: Rubrique) => emission.rubriqueIds.includes(element.rubriqueId!) && element.rubriquageId === parseInt(this.displayRubriquage)
       );
       return rubrique!.name;
     },
     mainRubriquage(emission: Emission): string {
       if (
         emission.rubriqueIds &&
-        emission.rubriqueIds[0] === state.emissionsPage.mainRubrique
+        emission.rubriqueIds.includes(state.emissionsPage.mainRubrique)
       )
         return 'partenaireRubrique';
       return '';

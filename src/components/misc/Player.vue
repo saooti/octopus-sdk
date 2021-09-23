@@ -450,7 +450,10 @@ export default cookies.extend({
       let listenerId = this.getCookie("octopus_listenerId");
       if(!listenerId){
         listenerId = new Date().valueOf().toString() + Math.random();
-        const domain = /\.(.+)/.exec(window.location.host)![1];
+        let domain: any = /\.(.+)/.exec(window.location.host);
+        if(/\.(.+)/.exec(window.location.host)){
+          domain = domain[1];
+        }
         this.setCookie("octopus_listenerId", listenerId, ';domain='+domain);
       }
       return listenerId;
