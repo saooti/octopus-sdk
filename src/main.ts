@@ -18,7 +18,6 @@ const moment = require('moment');
 import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
 
-moment.locale('fr');
 Vue.use(ModalPlugin); 
 Vue.use(FormRadioPlugin); 
 Vue.use(CardPlugin); 
@@ -50,6 +49,7 @@ const i18n = new VueI18n({
   locale: language,
   messages: messages,
 });
+moment.locale(language);
 
 // Initialisation store
 paramStore
