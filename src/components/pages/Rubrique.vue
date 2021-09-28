@@ -12,7 +12,8 @@
 const octopusApi = require('@saooti/octopus-api');
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastList,
   },
@@ -45,5 +46,5 @@ export default {
       this.extractTitle();
     },
   },
-};
+})
 </script>

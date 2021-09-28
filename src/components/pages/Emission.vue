@@ -90,7 +90,8 @@ import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Emission } from '@/store/class/emission';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   mixins: [displayMethods],
   components: {
     PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
@@ -238,5 +239,5 @@ export default {
       this.getEmissionDetails();
     },
   },
-};
+})
 </script>

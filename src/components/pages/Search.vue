@@ -54,7 +54,8 @@
 // @ is an alias to /src
 import { state } from '../../store/paramStore';
 import PodcastList from '../display/podcasts/PodcastList.vue';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastList,
   },
@@ -111,5 +112,5 @@ export default {
       this.rawQuery = this.queryRoute;
     }
   },
-};
+})
 </script>

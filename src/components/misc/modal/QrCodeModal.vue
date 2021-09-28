@@ -26,7 +26,8 @@
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import QrCode from '../../display/sharing/QrCode.vue';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'QrCodeModal',
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -69,5 +70,5 @@ export default{
       this.$emit('close');
     },
   }
-};
+})
 </script>

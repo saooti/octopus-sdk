@@ -73,7 +73,8 @@
 // @ is an alias to /src
 import PodcastList from './PodcastList.vue';
 import { Category } from '@/store/class/category';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     CategoryChooser: () => import('../categories/CategoryChooser.vue'),
     PodcastList,
@@ -129,5 +130,5 @@ export default {
       this.reloadList = !this.reloadList;
     },
   },
-};
+})
 </script>

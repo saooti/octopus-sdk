@@ -121,7 +121,8 @@ const getDefaultOrganistion = (defaultName: string) => {
   };
 };
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   mixins:[selenium],
   components: {
     Multiselect,
@@ -274,5 +275,5 @@ export default {
         : undefined;
     },
   },
-};
+})
 </script>

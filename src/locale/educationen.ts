@@ -1,4 +1,5 @@
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
     Productors: 'Educational organizations',
     Productor: 'Educational organization',
     'Number productors': '{nb} educational organizations',

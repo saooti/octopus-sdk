@@ -162,7 +162,8 @@ import { state } from '../../store/paramStore';
 import { orgaFilter } from '../mixins/organisationFilter';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'LeftMenu',
   mixins:[orgaFilter],
 
@@ -244,5 +245,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

@@ -80,7 +80,8 @@ const PHONE_WIDTH = 960;
 
 import { Podcast } from '@/store/class/podcast';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastInlineList',
   props: {
     organisationId: { default: undefined as string|undefined},
@@ -284,5 +285,5 @@ export default {
       this.fetchNext();
     },
   },
-};
+})
 </script>

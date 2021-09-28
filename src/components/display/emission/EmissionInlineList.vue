@@ -83,7 +83,8 @@ const PHONE_WIDTH = 960;
 
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionInlineList',
 
   components: {
@@ -257,5 +258,5 @@ export default {
       return '';
     },
   },
-};
+})
 </script>

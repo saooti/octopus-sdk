@@ -39,7 +39,8 @@
 const octopusApi = require('@saooti/octopus-api');
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     RubriqueChoice: () => import('./RubriqueChoice.vue'),
   },
@@ -215,5 +216,5 @@ export default {
       this.isRubriquage = false;
     },
   },
-};
+})
 </script>

@@ -110,7 +110,8 @@ import { displayMethods } from '../../mixins/functions';
 import { Participant } from '@/store/class/participant';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'NewsletterModal',
   mixins: [displayMethods],
   props: {
@@ -307,5 +308,5 @@ export default{
       (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
     }
   },
-};
+})
 </script>

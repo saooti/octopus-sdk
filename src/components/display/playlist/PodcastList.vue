@@ -67,7 +67,8 @@ import { state } from '../../../store/paramStore';
 
 import { Podcast } from '@/store/class/podcast';
 import { Playlist } from '@/store/class/playlist';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastList',
 
   props: {
@@ -169,5 +170,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

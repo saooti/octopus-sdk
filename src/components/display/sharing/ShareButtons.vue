@@ -225,7 +225,8 @@ import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   mixins: [displayMethods],
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -314,5 +315,5 @@ export default {
       return check;
     }
   },
-};
+})
 </script>

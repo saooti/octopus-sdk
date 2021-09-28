@@ -150,7 +150,8 @@ import { displayMethods } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Participant } from '@/store/class/participant';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'LiveItem',
   mixins: [displayMethods],
 
@@ -272,5 +273,5 @@ export default {
       this.handleDescription();
     },
   },
-};
+})
 </script>

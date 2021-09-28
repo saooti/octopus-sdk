@@ -15,10 +15,11 @@
 </style>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ErrorMessage',
   props: {
     message: { default: undefined as string|undefined},
   },
-};
+})
 </script>

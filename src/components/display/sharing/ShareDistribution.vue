@@ -153,7 +153,8 @@ import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { Emission } from '@/store/class/emission';
 
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     Snackbar,
     RssSection: () => import('@/components/display/aggregator/RssSection.vue'),
@@ -195,5 +196,5 @@ export default{
       (this.$refs.snackbar as any).open(this.$t('Link in clipboard'));
     }
   },
-};
+})
 </script>

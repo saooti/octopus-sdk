@@ -37,7 +37,8 @@
 
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/comment';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     comment: { default: undefined as CommentPodcast|undefined },
   },
@@ -57,5 +58,5 @@ export default {
       console.log('delete');
     },
   },
-};
+})
 </script>

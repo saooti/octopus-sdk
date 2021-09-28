@@ -49,7 +49,8 @@
 // @ is an alias to /src
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     RubriqueChooser: () => import('../rubriques/RubriqueChooser.vue'),
   },
@@ -59,7 +60,7 @@ export default {
     rubriqueIdSelected: { default: 0 as number},
     index: { default: 0 as number},
   },
-  emits: ['deleteRubriqueChoice', 'updateRubrique'],
+  emits: ['deleteRubriqueChoice', 'updateRubrique', 'updateRubriquage'],
 
   data() {
     return {
@@ -97,5 +98,5 @@ export default {
       this.$emit('updateRubriquage', {rubriquageId : this.rubriquageId, index: this.index});
     },
   },
-};
+})
 </script>

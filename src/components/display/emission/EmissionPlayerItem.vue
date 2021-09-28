@@ -151,7 +151,8 @@ import { Emission } from '@/store/class/emission';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionPlayerItem',
   mixins: [displayMethods],
   props: {
@@ -247,5 +248,5 @@ export default {
       this.$store.commit('playerPause', true);
     },
   },
-};
+})
 </script>

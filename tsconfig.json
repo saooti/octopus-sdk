@@ -38,6 +38,7 @@
     "node_modules"
   ],
   "files": [
-    "src/shims-vue.d.ts"
+    "src/shims-vue.d.ts",
+    "src/vuex-shim.d.ts"
   ]
 }

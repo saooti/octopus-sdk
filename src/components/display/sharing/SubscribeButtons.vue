@@ -125,7 +125,8 @@
 
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     emission: { default: undefined as Emission|undefined},
     podcastId: { default: undefined as number|undefined},
@@ -196,5 +197,5 @@ export default {
       return link;
     },
   },
-};
+})
 </script>

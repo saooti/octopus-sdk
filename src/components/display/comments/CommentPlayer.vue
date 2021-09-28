@@ -58,7 +58,8 @@
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/comment';
 import { selenium } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentPlayer',
   mixins:[selenium],
 
@@ -90,5 +91,5 @@ export default {
       return Math.round((time * 100) / this.totalTime);
     },
   },
-};
+})
 </script>

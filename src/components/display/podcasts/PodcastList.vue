@@ -43,7 +43,8 @@ import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
 import { Podcast } from '@/store/class/podcast';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastList',
 
   components: {
@@ -202,5 +203,5 @@ export default{
       this.fetchContent(true);
     },
   },
-};
+})
 </script>

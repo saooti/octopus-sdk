@@ -87,7 +87,8 @@ const moment = require('moment');
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentList',
 
   components: {
@@ -322,5 +323,5 @@ export default {
       this.$emit('fetch', { count: this.totalCount, comments: this.comments });
     },
   },
-};
+})
 </script>

@@ -116,7 +116,8 @@ const octopusApi = require('@saooti/octopus-api');
 import { Participant } from '@/store/class/participant';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ParticpantItem',
   mixins: [displayMethods],
   props: {
@@ -190,5 +191,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

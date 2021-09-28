@@ -20,7 +20,9 @@ import { Rubriquage } from './store/class/rubriquage';
 import { RubriquageFilter } from './store/class/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique';
 import { initSDK } from './components/mixins/init';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
+
   name: 'app',
   mixins: [initSDK],
   components: {
@@ -102,5 +104,5 @@ export default {
       }
     },
   }
-};
+})
 </script>

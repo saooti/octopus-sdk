@@ -32,7 +32,8 @@
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { CommentPodcast } from '@/store/class/comment';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentParentInfo',
 
   props: {
@@ -73,5 +74,5 @@ export default {
       return this.comment!.content;
     },
   },
-};
+})
 </script>

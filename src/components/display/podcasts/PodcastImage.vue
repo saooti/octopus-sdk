@@ -212,7 +212,8 @@ import { state } from '../../../store/paramStore';
 import {StoreState} from '@/store/typeAppStore';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastImage',
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -399,5 +400,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

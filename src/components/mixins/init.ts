@@ -3,7 +3,8 @@ import { Category } from "@/store/class/category";
 import { orgaFilter } from '../mixins/organisationFilter';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
-export const initSDK = {
+import { defineComponent } from 'vue';
+export const initSDK = defineComponent({
   mixins: [orgaFilter],
   methods: {
     async initSdk() {
@@ -20,4 +21,4 @@ export const initSDK = {
       }
     },
   },
-};
+});

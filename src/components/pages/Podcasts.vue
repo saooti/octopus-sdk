@@ -72,7 +72,8 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { Emission } from '@/store/class/emission';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastList,
     ProductorSearch,
@@ -232,5 +233,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

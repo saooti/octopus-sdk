@@ -51,7 +51,8 @@ const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Playlist } from '@/store/class/playlist';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
     EditBox: () => import('@/components/display/edit/EditBox.vue'),
@@ -134,5 +135,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

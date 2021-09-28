@@ -22,7 +22,8 @@
 // @ is an alias to /src
 import CategoryChooser from '../categories/CategoryChooser.vue';
 import { Category } from '@/store/class/category';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     CategoryChooser
   },
@@ -109,5 +110,5 @@ export default {
       });
     },
   },
-};
+})
 </script>

@@ -269,7 +269,8 @@ import HomeDropdown from './HomeDropdown.vue';
 import { Organisation } from '@/store/class/organisation';
 import { orgaFilter } from '../mixins/organisationFilter';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'TopBar',
   mixins:[orgaFilter],
 
@@ -398,5 +399,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

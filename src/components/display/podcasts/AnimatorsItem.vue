@@ -37,7 +37,8 @@
 
 <script lang="ts">
 import { Participant } from '@/store/class/participant';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'AnimatorsItem',
 
   props: {
@@ -57,5 +58,5 @@ export default {
       return (first + ' ' + last).trim();
     },
   },
-};
+})
 </script>

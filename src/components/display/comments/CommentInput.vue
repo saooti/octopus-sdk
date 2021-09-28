@@ -95,7 +95,8 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
 
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentInput',
   mixins:[cookies],
   components: {
@@ -295,5 +296,5 @@ export default{
         padding;
     },
   },
-};
+})
 </script>

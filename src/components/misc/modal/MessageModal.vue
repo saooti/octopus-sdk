@@ -36,7 +36,8 @@
 
 <style lang="scss"></style>
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'MessageModal',
   props: {
     title: { default: undefined as string|undefined},
@@ -63,5 +64,5 @@ export default {
       this.$emit('thirdEvent');
     },
   },
-};
+})
 </script>

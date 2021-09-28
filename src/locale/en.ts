@@ -1,4 +1,5 @@
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   'Edit my profile': 'My profile',
   'Edit my organisation': 'My organization',
   Logout: 'Logout',

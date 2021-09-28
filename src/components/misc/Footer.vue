@@ -149,7 +149,8 @@ const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'Footer',
   components: {
     Player,
@@ -201,5 +202,5 @@ export default{
       });
     }
   },
-};
+})
 </script>

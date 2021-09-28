@@ -67,7 +67,8 @@ const getDefaultRubrique = (defaultName: string) => {
   return { name: defaultName, rubriqueId: 0 };
 };
 
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   mixins:[selenium],
   components: {
     Multiselect,
@@ -211,5 +212,5 @@ export default{
       this.rubrique = getDefaultRubrique(this.defaultanswer);
     }
   },
-};
+})
 </script>

@@ -121,7 +121,8 @@ const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'LiveList',
   components: {
     LiveItem,
@@ -348,5 +349,5 @@ export default {
       deep: true,
     },
   },
-};
+})
 </script>

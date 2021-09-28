@@ -215,7 +215,8 @@ const moment = require('moment');
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     MonetizableFilter: () => import('./MonetizableFilter.vue'),
     // @ts-ignore
@@ -405,5 +406,5 @@ export default {
       this.sort = this.sortCriteria;
     },
   },
-};
+})
 </script>

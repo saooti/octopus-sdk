@@ -27,7 +27,8 @@
 const octopusApi = require('@saooti/octopus-api');
 
 import { Organisation } from '@/store/class/organisation';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     width: { default: '100%' },
     value: { default: null },
@@ -76,5 +77,5 @@ export default {
       this.actual = -1;
     },
   },
-};
+})
 </script>

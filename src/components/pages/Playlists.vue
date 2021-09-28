@@ -30,7 +30,8 @@
 // @ is an alias to /src
 import PlaylistList from '../display/playlist/PlaylistList.vue';
 import { state } from '../../store/paramStore';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
     PlaylistList,
@@ -84,5 +85,5 @@ export default {
       this.searchPattern = value;
     },
   },
-};
+})
 </script>

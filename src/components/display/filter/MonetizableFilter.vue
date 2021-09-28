@@ -21,7 +21,8 @@
 </template>
 <style lang="scss"></style>
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     isEmission: { default: false as boolean},
     isEducation: { default: false as boolean},
@@ -39,5 +40,5 @@ export default {
       this.$emit('updateMonetization', this.monetization);
     },
   },
-};
+})
 </script>

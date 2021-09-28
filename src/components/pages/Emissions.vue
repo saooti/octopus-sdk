@@ -53,7 +53,8 @@ import { state } from '../../store/paramStore';
 
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
     EmissionList,
@@ -176,5 +177,5 @@ export default{
       this.monetization = value;
     },
   },
-};
+})
 </script>

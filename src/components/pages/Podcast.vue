@@ -249,7 +249,8 @@ const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastInlineList,
     PodcastImage,
@@ -554,5 +555,5 @@ export default {
       this.getPodcastDetails(this.podcastId);
     },
   },
-};
+})
 </script>

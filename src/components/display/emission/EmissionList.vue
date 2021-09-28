@@ -61,7 +61,8 @@ import { state } from '../../../store/paramStore';
 
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionList',
 
   components: {
@@ -236,5 +237,5 @@ export default {
       this.fetchContent(true);
     },
   },
-};
+})
 </script>

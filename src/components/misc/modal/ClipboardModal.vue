@@ -43,7 +43,8 @@
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ClipboardModal',
   mixins: [displayMethods],
 
@@ -84,5 +85,5 @@ export default {
       return;
     }
   },
-};
+})
 </script>

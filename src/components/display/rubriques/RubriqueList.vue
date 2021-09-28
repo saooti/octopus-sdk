@@ -99,7 +99,8 @@ button.rubrique-item {
 import { Rubrique } from '@/store/class/rubrique';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'RubriqueList',
 
   props: {
@@ -206,5 +207,5 @@ export default {
       this.selectNewRubriquage();
     }
   }
-};
+})
 </script>

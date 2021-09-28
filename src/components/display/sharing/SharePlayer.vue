@@ -200,7 +200,8 @@ import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import { Playlist } from '@/store/class/playlist';
 import { CustomPlayer } from '@/store/class/customPlayer';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     podcast: { default: undefined as Podcast|undefined},
     emission: { default: undefined as Emission|undefined},
@@ -504,5 +505,5 @@ export default {
       this.displayArticle = value;
     }
   },
-};
+})
 </script>

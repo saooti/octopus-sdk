@@ -83,7 +83,8 @@ import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Participant } from '@/store/class/participant';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
     PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
@@ -176,5 +177,5 @@ export default {
       this.reload = !this.reload;
     },
   },
-};
+})
 </script>

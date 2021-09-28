@@ -29,7 +29,8 @@ import { state } from '../../store/paramStore';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'home',
 
   components: {
@@ -88,5 +89,5 @@ export default{
       this.updateRubriquageFilter();
     }
   }
-};
+})
 </script>

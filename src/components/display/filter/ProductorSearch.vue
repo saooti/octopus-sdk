@@ -117,7 +117,8 @@
 import { state } from '../../../store/paramStore';
 import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/organisation';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   mixins:[orgaFilter],
   components: {
     OrganisationChooser: () => import('../organisation/OrganisationChooser.vue'),
@@ -210,5 +211,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

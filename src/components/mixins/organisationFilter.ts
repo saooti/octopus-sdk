@@ -1,7 +1,8 @@
 
 import { Rubriquage } from "@/store/class/rubriquage";
 const octopusApi = require('@saooti/octopus-api');
-export const orgaFilter = {
+import { defineComponent } from 'vue'
+export const orgaFilter = defineComponent({
   methods: {
     async selectOrganisation(organisationId: string): Promise<void> {
       const response = await octopusApi.fetchOrganisation(organisationId);
@@ -20,4 +21,4 @@ export const orgaFilter = {
       });
     },
   },
-};
+});

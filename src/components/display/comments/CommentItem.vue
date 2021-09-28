@@ -161,7 +161,8 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 const moment = require('moment');
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentItem',
   mixins:[displayMethods, selenium],
   components: {
@@ -323,5 +324,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

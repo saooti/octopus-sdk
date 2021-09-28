@@ -149,7 +149,8 @@ const humanizeDuration = require('humanize-duration');
 
 import { Podcast } from '@/store/class/podcast';
 import { Category } from '@/store/class/category';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastItem',
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -290,5 +291,5 @@ export default {
       this.hover = false;
     },
   },
-};
+})
 </script>

@@ -94,7 +94,8 @@ import Snackbar from '../Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 
 import QrCode from '../../display/sharing/QrCode.vue';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ShareModalPlayer',
   mixins: [displayMethods],
   props: {
@@ -117,5 +118,5 @@ export default {
       (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
     }
   },
-};
+})
 </script>

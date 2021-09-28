@@ -77,7 +77,8 @@ const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
 
 import { Category } from '@/store/class/category';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CategoryList',
 
   props: {
@@ -184,5 +185,5 @@ export default {
       }
     }
   },
-};
+})
 </script>

@@ -150,7 +150,8 @@
 <script lang="ts">
 import { Playlist } from '@/store/class/playlist';
 import { Podcast } from '@/store/class/podcast';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     podcast: { default: undefined as Podcast|undefined},
     playlist: { default: undefined as Playlist|undefined},
@@ -224,5 +225,5 @@ export default {
       this.$emit('displayArticle', this.displayArticle);
     }
   },
-};
+})
 </script>

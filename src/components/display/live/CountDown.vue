@@ -16,7 +16,8 @@
 </template>
 <style lang="scss"></style>
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
     timeRemaining: { default: undefined as number|undefined},
   },
@@ -58,5 +59,5 @@ export default {
       return n < 10 ? '0' + n : n.toString();
     },
   },
-};
+})
 </script>

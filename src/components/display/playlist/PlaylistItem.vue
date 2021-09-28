@@ -71,7 +71,8 @@
 import { Playlist } from '@/store/class/playlist';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlaylistItem',
 
   mixins: [displayMethods],
@@ -132,5 +133,5 @@ export default {
     },
   },
   methods: {},
-};
+})
 </script>

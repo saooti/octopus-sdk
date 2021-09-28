@@ -36,7 +36,8 @@
 </style>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'TagList',
   components: {},
   props: {
@@ -44,5 +45,5 @@ export default {
   },
 
   methods: {},
-};
+})
 </script>

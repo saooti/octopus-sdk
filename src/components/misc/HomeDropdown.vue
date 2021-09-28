@@ -140,7 +140,8 @@
 <script lang="ts">
 import { state } from '../../store/paramStore';
 
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'HomeDropdown',
   props: {
     isEducation: { default: false as boolean},
@@ -180,5 +181,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

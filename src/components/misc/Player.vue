@@ -294,7 +294,8 @@ const moment = require('moment');
 import { CommentPodcast } from '@/store/class/comment';
 import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'Player',
   mixins:[cookies],
 
@@ -770,5 +771,5 @@ export default {
       this.initComments(true);
     },
   },
-};
+})
 </script>

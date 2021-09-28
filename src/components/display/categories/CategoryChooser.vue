@@ -63,7 +63,8 @@ const getDefaultCategory = (defaultName: string) => {
 };
 
 import { Category } from '@/store/class/category';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     Multiselect,
   },
@@ -222,5 +223,5 @@ export default {
       this.$emit('selected', idsArray);
     },
   },
-};
+})
 </script>

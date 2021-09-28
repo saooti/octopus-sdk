@@ -82,7 +82,8 @@ import { Emission } from '@/store/class/emission';
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 import { displayMethods } from '../../mixins/functions';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionItem',
 
   mixins: [displayMethods],
@@ -159,5 +160,5 @@ export default {
       }
     },
   },
-};
+})
 </script>

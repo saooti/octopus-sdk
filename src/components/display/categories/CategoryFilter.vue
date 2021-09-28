@@ -27,7 +27,8 @@
 import { Category } from '@/store/class/category';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default{
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CategoryFilter',
 
   components:{
@@ -77,5 +78,5 @@ export default{
       }
     }
   }
-};
+})
 </script>

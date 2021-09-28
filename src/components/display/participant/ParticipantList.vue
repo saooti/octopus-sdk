@@ -61,7 +61,8 @@ const octopusApi = require('@saooti/octopus-api');
 import ParticipantItem from './ParticipantItem.vue';
 
 import { Participant } from '@/store/class/participant';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ParticipantList',
   props: {
     first: { default: 0 as number },
@@ -147,5 +148,5 @@ export default {
       this.fetchContent(true);
     },
   },
-};
+})
 </script>

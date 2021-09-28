@@ -36,7 +36,8 @@ import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore';
 
 import { Playlist } from '@/store/class/playlist';
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlaylistList',
 
   components: {
@@ -136,5 +137,5 @@ export default {
       this.fetchContent(true);
     },
   },
-};
+})
 </script>
