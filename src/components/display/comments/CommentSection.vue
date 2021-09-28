@@ -19,7 +19,7 @@
     </div>
     <CommentInput
       :podcast="podcast"
-      :knownIdentity.sync="knownIdentity"
+      v-model:knownIdentity="knownIdentity"
       :fetchConference="fetchConference"
       @newComment="newComment"
     />
@@ -51,8 +51,9 @@ import { cookies } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
-export default cookies.extend({
+export default {
   name: 'CommentSection',
+  mixins:[cookies],
 
   components: {
     CommentList,
@@ -154,5 +155,5 @@ export default cookies.extend({
       }
     },
   },
-});
+};
 </script>

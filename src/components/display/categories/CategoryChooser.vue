@@ -1,7 +1,7 @@
 <template>
   <div class="default-multiselect-width" :style="{ width: width }">
     <label :for="id" class="d-inline" aria-label="select category"></label>
-    <Multiselect
+    <!-- <Multiselect
       v-model="model"
       :disabled="isDisabled"
       :id="id"
@@ -47,7 +47,7 @@
           class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
         ></span>
       </div>
-    </Multiselect>
+    </Multiselect> -->
   </div>
 </template>
 
@@ -62,9 +62,8 @@ const getDefaultCategory = (defaultName: string) => {
   return { name: defaultName, id: 0 };
 };
 
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
-export default Vue.extend({
+export default {
   components: {
     Multiselect,
   },
@@ -78,7 +77,8 @@ export default Vue.extend({
     isDisabled: { default: false as boolean },
     initCategories: { default: undefined as Array<Category>|undefined },
   },
-   data() {
+  emits: ['update:categorySelected','selected'],
+  data() {
     return {
       categories: [] as Array<Category>,
       category: getDefaultCategory(this.defaultanswer) as Category|undefined,
@@ -222,5 +222,5 @@ export default Vue.extend({
       this.$emit('selected', idsArray);
     },
   },
-});
+};
 </script>

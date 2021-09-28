@@ -21,12 +21,12 @@
 </template>
 <style lang="scss"></style>
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   props: {
     isEmission: { default: false as boolean},
     isEducation: { default: false as boolean},
   },
+  emits: ['updateMonetization'],
 
   data() {
     return {
@@ -39,5 +39,5 @@ export default Vue.extend({
       this.$emit('updateMonetization', this.monetization);
     },
   },
-});
+};
 </script>

@@ -71,8 +71,10 @@
 import { Playlist } from '@/store/class/playlist';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default displayMethods.extend({
+export default {
   name: 'PlaylistItem',
+
+  mixins: [displayMethods],
 
   props: {
     playlist: { default: undefined as Playlist|undefined},
@@ -98,10 +100,6 @@ export default displayMethods.extend({
     ) {
       playlistDescContainer!.classList.add('after-emission-description');
     }
-    /* if (this.editRight || this.activePlaylist) {
-      return;
-    }
-    this.$emit('playlistNotVisible'); */
   },
   
   computed: {
@@ -134,5 +132,5 @@ export default displayMethods.extend({
     },
   },
   methods: {},
-});
+};
 </script>

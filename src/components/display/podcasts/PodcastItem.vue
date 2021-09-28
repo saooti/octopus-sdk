@@ -147,10 +147,9 @@ import { state } from '../../../store/paramStore';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Category } from '@/store/class/category';
-export default Vue.extend({
+export default {
   name: 'PodcastItem',
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -291,5 +290,5 @@ export default Vue.extend({
       this.hover = false;
     },
   },
-});
+};
 </script>

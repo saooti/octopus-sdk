@@ -73,8 +73,7 @@
 // @ is an alias to /src
 import PodcastList from './PodcastList.vue';
 import { Category } from '@/store/class/category';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   components: {
     CategoryChooser: () => import('../categories/CategoryChooser.vue'),
     PodcastList,
@@ -88,8 +87,9 @@ export default Vue.extend({
     editRight: { default: false as boolean},
     productorId: { default: undefined as string|undefined},
   },
+  emits: ['fetch'],
 
-   data() {
+  data() {
     return {
       first: 0 as number,
       size: 12 as number,
@@ -129,5 +129,5 @@ export default Vue.extend({
       this.reloadList = !this.reloadList;
     },
   },
-});
+};
 </script>

@@ -31,9 +31,8 @@
 // @ is an alias to /src
 import { state } from '../../store/paramStore';
 
-import Vue from 'vue';
 import { Organisation } from '@/store/class/organisation';
-export default Vue.extend({
+export default{
   components: {
     LiveList: () => import('../display/live/LiveList.vue'),
     OrganisationChooser: () => import('../display/organisation/OrganisationChooser.vue'),
@@ -43,6 +42,7 @@ export default Vue.extend({
     organisationId: { default: undefined as any },
     productor:{default:undefined as string|undefined}
   },
+  emits: ['update:organisationId', 'initConferenceIds'],
   data() {
     return {
       live: true as boolean,
@@ -90,5 +90,5 @@ export default Vue.extend({
       }
     },
   },
-});
+};
 </script>

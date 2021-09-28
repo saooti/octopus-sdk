@@ -16,8 +16,7 @@
 </template>
 <style lang="scss"></style>
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   props: {
     timeRemaining: { default: undefined as number|undefined},
   },
@@ -59,5 +58,5 @@ export default Vue.extend({
       return n < 10 ? '0' + n : n.toString();
     },
   },
-});
+};
 </script>

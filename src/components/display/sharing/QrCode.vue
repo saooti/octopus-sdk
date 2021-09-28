@@ -11,8 +11,7 @@
 <script lang="ts">
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   name: 'QrCode',
   props: {
     url: { default: '' as string},
@@ -40,5 +39,5 @@ export default Vue.extend({
       }
     }
   }
-});
+};
 </script>

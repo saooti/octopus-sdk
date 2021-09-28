@@ -117,7 +117,8 @@
 import { state } from '../../../store/paramStore';
 import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/organisation';
-export default orgaFilter.extend({
+export default {
+  mixins:[orgaFilter],
   components: {
     OrganisationChooser: () => import('../organisation/OrganisationChooser.vue'),
   },
@@ -127,6 +128,7 @@ export default orgaFilter.extend({
     searchPattern: { default: '' as string },
     type: { default: 'podcast' as string },
   },
+  emits: ['updateOrganisationId', 'updateSearchPattern'],
 
   data() {
     return {
@@ -208,5 +210,5 @@ export default orgaFilter.extend({
       }
     },
   },
-});
+};
 </script>

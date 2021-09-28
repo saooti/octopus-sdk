@@ -59,10 +59,9 @@ const octopusApi = require('@saooti/octopus-api');
 import emissionApi from '@/api/emissions';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
-export default Vue.extend({
+export default {
   name: 'EmissionList',
 
   components: {
@@ -237,5 +236,5 @@ export default Vue.extend({
       this.fetchContent(true);
     },
   },
-});
+};
 </script>

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { 
   ModalPlugin, 
   FormRadioPlugin, 
@@ -9,7 +9,7 @@ import {
   TabsPlugin,
   FormGroupPlugin,
   FormTextareaPlugin,
-  CollapsePlugin } from 'bootstrap-vue';
+  CollapsePlugin } from 'bootstrap-vue-3';
 import App from './App.vue';
 import VueI18n from 'vue-i18n';
 import I18nResources from './locale/messages';
@@ -18,20 +18,6 @@ const moment = require('moment');
 import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
 
-Vue.use(ModalPlugin); 
-Vue.use(FormRadioPlugin); 
-Vue.use(CardPlugin); 
-Vue.use(ButtonPlugin); 
-Vue.use(FormTextareaPlugin); 
-Vue.use(DropdownPlugin); 
-Vue.use(PopoverPlugin); 
-Vue.use(TabsPlugin); 
-Vue.use(FormGroupPlugin);
-Vue.use(CollapsePlugin);
-Vue.config.productionTip = false;
-
-//Gestion de l'i18n
-Vue.use(VueI18n);
 //@ts-ignore
 const navigatorLang = navigator.language || navigator.userLanguage;
 let language = 'fr';
@@ -45,7 +31,7 @@ if (store.state.general.education) {
     en: { ...I18nResources.en, ...I18nResources.educationen },
   };
 }
-const i18n = new VueI18n({
+const i18n = VueI18n.createI18n({
   locale: language,
   messages: messages,
 });
@@ -69,10 +55,19 @@ paramStore
     footer: {},
   })
   .then(() => {
-    new Vue({
-      i18n,
-      store,
-      router,
-      render: h => h(App),
-    }).$mount('#app');
+    createApp(App)
+    .use(i18n)
+    .use(store)
+    .use(router)
+    .use(ModalPlugin)
+    .use(FormRadioPlugin)
+    .use(CardPlugin)
+    .use(ButtonPlugin)
+    .use(FormTextareaPlugin)
+    .use(DropdownPlugin)
+    .use(PopoverPlugin)
+    .use(TabsPlugin)
+    .use(FormGroupPlugin)
+    .use(CollapsePlugin)
+    .mount('#app');
   });

@@ -5,6 +5,7 @@
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
+      :show="true"
       :title="$t('Share newsletter')"
     >
       <template v-slot:default>
@@ -109,11 +110,13 @@ import { displayMethods } from '../../mixins/functions';
 import { Participant } from '@/store/class/participant';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
-export default displayMethods.extend({
+export default{
   name: 'NewsletterModal',
+  mixins: [displayMethods],
   props: {
     podcast: { default: undefined as Podcast|undefined},
   },
+  emits: ['close'],
 
   components: {
     Snackbar,
@@ -129,10 +132,6 @@ export default displayMethods.extend({
     };
   },
 
-  mounted() {
-    this.$bvModal.show('newsletter-modal');
-  },
- 
   computed: {
     resourcesUrl(): string{
       return state.podcastPage.resourceUrl? state.podcastPage.resourceUrl : window.location.origin;
@@ -308,5 +307,5 @@ export default displayMethods.extend({
       (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
     }
   },
-});
+};
 </script>

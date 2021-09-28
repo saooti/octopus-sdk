@@ -121,8 +121,7 @@ const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   name: 'LiveList',
   components: {
     LiveItem,
@@ -132,6 +131,7 @@ export default Vue.extend({
     conferenceWatched: { default: () => ([])  as Array<Conference>},
     organisationId: { default: undefined as string | undefined},
   },
+  emits: ['initConferenceIds'],
 
   data() {
     return {
@@ -348,5 +348,5 @@ export default Vue.extend({
       deep: true,
     },
   },
-});
+};
 </script>

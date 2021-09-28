@@ -11,7 +11,7 @@
     </div>
     <CategoryChooser
       width="auto"
-      :categorySelected.sync="iabId"
+      v-model:categorySelected="iabId"
       :defaultanswer="$t('No category filter')"
     />
   </div>
@@ -21,9 +21,8 @@
 <script lang="ts">
 // @ is an alias to /src
 import CategoryChooser from '../categories/CategoryChooser.vue';
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
-export default Vue.extend({
+export default {
   components: {
     CategoryChooser
   },
@@ -35,6 +34,7 @@ export default Vue.extend({
       isInit: true as boolean,
     };
   },
+  emits: ['updateCategory'],
 
   created() {
     if(this.categoryFilter){
@@ -109,5 +109,5 @@ export default Vue.extend({
       });
     },
   },
-});
+};
 </script>

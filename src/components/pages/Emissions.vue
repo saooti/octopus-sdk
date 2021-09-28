@@ -3,7 +3,7 @@
     <h1 v-if="undefined === titlePage">{{ $t('All emissions') }}</h1>
     <h1 v-else>{{ titlePage }}</h1>
     <ProductorSearch
-      :organisationId.sync="organisationId"
+      v-model:organisationId="organisationId"
       :searchPattern="searchPattern"
       type="emission"
       @updateOrganisationId="updateOrganisationId"
@@ -51,10 +51,9 @@ import EmissionList from '../display/emission/EmissionList.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
 
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default{
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
     EmissionList,
@@ -177,5 +176,5 @@ export default Vue.extend({
       this.monetization = value;
     },
   },
-});
+};
 </script>

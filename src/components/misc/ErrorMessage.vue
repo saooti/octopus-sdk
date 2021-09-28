@@ -15,11 +15,10 @@
 </style>
 
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   name: 'ErrorMessage',
   props: {
     message: { default: undefined as string|undefined},
   },
-});
+};
 </script>

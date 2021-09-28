@@ -43,8 +43,9 @@
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { displayMethods } from '../../mixins/functions';
-export default displayMethods.extend({
+export default {
   name: 'ClipboardModal',
+  mixins: [displayMethods],
 
   components: {
     RssSection: () => import('@/components/display/aggregator/RssSection.vue'),
@@ -58,6 +59,7 @@ export default displayMethods.extend({
     link: { default: undefined as string|undefined},
     emission: { default: undefined as Emission|undefined},
   },
+  emits: ['close', 'validate'],
 
   data() {
     return {
@@ -82,5 +84,5 @@ export default displayMethods.extend({
       return;
     }
   },
-});
+};
 </script>

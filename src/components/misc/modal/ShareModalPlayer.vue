@@ -5,6 +5,7 @@
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
+      :show="true"
       :title="$t('Share the player')"
     >
       <template v-slot:default>
@@ -91,22 +92,21 @@
 <script lang="ts">
 import Snackbar from '../Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
+
 import QrCode from '../../display/sharing/QrCode.vue';
-export default displayMethods.extend({
+export default {
   name: 'ShareModalPlayer',
+  mixins: [displayMethods],
   props: {
     embedLink: { default: undefined as string|undefined},
     embedlyLink: { default: undefined as string|undefined},
     directLink: { default: undefined as string|undefined},
   },
+  emits: ['close'],
 
   components: {
     Snackbar,
     QrCode
-  },
-
-  mounted() {
-    this.$bvModal.show('share-modal');
   },
   methods: {
     closePopup(event: { preventDefault: () => void }): void {
@@ -117,5 +117,5 @@ export default displayMethods.extend({
       (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
     }
   },
-});
+};
 </script>

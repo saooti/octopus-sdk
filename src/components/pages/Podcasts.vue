@@ -69,11 +69,10 @@ import { state } from '../../store/paramStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default {
   components: {
     PodcastList,
     ProductorSearch,
@@ -233,5 +232,5 @@ export default Vue.extend({
       }
     },
   },
-});
+};
 </script>

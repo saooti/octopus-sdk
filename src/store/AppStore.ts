@@ -1,11 +1,7 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex'
 import { AppStoreData } from './typeAppStore';
 
-//Utilisation de VueX pour le store https://vuex.vuejs.org/fr/guide/
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: AppStoreData(),
 
   getters: {},

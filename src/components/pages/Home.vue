@@ -26,11 +26,10 @@
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../store/paramStore';
 
-import Vue from 'vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
-export default Vue.extend({
+export default{
   name: 'home',
 
   components: {
@@ -89,5 +88,5 @@ export default Vue.extend({
       this.updateRubriquageFilter();
     }
   }
-});
+};
 </script>

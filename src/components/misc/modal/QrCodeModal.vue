@@ -5,6 +5,7 @@
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
+      :show="true"
       :title="$t('Share QR Code')"
     >
       <template v-slot:default>
@@ -22,16 +23,16 @@
 <style lang="scss">
 </style>
 <script lang="ts">
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import QrCode from '../../display/sharing/QrCode.vue';
-export default Vue.extend({
+export default{
   name: 'QrCodeModal',
   props: {
     podcast: { default: undefined as Podcast|undefined},
     emission: { default: undefined as Emission|undefined},
   },
+  emits: ['close'],
 
   components: {
     QrCode
@@ -40,10 +41,6 @@ export default Vue.extend({
   data() {
     return {
     };
-  },
-
-  mounted() {
-    this.$bvModal.show('qrcode-modal');
   },
  
   computed: {
@@ -72,5 +69,5 @@ export default Vue.extend({
       this.$emit('close');
     },
   }
-});
+};
 </script>

@@ -47,10 +47,9 @@
 </style>
 <script lang="ts">
 // @ is an alias to /src
-import Vue from 'vue';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
-export default Vue.extend({
+export default {
   components: {
     RubriqueChooser: () => import('../rubriques/RubriqueChooser.vue'),
   },
@@ -60,6 +59,7 @@ export default Vue.extend({
     rubriqueIdSelected: { default: 0 as number},
     index: { default: 0 as number},
   },
+  emits: ['deleteRubriqueChoice', 'updateRubrique'],
 
   data() {
     return {
@@ -97,5 +97,5 @@ export default Vue.extend({
       this.$emit('updateRubriquage', {rubriquageId : this.rubriquageId, index: this.index});
     },
   },
-});
+};
 </script>

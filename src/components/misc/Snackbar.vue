@@ -1,14 +1,13 @@
 <template>
   <div class="snack-bar-wrap" :style="style.wrap">
-    <template v-for="(msg, i) in msgs">
+    <template v-for="(msg, i) in msgs" :key="i">
       <div
-        :key="i"
         class="snack-bar"
         :style="style.bar(msg.color)"
         @click="pop(i)"
         v-html="msg.msg.message || msg.msg"
       ></div>
-      <br :key="i + '1'" />
+      <br/>
     </template>
   </div>
 </template>
@@ -47,25 +46,16 @@ const getStyle = (baseSize: string, position: any) => {
     }),
   };
 };
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   name: 'Snackbar',
   props: {
-    colors: {
-      default() {
-        return {
+    colors: { default: ()=> ({
           open: '#333',
           info: '#3DBD7D',
           error: '#FA7377',
           warn: '#FF6600',
-        };
-      },
-      type: Object,
-    },
-    position: {
-      default: 'top-center',
-      type: String,
-    },
+        }) as any},
+    position: { default: 'top-center' as string},
   },
   data() {
     return {
@@ -129,5 +119,5 @@ export default Vue.extend({
       this.msgs.splice(i, 1);
     },
   },
-});
+};
 </script>

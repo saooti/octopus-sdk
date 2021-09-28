@@ -3,7 +3,8 @@ import { Category } from "@/store/class/category";
 import { orgaFilter } from '../mixins/organisationFilter';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
-export const initSDK = orgaFilter.extend({
+export const initSDK = {
+  mixins: [orgaFilter],
   methods: {
     async initSdk() {
       if (0 === state.generalParameters.allCategories.length) {
@@ -19,4 +20,4 @@ export const initSDK = orgaFilter.extend({
       }
     },
   },
-});
+};

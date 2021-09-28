@@ -37,8 +37,7 @@
 
 <script lang="ts">
 import { Participant } from '@/store/class/participant';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   name: 'AnimatorsItem',
 
   props: {
@@ -58,5 +57,5 @@ export default Vue.extend({
       return (first + ' ' + last).trim();
     },
   },
-});
+};
 </script>

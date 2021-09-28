@@ -128,7 +128,7 @@
         v-if="!isFlat || (isFlat && !comment.commentIdReferer)"
         :focus="focus"
         :podcast="podcast"
-        :knownIdentity.sync="knownIdentity"
+        v-model:knownIdentity="knownIdentity"
         :comment="comment"
         :fetchConference="fetchConference"
         @cancelAction="collapseVisible = false"
@@ -155,14 +155,15 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-import { seleniumAndMethods } from '../../mixins/functions';
+import { displayMethods, selenium } from '../../mixins/functions';
 import { CommentPodcast } from '@/store/class/comment';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 const moment = require('moment');
 
-export default seleniumAndMethods.extend({
+export default {
   name: 'CommentItem',
+  mixins:[displayMethods, selenium],
   components: {
     CommentList: () => import('./CommentList.vue'),
     CommentInput: () => import('./CommentInput.vue'),
@@ -176,6 +177,7 @@ export default seleniumAndMethods.extend({
     organisation: { default: undefined as string|undefined },
     isFlat: { default: false as boolean },
   },
+  emits: ['deleteComment', 'updateComment', 'update:comment'],
   
   data() {
     return {
@@ -321,5 +323,5 @@ export default seleniumAndMethods.extend({
       }
     },
   },
-});
+};
 </script>

@@ -58,8 +58,9 @@
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/comment';
 import { selenium } from '../../mixins/functions';
-export default selenium.extend({
+export default {
   name: 'CommentPlayer',
+  mixins:[selenium],
 
   components: {},
   props: {
@@ -89,5 +90,5 @@ export default selenium.extend({
       return Math.round((time * 100) / this.totalTime);
     },
   },
-});
+};
 </script>

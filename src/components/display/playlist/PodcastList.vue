@@ -65,10 +65,9 @@ const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Playlist } from '@/store/class/playlist';
-export default Vue.extend({
+export default {
   name: 'PodcastList',
 
   props: {
@@ -170,5 +169,5 @@ export default Vue.extend({
       }
     },
   },
-});
+};
 </script>

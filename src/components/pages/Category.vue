@@ -16,8 +16,7 @@
 // @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   components: {
     PodcastList,
   },

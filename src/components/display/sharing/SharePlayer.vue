@@ -196,12 +196,11 @@ import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
 const octopusApi = require('@saooti/octopus-api');
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import { Playlist } from '@/store/class/playlist';
 import { CustomPlayer } from '@/store/class/customPlayer';
-export default Vue.extend({
+export default {
   props: {
     podcast: { default: undefined as Podcast|undefined},
     emission: { default: undefined as Emission|undefined},
@@ -505,5 +504,5 @@ export default Vue.extend({
       this.displayArticle = value;
     }
   },
-});
+};
 </script>

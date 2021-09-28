@@ -215,8 +215,7 @@ const moment = require('moment');
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   components: {
     MonetizableFilter: () => import('./MonetizableFilter.vue'),
     // @ts-ignore
@@ -234,6 +233,14 @@ export default Vue.extend({
     sortCriteria: { default: 'DATE' as string},
   },
 
+  emits: ['updateToDate', 
+          'updateFromDate',
+          'updateMonetization',
+          'updateCategory',
+          'updateSortCriteria',
+          'includeHidden',
+          'notValid',
+          'updateRubriquageFilter'],
   data() {
     return {
       isFrom: false as boolean,
@@ -398,5 +405,5 @@ export default Vue.extend({
       this.sort = this.sortCriteria;
     },
   },
-});
+};
 </script>

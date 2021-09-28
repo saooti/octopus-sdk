@@ -146,11 +146,10 @@
 import Player from './Player.vue';
 import { state } from '../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
-import Vue from 'vue';
 const moment = require('moment');
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default{
   name: 'Footer',
   components: {
     Player,
@@ -202,5 +201,5 @@ export default Vue.extend({
       });
     }
   },
-});
+};
 </script>

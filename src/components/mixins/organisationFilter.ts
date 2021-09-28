@@ -1,8 +1,7 @@
 
 import { Rubriquage } from "@/store/class/rubriquage";
-import Vue from "vue";
 const octopusApi = require('@saooti/octopus-api');
-export const orgaFilter = Vue.extend({
+export const orgaFilter = {
   methods: {
     async selectOrganisation(organisationId: string): Promise<void> {
       const response = await octopusApi.fetchOrganisation(organisationId);
@@ -21,4 +20,4 @@ export const orgaFilter = Vue.extend({
       });
     },
   },
-});
+};

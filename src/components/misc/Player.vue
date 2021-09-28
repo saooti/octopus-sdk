@@ -294,12 +294,14 @@ const moment = require('moment');
 import { CommentPodcast } from '@/store/class/comment';
 import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
-export default cookies.extend({
+export default {
   name: 'Player',
+  mixins:[cookies],
 
   components: {
     CommentPlayer: () => import('../display/comments/CommentPlayer.vue'),
   },
+  emits: ['hide'],
 
   data() {
     return {
@@ -768,5 +770,5 @@ export default cookies.extend({
       this.initComments(true);
     },
   },
-});
+};
 </script>

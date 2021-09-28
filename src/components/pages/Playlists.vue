@@ -9,7 +9,7 @@
       <button class="btn btn-primary">{{ $t('Create playlist') }}</button>
     </router-link>
     <ProductorSearch
-      :organisationId.sync="organisationId"
+      v-model:organisationId="organisationId"
       :searchPattern="searchPattern"
       type="playlist"
       @updateOrganisationId="updateOrganisationId"
@@ -30,9 +30,7 @@
 // @ is an alias to /src
 import PlaylistList from '../display/playlist/PlaylistList.vue';
 import { state } from '../../store/paramStore';
-
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   components: {
     ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
     PlaylistList,
@@ -86,5 +84,5 @@ export default Vue.extend({
       this.searchPattern = value;
     },
   },
-});
+};
 </script>

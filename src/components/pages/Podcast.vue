@@ -249,7 +249,7 @@ const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
-export default displayMethods.extend({
+export default {
   components: {
     PodcastInlineList,
     PodcastImage,
@@ -264,12 +264,14 @@ export default displayMethods.extend({
     CommentSection: () => import('../display/comments/CommentSection.vue'),
     ErrorMessage: () => import('../misc/ErrorMessage.vue'),
   },
+  mixins:[displayMethods],
   props: {
     updateStatus: { default: undefined as string|undefined},
     playingPodcast: { default: undefined as Podcast|undefined},
     podcastId: { default: undefined as number|undefined},
     isEducation: { default: false as boolean},
   },
+  emits: ['initConferenceId', 'podcastTitle', 'playPodcast'],
 
   data() {
     return {
@@ -552,5 +554,5 @@ export default displayMethods.extend({
       this.getPodcastDetails(this.podcastId);
     },
   },
-});
+};
 </script>

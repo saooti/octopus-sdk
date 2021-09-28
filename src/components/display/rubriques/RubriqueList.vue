@@ -96,11 +96,10 @@ button.rubrique-item {
 }
 </style>
 <script lang="ts">
-import Vue from 'vue';
 import { Rubrique } from '@/store/class/rubrique';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default {
   name: 'RubriqueList',
 
   props: {
@@ -207,5 +206,5 @@ export default Vue.extend({
       this.selectNewRubriquage();
     }
   }
-});
+};
 </script>

@@ -90,7 +90,8 @@ import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Emission } from '@/store/class/emission';
 
-export default displayMethods.extend({
+export default {
+  mixins: [displayMethods],
   components: {
     PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
     SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
@@ -105,6 +106,7 @@ export default displayMethods.extend({
     emissionId: { default: undefined as number|undefined},
     isEducation: { default: false as boolean},
   },
+  emits: ['emissionTitle'],
 
   data() {
     return {
@@ -236,5 +238,5 @@ export default displayMethods.extend({
       this.getEmissionDetails();
     },
   },
-});
+};
 </script>

@@ -16,7 +16,7 @@
       <CommentItem
         :ref="'comItem' + c.comId"
         :isFlat="isFlat"
-        :comment.sync="comments[indexCom]"
+        v-model:comment="comments[indexCom]"
         :podcast="podcast"
         :fetchConference="fetchConference"
         :organisation="organisation"
@@ -84,11 +84,10 @@ import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
-export default Vue.extend({
+export default {
   name: 'CommentList',
 
   components: {
@@ -106,6 +105,7 @@ export default Vue.extend({
     status: { default: undefined as string | undefined},
     isFlat: { default: false as boolean},
   },
+  emits: ['updateStatus', 'fetch'],
 
   data() {
     return {
@@ -322,5 +322,5 @@ export default Vue.extend({
       this.$emit('fetch', { count: this.totalCount, comments: this.comments });
     },
   },
-});
+};
 </script>

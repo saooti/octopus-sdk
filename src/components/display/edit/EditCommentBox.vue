@@ -37,11 +37,11 @@
 
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/comment';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   props: {
     comment: { default: undefined as CommentPodcast|undefined },
   },
+  emits: ['editComment'],
 
   methods: {
     editComment() {
@@ -57,5 +57,5 @@ export default Vue.extend({
       console.log('delete');
     },
   },
-});
+};
 </script>

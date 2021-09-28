@@ -51,17 +51,19 @@ const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Playlist } from '@/store/class/playlist';
-export default displayMethods.extend({
+export default {
   components: {
     ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
     EditBox: () => import('@/components/display/edit/EditBox.vue'),
     PodcastList,
     SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
   },
+  mixins:[displayMethods],
   props: {
     playlistId: { default: undefined as number|undefined},
     isEducation: { default: false as boolean},
   },
+  emits: ['playlistTitle'],
 
   data() {
     return {
@@ -132,5 +134,5 @@ export default displayMethods.extend({
       }
     },
   },
-});
+};
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <TopBar v-bind:displayMenu.sync="displayMenu" :isEducation="false" />
-    <LeftMenu v-bind:displayMenu.sync="displayMenu" :isEducation="false" />
+    <TopBar v-model:displayMenu="displayMenu" :isEducation="false" />
+    <LeftMenu v-model:displayMenu="displayMenu" :isEducation="false" />
     <CategoryFilter />
     <router-view />
     <Footer />
@@ -20,8 +20,9 @@ import { Rubriquage } from './store/class/rubriquage';
 import { RubriquageFilter } from './store/class/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique';
 import { initSDK } from './components/mixins/init';
-export default initSDK.extend({
+export default {
   name: 'app',
+  mixins: [initSDK],
   components: {
     TopBar,
     LeftMenu,
@@ -101,5 +102,5 @@ export default initSDK.extend({
       }
     },
   }
-});
+};
 </script>

@@ -35,9 +35,8 @@ const octopusApi = require('@saooti/octopus-api');
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Playlist } from '@/store/class/playlist';
-export default Vue.extend({
+export default {
   name: 'PlaylistList',
 
   components: {
@@ -137,5 +136,5 @@ export default Vue.extend({
       this.fetchContent(true);
     },
   },
-});
+};
 </script>

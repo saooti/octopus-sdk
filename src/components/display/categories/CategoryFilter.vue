@@ -24,11 +24,10 @@
 
 </style>
 <script lang="ts">
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default{
   name: 'CategoryFilter',
 
   components:{
@@ -78,5 +77,5 @@ export default Vue.extend({
       }
     }
   }
-});
+};
 </script>

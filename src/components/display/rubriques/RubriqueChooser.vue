@@ -27,14 +27,14 @@
       @close="onClose"
       @select="onRubriqueSelected"
     >
-      <template slot="singleLabel" slot-scope="props">
+      <slot name="singleLabel">
         <div class="multiselect-octopus-proposition">
           <span class="option__title">
             {{ props.option.name }}
           </span>
         </div>
-      </template>
-      <template slot="option" slot-scope="props" v-if="undefined!==props.option">
+      </slot>
+      <slot name="option" v-if="undefined!==props.option">
         <div
           class="multiselect-octopus-proposition"
           :class="props.option.rubriqueId <= 0 ? 'primary-dark' : ''"
@@ -42,15 +42,15 @@
         >
           <span class="option__title">{{ props.option.name }}</span>
         </div>
-      </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <span slot="noResult">
+      </slot>
+      <slot name="noOptions">{{ $t('List is empty') }}</slot>
+      <slot name="noResult">
         {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
-      <span
+      </slot>
+      <slot
         class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top"
-        slot="caret"
-      ></span>
+        name="caret"
+      ></slot>
     </Multiselect>
   </div>
 </template>
@@ -67,7 +67,8 @@ const getDefaultRubrique = (defaultName: string) => {
   return { name: defaultName, rubriqueId: 0 };
 };
 
-export default selenium.extend({
+export default{
+  mixins:[selenium],
   components: {
     Multiselect,
   },
@@ -83,6 +84,7 @@ export default selenium.extend({
     withoutRubrique: { default: false as boolean },
     isDisabled: { default: false as boolean },
   },
+  emits: ['update:rubriqueSelected', 'selected'],
 
   data() {
     return {
@@ -209,5 +211,5 @@ export default selenium.extend({
       this.rubrique = getDefaultRubrique(this.defaultanswer);
     }
   },
-});
+};
 </script>

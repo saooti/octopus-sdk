@@ -6,6 +6,7 @@
       @hide="closePopup"
       @cancel="closePopup"
       :title="$t('Welcome, thanks for your comment')"
+      :show="true"
     >
       <template v-slot:default v-if="!sending">
         <div>{{ $t("Let's get acquainted :") }}</div>
@@ -51,12 +52,14 @@
 import { VueReCaptcha } from 'vue-recaptcha-v3';
 import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
-import Vue from 'vue';
-Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' });
-export default Vue.extend({
+//TODO
+/* import Vue from 'vue';
+Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' }); */
+export default {
   name: 'AddCommentModal',
 
   props: {},
+  emits: ['close','validate'],
 
    data() {
     return {
@@ -80,7 +83,6 @@ export default Vue.extend({
       ).trim();
       this.needVerify = false;
     }
-    this.$bvModal.show('add-comment-modal');
   },
 
   destroyed() {
@@ -101,7 +103,8 @@ export default Vue.extend({
 
   methods: {
     async recaptcha(): Promise<void> {
-      if (!this.needVerify || this.isCaptchaTest) {
+      //TODO
+      /* if (!this.needVerify || this.isCaptchaTest) {
         this.sendComment();
         return;
       }
@@ -118,7 +121,7 @@ export default Vue.extend({
         this.sendError = true;
         return;
       }
-      this.sendComment();
+      this.sendComment(); */
     },
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();
@@ -129,5 +132,5 @@ export default Vue.extend({
       this.$emit('validate', this.name);
     },
   },
-});
+};
 </script>

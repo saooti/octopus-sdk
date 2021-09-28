@@ -150,14 +150,14 @@
 <script lang="ts">
 import { Playlist } from '@/store/class/playlist';
 import { Podcast } from '@/store/class/podcast';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   props: {
     podcast: { default: undefined as Podcast|undefined},
     playlist: { default: undefined as Playlist|undefined},
     iFrameModel: { default: undefined as string|undefined},
     isVisible: { default: false as boolean},
   },
+  emits: ['startTime', 'episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle'],
 
   data() {
     return {
@@ -224,5 +224,5 @@ export default Vue.extend({
       this.$emit('displayArticle', this.displayArticle);
     }
   },
-});
+};
 </script>

@@ -37,10 +37,9 @@
 <script lang="ts">
 // @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
-import Vue from 'vue';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default {
   components: {
     RubriqueChoice: () => import('./RubriqueChoice.vue'),
   },
@@ -48,6 +47,7 @@ export default Vue.extend({
     organisationId: { default: undefined as string|undefined},
     resetRubriquage: { default: false as boolean},
   },
+  emits: ['updateRubriquageFilter'],
 
   data() {
     return {
@@ -215,5 +215,5 @@ export default Vue.extend({
       this.isRubriquage = false;
     },
   },
-});
+};
 </script>

@@ -81,10 +81,9 @@ import { state } from '../../../store/paramStore';
 
 const PHONE_WIDTH = 960;
 
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
-export default Vue.extend({
+export default {
   name: 'EmissionInlineList',
 
   components: {
@@ -258,5 +257,5 @@ export default Vue.extend({
       return '';
     },
   },
-});
+};
 </script>

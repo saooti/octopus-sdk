@@ -9,7 +9,7 @@
       class="d-inline"
       aria-label="select emission"
     ></label>
-    <Multiselect
+    <!-- <Multiselect
       v-model="emission"
       id="emissionChooser"
       label="name"
@@ -69,7 +69,7 @@
           class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
         ></span>
       </div>
-    </Multiselect>
+    </Multiselect> -->
   </div>
 </template>
 
@@ -100,9 +100,8 @@ const getDefaultEmission = (defaultName: string) => {
   };
 };
 
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
-export default Vue.extend({
+export default {
   components: {
     Multiselect,
   },
@@ -117,6 +116,8 @@ export default Vue.extend({
     organisationDistributedBy: { default: undefined as string|undefined },
     reset: { default: false as boolean },
   },
+
+  emits: ['selected'],
 
   data() {
     return{
@@ -191,5 +192,5 @@ export default Vue.extend({
       this.emission = getDefaultEmission(this.defaultanswer);
     },
   },
-});
+};
 </script>

@@ -116,8 +116,9 @@ const octopusApi = require('@saooti/octopus-api');
 import { Participant } from '@/store/class/participant';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default displayMethods.extend({
+export default {
   name: 'ParticpantItem',
+  mixins: [displayMethods],
   props: {
     participant: { default: undefined as Participant|undefined},
   },
@@ -187,11 +188,7 @@ export default displayMethods.extend({
       if (0 === data.count) {
         this.activeParticipant = false;
       }
-      /* if (this.participant && (this.editRight || this.activeParticipant)) {
-        return;
-      }
-      this.$emit('participantNotVisible'); */
     },
   },
-});
+};
 </script>

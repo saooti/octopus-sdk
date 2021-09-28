@@ -269,8 +269,9 @@ import HomeDropdown from './HomeDropdown.vue';
 import { Organisation } from '@/store/class/organisation';
 import { orgaFilter } from '../mixins/organisationFilter';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default orgaFilter.extend({
+export default {
   name: 'TopBar',
+  mixins:[orgaFilter],
 
   components: {
     OrganisationChooserLight: () => import('../display/organisation/OrganisationChooserLight.vue'),
@@ -281,6 +282,7 @@ export default orgaFilter.extend({
     displayMenu: { default: false as boolean},
     isEducation: { default: false as boolean},
   },
+  emits: ['update:displayMenu'],
 
   data() {
     return {
@@ -396,5 +398,5 @@ export default orgaFilter.extend({
       }
     },
   },
-});
+};
 </script>

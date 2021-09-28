@@ -78,10 +78,9 @@ import PodcastItem from './PodcastItem.vue';
 
 const PHONE_WIDTH = 960;
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+export default {
   name: 'PodcastInlineList',
   props: {
     organisationId: { default: undefined as string|undefined},
@@ -96,6 +95,7 @@ export default Vue.extend({
     rubriqueId: { default: () => ([]) as Array<number> },
     rubriquageId:{ default: () => ([]) as Array<number> },
   },
+  emits: ['update:isArrow'],
 
   components: {
     PodcastItem
@@ -284,5 +284,5 @@ export default Vue.extend({
       this.fetchNext();
     },
   },
-});
+};
 </script>

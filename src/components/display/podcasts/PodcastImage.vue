@@ -208,12 +208,11 @@
 
 <script lang="ts">
 import { mapState } from 'vuex';
-import Vue from 'vue';
 import { state } from '../../../store/paramStore';
 import {StoreState} from '@/store/typeAppStore';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
-export default Vue.extend({
+export default {
   name: 'PodcastImage',
   props: {
     podcast: { default: undefined as Podcast|undefined},
@@ -223,8 +222,8 @@ export default Vue.extend({
     isAnimatorLive: { default: false as boolean},
     fetchConference: { default: undefined as Conference|undefined},
   },
-
-   data() {
+  emits: ['hideDescription', 'showDescription'],
+  data() {
     return {
       isDescription: false as boolean,
     };
@@ -400,5 +399,5 @@ export default Vue.extend({
       }
     },
   },
-});
+};
 </script>

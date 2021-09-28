@@ -151,8 +151,9 @@ import { Emission } from '@/store/class/emission';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default displayMethods.extend({
+export default {
   name: 'EmissionPlayerItem',
+  mixins: [displayMethods],
   props: {
     emission: { default: undefined as Emission|undefined },
     nbPodcasts: { default: undefined as number|undefined },
@@ -168,7 +169,6 @@ export default displayMethods.extend({
   },
 
   created() {
-    /* if(!this.editRight)return; */
     this.loadPodcasts();
   },
   mounted() {
@@ -235,10 +235,6 @@ export default displayMethods.extend({
         }
       }
       });
-      /* if (this.editRight || this.activeEmission) {
-        return;
-      }
-      this.$emit('emissionNotVisible'); */
     },
     play(podcast: Podcast): void {
       if (podcast === this.$store.state.player.podcast) {
@@ -251,5 +247,5 @@ export default displayMethods.extend({
       this.$store.commit('playerPause', true);
     },
   },
-});
+};
 </script>

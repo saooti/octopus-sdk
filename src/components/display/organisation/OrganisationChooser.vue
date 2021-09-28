@@ -10,7 +10,7 @@
       class="d-inline"
       aria-label="select productor"
     ></label>
-    <Multiselect
+   <!-- <Multiselect
       v-model="organisation"
       id="organisationChooser"
       label="name"
@@ -93,7 +93,7 @@
           :class="{ 'octopus-arrow-down-top': stats }"
         ></span>
       </div>
-    </Multiselect>
+    </Multiselect> -->
   </div>
 </template>
 
@@ -121,7 +121,8 @@ const getDefaultOrganistion = (defaultName: string) => {
   };
 };
 
-export default selenium.extend({
+export default {
+  mixins:[selenium],
   components: {
     Multiselect,
   },
@@ -135,6 +136,7 @@ export default selenium.extend({
     reset: { default: false as boolean},
     all: { default: false as boolean},
   },
+  emits: ['selected'],
   data() {
     return {
       organisations: [] as Array<Organisation>,
@@ -272,5 +274,5 @@ export default selenium.extend({
         : undefined;
     },
   },
-});
+};
 </script>

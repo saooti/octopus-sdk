@@ -82,8 +82,10 @@ import { Emission } from '@/store/class/emission';
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 import { displayMethods } from '../../mixins/functions';
-export default displayMethods.extend({
+export default {
   name: 'EmissionItem',
+
+  mixins: [displayMethods],
 
   props: {
     emission: { default: undefined as Emission|undefined },
@@ -155,11 +157,7 @@ export default displayMethods.extend({
       if (0 === data.count) {
         this.activeEmission = false;
       }
-      /* if (this.editRight || this.activeEmission) {
-        return;
-      }
-      this.$emit('emissionNotVisible'); */
     },
   },
-});
+};
 </script>

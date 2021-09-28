@@ -83,16 +83,18 @@ import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Participant } from '@/store/class/participant';
 
-export default displayMethods.extend({
+export default {
   components: {
     ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
     PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
     EditBox: () => import('@/components/display/edit/EditBox.vue'),
     PodcastList: () => import('../display/podcasts/PodcastList.vue'),
   },
+  mixins: [displayMethods],
   props: {
     participantId: { default: undefined as number|undefined},
   },
+  emits: ['participantTitle'],
   data() {
     return {
       loaded: false as boolean,
@@ -174,5 +176,5 @@ export default displayMethods.extend({
       this.reload = !this.reload;
     },
   },
-});
+};
 </script>

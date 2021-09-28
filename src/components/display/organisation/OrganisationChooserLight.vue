@@ -27,14 +27,14 @@
 const octopusApi = require('@saooti/octopus-api');
 
 import { Organisation } from '@/store/class/organisation';
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   props: {
     width: { default: '100%' },
     value: { default: null },
     reset: { default: false },
     page: { default: '' },
   },
+  emits: ['selected'],
 
   data() {
     return  {
@@ -76,5 +76,5 @@ export default Vue.extend({
       this.actual = -1;
     },
   },
-});
+};
 </script>

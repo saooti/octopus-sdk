@@ -52,8 +52,6 @@ import CommentInput from "./src/components/display/comments/CommentInput.vue";
 import {selenium} from "./src/components/mixins/functions";
 import {cookies} from "./src/components/mixins/functions";
 import {displayMethods} from "./src/components/mixins/functions";
-import {cookiesAndMethods} from "./src/components/mixins/functions";
-import {seleniumAndMethods} from "./src/components/mixins/functions";
 import {orgaFilter} from "./src/components/mixins/organisationFilter";
 import {initSDK} from "./src/components/mixins/init";
 
@@ -94,8 +92,6 @@ const components = {
     HomeDropdown,
     ErrorMessage,
     displayMethods,
-    cookiesAndMethods,
-    seleniumAndMethods,
     Rubrique,
     CategoryFilter,
     orgaFilter,
@@ -141,8 +137,6 @@ export {
     HomeDropdown,
     ErrorMessage,
     displayMethods,
-    cookiesAndMethods,
-    seleniumAndMethods,
     Rubrique,
     CategoryFilter,
     orgaFilter,

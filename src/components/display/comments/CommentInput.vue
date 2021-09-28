@@ -95,8 +95,9 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
 
-export default cookies.extend({
+export default{
   name: 'CommentInput',
+  mixins:[cookies],
   components: {
     AddCommentModal: () => import('./AddCommentModal.vue'),
     MessageModal: () => import('../../misc/modal/MessageModal.vue'),
@@ -109,6 +110,7 @@ export default cookies.extend({
     comment: { default: undefined as CommentPodcast|undefined },
     fetchConference: { default: undefined as Conference|undefined },
   },
+  emits: ['update:knownIdentity', 'cancelAction', 'newComment'],
 
   data() {
     return {
@@ -293,5 +295,5 @@ export default cookies.extend({
         padding;
     },
   },
-});
+};
 </script>

@@ -150,8 +150,9 @@ import { displayMethods } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Participant } from '@/store/class/participant';
 
-export default displayMethods.extend({
+export default {
   name: 'LiveItem',
+  mixins: [displayMethods],
 
   components: {
     RecordingItemButton: () => import('@/components/display/studio/RecordingItemButton.vue'),
@@ -161,6 +162,7 @@ export default displayMethods.extend({
     fetchConference: { default: undefined as Podcast|undefined},
     index: { default: undefined as number|undefined},
   },
+  emits: ['deleteItem'],
 
   data() {
     return {
@@ -270,5 +272,5 @@ export default displayMethods.extend({
       this.handleDescription();
     },
   },
-});
+};
 </script>

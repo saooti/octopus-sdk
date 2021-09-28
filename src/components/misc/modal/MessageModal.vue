@@ -5,6 +5,7 @@
     @hide="closePopup"
     @cancel="closePopup"
     :title="title"
+    :show="true"
   >
     <template v-slot:modal-header-close v-if="!closable">
       <span></span>
@@ -35,8 +36,7 @@
 
 <style lang="scss"></style>
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+export default {
   name: 'MessageModal',
   props: {
     title: { default: undefined as string|undefined},
@@ -47,11 +47,7 @@ export default Vue.extend({
     canceltext: { default: undefined as string|undefined},
     thirdText: { default: undefined as string|undefined},
   },
-
-  mounted() {
-    this.$bvModal.show('message-modal');
-  },
-
+  emits: ['close', 'validate', 'cancel', 'thirdEvent'],
   methods: {
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();
@@ -67,5 +63,5 @@ export default Vue.extend({
       this.$emit('thirdEvent');
     },
   },
-});
+};
 </script>

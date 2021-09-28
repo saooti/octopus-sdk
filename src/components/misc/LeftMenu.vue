@@ -2,7 +2,7 @@
   <div class="left-menu-container" v-show="displayMenu">
     <div class="routes-container h5">
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone home-route"
         :to="{
           name: 'home',
@@ -13,7 +13,7 @@
         >{{ $t('Home') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         v-if="isLiveTab && filterOrga && filterOrgaLive"
         class="text-dark font-weight-bold mb-3 live-route"
         :to="{
@@ -23,7 +23,7 @@
         >{{ $t('Live') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 podcasts-route"
         :to="{
           name: 'podcasts',
@@ -34,7 +34,7 @@
         >{{ $t('Podcasts') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 emissions-route"
         :to="{
           name: 'emissions',
@@ -45,7 +45,7 @@
         >{{ $t('Emissions') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         v-if="!isPodcastmaker && (!filterOrga || isEducation)"
         class="text-dark font-weight-bold mb-3 productors-route"
         :to="{
@@ -55,7 +55,7 @@
         >{{ $t('Productors') }}</router-link
       >
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 participants-route"
         :to="{
           name: 'participants',
@@ -64,7 +64,7 @@
         >{{ $t('Speakers') }}</router-link
       >
       <router-link
-      @click.native="onMenuClick"
+      @click="onMenuClick"
         :to="{
           name: 'playlists',
           query: { productor: $store.state.filter.organisationId },
@@ -85,7 +85,7 @@
       />
       <hr class="divided-line show-phone" />
       <router-link
-        @click.native="onMenuClick"
+        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone category-route"
         v-for="category in categories"
         v-bind:key="category.id"
@@ -162,8 +162,9 @@ import { state } from '../../store/paramStore';
 import { orgaFilter } from '../mixins/organisationFilter';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default orgaFilter.extend({
+export default {
   name: 'LeftMenu',
+  mixins:[orgaFilter],
 
   components: {
     OrganisationChooserLight: () => import('../display/organisation/OrganisationChooserLight.vue'),
@@ -173,6 +174,7 @@ export default orgaFilter.extend({
     displayMenu: { default: false as boolean},
     isEducation: { default: false as boolean},
   },
+  emits: ['update:displayMenu'],
 
   data() {
     return {
@@ -242,5 +244,5 @@ export default orgaFilter.extend({
       }
     },
   },
-});
+};
 </script>

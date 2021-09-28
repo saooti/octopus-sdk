@@ -29,9 +29,8 @@ const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
-export default Vue.extend({
+export default {
   name: 'LiveHorizontalList',
 
   components: {
@@ -105,5 +104,5 @@ export default Vue.extend({
       this.fetchContent(false);
     },
   },
-});
+};
 </script>

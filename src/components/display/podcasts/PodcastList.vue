@@ -42,9 +42,8 @@ import podcastApi from '@/api/podcasts';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
-export default Vue.extend({
+export default{
   name: 'PodcastList',
 
   components: {
@@ -72,6 +71,7 @@ export default Vue.extend({
     rubriquageId:{ default: () => ([]) as Array<number> },
     noRubriquageId: { default: () => ([]) as Array<number> },
   },
+  emits: ['fetch', 'emptyList'],
 
   data() {
     return {
@@ -202,5 +202,5 @@ export default Vue.extend({
       this.fetchContent(true);
     },
   },
-});
+};
 </script>
