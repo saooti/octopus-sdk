@@ -178,12 +178,13 @@ const moment = require('moment');
 import { CommentPodcast } from '@/store/class/comment';
 import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CommentPlayer = defineAsyncComponent(() => import('../display/comments/CommentPlayer.vue'));
 export default defineComponent({
   name: 'Player',
 
   components: {
-    CommentPlayer: () => import('../display/comments/CommentPlayer.vue'),
+    CommentPlayer,
   },
   mixins:[cookies],
   emits: ['hide'],

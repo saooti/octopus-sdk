@@ -45,10 +45,11 @@
 const octopusApi = require('@saooti/octopus-api');
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const RubriqueChoice = defineAsyncComponent(() => import('./RubriqueChoice.vue'));
 export default defineComponent({
   components: {
-    RubriqueChoice: () => import('./RubriqueChoice.vue'),
+    RubriqueChoice,
   },
   props: {
     organisationId: { default: undefined, type: String},

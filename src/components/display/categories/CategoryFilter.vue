@@ -49,13 +49,15 @@
 import { Category } from '@/store/class/category';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CategoryList = defineAsyncComponent(() => import('./CategoryList.vue'));
+const RubriqueList = defineAsyncComponent(() => import('./../rubriques/RubriqueList.vue'));
 export default defineComponent({
   name: 'CategoryFilter',
 
   components:{
-    CategoryList: () => import('./CategoryList.vue') as any,
-    RubriqueList: () => import('./../rubriques/RubriqueList.vue') as any,
+    CategoryList,
+    RubriqueList,
   },
   computed: {
     categoryFilter(): Category|undefined{

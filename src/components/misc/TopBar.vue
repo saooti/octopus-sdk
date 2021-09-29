@@ -142,12 +142,13 @@ import HomeDropdown from './HomeDropdown.vue';
 import { Organisation } from '@/store/class/organisation';
 import { orgaFilter } from '../mixins/organisationFilter';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { defineComponent } from 'vue'
+import { defineComponent,defineAsyncComponent } from 'vue';
+const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
   name: 'TopBar',
 
   components: {
-    OrganisationChooserLight: () => import('../display/organisation/OrganisationChooserLight.vue'),
+    OrganisationChooserLight,
     HomeDropdown,
   },
   mixins:[orgaFilter],

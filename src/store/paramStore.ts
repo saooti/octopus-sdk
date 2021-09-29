@@ -30,7 +30,7 @@ const initialize = function initialize(initObject: any) {
       state.generalParameters.authenticated =
         'undefined' !== typeof param.authenticated ? param.authenticated : true;
       state.generalParameters.isAdmin =
-        'undefined' !== typeof param.isAdmin ? param.isAdmin : false;
+        'undefined' !== typeof param.isAdmin ? param.isAdmin : true;
       state.generalParameters.isRoleLive =
         'undefined' !== typeof param.isRoleLive ? param.isRoleLive : true;
       state.generalParameters.isCommments =

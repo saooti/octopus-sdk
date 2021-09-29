@@ -93,13 +93,17 @@ import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Participant } from '@/store/class/participant';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const PodcastList = defineAsyncComponent(() => import('../display/podcasts/PodcastList.vue'));
 export default defineComponent({
   components: {
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
-    PodcastList: () => import('../display/podcasts/PodcastList.vue'),
+    ShareButtons,
+    PodcastFilterList,
+    EditBox,
+    PodcastList,
   },
   mixins: [displayMethods],
   props: {

@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { 
+/* import { 
   ModalPlugin, 
   FormRadioPlugin, 
   CardPlugin, 
@@ -9,9 +9,10 @@ import {
   TabsPlugin,
   FormGroupPlugin,
   FormTextareaPlugin,
-  CollapsePlugin } from 'bootstrap-vue-3';
+  CollapsePlugin } from 'bootstrap-vue-3'; */
+import bootstrap from 'bootstrap-vue-3';
 import App from './App.vue';
-import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 import I18nResources from './locale/messages';
 import router from '@/router/router';
 const moment = require('moment');
@@ -31,7 +32,7 @@ if (store.state.general.education) {
     en: { ...I18nResources.en, ...I18nResources.educationen },
   };
 }
-const i18n = VueI18n.createI18n({
+const i18n = createI18n({
   locale: language,
   messages: messages,
 });
@@ -59,7 +60,8 @@ paramStore
     .use(i18n)
     .use(store)
     .use(router)
-    .use(ModalPlugin)
+    .use(bootstrap)
+    /* .use(ModalPlugin)
     .use(FormRadioPlugin)
     .use(CardPlugin)
     .use(ButtonPlugin)
@@ -68,6 +70,6 @@ paramStore
     .use(PopoverPlugin)
     .use(TabsPlugin)
     .use(FormGroupPlugin)
-    .use(CollapsePlugin)
+    .use(CollapsePlugin) */
     .mount('#app');
   });

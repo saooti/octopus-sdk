@@ -104,7 +104,7 @@ export default defineComponent({
     iabId: { default: undefined, type: Number},
     title: { default: '', type: String},
     href: { default: undefined, type: String},
-    buttonText: { default: false, type: Boolean},
+    buttonText: { default: undefined, type: String},
     isArrow: { default: false, type: Boolean},
     requirePopularSort: { default:undefined, type: Boolean},
     buttonPlus: { default:false, type: Boolean},

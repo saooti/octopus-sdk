@@ -168,6 +168,19 @@ const routes: any = [
         productor: route.params.productor,
       }),
     },
+    //Fake route to avoid errors
+    {
+      path: '/main/pub/contact',
+      component: Home,
+    },
+    {
+      path: '/main/pub/cgu',
+      component: Home,
+    },
+    {
+      path: '/main/pub/libraries',
+      component: Home,
+    },
 ];
 export default createRouter({
   history: createWebHistory(process.env.BASE_URL),

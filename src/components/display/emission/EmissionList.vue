@@ -66,13 +66,15 @@ import { state } from '../../../store/paramStore';
 
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
+const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({
   name: 'EmissionList',
 
   components: {
-    EmissionItem: () => import('./EmissionItem.vue'),
-    EmissionPlayerItem: () => import('./EmissionPlayerItem.vue'),
+    EmissionItem,
+    EmissionPlayerItem,
   },
 
   props: {

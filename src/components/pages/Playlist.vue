@@ -63,13 +63,16 @@ const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Playlist } from '@/store/class/playlist';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
 export default defineComponent({
   components: {
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
+    ShareButtons,
+    EditBox,
     PodcastList,
-    SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
+    SharePlayer,
   },
   mixins:[displayMethods],
   props: {

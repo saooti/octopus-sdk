@@ -112,17 +112,25 @@ import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Emission } from '@/store/class/emission';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
+const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const ShareDistribution = defineAsyncComponent(() => import('../display/sharing/ShareDistribution.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const PodcastList = defineAsyncComponent(() => import('../display/podcasts/PodcastList.vue'));
+const SubscribeButtons = defineAsyncComponent(() => import('../display/sharing/SubscribeButtons.vue'));
+const LiveHorizontalList = defineAsyncComponent(() => import('../display/live/LiveHorizontalList.vue'));
 export default defineComponent({
   components: {
-    PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
-    SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    ShareDistribution: () => import('../display/sharing/ShareDistribution.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
-    PodcastList: () => import('../display/podcasts/PodcastList.vue'),
-    SubscribeButtons: () => import('../display/sharing/SubscribeButtons.vue'),
-    LiveHorizontalList: () => import('../display/live/LiveHorizontalList.vue'),
+    PodcastFilterList,
+    SharePlayer,
+    ShareButtons,
+    ShareDistribution,
+    EditBox,
+    PodcastList,
+    SubscribeButtons,
+    LiveHorizontalList,
   },
   mixins: [displayMethods],
   props: {

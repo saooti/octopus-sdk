@@ -115,11 +115,12 @@ import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { Emission } from '@/store/class/emission';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
 export default defineComponent({
   components: {
     Snackbar,
-    RssSection: () => import('@/components/display/aggregator/RssSection.vue'),
+    RssSection,
   },
   mixins: [displayMethods],
   props: {

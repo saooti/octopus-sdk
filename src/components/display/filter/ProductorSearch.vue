@@ -62,10 +62,11 @@
 import { state } from '../../../store/paramStore';
 import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/organisation';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const OrganisationChooser = defineAsyncComponent(() => import('../organisation/OrganisationChooser.vue'));
 export default defineComponent({
   components: {
-    OrganisationChooser: () => import('../organisation/OrganisationChooser.vue'),
+    OrganisationChooser,
   },
   mixins:[orgaFilter],
 

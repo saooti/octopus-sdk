@@ -204,12 +204,14 @@ import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import { Playlist } from '@/store/class/playlist';
 import { CustomPlayer } from '@/store/class/customPlayer';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
+const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
 export default defineComponent({
   components: {
-    ShareModalPlayer: () => import('../../misc/modal/ShareModalPlayer.vue'),
+    ShareModalPlayer,
     VSwatches,
-    PlayerParameters: () => import('./PlayerParameters.vue'),
+    PlayerParameters,
   },
 
   props: {

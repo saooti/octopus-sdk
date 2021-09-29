@@ -56,10 +56,11 @@ import { state } from '../../store/paramStore';
 
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
 export default defineComponent({
   components: {
-    ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
+    ProductorSearch,
     EmissionList,
     AdvancedSearch,
   },

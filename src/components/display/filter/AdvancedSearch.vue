@@ -57,7 +57,7 @@
                 $t('From the :')
               }}</label>
             </div>
-            <DatePicker
+            <!-- <DatePicker
               v-model="fromDate"
               class="pl-3 pr-3"
               mode="dateTime"
@@ -72,7 +72,7 @@
                   v-on="inputEvents"
                 >
               </template>
-            </DatePicker>
+            </DatePicker> -->
           </div>
           <div class="d-flex align-items-center">
             <div class="checkbox-saooti flex-shrink">
@@ -89,7 +89,7 @@
                 $t('To the :')
               }}</label>
             </div>
-            <DatePicker
+           <!--  <DatePicker
               v-model="toDate"
               class="pl-3"
               mode="dateTime"
@@ -104,7 +104,7 @@
                   v-on="inputEvents"
                 >
               </template>
-            </DatePicker>
+            </DatePicker> -->
           </div>
         </div>
         <div
@@ -149,40 +149,38 @@
         <div class="primary-color mb-2 padding-left-custom-radio">
           {{ $t('Sort') }}
         </div>
-        <b-form-group>
-          <b-form-radio-group
-            v-model="sort"
-            class="d-flex flex-column"
+        <b-form-radio-group
+          v-model="sort"
+          class="d-flex flex-column"
+        >
+          <b-form-radio
+            v-if="isSearchBar"
+            value="SCORE"
           >
-            <b-form-radio
-              v-if="isSearchBar"
-              value="SCORE"
-            >
-              {{
-                $t('Sort score')
-              }}
-            </b-form-radio>
-            <b-form-radio
-              v-if="isEmission"
-              value="LAST_PODCAST_DESC"
-            >
-              {{
-                $t('Sort last')
-              }}
-            </b-form-radio>
-            <b-form-radio
-              v-else
-              value="DATE"
-            >
-              {{
-                $t('Sort last')
-              }}
-            </b-form-radio>
-            <b-form-radio value="NAME">
-              {{ $t('Sort name') }}
-            </b-form-radio>
-          </b-form-radio-group>
-        </b-form-group>
+            {{
+              $t('Sort score')
+            }}
+          </b-form-radio>
+          <b-form-radio
+            v-if="isEmission"
+            value="LAST_PODCAST_DESC"
+          >
+            {{
+              $t('Sort last')
+            }}
+          </b-form-radio>
+          <b-form-radio
+            v-else
+            value="DATE"
+          >
+            {{
+              $t('Sort last')
+            }}
+          </b-form-radio>
+          <b-form-radio value="NAME">
+            {{ $t('Sort name') }}
+          </b-form-radio>
+        </b-form-radio-group>
       </div>
     </div>
   </div>
@@ -194,12 +192,14 @@ const moment = require('moment');
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { DatePicker } from 'v-calendar';
-import { defineComponent } from 'vue'
+//TODO
+/* import { DatePicker } from 'v-calendar'; */
+import { defineComponent, defineAsyncComponent } from 'vue';
+const MonetizableFilter = defineAsyncComponent(() => import('./MonetizableFilter.vue'));
 export default defineComponent({
   components: {
-    MonetizableFilter: () => import('./MonetizableFilter.vue'),
-    DatePicker,
+    MonetizableFilter,
+    /* DatePicker, */
     CategoryFilter,
     RubriqueFilter
   },

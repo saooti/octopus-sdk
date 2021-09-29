@@ -80,14 +80,15 @@ import { Emission } from '@/store/class/emission';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const EmissionChooser = defineAsyncComponent(() => import('../display/emission/EmissionChooser.vue'));
 export default defineComponent({
   name:"Podcasts",
 
   components: {
     PodcastList,
     ProductorSearch,
-    EmissionChooser: () => import('../display/emission/EmissionChooser.vue'),
+    EmissionChooser,
     AdvancedSearch,
   },
 

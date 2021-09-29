@@ -177,16 +177,21 @@ import { CommentPodcast } from '@/store/class/comment';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 const moment = require('moment');
-
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
+const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
+const EditCommentBox = defineAsyncComponent(() => import('@/components/display/edit/EditCommentBox.vue'));
+const CommentList = defineAsyncComponent(() => import('./CommentList.vue'));
 export default defineComponent({
   name: 'CommentItem',
+
   components: {
-    CommentList: () => import('./CommentList.vue'),
-    CommentInput: () => import('./CommentInput.vue'),
-    CommentParentInfo: () => import('./CommentParentInfo.vue'),
-    EditCommentBox: () => import('@/components/display/edit/EditCommentBox.vue'),
+    CommentInput,
+    CommentParentInfo,
+    EditCommentBox,
+    CommentList
   },
+
   mixins:[displayMethods, selenium],
   props: {
     comment: { default: ()=>({}), type: Object as ()=>CommentPodcast },

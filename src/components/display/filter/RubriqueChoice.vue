@@ -48,10 +48,11 @@
 <script lang="ts">
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const RubriqueChooser = defineAsyncComponent(() => import('../rubriques/RubriqueChooser.vue'));
 export default defineComponent({
   components: {
-    RubriqueChooser: () => import('../rubriques/RubriqueChooser.vue'),
+    RubriqueChooser,
   },
   props: {
     rubriquageDisplay: { default: () => [], type: Array as ()=>Array<Rubriquage>},

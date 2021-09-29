@@ -261,23 +261,31 @@ import { displayMethods } from '../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const TagList = defineAsyncComponent(() => import('../display/podcasts/TagList.vue'));
+const SubscribeButtons = defineAsyncComponent(() => import('../display/sharing/SubscribeButtons.vue'));
+const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
+const Countdown = defineAsyncComponent(() => import('../display/live/CountDown.vue'));
+const CommentSection = defineAsyncComponent(() => import('../display/comments/CommentSection.vue'));
+const ErrorMessage = defineAsyncComponent(() => import('../misc/ErrorMessage.vue'));
 export default defineComponent({
   name: "Podcast",
-
   components: {
     PodcastInlineList,
     PodcastImage,
     ParticipantDescription,
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
-    TagList: () => import('../display/podcasts/TagList.vue'),
-    SubscribeButtons: () => import('../display/sharing/SubscribeButtons.vue'),
-    RecordingItemButton: () => import('@/components/display/studio/RecordingItemButton.vue'),
-    Countdown: () => import('../display/live/CountDown.vue'),
-    CommentSection: () => import('../display/comments/CommentSection.vue'),
-    ErrorMessage: () => import('../misc/ErrorMessage.vue'),
+    ShareButtons,
+    SharePlayer,
+    EditBox,
+    TagList,
+    SubscribeButtons,
+    RecordingItemButton,
+    Countdown,
+    CommentSection,
+    ErrorMessage,
   },
 
   mixins:[displayMethods],

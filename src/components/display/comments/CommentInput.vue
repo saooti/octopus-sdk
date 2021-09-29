@@ -84,12 +84,14 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const AddCommentModal = defineAsyncComponent(() => import('./AddCommentModal.vue'));
+const MessageModal = defineAsyncComponent(() => import('../../misc/modal/MessageModal.vue'));
 export default defineComponent({
   name: 'CommentInput',
   components: {
-    AddCommentModal: () => import('./AddCommentModal.vue'),
-    MessageModal: () => import('../../misc/modal/MessageModal.vue'),
+    AddCommentModal,
+    MessageModal,
   },
   mixins:[cookies],
 

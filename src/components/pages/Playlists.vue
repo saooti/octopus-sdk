@@ -31,10 +31,11 @@
 <script lang="ts">
 import PlaylistList from '../display/playlist/PlaylistList.vue';
 import { state } from '../../store/paramStore';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
 export default defineComponent({
   components: {
-    ProductorSearch: () => import('../display/filter/ProductorSearch.vue'),
+    ProductorSearch,
     PlaylistList,
   },
   props: {

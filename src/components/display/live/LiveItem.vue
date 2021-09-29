@@ -131,12 +131,13 @@ import { displayMethods } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Participant } from '@/store/class/participant';
 
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
 export default defineComponent({
   name: 'LiveItem',
 
   components: {
-    RecordingItemButton: () => import('@/components/display/studio/RecordingItemButton.vue'),
+    RecordingItemButton,
     PodcastImage,
   },
   mixins: [displayMethods],

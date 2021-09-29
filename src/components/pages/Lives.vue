@@ -36,11 +36,13 @@
 import { state } from '../../store/paramStore';
 
 import { Organisation } from '@/store/class/organisation';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const LiveList = defineAsyncComponent(() => import('../display/live/LiveList.vue'));
+const OrganisationChooser = defineAsyncComponent(() => import('../display/organisation/OrganisationChooser.vue'));
 export default defineComponent({
   components: {
-    LiveList: () => import('../display/live/LiveList.vue'),
-    OrganisationChooser: () => import('../display/organisation/OrganisationChooser.vue'),
+    LiveList,
+    OrganisationChooser,
   },
   props: {
     conferenceWatched: { default: () => [], type: Array as ()=>Array<any>},

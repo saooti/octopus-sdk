@@ -55,12 +55,13 @@ const moment = require('moment');
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CommentItem: any = defineAsyncComponent(() => import('./CommentItem.vue'));
 export default defineComponent({
   name: 'CommentList',
 
   components: {
-    CommentItem: () => import('./CommentItem.vue') as any,
+    CommentItem,
   },
 
   props: {

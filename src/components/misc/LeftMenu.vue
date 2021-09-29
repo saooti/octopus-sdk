@@ -119,12 +119,13 @@ import { state } from '../../store/paramStore';
 import { orgaFilter } from '../mixins/organisationFilter';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
   name: 'LeftMenu',
 
   components: {
-    OrganisationChooserLight: () => import('../display/organisation/OrganisationChooserLight.vue'),
+    OrganisationChooserLight,
   },
   mixins:[orgaFilter],
 

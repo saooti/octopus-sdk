@@ -253,12 +253,15 @@ import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));
+const NewsletterModal = defineAsyncComponent(() => import('../../misc/modal/NewsletterModal.vue'));
+const QrCodeModal = defineAsyncComponent(() => import('../../misc/modal/QrCodeModal.vue'));
 export default defineComponent({
   components: {
-    ClipboardModal: () => import('../../misc/modal/ClipboardModal.vue'),
-    NewsletterModal: () => import('../../misc/modal/NewsletterModal.vue'),
-    QrCodeModal: () => import('../../misc/modal/QrCodeModal.vue'),
+    ClipboardModal,
+    NewsletterModal,
+    QrCodeModal,
     Snackbar,
   },
 
