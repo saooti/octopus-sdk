@@ -48,37 +48,8 @@
   </div>
 </template>
 
-<style lang="scss">
-.categories-filter {
-  .multiselect {
-    width: 75%;
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-}
-.list-episodes {
-  padding: 2rem 0.5rem 1rem !important;
-  margin: 0 0.5rem;
-
-  @media (max-width: 450px) {
-    padding: 0.5rem 0rem 1rem !important;
-  }
-  h2 {
-    margin-bottom: 0.5rem;
-  }
-}
-.filter-list-search-icon {
-  right: 1.6rem !important;
-  font-weight: bold;
-}
-.small-flex-grow {
-  flex-grow: 0.3;
-}
-</style>
-
 <script lang="ts">
-// @ is an alias to /src
+
 import PodcastList from './PodcastList.vue';
 import { Category } from '@/store/class/category';
 import { defineComponent } from 'vue'
@@ -88,13 +59,13 @@ export default defineComponent({
     PodcastList,
   },
   props: {
-    participantId: { default: undefined as number|undefined},
-    name: { default: undefined as string|undefined},
-    emissionId: { default: undefined as number|undefined},
-    categoryFilter: { default: false as boolean},
-    reload: { default: false as boolean},
-    editRight: { default: false as boolean},
-    productorId: { default: undefined as string|undefined},
+    participantId: { default: undefined, type: Number},
+    name: { default: undefined, type: String},
+    emissionId: { default: undefined, type: Number},
+    categoryFilter: { default: false, type:  Boolean},
+    reload: { default: false, type:  Boolean},
+    editRight: { default: false, type:  Boolean},
+    productorId: { default: undefined, type: String},
   },
   emits: ['fetch'],
 
@@ -140,3 +111,32 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.categories-filter {
+  .multiselect {
+    width: 75%;
+    @media (max-width: 600px) {
+      width: 100%;
+    }
+  }
+}
+.list-episodes {
+  padding: 2rem 0.5rem 1rem !important;
+  margin: 0 0.5rem;
+
+  @media (max-width: 450px) {
+    padding: 0.5rem 0rem 1rem !important;
+  }
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+}
+.filter-list-search-icon {
+  right: 1.6rem !important;
+  font-weight: bold;
+}
+.small-flex-grow {
+  flex-grow: 0.3;
+}
+</style>

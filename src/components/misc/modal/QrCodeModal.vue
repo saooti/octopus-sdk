@@ -23,8 +23,6 @@
   </div>
 </template>
 
-<style lang="scss">
-</style>
 <script lang="ts">
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
@@ -32,15 +30,17 @@ import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'QrCodeModal',
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-    emission: { default: undefined as Emission|undefined},
-  },
-  emits: ['close'],
 
   components: {
     QrCode
   },
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    emission: { default: undefined, type: Object as ()=> Emission},
+  },
+
+  emits: ['close'],
 
   data() {
     return {
@@ -75,3 +75,5 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss"></style>

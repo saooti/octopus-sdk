@@ -27,9 +27,8 @@
     />
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import PlaylistList from '../display/playlist/PlaylistList.vue';
 import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue'
@@ -39,9 +38,9 @@ export default defineComponent({
     PlaylistList,
   },
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    productor: { default: undefined as string|undefined},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    productor: { default: undefined, type: String},
   },
 
   data() {
@@ -89,3 +88,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

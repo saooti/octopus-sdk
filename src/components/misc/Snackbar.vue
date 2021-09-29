@@ -61,8 +61,8 @@ export default defineComponent({
           info: '#3DBD7D',
           error: '#FA7377',
           warn: '#FF6600',
-        }) as any},
-    position: { default: 'top-center' as string},
+        }), type: Object},
+    position: { default: 'top-center', type: String},
   },
   data() {
     return {

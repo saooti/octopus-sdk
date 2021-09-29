@@ -97,11 +97,9 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
-import Multiselect from 'vue-multiselect';
+/* import Multiselect from 'vue-multiselect'; */
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
 import { Organisation } from '@/store/class/organisation';
@@ -124,18 +122,18 @@ const getDefaultOrganistion = (defaultName: string) => {
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    Multiselect,
+    //Multiselect,
   },
   mixins:[selenium],
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string},
-    stats: { default: false as boolean},
-    displayArrow: { default: true as boolean},
-    value: { default: null as null | Organisation },
-    light: { default: false as boolean},
-    reset: { default: false as boolean},
-    all: { default: false as boolean},
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String},
+    stats: { default: false, type:  Boolean},
+    displayArrow: { default: true, type: Boolean},
+    value: { default: undefined, type: Object as ()=>Organisation},
+    light: { default: false, type:  Boolean},
+    reset: { default: false, type:  Boolean},
+    all: { default: false, type:  Boolean},
   },
   emits: ['selected'],
   data() {
@@ -277,3 +275,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

@@ -44,10 +44,8 @@
     </button>
   </div>
 </template>
-<style lang="scss">
-</style>
+
 <script lang="ts">
-// @ is an alias to /src
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
 import { defineComponent } from 'vue'
@@ -56,10 +54,10 @@ export default defineComponent({
     RubriqueChooser: () => import('../rubriques/RubriqueChooser.vue'),
   },
   props: {
-    rubriquageDisplay: { default: () => ([]) as Array<Rubriquage>},
-    rubriquageIdSelected:{default: 0 as number},
-    rubriqueIdSelected: { default: 0 as number},
-    index: { default: 0 as number},
+    rubriquageDisplay: { default: () => [], type: Array as ()=>Array<Rubriquage>},
+    rubriquageIdSelected:{default: 0, type: Number},
+    rubriqueIdSelected: { default: 0, type: Number},
+    index: { default: 0, type: Number},
   },
   emits: ['deleteRubriqueChoice', 'updateRubrique', 'updateRubriquage'],
 
@@ -101,3 +99,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

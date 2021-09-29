@@ -10,11 +10,11 @@
         @change="onRubriquageSelected"
       >
         <option
-          v-for="rubriquage in rubriquageDisplay"
-          :key="rubriquage.rubriquageId"
-          :value="rubriquage"
+          v-for="myRubriquage in rubriquageDisplay"
+          :key="myRubriquage.rubriquageId"
+          :value="myRubriquage"
         >
-          {{ rubriquage.title }}
+          {{ myRubriquage.title }}
         </option>
       </select>
       <button
@@ -40,70 +40,18 @@
           class="saooti-plus"
         />
       </template>
-      <template>
-        <b-dropdown-item
-          v-for="rubrique in hidenRubriques"
-          :key="rubrique.rubriqueId"
-          class="mr-3"
-          @click="addFilter(rubrique)"
-        >
-          {{ rubrique.name }}
-        </b-dropdown-item>
-      </template>
+      <b-dropdown-item
+        v-for="rubrique in hidenRubriques"
+        :key="rubrique.rubriqueId"
+        class="mr-3"
+        @click="addFilter(rubrique)"
+      >
+        {{ rubrique.name }}
+      </b-dropdown-item>
     </b-dropdown>
   </div>
 </template>
 
-<style lang="scss">
-.rubrique-list-container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  overflow: hidden;
-  flex-grow: 1;
-  width: 0;
-  padding: 0 4rem;
-  select{
-    width: auto;
-    border-radius: 1.5rem;
-    margin: 0.2rem;
-    font-size: 0.6rem;
-    margin: 0.2rem;
-    padding: 0.5rem;
-  }
-}
-.rubrique-item {
-  font-size: 0.6rem;
-  margin: 0.2rem;
-  padding: 0.5rem;
-  display: block;
-  height: 1.5rem;
-  border-radius: 1.5rem;
-  border: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-button.rubrique-item {
-  .router-link-active {
-    background: #ddd !important;
-  }
-  &:hover {
-    background: #ddd !important;
-  }
-}
-
-.rubrique-list .rubrique-item-plus {
-  display: flex;
-  height: 1.5rem;
-  width: 1.5rem;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.5rem;
-}
-</style>
 <script lang="ts">
 import { Rubrique } from '@/store/class/rubrique';
 import { Rubriquage } from '@/store/class/rubriquage';
@@ -113,7 +61,7 @@ export default defineComponent({
   name: 'RubriqueList',
 
   props: {
-    rubriquages: { default: () => ([]) as Array<Rubriquage>},
+    rubriquages: { default: () => [], type: Array as ()=>Array<Rubriquage>},
   },
 
   data() {
@@ -218,3 +166,54 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+.rubrique-list-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  flex-grow: 1;
+  width: 0;
+  padding: 0 4rem;
+  select{
+    width: auto;
+    border-radius: 1.5rem;
+    margin: 0.2rem;
+    font-size: 0.6rem;
+    margin: 0.2rem;
+    padding: 0.5rem;
+  }
+}
+.rubrique-item {
+  font-size: 0.6rem;
+  margin: 0.2rem;
+  padding: 0.5rem;
+  display: block;
+  height: 1.5rem;
+  border-radius: 1.5rem;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+button.rubrique-item {
+  .router-link-active {
+    background: #ddd !important;
+  }
+  &:hover {
+    background: #ddd !important;
+  }
+}
+
+.rubrique-list .rubrique-item-plus {
+  display: flex;
+  height: 1.5rem;
+  width: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5rem;
+}
+</style>

@@ -81,8 +81,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import domHelper from '../../../helper/dom';
@@ -95,24 +93,26 @@ import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastInlineList',
-  props: {
-    organisationId: { default: undefined as string|undefined},
-    emissionId: { default: undefined as number|undefined},
-    iabId: { default: undefined as number|undefined},
-    title: { default: '' as string},
-    href: { default: undefined as string|undefined},
-    buttonText: { default: false as boolean},
-    isArrow: { default: false as boolean},
-    requirePopularSort: { default:undefined as boolean|undefined},
-    buttonPlus: { default:false as boolean},
-    rubriqueId: { default: () => ([]) as Array<number> },
-    rubriquageId:{ default: () => ([]) as Array<number> },
-  },
-  emits: ['update:isArrow'],
-
+  
   components: {
     PodcastItem
   },
+
+  props: {
+    organisationId: { default: undefined, type: String},
+    emissionId: { default: undefined, type: Number},
+    iabId: { default: undefined, type: Number},
+    title: { default: '', type: String},
+    href: { default: undefined, type: String},
+    buttonText: { default: false, type: Boolean},
+    isArrow: { default: false, type: Boolean},
+    requirePopularSort: { default:undefined, type: Boolean},
+    buttonPlus: { default:false, type: Boolean},
+    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
+    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
+  },
+  emits: ['update:isArrow'],
+
   data() {
     return {
       loading: true as boolean,
@@ -299,3 +299,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

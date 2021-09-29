@@ -142,42 +142,17 @@
     </b-collapse>
   </b-card>
 </template>
-<style lang="scss">
-.player-parameters.card {
-  border: 0;
-  .btn {
-    border-radius: 0;
-  }
-  .card-header {
-    border: 0;
-    background-color: #fafafa;
-    padding: 0;
-  }
-  .card-body {
-    padding: 0.25rem;
-    border: 0.05rem solid #eee;
-    background-color: #fafafa;
-    .custom-control {
-      padding-left: 0;
-    }
-    input[type='number'] {
-      padding-left: 10px;
-      text-align: center;
-      width: 90px;
-    }
-  }
-}
-</style>
+
 <script lang="ts">
 import { Playlist } from '@/store/class/playlist';
 import { Podcast } from '@/store/class/podcast';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    podcast: { default: undefined as Podcast|undefined},
-    playlist: { default: undefined as Playlist|undefined},
-    iFrameModel: { default: undefined as string|undefined},
-    isVisible: { default: false as boolean},
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    playlist: { default: undefined, type: Object as ()=> Playlist},
+    iFrameModel: { default: undefined, type: String},
+    isVisible: { default: false, type: Boolean},
   },
   emits: ['startTime', 'episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle'],
 
@@ -248,3 +223,30 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.player-parameters.card {
+  border: 0;
+  .btn {
+    border-radius: 0;
+  }
+  .card-header {
+    border: 0;
+    background-color: #fafafa;
+    padding: 0;
+  }
+  .card-body {
+    padding: 0.25rem;
+    border: 0.05rem solid #eee;
+    background-color: #fafafa;
+    .custom-control {
+      padding-left: 0;
+    }
+    input[type='number'] {
+      padding-left: 10px;
+      text-align: center;
+      width: 90px;
+    }
+  }
+}
+</style>

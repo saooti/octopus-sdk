@@ -170,8 +170,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 import { displayMethods, selenium } from '../../mixins/functions';
@@ -191,11 +189,11 @@ export default defineComponent({
   },
   mixins:[displayMethods, selenium],
   props: {
-    comment: { default: undefined as CommentPodcast|undefined },
-    podcast: { default: undefined as Podcast|undefined },
-    fetchConference: { default: undefined as Conference|undefined },
-    organisation: { default: undefined as string|undefined },
-    isFlat: { default: false as boolean },
+    comment: { default: undefined, type: Object as ()=>CommentPodcast },
+    podcast: { default: undefined, type: Object as ()=>Podcast },
+    fetchConference: { default: undefined, type: Object as ()=>Conference },
+    organisation: { default: undefined, type: String},
+    isFlat: { default: false, type: Boolean },
   },
   emits: ['deleteComment', 'updateComment', 'update:comment'],
   
@@ -345,3 +343,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

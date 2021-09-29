@@ -165,134 +165,6 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-@import '../../sass/_variables.scss';
-
-.play-button-box {
-  height: 2.5rem;
-  width: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 0.5rem;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.player-container {
-  position: fixed;
-  overflow: hidden;
-  z-index: 12;
-  width: 100%;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  transition: height 1s;
-  background: #282828 !important;
-  max-width: 100%;
-  font-size: 1rem;
-
-  .player-image {
-    border-radius: 0.2rem;
-    height: 2.4rem;
-    width: 2.4rem;
-  }
-  .player-progress-border {
-    height: 10px;
-    width: 3px;
-    background: black;
-  }
-  .progress {
-    align-items: flex-end;
-    height: 10px;
-    position: relative;
-  }
-  .progress-bar-duration {
-    width: 10px;
-  }
-  .progress-bar {
-    height: 4px;
-    position: absolute;
-  }
-
-  .progress.custom-bg-darkgrey {
-    background: #555;
-  }
-
-  .progress-bar.custom-bg-grey {
-    background: #e9ecef;
-  }
-
-  .player-title,
-  .hide-phone {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-  .player-grow-content {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    flex-shrink: 1;
-    flex-basis: 20px;
-    overflow: hidden;
-  }
-  .player-title {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-
-  .hide-phone {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-  .timeline-button {
-    background: black;
-    padding: 0.1rem;
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    color: $octopus-primary-color;
-    margin-left: 0.5rem;
-    @media (max-width: 960px) {
-      display: none;
-    }
-  }
-}
-/** PHONES*/
-@media (max-width: 450px) {
-  .player-container {
-    .player-image {
-      height: 2rem;
-      width: 2rem;
-    }
-  }
-}
-
-@media (max-width: 960px) {
-  .player-container {
-    .d-flex {
-      @media (max-width: 960px) {
-        flex-wrap: nowrap !important;
-      }
-    }
-    .player-title {
-      font-size: 12px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-}
-</style>
 
 <script lang="ts">
 import { mapState } from 'vuex';
@@ -335,17 +207,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    moment.locale('fr');
-    if (this.isClock) {
-      setInterval(() => {
-        this.actualTime = moment(new Date()).format('HH:mm:ss');
-      }, 1000);
-    }
-    window.addEventListener('beforeunload', this.endListeningProgress);
-    this.watchPlayerStatus();
-  },
-  
   computed: {
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
@@ -460,6 +321,58 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
   },
+
+  watch: {
+    async live(): Promise<void> {
+      this.hlsReady = false;
+      this.setDownloadId(null);
+      this.listenError = false;
+      await this.playLive();
+      this.initComments();
+    },
+    playerHeight(): void {
+      this.$emit('hide', 0 === this.playerHeight ? true : false);
+    },
+    podcast(): void {
+      this.setDownloadId(null);
+      this.listenError = false;
+      this.initComments();
+    },
+    async listenTime(newVal): Promise<void> {
+      if (!this.podcast && !this.live) {
+        //Nothing can be done there is no listen time
+        return;
+      }
+      if (!this.getDownloadId()) {
+        //nothing can be done there is no downloadId
+        return;
+      }
+      if (newVal - this.lastSend < 10) {
+        //Last send is too recent, do nothing
+        return;
+      }
+      this.lastSend = newVal;
+      await octopusApi.updatePlayerTime(
+        this.getDownloadId(),
+        Math.round(newVal)
+      );
+    },
+    commentsLoaded(): void {
+      this.initComments(true);
+    },
+  },
+
+  mounted() {
+    moment.locale('fr');
+    if (this.isClock) {
+      setInterval(() => {
+        this.actualTime = moment(new Date()).format('HH:mm:ss');
+      }, 1000);
+    }
+    window.addEventListener('beforeunload', this.endListeningProgress);
+    this.watchPlayerStatus();
+  },
+  
   methods: {
     getListenerId(): string{
       let listenerId = this.getCookie("octopus_listenerId");
@@ -625,8 +538,11 @@ export default defineComponent({
     async initHls(hlsStreamUrl: string): Promise<void> {
       return new Promise<void>(async(resolve, reject) => {
         if(null === Hls){
-          //@ts-ignore
-          await import('hls.js/dist/hls.light.min.js').then((hlsLibrary) => {
+          //TODO
+          /* await import('hls.js/dist/hls.light.min.js').then((hlsLibrary) => {
+            Hls = hlsLibrary.default;
+          }) */
+           await import('hls.js').then((hlsLibrary) => {
             Hls = hlsLibrary.default;
           })
         }
@@ -744,44 +660,134 @@ export default defineComponent({
       }
     },
   },
-  watch: {
-    async live(): Promise<void> {
-      this.hlsReady = false;
-      this.setDownloadId(null);
-      this.listenError = false;
-      await this.playLive();
-      this.initComments();
-    },
-    playerHeight(): void {
-      this.$emit('hide', 0 === this.playerHeight ? true : false);
-    },
-    podcast(): void {
-      this.setDownloadId(null);
-      this.listenError = false;
-      this.initComments();
-    },
-    async listenTime(newVal): Promise<void> {
-      if (!this.podcast && !this.live) {
-        //Nothing can be done there is no listen time
-        return;
-      }
-      if (!this.getDownloadId()) {
-        //nothing can be done there is no downloadId
-        return;
-      }
-      if (newVal - this.lastSend < 10) {
-        //Last send is too recent, do nothing
-        return;
-      }
-      this.lastSend = newVal;
-      await octopusApi.updatePlayerTime(
-        this.getDownloadId(),
-        Math.round(newVal)
-      );
-    },
-    commentsLoaded(): void {
-      this.initComments(true);
-    },
-  },
 })
 </script>
+
+<style lang="scss">
+@import '../../sass/_variables.scss';
+
+.play-button-box {
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.player-container {
+  position: fixed;
+  overflow: hidden;
+  z-index: 12;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  transition: height 1s;
+  background: #282828 !important;
+  max-width: 100%;
+  font-size: 1rem;
+
+  .player-image {
+    border-radius: 0.2rem;
+    height: 2.4rem;
+    width: 2.4rem;
+  }
+  .player-progress-border {
+    height: 10px;
+    width: 3px;
+    background: black;
+  }
+  .progress {
+    align-items: flex-end;
+    height: 10px;
+    position: relative;
+  }
+  .progress-bar-duration {
+    width: 10px;
+  }
+  .progress-bar {
+    height: 4px;
+    position: absolute;
+  }
+
+  .progress.custom-bg-darkgrey {
+    background: #555;
+  }
+
+  .progress-bar.custom-bg-grey {
+    background: #e9ecef;
+  }
+
+  .player-title,
+  .hide-phone {
+    font-size: 0.8rem;
+    margin: 0 0 5px 0;
+  }
+  .player-grow-content {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    flex-shrink: 1;
+    flex-basis: 20px;
+    overflow: hidden;
+  }
+  .player-title {
+    font-size: 0.8rem;
+    margin: 0 0 5px 0;
+  }
+
+  .hide-phone {
+    font-size: 0.8rem;
+    margin: 0 0 5px 0;
+  }
+  .timeline-button {
+    background: black;
+    padding: 0.1rem;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    color: $octopus-primary-color;
+    margin-left: 0.5rem;
+    @media (max-width: 960px) {
+      display: none;
+    }
+  }
+}
+/** PHONES*/
+@media (max-width: 450px) {
+  .player-container {
+    .player-image {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+}
+
+@media (max-width: 960px) {
+  .player-container {
+    .d-flex {
+      @media (max-width: 960px) {
+        flex-wrap: nowrap !important;
+      }
+    }
+    .player-title {
+      font-size: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+</style>

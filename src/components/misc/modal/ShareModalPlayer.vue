@@ -65,6 +65,38 @@
   </div>
 </template>
 
+<script lang="ts">
+import Snackbar from '../Snackbar.vue';
+import { displayMethods } from '../../mixins/functions';
+
+import QrCode from '../../display/sharing/QrCode.vue';
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'ShareModalPlayer',
+
+  components: {
+    Snackbar,
+    QrCode
+  },
+  mixins: [displayMethods],
+  props: {
+    embedLink: { default: undefined, type: String},
+    embedlyLink: { default: undefined, type: String},
+    directLink: { default: undefined, type: String},
+  },
+  emits: ['close'],
+  methods: {
+    closePopup(event: { preventDefault: () => void }): void {
+      event.preventDefault();
+      this.$emit('close');
+    },
+    afterCopy(): void{
+      (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
+    }
+  },
+})
+</script>
+
 <style lang="scss">
 .share-modal-border {
   border-right: solid 1px rgb(222, 226, 230);
@@ -106,34 +138,3 @@
   }
 }
 </style>
-<script lang="ts">
-import Snackbar from '../Snackbar.vue';
-import { displayMethods } from '../../mixins/functions';
-
-import QrCode from '../../display/sharing/QrCode.vue';
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'ShareModalPlayer',
-  mixins: [displayMethods],
-  props: {
-    embedLink: { default: undefined as string|undefined},
-    embedlyLink: { default: undefined as string|undefined},
-    directLink: { default: undefined as string|undefined},
-  },
-  emits: ['close'],
-
-  components: {
-    Snackbar,
-    QrCode
-  },
-  methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.$emit('close');
-    },
-    afterCopy(): void{
-      (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
-    }
-  },
-})
-</script>

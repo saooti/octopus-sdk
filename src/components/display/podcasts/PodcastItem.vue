@@ -79,74 +79,6 @@
   </li>
 </template>
 
-<style lang="scss">
-.podcast-item-container {
-  border-radius: 0.8rem;
-  list-style: none;
-  position: relative;
-  width: 13rem;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  background: #fff;
-  flex-shrink: 0;
-  .text-secondary {
-    margin: 0.5rem !important;
-  }
-  .saooti-star-bounty {
-    font-size: 22px;
-  }
-
-  .title-podcast-item {
-    font-weight: 700;
-    margin: 0.25rem 0.5rem 0.5rem;
-    overflow: hidden;
-    display: -webkit-box;
-    flex-grow: 1;
-    font-size: 0.7rem;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    min-height: 3rem;
-    line-height: 1rem;
-    word-break: break-word;
-  }
-  .description-podcast-item {
-    padding: 1rem;
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.92);
-    height: 13rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.9em;
-    position: absolute;
-    width: 13rem;
-    word-break: break-word;
-    &.after-podcast-description:after {
-      content: '...';
-      position: absolute;
-      padding-left: 1rem;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 1rem;
-      font-weight: bolder;
-      text-align: center;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
-    }
-  }
-  .producer-podcast-item {
-    margin: 0.2rem 0.5rem 0.5rem;
-    font-size: 0.55rem;
-    color: #666;
-  }
-
-  @media (max-width: 960px) {
-    margin: 0.5rem !important;
-  }
-}
-</style>
-
 <script lang="ts">
 import AnimatorsItem from './AnimatorsItem.vue';
 import PodcastImage from './PodcastImage.vue';
@@ -159,13 +91,14 @@ import { Category } from '@/store/class/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastItem',
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-  },
-
+  
   components: {
     AnimatorsItem,
     PodcastImage,
+  },
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
   },
 
   data() {
@@ -300,3 +233,71 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.podcast-item-container {
+  border-radius: 0.8rem;
+  list-style: none;
+  position: relative;
+  width: 13rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: #fff;
+  flex-shrink: 0;
+  .text-secondary {
+    margin: 0.5rem !important;
+  }
+  .saooti-star-bounty {
+    font-size: 22px;
+  }
+
+  .title-podcast-item {
+    font-weight: 700;
+    margin: 0.25rem 0.5rem 0.5rem;
+    overflow: hidden;
+    display: -webkit-box;
+    flex-grow: 1;
+    font-size: 0.7rem;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    min-height: 3rem;
+    line-height: 1rem;
+    word-break: break-word;
+  }
+  .description-podcast-item {
+    padding: 1rem;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.92);
+    height: 13rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9em;
+    position: absolute;
+    width: 13rem;
+    word-break: break-word;
+    &.after-podcast-description:after {
+      content: '...';
+      position: absolute;
+      padding-left: 1rem;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: bolder;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
+    }
+  }
+  .producer-podcast-item {
+    margin: 0.2rem 0.5rem 0.5rem;
+    font-size: 0.55rem;
+    color: #666;
+  }
+
+  @media (max-width: 960px) {
+    margin: 0.5rem !important;
+  }
+}
+</style>

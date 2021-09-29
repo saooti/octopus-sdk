@@ -86,8 +86,6 @@
   </li>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { state } from '../../../store/paramStore';
@@ -100,7 +98,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    emission: { default: undefined as Emission|undefined },
+    emission: { default: undefined, type: Object as ()=> Emission},
   },
 
   data() {
@@ -173,3 +171,4 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss"></style>

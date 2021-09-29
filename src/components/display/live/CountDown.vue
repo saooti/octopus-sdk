@@ -19,12 +19,12 @@
     </h3>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    timeRemaining: { default: undefined as number|undefined},
+    timeRemaining: { default: undefined, type: Number},
   },
   data() {
     return {
@@ -66,3 +66,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

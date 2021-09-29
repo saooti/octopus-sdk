@@ -25,8 +25,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 
@@ -34,10 +32,10 @@ import { Organisation } from '@/store/class/organisation';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    width: { default: '100%' },
-    value: { default: null },
-    reset: { default: false },
-    page: { default: '' },
+    width: { default: '100%', type: String},
+    value: { default: undefined, type: String},
+    reset: { default: false, type: Boolean},
+    page: { default: '', type: String},
   },
   emits: ['selected'],
 
@@ -83,3 +81,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

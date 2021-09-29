@@ -71,11 +71,10 @@
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import { VueReCaptcha } from 'vue-recaptcha-v3';
+/* import { VueReCaptcha } from 'vue-recaptcha-v3'; */
 import { state } from '../../../store/paramStore';
-import api from '@/api/initialize';
+/* import api from '@/api/initialize'; */
 //TODO
 /* import Vue from 'vue';
 Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' }); */
@@ -159,3 +158,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

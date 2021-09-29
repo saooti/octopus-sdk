@@ -59,58 +59,6 @@
   </li>
 </template>
 
-<style lang="scss">
-.participant-item-container {
-  list-style: none;
-  border-radius: 2rem;
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-  align-items: center;
-
-  .participant-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: center;
-  }
-
-  .participant-description {
-    overflow: hidden;
-    margin-top: 0.5em;
-    word-break: break-word;
-    max-height: 4rem;
-    position: relative;
-    &.after-participant-description:after {
-      content: '...';
-      position: absolute;
-      padding-left: 1rem;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 1rem;
-      font-weight: bolder;
-      text-align: center;
-      background: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0),
-        #f3f3f3 40%
-      );
-    }
-  }
-
-  .participant-producer {
-    font-weight: 300;
-    font-size: 0.6rem;
-  }
-  @media (max-width: 960px) {
-    margin: 0;
-  }
-  @media (max-width: 450px) {
-    margin: 1rem 0 0;
-  }
-}
-</style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import { Participant } from '@/store/class/participant';
@@ -121,7 +69,7 @@ export default defineComponent({
   name: 'ParticpantItem',
   mixins: [displayMethods],
   props: {
-    participant: { default: undefined as Participant|undefined},
+    participant: { default: undefined, type: Object as ()=> Participant},
   },
 
   data() {
@@ -193,3 +141,54 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss">
+.participant-item-container {
+  list-style: none;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  align-items: center;
+
+  .participant-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .participant-description {
+    overflow: hidden;
+    margin-top: 0.5em;
+    word-break: break-word;
+    max-height: 4rem;
+    position: relative;
+    &.after-participant-description:after {
+      content: '...';
+      position: absolute;
+      padding-left: 1rem;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: bolder;
+      text-align: center;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        #f3f3f3 40%
+      );
+    }
+  }
+
+  .participant-producer {
+    font-weight: 300;
+    font-size: 0.6rem;
+  }
+  @media (max-width: 960px) {
+    margin: 0;
+  }
+  @media (max-width: 450px) {
+    margin: 1rem 0 0;
+  }
+}
+</style>

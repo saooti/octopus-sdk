@@ -81,7 +81,7 @@
               <div class="font-weight-600">
                 {{ $t('Choose color') }}
               </div>
-              <swatches
+              <VSwatches
                 v-model="color"
                 class="c-hand input-no-outline"
                 show-fallback
@@ -98,9 +98,9 @@
                 v-if="!isBeta"
                 class="d-flex"
               >
-                <swatches
-                  v-for="color in colors"
-                  :key="color"
+                <VSwatches
+                  v-for="myColor in colors"
+                  :key="myColor"
                   v-model="theme"
                   :data-theme="theme"
                   class="c-hand input-no-outline mr-1"
@@ -116,11 +116,11 @@
                     paddingRight: '0px',
                     paddingBottom: '0px',
                   }"
-                  :colors="[color]"
+                  :colors="[myColor]"
                   inline
                 />
               </div>
-              <swatches
+              <VSwatches
                 v-else
                 v-model="theme"
                 class="c-hand input-no-outline"
@@ -195,33 +195,9 @@
   </div>
 </template>
 
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.sticker {
-  align-self: center;
-  background: rgba($octopus-primary-color, 0.3);
-  padding: 0.5rem;
-  transition: all 0.5s ease;
-  color: #41403e;
-  letter-spacing: 1px;
-  outline: none;
-  box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  border: solid 2px #41403e;
-  &:hover {
-    box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
-  }
-}
-.maxIframe {
-  max-width: 300px;
-}
-</style>
-
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-//@ts-ignore
-import Swatches from 'vue-swatches';
-import 'vue-swatches/dist/vue-swatches.min.css';
+import VSwatches from 'vue3-swatches';
 import profileApi from '@/api/profile';
 const octopusApi = require('@saooti/octopus-api');
 import { Podcast } from '@/store/class/podcast';
@@ -230,19 +206,20 @@ import { Playlist } from '@/store/class/playlist';
 import { CustomPlayer } from '@/store/class/customPlayer';
 import { defineComponent } from 'vue'
 export default defineComponent({
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-    emission: { default: undefined as Emission|undefined},
-    playlist: { default: undefined as Playlist|undefined},
-    organisationId: { default: undefined as string|undefined},
-    isEducation: { default: false as boolean},
-    exclusive: { default: false as boolean},
-    notExclusive: { default: true as boolean},
-  },
   components: {
     ShareModalPlayer: () => import('../../misc/modal/ShareModalPlayer.vue'),
-    Swatches,
+    VSwatches,
     PlayerParameters: () => import('./PlayerParameters.vue'),
+  },
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    emission: { default: undefined, type: Object as ()=> Emission},
+    playlist: { default: undefined, type: Object as ()=> Playlist},
+    organisationId: { default: undefined, type: String},
+    isEducation: { default: false, type: Boolean},
+    exclusive: { default: false, type: Boolean},
+    notExclusive: { default: true, type: Boolean},
   },
 
   data() {
@@ -461,24 +438,6 @@ export default defineComponent({
     }
   },
   methods: {
-    /* getOrganisationId(): string{
-      let orgaId = undefined;
-      if (this.podcast) {
-        orgaId = this.podcast.organisation.id;
-      } else if (this.playlist) {
-        orgaId = this.playlist.organisation.id;
-      } else {
-        orgaId = this.emission.orga.id;
-      }
-      return orgaId;
-    },
-    async initBeta(): Promise<void> {
-      const orgaId = this.getOrganisationId();
-      const data: any = await octopusApi.fetchOrganisationAttributes(orgaId);
-      if (data.hasOwnProperty('playerBeta')) {
-        this.isBeta = data.playerBeta;
-      }
-    }, */
     async initColor(): Promise<void> {
       if (!this.authenticated) return;
       let data;
@@ -490,17 +449,17 @@ export default defineComponent({
           state.generalParameters.organisationId
         );
       }
-      if (data.hasOwnProperty('COLOR')) {
+      if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {
         this.color = data.COLOR;
       } else {
         this.color = '#40a372';
       }
-      if (data.hasOwnProperty('THEME')) {
+      if (Object.prototype.hasOwnProperty.call(data,'THEME')) {
         this.theme = data.THEME;
       } else {
         this.theme = '#ffffff';
       }
-      if (data.hasOwnProperty('playerBeta')) {
+      if (Object.prototype.hasOwnProperty.call(data,'playerBeta')) {
         this.displayBetaChoice = data.playerBeta;
         let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!);
         this.customPlayers = dataFetched.content;
@@ -535,3 +494,25 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+.sticker {
+  align-self: center;
+  background: rgba($octopus-primary-color, 0.3);
+  padding: 0.5rem;
+  transition: all 0.5s ease;
+  color: #41403e;
+  letter-spacing: 1px;
+  outline: none;
+  box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: solid 2px #41403e;
+  &:hover {
+    box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+  }
+}
+.maxIframe {
+  max-width: 300px;
+}
+</style>

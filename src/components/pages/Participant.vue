@@ -87,17 +87,7 @@
   </div>
 </template>
 
-<style lang="scss">
-@media (min-width: 950px) {
-  .participant-desc {
-    max-width: 50%;
-    line-height: 1.5em;
-  }
-}
-</style>
-
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
@@ -113,7 +103,7 @@ export default defineComponent({
   },
   mixins: [displayMethods],
   props: {
-    participantId: { default: undefined as number|undefined},
+    participantId: { default: undefined, type: Number},
   },
   emits: ['participantTitle'],
   data() {
@@ -199,3 +189,12 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@media (min-width: 950px) {
+  .participant-desc {
+    max-width: 50%;
+    line-height: 1.5em;
+  }
+}
+</style>

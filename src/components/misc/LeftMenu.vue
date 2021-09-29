@@ -83,9 +83,9 @@
         {{ $t('Playlists') }}
       </router-link>
       <OrganisationChooserLight
+        v-if="!isPodcastmaker"
         width="auto"
         page="leftMenu"
-        v-if="!isPodcastmaker"
         :defaultanswer="$t('No organisation filter')"
         :value="organisationId"
         :light="true"
@@ -113,59 +113,7 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-.left-menu-container {
-  position: fixed;
-  top: 3rem;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  background: #fff;
-  width: 20%;
-  padding: 2rem;
 
-  .routes-container {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.9rem;
-  }
-  .hostedBy {
-    font-size: 0.6rem;
-    position: absolute;
-    bottom: 10px;
-    right: 0;
-  }
-}
-/** PHONES*/
-@media (max-width: 960px) {
-  .left-menu-container {
-    width: 75%;
-    max-height: 80%;
-    left: 0.5rem;
-    top: 2.5rem;
-    padding-left: 1rem;
-    font-size: 0.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.2rem 1rem rgba(79, 83, 90, 0.3);
-
-    .routes-container {
-      overflow-y: scroll;
-      height: 100%;
-    }
-  }
-  .divided-line {
-    margin: 0.5rem 0;
-    border-top: 1px solid lightgray;
-  }
-}
-@media (max-width: 450px) {
-  .left-menu-container {
-    width: 94%;
-    font-size: 0.3rem;
-    padding: 2rem 0 1.5rem 1rem;
-  }
-}
-</style>
 <script lang="ts">
 import { state } from '../../store/paramStore';
 import { orgaFilter } from '../mixins/organisationFilter';
@@ -181,8 +129,8 @@ export default defineComponent({
   mixins:[orgaFilter],
 
   props: {
-    displayMenu: { default: false as boolean},
-    isEducation: { default: false as boolean},
+    displayMenu: { default: false, type: Boolean},
+    isEducation: { default: false, type: Boolean},
   },
   emits: ['update:displayMenu'],
 
@@ -256,3 +204,57 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.left-menu-container {
+  position: fixed;
+  top: 3rem;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+  width: 20%;
+  padding: 2rem;
+
+  .routes-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+  }
+  .hostedBy {
+    font-size: 0.6rem;
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+  }
+}
+/** PHONES*/
+@media (max-width: 960px) {
+  .left-menu-container {
+    width: 75%;
+    max-height: 80%;
+    left: 0.5rem;
+    top: 2.5rem;
+    padding-left: 1rem;
+    font-size: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.2rem 1rem rgba(79, 83, 90, 0.3);
+
+    .routes-container {
+      overflow-y: scroll;
+      height: 100%;
+    }
+  }
+  .divided-line {
+    margin: 0.5rem 0;
+    border-top: 1px solid lightgray;
+  }
+}
+@media (max-width: 450px) {
+  .left-menu-container {
+    width: 94%;
+    font-size: 0.3rem;
+    padding: 2rem 0 1.5rem 1rem;
+  }
+}
+</style>

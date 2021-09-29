@@ -120,41 +120,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.live-date-box {
-  width: 200px;
-  display: flex;
-  flex-shrink: 0;
-  flex-direction: column;
-}
-.font-size-smaller {
-  font-size: smaller;
-}
-.live-description-container {
-  overflow: hidden;
-  margin-top: 0.5em;
-  word-break: break-word;
-  max-height: 6rem;
-  position: relative;
-  &.after-live-description:after {
-    content: '...';
-    position: absolute;
-    padding-left: 1rem;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: bolder;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f3f3f3 40%);
-  }
-}
-.live-special-width {
-  width: 0;
-  flex-grow: 1;
-}
-
-</style>
-
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
@@ -176,8 +141,8 @@ export default defineComponent({
   },
   mixins: [displayMethods],
   props: {
-    fetchConference: { default: undefined as Podcast|undefined},
-    index: { default: undefined as number|undefined},
+    fetchConference: { default: undefined, type: Object as ()=>Podcast},
+    index: { default: undefined, type: Number},
   },
   emits: ['deleteItem'],
 
@@ -291,3 +256,38 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.live-date-box {
+  width: 200px;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+.font-size-smaller {
+  font-size: smaller;
+}
+.live-description-container {
+  overflow: hidden;
+  margin-top: 0.5em;
+  word-break: break-word;
+  max-height: 6rem;
+  position: relative;
+  &.after-live-description:after {
+    content: '...';
+    position: absolute;
+    padding-left: 1rem;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bolder;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f3f3f3 40%);
+  }
+}
+.live-special-width {
+  width: 0;
+  flex-grow: 1;
+}
+
+</style>

@@ -58,9 +58,8 @@
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import Multiselect from 'vue-multiselect';
+/* import Multiselect from 'vue-multiselect'; */
 
 const getDefaultCategory = (defaultName: string) => {
   if ('' === defaultName){
@@ -73,17 +72,17 @@ import { Category } from '@/store/class/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    Multiselect,
+    //Multiselect,
   },
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string },
-    categorySelected: { default: undefined as number|undefined },
-    multiple: { default: false as boolean },
-    categoryArray: { default: undefined as Array<number>|undefined },
-    displayAllCategories: { default: false as boolean },
-    isDisabled: { default: false as boolean },
-    initCategories: { default: undefined as Array<Category>|undefined },
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String },
+    categorySelected: { default: undefined, type: Number },
+    multiple: { default: false, type: Boolean },
+    categoryArray: { default: undefined, type: Array as ()=>Array<number> },
+    displayAllCategories: { default: false, type: Boolean },
+    isDisabled: { default: false, type: Boolean },
+    initCategories: { default: undefined, type: Array as ()=>Array<Category> },
   },
   emits: ['update:categorySelected','selected'],
   data() {
@@ -232,3 +231,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

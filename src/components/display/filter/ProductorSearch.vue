@@ -57,76 +57,8 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-@import '../../../sass/_variables.scss';
 
-.filter-speech-bubble {
-  position: absolute;
-  background: $octopus-primary-color;
-  border-radius: 0.4em;
-  width: 10rem;
-  right: 4rem;
-  padding: 5px;
-  -webkit-animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  animation: fadein 1s;
-  color: white;
-}
-
-.filter-speech-bubble:after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border: 18px solid transparent;
-  border-left-color: $octopus-primary-color;
-  border-right: 0;
-  border-bottom: 0;
-  margin-top: -9px;
-  margin-right: -18px;
-  -webkit-animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  animation: fadein 1s;
-}
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-moz-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.filter-organisation-chooser {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-  margin-right: 10%;
-  position: relative;
-  @media (max-width: 500px) {
-    margin-right: 0;
-  }
-}
-</style>
 <script lang="ts">
-// @ is an alias to /src
 import { state } from '../../../store/paramStore';
 import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/organisation';
@@ -138,9 +70,9 @@ export default defineComponent({
   mixins:[orgaFilter],
 
   props: {
-    organisationId: { default: undefined as string|undefined },
-    searchPattern: { default: '' as string },
-    type: { default: 'podcast' as string },
+    organisationId: { default: undefined, type: String},
+    searchPattern: { default: '', type: String },
+    type: { default: 'podcast', type: String },
   },
   emits: ['updateOrganisationId', 'updateSearchPattern'],
 
@@ -226,3 +158,72 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+
+.filter-speech-bubble {
+  position: absolute;
+  background: $octopus-primary-color;
+  border-radius: 0.4em;
+  width: 10rem;
+  right: 4rem;
+  padding: 5px;
+  -webkit-animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  animation: fadein 1s;
+  color: white;
+}
+
+.filter-speech-bubble:after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 18px solid transparent;
+  border-left-color: $octopus-primary-color;
+  border-right: 0;
+  border-bottom: 0;
+  margin-top: -9px;
+  margin-right: -18px;
+  -webkit-animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  animation: fadein 1s;
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.filter-organisation-chooser {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 10%;
+  position: relative;
+  @media (max-width: 500px) {
+    margin-right: 0;
+  }
+}
+</style>

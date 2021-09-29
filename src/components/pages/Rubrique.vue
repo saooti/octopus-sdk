@@ -9,7 +9,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PodcastList from '../display/podcasts/PodcastList.vue';
@@ -22,9 +21,9 @@ export default defineComponent({
   },
 
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    rubriqueId: { default: undefined as number|undefined},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    rubriqueId: { default: undefined, type:  [ Number ]},
   },
 
   data() {
@@ -51,3 +50,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

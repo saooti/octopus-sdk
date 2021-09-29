@@ -111,29 +111,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.live-list-container .horizontal-separator {
-  border-top: 1px solid #cccccc;
-  width: 100%;
-  margin: 2rem;
-}
-.live-list-category {
-  align-self: flex-start;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-@media (max-width: 450px) {
-  .live-list-container h3 {
-    text-align: center;
-    font-size: 1rem;
-  }
-  .live-list-container .horizontal-separator {
-    margin: 1rem;
-  }
-}
-</style>
-
 <script lang="ts">
 import LiveItem from './LiveItem.vue';
 const octopusApi = require('@saooti/octopus-api');
@@ -148,8 +125,8 @@ export default defineComponent({
   },
 
   props: {
-    conferenceWatched: { default: () => ([])  as Array<Conference>},
-    organisationId: { default: undefined as string | undefined},
+    conferenceWatched: { default: () => [], type: Array as ()=>Array<Conference>},
+    organisationId: { default: undefined, type: String},
   },
   emits: ['initConferenceIds'],
 
@@ -370,3 +347,26 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.live-list-container .horizontal-separator {
+  border-top: 1px solid #cccccc;
+  width: 100%;
+  margin: 2rem;
+}
+.live-list-category {
+  align-self: flex-start;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+@media (max-width: 450px) {
+  .live-list-container h3 {
+    text-align: center;
+    font-size: 1rem;
+  }
+  .live-list-container .horizontal-separator {
+    margin: 1rem;
+  }
+}
+</style>

@@ -20,7 +20,6 @@
     </template>
   </div>
 </template>
-<style lang="scss"></style>
 
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
@@ -91,3 +90,5 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss"></style>

@@ -117,51 +117,6 @@
   </li>
 </template>
 
-<style lang="scss">
-
-.emission-player-container {
-  list-style: none;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 13rem;
-  height: min-content;
-  border-radius: 0.8rem;
-  overflow: hidden;
-  .emission-description {
-    overflow: hidden;
-    margin-top: 0.5em;
-    word-break: break-word;
-    max-height: 3.5rem;
-    position: relative;
-    &.after-emission-description:after {
-      content: '...';
-      position: absolute;
-      padding-left: 1rem;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 1rem;
-      font-weight: bolder;
-      text-align: center;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
-    }
-  }
-  .define-width {
-    width: 9rem;
-  }
-  @media (max-width: 960px) {
-    .d-flex:not(.flex-column) {
-      flex-wrap: nowrap;
-    }
-  }
-}
-.emission-item-border-color {
-  border-color: #ddd;
-}
-</style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import { Emission } from '@/store/class/emission';
@@ -173,9 +128,9 @@ export default defineComponent({
   name: 'EmissionPlayerItem',
   mixins: [displayMethods],
   props: {
-    emission: { default: undefined as Emission|undefined },
-    nbPodcasts: { default: undefined as number|undefined },
-    rubriqueName: { default: undefined as string|undefined },
+    emission: { default: undefined, type: Object as ()=>Emission },
+    nbPodcasts: { default: undefined, type: Number },
+    rubriqueName: { default: undefined, type: String},
   },
 
   data() {
@@ -267,3 +222,48 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+
+.emission-player-container {
+  list-style: none;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 13rem;
+  height: min-content;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  .emission-description {
+    overflow: hidden;
+    margin-top: 0.5em;
+    word-break: break-word;
+    max-height: 3.5rem;
+    position: relative;
+    &.after-emission-description:after {
+      content: '...';
+      position: absolute;
+      padding-left: 1rem;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: bolder;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
+    }
+  }
+  .define-width {
+    width: 9rem;
+  }
+  @media (max-width: 960px) {
+    .d-flex:not(.flex-column) {
+      flex-wrap: nowrap;
+    }
+  }
+}
+.emission-item-border-color {
+  border-color: #ddd;
+}
+</style>

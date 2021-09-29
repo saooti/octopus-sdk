@@ -55,19 +55,18 @@
   </b-modal>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'MessageModal',
   props: {
-    title: { default: undefined as string|undefined},
-    active: { default: false as boolean},
-    closable: { default: true as boolean},
-    message: { default: undefined as string|undefined},
-    validatetext: { default: undefined as string|undefined},
-    canceltext: { default: undefined as string|undefined},
-    thirdText: { default: undefined as string|undefined},
+    title: { default: undefined, type: String},
+    active: { default: false, type: Boolean},
+    closable: { default: true, type: Boolean},
+    message: { default: undefined, type: String},
+    validatetext: { default: undefined, type: String},
+    canceltext: { default: undefined, type: String},
+    thirdText: { default: undefined, type: String},
   },
   emits: ['close', 'validate', 'cancel', 'thirdEvent'],
   methods: {
@@ -87,3 +86,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

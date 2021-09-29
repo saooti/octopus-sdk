@@ -73,9 +73,8 @@
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import Multiselect from 'vue-multiselect';
+/* import Multiselect from 'vue-multiselect'; */
 const octopusApi = require('@saooti/octopus-api');
 
 const ELEMENTS_COUNT = 50;
@@ -104,18 +103,18 @@ import { Emission } from '@/store/class/emission';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    Multiselect,
+    //Multiselect,
   },
 
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string },
-    organisationId: { default: undefined as string|undefined },
-    emissionChosen: { default: undefined as Emission|undefined},
-    displayArrow: { default: true as boolean },
-    distributedBy: { default: undefined as string|undefined },
-    organisationDistributedBy: { default: undefined as string|undefined },
-    reset: { default: false as boolean },
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String },
+    organisationId: { default: undefined, type: String},
+    emissionChosen: { default: undefined, type: Object as ()=>Emission},
+    displayArrow: { default: true, type: Boolean },
+    distributedBy: { default: undefined, type: String},
+    organisationDistributedBy: { default: undefined, type: String},
+    reset: { default: false, type: Boolean },
   },
 
   emits: ['selected'],
@@ -195,3 +194,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

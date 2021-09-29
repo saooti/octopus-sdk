@@ -67,7 +67,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
 import Multiselect from 'vue-multiselect';
@@ -86,16 +85,16 @@ export default defineComponent({
   },
   mixins:[selenium],
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string },
-    rubriqueSelected: { default: undefined as number|undefined },
-    multiple: { default: false as boolean },
-    rubriqueArray: { default: undefined as Array<number>|undefined },
-    rubriquageId: { default: undefined as number|undefined },
-    allRubriques: { default: () => ([])  as Array<Rubrique>|undefined },
-    reset: { default: false as boolean },
-    withoutRubrique: { default: false as boolean },
-    isDisabled: { default: false as boolean },
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String },
+    rubriqueSelected: { default: undefined, type: Number },
+    multiple: { default: false, type: Boolean },
+    rubriqueArray: { default: undefined, type: Object as ()=>Array<number> },
+    rubriquageId: { default: undefined, type: Number },
+    allRubriques: { default: () => [], type: Array as ()=> Array<Rubrique> },
+    reset: { default: false, type: Boolean },
+    withoutRubrique: { default: false, type: Boolean },
+    isDisabled: { default: false, type: Boolean },
   },
   emits: ['update:rubriqueSelected', 'selected'],
 
@@ -226,3 +225,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

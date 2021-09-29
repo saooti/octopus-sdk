@@ -33,14 +33,12 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    comment: { default: undefined as CommentPodcast|undefined },
+    comment: { default: undefined, type: Object as ()=>CommentPodcast},
   },
   emits: ['editComment'],
 
@@ -60,3 +58,4 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss"></style>

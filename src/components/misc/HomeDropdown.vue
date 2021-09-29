@@ -22,7 +22,7 @@
             {{ $t('Upload') }}
           </button>
         </router-link>
-        <template @click="displayMenuPhone(true)">
+        <div @click="displayMenuPhone(true)">
           <b-dropdown-item
             v-if="!isPodcastmaker"
             to="/main/priv/backoffice"
@@ -65,7 +65,7 @@
               $t('Logout')
             }}
           </b-dropdown-item>
-        </template>
+        </div>
       </b-dropdown-text>
     </b-dropdown>
     <b-dropdown
@@ -91,6 +91,54 @@
     </b-dropdown>
   </div>
 </template>
+
+<script lang="ts">
+import { state } from '../../store/paramStore';
+
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'HomeDropdown',
+  props: {
+    isEducation: { default: false, type: Boolean},
+  },
+
+  data() {
+    return {};
+  },
+
+  computed: {
+    isPodcastmaker(): boolean {
+      return state.generalParameters.podcastmaker;
+    },
+    authenticated(): boolean {
+      return this.$store.state.authentication.isAuthenticated;
+    },
+    isOrganisation(): boolean {
+      return state.generalParameters.isOrganisation;
+    },
+    isContribution(): boolean {
+      return state.generalParameters.isContribution;
+    },
+  },
+
+
+  methods: {
+    displayMenuPhone(hidden: boolean): void {
+      if (hidden) {
+        (this.$refs.menu as HTMLElement).className='menu hid';
+      } else {
+        (this.$refs.menu as HTMLElement).className='menu';
+      }
+    },
+    goToUrl(url: string): void {
+      if (this.authenticated) {
+        this.$router.push(url);
+      }
+    },
+  },
+})
+</script>
+
 <style lang="scss">
 .top-bar-dropdown {
   .main-button-dropdown {
@@ -151,50 +199,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import { state } from '../../store/paramStore';
-
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'HomeDropdown',
-  props: {
-    isEducation: { default: false as boolean},
-  },
-
-  data() {
-    return {};
-  },
-
-  computed: {
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
-    },
-    authenticated(): boolean {
-      return this.$store.state.authentication.isAuthenticated;
-    },
-    isOrganisation(): boolean {
-      return state.generalParameters.isOrganisation;
-    },
-    isContribution(): boolean {
-      return state.generalParameters.isContribution;
-    },
-  },
-
-
-  methods: {
-    displayMenuPhone(hidden: boolean): void {
-      if (hidden) {
-        (this.$refs.menu as HTMLElement).className='menu hid';
-      } else {
-        (this.$refs.menu as HTMLElement).className='menu';
-      }
-    },
-    goToUrl(url: string): void {
-      if (this.authenticated) {
-        this.$router.push(url);
-      }
-    },
-  },
-})
-</script>

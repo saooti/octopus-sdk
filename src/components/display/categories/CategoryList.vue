@@ -27,59 +27,18 @@
           class="saooti-plus"
         />
       </template>
-      <template>
-        <b-dropdown-item
-          v-for="category in hidenCategories"
-          :key="category.id"
-          class="mr-3"
-          @click="checkIfFilter(category)"
-        >
-          {{ category.name }}
-        </b-dropdown-item>
-      </template>
+      <b-dropdown-item
+        v-for="category in hidenCategories"
+        :key="category.id"
+        class="mr-3"
+        @click="checkIfFilter(category)"
+      >
+        {{ category.name }}
+      </b-dropdown-item>
     </b-dropdown>
   </div>
 </template>
 
-<style lang="scss">
-.category-list-container {
-  display: inline-flex;
-  justify-content: flex-start;
-  overflow: hidden;
-  flex-grow: 1;
-  width: 0;
-  padding: 0 4rem;
-}
-.category-item {
-  font-size: 0.6rem;
-  margin: 0.2rem;
-  padding: 0.5rem;
-  display: block;
-  height: 1.5rem;
-  border-radius: 1.5rem;
-  border: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-  .router-link-active {
-    background: #ddd !important;
-  }
-  &:hover {
-    background: #ddd !important;
-  }
-}
-
-.category-list .category-item-plus {
-  display: flex;
-  height: 1.5rem;
-  width: 1.5rem;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.5rem;
-}
-</style>
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
@@ -90,7 +49,7 @@ export default defineComponent({
   name: 'CategoryList',
 
   props: {
-    isFilter: { default: false as boolean },
+    isFilter: { default: false, type: Boolean },
   },
 
   data() {
@@ -195,3 +154,42 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss">
+.category-list-container {
+  display: inline-flex;
+  justify-content: flex-start;
+  overflow: hidden;
+  flex-grow: 1;
+  width: 0;
+  padding: 0 4rem;
+}
+.category-item {
+  font-size: 0.6rem;
+  margin: 0.2rem;
+  padding: 0.5rem;
+  display: block;
+  height: 1.5rem;
+  border-radius: 1.5rem;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  .router-link-active {
+    background: #ddd !important;
+  }
+  &:hover {
+    background: #ddd !important;
+  }
+}
+
+.category-list .category-item-plus {
+  display: flex;
+  height: 1.5rem;
+  width: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5rem;
+}
+</style>

@@ -40,10 +40,8 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-</style>
+
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
@@ -53,8 +51,8 @@ export default defineComponent({
     RubriqueChoice: () => import('./RubriqueChoice.vue'),
   },
   props: {
-    organisationId: { default: undefined as string|undefined},
-    resetRubriquage: { default: false as boolean},
+    organisationId: { default: undefined, type: String},
+    resetRubriquage: { default: false, type:  Boolean},
   },
   emits: ['updateRubriquageFilter'],
 
@@ -226,3 +224,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

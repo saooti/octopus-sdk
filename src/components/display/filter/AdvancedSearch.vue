@@ -187,106 +187,30 @@
     </div>
   </div>
 </template>
-<style lang="scss">
 
-.padding-left-custom-radio {
-  padding-left: 1.5rem;
-  @media (max-width: 720px) {
-    padding-left: 0;
-    margin-top: 1rem;
-  }
-}
-.large-font-size {
-  font-size: 1.3rem;
-}
-
-.advanced-search-container {
-  background: #fff;
-  border-radius: 0.8rem;
-  display: flex;
-  width: 100%;
-  padding: 1rem 2rem;
-  margin-bottom: 1rem;
-  justify-content: space-around;
-  @media (max-width: 720px) {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-  .checkbox-saooti .custom-control-label::after {
-    top: 0.22rem;
-  }
-  .checkbox-saooti .custom-control-label::before {
-    top: 0.22rem;
-  }
-
-  @media (max-width: 450px) {
-    flex-direction: column;
-    .vdatetime {
-      padding: 0.5em 0 !important;
-      width: 100%;
-      input {
-        width: 100%;
-      }
-    }
-
-    .checkbox-saooti {
-      margin-left: 0rem !important;
-    }
-    padding: 1rem;
-    .basic-select {
-      width: 100%;
-      margin: 0 !important;
-    }
-
-    label.wrap {
-      width: 100%;
-      margin: 0.5em 0;
-      position: relative;
-    }
-  }
-
-  @media (min-width: 401px) {
-    label.wrap {
-      position: relative;
-      margin: 0;
-    }
-  }
-  input:not([id*='rubriqueChooser']) {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 0.2em 0.5em;
-  }
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
-}
-</style>
 <script lang="ts">
-// @ is an alias to /src
 import { state } from '../../../store/paramStore';
 const moment = require('moment');
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { DatePicker } from 'v-calendar';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
     MonetizableFilter: () => import('./MonetizableFilter.vue'),
-    // @ts-ignore
-    DatePicker: () => import('v-calendar/lib/components/date-picker.umd.min.js'),
+    DatePicker,
     CategoryFilter,
     RubriqueFilter
   },
   props: {
-    organisationId: { default: undefined as string|undefined},
-    isEmission: { default: false as boolean},
-    resetRubriquage: { default: false as boolean},
-    isSearchBar: { default: false as boolean},
-    isEducation: { default: false as boolean},
-    includeHidden: { default: false as boolean},
-    sortCriteria: { default: 'DATE' as string},
+    organisationId: { default: undefined, type: String},
+    isEmission: { default: false, type:  Boolean},
+    resetRubriquage: { default: false, type:  Boolean},
+    isSearchBar: { default: false, type:  Boolean},
+    isEducation: { default: false, type:  Boolean},
+    includeHidden: { default: false, type:  Boolean},
+    sortCriteria: { default: 'DATE', type: String},
   },
 
   emits: ['updateToDate', 
@@ -463,3 +387,80 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+
+.padding-left-custom-radio {
+  padding-left: 1.5rem;
+  @media (max-width: 720px) {
+    padding-left: 0;
+    margin-top: 1rem;
+  }
+}
+.large-font-size {
+  font-size: 1.3rem;
+}
+
+.advanced-search-container {
+  background: #fff;
+  border-radius: 0.8rem;
+  display: flex;
+  width: 100%;
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+  justify-content: space-around;
+  @media (max-width: 720px) {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .checkbox-saooti .custom-control-label::after {
+    top: 0.22rem;
+  }
+  .checkbox-saooti .custom-control-label::before {
+    top: 0.22rem;
+  }
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+    .vdatetime {
+      padding: 0.5em 0 !important;
+      width: 100%;
+      input {
+        width: 100%;
+      }
+    }
+
+    .checkbox-saooti {
+      margin-left: 0rem !important;
+    }
+    padding: 1rem;
+    .basic-select {
+      width: 100%;
+      margin: 0 !important;
+    }
+
+    label.wrap {
+      width: 100%;
+      margin: 0.5em 0;
+      position: relative;
+    }
+  }
+
+  @media (min-width: 401px) {
+    label.wrap {
+      position: relative;
+      margin: 0;
+    }
+  }
+  input:not([id*='rubriqueChooser']) {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0.2em 0.5em;
+  }
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+</style>

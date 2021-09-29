@@ -59,8 +59,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import emissionApi from '@/api/emissions';
@@ -78,20 +76,20 @@ export default defineComponent({
   },
 
   props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    query: { default: undefined as string|undefined },
-    iabId: { default: undefined as number | undefined },
-    organisationId: { default: undefined as string|undefined },
-    monetization: { default: 'UNDEFINED' as string },
-    before: { default: undefined as string|undefined },
-    after: { default: undefined as string|undefined },
-    sort: { default: 'DATE' as string },
-    showCount: { default: false as boolean },
-    includeHidden: { default: false as boolean },
-    rubriqueId: { default: () => ([]) as Array<number> },
-    rubriquageId:{ default: () => ([]) as Array<number> },
-    noRubriquageId: { default: () => ([]) as Array<number> },
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    query: { default: undefined, type: String},
+    iabId: { default: undefined, type: Number },
+    organisationId: { default: undefined, type: String},
+    monetization: { default: 'UNDEFINED', type: String},
+    before: { default: undefined, type: String},
+    after: { default: undefined, type: String},
+    sort: { default: 'DATE', type: String},
+    showCount: { default: false, type: Boolean },
+    includeHidden: { default: false, type: Boolean },
+    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
+    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
+    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
   },
 
   data() {
@@ -246,3 +244,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

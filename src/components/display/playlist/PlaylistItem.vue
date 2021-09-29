@@ -65,8 +65,6 @@
   </li>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Playlist } from '@/store/class/playlist';
 import { state } from '../../../store/paramStore';
@@ -78,7 +76,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    playlist: { default: undefined as Playlist|undefined},
+    playlist: { default: undefined, type: Object as ()=>Playlist},
   },
 
   data() {
@@ -135,3 +133,5 @@ export default defineComponent({
   methods: {},
 })
 </script>
+
+<style lang="scss"></style>

@@ -48,18 +48,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.champs-searchPage {
-  margin: 0 auto;
-  input {
-    margin: 1rem 0 !important;
-    padding-right: 40px !important;
-  }
-  .search-icon-container {
-    margin: 0 1em 0 0;
-  }
-}
-</style>
 <script lang="ts">
 import { state } from '../../store/paramStore';
 import PodcastList from '../display/podcasts/PodcastList.vue';
@@ -72,7 +60,7 @@ export default defineComponent({
   },
 
   props: {
-    queryRoute: { default: '' as string },
+    queryRoute: { default: '', type: String },
   },
   
   data() {
@@ -128,3 +116,16 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.champs-searchPage {
+  margin: 0 auto;
+  input {
+    margin: 1rem 0 !important;
+    padding-right: 40px !important;
+  }
+  .search-icon-container {
+    margin: 0 1em 0 0;
+  }
+}
+</style>

@@ -45,9 +45,6 @@
   </div>
 </template>
 
-<style lang="scss">
-
-</style>
 <script lang="ts">
 import { Category } from '@/store/class/category';
 import { Rubriquage } from '@/store/class/rubriquage';
@@ -105,3 +102,5 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss"></style>

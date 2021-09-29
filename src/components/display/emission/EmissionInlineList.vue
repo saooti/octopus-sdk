@@ -66,27 +66,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.podcast-list-inline.overflowScroll {
-  display: flex;
-  flex-wrap: wrap;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  padding-bottom: 1rem;
-  width: 100%;
-  height: 80vh;
-  overflow-y: auto;
-  @media (max-width: 960px) {
-    overflow-x: hidden;
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-  .item-phone-margin {
-    margin: 1rem 0.5rem !important;
-  }
-}
-</style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import domHelper from '../../../helper/dom';
@@ -105,13 +84,13 @@ export default defineComponent({
     EmissionPlayerItem,
   },
   props: {
-    organisationId: { default: undefined as string|undefined },
-    href: { default: undefined as string|undefined },
-    buttonText: { default: undefined as string|undefined },
-    rubriqueId: { default: undefined as number|undefined },
-    rubriquageId: { default: undefined as number|undefined },
-    nbPodcasts: { default: undefined as number|undefined },
-    itemSize: { default: undefined as number|undefined },
+    organisationId: { default: undefined, type: String},
+    href: { default: undefined, type: String},
+    buttonText: { default: undefined, type: String},
+    rubriqueId: { default: undefined, type: Number },
+    rubriquageId: { default: undefined, type: Number },
+    nbPodcasts: { default: undefined, type: Number },
+    itemSize: { default: undefined, type: Number },
   },
 
   data() {
@@ -274,3 +253,24 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.podcast-list-inline.overflowScroll {
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+  width: 100%;
+  height: 80vh;
+  overflow-y: auto;
+  @media (max-width: 960px) {
+    overflow-x: hidden;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .item-phone-margin {
+    margin: 1rem 0.5rem !important;
+  }
+}
+</style>

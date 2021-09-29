@@ -52,8 +52,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped></style>
-
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { displayMethods } from '../../mixins/functions';
@@ -67,12 +65,12 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    title: { default: undefined as string|undefined},
-    active: { default: false as boolean},
-    closable: { default: true as boolean},
-    validatetext: { default: undefined as string|undefined},
-    link: { default: undefined as string|undefined},
-    emission: { default: undefined as Emission|undefined},
+    title: { default: undefined, type: String},
+    active: { default: false, type: Boolean},
+    closable: { default: true, type: Boolean},
+    validatetext: { default: undefined, type: String},
+    link: { default: undefined, type: String},
+    emission: { default: undefined, type: Object as ()=> Emission},
   },
   emits: ['close', 'validate'],
 
@@ -101,3 +99,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

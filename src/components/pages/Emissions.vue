@@ -48,9 +48,8 @@
     />
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import EmissionList from '../display/emission/EmissionList.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
@@ -65,10 +64,10 @@ export default defineComponent({
     AdvancedSearch,
   },
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    productor: { default: undefined as string|undefined},
-    isEducation: { default: false as boolean},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    productor: { default: undefined, type: String},
+    isEducation: { default: false, type: Boolean},
   },
 
   data() {
@@ -183,3 +182,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

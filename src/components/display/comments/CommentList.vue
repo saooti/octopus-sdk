@@ -47,46 +47,6 @@
   </div>
 </template>
 
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.my-transition-list-comments {
-  position: relative;
-  .comment-list-enter-active,
-  .comment-list-leave-active {
-    transition: 1200ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
-    transition-property: opacity, transform;
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-enter {
-    opacity: 0;
-    transform: translateX(50px) scaleY(0.5);
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-enter-to {
-    opacity: 1;
-    transform: translateX(0) scaleY(1);
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-leave-active {
-    position: absolute;
-    background-color: $primaryColorReallyTransparent;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .comment-list-leave-to {
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: center top;
-    background-color: $primaryColorReallyTransparent;
-  }
-}
-</style>
-
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
@@ -104,15 +64,15 @@ export default defineComponent({
   },
 
   props: {
-    first: { default: 0 as number },
-    size: { default: 50 as number},
-    podcast: { default: undefined as Podcast|undefined },
-    comId: { default: undefined as number|undefined },
-    reload: { default: false as boolean},
-    fetchConference: { default: undefined as Conference|undefined},
-    organisation: { default: undefined as  string|undefined},
-    status: { default: undefined as string | undefined},
-    isFlat: { default: false as boolean},
+    first: { default: 0, type: Number },
+    size: { default: 50, type: Number },
+    podcast: { default: undefined, type: Object as ()=>Podcast},
+    comId: { default: undefined, type: Number },
+    reload: { default: false, type: Boolean},
+    fetchConference: { default: undefined, type: Object as ()=>Conference},
+    organisation: { default: undefined, type: String},
+    status: { default: undefined, type: String},
+    isFlat: { default: false, type: Boolean},
   },
   emits: ['updateStatus', 'fetch'],
 
@@ -333,3 +293,43 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+.my-transition-list-comments {
+  position: relative;
+  .comment-list-enter-active,
+  .comment-list-leave-active {
+    transition: 1200ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+    transition-property: opacity, transform;
+    background-color: $primaryColorReallyTransparent;
+  }
+
+  .comment-list-enter {
+    opacity: 0;
+    transform: translateX(50px) scaleY(0.5);
+    background-color: $primaryColorReallyTransparent;
+  }
+
+  .comment-list-enter-to {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+    background-color: $primaryColorReallyTransparent;
+  }
+
+  .comment-list-leave-active {
+    position: absolute;
+    background-color: $primaryColorReallyTransparent;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .comment-list-leave-to {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: center top;
+    background-color: $primaryColorReallyTransparent;
+  }
+}
+</style>

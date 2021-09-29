@@ -56,9 +56,8 @@
     </div>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import PodcastList from '../display/playlist/PodcastList.vue';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
@@ -74,8 +73,8 @@ export default defineComponent({
   },
   mixins:[displayMethods],
   props: {
-    playlistId: { default: undefined as number|undefined},
-    isEducation: { default: false as boolean},
+    playlistId: { default: undefined, type: Number},
+    isEducation: { default: false, type: Boolean},
   },
   emits: ['playlistTitle'],
 
@@ -150,3 +149,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

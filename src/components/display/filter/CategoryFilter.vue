@@ -19,10 +19,8 @@
     />
   </div>
 </template>
-<style lang="scss">
-</style>
+
 <script lang="ts">
-// @ is an alias to /src
 import CategoryChooser from '../categories/CategoryChooser.vue';
 import { Category } from '@/store/class/category';
 import { defineComponent } from 'vue'
@@ -115,3 +113,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

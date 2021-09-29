@@ -28,13 +28,13 @@
     </label>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    isEmission: { default: false as boolean},
-    isEducation: { default: false as boolean},
+    isEmission: { default: false, type:  Boolean},
+    isEducation: { default: false, type:  Boolean},
   },
   emits: ['updateMonetization'],
 
@@ -51,3 +51,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

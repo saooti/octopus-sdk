@@ -39,16 +39,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.btn-reload {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
-</style>
-
 <script lang="ts">
 import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
@@ -67,8 +57,8 @@ export default defineComponent({
   mixins:[cookies],
 
   props: {
-    podcast: { default: undefined as Podcast|undefined },
-    fetchConference: { default: undefined as Conference|undefined },
+    podcast: { default: undefined, type: Object as ()=>Podcast },
+    fetchConference: { default: undefined, type: Object as ()=>Conference },
   },
   
   data() {
@@ -163,3 +153,13 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.btn-reload {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+</style>

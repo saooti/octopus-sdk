@@ -122,19 +122,16 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    emission: { default: undefined as Emission|undefined},
-    podcastId: { default: undefined as number|undefined},
+    emission: { default: undefined, type: Object as ()=> Emission},
+    podcastId: { default: undefined, type: Number},
   },
-  components: {},
-
-   data() {
+   
+  data() {
     return {
       applePodcast:
         this.emission && this.emission.annotations
@@ -200,3 +197,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

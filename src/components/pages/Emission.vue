@@ -105,9 +105,8 @@
     </div>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
@@ -127,8 +126,8 @@ export default defineComponent({
   },
   mixins: [displayMethods],
   props: {
-    emissionId: { default: undefined as number|undefined},
-    isEducation: { default: false as boolean},
+    emissionId: { default: undefined, type: Number},
+    isEducation: { default: false, type: Boolean},
   },
   emits: ['emissionTitle'],
 
@@ -264,3 +263,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

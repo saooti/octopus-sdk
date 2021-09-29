@@ -20,21 +20,19 @@
   </div>
 </template>
 
-<style lang="scss">
-</style>
 <script lang="ts">
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'QrCode',
-  props: {
-    url: { default: '' as string},
-  },
 
   components: {
     Snackbar,
     QrcodeVue
+  },
+  props: {
+    url: { default: '', type: String},
   },
 
   data() {
@@ -56,3 +54,5 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss"></style>

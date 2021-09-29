@@ -29,8 +29,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
@@ -46,9 +44,9 @@ export default defineComponent({
   },
 
   props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    emissionId: { default: undefined as undefined|number},
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    emissionId: { default: undefined, type: Number},
   },
 
   data() {
@@ -114,3 +112,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

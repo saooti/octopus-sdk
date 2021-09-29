@@ -51,15 +51,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.participant-help{
-  .horizontal-separator {
-    border-top: 1px solid #cccccc;
-    width: 100%;
-  }
-} 
-</style>
-
 <script lang="ts">
 import { Participant } from '@/store/class/participant';
 import { defineComponent } from 'vue'
@@ -67,8 +58,8 @@ export default defineComponent({
   name: 'ParticipantDescription',
 
   props: {
-    participants: { default: () => ([]) as Array<Participant>},
-    isGuest: { default: false as boolean},
+    participants: { default: () => [], type: Array as ()=> Array<Participant>},
+    isGuest: { default: false, type:  Boolean},
   },
 
   data() {
@@ -99,3 +90,12 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.participant-help{
+  .horizontal-separator {
+    border-top: 1px solid #cccccc;
+    width: 100%;
+  }
+} 
+</style>

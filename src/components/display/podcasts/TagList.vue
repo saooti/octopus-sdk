@@ -22,6 +22,20 @@
     </ul>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'TagList',
+  components: {},
+  props: {
+    tagList: { default: () => [], type: Array as ()=>Array<string>},
+  },
+
+  methods: {},
+})
+</script>
+
 <style lang="scss">
 .tagListElement {
   display: flex;
@@ -39,16 +53,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'TagList',
-  components: {},
-  props: {
-    tagList: { default: () => ([])  as Array<string>},
-  },
-
-  methods: {},
-})
-</script>

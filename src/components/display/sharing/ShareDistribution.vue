@@ -108,6 +108,59 @@
     />
   </div>
 </template>
+
+<script lang="ts">
+const octopusApi = require('@saooti/octopus-api');
+import Snackbar from '../../misc/Snackbar.vue';
+import { displayMethods } from '../../mixins/functions';
+import { Emission } from '@/store/class/emission';
+
+import { defineComponent } from 'vue'
+export default defineComponent({
+  components: {
+    Snackbar,
+    RssSection: () => import('@/components/display/aggregator/RssSection.vue'),
+  },
+  mixins: [displayMethods],
+  props: {
+    emissionId: { default: undefined, type: Number},
+  },
+  
+  data() {
+    return {
+      emission: undefined as Emission|undefined,
+      error: false as boolean,
+      baseRss: '' as string,
+      rss: '' as string,
+    };
+  },
+
+  mounted() {
+    this.getEmissionDetails();
+    this.getRSS();
+  },
+
+  methods: {
+    async getEmissionDetails(): Promise<void> {
+      try {
+        const data = await octopusApi.fetchEmission(this.emissionId);
+        this.emission = data;
+      } catch {
+        this.error = true;
+      }
+    },
+    getRSS(): void {
+      if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
+      this.baseRss = octopusApi.fetchRSS(this.emissionId);
+      this.rss = this.baseRss;
+    },
+    afterCopy(): void{
+      (this.$refs.snackbar as any).open(this.$t('Link in clipboard'));
+    }
+  },
+})
+</script>
+
 <style lang="scss">
 .sharing-distribution-container {
   border: 0.05rem solid #dee2e6;
@@ -152,54 +205,3 @@
   }
 }
 </style>
-<script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
-import Snackbar from '../../misc/Snackbar.vue';
-import { displayMethods } from '../../mixins/functions';
-import { Emission } from '@/store/class/emission';
-
-import { defineComponent } from 'vue'
-export default defineComponent({
-  components: {
-    Snackbar,
-    RssSection: () => import('@/components/display/aggregator/RssSection.vue'),
-  },
-  mixins: [displayMethods],
-  props: {
-    emissionId: { default: undefined as number|undefined},
-  },
-  
-  data() {
-    return {
-      emission: undefined as Emission|undefined,
-      error: false as boolean,
-      baseRss: '' as string,
-      rss: '' as string,
-    };
-  },
-
-  mounted() {
-    this.getEmissionDetails();
-    this.getRSS();
-  },
-
-  methods: {
-    async getEmissionDetails(): Promise<void> {
-      try {
-        const data = await octopusApi.fetchEmission(this.emissionId);
-        this.emission = data;
-      } catch {
-        this.error = true;
-      }
-    },
-    getRSS(): void {
-      if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
-      this.baseRss = octopusApi.fetchRSS(this.emissionId);
-      this.rss = this.baseRss;
-    },
-    afterCopy(): void{
-      (this.$refs.snackbar as any).open(this.$t('Link in clipboard'));
-    }
-  },
-})
-</script>

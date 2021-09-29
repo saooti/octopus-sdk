@@ -16,18 +16,19 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-.bg-error-message {
-  background-color: #ffd84a9c;
-}
-</style>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ErrorMessage',
   props: {
-    message: { default: undefined as string|undefined},
+    message: { default: undefined, type: String},
   },
 })
 </script>
+
+<style lang="scss">
+.bg-error-message {
+  background-color: #ffd84a9c;
+}
+</style>

@@ -1,4 +1,4 @@
-import { ComponentCustomProperties } from 'vue';
+//import { ComponentCustomProperties } from 'vue';
 import { Store } from 'vuex';
 import { StoreState } from './typeAppStore';
 declare module '@vue/runtime-core' {

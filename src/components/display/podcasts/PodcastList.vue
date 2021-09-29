@@ -44,8 +44,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import podcastApi from '@/api/podcasts';
@@ -62,25 +60,25 @@ export default defineComponent({
   },
 
   props: {
-    first: { default: 0 as number},
-    size: { default: 12 as number },
-    organisationId: { default: undefined as string | undefined },
-    emissionId: { default: undefined as number | undefined },
-    iabId: { default: undefined as number | undefined },
-    participantId: { default: undefined as number | undefined },
-    query: { default: undefined as string | undefined },
-    monetization: { default: undefined as string | undefined },
-    popularSort: { default: false as boolean },
-    reload: { default: false as boolean },
-    before: { default: undefined as string | undefined },
-    after: { default: undefined as string | undefined },
-    includeHidden: { default: false as boolean},
-    showCount: { default: false as boolean },
-    sortCriteria: { default: undefined as string | undefined },
-    notValid: { default: undefined as boolean | undefined },
-    rubriqueId: { default: () => ([]) as Array<number> },
-    rubriquageId:{ default: () => ([]) as Array<number> },
-    noRubriquageId: { default: () => ([]) as Array<number> },
+    first: { default: 0, type: Number},
+    size: { default: 12, type: Number},
+    organisationId: { default: undefined, type: String},
+    emissionId: { default: undefined, type: Number},
+    iabId: { default: undefined, type: Number},
+    participantId: { default: undefined, type: Number},
+    query: { default: undefined, type: String},
+    monetization: { default: undefined, type: String},
+    popularSort: { default: false, type: Boolean},
+    reload: { default: false, type: Boolean},
+    before: { default: undefined, type: String},
+    after: { default: undefined, type: String},
+    includeHidden: { default: false, type: Boolean},
+    showCount: { default: false, type: Boolean },
+    sortCriteria: { default: undefined, type: String},
+    notValid: { default: undefined , type: Boolean},
+    rubriqueId: { default: () => [], type: Array as ()=>Array<number> },
+    rubriquageId:{ default: () => [], type: Array as ()=>Array<number> },
+    noRubriquageId: { default: () => [], type: Array as ()=>Array<number> },
   },
   emits: ['fetch', 'emptyList'],
 
@@ -215,3 +213,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

@@ -169,7 +169,7 @@
         />
       </a>
       <a
-        v-if="podcast || emission"
+        v-if="podcast ||emission"
         rel="noopener"
         target="_blank"
         :class="[
@@ -247,29 +247,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.share-button-page {
-  .saooti-Whatsapp{
-    width: 25px;
-    height: 25px;
-  }
-  @media (max-width: 960px) {
-    .flex-column {
-      flex-direction: row !important;
-    }
-    .btn {
-      margin-right: 0.5rem;
-    }
-  }
-  @media (max-width: 450px) {
-    .flex-column {
-      flex-direction: row !important;
-      flex-wrap: wrap;
-    }
-  }
-}
-</style>
-
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { Podcast } from '@/store/class/podcast';
@@ -278,22 +255,23 @@ import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
-  mixins: [displayMethods],
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-    emission: { default: undefined as Emission|undefined},
-    participantId: { default: undefined as number|undefined},
-    organisationId: { default: undefined as string|undefined},
-    bigRound: { default: false as boolean},
-    audioUrl: { default: undefined as string|undefined},
-    notExclusive: { default: true as boolean},
-  },
-
   components: {
     ClipboardModal: () => import('../../misc/modal/ClipboardModal.vue'),
     NewsletterModal: () => import('../../misc/modal/NewsletterModal.vue'),
     QrCodeModal: () => import('../../misc/modal/QrCodeModal.vue'),
     Snackbar,
+  },
+
+  mixins: [displayMethods],
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    emission: { default: undefined, type: Object as ()=> Emission},
+    participantId: { default: undefined, type: Number},
+    organisationId: { default: undefined, type: String},
+    bigRound: { default: false, type: Boolean},
+    audioUrl: { default: undefined, type: String},
+    notExclusive: { default: true, type: Boolean},
   },
 
   data() {
@@ -368,3 +346,26 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.share-button-page {
+  .saooti-Whatsapp{
+    width: 25px;
+    height: 25px;
+  }
+  @media (max-width: 960px) {
+    .flex-column {
+      flex-direction: row !important;
+    }
+    .btn {
+      margin-right: 0.5rem;
+    }
+  }
+  @media (max-width: 450px) {
+    .flex-column {
+      flex-direction: row !important;
+      flex-wrap: wrap;
+    }
+  }
+}
+</style>

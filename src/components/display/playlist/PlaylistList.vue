@@ -38,8 +38,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PlaylistItem from './PlaylistItem.vue';
@@ -54,10 +52,10 @@ export default defineComponent({
     PlaylistItem,
   },
   props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    query: { default: undefined as string|undefined },
-    organisationId: { default: undefined as string|undefined },
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    query: { default: undefined, type: String},
+    organisationId: { default: undefined, type: String},
   },
 
   data() {
@@ -149,3 +147,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

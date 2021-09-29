@@ -1,3 +1,19 @@
+<template>
+  <div id="app">
+    <TopBar
+      v-model:displayMenu="displayMenu"
+      :is-education="false"
+    />
+    <LeftMenu
+      v-model:displayMenu="displayMenu"
+      :is-education="false"
+    />
+    <CategoryFilter />
+    <router-view />
+    <Footer />
+  </div>
+</template>
+
 <script lang="ts">
 import TopBar from '@/components/misc/TopBar.vue';
 import LeftMenu from '@/components/misc/LeftMenu.vue';
@@ -98,21 +114,5 @@ export default defineComponent({
   }
 })
 </script>
-
-<template>
-  <div id="app">
-    <TopBar
-      v-model:displayMenu="displayMenu"
-      :is-education="false"
-    />
-    <LeftMenu
-      v-model:displayMenu="displayMenu"
-      :is-education="false"
-    />
-    <CategoryFilter />
-    <router-view />
-    <Footer />
-  </div>
-</template>
 
 <style lang="scss" src="@/assets/octopus-library.scss"></style>

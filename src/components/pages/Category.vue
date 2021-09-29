@@ -10,10 +10,7 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
-// @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
 import { defineComponent } from 'vue'
@@ -22,9 +19,9 @@ export default defineComponent({
     PodcastList,
   },
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    iabId: { default: undefined as number|undefined},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    iabId: { default: undefined, type: Number},
   },
 
   data() {
@@ -60,3 +57,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

@@ -75,31 +75,6 @@
   </div>
 </template>
 
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.comment-input-container {
-  textarea::placeholder {
-    color: $octopus-primary-color;
-  }
-  textarea:focus::placeholder {
-    color: black;
-  }
-  textarea {
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    border-bottom: 0.1rem solid #ddd !important;
-    overflow: hidden !important;
-    box-shadow: unset !important;
-    background: transparent !important;
-    height: 40px;
-  }
-  textarea.short {
-    max-height: 38px;
-  }
-}
-</style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import commentApi from '@/api/comments';
@@ -119,11 +94,11 @@ export default defineComponent({
   mixins:[cookies],
 
   props: {
-    podcast: { default: undefined as Podcast|undefined },
-    knownIdentity: { default: null as string|null },
-    focus: { default: false as boolean },
-    comment: { default: undefined as CommentPodcast|undefined },
-    fetchConference: { default: undefined as Conference|undefined },
+    podcast: { default: undefined, type: Object as ()=>Podcast },
+    knownIdentity: { default: undefined, type: String },
+    focus: { default: false, type: Boolean },
+    comment: { default: undefined, type: Object as ()=>CommentPodcast },
+    fetchConference: { default: undefined, type: Object as ()=>Conference },
   },
   emits: ['update:knownIdentity', 'cancelAction', 'newComment'],
 
@@ -312,3 +287,28 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+.comment-input-container {
+  textarea::placeholder {
+    color: $octopus-primary-color;
+  }
+  textarea:focus::placeholder {
+    color: black;
+  }
+  textarea {
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 0.1rem solid #ddd !important;
+    overflow: hidden !important;
+    box-shadow: unset !important;
+    background: transparent !important;
+    height: 40px;
+  }
+  textarea.short {
+    max-height: 38px;
+  }
+}
+</style>

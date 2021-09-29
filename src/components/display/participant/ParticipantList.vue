@@ -39,31 +39,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.participant-list {
-  align-self: stretch;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-  /*For ie11 */
-  display: flex;
-  flex-wrap: wrap;
-  /* end */
-
-  display: grid; /* 1 */
-  grid-template-columns: repeat(auto-fill, 14rem); /* 2 */
-  grid-gap: 2rem; /* 3 */
-  justify-content: space-between; /* 4 */
-}
-/** PHONES*/
-@media (max-width: 655px) {
-  .participant-list {
-    align-self: auto;
-    grid-gap: 0;
-  }
-}
-</style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import ParticipantItem from './ParticipantItem.vue';
@@ -72,16 +47,16 @@ import { Participant } from '@/store/class/participant';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ParticipantList',
-  props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    query: { default: undefined as string|undefined },
-    organisationId: { default: undefined as string|undefined },
-    showCount: { default: false as boolean },
-  },
 
   components: {
     ParticipantItem,
+  },
+  props: {
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    query: { default: undefined, type: String},
+    organisationId: { default: undefined, type: String},
+    showCount: { default: false, type: Boolean },
   },
 
   data() {
@@ -158,3 +133,28 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.participant-list {
+  align-self: stretch;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+  /*For ie11 */
+  display: flex;
+  flex-wrap: wrap;
+  /* end */
+
+  display: grid; /* 1 */
+  grid-template-columns: repeat(auto-fill, 14rem); /* 2 */
+  grid-gap: 2rem; /* 3 */
+  justify-content: space-between; /* 4 */
+}
+/** PHONES*/
+@media (max-width: 655px) {
+  .participant-list {
+    align-self: auto;
+    grid-gap: 0;
+  }
+}
+</style>

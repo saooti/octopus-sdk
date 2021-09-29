@@ -7,7 +7,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --report",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --fix",
     "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js",
     "prettifile": "prettier --single-quote --trailing-comma es5 --write",
     "prettify": "prettier --single-quote --trailing-comma es5 --write src/**/**/**/*.{js,vue}"
@@ -31,7 +31,7 @@
     "qrcode.vue": "^3.3.2",
     "sass": "^1.42.1",
     "sass-loader": "^12.1.0",
-    "v-calendar": "^2.3.2",
+    "v-calendar": "^3.0.0-alpha.5",
     "vue": "^3.1.0",
     "vue-class-component": "^7.2.3",
     "vue-i18n": "^9.2.0-beta.7",
@@ -39,7 +39,7 @@
     "vue-property-decorator": "^9.1.2",
     "vue-recaptcha-v3": "^2.0.1",
     "vue-router": "^4.0.11",
-    "vue-swatches": "^2.1.1",
+    "vue3-swatches": "^1.0.3",
     "vuex": "^4.0.2",
     "webpack": "^5.54.0"
   },
@@ -79,12 +79,14 @@
       "no-console": "off",
       "no-debugger": "off",
       "no-useless-escape": "off",
+      "vue/no-v-html": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/camelcase": "off",
       "@typescript-eslint/ban-ts-ignore": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/explicit-function-return-type": "off"
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
     },
     "parserOptions": {
       "parser": "@typescript-eslint/parser"

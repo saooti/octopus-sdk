@@ -31,9 +31,8 @@
     />
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import { state } from '../../store/paramStore';
 
 import { Organisation } from '@/store/class/organisation';
@@ -44,9 +43,9 @@ export default defineComponent({
     OrganisationChooser: () => import('../display/organisation/OrganisationChooser.vue'),
   },
   props: {
-    conferenceWatched: { default: () => ([])  },
-    organisationId: { default: undefined as any },
-    productor:{default:undefined as string|undefined}
+    conferenceWatched: { default: () => [], type: Array as ()=>Array<any>},
+    organisationId: { default: undefined, type: String },
+    productor:{default:undefined, type: String}
   },
   emits: ['update:organisationId', 'initConferenceIds'],
   data() {
@@ -98,3 +97,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

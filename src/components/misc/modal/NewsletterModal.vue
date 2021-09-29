@@ -42,7 +42,7 @@
               >{{ $t('Display participants list') }}</label>
             </div>
             <div class="d-flex align-items-center mt-2">
-              <swatches
+              <VSwatches
                 v-model="color"
                 class="c-hand input-no-outline mr-2 mt-2"
                 show-fallback
@@ -95,28 +95,10 @@
   </div>
 </template>
 
-<style lang="scss">
-#newsletter-modal {
-  textarea {
-    border: 2px solid #eee;
-    height: 200px;
-    padding: 1em;
-    border-radius: 1em;
-    &:focus {
-      outline-width: 0;
-    }
-  }
-
-  .modal-dialog {
-    max-width: 60%;
-  }
-}
-</style>
 <script lang="ts">
 import Snackbar from '../../misc/Snackbar.vue';
 const moment = require('moment');
-//@ts-ignore
-import Swatches from 'vue-swatches';
+import VSwatches from 'vue3-swatches';
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
 import { Participant } from '@/store/class/participant';
@@ -125,16 +107,19 @@ import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NewsletterModal',
-  mixins: [displayMethods],
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-  },
-  emits: ['close'],
 
   components: {
     Snackbar,
-    Swatches,
+    VSwatches,
   },
+
+  mixins: [displayMethods],
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+  },
+
+  emits: ['close'],
 
   data() {
     return {
@@ -322,3 +307,21 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+#newsletter-modal {
+  textarea {
+    border: 2px solid #eee;
+    height: 200px;
+    padding: 1em;
+    border-radius: 1em;
+    &:focus {
+      outline-width: 0;
+    }
+  }
+
+  .modal-dialog {
+    max-width: 60%;
+  }
+}
+</style>

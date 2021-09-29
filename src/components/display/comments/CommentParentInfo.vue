@@ -32,8 +32,6 @@
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
@@ -43,7 +41,7 @@ export default defineComponent({
   name: 'CommentParentInfo',
 
   props: {
-    comId: { default: undefined as number|undefined },
+    comId: { default: undefined, type: Number },
   },
 
   data() {
@@ -82,3 +80,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss"></style>

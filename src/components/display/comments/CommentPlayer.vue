@@ -35,6 +35,45 @@
   </div>
 </template>
 
+<script lang="ts">
+import { CommentPodcast } from '@/store/class/comment';
+import { selenium } from '../../mixins/functions';
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'CommentPlayer',
+
+  components: {},
+  mixins:[selenium],
+  props: {
+    comments: { default: undefined, type: Array as ()=>Array<CommentPodcast>},
+    totalTime: { default: 0, type: Number},
+  },
+
+  data() {
+    return {
+      displayContent: undefined as CommentPodcast|undefined,
+    };
+  },
+  methods: {
+    percentPosition(time: number): number {
+      let realDuration = this.totalTime;
+      if (
+        this.$store.state.player.podcast &&
+        this.$store.state.player.podcast.duration
+      ) {
+        realDuration = Math.round(
+          this.$store.state.player.podcast.duration / 1000
+        );
+      }
+      if (realDuration < this.totalTime) {
+        time = time + (this.totalTime - realDuration);
+      }
+      return Math.round((time * 100) / this.totalTime);
+    },
+  },
+})
+</script>
+
 <style lang="scss">
 .comment-player-container {
   position: relative;
@@ -63,42 +102,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import { CommentPodcast } from '@/store/class/comment';
-import { selenium } from '../../mixins/functions';
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'CommentPlayer',
-
-  components: {},
-  mixins:[selenium],
-  props: {
-    comments: { default: undefined as Array<CommentPodcast>|undefined },
-    totalTime: { default: 0 as number},
-  },
-
-  data() {
-    return {
-      displayContent: undefined as CommentPodcast|undefined,
-    };
-  },
-  methods: {
-    percentPosition(time: number): number {
-      let realDuration = this.totalTime;
-      if (
-        this.$store.state.player.podcast &&
-        this.$store.state.player.podcast.duration
-      ) {
-        realDuration = Math.round(
-          this.$store.state.player.podcast.duration / 1000
-        );
-      }
-      if (realDuration < this.totalTime) {
-        time = time + (this.totalTime - realDuration);
-      }
-      return Math.round((time * 100) / this.totalTime);
-    },
-  },
-})
-</script>

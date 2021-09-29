@@ -247,26 +247,7 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-.title-page-podcast {
-  font-size: 0.9rem;
-}
-.width-fit-content{
-  width: fit-content;
-}
 
-.date-text-zone {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  @media (max-width: 600px) {
-    display: initial;
-    .duration {
-      margin-left: 0 !important;
-    }
-  }
-}
-</style>
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import PodcastImage from '../display/podcasts/PodcastImage.vue';
@@ -302,10 +283,10 @@ export default defineComponent({
   mixins:[displayMethods],
 
   props: {
-    updateStatus: { default: undefined as string|undefined},
-    playingPodcast: { default: undefined as Podcast|undefined},
-    podcastId: { default: undefined as number|undefined},
-    isEducation: { default: false as boolean},
+    updateStatus: { default: undefined, type: String},
+    playingPodcast: { default: undefined, type: Object as ()=> Podcast},
+    podcastId: { default: undefined, type: Number},
+    isEducation: { default: false, type: Boolean},
   },
 
   emits: ['initConferenceId', 'podcastTitle', 'playPodcast'],
@@ -595,3 +576,24 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+.title-page-podcast {
+  font-size: 0.9rem;
+}
+.width-fit-content{
+  width: fit-content;
+}
+
+.date-text-zone {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  @media (max-width: 600px) {
+    display: initial;
+    .duration {
+      margin-left: 0 !important;
+    }
+  }
+}
+</style>

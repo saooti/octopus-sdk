@@ -74,15 +74,6 @@
   </div>
 </template>
 
-<style lang="scss">
-.width-600 {
-  width: 600px;
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-}
-</style>
-
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
@@ -94,12 +85,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastList',
 
-  props: {
-    playlist: { default: undefined as Playlist|undefined},
-  },
-
   components: {
     PodcastItem,
+  },
+
+  props: {
+    playlist: { default: undefined, type: Object as ()=>Playlist},
   },
 
   data() {
@@ -195,3 +186,13 @@ export default defineComponent({
   },
 })
 </script>
+
+
+<style lang="scss">
+.width-600 {
+  width: 600px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+</style>

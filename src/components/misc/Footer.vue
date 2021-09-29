@@ -134,37 +134,6 @@
     <Player @hide="showBlackBorder" />
   </div>
 </template>
-<style lang="scss">
-#footer {
-  font-size: 0.7rem;
-  a {
-    color: #666;
-  }
-  .acpm_image {
-    width: 70px;
-    height: 70px;
-  }
-}
-.border-round {
-  border-radius: 0 0 2rem 2rem;
-}
-/** PHONES*/
-@media (max-width: 960px) {
-  .footer-display-phone {
-    flex-direction: column;
-    .align-items-center,
-    .align-items-end {
-      align-items: flex-start !important;
-    }
-  }
-  .container {
-    font-size: 0.6rem;
-    .pages {
-      margin-right: 3rem;
-    }
-  }
-}
-</style>
 
 <script lang="ts">
 import Player from './Player.vue';
@@ -228,3 +197,35 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+#footer {
+  font-size: 0.7rem;
+  a {
+    color: #666;
+  }
+  .acpm_image {
+    width: 70px;
+    height: 70px;
+  }
+}
+.border-round {
+  border-radius: 0 0 2rem 2rem;
+}
+/** PHONES*/
+@media (max-width: 960px) {
+  .footer-display-phone {
+    flex-direction: column;
+    .align-items-center,
+    .align-items-end {
+      align-items: flex-start !important;
+    }
+  }
+  .container {
+    font-size: 0.6rem;
+    .pages {
+      margin-right: 3rem;
+    }
+  }
+}
+</style>
