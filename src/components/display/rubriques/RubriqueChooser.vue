@@ -8,7 +8,7 @@
       class="d-inline"
       aria-label="select rubrique"
     />
-    <Multiselect
+    <VueMultiselect
       :id="id"
       ref="multiselectRef"
       v-model="model"
@@ -34,42 +34,42 @@
       @close="onClose"
       @select="onRubriqueSelected"
     >
-      <slot name="singleLabel">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <span class="option__title">
-            {{ props.option.name }}
+            {{ option.name }}
           </span>
         </div>
-      </slot>
-      <slot
-        v-if="undefined!==props.option"
-        name="option"
+      </template>
+      <template
+        v-if="undefined!==option"
+        #option="{ option }"
       >
         <div
           class="multiselect-octopus-proposition"
-          :class="props.option.rubriqueId <= 0 ? 'primary-dark' : ''"
-          :data-selenium="'rubric-chooser-' + seleniumFormat(props.option.name)"
+          :class="option.rubriqueId <= 0 ? 'primary-dark' : ''"
+          :data-selenium="'rubric-chooser-' + seleniumFormat(option.name)"
         >
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
-      </slot>
-      <slot name="noOptions">
+      </template>
+      <template #noOptions>
         {{ $t('List is empty') }}
-      </slot>
-      <slot name="noResult">
+      </template>
+      <template #noResult>
         {{ $t('No elements found. Consider changing the search query.') }}
-      </slot>
-      <slot
-        class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top"
-        name="caret"
-      />
-    </Multiselect>
+      </template>
+      <template #caret>
+        <span class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top" />
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
-import Multiselect from 'vue-multiselect';
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 import { Rubrique } from '@/store/class/rubrique';
 const getDefaultRubrique = (defaultName: string) => {
   if ('' === defaultName){
@@ -81,7 +81,7 @@ const getDefaultRubrique = (defaultName: string) => {
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    Multiselect,
+    VueMultiselect,
   },
   mixins:[selenium],
   props: {

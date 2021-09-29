@@ -116,7 +116,7 @@
                     paddingRight: '0px',
                     paddingBottom: '0px',
                   }"
-                  :colors="[myColor]"
+                  :swatches="[myColor]"
                   inline
                 />
               </div>

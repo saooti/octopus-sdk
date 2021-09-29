@@ -9,13 +9,13 @@
       class="d-inline"
       aria-label="select emission"
     />
-    <!-- <Multiselect
-      v-model="emission"
+    <VueMultiselect
       id="emissionChooser"
+      ref="multiselectRef"
+      v-model="emission"
       label="name"
       track-by="emissionId"
       :placeholder="$t('Type string to filter by emission')"
-      ref="multiselectRef"
       :options="emissions"
       :multiple="false"
       :searchable="true"
@@ -33,28 +33,31 @@
       @close="onClose"
       @select="onEmissionSelected"
     >
-      <template slot="clear" slot-scope="props">
+      <template #clear="{ props }">
         <div
-          class="multiselect__clear"
           v-if="emission"
+          class="multiselect__clear"
           @mousedown.prevent.stop="clearAll(props.search)"
-        ></div>
+        />
       </template>
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template #option="{ option }">
         <div class="multiselect-octopus-proposition">
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <span slot="noResult">{{
-        $t('No elements found. Consider changing the search query.')
-      }}</span>
-      <template slot="afterList">
-        <div v-if="remainingElements" class="multiselect-remaining-elements">
+      <template #noResult="">
+        <span>{{ $t('No elements found. Consider changing the search query.') }}</span>
+      </template>
+      <template #afterList="">
+        <div
+          v-if="remainingElements"
+          class="multiselect-remaining-elements"
+        >
           {{
             $t(
               'Count more elements matched your query, please make a more specific search.',
@@ -63,18 +66,23 @@
           }}
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <div class="position-relative" slot="caret">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
-        ></span>
-      </div>
-    </Multiselect> -->
+      <template #noOptions="">
+        {{ $t('List is empty') }}
+      </template>
+      <template #caret="">
+        <div class="position-relative">
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+          />
+        </div>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
 <script lang="ts">
-/* import Multiselect from 'vue-multiselect'; */
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 const octopusApi = require('@saooti/octopus-api');
 
 const ELEMENTS_COUNT = 50;
@@ -103,7 +111,7 @@ import { Emission } from '@/store/class/emission';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    //Multiselect,
+    VueMultiselect
   },
 
   props: {

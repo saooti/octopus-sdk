@@ -10,13 +10,13 @@
       class="d-inline"
       aria-label="select productor"
     />
-    <!-- <Multiselect
-      v-model="organisation"
+    <VueMultiselect
       id="organisationChooser"
+      ref="multiselectRef"
+      v-model="organisation"
       label="name"
       track-by="organisationId"
       :placeholder="$t('Type string to filter by organisation')"
-      ref="multiselectRef"
       :options="organisations"
       :multiple="false"
       :searchable="true"
@@ -29,55 +29,64 @@
       :show-no-results="true"
       :hide-selected="true"
       :show-labels="false"
+      :class="{ 'light-multiselect': stats }"
       @search-change="onSearchOrganisation"
       @open="onOpen"
       @close="onClose"
       @select="onOrganisationSelected"
-      :class="{ 'light-multiselect': stats }"
     >
-      <template slot="clear" slot-scope="props">
+      <template #clear="{ props }">
         <div
-          class="multiselect__clear"
           v-if="organisation"
+          class="multiselect__clear"
           @mousedown.prevent.stop="clearAll(props.search)"
-        ></div>
+        />
       </template>
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <img
             v-if="!light &&!stats"
             class="option__image"
-            :src="props.option.imageUrl"
-            :alt="props.option.name"
-          />
-          <span class="option__title" :class="{ descriptionText: light }">
-            {{ props.option.name }}
+            :src="option.imageUrl"
+            :alt="option.name"
+          >
+          <span
+            class="option__title"
+            :class="{ descriptionText: light }"
+          >
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template #option="{ option }">
         <div
           class="multiselect-octopus-proposition"
           :data-selenium="
-            'organisation-chooser-' + seleniumFormat(props.option.name)
+            'organisation-chooser-' + seleniumFormat(option.name)
           "
         >
           <img
             v-if="!light &&!stats"
             class="option__image"
-            :src="props.option.imageUrl"
-            :alt="props.option.name"
-          />
-          <span class="option__title" :class="{ descriptionText: light }">
-            {{ props.option.name }}
+            :src="option.imageUrl"
+            :alt="option.name"
+          >
+          <span
+            class="option__title"
+            :class="{ descriptionText: light }"
+          >
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <span slot="noResult">
-        {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
-      <template slot="afterList">
-        <div v-if="remainingElements" class="multiselect-remaining-elements">
+      <template #noResult="">
+        <span>{{ $t('No elements found. Consider changing the search query.') }}</span>
+      </template>
+      <template #afterList="">
+        <div
+          v-if="remainingElements"
+          class="multiselect-remaining-elements"
+        >
           {{
             $t(
               'Count more elements matched your query, please make a more specific search.',
@@ -86,20 +95,28 @@
           }}
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <div class="position-relative" slot="caret" v-if="!light">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2"
-          :class="{ 'octopus-arrow-down-top': stats }"
-        ></span>
-      </div>
-    </Multiselect> -->
+      <template #noOptions="">
+        {{ $t('List is empty') }}
+      </template>
+      <template #caret="">
+        <div
+          v-if="!light"
+          class="position-relative"
+        >
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2"
+            :class="{ 'octopus-arrow-down-top': stats }"
+          />
+        </div>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
-/* import Multiselect from 'vue-multiselect'; */
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
 import { Organisation } from '@/store/class/organisation';
@@ -122,7 +139,7 @@ const getDefaultOrganistion = (defaultName: string) => {
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    //Multiselect,
+    VueMultiselect,
   },
   mixins:[selenium],
   props: {

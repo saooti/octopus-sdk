@@ -8,14 +8,14 @@
       class="d-inline"
       aria-label="select category"
     />
-    <!-- <Multiselect
+    <VueMultiselect
+      :id="id"
+      ref="multiselectRef"
       v-model="model"
       :disabled="isDisabled"
-      :id="id"
       label="name"
       track-by="id"
       :placeholder="$t('Type string to filter by categories')"
-      ref="multiselectRef"
       :options="categories"
       :multiple="multiple"
       :searchable="true"
@@ -33,33 +33,40 @@
       @close="onClose"
       @select="onCategorySelected"
     >
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <span class="option__title">
-            {{ props.option.name }}
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template #option="{ option }">
         <div class="multiselect-octopus-proposition">
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <span slot="noResult">
-        {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
-      <div class="position-relative" slot="caret">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
-        ></span>
-      </div>
-    </Multiselect> -->
+      <template #noOptions="">
+        {{ $t('List is empty') }}
+      </template>
+      <template #noResult="">
+        <span>
+          {{ $t('No elements found. Consider changing the search query.') }}
+        </span>
+      </template>
+      <template #caret="">
+        <div class="position-relative">
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+          />
+        </div>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
 <script lang="ts">
-/* import Multiselect from 'vue-multiselect'; */
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 
 const getDefaultCategory = (defaultName: string) => {
   if ('' === defaultName){
@@ -72,7 +79,7 @@ import { Category } from '@/store/class/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    //Multiselect,
+    VueMultiselect
   },
   props: {
     width: { default: '100%', type: String },
