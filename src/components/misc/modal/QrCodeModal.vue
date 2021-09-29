@@ -2,17 +2,20 @@
   <div>
     <b-modal
       id="qrcode-modal"
+      :show="true"
+      :title="$t('Share QR Code')"
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
-      :show="true"
-      :title="$t('Share QR Code')"
     >
-      <template v-slot:default>
-        <QrCode :url="urlPage"/>
+      <template #default>
+        <QrCode :url="urlPage" />
       </template>
-      <template v-slot:modal-footer>
-        <button class="btn btn-primary m-1" @click="closePopup">
+      <template #modal-footer>
+        <button
+          class="btn btn-primary m-1"
+          @click="closePopup"
+        >
           {{ $t('Close') }}
         </button>
       </template>

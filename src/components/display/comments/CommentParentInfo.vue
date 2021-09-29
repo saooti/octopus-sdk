@@ -1,27 +1,33 @@
 <template>
   <div class="mt-2">
-    <div class="d-flex" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <div class="mt-2">{{ $t('Loading content ...') }}</div>
+    <div
+      v-if="loading"
+      class="d-flex"
+    >
+      <div class="spinner-border mr-3" />
+      <div class="mt-2">
+        {{ $t('Loading content ...') }}
+      </div>
     </div>
     <div v-else>
       <div class="d-flex small-Text">
         <b class="mr-2">{{ comment.name }}</b>
         <img
+          v-if="comment.certified"
           class="icon-certified"
           src="/img/certified.png"
-          v-if="comment.certified"
           :title="$t('Certified account')"
-        />
-        <div class="mr-2">{{ date }}</div>
+        >
+        <div class="mr-2">
+          {{ date }}
+        </div>
       </div>
       <div>{{ contentDisplay }}</div>
       <a
-        class="c-hand font-italic"
         v-if="comment.content.length > 300"
+        class="c-hand font-italic"
         @click="summary = !summary"
-        >{{ readMore }}</a
-      >
+      >{{ readMore }}</a>
     </div>
   </div>
 </template>
@@ -48,11 +54,6 @@ export default defineComponent({
     };
   },
 
-  async created() {
-    this.comment = await octopusApi.fetchComment(this.comId);
-    this.loading = false;
-  },
-
   
   computed: {
     date(): string {
@@ -73,6 +74,11 @@ export default defineComponent({
       if (this.summary) return this.limitContent;
       return this.comment!.content;
     },
+  },
+
+  async created() {
+    this.comment = await octopusApi.fetchComment(this.comId);
+    this.loading = false;
   },
 })
 </script>

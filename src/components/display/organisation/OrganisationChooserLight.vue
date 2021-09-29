@@ -1,23 +1,27 @@
 <template>
   <div
+    v-if="(!value || init) && organisation"
     class="default-multiselect-width"
     :style="{ width: width }"
-    v-if="(!value || init) && organisation"
   >
     <select
       :id="'organisation_chooser_light' + page"
-      class="basic-select mb-0 c-hand"
       v-model="actual"
+      class="basic-select mb-0 c-hand"
       @change="onOrganisationSelected"
     >
-      <option :value="organisation.id">{{ organisation.name }}</option>
-      <option :value="-1">{{ $t('No organisation filter') }}</option>
+      <option :value="organisation.id">
+        {{ organisation.name }}
+      </option>
+      <option :value="-1">
+        {{ $t('No organisation filter') }}
+      </option>
     </select>
     <label
       :for="'organisation_chooser_light' + page"
       class="d-inline"
       :aria-label="$t('select productor')"
-    ></label>
+    />
   </div>
 </template>
 
@@ -45,6 +49,17 @@ export default defineComponent({
     };
   },
 
+  watch: {
+    value(): void {
+      if (!this.init || this.value) {
+        this.fetchOrganisation();
+      }
+    },
+    reset(): void {
+      this.actual = -1;
+    },
+  },
+
   created() {
     if (this.value) {
       this.fetchOrganisation();
@@ -64,17 +79,6 @@ export default defineComponent({
       this.organisation = data;
       this.actual = data.id;
       this.init = true;
-    },
-  },
-
-  watch: {
-    value(): void {
-      if (!this.init || this.value) {
-        this.fetchOrganisation();
-      }
-    },
-    reset(): void {
-      this.actual = -1;
     },
   },
 })

@@ -2,44 +2,45 @@
   <div class="d-flex align-items-center">
     <label class="wrap">
       <select
-        class="basic-select ml-2 mb-0 border c-hand"
         v-model="rubriquageId"
+        class="basic-select ml-2 mb-0 border c-hand"
         @change="onRubriquageSelected"
       >
         <option
           v-for="rubriquage in rubriquageDisplay"
           :key="rubriquage.rubriquageId"
           :value="rubriquage.rubriquageId"
-          >{{ rubriquage.title }}</option
-        >
+        >{{ rubriquage.title }}</option>
       </select>
       <div
         class="saooti-arrow_down octopus-arrow-down-2 classic-select"
-      ></div>
+      />
     </label>
     <template v-if="rubriquageId">
-      <div class="ml-3 flex-shrink">{{ $t('By rubric') }}</div>
+      <div class="ml-3 flex-shrink">
+        {{ $t('By rubric') }}
+      </div>
       <RubriqueChooser
+        v-if="getRubriques(rubriquageId).length"
         class="ml-2"
         :multiple="false"
-        :rubriquageId="rubriquageId"
-        :rubriqueSelected="0 < this.rubriqueIdSelected? this.rubriqueIdSelected : undefined"
-        :allRubriques="getRubriques(rubriquageId)"
+        :rubriquage-id="rubriquageId"
+        :rubrique-selected="0 < rubriqueIdSelected? rubriqueIdSelected : undefined"
+        :all-rubriques="getRubriques(rubriquageId)"
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
-        :withoutRubrique="true"
+        :without-rubrique="true"
         width="auto"
-        v-if="getRubriques(rubriquageId).length"
         @selected="onRubriqueSelected"
       />
     </template>
     <button
+      v-if="index"
       class="btn btn-circle primary-color ml-1"
       aria-label="delete"
       @click="deleteRubriquage"
-      v-if="index"
     >
-      <span class="saooti-bin"></span>
+      <span class="saooti-bin" />
     </button>
   </div>
 </template>

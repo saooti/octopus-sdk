@@ -1,54 +1,68 @@
 <template>
   <div class="d-flex flex-column p-3 list-episode">
-    <div class="d-flex justify-content-end" v-if="!overflowScroll">
+    <div
+      v-if="!overflowScroll"
+      class="d-flex justify-content-end"
+    >
       <div class="hide-phone">
         <button
           class="btn btn-arrow"
-          @click="displayPrevious()"
           :class="{ disabled: !previousAvailable }"
           :aria-label="$t('Display previous')"
+          @click="displayPrevious()"
         >
-          <div class="saooti-arrow-left2"></div>
+          <div class="saooti-arrow-left2" />
         </button>
         <button
           class="btn btn-arrow"
-          @click="displayNext()"
           :class="{ disabled: !nextAvailable }"
           :aria-label="$t('Display next')"
+          @click="displayNext()"
         >
-          <div class="saooti-arrow-right2"></div>
+          <div class="saooti-arrow-right2" />
         </button>
       </div>
     </div>
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading emissions ...') }}
+      </h3>
     </div>
     <transition-group
-      :name="transitionName"
-      class="podcast-list-inline"
-      tag="ul"
       v-show="
         (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
       "
+      :name="transitionName"
+      class="podcast-list-inline"
+      tag="ul"
       :class="[
         alignLeft ? 'justify-content-start' : '',
         overflowScroll ? 'overflowScroll' : '',
       ]"
     >
       <EmissionPlayerItem
+        v-for="e in emissions"
+        :key="e.emissionId"
         class="flex-shrink item-phone-margin"
         :emission="e"
-        v-for="e in emissions"
-        v-bind:key="e.emissionId"
         :class="[alignLeft ? 'mr-3' : '', mainRubriquage(e)]"
-        :nbPodcasts="nbPodcasts"
-        :rubriqueName="rubriquesId(e)"
+        :nb-podcasts="nbPodcasts"
+        :rubrique-name="rubriquesId(e)"
       />
     </transition-group>
-    <router-link v-bind:to="href" class="btn btn-link" v-if="!overflowScroll">{{
-      buttonText
-    }}</router-link>
+    <router-link
+      v-if="!overflowScroll"
+      :to="href"
+      class="btn btn-link"
+    >
+      {{
+        buttonText
+      }}
+    </router-link>
   </div>
 </template>
 
@@ -115,22 +129,6 @@ export default defineComponent({
       rubriques: undefined as Array<Rubrique>|undefined,
     };
   },
-  
-  created() {
-    window.addEventListener('resize', this.handleResize);
-  },
-
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-
-  mounted() {
-    this.handleResize();
-    this.fetchNext();
-    if (this.displayRubriquage) {
-      this.fetchRubriques();
-    }
-  },
 
 
   computed: {
@@ -151,6 +149,22 @@ export default defineComponent({
     },
     transitionName(): string {
       return this.direction > 0 ? 'out-left' : 'out-right';
+    }
+  },
+  
+  created() {
+    window.addEventListener('resize', this.handleResize);
+  },
+
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+
+  mounted() {
+    this.handleResize();
+    this.fetchNext();
+    if (this.displayRubriquage) {
+      this.fetchRubriques();
     }
   },
   methods: {

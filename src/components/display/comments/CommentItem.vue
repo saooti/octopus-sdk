@@ -3,18 +3,23 @@
     <div class="d-flex small-Text">
       <template v-if="!isEditing">
         <b
-          class="recording-bg mr-1 text-light p-01"
           v-if="
             recordingInLive &&
               ('Live' === comment.phase || 'Prelive' === comment.phase)
           "
-          >{{ $t('Live') }}</b
-        >
-        <b class="mr-2" v-if="editRight || comment.status == 'Valid'">{{
+          class="recording-bg mr-1 text-light p-01"
+        >{{ $t('Live') }}</b>
+        <b
+          v-if="editRight || comment.status == 'Valid'"
+          class="mr-2"
+        >{{
           comment.name
         }}</b>
         <template v-else>
-          <b class="mr-2 text-danger" :id="'popover-comment' + comment.comId">{{
+          <b
+            :id="'popover-comment' + comment.comId"
+            class="mr-2 text-danger"
+          >{{
             comment.name
           }}</b>
           <b-popover
@@ -28,39 +33,47 @@
       </template>
       <template v-else>
         <input
+          v-model="temporaryName"
           class="form-input mr-2 mb-2 width-auto"
           type="text"
-          v-model="temporaryName"
-          v-bind:class="{ 'border border-danger': temporaryName.length < 2 }"
-        />
+          :class="{ 'border border-danger': temporaryName.length < 2 }"
+        >
       </template>
       <img
+        v-if="comment.certified"
         class="icon-certified"
         src="/img/certified.png"
-        v-if="comment.certified"
         :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
         :title="$t('Certified account')"
-      />
-      <div class="mr-2">{{ date }}</div>
+      >
+      <div class="mr-2">
+        {{ date }}
+      </div>
       <span 
         v-if="editRight" 
         :class="'status-' + comment.status"
         :data-selenium="'status-comment-' + seleniumFormat(comment.name)"
-      ></span>
+      />
     </div>
     <template v-if="!isEditing">
-      <div v-html="urlify(contentDisplay)"></div>
+      <div v-html="urlify(contentDisplay)" />
       <a
-        class="c-hand font-italic"
         v-if="comment.content.length > 300"
+        class="c-hand font-italic"
         @click="summary = !summary"
-        >{{ readMore }}</a
-      >
+      >{{ readMore }}</a>
     </template>
     <template v-else>
-      <textarea class="form-input" type="text" v-model="temporaryContent" />
+      <textarea
+        v-model="temporaryContent"
+        class="form-input"
+        type="text"
+      />
       <div class="d-flex justify-content-end">
-        <button class="btn btn-light m-1" @click="isEditing = false">
+        <button
+          class="btn btn-light m-1"
+          @click="isEditing = false"
+        >
           {{ $t('Cancel') }}
         </button>
         <button
@@ -74,20 +87,20 @@
     </template>
     <div class="d-flex align-items-center mt-1">
       <button
-        @click="answerComment"
+        v-if="null === comment.commentIdReferer && 'Valid' === comment.status"
         class="btn btn-answer primary-color mr-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
-        v-if="null === comment.commentIdReferer && 'Valid' === comment.status"
+        @click="answerComment"
       >
         {{ $t('To answer') }}
       </button>
       <div
-        v-b-toggle="'answers-comment-' + comment.comId"
-        class="primary-color c-hand d-flex align-items-center small-Text input-no-outline"
         v-if="
           (!isFlat && comment.relatedComments) ||
             (isFlat && comment.commentIdReferer)
         "
+        v-b-toggle="'answers-comment-' + comment.comId"
+        class="primary-color c-hand d-flex align-items-center small-Text input-no-outline"
       >
         <div class="d-flex align-items-center when-closed mr-2">
           <div v-if="comment.relatedComments">
@@ -98,20 +111,26 @@
               })
             }}</i>
           </div>
-          <div v-else>{{ $t('In response to') }}</div>
-          <span class="saooti-arrow_down saooti-arrow_down-margin"></span>
+          <div v-else>
+            {{ $t('In response to') }}
+          </div>
+          <span class="saooti-arrow_down saooti-arrow_down-margin" />
         </div>
         <div class="d-flex align-items-center when-opened">
-          <div v-if="comment.relatedComments">{{ $t('Hide answers') }}</div>
-          <div v-else>{{ $t('In response to') }}</div>
+          <div v-if="comment.relatedComments">
+            {{ $t('Hide answers') }}
+          </div>
+          <div v-else>
+            {{ $t('In response to') }}
+          </div>
           <span
             class="saooti-arrow_down saooti-arrow_down-margin arrow-transform mr-2"
-          ></span>
+          />
         </div>
       </div>
       <EditCommentBox
-        ref="editBox"
         v-if="editRight"
+        ref="editBox"
         :comment="comment"
         :organisation="organisation"
         @deleteComment="deleteComment"
@@ -121,31 +140,31 @@
     </div>
     <b-collapse
       :id="'answers-comment-' + comment.comId"
-      class="ml-4"
       v-model="collapseVisible"
+      class="ml-4"
     >
       <CommentInput
         v-if="!isFlat || (isFlat && !comment.commentIdReferer)"
+        v-model:knownIdentity="knownIdentity"
         :focus="focus"
         :podcast="podcast"
-        v-model:knownIdentity="knownIdentity"
         :comment="comment"
-        :fetchConference="fetchConference"
+        :fetch-conference="fetchConference"
         @cancelAction="collapseVisible = false"
         @newComment="newComment"
       />
       <CommentParentInfo
         v-if="isFlat && comment.commentIdReferer && collapseVisible"
-        :comId="comment.commentIdReferer"
+        :com-id="comment.commentIdReferer"
       />
       <CommentList
         v-if="comment.relatedComments && collapseVisible && !isFlat"
-        @updateStatus="updateStatus"
-        :podcast="podcast"
-        :fetchConference="fetchConference"
-        :organisation="organisation"
         ref="commentList"
-        :comId="comment.comId"
+        :podcast="podcast"
+        :fetch-conference="fetchConference"
+        :organisation="organisation"
+        :com-id="comment.comId"
+        @updateStatus="updateStatus"
       />
     </b-collapse>
   </div>
@@ -164,13 +183,13 @@ const moment = require('moment');
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentItem',
-  mixins:[displayMethods, selenium],
   components: {
     CommentList: () => import('./CommentList.vue'),
     CommentInput: () => import('./CommentInput.vue'),
     CommentParentInfo: () => import('./CommentParentInfo.vue'),
     EditCommentBox: () => import('@/components/display/edit/EditCommentBox.vue'),
   },
+  mixins:[displayMethods, selenium],
   props: {
     comment: { default: undefined as CommentPodcast|undefined },
     podcast: { default: undefined as Podcast|undefined },

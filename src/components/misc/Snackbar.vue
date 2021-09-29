@@ -1,13 +1,19 @@
 <template>
-  <div class="snack-bar-wrap" :style="style.wrap">
-    <template v-for="(msg, i) in msgs" :key="i">
+  <div
+    class="snack-bar-wrap"
+    :style="style.wrap"
+  >
+    <template
+      v-for="(msg, i) in msgs"
+      :key="i"
+    >
       <div
         class="snack-bar"
         :style="style.bar(msg.color)"
         @click="pop(i)"
         v-html="msg.msg.message || msg.msg"
-      ></div>
-      <br/>
+      />
+      <br>
     </template>
   </div>
 </template>

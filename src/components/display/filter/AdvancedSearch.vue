@@ -4,109 +4,144 @@
       class="d-flex justify-content-center mb-3"
       @click="showFilters = !showFilters"
     >
-      <div class="text-secondary c-hand">{{ $t('Advanced filters') }}</div>
+      <div class="text-secondary c-hand">
+        {{ $t('Advanced filters') }}
+      </div>
       <div
         class="text-secondary c-hand align-self-center large-font-size"
         :class="{ 'arrow-transform': showFilters }"
       >
-        <div class="saooti-arrow_down saooti-arrow_down-margin"></div>
+        <div class="saooti-arrow_down saooti-arrow_down-margin" />
       </div>
     </div>
-    <div class="advanced-search-container" v-show="showFilters">
+    <div
+      v-show="showFilters"
+      class="advanced-search-container"
+    >
       <div class="d-flex flex-column">
-        <div class="primary-color mb-2">{{ $t('Filter') }}</div>
+        <div class="primary-color mb-2">
+          {{ $t('Filter') }}
+        </div>
         <MonetizableFilter
-          @updateMonetization="updateMonetization"
-          :isEducation="isEducation"
-          :isEmission="isEmission"
           v-if="isMonetizableFilter"
+          :is-education="isEducation"
+          :is-emission="isEmission"
+          @updateMonetization="updateMonetization"
         />
-        <CategoryFilter @updateCategory="updateCategory"/>
+        <CategoryFilter @updateCategory="updateCategory" />
         
         <RubriqueFilter 
-          :resetRubriquage="resetRubriquage"
-          :organisationId="organisationId"
+          :reset-rubriquage="resetRubriquage"
+          :organisation-id="organisationId"
           @updateRubriquageFilter="updateRubriquageFilter"
         />
         <div class="d-flex mt-3 align-items-center flex-wrap">
-          <div class="mr-2" v-if="isEmission">
+          <div
+            v-if="isEmission"
+            class="mr-2"
+          >
             {{ $t('Emission with episode published :') }}
           </div>
           <div class="d-flex align-items-center">
             <div class="checkbox-saooti flex-shrink">
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="search-from-checkbox"
                 v-model="isFrom"
-              />
-              <label class="custom-control-label" for="search-from-checkbox">{{
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="search-from-checkbox"
+              >{{
                 $t('From the :')
               }}</label>
             </div>
-            <DatePicker class="pl-3 pr-3" v-model="fromDate" mode="dateTime" color="green" @input="updateFromDate()" is24hr>
-              <template v-slot="{ inputValue, inputEvents }">
+            <DatePicker
+              v-model="fromDate"
+              class="pl-3 pr-3"
+              mode="dateTime"
+              color="green"
+              is24hr
+              @input="updateFromDate()"
+            >
+              <template #default="{ inputValue, inputEvents }">
                 <input
                   class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
                   :value="inputValue"
                   v-on="inputEvents"
-                />
+                >
               </template>
             </DatePicker>
           </div>
           <div class="d-flex align-items-center">
             <div class="checkbox-saooti flex-shrink">
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="search-to-checkbox"
                 v-model="isTo"
-              />
-              <label class="custom-control-label" for="search-to-checkbox">{{
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="search-to-checkbox"
+              >{{
                 $t('To the :')
               }}</label>
             </div>
-            <DatePicker class="pl-3" v-model="toDate" mode="dateTime" color="green" @input="updateToDate()" is24hr>
-              <template v-slot="{ inputValue, inputEvents }">
+            <DatePicker
+              v-model="toDate"
+              class="pl-3"
+              mode="dateTime"
+              color="green"
+              is24hr
+              @input="updateToDate()"
+            >
+              <template #default="{ inputValue, inputEvents }">
                 <input
                   class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
                   :value="inputValue"
                   v-on="inputEvents"
-                />
+                >
               </template>
             </DatePicker>
           </div>
         </div>
         <div
-          class="d-flex flex-column mt-3"
           v-if="organisation && organisationRight && !isPodcastmaker"
+          class="d-flex flex-column mt-3"
         >
           <div class="checkbox-saooti flex-shrink">
             <input
-              type="checkbox"
-              class="custom-control-input"
               id="search-future-checkbox"
               v-model="isNotVisible"
+              type="checkbox"
+              class="custom-control-input"
               :disabled="isCheckboxNotValidate && isNotValidate"
-            />
-            <label class="custom-control-label" for="search-future-checkbox">{{
+            >
+            <label
+              class="custom-control-label"
+              for="search-future-checkbox"
+            >{{
               textNotVisible
             }}</label>
           </div>
         </div>
-        <div class="d-flex flex-column mt-3" v-if="isCheckboxNotValidate">
+        <div
+          v-if="isCheckboxNotValidate"
+          class="d-flex flex-column mt-3"
+        >
           <div class="checkbox-saooti flex-shrink">
             <input
-              type="checkbox"
-              class="custom-control-input"
               id="search-not-validate-checkbox"
               v-model="isNotValidate"
-            />
+              type="checkbox"
+              class="custom-control-input"
+            >
             <label
               class="custom-control-label"
               for="search-not-validate-checkbox"
-              >{{ textNotValidate }}</label
-            >
+            >{{ textNotValidate }}</label>
           </div>
         </div>
       </div>
@@ -115,17 +150,37 @@
           {{ $t('Sort') }}
         </div>
         <b-form-group>
-          <b-form-radio-group v-model="sort" class="d-flex flex-column">
-            <b-form-radio value="SCORE" v-if="isSearchBar">{{
-              $t('Sort score')
-            }}</b-form-radio>
-            <b-form-radio value="LAST_PODCAST_DESC" v-if="isEmission">{{
-              $t('Sort last')
-            }}</b-form-radio>
-            <b-form-radio value="DATE" v-else>{{
-              $t('Sort last')
-            }}</b-form-radio>
-            <b-form-radio value="NAME">{{ $t('Sort name') }}</b-form-radio>
+          <b-form-radio-group
+            v-model="sort"
+            class="d-flex flex-column"
+          >
+            <b-form-radio
+              v-if="isSearchBar"
+              value="SCORE"
+            >
+              {{
+                $t('Sort score')
+              }}
+            </b-form-radio>
+            <b-form-radio
+              v-if="isEmission"
+              value="LAST_PODCAST_DESC"
+            >
+              {{
+                $t('Sort last')
+              }}
+            </b-form-radio>
+            <b-form-radio
+              v-else
+              value="DATE"
+            >
+              {{
+                $t('Sort last')
+              }}
+            </b-form-radio>
+            <b-form-radio value="NAME">
+              {{ $t('Sort name') }}
+            </b-form-radio>
           </b-form-radio-group>
         </b-form-group>
       </div>
@@ -259,16 +314,6 @@ export default defineComponent({
     };
   },
 
-  created() {
-    if (!this.isEmission) {
-      this.isNotVisible = this.includeHidden;
-    }
-  },
-
-  mounted() {
-    this.sort = this.sortCriteria;
-  },
-
   computed: {
     isMonetizableFilter(): boolean {
       return state.podcastsPage.MonetizableFilter;
@@ -323,6 +368,51 @@ export default defineComponent({
       return this.$t('Display my podcasts to validate').toString();
     },
   },
+  watch: {
+    organisation(): void {
+      if (this.organisation && this.organisationRight && !this.isEmission) {
+        this.isNotVisible = true;
+      } else {
+        this.isNotVisible = false;
+      }
+    },
+    isFrom(): void {
+      if (this.isFrom) {
+        this.$emit('updateFromDate', moment(this.fromDate).toISOString(true));
+      } else {
+        this.$emit('updateFromDate', undefined);
+      }
+    },
+    isTo(): void {
+      if (this.isTo) {
+        this.$emit('updateToDate', moment(this.toDate).toISOString(true));
+      } else {
+        this.$emit('updateToDate', undefined);
+      }
+    },
+    sort(): void {
+      this.$emit('updateSortCriteria', this.sort);
+    },
+    isNotVisible(): void{
+      this.$emit('includeHidden', this.isNotVisible);
+    },
+    isNotValidate(): void {
+      this.$emit('notValid', this.isNotValidate);
+    },
+    sortCriteria(): void {
+      this.sort = this.sortCriteria;
+    },
+  },
+
+  created() {
+    if (!this.isEmission) {
+      this.isNotVisible = this.includeHidden;
+    }
+  },
+
+  mounted() {
+    this.sort = this.sortCriteria;
+  },
   methods: {
     updateFromDate(): void {
       if (
@@ -369,41 +459,6 @@ export default defineComponent({
     },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       this.$emit('updateRubriquageFilter', value);
-    },
-  },
-  watch: {
-    organisation(): void {
-      if (this.organisation && this.organisationRight && !this.isEmission) {
-        this.isNotVisible = true;
-      } else {
-        this.isNotVisible = false;
-      }
-    },
-    isFrom(): void {
-      if (this.isFrom) {
-        this.$emit('updateFromDate', moment(this.fromDate).toISOString(true));
-      } else {
-        this.$emit('updateFromDate', undefined);
-      }
-    },
-    isTo(): void {
-      if (this.isTo) {
-        this.$emit('updateToDate', moment(this.toDate).toISOString(true));
-      } else {
-        this.$emit('updateToDate', undefined);
-      }
-    },
-    sort(): void {
-      this.$emit('updateSortCriteria', this.sort);
-    },
-    isNotVisible(): void{
-      this.$emit('includeHidden', this.isNotVisible);
-    },
-    isNotValidate(): void {
-      this.$emit('notValid', this.isNotValidate);
-    },
-    sortCriteria(): void {
-      this.sort = this.sortCriteria;
     },
   },
 })

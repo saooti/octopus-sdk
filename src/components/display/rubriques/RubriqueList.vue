@@ -1,26 +1,31 @@
 <template>
   <div class="d-inline-flex w-100 mb-3 pl-3 pr-3 hide-phone rubrique-list">
-    <div class="rubrique-list-container" id="rubrique-list-container">
+    <div
+      id="rubrique-list-container"
+      class="rubrique-list-container"
+    >
       <select
-        class="basic-select border c-hand"
         v-model="rubriquage"
+        class="basic-select border c-hand"
         @change="onRubriquageSelected"
       >
         <option
           v-for="rubriquage in rubriquageDisplay"
           :key="rubriquage.rubriquageId"
           :value="rubriquage"
-          >{{ rubriquage.title }}</option
         >
+          {{ rubriquage.title }}
+        </option>
       </select>
       <button
-        :id="'rubrique' + rubrique.rubriqueId"
-        @click="addFilter(rubrique)"
-        class="rubrique-item"
         v-for="rubrique in rubriqueDisplay"
+        :id="'rubrique' + rubrique.rubriqueId"
         :key="rubrique.rubriqueId"
-        >{{ rubrique.name }}</button
+        class="rubrique-item"
+        @click="addFilter(rubrique)"
       >
+        {{ rubrique.name }}
+      </button>
     </div>
     <b-dropdown
       v-show="hidenRubriques.length"
@@ -29,17 +34,21 @@
       no-caret
       :aria-label="$t('See more')"
     >
-      <template v-slot:button-content>
-        <i :aria-label="$t('See more')" class="saooti-plus"></i>
+      <template #button-content>
+        <i
+          :aria-label="$t('See more')"
+          class="saooti-plus"
+        />
       </template>
       <template>
         <b-dropdown-item
-          @click="addFilter(rubrique)"
           v-for="rubrique in hidenRubriques"
-          v-bind:key="rubrique.rubriqueId"
+          :key="rubrique.rubriqueId"
           class="mr-3"
-          >{{ rubrique.name }}</b-dropdown-item
+          @click="addFilter(rubrique)"
         >
+          {{ rubrique.name }}
+        </b-dropdown-item>
       </template>
     </b-dropdown>
   </div>
@@ -115,10 +124,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    this.selectNewRubriquage();
-  },
-
   computed: {
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -139,6 +144,18 @@ export default defineComponent({
       }
       return this.rubriquages;
     },
+  },
+  watch:{
+    rubriqueFilter(): void{
+      this.selectNewRubriquage();
+    }
+  },
+
+  mounted() {
+    this.selectNewRubriquage();
+  },
+  beforeUnmount(): void {
+    window.removeEventListener('resize', this.resizeWindow);
   },
   methods: {
     
@@ -197,14 +214,6 @@ export default defineComponent({
     },
     onRubriquageSelected(){
       this.initRubriques();
-    }
-  },
-  beforeDestroy(): void {
-    window.removeEventListener('resize', this.resizeWindow);
-  },
-  watch:{
-    rubriqueFilter(): void{
-      this.selectNewRubriquage();
     }
   }
 })

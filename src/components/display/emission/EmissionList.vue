@@ -1,8 +1,13 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading emissions ...') }}
+      </h3>
     </div>
     <div
       v-if="showCount && loaded && emissions.length > 1"
@@ -11,43 +16,45 @@
       {{ $t('Number emissions', { nb: displayCount }) + sortText }}
     </div>
     <ul
+      v-if="!itemPlayer"
       class="emission-list"
       :class="smallItems ? 'threeEmissions' : 'twoEmissions'"
-      v-if="!itemPlayer"
     >
       <EmissionItem
-        v-bind:emission="e"
         v-for="e in emissions"
-        v-bind:key="e.emissionId"
+        :key="e.emissionId"
+        :emission="e"
       />
     </ul>
     <ul
-      class="d-flex flex-wrap justify-content-around"
       v-show="
         (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
       "
       v-else
+      class="d-flex flex-wrap justify-content-around"
     >
       <EmissionPlayerItem
-        v-bind:emission="e"
         v-for="e in emissions"
-        v-bind:key="e.emissionId"
+        :key="e.emissionId"
+        :emission="e"
         class="m-3 flex-shrink"
         :class="mainRubriquage(e)"
-        :rubriqueName="rubriquesId(e)"
+        :rubrique-name="rubriquesId(e)"
         @emissionNotVisible="displayCount--"
       />
     </ul>
     <button
+      v-show="!allFetched && loaded"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus' : 'btn-more'"
-      @click="displayMore"
       :disabled="inFetching"
-      v-show="!allFetched && loaded"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
@@ -101,15 +108,6 @@ export default defineComponent({
     };
   },
 
-  
-
-  mounted() {
-    this.fetchContent(true);
-    if (this.displayRubriquage) {
-      this.fetchRubriques();
-    }
-  },
-
   computed: {
     allFetched(): boolean {
       return this.dfirst >= this.totalCount;
@@ -150,6 +148,20 @@ export default defineComponent({
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
+  },
+  watch: {
+    changed(): void {
+      this.fetchContent(true);
+    },
+  },
+
+  
+
+  mounted() {
+    this.fetchContent(true);
+    if (this.displayRubriquage) {
+      this.fetchRubriques();
+    }
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -230,11 +242,6 @@ export default defineComponent({
         (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0]
       );
       return rubrique!.name;
-    },
-  },
-  watch: {
-    changed(): void {
-      this.fetchContent(true);
     },
   },
 })

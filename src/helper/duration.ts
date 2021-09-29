@@ -1,5 +1,4 @@
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default {
   formatDuration(totalSeconds: number) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - hours * 3600) / 60);

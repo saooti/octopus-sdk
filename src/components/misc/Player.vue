@@ -1,17 +1,17 @@
 <template>
   <div
     class="w-100 transition-height bg-dark"
-    v-bind:style="{ height: playerHeight }"
+    :style="{ height: playerHeight }"
   >
     <div
       class="player-container"
-      v-bind:style="{ height: playerHeight }"
+      :style="{ height: playerHeight }"
       @transitionend="onHidden"
     >
       <div
+        v-if="isBarTop"
         class="progress secondary-bg c-hand"
         @mouseup="seekTo"
-        v-if="isBarTop"
       >
         <div
           class="progress-bar primary-bg"
@@ -20,25 +20,26 @@
           aria-valuemin="0"
           aria-valuemax="100"
           :style="'width: ' + percentProgress + '%'"
-        ></div>
-        <div class="player-progress-border"></div>
+        />
+        <div class="player-progress-border" />
       </div>
       <div
-        class="d-flex align-items-center justify-center flex-grow pr-5 pl-5"
         v-if="display"
+        class="d-flex align-items-center justify-center flex-grow pr-5 pl-5"
       >
         <audio
+          v-if="!live"
           id="audio-player"
-          v-bind:src="audioUrl"
+          :src="audioUrl"
           autoplay
           @timeupdate="onTimeUpdate"
           @ended="onFinished"
           @playing="onPlay"
           @durationChange="onTimeUpdate"
           @error="onError"
-          v-if="!live"
         />
         <audio
+          v-else
           id="audio-player"
           src
           @timeupdate="onTimeUpdate"
@@ -46,20 +47,22 @@
           @playing="onPlay"
           @durationChange="onTimeUpdate"
           @error="onError"
-          v-else
         />
-        <router-link :to="podcastShareUrl" v-if="isImage && podcastImage">
+        <router-link
+          v-if="isImage && podcastImage"
+          :to="podcastShareUrl"
+        >
           <img
-            v-bind:src="podcastImage"
+            :src="podcastImage"
             :alt="$t('Podcast image')"
             class="player-image c-hand"
-          />
+          >
         </router-link>
 
         <div
           v-if="!playerError"
           class="play-button-box"
-          v-bind:class="{
+          :class="{
             'primary-bg': !isLoading,
             'text-light': !isLoading,
           }"
@@ -68,13 +71,13 @@
           <div
             class="text-light"
             :aria-label="$t('Play')"
-            v-bind:class="{
+            :class="{
               saooti: isPlaying || isPaused,
               'saooti-play2-bounty': isPaused,
               'saooti-pause-bounty': isPlaying,
               loading: isLoading,
             }"
-          ></div>
+          />
         </div>
         <div
           v-if="(isPlaying || isPaused) && (media || isStop)"
@@ -84,24 +87,33 @@
           <div
             class="text-light saooti-stop-bounty"
             :aria-label="$t('Stop')"
-          ></div>
+          />
         </div>
         <div class="text-light player-grow-content">
           <div class="d-flex">
-            <div class="text-warning player-title ml-2 mr-2" v-if="playerError">
+            <div
+              v-if="playerError"
+              class="text-warning player-title ml-2 mr-2"
+            >
               {{ $t('Podcast play error') + ' - ' }}
             </div>
-            <div class="flex-grow player-title">{{ podcastTitle }}</div>
-            <div v-if="!playerError" v-show="!isBarTop" class="hide-phone">
+            <div class="flex-grow player-title">
+              {{ podcastTitle }}
+            </div>
+            <div
+              v-if="!playerError"
+              v-show="!isBarTop"
+              class="hide-phone"
+            >
               {{ playedTime }} / {{ totalTime }}
             </div>
           </div>
           <div
-            class="progress c-hand custom-bg-darkgrey"
-            @mouseup="seekTo"
-            style="height: 3px;"
             v-if="!playerError"
             v-show="!isBarTop"
+            class="progress c-hand custom-bg-darkgrey"
+            style="height: 3px;"
+            @mouseup="seekTo"
           >
             <div
               class="progress-bar custom-bg-grey"
@@ -110,7 +122,7 @@
               aria-valuemin="0"
               aria-valuemax="100"
               :style="'width: ' + percentLiveProgress + '%'"
-            ></div>
+            />
             <div
               class="progress-bar primary-bg"
               role="progressbar"
@@ -118,35 +130,35 @@
               aria-valuemin="0"
               aria-valuemax="100"
               :style="'width: ' + percentProgress + '%'"
-            ></div>
+            />
             <div
-              class="progress-bar progress-bar-duration bg-danger"
               v-if="displayAlertBar"
+              class="progress-bar progress-bar-duration bg-danger"
               :style="'left: ' + durationLivePosition + '%'"
-            ></div>
+            />
           </div>
           <CommentPlayer
             v-if="showTimeline"
-            :totalTime="totalSecondes"
+            :total-time="totalSecondes"
             :comments="comments"
           />
         </div>
         <div
-          class="timeline-button"
           v-if="0 !== comments.length && !isPodcastmaker"
+          class="timeline-button"
           @click="showTimeline = !showTimeline"
         >
           <div
             class="saooti-arrow_down saooti-arrow_down-margin"
             :class="showTimeline ? '' : 'arrow-transform'"
-          ></div>
+          />
           <div>Timeline</div>
         </div>
         <div
-          class="d-flex text-light align-items-center hide-phone"
           v-if="isClock"
+          class="d-flex text-light align-items-center hide-phone"
         >
-          <div class="saooti-clock-stud m-2"></div>
+          <div class="saooti-clock-stud m-2" />
           <div>{{ actualTime }}</div>
         </div>
       </div>
@@ -297,11 +309,11 @@ import { StoreState } from '@/store/typeAppStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Player',
-  mixins:[cookies],
 
   components: {
     CommentPlayer: () => import('../display/comments/CommentPlayer.vue'),
   },
+  mixins:[cookies],
   emits: ['hide'],
 
   data() {

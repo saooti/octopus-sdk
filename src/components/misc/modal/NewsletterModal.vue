@@ -2,40 +2,44 @@
   <div>
     <b-modal
       id="newsletter-modal"
+      :show="true"
+      :title="$t('Share newsletter')"
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
-      :show="true"
-      :title="$t('Share newsletter')"
     >
-      <template v-slot:default>
+      <template #default>
         <div class="d-flex justify-content-between">
-          <div v-html="newsletterHtml"></div>
+          <div v-html="newsletterHtml" />
           <div class="d-flex flex-column flex-grow ml-4">
-            <h4 class="mb-3">{{ $t('Configuration') }}</h4>
+            <h4 class="mb-3">
+              {{ $t('Configuration') }}
+            </h4>
             <div class="checkbox-saooti">
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="display-emission-name"
                 v-model="displayEmissionName"
-              />
-              <label class="custom-control-label" for="display-emission-name">{{
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="display-emission-name"
+              >{{
                 $t('Display emission name')
               }}</label>
             </div>
             <div class="checkbox-saooti">
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="display-participants-names"
                 v-model="displayParticipantsNames"
-              />
+                type="checkbox"
+                class="custom-control-input"
+              >
               <label
                 class="custom-control-label"
                 for="display-participants-names"
-                >{{ $t('Display participants list') }}</label
-              >
+              >{{ $t('Display participants list') }}</label>
             </div>
             <div class="d-flex align-items-center mt-2">
               <swatches
@@ -45,41 +49,49 @@
                 colors="text-advanced"
                 popover-to="right"
                 :data-color="color"
-              ></swatches>
+              />
               <div>{{ $t('Choose main color') }}</div>
             </div>
             <div
               class=" d-flex justify-content-between align-items-center mt-3 mb-2"
             >
-              <h4 class="mb-0">{{ $t('HTML Code') }}</h4>
+              <h4 class="mb-0">
+                {{ $t('HTML Code') }}
+              </h4>
               <input
                 type="button"
                 :value="$t('Copy')"
                 class="btn btn-primary"
-                @click="onCopyCode(newsletterHtml, afterCopy)"
                 :aria-label="$t('Copy')"
-              />
+                @click="onCopyCode(newsletterHtml, afterCopy)"
+              >
             </div>
             <textarea
               id="newsletter_code_textarea"
               v-model="newsletterHtml"
-              @click="selectAll"
               readonly
-            ></textarea>
+              @click="selectAll"
+            />
             <label
               for="newsletter_code_textarea"
               :aria-label="$t('HTML Code')"
-            ></label>
+            />
           </div>
         </div>
       </template>
-      <template v-slot:modal-footer>
-        <button class="btn btn-primary m-1" @click="closePopup">
+      <template #modal-footer>
+        <button
+          class="btn btn-primary m-1"
+          @click="closePopup"
+        >
           {{ $t('Close') }}
         </button>
       </template>
     </b-modal>
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 

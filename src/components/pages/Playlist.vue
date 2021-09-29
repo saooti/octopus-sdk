@@ -1,14 +1,17 @@
 <template>
   <div>
-    <div class="page-box" v-if="loaded && !error">
+    <div
+      v-if="loaded && !error"
+      class="page-box"
+    >
       <h1>{{ $t('Playlist') }}</h1>
       <div class="d-flex">
         <div class="d-flex flex-column flex-grow">
           <EditBox
-            :playlist="playlist"
-            :isReady="isReady"
             v-if="editRight && isEditBox"
-          ></EditBox>
+            :playlist="playlist"
+            :is-ready="isReady"
+          />
           <div class="module-box">
             <h2>{{ name }}</h2>
             <div class="mb-5 mt-3 descriptionText">
@@ -16,29 +19,39 @@
                 :src="imageUrl"
                 :alt="$t('Playlist name image', { name: name })"
                 class="img-box shadow-element float-left mr-3 mb-3"
+              >
+              <p
+                class="html-wysiwyg-content"
+                v-html="urlify(description)"
               />
-              <p class="html-wysiwyg-content" v-html="urlify(description)"></p>
             </div>
           </div>
         </div>
         <div class="d-flex flex-column share-container">
           <SharePlayer
-            :playlist="playlist"
-            :organisationId="organisationId"
-            :isEducation="isEducation"
             v-if="isSharePlayer && authenticated"
-          >
-          </SharePlayer>
-          <ShareButtons v-if="isShareButtons"></ShareButtons>
+            :playlist="playlist"
+            :organisation-id="organisationId"
+            :is-education="isEducation"
+          />
+          <ShareButtons v-if="isShareButtons" />
         </div>
       </div>
       <PodcastList :playlist="playlist" />
     </div>
-    <div class="d-flex justify-content-center" v-if="!loaded">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="!loaded"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-center"
+    >
       <h3>{{ $t("Playlist doesn't exist") }}</h3>
     </div>
   </div>
@@ -73,10 +86,6 @@ export default defineComponent({
       error: false as boolean,
       isReady: true as boolean,
     };
-  },
-
-  mounted() {
-    this.getPlaylistDetails();
   },
   
   computed: {
@@ -121,6 +130,10 @@ export default defineComponent({
       this.error = false;
       this.getPlaylistDetails();
     },
+  },
+
+  mounted() {
+    this.getPlaylistDetails();
   },
   methods: {
     async getPlaylistDetails(): Promise<void> {

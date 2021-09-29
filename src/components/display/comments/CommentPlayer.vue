@@ -1,9 +1,9 @@
 <template>
   <div class="comment-player-container comment-item-container">
     <div
-      class="c-hand"
       v-for="c in comments"
       :key="c.comId"
+      class="c-hand"
       @mouseenter="displayContent = c"
       @mouseleave="displayContent = undefined"
       @click="displayContent = c"
@@ -11,17 +11,26 @@
       <div
         :style="'margin-left: ' + percentPosition(c.timeline) + '%'"
         class="comment-border"
-      ></div>
+      />
       <div
         :style="'margin-left: calc(' + percentPosition(c.timeline) + '% - 7px)'"
         :class="'status-' + c.status"
         :data-selenium="'comment-' + seleniumFormat(c.name)"
-      ></div>
+      />
     </div>
-    <div class="comment-content" v-if="displayContent">
-      <div class="primary-color flex-shrink">{{ displayContent.name }}</div>
-      <div class="ml-1 mr-1">-</div>
-      <div class="text-truncate">{{ displayContent.content }}</div>
+    <div
+      v-if="displayContent"
+      class="comment-content"
+    >
+      <div class="primary-color flex-shrink">
+        {{ displayContent.name }}
+      </div>
+      <div class="ml-1 mr-1">
+        -
+      </div>
+      <div class="text-truncate">
+        {{ displayContent.content }}
+      </div>
     </div>
   </div>
 </template>
@@ -61,9 +70,9 @@ import { selenium } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentPlayer',
-  mixins:[selenium],
 
   components: {},
+  mixins:[selenium],
   props: {
     comments: { default: undefined as Array<CommentPodcast>|undefined },
     totalTime: { default: 0 as number},

@@ -1,20 +1,35 @@
 <template>
   <b-modal
     id="message-modal"
+    :title="title"
+    :show="true"
     @close="closePopup"
     @hide="closePopup"
     @cancel="closePopup"
-    :title="title"
-    :show="true"
   >
-    <template v-slot:modal-header-close v-if="!closable">
-      <span></span>
+    <template
+      v-if="!closable"
+      #modal-header-close
+    >
+      <span />
     </template>
-    <template v-slot:default>
-      <div class="content" v-html="message">{{ message }}</div>
+    <template #default>
+      <div
+        class="content"
+        v-html="message"
+      >
+        {{ message }}
+      </div>
     </template>
-    <template v-slot:modal-footer v-if="validatetext">
-      <button v-if="canceltext" class="btn btn-light m-1" @click="onCancel">
+    <template
+      v-if="validatetext"
+      #modal-footer
+    >
+      <button
+        v-if="canceltext"
+        class="btn btn-light m-1"
+        @click="onCancel"
+      >
         {{ canceltext }}
       </button>
       <button
@@ -24,12 +39,18 @@
       >
         {{ thirdText }}
       </button>
-      <button class="btn btn-primary m-1" @click="onValid">
+      <button
+        class="btn btn-primary m-1"
+        @click="onValid"
+      >
         {{ validatetext }}
       </button>
     </template>
-    <template v-slot:modal-footer v-else>
-      <span></span>
+    <template
+      v-else
+      #modal-footer
+    >
+      <span />
     </template>
   </b-modal>
 </template>

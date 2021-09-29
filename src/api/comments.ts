@@ -1,6 +1,5 @@
 const octopusApi = require('@saooti/octopus-api');
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default {
   postComment(store: any, parameters: any): void {
     console.log(store);
     octopusApi.postComment(parameters);

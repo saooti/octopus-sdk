@@ -1,26 +1,35 @@
 <template>
   <div class="d-flex align-items-center">
     <div
-      class="filter-organisation-chooser"
       v-if="!isPodcastmaker && !filterOrga"
+      class="filter-organisation-chooser"
     >
       <OrganisationChooser
         :defaultanswer="$t('No organisation filter')"
-        @selected="onOrganisationSelected"
         :value="organisationId"
         :all="true"
+        @selected="onOrganisationSelected"
       />
-      <div class="checkbox-saooti m-3" v-if="!!organisationId">
+      <div
+        v-if="!!organisationId"
+        class="checkbox-saooti m-3"
+      >
         <input
-          type="checkbox"
-          class="custom-control-input"
           id="orgaCheck"
           v-model="keepOrganisation"
+          type="checkbox"
+          class="custom-control-input"
           @click="onKeepOrganisation"
+        >
+        <label
+          class="custom-control-label"
+          for="orgaCheck"
         />
-        <label class="custom-control-label" for="orgaCheck"></label>
       </div>
-      <div class="filter-speech-bubble" v-if="showBubble">
+      <div
+        v-if="showBubble"
+        class="filter-speech-bubble"
+      >
         {{
           $t(
             'check this box if you want to keep this filter for the rest of your visit'
@@ -29,18 +38,22 @@
       </div>
     </div>
     <div class="d-flex align-items-center flex-grow">
-      <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
+      <label
+        for="search"
+        class="d-inline"
+        :aria-label="$t('Search')"
+      />
       <input
         id="search"
+        ref="search"
         class="filter-search-input input-no-outline"
         :placeholder="searchText"
         :value="searchPattern"
-        ref="search"
-        v-on:input="
-          event => this.$emit('updateSearchPattern', event.target.value)
-        "
         :readonly="notInitFocus"
-      />
+        @input="
+          event => $emit('updateSearchPattern', event.target.value)
+        "
+      >
     </div>
   </div>
 </template>
@@ -119,10 +132,10 @@ import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/organisation';
 import { defineComponent } from 'vue'
 export default defineComponent({
-  mixins:[orgaFilter],
   components: {
     OrganisationChooser: () => import('../organisation/OrganisationChooser.vue'),
   },
+  mixins:[orgaFilter],
 
   props: {
     organisationId: { default: undefined as string|undefined },
@@ -139,18 +152,6 @@ export default defineComponent({
       notInitFocus: true as boolean
     };
   },
-  async created() {
-    if (!this.organisationId) return;
-    if(this.$store.state.filter.organisationId === this.organisationId){
-      this.keepOrganisation = true;
-    }
-  },
-  mounted() {
-    if (this.$refs.search) {
-      (this.$refs.search as HTMLElement).focus();
-      this.notInitFocus = false;
-    }
-  },
  
   computed: {
     isPodcastmaker(): boolean {
@@ -166,6 +167,28 @@ export default defineComponent({
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
     },
+  },
+  watch: {
+    filterOrga(): void {
+      if (this.filterOrga) {
+        this.keepOrganisation = true;
+        this.$emit('updateOrganisationId', this.filterOrga);
+      } else {
+        this.keepOrganisation = false;
+      }
+    },
+  },
+  async created() {
+    if (!this.organisationId) return;
+    if(this.$store.state.filter.organisationId === this.organisationId){
+      this.keepOrganisation = true;
+    }
+  },
+  mounted() {
+    if (this.$refs.search) {
+      (this.$refs.search as HTMLElement).focus();
+      this.notInitFocus = false;
+    }
   },
   methods: {
     onOrganisationSelected(organisation: Organisation): void {
@@ -199,16 +222,6 @@ export default defineComponent({
         this.$router.push({ query: { productor: undefined } });
       }
       this.$store.commit('filterOrga', { orgaId: undefined });
-    },
-  },
-  watch: {
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.keepOrganisation = true;
-        this.$emit('updateOrganisationId', this.filterOrga);
-      } else {
-        this.keepOrganisation = false;
-      }
     },
   },
 })

@@ -4,8 +4,8 @@
     <PodcastList
       :first="firstRoute"
       :size="sizeRoute"
-      :iabId="iabId"
-      :organisationId="filterOrga"
+      :iab-id="iabId"
+      :organisation-id="filterOrga"
     />
   </div>
 </template>
@@ -33,10 +33,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    this.extractTitle();
-  },
-
   computed: {
     categories(): any {
       return this.$store.state.categories;
@@ -45,17 +41,21 @@ export default defineComponent({
       return this.$store.state.filter.organisationId;
     },
   },
+  watch: {
+    iabId(): void {
+      this.extractTitle();
+    },
+  },
+
+  mounted() {
+    this.extractTitle();
+  },
   methods: {
     extractTitle(): void {
       const matchCategories = this.categories.filter((c: any) => c.id === this.iabId);
       if (1 !== matchCategories.length) return;
       this.title = matchCategories[0]['name'];
 
-    },
-  },
-  watch: {
-    iabId(): void {
-      this.extractTitle();
     },
   },
 })

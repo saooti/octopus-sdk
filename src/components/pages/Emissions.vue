@@ -1,21 +1,26 @@
 <template>
   <div class="page-box">
-    <h1 v-if="undefined === titlePage">{{ $t('All emissions') }}</h1>
-    <h1 v-else>{{ titlePage }}</h1>
+    <h1 v-if="undefined === titlePage">
+      {{ $t('All emissions') }}
+    </h1>
+    <h1 v-else>
+      {{ titlePage }}
+    </h1>
     <ProductorSearch
+      v-if="isProductorSearch"
       v-model:organisationId="organisationId"
-      :searchPattern="searchPattern"
+      :search-pattern="searchPattern"
       type="emission"
       @updateOrganisationId="updateOrganisationId"
       @updateSearchPattern="updateSearchPattern"
-      v-if="isProductorSearch"
     />
     <AdvancedSearch
-      :isEducation="isEducation"
-      :resetRubriquage="resetRubriquage"
-      :isEmission="true"
-      :isSearchBar="isProductorSearch"
-      :sortCriteria="sortEmission"
+      :is-education="isEducation"
+      :reset-rubriquage="resetRubriquage"
+      :is-emission="true"
+      :is-search-bar="isProductorSearch"
+      :sort-criteria="sortEmission"
+      :organisation-id="organisationId"
       @updateCategory="updateCategory"
       @updateRubriquageFilter="updateRubriquageFilter"
       @updateMonetization="updateMonetization"
@@ -23,24 +28,23 @@
       @updateToDate="updateToDate"
       @updateSortCriteria="updateSortEmission"
       @includeHidden="updateHidden"
-      :organisationId="organisationId"
     />
     <EmissionList
-      :showCount="true"
+      :show-count="true"
       :first="first"
       :size="size"
       :query="searchPattern"
-      :organisationId="organisationId"
+      :organisation-id="organisationId"
       :monetization="monetization"
       :before="toDate"
       :after="fromDate"
       :sort="sortEmission"
-      :includeHidden="includeHidden"
-      :iabId="iabId"
+      :include-hidden="includeHidden"
+      :iab-id="iabId"
 
-      :rubriqueId="rubriqueId"
-      :rubriquageId="rubriquageId"
-      :noRubriquageId="noRubriquageId"
+      :rubrique-id="rubriqueId"
+      :rubriquage-id="rubriquageId"
+      :no-rubriquage-id="noRubriquageId"
     />
   </div>
 </template>
@@ -86,6 +90,24 @@ export default defineComponent({
       rubriqueId: [] as Array<number>,
     };
   },
+  
+  computed: {
+    rubriqueFilter(): Array<RubriquageFilter>{
+      return this.$store.state.filter.rubriqueFilter;
+    },
+    categoryFilter(): Category|undefined{
+      return this.$store.state.filter.iab;
+    },
+    isProductorSearch(): boolean {
+      return state.podcastsPage.ProductorSearch;
+    },
+    isMonetizableFilter(): boolean {
+      return state.podcastsPage.MonetizableFilter;
+    },
+    titlePage(): string|undefined {
+      return state.emissionsPage.titlePage;
+    },
+  },
 
   created() {
     if (this.firstRoute) {
@@ -105,24 +127,6 @@ export default defineComponent({
     if(this.rubriqueFilter.length){
       this.updateRubriquageFilter(this.rubriqueFilter);
     }
-  },
-  
-  computed: {
-    rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
-    },
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
-    isProductorSearch(): boolean {
-      return state.podcastsPage.ProductorSearch;
-    },
-    isMonetizableFilter(): boolean {
-      return state.podcastsPage.MonetizableFilter;
-    },
-    titlePage(): string|undefined {
-      return state.emissionsPage.titlePage;
-    },
   },
   methods: {
     updateHidden(value: boolean): void {

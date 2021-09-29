@@ -1,8 +1,13 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading participants ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading participants ...') }}
+      </h3>
     </div>
     <div
       v-if="showCount && loaded && participants.length > 1"
@@ -12,21 +17,24 @@
         $t('Number participants', { nb: displayCount }) + $t('sort by score')
       }}
     </div>
-    <ul class="participant-list" v-show="loaded">
+    <ul
+      v-show="loaded"
+      class="participant-list"
+    >
       <ParticipantItem
-        v-bind:participant="p"
         v-for="p in participants"
-        v-bind:key="p.participantId"
+        :key="p.participantId"
+        :participant="p"
       />
     </ul>
     <button
-      class="btn btn-more"
-      @click="displayMore"
       v-show="!allFetched && loaded"
+      class="btn btn-more"
       :aria-label="$t('See more')"
       :disabled="inFetching"
+      @click="displayMore"
     >
-      <div class="saooti-plus"></div>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
@@ -89,10 +97,6 @@ export default defineComponent({
     };
   },
 
-  created() {
-    this.fetchContent(true);
-  },
-
    
   computed: {
     allFetched(): boolean {
@@ -106,6 +110,18 @@ export default defineComponent({
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
+  },
+  watch: {
+    query(): void {
+      this.fetchContent(true);
+    },
+    organisation(): void {
+      this.fetchContent(true);
+    },
+  },
+
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -138,14 +154,6 @@ export default defineComponent({
     displayMore(event: { preventDefault: () => void }): void {
       event.preventDefault();
       this.fetchContent(false);
-    },
-  },
-  watch: {
-    query(): void {
-      this.fetchContent(true);
-    },
-    organisation(): void {
-      this.fetchContent(true);
     },
   },
 })

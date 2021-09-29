@@ -1,23 +1,30 @@
 <template>
-  <div class="d-flex flex-column" v-if="notEmpty">
-    <h2 class="mb-4 mt-3">{{ $t('All live emission button') }}</h2>
+  <div
+    v-if="notEmpty"
+    class="d-flex flex-column"
+  >
+    <h2 class="mb-4 mt-3">
+      {{ $t('All live emission button') }}
+    </h2>
     <ul class="podcast-list">
       <PodcastItem
-        v-bind:podcast="l"
         v-for="l in lives"
-        v-bind:key="l.podcastId"
+        :key="l.podcastId"
+        :podcast="l"
       />
     </ul>
     <button
+      v-show="!allFetched"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus mt-3' : 'btn-more'"
-      @click="displayMore"
-      v-show="!allFetched"
       :disabled="inFetching"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
@@ -55,10 +62,6 @@ export default defineComponent({
     };
   },
 
-  created() {
-    this.fetchContent(true);
-  },
-
  
   computed: {
     allFetched(): boolean {
@@ -67,6 +70,10 @@ export default defineComponent({
     buttonPlus(): boolean {
       return state.generalParameters.buttonPlus;
     },
+  },
+
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {

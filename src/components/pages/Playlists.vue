@@ -2,26 +2,28 @@
   <div class="page-box">
     <h1>{{ $t('All playlists') }}</h1>
     <router-link
-      to="/main/priv/edit/playlist"
       v-if="editRight && !isPodcastmaker"
+      to="/main/priv/edit/playlist"
       class="d-flex justify-content-center"
     >
-      <button class="btn btn-primary">{{ $t('Create playlist') }}</button>
+      <button class="btn btn-primary">
+        {{ $t('Create playlist') }}
+      </button>
     </router-link>
     <ProductorSearch
+      v-if="isProductorSearch"
       v-model:organisationId="organisationId"
-      :searchPattern="searchPattern"
+      :search-pattern="searchPattern"
       type="playlist"
       @updateOrganisationId="updateOrganisationId"
       @updateSearchPattern="updateSearchPattern"
-      v-if="isProductorSearch"
     />
     <PlaylistList
-      :showCount="true"
+      :show-count="true"
       :first="first"
       :size="size"
       :query="searchPattern"
-      :organisationId="organisationId"
+      :organisation-id="organisationId"
     />
   </div>
 </template>
@@ -50,6 +52,19 @@ export default defineComponent({
       organisationId: undefined as string | undefined,
     };
   },
+  
+  computed: {
+    isProductorSearch(): boolean {
+      return state.podcastsPage.ProductorSearch;
+    },
+    isPodcastmaker(): boolean {
+      return state.generalParameters.podcastmaker;
+    },
+    editRight(): boolean {
+      if (state.generalParameters.isPlaylist) return true;
+      return false;
+    },
+  },
 
   created() {
     if (this.firstRoute) {
@@ -63,19 +78,6 @@ export default defineComponent({
     } else if (this.$store.state.filter.organisationId) {
       this.organisationId = this.$store.state.filter.organisationId;
     }
-  },
-  
-  computed: {
-    isProductorSearch(): boolean {
-      return state.podcastsPage.ProductorSearch;
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
-    },
-    editRight(): boolean {
-      if (state.generalParameters.isPlaylist) return true;
-      return false;
-    },
   },
   methods: {
     updateOrganisationId(value: string): void {

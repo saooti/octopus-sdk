@@ -1,15 +1,22 @@
 <template>
-  <div class="default-multiselect-width" :style="{ width: width }">
-    <label :for="id" class="d-inline" aria-label="select rubrique"></label>
+  <div
+    class="default-multiselect-width"
+    :style="{ width: width }"
+  >
+    <label
+      :for="id"
+      class="d-inline"
+      aria-label="select rubrique"
+    />
     <Multiselect
-      v-model="model"
       :id="id"
+      ref="multiselectRef"
+      v-model="model"
       :disabled="isDisabled"
       class="rubriqueChooser"
       label="name"
       track-by="rubriqueId"
       :placeholder="$t('Type string to filter by rubrics')"
-      ref="multiselectRef"
       :options="rubriques"
       :multiple="multiple"
       :searchable="true"
@@ -34,7 +41,10 @@
           </span>
         </div>
       </slot>
-      <slot name="option" v-if="undefined!==props.option">
+      <slot
+        v-if="undefined!==props.option"
+        name="option"
+      >
         <div
           class="multiselect-octopus-proposition"
           :class="props.option.rubriqueId <= 0 ? 'primary-dark' : ''"
@@ -43,14 +53,16 @@
           <span class="option__title">{{ props.option.name }}</span>
         </div>
       </slot>
-      <slot name="noOptions">{{ $t('List is empty') }}</slot>
+      <slot name="noOptions">
+        {{ $t('List is empty') }}
+      </slot>
       <slot name="noResult">
         {{ $t('No elements found. Consider changing the search query.') }}
       </slot>
       <slot
         class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top"
         name="caret"
-      ></slot>
+      />
     </Multiselect>
   </div>
 </template>
@@ -69,10 +81,10 @@ const getDefaultRubrique = (defaultName: string) => {
 
 import { defineComponent } from 'vue'
 export default defineComponent({
-  mixins:[selenium],
   components: {
     Multiselect,
   },
+  mixins:[selenium],
   props: {
     width: { default: '100%' as string },
     defaultanswer: { default: '' as string },
@@ -96,14 +108,6 @@ export default defineComponent({
       withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as any,
     };
   },
-  mounted() {
-    if (undefined !== this.rubriqueSelected) {
-      this.initRubriqueSelected(this.rubriqueSelected);
-    }
-    if (undefined !== this.rubriqueArray) {
-      this.initRubriqueArray(this.rubriqueArray);
-    }
-  },
   computed: {
     id(): string {
       if (this.rubriquageId) return 'rubriqueChooser' + this.rubriquageId;
@@ -124,6 +128,33 @@ export default defineComponent({
         this.rubriqueForArray = value;
       }
 
+    }
+  },
+  watch: {
+    model(): void {
+      if(false===this.multiple){
+        return;
+      }
+      const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
+      const idsArray: Array<number> = [];
+      selected.forEach((el: Rubrique) => {
+        idsArray.push(el.rubriqueId!);
+      });
+      this.$emit('selected', idsArray);
+    },
+    rubriqueSelected(): void {
+      this.initRubriqueSelected(this.rubriqueSelected);
+    },
+    reset(): void {
+      this.rubrique = getDefaultRubrique(this.defaultanswer);
+    }
+  },
+  mounted() {
+    if (undefined !== this.rubriqueSelected) {
+      this.initRubriqueSelected(this.rubriqueSelected);
+    }
+    if (undefined !== this.rubriqueArray) {
+      this.initRubriqueArray(this.rubriqueArray);
     }
   },
   methods: {
@@ -192,25 +223,6 @@ export default defineComponent({
         }
       });
     },
-  },
-  watch: {
-    model(): void {
-      if(false===this.multiple){
-        return;
-      }
-      const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
-      const idsArray: Array<number> = [];
-      selected.forEach((el: Rubrique) => {
-        idsArray.push(el.rubriqueId!);
-      });
-      this.$emit('selected', idsArray);
-    },
-    rubriqueSelected(): void {
-      this.initRubriqueSelected(this.rubriqueSelected);
-    },
-    reset(): void {
-      this.rubrique = getDefaultRubrique(this.defaultanswer);
-    }
   },
 })
 </script>

@@ -1,15 +1,3 @@
-<template>
-  <div id="app">
-    <TopBar v-model:displayMenu="displayMenu" :isEducation="false" />
-    <LeftMenu v-model:displayMenu="displayMenu" :isEducation="false" />
-    <CategoryFilter />
-    <router-view />
-    <Footer />
-  </div>
-</template>
-<style lang="scss" src="@/assets/octopus-library.scss"></style>
-<style lang="scss"></style>
-
 <script lang="ts">
 import TopBar from '@/components/misc/TopBar.vue';
 import LeftMenu from '@/components/misc/LeftMenu.vue';
@@ -22,21 +10,33 @@ import { Rubrique } from './store/class/rubrique';
 import { initSDK } from './components/mixins/init';
 import { defineComponent } from 'vue'
 export default defineComponent({
-
-  name: 'app',
-  mixins: [initSDK],
+  name: 'App',
+  
   components: {
     TopBar,
     LeftMenu,
     CategoryFilter,
     Footer,
   },
+
+  mixins: [initSDK],
+
   data() {
     return {
       displayMenu: false as boolean,
       initQueryRouter: false,
     };
   },
+
+  watch: {
+    '$route' () {
+      if(!this.initQueryRouter){
+        this.initQueryRouter = true;
+        this.initApp();
+      }
+    },
+  },
+
   methods:{
     async initApp(){
       await this.initSdk();
@@ -95,14 +95,24 @@ export default defineComponent({
         }
       }
     }
-  },
-  watch: {
-    '$route' () {
-      if(!this.initQueryRouter){
-        this.initQueryRouter = true;
-        this.initApp();
-      }
-    },
   }
 })
 </script>
+
+<template>
+  <div id="app">
+    <TopBar
+      v-model:displayMenu="displayMenu"
+      :is-education="false"
+    />
+    <LeftMenu
+      v-model:displayMenu="displayMenu"
+      :is-education="false"
+    />
+    <CategoryFilter />
+    <router-view />
+    <Footer />
+  </div>
+</template>
+
+<style lang="scss" src="@/assets/octopus-library.scss"></style>

@@ -4,18 +4,18 @@
       <PodcastInlineList
         v-for="c in categories"
         :key="c.id"
-        :iabId="c.id"
+        :iab-id="c.id"
         :title="c.name"
-        :buttonText="$t('All podcast button', { name: c.name })"
+        :button-text="$t('All podcast button', { name: c.name })"
       />
     </template>
-     <template v-else>
+    <template v-else>
       <PodcastInlineList
         v-for="r in rubriqueDisplay"
         :key="r.rubriqueId"
-        :rubriqueId="rubriqueId.concat(r.rubriqueId)"
+        :rubrique-id="rubriqueId.concat(r.rubriqueId)"
         :title="r.name"
-        :buttonText="$t('All podcast button', { name: r.name })"
+        :button-text="$t('All podcast button', { name: r.name })"
       />
     </template>
   </div>
@@ -31,7 +31,7 @@ import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'home',
+  name: 'Home',
 
   components: {
     PodcastInlineList,
@@ -40,11 +40,6 @@ export default defineComponent({
     return {
       rubriqueId: [] as Array<number>,
     };
-  },
-  created(){
-    if(this.rubriqueFilter.length){
-      this.updateRubriquageFilter();
-    }
   },
   computed: {
     rubriqueDisplay(): Array<Rubrique>{
@@ -72,6 +67,16 @@ export default defineComponent({
       });
     },
   },
+  watch:{
+    rubriqueFilter(){
+      this.updateRubriquageFilter();
+    }
+  },
+  created(){
+    if(this.rubriqueFilter.length){
+      this.updateRubriquageFilter();
+    }
+  },
   methods:{
     updateRubriquageFilter(){
       const length = this.rubriqueFilter.length;
@@ -83,11 +88,6 @@ export default defineComponent({
       }
       this.rubriqueId = rubriqueId;
     },
-  },
-  watch:{
-    rubriqueFilter(){
-      this.updateRubriquageFilter();
-    }
   }
 })
 </script>

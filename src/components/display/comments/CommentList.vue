@@ -1,38 +1,46 @@
 <template>
   <div class="d-flex flex-column mt-3">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-danger align-self-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-danger align-self-center"
+    >
       {{ $t('Comments loading error') }}
     </div>
     <transition-group
+      v-show="loaded"
       tag="div"
       name="comment-list"
       class="d-flex flex-column my-transition-list-comments"
-      v-show="loaded"
     >
       <CommentItem
-        :ref="'comItem' + c.comId"
-        :isFlat="isFlat"
-        v-model:comment="comments[indexCom]"
-        :podcast="podcast"
-        :fetchConference="fetchConference"
-        :organisation="organisation"
         v-for="(c, indexCom) in comments"
+        :ref="'comItem' + c.comId"
         :key="c.comId"
+        v-model:comment="comments[indexCom]"
+        :is-flat="isFlat"
+        :podcast="podcast"
+        :fetch-conference="fetchConference"
+        :organisation="organisation"
         @deleteComment="deleteComment(c)"
         @updateComment="updateComment"
       />
     </transition-group>
     <button
+      v-show="!allFetched && loaded"
       class="btn btn-primary mt-2"
       :class="comId ? 'align-self-start' : 'align-self-center'"
-      @click="displayMore"
       :disabled="inFetching"
-      v-show="!allFetched && loaded"
       :aria-label="$t('See more comments')"
+      @click="displayMore"
     >
       {{ $t('See more comments') }}
     </button>
@@ -120,9 +128,6 @@ export default defineComponent({
       inFetching: false as boolean,
     };
   },
-  created() {
-    this.fetchContent(true);
-  },
 
   computed: {
     allFetched(): boolean {
@@ -146,6 +151,20 @@ export default defineComponent({
         return true;
       return false;
     },
+  },
+  watch: {
+    reload(): void {
+      this.fetchContent(true);
+    },
+    status(): void {
+      this.fetchContent(true);
+    },
+    comments(): void {
+      this.$emit('fetch', { count: this.totalCount, comments: this.comments });
+    },
+  },
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -310,17 +329,6 @@ export default defineComponent({
           this.comments.unshift(comment);
         }
       }
-    },
-  },
-  watch: {
-    reload(): void {
-      this.fetchContent(true);
-    },
-    status(): void {
-      this.fetchContent(true);
-    },
-    comments(): void {
-      this.$emit('fetch', { count: this.totalCount, comments: this.comments });
     },
   },
 })

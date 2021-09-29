@@ -1,8 +1,22 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <qrcode-vue :value="url" :size="size" level="H" foreground="#40a372" class="myQrCode"/>
-    <button class="btn m-3" @click="download">{{ $t('Download') }}</button>
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+    <qrcode-vue
+      :value="url"
+      :size="size"
+      level="H"
+      foreground="#40a372"
+      class="myQrCode"
+    />
+    <button
+      class="btn m-3"
+      @click="download"
+    >
+      {{ $t('Download') }}
+    </button>
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 

@@ -17,19 +17,27 @@
       class="text-dark"
     >
       <div
+        v-if="!lightItems"
         class="img-box"
         :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"
-        v-if="!lightItems"
-      ></div>
-      <div class="d-flex" v-else>
+      />
+      <div
+        v-else
+        class="d-flex"
+      >
         <div
           class="img-box-light flex-shrink"
           :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"
-        ></div>
-        <div class="emission-light-title">{{ name }}</div>
+        />
+        <div class="emission-light-title">
+          {{ name }}
+        </div>
       </div>
     </router-link>
-    <div class="emission-item-text" :class="lightItems ? 'p-0' : ''">
+    <div
+      class="emission-item-text"
+      :class="lightItems ? 'p-0' : ''"
+    >
       <router-link
         :to="{
           name: 'emission',
@@ -38,13 +46,16 @@
         }"
         class="text-dark"
       >
-        <div class="emission-name" v-if="!lightItems">
+        <div
+          v-if="!lightItems"
+          class="emission-name"
+        >
           <img
+            v-if="!activeEmission && !isPodcastmaker && editRight"
             class="icon-caution"
             src="/img/caution.png"
-            v-if="!activeEmission && !isPodcastmaker && editRight"
             :title="$t('Emission have not podcasts')"
-          />{{ name }}
+          >{{ name }}
         </div>
         <div
           :id="'description-emission-container-' + emission.emissionId"
@@ -54,18 +65,18 @@
           <div
             :id="'description-emission-' + emission.emissionId"
             v-html="urlify(description)"
-          ></div>
+          />
         </div>
       </router-link>
-      <div class="flex-grow"></div>
+      <div class="flex-grow" />
       <router-link
+        v-if="!isPodcastmaker"
         :to="{
           name: 'productor',
           params: { productorId: emission.orga.id },
           query: { productor: $store.state.filter.organisationId },
         }"
         class="text-dark"
-        v-if="!isPodcastmaker"
       >
         <div class="emission-producer primary-color">
           © {{ emission.orga.name }}
@@ -96,25 +107,6 @@ export default defineComponent({
     return {
       activeEmission: true as boolean,
     };
-  },
-
-  created() {
-    if(!this.editRight)return;
-    this.hasPodcast();
-  },
-  mounted() {
-    const emissionDesc = document.getElementById(
-      'description-emission-' + this.emission.emissionId
-    );
-    const emissionDescContainer = document.getElementById(
-      'description-emission-container-' + this.emission.emissionId
-    );
-    if (
-      null !== emissionDesc &&
-      emissionDesc.clientHeight > emissionDescContainer!.clientHeight
-    ) {
-      emissionDescContainer!.classList.add('after-emission-description');
-    }
   },
   
   computed: {
@@ -147,6 +139,25 @@ export default defineComponent({
         return true;
       return false;
     },
+  },
+
+  created() {
+    if(!this.editRight)return;
+    this.hasPodcast();
+  },
+  mounted() {
+    const emissionDesc = document.getElementById(
+      'description-emission-' + this.emission.emissionId
+    );
+    const emissionDescContainer = document.getElementById(
+      'description-emission-container-' + this.emission.emissionId
+    );
+    if (
+      null !== emissionDesc &&
+      emissionDesc.clientHeight > emissionDescContainer!.clientHeight
+    ) {
+      emissionDescContainer!.classList.add('after-emission-description');
+    }
   },
   methods: {
     async hasPodcast(): Promise<void> {

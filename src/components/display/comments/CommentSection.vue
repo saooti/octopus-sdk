@@ -1,34 +1,39 @@
 <template>
   <div
-    class="d-flex flex-column mt-3 module-box comment-item-container"
     v-if="isComments"
+    class="d-flex flex-column mt-3 module-box comment-item-container"
   >
     <div class="d-flex align-items-center">
-      <h2 class="mb-0 mr-2" data-selenium="episode-comment-counter">
+      <h2
+        class="mb-0 mr-2"
+        data-selenium="episode-comment-counter"
+      >
         {{ $t("Podcast's comments") }}
-        <template v-if="loaded && totalCount > 0">{{
-          $t('()', { nb: totalCount })
-        }}</template>
+        <template v-if="loaded && totalCount > 0">
+          {{
+            $t('()', { nb: totalCount })
+          }}
+        </template>
       </h2>
       <button
+        v-if="!isLive"
         :aria-label="$t('Refresh')"
         class="saooti-refresh-stud btn btn-reload primary-color"
         @click="reloadComments"
-        v-if="!isLive"
-      ></button>
+      />
     </div>
     <CommentInput
-      :podcast="podcast"
       v-model:knownIdentity="knownIdentity"
-      :fetchConference="fetchConference"
+      :podcast="podcast"
+      :fetch-conference="fetchConference"
       @newComment="newComment"
     />
     <CommentList
       ref="commentList"
       :podcast="podcast"
       :reload="reload"
-      :isFlat="isLive"
-      :fetchConference="fetchConference"
+      :is-flat="isLive"
+      :fetch-conference="fetchConference"
       @fetch="updateFetch"
     />
   </div>
@@ -54,12 +59,12 @@ import { Conference } from '@/store/class/conference';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentSection',
-  mixins:[cookies],
 
   components: {
     CommentList,
     CommentInput,
   },
+  mixins:[cookies],
 
   props: {
     podcast: { default: undefined as Podcast|undefined },
@@ -72,10 +77,6 @@ export default defineComponent({
       loaded: false as boolean,
       reload: false as boolean,
     };
-  },
-
-  created() {
-    this.knownIdentity = this.getCookie('comment-octopus-name');
   },
 
   computed: {
@@ -116,6 +117,10 @@ export default defineComponent({
         'DEBRIEFING' !== this.fetchConference.status
       );
     },
+  },
+
+  created() {
+    this.knownIdentity = this.getCookie('comment-octopus-name');
   },
   methods: {
     updateFetch(value: { count: number }): void {

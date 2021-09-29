@@ -1,10 +1,18 @@
 <template>
-  <div class="d-flex" v-if="message && message.length">
+  <div
+    v-if="message && message.length"
+    class="d-flex"
+  >
     <div
       class="d-flex align-items-center bg-error-message p-2 rounded mt-1 mb-1"
     >
-      <img src="/img/caution.png" class="icon-caution" />
-      <div class="alert-text">{{ message }}</div>
+      <img
+        src="/img/caution.png"
+        class="icon-caution"
+      >
+      <div class="alert-text">
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>

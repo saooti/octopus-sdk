@@ -1,22 +1,47 @@
 <template>
   <div v-if="isDisplay">
-    <nav aria-label="breadcrumb" v-if="categoryFilter || rubriqueFilter.length">
+    <nav
+      v-if="categoryFilter || rubriqueFilter.length"
+      aria-label="breadcrumb"
+    >
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#" @click="removeFilter(-1, $event)">{{$t('All')}}</a></li>
-        <li class="breadcrumb-item active" v-if="categoryFilter">{{ categoryFilter.name }}</li>
-        <li 
-          class="breadcrumb-item" 
-          :class="rubriqueFilter.length-1 === index ? 'active':''"
-          v-for="(filter, index) in rubriqueFilter"
-          :key="filter.rubriqueId"
+        <li class="breadcrumb-item">
+          <a
+            href="#"
+            @click="removeFilter(-1, $event)"
+          >{{ $t('All') }}</a>
+        </li>
+        <li
+          v-if="categoryFilter"
+          class="breadcrumb-item active"
         >
-          <a href="#" @click="removeFilter(index,$event)" v-if="rubriqueFilter.length - 1 !== index">{{ filter.name }}</a>
-          <template v-else>{{ filter.name }}</template>
+          {{ categoryFilter.name }}
+        </li>
+        <li 
+          v-for="(filter, index) in rubriqueFilter" 
+          :key="filter.rubriqueId"
+          class="breadcrumb-item"
+          :class="rubriqueFilter.length-1 === index ? 'active':''"
+        >
+          <a
+            v-if="rubriqueFilter.length - 1 !== index"
+            href="#"
+            @click="removeFilter(index,$event)"
+          >{{ filter.name }}</a>
+          <template v-else>
+            {{ filter.name }}
+          </template>
         </li>
       </ol>
     </nav>
-    <CategoryList :isFilter="true" v-if="!categoryFilter && !rubriquageFilter.length"/>
-    <RubriqueList :rubriquages="rubriquageFilter"  v-else-if="rubriquageFilter.length !== rubriqueFilter.length"/>
+    <CategoryList
+      v-if="!categoryFilter && !rubriquageFilter.length"
+      :is-filter="true"
+    />
+    <RubriqueList
+      v-else-if="rubriquageFilter.length !== rubriqueFilter.length"
+      :rubriquages="rubriquageFilter"
+    />
   </div>
 </template>
 

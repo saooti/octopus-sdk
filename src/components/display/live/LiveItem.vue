@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex w-100" v-if="live">
+  <div
+    v-if="live"
+    class="d-flex w-100"
+  >
     <router-link
       class="live-date-box"
       :to="{
@@ -8,8 +11,12 @@
         query: { productor: $store.state.filter.organisationId },
       }"
     >
-      <div class="font-weight-bold">{{ date }}</div>
-      <div class="font-weight-bold">{{ hours }}</div>
+      <div class="font-weight-bold">
+        {{ date }}
+      </div>
+      <div class="font-weight-bold">
+        {{ hours }}
+      </div>
       <div class="font-size-smaller">
         {{ $t('Duration', { duration: duration }) }}
       </div>
@@ -25,16 +32,16 @@
         class="mr-3"
         :class="
           fetchConference &&
-          'null' !== fetchConference &&
-          fetchConference.status
+            'null' !== fetchConference &&
+            fetchConference.status
             ? fetchConference.status.toLowerCase() + '-shadow'
             : ''
         "
-        v-bind:podcast="live"
-        :hidePlay="false"
-        :playingPodcast="false"
-        :fetchConference="fetchConference"
-        :isAnimatorLive="organisationRight"
+        :podcast="live"
+        :hide-play="false"
+        :playing-podcast="false"
+        :fetch-conference="fetchConference"
+        :is-animator-live="organisationRight"
       />
     </router-link>
     <div class="d-flex flex-column live-special-width">
@@ -45,8 +52,9 @@
           params: { podcastId: live.podcastId },
           query: { productor: $store.state.filter.organisationId },
         }"
-        >{{ live.title }}</router-link
       >
+        {{ live.title }}
+      </router-link>
       <router-link
         class="link-info text-truncate"
         :to="{
@@ -54,8 +62,9 @@
           params: { emissionId: live.emission.emissionId },
           query: { productor: $store.state.filter.organisationId },
         }"
-        >{{ live.emission.name }}</router-link
       >
+        {{ live.emission.name }}
+      </router-link>
       <div
         :id="'description-live-container-' + live.podcastId"
         class="live-description-container html-wysiwyg-content"
@@ -63,22 +72,28 @@
         <div
           :id="'description-live-' + live.podcastId"
           v-html="urlify(description)"
-        ></div>
+        />
       </div>
-      <div class="comma" v-if="live.animators">
-        {{ $t('Animated by')}}<div class="mx-1">:</div>
+      <div
+        v-if="live.animators"
+        class="comma"
+      >
+        {{ $t('Animated by') }}<div class="mx-1">
+          :
+        </div>
         <router-link
+          v-for="animator in live.animators"
+          :key="animator.participantId"
           :aria-label="$t('Participant')"
           class="link-info"
-          v-for="animator in live.animators"
-          v-bind:key="animator.participantId"
           :to="{
             name: 'participant',
             params: { participantId: animator.participantId },
             query: { productor: $store.state.filter.organisationId },
           }"
-          >{{ getName(animator) }}</router-link
         >
+          {{ getName(animator) }}
+        </router-link>
       </div>
       <div v-if="!isPodcastmaker">
         {{ $t('Producted by : ') }}
@@ -89,17 +104,18 @@
             params: { productorId: live.organisation.id },
             query: { productor: $store.state.filter.organisationId },
           }"
-          >{{ live.organisation.name }}</router-link
         >
+          {{ live.organisation.name }}
+        </router-link>
       </div>
       <RecordingItemButton
+        v-if="fetchConference && organisationRight && isEditBox"
         :live="true"
         :recording="fetchConference"
         :podcast="live"
         @deleteItem="deleteItem"
         @validatePodcast="updatePodcast"
-        v-if="fetchConference && organisationRight && isEditBox"
-      ></RecordingItemButton>
+      />
     </div>
   </div>
 </template>
@@ -153,12 +169,12 @@ import { Participant } from '@/store/class/participant';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveItem',
-  mixins: [displayMethods],
 
   components: {
     RecordingItemButton: () => import('@/components/display/studio/RecordingItemButton.vue'),
     PodcastImage,
   },
+  mixins: [displayMethods],
   props: {
     fetchConference: { default: undefined as Podcast|undefined},
     index: { default: undefined as number|undefined},
@@ -169,10 +185,6 @@ export default defineComponent({
     return {
       live: undefined as Podcast|undefined,
     };
-  },
-
-  async created() {
-    this.fetchPodcastData();
   },
   
   computed: {
@@ -225,6 +237,15 @@ export default defineComponent({
       });
     },
   },
+  watch: {
+    live(): void {
+      this.handleDescription();
+    },
+  },
+
+  async created() {
+    this.fetchPodcastData();
+  },
   methods: {
     updatePodcast(podcastUpdated: Podcast): void {
       this.live = podcastUpdated;
@@ -266,11 +287,6 @@ export default defineComponent({
     },
     deleteItem(): void {
       this.$emit('deleteItem', this.index);
-    },
-  },
-  watch: {
-    live(): void {
-      this.handleDescription();
     },
   },
 })

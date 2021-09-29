@@ -1,14 +1,18 @@
 <template>
   <div class="d-inline-flex w-100 mb-3 pl-3 pr-3 hide-phone category-list">
-    <div class="category-list-container" id="category-list-container">
+    <div
+      id="category-list-container"
+      class="category-list-container"
+    >
       <button
-        :id="'category' + category.id"
-        @click="checkIfFilter(category)"
-        class="category-item text-dark secondary-bg"
         v-for="category in categories"
+        :id="'category' + category.id"
         :key="category.id"
-        >{{ category.name }}</button
+        class="category-item text-dark secondary-bg"
+        @click="checkIfFilter(category)"
       >
+        {{ category.name }}
+      </button>
     </div>
     <b-dropdown
       v-show="hidenCategories.length"
@@ -17,17 +21,21 @@
       no-caret
       :aria-label="$t('See more')"
     >
-      <template v-slot:button-content>
-        <i :aria-label="$t('See more')" class="saooti-plus"></i>
+      <template #button-content>
+        <i
+          :aria-label="$t('See more')"
+          class="saooti-plus"
+        />
       </template>
       <template>
         <b-dropdown-item
-          @click="checkIfFilter(category)"
           v-for="category in hidenCategories"
-          v-bind:key="category.id"
+          :key="category.id"
           class="mr-3"
-          >{{ category.name }}</b-dropdown-item
+          @click="checkIfFilter(category)"
         >
+          {{ category.name }}
+        </b-dropdown-item>
       </template>
     </b-dropdown>
   </div>
@@ -91,14 +99,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    window.addEventListener('resize', this.resizeWindow);
-    this.resizeWindow();
-    if (this.filterOrga) {
-      this.fetchCategories(this.filterOrga);
-    }
-  },
-
   computed: {
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
@@ -120,6 +120,34 @@ export default defineComponent({
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
     },
+  },
+  watch: {
+    categories(): void {
+      this.$nextTick(() => {
+        this.resizeWindow();
+      });
+    },
+    filterOrga(): void {
+      if (this.filterOrga) {
+        this.fetchCategories(this.filterOrga);
+      }
+    },
+    categoriesWatch(): void{
+      if (this.filterOrga) {
+        this.fetchCategories(this.filterOrga);
+      }
+    }
+  },
+
+  mounted() {
+    window.addEventListener('resize', this.resizeWindow);
+    this.resizeWindow();
+    if (this.filterOrga) {
+      this.fetchCategories(this.filterOrga);
+    }
+  },
+  beforeUnmount(): void {
+    window.removeEventListener('resize', this.resizeWindow);
   },
   methods: {
     checkIfFilter(category: Category): void{
@@ -164,26 +192,6 @@ export default defineComponent({
       });
       this.$store.commit('categoriesOrgaSet', data);
     },
-  },
-  beforeDestroy(): void {
-    window.removeEventListener('resize', this.resizeWindow);
-  },
-  watch: {
-    categories(): void {
-      this.$nextTick(() => {
-        this.resizeWindow();
-      });
-    },
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.fetchCategories(this.filterOrga);
-      }
-    },
-    categoriesWatch(): void{
-      if (this.filterOrga) {
-        this.fetchCategories(this.filterOrga);
-      }
-    }
   },
 })
 </script>

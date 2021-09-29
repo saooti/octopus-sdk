@@ -1,5 +1,4 @@
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default {
   convertRemToPixels(rem: number) {
     return (
       rem * parseFloat(getComputedStyle(document.documentElement).fontSize)

@@ -9,10 +9,10 @@
     :data-count="podcast.downloadCount"
   >
     <PodcastImage
-      v-bind:podcast="podcast"
-      :hidePlay="!hover || !description"
-      :displayDescription="description"
-      :arrowDirection="arrowDirection"
+      :podcast="podcast"
+      :hide-play="!hover || !description"
+      :display-description="description"
+      :arrow-direction="arrowDirection"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
@@ -27,7 +27,7 @@
       <div
         :id="'description-podcast-' + podcast.podcastId"
         v-html="description"
-      ></div>
+      />
     </div>
     <div
       class="d-contents"
@@ -35,12 +35,17 @@
       @mouseleave="hideDescription"
     >
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-        <div class="mr-3 small-Text">{{ date }}</div>
-        <div class="small-Text" v-if="0 !== duration.length">
+        <div class="mr-3 small-Text">
+          {{ date }}
+        </div>
+        <div
+          v-if="0 !== duration.length"
+          class="small-Text"
+        >
           <!-- <span class="saooti-clock3"></span> -->{{ duration }}
         </div>
       </div>
-      <AnimatorsItem v-bind:animators="podcast.animators" />
+      <AnimatorsItem :animators="podcast.animators" />
       <router-link
         :to="{
           name: 'podcast',
@@ -49,7 +54,9 @@
         }"
         class="text-dark d-flex flex-column flex-grow"
       >
-        <div class="title-podcast-item">{{ title }}</div>
+        <div class="title-podcast-item">
+          {{ title }}
+        </div>
       </router-link>
       <div class="d-flex justify-content-between">
         <router-link
@@ -64,9 +71,9 @@
           <div>{{ '© ' + podcast.organisation.name }}</div>
         </router-link>
         <span
-          class="saooti-star-bounty text-danger pr-2"
           v-if="editRight && podcast.order && podcast.order > 1"
-        ></span>
+          class="saooti-star-bounty text-danger pr-2"
+        />
       </div>
     </div>
   </li>
@@ -168,21 +175,6 @@ export default defineComponent({
       isDescriptionBig: false as boolean,
     };
   },
-
-  mounted() {
-    const podcastDesc = document.getElementById(
-      'description-podcast-' + this.podcast.podcastId
-    );
-    const podcastDescContainer = document.getElementById(
-      'description-podcast-container-' + this.podcast.podcastId
-    );
-    if (
-      null !== podcastDesc &&
-      podcastDesc.clientHeight > podcastDescContainer!.clientHeight
-    ) {
-      this.isDescriptionBig = true;
-    }
-  },
   
   computed: {
     isPodcastmaker(): boolean {
@@ -280,6 +272,21 @@ export default defineComponent({
         },
       });
     },
+  },
+
+  mounted() {
+    const podcastDesc = document.getElementById(
+      'description-podcast-' + this.podcast.podcastId
+    );
+    const podcastDescContainer = document.getElementById(
+      'description-podcast-container-' + this.podcast.podcastId
+    );
+    if (
+      null !== podcastDesc &&
+      podcastDesc.clientHeight > podcastDescContainer!.clientHeight
+    ) {
+      this.isDescriptionBig = true;
+    }
   },
   methods: {
     showDescription(): void {

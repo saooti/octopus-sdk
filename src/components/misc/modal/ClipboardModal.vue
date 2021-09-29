@@ -1,17 +1,22 @@
 <template>
   <div>
-    <div v-bind:class="{ active: active }">
+    <div :class="{ active: active }">
       <div class="modal-container">
         <div class="modal-header">
-          <div class="modal-title h5">{{ title }}</div>
+          <div class="modal-title h5">
+            {{ title }}
+          </div>
           <button
+            v-if="closable"
             type="button"
             class="close input-no-outline"
             data-dismiss="modal"
             aria-label="Close"
-            v-if="closable"
           >
-            <span aria-hidden="true" @click="closePopup">&times;</span>
+            <span
+              aria-hidden="true"
+              @click="closePopup"
+            >&times;</span>
           </button>
         </div>
         <div class="modal-body">
@@ -22,14 +27,23 @@
               type="button"
               :value="$t('Copy')"
               class="btn btn-primary"
-              @click="onCopyCode(rss, afterCopy)"
               :aria-label="$t('Copy')"
-            />
+              @click="onCopyCode(rss, afterCopy)"
+            >
           </p>
-          <RssSection :emission="emission" v-if="emission" />
+          <RssSection
+            v-if="emission"
+            :emission="emission"
+          />
         </div>
-        <div class="modal-footer" v-if="validatetext">
-          <button class="btn btn-primary" @click="onValid">
+        <div
+          v-if="validatetext"
+          class="modal-footer"
+        >
+          <button
+            class="btn btn-primary"
+            @click="onValid"
+          >
             {{ validatetext }}
           </button>
         </div>
@@ -46,11 +60,11 @@ import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ClipboardModal',
-  mixins: [displayMethods],
 
   components: {
     RssSection: () => import('@/components/display/aggregator/RssSection.vue'),
   },
+  mixins: [displayMethods],
 
   props: {
     title: { default: undefined as string|undefined},

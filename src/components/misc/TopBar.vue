@@ -1,45 +1,52 @@
 <template>
   <div
-    class="top-bar-container position-sticky"
-    v-bind:class="{ 'shadow-element': scrolled }"
     v-if="init"
+    class="top-bar-container position-sticky"
+    :class="{ 'shadow-element': scrolled }"
   >
     <div class="top-bar">
       <div
         class="hamburger-menu"
-        v-on:click="onDisplayMenu(false)"
         :aria-label="$t('open left Menu')"
+        @click="onDisplayMenu(false)"
       >
-        <div class="saooti-burger-menu h3"></div>
+        <div class="saooti-burger-menu h3" />
       </div>
       <router-link
         :to="{
           name: 'home',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                  rubriquesId: rubriqueQueryParam},
+                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                   rubriquesId: rubriqueQueryParam},
         }"
       >
-        <div class="top-bar-logo m-3" v-on:click="onDisplayMenu(true)">
+        <div
+          class="top-bar-logo m-3"
+          @click="onDisplayMenu(true)"
+        >
           <img
+            v-if="!filterOrga || '' === imgUrl"
             :src="logoUrl"
             :alt="$t('Logo of main page')"
             :class="isEducation ? 'educationLogo' : ''"
-            v-if="!filterOrga || '' === imgUrl"
-          />
-          <img :src="imgUrl" :alt="$t('Logo of main page')" v-else />
+          >
+          <img
+            v-else
+            :src="imgUrl"
+            :alt="$t('Logo of main page')"
+          >
         </div>
       </router-link>
       <OrganisationChooserLight
         width="auto"
         page="topBar"
+        v-if="!isPodcastmaker"
         :defaultanswer="$t('No organisation filter')"
-        @selected="onOrganisationSelected"
         :value="organisationId"
         :light="true"
         class="mr-2 hide-top-bar"
         :reset="reset"
-        v-if="!isPodcastmaker"
+        @selected="onOrganisationSelected"
       />
       <div class="d-flex align-items-center justify-content-center flex-grow">
         <router-link
@@ -52,61 +59,66 @@
             query: { productor: $store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
-          >{{ $t('Live') }}</router-link
         >
+          {{ $t('Live') }}
+        </router-link>
         <router-link
           :to="{
             name: 'podcasts',
             query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                  rubriquesId: rubriqueQueryParam},
+                     iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                     rubriquesId: rubriqueQueryParam},
           }"
           class="linkHover p-3 text-dark font-weight-bold"
-          >{{ $t('Podcasts') }}</router-link
         >
+          {{ $t('Podcasts') }}
+        </router-link>
         <router-link
           :to="{
             name: 'emissions',
             query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                  rubriquesId: rubriqueQueryParam },
+                     iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                     rubriquesId: rubriqueQueryParam },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
-          >{{ $t('Emissions') }}</router-link
         >
+          {{ $t('Emissions') }}
+        </router-link>
         <router-link
           :to="{
             name: 'participants',
             query: { productor: $store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
-          >{{ $t('Speakers') }}</router-link
         >
+          {{ $t('Speakers') }}
+        </router-link>
         <router-link
           :to="{
             name: 'playlists',
             query: { productor: $store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
-          >{{ $t('Playlists') }}</router-link
         >
+          {{ $t('Playlists') }}
+        </router-link>
         <router-link
+          v-if="!isPodcastmaker && (!filterOrga || isEducation)"
           :to="{
             name: 'productors',
             query: { productor: $store.state.filter.organisationId },
           }"
           class="linkHover p-3 text-dark font-weight-bold"
-          v-if="!isPodcastmaker && (!filterOrga || isEducation)"
-          >{{ $t('Productors') }}</router-link
         >
+          {{ $t('Productors') }}
+        </router-link>
       </div>
       <div class="d-flex flex-column">
         <div class="d-flex justify-content-end hostedBy hide-phone">
-          <span>{{ $t('Hosted by') }}</span
-          ><span class="ml-1 mr-1 primary-color">Saooti</span>
+          <span>{{ $t('Hosted by') }}</span><span class="ml-1 mr-1 primary-color">Saooti</span>
         </div>
         <div class="d-flex align-items-center justify-content-end flex-no-wrap">
-          <HomeDropdown :isEducation="isEducation" />
+          <HomeDropdown :is-education="isEducation" />
           <router-link
             :aria-label="$t('Search')"
             :to="{
@@ -115,7 +127,7 @@
             }"
           >
             <div class="btn admin-button m-1">
-              <i class="saooti-search text-dark"></i>
+              <i class="saooti-search text-dark" />
             </div>
           </router-link>
         </div>
@@ -272,12 +284,12 @@ import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'TopBar',
-  mixins:[orgaFilter],
 
   components: {
     OrganisationChooserLight: () => import('../display/organisation/OrganisationChooserLight.vue'),
     HomeDropdown,
   },
+  mixins:[orgaFilter],
 
   props: {
     displayMenu: { default: false as boolean},
@@ -295,18 +307,6 @@ export default defineComponent({
       init: false as boolean,
       dummyParam: new Date().getTime().toString() as string,
     };
-  },
-
-  mounted() {
-    if (this.filterOrga) {
-      this.organisationId = this.filterOrga;
-    }
-    this.init = true;
-    window.addEventListener('scroll', this.handleScroll);
-  },
-
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll);
   },
 
  
@@ -341,6 +341,27 @@ export default defineComponent({
         return this.$store.state.filter.imgUrl + '?dummy=' + this.dummyParam;
       return '';
     },
+  },
+  watch: {
+    filterOrga(): void {
+      if (this.filterOrga) {
+        this.organisationId = this.filterOrga;
+      } else {
+        this.reset = !this.reset;
+      }
+    },
+  },
+
+  mounted() {
+    if (this.filterOrga) {
+      this.organisationId = this.filterOrga;
+    }
+    this.init = true;
+    window.addEventListener('scroll', this.handleScroll);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     handleScroll(): void {
@@ -387,15 +408,6 @@ export default defineComponent({
           this.$router.push({ query: { ...queries, ...{productor: undefined} } });
         }
         this.$store.commit('filterOrga', { orgaId: undefined });
-      }
-    },
-  },
-  watch: {
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.organisationId = this.filterOrga;
-      } else {
-        this.reset = !this.reset;
       }
     },
   },

@@ -1,7 +1,11 @@
 <template>
   <div v-if="undefined !== tagList">
     <ul class="d-flex flex-wrap">
-      <li class="tagListElement" v-for="tag in tagList" :key="tag">
+      <li
+        v-for="tag in tagList"
+        :key="tag"
+        class="tagListElement"
+      >
         <router-link
           :to="{
             name: 'search',
@@ -11,8 +15,9 @@
             },
           }"
           class="tagListLink"
-          >{{ tag }}</router-link
         >
+          {{ tag }}
+        </router-link>
       </li>
     </ul>
   </div>

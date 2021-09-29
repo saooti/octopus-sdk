@@ -1,34 +1,42 @@
 <template>
   <div
-    class="d-flex mt-3 align-items-center"
     v-if="organisationId && rubriquageData"
+    class="d-flex mt-3 align-items-center"
   >
     <div class="checkbox-saooti flex-shrink">
       <input
-        type="checkbox"
-        class="custom-control-input"
         id="search-rubriquage-checkbox"
         v-model="isRubriquage"
-      />
+        type="checkbox"
+        class="custom-control-input"
+      >
       <label
         class="custom-control-label"
         for="search-rubriquage-checkbox"
-        >{{ $t('By topic') }}</label
-      >
+      >{{ $t('By topic') }}</label>
     </div>
-    <div class="d-flex flex-column" v-if="isRubriquage">
+    <div
+      v-if="isRubriquage"
+      class="d-flex flex-column"
+    >
       <RubriqueChoice 
         v-for="(filter, index) in arrayFilter"
         :key="index"
         :index="index"
-        :rubriquageDisplay="getRubriquage(index)"
-        :rubriqueIdSelected="filter.rubriqueId"
-        :rubriquageIdSelected="filter.rubriquageId"
+        :rubriquage-display="getRubriquage(index)"
+        :rubrique-id-selected="filter.rubriqueId"
+        :rubriquage-id-selected="filter.rubriquageId"
         @updateRubrique="updateRubrique"
         @updateRubriquage="updateRubriquage"
         @deleteRubriqueChoice="deleteRubriqueChoice(index)"
       />
-      <button class="btn mt-2" @click="addFilter" v-if="availableRubriquage.length">{{ $t('Add a sort criterion by topic') }}</button>
+      <button
+        v-if="availableRubriquage.length"
+        class="btn mt-2"
+        @click="addFilter"
+      >
+        {{ $t('Add a sort criterion by topic') }}
+      </button>
     </div>
   </div>
 </template>
@@ -64,17 +72,6 @@ export default defineComponent({
     };
   },
 
-  created() {
-    if(this.rubriqueFilter.length){
-      this.arrayFilter = Array.from(this.rubriqueFilter);
-      this.isRubriquage = true;
-    }
-    this.fetchTopics(false);
-    this.$nextTick(() => {
-      this.isInit = false;
-    });
-  },
-
   computed: {
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -95,60 +92,6 @@ export default defineComponent({
         });
       }
       return this.rubriquageData;
-    }
-  },
-  methods: {
-    deleteRubriqueChoice(index: number): void{
-      this.arrayFilter.splice(index,1);
-    },
-    getRubriquage(index: number){
-      const elementToNotShow = Array.from(this.arrayFilter);
-      elementToNotShow.splice(index, 1);
-      if(elementToNotShow.length){
-        const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
-        return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
-        });
-      }
-      return this.rubriquageData;
-    },
-    addFilter(): void{
-      this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
-    },
-    updateRubrique(newValue: {rubriqueId: number; index: number}): void{
-      const item = this.arrayFilter[newValue.index];
-      item.rubriqueId = newValue.rubriqueId;
-      this.arrayFilter.splice(newValue.index, 1, item);
-    },
-    updateRubriquage(newValue: {rubriquageId: number; index: number}): void{
-      const item = this.arrayFilter[newValue.index];
-      item.rubriquageId = newValue.rubriquageId;
-      this.arrayFilter.splice(newValue.index, 1, item);
-    },
-    async fetchTopics(initArrayFilter: boolean): Promise<void> {
-      if(initArrayFilter){
-        this.arrayFilter.length = 0;
-      }
-      if (!this.organisation) return;
-      const data = await octopusApi.fetchTopics(this.organisation);
-      this.rubriquageData = data.filter((element: Rubriquage)=>{
-        return element.rubriques.length;
-      });
-      this.saveOrganisation = this.organisation;
-      if (0 === this.rubriquageData.length) return;
-      if(initArrayFilter){
-        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""});
-      }
-    },
-    resetRubriqueFilter(): void{
-      if(0===this.rubriqueFilter.length || this.isInit){
-        return;
-      }
-      const queries = this.$route.query;
-      if (queries.rubriquesId) {
-        this.$router.push({ query: {...queries, ...{rubriquesId: undefined} } });
-      }
-      this.$store.commit('filterRubrique', []);
     }
   },
   watch: {
@@ -215,6 +158,71 @@ export default defineComponent({
     resetRubriquage(): void {
       this.isRubriquage = false;
     },
+  },
+
+  created() {
+    if(this.rubriqueFilter.length){
+      this.arrayFilter = Array.from(this.rubriqueFilter);
+      this.isRubriquage = true;
+    }
+    this.fetchTopics(false);
+    this.$nextTick(() => {
+      this.isInit = false;
+    });
+  },
+  methods: {
+    deleteRubriqueChoice(index: number): void{
+      this.arrayFilter.splice(index,1);
+    },
+    getRubriquage(index: number){
+      const elementToNotShow = Array.from(this.arrayFilter);
+      elementToNotShow.splice(index, 1);
+      if(elementToNotShow.length){
+        const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
+        return this.rubriquageData.filter((element)=>{
+          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+        });
+      }
+      return this.rubriquageData;
+    },
+    addFilter(): void{
+      this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
+    },
+    updateRubrique(newValue: {rubriqueId: number; index: number}): void{
+      const item = this.arrayFilter[newValue.index];
+      item.rubriqueId = newValue.rubriqueId;
+      this.arrayFilter.splice(newValue.index, 1, item);
+    },
+    updateRubriquage(newValue: {rubriquageId: number; index: number}): void{
+      const item = this.arrayFilter[newValue.index];
+      item.rubriquageId = newValue.rubriquageId;
+      this.arrayFilter.splice(newValue.index, 1, item);
+    },
+    async fetchTopics(initArrayFilter: boolean): Promise<void> {
+      if(initArrayFilter){
+        this.arrayFilter.length = 0;
+      }
+      if (!this.organisation) return;
+      const data = await octopusApi.fetchTopics(this.organisation);
+      this.rubriquageData = data.filter((element: Rubriquage)=>{
+        return element.rubriques.length;
+      });
+      this.saveOrganisation = this.organisation;
+      if (0 === this.rubriquageData.length) return;
+      if(initArrayFilter){
+        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""});
+      }
+    },
+    resetRubriqueFilter(): void{
+      if(0===this.rubriqueFilter.length || this.isInit){
+        return;
+      }
+      const queries = this.$route.query;
+      if (queries.rubriquesId) {
+        this.$router.push({ query: {...queries, ...{rubriquesId: undefined} } });
+      }
+      this.$store.commit('filterRubrique', []);
+    }
   },
 })
 </script>

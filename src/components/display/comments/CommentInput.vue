@@ -1,19 +1,27 @@
 <template>
-  <div class="d-flex flex-column comment-input-container mt-3" v-if="isPresent">
+  <div
+    v-if="isPresent"
+    class="d-flex flex-column comment-input-container mt-3"
+  >
     <b
+      v-if="knownIdentity && !editName"
       class="small-Text mt-1 c-hand"
       @click="changeIdentity"
-      v-if="knownIdentity && !editName"
-      >{{ knownIdentity }}</b
+    >{{ knownIdentity }}</b>
+    <div
+      v-if="knownIdentity && editName"
+      class="d-flex"
     >
-    <div class="d-flex" v-if="knownIdentity && editName">
       <input
+        v-model="temporaryName"
         class="small-Text mt-1"
         type="text"
-        v-model="temporaryName"
-        v-bind:class="{ 'border border-danger': temporaryName.length < 2 }"
-      />
-      <button class="btn btn-light p-1 m-1" @click="editName = false">
+        :class="{ 'border border-danger': temporaryName.length < 2 }"
+      >
+      <button
+        class="btn btn-light p-1 m-1"
+        @click="editName = false"
+      >
         {{ $t('Cancel') }}
       </button>
       <button
@@ -32,15 +40,21 @@
       :class="{ short: isOneLine && !newComment.includes('\n') }"
       @focus="textareaFocus = true"
       @blur="textareaFocus = false"
-    ></b-form-textarea>
-    <div class="d-flex justify-content-end mt-1" v-if="textareaFocus">
-      <button class="btn mr-2" @mousedown="cancelAction">
+    />
+    <div
+      v-if="textareaFocus"
+      class="d-flex justify-content-end mt-1"
+    >
+      <button
+        class="btn mr-2"
+        @mousedown="cancelAction"
+      >
         {{ $t('Cancel') }}
       </button>
       <button
         class="btn btn-primary"
-        @mousedown="requestToSend"
         :disabled="0 === newComment.trim().length"
+        @mousedown="requestToSend"
       >
         {{ placeholder }}
       </button>
@@ -52,11 +66,11 @@
     />
     <MessageModal
       v-if="postError"
-      @close="postError = false"
-      @validate="postError = false"
       :validatetext="$t('Close')"
       :title="$t('Error')"
       :message="$t('Error occurs while post your comment...')"
+      @close="postError = false"
+      @validate="postError = false"
     />
   </div>
 </template>
@@ -98,11 +112,11 @@ import { CommentPodcast } from '@/store/class/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentInput',
-  mixins:[cookies],
   components: {
     AddCommentModal: () => import('./AddCommentModal.vue'),
     MessageModal: () => import('../../misc/modal/MessageModal.vue'),
   },
+  mixins:[cookies],
 
   props: {
     podcast: { default: undefined as Podcast|undefined },
@@ -192,6 +206,25 @@ export default defineComponent({
       return this.podcast ? this.podcast.organisation.id : this.comment.organisationId;
     }
   },
+  watch: {
+    textareaFocus(): void {
+      this.newComment = this.newComment.trim();
+    },
+    focus(): void {
+      (this.$refs.textarea as HTMLElement).focus();
+    },
+    newComment(): void {
+      const padding =
+        1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+      this.isOneLine =
+        (this.$refs.textarea as any).$el.clientWidth -
+          this.inputExceeded(
+            this.newComment,
+            '18px Montserrat, sans-serif, Helvetica Neue'
+          ) >
+        padding;
+    },
+  },
   methods: {
     changeIdentity(): void {
       this.temporaryName = this.knownIdentity;
@@ -275,25 +308,6 @@ export default defineComponent({
         this.checkIdentityModal = false;
         this.postError = true;
       }
-    },
-  },
-  watch: {
-    textareaFocus(): void {
-      this.newComment = this.newComment.trim();
-    },
-    focus(): void {
-      (this.$refs.textarea as HTMLElement).focus();
-    },
-    newComment(): void {
-      const padding =
-        1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
-      this.isOneLine =
-        (this.$refs.textarea as any).$el.clientWidth -
-          this.inputExceeded(
-            this.newComment,
-            '18px Montserrat, sans-serif, Helvetica Neue'
-          ) >
-        padding;
     },
   },
 })

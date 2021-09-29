@@ -1,76 +1,94 @@
 <template>
   <div
+    v-if="podcast"
     class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-left"
     :style="{ 'background-image': 'url(\'' + podcast.imageUrl + '\')' }"
-    v-if="podcast"
   >
     <template v-if="isPodcastmaker">
-      <div v-if="mainRubrique" class="mainRubrique"></div>
-      <div v-else class="notMainRubrique"></div>
+      <div
+        v-if="mainRubrique"
+        class="mainRubrique"
+      />
+      <div
+        v-else
+        class="notMainRubrique"
+      />
     </template>
     <div
+      v-if="fetchConference"
       class="live-image-status"
       :class="
         fetchConference && 'null' !== fetchConference
           ? fetchConference.status.toLowerCase() + '-bg'
           : ''
       "
-      v-if="fetchConference"
     >
       {{ statusText }}
     </div>
-    <div class="live-image-status recording-bg" v-if="isRecordedInLive">
+    <div
+      v-if="isRecordedInLive"
+      class="live-image-status recording-bg"
+    >
       {{ $t('Recorded in live') }}
     </div>
     <div
-      class="podcast-image-play-button"
-      v-on:click="play"
       v-if="hidePlay || recordingLive"
+      class="podcast-image-play-button"
       :class="classicPodcastPlay ? '' : 'transparent-background'"
+      @click="play"
     >
-      <div class="icon-container" v-if="!isLiveToBeRecorded">
+      <div
+        v-if="!isLiveToBeRecorded"
+        class="icon-container"
+      >
         <div
+          v-show="!playingPodcast"
           :aria-label="$t('Play')"
           class="saooti-play2-bounty primary-color"
-          v-show="!playingPodcast"
-        ></div>
+        />
         <div
+          v-if="!classicPodcastPlay"
           class="special-icon-play-button"
           :class="iconName"
-          v-if="!classicPodcastPlay"
-        ></div>
-        <div class="bloc-paddle" v-show="playingPodcast">
-          <span class="paddle1 primary-color"></span>
-          <span class="paddle2 primary-color"></span>
-          <span class="paddle3 primary-color"></span>
+        />
+        <div
+          v-show="playingPodcast"
+          class="bloc-paddle"
+        >
+          <span class="paddle1 primary-color" />
+          <span class="paddle2 primary-color" />
+          <span class="paddle3 primary-color" />
         </div>
       </div>
-      <div class="icon-container error-icon" v-else>
+      <div
+        v-else
+        class="icon-container error-icon"
+      >
         <div
           :aria-label="textVisible"
           class="big-icon-error"
           :class="iconName"
-        ></div>
+        />
       </div>
       <div
-        class="small-Text mt-3 font-weight-bolder"
         v-if="!classicPodcastPlay"
+        class="small-Text mt-3 font-weight-bolder"
       >
         {{ textVisible }}
       </div>
     </div>
     <div
+      v-if="!isDescription && displayDescription && isMobile"
       class="background-icon saooti-arrow-up2"
       :aria-label="$t('Show description')"
-      v-if="!isDescription && displayDescription && isMobile"
       @click="showDescription"
-    ></div>
+    />
     <div
+      v-if="isDescription && displayDescription && isMobile"
       class="background-icon saooti-arrow-down2"
       :aria-label="$t('Hide description')"
-      v-if="isDescription && displayDescription && isMobile"
       @click="showDescription"
-    ></div>
+    />
   </div>
 </template>
 
@@ -353,6 +371,17 @@ export default defineComponent({
       );
     },
   },
+  watch: {
+    arrowDirection(): void {
+      if ('up' === this.arrowDirection) {
+        this.isDescription = true;
+        this.showDescription();
+      } else {
+        this.isDescription = false;
+        this.showDescription();
+      }
+    },
+  },
  
   methods: {
     play(): void {
@@ -387,17 +416,6 @@ export default defineComponent({
         this.$emit('showDescription');
       }
       this.isDescription = !this.isDescription;
-    },
-  },
-  watch: {
-    arrowDirection(): void {
-      if ('up' === this.arrowDirection) {
-        this.isDescription = true;
-        this.showDescription();
-      } else {
-        this.isDescription = false;
-        this.showDescription();
-      }
     },
   },
 })

@@ -1,20 +1,24 @@
 <template>
   <div class="page-box">
-    <h1 v-if="undefined === titlePage">{{ $t('All participants') }}</h1>
-    <h1 v-else>{{ titlePage }}</h1>
+    <h1 v-if="undefined === titlePage">
+      {{ $t('All participants') }}
+    </h1>
+    <h1 v-else>
+      {{ titlePage }}
+    </h1>
     <ProductorSearch
-      :organisationId="organisationId"
-      :searchPattern="searchPattern"
+      :organisation-id="organisationId"
+      :search-pattern="searchPattern"
       type="participant"
       @updateOrganisationId="updateOrganisationId"
       @updateSearchPattern="updateSearchPattern"
     />
     <ParticipantList
-      :showCount="true"
+      :show-count="true"
       :first="first"
       :size="size"
       :query="searchPattern"
-      :organisationId="organisationId"
+      :organisation-id="organisationId"
     />
   </div>
 </template>
@@ -45,6 +49,12 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    titlePage(): string|undefined {
+      return state.intervenantsPage.titlePage;
+    },
+  },
+
   created() {
     if (this.firstRoute) {
       this.first = this.firstRoute;
@@ -57,12 +67,6 @@ export default defineComponent({
     } else if (this.$store.state.filter.organisationId) {
       this.organisationId = this.$store.state.filter.organisationId;
     }
-  },
-
-  computed: {
-    titlePage(): string|undefined {
-      return state.intervenantsPage.titlePage;
-    },
   },
   
   methods: {

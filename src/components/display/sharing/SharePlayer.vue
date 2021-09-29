@@ -19,9 +19,12 @@
             :width="iFrameWidth"
             :height="iFrameHeight"
             class="maxIframe"
-          ></iframe>
+          />
           <div class="d-flex flex-column">
-            <button class="btn mb-3" @click="isShareModal = true">
+            <button
+              class="btn mb-3"
+              @click="isShareModal = true"
+            >
               {{ $t('Share the player') }}
             </button>
             <template v-if="!isLiveReadyToRecord">
@@ -29,40 +32,55 @@
                 for="iframe-select"
                 class="d-inline"
                 aria-label="select miniplayer"
-              ></label>
+              />
               <select
-                v-model="iFrameModel"
                 id="iframe-select"
+                v-model="iFrameModel"
                 class="frame-select input-no-outline"
               >
-                <option value="default">{{ $t('Default version') }}</option>
-                <option value="large">{{ $t('Large version') }}</option>
+                <option value="default">
+                  {{ $t('Default version') }}
+                </option>
+                <option value="large">
+                  {{ $t('Large version') }}
+                </option>
                 <template v-if="isBeta">
-                    <option
-                    v-for="player in customPlayersDisplay" :key="player.customId"
-                    :value="player.customId" 
-                    
-                    >{{ $t('Custom version') + " «" +player.name+"»" }}</option>
+                  <option
+                    v-for="player in customPlayersDisplay"
+                    :key="player.customId"
+                    :value="player.customId"
+                  >
+                    {{ $t('Custom version') + " «" +player.name+"»" }}
+                  </option>
                 </template>
-                <option value="emission" v-if="podcast && podcast.podcastId">{{
-                  $t('Emission version')
-                }}</option>
                 <option
+                  v-if="podcast && podcast.podcastId"
+                  value="emission"
+                >
+                  {{
+                    $t('Emission version')
+                  }}
+                </option>
+                <option
+                  v-if="podcast && podcast.podcastId"
                   value="largeEmission"
-                  v-if="podcast && podcast.podcastId"
-                  >{{ $t('Large emission version') }}</option
                 >
+                  {{ $t('Large emission version') }}
+                </option>
                 <option
-                  value="largeSuggestion"
                   v-if="podcast && podcast.podcastId"
-                  >{{ $t('Large suggestion version') }}</option
+                  value="largeSuggestion"
                 >
+                  {{ $t('Large suggestion version') }}
+                </option>
               </select>
             </template>
           </div>
           <div class="d-flex justify-content-around mt-3 flex-grow w-100">
             <div class="d-flex flex-column align-items-center flex-shrink mr-3">
-              <div class="font-weight-600">{{ $t('Choose color') }}</div>
+              <div class="font-weight-600">
+                {{ $t('Choose color') }}
+              </div>
               <swatches
                 v-model="color"
                 class="c-hand input-no-outline"
@@ -70,12 +88,21 @@
                 colors="text-advanced"
                 popover-to="right"
                 :data-color="color"
-              ></swatches>
+              />
             </div>
             <div class="d-flex flex-column align-items-center">
-              <div class="font-weight-600">{{ $t('Choose theme') }}</div>
-              <div class="d-flex" v-if="!isBeta">
-                <swatches v-for="color in colors" :key="color" v-model="theme" :data-theme="theme"
+              <div class="font-weight-600">
+                {{ $t('Choose theme') }}
+              </div>
+              <div
+                v-if="!isBeta"
+                class="d-flex"
+              >
+                <swatches
+                  v-for="color in colors"
+                  :key="color"
+                  v-model="theme"
+                  :data-theme="theme"
                   class="c-hand input-no-outline mr-1"
                   :swatch-style="{
                     padding: '0px 0px',
@@ -91,48 +118,49 @@
                   }"
                   :colors="[color]"
                   inline
-                ></swatches>
+                />
               </div>
               <swatches
+                v-else
                 v-model="theme"
                 class="c-hand input-no-outline"
                 show-fallback
                 colors="text-advanced"
                 popover-to="right"
                 :data-color="theme"
-                v-else
-              ></swatches>
+              />
             </div>
           </div>
-          <div class="checkbox-saooti" v-if="displayBetaChoice">
+          <div
+            v-if="displayBetaChoice"
+            class="checkbox-saooti"
+          >
             <input
-              type="checkbox"
-              class="custom-control-input"
               id="isBetaCheckbox"
               v-model="isBeta"
-            />
+              type="checkbox"
+              class="custom-control-input"
+            >
             <label
               class="custom-control-label mr-2"
               for="isBetaCheckbox"
-              >{{ $t('Use beta version') }}</label
-            >
+            >{{ $t('Use beta version') }}</label>
           </div>
           <div
-            class="d-flex align-items-center flex-wrap"
             v-if="isPodcastNotVisible || playlist"
+            class="d-flex align-items-center flex-wrap"
           >
             <div class="checkbox-saooti">
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="isVisibleCheckbox"
                 v-model="isVisible"
-              />
+                type="checkbox"
+                class="custom-control-input"
+              >
               <label
                 class="custom-control-label mr-2"
                 for="isVisibleCheckbox"
-                >{{ titleStillAvailable }}</label
-              >
+              >{{ titleStillAvailable }}</label>
             </div>
           </div>
         </div>
@@ -140,8 +168,8 @@
           v-if="isPlayerParameter"
           :podcast="podcast"
           :playlist="playlist"
-          :iFrameModel="iFrameModel"
-          :isVisible="isVisible"
+          :i-frame-model="iFrameModel"
+          :is-visible="isVisible"
           @displayArticle="updateDisplayArticle"
           @episodeNumbers="updateEpisodeNumber"
           @proceedReading="updateProceedReading"
@@ -159,11 +187,11 @@
     </div>
     <ShareModalPlayer
       v-if="isShareModal"
+      :embed-link="iFrame"
+      :embedly-link="iFrameSrc"
+      :direct-link="podcast"
       @close="isShareModal = false"
-      :embedLink="iFrame"
-      :embedlyLink="iFrameSrc"
-      :directLink="podcast"
-    ></ShareModalPlayer>
+    />
   </div>
 </template>
 
@@ -234,12 +262,6 @@ export default defineComponent({
       isBeta: false as boolean,
       colors: ['#000000', '#ffffff'],
     };
-  },
-  async created() {
-    await this.initColor();
-    if (this.isLiveReadyToRecord) {
-      this.iFrameModel = 'large';
-    }
   },
   
   computed: {
@@ -430,6 +452,12 @@ export default defineComponent({
     },
     isPlayerParameter(): boolean{
       return !this.podcast || (this.podcast.article && 0 !== this.podcast.article.length) || this.isEmission || this.isLargeEmission || this.isLargeSuggestion;
+    }
+  },
+  async created() {
+    await this.initColor();
+    if (this.isLiveReadyToRecord) {
+      this.iFrameModel = 'large';
     }
   },
   methods: {

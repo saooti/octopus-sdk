@@ -1,83 +1,106 @@
 <template>
   <div>
-    <div class="page-box" v-if="loaded && !error">
-      <h1 v-if="!isOuestFrance">{{ $t('Emission') }}</h1>
+    <div
+      v-if="loaded && !error"
+      class="page-box"
+    >
+      <h1 v-if="!isOuestFrance">
+        {{ $t('Emission') }}
+      </h1>
       <div class="d-flex">
         <div class="d-flex flex-column flex-grow">
           <EditBox
-            :emission="emission"
-            :rssEmission="rssEmission"
-            :ftpEmission="ftpEmission"
-            :isReady="isReady"
             v-if="editRight && isEditBox"
-          ></EditBox>
+            :emission="emission"
+            :rss-emission="rssEmission"
+            :ftp-emission="ftpEmission"
+            :is-ready="isReady"
+          />
           <div class="module-box">
-            <h2 v-if="!isOuestFrance">{{ name }}</h2>
-            <h1 v-else>{{ name }}</h1>
+            <h2 v-if="!isOuestFrance">
+              {{ name }}
+            </h2>
+            <h1 v-else>
+              {{ name }}
+            </h1>
             <div class="mb-5 mt-3 descriptionText">
               <img
+                v-if="!isOuestFrance"
                 :src="imageUrl"
                 :alt="$t('Emission name image', { name: name })"
                 class="img-box shadow-element float-left mr-3 mb-3"
-                v-if="!isOuestFrance"
+              >
+              <p
+                class="html-wysiwyg-content"
+                v-html="urlify(description)"
               />
-              <p class="html-wysiwyg-content" v-html="urlify(description)"></p>
             </div>
             <ShareButtons
-              :emission="emission"
-              :bigRound="true"
               v-if="isRssButton"
-            ></ShareButtons>
+              :emission="emission"
+              :big-round="true"
+            />
           </div>
           <SubscribeButtons
-            :emission="emission"
             v-if="isShareButtons && countLink >= 1"
-          ></SubscribeButtons>
+            :emission="emission"
+          />
         </div>
         <div class="d-flex flex-column share-container">
           <SharePlayer
+            v-if="isSharePlayer && (authenticated || notExclusive)"
             :emission="emission"
             :exclusive="exclusive"
-            :notExclusive="notExclusive"
-            :organisationId="organisationId"
-            :isEducation="isEducation"
-            v-if="isSharePlayer && (authenticated || notExclusive)"
-          ></SharePlayer>
+            :not-exclusive="notExclusive"
+            :organisation-id="organisationId"
+            :is-education="isEducation"
+          />
           <ShareButtons
-            :emission="emission"
-            :notExclusive="notExclusive"
             v-if="isShareButtons"
-          ></ShareButtons>
+            :emission="emission"
+            :not-exclusive="notExclusive"
+          />
         </div>
       </div>
       <div v-if="editRight">
         <ShareDistribution
-          :emissionId="emissionId"
           v-if="isShareDistribution"
-        ></ShareDistribution>
+          :emission-id="emissionId"
+        />
       </div>
-      <LiveHorizontalList :emissionId="emissionId" v-if="!isPodcastmaker" />
+      <LiveHorizontalList
+        v-if="!isPodcastmaker"
+        :emission-id="emissionId"
+      />
       <PodcastFilterList
-        :emissionId="emissionId"
-        :categoryFilter="false"
-        :editRight="editRight"
-        :productorId="emission.orga.id"
         v-if="!isOuestFrance"
+        :emission-id="emissionId"
+        :category-filter="false"
+        :edit-right="editRight"
+        :productor-id="emission.orga.id"
         @fetch="fetch"
       />
       <PodcastList
+        v-else
         :first="0"
         :size="15"
-        :emissionId="emissionId"
+        :emission-id="emissionId"
         @fetch="fetch"
-        v-else
       />
     </div>
-    <div class="d-flex justify-content-center" v-if="!loaded">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="!loaded"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-center"
+    >
       <h3>{{ $t("Emission doesn't exist") }}</h3>
     </div>
   </div>
@@ -92,7 +115,6 @@ import { Emission } from '@/store/class/emission';
 
 import { defineComponent } from 'vue'
 export default defineComponent({
-  mixins: [displayMethods],
   components: {
     PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
     SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
@@ -103,6 +125,7 @@ export default defineComponent({
     SubscribeButtons: () => import('../display/sharing/SubscribeButtons.vue'),
     LiveHorizontalList: () => import('../display/live/LiveHorizontalList.vue'),
   },
+  mixins: [displayMethods],
   props: {
     emissionId: { default: undefined as number|undefined},
     isEducation: { default: false as boolean},
@@ -123,10 +146,6 @@ export default defineComponent({
       dummyParam: new Date().getTime().toString() as string,
       fetchLive: true as boolean,
     };
-  },
-
-  mounted() {
-    this.getEmissionDetails();
   },
   
   computed: {
@@ -195,6 +214,17 @@ export default defineComponent({
       return count;
     },
   },
+  watch: {
+    emissionId(): void {
+      this.loaded = false;
+      this.error = false;
+      this.getEmissionDetails();
+    },
+  },
+
+  mounted() {
+    this.getEmissionDetails();
+  },
   methods: {
     async getEmissionDetails(): Promise<void> {
       try {
@@ -230,13 +260,6 @@ export default defineComponent({
       if(found){
         this.isReady = false;
       } */
-    },
-  },
-  watch: {
-    emissionId(): void {
-      this.loaded = false;
-      this.error = false;
-      this.getEmissionDetails();
     },
   },
 })

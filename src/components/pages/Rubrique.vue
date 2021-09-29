@@ -1,22 +1,26 @@
 <template>
   <div class="page-box">
     <h1>{{ title }}</h1>
-    <PodcastList :first="firstRoute" :size="sizeRoute" :rubriqueId="rubriqueId" />
+    <PodcastList
+      :first="firstRoute"
+      :size="sizeRoute"
+      :rubrique-id="rubriqueId"
+    />
   </div>
 </template>
 
 <style lang="scss"></style>
-
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
 import PodcastList from '../display/podcasts/PodcastList.vue';
-
 import { defineComponent } from 'vue'
 export default defineComponent({
+  name:"Rubrique",
+
   components: {
     PodcastList,
   },
+
   props: {
     firstRoute: { default: 0 as number},
     sizeRoute: { default: 12 as number},
@@ -29,21 +33,20 @@ export default defineComponent({
     };
   },
 
+  watch: {
+    rubriqueId(): void {
+      this.extractTitle();
+    },
+  },
+
   mounted() {
     this.extractTitle();
   },
 
-  
-  computed: {},
   methods: {
     async extractTitle(): Promise<void> {
       const data = await octopusApi.fetchRubric(this.rubriqueId);
       this.title = data.name;
-    },
-  },
-  watch: {
-    rubriqueId(): void {
-      this.extractTitle();
     },
   },
 })

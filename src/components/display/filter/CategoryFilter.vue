@@ -2,16 +2,19 @@
   <div class="d-flex mt-3 align-items-center">
     <div class="checkbox-saooti flex-shrink mr-2">
       <input
-        type="checkbox"
-        class="custom-control-input"
         id="search-category-checkbox"
         v-model="isCategory"
-      />
-      <label class="custom-control-label" for="search-category-checkbox">{{ $t('By category') }}</label>
+        type="checkbox"
+        class="custom-control-input"
+      >
+      <label
+        class="custom-control-label"
+        for="search-category-checkbox"
+      >{{ $t('By category') }}</label>
     </div>
     <CategoryChooser
-      width="auto"
       v-model:categorySelected="iabId"
+      width="auto"
       :defaultanswer="$t('No category filter')"
     />
   </div>
@@ -27,6 +30,7 @@ export default defineComponent({
   components: {
     CategoryChooser
   },
+  emits: ['updateCategory'],
   data() {
     return {
       isCategory: false as boolean,
@@ -35,33 +39,10 @@ export default defineComponent({
       isInit: true as boolean,
     };
   },
-  emits: ['updateCategory'],
-
-  created() {
-    if(this.categoryFilter){
-      this.iabId = this.categoryFilter.id;
-      this.isCategory = true;
-    }
-    this.$nextTick(() => {
-      this.isInit = false;
-    });
-  },
   computed: {
     categoryFilter(): Category|undefined{
       return this.$store.state.filter.iab;
     },
-  },
-  methods: {
-    resetCategoryFilter(): void{
-      if(!this.categoryFilter || this.isInit){
-        return;
-      }
-      const queries = this.$route.query;
-      if (queries.iabId) {
-        this.$router.push({ query: {...queries, ...{iabId: undefined} } });
-      }
-      this.$store.commit('filterIab', undefined);
-    }
   },
   watch: {
     isCategory(): void {
@@ -109,6 +90,28 @@ export default defineComponent({
         this.isInternChanged = false;
       });
     },
+  },
+
+  created() {
+    if(this.categoryFilter){
+      this.iabId = this.categoryFilter.id;
+      this.isCategory = true;
+    }
+    this.$nextTick(() => {
+      this.isInit = false;
+    });
+  },
+  methods: {
+    resetCategoryFilter(): void{
+      if(!this.categoryFilter || this.isInit){
+        return;
+      }
+      const queries = this.$route.query;
+      if (queries.iabId) {
+        this.$router.push({ query: {...queries, ...{iabId: undefined} } });
+      }
+      this.$store.commit('filterIab', undefined);
+    }
   },
 })
 </script>

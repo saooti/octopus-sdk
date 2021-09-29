@@ -8,7 +8,7 @@
       for="emissionChooser"
       class="d-inline"
       aria-label="select emission"
-    ></label>
+    />
     <!-- <Multiselect
       v-model="emission"
       id="emissionChooser"
@@ -128,6 +128,14 @@ export default defineComponent({
       isLoading: false as boolean,
     };
   },
+  watch: {
+    emissionChosen(): void {
+      this.emission = this.emissionChosen;
+    },
+    reset(): void {
+      this.emission = getDefaultEmission(this.defaultanswer);
+    },
+  },
 
    methods: {
     onOpen(): void {
@@ -183,14 +191,6 @@ export default defineComponent({
     clearAll(): void {
       this.emission = undefined;
       this.emissions.length = 0;
-    },
-  },
-  watch: {
-    emissionChosen(): void {
-      this.emission = this.emissionChosen;
-    },
-    reset(): void {
-      this.emission = getDefaultEmission(this.defaultanswer);
     },
   },
 })

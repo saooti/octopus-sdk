@@ -1,105 +1,114 @@
 <template>
-  <div class="left-menu-container" v-show="displayMenu">
+  <div
+    v-show="displayMenu"
+    class="left-menu-container"
+  >
     <div class="routes-container h5">
       <router-link
-        @click="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone home-route"
         :to="{
           name: 'home',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                  rubriquesId: rubriqueQueryParam},
+                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                   rubriquesId: rubriqueQueryParam},
         }"
-        >{{ $t('Home') }}</router-link
-      >
-      <router-link
         @click="onMenuClick"
+      >
+        {{ $t('Home') }}
+      </router-link>
+      <router-link
         v-if="isLiveTab && filterOrga && filterOrgaLive"
         class="text-dark font-weight-bold mb-3 live-route"
         :to="{
           name: 'lives',
           query: { productor: $store.state.filter.organisationId},
         }"
-        >{{ $t('Live') }}</router-link
-      >
-      <router-link
         @click="onMenuClick"
+      >
+        {{ $t('Live') }}
+      </router-link>
+      <router-link
         class="text-dark font-weight-bold mb-3 podcasts-route"
         :to="{
           name: 'podcasts',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                  rubriquesId: rubriqueQueryParam},
+                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                   rubriquesId: rubriqueQueryParam},
         }"
-        >{{ $t('Podcasts') }}</router-link
-      >
-      <router-link
         @click="onMenuClick"
+      >
+        {{ $t('Podcasts') }}
+      </router-link>
+      <router-link
         class="text-dark font-weight-bold mb-3 emissions-route"
         :to="{
           name: 'emissions',
           query: { productor: $store.state.filter.organisationId,
-                  iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined ,
-                  rubriquesId: rubriqueQueryParam},
+                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined ,
+                   rubriquesId: rubriqueQueryParam},
         }"
-        >{{ $t('Emissions') }}</router-link
-      >
-      <router-link
         @click="onMenuClick"
+      >
+        {{ $t('Emissions') }}
+      </router-link>
+      <router-link
         v-if="!isPodcastmaker && (!filterOrga || isEducation)"
         class="text-dark font-weight-bold mb-3 productors-route"
         :to="{
           name: 'productors',
           query: { productor: $store.state.filter.organisationId },
         }"
-        >{{ $t('Productors') }}</router-link
-      >
-      <router-link
         @click="onMenuClick"
+      >
+        {{ $t('Productors') }}
+      </router-link>
+      <router-link
         class="text-dark font-weight-bold mb-3 participants-route"
         :to="{
           name: 'participants',
           query: { productor: $store.state.filter.organisationId },
         }"
-        >{{ $t('Speakers') }}</router-link
+        @click="onMenuClick"
       >
+        {{ $t('Speakers') }}
+      </router-link>
       <router-link
-      @click="onMenuClick"
         :to="{
           name: 'playlists',
           query: { productor: $store.state.filter.organisationId },
         }"
         class="linkHover pb-3 text-dark font-weight-bold playlists-route"
-        >{{ $t('Playlists') }}</router-link
+        @click="onMenuClick"
       >
+        {{ $t('Playlists') }}
+      </router-link>
       <OrganisationChooserLight
         width="auto"
         page="leftMenu"
+        v-if="!isPodcastmaker"
         :defaultanswer="$t('No organisation filter')"
-        @selected="onOrganisationSelected"
         :value="organisationId"
         :light="true"
         class="mr-2 hide-top-bar"
         :reset="reset"
-        v-if="!isPodcastmaker"
+        @selected="onOrganisationSelected"
       />
-      <hr class="divided-line show-phone" />
+      <hr class="divided-line show-phone">
       <router-link
-        @click="onMenuClick"
-        class="text-dark font-weight-bold mb-3 show-phone category-route"
         v-for="category in categories"
-        v-bind:key="category.id"
+        :key="category.id"
+        class="text-dark font-weight-bold mb-3 show-phone category-route"
         :to="{
           name: 'category',
           params: { iabId: category.id },
           query: { productor: $store.state.filter.organisationId },
         }"
+        @click="onMenuClick"
       >
-        {{ category.name }}</router-link
-      >
+        {{ category.name }}
+      </router-link>
       <div class="d-flex hostedBy">
-        <span>{{ $t('Hosted by') }}</span
-        ><span class="ml-1 mr-1 primary-color">Saooti</span>
+        <span>{{ $t('Hosted by') }}</span><span class="ml-1 mr-1 primary-color">Saooti</span>
       </div>
     </div>
   </div>
@@ -165,11 +174,11 @@ import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LeftMenu',
-  mixins:[orgaFilter],
 
   components: {
     OrganisationChooserLight: () => import('../display/organisation/OrganisationChooserLight.vue'),
   },
+  mixins:[orgaFilter],
 
   props: {
     displayMenu: { default: false as boolean},
@@ -182,12 +191,6 @@ export default defineComponent({
       organisationId: undefined as string|undefined,
       reset: false as boolean,
     };
-  },
-
-  mounted() {
-    if (this.filterOrga) {
-      this.organisationId = this.filterOrga;
-    }
   },
 
   computed: {
@@ -216,6 +219,21 @@ export default defineComponent({
       return undefined;
     },
   },
+  watch: {
+    filterOrga(): void {
+      if (this.filterOrga) {
+        this.organisationId = this.filterOrga;
+      } else {
+        this.reset = !this.reset;
+      }
+    },
+  },
+
+  mounted() {
+    if (this.filterOrga) {
+      this.organisationId = this.filterOrga;
+    }
+  },
   
   methods: {
     onMenuClick() {
@@ -233,15 +251,6 @@ export default defineComponent({
           this.$router.push({ query: {...queries, ...{productor: undefined} } });
         }
         this.$store.commit('filterOrga', { orgaId: undefined });
-      }
-    },
-  },
-  watch: {
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.organisationId = this.filterOrga;
-      } else {
-        this.reset = !this.reset;
       }
     },
   },

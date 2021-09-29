@@ -1,29 +1,39 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div v-if="loaded && playlists.length > 1" class="text-secondary mb-2">
+    <div
+      v-if="loaded && playlists.length > 1"
+      class="text-secondary mb-2"
+    >
       {{ $t('Number playlists', { nb: displayCount }) + $t('sort by score') }}
     </div>
     <ul class="emission-list twoEmissions">
       <PlaylistItem
-        v-bind:playlist="p"
         v-for="p in playlists"
-        v-bind:key="p.playlistId"
+        :key="p.playlistId"
+        :playlist="p"
       />
     </ul>
     <button
+      v-show="!allFetched && loaded"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus' : 'btn-more'"
-      @click="displayMore"
-      v-show="!allFetched && loaded"
       :disabled="inFetching"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
@@ -63,10 +73,6 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    this.fetchContent(true);
-  },
-
   
   computed: {
     allFetched(): boolean {
@@ -90,6 +96,15 @@ export default defineComponent({
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
+  },
+  watch: {
+    changed(): void {
+      this.fetchContent(true);
+    },
+  },
+
+  mounted() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -130,11 +145,6 @@ export default defineComponent({
     displayMore(event: { preventDefault: () => void }): void {
       event.preventDefault();
       this.fetchContent(false);
-    },
-  },
-  watch: {
-    changed(): void {
-      this.fetchContent(true);
     },
   },
 })

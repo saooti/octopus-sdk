@@ -1,5 +1,4 @@
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default{
   checkToken(token: any): boolean {
     console.log(token);
     return true;

@@ -2,26 +2,26 @@
   <div class="module-box text-center-mobile share-button-page">
     <div class="d-flex align-items-center mb-3 share-button-title">
       <h3
-        class="mb-0"
         v-if="
           !bigRound &&
             (authenticated || participantId || organisationId || notExclusive)
         "
+        class="mb-0"
       >
         {{ $t('Share') }}
       </h3>
       <span
-        class="saooti-help ml-2"
-        id="popover-share-help"
-        :aria-label="$t('Help')"
         v-if="authenticated"
-      ></span>
+        id="popover-share-help"
+        class="saooti-help ml-2"
+        :aria-label="$t('Help')"
+      />
       <b-popover
+        v-if="authenticated"
         target="popover-share-help"
         triggers="hover"
         placement="right"
         custom-class="wizard-help"
-        v-if="authenticated"
       >
         {{ $t('Share this page without edit and share blocks') }}
       </b-popover>
@@ -34,16 +34,16 @@
       ]"
     >
       <a
+        v-if="audioUrl"
         class="btn btn-bigRound"
         :title="$t('Downloading')"
         :href="audioUrl"
         rel="noopener"
         target="_blank"
         download
-        v-if="audioUrl"
         :aria-label="$t('Downloading')"
       >
-        <div class="saooti-download-bounty"></div>
+        <div class="saooti-download-bounty" />
       </a>
       <a
         rel="noopener"
@@ -56,8 +56,14 @@
         title="Facebook"
         aria-label="Facebook"
       >
-        <span class="saooti-facebook-bounty" v-if="!bigRound"></span>
-        <div class="saooti-facebook-bounty" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-facebook-bounty"
+        />
+        <div
+          v-else
+          class="saooti-facebook-bounty"
+        />
       </a>
       <a
         rel="noopener"
@@ -70,8 +76,14 @@
         title="Twitter"
         aria-label="Twitter"
       >
-        <span class="saooti-twitter-bounty" v-if="!bigRound"></span>
-        <div class="saooti-twitter-bounty" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-twitter-bounty"
+        />
+        <div
+          v-else
+          class="saooti-twitter-bounty"
+        />
       </a>
       <a
         rel="noopener"
@@ -84,24 +96,36 @@
         title="Linkedin"
         aria-label="Linkedin"
       >
-        <span class="saooti-linkedin1" v-if="!bigRound"></span>
-        <div class="saooti-linkedin1" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-linkedin1"
+        />
+        <div
+          v-else
+          class="saooti-linkedin1"
+        />
       </a>
       <a
+        v-if="''!==rssUrl"
         rel="noopener"
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
           verticalDisplay ? '' : 'mr-2 ml-2',
         ]"
-        @click.prevent="openPopup()"
         :href="rssUrl"
         :title="$t('Subscribe to this emission')"
         aria-label="RSS"
-        v-if="''!==rssUrl"
+        @click.prevent="openPopup()"
       >
-        <span class="saooti-rss-bounty" v-if="!bigRound"></span>
-        <div class="saooti-rss-bounty" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-rss-bounty"
+        />
+        <div
+          v-else
+          class="saooti-rss-bounty"
+        />
       </a>
       <a
         rel="noopener"
@@ -114,40 +138,59 @@
         :title="$t('Copy this page URL')"
         @click="onCopyCode(urlPage,afterCopy)"
       >
-        <span class="saooti-link" v-if="!bigRound"></span>
-        <div class="saooti-link" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-link"
+        />
+        <div
+          v-else
+          class="saooti-link"
+        />
       </a>
       <a
+        v-if="podcast"
         rel="noopener"
         target="_blank"
-        v-if="podcast"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
           verticalDisplay ? '' : 'mr-2 ml-2',
         ]"
         :aria-label="$t('Share newsletter')"
-        @click="newsletter = true"
         :title="$t('Share newsletter')"
+        @click="newsletter = true"
       >
-        <span class="saooti-newsletter" v-if="!bigRound"></span>
-        <div class="saooti-newsletter" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-newsletter"
+        />
+        <div
+          v-else
+          class="saooti-newsletter"
+        />
       </a>
       <a
+        v-if="podcast || emission"
         rel="noopener"
         target="_blank"
-        v-if="podcast || emission"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
           verticalDisplay ? '' : 'mr-2 ml-2',
         ]"
         :aria-label="$t('Share QR Code')"
-        @click="qrCode = true"
         :title="$t('Share QR Code')"
+        @click="qrCode = true"
       >
-        <span class="saooti-qrcode" v-if="!bigRound"></span>
-        <div class="saooti-qrcode" v-else></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-qrcode"
+        />
+        <div
+          v-else
+          class="saooti-qrcode"
+        />
       </a>
       <a
+        v-if="isMobile"
         rel="noopener"
         target="_blank"
         :href="whatsappURL"
@@ -157,27 +200,32 @@
         ]"
         aria-label="Whatsapp"
         title="Whatsapp"
-        v-if="isMobile"
       >
-        <span class="saooti-Whatsapp" v-if="!bigRound">
-          <div class="path1"></div>
-          <div class="path2"></div>
-          <div class="path3"></div>
+        <span
+          v-if="!bigRound"
+          class="saooti-Whatsapp"
+        >
+          <div class="path1" />
+          <div class="path2" />
+          <div class="path3" />
         </span>
-        <div class="saooti-Whatsapp" v-else>
-          <div class="path1"></div>
-          <div class="path2"></div>
-          <div class="path3"></div>
+        <div
+          v-else
+          class="saooti-Whatsapp"
+        >
+          <div class="path1" />
+          <div class="path2" />
+          <div class="path3" />
         </div>
       </a>
     </div>
     <ClipboardModal
       v-if="dataRSSSave"
       :closable="true"
-      @close="closeModal()"
       :link="rssUrl"
       :emission="emission"
       :title="$t('RSS Link')"
+      @close="closeModal()"
     />
     <NewsletterModal
       v-if="newsletter"
@@ -192,7 +240,10 @@
       :emission="emission"
       @close="qrCode = false"
     />
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 
@@ -258,10 +309,6 @@ export default defineComponent({
     };
   },
 
-  created(){
-    this.isMobile = this.checkIfDeviceMobile();
-  },
-
   computed: {
     urlPage(): string{
       return window.location.href;
@@ -298,6 +345,10 @@ export default defineComponent({
         );
       return '';
     },
+  },
+
+  created(){
+    this.isMobile = this.checkIfDeviceMobile();
   },
   methods: {
     openPopup(): void {

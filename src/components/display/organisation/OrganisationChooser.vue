@@ -1,16 +1,16 @@
 <template>
   <div
+    v-if="!value || init"
     class="default-multiselect-width"
     :style="{ width: width }"
     :class="{ 'multiselect-hide-arrow': !displayArrow }"
-    v-if="!value || init"
   >
     <label
       for="organisationChooser"
       class="d-inline"
       aria-label="select productor"
-    ></label>
-   <!-- <Multiselect
+    />
+    <!-- <Multiselect
       v-model="organisation"
       id="organisationChooser"
       label="name"
@@ -123,10 +123,10 @@ const getDefaultOrganistion = (defaultName: string) => {
 
 import { defineComponent } from 'vue'
 export default defineComponent({
-  mixins:[selenium],
   components: {
     Multiselect,
   },
+  mixins:[selenium],
   props: {
     width: { default: '100%' as string },
     defaultanswer: { default: '' as string},
@@ -148,19 +148,6 @@ export default defineComponent({
       organisation: getDefaultOrganistion(this.defaultanswer) as Organisation | undefined
     };
   },
-
-  async created() {
-    if (
-      this.authenticated &&
-      undefined === this.$store.state.organisation.imageUrl
-    ) {
-      const data = await octopusApi.fetchOrganisation(this.organisationId);
-      this.myImage = data.imageUrl;
-    }
-    if (this.value) {
-      this.fetchOrganisation();
-    }
-  },
   
   computed: {
     organisationId(): string {
@@ -181,6 +168,31 @@ export default defineComponent({
           ')',
       };
     },
+  },
+  watch: {
+    value(): void {
+      if (!this.init || this.value) {
+        this.fetchOrganisation();
+      }
+    },
+    reset(): void {
+      this.organisation = this.defaultanswer
+        ? getDefaultOrganistion(this.defaultanswer)
+        : undefined;
+    },
+  },
+
+  async created() {
+    if (
+      this.authenticated &&
+      undefined === this.$store.state.organisation.imageUrl
+    ) {
+      const data = await octopusApi.fetchOrganisation(this.organisationId);
+      this.myImage = data.imageUrl;
+    }
+    if (this.value) {
+      this.fetchOrganisation();
+    }
   },
   methods: {
     onOpen(): void {
@@ -261,18 +273,6 @@ export default defineComponent({
     clearAll(): void {
       this.organisation = undefined;
       this.organisations.length = 0;
-    },
-  },
-  watch: {
-    value(): void {
-      if (!this.init || this.value) {
-        this.fetchOrganisation();
-      }
-    },
-    reset(): void {
-      this.organisation = this.defaultanswer
-        ? getDefaultOrganistion(this.defaultanswer)
-        : undefined;
     },
   },
 })

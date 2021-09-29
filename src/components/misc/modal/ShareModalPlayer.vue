@@ -2,49 +2,66 @@
   <div>
     <b-modal
       id="share-modal"
+      :show="true"
+      :title="$t('Share the player')"
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
-      :show="true"
-      :title="$t('Share the player')"
     >
-      <template v-slot:default>
+      <template #default>
         <b-tabs content-class="p-2 share-modal-border">
-          <b-tab :title="$t('Embed link')" class="tab-pane" active>
+          <b-tab
+            :title="$t('Embed link')"
+            class="tab-pane"
+            active
+          >
             <p>{{ embedLink }}</p>
             <div
               class="saooti-copy"
               @click="onCopyCode(embedLink, afterCopy)"
-            ></div>
+            />
           </b-tab>
-          <b-tab :title="$t('Embedly link')" class="tab-pane">
+          <b-tab
+            :title="$t('Embedly link')"
+            class="tab-pane"
+          >
             <div class="d-flex flex-column">
               <div class="d-flex">
                 <p>{{ embedlyLink }}</p>
                 <div
                   class="saooti-copy"
                   @click="onCopyCode(embedlyLink, afterCopy)"
-                ></div>
+                />
               </div>
-              <QrCode :url="embedlyLink"/>
+              <QrCode :url="embedlyLink" />
             </div>
           </b-tab>
-          <b-tab :title="$t('Direct link')" class="tab-pane" v-if="directLink">
+          <b-tab
+            v-if="directLink"
+            :title="$t('Direct link')"
+            class="tab-pane"
+          >
             <p>{{ directLink.audioUrl }}</p>
             <div
               class="saooti-copy"
               @click="onCopyCode(directLink.audioUrl, snackbarRef)"
-            ></div>
+            />
           </b-tab>
         </b-tabs>
       </template>
-      <template v-slot:modal-footer>
-        <button class="btn btn-primary m-1" @click="closePopup">
+      <template #modal-footer>
+        <button
+          class="btn btn-primary m-1"
+          @click="closePopup"
+        >
           {{ $t('Close') }}
         </button>
       </template>
     </b-modal>
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 

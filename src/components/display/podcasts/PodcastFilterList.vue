@@ -1,11 +1,15 @@
 <template>
   <div class="p-3 list-episodes">
-    <h2 v-if="name">{{ $t('All podcast button', { name: name }) }}</h2>
-    <h2 v-else>{{ $t('All podcast emission button') }}</h2>
+    <h2 v-if="name">
+      {{ $t('All podcast button', { name: name }) }}
+    </h2>
+    <h2 v-else>
+      {{ $t('All podcast emission button') }}
+    </h2>
     <div class="d-flex align-items-center flex-wrap">
       <div
-        class="d-flex align-items-center flex-grow categories-filter"
         v-if="categoryFilter"
+        class="d-flex align-items-center flex-grow categories-filter"
       >
         <CategoryChooser
           :defaultanswer="$t('No category filter')"
@@ -13,28 +17,32 @@
         />
       </div>
       <div class="d-flex position-relative small-flex-grow">
-        <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
-        <input
-          :placeholder="$t('Search')"
-          v-model="searchPattern"
-          class="filter-search-input input-no-outline flex-grow"
-          id="search"
+        <label
+          for="search"
+          class="d-inline"
+          :aria-label="$t('Search')"
         />
+        <input
+          id="search"
+          v-model="searchPattern"
+          :placeholder="$t('Search')"
+          class="filter-search-input input-no-outline flex-grow"
+        >
         <div
           class="saooti-search-bounty filter-list-search-icon search-icon-container"
-        ></div>
+        />
       </div>
     </div>
     <PodcastList
       :first="first"
       :size="size"
-      :iabId="iabId"
+      :iab-id="iabId"
       :query="query"
-      :participantId="participantId"
-      :emissionId="emissionId"
-      :organisationId="productorId"
+      :participant-id="participantId"
+      :emission-id="emissionId"
+      :organisation-id="productorId"
       :reload="reloadList"
-      :includeHidden="editRight"
+      :include-hidden="editRight"
       @fetch="fetch"
     />
   </div>
@@ -99,6 +107,17 @@ export default defineComponent({
       reloadList: false as boolean,
     };
   },
+  computed: {
+    query(): string {
+      if (this.searchPattern.length >= 3) return this.searchPattern;
+      return '';
+    },
+  },
+  watch: {
+    reload(): void {
+      this.reloadList = !this.reloadList;
+    },
+  },
   created() {
     if (this.$route.query.first && 'string' === typeof this.$route.query.first) {
       this.first = parseInt(this.$route.query.first);
@@ -106,12 +125,6 @@ export default defineComponent({
     if (this.$route.query.size && 'string' === typeof this.$route.query.size) {
       this.size = parseInt(this.$route.query.size);
     }
-  },
-  computed: {
-    query(): string {
-      if (this.searchPattern.length >= 3) return this.searchPattern;
-      return '';
-    },
   },
   methods: {
     onCategorySelected(category: Category|undefined): void {
@@ -123,11 +136,6 @@ export default defineComponent({
     },
     fetch(podcasts: any): void {
       this.$emit('fetch', podcasts);
-    },
-  },
-  watch: {
-    reload(): void {
-      this.reloadList = !this.reloadList;
     },
   },
 })

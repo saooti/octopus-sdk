@@ -1,6 +1,5 @@
 const octopusApi = require('@saooti/octopus-api');
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default {
   async fetchPodcastsAdmin(store: any, parameters: any): Promise<any> {
     console.log(store);
     return await octopusApi.fetchPodcasts(parameters);

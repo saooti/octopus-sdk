@@ -3,8 +3,13 @@
     <div class="d-flex flex-column align-items-center mb-3">
       <h1>{{ $t('In live') }}</h1>
       <template v-if="!isPodcastmaker">
-        <router-link to="/main/priv/edit/live" v-if="liveRight && filterOrga">
-          <button class="btn btn-primary">{{ $t('Launch a new live') }}</button>
+        <router-link
+          v-if="liveRight && filterOrga"
+          to="/main/priv/edit/live"
+        >
+          <button class="btn btn-primary">
+            {{ $t('Launch a new live') }}
+          </button>
         </router-link>
         <template v-else>
           <div class="align-self-start font-weight-bold mb-2">
@@ -19,10 +24,10 @@
       </template>
     </div>
     <LiveList
-      @initConferenceIds="initConferenceIds"
-      :conferenceWatched="conferenceWatched"
-      :organisationId="organisationId"
       v-if="filterOrga || organisationId"
+      :conference-watched="conferenceWatched"
+      :organisation-id="organisationId"
+      @initConferenceIds="initConferenceIds"
     />
   </div>
 </template>
@@ -49,20 +54,6 @@ export default defineComponent({
       live: true as boolean,
     };
   },
-  created() {
-    if (this.productor) {
-      this.$emit('update:organisationId',this.productor);
-    } else if (this.$store.state.filter.organisationId) {
-      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
-    }
-    if (
-      this.$store.state.organisation &&
-      this.$store.state.organisation.attributes &&
-      !this.$store.state.organisation.attributes['live.active']
-    ) {
-      this.live = false;
-    }
-  },
   
   computed: {
     liveRight(): boolean {
@@ -78,6 +69,20 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
     },
+  },
+  created() {
+    if (this.productor) {
+      this.$emit('update:organisationId',this.productor);
+    } else if (this.$store.state.filter.organisationId) {
+      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
+    }
+    if (
+      this.$store.state.organisation &&
+      this.$store.state.organisation.attributes &&
+      !this.$store.state.organisation.attributes['live.active']
+    ) {
+      this.live = false;
+    }
   },
   methods: {
     initConferenceIds(listIds: any): void {

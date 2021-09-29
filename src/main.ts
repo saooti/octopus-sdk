@@ -18,8 +18,8 @@ const moment = require('moment');
 import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
 
-//@ts-ignore
-const navigatorLang = navigator.language || navigator.userLanguage;
+//TODO
+const navigatorLang = navigator.language /* || navigator.userLanguage */;
 let language = 'fr';
 if(navigatorLang.includes('en')){
   language = 'en';

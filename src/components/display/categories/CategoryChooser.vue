@@ -1,6 +1,13 @@
 <template>
-  <div class="default-multiselect-width" :style="{ width: width }">
-    <label :for="id" class="d-inline" aria-label="select category"></label>
+  <div
+    class="default-multiselect-width"
+    :style="{ width: width }"
+  >
+    <label
+      :for="id"
+      class="d-inline"
+      aria-label="select category"
+    />
     <!-- <Multiselect
       v-model="model"
       :disabled="isDisabled"
@@ -125,6 +132,21 @@ export default defineComponent({
 
     }
   },
+  watch: {
+    categorySelected(): void {
+      this.initCategorySelected(this.categorySelected);
+    },
+    model(): void {
+      if(undefined===this.categoryArray){
+        return;
+      }
+      const idsArray: Array<number> = [];
+      this.categoryForArray!.forEach((el: Category) => {
+        idsArray.push(el.id);
+      });
+      this.$emit('selected', idsArray);
+    },
+  },
  
   mounted() {
     if (undefined !== this.categorySelected) {
@@ -206,21 +228,6 @@ export default defineComponent({
         });
         this.categoryForArray!.push(item!);
       });
-    },
-  },
-  watch: {
-    categorySelected(): void {
-      this.initCategorySelected(this.categorySelected);
-    },
-    model(): void {
-      if(undefined===this.categoryArray){
-        return;
-      }
-      const idsArray: Array<number> = [];
-      this.categoryForArray!.forEach((el: Category) => {
-        idsArray.push(el.id);
-      });
-      this.$emit('selected', idsArray);
     },
   },
 })

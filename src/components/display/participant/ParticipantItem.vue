@@ -1,7 +1,7 @@
 <template>
   <li
-    class="participant-item-container"
     v-if="participant"
+    class="participant-item-container"
   >
     <router-link
       :to="{
@@ -15,7 +15,7 @@
       <div
         class="img-box-circle"
         :style="{ 'background-image': 'url(\'' + participant.imageUrl + '\')' }"
-      ></div>
+      />
     </router-link>
     <router-link
       :to="{
@@ -27,11 +27,11 @@
     >
       <div class="participant-name">
         <img
+          v-if="!activeParticipant && !isPodcastmaker && editRight"
           src="/img/caution.png"
           class="icon-caution"
-          v-if="!activeParticipant && !isPodcastmaker && editRight"
           :title="$t('Participant have not podcasts')"
-        />{{ name }}
+        >{{ name }}
       </div>
       <div
         :id="'description-participant-container-' + participant.participantId"
@@ -40,17 +40,17 @@
         <div
           :id="'description-participant-' + participant.participantId"
           v-html="urlify(description)"
-        ></div>
+        />
       </div>
     </router-link>
     <router-link
+      v-if="!isPodcastmaker"
       :to="{
         name: 'productor',
         params: { productorId: participant.orga.id },
         query: { productor: $store.state.filter.organisationId },
       }"
       class="text-dark participant-producer"
-      v-if="!isPodcastmaker"
     >
       <div class="participant-producer primary-color">
         © {{ participant.orga.name }}
@@ -129,25 +129,6 @@ export default defineComponent({
       activeParticipant: true as boolean,
     };
   },
-
-  created() {
-    if(!this.editRight)return;
-    this.hasPodcast();
-  },
-  mounted() {
-    const participantDesc = document.getElementById(
-      'description-participant-' + this.participant.participantId
-    );
-    const participantDescContainer = document.getElementById(
-      'description-participant-container-' + this.participant.participantId
-    );
-    if (
-      null !== participantDesc &&
-      participantDesc.clientHeight > participantDescContainer!.clientHeight
-    ) {
-      participantDescContainer!.classList.add('after-participant-description');
-    }
-  },
   
   computed: {
     isPodcastmaker(): boolean {
@@ -178,6 +159,25 @@ export default defineComponent({
         return true;
       return false;
     },
+  },
+
+  created() {
+    if(!this.editRight)return;
+    this.hasPodcast();
+  },
+  mounted() {
+    const participantDesc = document.getElementById(
+      'description-participant-' + this.participant.participantId
+    );
+    const participantDescContainer = document.getElementById(
+      'description-participant-container-' + this.participant.participantId
+    );
+    if (
+      null !== participantDesc &&
+      participantDesc.clientHeight > participantDescContainer!.clientHeight
+    ) {
+      participantDescContainer!.classList.add('after-participant-description');
+    }
   },
   methods: {
     async hasPodcast(): Promise<void> {

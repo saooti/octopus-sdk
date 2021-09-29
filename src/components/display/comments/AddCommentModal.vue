@@ -2,32 +2,50 @@
   <div>
     <b-modal
       id="add-comment-modal"
+      :title="$t('Welcome, thanks for your comment')"
+      :show="true"
       @close="closePopup"
       @hide="closePopup"
       @cancel="closePopup"
-      :title="$t('Welcome, thanks for your comment')"
-      :show="true"
     >
-      <template v-slot:default v-if="!sending">
+      <template
+        v-if="!sending"
+        #default
+      >
         <div>{{ $t("Let's get acquainted :") }}</div>
         <input
+          v-model="name"
           class="form-input"
           type="text"
-          v-model="name"
           :placeholder="$t('Your name')"
-        />
-        <div class="mt-1 text-danger" v-if="sendError">
+        >
+        <div
+          v-if="sendError"
+          class="mt-1 text-danger"
+        >
           {{ $t('Recaptcha error') }}
         </div>
-        <div class="mt-1 text-danger" v-if="isCaptchaTest">
+        <div
+          v-if="isCaptchaTest"
+          class="mt-1 text-danger"
+        >
           {{ $t('Recaptcha not active') }}
         </div>
       </template>
-      <template v-slot:default v-else>
+      <template
+        v-else
+        #default
+      >
         <div>{{ $t('Send in progress') }}</div>
       </template>
-      <template v-slot:modal-footer v-if="!sending">
-        <button class="btn btn-light m-1" @click="closePopup">
+      <template
+        v-if="!sending"
+        #modal-footer
+      >
+        <button
+          class="btn btn-light m-1"
+          @click="closePopup"
+        >
           {{ $t('Cancel') }}
         </button>
         <button
@@ -38,8 +56,14 @@
           {{ $t('Validate') }}
         </button>
       </template>
-      <template v-slot:modal-footer v-else>
-        <button class="btn m-1" @click="closePopup">
+      <template
+        v-else
+        #modal-footer
+      >
+        <button
+          class="btn m-1"
+          @click="closePopup"
+        >
           {{ $t('Close') }}
         </button>
       </template>
@@ -71,6 +95,15 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    authenticated(): boolean {
+      return state.generalParameters.authenticated;
+    },
+    isCaptchaTest(): boolean {
+      return state.generalParameters.isCaptchaTest;
+    },
+  },
+
   mounted() {
     const captcha: any = document.getElementsByClassName('grecaptcha-badge')[0];
     if (captcha) {
@@ -86,20 +119,11 @@ export default defineComponent({
     }
   },
 
-  destroyed() {
+  unmounted() {
     const captcha: any = document.getElementsByClassName('grecaptcha-badge')[0];
     if (captcha) {
       captcha.style.display = 'none';
     }
-  },
-
-  computed: {
-    authenticated(): boolean {
-      return state.generalParameters.authenticated;
-    },
-    isCaptchaTest(): boolean {
-      return state.generalParameters.isCaptchaTest;
-    },
   },
 
   methods: {

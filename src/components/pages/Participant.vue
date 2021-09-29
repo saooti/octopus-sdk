@@ -1,8 +1,15 @@
 <template>
   <div>
-    <div class="page-box intervenant-page" v-if="loaded && !error">
-      <h1 v-if="undefined === titlePage ||!lightStyle">{{ $t('Animator') }}</h1>
-      <h1 v-else>{{ titlePage }}</h1>
+    <div
+      v-if="loaded && !error"
+      class="page-box intervenant-page"
+    >
+      <h1 v-if="undefined === titlePage ||!lightStyle">
+        {{ $t('Animator') }}
+      </h1>
+      <h1 v-else>
+        {{ titlePage }}
+      </h1>
       <div
         class="d-flex w-100 flex-column align-items-center justify-content-center"
       >
@@ -11,13 +18,18 @@
           :style="{
             'background-image': 'url(\'' + participant.imageUrl + '\')',
           }"
-        ></div>
-        <h2 class="text-capitalize">{{ name }}</h2>
+        />
+        <h2 class="text-capitalize">
+          {{ name }}
+        </h2>
         <div
           class="h6 participant-desc html-wysiwyg-content"
           v-html="urlify(description)"
-        ></div>
-        <div class="d-flex justify-content-center" v-if="isRssButton">
+        />
+        <div
+          v-if="isRssButton"
+          class="d-flex justify-content-center"
+        >
           <a
             class="btn btn-bigRound"
             :title="$t('Subscribe to this participant')"
@@ -26,42 +38,50 @@
             rel="noopener"
             target="_blank"
           >
-            <div class="saooti-rss-bounty"></div>
+            <div class="saooti-rss-bounty" />
           </a>
         </div>
         <div class="d-flex">
           <EditBox
-            :participant="participant"
             v-if="editRight && isEditBox"
-            @participantUpdate="updateParticipant"
+            :participant="participant"
             class="flex-grow-1"
-          ></EditBox>
+            @participantUpdate="updateParticipant"
+          />
           <ShareButtons
-            :participantId="participantId"
             v-if="isShareButtons"
-          ></ShareButtons>
+            :participant-id="participantId"
+          />
         </div>
       </div>
       <PodcastFilterList
-        :participantId="participantId"
-        :name="name"
-        :categoryFilter="true"
-        :reload="reload"
         v-if="!lightStyle"
+        :participant-id="participantId"
+        :name="name"
+        :category-filter="true"
+        :reload="reload"
       />
       <PodcastList
+        v-else
         :first="0"
         :size="15"
-        :participantId="participantId"
+        :participant-id="participantId"
         :reload="reload"
-        v-else
       />
     </div>
-    <div class="d-flex justify-content-center" v-if="!loaded">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="!loaded"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border mr-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-center"
+    >
       <h3>{{ $t("Animator doesn't exist") }}</h3>
     </div>
   </div>
@@ -103,9 +123,6 @@ export default defineComponent({
       error: false as boolean,
       reload: false as boolean,
     };
-  },
-  mounted() {
-    this.getParticipantDetails();
   },
   computed: {
     organisationId(): string {
@@ -154,6 +171,14 @@ export default defineComponent({
       return false;
     },
   },
+  watch: {
+    participant(): void {
+      this.reload = !this.reload;
+    },
+  },
+  mounted() {
+    this.getParticipantDetails();
+  },
   methods: {
     async getParticipantDetails(): Promise<void> {
       this.loaded = false;
@@ -170,11 +195,6 @@ export default defineComponent({
     updateParticipant(participant: Participant): void {
       this.participant = participant;
       this.$emit('participantTitle', this.name);
-    },
-  },
-  watch: {
-    participant(): void {
-      this.reload = !this.reload;
     },
   },
 })

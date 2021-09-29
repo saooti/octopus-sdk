@@ -1,5 +1,4 @@
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default{
     deleteConference(store?: any,fetchConference?: any): any{
         return;
     },
