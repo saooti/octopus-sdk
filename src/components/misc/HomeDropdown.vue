@@ -71,7 +71,7 @@
     <b-dropdown
       v-else
       right
-      toggle-class="text-decoration-none  m-1 admin-button btn-rounded-icon"
+      toggle-class="text-decoration-none m-1 admin-button btn-rounded-icon"
       no-caret
     >
       <template #button-content>

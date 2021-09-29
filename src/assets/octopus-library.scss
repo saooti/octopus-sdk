@@ -1,7 +1,7 @@
-//@import 'node_modules/bootstrap/scss/bootstrap';
 @import '../sass/_variables.scss';
-@import './bootstrap_scss/bootstrap.scss';
-@import 'node_modules/bootstrap-vue/src/index.scss';
+//@import './bootstrap_scss/bootstrap.scss';
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+/* @import 'node_modules/bootstrap-vue-3/dist/bootstrap-vue-3.css'; */
 @import './general.scss';
 @import './form.scss';
 @import './multiselect.scss';

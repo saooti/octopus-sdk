@@ -11,6 +11,7 @@ import { createApp } from 'vue';
   FormTextareaPlugin,
   CollapsePlugin } from 'bootstrap-vue-3'; */
 import bootstrap from 'bootstrap-vue-3';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import I18nResources from './locale/messages';

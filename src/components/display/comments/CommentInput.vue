@@ -32,7 +32,7 @@
         {{ $t('Validate') }}
       </button>
     </div>
-    <b-form-textarea
+    <textarea
       ref="textarea"
       v-model="newComment"
       :placeholder="placeholder"
@@ -302,6 +302,7 @@ export default defineComponent({
     color: black;
   }
   textarea {
+    outline-width: 0 !important;
     border-top: 0;
     border-right: 0;
     border-left: 0;
