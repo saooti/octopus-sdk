@@ -285,7 +285,7 @@ export default defineComponent({
   props: {
     updateStatus: { default: undefined, type: String},
     playingPodcast: { default: undefined, type: Object as ()=> Podcast},
-    podcastId: { default: undefined, type: Number},
+    podcastId: { default: 0, type: Number},
     isEducation: { default: false, type: Boolean},
   },
 

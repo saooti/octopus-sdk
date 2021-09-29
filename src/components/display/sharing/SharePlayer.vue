@@ -301,7 +301,7 @@ export default defineComponent({
       ) {
         iFrameNumber = '/0';
       }
-      if (!this.podcast && !this.playlist) {
+      if (!this.podcast && !this.playlist && this.emission) {
         if ('default' === this.iFrameModel) {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
@@ -330,7 +330,7 @@ export default defineComponent({
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.playlist.playlistId}`
           );
         }
-      } else {
+      } else if(this.emission && this.podcast){
         if (this.isEmission || this.isLargeEmission) {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`
@@ -417,7 +417,7 @@ export default defineComponent({
     },
     isPodcastNotVisible(): boolean {
       return (
-        this.podcast &&
+        undefined !== this.podcast &&
         !this.podcast.availability.visibility &&
         ('default' === this.iFrameModel || 'large' === this.iFrameModel)
       );
@@ -425,7 +425,8 @@ export default defineComponent({
     dataTitle(): number {
       if (this.podcast) return this.podcast.podcastId;
       if (this.emission) return this.emission.emissionId;
-      return this.playlist.playlistId;
+      if (this.playlist) return this.playlist.playlistId;
+      return 0;
     },
     isPlayerParameter(): boolean{
       return !this.podcast || (this.podcast.article && 0 !== this.podcast.article.length) || this.isEmission || this.isLargeEmission || this.isLargeSuggestion;

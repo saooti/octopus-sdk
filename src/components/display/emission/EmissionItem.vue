@@ -98,7 +98,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    emission: { default: undefined, type: Object as ()=> Emission},
+    emission: { default: ()=>({}), type: Object as ()=> Emission},
   },
 
   data() {

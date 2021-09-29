@@ -117,7 +117,7 @@ export default defineComponent({
       this.loaded = true;
       this.$store.commit('setCommentLoaded', {
         ...value,
-        podcastId: this.podcast.podcastId,
+        podcastId: this.podcast? this.podcast.podcastId: undefined,
       });
       this.totalCount = value.count;
     },

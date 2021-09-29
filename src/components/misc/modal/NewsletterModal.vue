@@ -116,7 +116,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    podcast: { default: undefined, type: Object as ()=> Podcast},
+    podcast: { default: ()=>({}), type: Object as ()=> Podcast},
   },
 
   emits: ['close'],

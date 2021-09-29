@@ -142,7 +142,9 @@ export default defineComponent({
       this.$emit('selected', idsArray);
     },
     rubriqueSelected(): void {
-      this.initRubriqueSelected(this.rubriqueSelected);
+      if (undefined !== this.rubriqueSelected) {
+        this.initRubriqueSelected(this.rubriqueSelected);
+      }
     },
     reset(): void {
       this.rubrique = getDefaultRubrique(this.defaultanswer);

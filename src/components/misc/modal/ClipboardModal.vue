@@ -69,7 +69,7 @@ export default defineComponent({
     active: { default: false, type: Boolean},
     closable: { default: true, type: Boolean},
     validatetext: { default: undefined, type: String},
-    link: { default: undefined, type: String},
+    link: { default: '', type: String},
     emission: { default: undefined, type: Object as ()=> Emission},
   },
   emits: ['close', 'validate'],

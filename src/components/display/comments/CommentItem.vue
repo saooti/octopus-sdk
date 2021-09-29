@@ -189,7 +189,7 @@ export default defineComponent({
   },
   mixins:[displayMethods, selenium],
   props: {
-    comment: { default: undefined, type: Object as ()=>CommentPodcast },
+    comment: { default: ()=>({}), type: Object as ()=>CommentPodcast },
     podcast: { default: undefined, type: Object as ()=>Podcast },
     fetchConference: { default: undefined, type: Object as ()=>Conference },
     organisation: { default: undefined, type: String},

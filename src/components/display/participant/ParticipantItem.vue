@@ -69,7 +69,7 @@ export default defineComponent({
   name: 'ParticpantItem',
   mixins: [displayMethods],
   props: {
-    participant: { default: undefined, type: Object as ()=> Participant},
+    participant: { default: ()=>({}), type: Object as ()=> Participant},
   },
 
   data() {

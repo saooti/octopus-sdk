@@ -161,7 +161,7 @@ export default defineComponent({
     },
     phase(): string|undefined {
       if(undefined === this.podcast){
-        return this.comment.phase;
+        return this.comment!.phase;
       }
       if (
         !this.podcast.conferenceId ||
@@ -178,7 +178,7 @@ export default defineComponent({
       return 'Live';
     },
     podcastOrga(): string|undefined{
-      return this.podcast ? this.podcast.organisation.id : this.comment.organisationId;
+      return this.podcast ? this.podcast.organisation.id : this.comment!.organisationId;
     }
   },
   watch: {
@@ -202,6 +202,7 @@ export default defineComponent({
   },
   methods: {
     changeIdentity(): void {
+      if(!this.knownIdentity){return}
       this.temporaryName = this.knownIdentity;
       this.editName = true;
     },
@@ -233,12 +234,13 @@ export default defineComponent({
       }
       let timeline = 0;
       if (
+        undefined !== this.podcast &&(
         (this.$store.state.player.podcast &&
           this.$store.state.player.podcast.podcastId ===
             this.podcast.podcastId) ||
         (this.$store.state.player.live &&
           this.$store.state.player.live.livePodcastId ===
-            this.podcast.podcastId)
+            this.podcast.podcastId))
       ) {
         timeline = Math.round(
           this.$store.state.player.elapsed! * this.$store.state.player.total!
@@ -260,7 +262,7 @@ export default defineComponent({
       const comment: any = {
         content: this.newComment,
         name: sendName,
-        podcastId: this.podcast ? this.podcast.podcastId : this.comment.podcastId,
+        podcastId: this.podcast ? this.podcast.podcastId : this.comment!.podcastId,
         timeline: timeline,
         organisationId: this.podcastOrga,
         commentIdReferer: this.comment ? this.comment.comId : undefined,

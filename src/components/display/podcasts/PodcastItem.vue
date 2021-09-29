@@ -98,7 +98,7 @@ export default defineComponent({
   },
 
   props: {
-    podcast: { default: undefined, type: Object as ()=> Podcast},
+    podcast: { default: ()=>({}), type: Object as ()=> Podcast},
   },
 
   data() {

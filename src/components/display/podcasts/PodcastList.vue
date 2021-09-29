@@ -115,8 +115,8 @@ export default defineComponent({
       return undefined;
     },
     sort(): string {
-      if (this.popularSort) return 'POPULARITY';
-      return this.sortCriteria;
+      if (!this.popularSort && this.sortCriteria) return this.sortCriteria;
+      return 'POPULARITY';
     },
     sortText(): string {
       switch (this.sortCriteria) {

@@ -143,6 +143,7 @@ export default defineComponent({
       }
     },
     async onKeepOrganisation(): Promise<void> {
+      if(!this.organisationId){return}
       if (!this.keepOrganisation) {
         if (this.$route.query.productor !== this.organisationId) {
           this.$router.push({ query: { productor: this.organisationId } });

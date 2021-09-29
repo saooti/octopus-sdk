@@ -133,7 +133,9 @@ export default defineComponent({
   },
   watch: {
     categorySelected(): void {
-      this.initCategorySelected(this.categorySelected);
+      if(this.categorySelected){
+        this.initCategorySelected(this.categorySelected);
+      }
     },
     model(): void {
       if(undefined===this.categoryArray){

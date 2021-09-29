@@ -102,7 +102,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastImage',
   props: {
-    podcast: { default: undefined, type: Object as ()=>Podcast},
+    podcast: { default: ()=>({}), type: Object as ()=>Podcast},
     hidePlay: { default: false, type: Boolean},
     displayDescription: { default: false, type: Boolean},
     arrowDirection: { default: 'up', type: String},
@@ -232,7 +232,7 @@ export default defineComponent({
     },
     recordingLive(): boolean {
       return (
-        this.fetchConference &&
+        undefined !== this.fetchConference &&
          -1 !== this.fetchConference.conferenceId &&
         ('RECORDING' === this.fetchConference.status ||
           'PENDING' === this.fetchConference.status)
@@ -272,7 +272,7 @@ export default defineComponent({
         title: this.podcast.title,
         audioUrl: this.podcast.audioUrl,
         duration: this.podcast.duration,
-        conferenceId: this.fetchConference.conferenceId,
+        conferenceId: this.fetchConference ? this.fetchConference.conferenceId : undefined,
         livePodcastId: this.podcast.podcastId,
         organisation: this.podcast.organisation.id,
       });

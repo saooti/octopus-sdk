@@ -76,7 +76,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    playlist: { default: undefined, type: Object as ()=>Playlist},
+    playlist: { default: ()=>({}), type: Object as ()=>Playlist},
   },
 
   data() {
