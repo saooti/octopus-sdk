@@ -32,10 +32,9 @@
             background: -ms-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
             background: linear-gradient(135deg, $octopus-third-color 0%, $octopus-primary-color 100%);
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d91f', endColorstr='#50b685', GradientType=1 );
-            border-color: $octopus-primary-color;
             border-radius: 50px;
             height: auto;
-            border-bottom: 0 solid transparent;
+            border: 0;
             color: white !important;
             &:focus,
             &:hover {
@@ -228,7 +227,7 @@
     }
 
     .custom-control-label {
-        border: 1px solid #ddd;
+        //border: 1px solid #ddd;
         border-radius: 5px;
     }
     .dropdown-menu {
@@ -249,25 +248,13 @@
         } 
     }   
 
-    //Custom Checkbox
-    .custom-control-label:before{
-        background-color:white;
-    }
-    .custom-control-label{
-        margin-left: 1.5rem;
-    }
-    .checkbox-saooti .custom-control-input:checked~.custom-control-label::before{
-        background-color:#40a372;
-    }
-    .checkbox-saooti .custom-control-input:checked~.custom-control-label::after{
-        background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='white' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
-    }
-
-
     .modal-header { 
         @media (max-width: 450px) {
             padding: 1rem 0;
         } 
+    }
+    .accordion-button {
+        padding: 0.5rem;
     }
 }
 

@@ -12,17 +12,17 @@
       />
       <div
         v-if="!!organisationId"
-        class="checkbox-saooti m-3"
+        class="m-3"
       >
         <input
           id="orgaCheck"
           v-model="keepOrganisation"
           type="checkbox"
-          class="custom-control-input"
+          class="form-check-input"
           @click="onKeepOrganisation"
         >
         <label
-          class="custom-control-label"
+          class="form-check-label"
           for="orgaCheck"
         />
       </div>

@@ -72,12 +72,9 @@
 </template>
 
 <script lang="ts">
-/* import { VueReCaptcha } from 'vue-recaptcha-v3'; */
+import { useReCaptcha } from 'vue-recaptcha-v3';
 import { state } from '../../../store/paramStore';
-/* import api from '@/api/initialize'; */
-//TODO
-/* import Vue from 'vue';
-Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' }); */
+import api from '@/api/initialize';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AddCommentModal',
@@ -85,7 +82,7 @@ export default defineComponent({
   props: {},
   emits: ['close','validate'],
 
-   data() {
+  data() {
     return {
       name: '' as string,
       sending: false as boolean,
@@ -127,13 +124,13 @@ export default defineComponent({
 
   methods: {
     async recaptcha(): Promise<void> {
-      //TODO
-      /* if (!this.needVerify || this.isCaptchaTest) {
+      if (!this.needVerify || this.isCaptchaTest) {
         this.sendComment();
         return;
       }
-      await this.$recaptchaLoaded();
-      const token = await this.$recaptcha('login');
+      const { executeRecaptcha, recaptchaLoaded }: any = useReCaptcha()
+      await recaptchaLoaded();
+      const token = await executeRecaptcha('login');
       try {
         this.sendError = false;
         const ok = await api.checkToken(token);
@@ -145,7 +142,7 @@ export default defineComponent({
         this.sendError = true;
         return;
       }
-      this.sendComment(); */
+      this.sendComment();
     },
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();

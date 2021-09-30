@@ -1,31 +1,32 @@
 <template>
-  <b-card
+  <div
     v-if="!playlist"
-    no-body
-    class="player-parameters mt-3"
+    id="accordionParameters"
+    class="accordion player-parameters mt-3"
   >
-    <div role="tablist">
-      <b-card-header
-        header-tag="header"
-        role="tab"
+    <div class="accordion-item">
+      <h2
+        id="labelPlayerParameter"
+        class="accordion-header"
       >
-        <b-button
-          v-b-toggle.playerParameters
-          block
-          variant="info"
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#playerParameters"
+          aria-expanded="false"
+          aria-controls="playerParameters"
         >
-          {{
-            $t('player parameters')
-          }}
-        </b-button>
-      </b-card-header>
-    </div>
-    <b-collapse
-      id="playerParameters"
-      role="tabpanel"
-    >
-      <b-card-body>
-        <b-card-text>
+          {{ $t('player parameters') }}
+        </button>
+      </h2>
+      <div
+        id="playerParameters"
+        class="accordion-collapse collapse"
+        aria-labelledby="labelPlayerParameter"
+        data-bs-parent="#accordionParameters"
+      >
+        <div class="accordion-body">
           <div
             v-if="
               !podcast || isEmission || isLargeEmission || isLargeSuggestion
@@ -69,29 +70,29 @@
               />
               <span class="flex-shrink">{{ $t('Last podcasts') }}</span>
             </div>
-            <div class="checkbox-saooti">
+            <div>
               <input
                 id="proceedCheck"
                 v-model="proceedReading"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label"
+                class="form-check-label"
                 for="proceedCheck"
               >{{
                 $t('Proceed reading')
               }}</label>
             </div>
-            <div class="checkbox-saooti">
+            <div>
               <input
                 id="isVisibleCheckbox"
                 v-model="isVisibleTemp"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label me-2"
+                class="form-check-label me-2"
                 for="isVisibleCheckbox"
               >{{ $t('Podcasts still available') }}</label>
             </div>
@@ -100,15 +101,15 @@
             v-else
             class="d-flex flex-column flex-grow"
           >
-            <div class="checkbox-saooti">
+            <div>
               <input
                 id="proceedCheck"
                 v-model="displayArticle"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label"
+                class="form-check-label"
                 for="proceedCheck"
               >{{
                 $t('Display associated article')
@@ -116,9 +117,9 @@
             </div>
           </div>
           <!-- <div class="d-flex align-items-center flex-wrap" v-if="podcast && iFrameModel !== 'emission'">
-              <div class="checkbox-saooti">  
-                <input type="checkbox" class="custom-control-input" id="startTime" v-model="startTime">  
-                <label class="custom-control-label me-2" for="startTime">{{$t('Start at')}}</label>  
+              <div>  
+                <input type="checkbox" class="form-check-input" id="startTime" v-model="startTime">  
+                <label class="form-check-label me-2" for="startTime">{{$t('Start at')}}</label>  
               </div>
                 <input 
                 ref="minutesRef"
@@ -137,10 +138,10 @@
                 class="input-share-player input-no-outline" 
                 @change="onDurationChange"/>
             </div> -->
-        </b-card-text>
-      </b-card-body>
-    </b-collapse>
-  </b-card>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

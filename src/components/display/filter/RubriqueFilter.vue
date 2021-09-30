@@ -3,15 +3,15 @@
     v-if="organisationId && rubriquageData"
     class="d-flex mt-3 align-items-center"
   >
-    <div class="checkbox-saooti flex-shrink">
+    <div class="flex-shrink">
       <input
         id="search-rubriquage-checkbox"
         v-model="isRubriquage"
         type="checkbox"
-        class="custom-control-input"
+        class="form-check-input"
       >
       <label
-        class="custom-control-label"
+        class="form-check-label"
         for="search-rubriquage-checkbox"
       >{{ $t('By topic') }}</label>
     </div>

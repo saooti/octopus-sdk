@@ -43,21 +43,21 @@
             {{ $t('Emission with episode published :') }}
           </div>
           <div class="d-flex align-items-center">
-            <div class="checkbox-saooti flex-shrink">
+            <div class="flex-shrink">
               <input
                 id="search-from-checkbox"
                 v-model="isFrom"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label"
+                class="form-check-label"
                 for="search-from-checkbox"
               >{{
                 $t('From the :')
               }}</label>
             </div>
-            <!-- <DatePicker
+            <DatePicker
               v-model="fromDate"
               class="ps-3 pe-3"
               mode="dateTime"
@@ -72,24 +72,24 @@
                   v-on="inputEvents"
                 >
               </template>
-            </DatePicker> -->
+            </DatePicker>
           </div>
           <div class="d-flex align-items-center">
-            <div class="checkbox-saooti flex-shrink">
+            <div class="flex-shrink">
               <input
                 id="search-to-checkbox"
                 v-model="isTo"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label"
+                class="form-check-label"
                 for="search-to-checkbox"
               >{{
                 $t('To the :')
               }}</label>
             </div>
-            <!--  <DatePicker
+            <DatePicker
               v-model="toDate"
               class="ps-3"
               mode="dateTime"
@@ -104,23 +104,23 @@
                   v-on="inputEvents"
                 >
               </template>
-            </DatePicker> -->
+            </DatePicker>
           </div>
         </div>
         <div
           v-if="organisation && organisationRight && !isPodcastmaker"
           class="d-flex flex-column mt-3"
         >
-          <div class="checkbox-saooti flex-shrink">
+          <div class="flex-shrink">
             <input
               id="search-future-checkbox"
               v-model="isNotVisible"
               type="checkbox"
-              class="custom-control-input"
+              class="form-check-input"
               :disabled="isCheckboxNotValidate && isNotValidate"
             >
             <label
-              class="custom-control-label"
+              class="form-check-label"
               for="search-future-checkbox"
             >{{
               textNotVisible
@@ -131,15 +131,15 @@
           v-if="isCheckboxNotValidate"
           class="d-flex flex-column mt-3"
         >
-          <div class="checkbox-saooti flex-shrink">
+          <div class="flex-shrink">
             <input
               id="search-not-validate-checkbox"
               v-model="isNotValidate"
               type="checkbox"
-              class="custom-control-input"
+              class="form-check-input"
             >
             <label
-              class="custom-control-label"
+              class="form-check-label"
               for="search-not-validate-checkbox"
             >{{ textNotValidate }}</label>
           </div>
@@ -192,14 +192,13 @@ const moment = require('moment');
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-//TODO
-/* import { DatePicker } from 'v-calendar'; */
+import { DatePicker } from 'v-calendar';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const MonetizableFilter = defineAsyncComponent(() => import('./MonetizableFilter.vue'));
 export default defineComponent({
   components: {
     MonetizableFilter,
-    /* DatePicker, */
+    DatePicker,
     CategoryFilter,
     RubriqueFilter
   },
@@ -413,12 +412,6 @@ export default defineComponent({
     flex-wrap: wrap;
     justify-content: flex-start;
   }
-  .checkbox-saooti .custom-control-label::after {
-    top: 0.22rem;
-  }
-  .checkbox-saooti .custom-control-label::before {
-    top: 0.22rem;
-  }
 
   @media (max-width: 450px) {
     flex-direction: column;
@@ -428,10 +421,6 @@ export default defineComponent({
       input {
         width: 100%;
       }
-    }
-
-    .checkbox-saooti {
-      margin-left: 0rem !important;
     }
     padding: 1rem;
     .basic-select {
@@ -451,11 +440,6 @@ export default defineComponent({
       position: relative;
       margin: 0;
     }
-  }
-  input:not([id*='rubriqueChooser']) {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 0.2em 0.5em;
   }
   select {
     -webkit-appearance: none;

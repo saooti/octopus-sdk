@@ -1,14 +1,14 @@
 <template>
   <div class="d-flex mt-3 align-items-center">
-    <div class="checkbox-saooti flex-shrink me-2">
+    <div class="flex-shrink me-2">
       <input
         id="search-category-checkbox"
         v-model="isCategory"
         type="checkbox"
-        class="custom-control-input"
+        class="form-check-input"
       >
       <label
-        class="custom-control-label"
+        class="form-check-label"
         for="search-category-checkbox"
       >{{ $t('By category') }}</label>
     </div>

@@ -539,10 +539,10 @@ export default defineComponent({
     async initHls(hlsStreamUrl: string): Promise<void> {
       return new Promise<void>(async(resolve, reject) => {
         if(null === Hls){
-          //TODO
-          /* await import('hls.js/dist/hls.light.min.js').then((hlsLibrary) => {
+          //TODO -> Version light min quand ce sera possible
+          await import('hls.js/dist/hls.js').then((hlsLibrary) => {
             Hls = hlsLibrary.default;
-          }) */
+          })
            await import('hls.js').then((hlsLibrary) => {
             Hls = hlsLibrary.default;
           })

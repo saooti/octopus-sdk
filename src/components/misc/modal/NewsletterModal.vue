@@ -15,29 +15,29 @@
             <h4 class="mb-3">
               {{ $t('Configuration') }}
             </h4>
-            <div class="checkbox-saooti">
+            <div>
               <input
                 id="display-emission-name"
                 v-model="displayEmissionName"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label"
+                class="form-check-label"
                 for="display-emission-name"
               >{{
                 $t('Display emission name')
               }}</label>
             </div>
-            <div class="checkbox-saooti">
+            <div>
               <input
                 id="display-participants-names"
                 v-model="displayParticipantsNames"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label"
+                class="form-check-label"
                 for="display-participants-names"
               >{{ $t('Display participants list') }}</label>
             </div>

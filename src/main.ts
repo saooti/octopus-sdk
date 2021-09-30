@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { VueReCaptcha } from 'vue-recaptcha-v3';
 /* import { 
   ModalPlugin, 
   FormRadioPlugin, 
@@ -62,6 +63,7 @@ paramStore
     .use(store)
     .use(router)
     .use(bootstrap)
+    .use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' })
     /* .use(ModalPlugin)
     .use(FormRadioPlugin)
     .use(CardPlugin)

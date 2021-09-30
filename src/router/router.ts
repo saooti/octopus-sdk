@@ -181,6 +181,11 @@ const routes: any = [
       path: '/main/pub/libraries',
       component: Home,
     },
+    {
+      path: '/main/priv/distribution/:distrib/:id',
+      component: Home,
+    },
+    
 ];
 export default createRouter({
   history: createWebHistory(process.env.BASE_URL),

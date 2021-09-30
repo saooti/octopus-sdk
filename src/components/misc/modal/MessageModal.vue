@@ -17,9 +17,7 @@
       <div
         class="content"
         v-html="message"
-      >
-        {{ message }}
-      </div>
+      />
     </template>
     <template
       v-if="validatetext"

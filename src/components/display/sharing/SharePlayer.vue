@@ -131,18 +131,15 @@
               />
             </div>
           </div>
-          <div
-            v-if="displayBetaChoice"
-            class="checkbox-saooti"
-          >
+          <div v-if="displayBetaChoice">
             <input
               id="isBetaCheckbox"
               v-model="isBeta"
               type="checkbox"
-              class="custom-control-input"
+              class="form-check-input"
             >
             <label
-              class="custom-control-label me-2"
+              class="form-check-label me-2"
               for="isBetaCheckbox"
             >{{ $t('Use beta version') }}</label>
           </div>
@@ -150,15 +147,15 @@
             v-if="isPodcastNotVisible || playlist"
             class="d-flex align-items-center flex-wrap"
           >
-            <div class="checkbox-saooti">
+            <div>
               <input
                 id="isVisibleCheckbox"
                 v-model="isVisible"
                 type="checkbox"
-                class="custom-control-input"
+                class="form-check-input"
               >
               <label
-                class="custom-control-label me-2"
+                class="form-check-label me-2"
                 for="isVisibleCheckbox"
               >{{ titleStillAvailable }}</label>
             </div>
