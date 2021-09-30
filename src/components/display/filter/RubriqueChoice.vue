@@ -3,7 +3,7 @@
     <label class="wrap">
       <select
         v-model="rubriquageId"
-        class="basic-select ml-2 mb-0 border c-hand"
+        class="basic-select ms-2 mb-0 border c-hand"
         @change="onRubriquageSelected"
       >
         <option
@@ -17,12 +17,12 @@
       />
     </label>
     <template v-if="rubriquageId">
-      <div class="ml-3 flex-shrink">
+      <div class="ms-3 flex-shrink">
         {{ $t('By rubric') }}
       </div>
       <RubriqueChooser
         v-if="getRubriques(rubriquageId).length"
-        class="ml-2"
+        class="ms-2"
         :multiple="false"
         :rubriquage-id="rubriquageId"
         :rubrique-selected="0 < rubriqueIdSelected? rubriqueIdSelected : undefined"
@@ -36,7 +36,7 @@
     </template>
     <button
       v-if="index"
-      class="btn btn-circle primary-color ml-1"
+      class="btn btn-circle primary-color ms-1"
       aria-label="delete"
       @click="deleteRubriquage"
     >

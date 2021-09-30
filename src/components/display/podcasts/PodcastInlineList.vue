@@ -47,7 +47,7 @@
       v-if="loading"
       class="d-flex justify-content-center"
     >
-      <div class="spinner-border mr-3" />
+      <div class="spinner-border me-3" />
       <h3 class="mt-2">
         {{ $t('Loading podcasts ...') }}
       </h3>
@@ -64,7 +64,7 @@
         :key="p.podcastId"
         class="flex-shrink item-phone-margin"
         :podcast="p"
-        :class="[alignLeft ? 'mr-3' : '']"
+        :class="[alignLeft ? 'me-3' : '']"
       />
     </transition-group>
     <router-link

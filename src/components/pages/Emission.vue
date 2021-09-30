@@ -28,7 +28,7 @@
                 v-if="!isOuestFrance"
                 :src="imageUrl"
                 :alt="$t('Emission name image', { name: name })"
-                class="img-box shadow-element float-left mr-3 mb-3"
+                class="img-box shadow-element float-start me-3 mb-3"
               >
               <p
                 class="html-wysiwyg-content"
@@ -92,7 +92,7 @@
       v-if="!loaded"
       class="d-flex justify-content-center"
     >
-      <div class="spinner-border mr-3" />
+      <div class="spinner-border me-3" />
       <h3 class="mt-2">
         {{ $t('Loading content ...') }}
       </h3>

@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div 
+    id="app"
+    class="octopus-app"
+  >
     <TopBar
       v-model:displayMenu="displayMenu"
       :is-education="false"

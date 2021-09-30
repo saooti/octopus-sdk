@@ -73,12 +73,12 @@ h1 {
   border-width: 1px;;
 }
 
-.pr-5 {
+.pe-5 {
 	@media (max-width: 960px) {
 		padding-right: 5px !important;
 	}
 }
-.pl-5 {
+.ps-5 {
 	@media (max-width: 960px) {
 		padding-left: 5px !important;
 	}
@@ -127,8 +127,9 @@ h1 {
   color: $octopus-primary-color;
 }
 
-a:hover{
+a, a:hover{
   text-decoration: none;
+  outline-width: 0;
 }
 
 a.linkHover.router-link-exact-active.router-link-active {

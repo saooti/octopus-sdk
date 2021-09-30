@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-flex w-100 mb-3 pl-3 pr-3 hide-phone category-list">
+  <div class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone category-list">
     <div
       id="category-list-container"
       class="category-list-container"
@@ -30,7 +30,7 @@
       <b-dropdown-item
         v-for="category in hidenCategories"
         :key="category.id"
-        class="mr-3"
+        class="me-3"
         @click="checkIfFilter(category)"
       >
         {{ category.name }}

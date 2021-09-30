@@ -36,7 +36,7 @@
           <div class="module-box">
             <h2
               v-if="!isOuestFrance"
-              class="text-uppercase font-weight-bold title-page-podcast"
+              class="text-uppercase fw-bold title-page-podcast"
             >
               {{ podcast.title }}
             </h2>
@@ -64,7 +64,7 @@
                       ? fetchConference.status.toLowerCase() + '-shadow'
                       : '',
                   ]"
-                  class="mr-3"
+                  class="me-3"
                   :podcast="podcast"
                   :hide-play="!isLiveReadyToRecord"
                   :playing-podcast="playingPodcast"
@@ -81,11 +81,11 @@
                 >
                   <div
                     v-if="!isOuestFrance && 0 !== date.length"
-                    :class="!isLiveReady ? 'mr-5' : ''"
+                    :class="!isLiveReady ? 'me-5' : ''"
                   >
                     {{ date }}
                   </div>
-                  <div class="ml-2 mr-2 duration">
+                  <div class="ms-2 me-2 duration">
                     <span
                       v-if="isOuestFrance"
                       class="saooti-clock3"
@@ -141,7 +141,7 @@
                     rel="noopener"
                     target="_blank"
                   >
-                    <span class="saooti-newspaper mr-1" />
+                    <span class="saooti-newspaper me-1" />
                     <div>{{ $t('See associated article') }}</div>
                   </a>
                   <ParticipantDescription
@@ -151,7 +151,7 @@
                   <div v-if="editRight && !isPodcastmaker">
                     <div
                       v-if="podcast.annotations && podcast.annotations.RSS"
-                      class="mr-5"
+                      class="me-5"
                     >
                       {{ $t('From RSS') }}
                     </div>
@@ -234,7 +234,7 @@
       v-if="!loaded"
       class="d-flex justify-content-center"
     >
-      <div class="spinner-border mr-3" />
+      <div class="spinner-border me-3" />
       <h3 class="mt-2">
         {{ $t('Loading content ...') }}
       </h3>

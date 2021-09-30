@@ -46,7 +46,7 @@
       class="d-flex justify-content-end mt-1"
     >
       <button
-        class="btn mr-2"
+        class="btn me-2"
         @mousedown="cancelAction"
       >
         {{ $t('Cancel') }}

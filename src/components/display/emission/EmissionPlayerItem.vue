@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="d-flex flex-column p-2">
-        <div class="font-weight-bold text-uppercase text-ellipsis">
+        <div class="fw-bold text-uppercase text-ellipsis">
           {{ emission.name }}
         </div>
         <div
@@ -60,7 +60,7 @@
           }"
           class="d-flex flex-column define-width text-dark"
         >
-          <div class="font-weight-bold text-ellipsis">
+          <div class="fw-bold text-ellipsis">
             {{ p.title }}
           </div>
           <div

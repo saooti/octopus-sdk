@@ -7,18 +7,18 @@
             recordingInLive &&
               ('Live' === comment.phase || 'Prelive' === comment.phase)
           "
-          class="recording-bg mr-1 text-light p-01"
+          class="recording-bg me-1 text-light p-01"
         >{{ $t('Live') }}</b>
         <b
           v-if="editRight || comment.status == 'Valid'"
-          class="mr-2"
+          class="me-2"
         >{{
           comment.name
         }}</b>
         <template v-else>
           <b
             :id="'popover-comment' + comment.comId"
-            class="mr-2 text-danger"
+            class="me-2 text-danger"
           >{{
             comment.name
           }}</b>
@@ -34,7 +34,7 @@
       <template v-else>
         <input
           v-model="temporaryName"
-          class="form-input mr-2 mb-2 width-auto"
+          class="form-input me-2 mb-2 width-auto"
           type="text"
           :class="{ 'border border-danger': temporaryName.length < 2 }"
         >
@@ -46,7 +46,7 @@
         :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
         :title="$t('Certified account')"
       >
-      <div class="mr-2">
+      <div class="me-2">
         {{ date }}
       </div>
       <span 
@@ -88,7 +88,7 @@
     <div class="d-flex align-items-center mt-1">
       <button
         v-if="null === comment.commentIdReferer && 'Valid' === comment.status"
-        class="btn btn-answer primary-color mr-2"
+        class="btn btn-answer primary-color me-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
         @click="answerComment"
       >
@@ -102,7 +102,7 @@
         v-b-toggle="'answers-comment-' + comment.comId"
         class="primary-color c-hand d-flex align-items-center small-Text input-no-outline"
       >
-        <div class="d-flex align-items-center when-closed mr-2">
+        <div class="d-flex align-items-center when-closed me-2">
           <div v-if="comment.relatedComments">
             {{ $t('Display answers', { nb: comment.relatedComments }) }}
             <i v-if="editRight">{{
@@ -124,7 +124,7 @@
             {{ $t('In response to') }}
           </div>
           <span
-            class="saooti-arrow_down saooti-arrow_down-margin arrow-transform mr-2"
+            class="saooti-arrow_down saooti-arrow_down-margin arrow-transform me-2"
           />
         </div>
       </div>
@@ -141,7 +141,7 @@
     <b-collapse
       :id="'answers-comment-' + comment.comId"
       v-model="collapseVisible"
-      class="ml-4"
+      class="ms-4"
     >
       <CommentInput
         v-if="!isFlat || (isFlat && !comment.commentIdReferer)"

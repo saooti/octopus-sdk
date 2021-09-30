@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-flex w-100 mb-3 pl-3 pr-3 hide-phone rubrique-list">
+  <div class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone rubrique-list">
     <div
       id="rubrique-list-container"
       class="rubrique-list-container"
@@ -43,7 +43,7 @@
       <b-dropdown-item
         v-for="rubrique in hidenRubriques"
         :key="rubrique.rubriqueId"
-        class="mr-3"
+        class="me-3"
         @click="addFilter(rubrique)"
       >
         {{ rubrique.name }}

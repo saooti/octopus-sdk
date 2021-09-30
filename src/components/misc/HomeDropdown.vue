@@ -75,7 +75,7 @@
       no-caret
     >
       <template #button-content>
-        <i class="saooti-user-octopus text-dark" /><span class="sr-only">Profile</span>
+        <i class="saooti-user-octopus text-dark" /><span class="visually-hidden">Profile</span>
       </template>
       <b-dropdown-item href="/sso/login">
         {{ $t('Login') }}

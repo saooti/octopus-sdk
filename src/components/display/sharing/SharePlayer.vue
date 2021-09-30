@@ -77,8 +77,8 @@
             </template>
           </div>
           <div class="d-flex justify-content-around mt-3 flex-grow w-100">
-            <div class="d-flex flex-column align-items-center flex-shrink mr-3">
-              <div class="font-weight-600">
+            <div class="d-flex flex-column align-items-center flex-shrink me-3">
+              <div class="fw-600">
                 {{ $t('Choose color') }}
               </div>
               <VSwatches
@@ -91,7 +91,7 @@
               />
             </div>
             <div class="d-flex flex-column align-items-center">
-              <div class="font-weight-600">
+              <div class="fw-600">
                 {{ $t('Choose theme') }}
               </div>
               <div
@@ -103,7 +103,7 @@
                   :key="myColor"
                   v-model="theme"
                   :data-theme="theme"
-                  class="c-hand input-no-outline mr-1"
+                  class="c-hand input-no-outline me-1"
                   :swatch-style="{
                     padding: '0px 0px',
                     marginRight: '0px',
@@ -142,7 +142,7 @@
               class="custom-control-input"
             >
             <label
-              class="custom-control-label mr-2"
+              class="custom-control-label me-2"
               for="isBetaCheckbox"
             >{{ $t('Use beta version') }}</label>
           </div>
@@ -158,7 +158,7 @@
                 class="custom-control-input"
               >
               <label
-                class="custom-control-label mr-2"
+                class="custom-control-label me-2"
                 for="isVisibleCheckbox"
               >{{ titleStillAvailable }}</label>
             </div>

@@ -59,7 +59,7 @@
         </div>
         <div
           :id="'description-emission-container-' + emission.emissionId"
-          class="emission-description html-wysiwyg-content"
+          class="emission-description htms-wysiwyg-content"
           :class="lightItems ? 'emission-small-description' : ''"
         >
           <div

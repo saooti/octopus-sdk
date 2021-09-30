@@ -27,7 +27,7 @@
       v-if="loading"
       class="d-flex justify-content-center"
     >
-      <div class="spinner-border mr-3" />
+      <div class="spinner-border me-3" />
       <h3 class="mt-2">
         {{ $t('Loading emissions ...') }}
       </h3>
@@ -49,7 +49,7 @@
         :key="e.emissionId"
         class="flex-shrink item-phone-margin"
         :emission="e"
-        :class="[alignLeft ? 'mr-3' : '', mainRubriquage(e)]"
+        :class="[alignLeft ? 'me-3' : '', mainRubriquage(e)]"
         :nb-podcasts="nbPodcasts"
         :rubrique-name="rubriquesId(e)"
       />

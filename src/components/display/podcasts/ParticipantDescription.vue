@@ -15,7 +15,7 @@
       triggers="hover"
       custom-class="participant-help"
     >
-      <div class="text-center font-weight-bold">
+      <div class="text-center fw-bold">
         {{ title }}
       </div>
       <div class="horizontal-separator my-1" />

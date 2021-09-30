@@ -11,7 +11,7 @@
       <template #default>
         <div class="d-flex justify-content-between">
           <div v-html="newsletterHtml" />
-          <div class="d-flex flex-column flex-grow ml-4">
+          <div class="d-flex flex-column flex-grow ms-4">
             <h4 class="mb-3">
               {{ $t('Configuration') }}
             </h4>
@@ -44,7 +44,7 @@
             <div class="d-flex align-items-center mt-2">
               <VSwatches
                 v-model="color"
-                class="c-hand input-no-outline mr-2 mt-2"
+                class="c-hand input-no-outline me-2 mt-2"
                 show-fallback
                 colors="text-advanced"
                 popover-to="right"

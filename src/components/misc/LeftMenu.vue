@@ -5,7 +5,7 @@
   >
     <div class="routes-container h5">
       <router-link
-        class="text-dark font-weight-bold mb-3 show-phone home-route"
+        class="text-dark fw-bold mb-3 show-phone home-route"
         :to="{
           name: 'home',
           query: { productor: $store.state.filter.organisationId,
@@ -18,7 +18,7 @@
       </router-link>
       <router-link
         v-if="isLiveTab && filterOrga && filterOrgaLive"
-        class="text-dark font-weight-bold mb-3 live-route"
+        class="text-dark fw-bold mb-3 live-route"
         :to="{
           name: 'lives',
           query: { productor: $store.state.filter.organisationId},
@@ -28,7 +28,7 @@
         {{ $t('Live') }}
       </router-link>
       <router-link
-        class="text-dark font-weight-bold mb-3 podcasts-route"
+        class="text-dark fw-bold mb-3 podcasts-route"
         :to="{
           name: 'podcasts',
           query: { productor: $store.state.filter.organisationId,
@@ -40,7 +40,7 @@
         {{ $t('Podcasts') }}
       </router-link>
       <router-link
-        class="text-dark font-weight-bold mb-3 emissions-route"
+        class="text-dark fw-bold mb-3 emissions-route"
         :to="{
           name: 'emissions',
           query: { productor: $store.state.filter.organisationId,
@@ -53,7 +53,7 @@
       </router-link>
       <router-link
         v-if="!isPodcastmaker && (!filterOrga || isEducation)"
-        class="text-dark font-weight-bold mb-3 productors-route"
+        class="text-dark fw-bold mb-3 productors-route"
         :to="{
           name: 'productors',
           query: { productor: $store.state.filter.organisationId },
@@ -63,7 +63,7 @@
         {{ $t('Productors') }}
       </router-link>
       <router-link
-        class="text-dark font-weight-bold mb-3 participants-route"
+        class="text-dark fw-bold mb-3 participants-route"
         :to="{
           name: 'participants',
           query: { productor: $store.state.filter.organisationId },
@@ -77,7 +77,7 @@
           name: 'playlists',
           query: { productor: $store.state.filter.organisationId },
         }"
-        class="linkHover pb-3 text-dark font-weight-bold playlists-route"
+        class="linkHover pb-3 text-dark fw-bold playlists-route"
         @click="onMenuClick"
       >
         {{ $t('Playlists') }}
@@ -89,7 +89,7 @@
         :defaultanswer="$t('No organisation filter')"
         :value="organisationId"
         :light="true"
-        class="mr-2 hide-top-bar"
+        class="me-2 hide-top-bar"
         :reset="reset"
         @selected="onOrganisationSelected"
       />
@@ -97,7 +97,7 @@
       <router-link
         v-for="category in categories"
         :key="category.id"
-        class="text-dark font-weight-bold mb-3 show-phone category-route"
+        class="text-dark fw-bold mb-3 show-phone category-route"
         :to="{
           name: 'category',
           params: { iabId: category.id },
@@ -108,7 +108,7 @@
         {{ category.name }}
       </router-link>
       <div class="d-flex hostedBy">
-        <span>{{ $t('Hosted by') }}</span><span class="ml-1 mr-1 primary-color">Saooti</span>
+        <span>{{ $t('Hosted by') }}</span><span class="ms-1 me-1 primary-color">Saooti</span>
       </div>
     </div>
   </div>

@@ -5,7 +5,7 @@
   >
     <div class="d-flex align-items-center">
       <h2
-        class="mb-0 mr-2"
+        class="mb-0 me-2"
         data-selenium="episode-comment-counter"
       >
         {{ $t("Podcast's comments") }}

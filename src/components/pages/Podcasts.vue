@@ -23,7 +23,7 @@
         v-if="isEmissionChooser"
         :defaultanswer="$t('No emission filter')"
         width="auto"
-        class="ml-3"
+        class="ms-3"
         @selected="emissionSelected"
       />
     </div>

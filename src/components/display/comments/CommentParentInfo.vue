@@ -4,21 +4,21 @@
       v-if="loading"
       class="d-flex"
     >
-      <div class="spinner-border mr-3" />
+      <div class="spinner-border me-3" />
       <div class="mt-2">
         {{ $t('Loading content ...') }}
       </div>
     </div>
     <div v-else>
       <div class="d-flex small-Text">
-        <b class="mr-2">{{ comment.name }}</b>
+        <b class="me-2">{{ comment.name }}</b>
         <img
           v-if="comment.certified"
           class="icon-certified"
           src="/img/certified.png"
           :title="$t('Certified account')"
         >
-        <div class="mr-2">
+        <div class="me-2">
           {{ date }}
         </div>
       </div>

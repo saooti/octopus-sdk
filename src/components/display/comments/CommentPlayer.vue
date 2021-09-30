@@ -25,7 +25,7 @@
       <div class="primary-color flex-shrink">
         {{ displayContent.name }}
       </div>
-      <div class="ml-1 mr-1">
+      <div class="ms-1 me-1">
         -
       </div>
       <div class="text-truncate">

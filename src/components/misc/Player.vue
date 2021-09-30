@@ -25,7 +25,7 @@
       </div>
       <div
         v-if="display"
-        class="d-flex align-items-center justify-center flex-grow pr-5 pl-5"
+        class="d-flex align-items-center justify-center flex-grow pe-5 ps-5"
       >
         <audio
           v-if="!live"
@@ -93,7 +93,7 @@
           <div class="d-flex">
             <div
               v-if="playerError"
-              class="text-warning player-title ml-2 mr-2"
+              class="text-warning player-title ms-2 me-2"
             >
               {{ $t('Podcast play error') + ' - ' }}
             </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex mt-3 align-items-center">
-    <div class="checkbox-saooti flex-shrink mr-2">
+    <div class="checkbox-saooti flex-shrink me-2">
       <input
         id="search-category-checkbox"
         v-model="isCategory"

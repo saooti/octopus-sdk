@@ -38,7 +38,7 @@
         <div class="d-flex mt-3 align-items-center flex-wrap">
           <div
             v-if="isEmission"
-            class="mr-2"
+            class="me-2"
           >
             {{ $t('Emission with episode published :') }}
           </div>
@@ -59,7 +59,7 @@
             </div>
             <!-- <DatePicker
               v-model="fromDate"
-              class="pl-3 pr-3"
+              class="ps-3 pe-3"
               mode="dateTime"
               color="green"
               is24hr
@@ -91,7 +91,7 @@
             </div>
             <!--  <DatePicker
               v-model="toDate"
-              class="pl-3"
+              class="ps-3"
               mode="dateTime"
               color="green"
               is24hr

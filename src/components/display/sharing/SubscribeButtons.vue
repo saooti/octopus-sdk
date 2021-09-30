@@ -10,7 +10,7 @@
         v-if="amazon"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="amazon"
         aria-label="amazon"
       >
@@ -24,7 +24,7 @@
         v-if="applePodcast"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="applePodcast"
         aria-label="Apple"
       >
@@ -34,7 +34,7 @@
         v-if="deezer"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="deezer"
         aria-label="Deezer"
       >
@@ -44,7 +44,7 @@
         v-if="playerFm"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="playerFm"
         aria-label="playerFm"
       >
@@ -54,7 +54,7 @@
         v-if="podcastAddict"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="podcastAddict"
         aria-label="podcastAddict"
       >
@@ -64,7 +64,7 @@
         v-if="radioline"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 btn-radioline share-btn"
+        class="btn me-3 mb-2 btn-radioline share-btn"
         :href="radioline"
         aria-label="Radioline"
       >
@@ -74,7 +74,7 @@
         v-if="spotify"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="spotify"
         aria-label="Spotify"
       >
@@ -84,7 +84,7 @@
         v-if="stitcher"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="stitcher"
         aria-label="stitcher"
       >
@@ -112,7 +112,7 @@
         v-if="tunein"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="tunein"
         aria-label="Tunin"
       >

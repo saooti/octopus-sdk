@@ -44,7 +44,7 @@
         :defaultanswer="$t('No organisation filter')"
         :value="organisationId"
         :light="true"
-        class="mr-2 hide-top-bar"
+        class="me-2 hide-top-bar"
         :reset="reset"
         @selected="onOrganisationSelected"
       />
@@ -58,7 +58,7 @@
             name: 'lives',
             query: { productor: $store.state.filter.organisationId },
           }"
-          class="linkHover p-3 text-dark font-weight-bold"
+          class="linkHover p-3 text-dark fw-bold"
         >
           {{ $t('Live') }}
         </router-link>
@@ -69,7 +69,7 @@
                      iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
                      rubriquesId: rubriqueQueryParam},
           }"
-          class="linkHover p-3 text-dark font-weight-bold"
+          class="linkHover p-3 text-dark fw-bold"
         >
           {{ $t('Podcasts') }}
         </router-link>
@@ -80,7 +80,7 @@
                      iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
                      rubriquesId: rubriqueQueryParam },
           }"
-          class="linkHover p-3 text-dark font-weight-bold"
+          class="linkHover p-3 text-dark fw-bold"
         >
           {{ $t('Emissions') }}
         </router-link>
@@ -89,7 +89,7 @@
             name: 'participants',
             query: { productor: $store.state.filter.organisationId },
           }"
-          class="linkHover p-3 text-dark font-weight-bold"
+          class="linkHover p-3 text-dark fw-bold"
         >
           {{ $t('Speakers') }}
         </router-link>
@@ -98,7 +98,7 @@
             name: 'playlists',
             query: { productor: $store.state.filter.organisationId },
           }"
-          class="linkHover p-3 text-dark font-weight-bold"
+          class="linkHover p-3 text-dark fw-bold"
         >
           {{ $t('Playlists') }}
         </router-link>
@@ -108,14 +108,14 @@
             name: 'productors',
             query: { productor: $store.state.filter.organisationId },
           }"
-          class="linkHover p-3 text-dark font-weight-bold"
+          class="linkHover p-3 text-dark fw-bold"
         >
           {{ $t('Productors') }}
         </router-link>
       </div>
       <div class="d-flex flex-column">
         <div class="d-flex justify-content-end hostedBy hide-phone">
-          <span>{{ $t('Hosted by') }}</span><span class="ml-1 mr-1 primary-color">Saooti</span>
+          <span>{{ $t('Hosted by') }}</span><span class="ms-1 me-1 primary-color">Saooti</span>
         </div>
         <div class="d-flex align-items-center justify-content-end flex-no-wrap">
           <HomeDropdown :is-education="isEducation" />

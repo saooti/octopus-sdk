@@ -1,6 +1,17 @@
 @import '../sass/_variables.scss';
-//@import './bootstrap_scss/bootstrap.scss';
+// Bottstrap variable overload
+$gray-800: #282828 !default;
+$border-width:                0.1rem !default;
+$h1-font-size:                $font-size-base * 2.5 !default;
+$h2-font-size:                $font-size-base * 1.3 !default;
+$h3-font-size:                $font-size-base * 1.25 !default;
+$h4-font-size:                $font-size-base * 1.1 !default;
+$h5-font-size:                $font-size-base * 0.9 !default;
+$h6-font-size:                $font-size-base * 0.7 !default;
+$breadcrumb-bg:                     #f3f3f3 !default;
+$breadcrumb-border-radius:          2rem !default;
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import './bootstrap-diff.scss';
 /* @import 'node_modules/bootstrap-vue-3/dist/bootstrap-vue-3.css'; */
 @import './general.scss';
 @import './form.scss';

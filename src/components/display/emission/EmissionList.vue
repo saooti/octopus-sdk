@@ -4,7 +4,7 @@
       v-if="loading"
       class="d-flex justify-content-center"
     >
-      <div class="spinner-border mr-3" />
+      <div class="spinner-border me-3" />
       <h3 class="mt-2">
         {{ $t('Loading emissions ...') }}
       </h3>

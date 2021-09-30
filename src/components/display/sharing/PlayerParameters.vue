@@ -91,7 +91,7 @@
                 class="custom-control-input"
               >
               <label
-                class="custom-control-label mr-2"
+                class="custom-control-label me-2"
                 for="isVisibleCheckbox"
               >{{ $t('Podcasts still available') }}</label>
             </div>
@@ -118,7 +118,7 @@
           <!-- <div class="d-flex align-items-center flex-wrap" v-if="podcast && iFrameModel !== 'emission'">
               <div class="checkbox-saooti">  
                 <input type="checkbox" class="custom-control-input" id="startTime" v-model="startTime">  
-                <label class="custom-control-label mr-2" for="startTime">{{$t('Start at')}}</label>  
+                <label class="custom-control-label me-2" for="startTime">{{$t('Start at')}}</label>  
               </div>
                 <input 
                 ref="minutesRef"
@@ -127,7 +127,7 @@
                 min="0"
                 class="input-share-player input-no-outline" 
                 @change="onDurationChange"/>
-                <div class="mr-1 ml-1">:</div>
+                <div class="me-1 ms-1">:</div>
               <input 
                 ref="secondesRef"
                 type="number"

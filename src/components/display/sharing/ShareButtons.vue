@@ -13,7 +13,7 @@
       <span
         v-if="authenticated"
         id="popover-share-help"
-        class="saooti-help ml-2"
+        class="saooti-help ms-2"
         :aria-label="$t('Help')"
       />
       <b-popover
@@ -51,7 +51,7 @@
         :href="facebookURL"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-facebook share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         title="Facebook"
         aria-label="Facebook"
@@ -70,7 +70,7 @@
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-twitter share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         :href="twitterURL"
         title="Twitter"
@@ -90,7 +90,7 @@
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-linkedin share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         :href="linkedinURL"
         title="Linkedin"
@@ -111,7 +111,7 @@
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         :href="rssUrl"
         :title="$t('Subscribe to this emission')"
@@ -132,7 +132,7 @@
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         aria-label="copy"
         :title="$t('Copy this page URL')"
@@ -153,7 +153,7 @@
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         :aria-label="$t('Share newsletter')"
         :title="$t('Share newsletter')"
@@ -174,7 +174,7 @@
         target="_blank"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         :aria-label="$t('Share QR Code')"
         :title="$t('Share QR Code')"
@@ -196,7 +196,7 @@
         :href="whatsappURL"
         :class="[
           bigRound ? 'btn btn-bigRound' : 'btn btn-whatsapp share-btn mb-2',
-          verticalDisplay ? '' : 'mr-2 ml-2',
+          verticalDisplay ? '' : 'me-2 ms-2',
         ]"
         aria-label="Whatsapp"
         title="Whatsapp"

@@ -11,10 +11,10 @@
         query: { productor: $store.state.filter.organisationId },
       }"
     >
-      <div class="font-weight-bold">
+      <div class="fw-bold">
         {{ date }}
       </div>
-      <div class="font-weight-bold">
+      <div class="fw-bold">
         {{ hours }}
       </div>
       <div class="font-size-smaller">
@@ -29,7 +29,7 @@
       }"
     >
       <PodcastImage
-        class="mr-3"
+        class="me-3"
         :class="
           fetchConference &&
             'null' !== fetchConference &&

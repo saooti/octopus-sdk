@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <button
-      class="btn btn-circle primary-color mr-1"
+      class="btn btn-circle primary-color me-1"
       aria-label="edit"
       @click="editComment"
     >
@@ -9,7 +9,7 @@
     </button>
     <button
       v-if="'Pending' === comment.status || 'Invalid' === comment.status"
-      class="btn btn-circle primary-color mr-1"
+      class="btn btn-circle primary-color me-1"
       aria-label="valid"
       @click="validComment"
     >
@@ -17,14 +17,14 @@
     </button>
     <button
       v-if="'Pending' === comment.status || 'Valid' === comment.status"
-      class="btn btn-circle primary-color mr-1"
+      class="btn btn-circle primary-color me-1"
       aria-label="invalid"
       @click="invalidComment"
     >
       <span class="saooti-cross" />
     </button>
     <button
-      class="btn btn-circle primary-color mr-1"
+      class="btn btn-circle primary-color me-1"
       aria-label="delete"
       @click="deleteComment"
     >

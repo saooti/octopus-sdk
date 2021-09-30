@@ -35,7 +35,7 @@
       @mouseleave="hideDescription"
     >
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-        <div class="mr-3 small-Text">
+        <div class="me-3 small-Text">
           {{ date }}
         </div>
         <div
@@ -72,7 +72,7 @@
         </router-link>
         <span
           v-if="editRight && podcast.order && podcast.order > 1"
-          class="saooti-star-bounty text-danger pr-2"
+          class="saooti-star-bounty text-danger pe-2"
         />
       </div>
     </div>

@@ -12,7 +12,7 @@
           </button>
         </router-link>
         <template v-else>
-          <div class="align-self-start font-weight-bold mb-2">
+          <div class="align-self-start fw-bold mb-2">
             {{ $t('Please chose a productor') }}
           </div>
           <OrganisationChooser
