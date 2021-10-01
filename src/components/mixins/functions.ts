@@ -1,7 +1,7 @@
 
 export const selenium ={
   methods: {
-    seleniumFormat(string: string) {
+    seleniumFormat(string: string): string {
       return string.toLowerCase().replace(/\s/g, '');
     },
   },
@@ -9,13 +9,13 @@ export const selenium ={
 export const cookies =
 {
   methods: {
-    setCookie(name: string, value: string, domain= "") {
+    setCookie(name: string, value: string, domain= ""): void {
       const date = new Date();
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
       const expires = '; expires=' + date.toUTCString();
       document.cookie = name + '=' + (value || '') + expires +domain+ '; path=/';
     },
-    getCookie(name: string) {
+    getCookie(name: string): string|null {
       const nameEQ = name + '=';
       const ca = document.cookie.split(';');
       for (let i = 0; i < ca.length; i++) {
@@ -31,14 +31,14 @@ export const cookies =
 
 export const displayMethods ={
   methods: {
-    urlify(text: string) {
+    urlify(text: string): string {
       const urlRegex = /(https?:\/\/[^\s<]+)/g;
       if (!text) return '';
       return text.replace(urlRegex, (url: string) => {
         return '<a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>';
       });
     },
-    async onCopyCode(link: string, callback: () => void) {
+    async onCopyCode(link: string, callback: () => void): Promise<any> {
       if ('undefined' !== typeof navigator.clipboard) {
         await navigator.clipboard.writeText(link);
         return callback();

@@ -18,8 +18,24 @@ const state = {
   octopusApi: {}as any,
   oAuthParam: {} as any,
 };
+export interface paramStore{
+  generalParameters: any,
+  filter: any,
+  podcastPage: any,
+  podcastsPage: any,
+  emissionsPage: any,
+  emissionPage: any,
+  intervenantPage: any,
+  intervenantsPage: any,
+  searchPage: any,
+  player: any,
+  footer: any,
+  organisation: any,
+  octopusApi: any,
+  oAuthParam: any,
+}
 
-const initialize = function initialize(initObject: any) {
+const initialize = function initialize(initObject: paramStore): any {
   return new Promise<void>((resolve, reject) => {
     if (initObject.generalParameters) {
       const param = initObject.generalParameters;
