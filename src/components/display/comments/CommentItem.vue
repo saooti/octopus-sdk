@@ -277,9 +277,11 @@ export default defineComponent({
     newComment(comment: CommentPodcast, fromEvent = false): void {
       if (undefined === this.fetchConference || fromEvent) {
         const updatedComment = this.comment;
-        updatedComment.relatedComments! += 1;
-        if ('Valid' === comment.status) {
-          updatedComment.relatedValidComments! += 1;
+        if(undefined !== updatedComment.relatedComments){
+          updatedComment.relatedComments += 1;
+        }
+        if (undefined !== updatedComment.relatedValidComments && 'Valid' === comment.status) {
+          updatedComment.relatedValidComments += 1;
         }
         this.$emit('update:comment', updatedComment);
       }
@@ -304,10 +306,13 @@ export default defineComponent({
     },
     updateStatus(data: string): void {
       const updatedComment = this.comment;
+      if(undefined === updatedComment.relatedValidComments){
+        return;
+      }
       if ('Valid' === data) {
-        updatedComment.relatedValidComments! += 1;
+        updatedComment.relatedValidComments += 1;
       } else {
-        updatedComment.relatedValidComments! -= 1;
+        updatedComment.relatedValidComments -= 1;
       }
       this.$emit('update:comment', updatedComment);
     },
@@ -321,11 +326,14 @@ export default defineComponent({
             (this.$refs.commentList as any).updateComment({ comment: event.comment });
           } else {
             const updatedComment = this.comment;
-            if ('Invalid' === event.status) {
-              updatedComment.relatedValidComments! -= 1;
-            } else if ('Valid' === event.status) {
-              updatedComment.relatedValidComments! += 1;
+            if(undefined !== updatedComment.relatedValidComments){
+              if ('Invalid' === event.status) {
+                updatedComment.relatedValidComments -= 1;
+              } else if ('Valid' === event.status) {
+                updatedComment.relatedValidComments += 1;
+              }
             }
+            
             this.$emit('update:comment', updatedComment);
           }
           break;
@@ -334,9 +342,11 @@ export default defineComponent({
             (this.$refs.commentList as any).deleteComment(event.comment);
           } else {
             const updatedComment = this.comment;
-            updatedComment.relatedComments! -= 1;
-            if ('Valid' === event.comment.status) {
-              updatedComment.relatedValidComments! -= 1;
+            if(undefined !== updatedComment.relatedComments){
+              updatedComment.relatedComments -= 1;
+            }
+            if (undefined !== updatedComment.relatedValidComments && 'Valid' === event.comment.status) {
+              updatedComment.relatedValidComments -= 1;
             }
             this.$emit('update:comment', updatedComment);
           }

@@ -87,7 +87,8 @@ export default defineComponent({
       if(elementToNotShow.length){
         const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
         return this.rubriquages.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+          if(!element.rubriquageId){return;}
+          return !rubriquageIdToNotShow.includes(element.rubriquageId);
         });
       }
       return this.rubriquages;
@@ -115,7 +116,11 @@ export default defineComponent({
     },
     addFilter(rubrique: Rubrique): void{
       if(!this.rubriquage){ return ;}
-      const filterToAdd = {rubriquageId: this.rubriquage.rubriquageId!, rubriqueId: rubrique.rubriqueId!, name: this.rubriquage.title +": "+rubrique.name};
+      const filterToAdd = {
+        rubriquageId: this.rubriquage.rubriquageId?this.rubriquage.rubriquageId: 0, 
+        rubriqueId: rubrique.rubriqueId? rubrique.rubriqueId:0, 
+        name: this.rubriquage.title +": "+rubrique.name
+      };
       const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
       newFilter.push(filterToAdd);
       this.$store.commit('filterRubrique', newFilter);
@@ -132,7 +137,8 @@ export default defineComponent({
       let index = 0;
       const rubriquageAlreadyFilter = this.rubriqueFilter.map(a => a.rubriquageId);
       for (index; index < rubriquageLength; index++) {
-        if(!rubriquageAlreadyFilter.includes(this.rubriquages[index].rubriquageId!)){
+        const rubriquageIdIndex = this.rubriquages[index].rubriquageId;
+        if(rubriquageIdIndex && !rubriquageAlreadyFilter.includes(rubriquageIdIndex)){
           break;
         }
       }
@@ -141,13 +147,14 @@ export default defineComponent({
     },
     resizeWindow(): void {
       const rubriqueList = document.getElementById('rubrique-list-container');
-      rubriqueList!.style.justifyContent = 'flex-start';
+      if(null === rubriqueList){return}
+      rubriqueList.style.justifyContent = 'flex-start';
       this.hidenRubriques.length = 0;
       this.rubriqueDisplay.forEach((element: Rubrique) => {
         const el = document.getElementById('rubrique' + element.rubriqueId);
         if (!el) return;
         const parent = el.parentElement;
-        if (el.offsetLeft + el.clientWidth <= parent!.clientWidth - 20) {
+        if (null !== parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
           el.classList.remove('hid');
           return;
         }
@@ -157,7 +164,7 @@ export default defineComponent({
         }
       });
       if (!this.hidenRubriques.length) {
-        rubriqueList!.style.justifyContent = 'center';
+        rubriqueList.style.justifyContent = 'center';
       }
     },
     onRubriquageSelected(){

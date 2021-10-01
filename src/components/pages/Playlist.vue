@@ -118,8 +118,8 @@ export default defineComponent({
     },
     editRight(): boolean {
       if (
-        (state.generalParameters.isPlaylist &&
-          this.organisationId === this.playlist!.organisation.id) ||
+        (state.generalParameters.isPlaylist && this.playlist &&
+          this.organisationId === this.playlist.organisation.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -140,9 +140,9 @@ export default defineComponent({
   methods: {
     async getPlaylistDetails(): Promise<void> {
       try {
-        const data = await octopusApi.fetchPlaylist(this.playlistId);
+        const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId);
         this.playlist = data;
-        this.$emit('playlistTitle', this.playlist!.title);
+        this.$emit('playlistTitle', this.playlist.title);
         this.loaded = true;
       } catch {
         this.error = true;

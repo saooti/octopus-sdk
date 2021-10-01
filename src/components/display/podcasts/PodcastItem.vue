@@ -121,9 +121,9 @@ export default defineComponent({
     },
     date(): string {
       if('fr' === this.$i18n.locale){
-        return moment(this.podcast!.pubDate).format('D MMMM YYYY [à] HH[h]mm');
+        return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
       }
-      return moment(this.podcast!.pubDate).format('D MMMM YYYY [at] HH[h]mm');
+      return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
     },
     displayDate(): string {
       return moment(this.podcast.pubDate).format('X');
@@ -132,7 +132,7 @@ export default defineComponent({
       const catIds = this.podcast.emission.iabIds;
       return this.$store.state.categories
         .filter((c: Category) => {
-          return catIds!.includes(c.id);
+          return catIds && catIds.includes(c.id);
         })
         .map((c: any) => {
           return c.name;
@@ -215,8 +215,8 @@ export default defineComponent({
       'description-podcast-container-' + this.podcast.podcastId
     );
     if (
-      null !== podcastDesc &&
-      podcastDesc.clientHeight > podcastDescContainer!.clientHeight
+      null !== podcastDesc && null !== podcastDescContainer &&
+      podcastDesc.clientHeight > podcastDescContainer.clientHeight
     ) {
       this.isDescriptionBig = true;
     }

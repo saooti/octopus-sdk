@@ -186,9 +186,12 @@ export default defineComponent({
       }
       const response = await octopusApi.fetchEmissions(standardParam);
       if (this.defaultanswer) {
-        this.emissions = [getDefaultEmission(this.defaultanswer)!].concat(
-          response.result
-        );
+        const emissionDefault = getDefaultEmission(this.defaultanswer);
+        if(emissionDefault){
+          this.emissions = [emissionDefault].concat(
+            response.result
+          );
+        }
       } else {
         this.emissions = response.result.concat();
       }

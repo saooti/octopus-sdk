@@ -253,19 +253,20 @@ export default defineComponent({
         return '';
       },
       playedTime: (state: StoreState) => {
-        if (state.player.elapsed! > 0 && state.player.total! > 0) {
+        if (state.player.elapsed && state.player.elapsed > 0 && state.player.total && state.player.total > 0) {
           return DurationHelper.formatDuration(
-            Math.round(state.player.elapsed! * state.player.total!)
+            Math.round(state.player.elapsed * state.player.total)
           );
         }
         return '--:--';
       },
       percentProgress: (state: StoreState) => {
-        return state.player.elapsed! * 100;
+        if(!state.player.elapsed){return 0;}
+        return state.player.elapsed * 100;
       },
       totalTime: (state: StoreState) => {
-        if (state.player.elapsed! > 0 && state.player.total! > 0)
-          return DurationHelper.formatDuration(Math.round(state.player.total!));
+        if (state.player.elapsed && state.player.elapsed > 0 && state.player.total && state.player.total > 0)
+          return DurationHelper.formatDuration(Math.round(state.player.total));
         return '--:--';
       },
       totalSecondes: (state: StoreState) => state.player.total,
@@ -439,7 +440,7 @@ export default defineComponent({
       const x = event.clientX - rect.left; //x position within the element.
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
-      const seekTime = this.$store.state.player.total! * percentPosition;
+      const seekTime = this.$store.state.player.total * percentPosition;
       if (this.podcast || this.live) {
         this.notListenTime = seekTime - this.listenTime;
       }
@@ -519,7 +520,8 @@ export default defineComponent({
           return _return.map(item => item.trim());
         })
         .filter(item => {
-          return 'player_' + this.podcast!.podcastId === item[0];
+          if(!this.podcast){return '';}
+          return 'player_' + this.podcast.podcastId === item[0];
         });
       if (1 === matching_cookies.length) {
         this.setDownloadId(matching_cookies[0][1]);

@@ -144,7 +144,7 @@ export default defineComponent({
       return '';
     },
     articleHtml(): string{
-      if(this.podcast.article && 0 !== this.podcast.article!.length){
+      if(this.podcast.article && 0 !== this.podcast.article.length){
         return (`<a href="` +
           this.podcast.article +
           `" aria-label="` +
@@ -263,11 +263,11 @@ export default defineComponent({
     },
     
     date(): string {
-      if (1970 !== moment(this.podcast!.pubDate).year()){
+      if (1970 !== moment(this.podcast.pubDate).year()){
         if('fr' === this.$i18n.locale){
-          return moment(this.podcast!.pubDate).format('D MMMM YYYY [à] HH[h]mm');
+          return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
         }
-        return moment(this.podcast!.pubDate).format('D MMMM YYYY [at] HH[h]mm');
+        return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
       }
       return '';
     },
@@ -298,8 +298,11 @@ export default defineComponent({
       return (first + ' ' + last).trim();
     },
     selectAll(element: Event): void {
-      (element.target! as HTMLInputElement).focus();
-      (element.target! as HTMLInputElement).select();
+      const target = element.target;
+      if(null!==target){
+        (target as HTMLInputElement).focus();
+        (target as HTMLInputElement).select();
+      }
     },
     afterCopy(): void{
       (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));

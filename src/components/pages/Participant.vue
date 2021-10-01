@@ -146,19 +146,21 @@ export default defineComponent({
       );
     },
     description(): string {
-      return this.participant!.description || '';
+      if(!this.participant){return '';}
+      return this.participant.description || '';
     },
     name(): string {
+      if(!this.participant){return '';}
       return (
-        (this.participant!.firstName || '') +
+        (this.participant.firstName || '') +
         ' ' +
-        (this.participant!.lastName || '')
+        (this.participant.lastName || '')
       ).trim();
     },
     editRight(): boolean {
       if (
-        (this.authenticated &&
-          this.organisationId === this.participant!.orga!.id!) ||
+        (this.authenticated && this.participant && 
+          this.organisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
       )
         return true;

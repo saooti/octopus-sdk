@@ -87,7 +87,9 @@ export default defineComponent({
       if(this.arrayFilter.length){
         const rubriquageIdToNotShow = this.arrayFilter.map(a => a.rubriquageId);
         return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+          if(element.rubriquageId){
+            return !rubriquageIdToNotShow.includes(element.rubriquageId);
+          }
         });
       }
       return this.rubriquageData;
@@ -141,8 +143,8 @@ export default defineComponent({
       if(this.rubriqueFilter.length){
         this.arrayFilter = Array.from(this.rubriqueFilter);
         this.isRubriquage = true;
-      }else{
-        this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""}];
+      }else if(this.rubriquageData[0].rubriquageId){
+        this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, name:""}];
         this.isRubriquage = false;
       }
       if(this.isRubriquage){
@@ -179,13 +181,17 @@ export default defineComponent({
       if(elementToNotShow.length){
         const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
         return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+          if(element.rubriquageId){
+            return !rubriquageIdToNotShow.includes(element.rubriquageId);
+          }
         });
       }
       return this.rubriquageData;
     },
     addFilter(): void{
-      this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
+      if(this.availableRubriquage[0].rubriquageId){
+        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0, name:""});
+      }
     },
     updateRubrique(newValue: {rubriqueId: number; index: number}): void{
       const item = this.arrayFilter[newValue.index];
@@ -208,8 +214,8 @@ export default defineComponent({
       });
       this.saveOrganisation = this.organisation;
       if (0 === this.rubriquageData.length) return;
-      if(initArrayFilter){
-        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""});
+      if(initArrayFilter && this.rubriquageData[0].rubriquageId){
+        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, name:""});
       }
     },
     resetRubriqueFilter(): void{

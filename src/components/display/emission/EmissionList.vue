@@ -241,7 +241,8 @@ export default defineComponent({
       const rubrique = this.rubriques.find(
         (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0]
       );
-      return rubrique!.name;
+      if(!rubrique){ return undefined; }
+      return rubrique.name;
     },
   },
 })

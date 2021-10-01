@@ -145,11 +145,11 @@ export default defineComponent({
       }
     },
     model(): void {
-      if(undefined===this.categoryArray){
+      if(undefined===this.categoryArray ||undefined === this.categoryForArray){
         return;
       }
       const idsArray: Array<number> = [];
-      this.categoryForArray!.forEach((el: Category) => {
+      this.categoryForArray.forEach((el: Category) => {
         idsArray.push(el.id);
       });
       this.$emit('selected', idsArray);
@@ -186,9 +186,12 @@ export default defineComponent({
         });
       }
       if ('' !== this.defaultanswer) {
-        this.categories = [getDefaultCategory(this.defaultanswer)!].concat(
-          this.totalCategories
-        );
+        const categoryDefault = getDefaultCategory(this.defaultanswer);
+        if(categoryDefault){
+          this.categories = [categoryDefault].concat(
+            this.totalCategories
+          );
+        }
       } else {
         this.categories = this.totalCategories;
       }
@@ -196,20 +199,25 @@ export default defineComponent({
     onClose(): void {
       if (!this.category && undefined === this.categoryArray) {
         this.category = getDefaultCategory(this.defaultanswer);
-        this.onCategorySelected(this.category!);
+        if(this.category){
+          this.onCategorySelected(this.category);
+        }
       }
     },
     onSearchCategory(query: string): void {
       this.isLoading = true;
-      let list: Array<Category> = [getDefaultCategory(this.defaultanswer)!].concat(
-        this.totalCategories
-      );
-      if ('' === this.defaultanswer) {
-        list = this.totalCategories;
+      const categoryDefault = getDefaultCategory(this.defaultanswer);
+      if(categoryDefault){
+        let list: Array<Category> = [categoryDefault].concat(
+          this.totalCategories
+        );
+        if ('' === this.defaultanswer) {
+          list = this.totalCategories;
+        }
+        this.categories = list.filter((item: Category) => {
+          return item.name.toUpperCase().includes(query.toUpperCase());
+        });
       }
-      this.categories = list.filter((item: Category) => {
-        return item.name.toUpperCase().includes(query.toUpperCase());
-      });
       this.isLoading = false;
     },
     onCategorySelected(category: Category): void {
@@ -229,12 +237,17 @@ export default defineComponent({
       this.category = categorySelected;
     },
     initCategoryArray(val: Array<number>): void {
-      this.categoryForArray!.length = 0;
+      if(!this.categoryForArray){
+        return;
+      }
+      this.categoryForArray.length = 0;
       val.forEach((element: number) => {
         const item = this.categoriesChosen.find((el: Category) => {
           return el.id === element;
         });
-        this.categoryForArray!.push(item!);
+        if(this.categoryForArray && item){
+          this.categoryForArray.push(item);
+        }
       });
     },
   },

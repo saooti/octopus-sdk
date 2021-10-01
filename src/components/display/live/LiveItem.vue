@@ -161,16 +161,19 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
     hours(): string {
-      return moment(this.live!.pubDate).format('À HH[H]mm');
+      if(!this.live){ return ''; }
+      return moment(this.live.pubDate).format('À HH[H]mm');
     },
     date(): string {
-      return moment(this.live!.pubDate).format('D/MM/YYYY');
+      if(!this.live){ return ''; }
+      return moment(this.live.pubDate).format('D/MM/YYYY');
     },
     displayDate(): string {
-      return moment(this.live!.pubDate).format('X');
+      if(!this.live){ return ''; }
+      return moment(this.live.pubDate).format('X');
     },
     description(): string {
-      if (this.live!.description) return this.live!.description;
+      if (this.live && this.live.description) return this.live.description;
       return '';
     },
     myOrganisationId(): string {
@@ -178,8 +181,8 @@ export default defineComponent({
     },
     organisationRight(): boolean {
       if (
-        this.isRoleLive &&
-        this.myOrganisationId === this.live!.organisation.id
+        this.isRoleLive && this.live && 
+        this.myOrganisationId === this.live.organisation.id
       )
         return true;
       return false;
@@ -188,15 +191,15 @@ export default defineComponent({
       return state.generalParameters.isRoleLive;
     },
     duration(): string {
-      if (this.live!.duration <= 1) return '';
-      if (this.live!.duration > 600000) {
-        return humanizeDuration(this.live!.duration, {
+      if (!this.live || this.live.duration <= 1) return '';
+      if (this.live.duration > 600000) {
+        return humanizeDuration(this.live.duration, {
           language: this.$i18n.locale,
           largest: 1,
           round: true,
         });
       }
-      return humanizeDuration(this.live!.duration, {
+      return humanizeDuration(this.live.duration, {
         language: this.$i18n.locale,
         largest: 2,
         round: true,
@@ -229,25 +232,30 @@ export default defineComponent({
         );
       } catch {
         this.$emit('deleteItem', this.index);
-        studioApi.deleteConference(
-          this.$store.state,
-          this.fetchConference.conferenceId!.toString()
-        );
+        if(this.fetchConference.conferenceId){
+          studioApi.deleteConference(
+            this.$store.state,
+            this.fetchConference.conferenceId.toString()
+          );
+        }
       }
     },
     async handleDescription(): Promise<void> {
       this.$nextTick(() => {
+        if(!this.live){
+          return;
+        }
         const liveDesc = document.getElementById(
-          'description-live-' + this.live!.podcastId
+          'description-live-' + this.live.podcastId
         );
         const liveDescContainer = document.getElementById(
-          'description-live-container-' + this.live!.podcastId
+          'description-live-container-' + this.live.podcastId
         );
         if (
-          null !== liveDesc &&
-          liveDesc.clientHeight > liveDescContainer!.clientHeight
+          null !== liveDesc && null !== liveDescContainer && 
+          liveDesc.clientHeight > liveDescContainer.clientHeight
         ) {
-          liveDescContainer!.classList.add('after-live-description');
+          liveDescContainer.classList.add('after-live-description');
         }
       });
     },

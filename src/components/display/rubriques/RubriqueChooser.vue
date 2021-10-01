@@ -137,7 +137,9 @@ export default defineComponent({
       const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
       const idsArray: Array<number> = [];
       selected.forEach((el: Rubrique) => {
-        idsArray.push(el.rubriqueId!);
+        if(el.rubriqueId){
+          idsArray.push(el.rubriqueId);
+        }
       });
       this.$emit('selected', idsArray);
     },
@@ -193,16 +195,16 @@ export default defineComponent({
       }
       this.onRubriqueSelected(this.rubrique);
     },
-    onSearchRubrique(query?: string): void {
+    onSearchRubrique(query: string): void {
       this.isLoading = true;
       this.rubriques = this.initRubriquesArray().filter((item: Rubrique) => {
-        return item.name!.toUpperCase().includes(query!.toUpperCase());
+        return item.name.toUpperCase().includes(query.toUpperCase());
       });
       this.isLoading = false;
     },
     onRubriqueSelected(rubrique: Rubrique|undefined): void {
-      if (undefined !== this.rubriqueSelected) {
-        this.$emit('update:rubriqueSelected', rubrique!.rubriqueId);
+      if (undefined !== this.rubriqueSelected && rubrique) {
+        this.$emit('update:rubriqueSelected', rubrique.rubriqueId);
       }
       if (false === this.multiple) {
         this.$emit('selected', rubrique);
@@ -220,7 +222,7 @@ export default defineComponent({
           return el.rubriqueId === element;
         });
         if(undefined!==item){
-          this.rubriqueForArray!.push(item);
+          this.rubriqueForArray.push(item);
         }
       });
     },

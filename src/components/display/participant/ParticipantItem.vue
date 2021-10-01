@@ -101,7 +101,7 @@ export default defineComponent({
     editRight(): boolean {
       if (
         (this.authenticated &&
-          this.organisationId === this.participant!.orga!.id!) ||
+          this.organisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -121,10 +121,10 @@ export default defineComponent({
       'description-participant-container-' + this.participant.participantId
     );
     if (
-      null !== participantDesc &&
-      participantDesc.clientHeight > participantDescContainer!.clientHeight
+      null !== participantDesc && null !==participantDescContainer && 
+      participantDesc.clientHeight > participantDescContainer.clientHeight
     ) {
-      participantDescContainer!.classList.add('after-participant-description');
+      participantDescContainer.classList.add('after-participant-description');
     }
   },
   methods: {

@@ -199,7 +199,7 @@ export default defineComponent({
     },
     editRight(): boolean {
       if (
-        (this.authenticated && this.organisationId === this.emission!.orga.id) ||
+        (this.authenticated && this.emission && this.organisationId === this.emission.orga.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -235,26 +235,26 @@ export default defineComponent({
   methods: {
     async getEmissionDetails(): Promise<void> {
       try {
-        const data = await octopusApi.fetchEmission(this.emissionId);
+        const data: Emission = await octopusApi.fetchEmission(this.emissionId);
         this.emission = data;
         this.$emit('emissionTitle', this.name);
         this.loaded = true;
-        if (!this.emission!.annotations) return;
-        if (this.emission!.annotations.RSS) {
+        if (!this.emission.annotations) return;
+        if (this.emission.annotations.RSS) {
           this.rssEmission = true;
         }
-        if (this.emission!.annotations.FTP) {
+        if (this.emission.annotations.FTP) {
           this.ftpEmission = true;
         }
-        if (this.emission!.annotations.exclusive) {
+        if (this.emission.annotations.exclusive) {
           this.exclusive =
-            'true' === this.emission!.annotations.exclusive ? true : false;
+            'true' === this.emission.annotations.exclusive ? true : false;
           this.exclusive =
-            this.exclusive && this.organisationId !== this.emission!.orga.id;
+            this.exclusive && this.organisationId !== this.emission.orga.id;
         }
-        if (this.emission!.annotations.notExclusive) {
+        if (this.emission.annotations.notExclusive) {
           this.notExclusive =
-            'true' === this.emission!.annotations.notExclusive ? true : false;
+            'true' === this.emission.annotations.notExclusive ? true : false;
         }
       } catch {
         this.error = true;

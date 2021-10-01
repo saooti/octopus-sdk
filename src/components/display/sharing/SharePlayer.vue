@@ -461,12 +461,12 @@ export default defineComponent({
       }
       if (Object.prototype.hasOwnProperty.call(data,'playerBeta')) {
         this.displayBetaChoice = data.playerBeta;
-        let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!);
+        let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId);
         this.customPlayers = dataFetched.content;
         const totalCount = dataFetched.totalElements;
         let index = 1;
         while (totalCount > this.customPlayers.length) {
-          dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!+'?start='+index);
+          dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId+'?start='+index);
           this.customPlayers = this.customPlayers.concat(dataFetched.content);
           ++index;
         }

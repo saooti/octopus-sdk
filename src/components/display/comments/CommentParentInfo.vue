@@ -55,14 +55,14 @@ export default defineComponent({
   
   computed: {
     date(): string {
-      if (this.comment!.date)
-        return moment(this.comment!.date).format('D MMMM YYYY HH[h]mm');
+      if (this.comment && this.comment.date)
+        return moment(this.comment.date).format('D MMMM YYYY HH[h]mm');
       return '';
     },
     limitContent(): string {
-      if (!this.comment!.content) return '';
-      if (this.comment!.content.length <= 300) return this.comment!.content;
-      return this.comment!.content.substring(0, 300) + '...';
+      if (!this.comment || !this.comment.content) return '';
+      if (this.comment.content.length <= 300) return this.comment.content;
+      return this.comment.content.substring(0, 300) + '...';
     },
     readMore(): string {
       if (this.summary) return this.$t('Read more').toString();
@@ -70,7 +70,7 @@ export default defineComponent({
     },
     contentDisplay(): string {
       if (this.summary) return this.limitContent;
-      return this.comment!.content;
+      return this.comment && this.comment.content? this.comment.content : '';
     },
   },
 

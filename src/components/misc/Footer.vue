@@ -169,10 +169,12 @@ export default defineComponent({
 
   methods: {
     showBlackBorder(hide: boolean): void {
+      const footerElement = document.getElementById('footer');
+      if(null===footerElement){return}
       if (hide) {
-        document.getElementById('footer')!.classList.remove('border-round');
+        footerElement.classList.remove('border-round');
       } else if (!this.isBarTop) {
-        document.getElementById('footer')!.className += ' border-round';
+        footerElement.className += ' border-round';
       }
     },
     changeLanguage(): void{

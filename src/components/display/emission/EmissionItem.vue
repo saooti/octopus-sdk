@@ -112,7 +112,10 @@ export default defineComponent({
       return state.generalParameters.podcastmaker;
     },
     organisation(): string {
-      return '' + this.emission.publisher!.organisation!.name;
+      if(this.emission && this.emission.publisher && this.emission.publisher.organisation){
+        return '' + this.emission.publisher.organisation.name;
+      }
+      return '';
     },
     lightItems(): boolean {
       return state.emissionsPage.lightItems;
@@ -151,10 +154,10 @@ export default defineComponent({
       'description-emission-container-' + this.emission.emissionId
     );
     if (
-      null !== emissionDesc &&
-      emissionDesc.clientHeight > emissionDescContainer!.clientHeight
+      null !== emissionDesc && null !== emissionDescContainer && 
+      emissionDesc.clientHeight > emissionDescContainer.clientHeight
     ) {
-      emissionDescContainer!.classList.add('after-emission-description');
+      emissionDescContainer.classList.add('after-emission-description');
     }
   },
   methods: {

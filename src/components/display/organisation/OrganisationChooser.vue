@@ -253,9 +253,10 @@ export default defineComponent({
         return null !== o;
       });
       if (this.defaultanswer) {
-        this.organisations =[getDefaultOrganistion(this.defaultanswer)!].concat(
-          notNull
-        );
+        const defaultOrganisation = getDefaultOrganistion(this.defaultanswer);
+        if(defaultOrganisation){
+          this.organisations =[defaultOrganisation].concat(notNull);
+        }
       } else {
         this.organisations = notNull;
       }

@@ -163,7 +163,7 @@ export default defineComponent({
     },
     phase(): string|undefined {
       if(undefined === this.podcast){
-        return this.comment!.phase;
+        return this.comment ? this.comment.phase : '';
       }
       if (
         !this.podcast.conferenceId ||
@@ -180,7 +180,8 @@ export default defineComponent({
       return 'Live';
     },
     podcastOrga(): string|undefined{
-      return this.podcast ? this.podcast.organisation.id : this.comment!.organisationId;
+      const commentOrga = this.comment ? this.comment.organisationId : '';
+      return this.podcast ? this.podcast.organisation.id : commentOrga;
     }
   },
   watch: {
@@ -216,8 +217,11 @@ export default defineComponent({
     inputExceeded(text: string, font: string): number {
       const element = document.createElement('canvas');
       const context = element.getContext('2d');
-      context!.font = font;
-      return context!.measureText(text).width;
+      if(null === context){
+        return 0;
+      }
+      context.font = font;
+      return context.measureText(text).width;
     },
     requestToSend(): void {
       if (this.knownIdentity) {
@@ -245,12 +249,12 @@ export default defineComponent({
             this.podcast.podcastId))
       ) {
         timeline = Math.round(
-          this.$store.state.player.elapsed! * this.$store.state.player.total!
+          this.$store.state.player.elapsed * this.$store.state.player.total
         );
         if (this.podcast.duration && this.$store.state.player.podcast) {
           timeline = Math.round(
             timeline -
-              (this.$store.state.player.total! - this.podcast.duration / 1000)
+              (this.$store.state.player.total - this.podcast.duration / 1000)
           );
         }
         if (timeline < 0) {
@@ -261,10 +265,11 @@ export default defineComponent({
       if (null === sendName && name) {
         sendName = name;
       }
+      const commentPodcastId = this.comment ? this.comment.podcastId : 0;
       const comment: any = {
         content: this.newComment,
         name: sendName,
-        podcastId: this.podcast ? this.podcast.podcastId : this.comment!.podcastId,
+        podcastId: this.podcast ? this.podcast.podcastId : commentPodcastId,
         timeline: timeline,
         organisationId: this.podcastOrga,
         commentIdReferer: this.comment ? this.comment.comId : undefined,

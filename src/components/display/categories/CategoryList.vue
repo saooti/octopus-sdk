@@ -126,13 +126,16 @@ export default defineComponent({
     },
     resizeWindow(): void {
       const categoryList = document.getElementById('category-list-container');
-      categoryList!.style.justifyContent = 'flex-start';
+      if(null === categoryList){
+        return;
+      }
+      categoryList.style.justifyContent = 'flex-start';
       this.hidenCategories.length = 0;
       this.categories.forEach((element: Category) => {
         const el = document.getElementById('category' + element.id);
         if (!el) return;
         const parent = el.parentElement;
-        if (el.offsetLeft + el.clientWidth <= parent!.clientWidth - 20) {
+        if (parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
           el.classList.remove('hid');
           return;
         }
@@ -142,7 +145,7 @@ export default defineComponent({
         }
       });
       if (!this.hidenCategories.length) {
-        categoryList!.style.justifyContent = 'center';
+        categoryList.style.justifyContent = 'center';
       }
     },
     async fetchCategories(organisationId: string): Promise<void> {

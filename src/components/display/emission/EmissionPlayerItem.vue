@@ -175,10 +175,10 @@ export default defineComponent({
       'description-emission-container-' + this.emission.emissionId
     );
     if (
-      null !== emissionDesc &&
-      emissionDesc.clientHeight > emissionDescContainer!.clientHeight
+      null !== emissionDesc && null !== emissionDescContainer &&
+      emissionDesc.clientHeight > emissionDescContainer.clientHeight
     ) {
-      emissionDescContainer!.classList.add('after-emission-description');
+      emissionDescContainer.classList.add('after-emission-description');
     }
   },
   methods: {
@@ -201,10 +201,10 @@ export default defineComponent({
           'description-podcast-container-' + this.podcasts[index].podcastId
         );
         if (
-          null !== podcastDesc &&
-          podcastDesc.clientHeight > podcastDescContainer!.clientHeight
+          null !== podcastDesc && null !== podcastDescContainer &&
+          podcastDesc.clientHeight > podcastDescContainer.clientHeight
         ) {
-          podcastDescContainer!.classList.add('after-emission-description');
+          podcastDescContainer.classList.add('after-emission-description');
         }
       }
       });
