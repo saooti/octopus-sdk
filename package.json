@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "0.29.0",
+  "version": "29.0.0",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
