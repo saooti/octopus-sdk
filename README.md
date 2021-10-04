@@ -464,6 +464,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.11 Podcastmaker modif
 
  * 29.0.0 Vue3
+ * 29.0.1 Upgrade npm
 
 
 
