@@ -17,6 +17,24 @@ import router from '@/router/router';
 const moment = require('moment');
 import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
+import VueRouter from 'vue-router';
+import { ErrorHandler, RawLocation } from 'vue-router/types/router';
+
+
+const originalPush: any = router.push;
+router.push = function push(location: RawLocation, onResolve?: Function | undefined, onReject?: ErrorHandler | undefined){
+    if (onResolve || onReject) {
+        return originalPush.call(this, location, onResolve, onReject)
+    }
+ 
+    return originalPush.call(this, location).catch((err: any) => {
+        if (VueRouter.isNavigationFailure(err)) {
+            return err
+        }
+   
+        return Promise.reject(err)
+    })
+}
 
 Vue.use(ModalPlugin); 
 Vue.use(FormRadioPlugin); 
