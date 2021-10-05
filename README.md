@@ -465,6 +465,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
  * 29.0.0 Vue3
  * 29.0.1 Upgrade npm
+ * 29.0.2 Début de suppression bootstrap vue
 
 
 
