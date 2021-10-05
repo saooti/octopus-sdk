@@ -238,9 +238,11 @@ export default defineComponent({
       )
         return undefined;
       const rubrique = this.rubriques.find(
-        (element: Rubrique) => emission.rubriqueIds.includes(element.rubriqueId!) && element.rubriquageId === parseInt(this.displayRubriquage)
+        (element: Rubrique) => element.rubriqueId && emission.rubriqueIds.includes(element.rubriqueId) && element.rubriquageId === parseInt(this.displayRubriquage)
       );
-      return rubrique!.name;
+      if(rubrique){
+        return rubrique.name;
+      }
     },
     mainRubriquage(emission: Emission): string {
       if (

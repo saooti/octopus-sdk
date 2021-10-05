@@ -82,3 +82,22 @@ background: $octopus-primary-color;
 .theme-saooti .vdatetime-popup__actions__button {
 color: $octopus-primary-color;
 }
+
+//Navigation Bar
+.nav{
+	border-bottom: 0.05rem solid #ddd;
+	.nav-item{
+		flex-grow: 1;
+		text-align: center;
+		a {
+			color: black;
+		}
+		.nav-link{
+			border-bottom: 0.1rem solid transparent;
+		}
+		.active{
+		  border-bottom-color: $octopus-primary-color;
+    	color: $octopus-primary-color;
+		}
+	}
+}

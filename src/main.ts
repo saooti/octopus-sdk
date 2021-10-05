@@ -11,8 +11,8 @@ import { VueReCaptcha } from 'vue-recaptcha-v3';
   FormGroupPlugin,
   FormTextareaPlugin,
   CollapsePlugin } from 'bootstrap-vue-3'; */
-import bootstrap from 'bootstrap-vue-3';
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+/* import bootstrap from 'bootstrap-vue-3';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'; */
 import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import I18nResources from './locale/messages';
@@ -20,6 +20,11 @@ import router from '@/router/router';
 const moment = require('moment');
 import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
+/* import 'popper.js/dist/popper.min.js'; */
+/* import 'jquery/src/jquery.js'; */
+import 'jquery';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 //TODO
 const navigatorLang = navigator.language /* || navigator.userLanguage */;
@@ -62,7 +67,7 @@ paramStore
     .use(i18n)
     .use(store)
     .use(router)
-    .use(bootstrap)
+    /* .use(bootstrap) */
     .use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' })
     /* .use(ModalPlugin)
     .use(FormRadioPlugin)

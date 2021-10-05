@@ -1,93 +1,99 @@
 <template>
   <div>
-    <b-modal
+    <div
       id="newsletter-modal"
-      :show="true"
-      :title="$t('Share newsletter')"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
+      class="modal"
     >
-      <template #default>
-        <div class="d-flex justify-content-between">
-          <div v-html="newsletterHtml" />
-          <div class="d-flex flex-column flex-grow ms-4">
-            <h4 class="mb-3">
-              {{ $t('Configuration') }}
-            </h4>
-            <div>
-              <input
-                id="display-emission-name"
-                v-model="displayEmissionName"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label"
-                for="display-emission-name"
-              >{{
-                $t('Display emission name')
-              }}</label>
+      <div class="modal-backdrop" />
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              {{ $t('Share newsletter') }}
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-between">
+              <div v-html="newsletterHtml" />
+              <div class="d-flex flex-column flex-grow ms-4">
+                <h4 class="mb-3">
+                  {{ $t('Configuration') }}
+                </h4>
+                <div>
+                  <input
+                    id="display-emission-name"
+                    v-model="displayEmissionName"
+                    type="checkbox"
+                    class="form-check-input"
+                  >
+                  <label
+                    class="form-check-label"
+                    for="display-emission-name"
+                  >{{
+                    $t('Display emission name')
+                  }}</label>
+                </div>
+                <div>
+                  <input
+                    id="display-participants-names"
+                    v-model="displayParticipantsNames"
+                    type="checkbox"
+                    class="form-check-input"
+                  >
+                  <label
+                    class="form-check-label"
+                    for="display-participants-names"
+                  >{{ $t('Display participants list') }}</label>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                  <VSwatches
+                    v-model="color"
+                    class="c-hand input-no-outline me-2 mt-2"
+                    show-fallback
+                    colors="text-advanced"
+                    popover-to="right"
+                    :data-color="color"
+                  />
+                  <div>{{ $t('Choose main color') }}</div>
+                </div>
+                <div
+                  class=" d-flex justify-content-between align-items-center mt-3 mb-2"
+                >
+                  <h4 class="mb-0">
+                    {{ $t('HTML Code') }}
+                  </h4>
+                  <input
+                    type="button"
+                    :value="$t('Copy')"
+                    class="btn btn-primary"
+                    :aria-label="$t('Copy')"
+                    @click="onCopyCode(newsletterHtml, afterCopy)"
+                  >
+                </div>
+                <textarea
+                  id="newsletter_code_textarea"
+                  v-model="newsletterHtml"
+                  readonly
+                  @click="selectAll"
+                />
+                <label
+                  for="newsletter_code_textarea"
+                  :aria-label="$t('HTML Code')"
+                />
+              </div>
             </div>
-            <div>
-              <input
-                id="display-participants-names"
-                v-model="displayParticipantsNames"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label"
-                for="display-participants-names"
-              >{{ $t('Display participants list') }}</label>
-            </div>
-            <div class="d-flex align-items-center mt-2">
-              <VSwatches
-                v-model="color"
-                class="c-hand input-no-outline me-2 mt-2"
-                show-fallback
-                colors="text-advanced"
-                popover-to="right"
-                :data-color="color"
-              />
-              <div>{{ $t('Choose main color') }}</div>
-            </div>
-            <div
-              class=" d-flex justify-content-between align-items-center mt-3 mb-2"
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary m-1"
+              @click="closePopup"
             >
-              <h4 class="mb-0">
-                {{ $t('HTML Code') }}
-              </h4>
-              <input
-                type="button"
-                :value="$t('Copy')"
-                class="btn btn-primary"
-                :aria-label="$t('Copy')"
-                @click="onCopyCode(newsletterHtml, afterCopy)"
-              >
-            </div>
-            <textarea
-              id="newsletter_code_textarea"
-              v-model="newsletterHtml"
-              readonly
-              @click="selectAll"
-            />
-            <label
-              for="newsletter_code_textarea"
-              :aria-label="$t('HTML Code')"
-            />
+              {{ $t('Close') }}
+            </button>
           </div>
         </div>
-      </template>
-      <template #modal-footer>
-        <button
-          class="btn btn-primary m-1"
-          @click="closePopup"
-        >
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
+      </div>
+    </div>
     <Snackbar
       ref="snackbar"
       position="bottom-left"

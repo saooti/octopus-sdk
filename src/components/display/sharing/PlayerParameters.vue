@@ -37,23 +37,27 @@
               v-if="!podcast || isEmission || isLargeEmission"
               class="d-flex align-items-center w-100 flex-wrap mt-1"
             >
-              <b-form-radio
+              <input
                 v-model="episodeNumbers"
+                class="form-check-input"
+                type="radio"
                 name="episodeNumbers"
                 value="all"
-              />
+              >
               <span class="flex-shrink">{{ $t('Show every episode') }}</span>
             </div>
             <div
               class="d-flex align-items-center flex-wrap"
               :class="!podcast || isEmission || isLargeEmission ? '' : 'mt-3'"
             >
-              <b-form-radio
+              <input
                 v-if="!podcast || isEmission || isLargeEmission"
                 v-model="episodeNumbers"
+                class="form-check-input"
+                type="radio"
                 name="episodeNumbers"
                 value="number"
-              />
+              >
               <span class="flex-shrink">{{ $t('Show') }}</span>
               <input
                 id="number-input"

@@ -1,56 +1,57 @@
 <template>
-  <b-modal
+  <div
     id="message-modal"
-    :title="title"
-    :show="true"
-    @close="closePopup"
-    @hide="closePopup"
-    @cancel="closePopup"
+    class="modal"
   >
-    <template
-      v-if="!closable"
-      #modal-header-close
-    >
-      <span />
-    </template>
-    <template #default>
-      <div
-        class="content"
-        v-html="message"
-      />
-    </template>
-    <template
-      v-if="validatetext"
-      #modal-footer
-    >
-      <button
-        v-if="canceltext"
-        class="btn btn-light m-1"
-        @click="onCancel"
-      >
-        {{ canceltext }}
-      </button>
-      <button
-        v-if="thirdText"
-        class="btn btn-primary m-1"
-        @click="onThirdAction"
-      >
-        {{ thirdText }}
-      </button>
-      <button
-        class="btn btn-primary m-1"
-        @click="onValid"
-      >
-        {{ validatetext }}
-      </button>
-    </template>
-    <template
-      v-else
-      #modal-footer
-    >
-      <span />
-    </template>
-  </b-modal>
+    <div class="modal-backdrop" />
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ title }}
+          </h5>
+          <button
+            v-if="closable"
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            @click="closePopup"
+          />
+        </div>
+        <div class="modal-body">
+          <div
+            class="content"
+            v-html="message"
+          />
+        </div>
+        <div
+          v-if="validatetext"
+          class="modal-footer"
+        >
+          <button
+            v-if="canceltext"
+            class="btn btn-light m-1"
+            @click="onCancel"
+          >
+            {{ canceltext }}
+          </button>
+          <button
+            v-if="thirdText"
+            class="btn btn-primary m-1"
+            @click="onThirdAction"
+          >
+            {{ thirdText }}
+          </button>
+          <button
+            class="btn btn-primary m-1"
+            @click="onValid"
+          >
+            {{ validatetext }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

@@ -149,38 +149,51 @@
         <div class="primary-color mb-2 padding-left-custom-radio">
           {{ $t('Sort') }}
         </div>
-        <b-form-radio-group
-          v-model="sort"
-          class="d-flex flex-column"
+        <div
+          v-if="isSearchBar"
+          class="form-check"
         >
-          <b-form-radio
-            v-if="isSearchBar"
+          <input
+            id="radio_score"
+            v-model="sort"
+            class="form-check-input"
+            type="radio"
+            name="sortRadio"
             value="SCORE"
           >
-            {{
-              $t('Sort score')
-            }}
-          </b-form-radio>
-          <b-form-radio
-            v-if="isEmission"
-            value="LAST_PODCAST_DESC"
+          <label
+            class="form-check-label"
+            for="radio_score"
+          >{{ $t('Sort score') }}</label>
+        </div>
+        <div class="form-check">
+          <input
+            id="radio_podcast"
+            v-model="sort"
+            class="form-check-input"
+            type="radio"
+            name="sortRadio"
+            :value="isEmission?'LAST_PODCAST_DESC':'DATE'"
           >
-            {{
-              $t('Sort last')
-            }}
-          </b-form-radio>
-          <b-form-radio
-            v-else
-            value="DATE"
+          <label
+            class="form-check-label"
+            for="radio_podcast"
+          >{{ $t('Sort last') }}</label>
+        </div>
+        <div class="form-check">
+          <input
+            id="radio_name"
+            v-model="sort"
+            class="form-check-input"
+            type="radio"
+            name="sortRadio"
+            value="NAME"
           >
-            {{
-              $t('Sort last')
-            }}
-          </b-form-radio>
-          <b-form-radio value="NAME">
-            {{ $t('Sort name') }}
-          </b-form-radio>
-        </b-form-radio-group>
+          <label
+            class="form-check-label"
+            for="radio_name"
+          >{{ $t('Sort name') }}</label>
+        </div>
       </div>
     </div>
   </div>

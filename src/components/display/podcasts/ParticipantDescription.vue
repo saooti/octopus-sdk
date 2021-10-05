@@ -6,14 +6,16 @@
     {{ title }}
     <span
       :id="idPopover"
-      class="saooti-help m-0"
+      class="saooti-help m-0 c-hand"
+      data-bs-toggle="popover"
+      data-bs-trigger="hover focus"
       :aria-label="$t('Help')"
+      data-bs-custom-class="participant-help"
     />
     <span class="mx-1">:</span>
-    <b-popover
-      :target="idPopover"
-      triggers="hover"
-      custom-class="participant-help"
+    <div
+      :id="idPopover+'content'"
+      class="d-none"
     >
       <div class="text-center fw-bold">
         {{ title }}
@@ -32,7 +34,7 @@
         />
         <div class="horizontal-separator my-1" />
       </div>
-    </b-popover>
+    </div>
     <router-link
       v-for="participant in participants"
       :key="participant.participantId"
@@ -52,6 +54,7 @@
 </template>
 
 <script lang="ts">
+const bootstrap = require('bootstrap/dist/js/bootstrap.esm.min.js');
 import { Participant } from '@/store/class/participant';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -79,6 +82,17 @@ export default defineComponent({
       }
       return this.$t('Animated by').toString();
     }
+  },
+  mounted(){
+    const contentPopover = document.querySelector('#'+this.idPopover+'content');
+    if(contentPopover){
+      new bootstrap.Popover(document.querySelector('#'+this.idPopover),{
+        trigger: 'hover focus',
+        html: true,
+        content: (contentPopover as HTMLElement).innerHTML
+      });
+    }
+    
   },
 
   methods: {

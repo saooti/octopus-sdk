@@ -158,8 +158,9 @@ export default defineComponent({
       ).trim();
     },
     editRight(): boolean {
+      if(!this.participant || !this.participant.orga ){return false;}
       if (
-        (this.authenticated && this.participant && 
+        (this.authenticated &&
           this.organisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
       )

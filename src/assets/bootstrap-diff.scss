@@ -8,6 +8,7 @@
         }
     }
     .btn{
+        font-size:.7rem;
         border-radius: 50px;
         background: $octopus-light-secondary-color; 
         transition: background .2s, border .2s, box-shadow .2s, color .2s;
@@ -230,6 +231,9 @@
         //border: 1px solid #ddd;
         border-radius: 5px;
     }
+    .dropdown-toggle-no-caret::after{
+        display: none;
+      }    
     .dropdown-menu {
         padding: $dropdown-padding-y 0.5rem;
         @media (max-width: 450px) {

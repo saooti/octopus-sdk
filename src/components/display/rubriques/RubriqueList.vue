@@ -27,28 +27,29 @@
         {{ rubrique.name }}
       </button>
     </div>
-    <b-dropdown
+    <div
       v-show="hidenRubriques.length"
-      right
-      toggle-class="text-decoration-none text-dark rubrique-item rubrique-item-plus"
-      no-caret
-      :aria-label="$t('See more')"
+      class="dropdown btn-group"
     >
-      <template #button-content>
-        <i
-          :aria-label="$t('See more')"
-          class="saooti-plus"
-        />
-      </template>
-      <b-dropdown-item
-        v-for="rubrique in hidenRubriques"
-        :key="rubrique.rubriqueId"
-        class="me-3"
-        @click="addFilter(rubrique)"
+      <button
+        class="btn dropdown-toggle btn-secondary text-decoration-none text-dark category-item category-item-plus dropdown-toggle-no-caret"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        :aria-label="$t('See more')"
       >
-        {{ rubrique.name }}
-      </b-dropdown-item>
-    </b-dropdown>
+        <i class="saooti-plus" />
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right px-4">
+        <div
+          v-for="rubrique in hidenRubriques"
+          :key="rubrique.rubriqueId"
+          class="me-3 dropdown-item"
+          @click="addFilter(rubrique)"
+        >
+          {{ rubrique.name }}
+        </div>
+      </ul>
+    </div>
   </div>
 </template>
 

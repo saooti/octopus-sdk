@@ -2,93 +2,126 @@
   <div
     class="d-flex align-items-center justify-content-end flex-no-wrap top-bar-dropdown"
   >
-    <b-dropdown
+    <div
       v-if="authenticated"
-      class="split-dropdown"
-      split
-      right
-      split-variant="primary main-button-dropdown"
-      variant="primary data-selenium-dropdown-topbar"
-      :text="$t('My space')"
-      @click="goToUrl('/main/priv/backoffice')"
+      class="dropdown split-dropdown btn-group"
     >
-      <b-dropdown-text>
-        <router-link
-          v-if="isContribution && !isPodcastmaker"
-          to="/main/priv/upload"
-          class="align-self-center w-100 mb-2"
-        >
-          <button class="btn btn-primary w-100">
-            {{ $t('Upload') }}
-          </button>
-        </router-link>
-        <div @click="displayMenuPhone(true)">
-          <b-dropdown-item
-            v-if="!isPodcastmaker"
-            to="/main/priv/backoffice"
-            class="linkSpace"
-          >
-            {{ $t('My space') }}
-          </b-dropdown-item>
-          <b-dropdown-item
-            v-if="!isPodcastmaker"
-            to="/main/priv/edit/profile"
-          >
-            {{ $t('Edit my profile') }}
-          </b-dropdown-item>
-          <b-dropdown-item
-            v-if="!isPodcastmaker && isOrganisation"
-            to="/main/priv/edit/organisation"
-          >
-            {{ $t('Edit my organisation') }}
-          </b-dropdown-item>
-          <b-dropdown-divider v-if="!isEducation" />
-          <b-dropdown-item
-            v-if="!isEducation"
-            href="https://help.octopus.saooti.com/Aide/"
-            rel="noopener"
-            target="_blank"
-          >
-            {{ $t('Help') }}
-          </b-dropdown-item>
-          <b-dropdown-item
-            v-if="!isEducation"
-            href="https://help.octopus.saooti.com/"
-            rel="noopener"
-            target="_blank"
-          >
-            {{ $t('TutoMag') }}
-          </b-dropdown-item>
-          <b-dropdown-divider />
-          <b-dropdown-item href="/sso/logout">
-            {{
-              $t('Logout')
-            }}
-          </b-dropdown-item>
-        </div>
-      </b-dropdown-text>
-    </b-dropdown>
-    <b-dropdown
-      v-else
-      right
-      toggle-class="text-decoration-none m-1 admin-button btn-rounded-icon"
-      no-caret
-    >
-      <template #button-content>
-        <i class="saooti-user-octopus text-dark" /><span class="visually-hidden">Profile</span>
-      </template>
-      <b-dropdown-item href="/sso/login">
-        {{ $t('Login') }}
-      </b-dropdown-item>
-      <b-dropdown-item
-        v-if="!isPodcastmaker"
-        to="/main/pub/create"
+      <button
+        class="btn btn-primary main-button-dropdown"
+        @click="goToUrl('/main/priv/backoffice')"
       >
-        {{
-          $t('Create an account')
-        }}
-      </b-dropdown-item>
-    </b-dropdown>
+        {{ $t('My space') }}
+      </button>
+      <button
+        class="btn dropdown-toggle btn-primary data-selenium-dropdown-topbar dropdown-toggle-split"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      />
+      <ul class="dropdown-menu dropdown-menu-right px-4">
+        <li>
+          <router-link
+            v-if="isContribution && !isPodcastmaker"
+            to="/main/priv/upload"
+            class="align-self-center w-100"
+          >
+            <button class="btn btn-primary w-100 mb-2">
+              {{ $t('Upload') }}
+            </button>
+          </router-link>
+        </li>
+        <div @click="displayMenuPhone(true)">
+          <li v-if="!isPodcastmaker">
+            <router-link
+              to="/main/priv/backoffice"
+              class="linkSpace dropdown-item"
+            >
+              {{ $t('My space') }}
+            </router-link>
+          </li>
+          <li v-if="!isPodcastmaker">
+            <router-link
+              class="dropdown-item"
+              to="/main/priv/edit/profile"
+            >
+              {{ $t('Edit my profile') }}
+            </router-link>
+          </li>
+          <li v-if="!isPodcastmaker && isOrganisation">
+            <router-link
+              class="dropdown-item"
+              to="/main/priv/edit/organisation"
+            >
+              {{ $t('Edit my organisation') }}
+            </router-link>
+          </li>
+          <li v-if="!isEducation">
+            <hr class="dropdown-divider">
+          </li>
+          <li v-if="!isEducation">
+            <a
+              href="https://help.octopus.saooti.com/Aide/"
+              class="dropdown-item"
+              rel="noopener"
+              target="_blank"
+            >
+              {{ $t('Help') }}
+            </a>
+          </li>
+          <li v-if="!isEducation">
+            <a
+              href="https://help.octopus.saooti.com/"
+              class="dropdown-item"
+              rel="noopener"
+              target="_blank"
+            >
+              {{ $t('TutoMag') }}
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li v-if="!isEducation">
+            <a
+              class="dropdown-item"
+              href="/sso/logout"
+            >
+              {{ $t('Logout') }}
+            </a>
+          </li>
+        </div>
+      </ul>
+    </div>
+    <div
+      v-else
+      class="dropdown btn-group"
+    >
+      <button
+        class="btn dropdown-toggle btn-secondary text-decoration-none m-1 admin-button btn-rounded-icon dropdown-toggle-no-caret"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="saooti-user-octopus text-dark" />
+        <span class="visually-hidden">Profile</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right px-4">
+        <li>
+          <a
+            class="dropdown-item"
+            href="/sso/login"
+          >
+            {{ $t('Login') }}
+          </a>
+        </li>
+        <li v-if="!isPodcastmaker">
+          <router-link
+            class="dropdown-item"
+            to="/main/pub/create"
+          >
+            {{
+              $t('Create an account')
+            }}
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -103,7 +136,9 @@ export default defineComponent({
   },
 
   data() {
-    return {};
+    return {
+      showMenu: false as boolean
+    };
   },
 
   computed: {
@@ -148,7 +183,6 @@ export default defineComponent({
     padding-left: 15px;
     margin-right: 30px;
   }
-
   .btn-group .dropdown-toggle-split {
     align-items: center;
     border-radius: 50% !important;
@@ -164,11 +198,6 @@ export default defineComponent({
       position: relative;
       right: auto;
     }
-  }
-  .b-dropdown-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
   .dropdown-header {
     display: flex;

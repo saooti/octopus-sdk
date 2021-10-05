@@ -1,63 +1,89 @@
 <template>
   <div>
-    <b-modal
+    <div
       id="share-modal"
-      :show="true"
-      :title="$t('Share the player')"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
+      class="modal"
     >
-      <template #default>
-        <b-tabs content-class="p-2 share-modal-border">
-          <b-tab
-            :title="$t('Embed link')"
-            class="tab-pane"
-            active
-          >
-            <p>{{ embedLink }}</p>
-            <div
-              class="saooti-copy"
-              @click="onCopyCode(embedLink, afterCopy)"
+      <div class="modal-backdrop" />
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              {{ $t('Share the player') }}
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              @click="closePopup"
             />
-          </b-tab>
-          <b-tab
-            :title="$t('Embedly link')"
-            class="tab-pane"
-          >
-            <div class="d-flex flex-column">
-              <div class="d-flex">
-                <p>{{ embedlyLink }}</p>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs">
+              <li
+                v-for="(tab, index) in tabs"
+                :key="tab"
+                class="nav-item"
+              >
+                <div
+                  class="nav-link"
+                  :class="activeTab === index? 'active':''"
+                  @click="activeTab = index"
+                >
+                  {{ tab }}
+                </div>
+              </li>
+            </ul>
+            <div class="tab-content p-2 share-modal-border">
+              <div
+                class="tab-pane tab-pane"
+                :class="activeTab === 0? 'active':''"
+              >
+                <p>{{ embedLink }}</p>
                 <div
                   class="saooti-copy"
-                  @click="onCopyCode(embedlyLink, afterCopy)"
+                  @click="onCopyCode(embedLink, afterCopy)"
                 />
               </div>
-              <QrCode :url="embedlyLink" />
+              <div
+                class="tab-pane tab-pane"
+                :class="activeTab === 1? 'active':''"
+              >
+                <div class="d-flex flex-column">
+                  <div class="d-flex">
+                    <p>{{ embedlyLink }}</p>
+                    <div
+                      class="saooti-copy"
+                      @click="onCopyCode(embedlyLink, afterCopy)"
+                    />
+                  </div>
+                  <QrCode :url="embedlyLink" />
+                </div>
+              </div>
+              <div
+                v-if="directLink"
+                class="tab-pane tab-pane active"
+                :class="activeTab === 2? 'active':''"
+              >
+                <p>{{ directLink.audioUrl }}</p>
+                <div
+                  class="saooti-copy"
+                  @click="onCopyCode(directLink.audioUrl, snackbarRef)"
+                />
+              </div>
             </div>
-          </b-tab>
-          <b-tab
-            v-if="directLink"
-            :title="$t('Direct link')"
-            class="tab-pane"
-          >
-            <p>{{ directLink.audioUrl }}</p>
-            <div
-              class="saooti-copy"
-              @click="onCopyCode(directLink.audioUrl, snackbarRef)"
-            />
-          </b-tab>
-        </b-tabs>
-      </template>
-      <template #modal-footer>
-        <button
-          class="btn btn-primary m-1"
-          @click="closePopup"
-        >
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary m-1"
+              @click="closePopup"
+            >
+              {{ $t('Close') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <Snackbar
       ref="snackbar"
       position="bottom-left"
@@ -71,6 +97,7 @@ import { displayMethods } from '../../mixins/functions';
 
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
+import { Podcast } from '@/store/class/podcast';
 export default defineComponent({
   name: 'ShareModalPlayer',
 
@@ -82,9 +109,22 @@ export default defineComponent({
   props: {
     embedLink: { default: undefined, type: String},
     embedlyLink: { default: undefined, type: String},
-    directLink: { default: undefined, type: String},
+    directLink: { default: undefined, type: Object as ()=>Podcast},
   },
   emits: ['close'],
+  data() {
+    return {
+      activeTab: 0 as number,
+    };
+  },
+  computed:{
+    tabs(): Array<string>{
+      if(this.directLink){
+        return [this.$t('Embed link'),this.$t('Embedly link'),this.$t('Direct link')];
+      }
+      return [this.$t('Embed link'),this.$t('Embedly link')];
+    }
+  },
   methods: {
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();

@@ -25,9 +25,11 @@
     "core-js": "^3.18.1",
     "hls.js": "^1.0.10",
     "humanize-duration": "^3.27.0",
+    "jquery": "^3.6.0",
     "luxon": "^2.0.2",
     "moment": "^2.29.0",
     "moment-locales-webpack-plugin": "^1.2.0",
+    "popper.js": "^1.16.1",
     "portal-vue": "^2.1.7",
     "qrcode.vue": "^3.3.2",
     "sass": "^1.42.1",
@@ -45,7 +47,9 @@
     "webpack": "^5.55.1"
   },
   "devDependencies": {
+    "@types/bootstrap": "^5.1.6",
     "@types/hls.js": "^1.0.0",
+    "@types/jquery": "^3.5.6",
     "@types/vue-datetime": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",

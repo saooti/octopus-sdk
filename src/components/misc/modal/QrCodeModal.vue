@@ -1,25 +1,29 @@
 <template>
-  <div>
-    <b-modal
-      id="qrcode-modal"
-      :show="true"
-      :title="$t('Share QR Code')"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
-    >
-      <template #default>
-        <QrCode :url="urlPage" />
-      </template>
-      <template #modal-footer>
-        <button
-          class="btn btn-primary m-1"
-          @click="closePopup"
-        >
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
+  <div
+    id="qrcode-modal"
+    class="modal"
+  >
+    <div class="modal-backdrop" />
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ $t('Share QR Code') }}
+          </h5>
+        </div>
+        <div class="modal-body">
+          <QrCode :url="urlPage" />
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-primary m-1"
+            @click="closePopup"
+          >
+            {{ $t('Close') }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -19,16 +19,13 @@
           <b
             :id="'popover-comment' + comment.comId"
             class="me-2 text-danger"
+            data-bs-toggle="popover"
+            data-bs-trigger="hover focus"
+            :data-bs-content="$t('Comment waiting')"
+            data-bs-custom-class="wizard-help"
           >{{
             comment.name
           }}</b>
-          <b-popover
-            :target="'popover-comment' + comment.comId"
-            triggers="hover"
-            custom-class="wizard-help"
-          >
-            {{ $t('Comment waiting') }}
-          </b-popover>
         </template>
       </template>
       <template v-else>
@@ -177,6 +174,7 @@ import { CommentPodcast } from '@/store/class/comment';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 const moment = require('moment');
+const bootstrap = require('bootstrap/dist/js/bootstrap.esm.min.js');
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
@@ -261,6 +259,11 @@ export default defineComponent({
         'READY' === this.podcast.processingStatus
       );
     },
+  },
+  mounted(){
+    Array.from(document.querySelectorAll('b[data-bs-toggle="popover"]')).forEach(popoverNode => new bootstrap.Popover(popoverNode,{
+      trigger: 'hover focus'
+    }));
   },
   methods: {
     answerComment(): void {

@@ -14,28 +14,29 @@
         {{ category.name }}
       </button>
     </div>
-    <b-dropdown
+    <div
       v-show="hidenCategories.length"
-      right
-      toggle-class="text-decoration-none text-dark category-item category-item-plus"
-      no-caret
-      :aria-label="$t('See more')"
+      class="dropdown btn-group"
     >
-      <template #button-content>
-        <i
-          :aria-label="$t('See more')"
-          class="saooti-plus"
-        />
-      </template>
-      <b-dropdown-item
-        v-for="category in hidenCategories"
-        :key="category.id"
-        class="me-3"
-        @click="checkIfFilter(category)"
+      <button
+        class="btn dropdown-toggle btn-secondary text-decoration-none text-dark category-item category-item-plus dropdown-toggle-no-caret"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        :aria-label="$t('See more')"
       >
-        {{ category.name }}
-      </b-dropdown-item>
-    </b-dropdown>
+        <i class="saooti-plus" />
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right px-4">
+        <div
+          v-for="category in hidenCategories"
+          :key="category.id"
+          class="me-3 dropdown-item"
+          @click="checkIfFilter(category)"
+        >
+          {{ category.name }}
+        </div>
+      </ul>
+    </div>
   </div>
 </template>
 
