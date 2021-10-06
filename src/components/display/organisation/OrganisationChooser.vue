@@ -147,7 +147,7 @@ export default defineComponent({
     defaultanswer: { default: '', type: String},
     stats: { default: false, type:  Boolean},
     displayArrow: { default: true, type: Boolean},
-    value: { default: undefined, type: Object as ()=>Organisation},
+    value: { default: undefined, type: String},
     light: { default: false, type:  Boolean},
     reset: { default: false, type:  Boolean},
     all: { default: false, type:  Boolean},

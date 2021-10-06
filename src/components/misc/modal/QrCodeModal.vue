@@ -10,6 +10,12 @@
           <h5 class="modal-title">
             {{ $t('Share QR Code') }}
           </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            @click="closePopup"
+          />
         </div>
         <div class="modal-body">
           <QrCode :url="urlPage" />

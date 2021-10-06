@@ -99,6 +99,9 @@ export default defineComponent({
       return state.generalParameters.authenticated;
     },
     editRight(): boolean {
+      if(!this.participant || !this.participant.orga){
+        return false;
+      }
       if (
         (this.authenticated &&
           this.organisationId === this.participant.orga.id) ||
