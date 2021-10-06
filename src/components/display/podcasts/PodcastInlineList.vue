@@ -95,6 +95,7 @@ export default Vue.extend({
     buttonPlus: { default:false as boolean},
     rubriqueId: { default: () => ([]) as Array<number> },
     rubriquageId:{ default: () => ([]) as Array<number> },
+    noRubriquageId: { default: () => ([]) as Array<number> },
   },
 
   components: {
@@ -185,8 +186,9 @@ export default Vue.extend({
         organisationId: this.organisation,
         emissionId: this.emissionId,
         iabId: this.iabId,
-        rubriqueId: this.rubriqueId,
-        rubriquageId: this.rubriquageId,
+        rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
+        rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
+        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
       });
       this.loading = false;
