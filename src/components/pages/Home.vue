@@ -17,6 +17,13 @@
         :title="r.name"
         :button-text="$t('All podcast button', { name: r.name })"
       />
+      <PodcastInlineList
+        v-if="rubriqueDisplay && rubriqueDisplay.length"
+        :noRubriquageId="[rubriqueDisplay[0].rubriquageId]"
+        :rubriqueId="rubriqueId"
+        :title="$t('Without rubric')"
+        :buttonText="$t('All podcast button', { name: $t('Without rubric') })"
+      />
     </template>
   </div>
 </template>
@@ -42,7 +49,7 @@ export default defineComponent({
   },
   computed: {
     rubriqueDisplay(): Array<Rubrique>{
-      return this.$store.state.filter.rubriqueDisplay;
+      return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
     },
     rubriquageFilter(): Array<Rubriquage>{
       if(this.$store.state.filter.organisationId){

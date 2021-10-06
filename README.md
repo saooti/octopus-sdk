@@ -462,6 +462,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.9 QrCode
  * 0.28.10 QrCode icone
  * 0.28.11 Podcastmaker modif
+ * 0.28.12 Rubriquage
 
  * 29.0.0 Vue3
  * 29.0.1 Upgrade npm

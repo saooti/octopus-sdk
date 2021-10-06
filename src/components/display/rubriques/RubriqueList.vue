@@ -81,7 +81,7 @@ export default defineComponent({
       return this.$store.state.filter.rubriqueFilter;
     },
     rubriqueDisplay(): Array<Rubrique>{
-      return this.$store.state.filter.rubriqueDisplay;
+      return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
     },
     rubriquageDisplay(): Array<Rubriquage>{
       const elementToNotShow = Array.from(this.rubriqueFilter);
@@ -120,7 +120,7 @@ export default defineComponent({
       const filterToAdd = {
         rubriquageId: this.rubriquage.rubriquageId?this.rubriquage.rubriquageId: 0, 
         rubriqueId: rubrique.rubriqueId? rubrique.rubriqueId:0, 
-        name: this.rubriquage.title +": "+rubrique.name
+        name: this.rubriquage.title +" : "+rubrique.name
       };
       const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
       newFilter.push(filterToAdd);

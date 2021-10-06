@@ -106,6 +106,9 @@ export default defineComponent({
         return;
       }
       this.isInternChanged = true;
+      if(0===this.arrayFilter.length){
+        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
+      }
       if(this.isRubriquage){
         if(this.saveOrganisation !== this.organisation){
           this.fetchTopics(true);

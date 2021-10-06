@@ -110,6 +110,7 @@ export default defineComponent({
     buttonPlus: { default:false, type: Boolean},
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
+    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
   },
   emits: ['update:isArrow'],
 
@@ -224,8 +225,9 @@ export default defineComponent({
         organisationId: this.organisation,
         emissionId: this.emissionId,
         iabId: this.iabId,
-        rubriqueId: this.rubriqueId,
-        rubriquageId: this.rubriquageId,
+        rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
+        rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
+        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
       });
       this.loading = false;
