@@ -12,13 +12,19 @@
       </h3>
       <span
         v-if="authenticated"
-        id="share-button-popover"
-        class="saooti-help ms-2 c-hand"
-        data-bs-toggle="popover"
-        data-bs-trigger="hover focus"
+        id="popover-share-help"
+        class="saooti-help ml-2"
         :aria-label="$t('Help')"
-        :data-bs-content="$t('Share this page without edit and share blocks')"
       />
+      <Popover
+        v-if="authenticated"
+        target="popover-share-help"
+        triggers="hover"
+        placement="right"
+        custom-class="wizard-help"
+      >
+        {{ $t('Share this page without edit and share blocks') }}
+      </Popover>
     </div>
     <div
       class="d-flex"
@@ -247,7 +253,7 @@ import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
-const bootstrap = require('bootstrap/dist/js/bootstrap.esm.min.js');
+import Popover from '../../misc/Popover.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));
 const NewsletterModal = defineAsyncComponent(() => import('../../misc/modal/NewsletterModal.vue'));
@@ -258,6 +264,7 @@ export default defineComponent({
     NewsletterModal,
     QrCodeModal,
     Snackbar,
+    Popover
   },
 
   mixins: [displayMethods],
@@ -325,11 +332,6 @@ export default defineComponent({
 
   created(){
     this.isMobile = this.checkIfDeviceMobile();
-  },
-  mounted(){
-    new bootstrap.Popover(document.querySelector('#share-button-popover'),{
-      trigger: 'hover focus'
-    });
   },
   methods: {
     openPopup(): void {

@@ -6,18 +6,16 @@
     {{ title }}
     <span
       :id="idPopover"
-      class="saooti-help m-0 c-hand"
-      data-bs-toggle="popover"
-      data-bs-trigger="hover focus"
+      class="saooti-help m-0"
       :aria-label="$t('Help')"
-      data-bs-custom-class="participant-help"
     />
     <span class="mx-1">:</span>
-    <div
-      :id="idPopover+'content'"
-      class="d-none"
+    <Popover
+      :target="idPopover"
+      triggers="hover"
+      custom-class="participant-help"
     >
-      <div class="text-center fw-bold">
+      <div class="text-center font-weight-bold">
         {{ title }}
       </div>
       <div class="horizontal-separator my-1" />
@@ -34,7 +32,7 @@
         />
         <div class="horizontal-separator my-1" />
       </div>
-    </div>
+    </Popover>
     <router-link
       v-for="participant in participants"
       :key="participant.participantId"
@@ -54,11 +52,15 @@
 </template>
 
 <script lang="ts">
-const bootstrap = require('bootstrap/dist/js/bootstrap.esm.min.js');
+import Popover from '../../misc/Popover.vue';
 import { Participant } from '@/store/class/participant';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ParticipantDescription',
+
+  components:{
+    Popover
+  },
 
   props: {
     participants: { default: () => [], type: Array as ()=> Array<Participant>},
@@ -83,18 +85,6 @@ export default defineComponent({
       return this.$t('Animated by').toString();
     }
   },
-  mounted(){
-    const contentPopover = document.querySelector('#'+this.idPopover+'content');
-    if(contentPopover){
-      new bootstrap.Popover(document.querySelector('#'+this.idPopover),{
-        trigger: 'hover focus',
-        html: true,
-        content: (contentPopover as HTMLElement).innerHTML
-      });
-    }
-    
-  },
-
   methods: {
     getName(person: any): string {
       const first = person.firstName || '';

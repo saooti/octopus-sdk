@@ -21,6 +21,7 @@ import TopBar from "./src/components/misc/TopBar.vue";
 import HomeDropdown from "./src/components/misc/HomeDropdown.vue";
 import MessageModal from "./src/components/misc/modal/MessageModal.vue";
 import ErrorMessage from "./src/components/misc/ErrorMessage.vue";
+import Popover from "./src/components/misc/Popover.vue";
 //Display
 import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
 import CategoryList from "./src/components/display/categories/CategoryList.vue";
@@ -95,7 +96,8 @@ const components = {
     Rubrique,
     CategoryFilter,
     orgaFilter,
-    initSDK
+    initSDK,
+    Popover
 }
 
 export default components;
@@ -140,5 +142,6 @@ export {
     Rubrique,
     CategoryFilter,
     orgaFilter,
-    initSDK
+    initSDK,
+    Popover
 };
