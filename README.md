@@ -464,6 +464,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.11 Podcastmaker modif
  * 0.28.12 Rubriquage
  * 0.28.13 Enlever les mises à jour
+ * 0.28.14 QrCode
 
 
 
