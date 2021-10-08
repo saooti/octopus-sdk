@@ -4,8 +4,9 @@
       :value="url"
       :size="size"
       level="H"
-      foreground="#40a372"
+      :foreground="color"
       class="myQrCode"
+      :margin="2" 
     />
     <button
       class="btn m-3"
@@ -21,6 +22,8 @@
 </template>
 
 <script lang="ts">
+import { state } from '../../../store/paramStore';
+import profileApi from '@/api/profile';
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
 import { defineComponent } from 'vue'
@@ -38,7 +41,13 @@ export default defineComponent({
   data() {
     return {
       size: 200 as number,
+      color: "#40a372" as string
     };
+  },
+  computed:{
+    authenticated(): boolean {
+      return state.generalParameters.authenticated;
+    },
   },
   methods:{
     download(): void{
@@ -50,7 +59,22 @@ export default defineComponent({
         link.click();
         (this.$refs.snackbar as any).open(this.$t('Download started'));
       }
-    }
+    },
+    async initColor(): Promise<void> {
+      if (!this.authenticated) return;
+      let data;
+      if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
+        data = this.$store.state.organisation.attributes;
+      }else{
+        data= await profileApi.fetchOrganisationAttibutes(
+          this.$store.state,
+          state.generalParameters.organisationId
+        );
+      }
+      if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {
+        this.color = data.COLOR;
+      }
+    },
   }
 })
 </script>
