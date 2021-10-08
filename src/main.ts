@@ -1,18 +1,5 @@
 import { createApp } from 'vue';
 import { VueReCaptcha } from 'vue-recaptcha-v3';
-/* import { 
-  ModalPlugin, 
-  FormRadioPlugin, 
-  CardPlugin, 
-  ButtonPlugin, 
-  DropdownPlugin, 
-  PopoverPlugin,
-  TabsPlugin,
-  FormGroupPlugin,
-  FormTextareaPlugin,
-  CollapsePlugin } from 'bootstrap-vue-3'; */
-/* import bootstrap from 'bootstrap-vue-3';
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'; */
 import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import I18nResources from './locale/messages';
@@ -67,17 +54,6 @@ paramStore
     .use(i18n)
     .use(store)
     .use(router)
-    /* .use(bootstrap) */
     .use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' })
-    /* .use(ModalPlugin)
-    .use(FormRadioPlugin)
-    .use(CardPlugin)
-    .use(ButtonPlugin)
-    .use(FormTextareaPlugin)
-    .use(DropdownPlugin)
-    .use(PopoverPlugin)
-    .use(TabsPlugin)
-    .use(FormGroupPlugin)
-    .use(CollapsePlugin) */
     .mount('#app');
   });
