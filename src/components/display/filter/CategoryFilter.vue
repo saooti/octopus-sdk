@@ -71,7 +71,9 @@ export default defineComponent({
         this.isInternChanged = false;
       });
     },
-    categoryFilter(): void{
+    categoryFilter:{
+      deep: true,
+      handler(){
       if(this.isInternChanged){
         return;
       }
@@ -87,6 +89,7 @@ export default defineComponent({
       this.$nextTick(() => {
         this.isInternChanged = false;
       });
+      }
     },
   },
 

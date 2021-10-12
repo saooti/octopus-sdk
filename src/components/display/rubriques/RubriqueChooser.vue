@@ -42,10 +42,10 @@
         </div>
       </template>
       <template
-        v-if="undefined!==option"
         #option="{ option }"
       >
         <div
+         v-if="undefined!==option"
           class="multiselect-octopus-proposition"
           :class="option.rubriqueId <= 0 ? 'primary-dark' : ''"
           :data-selenium="'rubric-chooser-' + seleniumFormat(option.name)"
@@ -95,6 +95,7 @@ export default defineComponent({
     reset: { default: false, type: Boolean },
     withoutRubrique: { default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
+    cannotBeUndefined: {default: false, type: Boolean}
   },
   emits: ['update:rubriqueSelected', 'selected'],
 
@@ -130,22 +131,28 @@ export default defineComponent({
     }
   },
   watch: {
-    model(): void {
-      if(false===this.multiple){
-        return;
-      }
-      const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
-      const idsArray: Array<number> = [];
-      selected.forEach((el: Rubrique) => {
-        if(el.rubriqueId){
-          idsArray.push(el.rubriqueId);
+    model:{
+      deep: true,
+      handler(){
+        if(false===this.multiple){
+          return;
         }
-      });
-      this.$emit('selected', idsArray);
+        const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
+        const idsArray: Array<number> = [];
+        selected.forEach((el: Rubrique) => {
+          if(el.rubriqueId){
+            idsArray.push(el.rubriqueId);
+          }
+        });
+        this.$emit('selected', idsArray);
+      }
     },
-    rubriqueSelected(): void {
-      if (undefined !== this.rubriqueSelected) {
-        this.initRubriqueSelected(this.rubriqueSelected);
+    rubriqueSelected: {
+      deep: true,
+      handler(){
+        if (undefined !== this.rubriqueSelected) {
+          this.initRubriqueSelected(this.rubriqueSelected);
+        }
       }
     },
     reset(): void {
@@ -188,6 +195,10 @@ export default defineComponent({
     },
     onClose(): void {
       if (this.rubrique || undefined !== this.rubriqueArray) return;
+      if(this.cannotBeUndefined && undefined !== this.rubriqueSelected){
+        this.initRubriqueSelected(this.rubriqueSelected);
+        return;
+      }
       if ('' !== this.defaultanswer) {
         this.rubrique = getDefaultRubrique(this.defaultanswer);
       } else {

@@ -19,6 +19,15 @@
             width: 98%;
         }
     }
+    .multiselect-transparent{
+        .multiselect__tags, .multiselect__input, .multiselect__single{
+            background: transparent !important;
+        }
+        .multiselect__tags{
+            border: 0;
+            padding-left: 0;
+        }
+    }
     .multiselect-hide-arrow {
         .multiselect__tags {
             background: none;

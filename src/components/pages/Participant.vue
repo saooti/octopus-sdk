@@ -169,8 +169,11 @@ export default defineComponent({
     },
   },
   watch: {
-    participant(): void {
+    participant: {
+      deep: true,
+      handler(){
       this.reload = !this.reload;
+      }
     },
   },
   mounted() {

@@ -144,15 +144,18 @@ export default defineComponent({
         this.initCategorySelected(this.categorySelected);
       }
     },
-    model(): void {
-      if(undefined===this.categoryArray ||undefined === this.categoryForArray){
-        return;
+    model: {
+      deep: true,
+      handler(){
+        if(undefined===this.categoryArray ||undefined === this.categoryForArray){
+          return;
+        }
+        const idsArray: Array<number> = [];
+        this.categoryForArray.forEach((el: Category) => {
+          idsArray.push(el.id);
+        });
+        this.$emit('selected', idsArray);
       }
-      const idsArray: Array<number> = [];
-      this.categoryForArray.forEach((el: Category) => {
-        idsArray.push(el.id);
-      });
-      this.$emit('selected', idsArray);
     },
   },
  

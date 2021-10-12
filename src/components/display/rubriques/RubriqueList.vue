@@ -6,7 +6,7 @@
     >
       <select
         v-model="rubriquage"
-        class="basic-select border c-hand"
+        class="basic-select border c-hand mb-0"
         @change="onRubriquageSelected"
       >
         <option
@@ -96,8 +96,11 @@ export default defineComponent({
     },
   },
   watch:{
-    rubriqueFilter(): void{
-      this.selectNewRubriquage();
+    rubriqueFilter:{
+      deep: true,
+      handler(){
+        this.selectNewRubriquage();
+      }
     }
   },
 
@@ -120,7 +123,8 @@ export default defineComponent({
       const filterToAdd = {
         rubriquageId: this.rubriquage.rubriquageId?this.rubriquage.rubriquageId: 0, 
         rubriqueId: rubrique.rubriqueId? rubrique.rubriqueId:0, 
-        name: this.rubriquage.title +" : "+rubrique.name
+        nameRubriquage: this.rubriquage.title,
+        nameRubrique: rubrique.name
       };
       const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
       newFilter.push(filterToAdd);

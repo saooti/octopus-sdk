@@ -82,19 +82,25 @@ export default defineComponent({
     },
   },
   watch: {
-    categories(): void {
+    categories: {
+      deep: true,
+      handler(){
       this.$nextTick(() => {
         this.resizeWindow();
       });
+      }
     },
     filterOrga(): void {
       if (this.filterOrga) {
         this.fetchCategories(this.filterOrga);
       }
     },
-    categoriesWatch(): void{
+    categoriesWatch:{
+      deep: true,
+      handler(){
       if (this.filterOrga) {
         this.fetchCategories(this.filterOrga);
+      }
       }
     }
   },

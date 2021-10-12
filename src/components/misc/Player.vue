@@ -325,20 +325,26 @@ export default defineComponent({
   },
 
   watch: {
-    async live(): Promise<void> {
+    live: {
+      deep: true,
+      async handler(){
       this.hlsReady = false;
       this.setDownloadId(null);
       this.listenError = false;
       await this.playLive();
       this.initComments();
+      }
     },
     playerHeight(): void {
       this.$emit('hide', 0 === this.playerHeight ? true : false);
     },
-    podcast(): void {
+    podcast: {
+      deep: true,
+      handler(){
       this.setDownloadId(null);
       this.listenError = false;
       this.initComments();
+      }
     },
     async listenTime(newVal): Promise<void> {
       if (!this.podcast && !this.live) {

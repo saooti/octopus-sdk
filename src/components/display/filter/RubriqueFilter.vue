@@ -17,12 +17,13 @@
     </div>
     <div
       v-if="isRubriquage"
-      class="d-flex flex-column"
+      class="d-flex flex-column mb-2"
     >
       <RubriqueChoice 
         v-for="(filter, index) in arrayFilter"
         :key="index"
         :index="index"
+        class="mb-2"
         :rubriquage-display="getRubriquage(index)"
         :rubrique-id-selected="filter.rubriqueId"
         :rubriquage-id-selected="filter.rubriquageId"
@@ -107,7 +108,7 @@ export default defineComponent({
       }
       this.isInternChanged = true;
       if(0===this.arrayFilter.length && this.availableRubriquage[0].rubriquageId){
-        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0, name:""});
+        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""});
       }
       if(this.isRubriquage){
         if(this.saveOrganisation !== this.organisation){
@@ -122,42 +123,48 @@ export default defineComponent({
         this.isInternChanged = false;
       });
     },
-    arrayFilter(): void{
-      if(this.isInternChanged ||this.isInit){
-        return;
+    arrayFilter:{
+      deep: true,
+      handler(){
+        if(this.isInternChanged ||this.isInit){
+          return;
+        }
+        this.isInternChanged = true;
+        this.resetRubriqueFilter();
+        if(this.isRubriquage){
+          this.$emit('updateRubriquageFilter', this.arrayFilter);
+        }
+        this.$nextTick(() => {
+          this.isInternChanged = false;
+        });
       }
-      this.isInternChanged = true;
-      this.resetRubriqueFilter();
-      if(this.isRubriquage){
-        this.$emit('updateRubriquageFilter', this.arrayFilter);
-      }
-      this.$nextTick(() => {
-        this.isInternChanged = false;
-      });
     },
-    async rubriqueFilter(): Promise<void>{
-      if(this.isInternChanged){
-        return;
+    rubriqueFilter:{
+      deep: true,
+      async handler(){
+        if(this.isInternChanged){
+          return;
+        }
+        this.isInternChanged = true;
+        if(this.saveOrganisation !== this.filterOrga){
+          await this.fetchTopics(false);
+        }
+        if(this.rubriqueFilter.length){
+          this.arrayFilter = Array.from(this.rubriqueFilter);
+          this.isRubriquage = true;
+        }else if(this.rubriquageData[0].rubriquageId){
+          this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""}];
+          this.isRubriquage = false;
+        }
+        if(this.isRubriquage){
+          this.$emit('updateRubriquageFilter', this.arrayFilter);
+        }else{
+          this.$emit('updateRubriquageFilter', []);
+        }
+        this.$nextTick(() => {
+          this.isInternChanged = false;
+        });
       }
-      this.isInternChanged = true;
-      if(this.saveOrganisation !== this.filterOrga){
-        await this.fetchTopics(false);
-      }
-      if(this.rubriqueFilter.length){
-        this.arrayFilter = Array.from(this.rubriqueFilter);
-        this.isRubriquage = true;
-      }else if(this.rubriquageData[0].rubriquageId){
-        this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, name:""}];
-        this.isRubriquage = false;
-      }
-      if(this.isRubriquage){
-        this.$emit('updateRubriquageFilter', this.arrayFilter);
-      }else{
-        this.$emit('updateRubriquageFilter', []);
-      }
-      this.$nextTick(() => {
-        this.isInternChanged = false;
-      });
     },
     resetRubriquage(): void {
       this.isRubriquage = false;
@@ -193,7 +200,7 @@ export default defineComponent({
     },
     addFilter(): void{
       if(this.availableRubriquage[0].rubriquageId){
-        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0, name:""});
+        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0,nameRubriquage:this.rubriquageData[0].title, nameRubrique:""});
       }
     },
     updateRubrique(newValue: {rubriqueId: number; index: number}): void{
@@ -218,7 +225,7 @@ export default defineComponent({
       this.saveOrganisation = this.organisation;
       if (0 === this.rubriquageData.length) return;
       if(initArrayFilter && this.rubriquageData[0].rubriquageId){
-        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, name:""});
+        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""});
       }
     },
     resetRubriqueFilter(): void{

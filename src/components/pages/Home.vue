@@ -74,8 +74,11 @@ export default defineComponent({
     },
   },
   watch:{
-    rubriqueFilter(){
+    rubriqueFilter:{
+      deep: true,
+      handler(){
       this.updateRubriquageFilter();
+      }
     }
   },
   created(){

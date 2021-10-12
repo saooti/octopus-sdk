@@ -207,8 +207,11 @@ export default defineComponent({
     },
   },
   watch: {
-    live(): void {
+    live: {
+      deep: true,
+      handler(){
       this.handleDescription();
+      }
     },
   },
 

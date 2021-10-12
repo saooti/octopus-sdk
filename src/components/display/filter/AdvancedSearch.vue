@@ -63,7 +63,7 @@
               mode="dateTime"
               color="green"
               is24hr
-              @input="updateFromDate()"
+              @update:modelValue="updateFromDate()"
             >
               <template #default="{ inputValue, inputEvents }">
                 <input
@@ -95,7 +95,7 @@
               mode="dateTime"
               color="green"
               is24hr
-              @input="updateToDate()"
+              @update:modelValue="updateToDate()"
             >
               <template #default="{ inputValue, inputEvents }">
                 <input

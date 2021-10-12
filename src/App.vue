@@ -48,10 +48,13 @@ export default defineComponent({
   },
 
   watch: {
-    '$route' () {
+    '$route': {
+      deep: true,
+      handler(){
       if(!this.initQueryRouter){
         this.initQueryRouter = true;
         this.initApp();
+      }
       }
     },
   },
@@ -106,7 +109,7 @@ export default defineComponent({
             const rubrique = rubriquage.rubriques.find((x: Rubrique) => {
               return x.rubriqueId === parseInt(rubriqueFilter[1]);
             });
-            rubriquesFilter.push({rubriquageId: rubriquage.rubriquageId, rubriqueId:rubrique.rubriqueId, name: rubriquage.title +": "+rubrique.name});
+            rubriquesFilter.push({rubriquageId: rubriquage.rubriquageId, rubriqueId:rubrique.rubriqueId, nameRubriquage: rubriquage.title, nameRubrique :rubrique.name});
           }
         }
         if(rubriquesFilter.length){

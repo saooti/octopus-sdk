@@ -120,8 +120,11 @@ export default defineComponent({
     status(): void {
       this.fetchContent(true);
     },
-    comments(): void {
-      this.$emit('fetch', { count: this.totalCount, comments: this.comments });
+    comments: {
+      deep: true,
+      handler(){
+        this.$emit('fetch', { count: this.totalCount, comments: this.comments });
+      }
     },
   },
   created() {

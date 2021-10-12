@@ -136,8 +136,11 @@ export default defineComponent({
     };
   },
   watch: {
-    emissionChosen(): void {
-      this.emission = this.emissionChosen;
+    emissionChosen: {
+      deep: true,
+      handler(){
+        this.emission = this.emissionChosen;
+      }
     },
     reset(): void {
       this.emission = getDefaultEmission(this.defaultanswer);
