@@ -370,6 +370,7 @@ export default defineComponent({
 
   > span {
     width: 0.1rem;
+    margin: 0.05rem;
     background: #fff;
   }
 

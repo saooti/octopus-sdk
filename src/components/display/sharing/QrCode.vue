@@ -54,8 +54,8 @@ export default defineComponent({
       const link = document.createElement('a');
       link.download = 'qrcode.png';
       const canvas = document.getElementsByClassName('myQrCode');
-      if(canvas && canvas.length > 0 && canvas[0] && canvas[0].firstChild){
-        link.href = (canvas[0].firstChild as any).toDataURL();
+      if(canvas && canvas.length > 0 && canvas[0]){
+        link.href = (canvas[0] as any).toDataURL();
         link.click();
         (this.$refs.snackbar as any).open(this.$t('Download started'));
       }

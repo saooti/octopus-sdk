@@ -62,7 +62,7 @@
               </div>
               <div
                 v-if="directLink"
-                class="tab-pane tab-pane active"
+                class="tab-pane tab-pane"
                 :class="activeTab === 2? 'active':''"
               >
                 <p>{{ directLink.audioUrl }}</p>
