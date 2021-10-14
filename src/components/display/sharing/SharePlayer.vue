@@ -27,110 +27,21 @@
             >
               {{ $t('Share the player') }}
             </button>
-            <template v-if="!isLiveReadyToRecord">
-              <label
-                for="iframe-select"
-                class="d-inline"
-                aria-label="select miniplayer"
-              />
-              <select
-                id="iframe-select"
-                v-model="iFrameModel"
-                class="frame-select input-no-outline"
-              >
-                <option value="default">
-                  {{ $t('Default version') }}
-                </option>
-                <option value="large">
-                  {{ $t('Large version') }}
-                </option>
-                <template v-if="isBeta">
-                  <option
-                    v-for="player in customPlayersDisplay"
-                    :key="player.customId"
-                    :value="player.customId"
-                  >
-                    {{ $t('Custom version') + " «" +player.name+"»" }}
-                  </option>
-                </template>
-                <option
-                  v-if="podcast && podcast.podcastId"
-                  value="emission"
-                >
-                  {{
-                    $t('Emission version')
-                  }}
-                </option>
-                <option
-                  v-if="podcast && podcast.podcastId"
-                  value="largeEmission"
-                >
-                  {{ $t('Large emission version') }}
-                </option>
-                <option
-                  v-if="podcast && podcast.podcastId"
-                  value="largeSuggestion"
-                >
-                  {{ $t('Large suggestion version') }}
-                </option>
-              </select>
-            </template>
+            <SharePlayerTypes 
+              v-if="!isLiveReadyToRecord"
+              :podcast="podcast"
+              :emission="emission"
+              :playlist="playlist"
+              :customPlayers="customPlayers"
+              :isBeta="isBeta"
+              v-model:iFrameModel="iFrameModel"
+            />
           </div>
-          <div class="d-flex justify-content-around mt-3 flex-grow w-100">
-            <div class="d-flex flex-column align-items-center flex-shrink me-3">
-              <div class="fw-600">
-                {{ $t('Choose color') }}
-              </div>
-              <VSwatches
-                v-model="color"
-                class="c-hand input-no-outline"
-                show-fallback
-                colors="text-advanced"
-                popover-to="right"
-                :data-color="color"
-              />
-            </div>
-            <div class="d-flex flex-column align-items-center">
-              <div class="fw-600">
-                {{ $t('Choose theme') }}
-              </div>
-              <div
-                v-if="!isBeta"
-                class="d-flex"
-              >
-                <VSwatches
-                  v-for="myColor in colors"
-                  :key="myColor"
-                  v-model="theme"
-                  :data-theme="theme"
-                  class="c-hand input-no-outline me-1"
-                  :swatch-style="{
-                    padding: '0px 0px',
-                    marginRight: '0px',
-                    marginBottom: '0px',
-                    border: '1px gray solid',
-                  }"
-                  :wrapper-style="{
-                    paddingTop: '0px',
-                    paddingLeft: '0px',
-                    paddingRight: '0px',
-                    paddingBottom: '0px',
-                  }"
-                  :swatches="[myColor]"
-                  inline
-                />
-              </div>
-              <VSwatches
-                v-else
-                v-model="theme"
-                class="c-hand input-no-outline"
-                show-fallback
-                colors="text-advanced"
-                popover-to="right"
-                :data-color="theme"
-              />
-            </div>
-          </div>
+          <SharePlayerColors
+            :isBeta="isBeta"
+            v-model:color="color"
+            v-model:theme="theme"
+          />
           <div v-if="displayBetaChoice">
             <input
               id="isBetaCheckbox"
@@ -194,7 +105,6 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-import VSwatches from 'vue3-swatches';
 import profileApi from '@/api/profile';
 const octopusApi = require('@saooti/octopus-api');
 import { Podcast } from '@/store/class/podcast';
@@ -204,11 +114,14 @@ import { CustomPlayer } from '@/store/class/customPlayer';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
 const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
+const SharePlayerTypes = defineAsyncComponent(() => import('./SharePlayerTypes.vue'));
+const SharePlayerColors = defineAsyncComponent(() => import('./SharePlayerColors.vue'));
 export default defineComponent({
   components: {
     ShareModalPlayer,
-    VSwatches,
+    SharePlayerColors,
     PlayerParameters,
+    SharePlayerTypes
   },
 
   props: {
@@ -241,12 +154,6 @@ export default defineComponent({
   },
   
   computed: {
-    customPlayersDisplay(): Array<CustomPlayer>{
-      return this.customPlayers.filter((player: CustomPlayer)=>{
-        return (('EPISODE' === player.typePlayer ||'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
-                          ('EMISSION' === player.typePlayer && this.emission  && !this.podcast)|| ('PLAYLIST' === player.typePlayer && this.playlist );
-      });
-    },
     miniplayerBaseUrl(): string{
       if(this.isBeta){
         return state.podcastPage.MiniplayerBetaUri;  
@@ -457,7 +364,7 @@ export default defineComponent({
       if (Object.prototype.hasOwnProperty.call(data,'THEME')) {
         this.theme = data.THEME;
       } else {
-        this.theme = '#ffffff';
+        this.theme = '#000000';
       }
       if (Object.prototype.hasOwnProperty.call(data,'playerBeta')) {
         this.displayBetaChoice = data.playerBeta;

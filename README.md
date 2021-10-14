@@ -473,6 +473,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.6 vue3
  * 29.0.7 Nouvelle version api
  * 29.0.8 Nouvelle version api
+ * 29.0.9 vue3
 
 
 

@@ -48,151 +48,53 @@
           @durationChange="onTimeUpdate"
           @error="onError"
         />
-        <router-link
-          v-if="isImage && podcastImage"
-          :to="podcastShareUrl"
-        >
-          <img
-            :src="podcastImage"
-            :alt="$t('Podcast image')"
-            class="player-image c-hand"
-          >
-        </router-link>
-
-        <div
-          v-if="!playerError"
-          class="play-button-box"
-          :class="{
-            'primary-bg': !isLoading,
-            'text-light': !isLoading,
-          }"
-          @click="switchPausePlay"
-        >
-          <div
-            class="text-light"
-            :aria-label="$t('Play')"
-            :class="{
-              saooti: isPlaying || isPaused,
-              'saooti-play2-bounty': isPaused,
-              'saooti-pause-bounty': isPlaying,
-              loading: isLoading,
-            }"
-          />
-        </div>
-        <div
-          v-if="(isPlaying || isPaused) && (media || isStop)"
-          class="play-button-box primary-bg text-light"
-          @click="stopPlayer"
-        >
-          <div
-            class="text-light saooti-stop-bounty"
-            :aria-label="$t('Stop')"
-          />
-        </div>
-        <div class="text-light player-grow-content">
-          <div class="d-flex">
-            <div
-              v-if="playerError"
-              class="text-warning player-title ms-2 me-2"
-            >
-              {{ $t('Podcast play error') + ' - ' }}
-            </div>
-            <div class="flex-grow player-title">
-              {{ podcastTitle }}
-            </div>
-            <div
-              v-if="!playerError"
-              v-show="!isBarTop"
-              class="hide-phone"
-            >
-              {{ playedTime }} / {{ totalTime }}
-            </div>
-          </div>
-          <div
-            v-if="!playerError"
-            v-show="!isBarTop"
-            class="progress c-hand custom-bg-darkgrey"
-            style="height: 3px;"
-            @mouseup="seekTo"
-          >
-            <div
-              class="progress-bar custom-bg-grey"
-              role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              :style="'width: ' + percentLiveProgress + '%'"
-            />
-            <div
-              class="progress-bar primary-bg"
-              role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              :style="'width: ' + percentProgress + '%'"
-            />
-            <div
-              v-if="displayAlertBar"
-              class="progress-bar progress-bar-duration bg-danger"
-              :style="'left: ' + durationLivePosition + '%'"
-            />
-          </div>
-          <CommentPlayer
-            v-if="showTimeline"
-            :total-time="totalSecondes"
-            :comments="comments"
-          />
-        </div>
-        <div
-          v-if="0 !== comments.length && !isPodcastmaker"
-          class="timeline-button"
-          @click="showTimeline = !showTimeline"
-        >
-          <div
-            class="saooti-arrow_down saooti-arrow_down-margin"
-            :class="showTimeline ? '' : 'arrow-transform'"
-          />
-          <div>Timeline</div>
-        </div>
-        <div
-          v-if="isClock"
-          class="d-flex text-light align-items-center hide-phone"
-        >
-          <div class="saooti-clock-stud m-2" />
-          <div>{{ actualTime }}</div>
-        </div>
+        <PlayerButtons
+        :playerError="playerError"
+        />
+        <PlayerProgressBar
+          :hlsReady="hlsReady"
+          :showTimeline="showTimeline"
+          :comments="comments"
+          :displayAlertBar="displayAlertBar"
+          :percentLiveProgress="percentLiveProgress"
+          :durationLivePosition="durationLivePosition"
+          :playerError="playerError"
+          :listenTime="listenTime"
+          v-model:notListenTime="notListenTime"
+        />
+        <PlayerClockAndTimeline
+          v-model:showTimeline="showTimeline"
+          :comments="comments"
+        />
       </div>
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import { mapState } from 'vuex';
 import { state } from '../../store/paramStore';
-import DurationHelper from '../../helper/duration';
 const octopusApi = require('@saooti/octopus-api');
 let Hls: any= null;
-
-const moment = require('moment');
-//const axios = require("axios");
 import { CommentPodcast } from '@/store/class/comment';
 import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
-import { defineComponent, defineAsyncComponent } from 'vue';
-const CommentPlayer = defineAsyncComponent(() => import('../display/comments/CommentPlayer.vue'));
+import PlayerProgressBar from './PlayerProgressBar.vue';
+import PlayerButtons from './PlayerButtons.vue';
+import PlayerClockAndTimeline from './PlayerClockAndTimeline.vue';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'Player',
 
   components: {
-    CommentPlayer,
+    PlayerProgressBar,
+    PlayerButtons,
+    PlayerClockAndTimeline
   },
   mixins:[cookies],
   emits: ['hide'],
-
   data() {
     return {
       forceHide: false as boolean,
-      actualTime: '' as string,
       listenTime: 0 as number,
       notListenTime: 0 as number,
       lastSend: 0 as number,
@@ -207,29 +109,7 @@ export default defineComponent({
       showTimeline: false as boolean,
     };
   },
-
   computed: {
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
-    },
-    isPlaying(): boolean {
-      return 'PLAYING' === this.status;
-    },
-    isPaused(): boolean {
-      return 'PAUSED' === this.status;
-    },
-    isLoading(): boolean {
-      return 'LOADING' === this.status;
-    },
-    isImage(): string {
-      return state.player.image;
-    },
-    isEmissionName(): string {
-      return state.player.emissionName;
-    },
-    isClock(): boolean {
-      return state.player.clock;
-    },
     isBarTop(): boolean {
       return state.player.barTop;
     },
@@ -241,35 +121,15 @@ export default defineComponent({
         if (window.innerWidth > 450 && this.showTimeline) return '6rem';
         return '3.5rem';
       },
-      status: (state: StoreState) => state.player.status,
       podcast: (state: StoreState) => state.player.podcast,
       media: (state: StoreState) => state.player.media,
       live: (state: StoreState) => state.player.live,
       volume: (state: StoreState) => state.player.volume,
-      isStop: (state: StoreState) => state.player.stop,
       commentsLoaded: (state: StoreState) => state.comments.loadedComments,
-      podcastImage: (state: StoreState) => {
-        if (state.player.podcast) return state.player.podcast.imageUrl;
-        return '';
-      },
-      playedTime: (state: StoreState) => {
-        if (state.player.elapsed && state.player.elapsed > 0 && state.player.total && state.player.total > 0) {
-          return DurationHelper.formatDuration(
-            Math.round(state.player.elapsed * state.player.total)
-          );
-        }
-        return '--:--';
-      },
       percentProgress: (state: StoreState) => {
         if(!state.player.elapsed){return 0;}
         return state.player.elapsed * 100;
       },
-      totalTime: (state: StoreState) => {
-        if (state.player.elapsed && state.player.elapsed > 0 && state.player.total && state.player.total > 0)
-          return DurationHelper.formatDuration(Math.round(state.player.total));
-        return '--:--';
-      },
-      totalSecondes: (state: StoreState) => state.player.total,
     }),
     audioUrl(): string {
       if (this.media) return this.media.audioUrl;
@@ -290,34 +150,6 @@ export default defineComponent({
         );
       }
       return this.podcast.audioUrl + '?' + parameters.join('&');
-    },
-    podcastShareUrl(): any {
-      if (this.podcast) {
-        return {
-          name: 'podcast',
-          params: { podcastId: this.podcast.podcastId },
-          query: { productor: this.$store.state.filter.organisationId },
-        };
-      }
-      return '';
-    },
-    podcastTitle(): string {
-      if (this.podcast) {
-        if (this.isEmissionName)
-          return this.emissionName + ' - ' + this.podcast.title;
-        return this.podcast.title;
-      }
-      if (this.media) return this.media.title;
-      if (this.live) {
-        if (!this.hlsReady)
-          return this.live.title + ' (' + this.$t('Start in a while') + ')';
-        return this.live.title;
-      }
-      return '';
-    },
-    emissionName(): string {
-      if (this.podcast) return this.podcast.emission.name;
-      return '';
     },
     organisationId(): string {
       return state.generalParameters.organisationId;
@@ -347,16 +179,7 @@ export default defineComponent({
       }
     },
     async listenTime(newVal): Promise<void> {
-      if (!this.podcast && !this.live) {
-        //Nothing can be done there is no listen time
-        return;
-      }
-      if (!this.getDownloadId()) {
-        //nothing can be done there is no downloadId
-        return;
-      }
-      if (newVal - this.lastSend < 10) {
-        //Last send is too recent, do nothing
+      if ((!this.podcast && !this.live)||(!this.getDownloadId())||(newVal - this.lastSend < 10)) {
         return;
       }
       this.lastSend = newVal;
@@ -371,12 +194,6 @@ export default defineComponent({
   },
 
   mounted() {
-    moment.locale('fr');
-    if (this.isClock) {
-      setInterval(() => {
-        this.actualTime = moment(new Date()).format('HH:mm:ss');
-      }, 1000);
-    }
     window.addEventListener('beforeunload', this.endListeningProgress);
     this.watchPlayerStatus();
   },
@@ -428,30 +245,6 @@ export default defineComponent({
         this.playerError = true;
       }
     },
-    switchPausePlay(): void {
-      const audioPlayer: any = document.querySelector('#audio-player');
-      if (audioPlayer.paused) {
-        this.onPlay();
-      } else {
-        this.onPause();
-      }
-    },
-    stopPlayer(): void {
-      this.$store.commit('playerPlayPodcast');
-    },
-    seekTo(event: { currentTarget: { getBoundingClientRect: () => any; clientWidth: any }; clientX: number }): void {
-      const audioPlayer: any = document.querySelector('#audio-player');
-      const rect = event.currentTarget.getBoundingClientRect();
-      const barWidth = event.currentTarget.clientWidth;
-      const x = event.clientX - rect.left; //x position within the element.
-      const percentPosition = x / barWidth;
-      if (percentPosition * 100 >= this.percentLiveProgress) return;
-      const seekTime = this.$store.state.player.total * percentPosition;
-      if (this.podcast || this.live) {
-        this.notListenTime = seekTime - this.listenTime;
-      }
-      audioPlayer.currentTime = seekTime;
-    },
     onTimeUpdate(event: { currentTarget: { currentTime: number; duration: any } }): void {
       if (this.podcast || this.live) {
         if (!this.getDownloadId()) {
@@ -499,9 +292,6 @@ export default defineComponent({
     },
     onPlay(): void {
       this.$store.commit('playerPause', false);
-    },
-    onPause(): void {
-      this.$store.commit('playerPause', true);
     },
     onFinished(): void {
       this.setDownloadId(null);
@@ -673,21 +463,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../sass/_variables.scss';
-
-.play-button-box {
-  height: 2.5rem;
-  width: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 0.5rem;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
 .player-container {
   position: fixed;
   overflow: hidden;
@@ -701,101 +476,18 @@ export default defineComponent({
   max-width: 100%;
   font-size: 1rem;
 
-  .player-image {
-    border-radius: 0.2rem;
-    height: 2.4rem;
-    width: 2.4rem;
-  }
   .player-progress-border {
     height: 10px;
     width: 3px;
     background: black;
   }
-  .progress {
-    align-items: flex-end;
-    height: 10px;
-    position: relative;
-  }
-  .progress-bar-duration {
-    width: 10px;
-  }
-  .progress-bar {
-    height: 4px;
-    position: absolute;
-  }
-
-  .progress.custom-bg-darkgrey {
-    background: #555;
-  }
-
-  .progress-bar.custom-bg-grey {
-    background: #e9ecef;
-  }
-
-  .player-title,
-  .hide-phone {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-  .player-grow-content {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    flex-shrink: 1;
-    flex-basis: 20px;
-    overflow: hidden;
-  }
-  .player-title {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-
-  .hide-phone {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-  .timeline-button {
-    background: black;
-    padding: 0.1rem;
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    color: $octopus-primary-color;
-    margin-left: 0.5rem;
-    @media (max-width: 960px) {
-      display: none;
-    }
-  }
 }
-/** PHONES*/
-@media (max-width: 450px) {
-  .player-container {
-    .player-image {
-      height: 2rem;
-      width: 2rem;
-    }
-  }
-}
-
 @media (max-width: 960px) {
   .player-container {
     .d-flex {
       @media (max-width: 960px) {
         flex-wrap: nowrap !important;
       }
-    }
-    .player-title {
-      font-size: 12px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
   }
 }

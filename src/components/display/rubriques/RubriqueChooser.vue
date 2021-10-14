@@ -45,7 +45,7 @@
         #option="{ option }"
       >
         <div
-         v-if="undefined!==option"
+          v-if="undefined!==option"
           class="multiselect-octopus-proposition"
           :class="option.rubriqueId <= 0 ? 'primary-dark' : ''"
           :data-selenium="'rubric-chooser-' + seleniumFormat(option.name)"

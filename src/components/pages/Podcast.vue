@@ -33,155 +33,11 @@
             :is-ready="isReady"
             @validatePodcast="updatePodcast"
           />
-          <div class="module-box">
-            <h2
-              v-if="!isOuestFrance"
-              class="text-uppercase fw-bold title-page-podcast"
-            >
-              {{ podcast.title }}
-            </h2>
-            <router-link
-              v-else
-              :to="{
-                name: 'emission',
-                params: { emissionId: podcast.emission.emissionId },
-                query: { productor: $store.state.filter.organisationId },
-              }"
-            >
-              <h1>{{ podcast.emission.name }}</h1>
-            </router-link>
-            <div class="mb-5 mt-3 d-flex">
-              <div class="w-100">
-                <PodcastImage
-                  :class="[
-                    !isOuestFrance && !isLiveReadyToRecord
-                      ? 'shadow-element'
-                      : '',
-                    isLiveReadyToRecord &&
-                      fetchConference &&
-                      'null' !== fetchConference &&
-                      fetchConference.status
-                      ? fetchConference.status.toLowerCase() + '-shadow'
-                      : '',
-                  ]"
-                  class="me-3"
-                  :podcast="podcast"
-                  :hide-play="!isLiveReadyToRecord"
-                  :playing-podcast="playingPodcast"
-                  :fetch-conference="fetchConference"
-                  :is-animator-live="isOctopusAndAnimator"
-                  @playPodcast="playPodcast"
-                />
-                <h3 v-if="isOuestFrance">
-                  {{ podcast.title }}
-                </h3>
-                <div
-                  class="date-text-zone"
-                  :class="isLiveReady ? 'justify-content-between' : ''"
-                >
-                  <div
-                    v-if="!isOuestFrance && 0 !== date.length"
-                    :class="!isLiveReady ? 'me-5' : ''"
-                  >
-                    {{ date }}
-                  </div>
-                  <div class="ms-2 me-2 duration">
-                    <span
-                      v-if="isOuestFrance"
-                      class="saooti-clock3"
-                    />{{ $t('Duration', { duration: duration }) }}
-                  </div>
-                  <div
-                    v-if="isLiveReady"
-                    class="text-danger"
-                  >
-                    {{ $t('Episode record in live') }}
-                  </div>
-                </div>
-                <div
-                  class="descriptionText html-wysiwyg-content"
-                  v-html="urlify(podcast.description)"
-                />
-                <div class="mt-3 mb-3">
-                  <ParticipantDescription :participants="podcast.animators" />
-                  <div v-if="!isOuestFrance">
-                    {{ $t('Emission') + ' : ' }}
-                    <router-link
-                      class="link-info"
-                      :to="{
-                        name: 'emission',
-                        params: { emissionId: podcast.emission.emissionId },
-                        query: {
-                          productor: $store.state.filter.organisationId,
-                        },
-                      }"
-                    >
-                      {{ podcast.emission.name }}
-                    </router-link>
-                  </div>
-                  <div v-if="!isPodcastmaker">
-                    {{ $t('Producted by : ') }}
-                    <router-link
-                      class="link-info"
-                      :to="{
-                        name: 'productor',
-                        params: { productorId: podcast.organisation.id },
-                        query: {
-                          productor: $store.state.filter.organisationId,
-                        },
-                      }"
-                    >
-                      {{ podcast.organisation.name }}
-                    </router-link>
-                  </div>
-                  <a
-                    v-if="podcast.article"
-                    class="btn d-flex align-items-center my-2 width-fit-content"
-                    :href="podcast.article"
-                    rel="noopener"
-                    target="_blank"
-                  >
-                    <span class="saooti-newspaper me-1" />
-                    <div>{{ $t('See associated article') }}</div>
-                  </a>
-                  <ParticipantDescription
-                    :participants="podcast.guests"
-                    :is-guest="true"
-                  />
-                  <div v-if="editRight && !isPodcastmaker">
-                    <div
-                      v-if="podcast.annotations && podcast.annotations.RSS"
-                      class="me-5"
-                    >
-                      {{ $t('From RSS') }}
-                    </div>
-                    <ErrorMessage
-                      v-if="!podcast.availability.visibility"
-                      :message="$t('Podcast is not visible for listeners')"
-                    />
-                    <ErrorMessage
-                      v-if="'ERROR' === podcast.processingStatus"
-                      :message="$t('Podcast in ERROR, please contact Saooti')"
-                    />
-                    <ErrorMessage
-                      v-if="podcastNotValid"
-                      :message="$t('Podcast not validated')"
-                    />
-                  </div>
-                  <ShareButtons
-                    v-if="isDownloadButton"
-                    :podcast="podcast"
-                    :big-round="true"
-                    :audio-url="podcast.audioUrl"
-                  />
-                </div>
-              </div>
-            </div>
-            <TagList
-              v-if="isTagList"
-              :tag-list="podcast.tags"
-            />
-          </div>
+          <PodcastModuleBox
+            :playing-podcast="playingPodcast"
+            :podcast="podcast"
+            :fetch-conference="fetchConference"
+          />
           <SubscribeButtons
             v-if="isShareButtons && countLink >= 1"
             :emission="podcast.emission"
@@ -250,14 +106,11 @@
 
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
-import PodcastImage from '../display/podcasts/PodcastImage.vue';
-import ParticipantDescription from '../display/podcasts/ParticipantDescription.vue';
+import PodcastModuleBox from '../display/podcasts/PodcastModuleBox.vue';
 const octopusApi = require('@saooti/octopus-api');
 import studioApi from '@/api/studio';
 import { state } from '../../store/paramStore';
 const moment = require('moment');
-const humanizeDuration = require('humanize-duration');
-import { displayMethods } from '../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
@@ -265,30 +118,23 @@ import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
-const TagList = defineAsyncComponent(() => import('../display/podcasts/TagList.vue'));
 const SubscribeButtons = defineAsyncComponent(() => import('../display/sharing/SubscribeButtons.vue'));
 const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
 const Countdown = defineAsyncComponent(() => import('../display/live/CountDown.vue'));
 const CommentSection = defineAsyncComponent(() => import('../display/comments/CommentSection.vue'));
-const ErrorMessage = defineAsyncComponent(() => import('../misc/ErrorMessage.vue'));
 export default defineComponent({
   name: "Podcast",
   components: {
     PodcastInlineList,
-    PodcastImage,
-    ParticipantDescription,
     ShareButtons,
     SharePlayer,
     EditBox,
-    TagList,
     SubscribeButtons,
     RecordingItemButton,
     Countdown,
     CommentSection,
-    ErrorMessage,
+    PodcastModuleBox
   },
-
-  mixins:[displayMethods],
 
   props: {
     updateStatus: { default: undefined, type: String},
@@ -297,7 +143,7 @@ export default defineComponent({
     isEducation: { default: false, type: Boolean},
   },
 
-  emits: ['initConferenceId', 'podcastTitle', 'playPodcast'],
+  emits: ['initConferenceId', 'podcastTitle'],
 
   data() {
     return {
@@ -335,12 +181,6 @@ export default defineComponent({
     isOuestFrance(): boolean {
       return state.podcastPage.ouestFranceStyle;
     },
-    isTagList(): boolean {
-      return state.podcastPage.tagList;
-    },
-    isDownloadButton(): boolean {
-      return state.podcastPage.downloadButton;
-    },
     emissionMainCategory(): number {
       if(!this.podcast){return 0;}
       if (
@@ -371,30 +211,6 @@ export default defineComponent({
           return 0;
         });
     },
-    date(): string {
-      if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){
-        if('fr' === this.$i18n.locale){
-          return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
-        }
-        return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
-      }
-      return '';
-    },
-    duration(): string {
-      if (!this.podcast || this.podcast.duration <= 1) return '';
-      if (this.podcast.duration > 600000) {
-        return humanizeDuration(this.podcast.duration, {
-          language: this.$i18n.locale,
-          largest: 1,
-          round: true,
-        });
-      }
-      return humanizeDuration(this.podcast.duration, {
-        language: this.$i18n.locale,
-        largest: 2,
-        round: true,
-      });
-    },
     editRight(): boolean {
       if ( this.podcast &&
         (this.authenticated &&
@@ -405,11 +221,6 @@ export default defineComponent({
       return false;
     },
     isReady(): boolean {
-      /* if(this.podcast && this.podcast.processingStatus !== "PLANNED" && this.podcast.processingStatus !== "PROCESSING"){
-        return true;
-      }else{
-        return false;
-      } */
       return true;
     },
     countLink(): number {
@@ -430,14 +241,6 @@ export default defineComponent({
     },
     isLiveReadyToRecord(): boolean {
       return (undefined!==this.podcast && undefined!==this.podcast.conferenceId && 0 !== this.podcast.conferenceId && 'READY_TO_RECORD' === this.podcast.processingStatus);
-    },
-    isLiveReady(): boolean {
-      return (
-        undefined!==this.podcast &&
-        undefined!==this.podcast.conferenceId &&
-        0 !== this.podcast.conferenceId &&
-        'READY' === this.podcast.processingStatus
-      );
     },
     isCounter(): boolean {
       return (
@@ -468,15 +271,6 @@ export default defineComponent({
     timeRemaining(): string {
       if(!this.podcast){return "";}
       return moment(this.podcast.pubDate).diff(moment(), 'seconds');
-    },
-    podcastNotValid(): boolean {
-      if (
-        this.podcast &&
-        this.podcast.availability &&
-        false === this.podcast.valid
-      )
-        return true;
-      return false;
     },
   },
   watch: {
@@ -567,14 +361,6 @@ export default defineComponent({
         this.loaded = true;
       }
     },
-    getName(person: any): string {
-      const first = person.firstName || '';
-      const last = person.lastName || '';
-      return (first + ' ' + last).trim();
-    },
-    playPodcast(podcast: Podcast): void {
-      this.$emit('playPodcast', podcast);
-    },
     removeDeleted(): void {
       if (window.history.length > 1) {
         this.$router.go(-1);
@@ -588,24 +374,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-.title-page-podcast {
-  font-size: 0.9rem;
-}
-.width-fit-content{
-  width: fit-content;
-}
-
-.date-text-zone {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  @media (max-width: 600px) {
-    display: initial;
-    .duration {
-      margin-left: 0 !important;
-    }
-  }
-}
-</style>

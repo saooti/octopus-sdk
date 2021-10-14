@@ -31,7 +31,9 @@
           <template v-else>
             {{ filter.nameRubriquage }}
           </template>
-          <div class="mx-1">:</div>
+          <div class="mx-1">
+            :
+          </div>
           <RubriqueChooser
             v-if="getRubriques(filter.rubriquageId).length"
             class="ms-2 multiselect-transparent"
@@ -39,7 +41,7 @@
             :rubriquage-id="filter.rubriquageId"
             :rubrique-selected="filter.rubriqueId"
             :all-rubriques="getRubriques(filter.rubriquageId)"
-            :cannotBeUndefined="true"
+            :cannot-be-undefined="true"
             width="auto"
             @selected="onRubriqueSelected(index,$event)"
           />
