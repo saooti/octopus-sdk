@@ -29,18 +29,18 @@
             </button>
             <SharePlayerTypes 
               v-if="!isLiveReadyToRecord"
+              v-model:iFrameModel="iFrameModel"
               :podcast="podcast"
               :emission="emission"
               :playlist="playlist"
-              :customPlayers="customPlayers"
-              :isBeta="isBeta"
-              v-model:iFrameModel="iFrameModel"
+              :custom-players="customPlayers"
+              :is-beta="isBeta"
             />
           </div>
           <SharePlayerColors
-            :isBeta="isBeta"
             v-model:color="color"
             v-model:theme="theme"
+            :is-beta="isBeta"
           />
           <div v-if="displayBetaChoice">
             <input

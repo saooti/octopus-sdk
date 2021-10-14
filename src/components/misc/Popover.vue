@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import {Popover} from 'bootstrap'
-import {defineComponent, onMounted, PropType, ref, watch} from 'vue'
+import {defineComponent, onMounted, PropType, ref} from 'vue'
 import useEventListener from '../../helper/useEventListener'
 export default defineComponent({
   name: 'Popover',
@@ -34,6 +34,7 @@ export default defineComponent({
     title: {type: String, default: ''},
     triggers: {type: String as PropType<Popover.Options['trigger']>, default: 'click'},
     show: {type: Boolean, default: false},
+    disable: {type: Boolean, default: false},
   },
   emits: ['show', 'shown', 'hide', 'hidden', 'inserted'],
   setup(props, {emit}) {
@@ -58,19 +59,10 @@ export default defineComponent({
       if (props.show) {
         instance.value.show()
       }
-    })
-    watch(
-      () => props.show,
-      (show, oldVal) => {
-        if (show !== oldVal) {
-          if (show) {
-            instance.value?.show()
-          } else {
-            instance.value?.hide()
-          }
-        }
+      if (props.disable) {
+        instance.value.disable()
       }
-    )
+    })
     useEventListener(target, 'show.bs.popover', () => emit('show'))
     useEventListener(target, 'shown.bs.popover', () => emit('shown'))
     useEventListener(target, 'hide.bs.popover', () => emit('hide'))
@@ -80,7 +72,20 @@ export default defineComponent({
       element,
       titleRef,
       contentRef,
+      instance
     }
   },
+  watch:{
+    disable(){
+      debugger;
+      if(!this.instance){ return; }
+      if (this.disable) {
+        this.instance.disable();
+      } else {
+        this.instance.enable();
+      }
+    }
+  }
+
 })
 </script>

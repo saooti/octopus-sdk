@@ -8,8 +8,8 @@
     <select
       id="iframe-select"
       :value="iFrameModel"
-      @change="$emit('update:iFrameModel',$event.target.value)"
       class="frame-select input-no-outline"
+      @change="$emit('update:iFrameModel',$event.target.value)"
     >
       <option value="default">
         {{ $t('Default version') }}

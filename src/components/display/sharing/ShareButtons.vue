@@ -21,7 +21,6 @@
         target="popover-share-help"
         triggers="hover"
         placement="right"
-        custom-class="wizard-help"
       >
         {{ $t('Share this page without edit and share blocks') }}
       </Popover>
@@ -288,7 +287,7 @@ export default defineComponent({
       dataRSSSave: false as boolean,
       newsletter: false as boolean,
       isMobile: false as boolean,
-      qrCode: false as boolean
+      qrCode: false as boolean,
     };
   },
 

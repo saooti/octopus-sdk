@@ -49,18 +49,18 @@
           @error="onError"
         />
         <PlayerButtons
-        :playerError="playerError"
+          :player-error="playerError"
         />
         <PlayerProgressBar
-          :hlsReady="hlsReady"
-          :showTimeline="showTimeline"
-          :comments="comments"
-          :displayAlertBar="displayAlertBar"
-          :percentLiveProgress="percentLiveProgress"
-          :durationLivePosition="durationLivePosition"
-          :playerError="playerError"
-          :listenTime="listenTime"
           v-model:notListenTime="notListenTime"
+          :hls-ready="hlsReady"
+          :show-timeline="showTimeline"
+          :comments="comments"
+          :display-alert-bar="displayAlertBar"
+          :percent-live-progress="percentLiveProgress"
+          :duration-live-position="durationLivePosition"
+          :player-error="playerError"
+          :listen-time="listenTime"
         />
         <PlayerClockAndTimeline
           v-model:showTimeline="showTimeline"
