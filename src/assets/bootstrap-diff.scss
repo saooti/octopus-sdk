@@ -14,6 +14,9 @@
         transition: background .2s, border .2s, box-shadow .2s, color .2s;
         text-decoration: none !important;
         white-space: nowrap;
+        @media (max-width: 960px) {
+            white-space: normal;
+        }
         &:hover,
         &:focus,
         &:active,
