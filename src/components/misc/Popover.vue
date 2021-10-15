@@ -43,7 +43,7 @@ export default defineComponent({
     const instance = ref<Popover>()
     const titleRef = ref<HTMLElement>()
     const contentRef = ref<HTMLElement>()
-    onMounted(() => {
+    function initPopover(){
       instance.value = new Popover(`#${props.target}`, {
         container: 'body',
         trigger: props.triggers,
@@ -62,6 +62,9 @@ export default defineComponent({
       if (props.disable) {
         instance.value.disable()
       }
+    }
+    onMounted(()=>{
+      initPopover();
     })
     useEventListener(target, 'show.bs.popover', () => emit('show'))
     useEventListener(target, 'shown.bs.popover', () => emit('shown'))
@@ -72,18 +75,32 @@ export default defineComponent({
       element,
       titleRef,
       contentRef,
-      instance
+      instance,
+      initPopover
     }
   },
   watch:{
     disable(){
-      debugger;
       if(!this.instance){ return; }
       if (this.disable) {
         this.instance.disable();
       } else {
         this.instance.enable();
       }
+    },
+    content(){
+      if(!this.instance){ return; }
+      this.$nextTick(() => {
+        this.instance?.dispose();
+        this.initPopover();
+      });
+    },
+    title(){
+      if(!this.instance){ return; }
+      this.$nextTick(() => {
+        this.instance?.dispose();
+        this.initPopover();
+      });
     }
   }
 
