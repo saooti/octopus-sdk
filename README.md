@@ -477,6 +477,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.10 vue3
  * 29.0.11 Popover (encore il est dur ce popover)
  * 29.0.12 CSS
+ * 29.0.13 npm upgrade
 
 
 
