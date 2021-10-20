@@ -2,6 +2,7 @@
   <div 
     id="app"
     class="octopus-app"
+    :key="reload"
   >
     <TopBar
       v-model:displayMenu="displayMenu"
@@ -44,6 +45,7 @@ export default defineComponent({
     return {
       displayMenu: false as boolean,
       initQueryRouter: false,
+      reload: false as boolean,
     };
   },
 
@@ -57,6 +59,10 @@ export default defineComponent({
       }
       }
     },
+    '$i18n.locale'(){
+      this.$forceUpdate();
+      this.reload = !this.reload;
+    }
   },
 
   methods:{
