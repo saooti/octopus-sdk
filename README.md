@@ -479,6 +479,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.12 CSS
  * 29.0.13 npm upgrade
  * 29.0.14 vue i18n change language
+ * 29.0.15 theme player beta
 
 
 

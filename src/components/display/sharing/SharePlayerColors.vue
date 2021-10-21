@@ -68,8 +68,9 @@ export default defineComponent({
     isBeta: { default: false, type: Boolean},
     color: { default: '#40a372', type: String},
     theme: { default: '#000000', type: String},
+    themeBeta: { default: '#000000', type: String},
   },
-  emits:['update:color', 'update:theme'],
+  emits:['update:color', 'update:theme', 'update:themeBeta'],
 
   data() {
     return {
@@ -79,6 +80,13 @@ export default defineComponent({
     };
   },
   watch:{
+    isBeta(){
+      if(this.isBeta){
+        this.internTheme = this.themeBeta;
+      }else{
+        this.internTheme = this.theme;
+      }
+    },
     color(){
       if(this.color !== this.internColor){
         this.internColor = this.color;
@@ -90,19 +98,26 @@ export default defineComponent({
       }
     },
     theme(){
-      if(this.theme !== this.internTheme){
+      if(this.theme !== this.internTheme && !this.isBeta){
         this.internTheme = this.theme;
       }
     },
+    themeBeta(){
+      if(this.themeBeta !== this.internTheme && this.isBeta){
+        this.internTheme = this.themeBeta;
+      }
+    },
     internTheme(){
-      if(this.theme !== this.internTheme){
+      if(this.theme !== this.internTheme && !this.isBeta){
         this.$emit('update:theme', this.internTheme);
+      }else if(this.themeBeta !== this.internTheme && this.isBeta){
+        this.$emit('update:themeBeta', this.internTheme);
       }
     }
   },
   mounted(){
     this.internColor= this.color;
-    this.internTheme= this.theme;
+    this.internTheme= this.isBeta? this.themeBeta : this.theme;
   }
 
 })

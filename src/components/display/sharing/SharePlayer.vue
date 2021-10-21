@@ -40,6 +40,7 @@
           <SharePlayerColors
             v-model:color="color"
             v-model:theme="theme"
+            v-model:themeBeta="themeBeta"
             :is-beta="isBeta"
           />
           <div v-if="displayBetaChoice">
@@ -140,6 +141,7 @@ export default defineComponent({
       isShareModal: false as boolean,
       color: '#40a372' as string,
       theme: '#000000' as string,
+      themeBeta: '#000000' as string,
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumber: '3' as string,
@@ -252,11 +254,12 @@ export default defineComponent({
         }
       }
       url.push('?distributorId=' + this.organisationId);
+      const theme = this.isBeta ? this.themeBeta : this.theme;
       url.push(
         '&color=' +
           this.color.substring(1) +
           '&theme=' +
-          this.theme.substring(1)
+          theme.substring(1)
       );
       if (!this.proceedReading) {
         url.push('&proceed=false');
@@ -367,6 +370,9 @@ export default defineComponent({
         this.theme = '#000000';
       }
       if (Object.prototype.hasOwnProperty.call(data,'playerBeta')) {
+        if (Object.prototype.hasOwnProperty.call(data,'THEMEBETA')) {
+          this.themeBeta = data.THEMEBETA;
+        }
         this.displayBetaChoice = data.playerBeta;
         let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId);
         this.customPlayers = dataFetched.content;
