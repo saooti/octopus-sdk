@@ -1,3 +1,4 @@
+
 <template>
   <div class="page-box">
     <div
@@ -6,31 +7,40 @@
         isEmissionChooser ? 'justify-content-between' : 'justify-content-center'
       "
     >
-      <h1 v-if="undefined === titlePage" class="flex-shrink">
+      <h1
+        v-if="undefined === titlePage"
+        class="flex-shrink"
+      >
         {{ $t('All podcasts') }}
       </h1>
-      <h1 v-else class="flex-shrink">{{ titlePage }}</h1>
+      <h1
+        v-else
+        class="flex-shrink"
+      >
+        {{ titlePage }}
+      </h1>
       <EmissionChooser
-        @selected="emissionSelected"
         v-if="isEmissionChooser"
         :defaultanswer="$t('No emission filter')"
         width="auto"
-        class="ml-3"
+        class="ms-3"
+        @selected="emissionSelected"
       />
     </div>
     <ProductorSearch
-      :organisationId="organisationId"
-      :searchPattern="searchPattern"
+      v-if="isProductorSearch"
+      :organisation-id="organisationId"
+      :search-pattern="searchPattern"
       @updateOrganisationId="updateOrganisationId"
       @updateSearchPattern="updateSearchPattern"
-      v-if="isProductorSearch"
     />
     <AdvancedSearch
-      :isEducation="isEducation"
-      :isEmission="false"
-      :resetRubriquage="resetRubriquage"
-      :isSearchBar="isProductorSearch"
-      :sortCriteria="sortCriteria"
+      :is-education="isEducation"
+      :is-emission="false"
+      :reset-rubriquage="resetRubriquage"
+      :is-search-bar="isProductorSearch"
+      :sort-criteria="sortCriteria"
+      :organisation-id="organisationId"
       @updateCategory="updateCategory"
       @updateRubriquageFilter="updateRubriquageFilter"
       @updateMonetization="updateMonetization"
@@ -39,52 +49,54 @@
       @updateSortCriteria="updateSortCriteria"
       @includeHidden="updateHidden"
       @notValid="updateNotValid"
-      :organisationId="organisationId"
     />
     <PodcastList
-      :showCount="true"
+      :show-count="true"
       :first="first"
       :size="size"
-      :organisationId="organisationId"
+      :organisation-id="organisationId"
       :query="searchPattern"
       :monetization="monetization"
-      :emissionId="emissionId"
+      :emission-id="emissionId"
       :before="toDate"
       :after="fromDate"
-      :sortCriteria="sortCriteria"
-      :includeHidden="includeHidden"
-      :notValid="notValid"
-      :iabId="iabId"
-      :rubriqueId="rubriqueId"
-      :rubriquageId="rubriquageId"
-      :noRubriquageId="noRubriquageId"
+      :sort-criteria="sortCriteria"
+      :include-hidden="includeHidden"
+      :not-valid="notValid"
+      :iab-id="iabId"
+      :rubrique-id="rubriqueId"
+      :rubriquage-id="rubriquageId"
+      :no-rubriquage-id="noRubriquageId"
     />
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
-
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+
+import { defineComponent, defineAsyncComponent } from 'vue';
+const EmissionChooser = defineAsyncComponent(() => import('../display/emission/EmissionChooser.vue'));
+export default defineComponent({
+  name:"Podcasts",
+
   components: {
     PodcastList,
     ProductorSearch,
-    EmissionChooser: () => import('../display/emission/EmissionChooser.vue'),
+    EmissionChooser,
     AdvancedSearch,
   },
+
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    productor: { default: undefined as string|undefined},
-    isEducation: { default: false as boolean},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    productor: { default: undefined, type: String},
+    isEducation: { default: false, type: Boolean},
   },
 
   data() {
@@ -108,29 +120,6 @@ export default Vue.extend({
     };
   },
 
-  created() {
-    if (this.firstRoute) {
-      this.first = this.firstRoute;
-    }
-    if (this.sizeRoute) {
-      this.size = this.sizeRoute;
-    }
-    if (this.productor) {
-      this.organisationId = this.productor;
-    } else if (this.$store.state.filter.organisationId) {
-      this.organisationId = this.$store.state.filter.organisationId;
-    }
-    if (this.organisation && this.organisationRight) {
-      this.includeHidden = true;
-    }
-    if(this.categoryFilter){
-      this.iabId = this.categoryFilter.id;
-    }
-    if(this.rubriqueFilter.length){
-      this.updateRubriquageFilter(this.rubriqueFilter);
-    }
-  },
-  
   computed: {
     rubriqueFilter(): Array<RubriquageFilter>{
       return this.$store.state.filter.rubriqueFilter;
@@ -170,6 +159,31 @@ export default Vue.extend({
       return state.podcastsPage.emissionChooser;
     },
   },
+
+  created() {
+    if (this.firstRoute) {
+      this.first = this.firstRoute;
+    }
+    if (this.sizeRoute) {
+      this.size = this.sizeRoute;
+    }
+    if (this.productor) {
+      this.organisationId = this.productor;
+    } else if (this.$store.state.filter.organisationId) {
+      this.organisationId = this.$store.state.filter.organisationId;
+    }
+    if (this.organisation && this.organisationRight) {
+      this.includeHidden = true;
+    }
+    if(this.categoryFilter){
+      this.iabId = this.categoryFilter.id;
+    }
+    if(this.rubriqueFilter.length){
+      this.updateRubriquageFilter(this.rubriqueFilter);
+    }
+  },
+  
+  
   methods: {
     updateCategory(value: number|undefined){
       this.iabId = value;
@@ -233,5 +247,7 @@ export default Vue.extend({
       }
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

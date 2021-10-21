@@ -1,67 +1,70 @@
 <template>
-   <div class="comma" v-if="participants.length">
-      {{ title }}
-      <span
-        class="saooti-help m-0"
-        :id="idPopover"
-        :aria-label="$t('Help')"
-      ></span>
-      <span class="mx-1">:</span>
-      <b-popover
-        :target="idPopover"
-        triggers="hover"
-        custom-class="participant-help"
-      >
-        <div class="text-center font-weight-bold">{{title}}</div>
-        <div class="horizontal-separator my-1"></div>
-        <div 
+  <div
+    v-if="participants.length"
+    class="comma"
+  >
+    {{ title }}
+    <span
+      :id="idPopover"
+      class="saooti-help m-0"
+      :aria-label="$t('Help')"
+    />
+    <span class="mx-1">:</span>
+    <Popover
+      :target="idPopover"
+      triggers="hover"
+      custom-class="participant-help"
+    >
+      <div class="text-center font-weight-bold">
+        {{ title }}
+      </div>
+      <div class="horizontal-separator my-1" />
+      <div 
+        v-for="participant in participants"
+        :key="'desc-'+participant.participantId"
         class="d-flex flex-column align-items-center"
-        v-for="participant in participants"
-        v-bind:key="'desc-'+participant.participantId">
-          <b><i>{{getName(participant) }}</i></b>
-          <div
-            class="h6 participant-desc html-wysiwyg-content"
-            v-if="participant.description"
-            v-html="participant.description"
-          ></div>
-          <div class="horizontal-separator my-1"></div>
-        </div>
-      </b-popover>
-      <router-link
-        :aria-label="$t('Participant')"
-        class="link-info"
-        v-for="participant in participants"
-        v-bind:key="participant.participantId"
-        :to="{
-          name: 'participant',
-          params: { participantId: participant.participantId },
-          query: {
-            productor: $store.state.filter.organisationId,
-          },
-        }"
-        >{{ getName(participant) }}</router-link
       >
-    </div>
+        <b><i>{{ getName(participant) }}</i></b>
+        <div
+          v-if="participant.description"
+          class="h6 participant-desc html-wysiwyg-content"
+          v-html="participant.description"
+        />
+        <div class="horizontal-separator my-1" />
+      </div>
+    </Popover>
+    <router-link
+      v-for="participant in participants"
+      :key="participant.participantId"
+      :aria-label="$t('Participant')"
+      class="link-info"
+      :to="{
+        name: 'participant',
+        params: { participantId: participant.participantId },
+        query: {
+          productor: $store.state.filter.organisationId,
+        },
+      }"
+    >
+      {{ getName(participant) }}
+    </router-link>
+  </div>
 </template>
 
-<style lang="scss">
-.participant-help{
-  .horizontal-separator {
-    border-top: 1px solid #cccccc;
-    width: 100%;
-  }
-} 
-</style>
-
 <script lang="ts">
+import Popover from '../../misc/Popover.vue';
 import { Participant } from '@/store/class/participant';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ParticipantDescription',
 
+  components:{
+    Popover
+  },
+
   props: {
-    participants: { default: () => ([]) as Array<Participant>},
-    isGuest: { default: false as boolean},
+    participants: { default: () => [], type: Array as ()=> Array<Participant>},
+    isGuest: { default: false, type:  Boolean},
   },
 
   data() {
@@ -82,7 +85,6 @@ export default Vue.extend({
       return this.$t('Animated by').toString();
     }
   },
-
   methods: {
     getName(person: any): string {
       const first = person.firstName || '';
@@ -90,5 +92,14 @@ export default Vue.extend({
       return (first + ' ' + last).trim();
     },
   },
-});
+})
 </script>
+
+<style lang="scss">
+.participant-help{
+  .horizontal-separator {
+    border-top: 1px solid #cccccc;
+    width: 100%;
+  }
+} 
+</style>

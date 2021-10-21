@@ -21,24 +21,21 @@
   </div>
 </template>
 
-
-<style lang="scss">
-</style>
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 import profileApi from '@/api/profile';
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'QrCode',
-  props: {
-    url: { default: '' as string},
-  },
 
   components: {
     Snackbar,
     QrcodeVue
+  },
+  props: {
+    url: { default: '', type: String},
   },
 
   data() {
@@ -57,8 +54,8 @@ export default Vue.extend({
       const link = document.createElement('a');
       link.download = 'qrcode.png';
       const canvas = document.getElementsByClassName('myQrCode');
-      if(canvas && canvas.length > 0 && canvas[0] && canvas[0].firstChild){
-        link.href = (canvas[0].firstChild as any).toDataURL();
+      if(canvas && canvas.length > 0 && canvas[0]){
+        link.href = (canvas[0] as any).toDataURL();
         link.click();
         (this.$refs.snackbar as any).open(this.$t('Download started'));
       }
@@ -79,5 +76,7 @@ export default Vue.extend({
       }
     },
   }
-});
+})
 </script>
+
+<style lang="scss"></style>

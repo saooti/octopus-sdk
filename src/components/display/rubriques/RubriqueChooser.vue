@@ -1,15 +1,22 @@
 <template>
-  <div class="default-multiselect-width" :style="{ width: width }">
-    <label :for="id" class="d-inline" aria-label="select rubrique"></label>
-    <Multiselect
-      v-model="model"
+  <div
+    class="default-multiselect-width"
+    :style="{ width: width }"
+  >
+    <label
+      :for="id"
+      class="d-inline"
+      aria-label="select rubrique"
+    />
+    <VueMultiselect
       :id="id"
+      ref="multiselectRef"
+      v-model="model"
       :disabled="isDisabled"
       class="rubriqueChooser"
       label="name"
       track-by="rubriqueId"
       :placeholder="$t('Type string to filter by rubrics')"
-      ref="multiselectRef"
       :options="rubriques"
       :multiple="multiple"
       :searchable="true"
@@ -27,38 +34,42 @@
       @close="onClose"
       @select="onRubriqueSelected"
     >
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <span class="option__title">
-            {{ props.option.name }}
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <template slot="option" slot-scope="props" v-if="undefined!==props.option">
+      <template
+        #option="{ option }"
+      >
         <div
+          v-if="undefined!==option"
           class="multiselect-octopus-proposition"
-          :class="props.option.rubriqueId <= 0 ? 'primary-dark' : ''"
-          :data-selenium="'rubric-chooser-' + seleniumFormat(props.option.name)"
+          :class="option.rubriqueId <= 0 ? 'primary-dark' : ''"
+          :data-selenium="'rubric-chooser-' + seleniumFormat(option.name)"
         >
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <span slot="noResult">
+      <template #noOptions>
+        {{ $t('List is empty') }}
+      </template>
+      <template #noResult>
         {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
-      <span
-        class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top"
-        slot="caret"
-      ></span>
-    </Multiselect>
+      </template>
+      <template #caret>
+        <span class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top" />
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
-import Multiselect from 'vue-multiselect';
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 import { Rubrique } from '@/store/class/rubrique';
 const getDefaultRubrique = (defaultName: string) => {
   if ('' === defaultName){
@@ -67,22 +78,26 @@ const getDefaultRubrique = (defaultName: string) => {
   return { name: defaultName, rubriqueId: 0 };
 };
 
-export default selenium.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
-    Multiselect,
+    VueMultiselect,
   },
+  mixins:[selenium],
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string },
-    rubriqueSelected: { default: undefined as number|undefined },
-    multiple: { default: false as boolean },
-    rubriqueArray: { default: undefined as Array<number>|undefined },
-    rubriquageId: { default: undefined as number|undefined },
-    allRubriques: { default: () => ([])  as Array<Rubrique>|undefined },
-    reset: { default: false as boolean },
-    withoutRubrique: { default: false as boolean },
-    isDisabled: { default: false as boolean },
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String },
+    rubriqueSelected: { default: undefined, type: Number },
+    multiple: { default: false, type: Boolean },
+    rubriqueArray: { default: undefined, type: Object as ()=>Array<number> },
+    rubriquageId: { default: undefined, type: Number },
+    allRubriques: { default: () => [], type: Array as ()=> Array<Rubrique> },
+    reset: { default: false, type: Boolean },
+    withoutRubrique: { default: false, type: Boolean },
+    isDisabled: { default: false, type: Boolean },
+    cannotBeUndefined: {default: false, type: Boolean}
   },
+  emits: ['update:rubriqueSelected', 'selected'],
 
   data() {
     return {
@@ -92,14 +107,6 @@ export default selenium.extend({
       isLoading: false as boolean,
       withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as any,
     };
-  },
-  mounted() {
-    if (undefined !== this.rubriqueSelected) {
-      this.initRubriqueSelected(this.rubriqueSelected);
-    }
-    if (undefined !== this.rubriqueArray) {
-      this.initRubriqueArray(this.rubriqueArray);
-    }
   },
   computed: {
     id(): string {
@@ -121,6 +128,43 @@ export default selenium.extend({
         this.rubriqueForArray = value;
       }
 
+    }
+  },
+  watch: {
+    model:{
+      deep: true,
+      handler(){
+        if(false===this.multiple){
+          return;
+        }
+        const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
+        const idsArray: Array<number> = [];
+        selected.forEach((el: Rubrique) => {
+          if(el.rubriqueId){
+            idsArray.push(el.rubriqueId);
+          }
+        });
+        this.$emit('selected', idsArray);
+      }
+    },
+    rubriqueSelected: {
+      deep: true,
+      handler(){
+        if (undefined !== this.rubriqueSelected) {
+          this.initRubriqueSelected(this.rubriqueSelected);
+        }
+      }
+    },
+    reset(): void {
+      this.rubrique = getDefaultRubrique(this.defaultanswer);
+    }
+  },
+  mounted() {
+    if (undefined !== this.rubriqueSelected) {
+      this.initRubriqueSelected(this.rubriqueSelected);
+    }
+    if (undefined !== this.rubriqueArray) {
+      this.initRubriqueArray(this.rubriqueArray);
     }
   },
   methods: {
@@ -151,6 +195,10 @@ export default selenium.extend({
     },
     onClose(): void {
       if (this.rubrique || undefined !== this.rubriqueArray) return;
+      if(this.cannotBeUndefined && undefined !== this.rubriqueSelected){
+        this.initRubriqueSelected(this.rubriqueSelected);
+        return;
+      }
       if ('' !== this.defaultanswer) {
         this.rubrique = getDefaultRubrique(this.defaultanswer);
       } else {
@@ -158,16 +206,16 @@ export default selenium.extend({
       }
       this.onRubriqueSelected(this.rubrique);
     },
-    onSearchRubrique(query?: string): void {
+    onSearchRubrique(query: string): void {
       this.isLoading = true;
       this.rubriques = this.initRubriquesArray().filter((item: Rubrique) => {
-        return item.name!.toUpperCase().includes(query!.toUpperCase());
+        return item.name.toUpperCase().includes(query.toUpperCase());
       });
       this.isLoading = false;
     },
     onRubriqueSelected(rubrique: Rubrique|undefined): void {
-      if (undefined !== this.rubriqueSelected) {
-        this.$emit('update:rubriqueSelected', rubrique!.rubriqueId);
+      if (undefined !== this.rubriqueSelected && rubrique) {
+        this.$emit('update:rubriqueSelected', rubrique.rubriqueId);
       }
       if (false === this.multiple) {
         this.$emit('selected', rubrique);
@@ -185,29 +233,12 @@ export default selenium.extend({
           return el.rubriqueId === element;
         });
         if(undefined!==item){
-          this.rubriqueForArray!.push(item);
+          this.rubriqueForArray.push(item);
         }
       });
     },
   },
-  watch: {
-    model(): void {
-      if(false===this.multiple){
-        return;
-      }
-      const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
-      const idsArray: Array<number> = [];
-      selected.forEach((el: Rubrique) => {
-        idsArray.push(el.rubriqueId!);
-      });
-      this.$emit('selected', idsArray);
-    },
-    rubriqueSelected(): void {
-      this.initRubriqueSelected(this.rubriqueSelected);
-    },
-    reset(): void {
-      this.rubrique = getDefaultRubrique(this.defaultanswer);
-    }
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

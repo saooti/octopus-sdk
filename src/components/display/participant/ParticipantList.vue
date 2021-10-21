@@ -1,8 +1,13 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading participants ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading participants ...') }}
+      </h3>
     </div>
     <div
       v-if="showCount && loaded && participants.length > 1"
@@ -12,68 +17,46 @@
         $t('Number participants', { nb: displayCount }) + $t('sort by score')
       }}
     </div>
-    <ul class="participant-list" v-show="loaded">
+    <ul
+      v-show="loaded"
+      class="participant-list"
+    >
       <ParticipantItem
-        v-bind:participant="p"
         v-for="p in participants"
-        v-bind:key="p.participantId"
+        :key="p.participantId"
+        :participant="p"
       />
     </ul>
     <button
-      class="btn btn-more"
-      @click="displayMore"
       v-show="!allFetched && loaded"
+      class="btn btn-more"
       :aria-label="$t('See more')"
       :disabled="inFetching"
+      @click="displayMore"
     >
-      <div class="saooti-plus"></div>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
-
-<style lang="scss">
-.participant-list {
-  align-self: stretch;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-  /*For ie11 */
-  display: flex;
-  flex-wrap: wrap;
-  /* end */
-
-  display: grid; /* 1 */
-  grid-template-columns: repeat(auto-fill, 14rem); /* 2 */
-  grid-gap: 2rem; /* 3 */
-  justify-content: space-between; /* 4 */
-}
-/** PHONES*/
-@media (max-width: 655px) {
-  .participant-list {
-    align-self: auto;
-    grid-gap: 0;
-  }
-}
-</style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import ParticipantItem from './ParticipantItem.vue';
 
-import Vue from 'vue';
 import { Participant } from '@/store/class/participant';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'ParticipantList',
-  props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    query: { default: undefined as string|undefined },
-    organisationId: { default: undefined as string|undefined },
-    showCount: { default: false as boolean },
-  },
 
   components: {
     ParticipantItem,
+  },
+  props: {
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    query: { default: undefined, type: String},
+    organisationId: { default: undefined, type: String},
+    showCount: { default: false, type: Boolean },
   },
 
   data() {
@@ -89,10 +72,6 @@ export default Vue.extend({
     };
   },
 
-  created() {
-    this.fetchContent(true);
-  },
-
    
   computed: {
     allFetched(): boolean {
@@ -106,6 +85,18 @@ export default Vue.extend({
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
+  },
+  watch: {
+    query(): void {
+      this.fetchContent(true);
+    },
+    organisation(): void {
+      this.fetchContent(true);
+    },
+  },
+
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -140,13 +131,30 @@ export default Vue.extend({
       this.fetchContent(false);
     },
   },
-  watch: {
-    query(): void {
-      this.fetchContent(true);
-    },
-    organisation(): void {
-      this.fetchContent(true);
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss">
+.participant-list {
+  align-self: stretch;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+  /*For ie11 */
+  display: flex;
+  flex-wrap: wrap;
+  /* end */
+
+  display: grid; /* 1 */
+  grid-template-columns: repeat(auto-fill, 14rem); /* 2 */
+  grid-gap: 2rem; /* 3 */
+  justify-content: space-between; /* 4 */
+}
+/** PHONES*/
+@media (max-width: 655px) {
+  .participant-list {
+    align-self: auto;
+    grid-gap: 0;
+  }
+}
+</style>

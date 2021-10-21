@@ -1,4 +1,4 @@
-export default {
+export default{
   'Edit my profile': 'My profile',
   'Edit my organisation': 'My organization',
   Logout: 'Logout',

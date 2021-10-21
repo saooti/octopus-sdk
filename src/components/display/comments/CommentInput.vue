@@ -1,19 +1,27 @@
 <template>
-  <div class="d-flex flex-column comment-input-container mt-3" v-if="isPresent">
+  <div
+    v-if="isPresent"
+    class="d-flex flex-column comment-input-container mt-3"
+  >
     <b
+      v-if="knownIdentity && !editName"
       class="small-Text mt-1 c-hand"
       @click="changeIdentity"
-      v-if="knownIdentity && !editName"
-      >{{ knownIdentity }}</b
+    >{{ knownIdentity }}</b>
+    <div
+      v-if="knownIdentity && editName"
+      class="d-flex"
     >
-    <div class="d-flex" v-if="knownIdentity && editName">
       <input
+        v-model="temporaryName"
         class="small-Text mt-1"
         type="text"
-        v-model="temporaryName"
-        v-bind:class="{ 'border border-danger': temporaryName.length < 2 }"
-      />
-      <button class="btn btn-light p-1 m-1" @click="editName = false">
+        :class="{ 'border border-danger': temporaryName.length < 2 }"
+      >
+      <button
+        class="btn btn-light p-1 m-1"
+        @click="editName = false"
+      >
         {{ $t('Cancel') }}
       </button>
       <button
@@ -24,7 +32,7 @@
         {{ $t('Validate') }}
       </button>
     </div>
-    <b-form-textarea
+    <textarea
       ref="textarea"
       v-model="newComment"
       :placeholder="placeholder"
@@ -32,15 +40,21 @@
       :class="{ short: isOneLine && !newComment.includes('\n') }"
       @focus="textareaFocus = true"
       @blur="textareaFocus = false"
-    ></b-form-textarea>
-    <div class="d-flex justify-content-end mt-1" v-if="textareaFocus">
-      <button class="btn mr-2" @mousedown="cancelAction">
+    />
+    <div
+      v-if="textareaFocus"
+      class="d-flex justify-content-end mt-1"
+    >
+      <button
+        class="btn me-2"
+        @mousedown="cancelAction"
+      >
         {{ $t('Cancel') }}
       </button>
       <button
         class="btn btn-primary"
-        @mousedown="requestToSend"
         :disabled="0 === newComment.trim().length"
+        @mousedown="requestToSend"
       >
         {{ placeholder }}
       </button>
@@ -52,39 +66,14 @@
     />
     <MessageModal
       v-if="postError"
-      @close="postError = false"
-      @validate="postError = false"
       :validatetext="$t('Close')"
       :title="$t('Error')"
       :message="$t('Error occurs while post your comment...')"
+      @close="postError = false"
+      @validate="postError = false"
     />
   </div>
 </template>
-
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.comment-input-container {
-  textarea::placeholder {
-    color: $octopus-primary-color;
-  }
-  textarea:focus::placeholder {
-    color: black;
-  }
-  textarea {
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    border-bottom: 0.1rem solid #ddd !important;
-    overflow: hidden !important;
-    box-shadow: unset !important;
-    background: transparent !important;
-    height: 40px;
-  }
-  textarea.short {
-    max-height: 38px;
-  }
-}
-</style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
@@ -95,20 +84,25 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
 
-export default cookies.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const AddCommentModal = defineAsyncComponent(() => import('./AddCommentModal.vue'));
+const MessageModal = defineAsyncComponent(() => import('../../misc/modal/MessageModal.vue'));
+export default defineComponent({
   name: 'CommentInput',
   components: {
-    AddCommentModal: () => import('./AddCommentModal.vue'),
-    MessageModal: () => import('../../misc/modal/MessageModal.vue'),
+    AddCommentModal,
+    MessageModal,
   },
+  mixins:[cookies],
 
   props: {
-    podcast: { default: undefined as Podcast|undefined },
-    knownIdentity: { default: null as string|null },
-    focus: { default: false as boolean },
-    comment: { default: undefined as CommentPodcast|undefined },
-    fetchConference: { default: undefined as Conference|undefined },
+    podcast: { default: undefined, type: Object as ()=>Podcast },
+    knownIdentity: { default: undefined, type: String },
+    focus: { default: false, type: Boolean },
+    comment: { default: undefined, type: Object as ()=>CommentPodcast },
+    fetchConference: { default: undefined, type: Object as ()=>Conference },
   },
+  emits: ['update:knownIdentity', 'cancelAction', 'newComment'],
 
   data() {
     return {
@@ -169,7 +163,7 @@ export default cookies.extend({
     },
     phase(): string|undefined {
       if(undefined === this.podcast){
-        return this.comment.phase;
+        return this.comment ? this.comment.phase : '';
       }
       if (
         !this.podcast.conferenceId ||
@@ -186,11 +180,32 @@ export default cookies.extend({
       return 'Live';
     },
     podcastOrga(): string|undefined{
-      return this.podcast ? this.podcast.organisation.id : this.comment.organisationId;
+      const commentOrga = this.comment ? this.comment.organisationId : '';
+      return this.podcast ? this.podcast.organisation.id : commentOrga;
     }
+  },
+  watch: {
+    textareaFocus(): void {
+      this.newComment = this.newComment.trim();
+    },
+    focus(): void {
+      (this.$refs.textarea as HTMLElement).focus();
+    },
+    newComment(): void {
+      const padding =
+        1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+      this.isOneLine =
+        (this.$refs.textarea as any).$el.clientWidth -
+          this.inputExceeded(
+            this.newComment,
+            '18px Montserrat, sans-serif, Helvetica Neue'
+          ) >
+        padding;
+    },
   },
   methods: {
     changeIdentity(): void {
+      if(!this.knownIdentity){return}
       this.temporaryName = this.knownIdentity;
       this.editName = true;
     },
@@ -202,8 +217,11 @@ export default cookies.extend({
     inputExceeded(text: string, font: string): number {
       const element = document.createElement('canvas');
       const context = element.getContext('2d');
-      context!.font = font;
-      return context!.measureText(text).width;
+      if(null === context){
+        return 0;
+      }
+      context.font = font;
+      return context.measureText(text).width;
     },
     requestToSend(): void {
       if (this.knownIdentity) {
@@ -222,20 +240,21 @@ export default cookies.extend({
       }
       let timeline = 0;
       if (
+        undefined !== this.podcast &&(
         (this.$store.state.player.podcast &&
           this.$store.state.player.podcast.podcastId ===
             this.podcast.podcastId) ||
         (this.$store.state.player.live &&
           this.$store.state.player.live.livePodcastId ===
-            this.podcast.podcastId)
+            this.podcast.podcastId))
       ) {
         timeline = Math.round(
-          this.$store.state.player.elapsed! * this.$store.state.player.total!
+          this.$store.state.player.elapsed * this.$store.state.player.total
         );
         if (this.podcast.duration && this.$store.state.player.podcast) {
           timeline = Math.round(
             timeline -
-              (this.$store.state.player.total! - this.podcast.duration / 1000)
+              (this.$store.state.player.total - this.podcast.duration / 1000)
           );
         }
         if (timeline < 0) {
@@ -246,10 +265,11 @@ export default cookies.extend({
       if (null === sendName && name) {
         sendName = name;
       }
+      const commentPodcastId = this.comment ? this.comment.podcastId : 0;
       const comment: any = {
         content: this.newComment,
         name: sendName,
-        podcastId: this.podcast ? this.podcast.podcastId : this.comment.podcastId,
+        podcastId: this.podcast ? this.podcast.podcastId : commentPodcastId,
         timeline: timeline,
         organisationId: this.podcastOrga,
         commentIdReferer: this.comment ? this.comment.comId : undefined,
@@ -274,24 +294,31 @@ export default cookies.extend({
       }
     },
   },
-  watch: {
-    textareaFocus(): void {
-      this.newComment = this.newComment.trim();
-    },
-    focus(): void {
-      (this.$refs.textarea as HTMLElement).focus();
-    },
-    newComment(): void {
-      const padding =
-        1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
-      this.isOneLine =
-        (this.$refs.textarea as any).$el.clientWidth -
-          this.inputExceeded(
-            this.newComment,
-            '18px Montserrat, sans-serif, Helvetica Neue'
-          ) >
-        padding;
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+.comment-input-container {
+  textarea::placeholder {
+    color: $octopus-primary-color;
+  }
+  textarea:focus::placeholder {
+    color: black;
+  }
+  textarea {
+    outline-width: 0 !important;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 0.1rem solid #ddd !important;
+    overflow: hidden !important;
+    box-shadow: unset !important;
+    background: transparent !important;
+    height: 40px;
+  }
+  textarea.short {
+    max-height: 38px;
+  }
+}
+</style>

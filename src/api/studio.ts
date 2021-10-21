@@ -1,8 +1,12 @@
-export default {
-    deleteConference(store?: any,fetchConference?: any): any{
+import { StoreState } from "@/store/typeAppStore";
+
+export default{
+    deleteConference(store?: StoreState,fetchConference?: string): any{
+        console.log(store, fetchConference);
         return;
     },
-    getConference(store?: any,fetchConference?: any): any{
+    getConference(store?: StoreState,fetchConference?: string): any{
+        console.log(store, fetchConference);
         return {};
     },
 };

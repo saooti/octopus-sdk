@@ -1,41 +1,121 @@
 <template>
   <div class="page-box">
-    <h1 v-if="!hideBar">{{ $t('Podcast search') }}</h1>
-    <h1 v-else-if="!noResult">
-      {{ $t('Search results', { query: this.rawQuery }) }}
+    <h1 v-if="!hideBar">
+      {{ $t('Podcast search') }}
     </h1>
-    <h1 v-else>{{ $t('Search - no results', { query: this.rawQuery }) }}</h1>
-    <div class="position-relative champs-searchPage w-75" v-if="!hideBar">
+    <h1 v-else-if="!noResult">
+      {{ $t('Search results', { query: rawQuery }) }}
+    </h1>
+    <h1 v-else>
+      {{ $t('Search - no results', { query: rawQuery }) }}
+    </h1>
+    <div
+      v-if="!hideBar"
+      class="position-relative champs-searchPage w-75"
+    >
       <input
         id="search"
-        type="text"
         ref="search"
         v-model="rawQuery"
+        type="text"
         class="search-input border-primary w-100 p-2 input-no-outline"
         :placeholder="$t('Please type at least three characters')"
-        @change="onSearchBegin"
         autofocus
+        @change="onSearchBegin"
+      >
+      <label
+        for="search"
+        class="d-inline"
+        :aria-label="$t('Search')"
       />
-      <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
       <div
-        class="saooti-search-bounty search-icon-container"
         v-if="!rawQuery"
-      ></div>
+        class="saooti-search-bounty search-icon-container"
+      />
       <div
+        v-else
         class="saooti-cross search-icon-container c-hand"
         @click="rawQuery = ''"
-        v-else
-      ></div>
+      />
     </div>
     <PodcastList
+      v-if="!!query"
       :query="query"
       :first="0"
       :size="20"
       @emptyList="onListEmpty"
-      v-if="!!query"
     />
   </div>
 </template>
+
+<script lang="ts">
+import { state } from '../../store/paramStore';
+import PodcastList from '../display/podcasts/PodcastList.vue';
+import { defineComponent } from 'vue';
+export default defineComponent({
+  name: "Search",
+
+  components: {
+    PodcastList,
+  },
+
+  props: {
+    queryRoute: { default: '', type: String },
+  },
+  
+  data() {
+    return {
+      rawQuery: '' as string,
+      noResult: false as boolean,
+    };
+  },
+
+  computed: {
+    query(): string {
+      if (this.rawQuery && this.rawQuery.length >= 3) return this.rawQuery;
+      return '';
+    },
+    hideBar(): boolean {
+      return state.searchPage.hideBar;
+    },
+  },
+
+  watch: {
+    query: {
+        handler(search: any): void {
+          this.rawQuery = search;
+        },
+      deep: true,
+      immediate: true,
+    },
+    queryRoute(): void{
+      this.rawQuery = this.queryRoute;
+    }
+  },
+
+  mounted() {
+    if (this.queryRoute) {
+      this.rawQuery = this.queryRoute;
+    }
+    if (this.$refs.search) {
+      (this.$refs.search as HTMLElement).focus();
+    }
+  },
+  
+  methods: {
+    onListEmpty(): void {
+      if (this.hideBar) {
+        this.noResult = true;
+      }
+    },
+    onSearchBegin(): void {
+      if (this.hideBar) {
+        this.noResult = false;
+      }
+    },
+  },
+})
+</script>
 
 <style lang="scss">
 .champs-searchPage {
@@ -49,68 +129,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-// @ is an alias to /src
-import { state } from '../../store/paramStore';
-import PodcastList from '../display/podcasts/PodcastList.vue';
-import Vue from 'vue';
-export default Vue.extend({
-  components: {
-    PodcastList,
-  },
-  props: {
-    queryRoute: { default: '' as string },
-  },
-  
-  data() {
-    return {
-      rawQuery: '' as string,
-      noResult: false as boolean,
-    };
-  },
-
-  mounted() {
-    if (this.queryRoute) {
-      this.rawQuery = this.queryRoute;
-    }
-    if (this.$refs.search) {
-      (this.$refs.search as HTMLElement).focus();
-    }
-  },
-  
-  computed: {
-    query(): string {
-      if (this.rawQuery && this.rawQuery.length >= 3) return this.rawQuery;
-      return '';
-    },
-    hideBar(): boolean {
-      return state.searchPage.hideBar;
-    },
-  },
-  methods: {
-    onListEmpty(): void {
-      if (this.hideBar) {
-        this.noResult = true;
-      }
-    },
-    onSearchBegin(): void {
-      if (this.hideBar) {
-        this.noResult = false;
-      }
-    },
-  },
-  watch: {
-    query: {
-        handler(search: any): void {
-          this.rawQuery = search;
-        },
-      deep: true,
-      immediate: true,
-    },
-    queryRoute(): void{
-      this.rawQuery = this.queryRoute;
-    }
-  },
-});
-</script>

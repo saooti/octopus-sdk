@@ -1,32 +1,34 @@
 <template>
   <div class="d-flex mt-3 align-items-center">
-    <div class="checkbox-saooti flex-shrink mr-2">
+    <div class="flex-shrink me-2">
       <input
-        type="checkbox"
-        class="custom-control-input"
         id="search-category-checkbox"
         v-model="isCategory"
-      />
-      <label class="custom-control-label" for="search-category-checkbox">{{ $t('By category') }}</label>
+        type="checkbox"
+        class="form-check-input"
+      >
+      <label
+        class="form-check-label"
+        for="search-category-checkbox"
+      >{{ $t('By category') }}</label>
     </div>
     <CategoryChooser
+      v-model:categorySelected="iabId"
       width="auto"
-      :categorySelected.sync="iabId"
       :defaultanswer="$t('No category filter')"
     />
   </div>
 </template>
-<style lang="scss">
-</style>
+
 <script lang="ts">
-// @ is an alias to /src
 import CategoryChooser from '../categories/CategoryChooser.vue';
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     CategoryChooser
   },
+  emits: ['updateCategory'],
   data() {
     return {
       isCategory: false as boolean,
@@ -35,32 +37,10 @@ export default Vue.extend({
       isInit: true as boolean,
     };
   },
-
-  created() {
-    if(this.categoryFilter){
-      this.iabId = this.categoryFilter.id;
-      this.isCategory = true;
-    }
-    this.$nextTick(() => {
-      this.isInit = false;
-    });
-  },
   computed: {
     categoryFilter(): Category|undefined{
       return this.$store.state.filter.iab;
     },
-  },
-  methods: {
-    resetCategoryFilter(): void{
-      if(!this.categoryFilter || this.isInit){
-        return;
-      }
-      const queries = this.$route.query;
-      if (queries.iabId) {
-        this.$router.push({ query: {...queries, ...{iabId: undefined} } });
-      }
-      this.$store.commit('filterIab', undefined);
-    }
   },
   watch: {
     isCategory(): void {
@@ -91,7 +71,9 @@ export default Vue.extend({
         this.isInternChanged = false;
       });
     },
-    categoryFilter(): void{
+    categoryFilter:{
+      deep: true,
+      handler(){
       if(this.isInternChanged){
         return;
       }
@@ -107,7 +89,32 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.isInternChanged = false;
       });
+      }
     },
   },
-});
+
+  created() {
+    if(this.categoryFilter){
+      this.iabId = this.categoryFilter.id;
+      this.isCategory = true;
+    }
+    this.$nextTick(() => {
+      this.isInit = false;
+    });
+  },
+  methods: {
+    resetCategoryFilter(): void{
+      if(!this.categoryFilter || this.isInit){
+        return;
+      }
+      const queries = this.$route.query;
+      if (queries.iabId) {
+        this.$router.push({ query: {...queries, ...{iabId: undefined} } });
+      }
+      this.$store.commit('filterIab', undefined);
+    }
+  },
+})
 </script>
+
+<style lang="scss"></style>

@@ -1,7 +1,11 @@
 <template>
   <div v-if="undefined !== tagList">
     <ul class="d-flex flex-wrap">
-      <li class="tagListElement" v-for="tag in tagList" :key="tag">
+      <li
+        v-for="tag in tagList"
+        :key="tag"
+        class="tagListElement"
+      >
         <router-link
           :to="{
             name: 'search',
@@ -11,12 +15,27 @@
             },
           }"
           class="tagListLink"
-          >{{ tag }}</router-link
         >
+          {{ tag }}
+        </router-link>
       </li>
     </ul>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'TagList',
+  components: {},
+  props: {
+    tagList: { default: () => [], type: Array as ()=>Array<string>},
+  },
+
+  methods: {},
+})
+</script>
+
 <style lang="scss">
 .tagListElement {
   display: flex;
@@ -34,16 +53,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
-  name: 'TagList',
-  components: {},
-  props: {
-    tagList: { default: () => ([])  as Array<string>},
-  },
-
-  methods: {},
-});
-</script>

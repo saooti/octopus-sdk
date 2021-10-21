@@ -1,7 +1,10 @@
 <template>
   <div class="d-flex flex-column align-items-center text-danger">
     <h3>{{ $t('This live will start') }}</h3>
-    <h3 ref="countdown" v-if="countdownTimer">
+    <h3
+      v-if="countdownTimer"
+      ref="countdown"
+    >
       {{
         $t('In days hours minutes seconds', {
           days: pad(days),
@@ -11,15 +14,17 @@
         })
       }}
     </h3>
-    <h3 v-else>{{ $t('In a moment') }}</h3>
+    <h3 v-else>
+      {{ $t('In a moment') }}
+    </h3>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
-    timeRemaining: { default: undefined as number|undefined},
+    timeRemaining: { default: undefined, type: Number},
   },
   data() {
     return {
@@ -31,6 +36,7 @@ export default Vue.extend({
       remainingSeconds: 0 as number,
     };
   },
+  computed: {},
   mounted() {
     if (!this.timeRemaining || this.timeRemaining <= 0) return;
     this.seconds = this.timeRemaining;
@@ -38,7 +44,6 @@ export default Vue.extend({
       this.timer();
     }, 1000);
   },
-  computed: {},
   methods: {
     timer(): void {
       this.days = Math.floor(this.seconds / 24 / 60 / 60);
@@ -59,5 +64,7 @@ export default Vue.extend({
       return n < 10 ? '0' + n : n.toString();
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

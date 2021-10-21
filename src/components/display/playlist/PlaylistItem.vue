@@ -1,7 +1,7 @@
 <template>
   <li
-    class="mt-3 emission-item-container shadow-element"
     v-if="editRight || activePlaylist"
+    class="mt-3 emission-item-container shadow-element"
   >
     <router-link
       :to="{
@@ -18,7 +18,7 @@
           'background-image':
             'url(\'' + playlist.imageUrl + '?dummy=' + dummyParam + '\')',
         }"
-      ></div>
+      />
     </router-link>
     <div class="emission-item-text">
       <router-link
@@ -31,11 +31,11 @@
       >
         <div class="emission-name">
           <img
+            v-if="!activePlaylist && !isPodcastmaker"
             class="icon-caution"
             src="/img/caution.png"
-            v-if="!activePlaylist && !isPodcastmaker"
             :title="$t('Playlist have not podcasts')"
-          />{{ name }}
+          >{{ name }}
         </div>
         <div
           :id="'description-playlist-container-' + playlist.playlistId"
@@ -44,18 +44,18 @@
           <div
             :id="'description-playlist-' + playlist.playlistId"
             v-html="urlify(description)"
-          ></div>
+          />
         </div>
       </router-link>
-      <div class="flex-grow"></div>
+      <div class="flex-grow" />
       <router-link
+        v-if="!isPodcastmaker && playlist.organisation"
         :to="{
           name: 'productor',
           params: { productorId: playlist.organisation.id },
           query: { productor: $store.state.filter.organisationId },
         }"
         class="text-dark"
-        v-if="!isPodcastmaker && playlist.organisation"
       >
         <div class="emission-producer primary-color">
           © {{ playlist.organisation.name }}
@@ -65,17 +65,18 @@
   </li>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Playlist } from '@/store/class/playlist';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
-export default displayMethods.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlaylistItem',
 
+  mixins: [displayMethods],
+
   props: {
-    playlist: { default: undefined as Playlist|undefined},
+    playlist: { default: ()=>({}), type: Object as ()=>Playlist},
   },
 
   data() {
@@ -83,33 +84,16 @@ export default displayMethods.extend({
       dummyParam: new Date().getTime().toString() as string,
     };
   },
-
-
-  mounted() {
-    const playlistDesc = document.getElementById(
-      'description-playlist-' + this.playlist.playlistId
-    );
-    const playlistDescContainer = document.getElementById(
-      'description-playlist-container-' + this.playlist.playlistId
-    );
-    if (
-      null !== playlistDesc &&
-      playlistDesc.clientHeight > playlistDescContainer!.clientHeight
-    ) {
-      playlistDescContainer!.classList.add('after-emission-description');
-    }
-    /* if (this.editRight || this.activePlaylist) {
-      return;
-    }
-    this.$emit('playlistNotVisible'); */
-  },
   
   computed: {
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
     },
     organisation(): string {
-      return '' + this.playlist.publisher!.organisation!.name;
+      if(this.playlist && this.playlist.publisher && this.playlist.publisher.organisation){
+        return '' + this.playlist.publisher.organisation.name;
+      }
+      return '';
     },
     description(): string {
       return this.playlist.description || '';
@@ -133,6 +117,24 @@ export default displayMethods.extend({
       return 0 !== Object.keys(this.playlist.podcasts).length;
     },
   },
+
+
+  mounted() {
+    const playlistDesc = document.getElementById(
+      'description-playlist-' + this.playlist.playlistId
+    );
+    const playlistDescContainer = document.getElementById(
+      'description-playlist-container-' + this.playlist.playlistId
+    );
+    if (
+      null !== playlistDesc && null !== playlistDescContainer &&
+      playlistDesc.clientHeight > playlistDescContainer.clientHeight
+    ) {
+      playlistDescContainer.classList.add('after-emission-description');
+    }
+  },
   methods: {},
-});
+})
 </script>
+
+<style lang="scss"></style>

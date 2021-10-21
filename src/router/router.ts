@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
 
 /*--------------------------------------------------------------------------
 Composants publics
@@ -18,8 +17,6 @@ const RubriquePage = () => import('@/components/pages/Rubrique.vue');
 const LivesPage = () => import('@/components/pages/Lives.vue');
 const PlaylistPage = () => import('@/components/pages/Playlist.vue');
 const PlaylistsPage = () => import('@/components/pages/Playlists.vue');
-
-Vue.use(VueRouter);
 
 const routes: any = [
   /*--------------------------------------------------------------------------
@@ -171,13 +168,29 @@ const routes: any = [
         productor: route.params.productor,
       }),
     },
+    //Fake route to avoid errors
+    {
+      path: '/main/pub/contact',
+      component: Home,
+    },
+    {
+      path: '/main/pub/cgu',
+      component: Home,
+    },
+    {
+      path: '/main/pub/libraries',
+      component: Home,
+    },
+    {
+      path: '/main/priv/distribution/:distrib/:id',
+      component: Home,
+    },
+    
 ];
-
-export default new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+export default createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes: routes,
-  scrollBehavior(): {x: number; y: number} {
-    return { x: 0, y: 0 };
+  scrollBehavior(): {left: number; top: number} {
+    return { left: 0, top: 0 };
   },
-});
+})

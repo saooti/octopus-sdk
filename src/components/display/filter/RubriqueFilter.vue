@@ -1,53 +1,62 @@
 <template>
   <div
-    class="d-flex mt-3 align-items-center"
     v-if="organisationId && rubriquageData"
+    class="d-flex mt-3 align-items-center"
   >
-    <div class="checkbox-saooti flex-shrink">
+    <div class="flex-shrink">
       <input
-        type="checkbox"
-        class="custom-control-input"
         id="search-rubriquage-checkbox"
         v-model="isRubriquage"
-      />
-      <label
-        class="custom-control-label"
-        for="search-rubriquage-checkbox"
-        >{{ $t('By topic') }}</label
+        type="checkbox"
+        class="form-check-input"
       >
+      <label
+        class="form-check-label"
+        for="search-rubriquage-checkbox"
+      >{{ $t('By topic') }}</label>
     </div>
-    <div class="d-flex flex-column" v-if="isRubriquage">
+    <div
+      v-if="isRubriquage"
+      class="d-flex flex-column mb-2"
+    >
       <RubriqueChoice 
         v-for="(filter, index) in arrayFilter"
         :key="index"
         :index="index"
-        :rubriquageDisplay="getRubriquage(index)"
-        :rubriqueIdSelected="filter.rubriqueId"
-        :rubriquageIdSelected="filter.rubriquageId"
+        class="mb-2"
+        :rubriquage-display="getRubriquage(index)"
+        :rubrique-id-selected="filter.rubriqueId"
+        :rubriquage-id-selected="filter.rubriquageId"
         @updateRubrique="updateRubrique"
         @updateRubriquage="updateRubriquage"
         @deleteRubriqueChoice="deleteRubriqueChoice(index)"
       />
-      <button class="btn mt-2" @click="addFilter" v-if="availableRubriquage.length">{{ $t('Add a sort criterion by topic') }}</button>
+      <button
+        v-if="availableRubriquage.length"
+        class="btn mt-2"
+        @click="addFilter"
+      >
+        {{ $t('Add a sort criterion by topic') }}
+      </button>
     </div>
   </div>
 </template>
-<style lang="scss">
-</style>
+
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
-import Vue from 'vue';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const RubriqueChoice = defineAsyncComponent(() => import('./RubriqueChoice.vue'));
+export default defineComponent({
   components: {
-    RubriqueChoice: () => import('./RubriqueChoice.vue'),
+    RubriqueChoice,
   },
   props: {
-    organisationId: { default: undefined as string|undefined},
-    resetRubriquage: { default: false as boolean},
+    organisationId: { default: undefined, type: String},
+    resetRubriquage: { default: false, type:  Boolean},
   },
+  emits: ['updateRubriquageFilter'],
 
   data() {
     return {
@@ -61,17 +70,6 @@ export default Vue.extend({
       isInit: true as boolean,
       isInternChanged: false as boolean,
     };
-  },
-
-  created() {
-    if(this.rubriqueFilter.length){
-      this.arrayFilter = Array.from(this.rubriqueFilter);
-      this.isRubriquage = true;
-    }
-    this.fetchTopics(false);
-    this.$nextTick(() => {
-      this.isInit = false;
-    });
   },
 
   computed: {
@@ -90,11 +88,98 @@ export default Vue.extend({
       if(this.arrayFilter.length){
         const rubriquageIdToNotShow = this.arrayFilter.map(a => a.rubriquageId);
         return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+          if(element.rubriquageId){
+            return !rubriquageIdToNotShow.includes(element.rubriquageId);
+          }
         });
       }
       return this.rubriquageData;
     }
+  },
+  watch: {
+    organisation(): void {
+      if(this.isRubriquage){
+        this.fetchTopics(true);
+      }
+    },
+    isRubriquage(): void {
+      if(this.isInternChanged ||this.isInit){
+        return;
+      }
+      this.isInternChanged = true;
+      if(0===this.arrayFilter.length && this.availableRubriquage[0].rubriquageId){
+        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""});
+      }
+      if(this.isRubriquage){
+        if(this.saveOrganisation !== this.organisation){
+          this.fetchTopics(true);
+        }
+        this.$emit('updateRubriquageFilter', this.arrayFilter);
+      }else{
+        this.$emit('updateRubriquageFilter', []);
+      }
+      this.resetRubriqueFilter();
+      this.$nextTick(() => {
+        this.isInternChanged = false;
+      });
+    },
+    arrayFilter:{
+      deep: true,
+      handler(){
+        if(this.isInternChanged ||this.isInit){
+          return;
+        }
+        this.isInternChanged = true;
+        this.resetRubriqueFilter();
+        if(this.isRubriquage){
+          this.$emit('updateRubriquageFilter', this.arrayFilter);
+        }
+        this.$nextTick(() => {
+          this.isInternChanged = false;
+        });
+      }
+    },
+    rubriqueFilter:{
+      deep: true,
+      async handler(){
+        if(this.isInternChanged){
+          return;
+        }
+        this.isInternChanged = true;
+        if(this.saveOrganisation !== this.filterOrga){
+          await this.fetchTopics(false);
+        }
+        if(this.rubriqueFilter.length){
+          this.arrayFilter = Array.from(this.rubriqueFilter);
+          this.isRubriquage = true;
+        }else if(this.rubriquageData[0].rubriquageId){
+          this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""}];
+          this.isRubriquage = false;
+        }
+        if(this.isRubriquage){
+          this.$emit('updateRubriquageFilter', this.arrayFilter);
+        }else{
+          this.$emit('updateRubriquageFilter', []);
+        }
+        this.$nextTick(() => {
+          this.isInternChanged = false;
+        });
+      }
+    },
+    resetRubriquage(): void {
+      this.isRubriquage = false;
+    },
+  },
+
+  created() {
+    if(this.rubriqueFilter.length){
+      this.arrayFilter = Array.from(this.rubriqueFilter);
+      this.isRubriquage = true;
+    }
+    this.fetchTopics(false);
+    this.$nextTick(() => {
+      this.isInit = false;
+    });
   },
   methods: {
     deleteRubriqueChoice(index: number): void{
@@ -106,13 +191,17 @@ export default Vue.extend({
       if(elementToNotShow.length){
         const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
         return this.rubriquageData.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
+          if(element.rubriquageId){
+            return !rubriquageIdToNotShow.includes(element.rubriquageId);
+          }
         });
       }
       return this.rubriquageData;
     },
     addFilter(): void{
-      this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
+      if(this.availableRubriquage[0].rubriquageId){
+        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId, rubriqueId: 0,nameRubriquage:this.rubriquageData[0].title, nameRubrique:""});
+      }
     },
     updateRubrique(newValue: {rubriqueId: number; index: number}): void{
       const item = this.arrayFilter[newValue.index];
@@ -135,8 +224,8 @@ export default Vue.extend({
       });
       this.saveOrganisation = this.organisation;
       if (0 === this.rubriquageData.length) return;
-      if(initArrayFilter){
-        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""});
+      if(initArrayFilter && this.rubriquageData[0].rubriquageId){
+        this.arrayFilter.push({rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""});
       }
     },
     resetRubriqueFilter(): void{
@@ -150,73 +239,7 @@ export default Vue.extend({
       this.$store.commit('filterRubrique', []);
     }
   },
-  watch: {
-    organisation(): void {
-      if(this.isRubriquage){
-        this.fetchTopics(true);
-      }
-    },
-    isRubriquage(): void {
-      if(this.isInternChanged ||this.isInit){
-        return;
-      }
-      this.isInternChanged = true;
-      if(0===this.arrayFilter.length){
-        this.arrayFilter.push({rubriquageId: this.availableRubriquage[0].rubriquageId!, rubriqueId: 0, name:""});
-      }
-      if(this.isRubriquage){
-        if(this.saveOrganisation !== this.organisation){
-          this.fetchTopics(true);
-        }
-        this.$emit('updateRubriquageFilter', this.arrayFilter);
-      }else{
-        this.$emit('updateRubriquageFilter', []);
-      }
-      this.resetRubriqueFilter();
-      this.$nextTick(() => {
-        this.isInternChanged = false;
-      });
-    },
-    arrayFilter(): void{
-      if(this.isInternChanged ||this.isInit){
-        return;
-      }
-      this.isInternChanged = true;
-      this.resetRubriqueFilter();
-      if(this.isRubriquage){
-        this.$emit('updateRubriquageFilter', this.arrayFilter);
-      }
-      this.$nextTick(() => {
-        this.isInternChanged = false;
-      });
-    },
-    async rubriqueFilter(): Promise<void>{
-      if(this.isInternChanged){
-        return;
-      }
-      this.isInternChanged = true;
-      if(this.saveOrganisation !== this.filterOrga){
-        await this.fetchTopics(false);
-      }
-      if(this.rubriqueFilter.length){
-        this.arrayFilter = Array.from(this.rubriqueFilter);
-        this.isRubriquage = true;
-      }else{
-        this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId!, rubriqueId: 0, name:""}];
-        this.isRubriquage = false;
-      }
-      if(this.isRubriquage){
-        this.$emit('updateRubriquageFilter', this.arrayFilter);
-      }else{
-        this.$emit('updateRubriquageFilter', []);
-      }
-      this.$nextTick(() => {
-        this.isInternChanged = false;
-      });
-    },
-    resetRubriquage(): void {
-      this.isRubriquage = false;
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

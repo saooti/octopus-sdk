@@ -1,49 +1,183 @@
 <template>
-  <div class="d-inline-flex w-100 mb-3 pl-3 pr-3 hide-phone rubrique-list">
-    <div class="rubrique-list-container" id="rubrique-list-container">
+  <div class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone rubrique-list">
+    <div
+      id="rubrique-list-container"
+      class="rubrique-list-container"
+    >
       <select
-        class="basic-select border c-hand"
         v-model="rubriquage"
+        class="basic-select border c-hand mb-0"
         @change="onRubriquageSelected"
       >
         <option
-          v-for="rubriquage in rubriquageDisplay"
-          :key="rubriquage.rubriquageId"
-          :value="rubriquage"
-          >{{ rubriquage.title }}</option
+          v-for="myRubriquage in rubriquageDisplay"
+          :key="myRubriquage.rubriquageId"
+          :value="myRubriquage"
         >
+          {{ myRubriquage.title }}
+        </option>
       </select>
       <button
-        :id="'rubrique' + rubrique.rubriqueId"
-        @click="addFilter(rubrique)"
-        class="rubrique-item"
         v-for="rubrique in rubriqueDisplay"
+        :id="'rubrique' + rubrique.rubriqueId"
         :key="rubrique.rubriqueId"
-        >{{ rubrique.name }}</button
+        class="rubrique-item"
+        @click="addFilter(rubrique)"
       >
+        {{ rubrique.name }}
+      </button>
     </div>
-    <b-dropdown
+    <div
       v-show="hidenRubriques.length"
-      right
-      toggle-class="text-decoration-none text-dark rubrique-item rubrique-item-plus"
-      no-caret
-      :aria-label="$t('See more')"
+      class="dropdown btn-group"
     >
-      <template v-slot:button-content>
-        <i :aria-label="$t('See more')" class="saooti-plus"></i>
-      </template>
-      <template>
-        <b-dropdown-item
-          @click="addFilter(rubrique)"
+      <button
+        class="btn dropdown-toggle btn-secondary text-decoration-none text-dark category-item category-item-plus dropdown-toggle-no-caret"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        :aria-label="$t('See more')"
+      >
+        <i class="saooti-plus" />
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right px-4">
+        <div
           v-for="rubrique in hidenRubriques"
-          v-bind:key="rubrique.rubriqueId"
-          class="mr-3"
-          >{{ rubrique.name }}</b-dropdown-item
+          :key="rubrique.rubriqueId"
+          class="me-3 dropdown-item"
+          @click="addFilter(rubrique)"
         >
-      </template>
-    </b-dropdown>
+          {{ rubrique.name }}
+        </div>
+      </ul>
+    </div>
   </div>
 </template>
+
+<script lang="ts">
+import { Rubrique } from '@/store/class/rubrique';
+import { Rubriquage } from '@/store/class/rubriquage';
+import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'RubriqueList',
+
+  props: {
+    rubriquages: { default: () => [], type: Array as ()=>Array<Rubriquage>},
+  },
+
+  data() {
+    return {
+      hidenRubriques: [] as Array<Rubrique>,
+      rubriques: [] as Array<Rubrique>,
+      rubriquage: undefined as Rubriquage|undefined,
+    };
+  },
+
+  computed: {
+    filterOrga(): string {
+      return this.$store.state.filter.organisationId;
+    },
+    rubriqueFilter(): Array<RubriquageFilter>{
+      return this.$store.state.filter.rubriqueFilter;
+    },
+    rubriqueDisplay(): Array<Rubrique>{
+      return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
+    },
+    rubriquageDisplay(): Array<Rubriquage>{
+      const elementToNotShow = Array.from(this.rubriqueFilter);
+      if(elementToNotShow.length){
+        const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
+        return this.rubriquages.filter((element)=>{
+          if(!element.rubriquageId){return;}
+          return !rubriquageIdToNotShow.includes(element.rubriquageId);
+        });
+      }
+      return this.rubriquages;
+    },
+  },
+  watch:{
+    rubriqueFilter:{
+      deep: true,
+      handler(){
+        this.selectNewRubriquage();
+      }
+    }
+  },
+
+  mounted() {
+    this.selectNewRubriquage();
+  },
+  beforeUnmount(): void {
+    window.removeEventListener('resize', this.resizeWindow);
+  },
+  methods: {
+    
+    initRubriques(): void{
+      if(!this.rubriquage){ return ;}
+      this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);
+      window.addEventListener('resize', this.resizeWindow);
+      this.resizeWindow();
+    },
+    addFilter(rubrique: Rubrique): void{
+      if(!this.rubriquage){ return ;}
+      const filterToAdd = {
+        rubriquageId: this.rubriquage.rubriquageId?this.rubriquage.rubriquageId: 0, 
+        rubriqueId: rubrique.rubriqueId? rubrique.rubriqueId:0, 
+        nameRubriquage: this.rubriquage.title,
+        nameRubrique: rubrique.name
+      };
+      const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
+      newFilter.push(filterToAdd);
+      this.$store.commit('filterRubrique', newFilter);
+      const queries = this.$route.query;
+      const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
+      this.$router.push({ query: { ...queries, ...{ rubriquesId: queryString }} });
+      this.selectNewRubriquage();
+    },
+    selectNewRubriquage(){
+      const rubriquageLength = this.rubriquages.length;
+      if(rubriquageLength === this.rubriqueFilter.length){
+        return;
+      }
+      let index = 0;
+      const rubriquageAlreadyFilter = this.rubriqueFilter.map(a => a.rubriquageId);
+      for (index; index < rubriquageLength; index++) {
+        const rubriquageIdIndex = this.rubriquages[index].rubriquageId;
+        if(rubriquageIdIndex && !rubriquageAlreadyFilter.includes(rubriquageIdIndex)){
+          break;
+        }
+      }
+      this.rubriquage = this.rubriquages[index];
+      this.initRubriques();
+    },
+    resizeWindow(): void {
+      const rubriqueList = document.getElementById('rubrique-list-container');
+      if(null === rubriqueList){return}
+      rubriqueList.style.justifyContent = 'flex-start';
+      this.hidenRubriques.length = 0;
+      this.rubriqueDisplay.forEach((element: Rubrique) => {
+        const el = document.getElementById('rubrique' + element.rubriqueId);
+        if (!el) return;
+        const parent = el.parentElement;
+        if (null !== parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
+          el.classList.remove('hid');
+          return;
+        }
+        this.hidenRubriques.push(element);
+        if (!el.classList.contains('hid')) {
+          el.className += ' hid';
+        }
+      });
+      if (!this.hidenRubriques.length) {
+        rubriqueList.style.justifyContent = 'center';
+      }
+    },
+    onRubriquageSelected(){
+      this.initRubriques();
+    }
+  }
+})
+</script>
 
 <style lang="scss">
 .rubrique-list-container {
@@ -95,117 +229,3 @@ button.rubrique-item {
   font-size: 0.5rem;
 }
 </style>
-<script lang="ts">
-import Vue from 'vue';
-import { Rubrique } from '@/store/class/rubrique';
-import { Rubriquage } from '@/store/class/rubriquage';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
-  name: 'RubriqueList',
-
-  props: {
-    rubriquages: { default: () => ([]) as Array<Rubriquage>},
-  },
-
-  data() {
-    return {
-      hidenRubriques: [] as Array<Rubrique>,
-      rubriques: [] as Array<Rubrique>,
-      rubriquage: undefined as Rubriquage|undefined,
-    };
-  },
-
-  mounted() {
-    this.selectNewRubriquage();
-  },
-
-  computed: {
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
-    rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
-    },
-    rubriqueDisplay(): Array<Rubrique>{
-      return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
-    },
-    rubriquageDisplay(): Array<Rubriquage>{
-      const elementToNotShow = Array.from(this.rubriqueFilter);
-      if(elementToNotShow.length){
-        const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
-        return this.rubriquages.filter((element)=>{
-          return !rubriquageIdToNotShow.includes(element.rubriquageId!);
-        });
-      }
-      return this.rubriquages;
-    },
-  },
-  methods: {
-    
-    initRubriques(): void{
-      if(!this.rubriquage){ return ;}
-      this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);
-      window.addEventListener('resize', this.resizeWindow);
-      this.resizeWindow();
-    },
-    addFilter(rubrique: Rubrique): void{
-      if(!this.rubriquage){ return ;}
-      const filterToAdd = {rubriquageId: this.rubriquage.rubriquageId!, rubriqueId: rubrique.rubriqueId!, name: this.rubriquage.title +" : "+rubrique.name};
-      const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
-      newFilter.push(filterToAdd);
-      this.$store.commit('filterRubrique', newFilter);
-      const queries = this.$route.query;
-      const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
-      this.$router.push({ query: { ...queries, ...{ rubriquesId: queryString }} });
-      this.selectNewRubriquage();
-    },
-    selectNewRubriquage(){
-      const rubriquageLength = this.rubriquages.length;
-      if(rubriquageLength === this.rubriqueFilter.length){
-        return;
-      }
-      let index = 0;
-      const rubriquageAlreadyFilter = this.rubriqueFilter.map(a => a.rubriquageId);
-      for (index; index < rubriquageLength; index++) {
-        if(!rubriquageAlreadyFilter.includes(this.rubriquages[index].rubriquageId!)){
-          break;
-        }
-      }
-      this.rubriquage = this.rubriquages[index];
-      this.initRubriques();
-    },
-    resizeWindow(): void {
-      const rubriqueList = document.getElementById('rubrique-list-container');
-      rubriqueList!.style.justifyContent = 'flex-start';
-      this.hidenRubriques.length = 0;
-      this.rubriqueDisplay.forEach((element: Rubrique) => {
-        const el = document.getElementById('rubrique' + element.rubriqueId);
-        if (!el) return;
-        const parent = el.parentElement;
-        if (el.offsetLeft + el.clientWidth <= parent!.clientWidth - 20) {
-          el.classList.remove('hid');
-          return;
-        }
-        this.hidenRubriques.push(element);
-        if (!el.classList.contains('hid')) {
-          el.className += ' hid';
-        }
-      });
-      if (!this.hidenRubriques.length) {
-        rubriqueList!.style.justifyContent = 'center';
-      }
-    },
-    onRubriquageSelected(){
-      this.initRubriques();
-    }
-  },
-  beforeDestroy(): void {
-    window.removeEventListener('resize', this.resizeWindow);
-  },
-  watch:{
-    rubriqueFilter(): void{
-      this.selectNewRubriquage();
-    }
-  }
-});
-</script>

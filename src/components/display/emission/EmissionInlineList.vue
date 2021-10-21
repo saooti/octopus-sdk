@@ -1,77 +1,70 @@
 <template>
   <div class="d-flex flex-column p-3 list-episode">
-    <div class="d-flex justify-content-end" v-if="!overflowScroll">
+    <div
+      v-if="!overflowScroll"
+      class="d-flex justify-content-end"
+    >
       <div class="hide-phone">
         <button
           class="btn btn-arrow"
-          @click="displayPrevious()"
           :class="{ disabled: !previousAvailable }"
           :aria-label="$t('Display previous')"
+          @click="displayPrevious()"
         >
-          <div class="saooti-arrow-left2"></div>
+          <div class="saooti-arrow-left2" />
         </button>
         <button
           class="btn btn-arrow"
-          @click="displayNext()"
           :class="{ disabled: !nextAvailable }"
           :aria-label="$t('Display next')"
+          @click="displayNext()"
         >
-          <div class="saooti-arrow-right2"></div>
+          <div class="saooti-arrow-right2" />
         </button>
       </div>
     </div>
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading emissions ...') }}
+      </h3>
     </div>
     <transition-group
-      :name="transitionName"
-      class="podcast-list-inline"
-      tag="ul"
       v-show="
         (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
       "
+      :name="transitionName"
+      class="podcast-list-inline"
+      tag="ul"
       :class="[
         alignLeft ? 'justify-content-start' : '',
         overflowScroll ? 'overflowScroll' : '',
       ]"
     >
       <EmissionPlayerItem
+        v-for="e in emissions"
+        :key="e.emissionId"
         class="flex-shrink item-phone-margin"
         :emission="e"
-        v-for="e in emissions"
-        v-bind:key="e.emissionId"
-        :class="[alignLeft ? 'mr-3' : '', mainRubriquage(e)]"
-        :nbPodcasts="nbPodcasts"
-        :rubriqueName="rubriquesId(e)"
+        :class="[alignLeft ? 'me-3' : '', mainRubriquage(e)]"
+        :nb-podcasts="nbPodcasts"
+        :rubrique-name="rubriquesId(e)"
       />
     </transition-group>
-    <router-link v-bind:to="href" class="btn btn-link" v-if="!overflowScroll">{{
-      buttonText
-    }}</router-link>
+    <router-link
+      v-if="!overflowScroll"
+      :to="href"
+      class="btn btn-link"
+    >
+      {{
+        buttonText
+      }}
+    </router-link>
   </div>
 </template>
-
-<style lang="scss">
-.podcast-list-inline.overflowScroll {
-  display: flex;
-  flex-wrap: wrap;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  padding-bottom: 1rem;
-  width: 100%;
-  height: 80vh;
-  overflow-y: auto;
-  @media (max-width: 960px) {
-    overflow-x: hidden;
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-  .item-phone-margin {
-    margin: 1rem 0.5rem !important;
-  }
-}
-</style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
@@ -81,23 +74,23 @@ import { state } from '../../../store/paramStore';
 
 const PHONE_WIDTH = 960;
 
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'EmissionInlineList',
 
   components: {
     EmissionPlayerItem,
   },
   props: {
-    organisationId: { default: undefined as string|undefined },
-    href: { default: undefined as string|undefined },
-    buttonText: { default: undefined as string|undefined },
-    rubriqueId: { default: undefined as number|undefined },
-    rubriquageId: { default: undefined as number|undefined },
-    nbPodcasts: { default: undefined as number|undefined },
-    itemSize: { default: undefined as number|undefined },
+    organisationId: { default: undefined, type: String},
+    href: { default: undefined, type: String},
+    buttonText: { default: undefined, type: String},
+    rubriqueId: { default: undefined, type: Number },
+    rubriquageId: { default: undefined, type: Number },
+    nbPodcasts: { default: undefined, type: Number },
+    itemSize: { default: undefined, type: Number },
   },
 
   data() {
@@ -114,22 +107,6 @@ export default Vue.extend({
       alignLeft: false as boolean,
       rubriques: undefined as Array<Rubrique>|undefined,
     };
-  },
-  
-  created() {
-    window.addEventListener('resize', this.handleResize);
-  },
-
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-
-  mounted() {
-    this.handleResize();
-    this.fetchNext();
-    if (this.displayRubriquage) {
-      this.fetchRubriques();
-    }
   },
 
 
@@ -151,6 +128,22 @@ export default Vue.extend({
     },
     transitionName(): string {
       return this.direction > 0 ? 'out-left' : 'out-right';
+    }
+  },
+  
+  created() {
+    window.addEventListener('resize', this.handleResize);
+  },
+
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+
+  mounted() {
+    this.handleResize();
+    this.fetchNext();
+    if (this.displayRubriquage) {
+      this.fetchRubriques();
     }
   },
   methods: {
@@ -245,9 +238,11 @@ export default Vue.extend({
       )
         return undefined;
       const rubrique = this.rubriques.find(
-        (element: Rubrique) => emission.rubriqueIds.includes(element.rubriqueId!) && element.rubriquageId === parseInt(this.displayRubriquage)
+        (element: Rubrique) => element.rubriqueId && emission.rubriqueIds.includes(element.rubriqueId) && element.rubriquageId === parseInt(this.displayRubriquage)
       );
-      return rubrique!.name;
+      if(rubrique){
+        return rubrique.name;
+      }
     },
     mainRubriquage(emission: Emission): string {
       if (
@@ -258,5 +253,26 @@ export default Vue.extend({
       return '';
     },
   },
-});
+})
 </script>
+
+<style lang="scss">
+.podcast-list-inline.overflowScroll {
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+  width: 100%;
+  height: 80vh;
+  overflow-y: auto;
+  @media (max-width: 960px) {
+    overflow-x: hidden;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .item-phone-margin {
+    margin: 1rem 0.5rem !important;
+  }
+}
+</style>

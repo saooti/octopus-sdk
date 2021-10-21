@@ -1,4 +1,4 @@
-export default{
+export default {
   Productors: 'Établissements',
   Productor: 'Établissement',
   'Number productors': '{nb} établissements',

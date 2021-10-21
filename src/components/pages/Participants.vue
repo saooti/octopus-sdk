@@ -1,39 +1,42 @@
 <template>
   <div class="page-box">
-    <h1 v-if="undefined === titlePage">{{ $t('All participants') }}</h1>
-    <h1 v-else>{{ titlePage }}</h1>
+    <h1 v-if="undefined === titlePage">
+      {{ $t('All participants') }}
+    </h1>
+    <h1 v-else>
+      {{ titlePage }}
+    </h1>
     <ProductorSearch
-      :organisationId="organisationId"
-      :searchPattern="searchPattern"
+      :organisation-id="organisationId"
+      :search-pattern="searchPattern"
       type="participant"
       @updateOrganisationId="updateOrganisationId"
       @updateSearchPattern="updateSearchPattern"
     />
     <ParticipantList
-      :showCount="true"
+      :show-count="true"
       :first="first"
       :size="size"
       :query="searchPattern"
-      :organisationId="organisationId"
+      :organisation-id="organisationId"
     />
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import ParticipantList from '../display/participant/ParticipantList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import { state } from '../../store/paramStore';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     ProductorSearch,
     ParticipantList,
   },
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    productor: { default: undefined as string|undefined},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    productor: { default: undefined, type: String},
   },
 
   data() {
@@ -43,6 +46,12 @@ export default Vue.extend({
       searchPattern: '',
       organisationId: undefined as string | undefined,
     };
+  },
+
+  computed: {
+    titlePage(): string|undefined {
+      return state.intervenantsPage.titlePage;
+    },
   },
 
   created() {
@@ -58,12 +67,6 @@ export default Vue.extend({
       this.organisationId = this.$store.state.filter.organisationId;
     }
   },
-
-  computed: {
-    titlePage(): string|undefined {
-      return state.intervenantsPage.titlePage;
-    },
-  },
   
   methods: {
     updateOrganisationId(value: string): void {
@@ -73,5 +76,7 @@ export default Vue.extend({
       this.searchPattern = value;
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

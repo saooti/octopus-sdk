@@ -1,39 +1,80 @@
 <template>
   <div v-if="isDisplay">
-    <nav aria-label="breadcrumb" v-if="categoryFilter || rubriqueFilter.length">
+    <nav
+      v-if="categoryFilter || rubriqueFilter.length"
+      aria-label="breadcrumb"
+    >
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#" @click="removeFilter(-1, $event)">{{$t('All')}}</a></li>
-        <li class="breadcrumb-item active" v-if="categoryFilter">{{ categoryFilter.name }}</li>
-        <li 
-          class="breadcrumb-item" 
-          :class="rubriqueFilter.length-1 === index ? 'active':''"
-          v-for="(filter, index) in rubriqueFilter"
-          :key="filter.rubriqueId"
+        <li class="breadcrumb-item">
+          <a
+            href="#"
+            @click="removeFilter(-1, $event)"
+          >{{ $t('All') }}</a>
+        </li>
+        <li
+          v-if="categoryFilter"
+          class="breadcrumb-item active"
         >
-          <a href="#" @click="removeFilter(index,$event)" v-if="rubriqueFilter.length - 1 !== index">{{ filter.name }}</a>
-          <template v-else>{{ filter.name }}</template>
+          {{ categoryFilter.name }}
+        </li>
+        <li 
+          v-for="(filter, index) in rubriqueFilter" 
+          :key="filter.rubriqueId"
+          class="breadcrumb-item d-flex align-items-center"
+          :class="rubriqueFilter.length-1 === index ? 'active':''"
+        >
+          <a
+            v-if="rubriqueFilter.length - 1 !== index"
+            href="#"
+            @click="removeFilter(index,$event)"
+          >{{ filter.nameRubriquage }}</a>
+          <template v-else>
+            {{ filter.nameRubriquage }}
+          </template>
+          <div class="mx-1">
+            :
+          </div>
+          <RubriqueChooser
+            v-if="getRubriques(filter.rubriquageId).length"
+            class="ms-2 multiselect-transparent"
+            :multiple="false"
+            :rubriquage-id="filter.rubriquageId"
+            :rubrique-selected="filter.rubriqueId"
+            :all-rubriques="getRubriques(filter.rubriquageId)"
+            :cannot-be-undefined="true"
+            width="auto"
+            @selected="onRubriqueSelected(index,$event)"
+          />
         </li>
       </ol>
     </nav>
-    <CategoryList :isFilter="true" v-if="!categoryFilter && !rubriquageFilter.length"/>
-    <RubriqueList :rubriquages="rubriquageFilter"  v-else-if="rubriquageFilter.length !== rubriqueFilter.length"/>
+    <CategoryList
+      v-if="!categoryFilter && !rubriquageFilter.length"
+      :is-filter="true"
+    />
+    <RubriqueList
+      v-else-if="rubriquageFilter.length !== rubriqueFilter.length"
+      :rubriquages="rubriquageFilter"
+    />
   </div>
 </template>
 
-<style lang="scss">
-
-</style>
 <script lang="ts">
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+import { Rubrique } from '@/store/class/rubrique';
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CategoryList = defineAsyncComponent(() => import('./CategoryList.vue'));
+const RubriqueList = defineAsyncComponent(() => import('./../rubriques/RubriqueList.vue'));
+const RubriqueChooser = defineAsyncComponent(() => import('../rubriques/RubriqueChooser.vue'));
+export default defineComponent({
   name: 'CategoryFilter',
 
   components:{
-    CategoryList: () => import('./CategoryList.vue') as any,
-    RubriqueList: () => import('./../rubriques/RubriqueList.vue') as any,
+    CategoryList,
+    RubriqueList,
+    RubriqueChooser
   },
   computed: {
     categoryFilter(): Category|undefined{
@@ -53,6 +94,28 @@ export default Vue.extend({
     }
   },
   methods:{
+    onRubriqueSelected(index: number, rubrique: Rubrique): void {
+      if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId){
+        return;
+      }
+      if(rubrique.rubriqueId){
+        const filter = Array.from(this.rubriqueFilter);
+        filter[index].rubriqueId = rubrique.rubriqueId;
+        this.$store.commit('filterRubrique', filter);
+        const queries = this.$route.query;
+        const queryString = filter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
+        this.$router.push({ query: { ...queries, ...{ rubriquesId: queryString }} });
+      }
+    },
+    getRubriques(rubriquageId: number): Array<Rubrique>{
+      const rubriquage = this.$store.state.filter.rubriquageArray.find((x: Rubriquage) => {
+        return x.rubriquageId === rubriquageId;
+      });
+      if(rubriquage){
+        return rubriquage.rubriques;
+      }
+      return [];
+    },
     removeFilter(index: number, event?: { preventDefault: () => void }): void{
       const queries = this.$route.query;
       if(this.categoryFilter){
@@ -78,5 +141,7 @@ export default Vue.extend({
       }
     }
   }
-});
+})
 </script>
+
+<style lang="scss"></style>

@@ -1,25 +1,34 @@
 <template>
-  <div class="d-flex" v-if="message && message.length">
+  <div
+    v-if="message && message.length"
+    class="d-flex"
+  >
     <div
       class="d-flex align-items-center bg-error-message p-2 rounded mt-1 mb-1"
     >
-      <img src="/img/caution.png" class="icon-caution" />
-      <div class="alert-text">{{ message }}</div>
+      <img
+        src="/img/caution.png"
+        class="icon-caution"
+      >
+      <div class="alert-text">
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'ErrorMessage',
+  props: {
+    message: { default: undefined, type: String},
+  },
+})
+</script>
+
 <style lang="scss">
 .bg-error-message {
   background-color: #ffd84a9c;
 }
 </style>
-
-<script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
-  name: 'ErrorMessage',
-  props: {
-    message: { default: undefined as string|undefined},
-  },
-});
-</script>

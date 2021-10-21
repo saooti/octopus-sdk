@@ -1,5 +1,6 @@
 export interface RubriquageFilter{
     rubriquageId: number;
     rubriqueId: number;
-    name: string;
+    nameRubriquage: string;
+    nameRubrique: string;
 }

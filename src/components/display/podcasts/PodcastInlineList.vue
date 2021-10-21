@@ -1,75 +1,85 @@
 <template>
   <div
-    class="d-flex flex-column p-3 list-episode"
     v-if="loading || (!loading && 0 !== allPodcasts.length)"
+    class="d-flex flex-column p-3 list-episode"
   >
     <h2>{{ title }}</h2>
     <div class="d-flex justify-content-between">
       <div class="d-flex">
         <button
           class="btn btn-underline"
-          @click="sortPopular()"
           :class="{ active: popularSort }"
+          @click="sortPopular()"
         >
           {{ $t('Most popular') }}
         </button>
         <button
           class="btn btn-underline"
-          @click="sortChrono()"
           :class="{ active: !popularSort }"
+          @click="sortChrono()"
         >
           {{ $t('Last added') }}
         </button>
       </div>
-      <div class="hide-phone" v-if="!isArrow">
+      <div
+        v-if="!isArrow"
+        class="hide-phone"
+      >
         <button
           class="btn btn-arrow"
-          @click="displayPrevious()"
           :class="{ disabled: !previousAvailable }"
           :aria-label="$t('Display previous')"
+          @click="displayPrevious()"
         >
-          <div class="saooti-arrow-left2"></div>
+          <div class="saooti-arrow-left2" />
         </button>
         <button
           class="btn btn-arrow"
-          @click="displayNext()"
           :class="{ disabled: !nextAvailable }"
           :aria-label="$t('Display next')"
+          @click="displayNext()"
         >
-          <div class="saooti-arrow-right2"></div>
+          <div class="saooti-arrow-right2" />
         </button>
       </div>
     </div>
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading podcasts ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading podcasts ...') }}
+      </h3>
     </div>
     <transition-group
+      v-show="loaded"
       :name="transitionName"
       class="podcast-list-inline"
       tag="ul"
-      v-show="loaded"
       :class="[alignLeft ? 'justify-content-start' : '']"
     >
       <PodcastItem
-        class="flex-shrink item-phone-margin"
-        v-bind:podcast="p"
         v-for="p in podcasts"
-        v-bind:key="p.podcastId"
-        :class="[alignLeft ? 'mr-3' : '']"
+        :key="p.podcastId"
+        class="flex-shrink item-phone-margin"
+        :podcast="p"
+        :class="[alignLeft ? 'me-3' : '']"
       />
     </transition-group>
     <router-link
       class="btn btn-link"
       :class="buttonPlus ? 'btn-linkPlus' : ''"
       :to="refTo"
-      >{{ buttonText }}
-      <div class="saooti-plus" v-if="buttonPlus"></div
-    ></router-link>
+    >
+      {{ buttonText }}
+      <div
+        v-if="buttonPlus"
+        class="saooti-plus"
+      />
+    </router-link>
   </div>
 </template>
-
-<style lang="scss"></style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
@@ -78,29 +88,32 @@ import PodcastItem from './PodcastItem.vue';
 
 const PHONE_WIDTH = 960;
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastInlineList',
-  props: {
-    organisationId: { default: undefined as string|undefined},
-    emissionId: { default: undefined as number|undefined},
-    iabId: { default: undefined as number|undefined},
-    title: { default: '' as string},
-    href: { default: undefined as string|undefined},
-    buttonText: { default: false as boolean},
-    isArrow: { default: false as boolean},
-    requirePopularSort: { default:undefined as boolean|undefined},
-    buttonPlus: { default:false as boolean},
-    rubriqueId: { default: () => ([]) as Array<number> },
-    rubriquageId:{ default: () => ([]) as Array<number> },
-    noRubriquageId: { default: () => ([]) as Array<number> },
-  },
-
+  
   components: {
     PodcastItem
   },
+
+  props: {
+    organisationId: { default: undefined, type: String},
+    emissionId: { default: undefined, type: Number},
+    iabId: { default: undefined, type: Number},
+    title: { default: '', type: String},
+    href: { default: undefined, type: String},
+    buttonText: { default: undefined, type: String},
+    isArrow: { default: false, type: Boolean},
+    requirePopularSort: { default:undefined, type: Boolean},
+    buttonPlus: { default:false, type: Boolean},
+    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
+    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
+    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
+  },
+  emits: ['update:isArrow'],
+
   data() {
     return {
       loading: true as boolean,
@@ -114,25 +127,6 @@ export default Vue.extend({
       direction: 1 as number,
       alignLeft: false as boolean,
     };
-  },
-  
-  created() {
-    if (undefined !== this.requirePopularSort) {
-      this.popularSort = this.requirePopularSort;
-    }
-    if (undefined !== this.isArrow) {
-      this.$emit('update:isArrow', true);
-    }
-    window.addEventListener('resize', this.handleResize);
-  },
-
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-
-  mounted() {
-    this.handleResize();
-    this.fetchNext();
   },
   computed: {
     podcasts(): Array<Podcast> {
@@ -177,6 +171,51 @@ export default Vue.extend({
     transitionName(): string {
       return this.direction > 0 ? 'out-left' : 'out-right';
     }
+  },
+  watch: {
+    emissionId(): void {
+      this.reset();
+      this.fetchNext();
+    },
+    organisationId(): void {
+      this.reset();
+      this.fetchNext();
+    },
+    filterOrga(): void {
+      this.reset();
+      this.fetchNext();
+    },
+    iabId(): void {
+      this.reset();
+      this.fetchNext();
+    },
+    rubriqueId(): void {
+      this.reset();
+      this.fetchNext();
+    },
+    rubriquageId(): void {
+      this.reset();
+      this.fetchNext();
+    },
+  },
+  
+  created() {
+    if (undefined !== this.requirePopularSort) {
+      this.popularSort = this.requirePopularSort;
+    }
+    if (undefined !== this.isArrow) {
+      this.$emit('update:isArrow', true);
+    }
+    window.addEventListener('resize', this.handleResize);
+  },
+
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+
+  mounted() {
+    this.handleResize();
+    this.fetchNext();
   },
   methods: {
     async fetchNext(): Promise<void> {
@@ -260,31 +299,7 @@ export default Vue.extend({
       img.src = url;
     },
   },
-  watch: {
-    emissionId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    organisationId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    filterOrga(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    iabId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    rubriqueId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    rubriquageId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

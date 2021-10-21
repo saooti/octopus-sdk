@@ -1,49 +1,60 @@
 <template>
-  <div>
-    <b-modal
-      id="qrcode-modal"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
-      :title="$t('Share QR Code')"
-    >
-      <template v-slot:default>
-        <QrCode :url="urlPage"/>
-      </template>
-      <template v-slot:modal-footer>
-        <button class="btn btn-primary m-1" @click="closePopup">
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
+  <div
+    id="qrcode-modal"
+    class="modal"
+  >
+    <div class="modal-backdrop" />
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ $t('Share QR Code') }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            @click="closePopup"
+          />
+        </div>
+        <div class="modal-body">
+          <QrCode :url="urlPage" />
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-primary m-1"
+            @click="closePopup"
+          >
+            {{ $t('Close') }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<style lang="scss">
-</style>
 <script lang="ts">
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import QrCode from '../../display/sharing/QrCode.vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'QrCodeModal',
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-    emission: { default: undefined as Emission|undefined},
-  },
 
   components: {
     QrCode
   },
 
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    emission: { default: undefined, type: Object as ()=> Emission},
+  },
+
+  emits: ['close'],
+
   data() {
     return {
     };
-  },
-
-  mounted() {
-    this.$bvModal.show('qrcode-modal');
   },
  
   computed: {
@@ -72,5 +83,7 @@ export default Vue.extend({
       this.$emit('close');
     },
   }
-});
+})
 </script>
+
+<style lang="scss"></style>

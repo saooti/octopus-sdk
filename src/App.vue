@@ -1,14 +1,22 @@
 <template>
-  <div id="app">
-    <TopBar v-bind:displayMenu.sync="displayMenu" :isEducation="false" />
-    <LeftMenu v-bind:displayMenu.sync="displayMenu" :isEducation="false" />
+  <div 
+    id="app"
+    class="octopus-app"
+    :key="reload"
+  >
+    <TopBar
+      v-model:displayMenu="displayMenu"
+      :is-education="false"
+    />
+    <LeftMenu
+      v-model:displayMenu="displayMenu"
+      :is-education="false"
+    />
     <CategoryFilter />
     <router-view />
     <Footer />
   </div>
 </template>
-<style lang="scss" src="@/assets/octopus-library.scss"></style>
-<style lang="scss"></style>
 
 <script lang="ts">
 import TopBar from '@/components/misc/TopBar.vue';
@@ -20,20 +28,43 @@ import { Rubriquage } from './store/class/rubriquage';
 import { RubriquageFilter } from './store/class/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique';
 import { initSDK } from './components/mixins/init';
-export default initSDK.extend({
-  name: 'app',
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'App',
+  
   components: {
     TopBar,
     LeftMenu,
     CategoryFilter,
     Footer,
   },
+
+  mixins: [initSDK],
+
   data() {
     return {
       displayMenu: false as boolean,
       initQueryRouter: false,
+      reload: false as boolean,
     };
   },
+
+  watch: {
+    '$route': {
+      deep: true,
+      handler(){
+      if(!this.initQueryRouter){
+        this.initQueryRouter = true;
+        this.initApp();
+      }
+      }
+    },
+    '$i18n.locale'(){
+      this.$forceUpdate();
+      this.reload = !this.reload;
+    }
+  },
+
   methods:{
     async initApp(){
       await this.initSdk();
@@ -84,7 +115,7 @@ export default initSDK.extend({
             const rubrique = rubriquage.rubriques.find((x: Rubrique) => {
               return x.rubriqueId === parseInt(rubriqueFilter[1]);
             });
-            rubriquesFilter.push({rubriquageId: rubriquage.rubriquageId, rubriqueId:rubrique.rubriqueId, name: rubriquage.title +": "+rubrique.name});
+            rubriquesFilter.push({rubriquageId: rubriquage.rubriquageId, rubriqueId:rubrique.rubriqueId, nameRubriquage: rubriquage.title, nameRubrique :rubrique.name});
           }
         }
         if(rubriquesFilter.length){
@@ -92,14 +123,8 @@ export default initSDK.extend({
         }
       }
     }
-  },
-  watch: {
-    '$route' () {
-      if(!this.initQueryRouter){
-        this.initQueryRouter = true;
-        this.initApp();
-      }
-    },
   }
-});
+})
 </script>
+
+<style lang="scss" src="@/assets/octopus-library.scss"></style>

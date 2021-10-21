@@ -1,343 +1,340 @@
 @import '../sass/_variables.scss';
+.octopus-app{
+  .search-icon-container {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+  }
+  .share-container {
+      @media (max-width: 960px) {
+          flex-grow: 1;
+      }
+  }
+  .icon-caution {
+      margin-right: 5px;
+      margin-bottom: 2px;
+      height: 25px;
+  }
+  .flex-no-grow {
+      flex-grow: 0 !important;
+  }
+  .custom-radio .custom-control-label {
+      cursor: pointer;
+  }
+  .input-share-player {
+      border: 1px solid #ddd;
+      border-radius: 50px;
+      &#number-input {
+          margin: 0 1rem;
+          width: 60px;
+      }
+  }
+  .vue-swatches__swatch--selected {
+      border: 2px #40a372 solid !important;
+      box-shadow: unset !important;
+      -webkit-box-shadow: unset !important;
+  }
+  .vue-swatches__trigger{
+    border: solid 1px black;
+  }
+  .share-button-title {
+      height: 2rem;
+  }
 
-.search-icon-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-}
-.share-container {
-    @media (max-width: 960px) {
-        flex-grow: 1;
-    }
-}
-.icon-caution {
-    margin-right: 5px;
-    margin-bottom: 2px;
-    height: 25px;
-}
-.flex-no-grow {
-    flex-grow: 0 !important;
-}
-.custom-radio .custom-control-label {
-    cursor: pointer;
-}
-.input-share-player {
-    border: 1px solid #ddd;
-    border-radius: 50px;
-    &#number-input {
-        margin: 0 1rem;
-        width: 60px;
-    }
-}
-.vue-swatches__container {
-    padding: 0 !important;
-    background-color: transparent !important;
-}
-.vue-swatches__swatch--selected {
-    border: 2px #40a372 solid !important;
-    box-shadow: unset !important;
-    -webkit-box-shadow: unset !important;
-}
-.vue-swatches__trigger{
-  border: solid 1px black;
-}
-.share-button-title {
-    height: 2rem;
-}
-
-.podcast-list {
-    align-self: stretch;
-    flex-grow: 1;
-    margin: 1em 0 0;
-    padding: 0;
-    /*For ie11 */
-    display: flex;
-    flex-wrap: wrap;
-    /* end */
-    display: grid; /* 1 */
-    grid-template-columns: repeat(auto-fill, 13rem); /* 2 */
-    grid-gap: 1rem; /* 3 */
-    justify-content: space-between; /* 4 */
-}
-/** PHONES*/
-@media (max-width: 960px) {
-    .podcast-list {
-        align-self: auto;
-        justify-items: center;
-        display: flex;
-        justify-content: space-around;
-    }
-}
-.list-episode {
-    padding: 2rem 0rem 1rem !important;
-    @media (max-width: 450px) {
-        padding: 0.5rem 0rem 1rem !important;
-    }
-    h2 {
-        margin-bottom: 1rem;
-    }
-}
-.podcast-list-inline {
-    align-self: stretch;
-    flex-grow: 1;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    display: grid;
-    grid-auto-flow: column;
-    grid-gap: 1rem;
-    grid-row: 1;
-  }
-  .out-left-enter-active,
-  .out-left-leave-active,
-  .out-right-enter-active,
-  .out-right-leave-active {
-    transition: all 0.3s ease;
-  }
-  
-  .out-left-leave-to,
-  .out-right-enter {
-    transform: translateX(-110%);
-    opacity: 0;
-  }
-  
-  .out-left-enter,
-  .out-right-leave-to {
-    transform: translateX(110%);
-    opacity: 0;
-  }
-  
-  .out-left-leave-to,
-  .out-right-leave-to {
-    position: absolute;
-  }
-  .out-right-leave-to {
-    right: 5rem;
-    z-index: -1;
+  .podcast-list {
+      align-self: stretch;
+      flex-grow: 1;
+      margin: 1em 0 0;
+      padding: 0;
+      /*For ie11 */
+      display: flex;
+      flex-wrap: wrap;
+      /* end */
+      display: grid; /* 1 */
+      grid-template-columns: repeat(auto-fill, 13rem); /* 2 */
+      grid-gap: 1rem; /* 3 */
+      justify-content: space-between; /* 4 */
   }
   /** PHONES*/
   @media (max-width: 960px) {
-    .podcast-list-inline {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-      padding-bottom: 1rem;
-      width: 100%;
-      .item-phone-margin {
-        margin: 0 0.5rem !important;
+      .podcast-list {
+          align-self: auto;
+          justify-items: center;
+          display: flex;
+          justify-content: space-around;
       }
-    }
   }
-
-.arrow-transform {
-    transform: rotate(180deg);
-}
-.no-border-round {
-    border-radius: 0;
-}
-.text-ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.emission-list {
-    align-self: stretch;
-    flex-grow: 1;
-    margin: 0;
-    padding: 0;
-    /*For ie11 */
-    display: flex;
-    flex-wrap: wrap;
-    /* end */
-  
-    display: grid; /* 1 */
-    grid-gap: 1rem; /* 3 */
-    justify-content: space-between; /* 4 */
-  }
-  .twoEmissions {
-    grid-template-columns: repeat(auto-fill, 49%); /* 2 */
-  }
-  
-  .threeEmissions {
-    grid-template-columns: repeat(auto-fill, 32%); /* 2 */
-  }
-  
-  /** PHONES*/
-  @media (max-width: 1200px) {
-    .emission-list {
-      grid-template-columns: auto;
-    }
-  }
-  .emission-item-container {
-    list-style: none;
-    background: #fff;
-    border-radius: 2rem;
-    display: flex;
-    width: 100%;
-    margin: 1rem 0;
-    .img-box {
-      border-radius: 2rem !important;
-    }
-  }
-  .emission-light-max-size {
-    width: 300px;
-    border-bottom: 1px solid #ddd;
-  }
-  .emission-light-title {
-    color: #333 !important;
-    align-self: flex-end;
-    text-transform: none;
-    font-size: 1.5em;
-    font-weight: normal;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .emission-item-text {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    max-height: 13rem;
-  
-    .emission-name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      word-break: break-word;
-    }
-  
-    .emission-description {
-      overflow: hidden;
-      margin-top: 0.5em;
-      word-break: break-word;
-      max-height: 7rem;
-      position: relative;
-      &.after-emission-description:after {
-        content: '...';
-        position: absolute;
-        padding-left: 1rem;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        font-size: 1rem;
-        font-weight: bolder;
-        text-align: center;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
+  .list-episode {
+      padding: 2rem 0rem 1rem !important;
+      @media (max-width: 450px) {
+          padding: 0.5rem 0rem 1rem !important;
       }
-    }
-  
-    .emission-small-description {
-      -webkit-line-clamp: 2;
-      border-top: 1px solid #ddd;
-      word-break: break-word;
-    }
-  
-    .emission-producer {
-      font-weight: 300;
-      font-size: 0.6rem;
-    }
+      h2 {
+          margin-bottom: 1rem;
+      }
   }
-  
-  button.btn.btn-primary.share-btn.m-3 {
-    font-size: 1rem;
-    width: 2.5rem;
-    height: 2.5rem !important;
-    margin: 0 0.8rem 0 0 !important;
-  }
-  /** PHONES*/
-  @media (max-width: 680px) {
-    .emission-item-container {
-      flex-wrap: wrap;
-      width: auto;
+  .podcast-list-inline {
+      align-self: stretch;
+      flex-grow: 1;
       margin: 0;
-      padding: 1rem;
-      justify-content: center;
-    }
-  }
-  
-  @media (max-width: 450px) {
-    .emission-item-text {
-      padding: 0.5rem 0;
-      text-align: center;
-    }
-  }
-  
-  .comment-item-container {
-    .btn-circle {
-      width: 32px;
-      height: 32px;
-      background: $octopus-secondary-color;
       padding: 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: 1rem;
+      grid-row: 1;
     }
-    .status-Pending {
-        background: #eb7d22;
+    .out-left-enter-active,
+    .out-left-leave-active,
+    .out-right-enter-active,
+    .out-right-leave-active {
+      transition: all 0.3s ease;
     }
-    .status-Invalid {
-        background: #d40303;
+    
+    .out-left-leave-to,
+    .out-right-enter {
+      transform: translateX(-110%);
+      opacity: 0;
     }
-    .status-Valid {
-        background: $octopus-primary-color;
+    
+    .out-left-enter,
+    .out-right-leave-to {
+      transform: translateX(110%);
+      opacity: 0;
+    }
+    
+    .out-left-leave-to,
+    .out-right-leave-to {
+      position: absolute;
+    }
+    .out-right-leave-to {
+      right: 5rem;
+      z-index: -1;
+    }
+    /** PHONES*/
+    @media (max-width: 960px) {
+      .podcast-list-inline {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        padding-bottom: 1rem;
+        width: 100%;
+        .item-phone-margin {
+          margin: 0 0.5rem !important;
+        }
+      }
     }
 
-    .status-Valid, .status-Invalid, .status-Pending {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-    }
-    .icon-certified {
-        height: 15px;
-        margin-right: 0.5rem;
-    }
-    .btn-answer {
-        padding: 0.1rem 0.75rem;
-    }
-    .collapsed > .when-opened,
-    :not(.collapsed) > .when-closed {
-        display: none !important;
-    }
-}
-.live-image-status {
-    text-align: center;
-    width: 100%;
-    font-size: 0.6rem;
-    padding: 0.2rem 0;
-    color: white;
-    text-transform: uppercase;
+  .arrow-transform {
+      transform: rotate(180deg);
   }
+  .no-border-round {
+      border-radius: 0;
+  }
+  .text-ellipsis {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+  .emission-list {
+      align-self: stretch;
+      flex-grow: 1;
+      margin: 0;
+      padding: 0;
+      /*For ie11 */
+      display: flex;
+      flex-wrap: wrap;
+      /* end */
+    
+      display: grid; /* 1 */
+      grid-gap: 1rem; /* 3 */
+      justify-content: space-between; /* 4 */
+    }
+    .twoEmissions {
+      grid-template-columns: repeat(auto-fill, 49%); /* 2 */
+    }
+    
+    .threeEmissions {
+      grid-template-columns: repeat(auto-fill, 32%); /* 2 */
+    }
+    
+    /** PHONES*/
+    @media (max-width: 1200px) {
+      .emission-list {
+        grid-template-columns: auto;
+      }
+    }
+    .emission-item-container {
+      list-style: none;
+      background: #fff;
+      border-radius: 2rem;
+      display: flex;
+      width: 100%;
+      margin: 1rem 0;
+      .img-box {
+        border-radius: 2rem !important;
+      }
+    }
+    .emission-light-max-size {
+      width: 300px;
+      border-bottom: 1px solid #ddd;
+    }
+    .emission-light-title {
+      color: #333 !important;
+      align-self: flex-end;
+      text-transform: none;
+      font-size: 1.5em;
+      font-weight: normal;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .emission-item-text {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      max-height: 13rem;
+    
+      .emission-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-break: break-word;
+      }
+    
+      .emission-description {
+        overflow: hidden;
+        margin-top: 0.5em;
+        word-break: break-word;
+        max-height: 7rem;
+        position: relative;
+        &.after-emission-description:after {
+          content: '...';
+          position: absolute;
+          padding-left: 1rem;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          font-size: 1rem;
+          font-weight: bolder;
+          text-align: center;
+          background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
+        }
+      }
+    
+      .emission-small-description {
+        -webkit-line-clamp: 2;
+        border-top: 1px solid #ddd;
+        word-break: break-word;
+      }
+    
+      .emission-producer {
+        font-weight: 300;
+        font-size: 0.6rem;
+      }
+    }
+    
+    button.btn.btn-primary.share-btn.m-3 {
+      font-size: 1rem;
+      width: 2.5rem;
+      height: 2.5rem !important;
+      margin: 0 0.8rem 0 0 !important;
+    }
+    /** PHONES*/
+    @media (max-width: 680px) {
+      .emission-item-container {
+        flex-wrap: wrap;
+        width: auto;
+        margin: 0;
+        padding: 1rem;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 450px) {
+      .emission-item-text {
+        padding: 0.5rem 0;
+        text-align: center;
+      }
+    }
+    
+    .comment-item-container {
+      .btn-circle {
+        width: 32px;
+        height: 32px;
+        background: $octopus-secondary-color;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .status-Pending {
+          background: #eb7d22;
+      }
+      .status-Invalid {
+          background: #d40303;
+      }
+      .status-Valid {
+          background: $octopus-primary-color;
+      }
 
-.saooti-stitcher-logo,
-.saooti-google-podcasts,
-.saooti-amazon,
-.saooti-Whatsapp {
-  position: relative;
-  div {
-    position: absolute;
-    right: 0;
+      .status-Valid, .status-Invalid, .status-Pending {
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+      }
+      .icon-certified {
+          height: 15px;
+          margin-right: 0.5rem;
+      }
+      .btn-answer {
+          padding: 0.1rem 0.75rem;
+      }
+      .collapsed > .when-opened,
+      :not(.collapsed) > .when-closed {
+          display: none !important;
+      }
   }
-}
-.saooti-stitcher-logo,.saooti-amazon {
-  font-size: 1.7rem !important;
-  div {
-    top: -7px;
+  .live-image-status {
+      text-align: center;
+      width: 100%;
+      font-size: 0.6rem;
+      padding: 0.2rem 0;
+      color: white;
+      text-transform: uppercase;
+    }
+
+  .saooti-stitcher-logo,
+  .saooti-google-podcasts,
+  .saooti-amazon,
+  .saooti-Whatsapp {
+    position: relative;
+    div {
+      position: absolute;
+      right: 0;
+    }
   }
-}
-.share-btn{
-  .saooti-stitcher-logo, .saooti-amazon {
-      top: -0.5rem;
-      left: 0.8rem;
+  .saooti-stitcher-logo,.saooti-amazon {
+    font-size: 1.7rem !important;
+    div {
+      top: -7px;
+    }
+  }
+  .share-btn{
+    .saooti-stitcher-logo, .saooti-amazon {
+        top: -0.5rem;
+        left: 0.8rem;
+    }
   }
 }

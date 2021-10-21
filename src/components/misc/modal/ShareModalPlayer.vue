@@ -1,51 +1,141 @@
 <template>
   <div>
-    <b-modal
+    <div
       id="share-modal"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
-      :title="$t('Share the player')"
+      class="modal"
     >
-      <template v-slot:default>
-        <b-tabs content-class="p-2 share-modal-border">
-          <b-tab :title="$t('Embed link')" class="tab-pane" active>
-            <p>{{ embedLink }}</p>
-            <div
-              class="saooti-copy"
-              @click="onCopyCode(embedLink, afterCopy)"
-            ></div>
-          </b-tab>
-          <b-tab :title="$t('Embedly link')" class="tab-pane">
-            <div class="d-flex flex-column">
-              <div class="d-flex">
-                <p>{{ embedlyLink }}</p>
+      <div class="modal-backdrop" />
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              {{ $t('Share the player') }}
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              @click="closePopup"
+            />
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs">
+              <li
+                v-for="(tab, index) in tabs"
+                :key="tab"
+                class="nav-item"
+              >
+                <div
+                  class="nav-link"
+                  :class="activeTab === index? 'active':''"
+                  @click="activeTab = index"
+                >
+                  {{ tab }}
+                </div>
+              </li>
+            </ul>
+            <div class="tab-content p-2 share-modal-border">
+              <div
+                class="tab-pane tab-pane"
+                :class="activeTab === 0? 'active':''"
+              >
+                <p>{{ embedLink }}</p>
                 <div
                   class="saooti-copy"
-                  @click="onCopyCode(embedlyLink, afterCopy)"
-                ></div>
+                  @click="onCopyCode(embedLink, afterCopy)"
+                />
               </div>
-              <QrCode :url="embedlyLink"/>
+              <div
+                class="tab-pane tab-pane"
+                :class="activeTab === 1? 'active':''"
+              >
+                <div class="d-flex flex-column">
+                  <div class="d-flex">
+                    <p>{{ embedlyLink }}</p>
+                    <div
+                      class="saooti-copy"
+                      @click="onCopyCode(embedlyLink, afterCopy)"
+                    />
+                  </div>
+                  <QrCode :url="embedlyLink" />
+                </div>
+              </div>
+              <div
+                v-if="directLink"
+                class="tab-pane tab-pane"
+                :class="activeTab === 2? 'active':''"
+              >
+                <p>{{ directLink.audioUrl }}</p>
+                <div
+                  class="saooti-copy"
+                  @click="onCopyCode(directLink.audioUrl, snackbarRef)"
+                />
+              </div>
             </div>
-          </b-tab>
-          <b-tab :title="$t('Direct link')" class="tab-pane" v-if="directLink">
-            <p>{{ directLink.audioUrl }}</p>
-            <div
-              class="saooti-copy"
-              @click="onCopyCode(directLink.audioUrl, snackbarRef)"
-            ></div>
-          </b-tab>
-        </b-tabs>
-      </template>
-      <template v-slot:modal-footer>
-        <button class="btn btn-primary m-1" @click="closePopup">
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary m-1"
+              @click="closePopup"
+            >
+              {{ $t('Close') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
+
+<script lang="ts">
+import Snackbar from '../Snackbar.vue';
+import { displayMethods } from '../../mixins/functions';
+
+import QrCode from '../../display/sharing/QrCode.vue';
+import { defineComponent } from 'vue'
+import { Podcast } from '@/store/class/podcast';
+export default defineComponent({
+  name: 'ShareModalPlayer',
+
+  components: {
+    Snackbar,
+    QrCode
+  },
+  mixins: [displayMethods],
+  props: {
+    embedLink: { default: undefined, type: String},
+    embedlyLink: { default: undefined, type: String},
+    directLink: { default: undefined, type: Object as ()=>Podcast},
+  },
+  emits: ['close'],
+  data() {
+    return {
+      activeTab: 0 as number,
+    };
+  },
+  computed:{
+    tabs(): Array<string>{
+      if(this.directLink){
+        return [this.$t('Embed link'),this.$t('Embedly link'),this.$t('Direct link')];
+      }
+      return [this.$t('Embed link'),this.$t('Embedly link')];
+    }
+  },
+  methods: {
+    closePopup(event: { preventDefault: () => void }): void {
+      event.preventDefault();
+      this.$emit('close');
+    },
+    afterCopy(): void{
+      (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
+    }
+  },
+})
+</script>
 
 <style lang="scss">
 .share-modal-border {
@@ -88,34 +178,3 @@
   }
 }
 </style>
-<script lang="ts">
-import Snackbar from '../Snackbar.vue';
-import { displayMethods } from '../../mixins/functions';
-import QrCode from '../../display/sharing/QrCode.vue';
-export default displayMethods.extend({
-  name: 'ShareModalPlayer',
-  props: {
-    embedLink: { default: undefined as string|undefined},
-    embedlyLink: { default: undefined as string|undefined},
-    directLink: { default: undefined as string|undefined},
-  },
-
-  components: {
-    Snackbar,
-    QrCode
-  },
-
-  mounted() {
-    this.$bvModal.show('share-modal');
-  },
-  methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.$emit('close');
-    },
-    afterCopy(): void{
-      (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
-    }
-  },
-});
-</script>

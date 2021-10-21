@@ -1,37 +1,42 @@
 <template>
-  <div class="d-flex flex-column" v-if="notEmpty">
-    <h2 class="mb-4 mt-3">{{ $t('All live emission button') }}</h2>
+  <div
+    v-if="notEmpty"
+    class="d-flex flex-column"
+  >
+    <h2 class="mb-4 mt-3">
+      {{ $t('All live emission button') }}
+    </h2>
     <ul class="podcast-list">
       <PodcastItem
-        v-bind:podcast="l"
         v-for="l in lives"
-        v-bind:key="l.podcastId"
+        :key="l.podcastId"
+        :podcast="l"
       />
     </ul>
     <button
+      v-show="!allFetched"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus mt-3' : 'btn-more'"
-      @click="displayMore"
-      v-show="!allFetched"
       :disabled="inFetching"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
-
-<style lang="scss"></style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'LiveHorizontalList',
 
   components: {
@@ -39,9 +44,9 @@ export default Vue.extend({
   },
 
   props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    emissionId: { default: undefined as undefined|number},
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    emissionId: { default: undefined, type: Number},
   },
 
   data() {
@@ -55,10 +60,6 @@ export default Vue.extend({
     };
   },
 
-  created() {
-    this.fetchContent(true);
-  },
-
  
   computed: {
     allFetched(): boolean {
@@ -67,6 +68,10 @@ export default Vue.extend({
     buttonPlus(): boolean {
       return state.generalParameters.buttonPlus;
     },
+  },
+
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -105,5 +110,7 @@ export default Vue.extend({
       this.fetchContent(false);
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

@@ -9,10 +9,10 @@
     :data-count="podcast.downloadCount"
   >
     <PodcastImage
-      v-bind:podcast="podcast"
-      :hidePlay="!hover || !description"
-      :displayDescription="description"
-      :arrowDirection="arrowDirection"
+      :podcast="podcast"
+      :hide-play="!hover || !description"
+      :display-description="description"
+      :arrow-direction="arrowDirection"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
@@ -27,7 +27,7 @@
       <div
         :id="'description-podcast-' + podcast.podcastId"
         v-html="description"
-      ></div>
+      />
     </div>
     <div
       class="d-contents"
@@ -35,12 +35,17 @@
       @mouseleave="hideDescription"
     >
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-        <div class="mr-3 small-Text">{{ date }}</div>
-        <div class="small-Text" v-if="0 !== duration.length">
+        <div class="me-3 small-Text">
+          {{ date }}
+        </div>
+        <div
+          v-if="0 !== duration.length"
+          class="small-Text"
+        >
           <!-- <span class="saooti-clock3"></span> -->{{ duration }}
         </div>
       </div>
-      <AnimatorsItem v-bind:animators="podcast.animators" />
+      <AnimatorsItem :animators="podcast.animators" />
       <router-link
         :to="{
           name: 'podcast',
@@ -49,7 +54,9 @@
         }"
         class="text-dark d-flex flex-column flex-grow"
       >
-        <div class="title-podcast-item">{{ title }}</div>
+        <div class="title-podcast-item">
+          {{ title }}
+        </div>
       </router-link>
       <div class="d-flex justify-content-between">
         <router-link
@@ -64,81 +71,13 @@
           <div>{{ '© ' + podcast.organisation.name }}</div>
         </router-link>
         <span
-          class="saooti-star-bounty text-danger pr-2"
           v-if="editRight && podcast.order && podcast.order > 1"
-        ></span>
+          class="saooti-star-bounty text-danger pe-2"
+        />
       </div>
     </div>
   </li>
 </template>
-
-<style lang="scss">
-.podcast-item-container {
-  border-radius: 0.8rem;
-  list-style: none;
-  position: relative;
-  width: 13rem;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  background: #fff;
-  flex-shrink: 0;
-  .text-secondary {
-    margin: 0.5rem !important;
-  }
-  .saooti-star-bounty {
-    font-size: 22px;
-  }
-
-  .title-podcast-item {
-    font-weight: 700;
-    margin: 0.25rem 0.5rem 0.5rem;
-    overflow: hidden;
-    display: -webkit-box;
-    flex-grow: 1;
-    font-size: 0.7rem;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    min-height: 3rem;
-    line-height: 1rem;
-    word-break: break-word;
-  }
-  .description-podcast-item {
-    padding: 1rem;
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.92);
-    height: 13rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.9em;
-    position: absolute;
-    width: 13rem;
-    word-break: break-word;
-    &.after-podcast-description:after {
-      content: '...';
-      position: absolute;
-      padding-left: 1rem;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 1rem;
-      font-weight: bolder;
-      text-align: center;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
-    }
-  }
-  .producer-podcast-item {
-    margin: 0.2rem 0.5rem 0.5rem;
-    font-size: 0.55rem;
-    color: #666;
-  }
-
-  @media (max-width: 960px) {
-    margin: 0.5rem !important;
-  }
-}
-</style>
 
 <script lang="ts">
 import AnimatorsItem from './AnimatorsItem.vue';
@@ -147,18 +86,19 @@ import { state } from '../../../store/paramStore';
 const moment = require('moment');
 const humanizeDuration = require('humanize-duration');
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Category } from '@/store/class/category';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastItem',
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-  },
-
+  
   components: {
     AnimatorsItem,
     PodcastImage,
+  },
+
+  props: {
+    podcast: { default: ()=>({}), type: Object as ()=> Podcast},
   },
 
   data() {
@@ -167,21 +107,6 @@ export default Vue.extend({
       arrowDirection: 'up' as string,
       isDescriptionBig: false as boolean,
     };
-  },
-
-  mounted() {
-    const podcastDesc = document.getElementById(
-      'description-podcast-' + this.podcast.podcastId
-    );
-    const podcastDescContainer = document.getElementById(
-      'description-podcast-container-' + this.podcast.podcastId
-    );
-    if (
-      null !== podcastDesc &&
-      podcastDesc.clientHeight > podcastDescContainer!.clientHeight
-    ) {
-      this.isDescriptionBig = true;
-    }
   },
   
   computed: {
@@ -196,9 +121,9 @@ export default Vue.extend({
     },
     date(): string {
       if('fr' === this.$i18n.locale){
-        return moment(this.podcast!.pubDate).format('D MMMM YYYY [à] HH[h]mm');
+        return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
       }
-      return moment(this.podcast!.pubDate).format('D MMMM YYYY [at] HH[h]mm');
+      return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
     },
     displayDate(): string {
       return moment(this.podcast.pubDate).format('X');
@@ -207,7 +132,7 @@ export default Vue.extend({
       const catIds = this.podcast.emission.iabIds;
       return this.$store.state.categories
         .filter((c: Category) => {
-          return catIds!.includes(c.id);
+          return catIds && catIds.includes(c.id);
         })
         .map((c: any) => {
           return c.name;
@@ -281,6 +206,21 @@ export default Vue.extend({
       });
     },
   },
+
+  mounted() {
+    const podcastDesc = document.getElementById(
+      'description-podcast-' + this.podcast.podcastId
+    );
+    const podcastDescContainer = document.getElementById(
+      'description-podcast-container-' + this.podcast.podcastId
+    );
+    if (
+      null !== podcastDesc && null !== podcastDescContainer &&
+      podcastDesc.clientHeight > podcastDescContainer.clientHeight
+    ) {
+      this.isDescriptionBig = true;
+    }
+  },
   methods: {
     showDescription(): void {
       this.arrowDirection = 'down';
@@ -291,5 +231,73 @@ export default Vue.extend({
       this.hover = false;
     },
   },
-});
+})
 </script>
+
+<style lang="scss">
+.podcast-item-container {
+  border-radius: 0.8rem;
+  list-style: none;
+  position: relative;
+  width: 13rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: #fff;
+  flex-shrink: 0;
+  .text-secondary {
+    margin: 0.5rem !important;
+  }
+  .saooti-star-bounty {
+    font-size: 22px;
+  }
+
+  .title-podcast-item {
+    font-weight: 700;
+    margin: 0.25rem 0.5rem 0.5rem;
+    overflow: hidden;
+    display: -webkit-box;
+    flex-grow: 1;
+    font-size: 0.7rem;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    min-height: 3rem;
+    line-height: 1rem;
+    word-break: break-word;
+  }
+  .description-podcast-item {
+    padding: 1rem;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.92);
+    height: 13rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9em;
+    position: absolute;
+    width: 13rem;
+    word-break: break-word;
+    &.after-podcast-description:after {
+      content: '...';
+      position: absolute;
+      padding-left: 1rem;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: bolder;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
+    }
+  }
+  .producer-podcast-item {
+    margin: 0.2rem 0.5rem 0.5rem;
+    font-size: 0.55rem;
+    color: #666;
+  }
+
+  @media (max-width: 960px) {
+    margin: 0.5rem !important;
+  }
+}
+</style>

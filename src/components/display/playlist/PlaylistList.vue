@@ -1,53 +1,61 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div v-if="loaded && playlists.length > 1" class="text-secondary mb-2">
+    <div
+      v-if="loaded && playlists.length > 1"
+      class="text-secondary mb-2"
+    >
       {{ $t('Number playlists', { nb: displayCount }) + $t('sort by score') }}
     </div>
     <ul class="emission-list twoEmissions">
       <PlaylistItem
-        v-bind:playlist="p"
         v-for="p in playlists"
-        v-bind:key="p.playlistId"
+        :key="p.playlistId"
+        :playlist="p"
       />
     </ul>
     <button
+      v-show="!allFetched && loaded"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus' : 'btn-more'"
-      @click="displayMore"
-      v-show="!allFetched && loaded"
       :disabled="inFetching"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
-
-<style lang="scss"></style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Playlist } from '@/store/class/playlist';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlaylistList',
 
   components: {
     PlaylistItem,
   },
   props: {
-    first: { default: 0 as number },
-    size: { default: 12 as number },
-    query: { default: undefined as string|undefined },
-    organisationId: { default: undefined as string|undefined },
+    first: { default: 0, type: Number },
+    size: { default: 12, type: Number },
+    query: { default: undefined, type: String},
+    organisationId: { default: undefined, type: String},
   },
 
   data() {
@@ -61,10 +69,6 @@ export default Vue.extend({
       playlists: [] as Array<Playlist>,
       inFetching: false as boolean,
     };
-  },
-
-  mounted() {
-    this.fetchContent(true);
   },
 
   
@@ -90,6 +94,15 @@ export default Vue.extend({
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
+  },
+  watch: {
+    changed(): void {
+      this.fetchContent(true);
+    },
+  },
+
+  mounted() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -132,10 +145,7 @@ export default Vue.extend({
       this.fetchContent(false);
     },
   },
-  watch: {
-    changed(): void {
-      this.fetchContent(true);
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

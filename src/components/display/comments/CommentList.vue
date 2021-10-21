@@ -1,111 +1,81 @@
 <template>
   <div class="d-flex flex-column mt-3">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-danger align-self-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-danger align-self-center"
+    >
       {{ $t('Comments loading error') }}
     </div>
     <transition-group
+      v-show="loaded"
       tag="div"
       name="comment-list"
       class="d-flex flex-column my-transition-list-comments"
-      v-show="loaded"
     >
       <CommentItem
-        :ref="'comItem' + c.comId"
-        :isFlat="isFlat"
-        :comment.sync="comments[indexCom]"
-        :podcast="podcast"
-        :fetchConference="fetchConference"
-        :organisation="organisation"
         v-for="(c, indexCom) in comments"
+        :ref="'comItem' + c.comId"
         :key="c.comId"
+        v-model:comment="comments[indexCom]"
+        :is-flat="isFlat"
+        :podcast="podcast"
+        :fetch-conference="fetchConference"
+        :organisation="organisation"
         @deleteComment="deleteComment(c)"
         @updateComment="updateComment"
       />
     </transition-group>
     <button
+      v-show="!allFetched && loaded"
       class="btn btn-primary mt-2"
       :class="comId ? 'align-self-start' : 'align-self-center'"
-      @click="displayMore"
       :disabled="inFetching"
-      v-show="!allFetched && loaded"
       :aria-label="$t('See more comments')"
+      @click="displayMore"
     >
       {{ $t('See more comments') }}
     </button>
   </div>
 </template>
 
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.my-transition-list-comments {
-  position: relative;
-  .comment-list-enter-active,
-  .comment-list-leave-active {
-    transition: 1200ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
-    transition-property: opacity, transform;
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-enter {
-    opacity: 0;
-    transform: translateX(50px) scaleY(0.5);
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-enter-to {
-    opacity: 1;
-    transform: translateX(0) scaleY(1);
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-leave-active {
-    position: absolute;
-    background-color: $primaryColorReallyTransparent;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .comment-list-leave-to {
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: center top;
-    background-color: $primaryColorReallyTransparent;
-  }
-}
-</style>
-
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
-export default Vue.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CommentItem: any = defineAsyncComponent(() => import('./CommentItem.vue'));
+export default defineComponent({
   name: 'CommentList',
 
   components: {
-    CommentItem: () => import('./CommentItem.vue') as any,
+    CommentItem,
   },
 
   props: {
-    first: { default: 0 as number },
-    size: { default: 50 as number},
-    podcast: { default: undefined as Podcast|undefined },
-    comId: { default: undefined as number|undefined },
-    reload: { default: false as boolean},
-    fetchConference: { default: undefined as Conference|undefined},
-    organisation: { default: undefined as  string|undefined},
-    status: { default: undefined as string | undefined},
-    isFlat: { default: false as boolean},
+    first: { default: 0, type: Number },
+    size: { default: 50, type: Number },
+    podcast: { default: undefined, type: Object as ()=>Podcast},
+    comId: { default: undefined, type: Number },
+    reload: { default: false, type: Boolean},
+    fetchConference: { default: undefined, type: Object as ()=>Conference},
+    organisation: { default: undefined, type: String},
+    status: { default: undefined, type: String},
+    isFlat: { default: false, type: Boolean},
   },
+  emits: ['updateStatus', 'fetch'],
 
   data() {
     return {
@@ -118,9 +88,6 @@ export default Vue.extend({
       comments: [] as Array<CommentPodcast>,
       inFetching: false as boolean,
     };
-  },
-  created() {
-    this.fetchContent(true);
   },
 
   computed: {
@@ -145,6 +112,23 @@ export default Vue.extend({
         return true;
       return false;
     },
+  },
+  watch: {
+    reload(): void {
+      this.fetchContent(true);
+    },
+    status(): void {
+      this.fetchContent(true);
+    },
+    comments: {
+      deep: true,
+      handler(){
+        this.$emit('fetch', { count: this.totalCount, comments: this.comments });
+      }
+    },
+  },
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -311,16 +295,45 @@ export default Vue.extend({
       }
     },
   },
-  watch: {
-    reload(): void {
-      this.fetchContent(true);
-    },
-    status(): void {
-      this.fetchContent(true);
-    },
-    comments(): void {
-      this.$emit('fetch', { count: this.totalCount, comments: this.comments });
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+.my-transition-list-comments {
+  position: relative;
+  .comment-list-enter-active,
+  .comment-list-leave-active {
+    transition: 1200ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+    transition-property: opacity, transform;
+    background-color: $primaryColorReallyTransparent;
+  }
+
+  .comment-list-enter {
+    opacity: 0;
+    transform: translateX(50px) scaleY(0.5);
+    background-color: $primaryColorReallyTransparent;
+  }
+
+  .comment-list-enter-to {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+    background-color: $primaryColorReallyTransparent;
+  }
+
+  .comment-list-leave-active {
+    position: absolute;
+    background-color: $primaryColorReallyTransparent;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .comment-list-leave-to {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: center top;
+    background-color: $primaryColorReallyTransparent;
+  }
+}
+</style>

@@ -1,80 +1,105 @@
-.input-no-outline{
-  outline-width: 0 !important;
-}
-.width-auto{
-  width: auto !important;
-}
+.octopus-app{
+	.input-no-outline{
+	outline-width: 0 !important;
+	}
+	.width-auto{
+	width: auto !important;
+	}
 
-.form-input {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background: #fff;
-	background-image: none;
+	.form-input {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background: #fff;
+		background-image: none;
+		border: 0.1rem solid #dee2e6;
+		border-radius: 0.3rem;
+		color: #353535;
+		display: block;
+		font-size: 0.8rem;
+		height: 2rem;
+		line-height: 1.2rem;
+		max-width: 100%;
+		outline: none;
+		padding: 0.25rem 0.4rem;
+		position: relative;
+		-webkit-transition: background 0.2s, border 0.2s, color 0.2s, -webkit-box-shadow 0.2s;
+		transition: background 0.2s, border 0.2s, color 0.2s, -webkit-box-shadow 0.2s;
+		transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s;
+		transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s, -webkit-box-shadow 0.2s;
+		width: 100%;
+	}
+
+	.form-check-input{
+	margin-right: 5px;
+	}
+
+	.basic-select{
+	background: white;
+	min-height: 40px;
+	text-align: left;
+	color: #35495e;
+	padding: 0.5rem;
+	border-radius: 0.3rem;
+	border-style: none;
+	outline: transparent;
+	width: 350px;
+	margin-bottom: 1rem;
+	}
+
+	.filter-search-input{
+	flex-grow: 1;
+	height: 2rem;
+	margin: 1rem 0;
+	padding: 1.2rem 3rem 1.2rem 1.2rem;
+	border-radius: 2rem;
+	border-style: none;
+	background: white;
+	@media (max-width: 450px) {
+		margin: 0.5rem 0;
+		font-size: 0.6rem;
+		padding: 1.2rem 2.5rem 1.2rem 1.2rem;
+	}
+	}
+
+	.btn-underline.active{
+	border-bottom: $octopus-primary-color 2px solid;
+	}
+	// Datetime picker
+	.theme-saooti input{
 	border: 0.1rem solid #dee2e6;
 	border-radius: 0.3rem;
-	color: #353535;
-	display: block;
-	font-size: 0.8rem;
-	height: 2rem;
-	line-height: 1.2rem;
-	max-width: 100%;
-	outline: none;
-	padding: 0.25rem 0.4rem;
-	position: relative;
-	-webkit-transition: background 0.2s, border 0.2s, color 0.2s, -webkit-box-shadow 0.2s;
-	transition: background 0.2s, border 0.2s, color 0.2s, -webkit-box-shadow 0.2s;
-	transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s;
-	transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s, -webkit-box-shadow 0.2s;
-	width: 100%;
-}
+	padding: 0.1rem 0.4rem;
+	}
+	.theme-saooti .vdatetime-popup__header,
+	.theme-saooti .vdatetime-calendar__month__day--selected>span>span,
+	.theme-saooti .vdatetime-calendar__month__day--selected:hover>span>span,
+	.theme-saooti .vdatetime-popup__date-picker__item--selected>span>span {
+	background: $octopus-primary-color;
+	}
 
-.basic-select{
-  background: white;
-  min-height: 40px;
-  text-align: left;
-  color: #35495e;
-  padding: 0.5rem;
-  border-radius: 0.3rem;
-  border-style: none;
-  outline: transparent;
-  width: 350px;
-  margin-bottom: 1rem;
-}
+	.theme-saooti .vdatetime-year-picker__item--selected,
+	.theme-saooti .vdatetime-time-picker__item--selected,
+	.theme-saooti .vdatetime-popup__actions__button {
+	color: $octopus-primary-color;
+	}
 
-.filter-search-input{
-  flex-grow: 1;
-  height: 2rem;
-  margin: 1rem 0;
-  padding: 1.2rem 3rem 1.2rem 1.2rem;
-  border-radius: 2rem;
-  border-style: none;
-  background: white;
-  @media (max-width: 450px) {
-    margin: 0.5rem 0;
-    font-size: 0.6rem;
-    padding: 1.2rem 2.5rem 1.2rem 1.2rem;
-  }
-}
-
-.btn-underline.active{
-border-bottom: $octopus-primary-color 2px solid;
-}
-// Datetime picker
-.theme-saooti input{
-  border: 0.1rem solid #dee2e6;
-  border-radius: 0.3rem;
-  padding: 0.1rem 0.4rem;
-}
-.theme-saooti .vdatetime-popup__header,
-.theme-saooti .vdatetime-calendar__month__day--selected>span>span,
-.theme-saooti .vdatetime-calendar__month__day--selected:hover>span>span,
-.theme-saooti .vdatetime-popup__date-picker__item--selected>span>span {
-background: $octopus-primary-color;
-}
-
-.theme-saooti .vdatetime-year-picker__item--selected,
-.theme-saooti .vdatetime-time-picker__item--selected,
-.theme-saooti .vdatetime-popup__actions__button {
-color: $octopus-primary-color;
+	//Navigation Bar
+	.nav{
+		border-bottom: 0.05rem solid #ddd;
+		.nav-item{
+			flex-grow: 1;
+			text-align: center;
+			a {
+				color: black;
+			}
+			.nav-link{
+				border-bottom: 0.1rem solid transparent;
+			}
+			.active{
+			border-bottom-color: $octopus-primary-color;
+			color: $octopus-primary-color;
+			}
+		}
+	}
 }

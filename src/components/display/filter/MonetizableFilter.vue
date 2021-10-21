@@ -1,32 +1,42 @@
 <template>
-  <div class="d-flex align-items-center" v-if="!isEducation">
+  <div
+    v-if="!isEducation"
+    class="d-flex align-items-center"
+  >
     <div>{{ $t('Advertising') + ' :' }}</div>
     <label class="wrap">
       <select
         ref="select"
-        class="basic-select ml-2 mb-0 border c-hand"
         v-model="monetization"
+        class="basic-select ms-2 mb-0 border c-hand"
         @change="onChange"
       >
-        <option value="UNDEFINED" v-if="isEmission">{{
+        <option
+          v-if="isEmission"
+          value="UNDEFINED"
+        >{{
           $t('All emissions')
         }}</option>
-        <option value="UNDEFINED" v-else>{{ $t('All podcasts') }}</option>
+        <option
+          v-else
+          value="UNDEFINED"
+        >{{ $t('All podcasts') }}</option>
         <option value="YES">{{ $t('Authorized advertising') }}</option>
         <option value="NO">{{ $t('Prohibited advertising') }}</option>
       </select>
-      <div class="saooti-arrow_down octopus-arrow-down-2 classic-select"></div>
+      <div class="saooti-arrow_down octopus-arrow-down-2 classic-select" />
     </label>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
-    isEmission: { default: false as boolean},
-    isEducation: { default: false as boolean},
+    isEmission: { default: false, type:  Boolean},
+    isEducation: { default: false, type:  Boolean},
   },
+  emits: ['updateMonetization'],
 
   data() {
     return {
@@ -39,5 +49,7 @@ export default Vue.extend({
       this.$emit('updateMonetization', this.monetization);
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

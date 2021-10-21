@@ -1,22 +1,22 @@
 <template>
   <div
+    v-if="!value || init"
     class="default-multiselect-width"
     :style="{ width: width }"
     :class="{ 'multiselect-hide-arrow': !displayArrow }"
-    v-if="!value || init"
   >
     <label
       for="organisationChooser"
       class="d-inline"
       aria-label="select productor"
-    ></label>
-    <Multiselect
-      v-model="organisation"
+    />
+    <VueMultiselect
       id="organisationChooser"
+      ref="multiselectRef"
+      v-model="organisation"
       label="name"
       track-by="organisationId"
       :placeholder="$t('Type string to filter by organisation')"
-      ref="multiselectRef"
       :options="organisations"
       :multiple="false"
       :searchable="true"
@@ -29,55 +29,64 @@
       :show-no-results="true"
       :hide-selected="true"
       :show-labels="false"
+      :class="{ 'light-multiselect': stats }"
       @search-change="onSearchOrganisation"
       @open="onOpen"
       @close="onClose"
       @select="onOrganisationSelected"
-      :class="{ 'light-multiselect': stats }"
     >
-      <template slot="clear" slot-scope="props">
+      <template #clear="{ props }">
         <div
-          class="multiselect__clear"
           v-if="organisation"
+          class="multiselect__clear"
           @mousedown.prevent.stop="clearAll(props.search)"
-        ></div>
+        />
       </template>
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <img
             v-if="!light &&!stats"
             class="option__image"
-            :src="props.option.imageUrl"
-            :alt="props.option.name"
-          />
-          <span class="option__title" :class="{ descriptionText: light }">
-            {{ props.option.name }}
+            :src="option.imageUrl"
+            :alt="option.name"
+          >
+          <span
+            class="option__title"
+            :class="{ descriptionText: light }"
+          >
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template #option="{ option }">
         <div
           class="multiselect-octopus-proposition"
           :data-selenium="
-            'organisation-chooser-' + seleniumFormat(props.option.name)
+            'organisation-chooser-' + seleniumFormat(option.name)
           "
         >
           <img
             v-if="!light &&!stats"
             class="option__image"
-            :src="props.option.imageUrl"
-            :alt="props.option.name"
-          />
-          <span class="option__title" :class="{ descriptionText: light }">
-            {{ props.option.name }}
+            :src="option.imageUrl"
+            :alt="option.name"
+          >
+          <span
+            class="option__title"
+            :class="{ descriptionText: light }"
+          >
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <span slot="noResult">
-        {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
-      <template slot="afterList">
-        <div v-if="remainingElements" class="multiselect-remaining-elements">
+      <template #noResult="">
+        <span>{{ $t('No elements found. Consider changing the search query.') }}</span>
+      </template>
+      <template #afterList="">
+        <div
+          v-if="remainingElements"
+          class="multiselect-remaining-elements"
+        >
           {{
             $t(
               'Count more elements matched your query, please make a more specific search.',
@@ -86,22 +95,28 @@
           }}
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <div class="position-relative" slot="caret" v-if="!light">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2"
-          :class="{ 'octopus-arrow-down-top': stats }"
-        ></span>
-      </div>
-    </Multiselect>
+      <template #noOptions="">
+        {{ $t('List is empty') }}
+      </template>
+      <template #caret="">
+        <div
+          v-if="!light"
+          class="position-relative"
+        >
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2"
+            :class="{ 'octopus-arrow-down-top': stats }"
+          />
+        </div>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
-import Multiselect from 'vue-multiselect';
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../../store/paramStore';
 import { Organisation } from '@/store/class/organisation';
@@ -121,20 +136,23 @@ const getDefaultOrganistion = (defaultName: string) => {
   };
 };
 
-export default selenium.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
-    Multiselect,
+    VueMultiselect,
   },
+  mixins:[selenium],
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string},
-    stats: { default: false as boolean},
-    displayArrow: { default: true as boolean},
-    value: { default: null as null | Organisation },
-    light: { default: false as boolean},
-    reset: { default: false as boolean},
-    all: { default: false as boolean},
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String},
+    stats: { default: false, type:  Boolean},
+    displayArrow: { default: true, type: Boolean},
+    value: { default: undefined, type: String},
+    light: { default: false, type:  Boolean},
+    reset: { default: false, type:  Boolean},
+    all: { default: false, type:  Boolean},
   },
+  emits: ['selected'],
   data() {
     return {
       organisations: [] as Array<Organisation>,
@@ -144,19 +162,6 @@ export default selenium.extend({
       myImage: state.organisation.imageUrl as string,
       organisation: getDefaultOrganistion(this.defaultanswer) as Organisation | undefined
     };
-  },
-
-  async created() {
-    if (
-      this.authenticated &&
-      undefined === this.$store.state.organisation.imageUrl
-    ) {
-      const data = await octopusApi.fetchOrganisation(this.organisationId);
-      this.myImage = data.imageUrl;
-    }
-    if (this.value) {
-      this.fetchOrganisation();
-    }
   },
   
   computed: {
@@ -178,6 +183,31 @@ export default selenium.extend({
           ')',
       };
     },
+  },
+  watch: {
+    value(): void {
+      if (!this.init || this.value) {
+        this.fetchOrganisation();
+      }
+    },
+    reset(): void {
+      this.organisation = this.defaultanswer
+        ? getDefaultOrganistion(this.defaultanswer)
+        : undefined;
+    },
+  },
+
+  async created() {
+    if (
+      this.authenticated &&
+      undefined === this.$store.state.organisation.imageUrl
+    ) {
+      const data = await octopusApi.fetchOrganisation(this.organisationId);
+      this.myImage = data.imageUrl;
+    }
+    if (this.value) {
+      this.fetchOrganisation();
+    }
   },
   methods: {
     onOpen(): void {
@@ -223,9 +253,10 @@ export default selenium.extend({
         return null !== o;
       });
       if (this.defaultanswer) {
-        this.organisations =[getDefaultOrganistion(this.defaultanswer)!].concat(
-          notNull
-        );
+        const defaultOrganisation = getDefaultOrganistion(this.defaultanswer);
+        if(defaultOrganisation){
+          this.organisations =[defaultOrganisation].concat(notNull);
+        }
       } else {
         this.organisations = notNull;
       }
@@ -260,17 +291,7 @@ export default selenium.extend({
       this.organisations.length = 0;
     },
   },
-  watch: {
-    value(): void {
-      if (!this.init || this.value) {
-        this.fetchOrganisation();
-      }
-    },
-    reset(): void {
-      this.organisation = this.defaultanswer
-        ? getDefaultOrganistion(this.defaultanswer)
-        : undefined;
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

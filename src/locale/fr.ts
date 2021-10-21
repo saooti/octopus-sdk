@@ -1,4 +1,4 @@
-export default {
+export default{
   'Edit my profile': 'Mon profil',
   'Edit my organisation': 'Mon organisation',
   Logout: 'Déconnexion',
@@ -130,7 +130,7 @@ export default {
   Advertising: 'Publicité',
   'By topic': 'Selon rubriquage',
   'By rubric': 'Par rubrique',
-  'Type string to filter by rubrics': 'Filtrer les rubriques par intitulé',
+  'Type string to filter by rubrics': 'Filtrer les rubriques',
   'No rubric filter': 'Toutes les rubriques',
   'From the :': 'Depuis le :',
   'To the :': "Jusqu'au :",

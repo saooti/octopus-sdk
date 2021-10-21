@@ -1,70 +1,103 @@
 <template>
-  <div>
-    <b-modal
-      id="add-comment-modal"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
-      :title="$t('Welcome, thanks for your comment')"
-    >
-      <template v-slot:default v-if="!sending">
-        <div>{{ $t("Let's get acquainted :") }}</div>
-        <input
-          class="form-input"
-          type="text"
-          v-model="name"
-          :placeholder="$t('Your name')"
-        />
-        <div class="mt-1 text-danger" v-if="sendError">
-          {{ $t('Recaptcha error') }}
+  <div
+    id="add-comment-modal"
+    class="modal"
+  >
+    <div class="modal-backdrop" />
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ $t('Welcome, thanks for your comment') }}
+          </h5>
         </div>
-        <div class="mt-1 text-danger" v-if="isCaptchaTest">
-          {{ $t('Recaptcha not active') }}
+        <div class="modal-body">
+          <template v-if="!sending">
+            <div>{{ $t("Let's get acquainted :") }}</div>
+            <input
+              v-model="name"
+              class="form-input"
+              type="text"
+              :placeholder="$t('Your name')"
+            >
+            <div
+              v-if="sendError"
+              class="mt-1 text-danger"
+            >
+              {{ $t('Recaptcha error') }}
+            </div>
+            <div
+              v-if="isCaptchaTest"
+              class="mt-1 text-danger"
+            >
+              {{ $t('Recaptcha not active') }}
+            </div>
+          </template>
+          <template v-else>
+            <div>{{ $t('Send in progress') }}</div>
+          </template>
         </div>
-      </template>
-      <template v-slot:default v-else>
-        <div>{{ $t('Send in progress') }}</div>
-      </template>
-      <template v-slot:modal-footer v-if="!sending">
-        <button class="btn btn-light m-1" @click="closePopup">
-          {{ $t('Cancel') }}
-        </button>
-        <button
-          class="btn btn-primary m-1"
-          :disabled="name.length <= 2"
-          @click="recaptcha"
-        >
-          {{ $t('Validate') }}
-        </button>
-      </template>
-      <template v-slot:modal-footer v-else>
-        <button class="btn m-1" @click="closePopup">
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
+        <div class="modal-footer">
+          <template
+            v-if="!sending"
+          >
+            <button
+              class="btn btn-light m-1"
+              @click="closePopup"
+            >
+              {{ $t('Cancel') }}
+            </button>
+            <button
+              class="btn btn-primary m-1"
+              :disabled="name.length <= 2"
+              @click="recaptcha"
+            >
+              {{ $t('Validate') }}
+            </button>
+          </template>
+          <template
+            v-else
+          >
+            <button
+              class="btn m-1"
+              @click="closePopup"
+            >
+              {{ $t('Close') }}
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import { VueReCaptcha } from 'vue-recaptcha-v3';
+import { useReCaptcha } from 'vue-recaptcha-v3';
 import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
-import Vue from 'vue';
-Vue.use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' });
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'AddCommentModal',
 
   props: {},
+  emits: ['close','validate'],
 
-   data() {
+  data() {
     return {
       name: '' as string,
       sending: false as boolean,
       needVerify: true as boolean,
       sendError: false as boolean,
     };
+  },
+
+  computed: {
+    authenticated(): boolean {
+      return state.generalParameters.authenticated;
+    },
+    isCaptchaTest(): boolean {
+      return state.generalParameters.isCaptchaTest;
+    },
   },
 
   mounted() {
@@ -80,23 +113,13 @@ export default Vue.extend({
       ).trim();
       this.needVerify = false;
     }
-    this.$bvModal.show('add-comment-modal');
   },
 
-  destroyed() {
+  unmounted() {
     const captcha: any = document.getElementsByClassName('grecaptcha-badge')[0];
     if (captcha) {
       captcha.style.display = 'none';
     }
-  },
-
-  computed: {
-    authenticated(): boolean {
-      return state.generalParameters.authenticated;
-    },
-    isCaptchaTest(): boolean {
-      return state.generalParameters.isCaptchaTest;
-    },
   },
 
   methods: {
@@ -105,8 +128,9 @@ export default Vue.extend({
         this.sendComment();
         return;
       }
-      await this.$recaptchaLoaded();
-      const token = await this.$recaptcha('login');
+      const { executeRecaptcha, recaptchaLoaded }: any = useReCaptcha()
+      await recaptchaLoaded();
+      const token = await executeRecaptcha('login');
       try {
         this.sendError = false;
         const ok = await api.checkToken(token);
@@ -129,5 +153,7 @@ export default Vue.extend({
       this.$emit('validate', this.name);
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

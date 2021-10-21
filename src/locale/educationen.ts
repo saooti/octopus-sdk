@@ -1,4 +1,4 @@
-export default{
+export default {
     Productors: 'Educational organizations',
     Productor: 'Educational organization',
     'Number productors': '{nb} educational organizations',

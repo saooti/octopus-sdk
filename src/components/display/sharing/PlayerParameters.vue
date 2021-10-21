@@ -1,103 +1,129 @@
 <template>
-  <b-card no-body class="player-parameters mt-3" v-if="!playlist">
-    <div role="tablist">
-      <b-card-header header-tag="header" role="tab">
-        <b-button block v-b-toggle.playerParameters variant="info">{{
-          $t('player parameters')
-        }}</b-button>
-      </b-card-header>
-    </div>
-    <b-collapse id="playerParameters" role="tabpanel">
-      <b-card-body>
-        <b-card-text>
+  <div
+    v-if="!playlist"
+    id="accordionParameters"
+    class="accordion player-parameters mt-3"
+  >
+    <div class="accordion-item">
+      <h2
+        id="labelPlayerParameter"
+        class="accordion-header"
+      >
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#playerParameters"
+          aria-expanded="false"
+          aria-controls="playerParameters"
+        >
+          {{ $t('player parameters') }}
+        </button>
+      </h2>
+      <div
+        id="playerParameters"
+        class="accordion-collapse collapse"
+        aria-labelledby="labelPlayerParameter"
+        data-bs-parent="#accordionParameters"
+      >
+        <div class="accordion-body">
           <div
-            class="d-flex flex-column flex-grow"
             v-if="
               !podcast || isEmission || isLargeEmission || isLargeSuggestion
             "
+            class="d-flex flex-column flex-grow"
           >
             <div
-              class="d-flex align-items-center w-100 flex-wrap mt-1"
               v-if="!podcast || isEmission || isLargeEmission"
+              class="d-flex align-items-center w-100 flex-wrap mt-1"
             >
-              <b-form-radio
+              <input
                 v-model="episodeNumbers"
+                class="form-check-input"
+                type="radio"
                 name="episodeNumbers"
                 value="all"
-              ></b-form-radio>
+              >
               <span class="flex-shrink">{{ $t('Show every episode') }}</span>
             </div>
             <div
               class="d-flex align-items-center flex-wrap"
               :class="!podcast || isEmission || isLargeEmission ? '' : 'mt-3'"
             >
-              <b-form-radio
+              <input
+                v-if="!podcast || isEmission || isLargeEmission"
                 v-model="episodeNumbers"
+                class="form-check-input"
+                type="radio"
                 name="episodeNumbers"
                 value="number"
-                v-if="!podcast || isEmission || isLargeEmission"
-              ></b-form-radio>
+              >
               <span class="flex-shrink">{{ $t('Show') }}</span>
               <input
                 id="number-input"
-                type="number"
                 v-model="iFrameNumber"
+                type="number"
                 min="1"
                 max="50"
                 class="input-share-player input-no-outline text-center m-2"
-              />
+              >
               <label
                 for="number-input"
                 class="d-inline"
                 :aria-label="$t('Number of player podcasts')"
-              ></label>
+              />
               <span class="flex-shrink">{{ $t('Last podcasts') }}</span>
             </div>
-            <div class="checkbox-saooti">
+            <div>
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="proceedCheck"
                 v-model="proceedReading"
-              />
-              <label class="custom-control-label" for="proceedCheck">{{
+                type="checkbox"
+                class="form-check-input"
+              >
+              <label
+                class="form-check-label"
+                for="proceedCheck"
+              >{{
                 $t('Proceed reading')
               }}</label>
             </div>
-            <div class="checkbox-saooti">
+            <div>
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="isVisibleCheckbox"
                 v-model="isVisibleTemp"
-              />
-              <label
-                class="custom-control-label mr-2"
-                for="isVisibleCheckbox"
-                >{{ $t('Podcasts still available') }}</label
+                type="checkbox"
+                class="form-check-input"
               >
+              <label
+                class="form-check-label me-2"
+                for="isVisibleCheckbox"
+              >{{ $t('Podcasts still available') }}</label>
             </div>
           </div>
           <div
-            class="d-flex flex-column flex-grow"
             v-else
+            class="d-flex flex-column flex-grow"
           >
-            <div class="checkbox-saooti">
+            <div>
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="proceedCheck"
                 v-model="displayArticle"
-              />
-              <label class="custom-control-label" for="proceedCheck">{{
+                type="checkbox"
+                class="form-check-input"
+              >
+              <label
+                class="form-check-label"
+                for="proceedCheck"
+              >{{
                 $t('Display associated article')
               }}</label>
             </div>
           </div>
           <!-- <div class="d-flex align-items-center flex-wrap" v-if="podcast && iFrameModel !== 'emission'">
-              <div class="checkbox-saooti">  
-                <input type="checkbox" class="custom-control-input" id="startTime" v-model="startTime">  
-                <label class="custom-control-label mr-2" for="startTime">{{$t('Start at')}}</label>  
+              <div>  
+                <input type="checkbox" class="form-check-input" id="startTime" v-model="startTime">  
+                <label class="form-check-label me-2" for="startTime">{{$t('Start at')}}</label>  
               </div>
                 <input 
                 ref="minutesRef"
@@ -106,7 +132,7 @@
                 min="0"
                 class="input-share-player input-no-outline" 
                 @change="onDurationChange"/>
-                <div class="mr-1 ml-1">:</div>
+                <div class="me-1 ms-1">:</div>
               <input 
                 ref="secondesRef"
                 type="number"
@@ -116,48 +142,24 @@
                 class="input-share-player input-no-outline" 
                 @change="onDurationChange"/>
             </div> -->
-        </b-card-text>
-      </b-card-body>
-    </b-collapse>
-  </b-card>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
-<style lang="scss">
-.player-parameters.card {
-  border: 0;
-  .btn {
-    border-radius: 0;
-  }
-  .card-header {
-    border: 0;
-    background-color: #fafafa;
-    padding: 0;
-  }
-  .card-body {
-    padding: 0.25rem;
-    border: 0.05rem solid #eee;
-    background-color: #fafafa;
-    .custom-control {
-      padding-left: 0;
-    }
-    input[type='number'] {
-      padding-left: 10px;
-      text-align: center;
-      width: 90px;
-    }
-  }
-}
-</style>
+
 <script lang="ts">
 import { Playlist } from '@/store/class/playlist';
 import { Podcast } from '@/store/class/podcast';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
-    podcast: { default: undefined as Podcast|undefined},
-    playlist: { default: undefined as Playlist|undefined},
-    iFrameModel: { default: undefined as string|undefined},
-    isVisible: { default: false as boolean},
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    playlist: { default: undefined, type: Object as ()=> Playlist},
+    iFrameModel: { default: undefined, type: String},
+    isVisible: { default: false, type: Boolean},
   },
+  emits: ['startTime', 'episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle'],
 
   data() {
     return {
@@ -193,17 +195,6 @@ export default Vue.extend({
       return 'largeSuggestion' === this.iFrameModel;
     },
   },
-  methods: {
-    onDurationChange(): void {
-      if (this.startTime) {
-        const minutes = parseInt((this.$refs.minutesRef as any).value, 10);
-        const secondes = parseInt((this.$refs.secondesRef as any).value, 10);
-        this.$emit('startTime', minutes * 60 + secondes);
-      } else {
-        this.$emit('startTime', 0);
-      }
-    },
-  },
   watch: {
     episodeNumbers(): void {
       this.$emit('episodeNumbers', this.episodeNumbers);
@@ -224,5 +215,43 @@ export default Vue.extend({
       this.$emit('displayArticle', this.displayArticle);
     }
   },
-});
+  methods: {
+    onDurationChange(): void {
+      if (this.startTime) {
+        const minutes = parseInt((this.$refs.minutesRef as any).value, 10);
+        const secondes = parseInt((this.$refs.secondesRef as any).value, 10);
+        this.$emit('startTime', minutes * 60 + secondes);
+      } else {
+        this.$emit('startTime', 0);
+      }
+    },
+  },
+})
 </script>
+
+<style lang="scss">
+.player-parameters.card {
+  border: 0;
+  .btn {
+    border-radius: 0;
+  }
+  .card-header {
+    border: 0;
+    background-color: #fafafa;
+    padding: 0;
+  }
+  .card-body {
+    padding: 0.25rem;
+    border: 0.05rem solid #eee;
+    background-color: #fafafa;
+    .custom-control {
+      padding-left: 0;
+    }
+    input[type='number'] {
+      padding-left: 10px;
+      text-align: center;
+      width: 90px;
+    }
+  }
+}
+</style>

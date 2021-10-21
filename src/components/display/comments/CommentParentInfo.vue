@@ -1,43 +1,47 @@
 <template>
   <div class="mt-2">
-    <div class="d-flex" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <div class="mt-2">{{ $t('Loading content ...') }}</div>
+    <div
+      v-if="loading"
+      class="d-flex"
+    >
+      <div class="spinner-border me-3" />
+      <div class="mt-2">
+        {{ $t('Loading content ...') }}
+      </div>
     </div>
     <div v-else>
       <div class="d-flex small-Text">
-        <b class="mr-2">{{ comment.name }}</b>
+        <b class="me-2">{{ comment.name }}</b>
         <img
+          v-if="comment.certified"
           class="icon-certified"
           src="/img/certified.png"
-          v-if="comment.certified"
           :title="$t('Certified account')"
-        />
-        <div class="mr-2">{{ date }}</div>
+        >
+        <div class="me-2">
+          {{ date }}
+        </div>
       </div>
       <div>{{ contentDisplay }}</div>
       <a
-        class="c-hand font-italic"
         v-if="comment.content.length > 300"
+        class="c-hand font-italic"
         @click="summary = !summary"
-        >{{ readMore }}</a
-      >
+      >{{ readMore }}</a>
     </div>
   </div>
 </template>
-
-<style lang="scss"></style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { CommentPodcast } from '@/store/class/comment';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentParentInfo',
 
   props: {
-    comId: { default: undefined as number|undefined },
+    comId: { default: undefined, type: Number },
   },
 
   data() {
@@ -48,22 +52,17 @@ export default Vue.extend({
     };
   },
 
-  async created() {
-    this.comment = await octopusApi.fetchComment(this.comId);
-    this.loading = false;
-  },
-
   
   computed: {
     date(): string {
-      if (this.comment!.date)
-        return moment(this.comment!.date).format('D MMMM YYYY HH[h]mm');
+      if (this.comment && this.comment.date)
+        return moment(this.comment.date).format('D MMMM YYYY HH[h]mm');
       return '';
     },
     limitContent(): string {
-      if (!this.comment!.content) return '';
-      if (this.comment!.content.length <= 300) return this.comment!.content;
-      return this.comment!.content.substring(0, 300) + '...';
+      if (!this.comment || !this.comment.content) return '';
+      if (this.comment.content.length <= 300) return this.comment.content;
+      return this.comment.content.substring(0, 300) + '...';
     },
     readMore(): string {
       if (this.summary) return this.$t('Read more').toString();
@@ -71,8 +70,15 @@ export default Vue.extend({
     },
     contentDisplay(): string {
       if (this.summary) return this.limitContent;
-      return this.comment!.content;
+      return this.comment && this.comment.content? this.comment.content : '';
     },
   },
-});
+
+  async created() {
+    this.comment = await octopusApi.fetchComment(this.comId);
+    this.loading = false;
+  },
+})
 </script>
+
+<style lang="scss"></style>

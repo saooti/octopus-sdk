@@ -18,8 +18,24 @@ const state = {
   octopusApi: {}as any,
   oAuthParam: {} as any,
 };
+export interface paramStore{
+  generalParameters: any,
+  filter: any,
+  podcastPage: any,
+  podcastsPage: any,
+  emissionsPage: any,
+  emissionPage: any,
+  intervenantPage: any,
+  intervenantsPage: any,
+  searchPage: any,
+  player: any,
+  footer: any,
+  organisation: any,
+  octopusApi: any,
+  oAuthParam: any,
+}
 
-const initialize = function initialize(initObject: any) {
+const initialize = function initialize(initObject: paramStore): any {
   return new Promise<void>((resolve, reject) => {
     if (initObject.generalParameters) {
       const param = initObject.generalParameters;
@@ -30,7 +46,7 @@ const initialize = function initialize(initObject: any) {
       state.generalParameters.authenticated =
         'undefined' !== typeof param.authenticated ? param.authenticated : true;
       state.generalParameters.isAdmin =
-        'undefined' !== typeof param.isAdmin ? param.isAdmin : false;
+        'undefined' !== typeof param.isAdmin ? param.isAdmin : true;
       state.generalParameters.isRoleLive =
         'undefined' !== typeof param.isRoleLive ? param.isRoleLive : true;
       state.generalParameters.isCommments =

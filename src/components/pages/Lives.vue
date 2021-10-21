@@ -3,11 +3,16 @@
     <div class="d-flex flex-column align-items-center mb-3">
       <h1>{{ $t('In live') }}</h1>
       <template v-if="!isPodcastmaker">
-        <router-link to="/main/priv/edit/live" v-if="liveRight && filterOrga">
-          <button class="btn btn-primary">{{ $t('Launch a new live') }}</button>
+        <router-link
+          v-if="liveRight && filterOrga"
+          to="/main/priv/edit/live"
+        >
+          <button class="btn btn-primary">
+            {{ $t('Launch a new live') }}
+          </button>
         </router-link>
         <template v-else>
-          <div class="align-self-start font-weight-bold mb-2">
+          <div class="align-self-start fw-bold mb-2">
             {{ $t('Please chose a productor') }}
           </div>
           <OrganisationChooser
@@ -19,48 +24,36 @@
       </template>
     </div>
     <LiveList
-      @initConferenceIds="initConferenceIds"
-      :conferenceWatched="conferenceWatched"
-      :organisationId="organisationId"
       v-if="filterOrga || organisationId"
+      :conference-watched="conferenceWatched"
+      :organisation-id="organisationId"
+      @initConferenceIds="initConferenceIds"
     />
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import { state } from '../../store/paramStore';
 
-import Vue from 'vue';
 import { Organisation } from '@/store/class/organisation';
-export default Vue.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const LiveList = defineAsyncComponent(() => import('../display/live/LiveList.vue'));
+const OrganisationChooser = defineAsyncComponent(() => import('../display/organisation/OrganisationChooser.vue'));
+export default defineComponent({
   components: {
-    LiveList: () => import('../display/live/LiveList.vue'),
-    OrganisationChooser: () => import('../display/organisation/OrganisationChooser.vue'),
+    LiveList,
+    OrganisationChooser,
   },
   props: {
-    conferenceWatched: { default: () => ([])  },
-    organisationId: { default: undefined as any },
-    productor:{default:undefined as string|undefined}
+    conferenceWatched: { default: () => [], type: Array as ()=>Array<any>},
+    organisationId: { default: undefined, type: String },
+    productor:{default:undefined, type: String}
   },
+  emits: ['update:organisationId', 'initConferenceIds'],
   data() {
     return {
       live: true as boolean,
     };
-  },
-  created() {
-    if (this.productor) {
-      this.$emit('update:organisationId',this.productor);
-    } else if (this.$store.state.filter.organisationId) {
-      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
-    }
-    if (
-      this.$store.state.organisation &&
-      this.$store.state.organisation.attributes &&
-      !this.$store.state.organisation.attributes['live.active']
-    ) {
-      this.live = false;
-    }
   },
   
   computed: {
@@ -78,6 +71,20 @@ export default Vue.extend({
       return state.generalParameters.podcastmaker;
     },
   },
+  created() {
+    if (this.productor) {
+      this.$emit('update:organisationId',this.productor);
+    } else if (this.$store.state.filter.organisationId) {
+      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
+    }
+    if (
+      this.$store.state.organisation &&
+      this.$store.state.organisation.attributes &&
+      !this.$store.state.organisation.attributes['live.active']
+    ) {
+      this.live = false;
+    }
+  },
   methods: {
     initConferenceIds(listIds: any): void {
       this.$emit('initConferenceIds', listIds);
@@ -90,5 +97,7 @@ export default Vue.extend({
       }
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

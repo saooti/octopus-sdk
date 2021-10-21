@@ -8,14 +8,14 @@
       for="emissionChooser"
       class="d-inline"
       aria-label="select emission"
-    ></label>
-    <Multiselect
-      v-model="emission"
+    />
+    <VueMultiselect
       id="emissionChooser"
+      ref="multiselectRef"
+      v-model="emission"
       label="name"
       track-by="emissionId"
       :placeholder="$t('Type string to filter by emission')"
-      ref="multiselectRef"
       :options="emissions"
       :multiple="false"
       :searchable="true"
@@ -33,28 +33,31 @@
       @close="onClose"
       @select="onEmissionSelected"
     >
-      <template slot="clear" slot-scope="props">
+      <template #clear="{ props }">
         <div
-          class="multiselect__clear"
           v-if="emission"
+          class="multiselect__clear"
           @mousedown.prevent.stop="clearAll(props.search)"
-        ></div>
+        />
       </template>
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template #option="{ option }">
         <div class="multiselect-octopus-proposition">
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <span slot="noResult">{{
-        $t('No elements found. Consider changing the search query.')
-      }}</span>
-      <template slot="afterList">
-        <div v-if="remainingElements" class="multiselect-remaining-elements">
+      <template #noResult="">
+        <span>{{ $t('No elements found. Consider changing the search query.') }}</span>
+      </template>
+      <template #afterList="">
+        <div
+          v-if="remainingElements"
+          class="multiselect-remaining-elements"
+        >
           {{
             $t(
               'Count more elements matched your query, please make a more specific search.',
@@ -63,19 +66,23 @@
           }}
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <div class="position-relative" slot="caret">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
-        ></span>
-      </div>
-    </Multiselect>
+      <template #noOptions="">
+        {{ $t('List is empty') }}
+      </template>
+      <template #caret="">
+        <div class="position-relative">
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+          />
+        </div>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import Multiselect from 'vue-multiselect';
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 const octopusApi = require('@saooti/octopus-api');
 
 const ELEMENTS_COUNT = 50;
@@ -100,23 +107,25 @@ const getDefaultEmission = (defaultName: string) => {
   };
 };
 
-import Vue from 'vue';
 import { Emission } from '@/store/class/emission';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
-    Multiselect,
+    VueMultiselect
   },
 
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string },
-    organisationId: { default: undefined as string|undefined },
-    emissionChosen: { default: undefined as Emission|undefined},
-    displayArrow: { default: true as boolean },
-    distributedBy: { default: undefined as string|undefined },
-    organisationDistributedBy: { default: undefined as string|undefined },
-    reset: { default: false as boolean },
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String },
+    organisationId: { default: undefined, type: String},
+    emissionChosen: { default: undefined, type: Object as ()=>Emission},
+    displayArrow: { default: true, type: Boolean },
+    distributedBy: { default: undefined, type: String},
+    organisationDistributedBy: { default: undefined, type: String},
+    reset: { default: false, type: Boolean },
   },
+
+  emits: ['selected'],
 
   data() {
     return{
@@ -125,6 +134,17 @@ export default Vue.extend({
       remainingElements: 0 as number,
       isLoading: false as boolean,
     };
+  },
+  watch: {
+    emissionChosen: {
+      deep: true,
+      handler(){
+        this.emission = this.emissionChosen;
+      }
+    },
+    reset(): void {
+      this.emission = getDefaultEmission(this.defaultanswer);
+    },
   },
 
    methods: {
@@ -169,9 +189,12 @@ export default Vue.extend({
       }
       const response = await octopusApi.fetchEmissions(standardParam);
       if (this.defaultanswer) {
-        this.emissions = [getDefaultEmission(this.defaultanswer)!].concat(
-          response.result
-        );
+        const emissionDefault = getDefaultEmission(this.defaultanswer);
+        if(emissionDefault){
+          this.emissions = [emissionDefault].concat(
+            response.result
+          );
+        }
       } else {
         this.emissions = response.result.concat();
       }
@@ -183,13 +206,7 @@ export default Vue.extend({
       this.emissions.length = 0;
     },
   },
-  watch: {
-    emissionChosen(): void {
-      this.emission = this.emissionChosen;
-    },
-    reset(): void {
-      this.emission = getDefaultEmission(this.defaultanswer);
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

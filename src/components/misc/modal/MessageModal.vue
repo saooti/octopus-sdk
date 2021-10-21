@@ -1,57 +1,73 @@
 <template>
-  <b-modal
+  <div
     id="message-modal"
-    @close="closePopup"
-    @hide="closePopup"
-    @cancel="closePopup"
-    :title="title"
+    class="modal"
   >
-    <template v-slot:modal-header-close v-if="!closable">
-      <span></span>
-    </template>
-    <template v-slot:default>
-      <div class="content" v-html="message">{{ message }}</div>
-    </template>
-    <template v-slot:modal-footer v-if="validatetext">
-      <button v-if="canceltext" class="btn btn-light m-1" @click="onCancel">
-        {{ canceltext }}
-      </button>
-      <button
-        v-if="thirdText"
-        class="btn btn-primary m-1"
-        @click="onThirdAction"
-      >
-        {{ thirdText }}
-      </button>
-      <button class="btn btn-primary m-1" @click="onValid">
-        {{ validatetext }}
-      </button>
-    </template>
-    <template v-slot:modal-footer v-else>
-      <span></span>
-    </template>
-  </b-modal>
+    <div class="modal-backdrop" />
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ title }}
+          </h5>
+          <button
+            v-if="closable"
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            @click="closePopup"
+          />
+        </div>
+        <div class="modal-body">
+          <div
+            class="content"
+            v-html="message"
+          />
+        </div>
+        <div
+          v-if="validatetext"
+          class="modal-footer"
+        >
+          <button
+            v-if="canceltext"
+            class="btn btn-light m-1"
+            @click="onCancel"
+          >
+            {{ canceltext }}
+          </button>
+          <button
+            v-if="thirdText"
+            class="btn btn-primary m-1"
+            @click="onThirdAction"
+          >
+            {{ thirdText }}
+          </button>
+          <button
+            class="btn btn-primary m-1"
+            @click="onValid"
+          >
+            {{ validatetext }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'MessageModal',
   props: {
-    title: { default: undefined as string|undefined},
-    active: { default: false as boolean},
-    closable: { default: true as boolean},
-    message: { default: undefined as string|undefined},
-    validatetext: { default: undefined as string|undefined},
-    canceltext: { default: undefined as string|undefined},
-    thirdText: { default: undefined as string|undefined},
+    title: { default: undefined, type: String},
+    active: { default: false, type: Boolean},
+    closable: { default: true, type: Boolean},
+    message: { default: undefined, type: String},
+    validatetext: { default: undefined, type: String},
+    canceltext: { default: undefined, type: String},
+    thirdText: { default: undefined, type: String},
   },
-
-  mounted() {
-    this.$bvModal.show('message-modal');
-  },
-
+  emits: ['close', 'validate', 'cancel', 'thirdEvent'],
   methods: {
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();
@@ -67,5 +83,7 @@ export default Vue.extend({
       this.$emit('thirdEvent');
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

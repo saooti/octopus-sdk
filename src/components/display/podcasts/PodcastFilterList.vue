@@ -1,11 +1,15 @@
 <template>
   <div class="p-3 list-episodes">
-    <h2 v-if="name">{{ $t('All podcast button', { name: name }) }}</h2>
-    <h2 v-else>{{ $t('All podcast emission button') }}</h2>
+    <h2 v-if="name">
+      {{ $t('All podcast button', { name: name }) }}
+    </h2>
+    <h2 v-else>
+      {{ $t('All podcast emission button') }}
+    </h2>
     <div class="d-flex align-items-center flex-wrap">
       <div
-        class="d-flex align-items-center flex-grow categories-filter"
         v-if="categoryFilter"
+        class="d-flex align-items-center flex-grow categories-filter"
       >
         <CategoryChooser
           :defaultanswer="$t('No category filter')"
@@ -13,32 +17,101 @@
         />
       </div>
       <div class="d-flex position-relative small-flex-grow">
-        <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
-        <input
-          :placeholder="$t('Search')"
-          v-model="searchPattern"
-          class="filter-search-input input-no-outline flex-grow"
-          id="search"
+        <label
+          for="search"
+          class="d-inline"
+          :aria-label="$t('Search')"
         />
+        <input
+          id="search"
+          v-model="searchPattern"
+          :placeholder="$t('Search')"
+          class="filter-search-input input-no-outline flex-grow"
+        >
         <div
           class="saooti-search-bounty filter-list-search-icon search-icon-container"
-        ></div>
+        />
       </div>
     </div>
     <PodcastList
       :first="first"
       :size="size"
-      :iabId="iabId"
+      :iab-id="iabId"
       :query="query"
-      :participantId="participantId"
-      :emissionId="emissionId"
-      :organisationId="productorId"
+      :participant-id="participantId"
+      :emission-id="emissionId"
+      :organisation-id="productorId"
       :reload="reloadList"
-      :includeHidden="editRight"
+      :include-hidden="editRight"
       @fetch="fetch"
     />
   </div>
 </template>
+
+<script lang="ts">
+
+import PodcastList from './PodcastList.vue';
+import { Category } from '@/store/class/category';
+import { defineComponent, defineAsyncComponent } from 'vue';
+const CategoryChooser = defineAsyncComponent(() => import('../categories/CategoryChooser.vue'));
+export default defineComponent({
+  components: {
+    CategoryChooser,
+    PodcastList,
+  },
+  props: {
+    participantId: { default: undefined, type: Number},
+    name: { default: undefined, type: String},
+    emissionId: { default: undefined, type: Number},
+    categoryFilter: { default: false, type:  Boolean},
+    reload: { default: false, type:  Boolean},
+    editRight: { default: false, type:  Boolean},
+    productorId: { default: undefined, type: String},
+  },
+  emits: ['fetch'],
+
+  data() {
+    return {
+      first: 0 as number,
+      size: 12 as number,
+      searchPattern: '' as string,
+      iabId: undefined as number | undefined,
+      reloadList: false as boolean,
+    };
+  },
+  computed: {
+    query(): string {
+      if (this.searchPattern.length >= 3) return this.searchPattern;
+      return '';
+    },
+  },
+  watch: {
+    reload(): void {
+      this.reloadList = !this.reloadList;
+    },
+  },
+  created() {
+    if (this.$route.query.first && 'string' === typeof this.$route.query.first) {
+      this.first = parseInt(this.$route.query.first);
+    }
+    if (this.$route.query.size && 'string' === typeof this.$route.query.size) {
+      this.size = parseInt(this.$route.query.size);
+    }
+  },
+  methods: {
+    onCategorySelected(category: Category|undefined): void {
+      if (category && category.id) {
+        this.iabId = category.id;
+      } else {
+        this.iabId = undefined;
+      }
+    },
+    fetch(podcasts: any): void {
+      this.$emit('fetch', podcasts);
+    },
+  },
+})
+</script>
 
 <style lang="scss">
 .categories-filter {
@@ -68,66 +141,3 @@
   flex-grow: 0.3;
 }
 </style>
-
-<script lang="ts">
-// @ is an alias to /src
-import PodcastList from './PodcastList.vue';
-import { Category } from '@/store/class/category';
-import Vue from 'vue';
-export default Vue.extend({
-  components: {
-    CategoryChooser: () => import('../categories/CategoryChooser.vue'),
-    PodcastList,
-  },
-  props: {
-    participantId: { default: undefined as number|undefined},
-    name: { default: undefined as string|undefined},
-    emissionId: { default: undefined as number|undefined},
-    categoryFilter: { default: false as boolean},
-    reload: { default: false as boolean},
-    editRight: { default: false as boolean},
-    productorId: { default: undefined as string|undefined},
-  },
-
-   data() {
-    return {
-      first: 0 as number,
-      size: 12 as number,
-      searchPattern: '' as string,
-      iabId: undefined as number | undefined,
-      reloadList: false as boolean,
-    };
-  },
-  created() {
-    if (this.$route.query.first && 'string' === typeof this.$route.query.first) {
-      this.first = parseInt(this.$route.query.first);
-    }
-    if (this.$route.query.size && 'string' === typeof this.$route.query.size) {
-      this.size = parseInt(this.$route.query.size);
-    }
-  },
-  computed: {
-    query(): string {
-      if (this.searchPattern.length >= 3) return this.searchPattern;
-      return '';
-    },
-  },
-  methods: {
-    onCategorySelected(category: Category|undefined): void {
-      if (category && category.id) {
-        this.iabId = category.id;
-      } else {
-        this.iabId = undefined;
-      }
-    },
-    fetch(podcasts: any): void {
-      this.$emit('fetch', podcasts);
-    },
-  },
-  watch: {
-    reload(): void {
-      this.reloadList = !this.reloadList;
-    },
-  },
-});
-</script>

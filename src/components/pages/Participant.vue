@@ -1,8 +1,15 @@
 <template>
   <div>
-    <div class="page-box intervenant-page" v-if="loaded && !error">
-      <h1 v-if="undefined === titlePage ||!lightStyle">{{ $t('Animator') }}</h1>
-      <h1 v-else>{{ titlePage }}</h1>
+    <div
+      v-if="loaded && !error"
+      class="page-box intervenant-page"
+    >
+      <h1 v-if="undefined === titlePage ||!lightStyle">
+        {{ $t('Animator') }}
+      </h1>
+      <h1 v-else>
+        {{ titlePage }}
+      </h1>
       <div
         class="d-flex w-100 flex-column align-items-center justify-content-center"
       >
@@ -11,13 +18,18 @@
           :style="{
             'background-image': 'url(\'' + participant.imageUrl + '\')',
           }"
-        ></div>
-        <h2 class="text-capitalize">{{ name }}</h2>
+        />
+        <h2 class="text-capitalize">
+          {{ name }}
+        </h2>
         <div
           class="h6 participant-desc html-wysiwyg-content"
           v-html="urlify(description)"
-        ></div>
-        <div class="d-flex justify-content-center" v-if="isRssButton">
+        />
+        <div
+          v-if="isRssButton"
+          class="d-flex justify-content-center"
+        >
           <a
             class="btn btn-bigRound"
             :title="$t('Subscribe to this participant')"
@@ -26,73 +38,78 @@
             rel="noopener"
             target="_blank"
           >
-            <div class="saooti-rss-bounty"></div>
+            <div class="saooti-rss-bounty" />
           </a>
         </div>
         <div class="d-flex">
           <EditBox
-            :participant="participant"
             v-if="editRight && isEditBox"
-            @participantUpdate="updateParticipant"
+            :participant="participant"
             class="flex-grow-1"
-          ></EditBox>
+            @participantUpdate="updateParticipant"
+          />
           <ShareButtons
-            :participantId="participantId"
             v-if="isShareButtons"
-          ></ShareButtons>
+            :participant-id="participantId"
+          />
         </div>
       </div>
       <PodcastFilterList
-        :participantId="participantId"
-        :name="name"
-        :categoryFilter="true"
-        :reload="reload"
         v-if="!lightStyle"
+        :participant-id="participantId"
+        :name="name"
+        :category-filter="true"
+        :reload="reload"
       />
       <PodcastList
+        v-else
         :first="0"
         :size="15"
-        :participantId="participantId"
+        :participant-id="participantId"
         :reload="reload"
-        v-else
       />
     </div>
-    <div class="d-flex justify-content-center" v-if="!loaded">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="!loaded"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-center"
+    >
       <h3>{{ $t("Animator doesn't exist") }}</h3>
     </div>
   </div>
 </template>
 
-<style lang="scss">
-@media (min-width: 950px) {
-  .participant-desc {
-    max-width: 50%;
-    line-height: 1.5em;
-  }
-}
-</style>
-
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Participant } from '@/store/class/participant';
 
-export default displayMethods.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const PodcastList = defineAsyncComponent(() => import('../display/podcasts/PodcastList.vue'));
+export default defineComponent({
   components: {
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
-    PodcastList: () => import('../display/podcasts/PodcastList.vue'),
+    ShareButtons,
+    PodcastFilterList,
+    EditBox,
+    PodcastList,
   },
+  mixins: [displayMethods],
   props: {
-    participantId: { default: undefined as number|undefined},
+    participantId: { default: undefined, type: Number},
   },
+  emits: ['participantTitle'],
   data() {
     return {
       loaded: false as boolean,
@@ -100,9 +117,6 @@ export default displayMethods.extend({
       error: false as boolean,
       reload: false as boolean,
     };
-  },
-  mounted() {
-    this.getParticipantDetails();
   },
   computed: {
     organisationId(): string {
@@ -132,24 +146,38 @@ export default displayMethods.extend({
       );
     },
     description(): string {
-      return this.participant!.description || '';
+      if(!this.participant){return '';}
+      return this.participant.description || '';
     },
     name(): string {
+      if(!this.participant){return '';}
       return (
-        (this.participant!.firstName || '') +
+        (this.participant.firstName || '') +
         ' ' +
-        (this.participant!.lastName || '')
+        (this.participant.lastName || '')
       ).trim();
     },
     editRight(): boolean {
+      if(!this.participant || !this.participant.orga ){return false;}
       if (
         (this.authenticated &&
-          this.organisationId === this.participant!.orga!.id!) ||
+          this.organisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
       )
         return true;
       return false;
     },
+  },
+  watch: {
+    participant: {
+      deep: true,
+      handler(){
+      this.reload = !this.reload;
+      }
+    },
+  },
+  mounted() {
+    this.getParticipantDetails();
   },
   methods: {
     async getParticipantDetails(): Promise<void> {
@@ -169,10 +197,14 @@ export default displayMethods.extend({
       this.$emit('participantTitle', this.name);
     },
   },
-  watch: {
-    participant(): void {
-      this.reload = !this.reload;
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss">
+@media (min-width: 950px) {
+  .participant-desc {
+    max-width: 50%;
+    line-height: 1.5em;
+  }
+}
+</style>

@@ -1,110 +1,143 @@
 <template>
   <div>
-    <div class="page-box" v-if="loaded && !error">
-      <h1 v-if="!isOuestFrance">{{ $t('Emission') }}</h1>
+    <div
+      v-if="loaded && !error"
+      class="page-box"
+    >
+      <h1 v-if="!isOuestFrance">
+        {{ $t('Emission') }}
+      </h1>
       <div class="d-flex">
         <div class="d-flex flex-column flex-grow">
           <EditBox
-            :emission="emission"
-            :rssEmission="rssEmission"
-            :ftpEmission="ftpEmission"
-            :isReady="isReady"
             v-if="editRight && isEditBox"
-          ></EditBox>
+            :emission="emission"
+            :rss-emission="rssEmission"
+            :ftp-emission="ftpEmission"
+            :is-ready="isReady"
+          />
           <div class="module-box">
-            <h2 v-if="!isOuestFrance">{{ name }}</h2>
-            <h1 v-else>{{ name }}</h1>
+            <h2 v-if="!isOuestFrance">
+              {{ name }}
+            </h2>
+            <h1 v-else>
+              {{ name }}
+            </h1>
             <div class="mb-5 mt-3 descriptionText">
               <img
+                v-if="!isOuestFrance"
                 :src="imageUrl"
                 :alt="$t('Emission name image', { name: name })"
-                class="img-box shadow-element float-left mr-3 mb-3"
-                v-if="!isOuestFrance"
+                class="img-box shadow-element float-start me-3 mb-3"
+              >
+              <p
+                class="html-wysiwyg-content"
+                v-html="urlify(description)"
               />
-              <p class="html-wysiwyg-content" v-html="urlify(description)"></p>
             </div>
             <ShareButtons
-              :emission="emission"
-              :bigRound="true"
               v-if="isRssButton"
-            ></ShareButtons>
+              :emission="emission"
+              :big-round="true"
+            />
           </div>
           <SubscribeButtons
-            :emission="emission"
             v-if="isShareButtons && countLink >= 1"
-          ></SubscribeButtons>
+            :emission="emission"
+          />
         </div>
         <div class="d-flex flex-column share-container">
           <SharePlayer
+            v-if="isSharePlayer && (authenticated || notExclusive)"
             :emission="emission"
             :exclusive="exclusive"
-            :notExclusive="notExclusive"
-            :organisationId="organisationId"
-            :isEducation="isEducation"
-            v-if="isSharePlayer && (authenticated || notExclusive)"
-          ></SharePlayer>
+            :not-exclusive="notExclusive"
+            :organisation-id="organisationId"
+            :is-education="isEducation"
+          />
           <ShareButtons
-            :emission="emission"
-            :notExclusive="notExclusive"
             v-if="isShareButtons"
-          ></ShareButtons>
+            :emission="emission"
+            :not-exclusive="notExclusive"
+          />
         </div>
       </div>
       <div v-if="editRight">
         <ShareDistribution
-          :emissionId="emissionId"
           v-if="isShareDistribution"
-        ></ShareDistribution>
+          :emission-id="emissionId"
+        />
       </div>
-      <LiveHorizontalList :emissionId="emissionId" v-if="!isPodcastmaker" />
+      <LiveHorizontalList
+        v-if="!isPodcastmaker"
+        :emission-id="emissionId"
+      />
       <PodcastFilterList
-        :emissionId="emissionId"
-        :categoryFilter="false"
-        :editRight="editRight"
-        :productorId="emission.orga.id"
         v-if="!isOuestFrance"
+        :emission-id="emissionId"
+        :category-filter="false"
+        :edit-right="editRight"
+        :productor-id="emission.orga.id"
         @fetch="fetch"
       />
       <PodcastList
+        v-else
         :first="0"
         :size="15"
-        :emissionId="emissionId"
+        :emission-id="emissionId"
         @fetch="fetch"
-        v-else
       />
     </div>
-    <div class="d-flex justify-content-center" v-if="!loaded">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="!loaded"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-center"
+    >
       <h3>{{ $t("Emission doesn't exist") }}</h3>
     </div>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Emission } from '@/store/class/emission';
 
-export default displayMethods.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
+const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const ShareDistribution = defineAsyncComponent(() => import('../display/sharing/ShareDistribution.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const PodcastList = defineAsyncComponent(() => import('../display/podcasts/PodcastList.vue'));
+const SubscribeButtons = defineAsyncComponent(() => import('../display/sharing/SubscribeButtons.vue'));
+const LiveHorizontalList = defineAsyncComponent(() => import('../display/live/LiveHorizontalList.vue'));
+export default defineComponent({
   components: {
-    PodcastFilterList: () => import('../display/podcasts/PodcastFilterList.vue'),
-    SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    ShareDistribution: () => import('../display/sharing/ShareDistribution.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
-    PodcastList: () => import('../display/podcasts/PodcastList.vue'),
-    SubscribeButtons: () => import('../display/sharing/SubscribeButtons.vue'),
-    LiveHorizontalList: () => import('../display/live/LiveHorizontalList.vue'),
+    PodcastFilterList,
+    SharePlayer,
+    ShareButtons,
+    ShareDistribution,
+    EditBox,
+    PodcastList,
+    SubscribeButtons,
+    LiveHorizontalList,
   },
+  mixins: [displayMethods],
   props: {
-    emissionId: { default: undefined as number|undefined},
-    isEducation: { default: false as boolean},
+    emissionId: { default: undefined, type: Number},
+    isEducation: { default: false, type: Boolean},
   },
+  emits: ['emissionTitle'],
 
   data() {
     return {
@@ -120,10 +153,6 @@ export default displayMethods.extend({
       dummyParam: new Date().getTime().toString() as string,
       fetchLive: true as boolean,
     };
-  },
-
-  mounted() {
-    this.getEmissionDetails();
   },
   
   computed: {
@@ -170,7 +199,7 @@ export default displayMethods.extend({
     },
     editRight(): boolean {
       if (
-        (this.authenticated && this.organisationId === this.emission!.orga.id) ||
+        (this.authenticated && this.emission && this.organisationId === this.emission.orga.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -192,29 +221,40 @@ export default displayMethods.extend({
       return count;
     },
   },
+  watch: {
+    emissionId(): void {
+      this.loaded = false;
+      this.error = false;
+      this.getEmissionDetails();
+    },
+  },
+
+  mounted() {
+    this.getEmissionDetails();
+  },
   methods: {
     async getEmissionDetails(): Promise<void> {
       try {
-        const data = await octopusApi.fetchEmission(this.emissionId);
+        const data: Emission = await octopusApi.fetchEmission(this.emissionId);
         this.emission = data;
         this.$emit('emissionTitle', this.name);
         this.loaded = true;
-        if (!this.emission!.annotations) return;
-        if (this.emission!.annotations.RSS) {
+        if (!this.emission.annotations) return;
+        if (this.emission.annotations.RSS) {
           this.rssEmission = true;
         }
-        if (this.emission!.annotations.FTP) {
+        if (this.emission.annotations.FTP) {
           this.ftpEmission = true;
         }
-        if (this.emission!.annotations.exclusive) {
+        if (this.emission.annotations.exclusive) {
           this.exclusive =
-            'true' === this.emission!.annotations.exclusive ? true : false;
+            'true' === this.emission.annotations.exclusive ? true : false;
           this.exclusive =
-            this.exclusive && this.organisationId !== this.emission!.orga.id;
+            this.exclusive && this.organisationId !== this.emission.orga.id;
         }
-        if (this.emission!.annotations.notExclusive) {
+        if (this.emission.annotations.notExclusive) {
           this.notExclusive =
-            'true' === this.emission!.annotations.notExclusive ? true : false;
+            'true' === this.emission.annotations.notExclusive ? true : false;
         }
       } catch {
         this.error = true;
@@ -229,12 +269,7 @@ export default displayMethods.extend({
       } */
     },
   },
-  watch: {
-    emissionId(): void {
-      this.loaded = false;
-      this.error = false;
-      this.getEmissionDetails();
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

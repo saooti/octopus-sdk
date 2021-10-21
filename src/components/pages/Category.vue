@@ -4,37 +4,30 @@
     <PodcastList
       :first="firstRoute"
       :size="sizeRoute"
-      :iabId="iabId"
-      :organisationId="filterOrga"
+      :iab-id="iabId"
+      :organisation-id="filterOrga"
     />
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
-// @ is an alias to /src
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
     PodcastList,
   },
   props: {
-    firstRoute: { default: 0 as number},
-    sizeRoute: { default: 12 as number},
-    iabId: { default: undefined as number|undefined},
+    firstRoute: { default: 0, type: Number},
+    sizeRoute: { default: 12, type: Number},
+    iabId: { default: undefined, type: Number},
   },
 
   data() {
     return {
       title: '' as string,
     };
-  },
-
-  mounted() {
-    this.extractTitle();
   },
 
   computed: {
@@ -45,6 +38,15 @@ export default Vue.extend({
       return this.$store.state.filter.organisationId;
     },
   },
+  watch: {
+    iabId(): void {
+      this.extractTitle();
+    },
+  },
+
+  mounted() {
+    this.extractTitle();
+  },
   methods: {
     extractTitle(): void {
       const matchCategories = this.categories.filter((c: any) => c.id === this.iabId);
@@ -53,10 +55,7 @@ export default Vue.extend({
 
     },
   },
-  watch: {
-    iabId(): void {
-      this.extractTitle();
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

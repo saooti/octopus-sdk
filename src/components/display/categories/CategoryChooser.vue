@@ -1,14 +1,21 @@
 <template>
-  <div class="default-multiselect-width" :style="{ width: width }">
-    <label :for="id" class="d-inline" aria-label="select category"></label>
-    <Multiselect
+  <div
+    class="default-multiselect-width"
+    :style="{ width: width }"
+  >
+    <label
+      :for="id"
+      class="d-inline"
+      aria-label="select category"
+    />
+    <VueMultiselect
+      :id="id"
+      ref="multiselectRef"
       v-model="model"
       :disabled="isDisabled"
-      :id="id"
       label="name"
       track-by="id"
       :placeholder="$t('Type string to filter by categories')"
-      ref="multiselectRef"
       :options="categories"
       :multiple="multiple"
       :searchable="true"
@@ -26,34 +33,40 @@
       @close="onClose"
       @select="onCategorySelected"
     >
-      <template slot="singleLabel" slot-scope="props">
+      <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <span class="option__title">
-            {{ props.option.name }}
+            {{ option.name }}
           </span>
         </div>
       </template>
-      <template slot="option" slot-scope="props">
+      <template #option="{ option }">
         <div class="multiselect-octopus-proposition">
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title">{{ option.name }}</span>
         </div>
       </template>
-      <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <span slot="noResult">
-        {{ $t('No elements found. Consider changing the search query.') }}
-      </span>
-      <div class="position-relative" slot="caret">
-        <span
-          class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
-        ></span>
-      </div>
-    </Multiselect>
+      <template #noOptions="">
+        {{ $t('List is empty') }}
+      </template>
+      <template #noResult="">
+        <span>
+          {{ $t('No elements found. Consider changing the search query.') }}
+        </span>
+      </template>
+      <template #caret="">
+        <div class="position-relative">
+          <span
+            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+          />
+        </div>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
-<style lang="scss"></style>
 <script lang="ts">
-import Multiselect from 'vue-multiselect';
+//@ts-ignore
+import VueMultiselect from 'vue-multiselect';
 
 const getDefaultCategory = (defaultName: string) => {
   if ('' === defaultName){
@@ -62,23 +75,24 @@ const getDefaultCategory = (defaultName: string) => {
   return { name: defaultName, id: 0 };
 };
 
-import Vue from 'vue';
 import { Category } from '@/store/class/category';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: {
-    Multiselect,
+    VueMultiselect
   },
   props: {
-    width: { default: '100%' as string },
-    defaultanswer: { default: '' as string },
-    categorySelected: { default: undefined as number|undefined },
-    multiple: { default: false as boolean },
-    categoryArray: { default: undefined as Array<number>|undefined },
-    displayAllCategories: { default: false as boolean },
-    isDisabled: { default: false as boolean },
-    initCategories: { default: undefined as Array<Category>|undefined },
+    width: { default: '100%', type: String },
+    defaultanswer: { default: '', type: String },
+    categorySelected: { default: undefined, type: Number },
+    multiple: { default: false, type: Boolean },
+    categoryArray: { default: undefined, type: Array as ()=>Array<number> },
+    displayAllCategories: { default: false, type: Boolean },
+    isDisabled: { default: false, type: Boolean },
+    initCategories: { default: undefined, type: Array as ()=>Array<Category> },
   },
-   data() {
+  emits: ['update:categorySelected','selected'],
+  data() {
     return {
       categories: [] as Array<Category>,
       category: getDefaultCategory(this.defaultanswer) as Category|undefined,
@@ -124,6 +138,26 @@ export default Vue.extend({
 
     }
   },
+  watch: {
+    categorySelected(): void {
+      if(this.categorySelected){
+        this.initCategorySelected(this.categorySelected);
+      }
+    },
+    model: {
+      deep: true,
+      handler(){
+        if(undefined===this.categoryArray ||undefined === this.categoryForArray){
+          return;
+        }
+        const idsArray: Array<number> = [];
+        this.categoryForArray.forEach((el: Category) => {
+          idsArray.push(el.id);
+        });
+        this.$emit('selected', idsArray);
+      }
+    },
+  },
  
   mounted() {
     if (undefined !== this.categorySelected) {
@@ -155,9 +189,12 @@ export default Vue.extend({
         });
       }
       if ('' !== this.defaultanswer) {
-        this.categories = [getDefaultCategory(this.defaultanswer)!].concat(
-          this.totalCategories
-        );
+        const categoryDefault = getDefaultCategory(this.defaultanswer);
+        if(categoryDefault){
+          this.categories = [categoryDefault].concat(
+            this.totalCategories
+          );
+        }
       } else {
         this.categories = this.totalCategories;
       }
@@ -165,20 +202,25 @@ export default Vue.extend({
     onClose(): void {
       if (!this.category && undefined === this.categoryArray) {
         this.category = getDefaultCategory(this.defaultanswer);
-        this.onCategorySelected(this.category!);
+        if(this.category){
+          this.onCategorySelected(this.category);
+        }
       }
     },
     onSearchCategory(query: string): void {
       this.isLoading = true;
-      let list: Array<Category> = [getDefaultCategory(this.defaultanswer)!].concat(
-        this.totalCategories
-      );
-      if ('' === this.defaultanswer) {
-        list = this.totalCategories;
+      const categoryDefault = getDefaultCategory(this.defaultanswer);
+      if(categoryDefault){
+        let list: Array<Category> = [categoryDefault].concat(
+          this.totalCategories
+        );
+        if ('' === this.defaultanswer) {
+          list = this.totalCategories;
+        }
+        this.categories = list.filter((item: Category) => {
+          return item.name.toUpperCase().includes(query.toUpperCase());
+        });
       }
-      this.categories = list.filter((item: Category) => {
-        return item.name.toUpperCase().includes(query.toUpperCase());
-      });
       this.isLoading = false;
     },
     onCategorySelected(category: Category): void {
@@ -198,29 +240,21 @@ export default Vue.extend({
       this.category = categorySelected;
     },
     initCategoryArray(val: Array<number>): void {
-      this.categoryForArray!.length = 0;
+      if(!this.categoryForArray){
+        return;
+      }
+      this.categoryForArray.length = 0;
       val.forEach((element: number) => {
         const item = this.categoriesChosen.find((el: Category) => {
           return el.id === element;
         });
-        this.categoryForArray!.push(item!);
+        if(this.categoryForArray && item){
+          this.categoryForArray.push(item);
+        }
       });
     },
   },
-  watch: {
-    categorySelected(): void {
-      this.initCategorySelected(this.categorySelected);
-    },
-    model(): void {
-      if(undefined===this.categoryArray){
-        return;
-      }
-      const idsArray: Array<number> = [];
-      this.categoryForArray!.forEach((el: Category) => {
-        idsArray.push(el.id);
-      });
-      this.$emit('selected', idsArray);
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

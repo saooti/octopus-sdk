@@ -1,230 +1,116 @@
 <template>
   <div
-    class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-left"
-    :style="{ 'background-image': 'url(\'' + podcast.imageUrl + '\')' }"
     v-if="podcast"
+    class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-start"
+    :style="{ 'background-image': 'url(\'' + podcast.imageUrl + '\')' }"
   >
     <template v-if="isPodcastmaker">
-      <div v-if="mainRubrique" class="mainRubrique"></div>
-      <div v-else class="notMainRubrique"></div>
+      <div
+        v-if="mainRubrique"
+        class="mainRubrique"
+      />
+      <div
+        v-else
+        class="notMainRubrique"
+      />
     </template>
     <div
+      v-if="fetchConference"
       class="live-image-status"
       :class="
         fetchConference && 'null' !== fetchConference
           ? fetchConference.status.toLowerCase() + '-bg'
           : ''
       "
-      v-if="fetchConference"
     >
       {{ statusText }}
     </div>
-    <div class="live-image-status recording-bg" v-if="isRecordedInLive">
+    <div
+      v-if="isRecordedInLive"
+      class="live-image-status recording-bg"
+    >
       {{ $t('Recorded in live') }}
     </div>
     <div
-      class="podcast-image-play-button"
-      v-on:click="play"
       v-if="hidePlay || recordingLive"
+      class="podcast-image-play-button"
       :class="classicPodcastPlay ? '' : 'transparent-background'"
+      @click="play"
     >
-      <div class="icon-container" v-if="!isLiveToBeRecorded">
+      <div
+        v-if="!isLiveToBeRecorded"
+        class="icon-container"
+      >
         <div
+          v-show="!playingPodcast"
           :aria-label="$t('Play')"
           class="saooti-play2-bounty primary-color"
-          v-show="!playingPodcast"
-        ></div>
+        />
         <div
+          v-if="!classicPodcastPlay"
           class="special-icon-play-button"
           :class="iconName"
-          v-if="!classicPodcastPlay"
-        ></div>
-        <div class="bloc-paddle" v-show="playingPodcast">
-          <span class="paddle1 primary-color"></span>
-          <span class="paddle2 primary-color"></span>
-          <span class="paddle3 primary-color"></span>
+        />
+        <div
+          v-show="playingPodcast"
+          class="bloc-paddle"
+        >
+          <span class="paddle1 primary-color" />
+          <span class="paddle2 primary-color" />
+          <span class="paddle3 primary-color" />
         </div>
       </div>
-      <div class="icon-container error-icon" v-else>
+      <div
+        v-else
+        class="icon-container error-icon"
+      >
         <div
           :aria-label="textVisible"
           class="big-icon-error"
           :class="iconName"
-        ></div>
+        />
       </div>
       <div
-        class="small-Text mt-3 font-weight-bolder"
         v-if="!classicPodcastPlay"
+        class="small-Text mt-3 fw-bolder"
       >
         {{ textVisible }}
       </div>
     </div>
     <div
+      v-if="!isDescription && displayDescription && isMobile"
       class="background-icon saooti-arrow-up2"
       :aria-label="$t('Show description')"
-      v-if="!isDescription && displayDescription && isMobile"
       @click="showDescription"
-    ></div>
+    />
     <div
+      v-if="isDescription && displayDescription && isMobile"
       class="background-icon saooti-arrow-down2"
       :aria-label="$t('Hide description')"
-      v-if="isDescription && displayDescription && isMobile"
       @click="showDescription"
-    ></div>
+    />
   </div>
 </template>
 
-<style lang="scss">
-.no-visible-img {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  padding: 0.7em;
-  background: rgba(0, 0, 0, 0.31);
-}
-.special-icon-play-button {
-  width: 30px;
-  height: 30px;
-  background-color: #ffd663;
-  border-radius: 50%;
-  position: absolute;
-  right: 4.5rem;
-  top: 6rem;
-  font-size: 0.9rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.transparent-background {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-.podcast-image-play-button {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  cursor: pointer;
-  flex-direction: column;
-
-  .icon-container {
-    background: #00000050;
-    border-radius: 50%;
-    height: 3rem;
-    width: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &.error-icon {
-      background: #00000050 !important;
-      cursor: default !important;
-    }
-
-    &:hover {
-      background: #00000030;
-    }
-
-    > .saooti-play2-bounty {
-      font-size: 2em;
-      position: relative;
-      right: -0.2rem;
-    }
-    .big-icon-error {
-      font-size: 2em;
-      position: relative;
-    }
-    z-index: 2;
-  }
-}
-.bloc-paddle {
-  align-items: flex-end;
-  display: flex;
-  width: 2rem;
-  height: 2.6rem;
-  padding: 0.7rem;
-  justify-content: space-around;
-  align-content: flex-start;
-  border-radius: 50%;
-  background: transparent !important;
-
-  > span {
-    width: 0.1rem;
-    background: #fff;
-  }
-
-  .paddle1 {
-    animation-duration: 0.6s;
-    animation-name: slidein;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-
-  .paddle2 {
-    animation-duration: 0.3s;
-    animation-name: slidein2;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-
-  .paddle3 {
-    animation-duration: 0.5s;
-    animation-name: slidein3;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-  @keyframes slidein {
-    0% {
-      height: 0;
-    }
-    100% {
-      height: 1rem;
-    }
-  }
-
-  @keyframes slidein2 {
-    0% {
-      height: 0.3rem;
-    }
-    100% {
-      height: 1.2rem;
-    }
-  }
-
-  @keyframes slidein3 {
-    0% {
-      height: 1.2rem;
-    }
-    100% {
-      height: 0;
-    }
-  }
-}
-</style>
-
 <script lang="ts">
 import { mapState } from 'vuex';
-import Vue from 'vue';
 import { state } from '../../../store/paramStore';
 import {StoreState} from '@/store/typeAppStore';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastImage',
   props: {
-    podcast: { default: undefined as Podcast|undefined},
-    hidePlay: { default: false as boolean},
-    displayDescription: { default: false as boolean},
-    arrowDirection: { default: 'up' as string},
-    isAnimatorLive: { default: false as boolean},
-    fetchConference: { default: undefined as Conference|undefined},
+    podcast: { default: ()=>({}), type: Object as ()=>Podcast},
+    hidePlay: { default: false, type: Boolean},
+    displayDescription: { default: undefined, type: String},
+    arrowDirection: { default: 'up', type: String},
+    isAnimatorLive: { default: false, type: Boolean},
+    fetchConference: { default: undefined, type: Object as ()=>Conference},
   },
-
-   data() {
+  emits: ['hideDescription', 'showDescription'],
+  data() {
     return {
       isDescription: false as boolean,
     };
@@ -346,11 +232,22 @@ export default Vue.extend({
     },
     recordingLive(): boolean {
       return (
-        this.fetchConference &&
+        undefined !== this.fetchConference &&
          -1 !== this.fetchConference.conferenceId &&
         ('RECORDING' === this.fetchConference.status ||
           'PENDING' === this.fetchConference.status)
       );
+    },
+  },
+  watch: {
+    arrowDirection(): void {
+      if ('up' === this.arrowDirection) {
+        this.isDescription = true;
+        this.showDescription();
+      } else {
+        this.isDescription = false;
+        this.showDescription();
+      }
     },
   },
  
@@ -375,7 +272,7 @@ export default Vue.extend({
         title: this.podcast.title,
         audioUrl: this.podcast.audioUrl,
         duration: this.podcast.duration,
-        conferenceId: this.fetchConference.conferenceId,
+        conferenceId: this.fetchConference ? this.fetchConference.conferenceId : undefined,
         livePodcastId: this.podcast.podcastId,
         organisation: this.podcast.organisation.id,
       });
@@ -389,16 +286,139 @@ export default Vue.extend({
       this.isDescription = !this.isDescription;
     },
   },
-  watch: {
-    arrowDirection(): void {
-      if ('up' === this.arrowDirection) {
-        this.isDescription = true;
-        this.showDescription();
-      } else {
-        this.isDescription = false;
-        this.showDescription();
-      }
-    },
-  },
-});
+})
 </script>
+
+
+<style lang="scss">
+.no-visible-img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  padding: 0.7em;
+  background: rgba(0, 0, 0, 0.31);
+}
+.special-icon-play-button {
+  width: 30px;
+  height: 30px;
+  background-color: #ffd663;
+  border-radius: 50%;
+  position: absolute;
+  right: 4.5rem;
+  top: 6rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.transparent-background {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.podcast-image-play-button {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  flex-direction: column;
+
+  .icon-container {
+    background: #00000050;
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.error-icon {
+      background: #00000050 !important;
+      cursor: default !important;
+    }
+
+    &:hover {
+      background: #00000030;
+    }
+
+    > .saooti-play2-bounty {
+      font-size: 2em;
+      position: relative;
+      right: -0.2rem;
+    }
+    .big-icon-error {
+      font-size: 2em;
+      position: relative;
+    }
+    z-index: 2;
+  }
+}
+.bloc-paddle {
+  align-items: flex-end;
+  display: flex;
+  width: 2rem;
+  height: 2.6rem;
+  padding: 0.7rem;
+  justify-content: space-around;
+  align-content: flex-start;
+  border-radius: 50%;
+  background: transparent !important;
+
+  > span {
+    width: 0.1rem;
+    margin: 0.05rem;
+    background: #fff;
+  }
+
+  .paddle1 {
+    animation-duration: 0.6s;
+    animation-name: slidein;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  .paddle2 {
+    animation-duration: 0.3s;
+    animation-name: slidein2;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  .paddle3 {
+    animation-duration: 0.5s;
+    animation-name: slidein3;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  @keyframes slidein {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: 1rem;
+    }
+  }
+
+  @keyframes slidein2 {
+    0% {
+      height: 0.3rem;
+    }
+    100% {
+      height: 1.2rem;
+    }
+  }
+
+  @keyframes slidein3 {
+    0% {
+      height: 1.2rem;
+    }
+    100% {
+      height: 0;
+    }
+  }
+}
+</style>

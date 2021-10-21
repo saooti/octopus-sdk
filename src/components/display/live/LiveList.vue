@@ -1,11 +1,16 @@
 <template>
   <div
-    class="d-flex flex-column align-items-center live-list-container"
     v-if="filterOrga || organisationId"
+    class="d-flex flex-column align-items-center live-list-container"
   >
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading lives...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading lives...') }}
+      </h3>
     </div>
     <div
       v-if="
@@ -15,76 +20,90 @@
       <p>{{ $t('No live currently') }}</p>
     </div>
     <div v-if="loaded && displayNextLiveMessage">
-      <h3 class="text-danger">{{ displayNextLiveMessage }}</h3>
+      <h3 class="text-danger">
+        {{ displayNextLiveMessage }}
+      </h3>
     </div>
     <template v-if="lives.length">
-      <div class="horizontal-separator"></div>
-      <p class="live-list-category">{{ $t('In live') }}</p>
+      <div class="horizontal-separator" />
+      <p class="live-list-category">
+        {{ $t('In live') }}
+      </p>
       <LiveItem
-        class="mt-3"
         v-for="(l, index) in lives"
-        :fetchConference="l"
         :key="l.podcastId"
+        class="mt-3"
+        :fetch-conference="l"
         :index="index"
         @deleteItem="deleteLive"
       />
     </template>
     <template v-if="livesNotStarted.length">
-      <div class="horizontal-separator"></div>
-      <p class="live-list-category">{{ $t('This live is not started yet') }}</p>
+      <div class="horizontal-separator" />
+      <p class="live-list-category">
+        {{ $t('This live is not started yet') }}
+      </p>
       <LiveItem
-        class="mt-3"
         v-for="(l, index) in livesNotStarted"
-        :fetchConference="l"
         :key="l.podcastId"
+        class="mt-3"
+        :fetch-conference="l"
         :index="index"
         @deleteItem="deleteLiveNotStarted"
       />
     </template>
     <template v-if="livesToBe.length">
-      <div class="horizontal-separator"></div>
-      <p class="live-list-category">{{ $t('Live to be') }}</p>
+      <div class="horizontal-separator" />
+      <p class="live-list-category">
+        {{ $t('Live to be') }}
+      </p>
       <LiveItem
-        class="mt-3"
         v-for="(l, index) in livesToBe"
-        :fetchConference="l"
         :key="l.podcastId"
+        class="mt-3"
+        :fetch-conference="l"
         :index="index"
         @deleteItem="deleteLiveToBe"
       />
     </template>
     <template v-if="livesTerminated.length">
-      <div class="horizontal-separator"></div>
-      <p class="live-list-category">{{ $t('Live terminated') }}</p>
+      <div class="horizontal-separator" />
+      <p class="live-list-category">
+        {{ $t('Live terminated') }}
+      </p>
       <LiveItem
-        class="mt-3"
         v-for="(l, index) in livesTerminated"
-        :fetchConference="l"
         :key="l.podcastId"
+        class="mt-3"
+        :fetch-conference="l"
         :index="index"
         @deleteItem="deleteLiveTerminated"
       />
     </template>
     <template v-if="livesPublishing.length">
-      <div class="horizontal-separator"></div>
-      <p class="live-list-category">{{ $t('Publishing') }}</p>
+      <div class="horizontal-separator" />
+      <p class="live-list-category">
+        {{ $t('Publishing') }}
+      </p>
       <LiveItem
-        class="mt-3"
         v-for="(l, index) in livesPublishing"
-        :fetchConference="l"
         :key="l.podcastId"
+        class="mt-3"
+        :fetch-conference="l"
         :index="index"
         @deleteItem="deleteLivePublishing"
       />
     </template>
     <template v-if="livesError.length">
-      <div class="horizontal-separator"></div>
-      <p class="live-list-category">{{ $t('In error') }}</p>
+      <div class="horizontal-separator" />
+      <p class="live-list-category">
+        {{ $t('In error') }}
+      </p>
       <LiveItem
-        class="mt-3"
         v-for="(l, index) in livesError"
-        :fetchConference="l"
         :key="l.podcastId"
+        class="mt-3"
+        :fetch-conference="l"
         :index="index"
         @deleteItem="deleteLiveError"
       />
@@ -92,46 +111,24 @@
   </div>
 </template>
 
-<style lang="scss">
-.live-list-container .horizontal-separator {
-  border-top: 1px solid #cccccc;
-  width: 100%;
-  margin: 2rem;
-}
-.live-list-category {
-  align-self: flex-start;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-@media (max-width: 450px) {
-  .live-list-container h3 {
-    text-align: center;
-    font-size: 1rem;
-  }
-  .live-list-container .horizontal-separator {
-    margin: 1rem;
-  }
-}
-</style>
-
 <script lang="ts">
 import LiveItem from './LiveItem.vue';
 const octopusApi = require('@saooti/octopus-api');
 const moment = require('moment');
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'LiveList',
   components: {
     LiveItem,
   },
 
   props: {
-    conferenceWatched: { default: () => ([])  as Array<Conference>},
-    organisationId: { default: undefined as string | undefined},
+    conferenceWatched: { default: () => [], type: Array as ()=>Array<Conference>},
+    organisationId: { default: undefined, type: String},
   },
+  emits: ['initConferenceIds'],
 
   data() {
     return {
@@ -144,18 +141,6 @@ export default Vue.extend({
       livesError: [] as Array<Conference>,
       livesPublishing: [] as Array<Conference>,
     };
-  },
-
-  async created() {
-    const isLive = await octopusApi.liveEnabledOrganisation(
-      this.filterOrgaUsed
-    );
-    if (isLive) {
-      this.fetchContent();
-    } else {
-      this.loading = false;
-      this.loaded = true;
-    }
   },
   
   computed: {
@@ -188,6 +173,45 @@ export default Vue.extend({
     isRoleLive(): boolean {
       return state.generalParameters.isRoleLive;
     },
+  },
+  watch: {
+    async organisationId(): Promise<void> {
+      const isLive = await octopusApi.liveEnabledOrganisation(
+        this.organisationId
+      );
+      if (isLive) {
+        if(!this.loading){
+          this.fetchContent();
+        }
+      } else {
+        this.initArrays();
+        this.loading = false;
+        this.loaded = true;
+      }
+    },
+    filterOrga(): void {
+      if(!this.loading){
+        this.fetchContent();
+      }
+    },
+    conferenceWatched: {
+      handler(): void {
+        this.updateLiveLocal();
+      },
+      deep: true,
+    },
+  },
+
+  async created() {
+    const isLive = await octopusApi.liveEnabledOrganisation(
+      this.filterOrgaUsed
+    );
+    if (isLive) {
+      this.fetchContent();
+    } else {
+      this.loading = false;
+      this.loaded = true;
+    }
   },
   methods: {
     initArrays(): void {
@@ -321,32 +345,28 @@ export default Vue.extend({
       }
     },
   },
-  watch: {
-    async organisationId(): Promise<void> {
-      const isLive = await octopusApi.liveEnabledOrganisation(
-        this.organisationId
-      );
-      if (isLive) {
-        if(!this.loading){
-          this.fetchContent();
-        }
-      } else {
-        this.initArrays();
-        this.loading = false;
-        this.loaded = true;
-      }
-    },
-    filterOrga(): void {
-      if(!this.loading){
-        this.fetchContent();
-      }
-    },
-    conferenceWatched: {
-      handler(): void {
-        this.updateLiveLocal();
-      },
-      deep: true,
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss">
+.live-list-container .horizontal-separator {
+  border-top: 1px solid #cccccc;
+  width: 100%;
+  margin: 2rem;
+}
+.live-list-category {
+  align-self: flex-start;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+@media (max-width: 450px) {
+  .live-list-container h3 {
+    text-align: center;
+    font-size: 1rem;
+  }
+  .live-list-container .horizontal-separator {
+    margin: 1rem;
+  }
+}
+</style>

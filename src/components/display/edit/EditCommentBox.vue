@@ -1,47 +1,46 @@
 <template>
   <div class="d-flex">
     <button
-      class="btn btn-circle primary-color mr-1"
+      class="btn btn-circle primary-color me-1"
       aria-label="edit"
       @click="editComment"
     >
-      <span class="saooti-edit-bounty"></span>
+      <span class="saooti-edit-bounty" />
     </button>
     <button
-      class="btn btn-circle primary-color mr-1"
-      aria-label="valid"
       v-if="'Pending' === comment.status || 'Invalid' === comment.status"
+      class="btn btn-circle primary-color me-1"
+      aria-label="valid"
       @click="validComment"
     >
-      <span class="saooti-valid-stud"></span>
+      <span class="saooti-valid-stud" />
     </button>
     <button
-      class="btn btn-circle primary-color mr-1"
-      aria-label="invalid"
       v-if="'Pending' === comment.status || 'Valid' === comment.status"
+      class="btn btn-circle primary-color me-1"
+      aria-label="invalid"
       @click="invalidComment"
     >
-      <span class="saooti-cross"></span>
+      <span class="saooti-cross" />
     </button>
     <button
-      class="btn btn-circle primary-color mr-1"
+      class="btn btn-circle primary-color me-1"
       aria-label="delete"
       @click="deleteComment"
     >
-      <span class="saooti-bin"></span>
+      <span class="saooti-bin" />
     </button>
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/comment';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
-    comment: { default: undefined as CommentPodcast|undefined },
+    comment: { default: undefined, type: Object as ()=>CommentPodcast},
   },
+  emits: ['editComment'],
 
   methods: {
     editComment() {
@@ -57,5 +56,6 @@ export default Vue.extend({
       console.log('delete');
     },
   },
-});
+})
 </script>
+<style lang="scss"></style>

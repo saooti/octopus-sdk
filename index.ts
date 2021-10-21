@@ -21,6 +21,7 @@ import TopBar from "./src/components/misc/TopBar.vue";
 import HomeDropdown from "./src/components/misc/HomeDropdown.vue";
 import MessageModal from "./src/components/misc/modal/MessageModal.vue";
 import ErrorMessage from "./src/components/misc/ErrorMessage.vue";
+import Popover from "./src/components/misc/Popover.vue";
 //Display
 import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
 import CategoryList from "./src/components/display/categories/CategoryList.vue";
@@ -52,8 +53,6 @@ import CommentInput from "./src/components/display/comments/CommentInput.vue";
 import {selenium} from "./src/components/mixins/functions";
 import {cookies} from "./src/components/mixins/functions";
 import {displayMethods} from "./src/components/mixins/functions";
-import {cookiesAndMethods} from "./src/components/mixins/functions";
-import {seleniumAndMethods} from "./src/components/mixins/functions";
 import {orgaFilter} from "./src/components/mixins/organisationFilter";
 import {initSDK} from "./src/components/mixins/init";
 
@@ -94,12 +93,11 @@ const components = {
     HomeDropdown,
     ErrorMessage,
     displayMethods,
-    cookiesAndMethods,
-    seleniumAndMethods,
     Rubrique,
     CategoryFilter,
     orgaFilter,
-    initSDK
+    initSDK,
+    Popover
 }
 
 export default components;
@@ -141,10 +139,9 @@ export {
     HomeDropdown,
     ErrorMessage,
     displayMethods,
-    cookiesAndMethods,
-    seleniumAndMethods,
     Rubrique,
     CategoryFilter,
     orgaFilter,
-    initSDK
+    initSDK,
+    Popover
 };

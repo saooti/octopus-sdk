@@ -1,57 +1,20 @@
-import Vue from 'vue';
-import { 
-  ModalPlugin, 
-  FormRadioPlugin, 
-  CardPlugin, 
-  ButtonPlugin, 
-  DropdownPlugin, 
-  PopoverPlugin,
-  TabsPlugin,
-  FormGroupPlugin,
-  FormTextareaPlugin,
-  CollapsePlugin } from 'bootstrap-vue';
+import { createApp } from 'vue';
+import { VueReCaptcha } from 'vue-recaptcha-v3';
 import App from './App.vue';
-import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 import I18nResources from './locale/messages';
 import router from '@/router/router';
 const moment = require('moment');
 import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
-import VueRouter from 'vue-router';
-import { ErrorHandler, RawLocation } from 'vue-router/types/router';
+/* import 'popper.js/dist/popper.min.js'; */
+/* import 'jquery/src/jquery.js'; */
+import 'jquery';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
-const originalPush: any = router.push;
-router.push = function push(location: RawLocation, onResolve?: Function | undefined, onReject?: ErrorHandler | undefined){
-    if (onResolve || onReject) {
-        return originalPush.call(this, location, onResolve, onReject)
-    }
- 
-    return originalPush.call(this, location).catch((err: any) => {
-        if (VueRouter.isNavigationFailure(err)) {
-            return err
-        }
-   
-        return Promise.reject(err)
-    })
-}
-
-Vue.use(ModalPlugin); 
-Vue.use(FormRadioPlugin); 
-Vue.use(CardPlugin); 
-Vue.use(ButtonPlugin); 
-Vue.use(FormTextareaPlugin); 
-Vue.use(DropdownPlugin); 
-Vue.use(PopoverPlugin); 
-Vue.use(TabsPlugin); 
-Vue.use(FormGroupPlugin);
-Vue.use(CollapsePlugin);
-Vue.config.productionTip = false;
-
-//Gestion de l'i18n
-Vue.use(VueI18n);
-//@ts-ignore
-const navigatorLang = navigator.language || navigator.userLanguage;
+//TODO
+const navigatorLang = navigator.language /* || navigator.userLanguage */;
 let language = 'fr';
 if(navigatorLang.includes('en')){
   language = 'en';
@@ -63,7 +26,7 @@ if (store.state.general.education) {
     en: { ...I18nResources.en, ...I18nResources.educationen },
   };
 }
-const i18n = new VueI18n({
+const i18n = createI18n({
   locale: language,
   messages: messages,
 });
@@ -87,10 +50,10 @@ paramStore
     footer: {},
   })
   .then(() => {
-    new Vue({
-      i18n,
-      store,
-      router,
-      render: h => h(App),
-    }).$mount('#app');
+    createApp(App)
+    .use(i18n)
+    .use(store)
+    .use(router)
+    .use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' })
+    .mount('#app');
   });

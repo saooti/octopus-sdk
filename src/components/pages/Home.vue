@@ -4,18 +4,25 @@
       <PodcastInlineList
         v-for="c in categories"
         :key="c.id"
-        :iabId="c.id"
+        :iab-id="c.id"
         :title="c.name"
-        :buttonText="$t('All podcast button', { name: c.name })"
+        :button-text="$t('All podcast button', { name: c.name })"
       />
     </template>
-     <template v-else>
+    <template v-else>
       <PodcastInlineList
         v-for="r in rubriqueDisplay"
         :key="r.rubriqueId"
-        :rubriqueId="rubriqueId.concat(r.rubriqueId)"
+        :rubrique-id="rubriqueId.concat(r.rubriqueId)"
         :title="r.name"
-        :buttonText="$t('All podcast button', { name: r.name })"
+        :button-text="$t('All podcast button', { name: r.name })"
+      />
+      <PodcastInlineList
+        v-if="rubriqueDisplay && rubriqueDisplay.length"
+        :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
+        :rubrique-id="rubriqueId"
+        :title="$t('Without rubric')"
+        :button-text="$t('All podcast button', { name: $t('Without rubric') })"
       />
       <PodcastInlineList
         v-if="rubriqueDisplay && rubriqueDisplay.length"
@@ -27,18 +34,17 @@
     </template>
   </div>
 </template>
-<style lang="scss"></style>
 
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../store/paramStore';
 
-import Vue from 'vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
-export default Vue.extend({
-  name: 'home',
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'Home',
 
   components: {
     PodcastInlineList,
@@ -47,11 +53,6 @@ export default Vue.extend({
     return {
       rubriqueId: [] as Array<number>,
     };
-  },
-  created(){
-    if(this.rubriqueFilter.length){
-      this.updateRubriquageFilter();
-    }
   },
   computed: {
     rubriqueDisplay(): Array<Rubrique>{
@@ -79,6 +80,19 @@ export default Vue.extend({
       });
     },
   },
+  watch:{
+    rubriqueFilter:{
+      deep: true,
+      handler(){
+      this.updateRubriquageFilter();
+      }
+    }
+  },
+  created(){
+    if(this.rubriqueFilter.length){
+      this.updateRubriquageFilter();
+    }
+  },
   methods:{
     updateRubriquageFilter(){
       const length = this.rubriqueFilter.length;
@@ -90,11 +104,8 @@ export default Vue.extend({
       }
       this.rubriqueId = rubriqueId;
     },
-  },
-  watch:{
-    rubriqueFilter(){
-      this.updateRubriquageFilter();
-    }
   }
-});
+})
 </script>
+
+<style lang="scss"></style>

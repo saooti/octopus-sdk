@@ -466,6 +466,23 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.28.13 Enlever les mises à jour
  * 0.28.14 QrCode
 
+ * 29.0.0 Vue3
+ * 29.0.1 Upgrade npm
+ * 29.0.2 Début de suppression bootstrap vue
+ * 29.0.3 Début de suppression bootstrap vue
+ * 29.0.4 vue3
+ * 29.0.5 vue3
+ * 29.0.6 vue3
+ * 29.0.7 Nouvelle version api
+ * 29.0.8 Nouvelle version api
+ * 29.0.9 vue3
+ * 29.0.10 vue3
+ * 29.0.11 Popover (encore il est dur ce popover)
+ * 29.0.12 CSS
+ * 29.0.13 npm upgrade
+ * 29.0.14 vue i18n change language
+ * 29.0.15 theme player beta
+
 
 
 

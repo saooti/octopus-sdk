@@ -1,139 +1,137 @@
 <template>
   <div class="module-box flex-no-grow">
     <div class="d-flex align-items-center mb-3">
-      <h3 class="mb-0 share-button-title">{{ $t('Subscribe emission') }}</h3>
+      <h3 class="mb-0 share-button-title">
+        {{ $t('Subscribe emission') }}
+      </h3>
     </div>
     <div class="d-flex flex-wrap">
       <a
+        v-if="amazon"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="amazon"
-        v-if="amazon"
         aria-label="amazon"
       >
         <span class="saooti-amazon">
-          <div class="path1"></div>
-          <div class="path2"></div>
-          <div class="path3"></div>
+          <div class="path1" />
+          <div class="path2" />
+          <div class="path3" />
         </span>
       </a>
       <a
+        v-if="applePodcast"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="applePodcast"
-        v-if="applePodcast"
         aria-label="Apple"
       >
-        <span class="saooti-apple"></span>
+        <span class="saooti-apple" />
       </a>
       <a
+        v-if="deezer"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="deezer"
-        v-if="deezer"
         aria-label="Deezer"
       >
-        <span class="saooti-deezer"></span>
+        <span class="saooti-deezer" />
       </a>
       <a
+        v-if="playerFm"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="playerFm"
-        v-if="playerFm"
         aria-label="playerFm"
       >
-        <span class="saooti-playerfm"></span>
+        <span class="saooti-playerfm" />
       </a>
       <a
+        v-if="podcastAddict"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="podcastAddict"
-        v-if="podcastAddict"
         aria-label="podcastAddict"
       >
-        <span class="saooti-podcast-addict"></span>
+        <span class="saooti-podcast-addict" />
       </a>
       <a
+        v-if="radioline"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 btn-radioline share-btn"
+        class="btn me-3 mb-2 btn-radioline share-btn"
         :href="radioline"
-        v-if="radioline"
         aria-label="Radioline"
       >
-        <span class="saooti-radioline"></span>
+        <span class="saooti-radioline" />
       </a>
       <a
+        v-if="spotify"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="spotify"
-        v-if="spotify"
         aria-label="Spotify"
       >
-        <span class="saooti-spotify"></span>
+        <span class="saooti-spotify" />
       </a>
       <a
+        v-if="stitcher"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="stitcher"
-        v-if="stitcher"
         aria-label="stitcher"
       >
         <span class="saooti-stitcher-logo">
-          <div class="path1"></div>
-          <div class="path2"></div>
-          <div class="path3"></div>
-          <div class="path4"></div>
-          <div class="path5"></div>
-          <div class="path6"></div>
-          <div class="path7"></div>
-          <div class="path8"></div>
-          <div class="path9"></div>
-          <div class="path10"></div>
-          <div class="path11"></div>
-          <div class="path12"></div>
-          <div class="path13"></div>
-          <div class="path14"></div>
-          <div class="path15"></div>
-          <div class="path16"></div>
-          <div class="path17"></div>
-          <div class="path18"></div> </span
-        >
+          <div class="path1" />
+          <div class="path2" />
+          <div class="path3" />
+          <div class="path4" />
+          <div class="path5" />
+          <div class="path6" />
+          <div class="path7" />
+          <div class="path8" />
+          <div class="path9" />
+          <div class="path10" />
+          <div class="path11" />
+          <div class="path12" />
+          <div class="path13" />
+          <div class="path14" />
+          <div class="path15" />
+          <div class="path16" />
+          <div class="path17" />
+          <div class="path18" /> </span>
       </a>
       <a
+        v-if="tunein"
         rel="noopener"
         target="_blank"
-        class="btn mr-3 mb-2 share-btn"
+        class="btn me-3 mb-2 share-btn"
         :href="tunein"
-        v-if="tunein"
         aria-label="Tunin"
       >
-        <span class="saooti-tunin"></span>
+        <span class="saooti-tunin" />
       </a>
     </div>
   </div>
 </template>
 
-<style lang="scss"></style>
-
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
-    emission: { default: undefined as Emission|undefined},
-    podcastId: { default: undefined as number|undefined},
+    emission: { default: undefined, type: Object as ()=> Emission},
+    podcastId: { default: undefined, type: Number},
   },
-  components: {},
-
-   data() {
+   
+  data() {
     return {
       applePodcast:
         this.emission && this.emission.annotations
@@ -174,6 +172,8 @@ export default Vue.extend({
     };
   },
 
+  computed: {},
+
   mounted() {
     this.applePodcast = this.externaliseLinks(this.applePodcast);
     this.deezer = this.externaliseLinks(this.deezer);
@@ -186,8 +186,6 @@ export default Vue.extend({
     this.amazon = this.externaliseLinks(this.amazon);
   },
 
-  computed: {},
-
   methods: {
     externaliseLinks(link?: string): string|undefined {
       if (!link) return link;
@@ -197,5 +195,7 @@ export default Vue.extend({
       return link;
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

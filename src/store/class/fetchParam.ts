@@ -1,0 +1,16 @@
+export interface FetchParam{
+    first: number,
+    size: number,
+    organisationId?: string,
+    emissionId?: number,
+    iabId?: number,
+    participantId?: number,
+    query?: string,
+    monetisable?: any,
+    sort?: string,
+    before?: string,
+    after?: string,
+    noRubriquageId?: number,
+    rubriqueId?:number,
+    rubriquageId?: number,
+  }

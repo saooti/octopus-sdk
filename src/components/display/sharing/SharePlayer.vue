@@ -19,120 +19,57 @@
             :width="iFrameWidth"
             :height="iFrameHeight"
             class="maxIframe"
-          ></iframe>
+          />
           <div class="d-flex flex-column">
-            <button class="btn mb-3" @click="isShareModal = true">
+            <button
+              class="btn mb-3"
+              @click="isShareModal = true"
+            >
               {{ $t('Share the player') }}
             </button>
-            <template v-if="!isLiveReadyToRecord">
-              <label
-                for="iframe-select"
-                class="d-inline"
-                aria-label="select miniplayer"
-              ></label>
-              <select
-                v-model="iFrameModel"
-                id="iframe-select"
-                class="frame-select input-no-outline"
-              >
-                <option value="default">{{ $t('Default version') }}</option>
-                <option value="large">{{ $t('Large version') }}</option>
-                <template v-if="isBeta">
-                    <option
-                    v-for="player in customPlayersDisplay" :key="player.customId"
-                    :value="player.customId" 
-                    
-                    >{{ $t('Custom version') + " «" +player.name+"»" }}</option>
-                </template>
-                <option value="emission" v-if="podcast && podcast.podcastId">{{
-                  $t('Emission version')
-                }}</option>
-                <option
-                  value="largeEmission"
-                  v-if="podcast && podcast.podcastId"
-                  >{{ $t('Large emission version') }}</option
-                >
-                <option
-                  value="largeSuggestion"
-                  v-if="podcast && podcast.podcastId"
-                  >{{ $t('Large suggestion version') }}</option
-                >
-              </select>
-            </template>
+            <SharePlayerTypes 
+              v-if="!isLiveReadyToRecord"
+              v-model:iFrameModel="iFrameModel"
+              :podcast="podcast"
+              :emission="emission"
+              :playlist="playlist"
+              :custom-players="customPlayers"
+              :is-beta="isBeta"
+            />
           </div>
-          <div class="d-flex justify-content-around mt-3 flex-grow w-100">
-            <div class="d-flex flex-column align-items-center flex-shrink mr-3">
-              <div class="font-weight-600">{{ $t('Choose color') }}</div>
-              <swatches
-                v-model="color"
-                class="c-hand input-no-outline"
-                show-fallback
-                colors="text-advanced"
-                popover-to="right"
-                :data-color="color"
-              ></swatches>
-            </div>
-            <div class="d-flex flex-column align-items-center">
-              <div class="font-weight-600">{{ $t('Choose theme') }}</div>
-              <div class="d-flex" v-if="!isBeta">
-                <swatches v-for="color in colors" :key="color" v-model="theme" :data-theme="theme"
-                  class="c-hand input-no-outline mr-1"
-                  :swatch-style="{
-                    padding: '0px 0px',
-                    marginRight: '0px',
-                    marginBottom: '0px',
-                    border: '1px gray solid',
-                  }"
-                  :wrapper-style="{
-                    paddingTop: '0px',
-                    paddingLeft: '0px',
-                    paddingRight: '0px',
-                    paddingBottom: '0px',
-                  }"
-                  :colors="[color]"
-                  inline
-                ></swatches>
-              </div>
-              <swatches
-                v-model="theme"
-                class="c-hand input-no-outline"
-                show-fallback
-                colors="text-advanced"
-                popover-to="right"
-                :data-color="theme"
-                v-else
-              ></swatches>
-            </div>
-          </div>
-          <div class="checkbox-saooti" v-if="displayBetaChoice">
+          <SharePlayerColors
+            v-model:color="color"
+            v-model:theme="theme"
+            v-model:themeBeta="themeBeta"
+            :is-beta="isBeta"
+          />
+          <div v-if="displayBetaChoice">
             <input
-              type="checkbox"
-              class="custom-control-input"
               id="isBetaCheckbox"
               v-model="isBeta"
-            />
-            <label
-              class="custom-control-label mr-2"
-              for="isBetaCheckbox"
-              >{{ $t('Use beta version') }}</label
+              type="checkbox"
+              class="form-check-input"
             >
+            <label
+              class="form-check-label me-2"
+              for="isBetaCheckbox"
+            >{{ $t('Use beta version') }}</label>
           </div>
           <div
-            class="d-flex align-items-center flex-wrap"
             v-if="isPodcastNotVisible || playlist"
+            class="d-flex align-items-center flex-wrap"
           >
-            <div class="checkbox-saooti">
+            <div>
               <input
-                type="checkbox"
-                class="custom-control-input"
                 id="isVisibleCheckbox"
                 v-model="isVisible"
-              />
-              <label
-                class="custom-control-label mr-2"
-                for="isVisibleCheckbox"
-                >{{ titleStillAvailable }}</label
+                type="checkbox"
+                class="form-check-input"
               >
+              <label
+                class="form-check-label me-2"
+                for="isVisibleCheckbox"
+              >{{ titleStillAvailable }}</label>
             </div>
           </div>
         </div>
@@ -140,8 +77,8 @@
           v-if="isPlayerParameter"
           :podcast="podcast"
           :playlist="playlist"
-          :iFrameModel="iFrameModel"
-          :isVisible="isVisible"
+          :i-frame-model="iFrameModel"
+          :is-visible="isVisible"
           @displayArticle="updateDisplayArticle"
           @episodeNumbers="updateEpisodeNumber"
           @proceedReading="updateProceedReading"
@@ -159,62 +96,43 @@
     </div>
     <ShareModalPlayer
       v-if="isShareModal"
+      :embed-link="iFrame"
+      :embedly-link="iFrameSrc"
+      :direct-link="podcast"
       @close="isShareModal = false"
-      :embedLink="iFrame"
-      :embedlyLink="iFrameSrc"
-      :directLink="podcast"
-    ></ShareModalPlayer>
+    />
   </div>
 </template>
 
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.sticker {
-  align-self: center;
-  background: rgba($octopus-primary-color, 0.3);
-  padding: 0.5rem;
-  transition: all 0.5s ease;
-  color: #41403e;
-  letter-spacing: 1px;
-  outline: none;
-  box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  border: solid 2px #41403e;
-  &:hover {
-    box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
-  }
-}
-.maxIframe {
-  max-width: 300px;
-}
-</style>
-
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-//@ts-ignore
-import Swatches from 'vue-swatches';
-import 'vue-swatches/dist/vue-swatches.min.css';
 import profileApi from '@/api/profile';
 const octopusApi = require('@saooti/octopus-api');
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import { Playlist } from '@/store/class/playlist';
 import { CustomPlayer } from '@/store/class/customPlayer';
-export default Vue.extend({
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-    emission: { default: undefined as Emission|undefined},
-    playlist: { default: undefined as Playlist|undefined},
-    organisationId: { default: undefined as string|undefined},
-    isEducation: { default: false as boolean},
-    exclusive: { default: false as boolean},
-    notExclusive: { default: true as boolean},
-  },
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
+const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
+const SharePlayerTypes = defineAsyncComponent(() => import('./SharePlayerTypes.vue'));
+const SharePlayerColors = defineAsyncComponent(() => import('./SharePlayerColors.vue'));
+export default defineComponent({
   components: {
-    ShareModalPlayer: () => import('../../misc/modal/ShareModalPlayer.vue'),
-    Swatches,
-    PlayerParameters: () => import('./PlayerParameters.vue'),
+    ShareModalPlayer,
+    SharePlayerColors,
+    PlayerParameters,
+    SharePlayerTypes
+  },
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    emission: { default: undefined, type: Object as ()=> Emission},
+    playlist: { default: undefined, type: Object as ()=> Playlist},
+    organisationId: { default: undefined, type: String},
+    isEducation: { default: false, type: Boolean},
+    exclusive: { default: false, type: Boolean},
+    notExclusive: { default: true, type: Boolean},
   },
 
   data() {
@@ -223,6 +141,7 @@ export default Vue.extend({
       isShareModal: false as boolean,
       color: '#40a372' as string,
       theme: '#000000' as string,
+      themeBeta: '#000000' as string,
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumber: '3' as string,
@@ -235,20 +154,8 @@ export default Vue.extend({
       colors: ['#000000', '#ffffff'],
     };
   },
-  async created() {
-    await this.initColor();
-    if (this.isLiveReadyToRecord) {
-      this.iFrameModel = 'large';
-    }
-  },
   
   computed: {
-    customPlayersDisplay(): Array<CustomPlayer>{
-      return this.customPlayers.filter((player: CustomPlayer)=>{
-        return (('EPISODE' === player.typePlayer ||'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
-                          ('EMISSION' === player.typePlayer && this.emission  && !this.podcast)|| ('PLAYLIST' === player.typePlayer && this.playlist );
-      });
-    },
     miniplayerBaseUrl(): string{
       if(this.isBeta){
         return state.podcastPage.MiniplayerBetaUri;  
@@ -302,7 +209,7 @@ export default Vue.extend({
       ) {
         iFrameNumber = '/0';
       }
-      if (!this.podcast && !this.playlist) {
+      if (!this.podcast && !this.playlist && this.emission) {
         if ('default' === this.iFrameModel) {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
@@ -331,7 +238,7 @@ export default Vue.extend({
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.playlist.playlistId}`
           );
         }
-      } else {
+      } else if(this.emission && this.podcast){
         if (this.isEmission || this.isLargeEmission) {
           url.push(
             `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`
@@ -347,11 +254,12 @@ export default Vue.extend({
         }
       }
       url.push('?distributorId=' + this.organisationId);
+      const theme = this.isBeta ? this.themeBeta : this.theme;
       url.push(
         '&color=' +
           this.color.substring(1) +
           '&theme=' +
-          this.theme.substring(1)
+          theme.substring(1)
       );
       if (!this.proceedReading) {
         url.push('&proceed=false');
@@ -418,7 +326,7 @@ export default Vue.extend({
     },
     isPodcastNotVisible(): boolean {
       return (
-        this.podcast &&
+        undefined !== this.podcast &&
         !this.podcast.availability.visibility &&
         ('default' === this.iFrameModel || 'large' === this.iFrameModel)
       );
@@ -426,31 +334,20 @@ export default Vue.extend({
     dataTitle(): number {
       if (this.podcast) return this.podcast.podcastId;
       if (this.emission) return this.emission.emissionId;
-      return this.playlist.playlistId;
+      if (this.playlist) return this.playlist.playlistId;
+      return 0;
     },
     isPlayerParameter(): boolean{
       return !this.podcast || (this.podcast.article && 0 !== this.podcast.article.length) || this.isEmission || this.isLargeEmission || this.isLargeSuggestion;
     }
   },
+  async created() {
+    await this.initColor();
+    if (this.isLiveReadyToRecord) {
+      this.iFrameModel = 'large';
+    }
+  },
   methods: {
-    /* getOrganisationId(): string{
-      let orgaId = undefined;
-      if (this.podcast) {
-        orgaId = this.podcast.organisation.id;
-      } else if (this.playlist) {
-        orgaId = this.playlist.organisation.id;
-      } else {
-        orgaId = this.emission.orga.id;
-      }
-      return orgaId;
-    },
-    async initBeta(): Promise<void> {
-      const orgaId = this.getOrganisationId();
-      const data: any = await octopusApi.fetchOrganisationAttributes(orgaId);
-      if (data.hasOwnProperty('playerBeta')) {
-        this.isBeta = data.playerBeta;
-      }
-    }, */
     async initColor(): Promise<void> {
       if (!this.authenticated) return;
       let data;
@@ -462,24 +359,27 @@ export default Vue.extend({
           state.generalParameters.organisationId
         );
       }
-      if (data.hasOwnProperty('COLOR')) {
+      if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {
         this.color = data.COLOR;
       } else {
         this.color = '#40a372';
       }
-      if (data.hasOwnProperty('THEME')) {
+      if (Object.prototype.hasOwnProperty.call(data,'THEME')) {
         this.theme = data.THEME;
       } else {
-        this.theme = '#ffffff';
+        this.theme = '#000000';
       }
-      if (data.hasOwnProperty('playerBeta')) {
+      if (Object.prototype.hasOwnProperty.call(data,'playerBeta')) {
+        if (Object.prototype.hasOwnProperty.call(data,'THEMEBETA')) {
+          this.themeBeta = data.THEMEBETA;
+        }
         this.displayBetaChoice = data.playerBeta;
-        let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!);
+        let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId);
         this.customPlayers = dataFetched.content;
         const totalCount = dataFetched.totalElements;
         let index = 1;
         while (totalCount > this.customPlayers.length) {
-          dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId!+'?start='+index);
+          dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId+'?start='+index);
           this.customPlayers = this.customPlayers.concat(dataFetched.content);
           ++index;
         }
@@ -505,5 +405,27 @@ export default Vue.extend({
       this.displayArticle = value;
     }
   },
-});
+})
 </script>
+
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+.sticker {
+  align-self: center;
+  background: rgba($octopus-primary-color, 0.3);
+  padding: 0.5rem;
+  transition: all 0.5s ease;
+  color: #41403e;
+  letter-spacing: 1px;
+  outline: none;
+  box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: solid 2px #41403e;
+  &:hover {
+    box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+  }
+}
+.maxIframe {
+  max-width: 300px;
+}
+</style>

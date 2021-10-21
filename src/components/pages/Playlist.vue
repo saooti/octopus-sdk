@@ -1,67 +1,85 @@
 <template>
   <div>
-    <div class="page-box" v-if="loaded && !error">
+    <div
+      v-if="loaded && !error"
+      class="page-box"
+    >
       <h1>{{ $t('Playlist') }}</h1>
       <div class="d-flex">
         <div class="d-flex flex-column flex-grow">
           <EditBox
-            :playlist="playlist"
-            :isReady="isReady"
             v-if="editRight && isEditBox"
-          ></EditBox>
+            :playlist="playlist"
+            :is-ready="isReady"
+          />
           <div class="module-box">
             <h2>{{ name }}</h2>
             <div class="mb-5 mt-3 descriptionText">
               <img
                 :src="imageUrl"
                 :alt="$t('Playlist name image', { name: name })"
-                class="img-box shadow-element float-left mr-3 mb-3"
+                class="img-box shadow-element float-start me-3 mb-3"
+              >
+              <p
+                class="html-wysiwyg-content"
+                v-html="urlify(description)"
               />
-              <p class="html-wysiwyg-content" v-html="urlify(description)"></p>
             </div>
           </div>
         </div>
         <div class="d-flex flex-column share-container">
           <SharePlayer
-            :playlist="playlist"
-            :organisationId="organisationId"
-            :isEducation="isEducation"
             v-if="isSharePlayer && authenticated"
-          >
-          </SharePlayer>
-          <ShareButtons v-if="isShareButtons"></ShareButtons>
+            :playlist="playlist"
+            :organisation-id="organisationId"
+            :is-education="isEducation"
+          />
+          <ShareButtons v-if="isShareButtons" />
         </div>
       </div>
       <PodcastList :playlist="playlist" />
     </div>
-    <div class="d-flex justify-content-center" v-if="!loaded">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
+    <div
+      v-if="!loaded"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading content ...') }}
+      </h3>
     </div>
-    <div class="text-center" v-if="error">
+    <div
+      v-if="error"
+      class="text-center"
+    >
       <h3>{{ $t("Playlist doesn't exist") }}</h3>
     </div>
   </div>
 </template>
-<style lang="scss"></style>
+
 <script lang="ts">
-// @ is an alias to /src
 import PodcastList from '../display/playlist/PodcastList.vue';
 const octopusApi = require('@saooti/octopus-api');
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Playlist } from '@/store/class/playlist';
-export default displayMethods.extend({
+import { defineComponent, defineAsyncComponent } from 'vue';
+const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
+export default defineComponent({
   components: {
-    ShareButtons: () => import('../display/sharing/ShareButtons.vue'),
-    EditBox: () => import('@/components/display/edit/EditBox.vue'),
+    ShareButtons,
+    EditBox,
     PodcastList,
-    SharePlayer: () => import('../display/sharing/SharePlayer.vue'),
+    SharePlayer,
   },
+  mixins:[displayMethods],
   props: {
-    playlistId: { default: undefined as number|undefined},
-    isEducation: { default: false as boolean},
+    playlistId: { default: undefined, type: Number},
+    isEducation: { default: false, type: Boolean},
   },
+  emits: ['playlistTitle'],
 
   data() {
     return {
@@ -70,10 +88,6 @@ export default displayMethods.extend({
       error: false as boolean,
       isReady: true as boolean,
     };
-  },
-
-  mounted() {
-    this.getPlaylistDetails();
   },
   
   computed: {
@@ -104,8 +118,8 @@ export default displayMethods.extend({
     },
     editRight(): boolean {
       if (
-        (state.generalParameters.isPlaylist &&
-          this.organisationId === this.playlist!.organisation.id) ||
+        (state.generalParameters.isPlaylist && this.playlist &&
+          this.organisationId === this.playlist.organisation.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -119,12 +133,16 @@ export default displayMethods.extend({
       this.getPlaylistDetails();
     },
   },
+
+  mounted() {
+    this.getPlaylistDetails();
+  },
   methods: {
     async getPlaylistDetails(): Promise<void> {
       try {
-        const data = await octopusApi.fetchPlaylist(this.playlistId);
+        const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId);
         this.playlist = data;
-        this.$emit('playlistTitle', this.playlist!.title);
+        this.$emit('playlistTitle', this.playlist.title);
         this.loaded = true;
       } catch {
         this.error = true;
@@ -132,5 +150,7 @@ export default displayMethods.extend({
       }
     },
   },
-});
+})
 </script>
+
+<style lang="scss"></style>

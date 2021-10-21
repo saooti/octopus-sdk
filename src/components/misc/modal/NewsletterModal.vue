@@ -1,124 +1,131 @@
 <template>
   <div>
-    <b-modal
+    <div
       id="newsletter-modal"
-      @close="closePopup"
-      @hide="closePopup"
-      @cancel="closePopup"
-      :title="$t('Share newsletter')"
+      class="modal"
     >
-      <template v-slot:default>
-        <div class="d-flex justify-content-between">
-          <div v-html="newsletterHtml"></div>
-          <div class="d-flex flex-column flex-grow ml-4">
-            <h4 class="mb-3">{{ $t('Configuration') }}</h4>
-            <div class="checkbox-saooti">
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                id="display-emission-name"
-                v-model="displayEmissionName"
-              />
-              <label class="custom-control-label" for="display-emission-name">{{
-                $t('Display emission name')
-              }}</label>
+      <div class="modal-backdrop" />
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              {{ $t('Share newsletter') }}
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-between">
+              <div v-html="newsletterHtml" />
+              <div class="d-flex flex-column flex-grow ms-4">
+                <h4 class="mb-3">
+                  {{ $t('Configuration') }}
+                </h4>
+                <div>
+                  <input
+                    id="display-emission-name"
+                    v-model="displayEmissionName"
+                    type="checkbox"
+                    class="form-check-input"
+                  >
+                  <label
+                    class="form-check-label"
+                    for="display-emission-name"
+                  >{{
+                    $t('Display emission name')
+                  }}</label>
+                </div>
+                <div>
+                  <input
+                    id="display-participants-names"
+                    v-model="displayParticipantsNames"
+                    type="checkbox"
+                    class="form-check-input"
+                  >
+                  <label
+                    class="form-check-label"
+                    for="display-participants-names"
+                  >{{ $t('Display participants list') }}</label>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                  <VSwatches
+                    v-model="color"
+                    class="c-hand input-no-outline me-2 mt-2"
+                    show-fallback
+                    colors="text-advanced"
+                    popover-to="right"
+                    :data-color="color"
+                  />
+                  <div>{{ $t('Choose main color') }}</div>
+                </div>
+                <div
+                  class=" d-flex justify-content-between align-items-center mt-3 mb-2"
+                >
+                  <h4 class="mb-0">
+                    {{ $t('HTML Code') }}
+                  </h4>
+                  <input
+                    type="button"
+                    :value="$t('Copy')"
+                    class="btn btn-primary"
+                    :aria-label="$t('Copy')"
+                    @click="onCopyCode(newsletterHtml, afterCopy)"
+                  >
+                </div>
+                <textarea
+                  id="newsletter_code_textarea"
+                  v-model="newsletterHtml"
+                  readonly
+                  @click="selectAll"
+                />
+                <label
+                  for="newsletter_code_textarea"
+                  :aria-label="$t('HTML Code')"
+                />
+              </div>
             </div>
-            <div class="checkbox-saooti">
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                id="display-participants-names"
-                v-model="displayParticipantsNames"
-              />
-              <label
-                class="custom-control-label"
-                for="display-participants-names"
-                >{{ $t('Display participants list') }}</label
-              >
-            </div>
-            <div class="d-flex align-items-center mt-2">
-              <swatches
-                v-model="color"
-                class="c-hand input-no-outline mr-2 mt-2"
-                show-fallback
-                colors="text-advanced"
-                popover-to="right"
-                :data-color="color"
-              ></swatches>
-              <div>{{ $t('Choose main color') }}</div>
-            </div>
-            <div
-              class=" d-flex justify-content-between align-items-center mt-3 mb-2"
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary m-1"
+              @click="closePopup"
             >
-              <h4 class="mb-0">{{ $t('HTML Code') }}</h4>
-              <input
-                type="button"
-                :value="$t('Copy')"
-                class="btn btn-primary"
-                @click="onCopyCode(newsletterHtml, afterCopy)"
-                :aria-label="$t('Copy')"
-              />
-            </div>
-            <textarea
-              id="newsletter_code_textarea"
-              v-model="newsletterHtml"
-              @click="selectAll"
-              readonly
-            ></textarea>
-            <label
-              for="newsletter_code_textarea"
-              :aria-label="$t('HTML Code')"
-            ></label>
+              {{ $t('Close') }}
+            </button>
           </div>
         </div>
-      </template>
-      <template v-slot:modal-footer>
-        <button class="btn btn-primary m-1" @click="closePopup">
-          {{ $t('Close') }}
-        </button>
-      </template>
-    </b-modal>
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+      </div>
+    </div>
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 
-<style lang="scss">
-#newsletter-modal {
-  textarea {
-    border: 2px solid #eee;
-    height: 200px;
-    padding: 1em;
-    border-radius: 1em;
-    &:focus {
-      outline-width: 0;
-    }
-  }
-
-  .modal-dialog {
-    max-width: 60%;
-  }
-}
-</style>
 <script lang="ts">
 import Snackbar from '../../misc/Snackbar.vue';
 const moment = require('moment');
-//@ts-ignore
-import Swatches from 'vue-swatches';
+import VSwatches from 'vue3-swatches';
 const humanizeDuration = require('humanize-duration');
 import { displayMethods } from '../../mixins/functions';
 import { Participant } from '@/store/class/participant';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
-export default displayMethods.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'NewsletterModal',
-  props: {
-    podcast: { default: undefined as Podcast|undefined},
-  },
 
   components: {
     Snackbar,
-    Swatches,
+    VSwatches,
   },
+
+  mixins: [displayMethods],
+
+  props: {
+    podcast: { default: ()=>({}), type: Object as ()=> Podcast},
+  },
+
+  emits: ['close'],
 
   data() {
     return {
@@ -129,10 +136,6 @@ export default displayMethods.extend({
     };
   },
 
-  mounted() {
-    this.$bvModal.show('newsletter-modal');
-  },
- 
   computed: {
     resourcesUrl(): string{
       return state.podcastPage.resourceUrl? state.podcastPage.resourceUrl : window.location.origin;
@@ -147,7 +150,7 @@ export default displayMethods.extend({
       return '';
     },
     articleHtml(): string{
-      if(this.podcast.article && 0 !== this.podcast.article!.length){
+      if(this.podcast.article && 0 !== this.podcast.article.length){
         return (`<a href="` +
           this.podcast.article +
           `" aria-label="` +
@@ -266,11 +269,11 @@ export default displayMethods.extend({
     },
     
     date(): string {
-      if (1970 !== moment(this.podcast!.pubDate).year()){
+      if (1970 !== moment(this.podcast.pubDate).year()){
         if('fr' === this.$i18n.locale){
-          return moment(this.podcast!.pubDate).format('D MMMM YYYY [à] HH[h]mm');
+          return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
         }
-        return moment(this.podcast!.pubDate).format('D MMMM YYYY [at] HH[h]mm');
+        return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
       }
       return '';
     },
@@ -301,12 +304,33 @@ export default displayMethods.extend({
       return (first + ' ' + last).trim();
     },
     selectAll(element: Event): void {
-      (element.target! as HTMLInputElement).focus();
-      (element.target! as HTMLInputElement).select();
+      const target = element.target;
+      if(null!==target){
+        (target as HTMLInputElement).focus();
+        (target as HTMLInputElement).select();
+      }
     },
     afterCopy(): void{
       (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
     }
   },
-});
+})
 </script>
+
+<style lang="scss">
+#newsletter-modal {
+  textarea {
+    border: 2px solid #eee;
+    height: 200px;
+    padding: 1em;
+    border-radius: 1em;
+    &:focus {
+      outline-width: 0;
+    }
+  }
+
+  .modal-dialog {
+    max-width: 60%;
+  }
+}
+</style>

@@ -1,8 +1,13 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading podcasts ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading podcasts ...') }}
+      </h3>
     </div>
     <div v-if="loaded && !podcasts.length">
       <p>{{ $t('No podcast match your query') }}</p>
@@ -13,28 +18,31 @@
     >
       {{ $t('Number podcasts', { nb: totalCount }) + sortText }}
     </div>
-    <ul class="podcast-list" v-show="loaded">
+    <ul
+      v-show="loaded"
+      class="podcast-list"
+    >
       <PodcastItem
-        v-bind:podcast="p"
         v-for="p in podcasts"
-        v-bind:key="p.podcastId"
+        :key="p.podcastId"
+        :podcast="p"
       />
     </ul>
     <button
+      v-show="!allFetched && loaded"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus mt-3' : 'btn-more'"
-      @click="displayMore"
       :disabled="inFetching"
-      v-show="!allFetched && loaded"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
-
-<style lang="scss"></style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
@@ -42,9 +50,9 @@ import podcastApi from '@/api/podcasts';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastList',
 
   components: {
@@ -52,26 +60,27 @@ export default Vue.extend({
   },
 
   props: {
-    first: { default: 0 as number},
-    size: { default: 12 as number },
-    organisationId: { default: undefined as string | undefined },
-    emissionId: { default: undefined as number | undefined },
-    iabId: { default: undefined as number | undefined },
-    participantId: { default: undefined as number | undefined },
-    query: { default: undefined as string | undefined },
-    monetization: { default: undefined as string | undefined },
-    popularSort: { default: false as boolean },
-    reload: { default: false as boolean },
-    before: { default: undefined as string | undefined },
-    after: { default: undefined as string | undefined },
-    includeHidden: { default: false as boolean},
-    showCount: { default: false as boolean },
-    sortCriteria: { default: undefined as string | undefined },
-    notValid: { default: undefined as boolean | undefined },
-    rubriqueId: { default: () => ([]) as Array<number> },
-    rubriquageId:{ default: () => ([]) as Array<number> },
-    noRubriquageId: { default: () => ([]) as Array<number> },
+    first: { default: 0, type: Number},
+    size: { default: 12, type: Number},
+    organisationId: { default: undefined, type: String},
+    emissionId: { default: undefined, type: Number},
+    iabId: { default: undefined, type: Number},
+    participantId: { default: undefined, type: Number},
+    query: { default: undefined, type: String},
+    monetization: { default: undefined, type: String},
+    popularSort: { default: false, type: Boolean},
+    reload: { default: false, type: Boolean},
+    before: { default: undefined, type: String},
+    after: { default: undefined, type: String},
+    includeHidden: { default: false, type: Boolean},
+    showCount: { default: false, type: Boolean },
+    sortCriteria: { default: undefined, type: String},
+    notValid: { default: undefined , type: Boolean},
+    rubriqueId: { default: () => [], type: Array as ()=>Array<number> },
+    rubriquageId:{ default: () => [], type: Array as ()=>Array<number> },
+    noRubriquageId: { default: () => [], type: Array as ()=>Array<number> },
   },
+  emits: ['fetch', 'emptyList'],
 
   data() {
     return {
@@ -83,10 +92,6 @@ export default Vue.extend({
       podcasts: [] as Array<Podcast>,
       inFetching: false as boolean,
     };
-  },
-  
-  created() {
-    this.fetchContent(true);
   },
   
   computed: {
@@ -110,8 +115,8 @@ export default Vue.extend({
       return undefined;
     },
     sort(): string {
-      if (this.popularSort) return 'POPULARITY';
-      return this.sortCriteria;
+      if (!this.popularSort && this.sortCriteria) return this.sortCriteria;
+      return 'POPULARITY';
     },
     sortText(): string {
       switch (this.sortCriteria) {
@@ -128,6 +133,18 @@ export default Vue.extend({
     isProduction(): boolean {
       return state.generalParameters.isProduction;
     },
+  },
+  watch: {
+    changed(): void {
+      this.fetchContent(true);
+    },
+    reload(): void {
+      this.fetchContent(true);
+    },
+  },
+  
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
@@ -194,13 +211,7 @@ export default Vue.extend({
       this.fetchContent(false);
     },
   },
-  watch: {
-    changed(): void {
-      this.fetchContent(true);
-    },
-    reload(): void {
-      this.fetchContent(true);
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>

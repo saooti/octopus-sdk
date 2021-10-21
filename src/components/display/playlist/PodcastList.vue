@@ -1,82 +1,96 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <h2 class="mt-3 align-self-baseline" v-if="notEmptyPlaylist">
+    <h2
+      v-if="notEmptyPlaylist"
+      class="mt-3 align-self-baseline"
+    >
       {{ $t('Podcasts in the playlist') }}
     </h2>
-    <h2 class="mt-3 align-self-baseline" v-else>
+    <h2
+      v-else
+      class="mt-3 align-self-baseline"
+    >
       {{ $t('No podcasts in the playlist') }}
     </h2>
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border mr-3"></div>
-      <h3 class="mt-2">{{ $t('Loading podcasts ...') }}</h3>
+    <div
+      v-if="loading"
+      class="d-flex justify-content-center"
+    >
+      <div class="spinner-border me-3" />
+      <h3 class="mt-2">
+        {{ $t('Loading podcasts ...') }}
+      </h3>
     </div>
     <div v-if="loaded && !podcasts.length && notEmptyPlaylist">
       <p>{{ $t('No podcast match your query') }}</p>
     </div>
-    <div v-if="loaded && podcasts.length > 1" class="text-secondary mb-4">
+    <div
+      v-if="loaded && podcasts.length > 1"
+      class="text-secondary mb-4"
+    >
       {{ $t('Number podcasts', { nb: podcasts.length }) + $t('sort by score') }}
     </div>
     <div
-      class="d-flex position-relative width-600 align-self-baseline"
       v-if="notEmptyPlaylist"
+      class="d-flex position-relative width-600 align-self-baseline"
     >
-      <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
-      <input
-        :placeholder="$t('Search')"
-        v-model="searchPattern"
-        class="filter-search-input input-no-outline flex-grow"
-        id="search"
+      <label
+        for="search"
+        class="d-inline"
+        :aria-label="$t('Search')"
       />
+      <input
+        id="search"
+        v-model="searchPattern"
+        :placeholder="$t('Search')"
+        class="filter-search-input input-no-outline flex-grow"
+      >
       <div
         class="saooti-search-bounty filter-list-search-icon search-icon-container"
-      ></div>
+      />
     </div>
-    <ul class="podcast-list" v-show="loaded">
+    <ul
+      v-show="loaded"
+      class="podcast-list"
+    >
       <PodcastItem
-        :podcast="p"
         v-for="p in podcastsDisplay"
         :key="p.podcastId"
+        :podcast="p"
       />
     </ul>
     <button
+      v-show="size < podcasts.length && loaded"
       class="btn"
       :class="buttonPlus ? 'btn-linkPlus mt-3' : 'btn-more'"
-      @click="displayMore"
-      v-show="size < podcasts.length && loaded"
       :aria-label="$t('See more')"
+      @click="displayMore"
     >
-      <template v-if="buttonPlus">{{ $t('See more') }}</template>
-      <div class="saooti-plus"></div>
+      <template v-if="buttonPlus">
+        {{ $t('See more') }}
+      </template>
+      <div class="saooti-plus" />
     </button>
   </div>
 </template>
-
-<style lang="scss">
-.width-600 {
-  width: 600px;
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-}
-</style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import Vue from 'vue';
 import { Podcast } from '@/store/class/podcast';
 import { Playlist } from '@/store/class/playlist';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PodcastList',
-
-  props: {
-    playlist: { default: undefined as Playlist|undefined},
-  },
 
   components: {
     PodcastItem,
+  },
+
+  props: {
+    playlist: { default: ()=>({}), type: Object as ()=>Playlist},
   },
 
   data() {
@@ -88,15 +102,6 @@ export default Vue.extend({
       size: 12 as number,
       searchPattern: '' as string,
     };
-  },
-
-  created() {
-    if (this.notEmptyPlaylist) {
-      this.fetchContent();
-    } else {
-      this.loading = false;
-      this.loaded = true;
-    }
   },
 
   
@@ -128,6 +133,28 @@ export default Vue.extend({
       return false;
     },
   },
+  watch: {
+    searchPattern(): void {
+      if ('' !== this.searchPattern) {
+        this.podcastsQuery = this.podcasts.filter((el: Podcast) => {
+          return el.title
+            .toLowerCase()
+            .includes(this.searchPattern.toLowerCase());
+        });
+      } else {
+        this.podcastsQuery = this.podcasts;
+      }
+    },
+  },
+
+  created() {
+    if (this.notEmptyPlaylist) {
+      this.fetchContent();
+    } else {
+      this.loading = false;
+      this.loaded = true;
+    }
+  },
   methods: {
     async fetchContent(): Promise<void> {
       this.podcasts.length = 0;
@@ -157,18 +184,15 @@ export default Vue.extend({
       this.size += 12;
     },
   },
-  watch: {
-    searchPattern(): void {
-      if ('' !== this.searchPattern) {
-        this.podcastsQuery = this.podcasts.filter((el: Podcast) => {
-          return el.title
-            .toLowerCase()
-            .includes(this.searchPattern.toLowerCase());
-        });
-      } else {
-        this.podcastsQuery = this.podcasts;
-      }
-    },
-  },
-});
+})
 </script>
+
+
+<style lang="scss">
+.width-600 {
+  width: 600px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+</style>

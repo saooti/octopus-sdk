@@ -1,48 +1,43 @@
 <template>
   <div
-    class="d-flex flex-column mt-3 module-box comment-item-container"
     v-if="isComments"
+    class="d-flex flex-column mt-3 module-box comment-item-container"
   >
     <div class="d-flex align-items-center">
-      <h2 class="mb-0 mr-2" data-selenium="episode-comment-counter">
+      <h2
+        class="mb-0 me-2"
+        data-selenium="episode-comment-counter"
+      >
         {{ $t("Podcast's comments") }}
-        <template v-if="loaded && totalCount > 0">{{
-          $t('()', { nb: totalCount })
-        }}</template>
+        <template v-if="loaded && totalCount > 0">
+          {{
+            $t('()', { nb: totalCount })
+          }}
+        </template>
       </h2>
       <button
+        v-if="!isLive"
         :aria-label="$t('Refresh')"
         class="saooti-refresh-stud btn btn-reload primary-color"
         @click="reloadComments"
-        v-if="!isLive"
-      ></button>
+      />
     </div>
     <CommentInput
+      v-model:knownIdentity="knownIdentity"
       :podcast="podcast"
-      :knownIdentity.sync="knownIdentity"
-      :fetchConference="fetchConference"
+      :fetch-conference="fetchConference"
       @newComment="newComment"
     />
     <CommentList
       ref="commentList"
       :podcast="podcast"
       :reload="reload"
-      :isFlat="isLive"
-      :fetchConference="fetchConference"
+      :is-flat="isLive"
+      :fetch-conference="fetchConference"
       @fetch="updateFetch"
     />
   </div>
 </template>
-
-<style lang="scss">
-.btn-reload {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
-</style>
 
 <script lang="ts">
 import CommentList from './CommentList.vue';
@@ -51,17 +46,19 @@ import { cookies } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
-export default cookies.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'CommentSection',
 
   components: {
     CommentList,
     CommentInput,
   },
+  mixins:[cookies],
 
   props: {
-    podcast: { default: undefined as Podcast|undefined },
-    fetchConference: { default: undefined as Conference|undefined },
+    podcast: { default: undefined, type: Object as ()=>Podcast },
+    fetchConference: { default: undefined, type: Object as ()=>Conference },
   },
   
   data() {
@@ -70,10 +67,6 @@ export default cookies.extend({
       loaded: false as boolean,
       reload: false as boolean,
     };
-  },
-
-  created() {
-    this.knownIdentity = this.getCookie('comment-octopus-name');
   },
 
   computed: {
@@ -115,12 +108,16 @@ export default cookies.extend({
       );
     },
   },
+
+  created() {
+    this.knownIdentity = this.getCookie('comment-octopus-name');
+  },
   methods: {
     updateFetch(value: { count: number }): void {
       this.loaded = true;
       this.$store.commit('setCommentLoaded', {
         ...value,
-        podcastId: this.podcast.podcastId,
+        podcastId: this.podcast? this.podcast.podcastId: undefined,
       });
       this.totalCount = value.count;
     },
@@ -154,5 +151,15 @@ export default cookies.extend({
       }
     },
   },
-});
+})
 </script>
+
+<style lang="scss">
+.btn-reload {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+</style>

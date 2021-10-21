@@ -1,40 +1,43 @@
 <template>
   <div
+    v-if="(!value || init) && organisation"
     class="default-multiselect-width"
     :style="{ width: width }"
-    v-if="(!value || init) && organisation"
   >
     <select
       :id="'organisation_chooser_light' + page"
-      class="basic-select mb-0 c-hand"
       v-model="actual"
+      class="basic-select mb-0 c-hand"
       @change="onOrganisationSelected"
     >
-      <option :value="organisation.id">{{ organisation.name }}</option>
-      <option :value="-1">{{ $t('No organisation filter') }}</option>
+      <option :value="organisation.id">
+        {{ organisation.name }}
+      </option>
+      <option :value="-1">
+        {{ $t('No organisation filter') }}
+      </option>
     </select>
     <label
       :for="'organisation_chooser_light' + page"
       class="d-inline"
       :aria-label="$t('select productor')"
-    ></label>
+    />
   </div>
 </template>
-
-<style lang="scss"></style>
 
 <script lang="ts">
 const octopusApi = require('@saooti/octopus-api');
 
 import { Organisation } from '@/store/class/organisation';
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: {
-    width: { default: '100%' },
-    value: { default: null },
-    reset: { default: false },
-    page: { default: '' },
+    width: { default: '100%', type: String},
+    value: { default: undefined, type: String},
+    reset: { default: false, type: Boolean},
+    page: { default: '', type: String},
   },
+  emits: ['selected'],
 
   data() {
     return  {
@@ -42,6 +45,17 @@ export default Vue.extend({
       organisation: undefined as Organisation|undefined,
       init: false as boolean,
     };
+  },
+
+  watch: {
+    value(): void {
+      if (!this.init || this.value) {
+        this.fetchOrganisation();
+      }
+    },
+    reset(): void {
+      this.actual = -1;
+    },
   },
 
   created() {
@@ -65,16 +79,7 @@ export default Vue.extend({
       this.init = true;
     },
   },
-
-  watch: {
-    value(): void {
-      if (!this.init || this.value) {
-        this.fetchOrganisation();
-      }
-    },
-    reset(): void {
-      this.actual = -1;
-    },
-  },
-});
+})
 </script>
+
+<style lang="scss"></style>
