@@ -66,7 +66,7 @@ const initialize = function initialize(initObject: paramStore): any {
       state.generalParameters.ApiUri =
         'undefined' !== typeof param.ApiUri
           ? param.ApiUri
-          : 'https://api.dev2.saooti.org/';
+          : 'https://api.staging.saooti.org/';
       state.generalParameters.podcastmaker =
         'undefined' !== typeof param.podcastmaker ? param.podcastmaker : false;
       state.generalParameters.buttonPlus =
@@ -93,11 +93,11 @@ const initialize = function initialize(initObject: paramStore): any {
       state.podcastPage.MiniplayerUri =
         'undefined' !== typeof param.MiniplayerUri
           ? param.MiniplayerUri
-          : 'https://player.dev2.saooti.org/';
+          : 'https://player.staging.saooti.org/';
       state.podcastPage.MiniplayerBetaUri =
         'undefined' !== typeof param.MiniplayerBetaUri
           ? param.MiniplayerBetaUri
-          : 'https://playerbeta.dev2.saooti.org/';
+          : 'https://playerbeta.staging.saooti.org/';
       state.podcastPage.ouestFranceStyle =
         'undefined' !== typeof param.ouestFranceStyle
           ? param.ouestFranceStyle
@@ -111,7 +111,7 @@ const initialize = function initialize(initObject: paramStore): any {
       state.podcastPage.hlsUri =
         'undefined' !== typeof param.hlsUri
           ? param.hlsUri
-          : 'https://hls.dev2.saooti.org/';
+          : 'https://hls.staging.saooti.org/';
       state.podcastPage.mainRubrique =
         'undefined' !== typeof param.mainRubrique
           ? param.mainRubrique
@@ -233,21 +233,21 @@ const initialize = function initialize(initObject: paramStore): any {
       state.octopusApi.url =
         'undefined' !== typeof param.url
           ? param.url
-          : 'http://api.dev2.saooti.org/';
+          : 'http://api.staging.saooti.org/';
       state.octopusApi.oAuthParam =
         'undefined' !== typeof param.oAuthParam ? param.oAuthParam : undefined;
       state.octopusApi.commentsUrl =
         'undefined' !== typeof param.commentsUrl
           ? param.commentsUrl
-          : 'http://comments.dev2.saooti.org/';
+          : 'http://comments.staging.saooti.org/';
       state.octopusApi.studioUrl =
         'undefined' !== typeof param.studioUrl
           ? param.studioUrl
-          : 'http://studio.dev2.saooti.org/';
+          : 'http://studio.staging.saooti.org/';
       state.octopusApi.playerUrl =
         'undefined' !== typeof param.playerUrl
           ? param.playerUrl
-          : 'https://playerbeta.dev2.saooti.org/';
+          : 'https://playerbeta.staging.saooti.org/';
       if (state.generalParameters.podcastmaker) {
         state.octopusApi.organisationId =
           'undefined' !== typeof param.organisationId

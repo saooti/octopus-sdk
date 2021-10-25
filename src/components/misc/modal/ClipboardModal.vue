@@ -1,51 +1,35 @@
 <template>
-  <div>
-    <div :class="{ active: active }">
-      <div class="modal-container">
+  <div class="modal">
+    <div class="modal-backdrop" />
+    <div class="modal-dialog">
+      <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title h5">
-            {{ title }}
+            {{ $t('RSS Link') }}
           </div>
           <button
-            v-if="closable"
             type="button"
-            class="close input-no-outline"
-            data-dismiss="modal"
+            class="btn-close"
             aria-label="Close"
-          >
-            <span
-              aria-hidden="true"
-              @click="closePopup"
-            >&times;</span>
-          </button>
+            @click="closePopup"
+          />
         </div>
         <div class="modal-body">
           <p class="d-flex justify-content-between align-items-center">
             {{ $t('Rss feed:') }}
-            <span id="LINK">{{ rss }}</span>
+            <span id="LINK">{{ link }}</span>
             <input
               type="button"
               :value="$t('Copy')"
               class="btn btn-primary"
               :aria-label="$t('Copy')"
-              @click="onCopyCode(rss, afterCopy)"
+              @click="onCopyCode(link, afterCopy)"
             >
           </p>
           <RssSection
             v-if="emission"
             :emission="emission"
           />
-        </div>
-        <div
-          v-if="validatetext"
-          class="modal-footer"
-        >
-          <button
-            class="btn btn-primary"
-            @click="onValid"
-          >
-            {{ validatetext }}
-          </button>
         </div>
       </div>
     </div>
@@ -66,23 +50,14 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    title: { default: undefined, type: String},
-    active: { default: false, type: Boolean},
-    closable: { default: true, type: Boolean},
-    validatetext: { default: undefined, type: String},
     link: { default: '', type: String},
     emission: { default: undefined, type: Object as ()=> Emission},
   },
-  emits: ['close', 'validate'],
+  emits: ['close', 'copy'],
 
   data() {
     return {
-      rss: '' as string,
     };
-  },
-
-  created() {
-    this.rss = this.link;
   },
 
   methods: {
@@ -90,15 +65,10 @@ export default defineComponent({
       event.preventDefault();
       this.$emit('close');
     },
-
-    onValid(): void {
-      this.$emit('validate');
-    },
     afterCopy(): void{
-      return;
+      this.$emit("copy");
     }
   },
 })
 </script>
 
-<style lang="scss"></style>

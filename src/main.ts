@@ -9,9 +9,9 @@ import store from '@/store/AppStore';
 const paramStore = require('./store/paramStore');
 /* import 'popper.js/dist/popper.min.js'; */
 /* import 'jquery/src/jquery.js'; */
-import 'jquery';
+/* import 'jquery';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
+ */
 
 //TODO
 const navigatorLang = navigator.language /* || navigator.userLanguage */;

@@ -26,10 +26,10 @@
       />
       <PodcastInlineList
         v-if="rubriqueDisplay && rubriqueDisplay.length"
-        :noRubriquageId="[rubriqueDisplay[0].rubriquageId]"
-        :rubriqueId="rubriqueId"
+        :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
+        :rubrique-id="rubriqueId"
         :title="$t('Without rubric')"
-        :buttonText="$t('All podcast button', { name: $t('Without rubric') })"
+        :button-text="$t('All podcast button', { name: $t('Without rubric') })"
       />
     </template>
   </div>

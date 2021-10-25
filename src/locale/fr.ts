@@ -108,7 +108,7 @@ export default{
   'Prohibited advertising': 'Publicité interdite',
   'Authorized advertising': 'Publicité autorisée',
   Distribute: 'Distribuer',
-  'Rss feed:': 'Flux RSS:',
+  'Rss feed:': 'Flux RSS :',
   'See more': 'Voir plus',
   'Search results': 'Résultat de la recherche "{query}"',
   'Search - no results': 'Aucun résultat pour la recherche "{query}"',

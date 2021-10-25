@@ -131,7 +131,6 @@ export default defineComponent({
     return {
       emission: undefined as Emission|undefined,
       error: false as boolean,
-      baseRss: '' as string,
       rss: '' as string,
     };
   },
@@ -152,8 +151,7 @@ export default defineComponent({
     },
     getRSS(): void {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
-      this.baseRss = octopusApi.fetchRSS(this.emissionId);
-      this.rss = this.baseRss;
+      this.rss = octopusApi.fetchRSS(this.emissionId) + '.rss';
     },
     afterCopy(): void{
       (this.$refs.snackbar as any).open(this.$t('Link in clipboard'));

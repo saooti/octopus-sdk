@@ -7,7 +7,7 @@
     <div class="accordion-item">
       <h2
         id="labelPlayerParameter"
-        class="accordion-header"
+        class="accordion-header mb-0"
       >
         <button
           class="accordion-button collapsed"

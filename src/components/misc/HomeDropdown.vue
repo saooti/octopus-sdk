@@ -29,64 +29,62 @@
             </button>
           </router-link>
         </li>
-        <div @click="displayMenuPhone(true)">
-          <li v-if="!isPodcastmaker">
-            <router-link
-              to="/main/priv/backoffice"
-              class="linkSpace dropdown-item"
-            >
-              {{ $t('My space') }}
-            </router-link>
-          </li>
-          <li v-if="!isPodcastmaker">
-            <router-link
-              class="dropdown-item"
-              to="/main/priv/edit/profile"
-            >
-              {{ $t('Edit my profile') }}
-            </router-link>
-          </li>
-          <li v-if="!isPodcastmaker && isOrganisation">
-            <router-link
-              class="dropdown-item"
-              to="/main/priv/edit/organisation"
-            >
-              {{ $t('Edit my organisation') }}
-            </router-link>
-          </li>
-          <li v-if="!isEducation">
-            <hr class="dropdown-divider">
-          </li>
-          <li v-if="!isEducation">
-            <a
-              href="https://help.octopus.saooti.com/Aide/"
-              class="dropdown-item"
-              rel="noopener"
-              target="_blank"
-            >
-              {{ $t('Help') }}
-            </a>
-          </li>
-          <li v-if="!isEducation">
-            <a
-              href="https://help.octopus.saooti.com/"
-              class="dropdown-item"
-              rel="noopener"
-              target="_blank"
-            >
-              {{ $t('TutoMag') }}
-            </a>
-          </li>
-          <li><hr class="dropdown-divider"></li>
-          <li v-if="!isEducation">
-            <a
-              class="dropdown-item"
-              href="/sso/logout"
-            >
-              {{ $t('Logout') }}
-            </a>
-          </li>
-        </div>
+        <li v-if="!isPodcastmaker">
+          <router-link
+            to="/main/priv/backoffice"
+            class="linkSpace dropdown-item"
+          >
+            {{ $t('My space') }}
+          </router-link>
+        </li>
+        <li v-if="!isPodcastmaker">
+          <router-link
+            class="dropdown-item"
+            to="/main/priv/edit/profile"
+          >
+            {{ $t('Edit my profile') }}
+          </router-link>
+        </li>
+        <li v-if="!isPodcastmaker && isOrganisation">
+          <router-link
+            class="dropdown-item"
+            to="/main/priv/edit/organisation"
+          >
+            {{ $t('Edit my organisation') }}
+          </router-link>
+        </li>
+        <li v-if="!isEducation">
+          <hr class="dropdown-divider">
+        </li>
+        <li v-if="!isEducation">
+          <a
+            href="https://help.octopus.saooti.com/Aide/"
+            class="dropdown-item"
+            rel="noopener"
+            target="_blank"
+          >
+            {{ $t('Help') }}
+          </a>
+        </li>
+        <li v-if="!isEducation">
+          <a
+            href="https://help.octopus.saooti.com/"
+            class="dropdown-item"
+            rel="noopener"
+            target="_blank"
+          >
+            {{ $t('TutoMag') }}
+          </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li v-if="!isEducation">
+          <a
+            class="dropdown-item"
+            href="/sso/logout"
+          >
+            {{ $t('Logout') }}
+          </a>
+        </li>
       </ul>
     </div>
     <div
@@ -158,13 +156,6 @@ export default defineComponent({
 
 
   methods: {
-    displayMenuPhone(hidden: boolean): void {
-      if (hidden) {
-        (this.$refs.menu as HTMLElement).className='menu hid';
-      } else {
-        (this.$refs.menu as HTMLElement).className='menu';
-      }
-    },
     goToUrl(url: string): void {
       if (this.authenticated) {
         this.$router.push(url);

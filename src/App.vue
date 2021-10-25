@@ -1,8 +1,8 @@
 <template>
   <div 
     id="app"
-    class="octopus-app"
     :key="reload"
+    class="octopus-app"
   >
     <TopBar
       v-model:displayMenu="displayMenu"

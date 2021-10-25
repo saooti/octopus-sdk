@@ -220,11 +220,10 @@
     </div>
     <ClipboardModal
       v-if="dataRSSSave"
-      :closable="true"
       :link="rssUrl"
       :emission="emission"
-      :title="$t('RSS Link')"
-      @close="closeModal()"
+      @close="dataRSSSave = false"
+      @copy="afterCopy"
     />
     <NewsletterModal
       v-if="newsletter"
@@ -311,19 +310,19 @@ export default defineComponent({
         return (
           state.generalParameters.ApiUri +
           'rss/emission/' +
-          this.emission.emissionId
+          this.emission.emissionId + '.rss'
         );
       if (this.organisationId)
         return (
           state.generalParameters.ApiUri +
           'rss/productor/' +
-          this.organisationId
+          this.organisationId + '.rss'
         );
       if (this.participantId)
         return (
           state.generalParameters.ApiUri +
           'rss/participant/' +
-          this.participantId
+          this.participantId + '.rss'
         );
       return '';
     },
@@ -335,9 +334,6 @@ export default defineComponent({
   methods: {
     openPopup(): void {
       this.dataRSSSave = !this.dataRSSSave;
-    },
-    closeModal(): void {
-      this.dataRSSSave = false;
     },
     afterCopy(): void{
       (this.$refs.snackbar as any).open(this.$t('Link in clipboard'));
