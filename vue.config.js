@@ -1,3 +1,4 @@
+/* eslint-disable */
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
@@ -12,3 +13,4 @@ module.exports = {
       ],
   },
 };
+/* eslint-enable */

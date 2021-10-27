@@ -37,10 +37,12 @@
         :id="'description-participant-container-' + participant.participantId"
         class="participant-description html-wysiwyg-content"
       >
+        <!-- eslint-disable vue/no-v-html -->
         <div
           :id="'description-participant-' + participant.participantId"
           v-html="urlify(description)"
         />
+        <!-- eslint-enable -->
       </div>
     </router-link>
     <router-link
@@ -60,7 +62,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { Participant } from '@/store/class/participant';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';

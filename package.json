@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "29.0.17",
+  "version": "29.0.18",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -15,7 +15,7 @@
   "main": "./dist/octopus.common.js",
   "dependencies": {
     "@popperjs/core": "^2.10.2",
-    "@saooti/octopus-api": "^0.29.0",
+    "@saooti/octopus-api": "^0.29.7",
     "@vue/cli": "^5.0.0-beta.6",
     "@vue/compat": "^3.1.0",
     "axios": "^0.23.0",
@@ -78,11 +78,7 @@
     "rules": {
       "no-console": "off",
       "no-debugger": "off",
-      "no-useless-escape": "off",
-      "vue/no-v-html": "off",
-      "no-async-promise-executor": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/ban-ts-ignore": "off",
       "@typescript-eslint/ban-ts-comment": "off"
     },

@@ -62,10 +62,12 @@
           class="emission-description htms-wysiwyg-content"
           :class="lightItems ? 'emission-small-description' : ''"
         >
+          <!-- eslint-disable vue/no-v-html -->
           <div
             :id="'description-emission-' + emission.emissionId"
             v-html="urlify(description)"
           />
+          <!-- eslint-enable -->
         </div>
       </router-link>
       <div class="flex-grow" />
@@ -89,7 +91,7 @@
 <script lang="ts">
 import { Emission } from '@/store/class/emission';
 import { state } from '../../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({

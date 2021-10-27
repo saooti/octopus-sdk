@@ -14,7 +14,9 @@
           </div>
           <div class="modal-body">
             <div class="d-flex justify-content-between">
+              <!-- eslint-disable vue/no-v-html -->
               <div v-html="newsletterHtml" />
+              <!-- eslint-enable -->
               <div class="d-flex flex-column flex-grow ms-4">
                 <h4 class="mb-3">
                   {{ $t('Configuration') }}
@@ -103,9 +105,10 @@
 
 <script lang="ts">
 import Snackbar from '../../misc/Snackbar.vue';
-const moment = require('moment');
+import moment from 'moment';
 import VSwatches from 'vue3-swatches';
-const humanizeDuration = require('humanize-duration');
+// @ts-ignore
+import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
 import { Participant } from '@/store/class/participant';
 import { Podcast } from '@/store/class/podcast';

@@ -110,7 +110,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { Emission } from '@/store/class/emission';

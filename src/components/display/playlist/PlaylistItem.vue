@@ -41,10 +41,12 @@
           :id="'description-playlist-container-' + playlist.playlistId"
           class="emission-description html-wysiwyg-content"
         >
+          <!-- eslint-disable vue/no-v-html -->
           <div
             :id="'description-playlist-' + playlist.playlistId"
             v-html="urlify(description)"
           />
+          <!-- eslint-enable -->
         </div>
       </router-link>
       <div class="flex-grow" />

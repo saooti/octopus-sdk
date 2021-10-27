@@ -1,6 +1,6 @@
 
 import { Rubriquage } from "@/store/class/rubriquage";
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { defineComponent } from 'vue'
 export const orgaFilter = defineComponent({
   methods: {

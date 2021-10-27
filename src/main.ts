@@ -4,9 +4,9 @@ import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import I18nResources from './locale/messages';
 import router from '@/router/router';
-const moment = require('moment');
+import moment from 'moment';
 import store from '@/store/AppStore';
-const paramStore = require('./store/paramStore');
+import paramStore from './store/paramStore';
 /* import 'popper.js/dist/popper.min.js'; */
 /* import 'jquery/src/jquery.js'; */
 /* import 'jquery';
@@ -48,6 +48,9 @@ paramStore
     organisation: {},
     octopusApi: {},
     footer: {},
+    filter: {}, 
+    intervenantsPage: {},
+    oAuthParam: {}
   })
   .then(() => {
     createApp(App)

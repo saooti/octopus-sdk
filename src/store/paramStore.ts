@@ -1,4 +1,4 @@
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 
 const state = {
   generalParameters: {} as any,
@@ -254,16 +254,18 @@ const initialize = function initialize(initObject: paramStore): any {
             ? param.organisationId
             : undefined;
       }
-      const error = octopusApi.initialize(state.octopusApi);
-      if (error) {
-        reject();
-      } else {
+      try {
+        octopusApi.initialize(state.octopusApi);
         resolve();
+      } catch (error) {
+        reject();
       }
     } else {
-      reject();
+      debugger
+      resolve();
     }
   });
 };
 
+export default { initialize, state };
 export { initialize, state };

@@ -33,8 +33,8 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
-const moment = require('moment');
+import octopusApi from '@saooti/octopus-api';
+import moment from 'moment';
 import { CommentPodcast } from '@/store/class/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -75,7 +75,9 @@ export default defineComponent({
   },
 
   async created() {
-    this.comment = await octopusApi.fetchComment(this.comId);
+    if(this.comId){
+      this.comment = await octopusApi.fetchComment(this.comId);
+    }
     this.loading = false;
   },
 })

@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import emissionApi from '@/api/emissions';
 import { state } from '../../../store/paramStore';
 

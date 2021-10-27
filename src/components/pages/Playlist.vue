@@ -20,10 +20,12 @@
                 :alt="$t('Playlist name image', { name: name })"
                 class="img-box shadow-element float-start me-3 mb-3"
               >
+              <!-- eslint-disable vue/no-v-html -->
               <p
                 class="html-wysiwyg-content"
                 v-html="urlify(description)"
               />
+              <!-- eslint-enable -->
             </div>
           </div>
         </div>
@@ -59,7 +61,7 @@
 
 <script lang="ts">
 import PodcastList from '../display/playlist/PodcastList.vue';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Playlist } from '@/store/class/playlist';

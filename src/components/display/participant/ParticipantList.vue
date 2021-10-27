@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import ParticipantItem from './ParticipantItem.vue';
 
 import { Participant } from '@/store/class/participant';

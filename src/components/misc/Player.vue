@@ -73,7 +73,7 @@
 <script lang="ts">
 import { mapState } from 'vuex';
 import { state } from '../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 let Hls: any= null;
 import { CommentPodcast } from '@/store/class/comment';
 import { cookies } from '../mixins/functions';
@@ -335,48 +335,46 @@ export default defineComponent({
       this.listenTime = 0;
     },
     async initHls(hlsStreamUrl: string): Promise<void> {
-      return new Promise<void>(async(resolve, reject) => {
-        if(null === Hls){
-          //TODO -> Version light min quand ce sera possible
-          await import('hls.js/dist/hls.js').then((hlsLibrary) => {
-            Hls = hlsLibrary.default;
-          })
-           await import('hls.js').then((hlsLibrary) => {
-            Hls = hlsLibrary.default;
-          })
+      if(null === Hls){
+        //TODO -> Version light min quand ce sera possible
+        await import('hls.js/dist/hls.js').then((hlsLibrary) => {
+          Hls = hlsLibrary.default;
+        })
+          await import('hls.js').then((hlsLibrary) => {
+          Hls = hlsLibrary.default;
+        })
+      }
+      if (!Hls.isSupported()) {
+        throw 'Hls is not supported ! ';
+      }
+      const hls = new Hls();
+      hls.on(Hls.Events.MANIFEST_PARSED, async () => {
+        let downloadId = null;
+        try {
+          downloadId = await octopusApi.requestLiveDownloadId(
+            this.live.livePodcastId
+          );
+          await octopusApi.markPlayingLive(
+            this.live.livePodcastId,
+            downloadId,
+            'octopus',
+            this.$store.state.authentication.organisationId
+          );
+          this.setDownloadId(downloadId);
+        } catch (error) {
+          console.log('ERROR downloadId');
         }
-        if (!Hls.isSupported()) {
-          reject('Hls is not supported ! ');
-        }
-        const hls = new Hls();
-        hls.on(Hls.Events.MANIFEST_PARSED, async () => {
-          let downloadId = null;
-          try {
-            downloadId = await octopusApi.requestLiveDownloadId(
-              this.live.livePodcastId
-            );
-            await octopusApi.markPlayingLive(
-              this.live.livePodcastId,
-              downloadId,
-              'octopus',
-              this.$store.state.authentication.organisationId
-            );
-            this.setDownloadId(downloadId);
-          } catch (error) {
-            console.log('ERROR downloadId');
-          }
-          this.hlsReady = true;
-          const audio: any = document.getElementById('audio-player');
-          hls.attachMedia(audio);
-          await audio.play();
-          this.onPlay();
-          resolve();
-        });
-        hls.on(Hls.Events.ERROR, async () => {
-          reject('There is an error while reading media content');
-        });
-        hls.loadSource(hlsStreamUrl);
+        this.hlsReady = true;
+        const audio: any = document.getElementById('audio-player');
+        hls.attachMedia(audio);
+        await audio.play();
+        this.onPlay();
+        throw 400;
       });
+      hls.on(Hls.Events.ERROR, async () => {
+        throw 'There is an error while reading media content';
+      });
+      hls.loadSource(hlsStreamUrl);
     },
     async playLive(): Promise<void> {
       if (!this.live) return;

@@ -113,8 +113,8 @@
 
 <script lang="ts">
 import LiveItem from './LiveItem.vue';
-const octopusApi = require('@saooti/octopus-api');
-const moment = require('moment');
+import octopusApi from '@saooti/octopus-api';
+import moment from 'moment';
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference';
 import { defineComponent } from 'vue'
@@ -176,6 +176,7 @@ export default defineComponent({
   },
   watch: {
     async organisationId(): Promise<void> {
+      if(!this.organisationId){return;}
       const isLive = await octopusApi.liveEnabledOrganisation(
         this.organisationId
       );
@@ -203,6 +204,9 @@ export default defineComponent({
   },
 
   async created() {
+    if(!this.filterOrgaUsed){
+      return;
+    }
     const isLive = await octopusApi.liveEnabledOrganisation(
       this.filterOrgaUsed
     );

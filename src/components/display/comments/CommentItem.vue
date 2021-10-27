@@ -56,7 +56,9 @@
       />
     </div>
     <template v-if="!isEditing">
+      <!-- eslint-disable vue/no-v-html -->
       <div v-html="urlify(contentDisplay)" />
+      <!-- eslint-enable -->
       <a
         v-if="comment.content.length > 300"
         class="c-hand font-italic"
@@ -176,7 +178,7 @@ import { displayMethods, selenium } from '../../mixins/functions';
 import { CommentPodcast } from '@/store/class/comment';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
-const moment = require('moment');
+import moment from 'moment';
 import Popover from '../../misc/Popover.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));

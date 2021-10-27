@@ -24,10 +24,12 @@
         isDescriptionBig ? 'after-podcast-description' : '',
       ]"
     >
+      <!-- eslint-disable vue/no-v-html -->
       <div
         :id="'description-podcast-' + podcast.podcastId"
         v-html="description"
       />
+    <!-- eslint-enable -->
     </div>
     <div
       class="d-contents"
@@ -83,8 +85,9 @@
 import AnimatorsItem from './AnimatorsItem.vue';
 import PodcastImage from './PodcastImage.vue';
 import { state } from '../../../store/paramStore';
-const moment = require('moment');
-const humanizeDuration = require('humanize-duration');
+import moment from 'moment';
+// @ts-ignore
+import humanizeDuration from 'humanize-duration';
 
 import { Podcast } from '@/store/class/podcast';
 import { Category } from '@/store/class/category';

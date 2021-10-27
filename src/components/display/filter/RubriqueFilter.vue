@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -218,7 +218,7 @@ export default defineComponent({
         this.arrayFilter.length = 0;
       }
       if (!this.organisation) return;
-      const data = await octopusApi.fetchTopics(this.organisation);
+      const data = await octopusApi.fetchTopics(this.organisation, undefined);
       this.rubriquageData = data.filter((element: Rubriquage)=>{
         return element.rubriques.length;
       });

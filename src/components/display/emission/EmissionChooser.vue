@@ -83,7 +83,7 @@
 <script lang="ts">
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 
 const ELEMENTS_COUNT = 50;
 const DEFAULT_EMISSION_ID = 0;

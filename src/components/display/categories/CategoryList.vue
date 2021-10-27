@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore';
 
 import { Category } from '@/store/class/category';

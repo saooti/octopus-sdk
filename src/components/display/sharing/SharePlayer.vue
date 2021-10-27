@@ -107,7 +107,7 @@
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 import profileApi from '@/api/profile';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { Podcast } from '@/store/class/podcast';
 import { Emission } from '@/store/class/emission';
 import { Playlist } from '@/store/class/playlist';

@@ -79,7 +79,7 @@ export function emptyPodcastData(): Podcast{
     typeMedia: string | undefined;
     sortOrder: string | undefined;
     sortField: string | undefined;
-    live: any;
+    live: boolean|undefined;
     iab: Category |undefined;
   }
 
@@ -140,23 +140,23 @@ export function emptyPodcastData(): Podcast{
         refreshToken: string | undefined;
         accessTokenUri: string | undefined;
         clientId: string | undefined;
-        expiration: any;
+        expiration: number | undefined;
     };
     media: Media;
   
     profile: {
-        firstname: any;
-        lastname: any;
-        email: any;
-        userId: any;
-        imageUrl: any;
-        description: any;
+        firstname: string | undefined;
+        lastname: string | undefined;
+        email: string | undefined;
+        userId: string | undefined;
+        imageUrl: string | undefined;
+        description: string | undefined;
         attributes: any;
     };
   
     organisation: Organisation;
-    categories: any;
-    categoriesOrga: any;
+    categories: Array<Category>;
+    categoriesOrga: Array<Category>;
   
     filter: Filter;
   

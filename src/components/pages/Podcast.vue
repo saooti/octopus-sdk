@@ -107,10 +107,10 @@
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import PodcastModuleBox from '../display/podcasts/PodcastModuleBox.vue';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import studioApi from '@/api/studio';
 import { state } from '../../store/paramStore';
-const moment = require('moment');
+import moment from 'moment';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
@@ -270,7 +270,7 @@ export default defineComponent({
     },
     timeRemaining(): string {
       if(!this.podcast){return "";}
-      return moment(this.podcast.pubDate).diff(moment(), 'seconds');
+      return moment(this.podcast.pubDate).diff(moment(), 'seconds').toString();
     },
   },
   watch: {

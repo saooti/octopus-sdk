@@ -49,8 +49,8 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
-const moment = require('moment');
+import octopusApi from '@saooti/octopus-api';
+import moment from 'moment';
 
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';

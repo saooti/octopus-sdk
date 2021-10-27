@@ -19,10 +19,12 @@
           />
         </div>
         <div class="modal-body">
+          <!-- eslint-disable vue/no-v-html -->
           <div
             class="content"
             v-html="message"
           />
+          <!-- eslint-enable -->
         </div>
         <div
           v-if="validatetext"

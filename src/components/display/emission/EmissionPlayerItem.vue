@@ -38,12 +38,13 @@
           :id="'description-emission-container-' + emission.emissionId"
           class="emission-description html-wysiwyg-content"
         >
+          <!-- eslint-disable vue/no-v-html -->
           <div
             :id="'description-emission-' + emission.emissionId"
             v-html="urlify(emission.description)"
           />
+          <!-- eslint-enable -->
         </div>
-        <!-- <div class="text-ellipsis html-wysiwyg-content" v-html="urlify(emission.description)"></div> -->
       </div>
     </router-link>
     <div
@@ -67,10 +68,12 @@
             :id="'description-podcast-container-' + p.podcastId"
             class="emission-description html-wysiwyg-content"
           >
+            <!-- eslint-disable vue/no-v-html -->
             <div
               :id="'description-podcast-' + p.podcastId"
               v-html="urlify(p.description)"
             />
+            <!-- eslint-enable -->
           </div>
         </router-link>
         <div
@@ -118,7 +121,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/emission';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';

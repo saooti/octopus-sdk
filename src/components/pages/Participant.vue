@@ -22,10 +22,12 @@
         <h2 class="text-capitalize">
           {{ name }}
         </h2>
+        <!-- eslint-disable vue/no-v-html -->
         <div
           class="h6 participant-desc html-wysiwyg-content"
           v-html="urlify(description)"
         />
+        <!-- eslint-enable -->
         <div
           v-if="isRssButton"
           class="d-flex justify-content-center"
@@ -88,7 +90,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Participant } from '@/store/class/participant';

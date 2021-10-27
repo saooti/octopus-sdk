@@ -201,7 +201,7 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-const moment = require('moment');
+import moment from 'moment';
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';

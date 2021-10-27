@@ -138,8 +138,8 @@
 <script lang="ts">
 import Player from './Player.vue';
 import { state } from '../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
-const moment = require('moment');
+import octopusApi from '@saooti/octopus-api';
+import moment from 'moment';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent } from 'vue'

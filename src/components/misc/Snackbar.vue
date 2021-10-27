@@ -11,8 +11,9 @@
         class="snack-bar"
         :style="style.bar(msg.color)"
         @click="pop(i)"
-        v-html="msg.msg.message || msg.msg"
-      />
+      >
+        {{ msg.msg.message || msg.msg }}
+      </div>
       <br>
     </template>
   </div>

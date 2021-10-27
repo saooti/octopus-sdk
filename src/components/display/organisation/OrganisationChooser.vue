@@ -117,7 +117,7 @@
 import { selenium } from '../../mixins/functions';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore';
 import { Organisation } from '@/store/class/organisation';
 
@@ -282,6 +282,7 @@ export default defineComponent({
       if (0 === this.organisations.length) {
         this.onSearchOrganisation();
       }
+      if(!this.value){return;}
       const data = await octopusApi.fetchOrganisation(this.value);
       this.organisation = data;
       this.init = true;

@@ -64,10 +64,12 @@
             {{ $t('Episode record in live') }}
           </div>
         </div>
+        <!-- eslint-disable vue/no-v-html -->
         <div
           class="descriptionText html-wysiwyg-content"
           v-html="urlify(podcast.description)"
         />
+        <!-- eslint-enable -->
         <div class="mt-3 mb-3">
           <ParticipantDescription :participants="podcast.animators" />
           <div v-if="!isOuestFrance">
@@ -154,8 +156,9 @@
 import PodcastImage from './PodcastImage.vue';
 import ParticipantDescription from './ParticipantDescription.vue';
 import { state } from '../../../store/paramStore';
-const moment = require('moment');
-const humanizeDuration = require('humanize-duration');
+import moment from 'moment';
+// @ts-ignore
+import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';

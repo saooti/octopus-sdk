@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({

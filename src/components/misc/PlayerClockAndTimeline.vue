@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-const moment = require('moment');
+import moment from 'moment';
 import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue';
 import { CommentPodcast } from '@/store/class/comment';

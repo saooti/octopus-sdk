@@ -69,10 +69,12 @@
         :id="'description-live-container-' + live.podcastId"
         class="live-description-container html-wysiwyg-content"
       >
+        <!-- eslint-disable vue/no-v-html -->
         <div
           :id="'description-live-' + live.podcastId"
           v-html="urlify(description)"
         />
+        <!-- eslint-enable -->
       </div>
       <div
         v-if="live.animators"
@@ -122,11 +124,12 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import PodcastImage from '../podcasts/PodcastImage.vue';
 import studioApi from '@/api/studio';
-const moment = require('moment');
-const humanizeDuration = require('humanize-duration');
+import moment from 'moment';
+// @ts-ignore
+import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
 import { Podcast } from '@/store/class/podcast';
 import { Participant } from '@/store/class/participant';

@@ -1,7 +1,7 @@
 
 import { Category } from "@/store/class/category";
 import { orgaFilter } from '../mixins/organisationFilter';
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue';
 export const initSDK = defineComponent({

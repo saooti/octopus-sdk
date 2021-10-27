@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 
 import { Organisation } from '@/store/class/organisation';
 import { defineComponent } from 'vue'
@@ -73,6 +73,7 @@ export default defineComponent({
       }
     },
     async fetchOrganisation(): Promise<void> {
+      if(!this.value){return;}
       const data = await octopusApi.fetchOrganisation(this.value);
       this.organisation = data;
       this.actual = data.id;

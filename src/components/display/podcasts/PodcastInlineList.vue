@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-const octopusApi = require('@saooti/octopus-api');
+import octopusApi from '@saooti/octopus-api';
 import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
 

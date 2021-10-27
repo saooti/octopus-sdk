@@ -25,11 +25,13 @@
         class="d-flex flex-column align-items-center"
       >
         <b><i>{{ getName(participant) }}</i></b>
+        <!-- eslint-disable vue/no-v-html -->
         <div
           v-if="participant.description"
           class="h6 participant-desc html-wysiwyg-content"
           v-html="participant.description"
         />
+        <!-- eslint-enable -->
         <div class="horizontal-separator my-1" />
       </div>
     </Popover>
