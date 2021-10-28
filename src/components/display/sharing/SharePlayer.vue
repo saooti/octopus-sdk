@@ -356,7 +356,7 @@ export default defineComponent({
       }else{
         data= await profileApi.fetchOrganisationAttibutes(
           this.$store.state,
-          state.generalParameters.organisationId
+          state.generalParameters.organisationId ? state.generalParameters.organisationId : ""
         );
       }
       if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {

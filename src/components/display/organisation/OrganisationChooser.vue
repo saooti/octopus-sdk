@@ -165,7 +165,7 @@ export default defineComponent({
   },
   
   computed: {
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
@@ -174,7 +174,7 @@ export default defineComponent({
     myOrganisation(): Organisation|undefined {
       if (!this.authenticated) return undefined;
       return {
-        id: this.organisationId,
+        id: this.organisationId ? this.organisationId : "",
         imageUrl: this.myImage,
         name:
           this.$t('Edit my organisation') +
@@ -202,7 +202,7 @@ export default defineComponent({
       this.authenticated &&
       undefined === this.$store.state.organisation.imageUrl
     ) {
-      const data = await octopusApi.fetchOrganisation(this.organisationId);
+      const data = await octopusApi.fetchOrganisation(this.organisationId ?this.organisationId:"");
       this.myImage = data.imageUrl;
     }
     if (this.value) {
@@ -211,7 +211,7 @@ export default defineComponent({
   },
   methods: {
     onOpen(): void {
-      (this.$refs.multiselectRef as any).$refs.search.setAttribute(
+      (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
         'autocomplete',
         'off'
       );

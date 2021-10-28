@@ -14,6 +14,7 @@
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
 import { defineComponent } from 'vue'
+import { Category } from '@/store/class/category';
 export default defineComponent({
   components: {
     PodcastList,
@@ -31,7 +32,7 @@ export default defineComponent({
   },
 
   computed: {
-    categories(): any {
+    categories(): Array<Category> {
       return this.$store.state.categories;
     },
     filterOrga(): string {
@@ -49,7 +50,7 @@ export default defineComponent({
   },
   methods: {
     extractTitle(): void {
-      const matchCategories = this.categories.filter((c: any) => c.id === this.iabId);
+      const matchCategories = this.categories.filter((c: Category) => c.id === this.iabId);
       if (1 !== matchCategories.length) return;
       this.title = matchCategories[0]['name'];
 

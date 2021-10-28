@@ -5,7 +5,7 @@ import { Person } from "./person";
 export interface Podcast{
     imageUrl: string;
     animators?: Array<Participant>;
-    annotations?: any;
+    annotations?: {[key: string]:string|number|boolean|undefined}|undefined;
     audioStorageUrl: string;
     audioUrl: string;
     availability: {
@@ -34,4 +34,5 @@ export interface Podcast{
     tags?: Array<string>;
     title: string;
     weekDownloadCount?: number;
+    livePodcastId?:number;
 }

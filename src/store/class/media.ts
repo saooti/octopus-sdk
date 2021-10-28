@@ -1,4 +1,5 @@
 export interface Media{
+    audioUrl: string;
     mediaId: number;
     imageUrl?: string;
     organisationId: string;

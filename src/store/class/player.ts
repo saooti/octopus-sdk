@@ -1,3 +1,4 @@
+import { Media } from "./media";
 import { Podcast } from "./podcast";
 
 export interface Player{
@@ -6,7 +7,7 @@ export interface Player{
     volume?: number; //From 0 to 1
     elapsed?: number; //From 0 to 1
     total?: number;
-    media: any;
-    live: any;
-    stop?: any;
+    media: Media|undefined;
+    live: Podcast|undefined;
+    stop?: boolean;
   }

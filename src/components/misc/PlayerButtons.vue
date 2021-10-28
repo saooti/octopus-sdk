@@ -46,6 +46,7 @@ import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue';
 import { Media } from '@/store/class/media';
 import { Podcast } from '@/store/class/podcast';
+import { RouteLocationRaw } from 'vue-router';
 export default defineComponent({
   name: 'PlayerButtons',
 
@@ -68,11 +69,11 @@ export default defineComponent({
     isLoading(): boolean {
       return 'LOADING' === this.$store.state.player.status;
     },
-    isImage(): string {
+    isImage(): boolean {
       return state.player.image;
     },
     podcastImage(): string{
-      if (this.$store.state.player.podcast) return state.player.podcast.imageUrl;
+      if (this.$store.state.player.podcast) return this.$store.state.player.podcast.imageUrl;
       return '';
     },
     isStop(): boolean{
@@ -85,11 +86,11 @@ export default defineComponent({
       return this.$store.state.player.podcast;
     },
 
-    podcastShareUrl(): any {
+    podcastShareUrl(): RouteLocationRaw|string {
       if (this.podcast) {
         return {
           name: 'podcast',
-          params: { podcastId: this.podcast.podcastId },
+          params: { podcastId: this.podcast.podcastId.toString() },
           query: { productor: this.$store.state.filter.organisationId },
         };
       }
@@ -99,7 +100,8 @@ export default defineComponent({
 
   methods: {
     switchPausePlay(): void {
-      const audioPlayer: any = document.querySelector('#audio-player');
+      const audioPlayer: HTMLAudioElement|null = document.querySelector('#audio-player');
+      if(!audioPlayer){return;}
       if (audioPlayer.paused) {
         this.onPlay();
       } else {

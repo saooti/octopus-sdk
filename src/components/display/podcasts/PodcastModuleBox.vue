@@ -196,7 +196,7 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {

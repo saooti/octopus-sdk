@@ -1,7 +1,7 @@
 import { Organisation } from "./organisation";
 
 export interface Person{
-    attributes?: any;
+    attributes?:{[key: string]:string|number|boolean|undefined}|undefined;
     email: string;
     emailVerified: boolean;
     enabled: true;

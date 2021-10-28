@@ -134,41 +134,41 @@ export default defineComponent({
   data() {
     return {
       applePodcast:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.applePodcast
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       deezer:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.deezer
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       spotify:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.spotify
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       tunein:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.tunein
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       radioline:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.radioline
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       podcastAddict:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.podcastAddict
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       playerFm:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.playerFm
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       stitcher:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.stitcher
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
       amazon:
-        this.emission && this.emission.annotations
+        (this.emission && this.emission.annotations
           ? this.emission.annotations.amazon
-          : undefined as string | undefined,
+          : undefined) as string | undefined,
     };
   },
 

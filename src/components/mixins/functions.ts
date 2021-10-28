@@ -38,7 +38,7 @@ export const displayMethods ={
         return '<a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>';
       });
     },
-    async onCopyCode(link: string, callback: () => void): Promise<any> {
+    async onCopyCode(link: string, callback: () => void): Promise<void> {
       if ('undefined' !== typeof navigator.clipboard) {
         await navigator.clipboard.writeText(link);
         return callback();

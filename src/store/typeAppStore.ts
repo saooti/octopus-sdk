@@ -151,7 +151,7 @@ export function emptyPodcastData(): Podcast{
         userId: string | undefined;
         imageUrl: string | undefined;
         description: string | undefined;
-        attributes: any;
+        attributes: {[key: string]:string|number|boolean|undefined}|undefined;
     };
   
     organisation: Organisation;
@@ -258,6 +258,7 @@ export function emptyPodcastData(): Podcast{
             mediaId: 0,
             organisationId: '',
             title: '',
+            audioUrl: ''
           },
       
           profile: {

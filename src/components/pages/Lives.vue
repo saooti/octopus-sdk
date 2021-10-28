@@ -37,6 +37,7 @@ import { state } from '../../store/paramStore';
 
 import { Organisation } from '@/store/class/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { Conference } from '@/store/class/conference';
 const LiveList = defineAsyncComponent(() => import('../display/live/LiveList.vue'));
 const OrganisationChooser = defineAsyncComponent(() => import('../display/organisation/OrganisationChooser.vue'));
 export default defineComponent({
@@ -45,7 +46,7 @@ export default defineComponent({
     OrganisationChooser,
   },
   props: {
-    conferenceWatched: { default: () => [], type: Array as ()=>Array<any>},
+    conferenceWatched: { default: () => [], type: Array as ()=>Array<{conferenceId:number,interval:number|undefined, status:string}>},
     organisationId: { default: undefined, type: String },
     productor:{default:undefined, type: String}
   },
@@ -86,7 +87,7 @@ export default defineComponent({
     }
   },
   methods: {
-    initConferenceIds(listIds: any): void {
+    initConferenceIds(listIds: Array<Conference>): void {
       this.$emit('initConferenceIds', listIds);
     },
     onOrganisationSelected(organisation: Organisation|undefined): void {

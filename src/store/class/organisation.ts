@@ -4,7 +4,7 @@ export interface Organisation{
     imageUrl: string;
     admin?: Person;
     comments?: string;
-    attributes?: any;
+    attributes?: {[key: string]:string|number|boolean|undefined}|undefined;
     description?: string;
     id: string;
     location?: {

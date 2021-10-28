@@ -216,7 +216,7 @@ export default defineComponent({
     }
   },
   methods: {
-    onDurationChange(): void {
+    /* onDurationChange(): void {
       if (this.startTime) {
         const minutes = parseInt((this.$refs.minutesRef as any).value, 10);
         const secondes = parseInt((this.$refs.secondesRef as any).value, 10);
@@ -224,7 +224,7 @@ export default defineComponent({
       } else {
         this.$emit('startTime', 0);
       }
-    },
+    }, */
   },
 })
 </script>

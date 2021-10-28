@@ -274,7 +274,7 @@ export default defineComponent({
         duration: this.podcast.duration,
         conferenceId: this.fetchConference ? this.fetchConference.conferenceId : undefined,
         livePodcastId: this.podcast.podcastId,
-        organisation: this.podcast.organisation.id,
+        organisation: this.podcast.organisation,
       });
     },
     showDescription(): void {

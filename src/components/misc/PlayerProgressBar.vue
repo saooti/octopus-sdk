@@ -86,7 +86,7 @@ export default defineComponent({
   },
 
   computed: {
-    isEmissionName(): string {
+    isEmissionName(): boolean {
       return state.player.emissionName;
     },
     isBarTop(): boolean {
@@ -134,10 +134,11 @@ export default defineComponent({
 
   
   methods: {
-    seekTo(event: { currentTarget: { getBoundingClientRect: () => any; clientWidth: any }; clientX: number }): void {
-      const audioPlayer: any = document.querySelector('#audio-player');
-      const rect = event.currentTarget.getBoundingClientRect();
-      const barWidth = event.currentTarget.clientWidth;
+    seekTo(event: MouseEvent): void {
+      const audioPlayer: HTMLAudioElement|null = document.querySelector('#audio-player');
+      if(!audioPlayer ||null===event.currentTarget){return;}
+      const rect = (event.currentTarget as Element).getBoundingClientRect();
+      const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;

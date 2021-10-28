@@ -154,7 +154,7 @@ export default defineComponent({
     authenticated(): boolean {
       return this.$store.state.authentication.isAuthenticated;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {

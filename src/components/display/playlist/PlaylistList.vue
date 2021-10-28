@@ -122,7 +122,7 @@ export default defineComponent({
       const data = await octopusApi.fetchPlaylists(param);
       this.afterFetching(reset, data);
     },
-    afterFetching(reset: boolean, data: any): void {
+    afterFetching(reset: boolean, data: {count: number, result: Array<Playlist>, sort: string}): void {
       if (reset) {
         this.playlists.length = 0;
         this.dfirst = 0;

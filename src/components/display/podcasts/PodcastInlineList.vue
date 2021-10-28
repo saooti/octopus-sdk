@@ -91,6 +91,7 @@ const PHONE_WIDTH = 960;
 import { Podcast } from '@/store/class/podcast';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent } from 'vue'
+import { RouteLocationRaw } from 'vue-router';
 export default defineComponent({
   name: 'PodcastInlineList',
   
@@ -146,12 +147,12 @@ export default defineComponent({
       }
       return undefined;
     },
-    refTo(): any {
+    refTo(): string | RouteLocationRaw {
       if (this.href) return this.href;
       if(this.iabId){
         return {
           name: 'category',
-          params: { iabId: this.iabId },
+          params:{ 'iabId': this.iabId },
           query: { productor: this.$store.state.filter.organisationId },
         };
       }
@@ -159,7 +160,7 @@ export default defineComponent({
           name: 'podcasts',
           query: { productor: this.$store.state.filter.organisationId, 
                   iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
-                  rubriquesId: this.rubriqueQueryParam},
+                  rubriquesId: this.rubriqueQueryParam },
         };
     },
     previousAvailable(): boolean {

@@ -52,6 +52,7 @@ import { state } from '../../../store/paramStore';
 
 import { Podcast } from '@/store/class/podcast';
 import { defineComponent } from 'vue'
+import { FetchParam } from '@/store/class/fetchParam';
 export default defineComponent({
   name: 'PodcastList',
 
@@ -155,7 +156,7 @@ export default defineComponent({
         this.loading = true;
         this.loaded = false;
       }
-      const param: any = {
+      const param: FetchParam = {
         first: this.dfirst,
         size: this.dsize,
         organisationId: this.organisation,
@@ -186,7 +187,7 @@ export default defineComponent({
         this.afterFetching(reset, data);
       }
     },
-    afterFetching(reset: boolean, data: any): void {
+    afterFetching(reset: boolean, data:  {count: number, result: Array<Podcast>, sort: string}): void {
       if (reset) {
         this.podcasts.length = 0;
         this.dfirst = 0;

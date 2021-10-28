@@ -128,7 +128,7 @@ export default defineComponent({
     name(): string {
       return this.emission.name;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {

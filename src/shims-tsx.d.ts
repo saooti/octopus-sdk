@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue, { VNode } from 'vue'
 
 declare global {
@@ -11,3 +12,4 @@ declare global {
     }
   }
 }
+/* eslint-enable */

@@ -162,7 +162,7 @@ export default defineComponent({
         }).toString();
       return '';
     },
-    myOrganisationId(): string {
+    myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     organisationRight(): boolean {

@@ -103,7 +103,7 @@ export default defineComponent({
     name(): string {
       return this.playlist.title;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {

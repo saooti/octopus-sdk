@@ -47,6 +47,8 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
 import { defineComponent } from 'vue'
+import CommentListVue from './CommentList.vue';
+import { CommentPodcast } from '@/store/class/comment';
 export default defineComponent({
   name: 'CommentSection',
 
@@ -74,7 +76,7 @@ export default defineComponent({
       if (!this.podcast) return true;
       let podcastComment = 'INHERIT';
       if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
-        podcastComment = this.podcast.annotations.COMMENTS;
+        podcastComment = (this.podcast.annotations.COMMENTS as string);
       }
       let organisationComment = 'LIVE_ONLY';
       if (this.podcast.organisation.comments) {
@@ -124,26 +126,26 @@ export default defineComponent({
     reloadComments(): void {
       this.reload = !this.reload;
     },
-    newComment(comment: Comment): void {
-      (this.$refs.commentList as any).addNewComment(comment, true);
+    newComment(comment: CommentPodcast): void {
+      (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(comment, true);
     },
-    receiveCommentEvent(event: any): void {
+    receiveCommentEvent(event: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
       let statusUpdated = undefined;
       switch (event.type) {
         case 'Create':
-          (this.$refs.commentList as any).addNewComment(event.comment);
+          (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(event.comment);
           break;
         case 'Update':
           if (event.comment.status !== event.oldStatus) {
             statusUpdated = event.comment.status;
           }
-          (this.$refs.commentList as any).updateComment({
+          (this.$refs.commentList as InstanceType<typeof CommentListVue>).updateComment({
             comment: event.comment,
             status: statusUpdated,
           });
           break;
         case 'Delete':
-          (this.$refs.commentList as any).deleteComment(event.comment);
+          (this.$refs.commentList as InstanceType<typeof CommentListVue>).deleteComment(event.comment);
           break;
         default:
           console.log('Event not handle');

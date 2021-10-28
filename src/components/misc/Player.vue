@@ -74,7 +74,9 @@
 import { mapState } from 'vuex';
 import { state } from '../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
-let Hls: any= null;
+/* eslint-disable */
+let Hls:any = null;
+/* eslint-enable */
 import { CommentPodcast } from '@/store/class/comment';
 import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
@@ -82,6 +84,7 @@ import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerButtons from './PlayerButtons.vue';
 import PlayerClockAndTimeline from './PlayerClockAndTimeline.vue';
 import { defineComponent } from 'vue';
+import { FetchParam } from '@/store/class/fetchParam';
 export default defineComponent({
   name: 'Player',
 
@@ -98,7 +101,7 @@ export default defineComponent({
       listenTime: 0 as number,
       notListenTime: 0 as number,
       lastSend: 0 as number,
-      downloadId: null as any,
+      downloadId: null as string|null,
       playerError: false as boolean,
       listenError: false as boolean,
       percentLiveProgress: 0 as number,
@@ -151,7 +154,7 @@ export default defineComponent({
       }
       return this.podcast.audioUrl + '?' + parameters.join('&');
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
   },
@@ -203,9 +206,10 @@ export default defineComponent({
       let listenerId = this.getCookie("octopus_listenerId");
       if(!listenerId){
         listenerId = new Date().valueOf().toString() + Math.random();
-        let domain: any = /\.(.+)/.exec(window.location.host);
-        if(/\.(.+)/.exec(window.location.host)){
-          domain = domain[1];
+        let domain = "";
+        const domainArray: RegExpExecArray | null = /\.(.+)/.exec(window.location.host);
+        if(domainArray &&  null !== domainArray){
+          domain = domainArray[1];
         }
         this.setCookie("octopus_listenerId", listenerId, ';domain='+domain);
       }
@@ -215,7 +219,7 @@ export default defineComponent({
       this.$store.watch(
         (state: StoreState) => state.player.status,
         (newValue: string) => {
-          const audioPlayer: any = document.querySelector('#audio-player');
+          const audioPlayer: HTMLAudioElement | null = document.querySelector('#audio-player');
           if (!audioPlayer) return;
           if (this.live && !this.hlsReady) {
             audioPlayer.pause();
@@ -231,10 +235,10 @@ export default defineComponent({
         }
       );
     },
-    getDownloadId(): any {
+    getDownloadId(): string|null {
       return this.downloadId;
     },
-    setDownloadId(newValue?: any): void {
+    setDownloadId(newValue: string|null): void {
       this.endListeningProgress();
       this.downloadId = newValue;
     },
@@ -245,7 +249,8 @@ export default defineComponent({
         this.playerError = true;
       }
     },
-    onTimeUpdate(event: { currentTarget: { currentTime: number; duration: any } }): void {
+    onTimeUpdate(event: Event): void {
+      const mediaTarget = (event.currentTarget as HTMLMediaElement);
       if (this.podcast || this.live) {
         if (!this.getDownloadId()) {
           this.loadDownloadId();
@@ -253,18 +258,18 @@ export default defineComponent({
         if (
           this.live &&
           0 === this.listenTime &&
-          0 !== event.currentTarget.currentTime
+          0 !== mediaTarget.currentTime
         ) {
-          this.notListenTime = event.currentTarget.currentTime;
+          this.notListenTime = mediaTarget.currentTime;
           this.listenTime = 1;
         } else {
           this.listenTime =
-            event.currentTarget.currentTime - this.notListenTime;
+            mediaTarget.currentTime - this.notListenTime;
         }
       }
-      const streamDuration = event.currentTarget.duration;
+      const streamDuration = mediaTarget.duration;
       if (!streamDuration) return;
-      const playerCurrentTime = event.currentTarget.currentTime;
+      const playerCurrentTime = mediaTarget.currentTime;
       if (!playerCurrentTime) return;
       if (!this.live) {
         this.displayAlertBar = false;
@@ -296,8 +301,10 @@ export default defineComponent({
     onFinished(): void {
       this.setDownloadId(null);
       if (this.live) {
-        const audio: any = document.getElementById('audio-player');
-        audio.src = '';
+        const audio: HTMLElement|null = document.getElementById('audio-player');
+        if(audio){
+          (audio as HTMLAudioElement).src = '';
+        }
       }
       this.forceHide = true;
     },
@@ -349,6 +356,7 @@ export default defineComponent({
       }
       const hls = new Hls();
       hls.on(Hls.Events.MANIFEST_PARSED, async () => {
+        if(!this.live){ return; }
         let downloadId = null;
         try {
           downloadId = await octopusApi.requestLiveDownloadId(
@@ -365,9 +373,9 @@ export default defineComponent({
           console.log('ERROR downloadId');
         }
         this.hlsReady = true;
-        const audio: any = document.getElementById('audio-player');
-        hls.attachMedia(audio);
-        await audio.play();
+        const audio: HTMLElement|null = document.getElementById('audio-player');
+        hls.attachMedia((audio as HTMLAudioElement));
+        await (audio as HTMLAudioElement).play();
         this.onPlay();
         throw 400;
       });
@@ -392,7 +400,7 @@ export default defineComponent({
         }, 1000);
       }
     },
-    editRight(organisation: any): boolean {
+    editRight(organisation: string): boolean {
       if (
         (state.generalParameters.isCommments &&
           this.organisationId === organisation) ||
@@ -408,7 +416,7 @@ export default defineComponent({
         organisation = this.podcast.organisation.id;
       } else if (this.live) {
         podcastId = this.live.livePodcastId;
-        organisation = this.live.organisation;
+        organisation = this.live.organisation.id;
       }
       if (
         refresh &&
@@ -440,12 +448,12 @@ export default defineComponent({
       )
         return;
       while (0 === first || this.comments.length < count) {
-        const param: any = {
+        const param: FetchParam = {
           first: first,
           size: size,
           podcastId: podcastId,
         };
-        if (!this.editRight(organisation)) {
+        if (!this.editRight(organisation? organisation : '')) {
           param.status = ['Valid'];
         }
         const data = await octopusApi.fetchRootComments(param);

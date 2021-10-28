@@ -109,6 +109,7 @@ const getDefaultEmission = (defaultName: string) => {
 
 import { Emission } from '@/store/class/emission';
 import { defineComponent } from 'vue'
+import { FetchParam } from '@/store/class/fetchParam';
 export default defineComponent({
   components: {
     VueMultiselect
@@ -149,7 +150,7 @@ export default defineComponent({
 
    methods: {
     onOpen(): void {
-      (this.$refs.multiselectRef as any).$refs.search.setAttribute(
+      (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
         'autocomplete',
         'off'
       );
@@ -168,7 +169,7 @@ export default defineComponent({
     },
     async onSearchEmission(query?: string): Promise<void> {
       this.isLoading = true;
-      let standardParam: any = {
+      let standardParam: FetchParam = {
         query: query,
         first: 0,
         size: ELEMENTS_COUNT,

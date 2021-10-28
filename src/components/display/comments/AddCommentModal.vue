@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { useReCaptcha } from 'vue-recaptcha-v3';
+import { IReCaptchaComposition, useReCaptcha } from 'vue-recaptcha-v3';
 import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
 import { defineComponent } from 'vue'
@@ -101,9 +101,9 @@ export default defineComponent({
   },
 
   mounted() {
-    const captcha: any = document.getElementsByClassName('grecaptcha-badge')[0];
+    const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
     if (captcha) {
-      captcha.style.display = 'block';
+      (captcha as HTMLElement).style.display = 'block';
     }
     if (this.authenticated) {
       this.name = (
@@ -116,9 +116,9 @@ export default defineComponent({
   },
 
   unmounted() {
-    const captcha: any = document.getElementsByClassName('grecaptcha-badge')[0];
+    const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
     if (captcha) {
-      captcha.style.display = 'none';
+      (captcha as HTMLElement).style.display = 'none';
     }
   },
 
@@ -128,9 +128,10 @@ export default defineComponent({
         this.sendComment();
         return;
       }
-      const { executeRecaptcha, recaptchaLoaded }: any = useReCaptcha()
-      await recaptchaLoaded();
-      const token = await executeRecaptcha('login');
+      const iRecaptcha: IReCaptchaComposition|undefined = useReCaptcha();
+      if(!iRecaptcha){return;}
+      await iRecaptcha.recaptchaLoaded();
+      const token = await iRecaptcha.executeRecaptcha('login');
       try {
         this.sendError = false;
         const ok = await api.checkToken(token);

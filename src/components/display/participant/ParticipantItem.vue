@@ -94,7 +94,7 @@ export default defineComponent({
         (this.participant.lastName || '')
       ).trim();
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {

@@ -123,7 +123,7 @@ export default defineComponent({
     nextAvailable(): boolean {
       return this.index + this.size < this.totalCount;
     },
-    displayRubriquage(): string {
+    displayRubriquage(): number|undefined {
       return state.emissionsPage.rubriquage;
     },
     transitionName(): string {
@@ -238,7 +238,7 @@ export default defineComponent({
       )
         return undefined;
       const rubrique = this.rubriques.find(
-        (element: Rubrique) => element.rubriqueId && emission.rubriqueIds.includes(element.rubriqueId) && element.rubriquageId === parseInt(this.displayRubriquage)
+        (element: Rubrique) => element.rubriqueId && emission.rubriqueIds.includes(element.rubriqueId) && element.rubriquageId === this.displayRubriquage
       );
       if(rubrique){
         return rubrique.name;
@@ -246,7 +246,7 @@ export default defineComponent({
     },
     mainRubriquage(emission: Emission): string {
       if (
-        emission.rubriqueIds &&
+        emission.rubriqueIds &&state.emissionsPage.mainRubrique &&
         emission.rubriqueIds.includes(state.emissionsPage.mainRubrique)
       )
         return 'partenaireRubrique';

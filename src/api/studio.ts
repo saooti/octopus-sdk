@@ -1,5 +1,5 @@
 import { StoreState } from "@/store/typeAppStore";
-
+/* eslint-disable */
 export default{
     deleteConference(store?: StoreState,fetchConference?: string): any{
         console.log(store, fetchConference);
@@ -10,3 +10,4 @@ export default{
         return {};
     },
 };
+/* eslint-enable */

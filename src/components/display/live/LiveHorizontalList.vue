@@ -90,7 +90,7 @@ export default defineComponent({
       const data = await octopusApi.fetchLives(param);
       this.afterFetching(reset, data);
     },
-    afterFetching(reset: boolean, data: any): void {
+    afterFetching(reset: boolean, data: {count: number, result: Array<Podcast>, sort: string}): void {
       if (reset) {
         this.lives.length = 0;
         this.dfirst = 0;

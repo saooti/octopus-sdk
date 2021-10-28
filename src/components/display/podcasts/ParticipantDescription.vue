@@ -88,7 +88,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getName(person: any): string {
+    getName(person: Participant): string {
       const first = person.firstName || '';
       const last = person.lastName || '';
       return (first + ' ' + last).trim();

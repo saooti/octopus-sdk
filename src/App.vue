@@ -29,6 +29,7 @@ import { RubriquageFilter } from './store/class/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique';
 import { initSDK } from './components/mixins/init';
 import { defineComponent } from 'vue'
+import { Category } from './store/class/category';
 export default defineComponent({
   name: 'App',
   
@@ -76,8 +77,8 @@ export default defineComponent({
       let orgaId = '';
       if (this.$route.query.productor && 'string'===typeof this.$route.query.productor) {
         orgaId = this.$route.query.productor;
-      } else {
-        orgaId = state.generalParameters.authenticated;
+      } else if(state.generalParameters.organisationId){
+        orgaId = state.generalParameters.organisationId;
       }
       if(''===orgaId){
         return;
@@ -90,7 +91,7 @@ export default defineComponent({
       }
       if (this.$route.query.iabId && 'string'===typeof this.$route.query.iabId) {
         const iabId = parseInt(this.$route.query.iabId, 10);
-        const category = this.$store.state.categories.filter((c: any) => {
+        const category = this.$store.state.categories.filter((c: Category) => {
           return c.id === iabId;
         });
         if(category.length){

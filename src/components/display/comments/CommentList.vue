@@ -56,7 +56,10 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 import { CommentPodcast } from '@/store/class/comment';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { FetchParam } from '@/store/class/fetchParam';
+/* eslint-disable */
 const CommentItem: any = defineAsyncComponent(() => import('./CommentItem.vue'));
+/* eslint-enable */
 export default defineComponent({
   name: 'CommentList',
 
@@ -94,7 +97,7 @@ export default defineComponent({
     allFetched(): boolean {
       return this.dfirst >= this.totalCount;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     podcastId(): number|undefined {
@@ -136,7 +139,7 @@ export default defineComponent({
       this.resetData(reset);
       let data;
       try {
-        const param: any = {
+        const param: FetchParam = {
           first: this.dfirst,
           size: this.dsize,
           podcastId: this.podcastId,
@@ -154,7 +157,7 @@ export default defineComponent({
         } else if (!this.isFlat) {
           data = await octopusApi.fetchRootComments(param);
         } else {
-          const param: any = {
+          const param: FetchParam = {
             first: this.dfirst,
             size: this.dsize,
             podcastId: this.podcastId,
@@ -204,8 +207,8 @@ export default defineComponent({
         comment.commentIdReferer &&
         this.comId !== comment.commentIdReferer
       ) {
-        const comItem: any = document.getElementsByClassName('comItem' + comment.commentIdReferer);
-        comItem[0].receiveCommentEvent({ type: 'Delete', comment: comment });
+        const comItem = (this.$refs['comItem' + comment.commentIdReferer] as InstanceType<typeof CommentItem>);
+        comItem.receiveCommentEvent({ type: 'Delete', comment: comment });
         return;
       }
       const index = this.comments.findIndex(
@@ -218,14 +221,14 @@ export default defineComponent({
       }
       this.comments.splice(index, 1);
     },
-    updateComment(data: any): void {
+    updateComment(data: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
       if (
         !this.isFlat &&
         data.comment.commentIdReferer &&
         this.comId !== data.comment.commentIdReferer
       ) {
-        const comItem: any = document.getElementsByClassName('comItem' + data.comment.commentIdReferer);
-        comItem[0].receiveCommentEvent({ ...data, type: 'Update' });
+        const comItem = (this.$refs['comItem' + data.comment.commentIdReferer] as InstanceType<typeof CommentItem>);
+        comItem.receiveCommentEvent({ ...data, type: 'Update' });
         return;
       }
       const index = this.comments.findIndex(
@@ -279,8 +282,8 @@ export default defineComponent({
         comment.commentIdReferer &&
         this.comId !== comment.commentIdReferer
       ) {
-        const comItem: any = document.getElementsByClassName('comItem' + comment.commentIdReferer);
-        comItem[0].receiveCommentEvent({ type: 'Create', comment: comment });
+        const comItem = (this.$refs['comItem' + comment.commentIdReferer] as InstanceType<typeof CommentItem>);
+        comItem.receiveCommentEvent({ type: 'Create', comment: comment });
         return;
       }
       const index = this.comments.findIndex(

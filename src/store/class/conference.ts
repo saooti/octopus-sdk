@@ -12,12 +12,16 @@ export interface Conference{
     jingleFilePath?: string;
     jingleId?: number;
     mediaId?: number;
-    messages?: any;
     organisationId?: string;
-    participants?: any;
+    participants?: Array<{
+        conferenceGuestId: number,
+        fullName: string,
+        keycloakId:string,
+        kind: string,
+        sipIdentifier:string}>;
     phone?: string;
     podcastId?: number;
-    prefix?: any;
+    prefix?: {[key:string]:string};
     queueCode?: string;
     recordDate?: string;
     recordingPort?: number;

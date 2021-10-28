@@ -1,259 +1,232 @@
 import octopusApi from '@saooti/octopus-api';
+import { Category } from './class/category';
 
-const state = {
-  generalParameters: {} as any,
-  filter: {
-    organisationId: undefined as any,
-  } as any,
-  podcastPage: {} as any,
-  podcastsPage: {} as any,
-  emissionsPage: {} as any,
-  emissionPage: {} as any,
-  intervenantPage: {} as any,
-  intervenantsPage: {} as any,
-  searchPage: {} as any,
-  player: {} as any,
-  footer: {} as any,
-  organisation: {} as any,
-  octopusApi: {}as any,
-  oAuthParam: {} as any,
+const state:paramStore = {
+  generalParameters: {
+    organisationId:'ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c',
+    authenticated: true,
+    isAdmin: true,
+    isRoleLive: true,
+    isCommments: true,
+    isOrganisation: true,
+    isPlaylist: false,
+    isProduction: true,
+    isContribution: true,
+    ApiUri: 'https://api.staging.saooti.org/',
+    podcastmaker: false,
+    buttonPlus: true,
+    allCategories: [],
+    isLiveTab: false,
+    isCaptchaTest: true,
+  },
+  podcastPage: {
+    EditBox: false,
+    SharePlayer: true,
+    ShareButtons: true,
+    ShareDistribution: true,
+    MiniplayerUri: 'https://player.staging.saooti.org/',
+    MiniplayerBetaUri: 'https://playerbeta.staging.saooti.org/',
+    ouestFranceStyle: false,
+    tagList: false,
+    downloadButton: false,
+    hlsUri: 'https://hls.staging.saooti.org/',
+    mainRubrique: 0,
+    resourceUrl: undefined
+  },
+  podcastsPage: {
+    ProductorSearch: true,
+    MonetizableFilter: true,
+    podcastShadow: true,
+    podcastBorderBottom: false,
+    titlePage: undefined,
+    emissionChooser: false,
+  },
+  emissionsPage: {
+    smallItems: false,
+    lightItems: false,
+    titlePage: undefined,
+    itemPlayer: false,
+    rubriquage: undefined,
+    mainRubrique: undefined,
+    buttonMore: false,
+    overflowScroll: false,
+    titleInImage: false,
+  },
+  emissionPage: {
+    ouestFranceStyle: false,
+    rssButton: false,
+  },
+  intervenantPage: {
+    lightStyle: false,
+    rssButton: false,
+    titlePage: undefined
+  },
+  intervenantsPage: {
+    titlePage: undefined,
+  },
+  searchPage: {
+    hideBar: false,
+  },
+  player: {
+    image: true,
+    emissionName: false,
+    clock: false,
+    barTop: false,
+  },
+  footer: {
+    contactLink: undefined,
+  },
+  organisation: {
+    imageUrl: '/img/emptypodcast.png',
+    name: 'Saooti',
+    userName: '',
+  },
+  octopusApi: {
+    url: 'http://api.staging.saooti.org/',
+    commentsUrl: 'http://comments.staging.saooti.org/',
+    studioUrl: 'http://studio.staging.saooti.org/',
+    playerUrl: 'https://playerbeta.staging.saooti.org/',
+    organisationId: undefined,
+  },
 };
+export interface GeneralParameters{
+  organisationId: string|undefined,
+  authenticated: boolean,
+  isAdmin: boolean,
+  isRoleLive: boolean,
+  isCommments: boolean,
+  isOrganisation: boolean,
+  isPlaylist: boolean,
+  isProduction: boolean,
+  isContribution: boolean,
+  ApiUri: string,
+  podcastmaker: boolean,
+  buttonPlus: boolean,
+  allCategories: Array<Category>,
+  isLiveTab: boolean,
+  isCaptchaTest: boolean,
+}
+export interface PodcastPage{
+  EditBox: boolean,
+  SharePlayer: boolean,
+  ShareButtons: boolean,
+  ShareDistribution: boolean,
+  MiniplayerUri: string,
+  MiniplayerBetaUri: string,
+  ouestFranceStyle: boolean,
+  tagList: boolean,
+  downloadButton: boolean,
+  hlsUri: string,
+  mainRubrique: number,
+  resourceUrl: string |undefined,
+}
+export interface PodcastsPage{
+  ProductorSearch: boolean,
+    MonetizableFilter: boolean,
+    podcastShadow: boolean,
+    podcastBorderBottom: boolean,
+    titlePage: string|undefined,
+    emissionChooser: boolean,
+}
+export interface EmissionsPage{
+  smallItems: boolean,
+  lightItems: boolean,
+  titlePage: string|undefined,
+  itemPlayer: boolean,
+  rubriquage: number|undefined,
+  mainRubrique: number|undefined,
+  buttonMore: boolean,
+  overflowScroll: boolean,
+  titleInImage: boolean,
+}
+export interface EmissionPage{
+  ouestFranceStyle: boolean,
+  rssButton: boolean,
+}
+export interface IntervenantPage{
+  lightStyle: boolean,
+    rssButton: boolean,
+    titlePage: string|undefined
+}
+export interface IntervenantsPage{
+  titlePage: string|undefined
+}
+export interface SearchPage{
+  hideBar: boolean
+}
+export interface Player{
+  image: boolean
+    emissionName: boolean
+    clock: boolean
+    barTop: boolean
+}
+export interface Footer{
+  contactLink: string|undefined
+}
+export interface Organisation{
+  imageUrl: string,
+    name: string,
+    userName: string,
+}
+export interface OctopusApi{
+  url: string,
+  commentsUrl: string,
+  studioUrl: string,
+  playerUrl: string,
+  organisationId: string | undefined,
+}
 export interface paramStore{
-  generalParameters: any,
-  filter: any,
-  podcastPage: any,
-  podcastsPage: any,
-  emissionsPage: any,
-  emissionPage: any,
-  intervenantPage: any,
-  intervenantsPage: any,
-  searchPage: any,
-  player: any,
-  footer: any,
-  organisation: any,
-  octopusApi: any,
-  oAuthParam: any,
+  generalParameters:GeneralParameters,
+  podcastPage: PodcastPage,
+  podcastsPage: PodcastsPage,
+  emissionsPage:EmissionsPage,
+  emissionPage: EmissionPage,
+  intervenantPage:IntervenantPage,
+  intervenantsPage:IntervenantsPage,
+  searchPage:SearchPage,
+  player: Player,
+  footer: Footer,
+  organisation:Organisation,
+  octopusApi:OctopusApi,
 }
 
-const initialize = function initialize(initObject: paramStore): any {
+const initialize = function initialize(initObject: paramStore): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     if (initObject.generalParameters) {
-      const param = initObject.generalParameters;
-      state.generalParameters.organisationId =
-        'undefined' !== typeof param.organisationId
-          ? param.organisationId
-          : null;
-      state.generalParameters.authenticated =
-        'undefined' !== typeof param.authenticated ? param.authenticated : true;
-      state.generalParameters.isAdmin =
-        'undefined' !== typeof param.isAdmin ? param.isAdmin : true;
-      state.generalParameters.isRoleLive =
-        'undefined' !== typeof param.isRoleLive ? param.isRoleLive : true;
-      state.generalParameters.isCommments =
-        'undefined' !== typeof param.isCommments ? param.isCommments : true;
-      state.generalParameters.isOrganisation =
-        'undefined' !== typeof param.isOrganisation
-          ? param.isOrganisation
-          : true;
-      state.generalParameters.isPlaylist =
-        'undefined' !== typeof param.isPlaylist ? param.isPlaylist : false;
-      state.generalParameters.isProduction =
-        'undefined' !== typeof param.isProduction ? param.isProduction : true;
-      state.generalParameters.isContribution =
-        'undefined' !== typeof param.isContribution
-          ? param.isContribution
-          : true;
-      state.generalParameters.ApiUri =
-        'undefined' !== typeof param.ApiUri
-          ? param.ApiUri
-          : 'https://api.staging.saooti.org/';
-      state.generalParameters.podcastmaker =
-        'undefined' !== typeof param.podcastmaker ? param.podcastmaker : false;
-      state.generalParameters.buttonPlus =
-        'undefined' !== typeof param.buttonPlus ? param.buttonPlus : true;
-      state.generalParameters.allCategories =
-        'undefined' !== typeof param.allCategories ? param.allCategories : [];
-      state.generalParameters.isLiveTab =
-        'undefined' !== typeof param.isLiveTab ? param.isLiveTab : false;
-      state.generalParameters.isCaptchaTest =
-        'undefined' !== typeof param.isCaptchaTest ? param.isCaptchaTest : true;
+      state.generalParameters = {...state.generalParameters,...initObject.generalParameters };
     }
     if (initObject.podcastPage) {
-      const param = initObject.podcastPage;
-      state.podcastPage.EditBox =
-        'undefined' !== typeof param.EditBox ? param.EditBox : false;
-      state.podcastPage.SharePlayer =
-        'undefined' !== typeof param.SharePlayer ? param.SharePlayer : true;
-      state.podcastPage.ShareButtons =
-        'undefined' !== typeof param.ShareButtons ? param.ShareButtons : true;
-      state.podcastPage.ShareDistribution =
-        'undefined' !== typeof param.ShareDistribution
-          ? param.ShareDistribution
-          : true;
-      state.podcastPage.MiniplayerUri =
-        'undefined' !== typeof param.MiniplayerUri
-          ? param.MiniplayerUri
-          : 'https://player.staging.saooti.org/';
-      state.podcastPage.MiniplayerBetaUri =
-        'undefined' !== typeof param.MiniplayerBetaUri
-          ? param.MiniplayerBetaUri
-          : 'https://playerbeta.staging.saooti.org/';
-      state.podcastPage.ouestFranceStyle =
-        'undefined' !== typeof param.ouestFranceStyle
-          ? param.ouestFranceStyle
-          : false;
-      state.podcastPage.tagList =
-        'undefined' !== typeof param.tagList ? param.tagList : false;
-      state.podcastPage.downloadButton =
-        'undefined' !== typeof param.downloadButton
-          ? param.downloadButton
-          : false;
-      state.podcastPage.hlsUri =
-        'undefined' !== typeof param.hlsUri
-          ? param.hlsUri
-          : 'https://hls.staging.saooti.org/';
-      state.podcastPage.mainRubrique =
-        'undefined' !== typeof param.mainRubrique
-          ? param.mainRubrique
-          : 0;
-      state.podcastPage.resourceUrl =
-        'undefined' !== typeof param.resourceUrl
-          ? param.resourceUrl
-          : undefined;
+      state.podcastPage = {...state.podcastPage,...initObject.podcastPage };
     }
     if (initObject.podcastsPage) {
-      const param = initObject.podcastsPage;
-      state.podcastsPage.ProductorSearch =
-        'undefined' !== typeof param.ProductorSearch
-          ? param.ProductorSearch
-          : true;
-      state.podcastsPage.MonetizableFilter =
-        'undefined' !== typeof param.MonetizableFilter
-          ? param.MonetizableFilter
-          : true;
-      state.podcastsPage.podcastShadow =
-        'undefined' !== typeof param.podcastShadow ? param.podcastShadow : true;
-      state.podcastsPage.podcastBorderBottom =
-        'undefined' !== typeof param.podcastBorderBottom
-          ? param.podcastBorderBottom
-          : false;
-      state.podcastsPage.titlePage =
-        'undefined' !== typeof param.titlePage ? param.titlePage : undefined;
-      state.podcastsPage.emissionChooser =
-        'undefined' !== typeof param.emissionChooser
-          ? param.emissionChooser
-          : false;
+      state.podcastsPage = {...state.podcastsPage,...initObject.podcastsPage };
     }
     if (initObject.emissionsPage) {
-      const param = initObject.emissionsPage;
-      state.emissionsPage.smallItems =
-        'undefined' !== typeof param.smallItems ? param.smallItems : false;
-      state.emissionsPage.lightItems =
-        'undefined' !== typeof param.lightItems ? param.lightItems : false;
-      state.emissionsPage.titlePage =
-        'undefined' !== typeof param.titlePage ? param.titlePage : undefined;
-      state.emissionsPage.itemPlayer =
-        'undefined' !== typeof param.itemPlayer ? param.itemPlayer : false;
-      state.emissionsPage.rubriquage =
-        'undefined' !== typeof param.rubriquage ? param.rubriquage : undefined;
-      state.emissionsPage.mainRubrique =
-        'undefined' !== typeof param.mainRubrique
-          ? param.mainRubrique
-          : undefined;
-      state.emissionsPage.buttonMore =
-        'undefined' !== typeof param.buttonMore ? param.buttonMore : false;
-      state.emissionsPage.overflowScroll =
-        'undefined' !== typeof param.overflowScroll
-          ? param.overflowScroll
-          : false;
-      state.emissionsPage.titleInImage=
-      'undefined' !== typeof param.titleInImage
-        ? param.titleInImage
-        : false;
+      state.emissionsPage = {...state.emissionsPage,...initObject.emissionsPage };
     }
     if (initObject.emissionPage) {
-      const param = initObject.emissionPage;
-      state.emissionPage.ouestFranceStyle =
-        'undefined' !== typeof param.ouestFranceStyle
-          ? param.ouestFranceStyle
-          : false;
-      state.emissionPage.rssButton =
-        'undefined' !== typeof param.rssButton ? param.rssButton : false;
+      state.emissionPage = {...state.emissionPage,...initObject.emissionPage };
     }
     if (initObject.intervenantPage) {
-      const param = initObject.intervenantPage;
-      state.intervenantPage.lightStyle =
-        'undefined' !== typeof param.lightStyle ? param.lightStyle : false;
-      state.intervenantPage.rssButton =
-        'undefined' !== typeof param.rssButton ? param.rssButton : false;
-      state.intervenantPage.titlePage =
-        'undefined' !== typeof param.titlePage ? param.titlePage : undefined;
+      state.intervenantPage = {...state.intervenantPage,...initObject.intervenantPage };
     }
     if (initObject.intervenantsPage) {
-      const param = initObject.intervenantsPage;
-      state.intervenantsPage.titlePage =
-        'undefined' !== typeof param.titlePage ? param.titlePage : undefined;
+      state.intervenantsPage = {...state.intervenantsPage,...initObject.intervenantsPage };
     }
     if (initObject.searchPage) {
-      const param = initObject.searchPage;
-      state.searchPage.hideBar =
-        'undefined' !== typeof param.hideBar ? param.hideBar : false;
+      state.searchPage = {...state.searchPage,...initObject.searchPage };
     }
     if (initObject.player) {
-      const param = initObject.player;
-      state.player.image =
-        'undefined' !== typeof param.image ? param.image : true;
-      state.player.emissionName =
-        'undefined' !== typeof param.emissionName ? param.emissionName : false;
-      state.player.clock =
-        'undefined' !== typeof param.clock ? param.clock : false;
-      state.player.barTop =
-        'undefined' !== typeof param.barTop ? param.barTop : false;
+      state.player = {...state.player,...initObject.player };
     }
     if (initObject.organisation) {
-      const param = initObject.organisation;
-      state.organisation.imageUrl =
-        'undefined' !== typeof param.imageUrl
-          ? param.imageUrl
-          : '/img/emptypodcast.png';
-      state.organisation.name =
-        'undefined' !== typeof param.name ? param.name : 'Saooti';
-      state.organisation.userName =
-        'undefined' !== typeof param.userName ? param.userName : '';
+      state.organisation = {...state.organisation,...initObject.organisation };
     }
     if (initObject.footer) {
-      const param = initObject.footer;
-      state.footer.contactLink =
-        'undefined' !== typeof param.contactLink
-          ? param.contactLink
-          : undefined;
+      state.footer = {...state.footer,...initObject.footer };
     }
     if (initObject.octopusApi) {
-      const param = initObject.octopusApi;
-      state.octopusApi.url =
-        'undefined' !== typeof param.url
-          ? param.url
-          : 'http://api.staging.saooti.org/';
-      state.octopusApi.oAuthParam =
-        'undefined' !== typeof param.oAuthParam ? param.oAuthParam : undefined;
-      state.octopusApi.commentsUrl =
-        'undefined' !== typeof param.commentsUrl
-          ? param.commentsUrl
-          : 'http://comments.staging.saooti.org/';
-      state.octopusApi.studioUrl =
-        'undefined' !== typeof param.studioUrl
-          ? param.studioUrl
-          : 'http://studio.staging.saooti.org/';
-      state.octopusApi.playerUrl =
-        'undefined' !== typeof param.playerUrl
-          ? param.playerUrl
-          : 'https://playerbeta.staging.saooti.org/';
-      if (state.generalParameters.podcastmaker) {
-        state.octopusApi.organisationId =
-          'undefined' !== typeof param.organisationId
-            ? param.organisationId
-            : undefined;
-      }
+      state.octopusApi = {...state.octopusApi,...initObject.octopusApi };
       try {
         octopusApi.initialize(state.octopusApi);
         resolve();
@@ -261,7 +234,6 @@ const initialize = function initialize(initObject: paramStore): any {
         reject();
       }
     } else {
-      debugger
       resolve();
     }
   });

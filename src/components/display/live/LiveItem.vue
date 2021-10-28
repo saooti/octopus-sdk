@@ -179,7 +179,7 @@ export default defineComponent({
       if (this.live && this.live.description) return this.live.description;
       return '';
     },
-    myOrganisationId(): string {
+    myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     organisationRight(): boolean {

@@ -128,12 +128,12 @@ export default defineComponent({
         }
         return this.categoryForArray;
       },
-      set(value: any): void{
+      set(value: Category| Array<Category>|undefined): void{
         if(false===this.initArray){
-          this.category = value;
+          this.category = (value as Category|undefined);
           return
         }
-        this.categoryForArray = value;
+        this.categoryForArray = (value as Array<Category>|undefined);
       }
 
     }
@@ -170,7 +170,7 @@ export default defineComponent({
   },
   methods: {
     clearAll(): void {
-      (this.$refs.multiselectRef as any).$refs.search.setAttribute(
+      (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
         'autocomplete',
         'off'
       );

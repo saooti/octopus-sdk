@@ -181,6 +181,7 @@ import { Conference } from '@/store/class/conference';
 import moment from 'moment';
 import Popover from '../../misc/Popover.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import EditBoxVue from '../edit/EditBox.vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
 const EditCommentBox = defineAsyncComponent(() => import('@/components/display/edit/EditCommentBox.vue'));
@@ -235,7 +236,7 @@ export default defineComponent({
       if (this.summary) return this.limitContent;
       return this.comment.content;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {
@@ -290,7 +291,7 @@ export default defineComponent({
         this.$emit('update:comment', updatedComment);
       }
       if (this.$refs.commentList) {
-        (this.$refs.commentList as any).addNewComment(comment, true);
+        (this.$refs.commentList as InstanceType<typeof CommentList>).addNewComment(comment, true);
       }
     },
     editComment(): void {
@@ -306,7 +307,7 @@ export default defineComponent({
       const comment = this.comment;
       comment.content = this.temporaryContent;
       comment.name = this.temporaryName;
-      (this.$refs.editBox as any).updateComment(comment);
+      (this.$refs.editBox as InstanceType<typeof EditBoxVue>).updateComment(comment);
     },
     updateStatus(data: string): void {
       const updatedComment = this.comment;
@@ -320,14 +321,14 @@ export default defineComponent({
       }
       this.$emit('update:comment', updatedComment);
     },
-    receiveCommentEvent(event: {type: string; comment: CommentPodcast; status?: string }): void {
+    receiveCommentEvent(event: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
       switch (event.type) {
         case 'Create':
           this.newComment(event.comment, true);
           break;
         case 'Update':
           if (this.$refs.commentList) {
-            (this.$refs.commentList as any).updateComment({ comment: event.comment });
+            (this.$refs.commentList as InstanceType<typeof CommentList>).updateComment({ comment: event.comment });
           } else {
             const updatedComment = this.comment;
             if(undefined !== updatedComment.relatedValidComments){
@@ -343,7 +344,7 @@ export default defineComponent({
           break;
         case 'Delete':
           if (this.$refs.commentList) {
-            (this.$refs.commentList as any).deleteComment(event.comment);
+            (this.$refs.commentList as InstanceType<typeof CommentList>).deleteComment(event.comment);
           } else {
             const updatedComment = this.comment;
             if(undefined !== updatedComment.relatedComments){

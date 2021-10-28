@@ -67,6 +67,7 @@ import { state } from '../../../store/paramStore';
 import { Emission } from '@/store/class/emission';
 import { Rubrique } from '@/store/class/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { FetchParam } from '@/store/class/fetchParam';
 const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
 const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({
@@ -121,7 +122,7 @@ export default defineComponent({
     itemPlayer(): boolean {
       return state.emissionsPage.itemPlayer;
     },
-    displayRubriquage(): boolean {
+    displayRubriquage(): number|undefined {
       return state.emissionsPage.rubriquage;
     },
     changed(): string {
@@ -172,7 +173,7 @@ export default defineComponent({
         this.loading = true;
         this.loaded = false;
       }
-      const param: any = {
+      const param: FetchParam = {
         first: this.dfirst,
         size: this.dsize,
         query: this.query,
@@ -195,7 +196,7 @@ export default defineComponent({
         this.afterFetching(reset, data);
       }
     },
-    afterFetching(reset: boolean, data: any): void {
+    afterFetching(reset: boolean, data: {count: number, result: Array<Emission>, sort: string}): void {
       if (reset) {
         this.emissions.length = 0;
         this.dfirst = 0;

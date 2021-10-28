@@ -115,6 +115,9 @@ import { Podcast } from '@/store/class/podcast';
 import { Conference } from '@/store/class/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
+import CommentSectionVue from '../display/comments/CommentSection.vue';
+import { CommentPodcast } from '@/store/class/comment';
+import { Category } from '@/store/class/category';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
@@ -169,10 +172,10 @@ export default defineComponent({
     isSharePlayer(): boolean {
       return state.podcastPage.SharePlayer;
     },
-    allCategories(): any {
+    allCategories(): Array<Category> {
       return this.$store.state.categories;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
@@ -187,7 +190,7 @@ export default defineComponent({
         this.podcast.emission.annotations &&
         this.podcast.emission.annotations.mainIabId
       ) {
-        return parseInt(this.podcast.emission.annotations.mainIabId, 10);
+        return parseInt((this.podcast.emission.annotations.mainIabId as string), 10);
       } else if (
         this.podcast.emission.iabIds &&
         this.podcast.emission.iabIds.length
@@ -196,16 +199,16 @@ export default defineComponent({
       }
       return 0;
     },
-    categories(): any {
-      if ('undefined' === typeof this.podcast) return '';
+    categories(): Array<Category> {
+      if ('undefined' === typeof this.podcast) return [];
       return this.allCategories
-        .filter((item: any) => {
+        .filter((item: Category) => {
           return ( this.podcast &&
             this.podcast.emission.iabIds &&
             -1 !== this.podcast.emission.iabIds.indexOf(item.id)
           );
         })
-        .sort((a: any, b: any) => {
+        .sort((a: Category, b: Category) => {
           if (a.id === this.emissionMainCategory) return -1;
           if (b.id === this.emissionMainCategory) return 1;
           return 0;
@@ -291,14 +294,14 @@ export default defineComponent({
     if (!this.podcast) return;
     if (!this.isLiveReadyToRecord) return;
     if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
-      const data: any = await studioApi.getConference(this.$store.state,this.podcast.conferenceId.toString());
+      const data = await studioApi.getConference(this.$store.state,this.podcast.conferenceId.toString());
       if ('' !== data.data) {
         this.fetchConference = data.data;
       } else {
         this.fetchConference = {conferenceId:-1, title:''};
       }
     } else if(undefined!==this.podcast.conferenceId){
-      const data: any = await octopusApi.getRealConferenceStatus(this.podcast.conferenceId.toString());
+      const data = await octopusApi.getRealConferenceStatus(this.podcast.conferenceId.toString());
       this.fetchConference = {
         status: data.data,
         conferenceId: this.podcast.conferenceId,
@@ -368,8 +371,8 @@ export default defineComponent({
         this.$router.push('/');
       }
     },
-    receiveCommentEvent(event: any): void {
-      (this.$refs.commentSection as any).receiveCommentEvent(event);
+    receiveCommentEvent(event:{type?: string; comment: CommentPodcast; status?: string; oldStatus?:string } ): void {
+      (this.$refs.commentSection as InstanceType<typeof CommentSectionVue>).receiveCommentEvent(event);
     },
   },
 })

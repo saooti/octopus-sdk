@@ -75,7 +75,7 @@ const getDefaultRubrique = (defaultName: string) => {
   if ('' === defaultName){
     return undefined;
   }
-  return { name: defaultName, rubriqueId: 0 };
+  return { name: defaultName, rubriqueId: 0 } as Rubrique;
 };
 
 import { defineComponent } from 'vue'
@@ -105,7 +105,7 @@ export default defineComponent({
       rubrique: getDefaultRubrique(this.defaultanswer) as Rubrique|undefined,
       rubriqueForArray: [] as Array<Rubrique>,
       isLoading: false as boolean,
-      withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as any,
+      withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as {name: string, rubriqueId:number},
     };
   },
   computed: {
@@ -120,12 +120,12 @@ export default defineComponent({
         }
         return this.rubriqueForArray;
       },
-      set(value: any): void{
+      set(value: Rubrique| Array<Rubrique>|undefined): void{
         if(false===this.multiple){
-          this.rubrique = value;
+          this.rubrique = (value as Rubrique|undefined);
           return
         }
-        this.rubriqueForArray = value;
+        this.rubriqueForArray = (value as Array<Rubrique>);
       }
 
     }
@@ -172,19 +172,23 @@ export default defineComponent({
       if ('' === this.defaultanswer) {
         return this.allRubriques;
       }
+      const rubriqueDefault = getDefaultRubrique(this.defaultanswer);
+      if(!rubriqueDefault){
+        return this.allRubriques;
+      }
       if (this.withoutRubrique) {
         return [
-          getDefaultRubrique(this.defaultanswer),
+          rubriqueDefault,
           this.withoutItem,
         ].concat(this.allRubriques);
       } else {
-        return [(getDefaultRubrique(this.defaultanswer) as Rubrique)].concat(
+        return [rubriqueDefault].concat(
           this.allRubriques
         );
       }
     },
     clearAll(): void {
-      (this.$refs.multiselectRef as any).$refs.search.setAttribute(
+      (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
         'autocomplete',
         'off'
       );

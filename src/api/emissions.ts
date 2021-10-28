@@ -1,10 +1,13 @@
+import { Emission } from "@/store/class/emission";
 import { FetchParam } from "@/store/class/fetchParam";
 import { StoreState } from "@/store/typeAppStore";
 
 import octopusApi from '@saooti/octopus-api';
+/* eslint-disable */
 export default{
-  fetchEmissionsAdmin(store: StoreState, parameters: FetchParam): void {
+  async fetchEmissionsAdmin(store: StoreState, parameters: FetchParam): Promise<{ count: number; result: Array<Emission>; sort: string; }> {
     console.log(store);
-    octopusApi.fetchEmissions(parameters);
+    return await octopusApi.fetchEmissions(parameters);
   },
 };
+/* eslint-enable */

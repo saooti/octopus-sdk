@@ -53,6 +53,7 @@
 import PodcastList from './PodcastList.vue';
 import { Category } from '@/store/class/category';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { Podcast } from '@/store/class/podcast';
 const CategoryChooser = defineAsyncComponent(() => import('../categories/CategoryChooser.vue'));
 export default defineComponent({
   components: {
@@ -106,7 +107,7 @@ export default defineComponent({
         this.iabId = undefined;
       }
     },
-    fetch(podcasts: any): void {
+    fetch(podcasts: Array<Podcast>): void {
       this.$emit('fetch', podcasts);
     },
   },

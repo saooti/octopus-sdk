@@ -137,7 +137,7 @@ export default defineComponent({
         .filter((c: Category) => {
           return catIds && catIds.includes(c.id);
         })
-        .map((c: any) => {
+        .map((c: Category) => {
           return c.name;
         })
         .join(', ');
@@ -149,7 +149,7 @@ export default defineComponent({
     title(): string {
       return this.podcast.title;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {

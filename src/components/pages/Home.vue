@@ -43,6 +43,7 @@ import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { Rubriquage } from '@/store/class/rubriquage';
 import { Rubrique } from '@/store/class/rubrique';
 import { defineComponent } from 'vue'
+import { Category } from '@/store/class/category';
 export default defineComponent({
   name: 'Home',
 
@@ -70,11 +71,11 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker;
     },
-    categories(): any {
+    categories(): Array<Category> {
       if(this.$store.state.filter.iab){
         return [this.$store.state.filter.iab];
       }
-      return this.$store.state.categories.filter((c: any) => {
+      return this.$store.state.categories.filter((c: Category) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });

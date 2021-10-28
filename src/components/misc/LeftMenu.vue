@@ -120,6 +120,7 @@ import { orgaFilter } from '../mixins/organisationFilter';
 import { Category } from '@/store/class/category';
 import { RubriquageFilter } from '@/store/class/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { Organisation } from '@/store/class/organisation';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
   name: 'LeftMenu',
@@ -188,7 +189,7 @@ export default defineComponent({
     onMenuClick() {
       this.$emit('update:displayMenu', false);
     },
-    async onOrganisationSelected(organisation: any) {
+    async onOrganisationSelected(organisation: Organisation|undefined) {
       const queries = this.$route.query;
       if (organisation && organisation.id) {
         if (queries.productor !== organisation.id) {

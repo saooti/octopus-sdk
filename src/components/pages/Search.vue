@@ -82,7 +82,7 @@ export default defineComponent({
 
   watch: {
     query: {
-        handler(search: any): void {
+        handler(search: string): void {
           this.rawQuery = search;
         },
       deep: true,

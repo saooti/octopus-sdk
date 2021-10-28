@@ -114,6 +114,7 @@ import { Participant } from '@/store/class/participant';
 import { Podcast } from '@/store/class/podcast';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue'
+import SnackbarVue from '../../misc/Snackbar.vue';
 export default defineComponent({
   name: 'NewsletterModal',
 
@@ -173,7 +174,7 @@ export default defineComponent({
     participantsName(): string {
       if (!this.displayParticipantsNames || !this.podcast.animators) return '';
       const text = [''];
-      this.podcast.animators.forEach((element: any) => {
+      this.podcast.animators.forEach((element: Participant) => {
         text.push(
           `<table width='100%' style="width:100%;background: #f3f3f3;font-family: Arial, sans-serif;font-size: 12px;line-height: 20px;border-bottom-left-radius: 1.5em;border-bottom-right-radius: 1.5em;">
 					<tr>
@@ -314,7 +315,7 @@ export default defineComponent({
       }
     },
     afterCopy(): void{
-      (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
+      (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Data in clipboard'));
     }
   },
 })

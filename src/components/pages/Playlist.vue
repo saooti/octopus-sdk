@@ -93,7 +93,7 @@ export default defineComponent({
   },
   
   computed: {
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {

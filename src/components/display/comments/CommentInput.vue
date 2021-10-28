@@ -121,7 +121,7 @@ export default defineComponent({
       if (!this.podcast) return true;
       let podcastComment = 'INHERIT';
       if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
-        podcastComment = this.podcast.annotations.COMMENTS;
+        podcastComment = (this.podcast.annotations.COMMENTS as string);
       }
       let organisationComment = 'LIVE_ONLY';
       if (this.podcast.organisation.comments) {
@@ -142,7 +142,7 @@ export default defineComponent({
       if (this.comment && this.comment.comId) return this.$t('Answer a comment').toString();
       return this.$t('Write a comment').toString();
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
@@ -195,7 +195,7 @@ export default defineComponent({
       const padding =
         1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
       this.isOneLine =
-        (this.$refs.textarea as any).$el.clientWidth -
+        (this.$refs.textarea as HTMLElement).clientWidth -
           this.inputExceeded(
             this.newComment,
             '18px Montserrat, sans-serif, Helvetica Neue'
@@ -266,9 +266,9 @@ export default defineComponent({
         sendName = name;
       }
       const commentPodcastId = this.comment ? this.comment.podcastId : 0;
-      const comment: any = {
+      const comment: CommentPodcast = {
         content: this.newComment,
-        name: sendName,
+        name: sendName ? sendName : '',
         podcastId: this.podcast ? this.podcast.podcastId : commentPodcastId,
         timeline: timeline,
         organisationId: this.podcastOrga,

@@ -98,6 +98,7 @@ import { displayMethods } from '../../mixins/functions';
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 import { Podcast } from '@/store/class/podcast';
+import SnackbarVue from '../Snackbar.vue';
 export default defineComponent({
   name: 'ShareModalPlayer',
 
@@ -131,7 +132,7 @@ export default defineComponent({
       this.$emit('close');
     },
     afterCopy(): void{
-      (this.$refs.snackbar as any).open(this.$t('Data in clipboard'));
+      (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Data in clipboard'));
     }
   },
 })

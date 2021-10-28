@@ -117,7 +117,7 @@ export default defineComponent({
     buttonPlus(): boolean {
       return state.generalParameters.buttonPlus;
     },
-    organisationId(): string {
+    organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {

@@ -156,7 +156,7 @@ export default defineComponent({
     isBarTop(): boolean {
       return state.player.barTop;
     },
-    isContactLink(): string {
+    isContactLink(): string|undefined {
       return state.footer.contactLink;
     },
     rubriqueQueryParam(): string|undefined{
@@ -187,7 +187,7 @@ export default defineComponent({
       octopusApi.fetchCategories({ lang: this.$i18n.locale }).then((data: Array<Category>) => {
         this.$store.commit('categoriesSet', data);
         if(this.$store.state.filter.iab){
-          const category = this.$store.state.categories.filter((c: any) => {
+          const category = this.$store.state.categories.filter((c: Category) => {
             return c.id === this.$store.state.filter.iab.id;
           });
           if(category.length){

@@ -27,6 +27,7 @@ import profileApi from '@/api/profile';
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
 import { defineComponent } from 'vue'
+import SnackbarVue from '../../misc/Snackbar.vue';
 export default defineComponent({
   name: 'QrCode',
 
@@ -55,9 +56,9 @@ export default defineComponent({
       link.download = 'qrcode.png';
       const canvas = document.getElementsByClassName('myQrCode');
       if(canvas && canvas.length > 0 && canvas[0]){
-        link.href = (canvas[0] as any).toDataURL();
+        link.href = (canvas[0] as HTMLCanvasElement).toDataURL();
         link.click();
-        (this.$refs.snackbar as any).open(this.$t('Download started'));
+        (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Download started'));
       }
     },
     async initColor(): Promise<void> {
@@ -68,7 +69,7 @@ export default defineComponent({
       }else{
         data= await profileApi.fetchOrganisationAttibutes(
           this.$store.state,
-          state.generalParameters.organisationId
+          state.generalParameters.organisationId ? state.generalParameters.organisationId : ""
         );
       }
       if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {

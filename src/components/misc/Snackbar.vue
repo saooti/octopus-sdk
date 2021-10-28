@@ -20,21 +20,21 @@
 </template>
 
 <script lang="ts">
-const getStyle = (baseSize: string, position: any) => {
+const getStyle = (baseSize: string, position: { pos:string,textAlign: string}) => {
   const c = (f: number) => `calc(${f} * ${baseSize})`;
   const { pos, textAlign } = position;
   return {
     wrap: {
       position: 'fixed',
       left: 0,
-      [pos]: c(0.05),
+      pos:pos? pos: c(0.05),
       zIndex: 9999,
       width: '100%',
       padding: `0 ${c(0.2)}`,
       pointerEvents: 'none',
       textAlign,
     },
-    bar: (bg: any) => ({
+    bar: (bg: string) => ({
       display: 'inline-block',
       width: 'auto',
       minWidth: baseSize,
@@ -67,13 +67,17 @@ export default defineComponent({
   },
   data() {
     return {
-      msgs: [] as any,
+      msgs: [] as Array<{
+        color: string,
+        msg:string,
+        timer: number|undefined,
+      }>,
       holdTime: 5000,
       baseSize: '5rem',
     };
   },
   computed: {
-    $_position(): any {
+    $_position(): { pos:string,textAlign: string} {
       const [p, textAlign] = this.position.toString().split('-');
       return {
         pos: ['top', 'bottom'].includes(p) ? p : 'top',
@@ -82,35 +86,61 @@ export default defineComponent({
           : 'center',
       };
     },
-    style(): any {
+    style(): {wrap: {
+      position: string,
+      left: number,
+      pos: string,
+      zIndex: number,
+      width: string,
+      padding: string,
+      pointerEvents: string,
+      textAlign:string,
+    },
+    bar: (bg:string) =>{
+      display: string,
+      width:string,
+      minWidth: string,
+      maxWidth:string,
+      padding: string,
+      margin: string,
+      borderRadius: string,
+      lineHeight: string,
+      color: string,
+      background: string,
+      boxShadow: string,
+      cursor: string,
+      textAlign: string,
+      pointerEvents: string,
+      userSelect: string,
+    }}{
       return getStyle(this.baseSize, this.$_position);
     },
   },
   methods: {
-    info(msg: any): boolean {
+    info(msg: string): boolean {
       const color = this.colors.info;
       this.open({ color, msg }, false);
       return true;
     },
-    error(msg: any): boolean {
+    error(msg: string): boolean {
       const color = this.colors.error;
       this.open({ color, msg }, false);
       return false;
     },
-    warn(msg: any): boolean {
+    warn(msg: string): boolean {
       const color = this.colors.warn;
       this.open({ color, msg }, false);
       return true;
     },
-    open(message: any, isOpen = true): boolean {
+    open(message: {color:string, msg:string}|string, isOpen = true): boolean {
       let msg;
       let color;
       if (!isOpen) {
-        ({ color } = message);
-        msg = message.msg;
+        color = (message as {color:string, msg:string}).color;
+        msg = (message as {color:string, msg:string}).msg;
       } else {
         color = this.colors.open;
-        msg = message;
+        msg = (message as string);
       }
       const msgObj = {
         color,

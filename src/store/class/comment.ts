@@ -1,5 +1,5 @@
 export interface CommentPodcast {
-    comId: number;
+    comId?: number;
     content: string;
     name: string;
     organisationId?: string;
@@ -7,11 +7,10 @@ export interface CommentPodcast {
     podcastId?: number;
     commentIdReferer?: number;
     timeline?: number;
-    comReferend?: any;
     status?: string;
     certified?: boolean;
     phase?: string;
-    date: string;
+    date?: string;
     relatedComments?: number;
     relatedValidComments?: number;
 }

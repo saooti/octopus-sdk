@@ -254,7 +254,7 @@ export default defineComponent({
     isMonetizableFilter(): boolean {
       return state.podcastsPage.MonetizableFilter;
     },
-    myOrganisationId(): string {
+    myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
