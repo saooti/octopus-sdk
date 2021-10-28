@@ -90,90 +90,90 @@ const state:paramStore = {
   },
 };
 export interface GeneralParameters{
-  organisationId: string|undefined,
-  authenticated: boolean,
-  isAdmin: boolean,
-  isRoleLive: boolean,
-  isCommments: boolean,
-  isOrganisation: boolean,
-  isPlaylist: boolean,
-  isProduction: boolean,
-  isContribution: boolean,
-  ApiUri: string,
-  podcastmaker: boolean,
-  buttonPlus: boolean,
-  allCategories: Array<Category>,
-  isLiveTab: boolean,
-  isCaptchaTest: boolean,
+  organisationId?: string|undefined,
+  authenticated?: boolean,
+  isAdmin?: boolean,
+  isRoleLive?: boolean,
+  isCommments?: boolean,
+  isOrganisation?: boolean,
+  isPlaylist?: boolean,
+  isProduction?: boolean,
+  isContribution?: boolean,
+  ApiUri?: string,
+  podcastmaker?: boolean,
+  buttonPlus?: boolean,
+  allCategories?: Array<Category>,
+  isLiveTab?: boolean,
+  isCaptchaTest?: boolean,
 }
 export interface PodcastPage{
-  EditBox: boolean,
-  SharePlayer: boolean,
-  ShareButtons: boolean,
-  ShareDistribution: boolean,
-  MiniplayerUri: string,
-  MiniplayerBetaUri: string,
-  ouestFranceStyle: boolean,
-  tagList: boolean,
-  downloadButton: boolean,
-  hlsUri: string,
-  mainRubrique: number,
-  resourceUrl: string |undefined,
+  EditBox?: boolean,
+  SharePlayer?: boolean,
+  ShareButtons?: boolean,
+  ShareDistribution?: boolean,
+  MiniplayerUri?: string,
+  MiniplayerBetaUri?: string,
+  ouestFranceStyle?: boolean,
+  tagList?: boolean,
+  downloadButton?: boolean,
+  hlsUri?: string,
+  mainRubrique?: number,
+  resourceUrl?: string |undefined,
 }
 export interface PodcastsPage{
-  ProductorSearch: boolean,
-    MonetizableFilter: boolean,
-    podcastShadow: boolean,
-    podcastBorderBottom: boolean,
-    titlePage: string|undefined,
-    emissionChooser: boolean,
+  ProductorSearch?: boolean,
+    MonetizableFilter?: boolean,
+    podcastShadow?: boolean,
+    podcastBorderBottom?: boolean,
+    titlePage?: string|undefined,
+    emissionChooser?: boolean,
 }
 export interface EmissionsPage{
-  smallItems: boolean,
-  lightItems: boolean,
-  titlePage: string|undefined,
-  itemPlayer: boolean,
-  rubriquage: number|undefined,
-  mainRubrique: number|undefined,
-  buttonMore: boolean,
-  overflowScroll: boolean,
-  titleInImage: boolean,
+  smallItems?: boolean,
+  lightItems?: boolean,
+  titlePage?: string|undefined,
+  itemPlayer?: boolean,
+  rubriquage?: number|undefined,
+  mainRubrique?: number|undefined,
+  buttonMore?: boolean,
+  overflowScroll?: boolean,
+  titleInImage?: boolean,
 }
 export interface EmissionPage{
-  ouestFranceStyle: boolean,
-  rssButton: boolean,
+  ouestFranceStyle?: boolean,
+  rssButton?: boolean,
 }
 export interface IntervenantPage{
-  lightStyle: boolean,
-    rssButton: boolean,
-    titlePage: string|undefined
+  lightStyle?: boolean,
+    rssButton?: boolean,
+    titlePage?: string|undefined
 }
 export interface IntervenantsPage{
-  titlePage: string|undefined
+  titlePage?: string|undefined
 }
 export interface SearchPage{
-  hideBar: boolean
+  hideBar?: boolean
 }
 export interface Player{
-  image: boolean
-    emissionName: boolean
-    clock: boolean
-    barTop: boolean
+  image?: boolean
+    emissionName?: boolean
+    clock?: boolean
+    barTop?: boolean
 }
 export interface Footer{
-  contactLink: string|undefined
+  contactLink?: string|undefined
 }
 export interface Organisation{
-  imageUrl: string,
-    name: string,
-    userName: string,
+  imageUrl?: string,
+    name?: string,
+    userName?: string,
 }
 export interface OctopusApi{
-  url: string,
-  commentsUrl: string,
-  studioUrl: string,
-  playerUrl: string,
-  organisationId: string | undefined,
+  url?: string,
+  commentsUrl?: string,
+  studioUrl?: string,
+  playerUrl?: string,
+  organisationId?: string | undefined,
 }
 export interface paramStore{
   generalParameters:GeneralParameters,

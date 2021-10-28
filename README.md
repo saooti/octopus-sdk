@@ -486,4 +486,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.17 Mise à jour bibliothèques
  * 29.0.18 Eslint
  * 29.0.19 Eslint
+ * 29.0.20 Eslint
 
