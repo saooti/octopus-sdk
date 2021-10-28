@@ -89,7 +89,7 @@ export default defineComponent({
   
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     organisation(): string {
       if(this.playlist && this.playlist.publisher && this.playlist.publisher.organisation){

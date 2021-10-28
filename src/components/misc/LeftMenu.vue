@@ -145,7 +145,7 @@ export default defineComponent({
 
   computed: {
     isLiveTab(): boolean {
-      return state.generalParameters.isLiveTab;
+      return (state.generalParameters.isLiveTab as boolean);
     },
     categories(): Array<Category> {
       return this.$store.state.categories.filter((c: Category) => {
@@ -154,7 +154,7 @@ export default defineComponent({
       });
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;

@@ -184,10 +184,10 @@ export default defineComponent({
       return '/img/logo_octopus_final.svg';
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     isLiveTab(): boolean {
-      return state.generalParameters.isLiveTab;
+      return (state.generalParameters.isLiveTab as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;

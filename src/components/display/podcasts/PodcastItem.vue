@@ -114,13 +114,13 @@ export default defineComponent({
   
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     podcastShadow(): boolean {
-      return state.podcastsPage.podcastShadow;
+      return (state.podcastsPage.podcastShadow as boolean);
     },
     podcastBorderBottom(): boolean {
-      return state.podcastsPage.podcastBorderBottom;
+      return (state.podcastsPage.podcastBorderBottom as boolean);
     },
     date(): string {
       if('fr' === this.$i18n.locale){
@@ -153,7 +153,7 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     editRight(): boolean {
       if (

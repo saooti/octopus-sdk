@@ -87,10 +87,10 @@ export default defineComponent({
 
   computed: {
     isEmissionName(): boolean {
-      return state.player.emissionName;
+      return (state.player.emissionName as boolean);
     },
     isBarTop(): boolean {
-      return state.player.barTop;
+      return (state.player.barTop as boolean);
     },
     playedTime(): string{
       if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {

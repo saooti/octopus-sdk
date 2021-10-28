@@ -100,7 +100,7 @@ export default defineComponent({
       return this.dfirst >= this.totalCount;
     },
     buttonPlus(): boolean {
-      return state.generalParameters.buttonPlus;
+      return (state.generalParameters.buttonPlus as boolean);
     },
     changed(): string {
       return `${this.first}|${this.size}|${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
@@ -132,7 +132,7 @@ export default defineComponent({
       }
     },
     isProduction(): boolean {
-      return state.generalParameters.isProduction;
+      return (state.generalParameters.isProduction as boolean);
     },
   },
   watch: {

@@ -93,10 +93,10 @@ export default defineComponent({
 
   computed: {
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isCaptchaTest(): boolean {
-      return state.generalParameters.isCaptchaTest;
+      return (state.generalParameters.isCaptchaTest as boolean);
     },
   },
 

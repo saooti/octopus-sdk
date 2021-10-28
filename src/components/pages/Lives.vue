@@ -63,13 +63,13 @@ export default defineComponent({
       return false;
     },
     isRoleLive(): boolean {
-      return state.generalParameters.isRoleLive;
+      return (state.generalParameters.isRoleLive as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
   },
   created() {

@@ -130,14 +130,14 @@ export default defineComponent({
       },
     }),
     mainRubrique(): boolean{
-      if(this.podcast && this.podcast.rubriqueIds && this.podcast.rubriqueIds.includes(state.podcastPage.mainRubrique)){
+      if(this.podcast && this.podcast.rubriqueIds &&state.podcastPage.mainRubrique && this.podcast.rubriqueIds.includes(state.podcastPage.mainRubrique)){
         return true;
       }else{
         return false;
       }
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     isMobile(): boolean {
       return window.matchMedia('(hover: none)').matches;

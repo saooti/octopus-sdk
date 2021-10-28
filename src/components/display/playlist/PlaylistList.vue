@@ -77,7 +77,7 @@ export default defineComponent({
       return this.dfirst >= this.totalCount;
     },
     buttonPlus(): boolean {
-      return state.generalParameters.buttonPlus;
+      return (state.generalParameters.buttonPlus as boolean);
     },
     changed(): string {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}`;

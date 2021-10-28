@@ -189,44 +189,24 @@ export interface paramStore{
   organisation:Organisation,
   octopusApi:OctopusApi,
 }
-
+const definedProps = (obj: GeneralParameters|PodcastPage|PodcastsPage|EmissionsPage|EmissionPage|IntervenantPage|IntervenantsPage|SearchPage|Player|Footer|Organisation|OctopusApi) => Object.fromEntries(
+  Object.entries(obj).filter(([, v]) => v !== undefined)
+);
 const initialize = function initialize(initObject: paramStore): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    if (initObject.generalParameters) {
-      state.generalParameters = {...state.generalParameters,...initObject.generalParameters };
-    }
-    if (initObject.podcastPage) {
-      state.podcastPage = {...state.podcastPage,...initObject.podcastPage };
-    }
-    if (initObject.podcastsPage) {
-      state.podcastsPage = {...state.podcastsPage,...initObject.podcastsPage };
-    }
-    if (initObject.emissionsPage) {
-      state.emissionsPage = {...state.emissionsPage,...initObject.emissionsPage };
-    }
-    if (initObject.emissionPage) {
-      state.emissionPage = {...state.emissionPage,...initObject.emissionPage };
-    }
-    if (initObject.intervenantPage) {
-      state.intervenantPage = {...state.intervenantPage,...initObject.intervenantPage };
-    }
-    if (initObject.intervenantsPage) {
-      state.intervenantsPage = {...state.intervenantsPage,...initObject.intervenantsPage };
-    }
-    if (initObject.searchPage) {
-      state.searchPage = {...state.searchPage,...initObject.searchPage };
-    }
-    if (initObject.player) {
-      state.player = {...state.player,...initObject.player };
-    }
-    if (initObject.organisation) {
-      state.organisation = {...state.organisation,...initObject.organisation };
-    }
-    if (initObject.footer) {
-      state.footer = {...state.footer,...initObject.footer };
-    }
+    state.generalParameters =  Object.assign(state.generalParameters, definedProps(initObject.generalParameters));
+    state.podcastPage =  Object.assign(state.podcastPage, definedProps(initObject.podcastPage));
+    state.podcastsPage =  Object.assign(state.podcastsPage, definedProps(initObject.podcastsPage));
+    state.emissionsPage =  Object.assign(state.emissionsPage, definedProps(initObject.emissionsPage));
+    state.emissionPage =  Object.assign(state.emissionPage, definedProps(initObject.emissionPage));
+    state.intervenantPage =  Object.assign(state.intervenantPage, definedProps(initObject.intervenantPage));
+    state.intervenantsPage =  Object.assign(state.intervenantsPage, definedProps(initObject.intervenantsPage));
+    state.searchPage =  Object.assign(state.searchPage, definedProps(initObject.searchPage));
+    state.player =  Object.assign(state.player, definedProps(initObject.player));
+    state.organisation =  Object.assign(state.organisation, definedProps(initObject.organisation));
+    state.footer =  Object.assign(state.footer, definedProps(initObject.footer));
+    state.octopusApi =  Object.assign(state.octopusApi, definedProps(initObject.octopusApi));
     if (initObject.octopusApi) {
-      state.octopusApi = {...state.octopusApi,...initObject.octopusApi };
       try {
         octopusApi.initialize(state.octopusApi);
         resolve();

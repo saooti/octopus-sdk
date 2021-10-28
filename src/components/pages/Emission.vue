@@ -162,28 +162,28 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isEditBox(): boolean {
-      return state.podcastPage.EditBox;
+      return (state.podcastPage.EditBox as boolean);
     },
     isShareButtons(): boolean {
-      return state.podcastPage.ShareButtons;
+      return (state.podcastPage.ShareButtons as boolean);
     },
     isSharePlayer(): boolean {
-      return state.podcastPage.SharePlayer;
+      return (state.podcastPage.SharePlayer as boolean);
     },
     isShareDistribution(): boolean {
-      return state.podcastPage.ShareDistribution;
+      return (state.podcastPage.ShareDistribution as boolean);
     },
     isOuestFrance(): boolean {
-      return state.emissionPage.ouestFranceStyle;
+      return (state.emissionPage.ouestFranceStyle as boolean);
     },
     isRssButton(): boolean {
-      return state.emissionPage.rssButton;
+      return (state.emissionPage.rssButton as boolean);
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     rssUrl(): string {
       return state.generalParameters.ApiUri + 'rss/emission/' + this.emissionId;

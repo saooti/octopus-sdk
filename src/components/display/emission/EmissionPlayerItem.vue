@@ -146,10 +146,10 @@ export default defineComponent({
   
   computed: {
     buttonMore(): boolean {
-      return state.emissionsPage.buttonMore;
+      return (state.emissionsPage.buttonMore as boolean);
     },
     titleInImage(): boolean {
-      return state.emissionsPage.titleInImage;
+      return (state.emissionsPage.titleInImage as boolean);
     },
     authenticated(): boolean {
       return this.$store.state.authentication.isAuthenticated;

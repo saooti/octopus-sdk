@@ -47,7 +47,7 @@ export default defineComponent({
   },
   computed:{
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
   },
   methods:{

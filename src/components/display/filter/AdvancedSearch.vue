@@ -252,19 +252,19 @@ export default defineComponent({
 
   computed: {
     isMonetizableFilter(): boolean {
-      return state.podcastsPage.MonetizableFilter;
+      return (state.podcastsPage.MonetizableFilter as boolean);
     },
     myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isProduction(): boolean {
-      return state.generalParameters.isProduction;
+      return (state.generalParameters.isProduction as boolean);
     },
     isContribution(): boolean {
-      return state.generalParameters.isContribution;
+      return (state.generalParameters.isContribution as boolean);
     },
     organisationRight(): boolean {
       if (
@@ -275,7 +275,7 @@ export default defineComponent({
       return false;
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;

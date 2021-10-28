@@ -125,19 +125,19 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isEditBox(): boolean {
-      return state.podcastPage.EditBox;
+      return (state.podcastPage.EditBox as boolean);
     },
     isShareButtons(): boolean {
-      return state.podcastPage.ShareButtons;
+      return (state.podcastPage.ShareButtons as boolean);
     },
     lightStyle(): boolean {
-      return state.intervenantPage.lightStyle;
+      return (state.intervenantPage.lightStyle as boolean);
     },
     isRssButton(): boolean {
-      return state.intervenantPage.rssButton;
+      return (state.intervenantPage.rssButton as boolean);
     },
     titlePage(): string|undefined {
       return state.intervenantPage.titlePage;

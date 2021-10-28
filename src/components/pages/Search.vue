@@ -76,7 +76,7 @@ export default defineComponent({
       return '';
     },
     hideBar(): boolean {
-      return state.searchPage.hideBar;
+      return (state.searchPage.hideBar as boolean);
     },
   },
 

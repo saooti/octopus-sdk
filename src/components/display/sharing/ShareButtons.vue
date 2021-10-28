@@ -304,7 +304,7 @@ export default defineComponent({
       );
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     rssUrl(): string {
       if (this.emission)

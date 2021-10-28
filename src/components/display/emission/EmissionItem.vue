@@ -111,7 +111,7 @@ export default defineComponent({
   
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     organisation(): string {
       if(this.emission && this.emission.publisher && this.emission.publisher.organisation){
@@ -120,7 +120,7 @@ export default defineComponent({
       return '';
     },
     lightItems(): boolean {
-      return state.emissionsPage.lightItems;
+      return (state.emissionsPage.lightItems as boolean);
     },
     description(): string {
       return this.emission.description || '';
@@ -132,7 +132,7 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     editRight(): boolean {
       if (

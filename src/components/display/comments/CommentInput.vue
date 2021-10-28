@@ -146,7 +146,7 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isCertified(): boolean {
       if (

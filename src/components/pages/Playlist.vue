@@ -97,16 +97,16 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isEditBox(): boolean {
-      return state.podcastPage.EditBox;
+      return (state.podcastPage.EditBox as boolean);
     },
     isShareButtons(): boolean {
-      return state.podcastPage.ShareButtons;
+      return (state.podcastPage.ShareButtons as boolean);
     },
     isSharePlayer(): boolean {
-      return state.podcastPage.SharePlayer;
+      return (state.podcastPage.SharePlayer as boolean);
     },
     name(): string {
       return this.playlist ? this.playlist.title : '';

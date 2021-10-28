@@ -55,10 +55,10 @@ export default defineComponent({
   
   computed: {
     isProductorSearch(): boolean {
-      return state.podcastsPage.ProductorSearch;
+      return (state.podcastsPage.ProductorSearch as boolean);
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     editRight(): boolean {
       if (state.generalParameters.isPlaylist) return true;

@@ -158,9 +158,9 @@ export default defineComponent({
   computed: {
     miniplayerBaseUrl(): string{
       if(this.isBeta){
-        return state.podcastPage.MiniplayerBetaUri;  
+        return (state.podcastPage.MiniplayerBetaUri as string);  
       }
-      return state.podcastPage.MiniplayerUri;
+      return (state.podcastPage.MiniplayerUri as string);
     },
     isEmission(): boolean {
       return 'emission' === this.iFrameModel;
@@ -198,7 +198,7 @@ export default defineComponent({
       return false;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     iFrameSrc(): string {
       const url = [''];

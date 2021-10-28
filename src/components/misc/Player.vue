@@ -114,7 +114,7 @@ export default defineComponent({
   },
   computed: {
     isBarTop(): boolean {
-      return state.player.barTop;
+      return (state.player.barTop as boolean);
     },
     ...mapState({
       display: (state: StoreState) => 'STOPPED' !== state.player.status,

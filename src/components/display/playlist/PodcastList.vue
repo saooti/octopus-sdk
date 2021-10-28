@@ -115,13 +115,13 @@ export default defineComponent({
       return this.podcastsQuery.slice(0, this.podcasts.length);
     },
     buttonPlus(): boolean {
-      return state.generalParameters.buttonPlus;
+      return (state.generalParameters.buttonPlus as boolean);
     },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     editRight(): boolean {
       if (

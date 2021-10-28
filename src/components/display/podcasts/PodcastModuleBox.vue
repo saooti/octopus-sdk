@@ -194,22 +194,22 @@ export default defineComponent({
 
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isOuestFrance(): boolean {
-      return state.podcastPage.ouestFranceStyle;
+      return (state.podcastPage.ouestFranceStyle as boolean);
     },
     isTagList(): boolean {
-      return state.podcastPage.tagList;
+      return (state.podcastPage.tagList as boolean);
     },
     isDownloadButton(): boolean {
-      return state.podcastPage.downloadButton;
+      return (state.podcastPage.downloadButton as boolean);
     },
     date(): string {
       if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){
@@ -266,7 +266,7 @@ export default defineComponent({
       return (
         !this.isPodcastmaker &&
         this.editRight &&
-        state.generalParameters.isRoleLive
+        (state.generalParameters.isRoleLive as boolean)
       );
     },
     podcastNotValid(): boolean {

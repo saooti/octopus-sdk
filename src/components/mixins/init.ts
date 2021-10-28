@@ -8,12 +8,12 @@ export const initSDK = defineComponent({
   mixins: [orgaFilter],
   methods: {
     async initSdk() {
-      if (0 === state.generalParameters.allCategories.length) {
+      if (0 === (state.generalParameters.allCategories as Array<Category>).length) {
         octopusApi.fetchCategories({ lang: this.$i18n.locale }).then((data: Array<Category>) => {
           this.$store.commit('categoriesSet', data);
         });
       }else{
-        this.$store.commit('categoriesSet', state.generalParameters.allCategories);
+        this.$store.commit('categoriesSet', (state.generalParameters.allCategories as Array<Category>));
       }
       const captcha = (document.getElementsByClassName('grecaptcha-badge')[0] as HTMLElement);
       if (captcha) {

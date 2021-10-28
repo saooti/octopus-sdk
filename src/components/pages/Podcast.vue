@@ -161,16 +161,16 @@ export default defineComponent({
 
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     isEditBox(): boolean {
-      return state.podcastPage.EditBox;
+      return (state.podcastPage.EditBox as boolean);
     },
     isShareButtons(): boolean {
-      return state.podcastPage.ShareButtons;
+      return (state.podcastPage.ShareButtons as boolean);
     },
     isSharePlayer(): boolean {
-      return state.podcastPage.SharePlayer;
+      return (state.podcastPage.SharePlayer as boolean);
     },
     allCategories(): Array<Category> {
       return this.$store.state.categories;
@@ -179,10 +179,10 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     isOuestFrance(): boolean {
-      return state.podcastPage.ouestFranceStyle;
+      return (state.podcastPage.ouestFranceStyle as boolean);
     },
     emissionMainCategory(): number {
       if(!this.podcast){return 0;}
@@ -264,7 +264,7 @@ export default defineComponent({
       return (
         !this.isPodcastmaker &&
         this.editRight &&
-        state.generalParameters.isRoleLive
+        (state.generalParameters.isRoleLive as boolean)
       );
     },
     titlePage(): string {

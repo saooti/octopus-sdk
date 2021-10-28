@@ -169,7 +169,7 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     myOrganisation(): Organisation|undefined {
       if (!this.authenticated) return undefined;

@@ -69,7 +69,7 @@ export default defineComponent({
       return this.$store.state.filter.rubriqueFilter;
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     categories(): Array<Category> {
       if(this.$store.state.filter.iab){

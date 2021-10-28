@@ -61,7 +61,7 @@ export default defineComponent({
 
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     categoriesWatch(): Array<Category>{
       return this.$store.state.categories;

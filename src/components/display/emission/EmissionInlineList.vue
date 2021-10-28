@@ -115,7 +115,7 @@ export default defineComponent({
       return this.allEmissions.slice(this.index, this.index + this.size);
     },
     overflowScroll(): boolean {
-      return state.emissionsPage.overflowScroll;
+      return (state.emissionsPage.overflowScroll as boolean);
     },
     previousAvailable(): boolean {
       return this.index > 0;

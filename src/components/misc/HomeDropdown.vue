@@ -141,16 +141,16 @@ export default defineComponent({
 
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     authenticated(): boolean {
       return this.$store.state.authentication.isAuthenticated;
     },
     isOrganisation(): boolean {
-      return state.generalParameters.isOrganisation;
+      return (state.generalParameters.isOrganisation as boolean);
     },
     isContribution(): boolean {
-      return state.generalParameters.isContribution;
+      return (state.generalParameters.isContribution as boolean);
     },
   },
 

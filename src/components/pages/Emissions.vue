@@ -99,10 +99,10 @@ export default defineComponent({
       return this.$store.state.filter.iab;
     },
     isProductorSearch(): boolean {
-      return state.podcastsPage.ProductorSearch;
+      return (state.podcastsPage.ProductorSearch as boolean);
     },
     isMonetizableFilter(): boolean {
-      return state.podcastsPage.MonetizableFilter;
+      return (state.podcastsPage.MonetizableFilter as boolean);
     },
     titlePage(): string|undefined {
       return state.emissionsPage.titlePage;

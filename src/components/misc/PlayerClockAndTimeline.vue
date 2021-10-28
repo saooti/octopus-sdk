@@ -41,10 +41,10 @@ export default defineComponent({
 
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     isClock(): boolean {
-      return state.player.clock;
+      return (state.player.clock as boolean);
     },
 
   },

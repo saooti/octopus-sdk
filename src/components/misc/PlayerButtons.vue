@@ -70,7 +70,7 @@ export default defineComponent({
       return 'LOADING' === this.$store.state.player.status;
     },
     isImage(): boolean {
-      return state.player.image;
+      return (state.player.image as boolean);
     },
     podcastImage(): string{
       if (this.$store.state.player.podcast) return this.$store.state.player.podcast.imageUrl;

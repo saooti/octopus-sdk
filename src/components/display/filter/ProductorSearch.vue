@@ -88,7 +88,7 @@ export default defineComponent({
  
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     searchText(): string {
       if ('emission' === this.type) return this.$t('Look for emission name').toString();

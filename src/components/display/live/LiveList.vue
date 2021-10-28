@@ -171,7 +171,7 @@ export default defineComponent({
       return false;
     },
     isRoleLive(): boolean {
-      return state.generalParameters.isRoleLive;
+      return (state.generalParameters.isRoleLive as boolean);
     },
   },
   watch: {

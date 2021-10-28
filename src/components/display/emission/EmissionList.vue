@@ -114,13 +114,13 @@ export default defineComponent({
       return this.dfirst >= this.totalCount;
     },
     buttonPlus(): boolean {
-      return state.generalParameters.buttonPlus;
+      return (state.generalParameters.buttonPlus as boolean);
     },
     smallItems(): boolean {
-      return state.emissionsPage.smallItems;
+      return (state.emissionsPage.smallItems as boolean);
     },
     itemPlayer(): boolean {
-      return state.emissionsPage.itemPlayer;
+      return (state.emissionsPage.itemPlayer as boolean);
     },
     displayRubriquage(): number|undefined {
       return state.emissionsPage.rubriquage;

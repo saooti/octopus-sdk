@@ -1,4 +1,3 @@
-
 <template>
   <div class="page-box">
     <div
@@ -128,7 +127,7 @@ export default defineComponent({
       return this.$store.state.filter.iab;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated;
+      return (state.generalParameters.authenticated as boolean);
     },
     myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
@@ -150,13 +149,13 @@ export default defineComponent({
       return undefined;
     },
     isProductorSearch(): boolean {
-      return state.podcastsPage.ProductorSearch;
+      return (state.podcastsPage.ProductorSearch as boolean);
     },
     titlePage(): string|undefined {
       return state.podcastsPage.titlePage;
     },
     isEmissionChooser(): boolean {
-      return state.podcastsPage.emissionChooser;
+      return (state.podcastsPage.emissionChooser as boolean);
     },
   },
 

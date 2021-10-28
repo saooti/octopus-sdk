@@ -158,10 +158,10 @@ export default defineComponent({
   
   computed: {
     isEditBox(): boolean {
-      return state.podcastPage.EditBox;
+      return (state.podcastPage.EditBox as boolean);
     },
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     hours(): string {
       if(!this.live){ return ''; }
@@ -191,7 +191,7 @@ export default defineComponent({
       return false;
     },
     isRoleLive(): boolean {
-      return state.generalParameters.isRoleLive;
+      return (state.generalParameters.isRoleLive as boolean);
     },
     duration(): string {
       if (!this.live || this.live.duration <= 1) return '';

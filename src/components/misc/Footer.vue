@@ -151,10 +151,10 @@ export default defineComponent({
 
   computed: {
     isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker;
+      return (state.generalParameters.podcastmaker as boolean);
     },
     isBarTop(): boolean {
-      return state.player.barTop;
+      return (state.player.barTop as boolean);
     },
     isContactLink(): string|undefined {
       return state.footer.contactLink;
