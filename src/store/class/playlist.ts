@@ -4,7 +4,7 @@ import { Podcast } from "./podcast";
 
 
 export interface Playlist{
-  imageUrl: string;
+  imageUrl?: string;
   description: string;
   organisation: Organisation;
   playlistId: number;

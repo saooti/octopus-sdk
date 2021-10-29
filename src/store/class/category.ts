@@ -1,8 +1,9 @@
-export interface Category{
+export interface Category {
     id: number;
     name: string;
     podcastCount?: number;
     podcastOrganisationCount?: number;
     rtbId?: string;
-    soundcastTag?: string;
-}
+    adConfig?: any;
+    orgaAdConfigs?: any;
+  }

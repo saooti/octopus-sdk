@@ -46,7 +46,7 @@ export default defineComponent({
     OrganisationChooser,
   },
   props: {
-    conferenceWatched: { default: () => [], type: Array as ()=>Array<{conferenceId:number,interval:number|undefined, status:string}>},
+    conferenceWatched: { default: () => [], type: Array as ()=>Array<{conferenceId:number,interval:ReturnType<typeof setTimeout>|undefined, status:string}>},
     organisationId: { default: undefined, type: String },
     productor:{default:undefined, type: String}
   },

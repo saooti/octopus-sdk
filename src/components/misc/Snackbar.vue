@@ -70,7 +70,7 @@ export default defineComponent({
       msgs: [] as Array<{
         color: string,
         msg:string,
-        timer: number|undefined,
+        timer: ReturnType<typeof setTimeout>|undefined,
       }>,
       holdTime: 5000,
       baseSize: '5rem',

@@ -29,7 +29,7 @@ export default defineComponent({
   data() {
     return {
       seconds: 0 as number,
-      countdownTimer: undefined as number|undefined,
+      countdownTimer: undefined as  ReturnType<typeof setTimeout>|undefined,
       days: 0 as number,
       hours: 0 as number,
       minutes: 0 as number,
