@@ -54,7 +54,7 @@ export default defineComponent({
       this.remainingSeconds = this.seconds % 60;
       /* this.$refs.countdown.innerHTML = this.pad(days) + ":" + this.pad(hours) + ":" + this.pad(minutes) + ":" + this.pad(remainingSeconds); */
       if (0 === this.seconds) {
-        clearInterval(this.countdownTimer);
+        clearInterval((this.countdownTimer as unknown as number));
         this.countdownTimer = undefined;
       } else {
         this.seconds--;

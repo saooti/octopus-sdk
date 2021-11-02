@@ -295,15 +295,15 @@ export default defineComponent({
     if (!this.isLiveReadyToRecord) return;
     if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
       const data = await studioApi.getConference(this.$store.state,this.podcast.conferenceId.toString());
-      if ('' !== data.data) {
-        this.fetchConference = data.data;
+      if (data) {
+        this.fetchConference = data;
       } else {
         this.fetchConference = {conferenceId:-1, title:''};
       }
     } else if(undefined!==this.podcast.conferenceId){
       const data = await octopusApi.getRealConferenceStatus(this.podcast.conferenceId.toString());
       this.fetchConference = {
-        status: data.data,
+        status: data,
         conferenceId: this.podcast.conferenceId,
         title:'',
       };

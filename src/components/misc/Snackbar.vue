@@ -153,7 +153,7 @@ export default defineComponent({
       return true;
     },
     pop(i = 0): void {
-      if (this.msgs[i]) clearTimeout(this.msgs[i].timer);
+      if (this.msgs[i]) clearTimeout((this.msgs[i].timer as unknown as number));
       this.msgs.splice(i, 1);
     },
   },
