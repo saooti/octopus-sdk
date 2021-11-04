@@ -489,4 +489,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.20 Eslint
  * 29.0.21 Eslint
  * 29.0.22 Eslint
+ * 29.0.23 Eslint
 

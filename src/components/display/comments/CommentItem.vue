@@ -87,7 +87,9 @@
         </button>
       </div>
     </template>
-    <div class="d-flex align-items-center mt-1">
+    <div
+      class="mb-0 d-flex align-items-center mt-1"
+    >
       <button
         v-if="null === comment.commentIdReferer && 'Valid' === comment.status"
         class="btn btn-answer primary-color me-2"
@@ -101,8 +103,14 @@
           (!isFlat && comment.relatedComments) ||
             (isFlat && comment.commentIdReferer)
         "
-        v-b-toggle="'answers-comment-' + comment.comId"
+        :id="'commentItem'+comment.comId"
         class="primary-color c-hand d-flex align-items-center small-Text input-no-outline"
+        type="button"
+        data-bs-toggle="collapse"
+        :data-bs-target="'#commentItemDetail'+comment.comId"
+        aria-expanded="false"
+        :aria-controls="'commentItemDetail'+comment.comId"
+        @click="collapseVisible=!collapseVisible"
       >
         <div class="d-flex align-items-center when-closed me-2">
           <div v-if="comment.relatedComments">
@@ -140,13 +148,12 @@
         @editComment="editComment"
       />
     </div>
-    <b-collapse
-      :id="'answers-comment-' + comment.comId"
-      v-model="collapseVisible"
-      class="ms-4"
+    <div
+      :id="'commentItemDetail'+comment.comId"
+      :aria-labelledby="'commentItem'+comment.comId"
     >
       <CommentInput
-        v-if="!isFlat || (isFlat && !comment.commentIdReferer)"
+        v-if="!isFlat || (isFlat && !comment.commentIdReferer) && collapseVisible"
         v-model:knownIdentity="knownIdentity"
         :focus="focus"
         :podcast="podcast"
@@ -168,7 +175,7 @@
         :com-id="comment.comId"
         @updateStatus="updateStatus"
       />
-    </b-collapse>
+    </div>
   </div>
 </template>
 
