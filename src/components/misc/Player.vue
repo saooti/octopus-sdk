@@ -229,7 +229,7 @@ export default defineComponent({
           }
           if ('PAUSED' === newValue) {
             audioPlayer.pause();
-          } else {
+          }else if ('PLAYING' === newValue){
             audioPlayer.play();
           }
         }
