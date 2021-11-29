@@ -97,8 +97,28 @@ export default defineComponent({
       return '';
     },
   },
+  created(){
+    window.addEventListener('keydown', this.addKeyboardControl);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.addKeyboardControl);
+  },
 
   methods: {
+    addKeyboardControl(event: KeyboardEvent): void{
+      if (' ' === event.key || 'Spacebar' === event.key) {
+        event.preventDefault();
+        this.switchPausePlay();
+			}else if ('ArrowRight' === event.key && event.ctrlKey) {
+        const audioPlayer: HTMLAudioElement|null = document.querySelector('#audio-player');
+        if(!audioPlayer){return;}
+        audioPlayer.currentTime += 15;
+			}else if ('ArrowLeft' === event.key && event.ctrlKey) {
+        const audioPlayer: HTMLAudioElement|null = document.querySelector('#audio-player');
+        if(!audioPlayer){return;}
+        audioPlayer.currentTime -=15;
+			}
+    },
     switchPausePlay(): void {
       const audioPlayer: HTMLAudioElement|null = document.querySelector('#audio-player');
       if(!audioPlayer){return;}
