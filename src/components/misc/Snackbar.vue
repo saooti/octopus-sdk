@@ -159,3 +159,8 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss">
+.snack-bar-wrap{
+  bottom: 0px;
+}
+</style>
