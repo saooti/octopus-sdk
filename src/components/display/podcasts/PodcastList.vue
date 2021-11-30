@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import podcastApi from '@/api/podcasts';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
@@ -172,6 +171,7 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
+        includeHidden: this.includeHidden
       };
       if (undefined !== this.notValid) {
         param.validity = !this.notValid;
@@ -179,14 +179,8 @@ export default defineComponent({
       if (this.notValid && !this.isProduction) {
         param.publisherId = this.$store.state.profile.userId;
       }
-      if (this.includeHidden) {
-        param.includeHidden = this.includeHidden;
-        const data = await podcastApi.fetchPodcastsAdmin(this.$store.state, param);
-        this.afterFetching(reset, data);
-      } else {
-        const data = await octopusApi.fetchPodcasts(param);
-        this.afterFetching(reset, data);
-      }
+      const data = await octopusApi.fetchPodcasts(param);
+      this.afterFetching(reset, data);
     },
     afterFetching(reset: boolean, data:  {count: number, result: Array<Podcast>, sort: string}): void {
       if (reset) {

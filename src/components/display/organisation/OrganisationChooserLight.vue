@@ -41,7 +41,7 @@ export default defineComponent({
 
   data() {
     return  {
-      actual: -1 as number,
+      actual: -1 as number|string,
       organisation: undefined as Organisation|undefined,
       init: false as boolean,
     };

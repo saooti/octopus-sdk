@@ -1,12 +1,12 @@
-import { Organisation } from "./organisation";
+import { Organisation } from './organisation';
 
-export interface Participant{
-  imageUrl: string;
-  description: string;
+export interface Participant {
+  imageUrl?: string;
+  description?: string;
   firstName: string;
   lastName: string;
-  orga: Organisation;
-  participantId: number;
+  orga?: Organisation;
+  participantId: number | undefined;
   score?: number;
-  uid: string;
+  uid?: string;
 }

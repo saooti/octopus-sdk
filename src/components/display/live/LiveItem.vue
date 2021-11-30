@@ -234,7 +234,7 @@ export default defineComponent({
       if (!this.fetchConference || !this.fetchConference.podcastId) return;
       try {
         this.live = await octopusApi.fetchPodcast(
-          this.fetchConference.podcastId
+          this.fetchConference.podcastId.toString()
         );
       } catch {
         this.$emit('deleteItem', this.index);

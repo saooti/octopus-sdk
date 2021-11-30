@@ -142,7 +142,7 @@ export default defineComponent({
   methods: {
     async getPlaylistDetails(): Promise<void> {
       try {
-        const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId);
+        const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
         this.playlist = data;
         this.$emit('playlistTitle', this.playlist.title);
         this.loaded = true;

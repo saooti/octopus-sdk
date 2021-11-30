@@ -235,8 +235,8 @@ export default defineComponent({
       this.loaded = true;
       this.totalCount = data.count;
       if (this.allPodcasts.length + data.result.length < this.totalCount) {
-        const nexEl = data.result.pop();
-        this.preloadImage(nexEl.imageUrl);
+        const nexEl = data.result.pop() as Podcast;
+        this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
       }
       this.allPodcasts = this.allPodcasts.concat(
         data.result.filter((pod: Podcast|null) => null !== pod)

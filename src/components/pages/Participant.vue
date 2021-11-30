@@ -185,7 +185,7 @@ export default defineComponent({
     async getParticipantDetails(): Promise<void> {
       this.loaded = false;
       try {
-        const data = await octopusApi.fetchParticipant(this.participantId);
+        const data = await octopusApi.fetchParticipant(this.participantId ? this.participantId.toString(): "");
         this.participant = data;
         this.$emit('participantTitle', this.name);
         this.loaded = true;

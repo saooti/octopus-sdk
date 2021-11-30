@@ -152,8 +152,8 @@ export default defineComponent({
         first: this.first,
         size: this.size + 1,
         organisationId: this.organisationId,
-        rubriqueId: this.rubriqueId,
-        rubriquageId: this.rubriquageId,
+        rubriqueId: this.rubriqueId ?  [this.rubriqueId] : [],
+        rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
         sort: 'LAST_PODCAST_DESC',
       });
       this.loading = false;
@@ -169,8 +169,8 @@ export default defineComponent({
         });
       } */
       if (this.allEmissions.length + data.result.length < this.totalCount) {
-        const nexEl = data.result.pop();
-        this.preloadImage(nexEl.imageUrl);
+        const nexEl = data.result.pop() as Emission;
+        this.preloadImage(nexEl.imageUrl ? nexEl.imageUrl : "");
       }
       this.allEmissions = this.allEmissions.concat(data.result);
       if (this.allEmissions.length <= 3) {

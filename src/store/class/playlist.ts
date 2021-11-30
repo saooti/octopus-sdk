@@ -1,14 +1,12 @@
-import { Organisation } from "./organisation";
-import { Person } from "./person";
-import { Podcast } from "./podcast";
+import { Organisation } from './organisation';
+import { Person } from './person';
 
-
-export interface Playlist{
+export interface Playlist {
   imageUrl?: string;
   description: string;
   organisation: Organisation;
   playlistId: number;
-  podcasts: Array<Podcast>;
+  podcasts: Array<number | undefined>;
   score: number;
   title: string;
   publisher?: Person;

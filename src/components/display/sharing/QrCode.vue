@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-import profileApi from '@/api/profile';
+import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
 import { defineComponent } from 'vue'
@@ -67,8 +67,7 @@ export default defineComponent({
       if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         data = this.$store.state.organisation.attributes;
       }else{
-        data= await profileApi.fetchOrganisationAttibutes(
-          this.$store.state,
+        data= await octopusApi.fetchOrganisationAttributes(
           state.generalParameters.organisationId ? state.generalParameters.organisationId : ""
         );
       }

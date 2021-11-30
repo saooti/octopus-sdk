@@ -494,3 +494,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.25 Specific category does not display in correct order
  * 29.0.26 Snackbar position
 
+ * 30.0.1 Nouveau sprint

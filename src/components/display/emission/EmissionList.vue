@@ -61,7 +61,6 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import emissionApi from '@/api/emissions';
 import { state } from '../../../store/paramStore';
 
 import { Emission } from '@/store/class/emission';
@@ -186,15 +185,10 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
+        includeHidden:this.includeHidden,
       };
-      if (this.includeHidden) {
-        param.includeHidden = this.includeHidden;
-        const data = await emissionApi.fetchEmissionsAdmin(this.$store.state, param);
-        this.afterFetching(reset, data);
-      } else {
-        const data = await octopusApi.fetchEmissions(param);
-        this.afterFetching(reset, data);
-      }
+      const data = await octopusApi.fetchEmissions(param);
+      this.afterFetching(reset, data);
     },
     afterFetching(reset: boolean, data: {count: number, result: Array<Emission>, sort: string}): void {
       if (reset) {

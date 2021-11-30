@@ -156,9 +156,9 @@ export default defineComponent({
       }
     },
     async fetchCategories(organisationId: string): Promise<void> {
-      const data = await octopusApi.fetchCategoriesOrga(organisationId, {
+      const data = await octopusApi.fetchCategories({
         lang: this.$i18n.locale,
-      });
+      }, organisationId);
       this.$store.commit('categoriesOrgaSet', data);
     },
   },

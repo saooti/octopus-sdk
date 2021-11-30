@@ -174,6 +174,13 @@ export interface OctopusApi{
   studioUrl?: string,
   playerUrl?: string,
   organisationId?: string | undefined,
+  oAuthParam?: {
+    accessToken: string,
+    refreshToken: string,
+    accessTokenUri: string,
+    expiration: string,
+    clientId: string,
+  }
 }
 export interface paramStore{
   generalParameters:GeneralParameters,

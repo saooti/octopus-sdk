@@ -325,7 +325,7 @@ export default defineComponent({
     },
     async getPodcastDetails(podcastId: number): Promise<void> {
       try {
-        const data : Podcast = await octopusApi.fetchPodcast(podcastId);
+        const data : Podcast = await octopusApi.fetchPodcast(podcastId.toString());
         this.podcast = data;
         this.$emit('podcastTitle', this.podcast.title);
         if (
