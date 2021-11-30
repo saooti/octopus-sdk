@@ -90,6 +90,7 @@
 	.nav{
 		border-bottom: 0.05rem solid #ddd;
 		.nav-item{
+			cursor: pointer;
 			flex-grow: 1;
 			text-align: center;
 			a {
