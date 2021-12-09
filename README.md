@@ -497,3 +497,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.28 Petite couleur des familles
 
  * 30.0.1 Nouveau sprint
+ * 30.0.2 Correction css
