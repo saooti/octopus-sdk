@@ -34,27 +34,12 @@
               :emission="emission"
               :playlist="playlist"
               :custom-players="customPlayers"
-              :is-beta="isBeta"
             />
           </div>
           <SharePlayerColors
             v-model:color="color"
             v-model:theme="theme"
-            v-model:themeBeta="themeBeta"
-            :is-beta="isBeta"
           />
-          <div v-if="displayBetaChoice">
-            <input
-              id="isBetaCheckbox"
-              v-model="isBeta"
-              type="checkbox"
-              class="form-check-input"
-            >
-            <label
-              class="form-check-label me-2"
-              for="isBetaCheckbox"
-            >{{ $t('Use beta version') }}</label>
-          </div>
           <div
             v-if="isPodcastNotVisible || playlist"
             class="d-flex align-items-center flex-wrap"
@@ -140,26 +125,20 @@ export default defineComponent({
       isShareModal: false as boolean,
       color: '#40a372' as string,
       theme: '#000000' as string,
-      themeBeta: '#000000' as string,
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumber: '3' as string,
       startTime: 0 as number,
       isVisible: false as boolean,
       displayArticle: true as boolean,
-      displayBetaChoice: false as boolean,
       customPlayers: [] as Array<CustomPlayer>,
-      isBeta: false as boolean,
       colors: ['#000000', '#ffffff'],
     };
   },
   
   computed: {
     miniplayerBaseUrl(): string{
-      if(this.isBeta){
-        return (state.podcastPage.MiniplayerBetaUri as string);  
-      }
-      return (state.podcastPage.MiniplayerUri as string);
+      return (state.podcastPage.MiniplayerUri as string); 
     },
     isEmission(): boolean {
       return 'emission' === this.iFrameModel;
@@ -253,7 +232,7 @@ export default defineComponent({
         }
       }
       url.push('?distributorId=' + this.organisationId);
-      const theme = this.isBeta ? this.themeBeta : this.theme;
+      const theme = this.theme;
       url.push(
         '&color=' +
           this.color.substring(1) +
@@ -367,22 +346,15 @@ export default defineComponent({
       } else {
         this.theme = '#000000';
       }
-      if (Object.prototype.hasOwnProperty.call(data,'playerBeta')) {
-        if (Object.prototype.hasOwnProperty.call(data,'THEMEBETA')) {
-          this.themeBeta = data.THEMEBETA;
-        }
-        this.displayBetaChoice = data.playerBeta;
-        let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId);
-        this.customPlayers = dataFetched.content;
-        const totalCount = dataFetched.totalElements;
-        let index = 1;
-        while (totalCount > this.customPlayers.length) {
-          dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId+'?start='+index);
-          this.customPlayers = this.customPlayers.concat(dataFetched.content);
-          ++index;
-        }
+      let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId);
+      this.customPlayers = dataFetched.content;
+      const totalCount = dataFetched.totalElements;
+      let index = 1;
+      while (totalCount > this.customPlayers.length) {
+        dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId+'?start='+index);
+        this.customPlayers = this.customPlayers.concat(dataFetched.content);
+        ++index;
       }
-      return;
     },
     updateEpisodeNumber(value: string): void {
       this.episodeNumbers = value;

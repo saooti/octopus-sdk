@@ -500,3 +500,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.1 Nouveau sprint
  * 30.0.2 Correction css
  * 30.0.3 Ajout tag page podcast
+ * 30.0.4 Remplacer la version "classique" des miniplayers par la version beta

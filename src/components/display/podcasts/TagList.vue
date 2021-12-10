@@ -39,11 +39,10 @@ export default defineComponent({
   components: {
     Popover
   },
+  mixins:[tagOfMixins],
   props: {
     tagList: { default: () => [], type: Array as ()=>Array<string>},
   },
-  mixins:[tagOfMixins],
-
   methods: {
   },
 })

@@ -17,15 +17,13 @@
       <option value="large">
         {{ $t('Large version') }}
       </option>
-      <template v-if="isBeta">
-        <option
-          v-for="player in customPlayersDisplay"
-          :key="player.customId"
-          :value="player.customId"
-        >
-          {{ $t('Custom version') + " «" +player.name+"»" }}
-        </option>
-      </template>
+      <option
+        v-for="player in customPlayersDisplay"
+        :key="player.customId"
+        :value="player.customId"
+      >
+        {{ $t('Custom version') + " «" +player.name+"»" }}
+      </option>
       <option
         v-if="podcast && podcast.podcastId"
         value="emission"
@@ -62,7 +60,6 @@ export default defineComponent({
     emission: { default: undefined, type: Object as ()=> Emission},
     playlist: { default: undefined, type: Object as ()=> Playlist},
     customPlayers: { default: ()=>[], type: Array as ()=> Array<CustomPlayer>},
-    isBeta: { default: false, type: Boolean},
     iFrameModel: { default: 'default', type: String},
   },
   emits:['update:iFrameModel'],
