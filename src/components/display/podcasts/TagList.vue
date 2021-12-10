@@ -1,55 +1,67 @@
 <template>
-  <div v-if="undefined !== tagList">
-    <ul class="d-flex flex-wrap">
-      <li
-        v-for="tag in tagList"
-        :key="tag"
-        class="tagListElement"
+  <div
+    v-if="undefined !== tagList"
+    class="tag-list-component d-flex flex-wrap"
+  >
+    <div
+      v-for="(tag, index) in tagList"
+      :key="tag"
+      class="tagListElement"
+    >
+      <div
+        :id="'tag-list-from-podcast-page'+index"
+        class="tagListLink"
       >
-        <router-link
-          :to="{
-            name: 'search',
-            query: {
-              query: tag,
-              productor: $store.state.filter.organisationId,
-            },
-          }"
-          class="tagListLink"
+        <img
+          v-if="isOuestFranceTag(tag)"
+          class="ouest-france-logo"
+          src="/img/ouest_france_logo.svg"
         >
-          {{ tag }}
-        </router-link>
-      </li>
-    </ul>
+        {{ formateOfTag(tag) }}
+      </div>
+      <Popover
+        v-if="isOuestFranceTag(tag)"
+        :target="'tag-list-from-podcast-page'+index"
+        triggers="hover"
+        :content="tag.substring(4,tag.length)"
+        placement="bottom"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import Popover from '../../misc/Popover.vue';
+import { tagOfMixins } from '../../mixins/tagOfMixins';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'TagList',
-  components: {},
+  components: {
+    Popover
+  },
   props: {
     tagList: { default: () => [], type: Array as ()=>Array<string>},
   },
+  mixins:[tagOfMixins],
 
-  methods: {},
+  methods: {
+  },
 })
 </script>
 
 <style lang="scss">
-.tagListElement {
-  display: flex;
-  margin: 0.4rem;
-  padding: 0.8rem;
-  border: 1px solid #999;
-  cursor: pointer;
-}
-.tagListLink {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #666;
-  &:hover {
-    color: #666;
+.tag-list-component{
+  .ouest-france-logo{
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  .tagListElement {
+    display: flex;
+    margin: 0.4rem;
+    padding: 0.2rem;
+    border: 1px solid #999;
+    border-radius: 0.5rem;
   }
 }
 </style>

@@ -498,3 +498,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
  * 30.0.1 Nouveau sprint
  * 30.0.2 Correction css
+ * 30.0.3 Ajout tag page podcast

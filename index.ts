@@ -55,6 +55,7 @@ import {cookies} from "./src/components/mixins/functions";
 import {displayMethods} from "./src/components/mixins/functions";
 import {orgaFilter} from "./src/components/mixins/organisationFilter";
 import {initSDK} from "./src/components/mixins/init";
+import {tagOfMixins} from "./src/components/mixins/tagOfMixins";
 
 const components = {
     Lives,
@@ -97,7 +98,8 @@ const components = {
     CategoryFilter,
     orgaFilter,
     initSDK,
-    Popover
+    Popover,
+    tagOfMixins
 }
 
 export default components;
@@ -143,5 +145,6 @@ export {
     CategoryFilter,
     orgaFilter,
     initSDK,
-    Popover
+    Popover,
+    tagOfMixins
 };

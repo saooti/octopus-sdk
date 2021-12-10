@@ -146,7 +146,6 @@
       </div>
     </div>
     <TagList
-      v-if="isTagList"
       :tag-list="podcast.tags"
     />
   </div>
@@ -155,6 +154,7 @@
 <script lang="ts">
 import PodcastImage from './PodcastImage.vue';
 import ParticipantDescription from './ParticipantDescription.vue';
+import TagList from './TagList.vue';
 import { state } from '../../../store/paramStore';
 import moment from 'moment';
 // @ts-ignore
@@ -165,7 +165,6 @@ import { Conference } from '@/store/class/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareButtons = defineAsyncComponent(() => import('../sharing/ShareButtons.vue'));
-const TagList = defineAsyncComponent(() => import('./TagList.vue'));
 const ErrorMessage = defineAsyncComponent(() => import('../../misc/ErrorMessage.vue'));
 export default defineComponent({
   name: "PodcastModuleBox",
@@ -204,9 +203,6 @@ export default defineComponent({
     },
     isOuestFrance(): boolean {
       return (state.podcastPage.ouestFranceStyle as boolean);
-    },
-    isTagList(): boolean {
-      return (state.podcastPage.tagList as boolean);
     },
     isDownloadButton(): boolean {
       return (state.podcastPage.downloadButton as boolean);
