@@ -12,7 +12,6 @@
     <span class="mx-1">:</span>
     <Popover
       :target="idPopover"
-      triggers="hover"
       custom-class="participant-help"
     >
       <div class="text-center font-weight-bold">

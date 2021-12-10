@@ -13,6 +13,7 @@
       <span
         v-if="authenticated"
         id="popover-share-help"
+        role="button"
         class="saooti-help ml-2"
         :aria-label="$t('Help')"
       />

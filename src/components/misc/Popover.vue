@@ -32,7 +32,6 @@ export default defineComponent({
     placement: {type: String as PropType<Popover.Options['placement']>, default: 'right'},
     target: {type: String, required: true},
     title: {type: String, default: ''},
-    triggers: {type: String as PropType<Popover.Options['trigger']>, default: 'click'},
     show: {type: Boolean, default: false},
     disable: {type: Boolean, default: false},
   },
@@ -46,7 +45,7 @@ export default defineComponent({
     function initPopover(){
       instance.value = new Popover(`#${props.target}`, {
         container: 'body',
-        trigger: props.triggers,
+        trigger: "click hover",
         placement: props.placement,
         title: titleRef.value?.innerHTML || '',
         content: contentRef.value?.innerHTML || '',

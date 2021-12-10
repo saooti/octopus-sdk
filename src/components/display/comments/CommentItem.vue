@@ -24,7 +24,6 @@
           }}</b>
           <Popover
             :target="'popover-comment' + comment.comId"
-            triggers="hover"
             custom-class="wizard-help"
           >
             {{ $t('Comment waiting') }}
