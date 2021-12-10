@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { Participant } from '@/store/class/participant';
+import { Participant } from '@/store/class/general/participant';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'

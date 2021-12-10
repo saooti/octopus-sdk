@@ -116,7 +116,7 @@ import LiveItem from './LiveItem.vue';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
 import { state } from '../../../store/paramStore';
-import { Conference } from '@/store/class/conference';
+import { Conference } from '@/store/class/conference/conference';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveList',

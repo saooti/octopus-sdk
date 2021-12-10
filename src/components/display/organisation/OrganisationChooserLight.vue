@@ -28,7 +28,7 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 
-import { Organisation } from '@/store/class/organisation';
+import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {

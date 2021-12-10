@@ -75,9 +75,9 @@ import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
-import { Emission } from '@/store/class/emission';
-import { Category } from '@/store/class/category';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { Emission } from '@/store/class/general/emission';
+import { Category } from '@/store/class/general/category';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const EmissionChooser = defineAsyncComponent(() => import('../display/emission/EmissionChooser.vue'));

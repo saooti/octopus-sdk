@@ -1,5 +1,5 @@
-import { Organisation } from './organisation';
-import { Person } from './person';
+import { Organisation } from '../general/organisation';
+import { Person } from '../user/person';
 
 export interface Playlist {
   imageUrl?: string;

@@ -34,7 +34,7 @@ import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import { Podcast } from '@/store/class/podcast';
+import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LiveHorizontalList',

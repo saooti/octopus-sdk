@@ -77,14 +77,14 @@ import octopusApi from '@saooti/octopus-api';
 /* eslint-disable */
 let Hls:any = null;
 /* eslint-enable */
-import { CommentPodcast } from '@/store/class/comment';
+import { CommentPodcast } from '@/store/class/general/comment';
 import { cookies } from '../mixins/functions';
 import { StoreState } from '@/store/typeAppStore';
 import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerButtons from './PlayerButtons.vue';
 import PlayerClockAndTimeline from './PlayerClockAndTimeline.vue';
 import { defineComponent } from 'vue';
-import { FetchParam } from '@/store/class/fetchParam';
+import { FetchParam } from '@/store/class/general/fetchParam';
 export default defineComponent({
   name: 'Player',
 

@@ -44,8 +44,8 @@
 <script lang="ts">
 import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue';
-import { Media } from '@/store/class/media';
-import { Podcast } from '@/store/class/podcast';
+import { Media } from '@/store/class/general/media';
+import { Podcast } from '@/store/class/general/podcast';
 import { RouteLocationRaw } from 'vue-router';
 export default defineComponent({
   name: 'PlayerButtons',

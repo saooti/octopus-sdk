@@ -80,9 +80,9 @@ import octopusApi from '@saooti/octopus-api';
 import commentApi from '@/api/comments';
 import { cookies } from '../../mixins/functions';
 import { state } from '../../../store/paramStore';
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
-import { CommentPodcast } from '@/store/class/comment';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
+import { CommentPodcast } from '@/store/class/general/comment';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const AddCommentModal = defineAsyncComponent(() => import('./AddCommentModal.vue'));

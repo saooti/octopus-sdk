@@ -58,7 +58,7 @@
 <script lang="ts">
 import { state } from '../../store/paramStore';
 import DurationHelper from '../../helper/duration';
-import { CommentPodcast } from '@/store/class/comment';
+import { CommentPodcast } from '@/store/class/general/comment';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentPlayer = defineAsyncComponent(() => import('../display/comments/CommentPlayer.vue'));
 export default defineComponent({

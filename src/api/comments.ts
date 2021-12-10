@@ -1,4 +1,4 @@
-import { CommentPodcast } from "@/store/class/comment";
+import { CommentPodcast } from "@/store/class/general/comment";
 import { StoreState } from "@/store/typeAppStore";
 
 import octopusApi from '@saooti/octopus-api';

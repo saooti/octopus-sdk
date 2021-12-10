@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts">
-import { Podcast } from '@/store/class/podcast';
-import { Emission } from '@/store/class/emission';
+import { Podcast } from '@/store/class/general/podcast';
+import { Emission } from '@/store/class/general/emission';
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({

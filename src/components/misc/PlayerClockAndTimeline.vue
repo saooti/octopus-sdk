@@ -23,7 +23,7 @@
 import moment from 'moment';
 import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue';
-import { CommentPodcast } from '@/store/class/comment';
+import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({
   name: 'PlayerClockAndTimeline',
 

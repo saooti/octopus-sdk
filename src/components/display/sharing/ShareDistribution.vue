@@ -113,7 +113,7 @@
 import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
-import { Emission } from '@/store/class/emission';
+import { Emission } from '@/store/class/general/emission';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 import SnackbarVue from '../../misc/Snackbar.vue';

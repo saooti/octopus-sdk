@@ -93,7 +93,7 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
-import { Participant } from '@/store/class/participant';
+import { Participant } from '@/store/class/general/participant';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));

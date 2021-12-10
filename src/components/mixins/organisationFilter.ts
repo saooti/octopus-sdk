@@ -1,5 +1,5 @@
 
-import { Rubriquage } from "@/store/class/rubriquage";
+import { Rubriquage } from "@/store/class/rubrique/rubriquage";
 import octopusApi from '@saooti/octopus-api';
 import { defineComponent } from 'vue'
 export const orgaFilter = defineComponent({

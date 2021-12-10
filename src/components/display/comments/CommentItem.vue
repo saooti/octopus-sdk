@@ -181,9 +181,9 @@
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 import { displayMethods, selenium } from '../../mixins/functions';
-import { CommentPodcast } from '@/store/class/comment';
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
+import { CommentPodcast } from '@/store/class/general/comment';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
 import moment from 'moment';
 import Popover from '../../misc/Popover.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';

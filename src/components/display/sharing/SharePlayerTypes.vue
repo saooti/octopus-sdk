@@ -34,7 +34,7 @@
       </option>
       <option
         v-if="podcast && podcast.podcastId"
-        value="largeEmission"
+        value="emissionLarge"
       >
         {{ $t('Large emission version') }}
       </option>
@@ -49,11 +49,11 @@
 </template>
 
 <script lang="ts">
-import { Podcast } from '@/store/class/podcast';
-import { CustomPlayer } from '@/store/class/customPlayer';
+import { Podcast } from '@/store/class/general/podcast';
+import { CustomPlayer } from '@/store/class/general/customPlayer';
 import { defineComponent } from 'vue';
-import { Emission } from '@/store/class/emission';
-import { Playlist } from '@/store/class/playlist';
+import { Emission } from '@/store/class/general/emission';
+import { Playlist } from '@/store/class/general/playlist';
 export default defineComponent({
   props: {
     podcast: { default: undefined, type: Object as ()=> Podcast},

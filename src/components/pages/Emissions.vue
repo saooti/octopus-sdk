@@ -54,8 +54,8 @@ import EmissionList from '../display/emission/EmissionList.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
 
-import { Category } from '@/store/class/category';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { Category } from '@/store/class/general/category';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
 export default defineComponent({

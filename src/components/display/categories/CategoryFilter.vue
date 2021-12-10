@@ -60,10 +60,10 @@
 </template>
 
 <script lang="ts">
-import { Category } from '@/store/class/category';
-import { Rubriquage } from '@/store/class/rubriquage';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { Rubrique } from '@/store/class/rubrique';
+import { Category } from '@/store/class/general/category';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CategoryList = defineAsyncComponent(() => import('./CategoryList.vue'));
 const RubriqueList = defineAsyncComponent(() => import('./../rubriques/RubriqueList.vue'));

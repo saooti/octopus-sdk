@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import { Emission } from '@/store/class/emission';
+import { Emission } from '@/store/class/general/emission';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {

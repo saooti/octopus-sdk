@@ -131,8 +131,8 @@ import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
-import { Podcast } from '@/store/class/podcast';
-import { Participant } from '@/store/class/participant';
+import { Podcast } from '@/store/class/general/podcast';
+import { Participant } from '@/store/class/general/participant';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));

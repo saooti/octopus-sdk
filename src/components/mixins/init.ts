@@ -1,5 +1,5 @@
 
-import { Category } from "@/store/class/category";
+import { Category } from "@/store/class/general/category";
 import { orgaFilter } from '../mixins/organisationFilter';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';

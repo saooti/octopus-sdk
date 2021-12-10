@@ -96,8 +96,8 @@
 import { mapState } from 'vuex';
 import { state } from '../../../store/paramStore';
 import {StoreState} from '@/store/typeAppStore';
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastImage',

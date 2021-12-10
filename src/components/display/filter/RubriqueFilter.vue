@@ -44,8 +44,8 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { Rubriquage } from '@/store/class/rubriquage';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const RubriqueChoice = defineAsyncComponent(() => import('./RubriqueChoice.vue'));
 export default defineComponent({

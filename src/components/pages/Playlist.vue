@@ -64,7 +64,7 @@ import PodcastList from '../display/playlist/PodcastList.vue';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
-import { Playlist } from '@/store/class/playlist';
+import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));

@@ -1,7 +1,7 @@
 import { Emission } from './emission';
 import { Organisation } from './organisation';
 import { Participant } from './participant';
-import { Person } from './person';
+import { Person } from '../user/person';
 export interface Podcast {
   imageUrl?: string;
   animators?: Array<Participant>;
@@ -35,6 +35,7 @@ export interface Podcast {
   score?: number;
   size?: number;
   tags?: Array<string>;
+  ofTags? : Array<string>;
   title: string;
   weekDownloadCount?: number;
   order?: number;

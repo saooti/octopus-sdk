@@ -43,7 +43,7 @@ import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore';
 
-import { Playlist } from '@/store/class/playlist';
+import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistList',

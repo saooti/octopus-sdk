@@ -43,12 +43,12 @@
 import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
 import { cookies } from '../../mixins/functions';
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
 
 import { defineComponent } from 'vue'
 import CommentListVue from './CommentList.vue';
-import { CommentPodcast } from '@/store/class/comment';
+import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({
   name: 'CommentSection',
 

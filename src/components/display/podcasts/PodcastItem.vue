@@ -89,8 +89,8 @@ import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 
-import { Podcast } from '@/store/class/podcast';
-import { Category } from '@/store/class/category';
+import { Podcast } from '@/store/class/general/podcast';
+import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastItem',

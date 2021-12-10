@@ -35,7 +35,7 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
-import { CommentPodcast } from '@/store/class/comment';
+import { CommentPodcast } from '@/store/class/general/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentParentInfo',

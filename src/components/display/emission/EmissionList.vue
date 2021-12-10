@@ -63,10 +63,10 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore';
 
-import { Emission } from '@/store/class/emission';
-import { Rubrique } from '@/store/class/rubrique';
+import { Emission } from '@/store/class/general/emission';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { FetchParam } from '@/store/class/fetchParam';
+import { FetchParam } from '@/store/class/general/fetchParam';
 const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
 const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({

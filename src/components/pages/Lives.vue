@@ -35,9 +35,9 @@
 <script lang="ts">
 import { state } from '../../store/paramStore';
 
-import { Organisation } from '@/store/class/organisation';
+import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Conference } from '@/store/class/conference';
+import { Conference } from '@/store/class/conference/conference';
 const LiveList = defineAsyncComponent(() => import('../display/live/LiveList.vue'));
 const OrganisationChooser = defineAsyncComponent(() => import('../display/organisation/OrganisationChooser.vue'));
 export default defineComponent({

@@ -75,7 +75,7 @@ const getDefaultCategory = (defaultName: string) => {
   return { name: defaultName, id: 0 };
 };
 
-import { Category } from '@/store/class/category';
+import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {

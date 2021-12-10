@@ -1,13 +1,13 @@
-import { Category } from "./class/category"
-import { CommentPodcast } from "./class/comment"
-import { Emission } from "./class/emission"
-import { Media } from "./class/media"
-import { Organisation } from "./class/organisation"
-import { Player } from "./class/player"
-import { Podcast } from "./class/podcast"
-import { Rubriquage } from "./class/rubriquage"
-import { RubriquageFilter } from "./class/rubriquageFilter"
-import { Rubrique } from "./class/rubrique"
+import { Category } from "./class/general/category"
+import { CommentPodcast } from "./class/general/comment"
+import { Emission } from "./class/general/emission"
+import { Media } from "./class/general/media"
+import { Organisation } from "./class/general/organisation"
+import { Player } from "./class/general/player"
+import { Podcast } from "./class/general/podcast"
+import { Rubriquage } from "./class/rubrique/rubriquage"
+import { RubriquageFilter } from "./class/rubrique/rubriquageFilter"
+import { Rubrique } from "./class/rubrique/rubrique"
 export function emptyEmissionData(): Emission{
   return {
       emissionId: 0 ,

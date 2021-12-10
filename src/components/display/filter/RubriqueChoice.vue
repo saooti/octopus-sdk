@@ -46,8 +46,8 @@
 </template>
 
 <script lang="ts">
-import { Rubriquage } from '@/store/class/rubriquage';
-import { Rubrique } from '@/store/class/rubrique';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const RubriqueChooser = defineAsyncComponent(() => import('../rubriques/RubriqueChooser.vue'));
 export default defineComponent({

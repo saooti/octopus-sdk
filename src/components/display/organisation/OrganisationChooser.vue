@@ -119,7 +119,7 @@ import { selenium } from '../../mixins/functions';
 import VueMultiselect from 'vue-multiselect';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore';
-import { Organisation } from '@/store/class/organisation';
+import { Organisation } from '@/store/class/general/organisation';
 
 const ELEMENTS_COUNT = 50;
 const DEFAULT_ORGANISATION_ID = "";

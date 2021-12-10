@@ -107,9 +107,9 @@ const getDefaultEmission = (defaultName: string): Emission|undefined => {
   };
 };
 
-import { Emission } from '@/store/class/emission';
+import { Emission } from '@/store/class/general/emission';
 import { defineComponent } from 'vue'
-import { FetchParam } from '@/store/class/fetchParam';
+import { FetchParam } from '@/store/class/general/fetchParam';
 export default defineComponent({
   components: {
     VueMultiselect

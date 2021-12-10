@@ -110,8 +110,8 @@ import VSwatches from 'vue3-swatches';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
-import { Participant } from '@/store/class/participant';
-import { Podcast } from '@/store/class/podcast';
+import { Participant } from '@/store/class/general/participant';
+import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue'
 import SnackbarVue from '../../misc/Snackbar.vue';

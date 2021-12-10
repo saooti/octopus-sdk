@@ -139,9 +139,9 @@
 <script lang="ts">
 import { state } from '../../store/paramStore';
 import HomeDropdown from './HomeDropdown.vue';
-import { Organisation } from '@/store/class/organisation';
+import { Organisation } from '@/store/class/general/organisation';
 import { orgaFilter } from '../mixins/organisationFilter';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent,defineAsyncComponent } from 'vue';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({

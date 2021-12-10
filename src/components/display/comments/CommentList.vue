@@ -52,11 +52,11 @@ import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
 
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
-import { CommentPodcast } from '@/store/class/comment';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
+import { CommentPodcast } from '@/store/class/general/comment';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { FetchParam } from '@/store/class/fetchParam';
+import { FetchParam } from '@/store/class/general/fetchParam';
 /* eslint-disable */
 const CommentItem: any = defineAsyncComponent(() => import('./CommentItem.vue'));
 /* eslint-enable */

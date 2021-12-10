@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="!playlist"
     id="accordionParameters"
     class="accordion player-parameters mt-3"
   >
@@ -28,13 +27,11 @@
       >
         <div class="accordion-body">
           <div
-            v-if="
-              !podcast || isEmission || isLargeEmission || isLargeSuggestion
-            "
+            v-if="choseNumberEpisode"
             class="d-flex flex-column flex-grow"
           >
             <div
-              v-if="!podcast || isEmission || isLargeEmission"
+              v-if="displayChoiceAllEpisodes"
               class="d-flex align-items-center w-100 flex-wrap mt-1"
             >
               <input
@@ -48,10 +45,10 @@
             </div>
             <div
               class="d-flex align-items-center flex-wrap"
-              :class="!podcast || isEmission || isLargeEmission ? '' : 'mt-3'"
+              :class="displayChoiceAllEpisodes ? '' : 'mt-3'"
             >
               <input
-                v-if="!podcast || isEmission || isLargeEmission"
+                v-if="displayChoiceAllEpisodes"
                 v-model="episodeNumbers"
                 class="form-check-input"
                 type="radio"
@@ -120,28 +117,6 @@
               }}</label>
             </div>
           </div>
-          <!-- <div class="d-flex align-items-center flex-wrap" v-if="podcast && iFrameModel !== 'emission'">
-              <div>  
-                <input type="checkbox" class="form-check-input" id="startTime" v-model="startTime">  
-                <label class="form-check-label me-2" for="startTime">{{$t('Start at')}}</label>  
-              </div>
-                <input 
-                ref="minutesRef"
-                type="number"
-                :value="minutes" 
-                min="0"
-                class="input-share-player input-no-outline" 
-                @change="onDurationChange"/>
-                <div class="me-1 ms-1">:</div>
-              <input 
-                ref="secondesRef"
-                type="number"
-                :value="secondes" 
-                min="0"
-                max="59"
-                class="input-share-player input-no-outline" 
-                @change="onDurationChange"/>
-            </div> -->
         </div>
       </div>
     </div>
@@ -149,26 +124,20 @@
 </template>
 
 <script lang="ts">
-import { Playlist } from '@/store/class/playlist';
-import { Podcast } from '@/store/class/podcast';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
-    podcast: { default: undefined, type: Object as ()=> Podcast},
-    playlist: { default: undefined, type: Object as ()=> Playlist},
-    iFrameModel: { default: undefined, type: String},
     isVisible: { default: false, type: Boolean},
+    choseNumberEpisode: {default: false, type: Boolean},
+    displayChoiceAllEpisodes: {default: false, type: Boolean}
   },
-  emits: ['startTime', 'episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle'],
+  emits: ['episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle'],
 
   data() {
     return {
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumberPriv: '3' as string,
-      minutes: 0 as number,
-      secondes: 0 as number,
-      startTime: true as boolean,
       isVisibleTemp: this.isVisible as boolean,
       displayArticle: true as boolean,
     };
@@ -184,15 +153,6 @@ export default defineComponent({
           this.iFrameNumberPriv = value;
         }
       },
-    },
-    isEmission(): boolean {
-      return 'emission' === this.iFrameModel;
-    },
-    isLargeEmission(): boolean {
-      return 'largeEmission' === this.iFrameModel;
-    },
-    isLargeSuggestion(): boolean {
-      return 'largeSuggestion' === this.iFrameModel;
     },
   },
   watch: {
@@ -214,17 +174,6 @@ export default defineComponent({
     displayArticle(): void{
       this.$emit('displayArticle', this.displayArticle);
     }
-  },
-  methods: {
-    /* onDurationChange(): void {
-      if (this.startTime) {
-        const minutes = parseInt((this.$refs.minutesRef as any).value, 10);
-        const secondes = parseInt((this.$refs.secondesRef as any).value, 10);
-        this.$emit('startTime', minutes * 60 + secondes);
-      } else {
-        this.$emit('startTime', 0);
-      }
-    }, */
   },
 })
 </script>

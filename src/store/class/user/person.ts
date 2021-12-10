@@ -1,4 +1,4 @@
-import { Organisation } from './organisation';
+import { Organisation } from '../general/organisation';
 
 export interface Person {
   attributes?: {[key:string]:  string|number|boolean|undefined|Array<string>};

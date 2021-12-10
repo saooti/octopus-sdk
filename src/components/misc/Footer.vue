@@ -140,8 +140,8 @@ import Player from './Player.vue';
 import { state } from '../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
-import { Category } from '@/store/class/category';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { Category } from '@/store/class/general/category';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Footer',

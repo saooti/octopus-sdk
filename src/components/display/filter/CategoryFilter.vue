@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import CategoryChooser from '../categories/CategoryChooser.vue';
-import { Category } from '@/store/class/category';
+import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {

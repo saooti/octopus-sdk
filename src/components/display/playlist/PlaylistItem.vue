@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { Playlist } from '@/store/class/playlist';
+import { Playlist } from '@/store/class/general/playlist';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'

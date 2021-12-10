@@ -54,9 +54,9 @@
 </template>
 
 <script lang="ts">
-import { Rubrique } from '@/store/class/rubrique';
-import { Rubriquage } from '@/store/class/rubriquage';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'RubriqueList',

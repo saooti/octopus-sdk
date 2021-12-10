@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import Popover from '../../misc/Popover.vue';
-import { Participant } from '@/store/class/participant';
+import { Participant } from '@/store/class/general/participant';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ParticipantDescription',

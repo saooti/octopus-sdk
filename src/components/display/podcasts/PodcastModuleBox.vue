@@ -160,8 +160,8 @@ import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareButtons = defineAsyncComponent(() => import('../sharing/ShareButtons.vue'));

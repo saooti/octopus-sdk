@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { Emission } from '@/store/class/emission';
+import { Emission } from '@/store/class/general/emission';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import { displayMethods } from '../../mixins/functions';

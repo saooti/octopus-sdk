@@ -88,8 +88,8 @@ import PodcastItem from './PodcastItem.vue';
 
 const PHONE_WIDTH = 960;
 
-import { Podcast } from '@/store/class/podcast';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { Podcast } from '@/store/class/general/podcast';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 import { RouteLocationRaw } from 'vue-router';
 export default defineComponent({

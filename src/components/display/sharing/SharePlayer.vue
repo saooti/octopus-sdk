@@ -60,16 +60,14 @@
         </div>
         <PlayerParameters
           v-if="isPlayerParameter"
-          :podcast="podcast"
-          :playlist="playlist"
-          :i-frame-model="iFrameModel"
           :is-visible="isVisible"
+          :chose-number-episode="displayChoiceAllEpisodes|| isLargeSuggestion"
+          :display-choice-all-episodes="displayChoiceAllEpisodes"
           @displayArticle="updateDisplayArticle"
           @episodeNumbers="updateEpisodeNumber"
           @proceedReading="updateProceedReading"
           @isVisible="updateIsVisible"
           @iFrameNumber="updateIframeNumber"
-          @startTime="updateStartTime"
         />
       </template>
       <div v-else-if="exclusive && authenticated">
@@ -92,10 +90,10 @@
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
-import { Podcast } from '@/store/class/podcast';
-import { Emission } from '@/store/class/emission';
-import { Playlist } from '@/store/class/playlist';
-import { CustomPlayer } from '@/store/class/customPlayer';
+import { Podcast } from '@/store/class/general/podcast';
+import { Emission } from '@/store/class/general/emission';
+import { Playlist } from '@/store/class/general/playlist';
+import { CustomPlayer } from '@/store/class/general/customPlayer';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
 const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
@@ -128,7 +126,6 @@ export default defineComponent({
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumber: '3' as string,
-      startTime: 0 as number,
       isVisible: false as boolean,
       displayArticle: true as boolean,
       customPlayers: [] as Array<CustomPlayer>,
@@ -137,6 +134,9 @@ export default defineComponent({
   },
   
   computed: {
+    displayChoiceAllEpisodes():boolean{
+      return !this.podcast || this.isEmission || this.isLargeEmission;
+    },
     miniplayerBaseUrl(): string{
       return (state.podcastPage.MiniplayerUri as string); 
     },
@@ -144,7 +144,7 @@ export default defineComponent({
       return 'emission' === this.iFrameModel;
     },
     isLargeEmission(): boolean {
-      return 'largeEmission' === this.iFrameModel;
+      return 'emissionLarge' === this.iFrameModel;
     },
     isLargeSuggestion(): boolean {
       return 'largeSuggestion' === this.iFrameModel;
@@ -181,10 +181,7 @@ export default defineComponent({
     iFrameSrc(): string {
       const url = [''];
       let iFrameNumber = '/' + this.iFrameNumber;
-      if (
-        (!this.podcast || this.isEmission || this.isLargeEmission) &&
-        'all' === this.episodeNumbers
-      ) {
+      if (this.displayChoiceAllEpisodes && 'all' === this.episodeNumbers) {
         iFrameNumber = '/0';
       }
       if (!this.podcast && !this.playlist && this.emission) {
@@ -245,7 +242,6 @@ export default defineComponent({
       if(!this.displayArticle){
         url.push('&article=false');
       }
-      url.push('&time=' + this.startTime);
       if (this.isVisible) {
         url.push('&key=' + window.btoa(this.dataTitle.toString()));
       }
@@ -259,38 +255,38 @@ export default defineComponent({
         case 'large':
           if (this.podcast) return '180px';
           if ('number' === this.episodeNumbers) {
-            switch (this.iFrameNumber) {
+            switch (this.iFrameNumber.toString()) {
               case '1':
-                return '185px';
+                return '270px';
               case '2':
-                return '240px';
+                return '320px';
               case '3':
-                return '290px';
+                return '360px';
               case '4':
-                return '345px';
+                return '420px';
               case '5':
-                return '390px';
+                return '420px';
               default:
-                return '435px';
+                return '420px';
             }
           }
           return '435px';
-        case 'largeEmission':
+        case 'emissionLarge':
         case 'largeSuggestion':
           if ('number' !== this.episodeNumbers) return '510px';
-          switch (this.iFrameNumber) {
+          switch (this.iFrameNumber.toString()) {
             case '1':
-              return '260px';
-            case '2':
               return '315px';
-            case '3':
+            case '2':
               return '365px';
-            case '4':
+            case '3':
               return '420px';
+            case '4':
+              return '470px';
             case '5':
-              return '465px';
+              return '470px';
             default:
-              return '510px';
+              return '470px';
           }
         case 'emission':
           return '530px';
@@ -316,7 +312,7 @@ export default defineComponent({
       return 0;
     },
     isPlayerParameter(): boolean{
-      return !this.podcast || (this.podcast.article && 0 !== this.podcast.article.length) || this.isEmission || this.isLargeEmission || this.isLargeSuggestion;
+      return (!this.podcast || (this.podcast.article && 0 !== this.podcast.article.length) || this.isEmission || this.isLargeEmission || this.isLargeSuggestion) && !this.playlist;
     }
   },
   async created() {
@@ -364,9 +360,6 @@ export default defineComponent({
     },
     updateIframeNumber(value: string): void {
       this.iFrameNumber = value;
-    },
-    updateStartTime(value: number): void {
-      this.startTime = value;
     },
     updateIsVisible(value: boolean): void {
       this.isVisible = value;

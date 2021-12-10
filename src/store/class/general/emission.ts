@@ -1,6 +1,6 @@
-import { AdserverConfig } from './adserverConfig';
+import { AdserverConfig } from '../adserver/adserverConfig';
 import { Organisation } from './organisation';
-import { Person } from './person';
+import { Person } from '../user/person';
 
 export interface Emission {
   imageUrl?: string;

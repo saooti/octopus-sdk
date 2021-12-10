@@ -74,8 +74,8 @@ import { state } from '../../../store/paramStore';
 
 const PHONE_WIDTH = 960;
 
-import { Emission } from '@/store/class/emission';
-import { Rubrique } from '@/store/class/rubrique';
+import { Emission } from '@/store/class/general/emission';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionInlineList',

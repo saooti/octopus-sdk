@@ -51,9 +51,9 @@
 <script lang="ts">
 
 import PodcastList from './PodcastList.vue';
-import { Category } from '@/store/class/category';
+import { Category } from '@/store/class/general/category';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Podcast } from '@/store/class/podcast';
+import { Podcast } from '@/store/class/general/podcast';
 const CategoryChooser = defineAsyncComponent(() => import('../categories/CategoryChooser.vue'));
 export default defineComponent({
   components: {

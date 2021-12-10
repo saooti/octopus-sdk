@@ -14,7 +14,7 @@
 import PodcastList from '../display/podcasts/PodcastList.vue';
 
 import { defineComponent } from 'vue'
-import { Category } from '@/store/class/category';
+import { Category } from '@/store/class/general/category';
 export default defineComponent({
   components: {
     PodcastList,

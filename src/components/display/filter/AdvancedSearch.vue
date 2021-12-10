@@ -204,7 +204,7 @@ import { state } from '../../../store/paramStore';
 import moment from 'moment';
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { DatePicker } from 'v-calendar';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const MonetizableFilter = defineAsyncComponent(() => import('./MonetizableFilter.vue'));

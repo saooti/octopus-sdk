@@ -1,5 +1,5 @@
 import octopusApi from '@saooti/octopus-api';
-import { Category } from './class/category';
+import { Category } from './class/general/category';
 
 const state:paramStore = {
   generalParameters: {

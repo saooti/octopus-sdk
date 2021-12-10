@@ -122,8 +122,8 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { Emission } from '@/store/class/emission';
-import { Podcast } from '@/store/class/podcast';
+import { Emission } from '@/store/class/general/emission';
+import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'

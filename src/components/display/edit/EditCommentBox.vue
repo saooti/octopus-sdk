@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { CommentPodcast } from '@/store/class/comment';
+import { CommentPodcast } from '@/store/class/general/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
   props: {

@@ -39,11 +39,11 @@
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../store/paramStore';
 
-import { RubriquageFilter } from '@/store/class/rubriquageFilter';
-import { Rubriquage } from '@/store/class/rubriquage';
-import { Rubrique } from '@/store/class/rubrique';
+import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
-import { Category } from '@/store/class/category';
+import { Category } from '@/store/class/general/category';
 export default defineComponent({
   name: 'Home',
 

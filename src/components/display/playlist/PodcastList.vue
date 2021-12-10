@@ -79,8 +79,8 @@ import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 
-import { Podcast } from '@/store/class/podcast';
-import { Playlist } from '@/store/class/playlist';
+import { Podcast } from '@/store/class/general/podcast';
+import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastList',

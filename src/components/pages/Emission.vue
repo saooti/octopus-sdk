@@ -112,7 +112,7 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
-import { Emission } from '@/store/class/emission';
+import { Emission } from '@/store/class/general/emission';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));

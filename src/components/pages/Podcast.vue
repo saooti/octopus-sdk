@@ -111,13 +111,13 @@ import octopusApi from '@saooti/octopus-api';
 import studioApi from '@/api/studio';
 import { state } from '../../store/paramStore';
 import moment from 'moment';
-import { Podcast } from '@/store/class/podcast';
-import { Conference } from '@/store/class/conference';
+import { Podcast } from '@/store/class/general/podcast';
+import { Conference } from '@/store/class/conference/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 import CommentSectionVue from '../display/comments/CommentSection.vue';
-import { CommentPodcast } from '@/store/class/comment';
-import { Category } from '@/store/class/category';
+import { CommentPodcast } from '@/store/class/general/comment';
+import { Category } from '@/store/class/general/category';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));

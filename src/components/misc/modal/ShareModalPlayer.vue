@@ -97,7 +97,7 @@ import { displayMethods } from '../../mixins/functions';
 
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
-import { Podcast } from '@/store/class/podcast';
+import { Podcast } from '@/store/class/general/podcast';
 import SnackbarVue from '../Snackbar.vue';
 export default defineComponent({
   name: 'ShareModalPlayer',

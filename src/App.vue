@@ -24,12 +24,12 @@ import LeftMenu from '@/components/misc/LeftMenu.vue';
 import Footer from '@/components/misc/Footer.vue';
 import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
 import { state } from './store/paramStore';
-import { Rubriquage } from './store/class/rubriquage';
-import { RubriquageFilter } from './store/class/rubriquageFilter';
-import { Rubrique } from './store/class/rubrique';
+import { Rubriquage } from './store/class/rubrique/rubriquage';
+import { RubriquageFilter } from './store/class/rubrique/rubriquageFilter';
+import { Rubrique } from './store/class/rubrique/rubrique';
 import { initSDK } from './components/mixins/init';
 import { defineComponent } from 'vue'
-import { Category } from './store/class/category';
+import { Category } from './store/class/general/category';
 export default defineComponent({
   name: 'App',
   
