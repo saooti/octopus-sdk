@@ -496,9 +496,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.27 Petit cursor:pointer des familles
  * 29.0.28 Petite couleur des familles
  * 29.0.29 Amélioration Popover
+ * 29.0.30 Amélioration Popover
 
  * 30.0.1 Nouveau sprint
  * 30.0.2 Correction css
  * 30.0.3 Ajout tag page podcast
  * 30.0.4 Remplacer la version "classique" des miniplayers par la version beta
  * 30.0.5 Tri des classes dans des sous dossiers
+ * 30.0.6 Merge 29

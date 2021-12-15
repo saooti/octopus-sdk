@@ -45,7 +45,7 @@ export default defineComponent({
     function initPopover(){
       instance.value = new Popover(`#${props.target}`, {
         container: 'body',
-        trigger: "click hover",
+        trigger: "hover focus",
         placement: props.placement,
         title: titleRef.value?.innerHTML || '',
         content: contentRef.value?.innerHTML || '',
@@ -105,3 +105,9 @@ export default defineComponent({
 
 })
 </script>
+<style lang="scss">
+.popover{
+  max-height: 80vh;
+  overflow: auto;
+}
+</style>

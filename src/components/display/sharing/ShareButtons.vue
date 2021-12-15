@@ -14,13 +14,13 @@
         v-if="authenticated"
         id="popover-share-help"
         role="button"
+        tabindex="-1"
         class="saooti-help ml-2"
         :aria-label="$t('Help')"
       />
       <Popover
         v-if="authenticated"
         target="popover-share-help"
-        triggers="hover"
         placement="right"
       >
         {{ $t('Share this page without edit and share blocks') }}

@@ -18,6 +18,7 @@
         <template v-else>
           <b
             :id="'popover-comment' + comment.comId"
+            tabindex="-1"
             class="mr-2 text-danger"
           >{{
             comment.name

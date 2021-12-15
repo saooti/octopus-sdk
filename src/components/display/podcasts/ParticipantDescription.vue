@@ -6,6 +6,7 @@
     {{ title }}
     <span
       :id="idPopover"
+      tabindex="-1"
       class="saooti-help m-0"
       :aria-label="$t('Help')"
     />
