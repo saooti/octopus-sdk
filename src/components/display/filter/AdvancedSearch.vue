@@ -436,10 +436,6 @@ export default defineComponent({
       }
     }
     padding: 1rem;
-    .basic-select {
-      width: 100%;
-      margin: 0 !important;
-    }
 
     label.wrap {
       width: 100%;
