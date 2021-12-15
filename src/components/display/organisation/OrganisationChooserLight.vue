@@ -7,7 +7,7 @@
     <select
       :id="'organisation_chooser_light' + page"
       v-model="actual"
-      class="basic-select mb-0 c-hand"
+      class="mb-0 c-hand border-0"
       @change="onOrganisationSelected"
     >
       <option :value="organisation.id">

@@ -6,7 +6,7 @@
     >
       <select
         v-model="rubriquage"
-        class="basic-select border c-hand mb-0"
+        class="c-hand mb-0"
         @change="onRubriquageSelected"
       >
         <option
