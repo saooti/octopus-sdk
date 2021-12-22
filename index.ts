@@ -49,6 +49,11 @@ import RubriqueChooser from "./src/components/display/rubriques/RubriqueChooser.
 import CommentList from "./src/components/display/comments/CommentList.vue";
 import CommentInput from "./src/components/display/comments/CommentInput.vue";
 
+//form
+import ClassicSearch from "./src/components/form/ClassicSearch.vue";
+import ClassicCheckbox from "./src/components/form/ClassicCheckbox.vue";
+import ClassicRadio from "./src/components/form/ClassicRadio.vue";
+
 //mixins
 import {selenium} from "./src/components/mixins/functions";
 import {cookies} from "./src/components/mixins/functions";
@@ -99,7 +104,10 @@ const components = {
     orgaFilter,
     initSDK,
     Popover,
-    tagOfMixins
+    tagOfMixins,
+    ClassicSearch,
+    ClassicCheckbox,
+    ClassicRadio
 }
 
 export default components;
@@ -146,5 +154,8 @@ export {
     orgaFilter,
     initSDK,
     Popover,
-    tagOfMixins
+    tagOfMixins,
+    ClassicSearch,
+    ClassicCheckbox,
+    ClassicRadio
 };

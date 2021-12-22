@@ -505,3 +505,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.5 Tri des classes dans des sous dossiers
  * 30.0.6 Merge 29
  * 30.0.7 Améliorations css
+ * 30.0.8 Améliorations diverses

@@ -1,10 +1,12 @@
 <template>
   <div class="page-box">
-    <h1 v-if="undefined === titlePage">
-      {{ $t('All emissions') }}
-    </h1>
-    <h1 v-else>
-      {{ titlePage }}
+    <h1>
+      <template v-if="undefined === titlePage">
+        {{ $t('All emissions') }}
+      </template>
+      <template v-else>
+        {{ titlePage }}
+      </template>
     </h1>
     <ProductorSearch
       v-if="isProductorSearch"
@@ -53,7 +55,6 @@
 import EmissionList from '../display/emission/EmissionList.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../store/paramStore';
-
 import { Category } from '@/store/class/general/category';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -65,8 +66,6 @@ export default defineComponent({
     AdvancedSearch,
   },
   props: {
-    firstRoute: { default: 0, type: Number},
-    sizeRoute: { default: 12, type: Number},
     productor: { default: undefined, type: String},
     isEducation: { default: false, type: Boolean},
   },
@@ -110,12 +109,6 @@ export default defineComponent({
   },
 
   created() {
-    if (this.firstRoute) {
-      this.first = this.firstRoute;
-    }
-    if (this.sizeRoute) {
-      this.size = this.sizeRoute;
-    }
     if(this.categoryFilter){
       this.iabId = this.categoryFilter.id;
     }
@@ -183,5 +176,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

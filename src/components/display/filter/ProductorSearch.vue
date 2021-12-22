@@ -10,22 +10,13 @@
         :all="true"
         @selected="onOrganisationSelected"
       />
-      <div
+      <ClassicCheckbox
         v-if="!!organisationId"
+        v-model:textInit="keepOrganisation"
         class="m-3"
-      >
-        <input
-          id="orgaCheck"
-          v-model="keepOrganisation"
-          type="checkbox"
-          class="form-check-input"
-          @click="onKeepOrganisation"
-        >
-        <label
-          class="form-check-label"
-          for="orgaCheck"
-        />
-      </div>
+        id-checkbox="organisation-checkbox"
+        @clickAction="onKeepOrganisation"
+      />
       <div
         v-if="showBubble"
         class="filter-speech-bubble"
@@ -37,36 +28,29 @@
         }}
       </div>
     </div>
-    <div class="d-flex align-items-center flex-grow">
-      <label
-        for="search"
-        class="d-inline"
-        :aria-label="$t('Search')"
-      />
-      <input
-        id="search"
-        ref="search"
-        class="filter-search-input input-no-outline"
-        :placeholder="searchText"
-        :value="searchPattern"
-        :readonly="notInitFocus"
-        @input="
-          event => $emit('updateSearchPattern', event.target.value)
-        "
-      >
-    </div>
+    <ClassicSearch
+      v-model:textInit="queryIntern"
+      class="d-flex align-items-center flex-grow-1"
+      :autofocus="true"
+      id-checkbox="productor-search-input"
+      :label="searchText"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import ClassicSearch from '../../form/ClassicSearch.vue';
 import { state } from '../../../store/paramStore';
 import { orgaFilter } from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const OrganisationChooser = defineAsyncComponent(() => import('../organisation/OrganisationChooser.vue'));
+const ClassicCheckbox = defineAsyncComponent(() => import('../../form/ClassicCheckbox.vue'));
 export default defineComponent({
   components: {
     OrganisationChooser,
+    ClassicSearch,
+    ClassicCheckbox
   },
   mixins:[orgaFilter],
 
@@ -82,7 +66,7 @@ export default defineComponent({
       keepOrganisation: false as boolean,
       showBubble: false as boolean,
       imgUrl: '' as string,
-      notInitFocus: true as boolean
+      queryIntern: '' as string,
     };
   },
  
@@ -102,6 +86,9 @@ export default defineComponent({
     },
   },
   watch: {
+    queryIntern(): void {
+      this.$emit('updateSearchPattern', this.queryIntern);
+    },
     filterOrga(): void {
       if (this.filterOrga) {
         this.keepOrganisation = true;
@@ -115,12 +102,6 @@ export default defineComponent({
     if (!this.organisationId) return;
     if(this.$store.state.filter.organisationId === this.organisationId){
       this.keepOrganisation = true;
-    }
-  },
-  mounted() {
-    if (this.$refs.search) {
-      (this.$refs.search as HTMLElement).focus();
-      this.notInitFocus = false;
     }
   },
   methods: {

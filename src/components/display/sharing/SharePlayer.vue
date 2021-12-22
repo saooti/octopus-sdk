@@ -40,23 +40,12 @@
             v-model:color="color"
             v-model:theme="theme"
           />
-          <div
+          <ClassicCheckbox
             v-if="isPodcastNotVisible || playlist"
-            class="d-flex align-items-center flex-wrap"
-          >
-            <div>
-              <input
-                id="isVisibleCheckbox"
-                v-model="isVisible"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label me-2"
-                for="isVisibleCheckbox"
-              >{{ titleStillAvailable }}</label>
-            </div>
-          </div>
+            v-model:textInit="isVisible"
+            id-checkbox="is-visible-checkbox"
+            :label="titleStillAvailable"
+          />
         </div>
         <PlayerParameters
           v-if="isPlayerParameter"
@@ -99,12 +88,14 @@ const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/Sha
 const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
 const SharePlayerTypes = defineAsyncComponent(() => import('./SharePlayerTypes.vue'));
 const SharePlayerColors = defineAsyncComponent(() => import('./SharePlayerColors.vue'));
+const ClassicCheckbox = defineAsyncComponent(() => import('../../form/ClassicCheckbox.vue'));
 export default defineComponent({
   components: {
     ShareModalPlayer,
     SharePlayerColors,
     PlayerParameters,
-    SharePlayerTypes
+    SharePlayerTypes,
+    ClassicCheckbox
   },
 
   props: {

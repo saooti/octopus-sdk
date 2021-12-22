@@ -1,136 +1,120 @@
 <template>
   <div
-    v-if="init"
-    class="top-bar-container position-sticky"
+    class="top-bar-container"
     :class="{ 'shadow-element': scrolled }"
   >
-    <div class="top-bar">
-      <div
-        class="hamburger-menu"
-        :aria-label="$t('open left Menu')"
-        @click="onDisplayMenu(false)"
+    <div
+      class="saooti-burger-menu"
+      :aria-label="$t('open left Menu')"
+      @click="onDisplayMenu(false)"
+    />
+    <router-link
+      class="top-bar-logo"
+      :to="{
+        name: 'home',
+        query: { productor: $store.state.filter.organisationId,
+                 iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                 rubriquesId: rubriqueQueryParam},
+      }"
+      @click="onDisplayMenu(true)"
+    >
+      <img
+        :src="!filterOrga || '' === imgUrl ? logoUrl : imgUrl"
+        :alt="$t('Logo of main page')"
+        :class="isEducation ? 'educationLogo' : ''"
       >
-        <div class="saooti-burger-menu h3" />
-      </div>
+    </router-link>
+    <OrganisationChooserLight
+      v-if="!isPodcastmaker"
+      page="topBar"
+      width="auto"
+      :defaultanswer="$t('No organisation filter')"
+      :value="organisationId"
+      :light="true"
+      class="me-2"
+      :reset="reset"
+      @selected="onOrganisationSelected"
+    />
+    <div class="d-flex justify-content-center flex-grow-1">
+      <router-link
+        v-if="
+          isLiveTab &&
+            ((filterOrga && filterOrgaLive) || !filterOrga)
+        "
+        :to="{
+          name: 'lives',
+          query: { productor: $store.state.filter.organisationId },
+        }"
+        class="link-hover p-3 fw-bold"
+      >
+        {{ $t('Live') }}
+      </router-link>
       <router-link
         :to="{
-          name: 'home',
+          name: 'podcasts',
           query: { productor: $store.state.filter.organisationId,
                    iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
                    rubriquesId: rubriqueQueryParam},
         }"
+        class="link-hover p-3 fw-bold"
       >
-        <div
-          class="top-bar-logo m-3"
-          @click="onDisplayMenu(true)"
-        >
-          <img
-            v-if="!filterOrga || '' === imgUrl"
-            :src="logoUrl"
-            :alt="$t('Logo of main page')"
-            :class="isEducation ? 'educationLogo' : ''"
-          >
-          <img
-            v-else
-            :src="imgUrl"
-            :alt="$t('Logo of main page')"
-          >
-        </div>
+        {{ $t('Podcasts') }}
       </router-link>
-      <OrganisationChooserLight
-        v-if="!isPodcastmaker"
-        width="auto"
-        page="topBar"
-        :defaultanswer="$t('No organisation filter')"
-        :value="organisationId"
-        :light="true"
-        class="me-2 hide-top-bar"
-        :reset="reset"
-        @selected="onOrganisationSelected"
-      />
-      <div class="d-flex align-items-center justify-content-center flex-grow">
+      <router-link
+        :to="{
+          name: 'emissions',
+          query: { productor: $store.state.filter.organisationId,
+                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                   rubriquesId: rubriqueQueryParam },
+        }"
+        class="link-hover p-3 fw-bold"
+      >
+        {{ $t('Emissions') }}
+      </router-link>
+      <router-link
+        :to="{
+          name: 'participants',
+          query: { productor: $store.state.filter.organisationId },
+        }"
+        class="link-hover p-3 fw-bold"
+      >
+        {{ $t('Speakers') }}
+      </router-link>
+      <router-link
+        :to="{
+          name: 'playlists',
+          query: { productor: $store.state.filter.organisationId },
+        }"
+        class="link-hover p-3 fw-bold"
+      >
+        {{ $t('Playlists') }}
+      </router-link>
+      <router-link
+        v-if="!isPodcastmaker && (!filterOrga || isEducation)"
+        :to="{
+          name: 'productors',
+          query: { productor: $store.state.filter.organisationId },
+        }"
+        class="link-hover p-3 fw-bold"
+      >
+        {{ $t('Productors') }}
+      </router-link>
+    </div>
+    <div class="d-flex flex-column">
+      <div class="hosted-by">
+        <span>{{ $t('Hosted by') }}</span><span class="ms-1 me-1 primary-color">Saooti</span>
+      </div>
+      <div class="d-flex justify-content-end flex-no-wrap">
+        <HomeDropdown :is-education="isEducation" />
         <router-link
-          v-if="
-            isLiveTab &&
-              ((filterOrga && filterOrgaLive) || !filterOrga)
-          "
-          :to="{
-            name: 'lives',
-            query: { productor: $store.state.filter.organisationId },
-          }"
-          class="linkHover p-3 text-dark fw-bold"
-        >
-          {{ $t('Live') }}
-        </router-link>
-        <router-link
+          :aria-label="$t('Search')"
           :to="{
             name: 'podcasts',
-            query: { productor: $store.state.filter.organisationId,
-                     iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                     rubriquesId: rubriqueQueryParam},
-          }"
-          class="linkHover p-3 text-dark fw-bold"
-        >
-          {{ $t('Podcasts') }}
-        </router-link>
-        <router-link
-          :to="{
-            name: 'emissions',
-            query: { productor: $store.state.filter.organisationId,
-                     iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                     rubriquesId: rubriqueQueryParam },
-          }"
-          class="linkHover p-3 text-dark fw-bold"
-        >
-          {{ $t('Emissions') }}
-        </router-link>
-        <router-link
-          :to="{
-            name: 'participants',
             query: { productor: $store.state.filter.organisationId },
           }"
-          class="linkHover p-3 text-dark fw-bold"
         >
-          {{ $t('Speakers') }}
+          <div class="btn admin-button m-1 saooti-search" />
         </router-link>
-        <router-link
-          :to="{
-            name: 'playlists',
-            query: { productor: $store.state.filter.organisationId },
-          }"
-          class="linkHover p-3 text-dark fw-bold"
-        >
-          {{ $t('Playlists') }}
-        </router-link>
-        <router-link
-          v-if="!isPodcastmaker && (!filterOrga || isEducation)"
-          :to="{
-            name: 'productors',
-            query: { productor: $store.state.filter.organisationId },
-          }"
-          class="linkHover p-3 text-dark fw-bold"
-        >
-          {{ $t('Productors') }}
-        </router-link>
-      </div>
-      <div class="d-flex flex-column">
-        <div class="d-flex justify-content-end hostedBy hide-phone">
-          <span>{{ $t('Hosted by') }}</span><span class="ms-1 me-1 primary-color">Saooti</span>
-        </div>
-        <div class="d-flex align-items-center justify-content-end flex-no-wrap">
-          <HomeDropdown :is-education="isEducation" />
-          <router-link
-            :aria-label="$t('Search')"
-            :to="{
-              name: 'podcasts',
-              query: { productor: $store.state.filter.organisationId },
-            }"
-          >
-            <div class="btn admin-button m-1">
-              <i class="saooti-search text-dark" />
-            </div>
-          </router-link>
-        </div>
       </div>
     </div>
   </div>
@@ -166,11 +150,9 @@ export default defineComponent({
       minScroll: 0 as number,
       organisationId: undefined as string | undefined,
       reset: false as boolean,
-      init: false as boolean,
       dummyParam: new Date().getTime().toString() as string,
     };
   },
-
  
   computed: {
     rubriqueQueryParam(): string|undefined{
@@ -218,7 +200,6 @@ export default defineComponent({
     if (this.filterOrga) {
       this.organisationId = this.filterOrga;
     }
-    this.init = true;
     window.addEventListener('scroll', this.handleScroll);
   },
 
@@ -278,139 +259,76 @@ export default defineComponent({
 
 <style lang="scss">
 .top-bar-container {
+  position: sticky;
   top: 0;
   background: #fff;
   width: 100%;
+  height: 5rem;
   z-index: 10;
-  padding: 0 2em;
-
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: height 1s;
   @media (max-width: 450px) {
     padding: 0 0.5rem;
   }
 
-  .top-bar {
-    transition: height 1s;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    height: 5rem;
-    position: relative;
-
-    .top-bar-logo {
-      margin: 1rem 2rem 1rem 1rem !important;
-      img {
-        max-width: 160px !important;
-        max-height: 80px;
-        height: 80px;
-        border-radius: 0.8rem;
-        &.educationLogo {
-          height: auto;
-          border-radius: 0;
-        }
-      }
-    }
-    .multiselect__tags {
-      padding: 6px 40px 0 10px;
-    }
-
-    .hamburger-menu {
-      display: none;
-      margin: 0 1rem;
-      @media (max-width: 600px) {
-        margin: 0;
-      }
-      .saooti-burger-menu {
-        font-size: 2.2em;
-        font-weight: bold;
-        margin-bottom: 0;
-      }
-      cursor: pointer;
-    }
+  .saooti-burger-menu {
+    display: none;
+    cursor: pointer;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0.5rem;
   }
 
-  &.shadow-element {
-    .linkHover {
-      display: none;
-    }
-    .top-bar {
-      height: 3.5rem;
-
-      .hamburger-menu {
-        display: block;
-        .saooti-burger-menu {
-          font-size: 2.2em;
-          font-weight: bold;
-          margin: 0;
-        }
-      }
-      .top-bar-logo {
-        flex-grow: 1;
-        text-align: center;
-        align-items: center;
-        display: flex;
-        img {
-          height: 2.5rem;
-          width: auto;
-        }
-      }
-      .hostedBy {
-        display: none !important;
+  .top-bar-logo {
+    margin: 1rem 2rem 1rem 1rem;
+    img {
+      max-width: 160px !important;
+      max-height: 2.5rem;
+      height: 2.5rem;
+      &.educationLogo {
+        height: auto;
       }
     }
   }
-  .hostedBy {
+  .hosted-by {
     font-size: 0.6rem;
     position: absolute;
     top: 5px;
     right: 0;
   }
-
+  .multiselect__tags {
+    padding: 6px 40px 0 10px;
+  }
+  &.shadow-element {
+    height: 3.5rem;
+    .link-hover,.hosted-by {
+      display: none;
+    }
+    .saooti-burger-menu {
+      display: block;
+    }
+  }
   /** PHONES*/
   @media (max-width: 1200px) {
-    .hide-top-bar {
-      display: none !important;
+    height: 3.5rem;
+    .default-multiselect-width, .hosted-by, .link-hover {
+      display: none;
     }
-    .hostedBy {
-      display: none !important;
-    }
-    .top-bar {
-      padding: 0;
-      height: 3.5rem;
-      .linkHover {
-        display: none;
-      }
-      .hamburger-menu {
-        flex-grow: 1;
-        display: block;
-      }
-      .top-bar-logo {
-        flex-grow: 1;
-        text-align: center;
-        display: flex;
-        width: 100px;
-        img {
-          max-width: 100px !important;
-        }
-      }
+    .saooti-burger-menu {
+      display: block;
     }
   }
   @media (max-width: 650px) {
-    .top-bar {
-      .top-bar-logo {
-        img {
-          height: 2rem;
-        }
-      }
+    .top-bar-logo img{
+      height: 2rem;
     }
   }
   @media (max-width: 290px) {
-    .top-bar {
-      .top-bar-logo {
-        img {
-          display: none;
-        }
-      }
+    .top-bar-logo img{
+      display: none;
     }
   }
 }

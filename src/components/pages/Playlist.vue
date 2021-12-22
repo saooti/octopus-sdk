@@ -1,16 +1,15 @@
 <template>
-  <div>
+  <div class="page-box">
     <div
       v-if="loaded && !error"
-      class="page-box"
     >
       <h1>{{ $t('Playlist') }}</h1>
       <div class="d-flex">
-        <div class="d-flex flex-column flex-grow">
+        <div class="d-flex flex-column flex-grow-1">
           <EditBox
             v-if="editRight && isEditBox"
             :playlist="playlist"
-            :is-ready="isReady"
+            :is-ready="true"
           />
           <div class="module-box">
             <h2>{{ name }}</h2>
@@ -29,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div class="d-flex flex-column share-container">
+        <div class="d-flex flex-column flex-grow-mobile">
           <SharePlayer
             v-if="isSharePlayer && authenticated"
             :playlist="playlist"
@@ -41,25 +40,15 @@
       </div>
       <PodcastList :playlist="playlist" />
     </div>
-    <div
-      v-if="!loaded"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading content ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="error"
-      class="text-center"
-    >
-      <h3>{{ $t("Playlist doesn't exist") }}</h3>
-    </div>
+    <ClassicLoading
+      :loading-text="!loaded?$t('Loading content ...'):undefined"
+      :error-text="error?$t(`Playlist doesn't exist`):undefined"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import ClassicLoading from '../form/ClassicLoading.vue';
 import PodcastList from '../display/playlist/PodcastList.vue';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
@@ -75,6 +64,7 @@ export default defineComponent({
     EditBox,
     PodcastList,
     SharePlayer,
+    ClassicLoading
   },
   mixins:[displayMethods],
   props: {
@@ -88,7 +78,6 @@ export default defineComponent({
       loaded: false as boolean,
       playlist: undefined as Playlist | undefined,
       error: false as boolean,
-      isReady: true as boolean,
     };
   },
   
@@ -123,15 +112,14 @@ export default defineComponent({
         (state.generalParameters.isPlaylist && this.playlist &&
           this.organisationId === this.playlist.organisation.id) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      }
       return false;
     },
   },
   watch: {
     playlistId() {
-      this.loaded = false;
-      this.error = false;
       this.getPlaylistDetails();
     },
   },
@@ -142,17 +130,16 @@ export default defineComponent({
   methods: {
     async getPlaylistDetails(): Promise<void> {
       try {
+        this.loaded = false;
+        this.error = false;
         const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
         this.playlist = data;
         this.$emit('playlistTitle', this.playlist.title);
-        this.loaded = true;
       } catch {
         this.error = true;
-        this.loaded = true;
       }
+      this.loaded = true;
     },
   },
 })
 </script>
-
-<style lang="scss"></style>

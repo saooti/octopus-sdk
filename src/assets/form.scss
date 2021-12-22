@@ -5,6 +5,13 @@
 	.width-auto{
 	width: auto !important;
 	}
+	select {
+		background: white !important;
+		outline-color: transparent !important;
+		padding: 0.5rem;
+		border: 0.1rem solid #dee2e6;
+		border-radius: 0.3rem;
+	}
 
 	.form-input {
 		-webkit-appearance: none;

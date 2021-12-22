@@ -37,7 +37,7 @@
         v-for="e in emissions"
         :key="e.emissionId"
         :emission="e"
-        class="m-3 flex-shrink"
+        class="m-3 flex-shrink-0"
         :class="mainRubriquage(e)"
         :rubrique-name="rubriquesId(e)"
         @emissionNotVisible="displayCount--"

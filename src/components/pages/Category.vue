@@ -2,8 +2,8 @@
   <div class="page-box">
     <h1>{{ title }}</h1>
     <PodcastList
-      :first="firstRoute"
-      :size="sizeRoute"
+      :first="0"
+      :size="12"
       :iab-id="iabId"
       :organisation-id="filterOrga"
     />
@@ -20,8 +20,6 @@ export default defineComponent({
     PodcastList,
   },
   props: {
-    firstRoute: { default: 0, type: Number},
-    sizeRoute: { default: 12, type: Number},
     iabId: { default: undefined, type: Number},
   },
 
@@ -53,10 +51,7 @@ export default defineComponent({
       const matchCategories = this.categories.filter((c: Category) => c.id === this.iabId);
       if (1 !== matchCategories.length) return;
       this.title = matchCategories[0]['name'];
-
     },
   },
 })
 </script>
-
-<style lang="scss"></style>

@@ -26,7 +26,7 @@
         class="d-flex"
       >
         <div
-          class="img-box-light flex-shrink"
+          class="img-box-light flex-shrink-0"
           :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"
         />
         <div class="emission-light-title">
@@ -70,7 +70,7 @@
           <!-- eslint-enable -->
         </div>
       </router-link>
-      <div class="flex-grow" />
+      <div class="flex-grow-1" />
       <router-link
         v-if="!isPodcastmaker"
         :to="{

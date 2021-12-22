@@ -39,8 +39,6 @@ export default defineComponent({
     PlaylistList,
   },
   props: {
-    firstRoute: { default: 0, type: Number},
-    sizeRoute: { default: 12, type: Number},
     productor: { default: undefined, type: String},
   },
 
@@ -67,12 +65,6 @@ export default defineComponent({
   },
 
   created() {
-    if (this.firstRoute) {
-      this.first = this.firstRoute;
-    }
-    if (this.sizeRoute) {
-      this.size = this.sizeRoute;
-    }
     if (this.productor) {
       this.organisationId = this.productor;
     } else if (this.$store.state.filter.organisationId) {
@@ -89,5 +81,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

@@ -3,18 +3,12 @@
     v-if="organisationId && rubriquageData"
     class="d-flex mt-3 align-items-center"
   >
-    <div class="flex-shrink">
-      <input
-        id="search-rubriquage-checkbox"
-        v-model="isRubriquage"
-        type="checkbox"
-        class="form-check-input"
-      >
-      <label
-        class="form-check-label"
-        for="search-rubriquage-checkbox"
-      >{{ $t('By topic') }}</label>
-    </div>
+    <ClassicCheckbox
+      v-model:textInit="isRubriquage"
+      class="flex-shrink-0"
+      id-checkbox="search-rubriquage-checkbox"
+      :label="$t('By topic')"
+    />
     <div
       v-if="isRubriquage"
       class="d-flex flex-column mb-2"
@@ -44,6 +38,7 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
+import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -51,6 +46,7 @@ const RubriqueChoice = defineAsyncComponent(() => import('./RubriqueChoice.vue')
 export default defineComponent({
   components: {
     RubriqueChoice,
+    ClassicCheckbox
   },
   props: {
     organisationId: { default: undefined, type: String},

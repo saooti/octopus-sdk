@@ -17,7 +17,7 @@
       />
     </label>
     <template v-if="rubriquageId">
-      <div class="ms-3 flex-shrink">
+      <div class="ms-3 flex-shrink-0">
         {{ $t('By rubric') }}
       </div>
       <RubriqueChooser

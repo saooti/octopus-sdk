@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex align-items-center justify-content-end flex-no-wrap top-bar-dropdown"
+    class="top-bar-dropdown"
   >
     <div
       v-if="authenticated"
@@ -17,46 +17,37 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       />
-      <ul class="dropdown-menu dropdown-menu-right px-4">
-        <li>
-          <router-link
-            v-if="isContribution && !isPodcastmaker"
-            to="/main/priv/upload"
-            class="align-self-center w-100"
-          >
-            <button class="btn btn-primary w-100 mb-2">
-              {{ $t('Upload') }}
-            </button>
-          </router-link>
-        </li>
-        <li v-if="!isPodcastmaker">
+      <div class="dropdown-menu dropdown-menu-right px-4">
+        <router-link
+          v-if="isContribution && !isPodcastmaker"
+          class="btn btn-primary w-100"
+          to="/main/priv/upload"
+        >
+          {{ $t('Upload') }}
+        </router-link>
+        <template v-if="!isPodcastmaker">
           <router-link
             to="/main/priv/backoffice"
-            class="linkSpace dropdown-item"
+            class="show-phone dropdown-item"
           >
             {{ $t('My space') }}
           </router-link>
-        </li>
-        <li v-if="!isPodcastmaker">
           <router-link
             class="dropdown-item"
             to="/main/priv/edit/profile"
           >
             {{ $t('Edit my profile') }}
           </router-link>
-        </li>
-        <li v-if="!isPodcastmaker && isOrganisation">
           <router-link
+            v-if="isOrganisation"
             class="dropdown-item"
             to="/main/priv/edit/organisation"
           >
             {{ $t('Edit my organisation') }}
           </router-link>
-        </li>
-        <li v-if="!isEducation">
+        </template>
+        <template v-if="!isEducation">
           <hr class="dropdown-divider">
-        </li>
-        <li v-if="!isEducation">
           <a
             href="https://help.octopus.saooti.com/Aide/"
             class="dropdown-item"
@@ -65,8 +56,6 @@
           >
             {{ $t('Help') }}
           </a>
-        </li>
-        <li v-if="!isEducation">
           <a
             href="https://help.octopus.saooti.com/"
             class="dropdown-item"
@@ -75,50 +64,41 @@
           >
             {{ $t('TutoMag') }}
           </a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li v-if="!isEducation">
+          <hr class="dropdown-divider">
           <a
             class="dropdown-item"
             href="/sso/logout"
           >
             {{ $t('Logout') }}
           </a>
-        </li>
-      </ul>
+        </template>
+      </div>
     </div>
     <div
       v-else
       class="dropdown btn-group"
     >
       <button
-        class="btn dropdown-toggle btn-secondary text-decoration-none m-1 admin-button btn-rounded-icon dropdown-toggle-no-caret"
+        class="btn dropdown-toggle m-1 admin-button dropdown-toggle-no-caret saooti-user-octopus"
         data-bs-toggle="dropdown"
         aria-expanded="false"
-      >
-        <i class="saooti-user-octopus text-dark" />
-        <span class="visually-hidden">Profile</span>
-      </button>
-      <ul class="dropdown-menu dropdown-menu-right px-4">
-        <li>
-          <a
-            class="dropdown-item"
-            href="/sso/login"
-          >
-            {{ $t('Login') }}
-          </a>
-        </li>
-        <li v-if="!isPodcastmaker">
-          <router-link
-            class="dropdown-item"
-            to="/main/pub/create"
-          >
-            {{
-              $t('Create an account')
-            }}
-          </router-link>
-        </li>
-      </ul>
+        aria-label="Profile"
+      />
+      <div class="dropdown-menu dropdown-menu-right px-4">
+        <a
+          class="dropdown-item"
+          href="/sso/login"
+        >
+          {{ $t('Login') }}
+        </a>
+        <router-link
+          v-if="!isPodcastmaker"
+          class="dropdown-item"
+          to="/main/pub/create"
+        >
+          {{ $t('Create an account') }}
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -131,12 +111,6 @@ export default defineComponent({
   name: 'HomeDropdown',
   props: {
     isEducation: { default: false, type: Boolean},
-  },
-
-  data() {
-    return {
-      showMenu: false as boolean
-    };
   },
 
   computed: {
@@ -154,7 +128,6 @@ export default defineComponent({
     },
   },
 
-
   methods: {
     goToUrl(url: string): void {
       if (this.authenticated) {
@@ -167,19 +140,24 @@ export default defineComponent({
 
 <style lang="scss">
 .top-bar-dropdown {
+  display: flex;
+  align-items: center;
+
   .main-button-dropdown {
     padding-bottom: 0.4rem;
     width: 140px;
     text-align: left;
     padding-left: 15px;
     margin-right: 30px;
+    @media (max-width: 650px) {
+      display: none;
+    }
   }
   .btn-group .dropdown-toggle-split {
     align-items: center;
-    border-radius: 50% !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     justify-content: center;
     position: absolute;
     right: 5px;
@@ -188,33 +166,6 @@ export default defineComponent({
     @media (max-width: 650px) {
       position: relative;
       right: auto;
-    }
-  }
-  .dropdown-header {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-  }
-  .linkSpace {
-    display: none;
-  }
-
-  /** PHONES*/
-  @media (max-width: 1200px) {
-    .linkSpace {
-      display: block;
-    }
-  }
-  @media (max-width: 650px) {
-    .dropdown {
-      .main-button-dropdown {
-        display: none;
-      }
-    }
-    .btn-group .dropdown-toggle-split {
-      height: 30px;
-      width: 30px;
-      border-radius: 50% !important;
     }
   }
 }

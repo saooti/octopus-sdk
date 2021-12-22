@@ -17,36 +17,20 @@
               <!-- eslint-disable vue/no-v-html -->
               <div v-html="newsletterHtml" />
               <!-- eslint-enable -->
-              <div class="d-flex flex-column flex-grow ms-4">
+              <div class="d-flex flex-column flex-grow-1 ms-4">
                 <h4 class="mb-3">
                   {{ $t('Configuration') }}
                 </h4>
-                <div>
-                  <input
-                    id="display-emission-name"
-                    v-model="displayEmissionName"
-                    type="checkbox"
-                    class="form-check-input"
-                  >
-                  <label
-                    class="form-check-label"
-                    for="display-emission-name"
-                  >{{
-                    $t('Display emission name')
-                  }}</label>
-                </div>
-                <div>
-                  <input
-                    id="display-participants-names"
-                    v-model="displayParticipantsNames"
-                    type="checkbox"
-                    class="form-check-input"
-                  >
-                  <label
-                    class="form-check-label"
-                    for="display-participants-names"
-                  >{{ $t('Display participants list') }}</label>
-                </div>
+                <ClassicCheckbox
+                  v-model:textInit="displayEmissionName"
+                  id-checkbox="display-emission-name"
+                  :label="$t('Display emission name')"
+                />
+                <ClassicCheckbox
+                  v-model:textInit="displayParticipantsNames"
+                  id-checkbox="display-participants-names"
+                  :label="$t('Display participants list')"
+                />
                 <div class="d-flex align-items-center mt-2">
                   <VSwatches
                     v-model="color"
@@ -104,6 +88,7 @@
 </template>
 
 <script lang="ts">
+import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import Snackbar from '../../misc/Snackbar.vue';
 import moment from 'moment';
 import VSwatches from 'vue3-swatches';
@@ -121,6 +106,7 @@ export default defineComponent({
   components: {
     Snackbar,
     VSwatches,
+    ClassicCheckbox
   },
 
   mixins: [displayMethods],

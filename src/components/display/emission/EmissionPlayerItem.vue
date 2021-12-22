@@ -52,7 +52,7 @@
       :key="p.podcastId"
       class="border-top emission-item-border-color p-2 secondary-bg d-flex"
     >
-      <div class="d-flex justify-content-between flex-grow">
+      <div class="d-flex justify-content-between flex-grow-1">
         <router-link
           :to="{
             name: 'podcast',

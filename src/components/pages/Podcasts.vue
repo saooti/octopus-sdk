@@ -6,17 +6,13 @@
         isEmissionChooser ? 'justify-content-between' : 'justify-content-center'
       "
     >
-      <h1
-        v-if="undefined === titlePage"
-        class="flex-shrink"
-      >
-        {{ $t('All podcasts') }}
-      </h1>
-      <h1
-        v-else
-        class="flex-shrink"
-      >
-        {{ titlePage }}
+      <h1 class="flex-shrink-0">
+        <template v-if="undefined === titlePage">
+          {{ $t('All podcasts') }}
+        </template>
+        <template v-else>
+          {{ titlePage }}
+        </template>
       </h1>
       <EmissionChooser
         v-if="isEmissionChooser"
@@ -92,8 +88,6 @@ export default defineComponent({
   },
 
   props: {
-    firstRoute: { default: 0, type: Number},
-    sizeRoute: { default: 12, type: Number},
     productor: { default: undefined, type: String},
     isEducation: { default: false, type: Boolean},
   },
@@ -101,7 +95,7 @@ export default defineComponent({
   data() {
     return {
       first: 0 as number,
-      size: 49 as number,
+      size: 12 as number,
       searchPattern: '' as string,
       organisationId: undefined as string|undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
@@ -160,12 +154,6 @@ export default defineComponent({
   },
 
   created() {
-    if (this.firstRoute) {
-      this.first = this.firstRoute;
-    }
-    if (this.sizeRoute) {
-      this.size = this.sizeRoute;
-    }
     if (this.productor) {
       this.organisationId = this.productor;
     } else if (this.$store.state.filter.organisationId) {
@@ -248,5 +236,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

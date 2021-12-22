@@ -1,17 +1,18 @@
 <template>
-  <div>
+  <div class="page-box">
     <div
       v-if="loaded && !error"
-      class="page-box intervenant-page"
     >
-      <h1 v-if="undefined === titlePage ||!lightStyle">
-        {{ $t('Animator') }}
-      </h1>
-      <h1 v-else>
-        {{ titlePage }}
+      <h1>
+        <template v-if="undefined === titlePage ||!lightStyle">
+          {{ $t('Animator') }}
+        </template>
+        <template v-else>
+          {{ titlePage }}
+        </template>
       </h1>
       <div
-        class="d-flex w-100 flex-column align-items-center justify-content-center"
+        class="d-flex flex-column align-items-center"
       >
         <div
           class="img-box-circle mb-3"
@@ -24,7 +25,7 @@
         </h2>
         <!-- eslint-disable vue/no-v-html -->
         <div
-          class="h6 participant-desc html-wysiwyg-content"
+          class="participant-desc html-wysiwyg-content"
           v-html="urlify(description)"
         />
         <!-- eslint-enable -->
@@ -71,21 +72,10 @@
         :reload="reload"
       />
     </div>
-    <div
-      v-if="!loaded"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading content ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="error"
-      class="text-center"
-    >
-      <h3>{{ $t("Animator doesn't exist") }}</h3>
-    </div>
+    <ClassicLoading
+      :loading-text="!loaded?$t('Loading content ...'):undefined"
+      :error-text="error?$t(`Animator doesn't exist`):undefined"
+    />
   </div>
 </template>
 
@@ -94,7 +84,7 @@ import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Participant } from '@/store/class/general/participant';
-
+import ClassicLoading from '../form/ClassicLoading.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
@@ -106,6 +96,7 @@ export default defineComponent({
     PodcastFilterList,
     EditBox,
     PodcastList,
+    ClassicLoading
   },
   mixins: [displayMethods],
   props: {
@@ -165,8 +156,9 @@ export default defineComponent({
         (this.authenticated &&
           this.organisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      }
       return false;
     },
   },

@@ -47,7 +47,7 @@
       <EmissionPlayerItem
         v-for="e in emissions"
         :key="e.emissionId"
-        class="flex-shrink item-phone-margin"
+        class="flex-shrink-0 item-phone-margin"
         :emission="e"
         :class="[alignLeft ? 'me-3' : '', mainRubriquage(e)]"
         :nb-podcasts="nbPodcasts"

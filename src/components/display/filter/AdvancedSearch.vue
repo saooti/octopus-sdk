@@ -43,20 +43,12 @@
             {{ $t('Emission with episode published :') }}
           </div>
           <div class="d-flex align-items-center">
-            <div class="flex-shrink">
-              <input
-                id="search-from-checkbox"
-                v-model="isFrom"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label"
-                for="search-from-checkbox"
-              >{{
-                $t('From the :')
-              }}</label>
-            </div>
+            <ClassicCheckbox
+              v-model:textInit="isFrom"
+              class="flex-shrink-0"
+              id-checkbox="search-from-checkbox"
+              :label="$t('From the :')"
+            />
             <DatePicker
               v-model="fromDate"
               class="ps-3 pe-3"
@@ -75,20 +67,12 @@
             </DatePicker>
           </div>
           <div class="d-flex align-items-center">
-            <div class="flex-shrink">
-              <input
-                id="search-to-checkbox"
-                v-model="isTo"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label"
-                for="search-to-checkbox"
-              >{{
-                $t('To the :')
-              }}</label>
-            </div>
+            <ClassicCheckbox
+              v-model:textInit="isTo"
+              class="flex-shrink-0"
+              id-checkbox="search-to-checkbox"
+              :label="$t('To the :')"
+            />
             <DatePicker
               v-model="toDate"
               class="ps-3"
@@ -111,89 +95,39 @@
           v-if="organisation && organisationRight && !isPodcastmaker"
           class="d-flex flex-column mt-3"
         >
-          <div class="flex-shrink">
-            <input
-              id="search-future-checkbox"
-              v-model="isNotVisible"
-              type="checkbox"
-              class="form-check-input"
-              :disabled="isCheckboxNotValidate && isNotValidate"
-            >
-            <label
-              class="form-check-label"
-              for="search-future-checkbox"
-            >{{
-              textNotVisible
-            }}</label>
-          </div>
+          <ClassicCheckbox
+            v-model:textInit="isNotVisible"
+            class="flex-shrink-0"
+            id-checkbox="search-future-checkbox"
+            :label="textNotVisible"
+            :is-disabled="isCheckboxNotValidate && isNotValidate"
+          />
         </div>
         <div
           v-if="isCheckboxNotValidate"
           class="d-flex flex-column mt-3"
         >
-          <div class="flex-shrink">
-            <input
-              id="search-not-validate-checkbox"
-              v-model="isNotValidate"
-              type="checkbox"
-              class="form-check-input"
-            >
-            <label
-              class="form-check-label"
-              for="search-not-validate-checkbox"
-            >{{ textNotValidate }}</label>
-          </div>
+          <ClassicCheckbox
+            v-model:textInit="isNotValidate"
+            class="flex-shrink-0"
+            id-checkbox="search-not-validate-checkbox"
+            :label="textNotValidate"
+          />
         </div>
       </div>
       <div class="d-flex flex-column">
         <div class="primary-color mb-2 padding-left-custom-radio">
           {{ $t('Sort') }}
         </div>
-        <div
-          v-if="isSearchBar"
-          class="form-check"
-        >
-          <input
-            id="radio_score"
-            v-model="sort"
-            class="form-check-input"
-            type="radio"
-            name="sortRadio"
-            value="SCORE"
-          >
-          <label
-            class="form-check-label"
-            for="radio_score"
-          >{{ $t('Sort score') }}</label>
-        </div>
-        <div class="form-check">
-          <input
-            id="radio_podcast"
-            v-model="sort"
-            class="form-check-input"
-            type="radio"
-            name="sortRadio"
-            :value="isEmission?'LAST_PODCAST_DESC':'DATE'"
-          >
-          <label
-            class="form-check-label"
-            for="radio_podcast"
-          >{{ $t('Sort last') }}</label>
-        </div>
-        <div class="form-check">
-          <input
-            id="radio_name"
-            v-model="sort"
-            class="form-check-input"
-            type="radio"
-            name="sortRadio"
-            value="NAME"
-          >
-          <label
-            class="form-check-label"
-            for="radio_name"
-          >{{ $t('Sort name') }}</label>
-        </div>
+        <ClassicRadio
+          v-model:textInit="sort"
+          id-select="sort-radio"
+          :options="isSearchBar? [{title:$t('Sort score'), value:'SCORE'},
+                                  {title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
+                                  {title:$t('Sort name'), value:'NAME'}]:
+            [{title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
+             {title:$t('Sort name'), value:'NAME'}]"
+        />
       </div>
     </div>
   </div>
@@ -204,6 +138,8 @@ import { state } from '../../../store/paramStore';
 import moment from 'moment';
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
+import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
+import ClassicRadio from '../../form/ClassicRadio.vue';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { DatePicker } from 'v-calendar';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -213,7 +149,9 @@ export default defineComponent({
     MonetizableFilter,
     DatePicker,
     CategoryFilter,
-    RubriqueFilter
+    RubriqueFilter,
+    ClassicCheckbox,
+    ClassicRadio
   },
   props: {
     organisationId: { default: undefined, type: String},

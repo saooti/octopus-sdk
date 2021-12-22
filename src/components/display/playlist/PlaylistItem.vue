@@ -49,7 +49,7 @@
           <!-- eslint-enable -->
         </div>
       </router-link>
-      <div class="flex-grow" />
+      <div class="flex-grow-1" />
       <router-link
         v-if="!isPodcastmaker && playlist.organisation"
         :to="{

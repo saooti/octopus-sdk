@@ -1,43 +1,23 @@
 <template>
   <div class="page-box">
-    <h1 v-if="!hideBar">
-      {{ $t('Podcast search') }}
+    <h1>
+      <template v-if="!hideBar">
+        {{ $t('Podcast search') }}
+      </template>
+      <template v-else-if="!noResult">
+        {{ $t('Search results', { query: rawQuery }) }}
+      </template>
+      <template v-else>
+        {{ $t('Search - no results', { query: rawQuery }) }}
+      </template>
     </h1>
-    <h1 v-else-if="!noResult">
-      {{ $t('Search results', { query: rawQuery }) }}
-    </h1>
-    <h1 v-else>
-      {{ $t('Search - no results', { query: rawQuery }) }}
-    </h1>
-    <div
+    <ClassicSearch
       v-if="!hideBar"
-      class="position-relative champs-searchPage w-75"
-    >
-      <input
-        id="search"
-        ref="search"
-        v-model="rawQuery"
-        type="text"
-        class="search-input border-primary w-100 p-2 input-no-outline"
-        :placeholder="$t('Please type at least three characters')"
-        autofocus
-        @change="onSearchBegin"
-      >
-      <label
-        for="search"
-        class="d-inline"
-        :aria-label="$t('Search')"
-      />
-      <div
-        v-if="!rawQuery"
-        class="saooti-search-bounty search-icon-container"
-      />
-      <div
-        v-else
-        class="saooti-cross search-icon-container c-hand"
-        @click="rawQuery = ''"
-      />
-    </div>
+      v-model:textInit="rawQuery"
+      :autofocus="true"
+      id-checkbox="search-page-input"
+      :label="$t('Please type at least three characters')"
+    />
     <PodcastList
       v-if="!!query"
       :query="query"
@@ -50,6 +30,7 @@
 
 <script lang="ts">
 import { state } from '../../store/paramStore';
+import ClassicSearch from '../form/ClassicSearch.vue';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { defineComponent } from 'vue';
 export default defineComponent({
@@ -57,6 +38,7 @@ export default defineComponent({
 
   components: {
     PodcastList,
+    ClassicSearch
   },
 
   props: {
@@ -81,12 +63,13 @@ export default defineComponent({
   },
 
   watch: {
-    query: {
-        handler(search: string): void {
-          this.rawQuery = search;
-        },
-      deep: true,
-      immediate: true,
+    rawQuery(): void{
+      if (this.hideBar) {
+        this.noResult = false;
+      }
+    },
+    query(): void{
+      this.rawQuery = this.query;
     },
     queryRoute(): void{
       this.rawQuery = this.queryRoute;
@@ -97,9 +80,6 @@ export default defineComponent({
     if (this.queryRoute) {
       this.rawQuery = this.queryRoute;
     }
-    if (this.$refs.search) {
-      (this.$refs.search as HTMLElement).focus();
-    }
   },
   
   methods: {
@@ -108,24 +88,6 @@ export default defineComponent({
         this.noResult = true;
       }
     },
-    onSearchBegin(): void {
-      if (this.hideBar) {
-        this.noResult = false;
-      }
-    },
   },
 })
 </script>
-
-<style lang="scss">
-.champs-searchPage {
-  margin: 0 auto;
-  input {
-    margin: 1rem 0 !important;
-    padding-right: 40px !important;
-  }
-  .search-icon-container {
-    margin: 0 1em 0 0;
-  }
-}
-</style>

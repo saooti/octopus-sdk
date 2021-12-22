@@ -1,14 +1,13 @@
 <template>
-  <div>
+  <div class="page-box">
     <div
       v-if="loaded && !error"
-      class="page-box"
     >
       <h1 v-if="!isOuestFrance">
         {{ $t('Emission') }}
       </h1>
       <div class="d-flex">
-        <div class="d-flex flex-column flex-grow">
+        <div class="d-flex flex-column flex-grow-1">
           <EditBox
             v-if="editRight && isEditBox"
             :emission="emission"
@@ -48,7 +47,7 @@
             :emission="emission"
           />
         </div>
-        <div class="d-flex flex-column share-container">
+        <div class="d-flex flex-column flex-grow-mobile">
           <SharePlayer
             v-if="isSharePlayer && (authenticated || notExclusive)"
             :emission="emission"
@@ -90,21 +89,10 @@
         @fetch="fetch"
       />
     </div>
-    <div
-      v-if="!loaded"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading content ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="error"
-      class="text-center"
-    >
-      <h3>{{ $t("Emission doesn't exist") }}</h3>
-    </div>
+    <ClassicLoading
+      :loading-text="!loaded?$t('Loading content ...'):undefined"
+      :error-text="error?$t(`Emission doesn't exist`):undefined"
+    />
   </div>
 </template>
 
@@ -113,7 +101,7 @@ import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
 import { Emission } from '@/store/class/general/emission';
-
+import ClassicLoading from '../form/ClassicLoading.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
@@ -133,6 +121,7 @@ export default defineComponent({
     PodcastList,
     SubscribeButtons,
     LiveHorizontalList,
+    ClassicLoading
   },
   mixins: [displayMethods],
   props: {
@@ -203,8 +192,9 @@ export default defineComponent({
       if (
         (this.authenticated && this.emission && this.organisationId === this.emission.orga.id) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      }
       return false;
     },
     countLink(): number {
@@ -273,5 +263,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

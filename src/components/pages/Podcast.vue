@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <div
-      v-if="loaded && !error"
-      class="page-box"
-    >
+  <div class="page-box">
+    <template v-if="loaded && !error">
       <h1 v-if="!isOuestFrance">
         {{ titlePage }}
       </h1>
@@ -20,7 +17,7 @@
                 !isNotRecorded &&
                 isOctopusAndAnimator
             "
-            class="module-box text-center-mobile flex-no-grow"
+            class="module-box text-center-mobile flex-grow-0"
             :podcast="podcast"
             :live="true"
             :recording="fetchConference"
@@ -30,7 +27,7 @@
           <EditBox
             v-else-if="editRight && isEditBox"
             :podcast="podcast"
-            :is-ready="isReady"
+            :is-ready="true"
             @validatePodcast="updatePodcast"
           />
           <PodcastModuleBox
@@ -44,8 +41,8 @@
           />
         </div>
         <div
-          class="d-flex flex-column share-container"
-          :class="authenticated || notExclusive ? 'flex-grow' : ''"
+          class="d-flex flex-column flex-grow-mobile"
+          :class="authenticated || notExclusive ? 'flex-grow-1' : ''"
         >
           <SharePlayer
             v-if="isSharePlayer && (authenticated || notExclusive)"
@@ -85,28 +82,18 @@
           :button-text="$t('All podcast button', { name: c.name })"
         />
       </template>
-    </div>
-    <div
-      v-if="!loaded"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading content ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="error"
-      class="text-center"
-    >
-      <h3>{{ $t("Podcast doesn't exist") }}</h3>
-    </div>
+    </template>
+    <ClassicLoading
+      :loading-text="!loaded?$t('Loading content ...'):undefined"
+      :error-text="error?$t(`Podcast doesn't exist`):undefined"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import PodcastModuleBox from '../display/podcasts/PodcastModuleBox.vue';
+import ClassicLoading from '../form/ClassicLoading.vue';
 import octopusApi from '@saooti/octopus-api';
 import studioApi from '@/api/studio';
 import { state } from '../../store/paramStore';
@@ -136,7 +123,8 @@ export default defineComponent({
     RecordingItemButton,
     Countdown,
     CommentSection,
-    PodcastModuleBox
+    PodcastModuleBox,
+    ClassicLoading
   },
 
   props: {
@@ -219,12 +207,10 @@ export default defineComponent({
         (this.authenticated &&
           this.organisationId === this.podcast.organisation.id) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      }
       return false;
-    },
-    isReady(): boolean {
-      return true;
     },
     countLink(): number {
       let count = 0;

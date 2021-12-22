@@ -4,7 +4,7 @@
     class="d-flex"
   >
     <div
-      class="d-flex align-items-center bg-error-message p-2 rounded mt-1 mb-1"
+      class="d-flex align-items-center bg-error-message p-2 rounded my-1"
     >
       <img
         src="/img/caution.png"

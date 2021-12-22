@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="podcast"
-    class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-start"
+    class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink-0 float-start"
     :style="{ 'background-image': 'url(\'' + podcast.imageUrl + '\')' }"
   >
     <template v-if="isPodcastmaker">

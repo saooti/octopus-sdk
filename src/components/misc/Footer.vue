@@ -2,9 +2,9 @@
   <div class="bg-dark">
     <div
       id="footer"
-      class="d-flex p-3 secondary-bg border-top footer-display-phone"
+      class="d-flex-column p-3 secondary-bg border-top"
     >
-      <div class="d-flex flex-grow align-items-end flex-column">
+      <div class="d-flex flex-column flex-grow-1 align-items-end">
         <div class="d-flex flex-column">
           <router-link
             :to="{
@@ -13,7 +13,7 @@
                        iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
                        rubriquesId: rubriqueQueryParam },
             }"
-            class="linkHover"
+            class="link-hover"
           >
             {{ $t('Home') }}
           </router-link>
@@ -24,7 +24,7 @@
                        iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
                        rubriquesId: rubriqueQueryParam},
             }"
-            class="linkHover"
+            class="link-hover"
           >
             {{ $t('Podcasts') }}
           </router-link>
@@ -34,7 +34,7 @@
               query: { productor: $store.state.filter.organisationId,
                        iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
             }"
-            class="linkHover"
+            class="link-hover"
           >
             {{ $t('Emissions') }}
           </router-link>
@@ -44,7 +44,7 @@
               name: 'productors',
               query: { productor: $store.state.filter.organisationId },
             }"
-            class="linkHover"
+            class="link-hover"
           >
             {{ $t('Productors') }}
           </router-link>
@@ -53,23 +53,23 @@
               name: 'participants',
               query: { productor: $store.state.filter.organisationId },
             }"
-            class="linkHover"
+            class="link-hover"
           >
             {{ $t('Speakers') }}
           </router-link>
         </div>
       </div>
-      <hr class="divided-line show-phone">
+      <hr class="show-phone">
       <div
         v-if="!isPodcastmaker"
-        class="d-flex flex-grow align-items-center flex-column"
+        class="d-flex flex-grow-1 align-items-center flex-column"
       >
         <div class="d-flex flex-column">
           <div class="text-dark">
             &copy; Saooti 2019
           </div>
           <router-link
-            class="linkHover"
+            class="link-hover"
             to="/main/pub/contact"
           >
             {{
@@ -77,7 +77,7 @@
             }}
           </router-link>
           <router-link
-            class="linkHover"
+            class="link-hover"
             to="/main/pub/cgu"
           >
             {{
@@ -85,7 +85,7 @@
             }}
           </router-link>
           <router-link
-            class="linkHover"
+            class="link-hover"
             to="/main/pub/libraries"
           >
             {{
@@ -93,15 +93,15 @@
             }}
           </router-link>
           <a
-            class="linkHover c-hand"
+            class="link-hover c-hand"
             @click="changeLanguage"
           >{{
             $t('Change locale')
           }}</a>
         </div>
       </div>
-      <hr class="divided-line show-phone">
-      <div class="flex-grow">
+      <hr class="show-phone">
+      <div class="flex-grow-1">
         <a
           href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
           rel="noopener"
@@ -118,12 +118,12 @@
       </div>
       <div
         v-if="isPodcastmaker && isContactLink"
-        class="d-flex flex-grow align-items-center flex-column"
+        class="d-flex flex-column flex-grow-1 align-items-center"
       >
         <div class="d-flex flex-column">
           <a
             id="footer-contact"
-            class="linkHover"
+            class="link-hover"
             :href="isContactLink"
             rel="noopener"
             target="_blank"
@@ -201,32 +201,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#footer {
+#footer{
   font-size: 0.7rem;
-  a {
-    color: #666;
-  }
   .acpm_image {
     width: 70px;
     height: 70px;
   }
-}
-.border-round {
-  border-radius: 0 0 2rem 2rem;
-}
-/** PHONES*/
-@media (max-width: 960px) {
-  .footer-display-phone {
-    flex-direction: column;
+  a{
+    color: #666;
+  }
+  .border-round {
+    border-radius: 0 0 2rem 2rem;
+  }
+  /** PHONES*/
+  @media (max-width: 960px) {
     .align-items-center,
     .align-items-end {
       align-items: flex-start !important;
-    }
-  }
-  .container {
-    font-size: 0.6rem;
-    .pages {
-      margin-right: 3rem;
     }
   }
 }

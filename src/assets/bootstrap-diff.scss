@@ -240,12 +240,13 @@
         display: none;
       }    
     .dropdown-menu {
-        padding: $dropdown-padding-y 0.5rem;
+        padding: 0.5rem;
         @media (max-width: 450px) {
             min-width: 15rem;
         } 
     }
     .dropdown-item {
+        cursor: pointer;
         font-size: 0.8rem;
         @media (max-width: 450px) {
             padding: 0.25rem 0;

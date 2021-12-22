@@ -83,4 +83,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+</style>

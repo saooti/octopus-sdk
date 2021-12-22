@@ -1,17 +1,11 @@
 <template>
   <div class="d-flex mt-3 align-items-center">
-    <div class="flex-shrink me-2">
-      <input
-        id="search-category-checkbox"
-        v-model="isCategory"
-        type="checkbox"
-        class="form-check-input"
-      >
-      <label
-        class="form-check-label"
-        for="search-category-checkbox"
-      >{{ $t('By category') }}</label>
-    </div>
+    <ClassicCheckbox
+      v-model:textInit="isCategory"
+      class="flex-shrink-0 me-2"
+      id-checkbox="search-category-checkbox"
+      :label="$t('By category')"
+    />
     <CategoryChooser
       v-model:categorySelected="iabId"
       width="auto"
@@ -21,12 +15,14 @@
 </template>
 
 <script lang="ts">
+import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import CategoryChooser from '../categories/CategoryChooser.vue';
 import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    CategoryChooser
+    CategoryChooser,
+    ClassicCheckbox
   },
   emits: ['updateCategory'],
   data() {

@@ -1,10 +1,12 @@
 <template>
   <div class="page-box">
     <h1 v-if="undefined === titlePage">
-      {{ $t('All participants') }}
-    </h1>
-    <h1 v-else>
-      {{ titlePage }}
+      <template v-if="undefined === titlePage">
+        {{ $t('All participants') }}
+      </template>
+      <template v-else>
+        {{ titlePage }}
+      </template>
     </h1>
     <ProductorSearch
       :organisation-id="organisationId"
@@ -34,8 +36,6 @@ export default defineComponent({
     ParticipantList,
   },
   props: {
-    firstRoute: { default: 0, type: Number},
-    sizeRoute: { default: 12, type: Number},
     productor: { default: undefined, type: String},
   },
 
@@ -55,12 +55,6 @@ export default defineComponent({
   },
 
   created() {
-    if (this.firstRoute) {
-      this.first = this.firstRoute;
-    }
-    if (this.sizeRoute) {
-      this.size = this.sizeRoute;
-    }
     if (this.productor) {
       this.organisationId = this.productor;
     } else if (this.$store.state.filter.organisationId) {
@@ -78,5 +72,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

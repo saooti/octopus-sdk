@@ -9,29 +9,19 @@
     <div class="d-flex align-items-center flex-wrap">
       <div
         v-if="categoryFilter"
-        class="d-flex align-items-center flex-grow categories-filter"
+        class="d-flex align-items-center flex-grow-1 categories-filter"
       >
         <CategoryChooser
           :defaultanswer="$t('No category filter')"
           @selected="onCategorySelected"
         />
       </div>
-      <div class="d-flex position-relative small-flex-grow">
-        <label
-          for="search"
-          class="d-inline"
-          :aria-label="$t('Search')"
-        />
-        <input
-          id="search"
-          v-model="searchPattern"
-          :placeholder="$t('Search')"
-          class="filter-search-input input-no-outline flex-grow"
-        >
-        <div
-          class="saooti-search-bounty filter-list-search-icon search-icon-container"
-        />
-      </div>
+      <ClassicSearch
+        v-model:textInit="searchPattern"
+        class="small-flex-grow"
+        id-checkbox="podcast-filter-search"
+        :label="$t('Search')"
+      />
     </div>
     <PodcastList
       :first="first"
@@ -49,7 +39,7 @@
 </template>
 
 <script lang="ts">
-
+import ClassicSearch from '../../form/ClassicSearch.vue';
 import PodcastList from './PodcastList.vue';
 import { Category } from '@/store/class/general/category';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -59,6 +49,7 @@ export default defineComponent({
   components: {
     CategoryChooser,
     PodcastList,
+    ClassicSearch
   },
   props: {
     participantId: { default: undefined, type: Number},

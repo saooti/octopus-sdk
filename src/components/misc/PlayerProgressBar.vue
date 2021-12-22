@@ -1,18 +1,17 @@
 <template>
   <div class="text-light player-grow-content">
-    <div class="d-flex">
+    <div class="d-flex mb-1">
       <div
         v-if="playerError"
-        class="text-warning player-title ms-2 me-2"
+        class="text-warning mx-2"
       >
         {{ $t('Podcast play error') + ' - ' }}
       </div>
-      <div class="flex-grow player-title">
+      <div class="flex-grow-1 text-ellipsis">
         {{ podcastTitle }}
       </div>
       <div
-        v-if="!playerError"
-        v-show="!isBarTop"
+        v-if="!playerError && !isBarTop"
         class="hide-phone"
       >
         {{ playedTime }} / {{ totalTime }}
@@ -21,12 +20,11 @@
     <div
       v-if="!playerError"
       v-show="!isBarTop"
-      class="progress c-hand custom-bg-darkgrey"
-      style="height: 3px;"
+      class="progress c-hand"
       @mouseup="seekTo"
     >
       <div
-        class="progress-bar custom-bg-grey"
+        class="progress-bar bg-light"
         role="progressbar"
         aria-valuenow="0"
         aria-valuemin="0"
@@ -79,12 +77,7 @@ export default defineComponent({
     notListenTime: { default: 0, type: Number},
   },
   emits: ['update:notListenTime'],
-
-  data() {
-    return {
-    };
-  },
-
+  
   computed: {
     isEmissionName(): boolean {
       return (state.player.emissionName as boolean);
@@ -153,10 +146,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.player-container {
+.player-grow-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
+  font-size: 0.8rem;
   .progress {
-    align-items: flex-end;
-    height: 10px;
+    height: 4px;
     position: relative;
   }
   .progress-bar-duration {
@@ -165,39 +163,6 @@ export default defineComponent({
   .progress-bar {
     height: 4px;
     position: absolute;
-  }
-
-  .progress.custom-bg-darkgrey {
-    background: #555;
-  }
-
-  .progress-bar.custom-bg-grey {
-    background: #e9ecef;
-  }
-
-  .player-title,
-  .hide-phone {
-    font-size: 0.8rem;
-    margin: 0 0 5px 0;
-  }
-  .player-grow-content {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    flex-shrink: 1;
-    flex-basis: 20px;
-    overflow: hidden;
-  }
-}
-/** PHONES*/
-@media (max-width: 960px) {
-  .player-container {
-    .player-title {
-      font-size: 12px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
   }
 }
 </style>

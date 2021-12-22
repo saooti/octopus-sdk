@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex justify-content-around mt-3 flex-grow w-100">
-    <div class="d-flex flex-column align-items-center flex-shrink me-3">
+  <div class="d-flex justify-content-around mt-3 flex-grow-1 w-100">
+    <div class="d-flex flex-column align-items-center flex-shrink-0 me-3">
       <div class="fw-600">
         {{ $t('Choose color') }}
       </div>

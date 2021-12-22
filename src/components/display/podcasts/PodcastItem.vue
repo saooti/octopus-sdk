@@ -54,7 +54,7 @@
           params: { podcastId: podcast.podcastId },
           query: { productor: $store.state.filter.organisationId },
         }"
-        class="text-dark d-flex flex-column flex-grow"
+        class="text-dark d-flex flex-column flex-grow-1"
       >
         <div class="title-podcast-item">
           {{ title }}

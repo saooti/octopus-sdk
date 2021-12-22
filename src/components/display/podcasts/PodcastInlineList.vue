@@ -62,7 +62,7 @@
       <PodcastItem
         v-for="p in podcasts"
         :key="p.podcastId"
-        class="flex-shrink item-phone-margin"
+        class="flex-shrink-0 item-phone-margin"
         :podcast="p"
         :class="[alignLeft ? 'me-3' : '']"
       />

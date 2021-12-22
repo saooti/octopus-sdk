@@ -22,7 +22,7 @@
       v-if="displayContent"
       class="comment-content"
     >
-      <div class="primary-color flex-shrink">
+      <div class="primary-color flex-shrink-0">
         {{ displayContent.name }}
       </div>
       <div class="ms-1 me-1">

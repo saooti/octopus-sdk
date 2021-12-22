@@ -10,7 +10,7 @@
     >
       <div
         v-if="isBarTop"
-        class="progress secondary-bg c-hand"
+        class="progress c-hand"
         @mouseup="seekTo"
       >
         <div
@@ -25,23 +25,13 @@
       </div>
       <div
         v-if="display"
-        class="d-flex align-items-center justify-center flex-grow pe-5 ps-5"
+        class="d-flex align-items-center flex-grow-1 px-5"
       >
         <audio
           v-if="!live"
           id="audio-player"
-          :src="audioUrl"
+          :src="!live? audioUrl: undefined"
           autoplay
-          @timeupdate="onTimeUpdate"
-          @ended="onFinished"
-          @playing="onPlay"
-          @durationChange="onTimeUpdate"
-          @error="onError"
-        />
-        <audio
-          v-else
-          id="audio-player"
-          src
           @timeupdate="onTimeUpdate"
           @ended="onFinished"
           @playing="onPlay"
@@ -163,11 +153,11 @@ export default defineComponent({
     live: {
       deep: true,
       async handler(){
-      this.hlsReady = false;
-      this.setDownloadId(null);
-      this.listenError = false;
-      await this.playLive();
-      this.initComments();
+        this.hlsReady = false;
+        this.setDownloadId(null);
+        this.listenError = false;
+        await this.playLive();
+        this.initComments();
       }
     },
     playerHeight(): void {
@@ -176,9 +166,9 @@ export default defineComponent({
     podcast: {
       deep: true,
       handler(){
-      this.setDownloadId(null);
-      this.listenError = false;
-      this.initComments();
+        this.setDownloadId(null);
+        this.listenError = false;
+        this.initComments();
       }
     },
     async listenTime(newVal): Promise<void> {
@@ -479,7 +469,6 @@ export default defineComponent({
   flex-direction: column;
   transition: height 1s;
   background: #282828 !important;
-  max-width: 100%;
   font-size: 1rem;
 
   .player-progress-border {
@@ -487,13 +476,10 @@ export default defineComponent({
     width: 3px;
     background: black;
   }
-}
-@media (max-width: 960px) {
-  .player-container {
+
+  @media (max-width: 960px) {
     .d-flex {
-      @media (max-width: 960px) {
-        flex-wrap: nowrap !important;
-      }
+      flex-wrap: nowrap !important;
     }
   }
 }

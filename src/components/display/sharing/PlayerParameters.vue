@@ -28,7 +28,7 @@
         <div class="accordion-body">
           <div
             v-if="choseNumberEpisode"
-            class="d-flex flex-column flex-grow"
+            class="d-flex flex-column flex-grow-1"
           >
             <div
               v-if="displayChoiceAllEpisodes"
@@ -41,7 +41,7 @@
                 name="episodeNumbers"
                 value="all"
               >
-              <span class="flex-shrink">{{ $t('Show every episode') }}</span>
+              <span class="flex-shrink-0">{{ $t('Show every episode') }}</span>
             </div>
             <div
               class="d-flex align-items-center flex-wrap"
@@ -55,7 +55,7 @@
                 name="episodeNumbers"
                 value="number"
               >
-              <span class="flex-shrink">{{ $t('Show') }}</span>
+              <span class="flex-shrink-0">{{ $t('Show') }}</span>
               <input
                 id="number-input"
                 v-model="iFrameNumber"
@@ -69,53 +69,28 @@
                 class="d-inline"
                 :aria-label="$t('Number of player podcasts')"
               />
-              <span class="flex-shrink">{{ $t('Last podcasts') }}</span>
+              <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
             </div>
-            <div>
-              <input
-                id="proceedCheck"
-                v-model="proceedReading"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label"
-                for="proceedCheck"
-              >{{
-                $t('Proceed reading')
-              }}</label>
-            </div>
-            <div>
-              <input
-                id="isVisibleCheckbox"
-                v-model="isVisibleTemp"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label me-2"
-                for="isVisibleCheckbox"
-              >{{ $t('Podcasts still available') }}</label>
-            </div>
+            <ClassicCheckbox
+              v-model:textInit="proceedReading"
+              id-checkbox="proceed-reading-checkbox"
+              :label="$t('Proceed reading')"
+            />
+            <ClassicCheckbox
+              v-model:textInit="isVisibleTemp"
+              id-checkbox="is-visible-checkbox"
+              :label="$t('Podcasts still available')"
+            />
           </div>
           <div
             v-else
-            class="d-flex flex-column flex-grow"
+            class="d-flex flex-column flex-grow-1"
           >
-            <div>
-              <input
-                id="proceedCheck"
-                v-model="displayArticle"
-                type="checkbox"
-                class="form-check-input"
-              >
-              <label
-                class="form-check-label"
-                for="proceedCheck"
-              >{{
-                $t('Display associated article')
-              }}</label>
-            </div>
+            <ClassicCheckbox
+              v-model:textInit="displayArticle"
+              id-checkbox="display-article-checkbox"
+              :label="$t('Display associated article')"
+            />
           </div>
         </div>
       </div>
@@ -124,8 +99,12 @@
 </template>
 
 <script lang="ts">
+import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
+  components:{
+    ClassicCheckbox,
+  },
   props: {
     isVisible: { default: false, type: Boolean},
     choseNumberEpisode: {default: false, type: Boolean},

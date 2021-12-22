@@ -30,25 +30,13 @@
     >
       {{ $t('Number podcasts', { nb: podcasts.length }) + $t('sort by score') }}
     </div>
-    <div
+    <ClassicSearch
       v-if="notEmptyPlaylist"
-      class="d-flex position-relative width-600 align-self-baseline"
-    >
-      <label
-        for="search"
-        class="d-inline"
-        :aria-label="$t('Search')"
-      />
-      <input
-        id="search"
-        v-model="searchPattern"
-        :placeholder="$t('Search')"
-        class="filter-search-input input-no-outline flex-grow"
-      >
-      <div
-        class="saooti-search-bounty filter-list-search-icon search-icon-container"
-      />
-    </div>
+      v-model:textInit="searchPattern"
+      class="width-600 align-self-baseline"
+      id-checkbox="podcast-list-search"
+      :label="$t('Search')"
+    />
     <ul
       v-show="loaded"
       class="podcast-list"
@@ -78,7 +66,7 @@
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
-
+import ClassicSearch from '../../form/ClassicSearch.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
@@ -87,6 +75,7 @@ export default defineComponent({
 
   components: {
     PodcastItem,
+    ClassicSearch
   },
 
   props: {
