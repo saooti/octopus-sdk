@@ -44,7 +44,7 @@ export default defineComponent({
     }, 1000);
   },
   unmounted() {
-    clearInterval(this.countdownTimer);
+    clearInterval((this.countdownTimer as unknown as number));
   },
 
   methods: {
