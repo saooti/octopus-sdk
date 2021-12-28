@@ -107,7 +107,12 @@ body{
       box-shadow:0px 6px 20px 3px rgba($octopus-primary-color, 0.2) !important;
     }
   }
-
+  a.btn{
+		color: #383838;
+		&:hover{
+			color: #383838;
+		}
+	}
   a, a:hover{
     text-decoration: none;
     outline-width: 0;

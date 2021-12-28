@@ -30,7 +30,6 @@
       width="auto"
       :defaultanswer="$t('No organisation filter')"
       :value="organisationId"
-      :light="true"
       class="me-2"
       :reset="reset"
       @selected="onOrganisationSelected"

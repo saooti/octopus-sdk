@@ -81,7 +81,6 @@
       page="leftMenu"
       :defaultanswer="$t('No organisation filter')"
       :value="organisationId"
-      :light="true"
       :reset="reset"
       @selected="onOrganisationSelected"
     />

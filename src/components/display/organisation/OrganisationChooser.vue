@@ -28,7 +28,7 @@
       :show-no-results="true"
       :hide-selected="true"
       :show-labels="false"
-      :class="{ 'light-multiselect': light }"
+      :class="{ 'multiselect-transparent': light }"
       @search-change="onSearchOrganisation"
       @open="onOpen"
       @close="onClose"
@@ -51,7 +51,6 @@
           >
           <span
             class="option__title"
-            :class="{ descriptionText: light }"
           >
             {{ option.name }}
           </span>
@@ -72,7 +71,6 @@
           >
           <span
             class="option__title"
-            :class="{ descriptionText: light }"
           >
             {{ option.name }}
           </span>
@@ -99,7 +97,6 @@
       </template>
       <template #caret="">
         <div
-          v-if="!light"
           class="position-relative"
         >
           <span

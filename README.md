@@ -508,3 +508,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.8 Améliorations diverses
  * 30.0.9 Améliorations diverses
  * 30.0.10 PB clearInterval
+ * 30.0.11 Version pour release

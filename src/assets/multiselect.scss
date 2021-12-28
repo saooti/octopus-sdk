@@ -16,40 +16,6 @@
         }
     }
 
-    .multiselect.light-multiselect {
-
-        .multiselect__single {
-            margin-bottom: 0;
-        }
-    }
-
-    .light-multiselect{
-        min-height: auto;
-        .multiselect__tags {
-            padding: 0 40px 0 0;
-            min-height: auto;
-        }
-        .multiselect__single {
-            margin-bottom: 0;
-        }
-        .multiselect__input,
-        .multiselect__single,
-        .multiselect__tags,
-        .multiselect--active .multiselect__select,
-        .multiselect__spinner {
-            background: transparent;
-        }
-        .multiselect--active .multiselect__select {
-            transform: unset;
-        }
-        .option__title {
-            font-weight: bold;
-        }
-        .octopus-arrow-down {
-            top: 2px;
-        }
-    }
-
     .multiselect-octopus-proposition{
         display: flex;
         align-items: center;
