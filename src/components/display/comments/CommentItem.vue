@@ -1,13 +1,13 @@
 <template>
   <div class="d-flex flex-column mt-2 mb-1 item-comment">
-    <div class="d-flex small-Text">
+    <div class="d-flex small-text">
       <template v-if="!isEditing">
         <b
           v-if="
             recordingInLive &&
               ('Live' === comment.phase || 'Prelive' === comment.phase)
           "
-          class="recording-bg me-1 text-light p-01"
+          class="recording-bg me-1 text-light p-1"
         >{{ $t('Live') }}</b>
         <b
           v-if="editRight || comment.status == 'Valid'"
@@ -92,7 +92,7 @@
     >
       <button
         v-if="null === comment.commentIdReferer && 'Valid' === comment.status"
-        class="btn btn-answer primary-color me-2"
+        class="btn py-1 px-3 primary-color me-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
         @click="answerComment"
       >
@@ -104,7 +104,7 @@
             (isFlat && comment.commentIdReferer)
         "
         :id="'commentItem'+comment.comId"
-        class="primary-color c-hand d-flex align-items-center small-Text input-no-outline"
+        class="primary-color c-hand d-flex align-items-center small-text input-no-outline"
         type="button"
         data-bs-toggle="collapse"
         :data-bs-target="'#commentItemDetail'+comment.comId"
@@ -124,7 +124,7 @@
           <div v-else>
             {{ $t('In response to') }}
           </div>
-          <span class="saooti-arrow_down saooti-arrow_down-margin" />
+          <span class="saooti-arrow_down" />
         </div>
         <div class="d-flex align-items-center when-opened">
           <div v-if="comment.relatedComments">
@@ -134,7 +134,7 @@
             {{ $t('In response to') }}
           </div>
           <span
-            class="saooti-arrow_down saooti-arrow_down-margin arrow-transform me-2"
+            class="saooti-arrow_down arrow-transform me-2"
           />
         </div>
       </div>

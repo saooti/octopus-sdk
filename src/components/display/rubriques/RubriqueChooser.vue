@@ -47,7 +47,7 @@
         <div
           v-if="undefined!==option"
           class="multiselect-octopus-proposition"
-          :class="option.rubriqueId <= 0 ? 'primary-dark' : ''"
+          :class="option.rubriqueId <= 0 ? 'primary-darker' : ''"
           :data-selenium="'rubric-chooser-' + seleniumFormat(option.name)"
         >
           <span class="option__title">{{ option.name }}</span>
@@ -60,7 +60,7 @@
         {{ $t('No elements found. Consider changing the search query.') }}
       </template>
       <template #caret>
-        <span class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top" />
+        <span class="saooti-arrow_down octopus-arrow-down" />
       </template>
     </VueMultiselect>
   </div>

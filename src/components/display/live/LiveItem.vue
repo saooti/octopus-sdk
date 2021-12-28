@@ -46,7 +46,7 @@
     </router-link>
     <div class="d-flex flex-column live-special-width">
       <router-link
-        class="text-uppercase link-info text-truncate"
+        class="text-uppercase fw-bold text-truncate"
         :to="{
           name: 'podcast',
           params: { podcastId: live.podcastId },
@@ -56,7 +56,7 @@
         {{ live.title }}
       </router-link>
       <router-link
-        class="link-info text-truncate"
+        class="fw-bold text-truncate"
         :to="{
           name: 'emission',
           params: { emissionId: live.emission.emissionId },
@@ -87,7 +87,7 @@
           v-for="animator in live.animators"
           :key="animator.participantId"
           :aria-label="$t('Participant')"
-          class="link-info"
+          class="fw-bold"
           :to="{
             name: 'participant',
             params: { participantId: animator.participantId },
@@ -100,7 +100,7 @@
       <div v-if="!isPodcastmaker">
         {{ $t('Producted by : ') }}
         <router-link
-          class="link-info"
+          class="fw-bold"
           :to="{
             name: 'productor',
             params: { productorId: live.organisation.id },

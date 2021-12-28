@@ -5,7 +5,7 @@
     @click="$emit('update:showTimeline', !showTimeline)"
   >
     <div
-      class="saooti-arrow_down saooti-arrow_down-margin"
+      class="saooti-arrow_down"
       :class="showTimeline ? '' : 'arrow-transform'"
     />
     <div>Timeline</div>

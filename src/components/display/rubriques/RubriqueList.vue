@@ -1,12 +1,11 @@
 <template>
-  <div class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone rubrique-list">
+  <div class="d-inline-flex w-100 mb-3 px-3 hide-phone">
     <div
       id="rubrique-list-container"
-      class="rubrique-list-container"
     >
       <select
         v-model="rubriquage"
-        class="c-hand mb-0"
+        class="c-hand"
         @change="onRubriquageSelected"
       >
         <option
@@ -32,13 +31,11 @@
       class="dropdown btn-group"
     >
       <button
-        class="btn dropdown-toggle btn-secondary text-decoration-none text-dark category-item category-item-plus dropdown-toggle-no-caret"
+        class="btn dropdown-toggle category-rubrique-item-plus dropdown-toggle-no-caret saooti-plus"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         :aria-label="$t('See more')"
-      >
-        <i class="saooti-plus" />
-      </button>
+      />
       <ul class="dropdown-menu dropdown-menu-right px-4">
         <div
           v-for="rubrique in hidenRubriques"
@@ -180,7 +177,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.rubrique-list-container {
+#rubrique-list-container {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -193,7 +190,6 @@ export default defineComponent({
     border-radius: 1.5rem;
     margin: 0.2rem;
     font-size: 0.6rem;
-    margin: 0.2rem;
     padding: 0.5rem;
   }
 }
@@ -201,8 +197,6 @@ export default defineComponent({
   font-size: 0.6rem;
   margin: 0.2rem;
   padding: 0.5rem;
-  display: block;
-  height: 1.5rem;
   border-radius: 1.5rem;
   border: 0;
   display: flex;
@@ -210,22 +204,8 @@ export default defineComponent({
   justify-content: center;
   white-space: nowrap;
   flex-shrink: 0;
-}
-button.rubrique-item {
-  .router-link-active {
-    background: #ddd !important;
-  }
   &:hover {
     background: #ddd !important;
   }
-}
-
-.rubrique-list .rubrique-item-plus {
-  display: flex;
-  height: 1.5rem;
-  width: 1.5rem;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.5rem;
 }
 </style>

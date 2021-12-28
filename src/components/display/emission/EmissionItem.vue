@@ -1,11 +1,6 @@
 <template>
   <li
-    class="mt-3"
-    :class="
-      lightItems
-        ? 'noList emission-light-max-size'
-        : 'emission-item-container shadow-element'
-    "
+    class="mt-3 emission-item-container shadow-element"
   >
     <router-link
       :to="{
@@ -14,40 +9,14 @@
         query: { productor: $store.state.filter.organisationId },
       }"
       :aria-label="$t('Emission')"
-      class="text-dark"
+      class="d-flex text-dark"
     >
       <div
-        v-if="!lightItems"
         class="img-box"
         :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"
       />
-      <div
-        v-else
-        class="d-flex"
-      >
+      <div class="emission-item-text">
         <div
-          class="img-box-light flex-shrink-0"
-          :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"
-        />
-        <div class="emission-light-title">
-          {{ name }}
-        </div>
-      </div>
-    </router-link>
-    <div
-      class="emission-item-text"
-      :class="lightItems ? 'p-0' : ''"
-    >
-      <router-link
-        :to="{
-          name: 'emission',
-          params: { emissionId: emission.emissionId },
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="text-dark"
-      >
-        <div
-          v-if="!lightItems"
           class="emission-name"
         >
           <img
@@ -55,36 +24,34 @@
             class="icon-caution"
             src="/img/caution.png"
             :title="$t('Emission have not podcasts')"
-          >{{ name }}
+          >{{ emission.name }}
         </div>
         <div
           :id="'description-emission-container-' + emission.emissionId"
           class="emission-description htms-wysiwyg-content"
-          :class="lightItems ? 'emission-small-description' : ''"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div
             :id="'description-emission-' + emission.emissionId"
-            v-html="urlify(description)"
+            v-html="urlify(emission.description|| '')"
           />
-          <!-- eslint-enable -->
+        <!-- eslint-enable -->
         </div>
-      </router-link>
-      <div class="flex-grow-1" />
-      <router-link
-        v-if="!isPodcastmaker"
-        :to="{
-          name: 'productor',
-          params: { productorId: emission.orga.id },
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="text-dark"
-      >
-        <div class="emission-producer primary-color">
-          © {{ emission.orga.name }}
-        </div>
-      </router-link>
-    </div>
+        <div class="flex-grow-1" />
+        <router-link
+          v-if="!isPodcastmaker"
+          :to="{
+            name: 'productor',
+            params: { productorId: emission.orga.id },
+            query: { productor: $store.state.filter.organisationId },
+          }"
+        >
+          <div class="emission-producer">
+            © {{ emission.orga.name }}
+          </div>
+        </router-link>
+      </div>
+    </router-link>
   </li>
 </template>
 
@@ -115,18 +82,9 @@ export default defineComponent({
     },
     organisation(): string {
       if(this.emission && this.emission.publisher && this.emission.publisher.organisation){
-        return '' + this.emission.publisher.organisation.name;
+        return this.emission.publisher.organisation.name;
       }
       return '';
-    },
-    lightItems(): boolean {
-      return (state.emissionsPage.lightItems as boolean);
-    },
-    description(): string {
-      return this.emission.description || '';
-    },
-    name(): string {
-      return this.emission.name;
     },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;

@@ -18,7 +18,7 @@
             frameborder="0"
             :width="iFrameWidth"
             :height="iFrameHeight"
-            class="maxIframe"
+            class="max-iframe"
           />
           <div class="d-flex flex-column">
             <button
@@ -379,7 +379,7 @@ export default defineComponent({
     box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
   }
 }
-.maxIframe {
+.max-iframe {
   max-width: 300px;
 }
 </style>

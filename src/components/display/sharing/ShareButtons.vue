@@ -1,6 +1,6 @@
 <template>
-  <div class="module-box text-center-mobile share-button-page">
-    <div class="d-flex align-items-center mb-3 share-button-title">
+  <div class="module-box text-center-mobile">
+    <div class="d-flex align-items-center mb-3">
       <h3
         v-if="
           !bigRound &&
@@ -13,9 +13,8 @@
       <span
         v-if="authenticated"
         id="popover-share-help"
-        role="button"
         tabindex="-1"
-        class="saooti-help ml-2"
+        class="saooti-help ms-2"
         :aria-label="$t('Help')"
       />
       <Popover
@@ -30,12 +29,12 @@
       class="d-flex"
       :class="[
         bigRound && !audioUrl ? 'justify-content-center' : '',
-        verticalDisplay ? 'flex-column' : '',
+        verticalDisplay ? 'd-flex-row' : '',
       ]"
     >
       <a
         v-if="audioUrl"
-        class="btn btn-bigRound"
+        class="btn btn-big-round"
         :title="$t('Downloading')"
         :href="audioUrl"
         rel="noopener"
@@ -50,8 +49,8 @@
         target="_blank"
         :href="facebookURL"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-facebook share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-facebook share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         title="Facebook"
         aria-label="Facebook"
@@ -69,8 +68,8 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-twitter share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-twitter share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         :href="twitterURL"
         title="Twitter"
@@ -89,8 +88,8 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-linkedin share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-linkedin share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         :href="linkedinURL"
         title="Linkedin"
@@ -110,8 +109,8 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         :href="rssUrl"
         :title="$t('Subscribe to this emission')"
@@ -131,8 +130,8 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         aria-label="copy"
         :title="$t('Copy this page URL')"
@@ -152,8 +151,8 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         :aria-label="$t('Share newsletter')"
         :title="$t('Share newsletter')"
@@ -173,8 +172,8 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         :aria-label="$t('Share QR Code')"
         :title="$t('Share QR Code')"
@@ -195,8 +194,8 @@
         target="_blank"
         :href="whatsappURL"
         :class="[
-          bigRound ? 'btn btn-bigRound' : 'btn btn-whatsapp share-btn mb-2',
-          verticalDisplay ? '' : 'me-2 ms-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-whatsapp share-btn mb-2',
+          verticalDisplay ? '' : 'mx-2',
         ]"
         aria-label="Whatsapp"
         title="Whatsapp"
@@ -348,26 +347,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-.share-button-page {
-  .saooti-Whatsapp{
-    width: 25px;
-    height: 25px;
-  }
-  @media (max-width: 960px) {
-    .flex-column {
-      flex-direction: row !important;
-    }
-    .btn {
-      margin-right: 0.5rem;
-    }
-  }
-  @media (max-width: 450px) {
-    .flex-column {
-      flex-direction: row !important;
-      flex-wrap: wrap;
-    }
-  }
-}
-</style>

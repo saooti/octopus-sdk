@@ -1,9 +1,7 @@
 <template>
-  <div class="d-flex justify-content-around mt-3 flex-grow-1 w-100">
+  <div class="d-flex justify-content-around mt-3 w-100">
     <div class="d-flex flex-column align-items-center flex-shrink-0 me-3">
-      <div class="fw-600">
-        {{ $t('Choose color') }}
-      </div>
+      <div>{{ $t('Choose color') }}</div>
       <VSwatches
         v-model="internColor"
         class="c-hand input-no-outline"
@@ -14,9 +12,7 @@
       />
     </div>
     <div class="d-flex flex-column align-items-center">
-      <div class="fw-600">
-        {{ $t('Choose theme') }}
-      </div>
+      <div>{{ $t('Choose theme') }}</div>
       <VSwatches
         v-model="internTheme"
         class="c-hand input-no-outline"

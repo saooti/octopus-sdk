@@ -17,7 +17,6 @@
           </div>
           <OrganisationChooser
             :defaultanswer="$t('Please chose a productor')"
-            :all="true"
             @selected="onOrganisationSelected"
           />
         </template>

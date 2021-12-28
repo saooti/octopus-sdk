@@ -7,7 +7,6 @@
       <OrganisationChooser
         :defaultanswer="$t('No organisation filter')"
         :value="organisationId"
-        :all="true"
         @selected="onOrganisationSelected"
       />
       <ClassicCheckbox

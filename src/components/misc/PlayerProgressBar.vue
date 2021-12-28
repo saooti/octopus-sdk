@@ -7,7 +7,7 @@
       >
         {{ $t('Podcast play error') + ' - ' }}
       </div>
-      <div class="flex-grow-1 text-ellipsis">
+      <div class="flex-grow-1 text-truncate">
         {{ podcastTitle }}
       </div>
       <div

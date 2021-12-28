@@ -1,17 +1,9 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading podcasts ...') }}
-      </h3>
-    </div>
-    <div v-if="loaded && !podcasts.length">
-      <p>{{ $t('No podcast match your query') }}</p>
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading podcasts ...'):undefined"
+      :error-text="loaded && !podcasts.length?$t(`No podcast match your query`):undefined"
+    />
     <div
       v-if="showCount && loaded && podcasts.length > 1"
       class="text-secondary mb-2"
@@ -31,7 +23,7 @@
     <button
       v-show="!allFetched && loaded"
       class="btn"
-      :class="buttonPlus ? 'btn-linkPlus mt-3' : 'btn-more'"
+      :class="buttonPlus ? 'btn-link-plus' : 'btn-more'"
       :disabled="inFetching"
       :aria-label="$t('See more')"
       @click="displayMore"
@@ -48,7 +40,7 @@
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
-
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 import { FetchParam } from '@/store/class/general/fetchParam';
@@ -57,6 +49,7 @@ export default defineComponent({
 
   components: {
     PodcastItem,
+    ClassicLoading
   },
 
   props: {

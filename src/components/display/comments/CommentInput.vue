@@ -5,7 +5,7 @@
   >
     <b
       v-if="knownIdentity && !editName"
-      class="small-Text mt-1 c-hand"
+      class="small-text mt-1 c-hand"
       @click="changeIdentity"
     >{{ knownIdentity }}</b>
     <div
@@ -14,7 +14,7 @@
     >
       <input
         v-model="temporaryName"
-        class="small-Text mt-1"
+        class="small-text mt-1"
         type="text"
         :class="{ 'border border-danger': temporaryName.length < 2 }"
       >

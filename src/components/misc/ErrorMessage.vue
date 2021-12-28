@@ -31,4 +31,7 @@ export default defineComponent({
 .bg-error-message {
   background-color: #ffd84a9c;
 }
+.alert-text{
+  color: darkred;
+}
 </style>

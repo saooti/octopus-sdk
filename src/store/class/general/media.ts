@@ -10,5 +10,5 @@ export interface Media {
   creation?: string;
   duration?: number;
   filePath?: string;
-  audioUrl: string;
+  audioUrl?: string;
 }

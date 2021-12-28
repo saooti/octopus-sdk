@@ -13,12 +13,11 @@
     <span class="mx-1">:</span>
     <Popover
       :target="idPopover"
-      custom-class="participant-help"
     >
       <div class="text-center font-weight-bold">
         {{ title }}
       </div>
-      <div class="horizontal-separator my-1" />
+      <hr>
       <div 
         v-for="participant in participants"
         :key="'desc-'+participant.participantId"
@@ -32,14 +31,14 @@
           v-html="participant.description"
         />
         <!-- eslint-enable -->
-        <div class="horizontal-separator my-1" />
+        <hr>
       </div>
     </Popover>
     <router-link
       v-for="participant in participants"
       :key="participant.participantId"
       :aria-label="$t('Participant')"
-      class="link-info"
+      class="fw-bold"
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
@@ -69,10 +68,6 @@ export default defineComponent({
     isGuest: { default: false, type:  Boolean},
   },
 
-  data() {
-    return {
-    };
-  },
   computed:{
     idPopover(): string{
       if(this.isGuest){
@@ -97,11 +92,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.participant-help{
-  .horizontal-separator {
-    border-top: 1px solid #cccccc;
-    width: 100%;
-  }
-} 
-</style>
+<style lang="scss"></style>

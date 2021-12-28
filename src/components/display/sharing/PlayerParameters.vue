@@ -1,7 +1,7 @@
 <template>
   <div
     id="accordionParameters"
-    class="accordion player-parameters mt-3"
+    class="accordion mt-3"
   >
     <div class="accordion-item">
       <h2
@@ -32,7 +32,7 @@
           >
             <div
               v-if="displayChoiceAllEpisodes"
-              class="d-flex align-items-center w-100 flex-wrap mt-1"
+              class="d-flex align-items-center flex-wrap mt-1"
             >
               <input
                 v-model="episodeNumbers"
@@ -66,7 +66,6 @@
               >
               <label
                 for="number-input"
-                class="d-inline"
                 :aria-label="$t('Number of player podcasts')"
               />
               <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
@@ -158,28 +157,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.player-parameters.card {
-  border: 0;
-  .btn {
-    border-radius: 0;
+  .input-share-player {
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    width: 60px;
   }
-  .card-header {
-    border: 0;
-    background-color: #fafafa;
-    padding: 0;
-  }
-  .card-body {
-    padding: 0.25rem;
-    border: 0.05rem solid #eee;
-    background-color: #fafafa;
-    .custom-control {
-      padding-left: 0;
-    }
-    input[type='number'] {
-      padding-left: 10px;
-      text-align: center;
-      width: 90px;
-    }
-  }
-}
 </style>

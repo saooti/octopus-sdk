@@ -19,13 +19,11 @@
       class="dropdown btn-group"
     >
       <button
-        class="btn dropdown-toggle btn-secondary text-decoration-none text-dark category-item category-item-plus dropdown-toggle-no-caret"
+        class="btn dropdown-toggle category-rubrique-item-plus dropdown-toggle-no-caret saooti-plus"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         :aria-label="$t('See more')"
-      >
-        <i class="saooti-plus" />
-      </button>
+      />
       <ul class="dropdown-menu dropdown-menu-right px-4">
         <div
           v-for="category in hidenCategories"

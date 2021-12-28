@@ -9,22 +9,13 @@
         params: { participantId: participant.participantId },
         query: { productor: $store.state.filter.organisationId },
       }"
-      class="mt-3"
+      class="mt-3 text-dark"
       :aria-label="$t('Participant')"
     >
       <div
         class="img-box-circle"
         :style="{ 'background-image': 'url(\'' + participant.imageUrl + '\')' }"
       />
-    </router-link>
-    <router-link
-      :to="{
-        name: 'participant',
-        params: { participantId: participant.participantId },
-        query: { productor: $store.state.filter.organisationId },
-      }"
-      class="text-dark mt-3"
-    >
       <div class="participant-name">
         <img
           v-if="!activeParticipant && !isPodcastmaker && editRight"
@@ -40,7 +31,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <div
           :id="'description-participant-' + participant.participantId"
-          v-html="urlify(description)"
+          v-html="urlify(participant.description|| '')"
         />
         <!-- eslint-enable -->
       </div>
@@ -52,11 +43,9 @@
         params: { productorId: participant.orga.id },
         query: { productor: $store.state.filter.organisationId },
       }"
-      class="text-dark participant-producer"
+      class="participant-producer"
     >
-      <div class="participant-producer primary-color">
-        © {{ participant.orga.name }}
-      </div>
+      © {{ participant.orga.name }}
     </router-link>
   </li>
 </template>
@@ -84,9 +73,6 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    description(): string {
-      return this.participant.description || '';
-    },
     name(): string {
       return (
         (this.participant.firstName || '') +
@@ -108,8 +94,9 @@ export default defineComponent({
         (this.authenticated &&
           this.organisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      }
       return false;
     },
   },
@@ -156,6 +143,7 @@ export default defineComponent({
   align-items: center;
 
   .participant-name {
+    margin-top: 1rem;
     font-size: 0.9rem;
     font-weight: 600;
     text-align: center;

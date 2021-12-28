@@ -1,117 +1,41 @@
 <template>
   <div
     v-if="filterOrga || organisationId"
-    class="d-flex flex-column align-items-center live-list-container"
+    class="d-flex flex-column align-items-center"
   >
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading lives...') }}
-      </h3>
-    </div>
-    <div
-      v-if="
-        loaded && !lives.length && !livesToBe.length && !livesTerminated.length
-      "
-    >
-      <p>{{ $t('No live currently') }}</p>
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading lives...'):undefined"
+      :error-text="isNoLive?$t('No live currently'):undefined"
+    />
     <div v-if="loaded && displayNextLiveMessage">
       <h3 class="text-danger">
         {{ displayNextLiveMessage }}
       </h3>
     </div>
-    <template v-if="lives.length">
-      <div class="horizontal-separator" />
-      <p class="live-list-category">
-        {{ $t('In live') }}
-      </p>
-      <LiveItem
-        v-for="(l, index) in lives"
-        :key="l.podcastId"
-        class="mt-3"
-        :fetch-conference="l"
-        :index="index"
-        @deleteItem="deleteLive"
-      />
-    </template>
-    <template v-if="livesNotStarted.length">
-      <div class="horizontal-separator" />
-      <p class="live-list-category">
-        {{ $t('This live is not started yet') }}
-      </p>
-      <LiveItem
-        v-for="(l, index) in livesNotStarted"
-        :key="l.podcastId"
-        class="mt-3"
-        :fetch-conference="l"
-        :index="index"
-        @deleteItem="deleteLiveNotStarted"
-      />
-    </template>
-    <template v-if="livesToBe.length">
-      <div class="horizontal-separator" />
-      <p class="live-list-category">
-        {{ $t('Live to be') }}
-      </p>
-      <LiveItem
-        v-for="(l, index) in livesToBe"
-        :key="l.podcastId"
-        class="mt-3"
-        :fetch-conference="l"
-        :index="index"
-        @deleteItem="deleteLiveToBe"
-      />
-    </template>
-    <template v-if="livesTerminated.length">
-      <div class="horizontal-separator" />
-      <p class="live-list-category">
-        {{ $t('Live terminated') }}
-      </p>
-      <LiveItem
-        v-for="(l, index) in livesTerminated"
-        :key="l.podcastId"
-        class="mt-3"
-        :fetch-conference="l"
-        :index="index"
-        @deleteItem="deleteLiveTerminated"
-      />
-    </template>
-    <template v-if="livesPublishing.length">
-      <div class="horizontal-separator" />
-      <p class="live-list-category">
-        {{ $t('Publishing') }}
-      </p>
-      <LiveItem
-        v-for="(l, index) in livesPublishing"
-        :key="l.podcastId"
-        class="mt-3"
-        :fetch-conference="l"
-        :index="index"
-        @deleteItem="deleteLivePublishing"
-      />
-    </template>
-    <template v-if="livesError.length">
-      <div class="horizontal-separator" />
-      <p class="live-list-category">
-        {{ $t('In error') }}
-      </p>
-      <LiveItem
-        v-for="(l, index) in livesError"
-        :key="l.podcastId"
-        class="mt-3"
-        :fetch-conference="l"
-        :index="index"
-        @deleteItem="deleteLiveError"
-      />
-    </template>
+    <div
+      v-for="(live, indexLive) in livesArray"
+      :key="live.status"
+    >
+      <template v-if="live.lives.length">
+        <hr>
+        <p class="live-list-category">
+          {{ live.title }}
+        </p>
+        <LiveItem
+          v-for="(l, index) in live.lives"
+          :key="l.podcastId"
+          class="mt-3"
+          :fetch-conference="l"
+          :index="index"
+          @deleteItem="deleteLive(indexLive, $event)"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import LiveItem from './LiveItem.vue';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
@@ -122,6 +46,7 @@ export default defineComponent({
   name: 'LiveList',
   components: {
     LiveItem,
+    ClassicLoading
   },
 
   props: {
@@ -129,21 +54,25 @@ export default defineComponent({
     organisationId: { default: undefined, type: String},
   },
   emits: ['initConferenceIds'],
-
   data() {
     return {
       loading: true as boolean,
       loaded: true as boolean,
-      lives: [] as Array<Conference>,
-      livesNotStarted: [] as Array<Conference>,
-      livesToBe: [] as Array<Conference>,
-      livesTerminated: [] as Array<Conference>,
-      livesError: [] as Array<Conference>,
-      livesPublishing: [] as Array<Conference>,
+      livesArray: [
+        {status: "RECORDING", title:this.$t('In live'), lives:[]},
+        {status: "PENDING", title:this.$t('This live is not started yet'), lives:[]},
+        {status: "PLANNED", title:this.$t('Live to be'), lives:[]},
+        {status: "DEBRIEFING", title:this.$t('Live terminated'), lives:[]},
+        {status: "PUBLISHING", title:this.$t('Publishing'), lives:[]},
+        {status: "ERROR", title:this.$t('In error'), lives:[]}
+      ] as Array<{status:string, title:string, lives:Array<Conference>}>
     };
   },
   
   computed: {
+    isNoLive(): boolean{
+      return this.loaded && !this.livesArray[0].lives.length && !this.livesArray[2].lives.length && !this.livesArray[3].lives.length;
+    },
     filterOrgaUsed(): string|undefined {
       if (this.filterOrga) return this.filterOrga;
       if (this.organisationId) return this.organisationId;
@@ -153,12 +82,12 @@ export default defineComponent({
       return this.$store.state.filter.organisationId;
     },
     displayNextLiveMessage(): string {
-      if (0 !== this.lives.length) return '';
-      if (this.livesNotStarted.length > 0)
+      if (0 !== this.livesArray[0].lives.length) return '';
+      if (this.livesArray[1].lives.length > 0)
         return this.$t('A live can start any moment').toString();
-      if (this.livesToBe.length > 0)
+      if (this.livesArray[2].lives.length > 0)
         return this.$t('Next live date', {
-          date: moment(this.livesToBe[0].date).format('LLLL'),
+          date: moment(this.livesArray[2].lives[0].date).format('LLLL'),
         }).toString();
       return '';
     },
@@ -219,12 +148,9 @@ export default defineComponent({
   },
   methods: {
     initArrays(): void {
-      this.lives.length = 0;
-      this.livesNotStarted.length = 0;
-      this.livesToBe.length = 0;
-      this.livesTerminated.length = 0;
-      this.livesError.length = 0;
-      this.livesPublishing.length = 0;
+      for (let i = 0, len = this.livesArray.length; i < len; i++) {
+        this.livesArray[i].lives.length = 0;
+      }
     },
     async fetchContent(): Promise<void> {
       this.initArrays();
@@ -235,89 +161,48 @@ export default defineComponent({
       }
       this.loading = true;
       this.loaded = false;
-      const dataLives = await octopusApi.listConferences(
-        this.filterOrgaUsed,
-        true,
-        'RECORDING'
-      );
-      this.lives = dataLives.filter((p: Conference | null) => {
-        return null !== p;
-      });
-      const dataLivesToBe = await octopusApi.listConferences(
-        this.filterOrgaUsed,
-        true,
-        'PENDING'
-      );
       let indexPast = 0;
-      for (let index = 0, len = dataLivesToBe.length; index < len; index++) {
-        if (moment(dataLivesToBe[index].date).isBefore(moment())) {
-          this.livesNotStarted.push(dataLivesToBe[index]);
-          indexPast = index + 1;
-        } else {
-          break;
+      let dataLivesToBe: Array<Conference> = [];
+      for (let i = 0, len = this.livesArray.length; i < len; i++) {
+        if (!this.organisationRight && 
+        ("DEBRIEFING"===this.livesArray[i].status ||"ERROR"===this.livesArray[i].status ||"PUBLISHING"===this.livesArray[i].status)) {
+          continue;
+        }
+        const dataLives = await octopusApi.listConferences(
+          this.filterOrgaUsed,
+          true,
+          this.livesArray[i].status
+        );
+        if("PLANNED"!==this.livesArray[i].status && "PENDING"!==this.livesArray[i].status){
+          this.livesArray[i].lives = dataLives.filter((p: Conference | null) => {
+            return null !== p;
+          });
+        }else if("PENDING"===this.livesArray[i].status){
+          dataLivesToBe = dataLives;
+          for (let index = 0, len = this.livesArray[i].lives.length; index < len; index++) {
+            if (moment(dataLives[index].date).isBefore(moment())) {
+              this.livesArray[i].lives.push(dataLives[index]);
+              indexPast = index + 1;
+            } else {break;}
+          }
+        }else{
+          this.livesArray[i].lives = dataLivesToBe
+          .slice(indexPast)
+          .concat(dataLives)
+          .filter((p: Conference | null) => {
+            return null !== p;
+          });
         }
       }
-      const dataLivesPlanned = await octopusApi.listConferences(
-        this.filterOrgaUsed,
-        true,
-        'PLANNED'
-      );
-      this.livesToBe = dataLivesToBe
-        .slice(indexPast)
-        .concat(dataLivesPlanned)
-        .filter((p: Conference | null) => {
-          return null !== p;
-        });
-      if (this.organisationRight) {
-        const dataLivesTerminated = await octopusApi.listConferences(
-          this.filterOrgaUsed,
-          true,
-          'DEBRIEFING'
-        );
-        this.livesTerminated = dataLivesTerminated.filter((p: Conference | null) => {
-          return null !== p;
-        });
-        const dataLivesError = await octopusApi.listConferences(
-          this.filterOrgaUsed,
-          true,
-          'ERROR'
-        );
-        this.livesError = dataLivesError.filter((p: Conference | null) => {
-          return null !== p;
-        });
-        const dataLivesPublishing = await octopusApi.listConferences(
-          this.filterOrgaUsed,
-          true,
-          'PUBLISHING'
-        );
-        this.livesPublishing = dataLivesPublishing.filter((p: Conference | null) => {
-          return null !== p;
-        });
-      }
-      const listIds = this.lives
-        .concat(this.livesToBe)
-        .concat(this.livesNotStarted);
+      const listIds = this.livesArray[0].lives
+        .concat(this.livesArray[1].lives)
+        .concat(this.livesArray[2].lives);
       this.$emit('initConferenceIds', listIds);
       this.loading = false;
       this.loaded = true;
     },
-    deleteLive(index: number): void {
-      this.lives.splice(index, 1);
-    },
-    deleteLiveToBe(index: number): void {
-      this.livesToBe.splice(index, 1);
-    },
-    deleteLiveTerminated(index: number): void {
-      this.livesTerminated.splice(index, 1);
-    },
-    deleteLiveError(index: number): void {
-      this.livesError.splice(index, 1);
-    },
-    deleteLiveNotStarted(index: number): void {
-      this.livesNotStarted.splice(index, 1);
-    },
-    deleteLivePublishing(index: number): void {
-      this.livesPublishing.splice(index, 1);
+    deleteLive(indexLives: number, index: number): void {
+      this.livesArray[indexLives].lives.splice(index, 1);
     },
     updateLiveLocal(): void {
       for (
@@ -326,25 +211,25 @@ export default defineComponent({
         index++
       ) {
         const element = this.conferenceWatched[index];
-        const indexLivesToBe = this.livesToBe.findIndex(
+        const indexLivesToBe = this.livesArray[1].lives.findIndex(
           (el: Conference) => el.conferenceId === element.conferenceId
         );
         if (-1 === indexLivesToBe) {
-          const indexLives = this.lives.findIndex(
+          const indexLives = this.livesArray[0].lives.findIndex(
             (el: Conference) => el.conferenceId === element.conferenceId
           );
           if (-1 === indexLives || 'DEBRIEFING' !== element.status) continue;
-          const newConf = this.lives[indexLives];
+          const newConf = this.livesArray[0].lives[indexLives];
           newConf.status = element.status;
-          this.lives.splice(indexLives, 1);
-          this.livesTerminated.push(newConf);
+          this.livesArray[0].lives.splice(indexLives, 1);
+          this.livesArray[3].lives.push(newConf);
           break;
         }
         if ('RECORDING' !== element.status) continue;
-        const newConf = this.livesToBe[indexLivesToBe];
+        const newConf = this.livesArray[1].lives[indexLivesToBe];
         newConf.status = element.status;
-        this.livesToBe.splice(indexLivesToBe, 1);
-        this.lives.push(newConf);
+        this.livesArray[1].lives.splice(indexLivesToBe, 1);
+        this.livesArray[0].lives.push(newConf);
         break;
       }
     },
@@ -353,24 +238,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.live-list-container .horizontal-separator {
-  border-top: 1px solid #cccccc;
-  width: 100%;
-  margin: 2rem;
-}
 .live-list-category {
   align-self: flex-start;
   text-transform: uppercase;
   font-weight: bold;
-}
-
-@media (max-width: 450px) {
-  .live-list-container h3 {
-    text-align: center;
-    font-size: 1rem;
-  }
-  .live-list-container .horizontal-separator {
-    margin: 1rem;
-  }
 }
 </style>

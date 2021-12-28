@@ -1,10 +1,9 @@
 <template>
   <div
-    v-if="!isEducation"
     class="d-flex align-items-center"
   >
     <div>{{ $t('Advertising') + ' :' }}</div>
-    <label class="wrap">
+    <label class="position-relative">
       <select
         ref="select"
         v-model="monetization"
@@ -24,7 +23,7 @@
         <option value="YES">{{ $t('Authorized advertising') }}</option>
         <option value="NO">{{ $t('Prohibited advertising') }}</option>
       </select>
-      <div class="saooti-arrow_down octopus-arrow-down-2 classic-select" />
+      <div class="saooti-arrow_down octopus-arrow-down" />
     </label>
   </div>
 </template>
@@ -34,7 +33,6 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
     isEmission: { default: false, type:  Boolean},
-    isEducation: { default: false, type:  Boolean},
   },
   emits: ['updateMonetization'],
 

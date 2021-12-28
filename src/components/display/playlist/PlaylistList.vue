@@ -1,21 +1,15 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading content ...') }}
-      </h3>
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading content ...'):undefined"
+    />
     <div
       v-if="loaded && playlists.length > 1"
       class="text-secondary mb-2"
     >
       {{ $t('Number playlists', { nb: displayCount }) + $t('sort by score') }}
     </div>
-    <ul class="emission-list twoEmissions">
+    <ul class="emission-list two-emissions">
       <PlaylistItem
         v-for="p in playlists"
         :key="p.playlistId"
@@ -25,7 +19,7 @@
     <button
       v-show="!allFetched && loaded"
       class="btn"
-      :class="buttonPlus ? 'btn-linkPlus' : 'btn-more'"
+      :class="buttonPlus ? 'btn-link-plus':'btn-more'"
       :disabled="inFetching"
       :aria-label="$t('See more')"
       @click="displayMore"
@@ -42,7 +36,7 @@
 import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore';
-
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -50,6 +44,7 @@ export default defineComponent({
 
   components: {
     PlaylistItem,
+    ClassicLoading
   },
   props: {
     first: { default: 0, type: Number },
@@ -140,8 +135,7 @@ export default defineComponent({
       this.totalCount = data.count;
       this.inFetching = false;
     },
-    displayMore(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    displayMore(): void {
       this.fetchContent(false);
     },
   },

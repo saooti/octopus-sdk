@@ -1,48 +1,41 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading participants ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="showCount && loaded && participants.length > 1"
-      class="text-secondary mb-2"
-    >
-      {{
-        $t('Number participants', { nb: displayCount }) + $t('sort by score')
-      }}
-    </div>
-    <ul
-      v-show="loaded"
-      class="participant-list"
-    >
-      <ParticipantItem
-        v-for="p in participants"
-        :key="p.participantId"
-        :participant="p"
+    <ClassicLoading
+      :loading-text="loading?$t('Loading participants ...'):undefined"
+    />
+    <template v-if="isLoadingMoreOrFinished">
+      <div
+        v-if="showCount"
+        class="text-secondary mb-2"
+      >
+        {{
+          $t('Number participants', { nb: displayCount }) + $t('sort by score')
+        }}
+      </div>
+      <ul
+        class="participant-list"
+      >
+        <ParticipantItem
+          v-for="p in participants"
+          :key="p.participantId"
+          :participant="p"
+        />
+      </ul>
+      <button
+        v-show="!allFetched"
+        class="btn btn-more saooti-plus"
+        :aria-label="$t('See more')"
+        :disabled="loading"
+        @click="fetchContent(false)"
       />
-    </ul>
-    <button
-      v-show="!allFetched && loaded"
-      class="btn btn-more"
-      :aria-label="$t('See more')"
-      :disabled="inFetching"
-      @click="displayMore"
-    >
-      <div class="saooti-plus" />
-    </button>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import ParticipantItem from './ParticipantItem.vue';
-
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Participant } from '@/store/class/general/participant';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -50,6 +43,7 @@ export default defineComponent({
 
   components: {
     ParticipantItem,
+    ClassicLoading
   },
   props: {
     first: { default: 0, type: Number },
@@ -62,18 +56,19 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: true as boolean,
       dfirst: this.first as number,
       dsize: this.size as number,
       totalCount: 0 as number,
       displayCount: 0 as number,
       participants: [] as Array<Participant>,
-      inFetching: false as boolean,
     };
   },
 
    
   computed: {
+    isLoadingMoreOrFinished():boolean{
+      return !this.loading || this.participants.length > 1;
+    },
     allFetched(): boolean {
       return this.dfirst >= this.totalCount;
     },
@@ -100,21 +95,17 @@ export default defineComponent({
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
-      this.inFetching = true;
-      if (reset) {
-        this.participants.length = 0;
-        this.dfirst = 0;
-        this.loading = true;
-        this.loaded = false;
-      }
+      this.loading = true;
       const data = await octopusApi.fetchParticipants({
         first: this.dfirst,
         size: this.dsize,
         query: this.query,
         organisationId: this.organisation,
       });
-      this.loading = false;
-      this.loaded = true;
+      if (reset) {
+        this.participants.length = 0;
+        this.dfirst = 0;
+      }
       this.displayCount = data.count;
       this.participants = this.participants.concat(data.result).filter((p: Participant | null) => {
         if (null === p) {
@@ -124,11 +115,7 @@ export default defineComponent({
       });
       this.dfirst += this.dsize;
       this.totalCount = data.count;
-      this.inFetching = false;
-    },
-    displayMore(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.fetchContent(false);
+      this.loading = false;
     },
   },
 })

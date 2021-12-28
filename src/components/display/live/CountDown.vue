@@ -3,7 +3,6 @@
     <h3>{{ $t('This live will start') }}</h3>
     <h3
       v-if="countdownTimer"
-      ref="countdown"
     >
       {{
         $t('In days hours minutes seconds', {
@@ -44,6 +43,10 @@ export default defineComponent({
       this.timer();
     }, 1000);
   },
+  unmounted() {
+    clearInterval(this.countdownTimer);
+  },
+
   methods: {
     timer(): void {
       this.days = Math.floor(this.seconds / 24 / 60 / 60);
@@ -52,7 +55,6 @@ export default defineComponent({
       const minutesLeft = Math.floor(hoursLeft - this.hours * 3600);
       this.minutes = Math.floor(minutesLeft / 60);
       this.remainingSeconds = this.seconds % 60;
-      /* this.$refs.countdown.innerHTML = this.pad(days) + ":" + this.pad(hours) + ":" + this.pad(minutes) + ":" + this.pad(remainingSeconds); */
       if (0 === this.seconds) {
         clearInterval((this.countdownTimer as unknown as number));
         this.countdownTimer = undefined;

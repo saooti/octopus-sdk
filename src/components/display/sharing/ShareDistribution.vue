@@ -131,7 +131,6 @@ export default defineComponent({
   data() {
     return {
       emission: undefined as Emission|undefined,
-      error: false as boolean,
       rss: '' as string,
     };
   },
@@ -143,12 +142,7 @@ export default defineComponent({
 
   methods: {
     async getEmissionDetails(): Promise<void> {
-      try {
-        const data = await octopusApi.fetchEmission(this.emissionId);
-        this.emission = data;
-      } catch {
-        this.error = true;
-      }
+      this.emission = await octopusApi.fetchEmission(this.emissionId);
     },
     getRSS(): void {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;

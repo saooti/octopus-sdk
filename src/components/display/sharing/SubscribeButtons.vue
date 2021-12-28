@@ -1,7 +1,7 @@
 <template>
   <div class="module-box flex-grow-0">
     <div class="d-flex align-items-center mb-3">
-      <h3 class="mb-0 share-button-title">
+      <h3 class="mb-0">
         {{ $t('Subscribe emission') }}
       </h3>
     </div>
@@ -197,5 +197,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

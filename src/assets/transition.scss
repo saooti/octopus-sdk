@@ -1,5 +1,99 @@
 .octopus-app{
     .transition-height {
-        transition: height 1s;
+      transition: height 1s;
     }
+    .arrow-transform {
+      transform: rotate(180deg);
+    }
+    .bloc-paddle {
+      align-items: flex-end;
+      display: flex;
+      width: 2rem;
+      height: 2.6rem;
+      padding: 0.7rem;
+      justify-content: space-around;
+      align-content: flex-start;
+      border-radius: 50%;
+      background: transparent !important;
+      
+      > span {
+          width: 0.1rem;
+          margin: 0.05rem;
+          background: #fff;
+      }
+      
+      .paddle1 {
+          animation-duration: 0.6s;
+          animation-name: slidein;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+      }
+      
+      .paddle2 {
+          animation-duration: 0.3s;
+          animation-name: slidein2;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+      }
+      
+      .paddle3 {
+          animation-duration: 0.5s;
+          animation-name: slidein3;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+      }
+      @keyframes slidein {
+          0% {
+          height: 0;
+          }
+          100% {
+          height: 1rem;
+          }
+      }
+      
+      @keyframes slidein2 {
+          0% {
+          height: 0.3rem;
+          }
+          100% {
+          height: 1.2rem;
+          }
+      }
+      
+      @keyframes slidein3 {
+          0% {
+          height: 1.2rem;
+          }
+          100% {
+          height: 0;
+          }
+      }
+    }
+    .out-left-enter-active,
+    .out-left-leave-active,
+    .out-right-enter-active,
+    .out-right-leave-active {
+      transition: all 0.3s ease;
+    }
+    
+    .out-left-leave-to,
+    .out-right-enter {
+      transform: translateX(-110%);
+      opacity: 0;
+    }
+    
+    .out-left-enter,
+    .out-right-leave-to {
+      transform: translateX(110%);
+      opacity: 0;
+    }
+    
+    .out-left-leave-to,
+    .out-right-leave-to {
+      position: absolute;
+    }
+    .out-right-leave-to {
+      right: 5rem;
+      z-index: -1;
+    }  
 }

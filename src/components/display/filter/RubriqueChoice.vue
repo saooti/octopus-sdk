@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center">
-    <label class="wrap">
+    <label class="position-relative">
       <select
         v-model="rubriquageId"
         class="ms-2 mb-0 c-hand"
@@ -13,7 +13,7 @@
         >{{ rubriquage.title }}</option>
       </select>
       <div
-        class="saooti-arrow_down octopus-arrow-down-2 classic-select"
+        class="saooti-arrow_down octopus-arrow-down"
       />
     </label>
     <template v-if="rubriquageId">
@@ -36,12 +36,10 @@
     </template>
     <button
       v-if="index"
-      class="btn btn-circle primary-color ms-1"
+      class="btn admin-button ms-1 saooti-bin"
       aria-label="delete"
       @click="deleteRubriquage"
-    >
-      <span class="saooti-bin" />
-    </button>
+    />
   </div>
 </template>
 

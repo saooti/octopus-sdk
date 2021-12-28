@@ -1,7 +1,6 @@
 <template>
   <div
     class="default-multiselect-width"
-    :class="{ 'multiselect-hide-arrow': !displayArrow }"
     :style="{ width: width }"
   >
     <label
@@ -72,7 +71,7 @@
       <template #caret="">
         <div class="position-relative">
           <span
-            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+            class="saooti-arrow_down octopus-arrow-down"
           />
         </div>
       </template>
@@ -120,7 +119,6 @@ export default defineComponent({
     defaultanswer: { default: '', type: String },
     organisationId: { default: undefined, type: String},
     emissionChosen: { default: undefined, type: Object as ()=>Emission},
-    displayArrow: { default: true, type: Boolean },
     distributedBy: { default: undefined, type: String},
     organisationDistributedBy: { default: undefined, type: String},
     reset: { default: false, type: Boolean },

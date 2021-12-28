@@ -6,12 +6,7 @@
   >
     <template v-if="isPodcastmaker">
       <div
-        v-if="mainRubrique"
-        class="mainRubrique"
-      />
-      <div
-        v-else
-        class="notMainRubrique"
+        :class="mainRubrique? 'mainRubrique' : 'notMainRubrique'"
       />
     </template>
     <div
@@ -55,9 +50,9 @@
           v-show="playingPodcast"
           class="bloc-paddle"
         >
-          <span class="paddle1 primary-color" />
-          <span class="paddle2 primary-color" />
-          <span class="paddle3 primary-color" />
+          <span class="paddle1" />
+          <span class="paddle2" />
+          <span class="paddle3" />
         </div>
       </div>
       <div
@@ -72,20 +67,20 @@
       </div>
       <div
         v-if="!classicPodcastPlay"
-        class="small-Text mt-3 fw-bolder"
+        class="small-text mt-3 fw-bolder"
       >
         {{ textVisible }}
       </div>
     </div>
     <div
       v-if="!isDescription && displayDescription && isMobile"
-      class="background-icon saooti-arrow-up2"
+      class="background-icon primary-bg saooti-arrow-up2"
       :aria-label="$t('Show description')"
       @click="showDescription"
     />
     <div
       v-if="isDescription && displayDescription && isMobile"
-      class="background-icon saooti-arrow-down2"
+      class="background-icon primary-bg saooti-arrow-down2"
       :aria-label="$t('Hide description')"
       @click="showDescription"
     />
@@ -291,12 +286,26 @@ export default defineComponent({
 
 
 <style lang="scss">
-.no-visible-img {
-  width: 3rem;
-  height: 3rem;
+.live-image-status {
+  text-align: center;
+  width: 100%;
+  font-size: 0.6rem;
+  padding: 0.2rem 0;
+  color: white;
+  text-transform: uppercase;
+}
+
+.background-icon{
   border-radius: 50%;
-  padding: 0.7em;
-  background: rgba(0, 0, 0, 0.31);
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+  right: 0;
+  bottom: 0;
+  margin: 5px;
+  position: absolute;
+  cursor: pointer;
+  z-index: 3;
 }
 .special-icon-play-button {
   width: 30px;
@@ -335,16 +344,13 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
-
     &.error-icon {
       background: #00000050 !important;
       cursor: default !important;
     }
-
     &:hover {
       background: #00000030;
     }
-
     > .saooti-play2-bounty {
       font-size: 2em;
       position: relative;
@@ -357,68 +363,5 @@ export default defineComponent({
     z-index: 2;
   }
 }
-.bloc-paddle {
-  align-items: flex-end;
-  display: flex;
-  width: 2rem;
-  height: 2.6rem;
-  padding: 0.7rem;
-  justify-content: space-around;
-  align-content: flex-start;
-  border-radius: 50%;
-  background: transparent !important;
 
-  > span {
-    width: 0.1rem;
-    margin: 0.05rem;
-    background: #fff;
-  }
-
-  .paddle1 {
-    animation-duration: 0.6s;
-    animation-name: slidein;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-
-  .paddle2 {
-    animation-duration: 0.3s;
-    animation-name: slidein2;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-
-  .paddle3 {
-    animation-duration: 0.5s;
-    animation-name: slidein3;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-  @keyframes slidein {
-    0% {
-      height: 0;
-    }
-    100% {
-      height: 1rem;
-    }
-  }
-
-  @keyframes slidein2 {
-    0% {
-      height: 0.3rem;
-    }
-    100% {
-      height: 1.2rem;
-    }
-  }
-
-  @keyframes slidein3 {
-    0% {
-      height: 1.2rem;
-    }
-    100% {
-      height: 0;
-    }
-  }
-}
 </style>

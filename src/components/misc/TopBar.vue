@@ -104,7 +104,7 @@
       <div class="hosted-by">
         <span>{{ $t('Hosted by') }}</span><span class="ms-1 me-1 primary-color">Saooti</span>
       </div>
-      <div class="d-flex justify-content-end flex-no-wrap">
+      <div class="d-flex justify-content-end flex-nowrap">
         <HomeDropdown :is-education="isEducation" />
         <router-link
           :aria-label="$t('Search')"

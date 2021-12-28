@@ -37,7 +37,7 @@
         (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
       "
       :name="transitionName"
-      class="podcast-list-inline"
+      class="element-list-inline"
       tag="ul"
       :class="[
         alignLeft ? 'justify-content-start' : '',
@@ -257,7 +257,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.podcast-list-inline.overflowScroll {
+.list-episode {
+    padding: 2rem 0rem 1rem !important;
+    @media (max-width: 450px) {
+        padding: 0.5rem 0rem 1rem !important;
+    }
+    h2 {
+        margin-bottom: 1rem;
+    }
+}
+.element-list-inline.overflowScroll {
   display: flex;
   flex-wrap: wrap;
   -webkit-overflow-scrolling: touch;

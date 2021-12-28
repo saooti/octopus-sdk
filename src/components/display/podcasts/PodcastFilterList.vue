@@ -1,15 +1,16 @@
 <template>
-  <div class="p-3 list-episodes">
-    <h2 v-if="name">
-      {{ $t('All podcast button', { name: name }) }}
-    </h2>
-    <h2 v-else>
-      {{ $t('All podcast emission button') }}
+  <div class="p-3">
+    <h2>
+      <template v-if="name">
+        {{ $t('All podcast button', { name: name }) }}
+      </template>
+      <template v-else>
+        {{ $t('All podcast emission button') }}
+      </template>
     </h2>
     <div class="d-flex align-items-center flex-wrap">
       <div
-        v-if="categoryFilter"
-        class="d-flex align-items-center flex-grow-1 categories-filter"
+        class="d-flex align-items-center flex-grow-1 me-3"
       >
         <CategoryChooser
           :defaultanswer="$t('No category filter')"
@@ -18,7 +19,7 @@
       </div>
       <ClassicSearch
         v-model:textInit="searchPattern"
-        class="small-flex-grow"
+        class="flex-small-grow"
         id-checkbox="podcast-filter-search"
         :label="$t('Search')"
       />
@@ -82,21 +83,13 @@ export default defineComponent({
       this.reloadList = !this.reloadList;
     },
   },
-  created() {
-    if (this.$route.query.first && 'string' === typeof this.$route.query.first) {
-      this.first = parseInt(this.$route.query.first);
-    }
-    if (this.$route.query.size && 'string' === typeof this.$route.query.size) {
-      this.size = parseInt(this.$route.query.size);
-    }
-  },
   methods: {
     onCategorySelected(category: Category|undefined): void {
       if (category && category.id) {
         this.iabId = category.id;
-      } else {
-        this.iabId = undefined;
+        return;
       }
+      this.iabId = undefined;
     },
     fetch(podcasts: Array<Podcast>): void {
       this.$emit('fetch', podcasts);
@@ -105,31 +98,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.categories-filter {
-  .multiselect {
-    width: 75%;
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-  }
-}
-.list-episodes {
-  padding: 2rem 0.5rem 1rem !important;
-  margin: 0 0.5rem;
-
-  @media (max-width: 450px) {
-    padding: 0.5rem 0rem 1rem !important;
-  }
-  h2 {
-    margin-bottom: 0.5rem;
-  }
-}
-.filter-list-search-icon {
-  right: 1.6rem !important;
-  font-weight: bold;
-}
-.small-flex-grow {
-  flex-grow: 0.3;
-}
-</style>
+<style lang="scss"></style>

@@ -1,6 +1,6 @@
 <template>
   <li
-    class="podcast-item-container m-0"
+    class="podcast-item-container"
     :class="[
       podcastShadow ? 'shadow-element' : '',
       podcastBorderBottom ? 'border-bottom' : '',
@@ -37,14 +37,14 @@
       @mouseleave="hideDescription"
     >
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-        <div class="me-3 small-Text">
+        <div class="me-3 small-text">
           {{ date }}
         </div>
         <div
           v-if="0 !== duration.length"
-          class="small-Text"
+          class="small-text"
         >
-          <!-- <span class="saooti-clock3"></span> -->{{ duration }}
+          {{ duration }}
         </div>
       </div>
       <AnimatorsItem :animators="podcast.animators" />

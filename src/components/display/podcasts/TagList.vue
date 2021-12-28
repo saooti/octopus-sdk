@@ -6,11 +6,10 @@
     <div
       v-for="(tag, index) in tagList"
       :key="tag"
-      class="tagListElement"
+      class="tag-list-element"
     >
       <div
         :id="'tag-list-from-podcast-page'+index"
-        class="tagListLink"
       >
         <img
           v-if="isOuestFranceTag(tag)"
@@ -55,7 +54,7 @@ export default defineComponent({
     height: 20px;
     margin-right: 5px;
   }
-  .tagListElement {
+  .tag-list-element {
     display: flex;
     margin: 0.4rem;
     padding: 0.2rem;

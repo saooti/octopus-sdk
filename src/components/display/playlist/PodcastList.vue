@@ -1,29 +1,19 @@
 <template>
   <div class="d-flex flex-column align-items-center">
     <h2
-      v-if="notEmptyPlaylist"
       class="mt-3 align-self-baseline"
     >
-      {{ $t('Podcasts in the playlist') }}
+      <template v-if="notEmptyPlaylist">
+        {{ $t('Podcasts in the playlist') }}
+      </template>
+      <template v-else>
+        {{ $t('No podcasts in the playlist') }}
+      </template>
     </h2>
-    <h2
-      v-else
-      class="mt-3 align-self-baseline"
-    >
-      {{ $t('No podcasts in the playlist') }}
-    </h2>
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading podcasts ...') }}
-      </h3>
-    </div>
-    <div v-if="loaded && !podcasts.length && notEmptyPlaylist">
-      <p>{{ $t('No podcast match your query') }}</p>
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading podcasts ...'):undefined"
+      :error-text="loaded && !podcasts.length && notEmptyPlaylist?$t(`No podcast match your query`):undefined"
+    />
     <div
       v-if="loaded && podcasts.length > 1"
       class="text-secondary mb-4"
@@ -50,7 +40,7 @@
     <button
       v-show="size < podcasts.length && loaded"
       class="btn"
-      :class="buttonPlus ? 'btn-linkPlus mt-3' : 'btn-more'"
+      :class="buttonPlus ? 'btn-link-plus':'btn-more'"
       :aria-label="$t('See more')"
       @click="displayMore"
     >
@@ -67,6 +57,7 @@ import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 import ClassicSearch from '../../form/ClassicSearch.vue';
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
@@ -75,7 +66,8 @@ export default defineComponent({
 
   components: {
     PodcastItem,
-    ClassicSearch
+    ClassicSearch,
+    ClassicLoading
   },
 
   props: {

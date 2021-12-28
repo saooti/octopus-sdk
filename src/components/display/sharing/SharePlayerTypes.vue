@@ -2,13 +2,12 @@
   <div class="d-flex flex-column">
     <label
       for="iframe-select"
-      class="d-inline"
       aria-label="select miniplayer"
     />
     <select
       id="iframe-select"
       :value="iFrameModel"
-      class="frame-select input-no-outline"
+      class="input-no-outline"
       @change="$emit('update:iFrameModel',$event.target.value)"
     >
       <option value="default">

@@ -1,23 +1,10 @@
 /* Added styles */
 @import '../sass/_variables.scss';
 .octopus-app{
-    .saooti-arrow_down-margin {
-        margin: 3px 0 0;
-    }
-    .default-multiselect-width {
-        width: 100%;
-    }
+
     .default-multiselect-width {
         width: auto;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        text-indent: 1px;
-        text-overflow: '';
         font-size: 1rem;
-        @media (max-width: 450px) {
-            background: transparent !important;
-            width: 98%;
-        }
     }
     .multiselect-transparent{
         .multiselect__tags, .multiselect__input, .multiselect__single{
@@ -28,47 +15,39 @@
             padding-left: 0;
         }
     }
-    .multiselect-hide-arrow {
-        .multiselect__tags {
-            background: none;
-            border: none;
-        }
-        .multiselect__spinner {
-            background: none;
-        }
-        .multiselect__select::before {
-            display: none;
+
+    .multiselect.light-multiselect {
+
+        .multiselect__single {
+            margin-bottom: 0;
         }
     }
 
     .light-multiselect{
+        min-height: auto;
         .multiselect__tags {
-            border-radius: 0.3rem;
-            padding: 10px 40px 5px 0;
-            background: transparent;
-            border-color: $octopus-background;
-        
+            padding: 0 40px 0 0;
+            min-height: auto;
         }
-        
-
-    .multiselect__input,
-    .multiselect__single {
-        background: none;
-    }
-    .multiselect--active .multiselect__select {
-        transform: unset;
-        background: none;
-    }
-    .multiselect__spinner {
-        background: none;
-    }
-    .option__image {
-        display: none;
-    }
-    .option__title {
-        padding-left: 0 !important;
-        font-weight: bold;
-    }
+        .multiselect__single {
+            margin-bottom: 0;
+        }
+        .multiselect__input,
+        .multiselect__single,
+        .multiselect__tags,
+        .multiselect--active .multiselect__select,
+        .multiselect__spinner {
+            background: transparent;
+        }
+        .multiselect--active .multiselect__select {
+            transform: unset;
+        }
+        .option__title {
+            font-weight: bold;
+        }
+        .octopus-arrow-down {
+            top: 2px;
+        }
     }
 
     .multiselect-octopus-proposition{
@@ -76,7 +55,6 @@
         align-items: center;
         overflow: hidden;
         text-overflow: ellipsis;
-
         .option__image {
             height: 32px;
             width: 32px;
@@ -98,8 +76,7 @@
         margin: 0.2rem;
     } 
 
-    .octopus-arrow-down,
-    .octopus-arrow-down-2
+    .octopus-arrow-down
     {
         height: 1.2rem;
         width: 1.2rem;
@@ -107,23 +84,14 @@
         cursor: pointer;
         position: absolute;
         right: 10px;
-        top: 12px;
+        top: 11px;
         margin: 0;
         background-color: #ccc;
         border-radius: 50%;
-
         &:before{
             position: relative;
             top:2px;
         }
-    }
-    .classic-select.octopus-arrow-down-2{
-        pointer-events: none;
-    }
-
-    .octopus-arrow-down-2{
-        right: 10px;
-        top: 11px;
         @media (max-width: 450px) {
             top: 14px;
         }
@@ -200,22 +168,7 @@
         color: #35495e;
     }
 
-    .multiselect.light-multiselect {
-        .multiselect__tags {
-            padding: 0 40px 0 0;
-            min-height: auto;
-        }
-        .multiselect__single {
-            margin-bottom: 0;
-        }
-        .octopus-arrow-down-2 {
-            top: 2px;
-        }
-        display: flex;
-        align-items: center;
-        min-height: auto;
-        top: 0;
-    }
+
 
     .multiselect * {
         box-sizing: border-box;

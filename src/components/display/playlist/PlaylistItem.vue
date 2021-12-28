@@ -1,7 +1,7 @@
 <template>
   <li
     v-if="editRight || activePlaylist"
-    class="mt-3 emission-item-container shadow-element"
+    class="emission-item-container shadow-element"
   >
     <router-link
       :to="{

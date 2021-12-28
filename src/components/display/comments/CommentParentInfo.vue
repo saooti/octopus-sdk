@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="d-flex small-Text">
+      <div class="d-flex small-text">
         <b class="me-2">{{ comment.name }}</b>
         <img
           v-if="comment.certified"

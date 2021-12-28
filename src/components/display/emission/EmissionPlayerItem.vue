@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     class="emission-player-container shadow-element"
   >
     <router-link
@@ -17,7 +17,7 @@
         {{ rubriqueName }}
       </div>
       <div
-        class="img-box no-border-round"
+        class="img-box rounded-0"
         :style="{
           'background-image':
             'url(\'' + emission.imageUrl + '?dummy=' + dummyParam + '\')',
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="d-flex flex-column p-2">
-        <div class="fw-bold text-uppercase text-ellipsis">
+        <div class="fw-bold text-uppercase text-truncate">
           {{ emission.name }}
         </div>
         <div
@@ -61,7 +61,7 @@
           }"
           class="d-flex flex-column define-width text-dark"
         >
-          <div class="fw-bold text-ellipsis">
+          <div class="fw-bold text-truncate">
             {{ p.title }}
           </div>
           <div
@@ -117,7 +117,7 @@
         {{ $t('More episodes') }}
       </router-link>
     </div>
-  </li>
+  </div>
 </template>
 
 <script lang="ts">
@@ -238,6 +238,9 @@ export default defineComponent({
   height: min-content;
   border-radius: 0.8rem;
   overflow: hidden;
+  .emission-item-border-color {
+    border-color: #ddd;
+  }
   .emission-description {
     overflow: hidden;
     margin-top: 0.5em;
@@ -266,7 +269,5 @@ export default defineComponent({
     }
   }
 }
-.emission-item-border-color {
-  border-color: #ddd;
-}
+
 </style>

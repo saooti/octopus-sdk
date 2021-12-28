@@ -1,68 +1,64 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading emissions ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="showCount && loaded && emissions.length > 1"
-      class="text-secondary mb-2"
-    >
-      {{ $t('Number emissions', { nb: displayCount }) + sortText }}
-    </div>
-    <ul
-      v-if="!itemPlayer"
-      class="emission-list"
-      :class="smallItems ? 'threeEmissions' : 'twoEmissions'"
-    >
-      <EmissionItem
-        v-for="e in emissions"
-        :key="e.emissionId"
-        :emission="e"
-      />
-    </ul>
-    <ul
-      v-show="
-        (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
-      "
-      v-else
-      class="d-flex flex-wrap justify-content-around"
-    >
-      <EmissionPlayerItem
-        v-for="e in emissions"
-        :key="e.emissionId"
-        :emission="e"
-        class="m-3 flex-shrink-0"
-        :class="mainRubriquage(e)"
-        :rubrique-name="rubriquesId(e)"
-        @emissionNotVisible="displayCount--"
-      />
-    </ul>
-    <button
-      v-show="!allFetched && loaded"
-      class="btn"
-      :class="buttonPlus ? 'btn-linkPlus' : 'btn-more'"
-      :disabled="inFetching"
-      :aria-label="$t('See more')"
-      @click="displayMore"
-    >
-      <template v-if="buttonPlus">
-        {{ $t('See more') }}
-      </template>
-      <div class="saooti-plus" />
-    </button>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading emissions ...'):undefined"
+    />
+    <template v-if="isLoadingMoreOrFinished">
+      <div
+        v-if="showCount && emissions.length > 1"
+        class="text-secondary mb-2"
+      >
+        {{ $t('Number emissions', { nb: displayCount }) + sortText }}
+      </div>
+      <ul
+        v-if="!itemPlayer"
+        class="emission-list"
+        :class="smallItems ? 'three-emissions' : 'two-emissions'"
+      >
+        <EmissionItem
+          v-for="e in emissions"
+          :key="e.emissionId"
+          :emission="e"
+        />
+      </ul>
+      <div
+        v-show="
+          (displayRubriquage && rubriques) || !(displayRubriquage)
+        "
+        v-else
+        class="d-flex flex-wrap justify-content-around"
+      >
+        <EmissionPlayerItem
+          v-for="e in emissions"
+          :key="e.emissionId"
+          :emission="e"
+          class="m-3 flex-shrink-0"
+          :class="mainRubriquage(e)"
+          :rubrique-name="rubriquesId(e)"
+          @emissionNotVisible="displayCount--"
+        />
+      </div>
+      <button
+        v-show="!allFetched"
+        class="btn"
+        :class="buttonPlus ? 'btn-link-plus' : 'btn-more'"
+        :disabled="loading"
+        :aria-label="$t('See more')"
+        @click="fetchContent(false)"
+      >
+        <template v-if="buttonPlus">
+          {{ $t('See more') }}
+        </template>
+        <div class="saooti-plus" />
+      </button>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore';
-
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -75,6 +71,7 @@ export default defineComponent({
   components: {
     EmissionItem,
     EmissionPlayerItem,
+    ClassicLoading
   },
 
   props: {
@@ -97,18 +94,19 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: false as boolean,
       dfirst: this.first as number,
       dsize: this.size as number,
       totalCount: 0 as number,
       displayCount: 0 as number,
       emissions: [] as Array<Emission>,
       rubriques: undefined as Array<Rubrique>|undefined,
-      inFetching: false as boolean,
     };
   },
 
   computed: {
+    isLoadingMoreOrFinished():boolean{
+      return !this.loading || this.emissions.length > 1;
+    },
     allFetched(): boolean {
       return this.dfirst >= this.totalCount;
     },
@@ -165,12 +163,10 @@ export default defineComponent({
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
-      this.inFetching = true;
+      this.loading = true;
       if (reset) {
         this.emissions.length = 0;
         this.dfirst = 0;
-        this.loading = true;
-        this.loaded = false;
       }
       const param: FetchParam = {
         first: this.dfirst,
@@ -196,7 +192,6 @@ export default defineComponent({
         this.dfirst = 0;
       }
       this.loading = false;
-      this.loaded = true;
       this.displayCount = data.count;
       this.emissions = this.emissions.concat(data.result).filter((e: Emission|null) => {
         if (null === e) {
@@ -206,11 +201,7 @@ export default defineComponent({
       });
       this.dfirst += this.dsize;
       this.totalCount = data.count;
-      this.inFetching = false;
-    },
-    displayMore(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.fetchContent(false);
+      this.loading = false;
     },
     async fetchRubriques(): Promise<void> {
       const data = await octopusApi.fetchTopic(this.displayRubriquage);

@@ -3,7 +3,6 @@
     v-if="!value || init"
     class="default-multiselect-width"
     :style="{ width: width }"
-    :class="{ 'multiselect-hide-arrow': !displayArrow }"
   >
     <label
       for="organisationChooser"
@@ -29,7 +28,7 @@
       :show-no-results="true"
       :hide-selected="true"
       :show-labels="false"
-      :class="{ 'light-multiselect': stats }"
+      :class="{ 'light-multiselect': light }"
       @search-change="onSearchOrganisation"
       @open="onOpen"
       @close="onClose"
@@ -45,7 +44,7 @@
       <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <img
-            v-if="!light &&!stats"
+            v-if="!light"
             class="option__image"
             :src="option.imageUrl"
             :alt="option.name"
@@ -66,7 +65,7 @@
           "
         >
           <img
-            v-if="!light &&!stats"
+            v-if="!light"
             class="option__image"
             :src="option.imageUrl"
             :alt="option.name"
@@ -104,8 +103,7 @@
           class="position-relative"
         >
           <span
-            class="saooti-arrow_down octopus-arrow-down-2"
-            :class="{ 'octopus-arrow-down-top': stats }"
+            class="saooti-arrow_down octopus-arrow-down"
           />
         </div>
       </template>
@@ -145,12 +143,9 @@ export default defineComponent({
   props: {
     width: { default: '100%', type: String },
     defaultanswer: { default: '', type: String},
-    stats: { default: false, type:  Boolean},
-    displayArrow: { default: true, type: Boolean},
     value: { default: undefined, type: String},
     light: { default: false, type:  Boolean},
     reset: { default: false, type:  Boolean},
-    all: { default: false, type:  Boolean},
   },
   emits: ['selected'],
   data() {
@@ -235,20 +230,7 @@ export default defineComponent({
         first: 0,
         size: ELEMENTS_COUNT,
       });
-      let orga = response.result;
-      if (this.all && !query) {
-        while (
-          (response.count < 200 && orga.length < response.count) ||
-          (response.count > 200 && orga.length < 200)
-        ) {
-          const other = await octopusApi.fetchOrganisations({
-            query: query,
-            first: orga.length,
-            size: ELEMENTS_COUNT,
-          });
-          orga = orga.concat(other.result);
-        }
-      }
+      const orga = response.result;
       const notNull = orga.filter((o: Organisation|null) => {
         return null !== o;
       });

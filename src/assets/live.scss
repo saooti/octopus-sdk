@@ -1,0 +1,39 @@
+  .planned-bg {
+    background: #f09653;
+  }
+  .pending-bg {
+    background: #f1643e;
+  }
+  .recording-bg {
+    background: #f34a4a;
+  }
+  .error-bg {
+    background: #ff0000;
+  }
+  .debriefing-bg {
+    background: #6ec66e;
+  }
+  .done-bg {
+    background: #679fe9;
+  }
+  .publishing-bg {
+    background: #7d7d7d;
+  }
+  .planned-shadow {
+    box-shadow: 0px 12px 48px 6px rgba(240, 151, 83, 0.2);
+  }
+  .pending-shadow {
+    box-shadow: 0px 12px 48px 6px rgba(241, 101, 62, 0.2);
+  }
+  .recording-shadow {
+    box-shadow: 0px 12px 48px 6px rgba(243, 74, 74, 0.2);
+  }
+  .debriefing-shadow {
+    box-shadow: 0px 12px 48px 6px rgba(110, 198, 110, 0.2);
+  }
+  .publishing-shadow {
+    box-shadow: 0px 12px 48px 6px rgba(125, 125, 125, 0.2);
+  }
+  .error-shadow {
+    box-shadow: 0px 12px 48px 6px rgba(255, 0, 0, 0.2);
+  }

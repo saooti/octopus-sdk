@@ -61,7 +61,6 @@ export default defineComponent({
       rubriqueId: [] as Array<number>,
       arrayFilter: [] as Array<RubriquageFilter>,
       rubriquageData: [] as Array<Rubriquage>,
-      reset: false as boolean,
       saveOrganisation: "" as string,
       isInit: true as boolean,
       isInternChanged: false as boolean,

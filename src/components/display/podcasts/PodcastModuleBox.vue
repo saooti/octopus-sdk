@@ -1,11 +1,11 @@
 <template>
   <div class="module-box">
-    <h2
+    <div
       v-if="!isOuestFrance"
-      class="text-uppercase fw-bold title-page-podcast"
+      class="text-uppercase h4"
     >
       {{ podcast.title }}
-    </h2>
+    </div>
     <router-link
       v-else
       :to="{
@@ -42,7 +42,7 @@
           {{ podcast.title }}
         </h3>
         <div
-          class="date-text-zone"
+          class="d-flex flex-wrap mb-3"
           :class="isLiveReady ? 'justify-content-between' : ''"
         >
           <div
@@ -51,7 +51,7 @@
           >
             {{ date }}
           </div>
-          <div class="ms-2 me-2 duration">
+          <div>
             <span
               v-if="isOuestFrance"
               class="saooti-clock3"
@@ -70,12 +70,12 @@
           v-html="urlify(podcast.description)"
         />
         <!-- eslint-enable -->
-        <div class="mt-3 mb-3">
+        <div class="my-3">
           <ParticipantDescription :participants="podcast.animators" />
           <div v-if="!isOuestFrance">
             {{ $t('Emission') + ' : ' }}
             <router-link
-              class="link-info"
+              class="fw-bold"
               :to="{
                 name: 'emission',
                 params: { emissionId: podcast.emission.emissionId },
@@ -90,7 +90,7 @@
           <div v-if="!isPodcastmaker">
             {{ $t('Producted by : ') }}
             <router-link
-              class="link-info"
+              class="fw-bold"
               :to="{
                 name: 'productor',
                 params: { productorId: podcast.organisation.id },
@@ -283,23 +283,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.title-page-podcast {
-  font-size: 0.9rem;
-}
-.width-fit-content{
-  width: fit-content;
-}
-
-.date-text-zone {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  @media (max-width: 600px) {
-    display: initial;
-    .duration {
-      margin-left: 0 !important;
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

@@ -42,43 +42,6 @@
 		cursor: pointer;
 	}
 
-	.filter-search-input{
-	flex-grow: 1;
-	height: 2rem;
-	margin: 1rem 0;
-	padding: 1.2rem 3rem 1.2rem 1.2rem;
-	border-radius: 2rem;
-	border-style: none;
-	background: white;
-	@media (max-width: 450px) {
-		margin: 0.5rem 0;
-		font-size: 0.6rem;
-		padding: 1.2rem 2.5rem 1.2rem 1.2rem;
-	}
-	}
-
-	.btn-underline.active{
-	border-bottom: $octopus-primary-color 2px solid;
-	}
-	// Datetime picker
-	.theme-saooti input{
-	border: 0.1rem solid #dee2e6;
-	border-radius: 0.3rem;
-	padding: 0.1rem 0.4rem;
-	}
-	.theme-saooti .vdatetime-popup__header,
-	.theme-saooti .vdatetime-calendar__month__day--selected>span>span,
-	.theme-saooti .vdatetime-calendar__month__day--selected:hover>span>span,
-	.theme-saooti .vdatetime-popup__date-picker__item--selected>span>span {
-	background: $octopus-primary-color;
-	}
-
-	.theme-saooti .vdatetime-year-picker__item--selected,
-	.theme-saooti .vdatetime-time-picker__item--selected,
-	.theme-saooti .vdatetime-popup__actions__button {
-	color: $octopus-primary-color;
-	}
-
 	//Navigation Bar
 	.nav{
 		border-bottom: 0.05rem solid #ddd;

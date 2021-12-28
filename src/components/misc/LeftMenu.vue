@@ -85,7 +85,7 @@
       :reset="reset"
       @selected="onOrganisationSelected"
     />
-    <div class="horizontal-separator show-phone" />
+    <hr class="show-phone">
     <router-link
       v-for="category in categories"
       :key="category.id"

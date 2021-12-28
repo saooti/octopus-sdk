@@ -56,7 +56,7 @@
       <template #caret="">
         <div class="position-relative">
           <span
-            class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"
+            class="saooti-arrow_down octopus-arrow-down"
           />
         </div>
       </template>

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loading || (!loading && 0 !== allPodcasts.length)"
-    class="d-flex flex-column p-3 list-episode"
+    class="d-flex flex-column p-3"
   >
     <h2>{{ title }}</h2>
     <div class="d-flex justify-content-between">
@@ -43,19 +43,13 @@
         </button>
       </div>
     </div>
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading podcasts ...') }}
-      </h3>
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading podcasts ...'):undefined"
+    />
     <transition-group
       v-show="loaded"
       :name="transitionName"
-      class="podcast-list-inline"
+      class="element-list-inline"
       tag="ul"
       :class="[alignLeft ? 'justify-content-start' : '']"
     >
@@ -69,7 +63,7 @@
     </transition-group>
     <router-link
       class="btn btn-link"
-      :class="buttonPlus ? 'btn-linkPlus' : ''"
+      :class="buttonPlus ? 'btn-link-plus' : ''"
       :to="refTo"
     >
       {{ buttonText }}
@@ -85,7 +79,7 @@
 import octopusApi from '@saooti/octopus-api';
 import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
-
+import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
 
 import { Podcast } from '@/store/class/general/podcast';
@@ -96,7 +90,8 @@ export default defineComponent({
   name: 'PodcastInlineList',
   
   components: {
-    PodcastItem
+    PodcastItem,
+    ClassicLoading
   },
 
   props: {
@@ -171,30 +166,13 @@ export default defineComponent({
     },
     transitionName(): string {
       return this.direction > 0 ? 'out-left' : 'out-right';
+    },
+    watchVariable():string{
+      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}`;
     }
   },
   watch: {
-    emissionId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    organisationId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    filterOrga(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    iabId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    rubriqueId(): void {
-      this.reset();
-      this.fetchNext();
-    },
-    rubriquageId(): void {
+    watchVariable(): void {
       this.reset();
       this.fetchNext();
     },

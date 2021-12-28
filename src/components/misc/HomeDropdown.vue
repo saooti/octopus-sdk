@@ -156,8 +156,8 @@ export default defineComponent({
   .btn-group .dropdown-toggle-split {
     align-items: center;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
     justify-content: center;
     position: absolute;
     right: 5px;

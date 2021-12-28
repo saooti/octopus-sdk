@@ -1,18 +1,14 @@
 <template>
   <div>
     <div
-      class="d-flex justify-content-center mb-3"
+      class="d-flex justify-content-center mb-3 text-secondary c-hand"
       @click="showFilters = !showFilters"
     >
-      <div class="text-secondary c-hand">
-        {{ $t('Advanced filters') }}
-      </div>
-      <div
-        class="text-secondary c-hand align-self-center large-font-size"
+      <div>{{ $t('Advanced filters') }}</div>
+      <div 
+        class="h3 saooti-arrow_down m-0"
         :class="{ 'arrow-transform': showFilters }"
-      >
-        <div class="saooti-arrow_down saooti-arrow_down-margin" />
-      </div>
+      />
     </div>
     <div
       v-show="showFilters"
@@ -23,8 +19,7 @@
           {{ $t('Filter') }}
         </div>
         <MonetizableFilter
-          v-if="isMonetizableFilter"
-          :is-education="isEducation"
+          v-if="isMonetizableFilter && !isEducation"
           :is-emission="isEmission"
           @updateMonetization="updateMonetization"
         />
@@ -116,7 +111,7 @@
         </div>
       </div>
       <div class="d-flex flex-column">
-        <div class="primary-color mb-2 padding-left-custom-radio">
+        <div class="primary-color mb-2">
           {{ $t('Sort') }}
         </div>
         <ClassicRadio
@@ -175,10 +170,6 @@ export default defineComponent({
     return {
       isFrom: false as boolean,
       isTo: false as boolean,
-      lang: {
-        ok: this.$t('Validate') as string,
-        cancel: this.$t('Cancel') as string,
-      },
       fromDate: moment().subtract(10, 'days').toISOString() as string,
       toDate: moment().toISOString() as string,
       isNotVisible: false as boolean,
@@ -339,18 +330,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-.padding-left-custom-radio {
-  padding-left: 1.5rem;
-  @media (max-width: 720px) {
-    padding-left: 0;
-    margin-top: 1rem;
-  }
-}
-.large-font-size {
-  font-size: 1.3rem;
-}
-
 .advanced-search-container {
   background: #fff;
   border-radius: 0.8rem;
@@ -363,35 +342,22 @@ export default defineComponent({
     flex-wrap: wrap;
     justify-content: flex-start;
   }
-
   @media (max-width: 450px) {
     flex-direction: column;
-    .vdatetime {
-      padding: 0.5em 0 !important;
+    padding: 1rem;
+    .vdatetime, label {
+      padding: 0.5rem 0 !important;
       width: 100%;
       input {
         width: 100%;
       }
-    }
-    padding: 1rem;
-
-    label.wrap {
-      width: 100%;
-      margin: 0.5em 0;
-      position: relative;
-    }
-  }
-
-  @media (min-width: 401px) {
-    label.wrap {
-      position: relative;
-      margin: 0;
     }
   }
   select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    padding-right: 40px;
   }
 }
 </style>

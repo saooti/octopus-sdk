@@ -1,35 +1,27 @@
 <template>
   <div class="d-flex">
     <button
-      class="btn btn-circle primary-color me-1"
+      class="btn btn-comment-edit saooti-edit-bounty"
       aria-label="edit"
       @click="editComment"
-    >
-      <span class="saooti-edit-bounty" />
-    </button>
+    />
     <button
       v-if="'Pending' === comment.status || 'Invalid' === comment.status"
-      class="btn btn-circle primary-color me-1"
+      class="btn btn-comment-edit saooti-valid-stud"
       aria-label="valid"
       @click="validComment"
-    >
-      <span class="saooti-valid-stud" />
-    </button>
+    />
     <button
       v-if="'Pending' === comment.status || 'Valid' === comment.status"
-      class="btn btn-circle primary-color me-1"
+      class="btn btn-comment-edit saooti-cross"
       aria-label="invalid"
       @click="invalidComment"
-    >
-      <span class="saooti-cross" />
-    </button>
+    />
     <button
-      class="btn btn-circle primary-color me-1"
+      class="btn btn-comment-edit saooti-bin"
       aria-label="delete"
       @click="deleteComment"
-    >
-      <span class="saooti-bin" />
-    </button>
+    />
   </div>
 </template>
 

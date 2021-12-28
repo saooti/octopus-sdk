@@ -12,7 +12,6 @@
         params: { participantId: animator.participantId },
         query: { productor: $store.state.filter.organisationId },
       }"
-      class="animator-item"
       :aria-label="$t('Participant')"
     >
       <div class="podcast-item-animator text-dark">

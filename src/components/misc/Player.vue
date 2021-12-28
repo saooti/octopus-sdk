@@ -125,7 +125,7 @@ export default defineComponent({
       },
     }),
     audioUrl(): string {
-      if (this.media) return this.media.audioUrl;
+      if (this.media) return this.media.audioUrl? this.media.audioUrl:"";
       if (!this.podcast) return '';
       if (!this.podcast.availability.visibility)
         return this.podcast.audioStorageUrl;
