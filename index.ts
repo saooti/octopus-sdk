@@ -53,6 +53,7 @@ import CommentInput from "./src/components/display/comments/CommentInput.vue";
 import ClassicSearch from "./src/components/form/ClassicSearch.vue";
 import ClassicCheckbox from "./src/components/form/ClassicCheckbox.vue";
 import ClassicRadio from "./src/components/form/ClassicRadio.vue";
+import ClassicLoading from "./src/components/form/ClassicLoading.vue";
 
 //mixins
 import {selenium} from "./src/components/mixins/functions";
@@ -107,7 +108,8 @@ const components = {
     tagOfMixins,
     ClassicSearch,
     ClassicCheckbox,
-    ClassicRadio
+    ClassicRadio,
+    ClassicLoading
 }
 
 export default components;
@@ -157,5 +159,6 @@ export {
     tagOfMixins,
     ClassicSearch,
     ClassicCheckbox,
-    ClassicRadio
+    ClassicRadio,
+    ClassicLoading
 };

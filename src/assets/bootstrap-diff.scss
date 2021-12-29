@@ -171,6 +171,7 @@
             font-size: 1rem;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
         }
         &.btn-arrow {
             margin: 0.2rem;
@@ -237,9 +238,6 @@
       }    
     .dropdown-menu {
         padding: 0.5rem;
-        @media (max-width: 450px) {
-            min-width: 15rem;
-        } 
     }
     .dropdown-item {
         cursor: pointer;
