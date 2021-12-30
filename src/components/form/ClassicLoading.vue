@@ -10,7 +10,7 @@
   </div>
   <div
     v-else-if="errorText"
-    class="text-center"
+    class="text-center text-danger"
   >
     <h3>{{ errorText }}</h3>
   </div>

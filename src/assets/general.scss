@@ -1,6 +1,7 @@
 
 html{
   font-size: 20px;
+  height: 100%;
 }
 body{
   color: #353535;
@@ -8,6 +9,8 @@ body{
   font-size: 0.8rem;
   overflow-x: hidden;
   background: #fff;
+  min-height: 100%;
+  overscroll-behavior-y: contain;
 }
 .octopus-app{
   h1,h2,h3,h4,h5,h6{
@@ -95,6 +98,7 @@ body{
     margin: 0.5rem 0.5rem 0 0.5rem;
     border-radius: 1rem;
     flex-grow: 1;
+    overflow: auto;
     @media (max-width: 500px){
       margin: 0.3rem;
       padding: 0.8rem;
@@ -212,6 +216,9 @@ body{
   }
   .c-hand{
     cursor: pointer;
+  }
+  .c-hand-auto {
+    cursor: auto;
   }
 
   .html-wysiwyg-content{

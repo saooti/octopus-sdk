@@ -510,3 +510,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.10 PB clearInterval
  * 30.0.11 Version pour release
  * 30.0.12 Export ClasicLoading
+ * 30.0.13 Améliorations css
