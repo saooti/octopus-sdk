@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="(!value || init) && organisation"
-    class="default-multiselect-width"
+    class="default-multiselect-width organisation-chooser-light"
     :style="{ width: width }"
   >
     <select
@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-
 import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -83,8 +82,8 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
-select {
+<style lang="scss">
+.organisation-chooser-light select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
