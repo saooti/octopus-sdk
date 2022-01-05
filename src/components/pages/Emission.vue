@@ -14,6 +14,7 @@
             :rss-emission="rssEmission"
             :ftp-emission="ftpEmission"
             :is-ready="isReady"
+            @isUpdated="getEmissionDetails"
           />
           <div class="module-box">
             <h2 v-if="!isOuestFrance">
@@ -215,8 +216,6 @@ export default defineComponent({
   },
   watch: {
     emissionId(): void {
-      this.loaded = false;
-      this.error = false;
       this.getEmissionDetails();
     },
   },
@@ -226,6 +225,8 @@ export default defineComponent({
   },
   methods: {
     async getEmissionDetails(): Promise<void> {
+      this.loaded = false;
+      this.error = false;
       try {
         const data: Emission = await octopusApi.fetchEmission(this.emissionId);
         this.emission = data;
