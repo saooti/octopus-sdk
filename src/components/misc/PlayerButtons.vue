@@ -15,7 +15,7 @@
     @click="switchPausePlay"
   >
     <div
-      :aria-label="$t('Play')"
+      :title="$t('Play')"
       :class="{
         'saooti-play2-bounty': isPaused,
         'saooti-pause-bounty': isPlaying,
@@ -29,7 +29,7 @@
   >
     <div
       class="saooti-stop-bounty"
-      :aria-label="$t('Stop')"
+      :title="$t('Stop')"
     />
   </div>
 </template>

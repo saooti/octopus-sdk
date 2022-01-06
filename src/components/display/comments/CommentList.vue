@@ -39,7 +39,7 @@
       class="btn btn-primary mt-2"
       :class="comId ? 'align-self-start' : 'align-self-center'"
       :disabled="inFetching"
-      :aria-label="$t('See more comments')"
+      :title="$t('See more comments')"
       @click="displayMore"
     >
       {{ $t('See more comments') }}

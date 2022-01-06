@@ -2,7 +2,7 @@
   <div v-if="isDisplay">
     <nav
       v-if="categoryFilter || rubriqueFilter.length"
-      aria-label="breadcrumb"
+      title="breadcrumb"
     >
       <ol class="breadcrumb">
         <li class="breadcrumb-item">

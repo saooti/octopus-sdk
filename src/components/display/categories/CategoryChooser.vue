@@ -6,7 +6,7 @@
     <label
       :for="id"
       class="d-inline"
-      aria-label="select category"
+      title="select category"
     />
     <VueMultiselect
       :id="id"

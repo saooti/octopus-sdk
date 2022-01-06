@@ -8,7 +8,7 @@
       :id="idPopover"
       tabindex="-1"
       class="saooti-help m-0"
-      :aria-label="$t('Help')"
+      :title="$t('Help')"
     />
     <span class="mx-1">:</span>
     <Popover
@@ -37,7 +37,7 @@
     <router-link
       v-for="participant in participants"
       :key="participant.participantId"
-      :aria-label="$t('Participant')"
+      :title="$t('Participant')"
       class="fw-bold"
       :to="{
         name: 'participant',

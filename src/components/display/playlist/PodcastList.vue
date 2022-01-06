@@ -41,7 +41,7 @@
       v-show="size < podcasts.length && loaded"
       class="btn"
       :class="buttonPlus ? 'btn-link-plus':'btn-more'"
-      :aria-label="$t('See more')"
+      :title="$t('See more')"
       @click="displayMore"
     >
       <template v-if="buttonPlus">

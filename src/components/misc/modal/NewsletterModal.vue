@@ -52,7 +52,7 @@
                     type="button"
                     :value="$t('Copy')"
                     class="btn btn-primary"
-                    :aria-label="$t('Copy')"
+                    :title="$t('Copy')"
                     @click="onCopyCode(newsletterHtml, afterCopy)"
                   >
                 </div>
@@ -64,7 +64,7 @@
                 />
                 <label
                   for="newsletter_code_textarea"
-                  :aria-label="$t('HTML Code')"
+                  :title="$t('HTML Code')"
                 />
               </div>
             </div>
@@ -143,7 +143,7 @@ export default defineComponent({
       if(this.podcast.article && 0 !== this.podcast.article.length){
         return (`<a href="` +
           this.podcast.article +
-          `" aria-label="` +
+          `" title="` +
           this.$t('See associated article') +
           `">
           <img width="44" height="44" style="display: inline-block;vertical-align: middle; margin-right:3px" src="` +
@@ -239,7 +239,7 @@ export default defineComponent({
       <div style="font-family: Arial, sans-serif;font-size: 12px;line-height: 20px;background: #f3f3f3;vertical-align: middle;padding: 15px 10px;display: flex; align-items:center; flex-wrap:wrap">
         <a href="` +
           window.location.href +
-          `" aria-label="` +
+          `" title="` +
           this.$t('Listen this episode') +
           `">
           <img width="44" height="44" style="display: inline-block;vertical-align: middle" src="` +

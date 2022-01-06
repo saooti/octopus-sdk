@@ -2,7 +2,7 @@
   <div class="d-flex flex-column">
     <label
       for="iframe-select"
-      aria-label="select miniplayer"
+      title="select miniplayer"
     />
     <select
       id="iframe-select"

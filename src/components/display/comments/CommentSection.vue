@@ -17,7 +17,7 @@
       </h2>
       <button
         v-if="!isLive"
-        :aria-label="$t('Refresh')"
+        :title="$t('Refresh')"
         class="saooti-refresh-stud btn btn-reload primary-color"
         @click="reloadComments"
       />

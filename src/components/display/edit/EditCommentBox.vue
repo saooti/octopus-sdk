@@ -2,24 +2,24 @@
   <div class="d-flex">
     <button
       class="btn btn-comment-edit saooti-edit-bounty"
-      aria-label="edit"
+      title="edit"
       @click="editComment"
     />
     <button
       v-if="'Pending' === comment.status || 'Invalid' === comment.status"
       class="btn btn-comment-edit saooti-valid-stud"
-      aria-label="valid"
+      title="valid"
       @click="validComment"
     />
     <button
       v-if="'Pending' === comment.status || 'Valid' === comment.status"
       class="btn btn-comment-edit saooti-cross"
-      aria-label="invalid"
+      title="invalid"
       @click="invalidComment"
     />
     <button
       class="btn btn-comment-edit saooti-bin"
-      aria-label="delete"
+      title="delete"
       @click="deleteComment"
     />
   </div>

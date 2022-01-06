@@ -12,7 +12,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="amazon"
-        aria-label="amazon"
+        title="amazon"
       >
         <span class="saooti-amazon">
           <div class="path1" />
@@ -26,7 +26,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="applePodcast"
-        aria-label="Apple"
+        title="Apple"
       >
         <span class="saooti-apple" />
       </a>
@@ -36,7 +36,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="deezer"
-        aria-label="Deezer"
+        title="Deezer"
       >
         <span class="saooti-deezer" />
       </a>
@@ -46,7 +46,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="playerFm"
-        aria-label="playerFm"
+        title="playerFm"
       >
         <span class="saooti-playerfm" />
       </a>
@@ -56,7 +56,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="podcastAddict"
-        aria-label="podcastAddict"
+        title="podcastAddict"
       >
         <span class="saooti-podcast-addict" />
       </a>
@@ -66,7 +66,7 @@
         target="_blank"
         class="btn me-3 mb-2 btn-radioline share-btn"
         :href="radioline"
-        aria-label="Radioline"
+        title="Radioline"
       >
         <span class="saooti-radioline" />
       </a>
@@ -76,7 +76,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="spotify"
-        aria-label="Spotify"
+        title="Spotify"
       >
         <span class="saooti-spotify" />
       </a>
@@ -86,7 +86,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="stitcher"
-        aria-label="stitcher"
+        title="stitcher"
       >
         <span class="saooti-stitcher-logo">
           <div class="path1" />
@@ -114,7 +114,7 @@
         target="_blank"
         class="btn me-3 mb-2 share-btn"
         :href="tunein"
-        aria-label="Tunin"
+        title="Tunin"
       >
         <span class="saooti-tunin" />
       </a>

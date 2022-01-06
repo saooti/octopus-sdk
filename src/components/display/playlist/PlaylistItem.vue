@@ -9,7 +9,7 @@
         params: { playlistId: playlist.playlistId },
         query: { productor: $store.state.filter.organisationId },
       }"
-      :aria-label="$t('Playlist')"
+      :title="$t('Playlist')"
       class="text-dark"
     >
       <div

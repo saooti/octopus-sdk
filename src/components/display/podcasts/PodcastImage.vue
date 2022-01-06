@@ -38,7 +38,7 @@
       >
         <div
           v-show="!playingPodcast"
-          :aria-label="$t('Play')"
+          :title="$t('Play')"
           class="saooti-play2-bounty primary-color"
         />
         <div
@@ -60,7 +60,7 @@
         class="icon-container error-icon"
       >
         <div
-          :aria-label="textVisible"
+          :title="textVisible"
           class="big-icon-error"
           :class="iconName"
         />
@@ -75,13 +75,13 @@
     <div
       v-if="!isDescription && displayDescription && isMobile"
       class="background-icon primary-bg saooti-arrow-up2"
-      :aria-label="$t('Show description')"
+      :title="$t('Show description')"
       @click="showDescription"
     />
     <div
       v-if="isDescription && displayDescription && isMobile"
       class="background-icon primary-bg saooti-arrow-down2"
-      :aria-label="$t('Hide description')"
+      :title="$t('Hide description')"
       @click="showDescription"
     />
   </div>

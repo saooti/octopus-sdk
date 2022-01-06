@@ -34,7 +34,7 @@
         class="btn dropdown-toggle category-rubrique-item-plus dropdown-toggle-no-caret saooti-plus"
         data-bs-toggle="dropdown"
         aria-expanded="false"
-        :aria-label="$t('See more')"
+        :title="$t('See more')"
       />
       <ul class="dropdown-menu dropdown-menu-right px-4">
         <div

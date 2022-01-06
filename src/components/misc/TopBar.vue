@@ -5,7 +5,7 @@
   >
     <div
       class="saooti-burger-menu"
-      :aria-label="$t('open left Menu')"
+      :title="$t('open left Menu')"
       @click="onDisplayMenu(false)"
     />
     <router-link
@@ -106,7 +106,7 @@
       <div class="d-flex justify-content-end flex-nowrap">
         <HomeDropdown :is-education="isEducation" />
         <router-link
-          :aria-label="$t('Search')"
+          :title="$t('Search')"
           :to="{
             name: 'podcasts',
             query: { productor: $store.state.filter.organisationId },

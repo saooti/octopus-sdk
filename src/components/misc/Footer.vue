@@ -106,7 +106,7 @@
           href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
           rel="noopener"
           target="_blank"
-          :aria-label="$t('Octopus is ACPM Podcast accredited')"
+          :title="$t('Octopus is ACPM Podcast accredited')"
         >
           <img
             class="acpm_image"

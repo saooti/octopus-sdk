@@ -10,7 +10,7 @@
         query: { productor: $store.state.filter.organisationId },
       }"
       class="mt-3 text-dark"
-      :aria-label="$t('Participant')"
+      :title="$t('Participant')"
     >
       <div
         class="img-box-circle"

@@ -86,7 +86,7 @@
         <router-link
           v-for="animator in live.animators"
           :key="animator.participantId"
-          :aria-label="$t('Participant')"
+          :title="$t('Participant')"
           class="fw-bold"
           :to="{
             name: 'participant',

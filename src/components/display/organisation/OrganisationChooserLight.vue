@@ -20,7 +20,7 @@
     <label
       :for="'organisation_chooser_light' + page"
       class="d-inline"
-      :aria-label="$t('select productor')"
+      :title="$t('select productor')"
     />
   </div>
 </template>

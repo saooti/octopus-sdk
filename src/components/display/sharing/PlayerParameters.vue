@@ -22,7 +22,7 @@
       <div
         id="playerParameters"
         class="accordion-collapse collapse"
-        aria-labelledby="labelPlayerParameter"
+        titleledby="labelPlayerParameter"
         data-bs-parent="#accordionParameters"
       >
         <div class="accordion-body">
@@ -66,7 +66,7 @@
               >
               <label
                 for="number-input"
-                :aria-label="$t('Number of player podcasts')"
+                :title="$t('Number of player podcasts')"
               />
               <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
             </div>

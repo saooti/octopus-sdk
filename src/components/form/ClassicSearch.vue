@@ -11,7 +11,7 @@
     >
     <label
       :for="idSearch"
-      :aria-label="label"
+      :title="label"
     />
     <div
       v-if="!textValue"

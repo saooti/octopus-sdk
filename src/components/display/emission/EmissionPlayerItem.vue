@@ -87,7 +87,7 @@
         >
           <div
             class="text-light saooti-play2-bounty"
-            :aria-label="$t('Play')"
+            :title="$t('Play')"
           />
         </div>
         <div
@@ -97,7 +97,7 @@
         >
           <div
             class="text-light saooti-pause-bounty"
-            :aria-label="$t('Pause')"
+            :title="$t('Pause')"
           />
         </div>
       </div>

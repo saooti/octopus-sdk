@@ -15,7 +15,7 @@
         id="popover-share-help"
         tabindex="-1"
         class="saooti-help ms-2"
-        :aria-label="$t('Help')"
+        :title="$t('Help')"
       />
       <Popover
         v-if="authenticated"
@@ -40,7 +40,6 @@
         rel="noopener"
         target="_blank"
         download
-        :aria-label="$t('Downloading')"
       >
         <div class="saooti-download-bounty" />
       </a>
@@ -53,7 +52,6 @@
           verticalDisplay ? '' : 'mx-2',
         ]"
         title="Facebook"
-        aria-label="Facebook"
       >
         <span
           v-if="!bigRound"
@@ -73,7 +71,6 @@
         ]"
         :href="twitterURL"
         title="Twitter"
-        aria-label="Twitter"
       >
         <span
           v-if="!bigRound"
@@ -93,7 +90,6 @@
         ]"
         :href="linkedinURL"
         title="Linkedin"
-        aria-label="Linkedin"
       >
         <span
           v-if="!bigRound"
@@ -114,7 +110,6 @@
         ]"
         :href="rssUrl"
         :title="$t('Subscribe to this emission')"
-        aria-label="RSS"
         @click.prevent="openPopup()"
       >
         <span
@@ -133,7 +128,6 @@
           bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
           verticalDisplay ? '' : 'mx-2',
         ]"
-        aria-label="copy"
         :title="$t('Copy this page URL')"
         @click="onCopyCode(urlPage,afterCopy)"
       >
@@ -154,7 +148,6 @@
           bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
           verticalDisplay ? '' : 'mx-2',
         ]"
-        :aria-label="$t('Share newsletter')"
         :title="$t('Share newsletter')"
         @click="newsletter = true"
       >
@@ -175,7 +168,6 @@
           bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
           verticalDisplay ? '' : 'mx-2',
         ]"
-        :aria-label="$t('Share QR Code')"
         :title="$t('Share QR Code')"
         @click="qrCode = true"
       >
@@ -197,7 +189,6 @@
           bigRound ? 'btn btn-big-round' : 'btn btn-whatsapp share-btn mb-2',
           verticalDisplay ? '' : 'mx-2',
         ]"
-        aria-label="Whatsapp"
         title="Whatsapp"
       >
         <span

@@ -36,7 +36,6 @@
           <a
             class="btn btn-big-round"
             :title="$t('Subscribe to this participant')"
-            :aria-label="$t('Subscribe to this participant')"
             :href="rssUrl"
             rel="noopener"
             target="_blank"

@@ -8,7 +8,7 @@
         <button
           class="btn btn-arrow"
           :class="{ disabled: !previousAvailable }"
-          :aria-label="$t('Display previous')"
+          :title="$t('Display previous')"
           @click="displayPrevious()"
         >
           <div class="saooti-arrow-left2" />
@@ -16,7 +16,7 @@
         <button
           class="btn btn-arrow"
           :class="{ disabled: !nextAvailable }"
-          :aria-label="$t('Display next')"
+          :title="$t('Display next')"
           @click="displayNext()"
         >
           <div class="saooti-arrow-right2" />

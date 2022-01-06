@@ -82,7 +82,7 @@
         class="btn dropdown-toggle m-1 admin-button dropdown-toggle-no-caret saooti-user-octopus"
         data-bs-toggle="dropdown"
         aria-expanded="false"
-        aria-label="Profile"
+        title="Profile"
       />
       <div class="dropdown-menu dropdown-menu-right px-4">
         <a

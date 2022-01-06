@@ -149,7 +149,7 @@
     </div>
     <div
       :id="'commentItemDetail'+comment.comId"
-      :aria-labelledby="'commentItem'+comment.comId"
+      :titleledby="'commentItem'+comment.comId"
     >
       <CommentInput
         v-if="!isFlat || (isFlat && !comment.commentIdReferer) && collapseVisible"

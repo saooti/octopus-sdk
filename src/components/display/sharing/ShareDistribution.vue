@@ -8,7 +8,7 @@
         type="button"
         :value="$t('Copy')"
         class="btn btn-primary"
-        :aria-label="$t('Copy')"
+        :title="$t('Copy')"
         @click="onCopyCode(rss, afterCopy)"
       >
     </p>

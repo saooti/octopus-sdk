@@ -10,7 +10,7 @@
           <button
             type="button"
             class="btn-close"
-            aria-label="Close"
+            title="Close"
             @click="closePopup"
           />
         </div>
@@ -22,7 +22,7 @@
               type="button"
               :value="$t('Copy')"
               class="btn btn-primary"
-              :aria-label="$t('Copy')"
+              :title="$t('Copy')"
               @click="onCopyCode(link, afterCopy)"
             >
           </p>

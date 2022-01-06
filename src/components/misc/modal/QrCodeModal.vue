@@ -13,7 +13,7 @@
           <button
             type="button"
             class="btn-close"
-            aria-label="Close"
+            title="Close"
             @click="closePopup"
           />
         </div>

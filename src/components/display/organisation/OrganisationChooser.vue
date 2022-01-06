@@ -7,7 +7,7 @@
     <label
       for="organisationChooser"
       class="d-inline"
-      aria-label="select productor"
+      title="select productor"
     />
     <VueMultiselect
       id="organisationChooser"

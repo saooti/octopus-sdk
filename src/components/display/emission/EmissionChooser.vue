@@ -6,7 +6,7 @@
     <label
       for="emissionChooser"
       class="d-inline"
-      aria-label="select emission"
+      title="select emission"
     />
     <VueMultiselect
       id="emissionChooser"

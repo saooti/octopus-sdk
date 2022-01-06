@@ -8,7 +8,7 @@
         params: { emissionId: emission.emissionId },
         query: { productor: $store.state.filter.organisationId },
       }"
-      :aria-label="$t('Emission')"
+      :title="$t('Emission')"
       class="d-flex text-dark"
     >
       <div

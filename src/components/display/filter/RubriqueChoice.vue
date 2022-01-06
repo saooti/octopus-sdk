@@ -37,7 +37,7 @@
     <button
       v-if="index"
       class="btn admin-button ms-1 saooti-bin"
-      aria-label="delete"
+      title="delete"
       @click="deleteRubriquage"
     />
   </div>

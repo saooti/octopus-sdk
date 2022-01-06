@@ -24,7 +24,7 @@
       <button
         v-show="!allFetched"
         class="btn btn-more saooti-plus"
-        :aria-label="$t('See more')"
+        :title="$t('See more')"
         :disabled="loading"
         @click="fetchContent(false)"
       />

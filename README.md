@@ -513,3 +513,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.13 Améliorations css
  * 30.0.14 Améliorations css
  * 30.0.15 Améliorations css
+ * 30.0.16 Change Aria-Label in title

@@ -12,7 +12,7 @@
         params: { participantId: animator.participantId },
         query: { productor: $store.state.filter.organisationId },
       }"
-      :aria-label="$t('Participant')"
+      :title="$t('Participant')"
     >
       <div class="podcast-item-animator text-dark">
         {{ getAnimatorName(animator) }}
