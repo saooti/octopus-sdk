@@ -116,7 +116,7 @@
         </div>
         <ClassicRadio
           v-model:textInit="sort"
-          id-select="sort-radio"
+          idRadio="sort-radio"
           :options="isSearchBar? [{title:$t('Sort score'), value:'SCORE'},
                                   {title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
                                   {title:$t('Sort name'), value:'NAME'}]:
