@@ -12,12 +12,12 @@
         {{ displayNextLiveMessage }}
       </h3>
     </div>
-    <div
+    <template
       v-for="(live, indexLive) in livesArray"
       :key="live.status"
     >
       <template v-if="live.lives.length">
-        <hr>
+        <hr class="w-100">
         <p class="live-list-category">
           {{ live.title }}
         </p>
@@ -30,7 +30,7 @@
           @deleteItem="deleteLive(indexLive, $event)"
         />
       </template>
-    </div>
+    </template>
   </div>
 </template>
 

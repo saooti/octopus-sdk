@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "30.0.18",
+  "version": "30.0.19",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -15,7 +15,7 @@
   "main": "./dist/octopus.common.js",
   "dependencies": {
     "@popperjs/core": "^2.11.0",
-    "@saooti/octopus-api": "^0.30.2",
+    "@saooti/octopus-api": "^0.30.3",
     "@vue/cli": "^5.0.0-rc.1",
     "@vue/compat": "^3.2.26",
     "axios": "^0.24.0",

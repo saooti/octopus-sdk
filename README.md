@@ -516,3 +516,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.16 Change Aria-Label in title
  * 30.0.17 Oups
  * 30.0.18 Responsive select
+ * 30.0.19 Mise à jour Api
