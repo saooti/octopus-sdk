@@ -3,8 +3,8 @@
     <CommentBasicView
       v-if="!isEditing"
       :comment="comment"
-      :editRight="editRight"
-      :recordingInLive="recordingInLive"
+      :edit-right="editRight"
+      :recording-in-live="recordingInLive"
     />
     <template v-else>
       <input
@@ -37,7 +37,7 @@
     </template>
     <div class="d-flex align-items-center mt-1">
       <button
-        v-if="null === comment.commentIdReferer && 'Valid'=== this.comment.status"
+        v-if="null === comment.commentIdReferer && 'Valid'=== comment.status"
         class="btn primary-color py-1 px-3 me-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
         @click="answerComment"

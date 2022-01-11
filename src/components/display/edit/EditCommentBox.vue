@@ -140,10 +140,10 @@ export default defineComponent({
       this.$emit('editComment');
     },
     commentModal(type: string): void {
-      console.log('commentModal');
+      console.log('commentModal'+ type);
     },
     async updateComment(newComment?: CommentPodcast | undefined): Promise<void> {
-      console.log('updateComment');
+      console.log('updateComment' + newComment);
     },
     async deleteComment(): Promise<void> {
       console.log('deleteComment');
