@@ -19,6 +19,7 @@
               class="form-input"
               type="text"
               :placeholder="$t('Your name')"
+              :class="{ 'border border-danger': name.length < 2 }"
             >
             <div
               v-if="sendError"
@@ -38,33 +39,20 @@
           </template>
         </div>
         <div class="modal-footer">
-          <template
+          <button
+            class="btn m-1"
+            @click="closePopup"
+          >
+            {{ $t('Close') }}
+          </button>
+          <button
             v-if="!sending"
+            class="btn btn-primary m-1"
+            :disabled="name.length <= 2"
+            @click="validateName"
           >
-            <button
-              class="btn btn-light m-1"
-              @click="closePopup"
-            >
-              {{ $t('Cancel') }}
-            </button>
-            <button
-              class="btn btn-primary m-1"
-              :disabled="name.length <= 2"
-              @click="recaptcha"
-            >
-              {{ $t('Validate') }}
-            </button>
-          </template>
-          <template
-            v-else
-          >
-            <button
-              class="btn m-1"
-              @click="closePopup"
-            >
-              {{ $t('Close') }}
-            </button>
-          </template>
+            {{ $t('Validate') }}
+          </button>
         </div>
       </div>
     </div>
@@ -92,38 +80,38 @@ export default defineComponent({
   },
 
   computed: {
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     isCaptchaTest(): boolean {
       return (state.generalParameters.isCaptchaTest as boolean);
     },
   },
 
   mounted() {
-    const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
-    if (captcha) {
-      (captcha as HTMLElement).style.display = 'block';
-    }
-    if (this.authenticated) {
-      this.name = (
-        (this.$store.state.profile.firstname || '') +
-        ' ' +
-        (this.$store.state.profile.lastname || '')
-      ).trim();
-      this.needVerify = false;
-    }
+    this.displayCaptcha('block');
+    this.initAuthenticatedName();
   },
 
   unmounted() {
-    const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
-    if (captcha) {
-      (captcha as HTMLElement).style.display = 'none';
-    }
+    this.displayCaptcha('none');
   },
 
   methods: {
-    async recaptcha(): Promise<void> {
+    initAuthenticatedName():void{
+      if (state.generalParameters.authenticated) {
+        this.name = (
+          (this.$store.state.profile.firstname || '') +
+          ' ' +
+          (this.$store.state.profile.lastname || '')
+        ).trim();
+        this.needVerify = false;
+      }
+    },
+    displayCaptcha(displayStyle: string): void{
+      const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
+      if (captcha) {
+        (captcha as HTMLElement).style.display = displayStyle;
+      }
+    },
+    async validateName(): Promise<void> {
       if (!this.needVerify || this.isCaptchaTest) {
         this.sendComment();
         return;
@@ -145,8 +133,7 @@ export default defineComponent({
       }
       this.sendComment();
     },
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
     sendComment(): void {
@@ -156,5 +143,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>

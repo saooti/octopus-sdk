@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-player-container comment-item-container">
+  <div class="comment-player-container">
     <div
       v-for="c in comments"
       :key="c.comId"
@@ -20,7 +20,7 @@
     </div>
     <div
       v-if="displayContent"
-      class="comment-content"
+      class="small-text mt-auto"
     >
       <div class="primary-color flex-shrink-0">
         {{ displayContent.name }}
@@ -94,11 +94,6 @@ export default defineComponent({
   .status-Pending {
     margin-top: 20px;
     position: absolute;
-  }
-  .comment-content {
-    margin-top: auto;
-    font-size: 0.7rem;
-    display: flex;
   }
 }
 </style>

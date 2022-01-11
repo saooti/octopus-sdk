@@ -9,7 +9,7 @@
       @click="changeIdentity"
     >{{ knownIdentity }}</b>
     <div
-      v-if="knownIdentity && editName"
+      v-if="editName"
       class="d-flex"
     >
       <input
@@ -19,13 +19,13 @@
         :class="{ 'border border-danger': temporaryName.length < 2 }"
       >
       <button
-        class="btn btn-light p-1 m-1"
+        class="btn"
         @click="editName = false"
       >
         {{ $t('Cancel') }}
       </button>
       <button
-        class="btn btn-primary p-1 m-1"
+        class="btn btn-primary"
         :disabled="temporaryName.length < 2"
         @click="validEdit"
       >
@@ -142,28 +142,23 @@ export default defineComponent({
       if (this.comment && this.comment.comId) return this.$t('Answer a comment').toString();
       return this.$t('Write a comment').toString();
     },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     isCertified(): boolean {
       if (
         (state.generalParameters.isCommments &&
-          this.organisationId === this.podcastOrga) ||
+        state.generalParameters.organisationId === this.podcastOrga) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      } 
       return false;
     },
     userId(): string|undefined {
-      if (this.authenticated) return this.$store.state.profile.userId;
+      if (state.generalParameters.authenticated) return this.$store.state.profile.userId;
       return undefined;
     },
     phase(): string|undefined {
       if(undefined === this.podcast){
-        return this.comment ? this.comment.phase : '';
+        return this.comment ? this.comment.phase : undefined;
       }
       if (
         !this.podcast.conferenceId ||
@@ -233,11 +228,7 @@ export default defineComponent({
     cancelAction(): void {
       this.$emit('cancelAction');
     },
-    async postComment(name?: string): Promise<void> {
-      if (name) {
-        this.setCookie('comment-octopus-name', name);
-        this.$emit('update:knownIdentity', name);
-      }
+    defineTimelineValue(): number{
       let timeline = 0;
       if (
         undefined !== this.podcast &&(
@@ -261,16 +252,20 @@ export default defineComponent({
           timeline = 0;
         }
       }
-      let sendName = this.knownIdentity;
-      if (null === sendName && name) {
-        sendName = name;
+      return timeline;
+    },
+    async postComment(name?: string): Promise<void> {
+      if (name) {
+        this.setCookie('comment-octopus-name', name);
+        this.$emit('update:knownIdentity', name);
       }
+      const sendName = name ? name: this.knownIdentity;
       const commentPodcastId = this.comment ? this.comment.podcastId : 0;
       const comment: CommentPodcast = {
         content: this.newComment,
         name: sendName ? sendName : '',
         podcastId: this.podcast ? this.podcast.podcastId : commentPodcastId,
-        timeline: timeline,
+        timeline: this.defineTimelineValue(),
         organisationId: this.podcastOrga,
         commentIdReferer: this.comment ? this.comment.comId : undefined,
         certified: this.isCertified,
@@ -287,11 +282,10 @@ export default defineComponent({
         }
         this.$emit('newComment', data);
         this.newComment = '';
-        this.checkIdentityModal = false;
       } catch (error) {
-        this.checkIdentityModal = false;
         this.postError = true;
       }
+      this.checkIdentityModal = false;
     },
   },
 })
@@ -315,10 +309,10 @@ export default defineComponent({
     overflow: hidden !important;
     box-shadow: unset !important;
     background: transparent !important;
-    height: 40px;
-  }
-  textarea.short {
-    max-height: 38px;
+    height: 50px;
+    &.short{
+      max-height: 38px;
+    }
   }
 }
 </style>

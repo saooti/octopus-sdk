@@ -13,7 +13,7 @@
       v-if="fetchConference"
       class="live-image-status"
       :class="
-        fetchConference && 'null' !== fetchConference
+        fetchConference && 'null' !== fetchConference && fetchConference.status
           ? fetchConference.status.toLowerCase() + '-bg'
           : ''
       "

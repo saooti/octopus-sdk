@@ -1,25 +1,14 @@
 <template>
   <div class="d-flex flex-column mt-3">
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading content ...') }}
-      </h3>
-    </div>
-    <div
-      v-if="error"
-      class="text-danger align-self-center"
-    >
-      {{ $t('Comments loading error') }}
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading content ...'):undefined"
+      :error-text="error?$t(`Comments loading error`):undefined"
+    />
     <transition-group
-      v-show="loaded"
+      v-show="!loading"
       tag="div"
       name="comment-list"
-      class="d-flex flex-column my-transition-list-comments"
+      class="my-transition-list-comments"
     >
       <CommentItem
         v-for="(c, indexCom) in comments"
@@ -35,12 +24,12 @@
       />
     </transition-group>
     <button
-      v-show="!allFetched && loaded"
+      v-show="!allFetched && (!loading || 0!==first)"
       class="btn btn-primary mt-2"
       :class="comId ? 'align-self-start' : 'align-self-center'"
-      :disabled="inFetching"
+      :disabled="loading"
       :title="$t('See more comments')"
-      @click="displayMore"
+      @click="fetchContent(false)"
     >
       {{ $t('See more comments') }}
     </button>
@@ -48,10 +37,10 @@
 </template>
 
 <script lang="ts">
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
-
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { CommentPodcast } from '@/store/class/general/comment';
@@ -65,11 +54,10 @@ export default defineComponent({
 
   components: {
     CommentItem,
+    ClassicLoading
   },
 
   props: {
-    first: { default: 0, type: Number },
-    size: { default: 50, type: Number },
     podcast: { default: undefined, type: Object as ()=>Podcast},
     comId: { default: undefined, type: Number },
     reload: { default: false, type: Boolean},
@@ -83,21 +71,19 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: false as boolean,
       error: false as boolean,
-      dfirst: this.first as number,
-      dsize: this.size as number,
+      first:0 as number,
+      size: 20 as number,
       totalCount: 0 as number,
       comments: [] as Array<CommentPodcast>,
-      inFetching: false as boolean,
     };
   },
 
   computed: {
     allFetched(): boolean {
-      return this.dfirst >= this.totalCount;
+      return this.first >= this.totalCount;
     },
-    organisationId(): string|undefined {
+    myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     podcastId(): number|undefined {
@@ -108,8 +94,8 @@ export default defineComponent({
       if (
         (state.generalParameters.isCommments &&
           ((this.podcast &&
-            this.organisationId === this.podcast.organisation.id) ||
-            this.organisationId === this.organisation)) ||
+            this.myOrganisationId === this.podcast.organisation.id) ||
+            this.myOrganisationId  === this.organisation)) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -118,10 +104,10 @@ export default defineComponent({
   },
   watch: {
     reload(): void {
-      this.fetchContent(true);
+      this.fetchContent();
     },
     status(): void {
-      this.fetchContent(true);
+      this.fetchContent();
     },
     comments: {
       deep: true,
@@ -131,121 +117,85 @@ export default defineComponent({
     },
   },
   created() {
-    this.fetchContent(true);
+    this.fetchContent();
   },
   methods: {
-    async fetchContent(reset: boolean): Promise<void> {
-      this.inFetching = true;
-      this.resetData(reset);
+    async fetchContent(reset=true): Promise<void> {
+      this.loading = true;
+      if(reset){
+        this.first = 0;
+      }
       let data;
       try {
-        const param: FetchParam = {
-          first: this.dfirst,
-          size: this.dsize,
-          podcastId: this.podcastId,
-        };
-        if (!this.editRight) {
-          param.status = ['Valid'];
-        }else if(this.status){
-          param.status = [this.status];
-        }
-        if (undefined === this.podcastId) {
-          param.organisationId = this.organisation;
-        }
         if (this.comId) {
-          data = await octopusApi.fetchCommentAnswers(this.comId, {first: this.dfirst,size: this.dsize});
-        } else if (!this.isFlat) {
-          data = await octopusApi.fetchRootComments(param);
-        } else {
+          data = await octopusApi.fetchCommentAnswers(this.comId, {first: this.first,size: this.size});
+        }else{
           const param: FetchParam = {
-            first: this.dfirst,
-            size: this.dsize,
+            first: this.first,
+            size: this.size,
             podcastId: this.podcastId,
+            status:this.editRight && this.status?[this.status]:['Valid'],
+            organisationId: undefined === this.podcastId? this.organisation: undefined,
           };
-          if (!this.editRight) {
-            param.status = ['Valid'];
-          }else if(this.status){
-            param.status = [this.status];
-          }
-          if (undefined === this.podcastId) {
-            param.organisationId = this.organisation;
-          }
           if (!this.isFlat) {
             data = await octopusApi.fetchRootComments(param);
           } else {
             data = await octopusApi.fetchComments(param);
           }
         }
-        this.resetData(reset);
-        this.loading = false;
-        this.loaded = true;
+        if(reset){
+          this.comments.length = 0;
+        }
         this.totalCount = data.totalElements;
         this.comments = this.comments.concat(data.content).filter((c: CommentPodcast) => {
           return null !== c;
         });
-        this.dfirst += this.dsize;
-      } catch (error) {
-        this.loading = false;
+        this.first += this.size;
+      } catch {
         this.error = true;
       }
-      this.inFetching = false;
+      this.loading = false;
     },
-    resetData(reset: boolean): void {
-      if (!reset) return;
-      this.comments.length = 0;
-      this.dfirst = 0;
-      this.loading = true;
-      this.loaded = false;
+    findCommentIndex(comId: number|undefined): number{
+      return this.comments.findIndex(
+        (element: CommentPodcast) => element.comId === comId
+      );
     },
-    displayMore(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.fetchContent(false);
+    commentIsNotInList(commentIdReferer:undefined|number):boolean{
+      return !this.isFlat && undefined!==commentIdReferer && this.comId !==commentIdReferer;
     },
     deleteComment(comment: CommentPodcast): void {
-      if (
-        !this.isFlat &&
-        comment.commentIdReferer &&
-        this.comId !== comment.commentIdReferer
-      ) {
+      if (this.commentIsNotInList(comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + comment.commentIdReferer] as InstanceType<typeof CommentItem>);
         comItem.receiveCommentEvent({ type: 'Delete', comment: comment });
         return;
       }
-      const index = this.comments.findIndex(
-        (element: CommentPodcast) => element.comId === comment.comId
-      );
+      const index = this.findCommentIndex(comment.comId);
       if (-1 === index) return;
       this.totalCount -= 1;
-      if (0 !== this.dfirst) {
-        this.dfirst -= 1;
-      }
+      /* if (0 !== this.first) {
+        this.first -= 1;
+      } */
       this.comments.splice(index, 1);
     },
     updateComment(data: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
-      if (
-        !this.isFlat &&
-        data.comment.commentIdReferer &&
-        this.comId !== data.comment.commentIdReferer
-      ) {
+      if (this.commentIsNotInList(data.comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + data.comment.commentIdReferer] as InstanceType<typeof CommentItem>);
         comItem.receiveCommentEvent({ ...data, type: 'Update' });
         return;
       }
-      const index = this.comments.findIndex(
-        (element: CommentPodcast) => element.comId === data.comment.comId
-      );
+      const index = this.findCommentIndex(data.comment.comId);
       if (-1 !== index) {
-        if (
-          'Valid' !== data.status &&
+        if ('Valid' !== data.status &&
           (!this.editRight || (this.status && this.status !== data.status))
         ) {
           this.comments.splice(index, 1);
         } else {
           this.comments.splice(index, 1, data.comment);
         }
-      } else if (this.status === data.comment.status) {
+      }else if (this.status === data.comment.status) {
         this.comments.unshift(data.comment);
-      } else if ('Valid' === data.status /* && !this.editRight */) {
+      } else if ('Valid' === data.status) {
         if (this.comments.length > 0) {
           let indexNewComment = -1;
           for (let i = 0, len = this.comments.length; i < len; i++) {
@@ -277,21 +227,15 @@ export default defineComponent({
       if (!myself && !this.editRight && 'Valid' !== comment.status) {
         return;
       }
-      if (
-        !this.isFlat &&
-        comment.commentIdReferer &&
-        this.comId !== comment.commentIdReferer
-      ) {
+      if (this.commentIsNotInList(comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + comment.commentIdReferer] as InstanceType<typeof CommentItem>);
         comItem.receiveCommentEvent({ type: 'Create', comment: comment });
         return;
       }
-      const index = this.comments.findIndex(
-        (element: CommentPodcast) => element.comId === comment.comId
-      );
+      const index = this.findCommentIndex(comment.comId);
       if (-1 === index) {
         this.totalCount += 1;
-        this.dfirst += 1;
+        /* this.first += 1; */
         if (!this.status || this.status === comment.status) {
           this.comments.unshift(comment);
         }

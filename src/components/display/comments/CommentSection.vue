@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isComments"
-    class="d-flex flex-column mt-3 module-box comment-item-container"
+    class="module-box"
   >
     <div class="d-flex align-items-center">
       <h2
@@ -18,7 +18,7 @@
       <button
         v-if="!isLive"
         :title="$t('Refresh')"
-        class="saooti-refresh-stud btn btn-reload primary-color"
+        class="btn admin-button primary-color saooti-refresh-stud"
         @click="reloadComments"
       />
     </div>
@@ -115,7 +115,7 @@ export default defineComponent({
     this.knownIdentity = this.getCookie('comment-octopus-name');
   },
   methods: {
-    updateFetch(value: { count: number }): void {
+    updateFetch(value: { count: number, comments: Array<CommentPodcast> }): void {
       this.loaded = true;
       this.$store.commit('setCommentLoaded', {
         ...value,
@@ -130,38 +130,23 @@ export default defineComponent({
       (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(comment, true);
     },
     receiveCommentEvent(event: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
+      const commentList = (this.$refs.commentList as InstanceType<typeof CommentListVue>);
       let statusUpdated = undefined;
       switch (event.type) {
-        case 'Create':
-          (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(event.comment);
-          break;
+        case 'Create':commentList.addNewComment(event.comment);break;
         case 'Update':
           if (event.comment.status !== event.oldStatus) {
             statusUpdated = event.comment.status;
           }
-          (this.$refs.commentList as InstanceType<typeof CommentListVue>).updateComment({
+          commentList.updateComment({
             comment: event.comment,
             status: statusUpdated,
           });
           break;
-        case 'Delete':
-          (this.$refs.commentList as InstanceType<typeof CommentListVue>).deleteComment(event.comment);
-          break;
-        default:
-          console.log('Event not handle');
-          break;
+        case 'Delete':commentList.deleteComment(event.comment);break;
+        default:break;
       }
     },
   },
 })
 </script>
-
-<style lang="scss">
-.btn-reload {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
-</style>

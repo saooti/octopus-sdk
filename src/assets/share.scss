@@ -153,40 +153,23 @@
       font-size: 0.6rem;
     }
   }
-  .comment-item-container {
-    .btn-comment-edit {
-      width: 32px;
-      height: 32px;
-      background: $octopus-secondary-color;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: $octopus-primary-color;
-      margin-right: 0.25rem;
-    }
-    .status-Pending {
-        background: #eb7d22;
-    }
-    .status-Invalid {
-        background: #d40303;
-    }
-    .status-Valid {
-        background: $octopus-primary-color;
-    }
-    .status-Valid, .status-Invalid, .status-Pending {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-    }
-    .icon-certified {
-        height: 15px;
-        margin-right: 0.5rem;
-    }
-    .collapsed > .when-opened,
-    :not(.collapsed) > .when-closed {
-        display: none !important;
-    }
+  .status-Pending {
+      background: #eb7d22;
+  }
+  .status-Invalid {
+      background: #d40303;
+  }
+  .status-Valid {
+      background: $octopus-primary-color;
+  }
+  .status-Valid, .status-Invalid, .status-Pending {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+  }
+  .icon-certified {
+      height: 15px;
+      margin-right: 0.5rem;
   }
 
 

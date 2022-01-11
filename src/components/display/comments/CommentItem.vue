@@ -1,78 +1,27 @@
 <template>
   <div class="d-flex flex-column mt-2 mb-1 item-comment">
-    <div class="d-flex small-text">
-      <template v-if="!isEditing">
-        <b
-          v-if="
-            recordingInLive &&
-              ('Live' === comment.phase || 'Prelive' === comment.phase)
-          "
-          class="recording-bg me-1 text-light p-1"
-        >{{ $t('Live') }}</b>
-        <b
-          v-if="editRight || comment.status == 'Valid'"
-          class="me-2"
-        >{{
-          comment.name
-        }}</b>
-        <template v-else>
-          <b
-            :id="'popover-comment' + comment.comId"
-            tabindex="-1"
-            class="mr-2 text-danger"
-          >{{
-            comment.name
-          }}</b>
-          <Popover
-            :target="'popover-comment' + comment.comId"
-          >
-            {{ $t('Comment waiting') }}
-          </Popover>
-        </template>
-      </template>
-      <template v-else>
-        <input
-          v-model="temporaryName"
-          class="form-input me-2 mb-2 width-auto"
-          type="text"
-          :class="{ 'border border-danger': temporaryName.length < 2 }"
-        >
-      </template>
-      <img
-        v-if="comment.certified"
-        class="icon-certified"
-        src="/img/certified.png"
-        :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
-        :title="$t('Certified account')"
-      >
-      <div class="me-2">
-        {{ date }}
-      </div>
-      <span 
-        v-if="editRight" 
-        :class="'status-' + comment.status"
-        :data-selenium="'status-comment-' + seleniumFormat(comment.name)"
-      />
-    </div>
-    <template v-if="!isEditing">
-      <!-- eslint-disable vue/no-v-html -->
-      <div v-html="urlify(contentDisplay)" />
-      <!-- eslint-enable -->
-      <a
-        v-if="comment.content.length > 300"
-        class="c-hand font-italic"
-        @click="summary = !summary"
-      >{{ readMore }}</a>
-    </template>
+    <CommentBasicView
+      v-if="!isEditing"
+      :comment="comment"
+      :editRight="editRight"
+      :recordingInLive="recordingInLive"
+    />
     <template v-else>
+      <input
+        v-model="temporaryName"
+        class="form-input me-2 mb-2 width-auto"
+        type="text"
+        :class="{ 'border border-danger': temporaryName.length < 2 }"
+      >
       <textarea
         v-model="temporaryContent"
+        :class="{ 'border border-danger': 0===temporaryContent.length }"
         class="form-input"
         type="text"
       />
       <div class="d-flex justify-content-end">
         <button
-          class="btn btn-light m-1"
+          class="btn m-1"
           @click="isEditing = false"
         >
           {{ $t('Cancel') }}
@@ -86,12 +35,10 @@
         </button>
       </div>
     </template>
-    <div
-      class="mb-0 d-flex align-items-center mt-1"
-    >
+    <div class="d-flex align-items-center mt-1">
       <button
-        v-if="null === comment.commentIdReferer && 'Valid' === comment.status"
-        class="btn py-1 px-3 primary-color me-2"
+        v-if="null === comment.commentIdReferer && 'Valid'=== this.comment.status"
+        class="btn primary-color py-1 px-3 me-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
         @click="answerComment"
       >
@@ -102,40 +49,29 @@
           (!isFlat && comment.relatedComments) ||
             (isFlat && comment.commentIdReferer)
         "
-        :id="'commentItem'+comment.comId"
-        class="primary-color c-hand d-flex align-items-center small-text input-no-outline"
-        type="button"
-        data-bs-toggle="collapse"
-        :data-bs-target="'#commentItemDetail'+comment.comId"
-        aria-expanded="false"
-        :aria-controls="'commentItemDetail'+comment.comId"
+        class="d-flex align-items-center small-text primary-color c-hand"
         @click="collapseVisible=!collapseVisible"
       >
-        <div class="d-flex align-items-center when-closed me-2">
-          <div v-if="comment.relatedComments">
+        <div v-if="comment.relatedComments">
+          <template v-if="!collapseVisible">
             {{ $t('Display answers', { nb: comment.relatedComments }) }}
             <i v-if="editRight">{{
               $t('(nb valid comment answers)', {
                 nb: comment.relatedValidComments,
               })
             }}</i>
-          </div>
-          <div v-else>
-            {{ $t('In response to') }}
-          </div>
-          <span class="saooti-arrow_down" />
-        </div>
-        <div class="d-flex align-items-center when-opened">
-          <div v-if="comment.relatedComments">
+          </template>
+          <template v-else>
             {{ $t('Hide answers') }}
-          </div>
-          <div v-else>
-            {{ $t('In response to') }}
-          </div>
-          <span
-            class="saooti-arrow_down arrow-transform me-2"
-          />
+          </template>
         </div>
+        <div v-else>
+          {{ $t('In response to') }}
+        </div>
+        <span 
+          :class="collapseVisible? 'arrow-transform': ''"
+          class="saooti-arrow_down"
+        />
       </div>
       <EditCommentBox
         v-if="editRight"
@@ -148,11 +84,11 @@
       />
     </div>
     <div
-      :id="'commentItemDetail'+comment.comId"
-      :titleledby="'commentItem'+comment.comId"
+      v-if="collapseVisible"
+      class="ms-4"
     >
       <CommentInput
-        v-if="!isFlat || (isFlat && !comment.commentIdReferer) && collapseVisible"
+        v-if="!isFlat || (isFlat && !comment.commentIdReferer)"
         v-model:knownIdentity="knownIdentity"
         :focus="focus"
         :podcast="podcast"
@@ -162,11 +98,12 @@
         @newComment="newComment"
       />
       <CommentParentInfo
-        v-if="isFlat && comment.commentIdReferer && collapseVisible"
+        v-if="isFlat && comment.commentIdReferer"
         :com-id="comment.commentIdReferer"
+        :edit-right="editRight"
       />
       <CommentList
-        v-if="comment.relatedComments && collapseVisible && !isFlat"
+        v-if="!isFlat && comment.relatedComments"
         ref="commentList"
         :podcast="podcast"
         :fetch-conference="fetchConference"
@@ -184,10 +121,8 @@ import { displayMethods, selenium } from '../../mixins/functions';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
-import moment from 'moment';
-import Popover from '../../misc/Popover.vue';
+import CommentBasicView from './CommentBasicView.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import EditBoxVue from '../edit/EditBox.vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
 const EditCommentBox = defineAsyncComponent(() => import('@/components/display/edit/EditCommentBox.vue'));
@@ -200,10 +135,11 @@ export default defineComponent({
     CommentParentInfo,
     EditCommentBox,
     CommentList,
-    Popover
+    CommentBasicView
   },
 
   mixins:[displayMethods, selenium],
+
   props: {
     comment: { default: ()=>({}), type: Object as ()=>CommentPodcast },
     podcast: { default: undefined, type: Object as ()=>Podcast },
@@ -211,11 +147,11 @@ export default defineComponent({
     organisation: { default: undefined, type: String},
     isFlat: { default: false, type: Boolean },
   },
+
   emits: ['deleteComment', 'updateComment', 'update:comment'],
   
   data() {
     return {
-      summary: true as boolean,
       collapseVisible: false as boolean,
       focus: false as boolean,
       isEditing: false as boolean,
@@ -224,36 +160,19 @@ export default defineComponent({
     };
   },
   computed: {
-    date(): string {
-      if (this.comment.date)
-        return moment(this.comment.date).format('D MMMM YYYY HH[h]mm');
-      return '';
-    },
-    limitContent(): string {
-      if (!this.comment.content) return '';
-      if (this.comment.content.length <= 300) return this.comment.content;
-      return this.comment.content.substring(0, 300) + '...';
-    },
-    readMore(): string {
-      if (this.summary) return this.$t('Read more').toString();
-      return this.$t('Read less').toString();
-    },
-    contentDisplay(): string {
-      if (this.summary) return this.limitContent;
-      return this.comment.content;
-    },
-    organisationId(): string|undefined {
+    myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {
       if (
         (state.generalParameters.isCommments &&
           ((this.podcast &&
-            this.organisationId === this.podcast.organisation.id) ||
-            this.organisationId === this.organisation)) ||
+            this.myOrganisationId === this.podcast.organisation.id) ||
+            this.myOrganisationId === this.organisation)) ||
         state.generalParameters.isAdmin
-      )
+      ){
         return true;
+      }
       return false;
     },
     knownIdentity: {
@@ -301,25 +220,19 @@ export default defineComponent({
       }
     },
     editComment(): void {
-      if (this.comment.name && null !== this.comment.name) {
-        this.temporaryName = this.comment.name;
-      }
-      if (this.comment.content && null !== this.comment.content) {
-        this.temporaryContent = this.comment.content;
-      }
+      this.temporaryName = this.comment.name && null !== this.comment.name ? this.comment.name : '';
+      this.temporaryContent = this.comment.content && null !== this.comment.content ? this.comment.content : '';
       this.isEditing = true;
     },
     validEdit(): void {
       const comment = this.comment;
       comment.content = this.temporaryContent;
       comment.name = this.temporaryName;
-      (this.$refs.editBox as InstanceType<typeof EditBoxVue>).updateComment(comment);
+      (this.$refs.editBox as InstanceType<typeof EditCommentBox>).updateComment(comment);
     },
     updateStatus(data: string): void {
       const updatedComment = this.comment;
-      if(undefined === updatedComment.relatedValidComments){
-        return;
-      }
+      if(undefined === updatedComment.relatedValidComments){return;}
       if ('Valid' === data) {
         updatedComment.relatedValidComments += 1;
       } else {
@@ -329,9 +242,7 @@ export default defineComponent({
     },
     receiveCommentEvent(event: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
       switch (event.type) {
-        case 'Create':
-          this.newComment(event.comment, true);
-          break;
+        case 'Create':this.newComment(event.comment, true);break;
         case 'Update':
           if (this.$refs.commentList) {
             (this.$refs.commentList as InstanceType<typeof CommentList>).updateComment({ comment: event.comment });
@@ -344,7 +255,6 @@ export default defineComponent({
                 updatedComment.relatedValidComments += 1;
               }
             }
-            
             this.$emit('update:comment', updatedComment);
           }
           break;
@@ -352,14 +262,14 @@ export default defineComponent({
           if (this.$refs.commentList) {
             (this.$refs.commentList as InstanceType<typeof CommentList>).deleteComment(event.comment);
           } else {
-            const updatedComment = this.comment;
-            if(undefined !== updatedComment.relatedComments){
-              updatedComment.relatedComments -= 1;
+            const deletedComment = this.comment;
+            if(undefined !== deletedComment.relatedComments){
+              deletedComment.relatedComments -= 1;
             }
-            if (undefined !== updatedComment.relatedValidComments && 'Valid' === event.comment.status) {
-              updatedComment.relatedValidComments -= 1;
+            if (undefined !== deletedComment.relatedValidComments && 'Valid' === event.comment.status) {
+              deletedComment.relatedValidComments -= 1;
             }
-            this.$emit('update:comment', updatedComment);
+            this.$emit('update:comment', deletedComment);
           }
           break;
         default:
@@ -369,5 +279,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss"></style>
