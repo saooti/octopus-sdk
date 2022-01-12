@@ -518,3 +518,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.18 Responsive select
  * 30.0.19 Mise à jour Api
  * 30.0.20 Petit refacto commentaires
+ * 30.0.21 #10701 & #10698

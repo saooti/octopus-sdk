@@ -233,12 +233,8 @@ export default defineComponent({
         this.$emit('emissionTitle', this.name);
         this.loaded = true;
         if (!this.emission.annotations) return;
-        if (this.emission.annotations.RSS) {
-          this.rssEmission = true;
-        }
-        if (this.emission.annotations.FTP) {
-          this.ftpEmission = true;
-        }
+        this.rssEmission = this.emission.annotations.RSS? true: false;
+        this.ftpEmission = this.emission.annotations.FTP? true: false;
         if (this.emission.annotations.exclusive) {
           this.exclusive =
             'true' === this.emission.annotations.exclusive ? true : false;

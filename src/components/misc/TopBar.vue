@@ -34,7 +34,7 @@
       :reset="reset"
       @selected="onOrganisationSelected"
     />
-    <div class="d-flex justify-content-center flex-grow-1">
+    <div class="d-flex justify-content-end flex-grow-1">
       <router-link
         v-if="
           isLiveTab &&

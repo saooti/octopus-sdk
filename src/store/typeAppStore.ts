@@ -199,7 +199,6 @@ export function emptyPodcastData(): Podcast{
             total: 0,
             media: undefined ,
             live: undefined ,
-            stop: undefined ,
           },
       
           navigator: {

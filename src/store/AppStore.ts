@@ -17,9 +17,6 @@ export default createStore({
         };
         return;
       }
-      if (podcast.isStop) {
-        state.player.stop = true;
-      }
       if (
         (state.player.podcast &&
           state.player.podcast.podcastId === podcast.podcastId) ||

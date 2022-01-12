@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "30.0.20",
+  "version": "30.0.21",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -39,7 +39,7 @@
     "vue-router": "^4.0.12",
     "vue3-swatches": "^1.0.5",
     "vuex": "^4.0.2",
-    "webpack": "^5.62.1"
+    "webpack": "^5.66.0"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.1.8",

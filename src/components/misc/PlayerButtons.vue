@@ -23,7 +23,7 @@
     />
   </div>
   <div
-    v-if="(isPlaying || isPaused) && (media || isStop)"
+    v-if="isPlaying || isPaused"
     class="play-button-box primary-bg text-light"
     @click="stopPlayer"
   >
@@ -60,9 +60,6 @@ export default defineComponent({
     podcastImage(): string{
       if (this.$store.state.player.podcast) return this.$store.state.player.podcast.imageUrl;
       return '';
-    },
-    isStop(): boolean{
-      return this.$store.state.player.stop;
     },
     media(): undefined|Media{
       return this.$store.state.player.media;

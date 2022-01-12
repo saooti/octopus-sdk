@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isDisplay">
+  <div class="mt-3" v-if="isDisplay">
     <nav
       v-if="categoryFilter || rubriqueFilter.length"
       title="breadcrumb"

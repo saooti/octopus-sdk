@@ -295,4 +295,5 @@ export default{
   "Download":"Download",
   "Download started": 'Download started',
   'From RSS': "From an RSS feed",
+  "User menu":"User menu",
 };
