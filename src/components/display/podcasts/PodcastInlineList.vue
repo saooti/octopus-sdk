@@ -63,13 +63,13 @@
     </transition-group>
     <router-link
       class="btn btn-link"
-      :class="buttonPlus ? 'btn-link-plus' : ''"
+      :class="buttonPlus ? 'btn-link' : ''"
       :to="refTo"
     >
       {{ buttonText }}
       <div
         v-if="buttonPlus"
-        class="saooti-plus"
+        class="ms-1 saooti-plus"
       />
     </router-link>
   </div>

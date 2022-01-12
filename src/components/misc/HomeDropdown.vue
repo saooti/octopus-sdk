@@ -110,7 +110,8 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     authenticated(): boolean {
-      return this.$store.state.authentication.isAuthenticated;
+      return true;
+      //return this.$store.state.authentication.isAuthenticated;
     },
     isOrganisation(): boolean {
       return (state.generalParameters.isOrganisation as boolean);

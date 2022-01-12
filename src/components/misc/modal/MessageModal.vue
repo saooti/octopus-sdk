@@ -32,7 +32,7 @@
         >
           <button
             v-if="canceltext"
-            class="btn btn-light m-1"
+            class="btn m-1"
             @click="onCancel"
           >
             {{ canceltext }}

@@ -40,14 +40,17 @@
     <button
       v-show="size < podcasts.length && loaded"
       class="btn"
-      :class="buttonPlus ? 'btn-link-plus':'btn-more'"
+      :class="buttonPlus ? 'btn-link':'btn-more'"
       :title="$t('See more')"
       @click="displayMore"
     >
       <template v-if="buttonPlus">
         {{ $t('See more') }}
       </template>
-      <div class="saooti-plus" />
+      <div
+        :class="buttonPlus?'ms-1':''"
+        class="saooti-plus"
+      />
     </button>
   </div>
 </template>

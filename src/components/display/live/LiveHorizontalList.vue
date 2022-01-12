@@ -16,7 +16,7 @@
     <button
       v-show="!allFetched"
       class="btn"
-      :class="buttonPlus ? 'btn-link-plus mt-3' : 'btn-more'"
+      :class="buttonPlus ? 'btn-link mt-3' : 'btn-more'"
       :disabled="inFetching"
       :title="$t('See more')"
       @click="displayMore"
@@ -24,7 +24,10 @@
       <template v-if="buttonPlus">
         {{ $t('See more') }}
       </template>
-      <div class="saooti-plus" />
+      <div
+        :class="buttonPlus?'ms-1':''"
+        class="saooti-plus"
+      />
     </button>
   </div>
 </template>
