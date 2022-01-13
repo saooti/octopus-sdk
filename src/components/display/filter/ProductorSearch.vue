@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center my-3">
     <div
       v-if="!isPodcastmaker && !filterOrga"
       class="filter-organisation-chooser"

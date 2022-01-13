@@ -8,7 +8,7 @@
         v-for="category in categories"
         :id="'category' + category.id"
         :key="category.id"
-        class="category-item text-dark secondary-bg"
+        class="category-item text-dark bg-white"
         @click="checkIfFilter(category)"
       >
         {{ category.name }}

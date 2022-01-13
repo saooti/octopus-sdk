@@ -4,7 +4,7 @@
     <router-link
       v-if="editRight && !isPodcastmaker"
       to="/main/priv/edit/playlist"
-      class="d-flex justify-content-center"
+      class="d-flex justify-content-center my-3"
     >
       <button class="btn btn-primary">
         {{ $t('Create playlist') }}

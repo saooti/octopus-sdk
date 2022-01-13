@@ -1,9 +1,11 @@
 <template>
   <div
-    v-if="undefined !== tagList"
+    v-if="undefined !== tagList && 0!==tagList.length"
     class="tag-list-component d-flex align-items-center flex-wrap"
   >
-    <div class="fw-bold">{{ $t('Podcast tags') + ": "}}</div>
+    <div class="fw-bold">
+      {{ $t('Podcast tags') + ": " }}
+    </div>
     <div
       v-for="(tag, index) in tagList"
       :key="tag"

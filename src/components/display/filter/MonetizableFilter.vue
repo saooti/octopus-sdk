@@ -7,7 +7,7 @@
       <select
         ref="select"
         v-model="monetization"
-        class="ms-2 mb-0 c-hand"
+        class="ms-2 mb-0 pe-4 c-hand"
         @change="onChange"
       >
         <option

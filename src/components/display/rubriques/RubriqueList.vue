@@ -20,7 +20,7 @@
         v-for="rubrique in rubriqueDisplay"
         :id="'rubrique' + rubrique.rubriqueId"
         :key="rubrique.rubriqueId"
-        class="rubrique-item"
+        class="rubrique-item bg-white"
         @click="addFilter(rubrique)"
       >
         {{ rubrique.name }}
@@ -205,7 +205,7 @@ export default defineComponent({
   white-space: nowrap;
   flex-shrink: 0;
   &:hover {
-    background: #ddd !important;
+    background: #eee !important;
   }
 }
 </style>
