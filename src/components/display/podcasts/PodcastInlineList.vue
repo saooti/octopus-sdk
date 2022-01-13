@@ -62,8 +62,7 @@
       />
     </transition-group>
     <router-link
-      class="btn btn-link"
-      :class="buttonPlus ? 'btn-link' : ''"
+      class="btn btn-link m-4"
       :to="refTo"
     >
       {{ buttonText }}

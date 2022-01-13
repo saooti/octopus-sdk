@@ -39,13 +39,13 @@
           </button>
           <button
             v-if="thirdText"
-            class="btn btn-primary m-1"
+            class="btn btn-link m-1"
             @click="onThirdAction"
           >
             {{ thirdText }}
           </button>
           <button
-            class="btn btn-primary m-1"
+            class="btn btn-link m-1"
             @click="onValid"
           >
             {{ validatetext }}

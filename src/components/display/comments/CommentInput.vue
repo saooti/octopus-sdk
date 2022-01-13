@@ -25,7 +25,7 @@
         {{ $t('Cancel') }}
       </button>
       <button
-        class="btn btn-primary"
+        class="btn btn-link"
         :disabled="temporaryName.length < 2"
         @click="validEdit"
       >
@@ -52,7 +52,7 @@
         {{ $t('Cancel') }}
       </button>
       <button
-        class="btn btn-primary"
+        class="btn btn-link"
         :disabled="0 === newComment.trim().length"
         @mousedown="requestToSend"
       >
@@ -295,7 +295,7 @@ export default defineComponent({
 @import '../../../sass/_variables.scss';
 .comment-input-container {
   textarea::placeholder {
-    color: $octopus-primary-color;
+    color: $octopus-primary-dark;
   }
   textarea:focus::placeholder {
     color: black;

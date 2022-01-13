@@ -7,7 +7,7 @@
       <input
         type="button"
         :value="$t('Copy')"
-        class="btn btn-primary"
+        class="btn btn-link"
         :title="$t('Copy')"
         @click="onCopyCode(rss, afterCopy)"
       >

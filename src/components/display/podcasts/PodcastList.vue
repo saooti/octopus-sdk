@@ -23,7 +23,7 @@
     <button
       v-show="!allFetched && loaded"
       class="btn"
-      :class="buttonPlus ? 'btn-link' : 'btn-more'"
+      :class="buttonPlus ? 'btn-link  m-4' : 'btn-more'"
       :disabled="inFetching"
       :title="$t('See more')"
       @click="displayMore"

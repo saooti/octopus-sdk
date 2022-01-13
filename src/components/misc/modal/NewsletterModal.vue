@@ -71,7 +71,7 @@
           </div>
           <div class="modal-footer">
             <button
-              class="btn btn-primary m-1"
+              class="btn btn-link m-1"
               @click="closePopup"
             >
               {{ $t('Close') }}

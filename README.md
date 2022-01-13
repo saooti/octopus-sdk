@@ -522,3 +522,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.22 Accessibilité
  * 30.0.23 Css +  Accessibilité
  * 30.0.24 Css +  Accessibilité
+ * 30.0.25 Css +  Accessibilité

@@ -366,10 +366,11 @@ export default defineComponent({
 @import '../../../sass/_variables.scss';
 .sticker {
   align-self: center;
-  background: $primaryColorMoreTransparent;
+  background: $octopus-primary-dark;
   padding: 0.5rem;
   transition: all 0.5s ease;
-  color: #41403e;
+  color: white;
+  font-weight: bold;
   letter-spacing: 1px;
   outline: none;
   box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
@@ -377,6 +378,8 @@ export default defineComponent({
   border: solid 2px #41403e;
   &:hover {
     box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+    background: transparent;
+    color: $octopus-primary-dark;
   }
 }
 .max-iframe {

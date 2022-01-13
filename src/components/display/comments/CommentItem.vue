@@ -27,7 +27,7 @@
           {{ $t('Cancel') }}
         </button>
         <button
-          class="btn btn-primary m-1"
+          class="btn btn-link m-1"
           :disabled="0 === temporaryContent.length || temporaryName.length < 2"
           @click="validEdit"
         >

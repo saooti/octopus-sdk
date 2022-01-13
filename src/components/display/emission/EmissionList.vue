@@ -41,7 +41,7 @@
       <button
         v-show="!allFetched"
         class="btn"
-        :class="buttonPlus ? 'btn-link' : 'btn-more'"
+        :class="buttonPlus ? 'btn-link  m-4' : 'btn-more'"
         :disabled="loading"
         :title="$t('See more')"
         @click="fetchContent(false)"
