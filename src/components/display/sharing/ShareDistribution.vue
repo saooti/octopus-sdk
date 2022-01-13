@@ -3,7 +3,7 @@
     <h3>{{ $t('Distribute') }}</h3>
     <p class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
-      <span class="primary-color text-break">{{ rss }}</span>
+      <span class="primary-darker hide-small-screen text-break">{{ rss }}</span>
       <input
         type="button"
         :value="$t('Copy')"
@@ -191,11 +191,6 @@ export default defineComponent({
   @media (max-width: 960px) {
     flex-wrap: wrap;
     margin: 0.2rem 0.5rem;
-  }
-  @media (max-width: 450px) {
-    .primary-color {
-      display: none;
-    }
   }
 }
 </style>

@@ -1,10 +1,8 @@
 <template>
   <div class="module-box flex-grow-0">
-    <div class="d-flex align-items-center mb-3">
-      <h3 class="mb-0">
-        {{ $t('Subscribe emission') }}
-      </h3>
-    </div>
+    <h3 class="mb-3">
+      {{ $t('Subscribe emission') }}
+    </h3>
     <div class="d-flex flex-wrap">
       <a
         v-if="amazon"

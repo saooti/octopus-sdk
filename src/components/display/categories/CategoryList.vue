@@ -19,7 +19,7 @@
       class="dropdown btn-group"
     >
       <button
-        class="btn dropdown-toggle category-rubrique-item-plus dropdown-toggle-no-caret saooti-plus"
+        class="btn dropdown-toggle admin-button dropdown-toggle-no-caret saooti-plus"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         :title="$t('See more')"
@@ -163,6 +163,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+@import '../../../sass/_variables.scss';
 .category-list-container {
   display: inline-flex;
   justify-content: flex-start;
@@ -184,20 +185,8 @@ export default defineComponent({
   justify-content: center;
   white-space: nowrap;
   flex-shrink: 0;
-  .router-link-active {
-    background: #ddd !important;
+  .router-link-active,&:hover {
+    background: $octopus-secondary-color !important;
   }
-  &:hover {
-    background: #ddd !important;
-  }
-}
-
-.category-list .category-item-plus {
-  display: flex;
-  height: 1.5rem;
-  width: 1.5rem;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.5rem;
 }
 </style>

@@ -296,4 +296,5 @@ export default{
   "Download started": 'Téléchargement lancé',
   'From RSS': "Issu d'un flux RSS",
   "User menu":"Menu utilisateur",
+  'Podcast tags': "Mot-clé de l'épisode",
 };

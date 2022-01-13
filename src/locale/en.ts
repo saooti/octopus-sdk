@@ -296,4 +296,5 @@ export default{
   "Download started": 'Download started',
   'From RSS': "From an RSS feed",
   "User menu":"User menu",
+  'Podcast tags': 'Podcast tags',
 };

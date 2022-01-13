@@ -60,23 +60,25 @@ export default defineComponent({
 	}
 });
 </script>
-<style lang="scss" scoped>
-.champs-searchPage input {
-  border: 2px solid #dee2e6;
-  border-radius: 10px;
-  margin: 0 !important;
-}
-.saooti-search-bounty,
-.saooti-cross {
-  font-size: 1rem;
-}
-.search-icon-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  margin: 1rem;
-}
+<style lang="scss">
+.champs-searchPage{
+  input {
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    margin: 0 !important;
+  }
+  .saooti-search-bounty,
+  .saooti-cross {
+    font-size: 1rem;
+  }
+  .search-icon-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    margin: 1rem;
+  }
+} 
 </style>

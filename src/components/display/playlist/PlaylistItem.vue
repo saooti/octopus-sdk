@@ -59,7 +59,7 @@
         }"
         class="text-dark"
       >
-        <div class="emission-producer primary-color">
+        <div class="emission-producer primary-darker">
           © {{ playlist.organisation.name }}
         </div>
       </router-link>
@@ -138,5 +138,3 @@ export default defineComponent({
   methods: {},
 })
 </script>
-
-<style lang="scss"></style>

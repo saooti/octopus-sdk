@@ -366,7 +366,7 @@ export default defineComponent({
 @import '../../../sass/_variables.scss';
 .sticker {
   align-self: center;
-  background: rgba($octopus-primary-color, 0.3);
+  background: $primaryColorMoreTransparent;
   padding: 0.5rem;
   transition: all 0.5s ease;
   color: #41403e;

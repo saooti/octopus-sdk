@@ -1,6 +1,9 @@
 .octopus-app{
 	.input-no-outline{
-	outline-width: 0 !important;
+		outline-width: 0 !important;
+	}
+	:-moz-focusring {
+		outline: 0px solid black;
 	}
 	.width-auto{
 	width: auto !important;
@@ -64,8 +67,8 @@
 				border-bottom: 0.1rem solid transparent;
 			}
 			.active{
-			border-bottom-color: $octopus-primary-color;
-			color: $octopus-primary-color;
+				border-bottom-color: $octopus-primary-dark;
+				color: $octopus-primary-dark;
 			}
 		}
 	}

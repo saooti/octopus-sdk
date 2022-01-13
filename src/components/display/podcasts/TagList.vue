@@ -1,8 +1,9 @@
 <template>
   <div
     v-if="undefined !== tagList"
-    class="tag-list-component d-flex flex-wrap"
+    class="tag-list-component d-flex align-items-center flex-wrap"
   >
+    <div class="fw-bold">{{ $t('Podcast tags') + ": "}}</div>
     <div
       v-for="(tag, index) in tagList"
       :key="tag"

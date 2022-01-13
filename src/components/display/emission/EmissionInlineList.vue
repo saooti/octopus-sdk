@@ -6,7 +6,7 @@
     >
       <div class="hide-phone">
         <button
-          class="btn btn-arrow"
+          class="btn admin-button m-1"
           :class="{ disabled: !previousAvailable }"
           :title="$t('Display previous')"
           @click="displayPrevious()"
@@ -14,7 +14,7 @@
           <div class="saooti-arrow-left2" />
         </button>
         <button
-          class="btn btn-arrow"
+          class="btn admin-button m-1"
           :class="{ disabled: !nextAvailable }"
           :title="$t('Display next')"
           @click="displayNext()"

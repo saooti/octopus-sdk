@@ -520,3 +520,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.20 Petit refacto commentaires
  * 30.0.21 #10701 & #10698
  * 30.0.22 Accessibilité
+ * 30.0.23 Css +  Accessibilité

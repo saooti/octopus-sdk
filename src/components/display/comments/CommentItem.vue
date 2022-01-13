@@ -38,7 +38,7 @@
     <div class="d-flex align-items-center mt-1">
       <button
         v-if="null === comment.commentIdReferer && 'Valid'=== comment.status"
-        class="btn primary-color py-1 px-3 me-2"
+        class="btn py-1 px-3 me-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
         @click="answerComment"
       >
@@ -49,7 +49,7 @@
           (!isFlat && comment.relatedComments) ||
             (isFlat && comment.commentIdReferer)
         "
-        class="d-flex align-items-center small-text primary-color c-hand"
+        class="d-flex align-items-center small-text primary-darker c-hand"
         @click="collapseVisible=!collapseVisible"
       >
         <div v-if="comment.relatedComments">

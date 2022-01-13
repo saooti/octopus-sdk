@@ -18,7 +18,7 @@
       <button
         v-if="!isLive"
         :title="$t('Refresh')"
-        class="btn admin-button primary-color saooti-refresh-stud"
+        class="btn admin-button saooti-refresh-stud"
         @click="reloadComments"
       />
     </div>

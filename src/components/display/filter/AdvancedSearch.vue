@@ -15,7 +15,7 @@
       class="advanced-search-container"
     >
       <div class="d-flex flex-column">
-        <div class="primary-color mb-2">
+        <div class="primary-darker mb-2">
           {{ $t('Filter') }}
         </div>
         <MonetizableFilter
@@ -111,7 +111,7 @@
         </div>
       </div>
       <div class="d-flex flex-column">
-        <div class="primary-color mb-2">
+        <div class="primary-darker mb-2">
           {{ $t('Sort') }}
         </div>
         <ClassicRadio

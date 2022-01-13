@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <button
-      class="btn admin-button primary-color me-1"
+      class="btn admin-button me-1"
       title="edit"
       @click="editComment"
     >
@@ -12,7 +12,7 @@
     </button>
     <button
       v-if="'Pending' === comment.status || 'Invalid' === comment.status"
-      class="btn admin-button primary-color me-1"
+      class="btn admin-button me-1"
       title="valid"
       @click="commentModal('Valid')"
     >
@@ -23,7 +23,7 @@
     </button>
     <button
       v-if="'Pending' === comment.status || 'Valid' === comment.status"
-      class="btn admin-button primary-color me-1"
+      class="btn admin-button me-1"
       title="invalid"
       @click="commentModal('Invalid')"
     >
@@ -34,7 +34,7 @@
     </button>
     <button
       v-if="organisation"
-      class="btn admin-button primary-color me-1"
+      class="btn admin-button me-1"
       :title="$t('See more')"
       @click="seeMore = true"
     >
@@ -44,7 +44,7 @@
       />
     </button>
     <button
-      class="btn admin-button primary-color me-1"
+      class="btn admin-button me-1"
       title="delete"
       @click="commentModal('Delete')"
     >

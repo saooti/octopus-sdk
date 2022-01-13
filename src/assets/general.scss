@@ -8,7 +8,7 @@ body{
   font-family: Montserrat,sans-serif,Helvetica Neue;
   font-size: 0.8rem;
   overflow-x: hidden;
-  background: #fafafa;
+  background: #ebebeb;
   min-height: 100%;
   overscroll-behavior-y: contain;
 }
@@ -73,6 +73,12 @@ body{
   .secondary-bg{
     background: $octopus-background;
   }
+  .light-primary-bg{
+		background-color: $primaryColorTransparent !important;
+	}
+	.really-light-primary-bg{
+		background-color: $primaryColorReallyTransparent !important;
+	}
   .width-fit-content{
     width: fit-content !important;
   }
@@ -93,7 +99,7 @@ body{
   }
 
   .module-box{
-    background-color: $octopus-secondary-background;
+    background-color: white;
     padding: 1.3rem;
     margin: 0.5rem 0.5rem 0 0.5rem;
     border-radius: 1rem;
@@ -125,7 +131,7 @@ body{
     color: black !important;
   }
   a.link-hover.router-link-exact-active.router-link-active, a.link-hover:hover {
-    color: $octopus-primary-color !important;
+    color: $octopus-primary-dark !important;
   }
   .descriptionText{
     white-space: pre-wrap; 
@@ -158,6 +164,11 @@ body{
       display: none !important;
     }
   }
+  .hide-small-screen{
+		@media (max-width: 450px) {
+			display: none !important;
+		}
+	}
   .show-phone{
     display: none;
     @media (max-width: 960px) {

@@ -10,7 +10,7 @@
     .btn{
         font-size:.7rem;
         border-radius: 50px;
-        background: $octopus-light-secondary-color; 
+        background: $octopus-secondary-color; 
         transition: background .2s, border .2s, box-shadow .2s, color .2s;
         text-decoration: none !important;
         white-space: nowrap;
@@ -30,12 +30,12 @@
         // Button Primary
         &.btn-primary {
             background: $octopus-third-color;
-            background: -moz-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: -webkit-gradient(left top, right bottom, color-stop(0%, $octopus-third-color), color-stop(100%, $octopus-primary-color));
-            background: -webkit-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: -o-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: -ms-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: linear-gradient(135deg, $octopus-third-color 0%, $octopus-primary-color 100%);
+            background: -moz-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
+            background: -webkit-gradient(left top, right bottom, color-stop(0%, $octopus-third-color), color-stop(100%, $octopus-primary-linear-background));
+            background: -webkit-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
+            background: -o-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
+            background: -ms-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
+            background: linear-gradient(135deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d91f', endColorstr='#50b685', GradientType=1 );
             border-radius: 50px;
             height: auto;
@@ -44,19 +44,19 @@
             &:focus,
             &:hover {
             background:$octopus-third-color;
-            background: -moz-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: -webkit-gradient(left top, right bottom, color-stop(0%, $octopus-third-color), color-stop(100%, $octopus-primary-color));
-            background: -webkit-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: -o-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: -ms-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            background: linear-gradient(135deg, $octopus-third-color 0%, $octopus-primary-color 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d91f', endColorstr='#4fcf91', GradientType=1 );
-            border: 0;
+                background: -moz-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
+                background: -webkit-gradient(left top, right bottom, color-stop(0%, darken($octopus-third-color,7%)), color-stop(100%, darken($octopus-primary-linear-background, 7%)));
+                background: -webkit-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
+                background: -o-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
+                background: -ms-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
+                background: linear-gradient(135deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d91f', endColorstr='#4fcf91', GradientType=1 );
+                border: 0;
             }
             &:active,
             &.active {
-            background: darken($octopus-primary-color, 4%);
-            border-color: darken($octopus-primary-color, 7%);
+                background: darken($octopus-primary-linear-background, 4%);
+                border-color: darken($octopus-primary-linear-background, 7%);
             }
         }
         //Button disable halo after click
@@ -78,8 +78,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: $octopus-primary-color;
-            border: 2px solid $octopus-primary-color;
+            background: $octopus-primary-dark;
+            border: 2px solid $octopus-primary-dark;
             color: white;
             font-weight: bold;
             margin: 2rem;
@@ -90,7 +90,7 @@
             &:active,
             &.active {
                 background: transparent;
-                color: $octopus-primary-color;
+                color: $octopus-primary-dark;
             }
             @media (max-width: 500px){
             margin: 0.3rem;
@@ -98,7 +98,7 @@
         }
 
         &.btn-more{
-            background: $octopus-primary-color;
+            background: $octopus-primary-dark;
             color: $octopus-background;
             width: 2rem;
             height: 2rem;
@@ -121,8 +121,7 @@
             height: 5rem;
         }
     
-        &.admin-button,
-        &.btn-arrow  {
+        &.admin-button{
             padding: 0.3rem;
             height: 1.8rem;
             width: 1.8rem;
@@ -130,13 +129,6 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-        }
-        &.btn-arrow {
-            margin: 0.2rem;
-            background: $octopus-secondary-color;
-            &:hover {
-            background: $octopus-secondary-color;
-            }
         }
     
     }
@@ -187,13 +179,9 @@
         }
     }
 
-    .custom-control-label {
-        //border: 1px solid #ddd;
-        border-radius: 5px;
-    }
     .dropdown-toggle-no-caret::after{
         display: none;
-      }    
+    }    
     .dropdown-menu {
         padding: 0.5rem;
     }
