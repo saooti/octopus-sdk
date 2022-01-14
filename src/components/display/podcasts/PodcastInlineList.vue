@@ -62,7 +62,7 @@
       />
     </transition-group>
     <router-link
-      class="btn btn-link m-4"
+      class="btn btn-link align-self-center width-fit-content m-4"
       :to="refTo"
     >
       {{ buttonText }}

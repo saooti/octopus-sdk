@@ -57,7 +57,7 @@
     <router-link
       v-if="!overflowScroll"
       :to="href"
-      class="btn btn-link m-4"
+      class="btn btn-link align-self-center width-fit-content m-4"
     >
       {{
         buttonText
