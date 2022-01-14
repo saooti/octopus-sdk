@@ -524,3 +524,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.24 Css +  Accessibilité
  * 30.0.25 Css +  Accessibilité
  * 30.0.26 Css +  Accessibilité
+ * 30.0.27 Top bar responsive

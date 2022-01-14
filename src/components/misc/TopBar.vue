@@ -325,8 +325,13 @@ export default defineComponent({
       height: 2rem;
     }
   }
-  @media (max-width: 290px) {
+  @media (max-width: 380px) {
     .top-bar-logo img{
+      height: 1rem;
+    }
+  }
+  @media (max-width: 290px) {
+    .top-bar-logo{
       display: none;
     }
   }

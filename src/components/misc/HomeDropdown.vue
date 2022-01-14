@@ -4,7 +4,7 @@
   >
     <button
       v-if="authenticated"
-      class="btn btn-primary m-1"
+      class="btn btn-primary hide-phone m-1"
       @click="goToUrl('/main/priv/backoffice')"
     >
       {{ $t('My space') }}
