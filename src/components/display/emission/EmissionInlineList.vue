@@ -257,31 +257,33 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.list-episode {
-    padding: 2rem 0rem 1rem !important;
-    @media (max-width: 450px) {
-        padding: 0.5rem 0rem 1rem !important;
-    }
-    h2 {
-        margin-bottom: 1rem;
-    }
-}
-.element-list-inline.overflowScroll {
-  display: flex;
-  flex-wrap: wrap;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  padding-bottom: 1rem;
-  width: 100%;
-  height: 80vh;
-  overflow-y: auto;
-  @media (max-width: 960px) {
-    overflow-x: hidden;
-    flex-direction: column;
-    flex-wrap: nowrap;
+.octopus-app{
+  .list-episode {
+      padding: 2rem 0rem 1rem !important;
+      @media (max-width: 450px) {
+          padding: 0.5rem 0rem 1rem !important;
+      }
+      h2 {
+          margin-bottom: 1rem;
+      }
   }
-  .item-phone-margin {
-    margin: 1rem 0.5rem !important;
+  .element-list-inline.overflowScroll {
+    display: flex;
+    flex-wrap: wrap;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding-bottom: 1rem;
+    width: 100%;
+    height: 80vh;
+    overflow-y: auto;
+    @media (max-width: 960px) {
+      overflow-x: hidden;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+    .item-phone-margin {
+      margin: 1rem 0.5rem !important;
+    }
   }
 }
 </style>
