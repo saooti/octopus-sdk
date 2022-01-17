@@ -12,21 +12,29 @@
       v-if="editName"
       class="d-flex"
     >
-      <input
-        v-model="temporaryName"
-        class="small-text mt-1"
-        type="text"
-        :class="{ 'border border-danger': temporaryName.length < 2 }"
-      >
+      <div class="d-flex flex-column">
+        <input
+          v-model="temporaryName"
+          class="small-text mt-1"
+          type="text"
+          :class="{ 'border border-danger': 0 === countName || !validName }"
+        >
+        <p
+          class="d-flex justify-content-end small-text mb-0"
+          :class="{ 'text-danger': !validName }"
+        >
+          {{ countName + ' / ' + maxName }}
+        </p>
+      </div>
       <button
-        class="btn"
+        class="btn m-1"
         @click="editName = false"
       >
         {{ $t('Cancel') }}
       </button>
       <button
-        class="btn btn-link"
-        :disabled="temporaryName.length < 2"
+        class="btn btn-link m-1"
+        :disabled="0 === countName || !validName"
         @click="validEdit"
       >
         {{ $t('Validate') }}
@@ -41,24 +49,29 @@
       @focus="textareaFocus = true"
       @blur="textareaFocus = false"
     />
-    <div
-      v-if="textareaFocus"
-      class="d-flex justify-content-end mt-1"
-    >
-      <button
-        class="btn me-2"
-        @mousedown="cancelAction"
+    <template v-if="textareaFocus">
+      <p
+        class="d-flex justify-content-end small-text"
+        :class="{ 'text-danger': !validComment }"
       >
-        {{ $t('Cancel') }}
-      </button>
-      <button
-        class="btn btn-link"
-        :disabled="0 === newComment.trim().length"
-        @mousedown="requestToSend"
-      >
-        {{ placeholder }}
-      </button>
-    </div>
+        {{ countComment + ' / ' + maxComment }}
+      </p>
+      <div class="d-flex justify-content-end mt-1">
+        <button
+          class="btn me-2"
+          @mousedown="cancelAction"
+        >
+          {{ $t('Cancel') }}
+        </button>
+        <button
+          class="btn btn-link"
+          :disabled="0 === countComment || !validComment"
+          @mousedown="requestToSend"
+        >
+          {{ placeholder }}
+        </button>
+      </div>
+    </template>
     <AddCommentModal
       v-if="checkIdentityModal"
       @validate="postComment"
@@ -83,7 +96,7 @@ import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { CommentPodcast } from '@/store/class/general/comment';
-
+import Constants from '../../../../public/config';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const AddCommentModal = defineAsyncComponent(() => import('./AddCommentModal.vue'));
 const MessageModal = defineAsyncComponent(() => import('../../misc/modal/MessageModal.vue'));
@@ -113,10 +126,24 @@ export default defineComponent({
       isOneLine: true as boolean,
       editName: false as boolean,
       temporaryName: '' as string,
+      maxComment : Constants.MAX_COMMENT as number,
+      maxName : Constants.MAX_COMMENT_NAME as number
     };
   },
 
   computed: {
+    validName(): boolean{
+      return this.countName <= this.maxName;
+    },
+    countName(): number{
+      return this.temporaryName.length;
+    },
+    validComment(): boolean{
+      return this.countComment <= this.maxComment;
+    },
+    countComment(): number{
+      return this.newComment.length;
+    },
     isPresent(): boolean {
       if (!this.podcast) return true;
       let podcastComment = 'INHERIT';

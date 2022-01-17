@@ -9,16 +9,28 @@
     <template v-else>
       <input
         v-model="temporaryName"
-        class="form-input me-2 mb-2 width-auto"
+        class="form-input"
         type="text"
-        :class="{ 'border border-danger': temporaryName.length < 2 }"
+        :class="{ 'border border-danger': 0 === countName || !validName }"
       >
+      <p
+        class="d-flex justify-content-end small-text"
+        :class="{ 'text-danger': !validName }"
+      >
+        {{ countName + ' / ' + maxName }}
+      </p>
       <textarea
         v-model="temporaryContent"
-        :class="{ 'border border-danger': 0===temporaryContent.length }"
+        :class="{ 'border border-danger': 0 === countComment || !validComment }"
         class="form-input"
         type="text"
       />
+      <p
+        class="d-flex justify-content-end small-text"
+        :class="{ 'text-danger': !validComment }"
+      >
+        {{ countComment + ' / ' + maxComment }}
+      </p>
       <div class="d-flex justify-content-end">
         <button
           class="btn m-1"
@@ -28,7 +40,7 @@
         </button>
         <button
           class="btn btn-link m-1"
-          :disabled="0 === temporaryContent.length || temporaryName.length < 2"
+          :disabled="0 === countComment || !validComment || 0 === countName || !validName"
           @click="validEdit"
         >
           {{ $t('Validate') }}
@@ -122,6 +134,7 @@ import { CommentPodcast } from '@/store/class/general/comment';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
+import Constants from '../../../../public/config';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
@@ -157,9 +170,23 @@ export default defineComponent({
       isEditing: false as boolean,
       temporaryContent: '' as string,
       temporaryName: '' as string,
+      maxComment : Constants.MAX_COMMENT as number,
+      maxName : Constants.MAX_COMMENT_NAME as number
     };
   },
   computed: {
+    validName(): boolean{
+      return this.countName <= this.maxName;
+    },
+    countName(): number{
+      return this.temporaryName.length;
+    },
+    validComment(): boolean{
+      return this.countComment <= this.maxComment;
+    },
+    countComment(): number{
+      return this.temporaryContent.length;
+    },
     myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },

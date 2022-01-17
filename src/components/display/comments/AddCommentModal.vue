@@ -19,8 +19,14 @@
               class="form-input"
               type="text"
               :placeholder="$t('Your name')"
-              :class="{ 'border border-danger': name.length < 2 }"
+              :class="{ 'border border-danger': 0 === countName || !validName }"
             >
+            <p
+              class="d-flex justify-content-end small-text"
+              :class="{ 'text-danger': !validName }"
+            >
+              {{ countName + ' / ' + maxName }}
+            </p>
             <div
               v-if="sendError"
               class="mt-1 text-danger"
@@ -48,7 +54,7 @@
           <button
             v-if="!sending"
             class="btn btn-link m-1"
-            :disabled="name.length <= 2"
+            :disabled="0 === countName || !validName"
             @click="validateName"
           >
             {{ $t('Validate') }}
@@ -61,6 +67,7 @@
 
 <script lang="ts">
 import { IReCaptchaComposition, useReCaptcha } from 'vue-recaptcha-v3';
+import Constants from '../../../../public/config';
 import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
 import { defineComponent } from 'vue'
@@ -76,10 +83,17 @@ export default defineComponent({
       sending: false as boolean,
       needVerify: true as boolean,
       sendError: false as boolean,
+      maxName : Constants.MAX_COMMENT_NAME as number
     };
   },
 
   computed: {
+    validName(): boolean{
+      return this.countName <= this.maxName;
+    },
+    countName(): number{
+      return this.name.length;
+    },
     isCaptchaTest(): boolean {
       return (state.generalParameters.isCaptchaTest as boolean);
     },
