@@ -276,6 +276,7 @@ export default defineComponent({
     width: 100%;
     height: 80vh;
     overflow-y: auto;
+    grid-gap: inherit;
     @media (max-width: 960px) {
       overflow-x: hidden;
       flex-direction: column;
