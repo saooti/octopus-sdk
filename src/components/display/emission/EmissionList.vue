@@ -168,7 +168,6 @@ export default defineComponent({
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
       if (reset) {
-        this.emissions.length = 0;
         this.dfirst = 0;
       }
       const param: FetchParam = {

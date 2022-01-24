@@ -147,7 +147,6 @@ export default defineComponent({
     async fetchContent(reset: boolean): Promise<void> {
       this.inFetching = true;
       if (reset) {
-        this.podcasts.length = 0;
         this.dfirst = 0;
         this.loading = true;
         this.loaded = false;

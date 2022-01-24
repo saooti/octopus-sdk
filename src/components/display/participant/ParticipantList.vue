@@ -96,6 +96,9 @@ export default defineComponent({
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
+      if (reset) {
+        this.dfirst = 0;
+      }
       const data = await octopusApi.fetchParticipants({
         first: this.dfirst,
         size: this.dsize,
