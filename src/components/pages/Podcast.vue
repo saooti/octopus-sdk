@@ -68,6 +68,7 @@
           :fetch-conference="fetchConference"
         />
         <PodcastInlineList
+          class="mt-4"
           :emission-id="podcast.emission.emissionId"
           :href="'/main/pub/emission/' + podcast.emission.emissionId"
           :title="$t('More episodes of this emission')"
