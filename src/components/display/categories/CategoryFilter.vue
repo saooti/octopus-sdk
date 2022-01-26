@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isDisplay"
+    v-show="isDisplay"
     class="mt-3"
   >
     <nav
@@ -54,12 +54,17 @@
     <CategoryList
       v-if="!categoryFilter && !rubriquageFilter.length"
       :is-filter="true"
+      @categoriesLength="checkIfCategories"
     />
     <RubriqueList
       v-else-if="rubriquageFilter.length !== rubriqueFilter.length"
       :rubriquages="rubriquageFilter"
     />
   </div>
+  <div
+    v-if="!isDisplay"
+    class="categary-filter-no-filter"
+  />
 </template>
 
 <script lang="ts">
@@ -79,6 +84,11 @@ export default defineComponent({
     RubriqueList,
     RubriqueChooser
   },
+  data() {
+    return {
+      isCategories: false as boolean,
+    };
+  },
   computed: {
     categoryFilter(): Category|undefined{
       return this.$store.state.filter.iab;
@@ -87,16 +97,20 @@ export default defineComponent({
       return this.$store.state.filter.rubriqueFilter;
     },
     isDisplay(): boolean {
-      return "homePriv" === this.$route.name ||"home" === this.$route.name ||"podcasts" === this.$route.name||"emissions" === this.$route.name;
+      return ("homePriv" === this.$route.name ||"home" === this.$route.name ||"podcasts" === this.$route.name||"emissions" === this.$route.name) 
+      && (this.isCategories || undefined!==this.categoryFilter || 0!==this.rubriqueFilter.length || 0!==this.rubriquageFilter.length);
     },
     rubriquageFilter(): Array<Rubriquage>{
       if(this.$store.state.filter.organisationId){
         return this.$store.state.filter.rubriquageArray;
       }
       return [];
-    }
+    },
   },
   methods:{
+    checkIfCategories(length: number): void{
+      this.isCategories = 0!==length;
+    },
     onRubriqueSelected(index: number, rubrique: Rubrique): void {
       if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId){
         return;
@@ -146,3 +160,14 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.categary-filter-no-filter{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: white;
+  z-index: -1;
+}
+</style>

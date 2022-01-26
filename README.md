@@ -528,3 +528,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.28 Limiter caractères des commentaires
  * 30.0.29 Pour podcastmaker sudPresse
  * 30.0.30 Problème fetch participants
+ * 30.0.31 Amélioration interface

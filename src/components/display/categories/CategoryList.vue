@@ -1,5 +1,8 @@
 <template>
-  <div class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone category-list">
+  <div
+    v-if="categories.length"
+    class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone category-list"
+  >
     <div
       id="category-list-container"
       class="category-list-container"
@@ -50,6 +53,7 @@ export default defineComponent({
   props: {
     isFilter: { default: false, type: Boolean },
   },
+  emits:['categoriesLength'],
 
   data() {
     return {
@@ -65,15 +69,19 @@ export default defineComponent({
       return this.$store.state.categories;
     },
     categories(): Array<Category> {
+      let arrayCategories: Array<Category>  = [];
       if (this.filterOrga) {
-        return this.$store.state.categoriesOrga.filter((c: Category) => {
+        arrayCategories = this.$store.state.categoriesOrga.filter((c: Category) => {
           return c.podcastOrganisationCount;
         });
+      }else{
+        arrayCategories = this.$store.state.categories.filter((c: Category) => {
+          if (this.isPodcastmaker) return c.podcastOrganisationCount;
+          return c.podcastCount;
+        });
       }
-      return this.$store.state.categories.filter((c: Category) => {
-        if (this.isPodcastmaker) return c.podcastOrganisationCount;
-        return c.podcastCount;
-      });
+      this.$emit('categoriesLength', arrayCategories.length);
+      return arrayCategories;
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -83,9 +91,9 @@ export default defineComponent({
     categories: {
       deep: true,
       handler(){
-      this.$nextTick(() => {
-        this.resizeWindow();
-      });
+        this.$nextTick(() => {
+          this.resizeWindow();
+        });
       }
     },
     filterOrga(): void {

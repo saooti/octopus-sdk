@@ -12,7 +12,7 @@
         </template>
       </h1>
       <div
-        class="d-flex flex-column align-items-center"
+        class="d-flex flex-column align-items-center mb-3"
       >
         <div
           class="img-box-circle mb-3"
@@ -43,7 +43,7 @@
             <div class="saooti-rss-bounty" />
           </a>
         </div>
-        <div class="d-flex">
+        <div class="d-flex mt-3">
           <EditBox
             v-if="editRight && isEditBox"
             :participant="participant"
