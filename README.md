@@ -529,3 +529,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.29 Pour podcastmaker sudPresse
  * 30.0.30 Problème fetch participants
  * 30.0.31 Amélioration interface
+ * 30.0.32 Amélioration interface
+ * 30.0.33 Pb categories list
