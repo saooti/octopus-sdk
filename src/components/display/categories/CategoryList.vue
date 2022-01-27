@@ -52,6 +52,7 @@ export default defineComponent({
 
   props: {
     isFilter: { default: false, type: Boolean },
+    isDisplay: { default: false, type: Boolean },
   },
   emits:['categoriesLength'],
 
@@ -88,6 +89,11 @@ export default defineComponent({
     },
   },
   watch: {
+    isDisplay():void{
+      this.$nextTick(() => {
+        this.resizeWindow();
+      });
+    },
     categories: {
       deep: true,
       handler(){

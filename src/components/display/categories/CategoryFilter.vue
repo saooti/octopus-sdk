@@ -54,6 +54,7 @@
     <CategoryList
       v-if="!categoryFilter && !rubriquageFilter.length"
       :is-filter="true"
+      :is-display="isDisplay"
       @categoriesLength="checkIfCategories"
     />
     <RubriqueList
