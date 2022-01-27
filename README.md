@@ -531,3 +531,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.31 Amélioration interface
  * 30.0.32 Amélioration interface
  * 30.0.33 Pb categories list
+ * 30.0.34 Bouton css
