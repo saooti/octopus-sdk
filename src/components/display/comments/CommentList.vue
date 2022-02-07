@@ -162,25 +162,25 @@ export default defineComponent({
       );
     },
     commentIsNotInList(commentIdReferer:undefined|number):boolean{
-      return !this.isFlat && undefined!==commentIdReferer && this.comId !==commentIdReferer;
+      return !this.isFlat && undefined!==commentIdReferer && null!==commentIdReferer && this.comId !==commentIdReferer;
     },
     deleteComment(comment: CommentPodcast): void {
       if (this.commentIsNotInList(comment.commentIdReferer)){
-        const comItem = (this.$refs['comItem' + comment.commentIdReferer] as InstanceType<typeof CommentItem>);
+        const comItem = (this.$refs['comItem' + comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
         comItem.receiveCommentEvent({ type: 'Delete', comment: comment });
         return;
       }
       const index = this.findCommentIndex(comment.comId);
       if (-1 === index) return;
       this.totalCount -= 1;
-      /* if (0 !== this.first) {
+      if (0 !== this.first) {
         this.first -= 1;
-      } */
+      }
       this.comments.splice(index, 1);
     },
     updateComment(data: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
       if (this.commentIsNotInList(data.comment.commentIdReferer)){
-        const comItem = (this.$refs['comItem' + data.comment.commentIdReferer] as InstanceType<typeof CommentItem>);
+        const comItem = (this.$refs['comItem' + data.comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
         comItem.receiveCommentEvent({ ...data, type: 'Update' });
         return;
       }
@@ -228,14 +228,14 @@ export default defineComponent({
         return;
       }
       if (this.commentIsNotInList(comment.commentIdReferer)){
-        const comItem = (this.$refs['comItem' + comment.commentIdReferer] as InstanceType<typeof CommentItem>);
+        const comItem = (this.$refs['comItem' + comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
         comItem.receiveCommentEvent({ type: 'Create', comment: comment });
         return;
       }
       const index = this.findCommentIndex(comment.comId);
       if (-1 === index) {
         this.totalCount += 1;
-        /* this.first += 1; */
+        this.first += 1;
         if (!this.status || this.status === comment.status) {
           this.comments.unshift(comment);
         }
