@@ -533,3 +533,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.33 Pb categories list
  * 30.0.34 Bouton css
  * 30.0.35 Commentaires
+ * 30.0.36 LiveList
