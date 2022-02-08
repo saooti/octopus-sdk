@@ -122,6 +122,7 @@ export default defineComponent({
   methods: {
     async fetchContent(reset=true): Promise<void> {
       this.loading = true;
+      this.error = false;
       if(reset){
         this.first = 0;
       }
@@ -134,7 +135,7 @@ export default defineComponent({
             first: this.first,
             size: this.size,
             podcastId: this.podcastId,
-            status:this.editRight && this.status?[this.status]:['Valid'],
+            status:this.editRight && this.status?[this.status]: this.editRight? ['Valid','Pending', 'Invalid']:['Valid'],
             organisationId: undefined === this.podcastId? this.organisation: undefined,
           };
           if (!this.isFlat) {
@@ -209,9 +210,9 @@ export default defineComponent({
           if (-1 !== indexNewComment) {
             if (!this.status || this.status === data.status) {
               this.comments.splice(indexNewComment, 0, data.comment);
-            } else {
+            } /* else {
               this.comments.splice(indexNewComment, 1);
-            }
+            } */
           } else if (!this.status || this.status === data.status) {
             this.comments.push(data.comment);
           }
