@@ -106,6 +106,7 @@ export default defineComponent({
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
+    sizeItem: { default: 13, type: Number},
   },
   emits: ['update:isArrow'],
 
@@ -175,6 +176,9 @@ export default defineComponent({
       this.reset();
       this.fetchNext();
     },
+    sizeItem(){
+      this.handleResize();
+    }
   },
   
   created() {
@@ -249,7 +253,7 @@ export default defineComponent({
         return;
       }
       const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(13.7);
+      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.7);
       this.size = Math.floor(width / sixteen);
     },
     sortPopular(): void {

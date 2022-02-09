@@ -90,7 +90,7 @@ export default defineComponent({
     rubriqueId: { default: undefined, type: Number },
     rubriquageId: { default: undefined, type: Number },
     nbPodcasts: { default: undefined, type: Number },
-    itemSize: { default: undefined, type: Number },
+    itemSize: { default: 13, type: Number },
   },
 
   data() {
@@ -128,6 +128,12 @@ export default defineComponent({
     },
     transitionName(): string {
       return this.direction > 0 ? 'out-left' : 'out-right';
+    }
+  },
+
+  watch: {
+    sizeItem(){
+      this.handleResize();
     }
   },
   
@@ -206,10 +212,7 @@ export default defineComponent({
         return;
       }
       const width = (this.$el as HTMLElement).offsetWidth;
-      let sixteen = domHelper.convertRemToPixels(13.7);
-      if (this.itemSize) {
-        sixteen = domHelper.convertRemToPixels(this.itemSize + 0.7);
-      }
+      const sixteen = domHelper.convertRemToPixels(this.itemSize + 0.7);
       this.size = Math.floor(width / sixteen);
     },
     reset(): void {
