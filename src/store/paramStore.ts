@@ -18,6 +18,7 @@ const state:paramStore = {
     allCategories: [],
     isLiveTab: false,
     isCaptchaTest: true,
+    podcastItem:13
   },
   podcastPage: {
     EditBox: false,
@@ -103,6 +104,7 @@ export interface GeneralParameters{
   allCategories?: Array<Category>,
   isLiveTab?: boolean,
   isCaptchaTest?: boolean,
+  podcastItem?: number
 }
 export interface PodcastPage{
   EditBox?: boolean,

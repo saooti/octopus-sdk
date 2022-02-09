@@ -80,7 +80,7 @@ import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
-
+import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
@@ -106,7 +106,6 @@ export default defineComponent({
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
-    sizeItem: { default: 13, type: Number},
   },
   emits: ['update:isArrow'],
 
@@ -127,6 +126,9 @@ export default defineComponent({
   computed: {
     podcasts(): Array<Podcast> {
       return this.allPodcasts.slice(this.index, this.index + this.size);
+    },
+    sizeItem(): number {
+      return state.generalParameters.podcastItem ? (state.generalParameters.podcastItem as number): 13;
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -176,9 +178,6 @@ export default defineComponent({
       this.reset();
       this.fetchNext();
     },
-    sizeItem(){
-      this.handleResize();
-    }
   },
   
   created() {
