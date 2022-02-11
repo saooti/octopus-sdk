@@ -537,3 +537,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.37 Commentaires
  * 30.0.38 EmissionList expose
  * 30.0.39 Listes inline taille item
+ * 30.0.41 Inline list arrow

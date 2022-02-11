@@ -31,7 +31,7 @@
           :title="$t('Display previous')"
           @click="displayPrevious()"
         >
-          <div class="saooti-arrow-left2" />
+          <div class="saooti-left fw-bold" />
         </button>
         <button
           class="btn admin-button m-1"
@@ -39,7 +39,7 @@
           :title="$t('Display next')"
           @click="displayNext()"
         >
-          <div class="saooti-arrow-right2" />
+          <div class="saooti-right fw-bold" />
         </button>
       </div>
     </div>
