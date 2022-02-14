@@ -112,8 +112,10 @@ export default defineComponent({
     initRubriques(): void{
       if(!this.rubriquage){ return ;}
       this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);
-      window.addEventListener('resize', this.resizeWindow);
-      this.resizeWindow();
+      this.$nextTick(() => {
+        window.addEventListener('resize', this.resizeWindow);
+        this.resizeWindow();
+      });
     },
     addFilter(rubrique: Rubrique): void{
       if(!this.rubriquage){ return ;}
