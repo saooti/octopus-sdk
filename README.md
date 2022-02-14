@@ -539,3 +539,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.39 Listes inline taille item
  * 30.0.41 Inline list arrow
  * 30.0.42 Resize rubriqueList
+ * 30.0.43 Resize rubriqueList

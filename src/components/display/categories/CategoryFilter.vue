@@ -58,7 +58,7 @@
       @categoriesLength="checkIfCategories"
     />
     <RubriqueList
-      v-else-if="rubriquageFilter.length !== rubriqueFilter.length"
+      v-else-if="isDisplay && rubriquageFilter.length !== rubriqueFilter.length"
       :rubriquages="rubriquageFilter"
     />
   </div>
