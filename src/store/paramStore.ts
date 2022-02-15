@@ -50,6 +50,7 @@ const state:paramStore = {
     buttonMore: false,
     overflowScroll: false,
     titleInImage: false,
+    progressBar:false
   },
   emissionPage: {
     ouestFranceStyle: false,
@@ -136,6 +137,7 @@ export interface EmissionsPage{
   buttonMore?: boolean,
   overflowScroll?: boolean,
   titleInImage?: boolean,
+  progressBar?:boolean
 }
 export interface EmissionPage{
   ouestFranceStyle?: boolean,

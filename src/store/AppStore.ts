@@ -77,6 +77,9 @@ export default createStore({
     playerVolume(state, volume) {
       state.player.volume = volume;
     },
+    playerSeekTime(state, seekTime) {
+      state.player.seekTime = seekTime;
+    },
 
     filterOrga(state, filter) {
       state.filter.organisationId = filter.orgaId;

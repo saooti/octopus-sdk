@@ -123,6 +123,7 @@ export default defineComponent({
         if(!state.player.elapsed){return 0;}
         return state.player.elapsed * 100;
       },
+      playerSeekTime: (state: StoreState) => state.player.seekTime,
     }),
     audioUrl(): string {
       if (this.media) return this.media.audioUrl? this.media.audioUrl:"";
@@ -150,6 +151,15 @@ export default defineComponent({
   },
 
   watch: {
+    playerSeekTime(){
+      if(!this.playerSeekTime){return;}
+      if (this.$store.state.player.podcast || this.$store.state.player.live) {
+        this.notListenTime = this.playerSeekTime - this.listenTime;
+      }
+      const audioPlayer: HTMLAudioElement | null = document.querySelector('#audio-player');
+      if (!audioPlayer) return;
+      audioPlayer.currentTime = this.playerSeekTime;
+    },
     live: {
       deep: true,
       async handler(){

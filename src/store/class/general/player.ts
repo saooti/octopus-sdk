@@ -10,4 +10,5 @@ export interface Player{
     media: Media|undefined;
     live: Podcast|undefined;
     stop?: boolean;
+    seekTime?: number;
   }

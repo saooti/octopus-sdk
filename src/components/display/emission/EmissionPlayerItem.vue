@@ -53,29 +53,61 @@
       class="border-top emission-item-border-color p-2 secondary-bg d-flex"
     >
       <div class="d-flex justify-content-between flex-grow-1">
-        <router-link
-          :to="{
-            name: 'podcast',
-            params: { podcastId: p.podcastId },
-            query: { productor: $store.state.filter.organisationId },
-          }"
-          class="d-flex flex-column define-width text-dark"
-        >
-          <div class="fw-bold text-truncate">
-            {{ p.title }}
-          </div>
-          <div
-            :id="'description-podcast-container-' + p.podcastId"
-            class="emission-description html-wysiwyg-content"
+        <div class="d-flex flex-column">
+          <router-link
+            :to="{
+              name: 'podcast',
+              params: { podcastId: p.podcastId },
+              query: { productor: $store.state.filter.organisationId },
+            }"
+            class="d-flex flex-column define-width text-dark"
           >
-            <!-- eslint-disable vue/no-v-html -->
+            <div class="fw-bold text-truncate">
+              {{ p.title }}
+            </div>
             <div
-              :id="'description-podcast-' + p.podcastId"
-              v-html="urlify(p.description)"
-            />
-            <!-- eslint-enable -->
+              :id="'description-podcast-container-' + p.podcastId"
+              class="emission-description html-wysiwyg-content"
+            >
+              <!-- eslint-disable vue/no-v-html -->
+              <div
+                :id="'description-podcast-' + p.podcastId"
+                v-html="urlify(p.description)"
+              />
+              <!-- eslint-enable -->
+            </div>
+          </router-link>
+          <div
+            v-if="isProgressBar"
+            class="d-flex align-items-center"
+          >
+            <div class="me-2">
+              {{ playedTime(p) }}
+            </div>
+            <div class="position-relative flex-grow-1">
+              <div
+                class="progress flex-grow-1 c-hand"
+                @mouseup="seekTo($event, p)"
+              >
+                <div
+                  class="progress-bar primary-bg"
+                  role="progressbar"
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  :style="'width: ' + percentProgress(p) + '%'"
+                />
+                <div
+                  class="progress-bar-cursor"
+                  :style="'left:' + percentProgress(p) + '%'"
+                />
+              </div>
+            </div>
+            <div class="ms-2">
+              {{ totalTime(p) }}
+            </div>
           </div>
-        </router-link>
+        </div>
         <div
           v-if="
             $store.state.player.podcast !== p ||
@@ -125,6 +157,7 @@ import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
+import DurationHelper from '../../../helper/duration';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -157,6 +190,9 @@ export default defineComponent({
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
+    isProgressBar(){
+      return (state.emissionsPage.progressBar as boolean);
+    },
     editRight(): boolean {
       if (
         (this.authenticated && this.organisationId === this.emission.orga.id) ||
@@ -185,6 +221,36 @@ export default defineComponent({
     }
   },
   methods: {
+    seekTo(event: MouseEvent, podcast: Podcast): void {
+      if(podcast!== this.$store.state.player.podcast){return;}
+      const rect = (event.currentTarget as Element).getBoundingClientRect();
+      const barWidth = (event.currentTarget as Element).clientWidth;
+      const x = event.clientX - rect.left;
+      const percentPosition = x / barWidth;
+      if (percentPosition * 100 >= this.percentLiveProgress) return;
+      const seekTime = this.$store.state.player.total * percentPosition;
+      this.$store.commit("playerSeekTime", seekTime);
+    },
+    percentProgress(podcast: Podcast): number{
+      if(podcast !== this.$store.state.player.podcast){
+        return 0;
+      }
+      if(!this.$store.state.player.elapsed){return 0;}
+      return this.$store.state.player.elapsed * 100;
+    },
+    playedTime(podcast: Podcast): string{
+      if(podcast === this.$store.state.player.podcast){
+        if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {
+          return DurationHelper.formatDuration(
+            Math.round(this.$store.state.player.elapsed * this.$store.state.player.total)
+          );
+        }
+      }
+      return '00:00';
+    },
+    totalTime(podcast: Podcast): string {
+      return DurationHelper.formatDuration(Math.round(podcast.duration/1000));
+    },
     async loadPodcasts(): Promise<void> {
       const nb = this.nbPodcasts ? this.nbPodcasts : 2;
       const data = await octopusApi.fetchPodcasts({
@@ -238,6 +304,17 @@ export default defineComponent({
   height: min-content;
   border-radius: 0.8rem;
   overflow: hidden;
+  .progress{
+    height: 6px;
+  }
+  .progress-bar-cursor{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: black;
+    align-self: center;
+    position: absolute;
+  }
   .emission-item-border-color {
     border-color: #ddd;
   }

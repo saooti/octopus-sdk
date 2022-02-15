@@ -540,3 +540,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.41 Inline list arrow
  * 30.0.42 Resize rubriqueList
  * 30.0.43 Resize rubriqueList
+ * 30.0.44 ProgressBar pour le soir
