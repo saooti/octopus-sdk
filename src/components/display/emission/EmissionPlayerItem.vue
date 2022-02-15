@@ -77,36 +77,7 @@
               <!-- eslint-enable -->
             </div>
           </router-link>
-          <div
-            v-if="isProgressBar"
-            class="d-flex align-items-center"
-          >
-            <div class="me-2">
-              {{ playedTime(p) }}
-            </div>
-            <div class="position-relative flex-grow-1">
-              <div
-                class="progress flex-grow-1 c-hand"
-                @mouseup="seekTo($event, p)"
-              >
-                <div
-                  class="progress-bar primary-bg"
-                  role="progressbar"
-                  aria-valuenow="0"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  :style="'width: ' + percentProgress(p) + '%'"
-                />
-                <div
-                  class="progress-bar-cursor"
-                  :style="'left:' + percentProgress(p) + '%'"
-                />
-              </div>
-            </div>
-            <div class="ms-2">
-              {{ totalTime(p) }}
-            </div>
-          </div>
+          <PodcastPlayBar :podcast="p" />
         </div>
         <div
           v-if="
@@ -157,11 +128,15 @@ import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
-import DurationHelper from '../../../helper/duration';
+import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
+
+  components:{
+    PodcastPlayBar
+  },
   mixins: [displayMethods],
   props: {
     emission: { default: ()=>({}), type: Object as ()=>Emission },
@@ -189,9 +164,6 @@ export default defineComponent({
     },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
-    },
-    isProgressBar(){
-      return (state.emissionsPage.progressBar as boolean);
     },
     editRight(): boolean {
       if (
@@ -221,36 +193,6 @@ export default defineComponent({
     }
   },
   methods: {
-    seekTo(event: MouseEvent, podcast: Podcast): void {
-      if(podcast!== this.$store.state.player.podcast){return;}
-      const rect = (event.currentTarget as Element).getBoundingClientRect();
-      const barWidth = (event.currentTarget as Element).clientWidth;
-      const x = event.clientX - rect.left;
-      const percentPosition = x / barWidth;
-      if (percentPosition * 100 >= this.percentLiveProgress) return;
-      const seekTime = this.$store.state.player.total * percentPosition;
-      this.$store.commit("playerSeekTime", seekTime);
-    },
-    percentProgress(podcast: Podcast): number{
-      if(podcast !== this.$store.state.player.podcast){
-        return 0;
-      }
-      if(!this.$store.state.player.elapsed){return 0;}
-      return this.$store.state.player.elapsed * 100;
-    },
-    playedTime(podcast: Podcast): string{
-      if(podcast === this.$store.state.player.podcast){
-        if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {
-          return DurationHelper.formatDuration(
-            Math.round(this.$store.state.player.elapsed * this.$store.state.player.total)
-          );
-        }
-      }
-      return '00:00';
-    },
-    totalTime(podcast: Podcast): string {
-      return DurationHelper.formatDuration(Math.round(podcast.duration/1000));
-    },
     async loadPodcasts(): Promise<void> {
       const nb = this.nbPodcasts ? this.nbPodcasts : 2;
       const data = await octopusApi.fetchPodcasts({

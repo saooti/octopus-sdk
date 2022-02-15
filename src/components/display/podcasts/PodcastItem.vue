@@ -60,6 +60,10 @@
           {{ title }}
         </div>
       </router-link>
+      <PodcastPlayBar
+        :podcast="podcast"
+        class="mx-2"
+      />
       <div class="d-flex justify-content-between">
         <router-link
           v-if="!isPodcastmaker"
@@ -88,7 +92,7 @@ import { state } from '../../../store/paramStore';
 import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
-
+import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
@@ -98,6 +102,7 @@ export default defineComponent({
   components: {
     AnimatorsItem,
     PodcastImage,
+    PodcastPlayBar
   },
 
   props: {
