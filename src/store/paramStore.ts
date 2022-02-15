@@ -55,6 +55,7 @@ const state:paramStore = {
   emissionPage: {
     ouestFranceStyle: false,
     rssButton: false,
+    isDisplayPodcasts:true
   },
   intervenantPage: {
     lightStyle: false,
@@ -142,6 +143,7 @@ export interface EmissionsPage{
 export interface EmissionPage{
   ouestFranceStyle?: boolean,
   rssButton?: boolean,
+  isDisplayPodcasts?:boolean
 }
 export interface IntervenantPage{
   lightStyle?: boolean,

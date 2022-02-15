@@ -106,6 +106,7 @@ export default defineComponent({
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
+    query: { default: undefined, type: String},
   },
   emits: ['update:isArrow'],
 
@@ -170,7 +171,7 @@ export default defineComponent({
       return this.direction > 0 ? 'out-left' : 'out-right';
     },
     watchVariable():string{
-      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}`;
+      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     }
   },
   watch: {
@@ -210,6 +211,7 @@ export default defineComponent({
         rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
+        query: this.query,
       });
       this.loading = false;
       this.loaded = true;
