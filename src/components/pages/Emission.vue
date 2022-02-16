@@ -70,25 +70,27 @@
           :emission-id="emissionId"
         />
       </div>
-      <LiveHorizontalList
-        v-if="!isPodcastmaker"
-        :emission-id="emissionId"
-      />
-      <PodcastFilterList
-        v-if="!isOuestFrance"
-        :emission-id="emissionId"
-        :category-filter="false"
-        :edit-right="editRight"
-        :productor-id="emission.orga.id"
-        @fetch="fetch"
-      />
-      <PodcastList
-        v-else
-        :first="0"
-        :size="15"
-        :emission-id="emissionId"
-        @fetch="fetch"
-      />
+      <template v-if="isDisplayPodcasts">
+        <LiveHorizontalList
+          v-if="!isPodcastmaker"
+          :emission-id="emissionId"
+        />
+        <PodcastFilterList
+          v-if="!isOuestFrance"
+          :emission-id="emissionId"
+          :category-filter="false"
+          :edit-right="editRight"
+          :productor-id="emission.orga.id"
+          @fetch="fetch"
+        />
+        <PodcastList
+          v-else
+          :first="0"
+          :size="15"
+          :emission-id="emissionId"
+          @fetch="fetch"
+        />
+      </template>
     </div>
     <ClassicLoading
       :loading-text="!loaded?$t('Loading content ...'):undefined"
@@ -171,6 +173,9 @@ export default defineComponent({
     },
     isRssButton(): boolean {
       return (state.emissionPage.rssButton as boolean);
+    },
+    isDisplayPodcasts(): boolean {
+      return (state.emissionPage.isDisplayPodcasts as boolean);
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);

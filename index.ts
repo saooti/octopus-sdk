@@ -29,8 +29,8 @@ import CategoryFilter from "./src/components/display/categories/CategoryFilter.v
 /*import EditBox from "./src/components/display/edit/EditBox.vue"; */
 import EmissionChooser from "./src/components/display/emission/EmissionChooser.vue";
 /* import EmissionItem from "./src/components/display/emission/EmissionItem.vue"; */
-/*import EmissionList from "./src/components/display/emission/EmissionList.vue";
-import MonetizableFilter from "./src/components/display/filter/MonetizableFilter.vue";
+import EmissionList from "./src/components/display/emission/EmissionList.vue";
+/*import MonetizableFilter from "./src/components/display/filter/MonetizableFilter.vue";
 import ProductorSearch from "./src/components/display/filter/ProductorSearch.vue";*/
 import OrganisationChooser from "./src/components/display/organisation/OrganisationChooser.vue";
 /*import ParticipantItem from "./src/components/display/participant/ParticipantItem.vue";
@@ -84,6 +84,7 @@ const components = {
     CategoryList,
     PodcastInlineList,
     EmissionChooser,
+    EmissionList,
     /* EmissionItem, */
     OrganisationChooser,
     PodcastFilterList,
@@ -136,6 +137,7 @@ export {
     PodcastInlineList,
     EmissionChooser,
     /* EmissionItem, */
+    EmissionList,
     OrganisationChooser,
     PodcastFilterList,
     ShareButtons,

@@ -18,6 +18,7 @@ const state:paramStore = {
     allCategories: [],
     isLiveTab: false,
     isCaptchaTest: true,
+    podcastItem:13
   },
   podcastPage: {
     EditBox: false,
@@ -49,10 +50,12 @@ const state:paramStore = {
     buttonMore: false,
     overflowScroll: false,
     titleInImage: false,
+    progressBar:false
   },
   emissionPage: {
     ouestFranceStyle: false,
     rssButton: false,
+    isDisplayPodcasts:true
   },
   intervenantPage: {
     lightStyle: false,
@@ -103,6 +106,7 @@ export interface GeneralParameters{
   allCategories?: Array<Category>,
   isLiveTab?: boolean,
   isCaptchaTest?: boolean,
+  podcastItem?: number
 }
 export interface PodcastPage{
   EditBox?: boolean,
@@ -134,10 +138,12 @@ export interface EmissionsPage{
   buttonMore?: boolean,
   overflowScroll?: boolean,
   titleInImage?: boolean,
+  progressBar?:boolean
 }
 export interface EmissionPage{
   ouestFranceStyle?: boolean,
   rssButton?: boolean,
+  isDisplayPodcasts?:boolean
 }
 export interface IntervenantPage{
   lightStyle?: boolean,

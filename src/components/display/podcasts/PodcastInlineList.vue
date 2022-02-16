@@ -31,7 +31,7 @@
           :title="$t('Display previous')"
           @click="displayPrevious()"
         >
-          <div class="saooti-arrow-left2" />
+          <div class="saooti-left fw-bold" />
         </button>
         <button
           class="btn admin-button m-1"
@@ -39,7 +39,7 @@
           :title="$t('Display next')"
           @click="displayNext()"
         >
-          <div class="saooti-arrow-right2" />
+          <div class="saooti-right fw-bold" />
         </button>
       </div>
     </div>
@@ -80,7 +80,7 @@ import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
-
+import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
@@ -106,6 +106,7 @@ export default defineComponent({
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
+    query: { default: undefined, type: String},
   },
   emits: ['update:isArrow'],
 
@@ -126,6 +127,9 @@ export default defineComponent({
   computed: {
     podcasts(): Array<Podcast> {
       return this.allPodcasts.slice(this.index, this.index + this.size);
+    },
+    sizeItem(): number {
+      return state.generalParameters.podcastItem ? (state.generalParameters.podcastItem as number): 13;
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -167,7 +171,7 @@ export default defineComponent({
       return this.direction > 0 ? 'out-left' : 'out-right';
     },
     watchVariable():string{
-      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}`;
+      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     }
   },
   watch: {
@@ -207,6 +211,7 @@ export default defineComponent({
         rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
+        query: this.query,
       });
       this.loading = false;
       this.loaded = true;
@@ -249,7 +254,7 @@ export default defineComponent({
         return;
       }
       const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(13.7);
+      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.7);
       this.size = Math.floor(width / sixteen);
     },
     sortPopular(): void {

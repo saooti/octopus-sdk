@@ -531,3 +531,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.31 Amélioration interface
  * 30.0.32 Amélioration interface
  * 30.0.33 Pb categories list
+ * 30.0.34 Bouton css
+ * 30.0.35 Commentaires
+ * 30.0.36 LiveList
+ * 30.0.37 Commentaires
+ * 30.0.38 EmissionList expose
+ * 30.0.39 Listes inline taille item
+ * 30.0.41 Inline list arrow
+ * 30.0.42 Resize rubriqueList
+ * 30.0.43 Resize rubriqueList
+ * 30.0.44 ProgressBar pour le soir
+ * 30.0.45 ProgressBar pour le soir
+ * 30.0.46 Param pour le soir

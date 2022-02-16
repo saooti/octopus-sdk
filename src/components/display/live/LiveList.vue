@@ -179,7 +179,7 @@ export default defineComponent({
           });
         }else if("PENDING"===this.livesArray[i].status){
           dataLivesToBe = dataLives;
-          for (let index = 0, len = this.livesArray[i].lives.length; index < len; index++) {
+          for (let index = 0, len = dataLives.length; index < len; index++) {
             if (moment(dataLives[index].date).isBefore(moment())) {
               this.livesArray[i].lives.push(dataLives[index]);
               indexPast = index + 1;

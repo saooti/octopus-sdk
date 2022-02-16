@@ -116,6 +116,9 @@
             :participants="podcast.guests"
             :is-guest="true"
           />
+          <PodcastPlayBar
+            :podcast="podcast"
+          />
           <div v-if="editRight && !isPodcastmaker">
             <div
               v-if="podcast.annotations && podcast.annotations.RSS"
@@ -152,6 +155,7 @@
 </template>
 
 <script lang="ts">
+import PodcastPlayBar from './PodcastPlayBar.vue';
 import PodcastImage from './PodcastImage.vue';
 import ParticipantDescription from './ParticipantDescription.vue';
 import TagList from './TagList.vue';
@@ -174,6 +178,7 @@ export default defineComponent({
     ShareButtons,
     TagList,
     ErrorMessage,
+    PodcastPlayBar
   },
 
   mixins:[displayMethods],

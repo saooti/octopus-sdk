@@ -53,29 +53,32 @@
       class="border-top emission-item-border-color p-2 secondary-bg d-flex"
     >
       <div class="d-flex justify-content-between flex-grow-1">
-        <router-link
-          :to="{
-            name: 'podcast',
-            params: { podcastId: p.podcastId },
-            query: { productor: $store.state.filter.organisationId },
-          }"
-          class="d-flex flex-column define-width text-dark"
-        >
-          <div class="fw-bold text-truncate">
-            {{ p.title }}
-          </div>
-          <div
-            :id="'description-podcast-container-' + p.podcastId"
-            class="emission-description html-wysiwyg-content"
+        <div class="d-flex flex-column">
+          <router-link
+            :to="{
+              name: 'podcast',
+              params: { podcastId: p.podcastId },
+              query: { productor: $store.state.filter.organisationId },
+            }"
+            class="d-flex flex-column define-width text-dark"
           >
-            <!-- eslint-disable vue/no-v-html -->
+            <div class="fw-bold text-truncate">
+              {{ p.title }}
+            </div>
             <div
-              :id="'description-podcast-' + p.podcastId"
-              v-html="urlify(p.description)"
-            />
-            <!-- eslint-enable -->
-          </div>
-        </router-link>
+              :id="'description-podcast-container-' + p.podcastId"
+              class="emission-description html-wysiwyg-content"
+            >
+              <!-- eslint-disable vue/no-v-html -->
+              <div
+                :id="'description-podcast-' + p.podcastId"
+                v-html="urlify(p.description)"
+              />
+              <!-- eslint-enable -->
+            </div>
+          </router-link>
+          <PodcastPlayBar :podcast="p" />
+        </div>
         <div
           v-if="
             $store.state.player.podcast !== p ||
@@ -125,10 +128,15 @@ import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
+import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
+
+  components:{
+    PodcastPlayBar
+  },
   mixins: [displayMethods],
   props: {
     emission: { default: ()=>({}), type: Object as ()=>Emission },
@@ -238,6 +246,17 @@ export default defineComponent({
   height: min-content;
   border-radius: 0.8rem;
   overflow: hidden;
+  .progress{
+    height: 6px;
+  }
+  .progress-bar-cursor{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: black;
+    align-self: center;
+    position: absolute;
+  }
   .emission-item-border-color {
     border-color: #ddd;
   }
