@@ -19,6 +19,7 @@
       :class="{
         'saooti-play2-bounty': isPaused,
         'saooti-pause-bounty': isPlaying,
+        'spinner-border':!isPaused&&!isPlaying
       }"
     />
   </div>

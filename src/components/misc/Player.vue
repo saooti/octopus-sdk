@@ -28,7 +28,6 @@
         class="d-flex align-items-center flex-grow-1 px-5"
       >
         <audio
-          v-if="!live"
           id="audio-player"
           :src="!live? audioUrl: undefined"
           autoplay
@@ -194,6 +193,9 @@ export default defineComponent({
     commentsLoaded(): void {
       this.initComments(true);
     },
+    audioUrl(): void{
+      this.playerError = false;
+    }
   },
 
   mounted() {
@@ -342,47 +344,49 @@ export default defineComponent({
       this.listenTime = 0;
     },
     async initHls(hlsStreamUrl: string): Promise<void> {
-      if(null === Hls){
-        //TODO -> Version light min quand ce sera possible
-        await import('hls.js/dist/hls.js').then((hlsLibrary) => {
-          Hls = hlsLibrary.default;
-        })
-          await import('hls.js').then((hlsLibrary) => {
-          Hls = hlsLibrary.default;
-        })
-      }
-      if (!Hls.isSupported()) {
-        throw 'Hls is not supported ! ';
-      }
-      const hls = new Hls();
-      hls.on(Hls.Events.MANIFEST_PARSED, async () => {
-        if(!this.live){ return; }
-        let downloadId = null;
-        try {
-          downloadId = await octopusApi.requestLiveDownloadId(
-            this.live.livePodcastId
-          );
-          await octopusApi.markPlayingLive(
-            this.live.livePodcastId,
-            downloadId,
-            'octopus',
-            this.$store.state.authentication.organisationId
-          );
-          this.setDownloadId(downloadId);
-        } catch (error) {
-          console.log('ERROR downloadId');
+      return new Promise<void>(async(resolve, reject) => {
+        if(null === Hls){
+          //TODO -> Version light min quand ce sera possible
+          await import('hls.js/dist/hls.js').then((hlsLibrary) => {
+            Hls = hlsLibrary.default;
+          })
+            await import('hls.js').then((hlsLibrary) => {
+            Hls = hlsLibrary.default;
+          })
         }
-        this.hlsReady = true;
-        const audio: HTMLElement|null = document.getElementById('audio-player');
-        hls.attachMedia((audio as HTMLAudioElement));
-        await (audio as HTMLAudioElement).play();
-        this.onPlay();
-        throw 400;
+        if (!Hls.isSupported()) {
+          reject('Hls is not supported ! ');
+        }
+        const hls = new Hls();
+        hls.on(Hls.Events.MANIFEST_PARSED, async () => {
+          if(!this.live){ return; }
+          let downloadId = null;
+          try {
+            downloadId = await octopusApi.requestLiveDownloadId(
+              this.live.livePodcastId
+            );
+            await octopusApi.markPlayingLive(
+              this.live.livePodcastId,
+              downloadId,
+              'octopus',
+              this.$store.state.authentication.organisationId
+            );
+            this.setDownloadId(downloadId);
+          } catch (error) {
+            console.log('ERROR downloadId');
+          }
+          this.hlsReady = true;
+          const audio: HTMLElement|null = document.getElementById('audio-player');
+          hls.attachMedia((audio as HTMLAudioElement));
+          await (audio as HTMLAudioElement).play();
+          this.onPlay();
+          resolve();
+        });
+        hls.on(Hls.Events.ERROR, async() => {
+reject('There is an error while reading media content');
+        });
+        hls.loadSource(hlsStreamUrl);
       });
-      hls.on(Hls.Events.ERROR, async () => {
-        throw 'There is an error while reading media content';
-      });
-      hls.loadSource(hlsStreamUrl);
     },
     async playLive(): Promise<void> {
       if (!this.live) return;
