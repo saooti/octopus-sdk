@@ -217,6 +217,7 @@ export default defineComponent({
       let count = 0;
       if (this.podcast && this.podcast.emission && this.podcast.emission.annotations) {
         if (undefined !== this.podcast.emission.annotations.amazon) count++;
+        if (undefined !== this.podcast.emission.annotations.googlePodcasts) count++;
         if (undefined !== this.podcast.emission.annotations.applePodcast)
           count++;
         if (undefined !== this.podcast.emission.annotations.deezer) count++;

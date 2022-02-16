@@ -40,6 +40,20 @@
         <span class="saooti-deezer" />Deezer
       </router-link>
       <router-link
+        :to="'/main/priv/distribution/googlePodcasts/' + emissionId"
+        class="text-dark"
+      >
+        <span class="saooti-google-podcasts">
+          <div class="path1" />
+          <div class="path2" />
+          <div class="path3" />
+          <div class="path4" />
+          <div class="path5" />
+          <div class="path6" />
+          <div class="path7" />
+        </span> Google Podcasts
+      </router-link>
+      <router-link
         :to="'/main/priv/distribution/PlayerFM/' + emissionId"
         class="text-dark"
       >
@@ -168,6 +182,13 @@ export default defineComponent({
   flex-wrap: wrap;
   .saooti-stitcher-logo, .saooti-amazon {
     width: 35px;
+    height: 20px;
+    div {
+      right: 0;
+    }
+  }
+  .saooti-google-podcasts {
+    width: 15px;
     height: 20px;
     div {
       right: 0;

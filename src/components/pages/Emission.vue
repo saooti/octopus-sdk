@@ -209,6 +209,7 @@ export default defineComponent({
         if (undefined !== this.emission.annotations.amazon) count++;
         if (undefined !== this.emission.annotations.applePodcast) count++;
         if (undefined !== this.emission.annotations.deezer) count++;
+        if (undefined !== this.emission.annotations.googlePodcasts) count++;
         if (undefined !== this.emission.annotations.spotify) count++;
         if (undefined !== this.emission.annotations.tunein) count++;
         if (undefined !== this.emission.annotations.radioline) count++;

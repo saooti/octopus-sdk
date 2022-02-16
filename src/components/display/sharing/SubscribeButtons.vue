@@ -39,6 +39,24 @@
         <span class="saooti-deezer" />
       </a>
       <a
+        v-if="googlePodcasts"
+        rel="noopener"
+        target="_blank"
+        class="btn me-3 mb-2 share-btn"
+        :href="googlePodcasts"
+        title="googlePodcasts"
+      >
+        <span class="saooti-google-podcasts">
+          <div class="path1" />
+          <div class="path2" />
+          <div class="path3" />
+          <div class="path4" />
+          <div class="path5" />
+          <div class="path6" />
+          <div class="path7" />
+        </span>
+      </a>
+      <a
         v-if="playerFm"
         rel="noopener"
         target="_blank"
@@ -167,6 +185,10 @@ export default defineComponent({
         (this.emission && this.emission.annotations
           ? this.emission.annotations.amazon
           : undefined) as string | undefined,
+      googlePodcasts:
+        (this.emission && this.emission.annotations
+          ? this.emission.annotations.googlePodcasts
+          : undefined) as string | undefined,
     };
   },
 
@@ -182,6 +204,7 @@ export default defineComponent({
     this.playerFm = this.externaliseLinks(this.playerFm);
     this.stitcher = this.externaliseLinks(this.stitcher);
     this.amazon = this.externaliseLinks(this.amazon);
+    this.googlePodcasts = this.externaliseLinks(this.googlePodcasts);
   },
 
   methods: {
