@@ -89,6 +89,9 @@ export default defineComponent({
 
   methods: {
     addKeyboardControl(event: KeyboardEvent): void{
+      if(!event || null ===event){return;}
+      const element = event.target as HTMLElement; 
+      if (!element || 'INPUT' == element.tagName.toUpperCase() || 'TEXTAREA' == element.tagName.toUpperCase()){return;}
       if (' ' === event.key || 'Spacebar' === event.key) {
         event.preventDefault();
         this.switchPausePlay();
