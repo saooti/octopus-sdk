@@ -66,7 +66,6 @@
 </template>
 
 <script lang="ts">
-import { IReCaptchaComposition, useReCaptcha } from 'vue-recaptcha-v3';
 import Constants from '../../../../public/config';
 import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
@@ -130,11 +129,9 @@ export default defineComponent({
         this.sendComment();
         return;
       }
-      const iRecaptcha: IReCaptchaComposition|undefined = useReCaptcha();
-      if(!iRecaptcha){return;}
-      await iRecaptcha.recaptchaLoaded();
-      const token = await iRecaptcha.executeRecaptcha('login');
       try {
+        await this.$recaptchaLoaded()
+        const token = await this.$recaptcha('login');
         this.sendError = false;
         const ok = await api.checkToken(token);
         if (!ok) {

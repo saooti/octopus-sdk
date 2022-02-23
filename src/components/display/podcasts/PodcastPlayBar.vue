@@ -48,14 +48,14 @@ export default defineComponent({
       return (state.emissionsPage.progressBar as boolean);
     },
     percentProgress(): number{
-      if(this.podcast !== this.$store.state.player.podcast){
+      if(!this.$store.state.player.podcast || this.podcast.podcastId !== this.$store.state.player.podcast.podcastId){
         return 0;
       }
       if(!this.$store.state.player.elapsed){return 0;}
       return this.$store.state.player.elapsed * 100;
     },
     playedTime(): string{
-      if(this.podcast === this.$store.state.player.podcast){
+      if(this.$store.state.player.podcast && this.podcast.podcastId === this.$store.state.player.podcast.podcastId){
         if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {
           return DurationHelper.formatDuration(
             Math.round(this.$store.state.player.elapsed * this.$store.state.player.total)
@@ -70,7 +70,7 @@ export default defineComponent({
   },
   methods: {
     seekTo(event: MouseEvent): void {
-      if(this.podcast!== this.$store.state.player.podcast){return;}
+      if(!this.$store.state.player.podcast || this.podcast.podcastId !== this.$store.state.player.podcast.podcastId){return;}
       const rect = (event.currentTarget as Element).getBoundingClientRect();
       const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;

@@ -55,7 +55,6 @@
       />
     </transition-group>
     <router-link
-      v-if="!overflowScroll"
       :to="href"
       class="btn btn-link align-self-center width-fit-content m-4"
     >
@@ -203,12 +202,12 @@ export default defineComponent({
     },
     handleResize(): void {
       if (!this.$el) return;
-      if (window.innerWidth <= PHONE_WIDTH) {
-        this.size = 10;
-        return;
-      }
       if (this.overflowScroll) {
         this.size = 20;
+        return;
+      }
+      if (window.innerWidth <= PHONE_WIDTH) {
+        this.size = 10;
         return;
       }
       const width = (this.$el as HTMLElement).offsetWidth;
@@ -269,25 +268,6 @@ export default defineComponent({
       h2 {
           margin-bottom: 1rem;
       }
-  }
-  .element-list-inline.overflowScroll {
-    display: flex;
-    flex-wrap: wrap;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    padding-bottom: 1rem;
-    width: 100%;
-    height: 80vh;
-    overflow-y: auto;
-    grid-gap: inherit;
-    @media (max-width: 960px) {
-      overflow-x: hidden;
-      flex-direction: column;
-      flex-wrap: nowrap;
-    }
-    .item-phone-margin {
-      margin: 1rem 0.5rem !important;
-    }
   }
 }
 </style>

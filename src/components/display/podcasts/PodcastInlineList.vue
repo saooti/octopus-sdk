@@ -22,7 +22,7 @@
         </button>
       </div>
       <div
-        v-if="!isArrow"
+        v-if="!isArrow && !overflowScroll"
         class="hide-phone"
       >
         <button
@@ -51,7 +51,10 @@
       :name="transitionName"
       class="element-list-inline"
       tag="ul"
-      :class="[alignLeft ? 'justify-content-start' : '']"
+      :class="[
+        alignLeft ? 'justify-content-start' : '',
+        overflowScroll ? 'overflowScroll' : '',
+      ]"
     >
       <PodcastItem
         v-for="p in podcasts"
@@ -130,6 +133,9 @@ export default defineComponent({
     },
     sizeItem(): number {
       return state.generalParameters.podcastItem ? (state.generalParameters.podcastItem as number): 13;
+    },
+    overflowScroll(): boolean {
+      return (state.emissionPage.overflowScroll as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -249,6 +255,10 @@ export default defineComponent({
     },
     handleResize(): void {
       if (!this.$el) return;
+      if (this.overflowScroll) {
+        this.size = 20;
+        return;
+      }
       if (window.innerWidth <= PHONE_WIDTH) {
         this.size = 10;
         return;

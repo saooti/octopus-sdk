@@ -544,5 +544,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.45 ProgressBar pour le soir
  * 30.0.46 Param pour le soir
  * 30.0.47 Live error
+ * 30.0.48 Podcastmaker ScrollOverflow PodcastInlineList
+ * 30.0.49 Podcastmaker ProgressBar
+ * 30.0.50 Commentaires live
 
  * 31.0.0 Passage en 31
+
