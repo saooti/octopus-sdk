@@ -6,6 +6,7 @@ import I18nResources from './locale/messages';
 import router from '@/router/router';
 import moment from 'moment';
 import store from '@/store/AppStore';
+import paramStore from '@/store/paramStore';
 import { LocaleMessage } from '@intlify/core-base';
 /* import 'popper.js/dist/popper.min.js'; */
 /* import 'jquery/src/jquery.js'; */
@@ -31,6 +32,22 @@ const i18n = createI18n({
   messages: messages,
 });
 moment.locale(language);
+
+
+paramStore.initialize({
+  generalParameters: {},
+  podcastPage: {},
+  podcastsPage: {},
+  emissionsPage: {},
+  emissionPage: {},
+  intervenantPage: {},
+  intervenantsPage: {},
+  searchPage: {},
+  player: {},
+  footer: {},
+  organisation: {},
+  octopusApi: {}
+});
 
 // Initialisation store
 createApp(App)

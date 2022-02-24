@@ -89,6 +89,7 @@ const state:paramStore = {
     studioUrl: 'http://studio.dev2.saooti.org/',
     playerUrl: 'https://playerbeta.dev2.saooti.org/',
     organisationId: undefined,
+    rubriqueIdFilter: undefined,
   },
 };
 export interface GeneralParameters{
@@ -184,7 +185,8 @@ export interface OctopusApi{
     accessTokenUri: string,
     expiration: string,
     clientId: string,
-  }
+  },
+  rubriqueIdFilter?: Array<number>,
 }
 export interface paramStore{
   generalParameters:GeneralParameters,

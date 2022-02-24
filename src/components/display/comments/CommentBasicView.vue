@@ -14,7 +14,7 @@
         comment.name
       }}</b>
       <Popover
-        v-if="!editRight && !isValid"
+        :disable="editRight || isValid"
         :target="'popover-comment' + comment.comId"
       >
         {{ $t('Comment waiting') }}
