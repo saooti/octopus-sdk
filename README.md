@@ -550,7 +550,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.51 Commentaires live
  * 30.0.52 Ajout rubriqueIdFilter
  * 30.0.53 Commentaires live
+ * 30.0.54 Multiselect not reload on close
  
  * 31.0.0 Passage en 31
-
-

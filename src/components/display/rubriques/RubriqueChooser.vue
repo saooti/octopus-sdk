@@ -29,9 +29,8 @@
       :show-no-results="true"
       :hide-selected="true"
       :show-labels="false"
-      @open="clearAll"
+      @open="onOpen"
       @search-change="onSearchRubrique"
-      @close="onClose"
       @select="onRubriqueSelected"
     >
       <template #singleLabel="{ option }">
@@ -187,14 +186,11 @@ export default defineComponent({
         );
       }
     },
-    clearAll(): void {
+    onOpen(): void {
       (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
         'autocomplete',
         'off'
       );
-      if (undefined === this.rubriqueArray) {
-        this.rubrique = undefined;
-      }
       this.rubriques = this.initRubriquesArray();
     },
     onClose(): void {

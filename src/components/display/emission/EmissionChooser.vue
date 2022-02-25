@@ -29,7 +29,6 @@
       :show-labels="false"
       @search-change="onSearchEmission"
       @open="onOpen"
-      @close="onClose"
       @select="onEmissionSelected"
     >
       <template #clear="{ props }">
@@ -152,15 +151,7 @@ export default defineComponent({
         'autocomplete',
         'off'
       );
-      this.clearAll();
       this.onSearchEmission();
-    },
-    onClose(): void {
-      if (this.emission) return;
-      this.emission = this.defaultanswer
-        ? getDefaultEmission(this.defaultanswer)
-        : undefined;
-      this.$emit('selected', this.emission);
     },
     onEmissionSelected(emission: Emission): void {
       this.$emit('selected', emission);

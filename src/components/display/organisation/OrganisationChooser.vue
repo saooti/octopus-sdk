@@ -31,7 +31,6 @@
       :class="{ 'multiselect-transparent': light }"
       @search-change="onSearchOrganisation"
       @open="onOpen"
-      @close="onClose"
       @select="onOrganisationSelected"
     >
       <template #clear="{ props }">
@@ -207,15 +206,7 @@ export default defineComponent({
         'autocomplete',
         'off'
       );
-      this.clearAll();
       this.onSearchOrganisation();
-    },
-    onClose(): void {
-      if (this.organisation) return;
-      this.organisation = this.defaultanswer
-        ? getDefaultOrganistion(this.defaultanswer)
-        : undefined;
-      this.$emit('selected', this.organisation);
     },
     onOrganisationSelected(organisation: Organisation|undefined): void {
       this.$emit('selected', organisation);

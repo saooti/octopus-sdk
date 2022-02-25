@@ -28,9 +28,8 @@
       :show-no-results="true"
       :hide-selected="true"
       :show-labels="false"
-      @open="clearAll"
+      @open="onOpen"
       @search-change="onSearchCategory"
-      @close="onClose"
       @select="onCategorySelected"
     >
       <template #singleLabel="{ option }">
@@ -169,14 +168,11 @@ export default defineComponent({
     }
   },
   methods: {
-    clearAll(): void {
+    onOpen(): void {
       (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
         'autocomplete',
         'off'
       );
-      if (undefined === this.categoryArray) {
-        this.category = undefined;
-      }
       if (
         undefined !== this.categorySelected ||
         undefined !== this.categoryArray ||
@@ -197,14 +193,6 @@ export default defineComponent({
         }
       } else {
         this.categories = this.totalCategories;
-      }
-    },
-    onClose(): void {
-      if (!this.category && undefined === this.categoryArray) {
-        this.category = getDefaultCategory(this.defaultanswer);
-        if(this.category){
-          this.onCategorySelected(this.category);
-        }
       }
     },
     onSearchCategory(query: string): void {
