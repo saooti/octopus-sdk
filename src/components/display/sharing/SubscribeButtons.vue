@@ -67,6 +67,16 @@
         <span class="saooti-playerfm" />
       </a>
       <a
+        v-if="pocketCasts"
+        rel="noopener"
+        target="_blank"
+        class="btn me-3 mb-2 share-btn"
+        :href="pocketCasts"
+        title="pocketCasts"
+      >
+        <span class="saooti-pocket-casts" />
+      </a>
+      <a
         v-if="podcastAddict"
         rel="noopener"
         target="_blank"
@@ -189,6 +199,10 @@ export default defineComponent({
         (this.emission && this.emission.annotations
           ? this.emission.annotations.googlePodcasts
           : undefined) as string | undefined,
+      pocketCasts:
+        (this.emission && this.emission.annotations
+          ? this.emission.annotations.pocketCasts
+          : undefined) as string | undefined,
     };
   },
 
@@ -205,6 +219,7 @@ export default defineComponent({
     this.stitcher = this.externaliseLinks(this.stitcher);
     this.amazon = this.externaliseLinks(this.amazon);
     this.googlePodcasts = this.externaliseLinks(this.googlePodcasts);
+    this.pocketCasts = this.externaliseLinks(this.pocketCasts);
   },
 
   methods: {

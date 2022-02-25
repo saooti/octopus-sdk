@@ -553,3 +553,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.54 Multiselect not reload on close
  
  * 31.0.0 Passage en 31
+ * 31.0.1 Ajout pocket casts

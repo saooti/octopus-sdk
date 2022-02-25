@@ -227,6 +227,7 @@ export default defineComponent({
         if (undefined !== this.podcast.emission.annotations.podcastAddict) count++;
         if (undefined !== this.podcast.emission.annotations.playerFm) count++;
         if (undefined !== this.podcast.emission.annotations.stitcher) count++;
+        if (undefined !== this.podcast.emission.annotations.pocketCasts) count++;
       }
       return count;
     },
