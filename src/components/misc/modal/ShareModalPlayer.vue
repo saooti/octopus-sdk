@@ -139,6 +139,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .share-modal-border {
   border-right: solid 1px rgb(222, 226, 230);
   border-left: solid 1px rgb(222, 226, 230);
@@ -177,5 +178,6 @@ export default defineComponent({
     cursor: pointer;
     align-self: center;
   }
+}
 }
 </style>

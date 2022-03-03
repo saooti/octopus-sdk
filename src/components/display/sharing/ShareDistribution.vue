@@ -170,6 +170,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .sharing-distribution-container {
   border: 0.05rem solid #dee2e6;
   border-radius: 0.3rem;
@@ -213,5 +214,6 @@ export default defineComponent({
     flex-wrap: wrap;
     margin: 0.2rem 0.5rem;
   }
+}
 }
 </style>

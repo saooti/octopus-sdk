@@ -134,6 +134,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.octopus-app{
 .participant-item-container {
   list-style: none;
   border-radius: 2rem;
@@ -183,5 +184,6 @@ export default defineComponent({
   @media (max-width: 450px) {
     margin: 1rem 0 0;
   }
+}
 }
 </style>

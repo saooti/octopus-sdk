@@ -28,10 +28,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .bg-error-message {
   background-color: #ffd84a9c;
 }
 .alert-text{
   color: darkred;
+}
 }
 </style>

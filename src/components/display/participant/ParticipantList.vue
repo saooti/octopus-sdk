@@ -125,6 +125,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .participant-list {
   align-self: stretch;
   flex-grow: 1;
@@ -146,5 +147,6 @@ export default defineComponent({
     align-self: auto;
     grid-gap: 0;
   }
+}
 }
 </style>

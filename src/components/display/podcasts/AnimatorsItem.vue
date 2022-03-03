@@ -48,6 +48,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .podcast-item-animator {
   display: flex;
   align-items: flex-start;
@@ -57,5 +58,6 @@ export default defineComponent({
   font-weight: 300;
   text-transform: capitalize;
   margin: 00.25rem 0.5rem 0;
+}
 }
 </style>

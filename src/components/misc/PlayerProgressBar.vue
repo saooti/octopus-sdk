@@ -146,6 +146,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .player-grow-content {
   display: flex;
   flex-direction: column;
@@ -164,5 +165,6 @@ export default defineComponent({
     height: 4px;
     position: absolute;
   }
+}
 }
 </style>

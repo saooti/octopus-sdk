@@ -51,6 +51,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .tag-list-component{
   .ouest-france-logo{
     width: 20px;
@@ -64,5 +65,6 @@ export default defineComponent({
     border: 1px solid #999;
     border-radius: 0.5rem;
   }
+}
 }
 </style>

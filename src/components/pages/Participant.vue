@@ -194,10 +194,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 @media (min-width: 950px) {
   .participant-desc {
     max-width: 50%;
     line-height: 1.5em;
   }
+}
 }
 </style>

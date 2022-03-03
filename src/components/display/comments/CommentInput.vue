@@ -320,25 +320,27 @@ export default defineComponent({
 
 <style lang="scss">
 @import '../../../sass/_variables.scss';
-.comment-input-container {
-  textarea::placeholder {
-    color: $octopus-primary-dark;
-  }
-  textarea:focus::placeholder {
-    color: black;
-  }
-  textarea {
-    outline-width: 0 !important;
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    border-bottom: 0.1rem solid #ddd !important;
-    overflow: hidden !important;
-    box-shadow: unset !important;
-    background: transparent !important;
-    height: 50px;
-    &.short{
-      max-height: 38px;
+.octopus-app{
+  .comment-input-container {
+    textarea::placeholder {
+      color: $octopus-primary-dark;
+    }
+    textarea:focus::placeholder {
+      color: black;
+    }
+    textarea {
+      outline-width: 0 !important;
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
+      border-bottom: 0.1rem solid #ddd !important;
+      overflow: hidden !important;
+      box-shadow: unset !important;
+      background: transparent !important;
+      height: 50px;
+      &.short{
+        max-height: 38px;
+      }
     }
   }
 }

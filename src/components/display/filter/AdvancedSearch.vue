@@ -330,6 +330,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .advanced-search-container {
   background: #fff;
   border-radius: 0.8rem;
@@ -359,5 +360,6 @@ export default defineComponent({
     appearance: none;
     padding-right: 40px;
   }
+}
 }
 </style>

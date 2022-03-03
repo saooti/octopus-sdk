@@ -23,16 +23,6 @@
       }"
     />
   </div>
-  <div
-    v-if="isPlaying || isPaused"
-    class="play-button-box primary-bg text-light"
-    @click="stopPlayer"
-  >
-    <div
-      class="saooti-stop-bounty"
-      :title="$t('Stop')"
-    />
-  </div>
 </template>
 
 <script lang="ts">
@@ -114,9 +104,6 @@ export default defineComponent({
         this.onPause();
       }
     },
-    stopPlayer(): void {
-      this.$store.commit('playerPlayPodcast');
-    },
     onPlay(): void {
       this.$store.commit('playerPause', false);
     },
@@ -128,6 +115,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .player-image {
   border-radius: 0.2rem;
   height: 2.4rem;
@@ -151,5 +139,5 @@ export default defineComponent({
   flex-shrink: 0;
   cursor: pointer;
 }
-
+}
 </style>

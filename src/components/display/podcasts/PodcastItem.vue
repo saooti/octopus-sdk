@@ -243,6 +243,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .podcast-item-container {
   border-radius: 0.8rem;
   list-style: none;
@@ -307,5 +308,6 @@ export default defineComponent({
   @media (max-width: 960px) {
     margin: 0.5rem !important;
   }
+}
 }
 </style>

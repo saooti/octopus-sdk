@@ -162,13 +162,15 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.categary-filter-no-filter{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: white;
-  z-index: -1;
+.octopus-app{
+  .categary-filter-no-filter{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: white;
+    z-index: -1;
+  }
 }
 </style>

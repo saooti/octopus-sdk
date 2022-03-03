@@ -84,6 +84,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .podcast-play-bar {
   .progress{
     height: 6px;
@@ -96,5 +97,6 @@ export default defineComponent({
     align-self: center;
     position: absolute;
   }
+}
 }
 </style>

@@ -195,6 +195,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .left-menu-container {
   position: fixed;
   top: 3rem;
@@ -224,5 +225,6 @@ export default defineComponent({
   @media (max-width: 450px) {
     width: 94%;
   }
+}
 }
 </style>

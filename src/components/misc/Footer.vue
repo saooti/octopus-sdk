@@ -201,6 +201,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 #footer{
   font-size: 0.7rem;
   .acpm_image {
@@ -220,5 +221,6 @@ export default defineComponent({
       align-items: flex-start !important;
     }
   }
+}
 }
 </style>

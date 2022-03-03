@@ -51,6 +51,15 @@
           :player-error="playerError"
           :listen-time="listenTime"
         />
+        <div
+          class="play-button-box primary-bg text-light"
+          @click="stopPlayer"
+        >
+          <div
+            class="saooti-cross"
+            :title="$t('Close')"
+          />
+        </div>
         <PlayerClockAndTimeline
           v-model:showTimeline="showTimeline"
           :comments="comments"
@@ -204,6 +213,9 @@ export default defineComponent({
   },
   
   methods: {
+    stopPlayer(): void {
+      this.$store.commit('playerPlayPodcast');
+    },
     getListenerId(): string{
       let listenerId = this.getCookie("octopus_listenerId");
       if(!listenerId){
@@ -473,6 +485,7 @@ reject('There is an error while reading media content');
 </script>
 
 <style lang="scss">
+.octopus-app{
 .player-container {
   position: fixed;
   overflow: hidden;
@@ -496,5 +509,6 @@ reject('There is an error while reading media content');
       flex-wrap: nowrap !important;
     }
   }
+}
 }
 </style>

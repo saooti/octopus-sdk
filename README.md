@@ -552,7 +552,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.53 Commentaires live
  * 30.0.54 Multiselect not reload on close
  * 30.0.55 Align participant img
+ * 30.0.56 Popover title
+ * 30.0.57 podcastmaker Le soir améliorations
+ * 30.0.58 Prefix css dans component par octopus-app
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
-

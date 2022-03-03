@@ -61,6 +61,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+.octopus-app{
 .champs-searchPage{
   input {
     border: 2px solid #dee2e6;
@@ -81,4 +82,5 @@ export default defineComponent({
     margin: 1rem;
   }
 } 
+}
 </style>

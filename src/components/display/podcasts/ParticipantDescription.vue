@@ -8,16 +8,12 @@
       :id="idPopover"
       tabindex="-1"
       class="saooti-help m-0"
-      :title="$t('Help')"
+      :title="title"
     />
     <span class="mx-1">:</span>
     <Popover
       :target="idPopover"
     >
-      <div class="text-center font-weight-bold">
-        {{ title }}
-      </div>
-      <hr>
       <div 
         v-for="participant in participants"
         :key="'desc-'+participant.participantId"

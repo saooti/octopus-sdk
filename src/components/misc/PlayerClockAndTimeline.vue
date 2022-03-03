@@ -61,6 +61,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import '../../sass/_variables.scss';
+.octopus-app{
 .player-container {
   .timeline-button {
     background: black;
@@ -81,5 +82,6 @@ export default defineComponent({
       display: none;
     }
   }
+}
 }
 </style>

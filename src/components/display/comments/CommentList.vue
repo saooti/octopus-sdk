@@ -248,6 +248,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import '../../../sass/_variables.scss';
+.octopus-app{
 .my-transition-list-comments {
   position: relative;
   .comment-list-enter-active,
@@ -283,5 +284,6 @@ export default defineComponent({
     transform-origin: center top;
     background-color: $primaryColorReallyTransparent;
   }
+}
 }
 </style>

@@ -242,9 +242,7 @@ export default defineComponent({
           `" title="` +
           this.$t('Listen this episode') +
           `">
-          <img width="44" height="44" style="display: inline-block;vertical-align: middle" src="` +
-          this.resourcesUrl +
-          `/img/play-podcast.png">
+          <img width="44" height="44" style="display: inline-block;vertical-align: middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAxElEQVRIie3WMWpCURBG4Q8FSRrtbC2SPhvICmzchVuwtXQLbsE2pVUIkjqQHVgqNmIj6EvxGHhFQAIvcxt/OPVhhrlzh3sKZ4MvTLLFVYNPvJYQB294LiGucMYSw2xxcMQcj9niYIsputni4BvjEuJgjZcS4goXrDDKFgcnLDDIFgd7zNDLFgfvTUHnL23ISJuV7iS3Ooarn1VxkeeUvkDSV2b6J3FQT+pDW8Jb4vRD4Kqe1Kf/Ev4mTj32PhQ6b+9pPT+XHgysHrPM6QAAAABJRU5ErkJggg=="/>
         </a>
         <a style="color: #000;text-decoration: none; margin-right:8px" href="` +
           window.location.href +
@@ -283,6 +281,9 @@ export default defineComponent({
       });
     },
   },
+  created(){
+    this.initColor();
+  },
   methods: {
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();
@@ -302,12 +303,18 @@ export default defineComponent({
     },
     afterCopy(): void{
       (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Data in clipboard'));
+    },
+    initColor(): void {
+      if(state.generalParameters.podcastmaker && state.generalParameters.podcastmakerColor){
+        this.color = state.generalParameters.podcastmakerColor;
+      }
     }
   },
 })
 </script>
 
 <style lang="scss">
+.octopus-app{
 #newsletter-modal {
   textarea {
     border: 2px solid #eee;
@@ -322,5 +329,6 @@ export default defineComponent({
   .modal-dialog {
     max-width: 60%;
   }
+}
 }
 </style>

@@ -55,6 +55,7 @@
         alignLeft ? 'justify-content-start' : '',
         overflowScroll ? 'overflowScroll' : '',
       ]"
+      :css="isInlineAnimation"
     >
       <PodcastItem
         v-for="p in podcasts"
@@ -136,6 +137,9 @@ export default defineComponent({
     },
     overflowScroll(): boolean {
       return (state.emissionPage.overflowScroll as boolean);
+    },
+    isInlineAnimation(): boolean {
+      return (state.generalParameters.isInlineAnimation as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;

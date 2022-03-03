@@ -143,7 +143,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import '../../../sass/_variables.scss';
-
+.octopus-app{
 .filter-speech-bubble {
   position: absolute;
   background: $octopus-primary-dark;
@@ -207,5 +207,6 @@ export default defineComponent({
   @media (max-width: 500px) {
     margin-right: 0;
   }
+}
 }
 </style>

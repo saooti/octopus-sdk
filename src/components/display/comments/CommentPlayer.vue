@@ -75,6 +75,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .comment-player-container {
   position: relative;
   width: 100%;
@@ -95,5 +96,6 @@ export default defineComponent({
     margin-top: 20px;
     position: absolute;
   }
+}
 }
 </style>

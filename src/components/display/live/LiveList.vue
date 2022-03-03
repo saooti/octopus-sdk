@@ -238,9 +238,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .live-list-category {
   align-self: flex-start;
   text-transform: uppercase;
   font-weight: bold;
+}
 }
 </style>

@@ -179,6 +179,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 #rubrique-list-container {
   display: flex;
   justify-content: flex-start;
@@ -209,5 +210,6 @@ export default defineComponent({
   &:hover {
     background: #eee !important;
   }
+}
 }
 </style>

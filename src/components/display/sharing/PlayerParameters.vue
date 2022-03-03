@@ -157,9 +157,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
   .input-share-player {
     border: 1px solid #ddd;
     border-radius: 50px;
     width: 60px;
   }
+}
 </style>

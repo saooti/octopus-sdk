@@ -18,7 +18,8 @@ const state:paramStore = {
     allCategories: [],
     isLiveTab: false,
     isCaptchaTest: true,
-    podcastItem:13
+    podcastItem:13,
+    isInlineAnimation:true,
   },
   podcastPage: {
     EditBox: false,
@@ -108,7 +109,9 @@ export interface GeneralParameters{
   allCategories?: Array<Category>,
   isLiveTab?: boolean,
   isCaptchaTest?: boolean,
-  podcastItem?: number
+  podcastItem?: number,
+  podcastmakerColor?: string,
+  isInlineAnimation?: boolean
 }
 export interface PodcastPage{
   EditBox?: boolean,

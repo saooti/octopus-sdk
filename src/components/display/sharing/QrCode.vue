@@ -50,6 +50,9 @@ export default defineComponent({
       return (state.generalParameters.authenticated as boolean);
     },
   },
+  created(){
+    this.initColor();
+  },
   methods:{
     download(): void{
       const link = document.createElement('a');
@@ -62,6 +65,10 @@ export default defineComponent({
       }
     },
     async initColor(): Promise<void> {
+      if(state.generalParameters.podcastmaker && state.generalParameters.podcastmakerColor){
+        this.color = state.generalParameters.podcastmakerColor;
+        return;
+      }
       if (!this.authenticated) return;
       let data;
       if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){

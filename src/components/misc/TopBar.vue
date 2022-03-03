@@ -257,6 +257,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .top-bar-container {
   position: sticky;
   top: 0;
@@ -335,5 +336,6 @@ export default defineComponent({
       display: none;
     }
   }
+}
 }
 </style>

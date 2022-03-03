@@ -273,6 +273,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.octopus-app{
 .live-date-box {
   width: 200px;
   display: flex;
@@ -304,5 +305,5 @@ export default defineComponent({
   width: 0;
   flex-grow: 1;
 }
-
+}
 </style>

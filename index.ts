@@ -32,6 +32,7 @@ import EmissionChooser from "./src/components/display/emission/EmissionChooser.v
 import EmissionList from "./src/components/display/emission/EmissionList.vue";
 /*import MonetizableFilter from "./src/components/display/filter/MonetizableFilter.vue";
 import ProductorSearch from "./src/components/display/filter/ProductorSearch.vue";*/
+import AdvancedSearch from "./src/components/display/filter/AdvancedSearch.vue";
 import OrganisationChooser from "./src/components/display/organisation/OrganisationChooser.vue";
 /*import ParticipantItem from "./src/components/display/participant/ParticipantItem.vue";
 import ParticipantList from "./src/components/display/participant/ParticipantList.vue";
@@ -110,7 +111,8 @@ const components = {
     ClassicSearch,
     ClassicCheckbox,
     ClassicRadio,
-    ClassicLoading
+    ClassicLoading,
+    AdvancedSearch
 }
 
 export default components;
@@ -162,5 +164,6 @@ export {
     ClassicSearch,
     ClassicCheckbox,
     ClassicRadio,
-    ClassicLoading
+    ClassicLoading,
+    AdvancedSearch
 };

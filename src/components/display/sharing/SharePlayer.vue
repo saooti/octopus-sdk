@@ -364,6 +364,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import '../../../sass/_variables.scss';
+.octopus-app{
 .sticker {
   align-self: center;
   background: $octopus-primary-dark;
@@ -384,5 +385,6 @@ export default defineComponent({
 }
 .max-iframe {
   max-width: 300px;
+}
 }
 </style>

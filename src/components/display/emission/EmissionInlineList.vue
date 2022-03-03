@@ -43,6 +43,7 @@
         alignLeft ? 'justify-content-start' : '',
         overflowScroll ? 'overflowScroll' : '',
       ]"
+      :css="isInlineAnimation"
     >
       <EmissionPlayerItem
         v-for="e in emissions"
@@ -127,7 +128,10 @@ export default defineComponent({
     },
     transitionName(): string {
       return this.direction > 0 ? 'out-left' : 'out-right';
-    }
+    },
+    isInlineAnimation(): boolean {
+      return (state.generalParameters.isInlineAnimation as boolean);
+    },
   },
 
   watch: {

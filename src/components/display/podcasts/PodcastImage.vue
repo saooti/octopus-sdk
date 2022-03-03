@@ -286,6 +286,7 @@ export default defineComponent({
 
 
 <style lang="scss">
+.octopus-app{
 .live-image-status {
   text-align: center;
   width: 100%;
@@ -363,5 +364,5 @@ export default defineComponent({
     z-index: 2;
   }
 }
-
+}
 </style>
