@@ -86,6 +86,7 @@ export default defineComponent({
   },
   watch: {
     queryIntern(): void {
+      if(this.queryIntern !== this.searchPattern)
       this.$emit('updateSearchPattern', this.queryIntern);
     },
     filterOrga(): void {
@@ -98,6 +99,9 @@ export default defineComponent({
     },
   },
   async created() {
+    if(this.searchPattern){
+      this.queryIntern=this.searchPattern;
+    }
     if (!this.organisationId) return;
     if(this.$store.state.filter.organisationId === this.organisationId){
       this.keepOrganisation = true;

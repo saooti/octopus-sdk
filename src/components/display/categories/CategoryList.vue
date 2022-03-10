@@ -22,7 +22,7 @@
       class="dropdown btn-group"
     >
       <button
-        class="btn dropdown-toggle admin-button dropdown-toggle-no-caret saooti-plus"
+        class="btn dropdown-toggle admin-button dropdown-toggle-no-caret saooti-more"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         :title="$t('See more')"

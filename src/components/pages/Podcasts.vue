@@ -90,6 +90,7 @@ export default defineComponent({
   props: {
     productor: { default: undefined, type: String},
     isEducation: { default: false, type: Boolean},
+    searchInit: { default: "", type: String}
   },
 
   data() {
@@ -154,6 +155,9 @@ export default defineComponent({
   },
 
   created() {
+    if(this.searchInit){
+      this.searchPattern = this.searchInit;
+    }
     if (this.productor) {
       this.organisationId = this.productor;
     } else if (this.$store.state.filter.organisationId) {

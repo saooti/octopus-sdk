@@ -72,7 +72,7 @@
       {{ buttonText }}
       <div
         v-if="buttonPlus"
-        class="ms-1 saooti-plus"
+        class="ms-1 saooti-more"
       />
     </router-link>
   </div>

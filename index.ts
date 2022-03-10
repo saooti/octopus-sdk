@@ -49,6 +49,7 @@ import EmissionInlineList from "./src/components/display/emission/EmissionInline
 import RubriqueChooser from "./src/components/display/rubriques/RubriqueChooser.vue";
 import CommentList from "./src/components/display/comments/CommentList.vue";
 import CommentInput from "./src/components/display/comments/CommentInput.vue";
+import PodcastPlaylistInlineList from "./src/components/display/playlist/PodcastPlaylistInlineList.vue";
 
 //form
 import ClassicSearch from "./src/components/form/ClassicSearch.vue";
@@ -112,7 +113,8 @@ const components = {
     ClassicCheckbox,
     ClassicRadio,
     ClassicLoading,
-    AdvancedSearch
+    AdvancedSearch,
+    PodcastPlaylistInlineList
 }
 
 export default components;
@@ -165,5 +167,6 @@ export {
     ClassicCheckbox,
     ClassicRadio,
     ClassicLoading,
-    AdvancedSearch
+    AdvancedSearch,
+    PodcastPlaylistInlineList
 };

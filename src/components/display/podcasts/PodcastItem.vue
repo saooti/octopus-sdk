@@ -197,6 +197,16 @@ export default defineComponent({
               s: () => 'sec',
               ms: () => 'ms',
             },
+            shortIt: {
+              y: () => 'anni',
+              mo: () => 'mesi',
+              w: () => 'settimane',
+              d: () => 'giorni',
+              h: () => 'h',
+              m: () => 'min',
+              s: () => 'sec',
+              ms: () => 'ms',
+            },
           },
         });
       }

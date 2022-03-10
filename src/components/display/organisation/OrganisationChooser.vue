@@ -14,7 +14,7 @@
       ref="multiselectRef"
       v-model="organisation"
       label="name"
-      track-by="organisationId"
+      track-by="id"
       :placeholder="$t('Type string to filter by organisation')"
       :options="organisations"
       :multiple="false"

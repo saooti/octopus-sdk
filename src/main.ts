@@ -16,7 +16,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 //TODO
 const navigatorLang = navigator.language /* || navigator.userLanguage */;
-let language = 'fr';
+let language = 'it';
 if(navigatorLang.includes('en')){
   language = 'en';
 }

@@ -51,7 +51,7 @@
         </template>
         <div
           :class="buttonPlus?'ms-1':''"
-          class="saooti-plus"
+          class="saooti-more"
         />
       </button>
     </template>
