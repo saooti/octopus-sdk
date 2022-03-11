@@ -60,12 +60,14 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
+import { handle403 } from '../../mixins/handle403';
 import { state } from '../../../store/paramStore';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
+import { AxiosError } from 'axios';
 const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
 const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({
@@ -76,6 +78,8 @@ export default defineComponent({
     EmissionPlayerItem,
     ClassicLoading
   },
+
+  mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number },
@@ -156,8 +160,6 @@ export default defineComponent({
     },
   },
 
-  
-
   mounted() {
     this.fetchContent(true);
     if (this.displayRubriquage) {
@@ -185,8 +187,12 @@ export default defineComponent({
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
         includeHidden:this.includeHidden,
       };
-      const data = await octopusApi.fetchEmissions(param);
-      this.afterFetching(reset, data);
+      try {
+        const data = await octopusApi.fetchEmissions(param);
+        this.afterFetching(reset, data);
+      } catch (error) {
+        this.handle403((error as AxiosError));
+      }
     },
     afterFetching(reset: boolean, data: {count: number, result: Array<Emission>, sort: string}): void {
       if (reset) {

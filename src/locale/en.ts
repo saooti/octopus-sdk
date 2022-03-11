@@ -297,4 +297,5 @@ export default{
   'From RSS': "From an RSS feed",
   "User menu":"User menu",
   'Podcast tags': 'Podcast tags',
+  "You do not have the right to access this page":"You do not have the right to access this page",
 };

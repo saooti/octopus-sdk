@@ -36,12 +36,14 @@
 </template>
 
 <script lang="ts">
+import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
 import { state } from '../../../store/paramStore';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'PlaylistList',
 
@@ -49,6 +51,9 @@ export default defineComponent({
     PlaylistItem,
     ClassicLoading
   },
+
+  mixins: [handle403],
+
   props: {
     first: { default: 0, type: Number },
     size: { default: 12, type: Number },
@@ -117,8 +122,12 @@ export default defineComponent({
         organisationId: this.organisation,
         sort: this.sort,
       };
-      const data = await octopusApi.fetchPlaylists(param);
-      this.afterFetching(reset, data);
+      try {
+        const data = await octopusApi.fetchPlaylists(param);
+        this.afterFetching(reset, data);
+      } catch (error) {
+        this.handle403((error as AxiosError));
+      }
     },
     afterFetching(reset: boolean, data: {count: number, result: Array<Playlist>, sort: string}): void {
       if (reset) {

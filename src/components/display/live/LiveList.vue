@@ -37,17 +37,21 @@
 <script lang="ts">
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import LiveItem from './LiveItem.vue';
+import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference/conference';
 import { defineComponent } from 'vue'
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'LiveList',
   components: {
     LiveItem,
     ClassicLoading
   },
+
+  mixins: [handle403],
 
   props: {
     conferenceWatched: { default: () => [], type: Array as ()=>Array<Conference>},
@@ -153,51 +157,55 @@ export default defineComponent({
       }
     },
     async fetchContent(): Promise<void> {
-      this.initArrays();
-      if (!this.filterOrgaUsed) {
-        this.loading = false;
-        this.loaded = true;
-        return;
-      }
-      this.loading = true;
-      this.loaded = false;
-      let indexPast = 0;
-      let dataLivesToBe: Array<Conference> = [];
-      for (let i = 0, len = this.livesArray.length; i < len; i++) {
-        if (!this.organisationRight && 
-        ("DEBRIEFING"===this.livesArray[i].status ||"ERROR"===this.livesArray[i].status ||"PUBLISHING"===this.livesArray[i].status)) {
-          continue;
+      try {
+        this.initArrays();
+        if (!this.filterOrgaUsed) {
+          this.loading = false;
+          this.loaded = true;
+          return;
         }
-        const dataLives = await octopusApi.listConferences(
-          this.filterOrgaUsed,
-          true,
-          this.livesArray[i].status
-        );
-        if("PLANNED"!==this.livesArray[i].status && "PENDING"!==this.livesArray[i].status){
-          this.livesArray[i].lives = dataLives.filter((p: Conference | null) => {
-            return null !== p;
-          });
-        }else if("PENDING"===this.livesArray[i].status){
-          dataLivesToBe = dataLives;
-          for (let index = 0, len = dataLives.length; index < len; index++) {
-            if (moment(dataLives[index].date).isBefore(moment())) {
-              this.livesArray[i].lives.push(dataLives[index]);
-              indexPast = index + 1;
-            } else {break;}
+        this.loading = true;
+        this.loaded = false;
+        let indexPast = 0;
+        let dataLivesToBe: Array<Conference> = [];
+        for (let i = 0, len = this.livesArray.length; i < len; i++) {
+          if (!this.organisationRight && 
+          ("DEBRIEFING"===this.livesArray[i].status ||"ERROR"===this.livesArray[i].status ||"PUBLISHING"===this.livesArray[i].status)) {
+            continue;
           }
-        }else{
-          this.livesArray[i].lives = dataLivesToBe
-          .slice(indexPast)
-          .concat(dataLives)
-          .filter((p: Conference | null) => {
-            return null !== p;
-          });
+          const dataLives = await octopusApi.listConferences(
+            this.filterOrgaUsed,
+            true,
+            this.livesArray[i].status
+          );
+          if("PLANNED"!==this.livesArray[i].status && "PENDING"!==this.livesArray[i].status){
+            this.livesArray[i].lives = dataLives.filter((p: Conference | null) => {
+              return null !== p;
+            });
+          }else if("PENDING"===this.livesArray[i].status){
+            dataLivesToBe = dataLives;
+            for (let index = 0, len = dataLives.length; index < len; index++) {
+              if (moment(dataLives[index].date).isBefore(moment())) {
+                this.livesArray[i].lives.push(dataLives[index]);
+                indexPast = index + 1;
+              } else {break;}
+            }
+          }else{
+            this.livesArray[i].lives = dataLivesToBe
+            .slice(indexPast)
+            .concat(dataLives)
+            .filter((p: Conference | null) => {
+              return null !== p;
+            });
+          }
         }
+        const listIds = this.livesArray[0].lives
+          .concat(this.livesArray[1].lives)
+          .concat(this.livesArray[2].lives);
+        this.$emit('initConferenceIds', listIds);
+      } catch (error) {
+        this.handle403((error as AxiosError));
       }
-      const listIds = this.livesArray[0].lives
-        .concat(this.livesArray[1].lives)
-        .concat(this.livesArray[2].lives);
-      this.$emit('initConferenceIds', listIds);
       this.loading = false;
       this.loaded = true;
     },

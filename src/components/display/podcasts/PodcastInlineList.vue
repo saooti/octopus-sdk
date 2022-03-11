@@ -79,6 +79,7 @@
 </template>
 
 <script lang="ts">
+import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
@@ -89,6 +90,7 @@ import { Podcast } from '@/store/class/general/podcast';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 import { RouteLocationRaw } from 'vue-router';
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'PodcastInlineList',
   
@@ -96,6 +98,8 @@ export default defineComponent({
     PodcastItem,
     ClassicLoading
   },
+
+  mixins: [handle403],
 
   props: {
     organisationId: { default: undefined, type: String},
@@ -211,34 +215,38 @@ export default defineComponent({
   },
   methods: {
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchPodcasts({
-        first: this.first,
-        size: this.size + 1,
-        organisationId: this.organisation,
-        emissionId: this.emissionId,
-        iabId: this.iabId,
-        rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
-        rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
-        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
-        sort: this.popularSort ? 'POPULARITY' : 'DATE',
-        query: this.query,
-      });
-      this.loading = false;
-      this.loaded = true;
-      this.totalCount = data.count;
-      if (this.allPodcasts.length + data.result.length < this.totalCount) {
-        const nexEl = data.result.pop() as Podcast;
-        this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
+      try {
+        const data = await octopusApi.fetchPodcasts({
+          first: this.first,
+          size: this.size + 1,
+          organisationId: this.organisation,
+          emissionId: this.emissionId,
+          iabId: this.iabId,
+          rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
+          rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
+          noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
+          sort: this.popularSort ? 'POPULARITY' : 'DATE',
+          query: this.query,
+        });
+        this.loading = false;
+        this.loaded = true;
+        this.totalCount = data.count;
+        if (this.allPodcasts.length + data.result.length < this.totalCount) {
+          const nexEl = data.result.pop() as Podcast;
+          this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
+        }
+        this.allPodcasts = this.allPodcasts.concat(
+          data.result.filter((pod: Podcast|null) => null !== pod)
+        );
+        if (this.allPodcasts.length <= 3) {
+          this.alignLeft = true;
+        } else {
+          this.alignLeft = false;
+        }
+        this.first += this.size;
+      } catch (error) {
+        this.handle403((error as AxiosError));
       }
-      this.allPodcasts = this.allPodcasts.concat(
-        data.result.filter((pod: Podcast|null) => null !== pod)
-      );
-      if (this.allPodcasts.length <= 3) {
-        this.alignLeft = true;
-      } else {
-        this.alignLeft = false;
-      }
-      this.first += this.size;
     },
     displayPrevious(): void {
       this.direction = -1;

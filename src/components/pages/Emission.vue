@@ -103,9 +103,11 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
+import { handle403 } from '../mixins/handle403';
 import { Emission } from '@/store/class/general/emission';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { AxiosError } from 'axios';
 const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
@@ -126,7 +128,7 @@ export default defineComponent({
     LiveHorizontalList,
     ClassicLoading
   },
-  mixins: [displayMethods],
+  mixins: [displayMethods, handle403],
   props: {
     emissionId: { default: undefined, type: Number},
     isEducation: { default: false, type: Boolean},
@@ -220,6 +222,9 @@ export default defineComponent({
       }
       return count;
     },
+    filterOrga(): string {
+      return this.$store.state.filter.organisationId;
+    },
   },
   watch: {
     emissionId(): void {
@@ -231,12 +236,20 @@ export default defineComponent({
     this.getEmissionDetails();
   },
   methods: {
+    initError():void{
+      this.error = true;
+      this.loaded = true;
+    },
     async getEmissionDetails(): Promise<void> {
       this.loaded = false;
       this.error = false;
       try {
         const data: Emission = await octopusApi.fetchEmission(this.emissionId);
         this.emission = data;
+        if(this.emission.orga.private && this.filterOrga!==this.emission.orga.id){
+          this.initError();
+          return;
+        }
         this.$emit('emissionTitle', this.name);
         this.loaded = true;
         if (!this.emission.annotations) return;
@@ -252,9 +265,9 @@ export default defineComponent({
           this.notExclusive =
             'true' === this.emission.annotations.notExclusive ? true : false;
         }
-      } catch {
-        this.error = true;
-        this.loaded = true;
+      } catch(error) {
+        this.handle403((error as AxiosError));
+        this.initError();
       }
     },
     fetch(/* podcasts */) {

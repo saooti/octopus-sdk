@@ -33,11 +33,13 @@
 </template>
 
 <script lang="ts">
+import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import ParticipantItem from './ParticipantItem.vue';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Participant } from '@/store/class/general/participant';
 import { defineComponent } from 'vue'
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'ParticipantList',
 
@@ -45,6 +47,9 @@ export default defineComponent({
     ParticipantItem,
     ClassicLoading
   },
+
+  mixins: [handle403],
+
   props: {
     first: { default: 0, type: Number },
     size: { default: 12, type: Number },
@@ -99,25 +104,29 @@ export default defineComponent({
       if (reset) {
         this.dfirst = 0;
       }
-      const data = await octopusApi.fetchParticipants({
-        first: this.dfirst,
-        size: this.dsize,
-        query: this.query,
-        organisationId: this.organisation,
-      });
-      if (reset) {
-        this.participants.length = 0;
-        this.dfirst = 0;
-      }
-      this.displayCount = data.count;
-      this.participants = this.participants.concat(data.result).filter((p: Participant | null) => {
-        if (null === p) {
-          this.displayCount--;
+      try {
+        const data = await octopusApi.fetchParticipants({
+          first: this.dfirst,
+          size: this.dsize,
+          query: this.query,
+          organisationId: this.organisation,
+        });
+        if (reset) {
+          this.participants.length = 0;
+          this.dfirst = 0;
         }
-        return null !== p;
-      });
-      this.dfirst += this.dsize;
-      this.totalCount = data.count;
+        this.displayCount = data.count;
+        this.participants = this.participants.concat(data.result).filter((p: Participant | null) => {
+          if (null === p) {
+            this.displayCount--;
+          }
+          return null !== p;
+        });
+        this.dfirst += this.dsize;
+        this.totalCount = data.count;
+      } catch (error) {
+        this.handle403((error as AxiosError));
+      }
       this.loading = false;
     },
   },

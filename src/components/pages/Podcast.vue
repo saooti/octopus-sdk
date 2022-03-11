@@ -103,11 +103,12 @@ import { state } from '../../store/paramStore';
 import moment from 'moment';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
-
+import { handle403 } from '../mixins/handle403';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import CommentSectionVue from '../display/comments/CommentSection.vue';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { Category } from '@/store/class/general/category';
+import { AxiosError } from 'axios';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
@@ -129,6 +130,8 @@ export default defineComponent({
     PodcastModuleBox,
     ClassicLoading
   },
+
+  mixins: [handle403],
 
   props: {
     updateStatus: { default: undefined, type: String},
@@ -266,6 +269,9 @@ export default defineComponent({
       if(!this.podcast){return "";}
       return moment(this.podcast.pubDate).diff(moment(), 'seconds').toString();
     },
+    filterOrga(): string {
+      return this.$store.state.filter.organisationId;
+    },
   },
   watch: {
     updateStatus(): void {
@@ -314,9 +320,17 @@ export default defineComponent({
     updatePodcast(podcastUpdated: Podcast): void {
       this.podcast = podcastUpdated;
     },
+    initError():void{
+      this.error = true;
+      this.loaded = true;
+    },
     async getPodcastDetails(podcastId: number): Promise<void> {
       try {
         const data : Podcast = await octopusApi.fetchPodcast(podcastId.toString());
+        if(data.organisation.private && this.filterOrga!==data.organisation.id){
+          this.initError();
+          return;
+        }
         this.podcast = data;
         this.$emit('podcastTitle', this.podcast.title);
         if (
@@ -350,9 +364,9 @@ export default defineComponent({
           this.error = true;
         }
         this.loaded = true;
-      } catch {
-        this.error = true;
-        this.loaded = true;
+      } catch(error) {
+        this.handle403((error as AxiosError));
+        this.initError();
       }
     },
     removeDeleted(): void {

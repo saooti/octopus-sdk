@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
@@ -47,6 +48,7 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 import { FetchParam } from '@/store/class/general/fetchParam';
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'PodcastList',
 
@@ -54,6 +56,8 @@ export default defineComponent({
     PodcastItem,
     ClassicLoading
   },
+
+  mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number},
@@ -174,8 +178,12 @@ export default defineComponent({
       if (this.notValid && !this.isProduction) {
         param.publisherId = this.$store.state.profile.userId;
       }
-      const data = await octopusApi.fetchPodcasts(param);
-      this.afterFetching(reset, data);
+      try {
+        const data = await octopusApi.fetchPodcasts(param);
+        this.afterFetching(reset, data);
+      } catch (error) {
+        this.handle403((error as AxiosError));
+      }
     },
     afterFetching(reset: boolean, data:  {count: number, result: Array<Podcast>, sort: string}): void {
       if (reset) {

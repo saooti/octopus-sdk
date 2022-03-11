@@ -71,18 +71,22 @@ import octopusApi from '@saooti/octopus-api';
 import domHelper from '../../../helper/dom';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
 import { state } from '../../../store/paramStore';
-
+import { handle403 } from '../../mixins/handle403';
 const PHONE_WIDTH = 960;
 
 import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'EmissionInlineList',
 
   components: {
     EmissionPlayerItem,
   },
+
+  mixins: [handle403],
+
   props: {
     organisationId: { default: undefined, type: String},
     href: { default: undefined, type: String},
@@ -157,35 +161,30 @@ export default defineComponent({
   },
   methods: {
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchEmissions({
-        first: this.first,
-        size: this.size + 1,
-        organisationId: this.organisationId,
-        rubriqueId: this.rubriqueId ?  [this.rubriqueId] : [],
-        rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
-        sort: 'LAST_PODCAST_DESC',
-      });
-      this.loading = false;
-      this.loaded = true;
-      this.totalCount = data.count;
-      /* if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
-        data.result.sort((a, b)=>{
-          if (a.rubriqueIds[0] === state.emissionsPage.mainRubrique)
-            return 1;
-          if (b.rubriqueIds[0] === state.emissionsPage.mainRubrique)
-            return -1;
-          return 0;
+      try {
+        const data = await octopusApi.fetchEmissions({
+          first: this.first,
+          size: this.size + 1,
+          organisationId: this.organisationId,
+          rubriqueId: this.rubriqueId ?  [this.rubriqueId] : [],
+          rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
+          sort: 'LAST_PODCAST_DESC',
         });
-      } */
-      if (this.allEmissions.length + data.result.length < this.totalCount) {
-        const nexEl = data.result.pop() as Emission;
-        this.preloadImage(nexEl.imageUrl ? nexEl.imageUrl : "");
+        this.loading = false;
+        this.loaded = true;
+        this.totalCount = data.count;
+        if (this.allEmissions.length + data.result.length < this.totalCount) {
+          const nexEl = data.result.pop() as Emission;
+          this.preloadImage(nexEl.imageUrl ? nexEl.imageUrl : "");
+        }
+        this.allEmissions = this.allEmissions.concat(data.result);
+        if (this.allEmissions.length <= 3) {
+          this.alignLeft = true;
+        }
+        this.first += this.size;
+      } catch (error) {
+        this.handle403((error as AxiosError));
       }
-      this.allEmissions = this.allEmissions.concat(data.result);
-      if (this.allEmissions.length <= 3) {
-        this.alignLeft = true;
-      }
-      this.first += this.size;
     },
     displayPrevious(): void {
       this.direction = -1;

@@ -53,8 +53,10 @@ import PodcastList from '../display/playlist/PodcastList.vue';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
+import { handle403 } from '../mixins/handle403';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { AxiosError } from 'axios';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
@@ -66,7 +68,7 @@ export default defineComponent({
     SharePlayer,
     ClassicLoading
   },
-  mixins:[displayMethods],
+  mixins:[displayMethods, handle403],
   props: {
     playlistId: { default: undefined, type: Number},
     isEducation: { default: false, type: Boolean},
@@ -117,6 +119,9 @@ export default defineComponent({
       }
       return false;
     },
+    filterOrga(): string {
+      return this.$store.state.filter.organisationId;
+    },
   },
   watch: {
     playlistId() {
@@ -128,15 +133,24 @@ export default defineComponent({
     this.getPlaylistDetails();
   },
   methods: {
+    initError():void{
+      this.error = true;
+      this.loaded = true;
+    },
     async getPlaylistDetails(): Promise<void> {
       try {
         this.loaded = false;
         this.error = false;
         const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
         this.playlist = data;
+        if(this.playlist.organisation.private && this.filterOrga!==this.playlist.organisation.id){
+          this.initError();
+          return;
+        }
         this.$emit('playlistTitle', this.playlist.title);
-      } catch {
-        this.error = true;
+      } catch(error) {
+        this.handle403((error as AxiosError));
+        this.initError();
       }
       this.loaded = true;
     },

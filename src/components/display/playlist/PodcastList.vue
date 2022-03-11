@@ -56,6 +56,7 @@
 </template>
 
 <script lang="ts">
+import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
@@ -64,6 +65,7 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
+import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'PodcastList',
 
@@ -72,6 +74,8 @@ export default defineComponent({
     ClassicSearch,
     ClassicLoading
   },
+
+  mixins: [handle403],
 
   props: {
     playlist: { default: ()=>({}), type: Object as ()=>Playlist},
@@ -144,22 +148,26 @@ export default defineComponent({
       this.podcasts.length = 0;
       this.loading = true;
       this.loaded = false;
-      const content = await octopusApi.fetchPlaylistContent(
-        this.playlist.playlistId.toString()
-      );
-      for (let index = 0, len = content.length; index < len; index++) {
-        content[index].order = this.playlist.podcasts[content[index].podcastId];
+      try {
+        const content = await octopusApi.fetchPlaylistContent(
+          this.playlist.playlistId.toString()
+        );
+        for (let index = 0, len = content.length; index < len; index++) {
+          content[index].order = this.playlist.podcasts[content[index].podcastId];
+        }
+        this.podcasts = content;
+        if (!this.editRight) {
+          this.podcasts = this.podcasts.filter((p: Podcast|null) => {
+            return (
+              null !== p &&
+              (!p.availability || true === p.availability.visibility)
+            );
+          });
+        }
+        this.podcastsQuery = this.podcasts;
+      } catch (error) {
+        this.handle403((error as AxiosError));
       }
-      this.podcasts = content;
-      if (!this.editRight) {
-        this.podcasts = this.podcasts.filter((p: Podcast|null) => {
-          return (
-            null !== p &&
-            (!p.availability || true === p.availability.visibility)
-          );
-        });
-      }
-      this.podcastsQuery = this.podcasts;
       this.loading = false;
       this.loaded = true;
     },

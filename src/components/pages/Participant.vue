@@ -82,9 +82,11 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
+import { handle403 } from '../mixins/handle403';
 import { Participant } from '@/store/class/general/participant';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { AxiosError } from 'axios';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const PodcastFilterList = defineAsyncComponent(() => import('../display/podcasts/PodcastFilterList.vue'));
 const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
@@ -97,7 +99,7 @@ export default defineComponent({
     PodcastList,
     ClassicLoading
   },
-  mixins: [displayMethods],
+  mixins: [displayMethods, handle403],
   props: {
     participantId: { default: undefined, type: Number},
   },
@@ -160,6 +162,9 @@ export default defineComponent({
       }
       return false;
     },
+    filterOrga(): string {
+      return this.$store.state.filter.organisationId;
+    },
   },
   watch: {
     participant: {
@@ -173,16 +178,24 @@ export default defineComponent({
     this.getParticipantDetails();
   },
   methods: {
+    initError():void{
+      this.error = true;
+      this.loaded = true;
+    },
     async getParticipantDetails(): Promise<void> {
       this.loaded = false;
       try {
         const data = await octopusApi.fetchParticipant(this.participantId ? this.participantId.toString(): "");
+        if(data && data.orga && data.orga.private && this.filterOrga!==data.orga.id){
+          this.initError();
+          return;
+        }
         this.participant = data;
         this.$emit('participantTitle', this.name);
         this.loaded = true;
-      } catch {
-        this.error = true;
-        this.loaded = true;
+      } catch(error) {
+        this.handle403((error as AxiosError));
+        this.initError();
       }
     },
     updateParticipant(participant: Participant): void {
