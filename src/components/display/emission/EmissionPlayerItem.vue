@@ -50,11 +50,23 @@
     <div
       v-for="p in podcasts"
       :key="p.podcastId"
-      class="border-top emission-item-border-color p-2 secondary-bg d-flex"
+      class="border-top emission-item-border-color p-2 secondary-bg d-flex flex-column"
     >
+      <router-link
+        v-if="isProgressBar"
+        :to="{
+          name: 'podcast',
+          params: { podcastId: p.podcastId },
+          query: { productor: $store.state.filter.organisationId },
+        }"
+        class="text-dark fw-bold two-line-clamp"
+      >
+        {{ p.title }}
+      </router-link>
       <div class="d-flex justify-content-between flex-grow-1">
         <div class="d-flex flex-column">
           <router-link
+            v-if="!isProgressBar"
             :to="{
               name: 'podcast',
               params: { podcastId: p.podcastId },
@@ -153,6 +165,9 @@ export default defineComponent({
   },
   
   computed: {
+    isProgressBar(): boolean{
+      return (state.emissionsPage.progressBar as boolean);
+    },
     buttonMore(): boolean {
       return (state.emissionsPage.buttonMore as boolean);
     },

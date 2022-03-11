@@ -560,7 +560,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.61 Page podcast -> init recherche
  * 30.0.62 Italian translation
  * 30.0.63 Italian translation
- 
+ * 30.0.64 Modif Le soir
+
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
-

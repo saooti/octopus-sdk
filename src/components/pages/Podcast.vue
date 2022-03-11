@@ -1,14 +1,16 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <h1 v-if="!isOuestFrance">
-        {{ titlePage }}
-      </h1>
-      <Countdown
-        v-if="isCounter"
-        :time-remaining="timeRemaining"
-      />
-      <div class="d-flex">
+      <div class="page-podcast-title">
+        <h1 v-if="!isOuestFrance">
+          {{ titlePage }}
+        </h1>
+        <Countdown
+          v-if="isCounter"
+          :time-remaining="timeRemaining"
+        />
+      </div>
+      <div class="d-flex page-podcast">
         <div class="d-flex flex-column flex-super-grow">
           <RecordingItemButton
             v-if="
