@@ -185,9 +185,7 @@ export interface OctopusApi{
   oAuthParam?: {
     accessToken: string,
     refreshToken: string,
-    accessTokenUri: string,
     expiration: string,
-    clientId: string,
   },
   rubriqueIdFilter?: Array<number>,
 }

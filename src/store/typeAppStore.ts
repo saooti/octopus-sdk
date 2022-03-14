@@ -138,8 +138,6 @@ export function emptyPodcastData(): Podcast{
     oAuthParam: {
         accessToken: string | undefined;
         refreshToken: string | undefined;
-        accessTokenUri: string | undefined;
-        clientId: string | undefined;
         expiration: number | undefined;
     };
     media: Media;
@@ -250,8 +248,6 @@ export function emptyPodcastData(): Podcast{
           oAuthParam: {
             accessToken: undefined ,
             refreshToken: undefined ,
-            accessTokenUri: undefined ,
-            clientId: undefined ,
             expiration:undefined
           },
           media: {
