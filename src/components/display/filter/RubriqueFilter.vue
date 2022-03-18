@@ -229,7 +229,7 @@ export default defineComponent({
       }
       const queries = this.$route.query;
       if (queries.rubriquesId) {
-        this.$router.push({ query: {...queries, ...{rubriquesId: undefined} } });
+        this.$router.replace({ query: {...queries, ...{rubriquesId: undefined} } });
       }
       this.$store.commit('filterRubrique', []);
     }

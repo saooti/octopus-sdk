@@ -122,7 +122,7 @@ export default defineComponent({
         this.$store.commit('filterRubrique', filter);
         const queries = this.$route.query;
         const queryString = filter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
-        this.$router.push({ query: { ...queries, ...{ rubriquesId: queryString }} });
+        this.$router.replace({ query: { ...queries, ...{ rubriquesId: queryString }} });
       }
     },
     getRubriques(rubriquageId: number): Array<Rubrique>{
@@ -138,7 +138,7 @@ export default defineComponent({
       const queries = this.$route.query;
       if(this.categoryFilter){
         if (queries.iabId) {
-          this.$router.push({ query: {...queries, ...{iabId: undefined} } });
+          this.$router.replace({ query: {...queries, ...{iabId: undefined} } });
         }
         this.$store.commit('filterIab', undefined);
       }else{
@@ -147,9 +147,9 @@ export default defineComponent({
         if (queries.rubriquesId) {
           const queryString = newFilter.map(value => value.rubriquageId+':'+value.rubriqueId).join();
           if("" !== queryString){
-            this.$router.push({ query: { ...queries, ...{ rubriquesId: queryString }} });
+            this.$router.replace({ query: { ...queries, ...{ rubriquesId: queryString }} });
           }else{
-            this.$router.push({ query: { ...queries, ...{ rubriquesId: undefined }} });
+            this.$router.replace({ query: { ...queries, ...{ rubriquesId: undefined }} });
           }
         }
         this.$store.commit('filterRubrique', newFilter);

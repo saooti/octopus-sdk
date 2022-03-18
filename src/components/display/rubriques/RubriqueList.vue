@@ -130,7 +130,7 @@ export default defineComponent({
       this.$store.commit('filterRubrique', newFilter);
       const queries = this.$route.query;
       const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
-      this.$router.push({ query: { ...queries, ...{ rubriquesId: queryString }} });
+      this.$router.replace({ query: { ...queries, ...{ rubriquesId: queryString }} });
       this.selectNewRubriquage();
     },
     selectNewRubriquage(){

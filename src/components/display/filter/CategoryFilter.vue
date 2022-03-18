@@ -105,7 +105,7 @@ export default defineComponent({
       }
       const queries = this.$route.query;
       if (queries.iabId) {
-        this.$router.push({ query: {...queries, ...{iabId: undefined} } });
+        this.$router.replace({ query: {...queries, ...{iabId: undefined} } });
       }
       this.$store.commit('filterIab', undefined);
     }

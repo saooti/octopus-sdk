@@ -139,7 +139,7 @@ export default defineComponent({
       }
       const queries = this.$route.query;
       if(!queries.iabId || ('string'===typeof queries.iabId &&  parseInt(queries.iabId ,10) !== category.id)) {
-        this.$router.push({ query: { ...queries, ...{ iabId: category.id.toString() }} });
+        this.$router.replace({ query: { ...queries, ...{ iabId: category.id.toString() }} });
       }
       this.$store.commit('filterIab',category);
     },

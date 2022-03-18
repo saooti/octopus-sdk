@@ -562,9 +562,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.63 Italian translation
  * 30.0.64 Modif Le soir
  * 30.0.65 OAuthType
+ * 30.0.66 ScrollBehavior
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
  * 31.0.2 Gestion des 403
  * 31.0.3 Merge 30
 
+
+ 
