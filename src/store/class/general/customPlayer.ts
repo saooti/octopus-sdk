@@ -4,5 +4,6 @@ export interface CustomPlayer{
   template: string,
   css: string,
   typePlayer: string,
-  name: string
+  name: string,
+  selected: boolean,
 }

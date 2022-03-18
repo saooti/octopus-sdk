@@ -48,6 +48,8 @@
 </template>
 
 <script lang="ts">
+import { state } from '../../../store/paramStore';
+import octopusApi from '@saooti/octopus-api';
 import { Podcast } from '@/store/class/general/podcast';
 import { CustomPlayer } from '@/store/class/general/customPlayer';
 import { defineComponent } from 'vue';
@@ -58,12 +60,21 @@ export default defineComponent({
     podcast: { default: undefined, type: Object as ()=> Podcast},
     emission: { default: undefined, type: Object as ()=> Emission},
     playlist: { default: undefined, type: Object as ()=> Playlist},
-    customPlayers: { default: ()=>[], type: Array as ()=> Array<CustomPlayer>},
     iFrameModel: { default: 'default', type: String},
+    organisationId: { default: undefined, type: String},
   },
   emits:['update:iFrameModel'],
 
+  data() {
+    return {
+      customPlayers: [] as Array<CustomPlayer>,
+    };
+  },
+
   computed: {
+    authenticated(): boolean {
+      return (state.generalParameters.authenticated as boolean);
+    },
     customPlayersDisplay(): Array<CustomPlayer>{
       return this.customPlayers.filter((player: CustomPlayer)=>{
         return (('EPISODE' === player.typePlayer ||'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
@@ -71,5 +82,41 @@ export default defineComponent({
       });
     },
   },
+   async created() {
+    await this.initCustomPlayers();
+  },
+
+  methods: {
+    async fetchCustomPlayers(type:string, trySelect: boolean): Promise<boolean>{
+      let players = await octopusApi.fetchCustomPlayer('customPlayer/type/'+ this.organisationId+'/'+type);
+      let playersContent = players.content;
+      const totalCount = players.totalElements;
+      let index = 1;
+      while (totalCount > playersContent.length) {
+        players =  await octopusApi.fetchCustomPlayer('customPlayer/type/'+ this.organisationId+'/'+type+'?start='+index);
+        playersContent = playersContent.concat(players.content);
+        ++index;
+      }
+      this.customPlayers = this.customPlayers.concat(playersContent);
+      if(trySelect && this.customPlayers[0] && this.customPlayers[0].selected){
+        this.$emit('update:iFrameModel',this.customPlayers[0].customId);
+        return false;
+      }
+      return true;
+    },
+    async initCustomPlayers(): Promise<void> {
+      if (!this.authenticated) return;
+      if(this.playlist){
+        this.fetchCustomPlayers('PLAYLIST', true);
+      }else if(this.emission  && !this.podcast){
+        this.fetchCustomPlayers('EMISSION', true);
+      }else{
+        let playerTrySelect = true;
+        playerTrySelect = await this.fetchCustomPlayers('EPISODE', playerTrySelect);
+        playerTrySelect = await this.fetchCustomPlayers('EMISSION', playerTrySelect);
+        playerTrySelect = await this.fetchCustomPlayers('SUGGESTION', playerTrySelect);
+      }
+    },
+  }
 })
 </script>

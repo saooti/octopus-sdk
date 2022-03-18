@@ -33,7 +33,7 @@
               :podcast="podcast"
               :emission="emission"
               :playlist="playlist"
-              :custom-players="customPlayers"
+              :organisation-id="organisationId"
             />
           </div>
           <SharePlayerColors
@@ -82,7 +82,6 @@ import octopusApi from '@saooti/octopus-api';
 import { Podcast } from '@/store/class/general/podcast';
 import { Emission } from '@/store/class/general/emission';
 import { Playlist } from '@/store/class/general/playlist';
-import { CustomPlayer } from '@/store/class/general/customPlayer';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
 const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
@@ -119,7 +118,6 @@ export default defineComponent({
       iFrameNumber: '3' as string,
       isVisible: false as boolean,
       displayArticle: true as boolean,
-      customPlayers: [] as Array<CustomPlayer>,
       colors: ['#000000', '#ffffff'],
     };
   },
@@ -332,15 +330,6 @@ export default defineComponent({
         this.theme = data.THEME;
       } else {
         this.theme = '#000000';
-      }
-      let dataFetched = await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId);
-      this.customPlayers = dataFetched.content;
-      const totalCount = dataFetched.totalElements;
-      let index = 1;
-      while (totalCount > this.customPlayers.length) {
-        dataFetched =  await octopusApi.fetchCustomPlayer('customPlayer/organisation/'+ this.organisationId+'?start='+index);
-        this.customPlayers = this.customPlayers.concat(dataFetched.content);
-        ++index;
       }
     },
     updateEpisodeNumber(value: string): void {

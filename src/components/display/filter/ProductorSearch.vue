@@ -118,11 +118,17 @@ export default defineComponent({
       });
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
-        this.showBubble = true;
-        setTimeout(() => {
-          this.showBubble = false;
-        }, 6000);
         this.$emit('updateOrganisationId', organisation.id);
+        if(organisation.private){
+          this.$nextTick(() => {
+            this.onKeepOrganisation();
+          });
+        } else{
+          this.showBubble = true;
+          setTimeout(() => {
+            this.showBubble = false;
+          }, 6000);
+        }
       } else {
         this.$emit('updateOrganisationId', undefined);
       }

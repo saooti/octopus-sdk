@@ -49,9 +49,9 @@
     <router-link
       class="btn btn-link align-self-center width-fit-content m-4"
       :to="{
-          name: 'playlist',
-          params: { playlistId: playlistId.toString() },
-        }"
+        name: 'playlist',
+        params: { playlistId: playlistId.toString() },
+      }"
     >
       {{ $t('See more') }}
       <div
