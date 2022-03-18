@@ -568,6 +568,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.1 Ajout pocket casts
  * 31.0.2 Gestion des 403
  * 31.0.3 Merge 30
+ * 31.0.4 Selection des customPlayers
 
 
  
