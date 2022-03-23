@@ -147,23 +147,30 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-.player-grow-content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 1;
-  overflow: hidden;
-  font-size: 0.8rem;
-  .progress {
-    height: 4px;
-    position: relative;
-  }
-  .progress-bar-duration {
-    width: 10px;
-  }
-  .progress-bar {
-    height: 4px;
-    position: absolute;
+  .player-grow-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    font-size: 0.8rem;
+    .progress {
+      height: 4px;
+      position: relative;
+      @media (max-width: 960px) {
+        height: 8px;
+      }
+    }
+    .progress-bar-duration {
+      width: 10px;
+    }
+    .progress-bar {
+      height: 4px;
+      position: absolute;
+      @media (max-width: 960px) {
+        height: 8px;
+      }
+    }
   }
 }
 }

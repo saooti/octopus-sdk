@@ -128,10 +128,7 @@ export default defineComponent({
       return (state.podcastsPage.podcastBorderBottom as boolean);
     },
     date(): string {
-      if('fr' === this.$i18n.locale){
-        return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
-      }
-      return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
+      return moment(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
     },
     displayDate(): string {
       return moment(this.podcast.pubDate).format('X');

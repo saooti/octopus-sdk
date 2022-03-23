@@ -214,10 +214,7 @@ export default defineComponent({
     },
     date(): string {
       if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){
-        if('fr' === this.$i18n.locale){
-          return moment(this.podcast.pubDate).format('D MMMM YYYY [à] HH[h]mm');
-        }
-        return moment(this.podcast.pubDate).format('D MMMM YYYY [at] HH[h]mm');
+        return moment(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
       }
       return '';
     },

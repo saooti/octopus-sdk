@@ -136,13 +136,13 @@ export default defineComponent({
     sortText(): string {
       switch (this.sort) {
         case 'SCORE':
-          return this.$t('sort by score').toString();
+          return " "+this.$t('sort by score').toString();
         case 'LAST_PODCAST_DESC':
-          return this.$t('sort by date').toString();
+          return " "+this.$t('sort by date').toString();
         case 'NAME':
-          return this.$t('sort by alphabetical').toString();
+          return " "+this.$t('sort by alphabetical').toString();
         default:
-          return this.$t('sort by date').toString();
+          return " "+this.$t('sort by date').toString();
       }
     },
     filterOrga(): string {

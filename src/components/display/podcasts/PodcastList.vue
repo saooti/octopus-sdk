@@ -122,13 +122,13 @@ export default defineComponent({
     sortText(): string {
       switch (this.sortCriteria) {
         case 'SCORE':
-          return this.$t('sort by score').toString();
+          return " "+this.$t('sort by score').toString();
         case 'DATE':
-          return this.$t('sort by date').toString();
+          return " "+this.$t('sort by date').toString();
         case 'NAME':
-          return this.$t('sort by alphabetical').toString();
+          return " "+this.$t('sort by alphabetical').toString();
         default:
-          return this.$t('sort by date').toString();
+          return " "+this.$t('sort by date').toString();
       }
     },
     isProduction(): boolean {

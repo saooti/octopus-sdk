@@ -81,14 +81,14 @@
             >
               {{ $t('TutoMag') }}
             </a>
-            <hr class="dropdown-divider">
-            <a
-              class="dropdown-item"
-              href="/sso/logout"
-            >
-              {{ $t('Logout') }}
-            </a>
           </template>
+          <hr class="dropdown-divider">
+          <a
+            class="dropdown-item"
+            href="/sso/logout"
+          >
+            {{ $t('Logout') }}
+          </a>
         </template>
       </div>
     </div>

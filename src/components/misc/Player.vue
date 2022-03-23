@@ -25,7 +25,7 @@
       </div>
       <div
         v-if="display"
-        class="d-flex align-items-center flex-grow-1 px-5"
+        class="d-flex align-items-center flex-grow-1 ps-2"
       >
         <audio
           id="audio-player"

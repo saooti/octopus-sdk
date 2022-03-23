@@ -89,6 +89,12 @@
                 background: transparent;
                 color: $octopus-primary-dark;
             }
+            &:disabled{
+                background-color: #cccccc;
+                border: black;
+                cursor: default;
+                color: gray;
+            }
             @media (max-width: 500px){
             margin: 0.3rem;
             }
