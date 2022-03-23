@@ -173,5 +173,4 @@ export default defineComponent({
     }
   }
 }
-}
 </style>
