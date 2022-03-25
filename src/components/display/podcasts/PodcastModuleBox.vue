@@ -139,12 +139,6 @@
               :message="$t('Podcast not validated')"
             />
           </div>
-          <ShareButtons
-            v-if="isDownloadButton"
-            :podcast="podcast"
-            :big-round="true"
-            :audio-url="podcast.audioUrl"
-          />
         </div>
       </div>
     </div>
@@ -168,14 +162,12 @@ import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
-const ShareButtons = defineAsyncComponent(() => import('../sharing/ShareButtons.vue'));
 const ErrorMessage = defineAsyncComponent(() => import('../../misc/ErrorMessage.vue'));
 export default defineComponent({
   name: "PodcastModuleBox",
   components: {
     PodcastImage,
     ParticipantDescription,
-    ShareButtons,
     TagList,
     ErrorMessage,
     PodcastPlayBar
@@ -208,9 +200,6 @@ export default defineComponent({
     },
     isOuestFrance(): boolean {
       return (state.podcastPage.ouestFranceStyle as boolean);
-    },
-    isDownloadButton(): boolean {
-      return (state.podcastPage.downloadButton as boolean);
     },
     date(): string {
       if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){

@@ -41,7 +41,7 @@ export default{
   Cancel: 'Cancel',
   'Most popular': 'Most popular',
   'Last added': 'Last added',
-  'All podcast button': 'All the podcast of "{name}"',
+  'All podcast button': 'All the podcasts of "{name}"',
   'Podcast search': 'Search in the podcasts',
   'No podcast match your query':
     'No podcast matches your query',

@@ -8,17 +8,17 @@
       <div class="d-flex">
         <button
           class="btn btn-underline"
-          :class="{ active: popularSort }"
-          @click="sortPopular()"
-        >
-          {{ $t('Most popular') }}
-        </button>
-        <button
-          class="btn btn-underline"
           :class="{ active: !popularSort }"
           @click="sortChrono()"
         >
           {{ $t('Last added') }}
+        </button>
+        <button
+          class="btn btn-underline"
+          :class="{ active: popularSort }"
+          @click="sortPopular()"
+        >
+          {{ $t('Most popular') }}
         </button>
       </div>
       <div
@@ -68,6 +68,7 @@
     <router-link
       class="btn btn-link align-self-center width-fit-content m-4"
       :to="refTo"
+      @click="handleSeeMoreButton"
     >
       {{ buttonText }}
       <div
@@ -91,6 +92,7 @@ import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 import { RouteLocationRaw } from 'vue-router';
 import { AxiosError } from 'axios';
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 export default defineComponent({
   name: 'PodcastInlineList',
   
@@ -126,7 +128,7 @@ export default defineComponent({
       first: 0 as number,
       size: 5 as number,
       totalCount: 0 as number,
-      popularSort: true as boolean,
+      popularSort: false as boolean,
       allPodcasts: [] as Array<Podcast>,
       direction: 1 as number,
       alignLeft: false as boolean,
@@ -214,6 +216,26 @@ export default defineComponent({
     this.fetchNext();
   },
   methods: {
+    handleSeeMoreButton(event: { preventDefault: () => void; }){
+      if(!this.rubriqueId || this.noRubriquageId.length){
+        return;
+      }
+      event.preventDefault();
+      const rubriqueChosenId = this.rubriqueId[this.rubriqueId.length - 1];
+      const rubriqueChosen =  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
+      const filterToAdd = {
+        rubriquageId: this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriquageId, 
+        rubriqueId: rubriqueChosenId, 
+        nameRubriquage:  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].title,
+        nameRubrique: rubriqueChosen.name
+      };
+      const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
+      newFilter.push(filterToAdd);
+      this.$store.commit('filterRubrique', newFilter);
+      const queries = this.$route.query;
+      const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
+      this.$router.push({ name: 'podcasts',query: { ...queries, ...{ rubriquesId: queryString }} });
+    },
     async fetchNext(): Promise<void> {
       try {
         const data = await octopusApi.fetchPodcasts({
