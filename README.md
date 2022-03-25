@@ -570,7 +570,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.71 Parlement européen
  * 30.0.72 Ajout des traductions
 
- 
+
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
  * 31.0.2 Gestion des 403
@@ -578,6 +578,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.4 Selection des customPlayers
  * 31.0.5 Merge 30
  * 31.0.6 Erreur de Merge 30
+ * 31.0.7 Sécurisation
 
 
 
