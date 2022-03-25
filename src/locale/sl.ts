@@ -282,7 +282,7 @@ export default{
   'Display my podcasts to validate': 'Prikaži moje podkaste za potrditev',
   'Podcast not validated': "Podkasti niso potrjeni",
   'Podcast to validate': 'Podkasti, ki jih je treba potrditi',
-  'Change locale': 'FR',
+  'Change locale': 'Spremenite jezik',
   'Refresh': 'Osveži',
   'See associated article':"Read the article",
   "Display associated article": "Prikaži povezan vir",

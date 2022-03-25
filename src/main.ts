@@ -19,12 +19,24 @@ const navigatorLang = navigator.language /* || navigator.userLanguage */;
 let language = 'fr';
 if(navigatorLang.includes('en')){
   language = 'en';
+}else if(navigatorLang.includes('it')){
+  language = 'it';
+}else if(navigatorLang.includes('sl')){
+  language = 'sl';
+}else if(navigatorLang.includes('es')){
+  language = 'es';
+}else if(navigatorLang.includes('de')){
+  language = 'de';
 }
 let messages: {[key: string]: LocaleMessage<VueMessageType>} = I18nResources;
 if (store.state.general.education) {
   messages = {
     fr: { ...I18nResources.fr, ...I18nResources.educationfr },
     en: { ...I18nResources.en, ...I18nResources.educationen },
+    it: I18nResources.it,
+    sl: I18nResources.it,
+    es: I18nResources.es,
+    de: I18nResources.de,
   };
 }
 const i18n = createI18n({

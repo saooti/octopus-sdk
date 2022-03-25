@@ -282,7 +282,7 @@ export default{
   'Display my podcasts to validate': 'Mostrar mis pódcast pendientes de validación',
   'Podcast not validated': "Pódcast no validado",
   'Podcast to validate': 'Pódcast pendiente de validación',
-  'Change locale': 'En français',
+  'Change locale': 'Cambiar el idioma',
   'Refresh': 'Volver a cargar',
   'See associated article':"Leer el artículo",
   "Display associated article":"Mostrar el artículo asociado",

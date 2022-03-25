@@ -92,12 +92,18 @@
               $t('Used libraries')
             }}
           </router-link>
-          <a
-            class="link-hover c-hand"
-            @click="changeLanguage"
-          >{{
-            $t('Change locale')
-          }}</a>
+          <ClassicSelect
+            v-model:textInit="language"
+            :display-label="false"
+            id-select="language-chooser-select"
+            :label="$t('Change locale')"
+            :options="[{title:'Deutsch', value:'de'},
+                       {title:'English', value:'en'},
+                       {title:'Español', value:'es'},
+                       {title:'Français', value:'fr'},
+                       {title:'Italiano', value:'it'},
+                       {title:'Slovenščina', value:'sl'}]"
+          />
         </div>
       </div>
       <hr class="show-phone">
@@ -136,6 +142,7 @@
 </template>
 
 <script lang="ts">
+import ClassicSelect from '../form/ClassicSelect.vue';
 import Player from './Player.vue';
 import { state } from '../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
@@ -147,7 +154,15 @@ export default defineComponent({
   name: 'Footer',
   components: {
     Player,
+    ClassicSelect
   },
+
+  data() {
+    return {
+      language: this.$i18n.locale as string,
+    };
+  },
+
 
   computed: {
     isPodcastmaker(): boolean {
@@ -167,6 +182,12 @@ export default defineComponent({
     },
   },
 
+  watch:{
+    language(){
+      this.changeLanguage();
+    }
+  },
+
   methods: {
     showBlackBorder(hide: boolean): void {
       const footerElement = document.getElementById('footer');
@@ -178,11 +199,7 @@ export default defineComponent({
       }
     },
     changeLanguage(): void{
-      if('fr'===this.$i18n.locale){
-        this.$i18n.locale= "en";
-      }else{
-        this.$i18n.locale= "fr";
-      }
+      this.$i18n.locale= this.language;
       moment.locale(this.$i18n.locale);
       octopusApi.fetchCategories({ lang: this.$i18n.locale }).then((data: Array<Category>) => {
         this.$store.commit('categoriesSet', data);

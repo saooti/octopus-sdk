@@ -56,6 +56,7 @@ import ClassicSearch from "./src/components/form/ClassicSearch.vue";
 import ClassicCheckbox from "./src/components/form/ClassicCheckbox.vue";
 import ClassicRadio from "./src/components/form/ClassicRadio.vue";
 import ClassicLoading from "./src/components/form/ClassicLoading.vue";
+import ClassicSelect from "./src/components/form/ClassicSelect.vue";
 
 //mixins
 import {selenium} from "./src/components/mixins/functions";
@@ -114,7 +115,8 @@ const components = {
     ClassicRadio,
     ClassicLoading,
     AdvancedSearch,
-    PodcastPlaylistInlineList
+    PodcastPlaylistInlineList,
+    ClassicSelect
 }
 
 export default components;
@@ -168,5 +170,6 @@ export {
     ClassicRadio,
     ClassicLoading,
     AdvancedSearch,
-    PodcastPlaylistInlineList
+    PodcastPlaylistInlineList,
+    ClassicSelect
 };

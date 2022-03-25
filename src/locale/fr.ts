@@ -282,7 +282,7 @@ export default{
   'Display my podcasts to validate': 'Afficher mes épisodes à valider',
   'Podcast not validated': "L'épisode n'est pas validé",
   'Podcast to validate': 'Épisode à valider',
-  'Change locale': 'In english',
+  'Change locale': 'Changer la langue',
   'Refresh': 'Rafraichir',
   'See associated article':"Lire l'article",
   "Display associated article":"Afficher l'article associé",

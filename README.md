@@ -579,6 +579,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.5 Merge 30
  * 31.0.6 Erreur de Merge 30
  * 31.0.7 Sécurisation
+ * 31.0.8 Dropdown Lang + classicSelect
 
 
 
