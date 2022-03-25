@@ -327,7 +327,7 @@ export default defineComponent({
     async getPodcastDetails(podcastId: number): Promise<void> {
       try {
         const data : Podcast = await octopusApi.fetchPodcast(podcastId.toString());
-        if(data.organisation.private && this.filterOrga!==data.organisation.id){
+        if("PUBLIC"!==data.organisation.privacy && this.filterOrga!==data.organisation.id){
           this.initError();
           return;
         }

@@ -82,7 +82,7 @@ export default defineComponent({
       const data = await octopusApi.fetchOrganisation(this.value);
       this.organisation = data;
       this.actual = data.id;
-      this.privateOrganisation = data.private??false;
+      this.privateOrganisation = "PUBLIC"!==data.privacy;
       this.init = true;
     },
   },

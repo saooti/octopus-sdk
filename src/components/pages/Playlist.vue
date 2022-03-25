@@ -143,7 +143,7 @@ export default defineComponent({
         this.error = false;
         const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
         this.playlist = data;
-        if(this.playlist.organisation.private && this.filterOrga!==this.playlist.organisation.id){
+        if("PUBLIC"!==this.playlist.organisation.privacy && this.filterOrga!==this.playlist.organisation.id){
           this.initError();
           return;
         }
