@@ -170,35 +170,15 @@ export default defineComponent({
       if (this.podcast.duration <= 1) return '';
       if (this.podcast.duration > 600000) {
         return humanizeDuration(this.podcast.duration, {
-          language: 'short'+this.$i18n.locale.charAt(0).toUpperCase() + this.$i18n.locale.slice(1),
+          language: 'short',
           largest: 1,
           round: true,
           languages: {
-            shortFr: {
-              y: () => 'années',
-              mo: () => 'mois',
-              w: () => 'semaines',
-              d: () => 'jours',
-              h: () => 'h',
-              m: () => 'min',
-              s: () => 'sec',
-              ms: () => 'ms',
-            },
-            shortEn: {
+            short: {
               y: () => 'years',
               mo: () => 'months',
               w: () => 'weeks',
               d: () => 'days',
-              h: () => 'h',
-              m: () => 'min',
-              s: () => 'sec',
-              ms: () => 'ms',
-            },
-            shortIt: {
-              y: () => 'anni',
-              mo: () => 'mesi',
-              w: () => 'settimane',
-              d: () => 'giorni',
               h: () => 'h',
               m: () => 'min',
               s: () => 'sec',
