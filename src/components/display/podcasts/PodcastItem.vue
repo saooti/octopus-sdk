@@ -31,78 +31,34 @@
       />
     <!-- eslint-enable -->
     </div>
-    <div
-      class="d-contents"
+    <PodcastItemInfo
+      :podcastId="podcast.podcastId"
+      :title="podcast.title"
+      :pubDate="podcast.pubDate"
+      :podcastOrganisationId="podcast.organisation.id"
+      :podcastOrganisationName="podcast.organisation.name"
+      :podcastOrder="podcast.order"
+      :duration="podcast.duration"
+      :animators="podcast.animators"
       @mouseenter="showDescription"
       @mouseleave="hideDescription"
-    >
-      <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-        <div class="me-3 small-text">
-          {{ date }}
-        </div>
-        <div
-          v-if="0 !== duration.length"
-          class="small-text"
-        >
-          {{ duration }}
-        </div>
-      </div>
-      <AnimatorsItem :animators="podcast.animators" />
-      <router-link
-        :to="{
-          name: 'podcast',
-          params: { podcastId: podcast.podcastId },
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="text-dark d-flex flex-column flex-grow-1"
-      >
-        <div class="title-podcast-item">
-          {{ title }}
-        </div>
-      </router-link>
-      <PodcastPlayBar
-        :podcast="podcast"
-        class="mx-2"
-      />
-      <div class="d-flex justify-content-between">
-        <router-link
-          v-if="!isPodcastmaker"
-          :to="{
-            name: 'productor',
-            params: { productorId: podcast.organisation.id },
-            query: { productor: $store.state.filter.organisationId },
-          }"
-          class="text-dark producer-podcast-item"
-        >
-          <div>{{ '© ' + podcast.organisation.name }}</div>
-        </router-link>
-        <span
-          v-if="editRight && podcast.order && podcast.order > 1"
-          class="saooti-star-bounty text-danger pe-2"
-        />
-      </div>
-    </div>
+    />
   </li>
 </template>
 
 <script lang="ts">
-import AnimatorsItem from './AnimatorsItem.vue';
+import PodcastItemInfo from './PodcastItemInfo.vue';
 import PodcastImage from './PodcastImage.vue';
 import { state } from '../../../store/paramStore';
 import moment from 'moment';
-// @ts-ignore
-import humanizeDuration from 'humanize-duration';
-import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
 import { Podcast } from '@/store/class/general/podcast';
-import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastItem',
   
   components: {
-    AnimatorsItem,
+    PodcastItemInfo,
     PodcastImage,
-    PodcastPlayBar
   },
 
   props: {
@@ -116,93 +72,24 @@ export default defineComponent({
       isDescriptionBig: false as boolean,
     };
   },
-  
+
   computed: {
-    isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
-    },
     podcastShadow(): boolean {
       return (state.podcastsPage.podcastShadow as boolean);
     },
     podcastBorderBottom(): boolean {
       return (state.podcastsPage.podcastBorderBottom as boolean);
     },
-    date(): string {
-      return moment(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
-    },
     displayDate(): string {
       return moment(this.podcast.pubDate).format('X');
-    },
-    category(): string {
-      const catIds = this.podcast.emission.iabIds;
-      return this.$store.state.categories
-        .filter((c: Category) => {
-          return catIds && catIds.includes(c.id);
-        })
-        .map((c: Category) => {
-          return c.name;
-        })
-        .join(', ');
     },
     description(): string {
       if (!this.podcast.description) return '';
       return this.podcast.description;
     },
-    title(): string {
-      return this.podcast.title;
-    },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-    editRight(): boolean {
-      if (
-        (this.authenticated &&
-          this.organisationId === this.podcast.organisation.id) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
-    },
-    duration(): string {
-      if (this.podcast.duration <= 1) return '';
-      if (this.podcast.duration > 600000) {
-        return humanizeDuration(this.podcast.duration, {
-          language: 'short',
-          largest: 1,
-          round: true,
-          languages: {
-            short: {
-              y: () => 'years',
-              mo: () => 'months',
-              w: () => 'weeks',
-              d: () => 'days',
-              h: () => 'h',
-              m: () => 'min',
-              s: () => 'sec',
-              ms: () => 'ms',
-            },
-          },
-        });
-      }
-      return humanizeDuration(this.podcast.duration, {
-        language: 'short',
-        largest: 2,
-        round: true,
-        languages: {
-          short: {
-            m: () => 'min',
-            s: () => 'sec',
-            ms: () => 'ms',
-          },
-        },
-      });
-    },
   },
 
-  mounted() {
+  created() {
     const podcastDesc = document.getElementById(
       'description-podcast-' + this.podcast.podcastId
     );
@@ -242,26 +129,7 @@ export default defineComponent({
   text-align: left;
   background: #fff;
   flex-shrink: 0;
-  .text-secondary {
-    margin: 0.5rem !important;
-  }
-  .saooti-star-bounty {
-    font-size: 22px;
-  }
-
-  .title-podcast-item {
-    font-weight: 700;
-    margin: 0.25rem 0.5rem 0.5rem;
-    overflow: hidden;
-    display: -webkit-box;
-    flex-grow: 1;
-    font-size: 0.7rem;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    min-height: 3rem;
-    line-height: 1rem;
-    word-break: break-word;
-  }
+ 
   .description-podcast-item {
     padding: 1rem;
     color: #333;
@@ -286,12 +154,6 @@ export default defineComponent({
       background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
     }
   }
-  .producer-podcast-item {
-    margin: 0.2rem 0.5rem 0.5rem;
-    font-size: 0.55rem;
-    color: #666;
-  }
-
   @media (max-width: 960px) {
     margin: 0.5rem !important;
   }

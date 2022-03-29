@@ -1,5 +1,6 @@
 <template>
-  <div 
+  <div
+    v-if="isInit"
     id="app"
     :key="reload"
     class="octopus-app"
@@ -45,27 +46,21 @@ export default defineComponent({
   data() {
     return {
       displayMenu: false as boolean,
-      initQueryRouter: false,
       reload: false as boolean,
+      isInit: false as boolean,
     };
   },
 
   watch: {
-    '$route': {
-      deep: true,
-      handler(){
-      if(!this.initQueryRouter){
-        this.initQueryRouter = true;
-        this.initApp();
-      }
-      }
-    },
     '$i18n.locale'(){
       this.$forceUpdate();
       this.reload = !this.reload;
     }
   },
-
+  async created(){
+    await this.initApp();
+    this.isInit =true;
+  },
   methods:{
     async initApp(){
       await this.initSdk();

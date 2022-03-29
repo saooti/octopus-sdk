@@ -36,7 +36,6 @@ export default defineComponent({
       visibleIndex: 0 as number,
     };
   },
-
    methods: {
     getAnimatorName(animator: Participant): string {
       const first = animator.firstName || '';

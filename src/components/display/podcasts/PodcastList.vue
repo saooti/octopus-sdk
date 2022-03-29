@@ -4,38 +4,39 @@
       :loading-text="loading?$t('Loading podcasts ...'):undefined"
       :error-text="loaded && !podcasts.length?$t(`No podcast match your query`):undefined"
     />
-    <div
-      v-if="showCount && loaded && podcasts.length > 1"
-      class="text-secondary mb-2"
-    >
-      {{ $t('Number podcasts', { nb: totalCount }) + sortText }}
-    </div>
-    <ul
-      v-show="loaded"
-      class="podcast-list"
-    >
-      <PodcastItem
-        v-for="p in podcasts"
-        :key="p.podcastId"
-        :podcast="p"
-      />
-    </ul>
-    <button
-      v-show="!allFetched && loaded"
-      class="btn"
-      :class="buttonPlus ? 'btn-link align-self-center width-fit-content m-4' : 'btn-more'"
-      :disabled="inFetching"
-      :title="$t('See more')"
-      @click="displayMore"
-    >
-      <template v-if="buttonPlus">
-        {{ $t('See more') }}
-      </template>
+    <template v-if="loaded">
       <div
-        :class="buttonPlus?'ms-1':''"
-        class="saooti-more"
-      />
-    </button>
+        v-if="showCount && podcasts.length > 1"
+        class="text-secondary mb-2"
+      >
+        {{ $t('Number podcasts', { nb: totalCount }) + sortText }}
+      </div>
+      <ul
+        class="podcast-list"
+      >
+        <PodcastItem
+          v-for="p in podcasts"
+          :key="p.podcastId"
+          :podcast="p"
+        />
+      </ul>
+      <button
+        v-show="!allFetched"
+        class="btn"
+        :class="buttonPlus ? 'btn-link align-self-center width-fit-content m-4' : 'btn-more'"
+        :disabled="inFetching"
+        :title="$t('See more')"
+        @click="displayMore"
+      >
+        <template v-if="buttonPlus">
+          {{ $t('See more') }}
+        </template>
+        <div
+          :class="buttonPlus?'ms-1':''"
+          class="saooti-more"
+        />
+      </button>
+    </template>
   </div>
 </template>
 
@@ -93,7 +94,7 @@ export default defineComponent({
       inFetching: false as boolean,
     };
   },
-  
+
   computed: {
     allFetched(): boolean {
       return this.dfirst >= this.totalCount;
@@ -144,8 +145,8 @@ export default defineComponent({
     },
   },
   
-  created() {
-    this.fetchContent(true);
+  async created() {
+    await this.fetchContent(true);
   },
   methods: {
     async fetchContent(reset: boolean): Promise<void> {
