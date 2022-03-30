@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="animators && 0 !== animators.length"
-    class="d-flex align-items-center justify-content-start"
+    class="d-flex align-items-center justify-content-start animators-item"
   >
     <router-link
       v-for="(animator, index) in animators"

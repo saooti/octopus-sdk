@@ -569,7 +569,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.70 Améliorations 30
  * 30.0.71 Parlement européen
  * 30.0.72 Ajout des traductions
-
+ * 30.0.73 Ajout classe css 
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
@@ -584,3 +584,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
  
+
