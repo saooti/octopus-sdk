@@ -12,13 +12,10 @@
       :title="$t('Playlist')"
       class="text-dark"
     >
-      <div
+      <img
+        v-lazy="playlist.imageUrl"
         class="img-box"
-        :style="{
-          'background-image':
-            'url(\'' + playlist.imageUrl + '?dummy=' + dummyParam + '\')',
-        }"
-      />
+      >
     </router-link>
     <div class="emission-item-text">
       <router-link

@@ -32,12 +32,12 @@
     <!-- eslint-enable -->
     </div>
     <PodcastItemInfo
-      :podcastId="podcast.podcastId"
+      :podcast-id="podcast.podcastId"
       :title="podcast.title"
-      :pubDate="podcast.pubDate"
-      :podcastOrganisationId="podcast.organisation.id"
-      :podcastOrganisationName="podcast.organisation.name"
-      :podcastOrder="podcast.order"
+      :pub-date="podcast.pubDate"
+      :podcast-organisation-id="podcast.organisation.id"
+      :podcast-organisation-name="podcast.organisation.name"
+      :podcast-order="podcast.order"
       :duration="podcast.duration"
       :animators="podcast.animators"
       @mouseenter="showDescription"

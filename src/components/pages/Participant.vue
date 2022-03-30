@@ -14,12 +14,10 @@
       <div
         class="d-flex flex-column align-items-center mb-3"
       >
-        <div
+        <img
+          v-lazy="participant.imageUrl"
           class="img-box-circle mb-3"
-          :style="{
-            'background-image': 'url(\'' + participant.imageUrl + '\')',
-          }"
-        />
+        >
         <h2 class="text-capitalize">
           {{ name }}
         </h2>

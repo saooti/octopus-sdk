@@ -2,8 +2,11 @@
   <div
     v-if="podcast"
     class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink-0 float-start"
-    :style="{ 'background-image': 'url(\'' + podcast.imageUrl + '\')' }"
   >
+    <img
+      v-lazy="podcast.imageUrl"
+      class="img-box"
+    >
     <template v-if="isPodcastmaker">
       <div
         :class="mainRubrique? 'mainRubrique' : 'notMainRubrique'"

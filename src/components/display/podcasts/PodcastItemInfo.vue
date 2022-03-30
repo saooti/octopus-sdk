@@ -25,7 +25,7 @@
       </div>
     </router-link>
     <PodcastPlayBar
-      :podcastId="podcastId"
+      :podcast-id="podcastId"
       :duration="duration"
       class="mx-2"
     />

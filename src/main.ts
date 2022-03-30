@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { VueReCaptcha } from 'vue-recaptcha-v3';
+import VueLazyLoad from 'vue3-lazyload';
 import App from './App.vue';
 import { createI18n, VueMessageType } from 'vue-i18n';
 import I18nResources from './locale/messages';
@@ -66,5 +67,6 @@ createApp(App)
 .use(i18n)
 .use(store)
 .use(router)
+.use(VueLazyLoad)
 .use(VueReCaptcha, { siteKey: '6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh' })
 .mount('#app');

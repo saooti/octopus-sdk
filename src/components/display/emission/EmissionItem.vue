@@ -11,10 +11,10 @@
       :title="$t('Emission')"
       class="d-flex text-dark"
     >
-      <div
+      <img
+        v-lazy="emission.imageUrl"
         class="img-box"
-        :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"
-      />
+      >
       <div class="emission-item-text">
         <div
           class="emission-name"

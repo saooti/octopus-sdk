@@ -44,8 +44,8 @@
         <div class="multiselect-octopus-proposition">
           <img
             v-if="!light"
+            v-lazy="option.imageUrl"
             class="option__image"
-            :src="option.imageUrl"
             :alt="option.name"
           >
           <span
@@ -64,8 +64,8 @@
         >
           <img
             v-if="!light"
+            v-lazy="option.imageUrl"
             class="option__image"
-            :src="option.imageUrl"
             :alt="option.name"
           >
           <span

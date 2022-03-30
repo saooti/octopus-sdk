@@ -18,11 +18,11 @@
       </div>
       <div
         class="img-box rounded-0"
-        :style="{
-          'background-image':
-            'url(\'' + emission.imageUrl + '?dummy=' + dummyParam + '\')',
-        }"
       >
+        <img
+          v-lazy="emission.imageUrl"
+          class="img-box rounded-0"
+        >
         <div
           v-if="titleInImage"
           class="titleInImage"

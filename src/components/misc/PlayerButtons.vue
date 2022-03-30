@@ -4,7 +4,7 @@
     :to="podcastShareUrl"
   >
     <img
-      :src="podcastImage"
+      v-lazy="podcastImage"
       :alt="$t('Podcast image')"
       class="player-image"
     >

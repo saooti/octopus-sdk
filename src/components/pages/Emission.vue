@@ -26,7 +26,7 @@
             <div class="mb-5 mt-3 descriptionText">
               <img
                 v-if="!isOuestFrance"
-                :src="imageUrl"
+                v-lazy="imageUrl"
                 :alt="$t('Emission name image', { name: name })"
                 class="img-box shadow-element float-start me-3 mb-3"
               >

@@ -12,10 +12,10 @@
       class="mt-3 text-dark"
       :title="$t('Participant')"
     >
-      <div
+      <img
+        v-lazy="participant.imageUrl"
         class="img-box-circle"
-        :style="{ 'background-image': 'url(\'' + participant.imageUrl + '\')' }"
-      />
+      >
       <div class="participant-name">
         <img
           v-if="!activeParticipant && !isPodcastmaker && editRight"
