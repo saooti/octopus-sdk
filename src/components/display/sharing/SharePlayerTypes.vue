@@ -99,7 +99,7 @@ export default defineComponent({
       }
       this.customPlayers = this.customPlayers.concat(playersContent);
       if(trySelect && this.customPlayers[0] && this.customPlayers[0].selected){
-        this.$emit('update:iFrameModel',this.customPlayers[0].customId);
+        this.$emit('update:iFrameModel',this.customPlayers[0].customId.toString());
         return false;
       }
       return true;
