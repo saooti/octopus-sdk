@@ -570,6 +570,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.71 Parlement européen
  * 30.0.72 Ajout des traductions
  * 30.0.73 Ajout classe css 
+ * 30.0.74 Error locales en allemand (je sens que ça va être fun cette histoire)
+ * 30.0.75 Parlement
+
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
@@ -581,7 +584,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.7 Sécurisation
  * 31.0.8 Dropdown Lang + classicSelect
  * 31.0.9 LazyLoad image
-
-
- 
-

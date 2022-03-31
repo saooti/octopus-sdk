@@ -70,7 +70,7 @@ export default{
   'Episode name image': "Slika epizode {name}",
   'More episodes of this emission': "Več oddaj iz tega niza",
   'More episodes of this category : ': 'Več oddaj iz te kategorije", {name}',
-  'All podcast emission buttonn': "Vsi podkasti iz tega sklopa",
+  'All podcast emission button': "Vsi podkasti iz tega sklopa",
   Duration: 'Trajanje: {duration}',
   Animator: 'Napovedovalec',
   'No category filter': 'Brez filtra za kategorijo',

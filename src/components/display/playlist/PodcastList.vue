@@ -18,7 +18,7 @@
       v-if="loaded && podcasts.length > 1"
       class="text-secondary mb-4"
     >
-      {{ $t('Number podcasts', { nb: podcasts.length }) + $t('sort by score') }}
+      {{ $t('Number podcasts', { nb: podcasts.length }) +" "+ $t('sort by score') }}
     </div>
     <ClassicSearch
       v-if="notEmptyPlaylist"

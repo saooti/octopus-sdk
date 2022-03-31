@@ -70,7 +70,7 @@ export default{
   'Episode name image': "Imagen del episodio {name}",
   'More episodes of this emission': "Más episodios de este programa",
   'More episodes of this category : {name}': "Más episodios de esta categoría: {name}",
-  'All podcast serie button': "Todos los episodios del programa",
+  'All podcast emission button': "Todos los episodios del programa",
   Duration: 'Duración: {duration}',
   Animator: 'Presentador/a',
   'No category filter': 'Sin filtro de categoría',

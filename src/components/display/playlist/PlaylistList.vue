@@ -7,7 +7,7 @@
       v-if="loaded && playlists.length > 1"
       class="text-secondary mb-2"
     >
-      {{ $t('Number playlists', { nb: displayCount }) + $t('sort by score') }}
+      {{ $t('Number playlists', { nb: displayCount }) +" "+ $t('sort by score') }}
     </div>
     <ul class="emission-list two-emissions">
       <PlaylistItem

@@ -9,7 +9,7 @@
         class="text-secondary mb-2"
       >
         {{
-          $t('Number participants', { nb: displayCount }) + $t('sort by score')
+          $t('Number participants', { nb: displayCount }) +" "+ $t('sort by score')
         }}
       </div>
       <ul
