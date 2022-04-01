@@ -376,7 +376,7 @@ export default defineComponent({
         this.$router.push('/');
       }
     },
-    receiveCommentEvent(event:{type?: string; comment: CommentPodcast; status?: string; oldStatus?:string } ): void {
+    receiveCommentEvent(event:{type: string; comment: CommentPodcast; oldStatus?:string } ): void {
       (this.$refs.commentSection as InstanceType<typeof CommentSectionVue>).receiveCommentEvent(event);
     },
   },

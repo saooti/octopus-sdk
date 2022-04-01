@@ -267,18 +267,22 @@ export default defineComponent({
       }
       this.$emit('update:comment', updatedComment);
     },
-    receiveCommentEvent(event: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
+    receiveCommentEvent(event: {type: string; comment: CommentPodcast; oldStatus?:string }): void {
       switch (event.type) {
         case 'Create':this.newComment(event.comment, true);break;
         case 'Update':
           if (this.$refs.commentList) {
-            (this.$refs.commentList as InstanceType<typeof CommentList>).updateComment({ comment: event.comment });
+            (this.$refs.commentList as InstanceType<typeof CommentList>).updateComment(event);
           } else {
             const updatedComment = this.comment;
+            let updatedStatus = "";
+            if (event.comment.status && event.comment.status !== event.oldStatus) {
+              updatedStatus = event.comment.status;
+            }
             if(undefined !== updatedComment.relatedValidComments){
-              if ('Invalid' === event.status) {
+              if ('Invalid' ===updatedStatus) {
                 updatedComment.relatedValidComments -= 1;
-              } else if ('Valid' === event.status) {
+              } else if ('Valid' === updatedStatus) {
                 updatedComment.relatedValidComments += 1;
               }
             }

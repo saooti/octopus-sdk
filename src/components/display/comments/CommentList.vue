@@ -179,49 +179,37 @@ export default defineComponent({
       }
       this.comments.splice(index, 1);
     },
-    updateComment(data: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
+    updateComment(data: {type: string; comment: CommentPodcast; oldStatus?:string }): void {
       if (this.commentIsNotInList(data.comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + data.comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
-        comItem.receiveCommentEvent({ ...data, type: 'Update' });
+        comItem.receiveCommentEvent(data);
         return;
       }
+      const updatedStatus = data.comment.status;
       const index = this.findCommentIndex(data.comment.comId);
       if (-1 !== index) {
-        if ('Valid' !== data.status &&
-          (!this.editRight || (this.status && this.status !== data.status))
-        ) {
+        if ((!this.editRight && 'Valid' !== data.comment.status) ||
+          (this.editRight && this.status && this.status !== data.comment.status)) {
           this.comments.splice(index, 1);
         } else {
           this.comments.splice(index, 1, data.comment);
         }
-      }else if (this.status === data.comment.status) {
-        this.comments.unshift(data.comment);
-      } else if ('Valid' === data.status) {
-        if (this.comments.length > 0) {
-          let indexNewComment = -1;
-          for (let i = 0, len = this.comments.length; i < len; i++) {
-            if (
-              moment(this.comments[i].date).isBefore(moment(data.comment.date))
-            ) {
-              indexNewComment = i;
-              break;
-            }
+      }else if((!this.editRight && 'Valid' === data.comment.status) ||
+              (this.editRight && !this.status) ||
+              (this.editRight && this.status && this.status === data.comment.status)){
+        let indexNewComment = 0;
+        for (let i = 0, len = this.comments.length; i < len; i++) {
+          if (
+            moment(this.comments[i].date).isBefore(moment(data.comment.date))
+          ) {
+            indexNewComment = i;
+            break;
           }
-          if (-1 !== indexNewComment) {
-            if (!this.status || this.status === data.status) {
-              this.comments.splice(indexNewComment, 0, data.comment);
-            } /* else {
-              this.comments.splice(indexNewComment, 1);
-            } */
-          } else if (!this.status || this.status === data.status) {
-            this.comments.push(data.comment);
-          }
-        } else if (!this.status || this.status === data.status) {
-          this.comments.unshift(data.comment);
         }
+        this.comments.splice(indexNewComment, 0, data.comment);
       }
-      if (this.comId && data.status) {
-        this.$emit('updateStatus', data.status);
+      if (this.comId && data.oldStatus!==data.comment.status) {
+        this.$emit('updateStatus', data.comment.status);
       }
     },
     addNewComment(comment: CommentPodcast, myself = false): void {

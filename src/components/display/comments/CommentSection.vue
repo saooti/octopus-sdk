@@ -129,20 +129,11 @@ export default defineComponent({
     newComment(comment: CommentPodcast): void {
       (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(comment, true);
     },
-    receiveCommentEvent(event: {type?: string; comment: CommentPodcast; status?: string; oldStatus?:string }): void {
+    receiveCommentEvent(event: {type: string; comment: CommentPodcast; oldStatus?:string }): void {
       const commentList = (this.$refs.commentList as InstanceType<typeof CommentListVue>);
-      let statusUpdated = undefined;
       switch (event.type) {
         case 'Create':commentList.addNewComment(event.comment);break;
-        case 'Update':
-          if (event.comment.status !== event.oldStatus) {
-            statusUpdated = event.comment.status;
-          }
-          commentList.updateComment({
-            comment: event.comment,
-            status: statusUpdated,
-          });
-          break;
+        case 'Update':commentList.updateComment(event);break;
         case 'Delete':commentList.deleteComment(event.comment);break;
         default:break;
       }
