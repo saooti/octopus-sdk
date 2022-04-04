@@ -26,6 +26,7 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore
 import VSwatches from 'vue3-swatches';
 import { defineComponent } from 'vue';
 export default defineComponent({

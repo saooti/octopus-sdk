@@ -587,3 +587,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.10 Sécurisation
  * 31.0.11 Sécurisation
  * 31.0.12 Commentaires Events
+ * 31.0.13 Update/delete Libraries

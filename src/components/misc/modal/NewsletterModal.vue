@@ -91,6 +91,7 @@
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import Snackbar from '../../misc/Snackbar.vue';
 import moment from 'moment';
+// @ts-ignore
 import VSwatches from 'vue3-swatches';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';

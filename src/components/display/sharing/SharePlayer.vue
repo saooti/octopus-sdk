@@ -18,7 +18,7 @@
             frameborder="0"
             :width="iFrameWidth"
             :height="iFrameHeight"
-            class="max-iframe"
+            class="max-iframe my-2"
           />
           <div class="d-flex flex-column">
             <button
