@@ -142,9 +142,11 @@
 </template>
 
 <script lang="ts">
+import { cookies } from '../mixins/functions';
 import ClassicSelect from '../form/ClassicSelect.vue';
 import Player from './Player.vue';
 import { state } from '../../store/paramStore';
+import {loadLocaleMessages} from '@/i18n';
 import octopusApi from '@saooti/octopus-api';
 import moment from 'moment';
 import { Category } from '@/store/class/general/category';
@@ -156,6 +158,8 @@ export default defineComponent({
     Player,
     ClassicSelect
   },
+
+  mixins:[cookies],
 
   data() {
     return {
@@ -199,7 +203,8 @@ export default defineComponent({
       }
     },
     changeLanguage(): void{
-      this.$i18n.locale= this.language;
+      this.setCookie('octopus-language', this.language);
+      loadLocaleMessages(this.$i18n, this.language, this.$store.state.general.isEducation);
       moment.locale(this.$i18n.locale);
       octopusApi.fetchCategories({ lang: this.$i18n.locale }).then((data: Array<Category>) => {
         this.$store.commit('categoriesSet', data);

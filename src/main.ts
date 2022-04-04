@@ -2,50 +2,48 @@ import { createApp } from 'vue';
 import { VueReCaptcha } from 'vue-recaptcha-v3';
 import VueLazyLoad from 'vue3-lazyload';
 import App from './App.vue';
-import { createI18n, VueMessageType } from 'vue-i18n';
-import I18nResources from './locale/messages';
+import {setupI18n} from './i18n';
 import router from '@/router/router';
 import moment from 'moment';
 import store from '@/store/AppStore';
 import paramStore from '@/store/paramStore';
-import { LocaleMessage } from '@intlify/core-base';
 /* import 'popper.js/dist/popper.min.js'; */
 /* import 'jquery/src/jquery.js'; */
 /* import 'jquery';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
  */
 
-//TODO
-const navigatorLang = navigator.language /* || navigator.userLanguage */;
-let language = 'fr';
-if(navigatorLang.includes('en')){
-  language = 'en';
-}else if(navigatorLang.includes('it')){
-  language = 'it';
-}else if(navigatorLang.includes('sl')){
-  language = 'sl';
-}else if(navigatorLang.includes('es')){
-  language = 'es';
-}else if(navigatorLang.includes('de')){
-  language = 'de';
-}
-let messages: {[key: string]: LocaleMessage<VueMessageType>} = I18nResources;
-if (store.state.general.education) {
-  messages = {
-    fr: { ...I18nResources.fr, ...I18nResources.educationfr },
-    en: { ...I18nResources.en, ...I18nResources.educationen },
-    it: I18nResources.it,
-    sl: I18nResources.it,
-    es: I18nResources.es,
-    de: I18nResources.de,
-  };
-}
-const i18n = createI18n({
-  locale: language,
-  messages: messages,
-});
-moment.locale(language);
 
+//TODO
+const nameEQ = 'octopus-language=';
+const ca = document.cookie.split(';');
+let language = "";
+for (let i = 0; i < ca.length; i++) {
+  let c = ca[i];
+  while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+  if (0 === c.indexOf(nameEQ)){
+    language = c.substring(nameEQ.length, c.length);
+    break;
+  }
+}
+if(0===language.length){
+  const navigatorLang = navigator.language /* || navigator.userLanguage */;
+  language = 'fr';
+  if(navigatorLang.includes('en')){
+    language = 'en';
+  }else if(navigatorLang.includes('it')){
+    language = 'it';
+  }else if(navigatorLang.includes('sl')){
+    language = 'sl';
+  }else if(navigatorLang.includes('es')){
+    language = 'es';
+  }else if(navigatorLang.includes('de')){
+    language = 'de';
+  }
+}
+
+const i18n = setupI18n({locale: language}, store.state.general.education);
+moment.locale(language);
 
 paramStore.initialize({
   generalParameters: {},

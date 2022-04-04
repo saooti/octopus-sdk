@@ -185,7 +185,6 @@ export default defineComponent({
         comItem.receiveCommentEvent(data);
         return;
       }
-      const updatedStatus = data.comment.status;
       const index = this.findCommentIndex(data.comment.comId);
       if (-1 !== index) {
         if ((!this.editRight && 'Valid' !== data.comment.status) ||
