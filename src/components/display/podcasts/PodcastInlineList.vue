@@ -222,13 +222,21 @@ export default defineComponent({
       }
       event.preventDefault();
       const rubriqueChosenId = this.rubriqueId[this.rubriqueId.length - 1];
-      const rubriqueChosen =  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
-      const filterToAdd = {
-        rubriquageId: this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriquageId, 
+      let filterToAdd: RubriquageFilter = {
+        rubriquageId: 0, 
         rubriqueId: rubriqueChosenId, 
-        nameRubriquage:  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].title,
-        nameRubrique: rubriqueChosen.name
+        nameRubriquage:  '',
+        nameRubrique: ''
       };
+      if(this.$store.state.filter.rubriquageArray.length){
+        const rubriqueChosen =  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
+        filterToAdd = {
+          rubriquageId: this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriquageId, 
+          rubriqueId: rubriqueChosenId, 
+          nameRubriquage:  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].title,
+          nameRubrique: rubriqueChosen.name
+        };
+      }
       const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
       newFilter.push(filterToAdd);
       this.$store.commit('filterRubrique', newFilter);

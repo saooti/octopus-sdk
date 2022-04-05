@@ -572,6 +572,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.73 Ajout classe css 
  * 30.0.74 Error locales en allemand (je sens que ça va être fun cette histoire)
  * 30.0.75 Parlement
+ * 30.0.76 Space
 
 
  * 31.0.0 Passage en 31
@@ -590,3 +591,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.13 Update/delete Libraries
  * 31.0.14 Lazy loading lang
  * 31.0.15 Error select productor filter
+ * 31.0.16 Merge 30
