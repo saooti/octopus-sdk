@@ -119,7 +119,7 @@ export default defineComponent({
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
         this.$emit('updateOrganisationId', organisation.id);
-        if(organisation.privacy){
+        if("PUBLIC"!==organisation.privacy){
           this.$nextTick(() => {
             this.onKeepOrganisation();
           });
