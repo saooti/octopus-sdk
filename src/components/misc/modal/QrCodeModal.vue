@@ -34,8 +34,6 @@
 </template>
 
 <script lang="ts">
-import { Podcast } from '@/store/class/general/podcast';
-import { Emission } from '@/store/class/general/emission';
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -46,8 +44,7 @@ export default defineComponent({
   },
 
   props: {
-    podcast: { default: undefined, type: Object as ()=> Podcast},
-    emission: { default: undefined, type: Object as ()=> Emission},
+    urlPage: { default: undefined, type: String},
   },
 
   emits: ['close'],
@@ -56,27 +53,7 @@ export default defineComponent({
     return {
     };
   },
- 
-  computed: {
-    urlPage(): string{
-      if(window.location.href.includes('?productor')){
-        return window.location.href;
-      }
-      if("" !== window.location.search){
-        return window.location.href + "&productor=" + this.productor;
-      }
-      return window.location.href + "?productor=" + this.productor;
-    },
-    productor(): string{
-      if(this.podcast){
-        return this.podcast.organisation.id;
-      }
-      if(this.emission){
-        return this.emission.orga.id;
-      }
-      return "";
-    },
-  },
+
   methods:{
     closePopup(event: { preventDefault: () => void }): void {
       event.preventDefault();

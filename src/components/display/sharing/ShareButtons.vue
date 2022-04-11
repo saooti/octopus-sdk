@@ -162,7 +162,6 @@
         />
       </a>
       <a
-        v-if="podcast ||emission"
         rel="noopener"
         target="_blank"
         :class="[
@@ -226,8 +225,7 @@
     <QrCodeModal
       v-if="qrCode"
       :closable="true"
-      :podcast="podcast"
-      :emission="emission"
+      :url-page="urlPage"
       @close="qrCode = false"
     />
     <Snackbar
