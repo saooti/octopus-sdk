@@ -297,6 +297,7 @@ export default defineComponent({
   padding: 0.2rem 0;
   color: white;
   text-transform: uppercase;
+  position: absolute;
 }
 
 .background-icon{

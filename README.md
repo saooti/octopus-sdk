@@ -593,3 +593,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.15 Error select productor filter
  * 31.0.16 Merge 30
  * 31.0.17 Bug divers
+ * 31.0.18 Bug #11015
