@@ -13,6 +13,9 @@ body{
   overscroll-behavior-y: contain;
 }
 .octopus-app{
+  a{
+    word-break: break-all;
+  }
   h1{
     margin-bottom: 2rem;
   }

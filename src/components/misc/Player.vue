@@ -151,6 +151,9 @@ export default defineComponent({
           'distributorId=' + this.$store.state.authentication.organisationId
         );
       }
+      if("SECURED" === this.podcast.organisation.privacy && this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
+        parameters.push('access_token='+this.$store.state.oAuthParam.accessToken);
+      }
       return this.podcast.audioUrl + '?' + parameters.join('&');
     },
     organisationId(): string|undefined {
@@ -369,7 +372,15 @@ export default defineComponent({
         if (!Hls.isSupported()) {
           reject('Hls is not supported ! ');
         }
-        const hls = new Hls();
+        let hls = new Hls();
+        if(this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
+          hls = new Hls({xhrSetup:
+            (xhr: any) => {
+              xhr.setRequestHeader("Authorization", "Bearer " + this.$store.state.oAuthParam.accessToken);
+            }
+            }
+          );
+        }
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           if(!this.live){ return; }
           let downloadId = null;
