@@ -69,13 +69,16 @@ export default defineComponent({
   methods: {
     seekTo(event: MouseEvent): void {
       const audioPlayer: HTMLAudioElement|null = document.querySelector('#audio-player');
-      if(!audioPlayer ||null===event.currentTarget){return;}
+      if(!audioPlayer || null===event.currentTarget){return;}
       const rect = (event.currentTarget as Element).getBoundingClientRect();
       const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
       const seekTime = this.$store.state.player.total * percentPosition;
+      this.isSeekTo(audioPlayer, seekTime);
+    },
+    isSeekTo(audioPlayer: HTMLAudioElement, seekTime: number): void {
       if (this.$store.state.player.podcast || this.$store.state.player.live) {
         this.$emit('updateNotListenTime',seekTime - this.listenTime);
       }

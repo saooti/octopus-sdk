@@ -82,6 +82,7 @@ export default defineComponent({
     PlayerProgressBar,
     PlayerTimeline
   },
+  mixins:[playerDisplay],
 
   props: {
     playerError: { default: false, type: Boolean},
@@ -93,7 +94,7 @@ export default defineComponent({
     durationLivePosition: { default: 0 , type: Number},
     listenTime: { default: 0 , type: Number},
   },
-  mixins:[playerDisplay],
+
   emits: ['stopPlayer', 'update:notListenTime', 'changePlayerLargeVersion'],
   data() {
     return {

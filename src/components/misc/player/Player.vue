@@ -21,27 +21,27 @@
         />
         <PlayerCompact
           v-if="!largeVersion"
-          :playerError="playerError"
           v-model:notListenTime="notListenTime"
-          :hlsReady="hlsReady"
+          :player-error="playerError"
+          :hls-ready="hlsReady"
           :comments="comments"
-          :displayAlertBar="displayAlertBar"
-          :percentLiveProgress="percentLiveProgress"
-          :durationLivePosition="durationLivePosition"
-          :listenTime="listenTime"
+          :display-alert-bar="displayAlertBar"
+          :percent-live-progress="percentLiveProgress"
+          :duration-live-position="durationLivePosition"
+          :listen-time="listenTime"
           @stopPlayer="stopPlayer"
           @changePlayerLargeVersion="largeVersion = true"
         />
         <PlayerLarge
           v-else
-          :playerError="playerError"
           v-model:notListenTime="notListenTime"
-          :hlsReady="hlsReady"
+          :player-error="playerError"
+          :hls-ready="hlsReady"
           :comments="comments"
-          :displayAlertBar="displayAlertBar"
-          :percentLiveProgress="percentLiveProgress"
-          :durationLivePosition="durationLivePosition"
-          :listenTime="listenTime"
+          :display-alert-bar="displayAlertBar"
+          :percent-live-progress="percentLiveProgress"
+          :duration-live-position="durationLivePosition"
+          :listen-time="listenTime"
           @stopPlayer="stopPlayer"
           @changePlayerLargeVersion="largeVersion = false"
         />
@@ -89,7 +89,7 @@ export default defineComponent({
       display: (state: StoreState) => 'STOPPED' !== state.player.status,
       playerHeight(state: StoreState) {
         if ('STOPPED' === state.player.status || this.forceHide) return 0;
-        if (this.largeVersion) return '30rem';
+        if (this.largeVersion) return '27rem';
         if (window.innerWidth > 450 && !this.showTimeline) return '5rem';
         if (window.innerWidth > 450 && this.showTimeline) return '6rem';
         return '3.5rem';
@@ -117,6 +117,7 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app{
 .player-container {
+  max-height: 94%;
   position: fixed;
   overflow: hidden;
   z-index: 12;
