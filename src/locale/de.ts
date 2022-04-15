@@ -297,4 +297,6 @@ export default{
   'From RSS': "Aus RSS-Feed",
   "User menu":"Benutzermenü",
   'Podcast tags': "Podcast-Tags",
+  "Enlarge":"Vergrößern",
+  "Reduce":"Reduzieren",
 }

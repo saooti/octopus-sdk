@@ -295,4 +295,6 @@ export default{
     'Podcast tags': 'Tag podcast', 
     "Term of use":"Termini d'uso",
     'More episodes of this category : ': "Altri episodi su questo tema : {name}",
+    "Enlarge":"Ingrandire",
+    "Reduce":"Ridurre",
   };

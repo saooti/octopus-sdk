@@ -1,0 +1,148 @@
+<template>
+  <div
+    class="d-flex align-items-center flex-grow-1 ps-2"
+  >
+    <router-link
+      v-if="isImage && podcastImage"
+      :to="podcastShareUrl"
+    >
+      <img
+        v-lazy="podcastImage"
+        :alt="$t('Podcast image')"
+        class="player-image"
+      >
+    </router-link>
+    <button
+      v-if="!playerError"
+      :title="$t('Play')"
+      :class="{
+        'saooti-play2-bounty': isPaused,
+        'saooti-pause-bounty': isPlaying,
+        'spinner-border':!isPaused&&!isPlaying
+      }"
+      class="btn play-button-box text-light primary-bg"
+      @click="switchPausePlay"
+    />
+    <div class="text-light player-grow-content">
+      <div class="d-flex mb-1">
+        <div
+          v-if="playerError"
+          class="text-warning mx-2"
+        >
+          {{ $t('Podcast play error') + ' - ' }}
+        </div>
+        <div class="flex-grow-1 text-truncate">
+          {{ podcastTitle }}
+        </div>
+        <div
+          v-if="!playerError"
+          class="hide-phone"
+        >
+          {{ playedTime }} / {{ totalTime }}
+        </div>
+      </div>
+      <PlayerProgressBar
+        :hls-ready="hlsReady"
+        :show-timeline="showTimeline"
+        :comments="comments"
+        :display-alert-bar="displayAlertBar"
+        :percent-live-progress="percentLiveProgress"
+        :duration-live-position="durationLivePosition"
+        :player-error="playerError"
+        :listen-time="listenTime"
+        @updateNotListenTime="$emit('update:notListenTime', $event)"
+      />
+    </div>
+    <button
+      :title="$t('Enlarge')"
+      class="btn play-button-box primary-bg text-light saooti-up-bounty"
+      @click="changePlayerLargeVersion"
+    />
+    <button
+      :title="$t('Close')"
+      class="btn play-button-box primary-bg text-light saooti-cross"
+      @click="stopPlayer"
+    />
+    <PlayerTimeline
+      v-model:showTimeline="showTimeline"
+      :comments="comments"
+    />
+  </div>
+</template>
+<script lang="ts">
+import { CommentPodcast } from '@/store/class/general/comment';
+import { playerDisplay } from '../../mixins/player/playerDisplay';
+import PlayerProgressBar from './PlayerProgressBar.vue';
+import PlayerTimeline from './PlayerTimeline.vue';
+import { defineComponent } from 'vue';
+export default defineComponent({
+  name: 'PlayerCompact',
+
+  components: {
+    PlayerProgressBar,
+    PlayerTimeline
+  },
+
+  props: {
+    playerError: { default: false, type: Boolean},
+    notListenTime: { default: 0 , type: Number},
+    hlsReady: { default: false , type: Boolean},
+    comments: { default: ()=>[] , type: Array as ()=> Array<CommentPodcast> },
+    displayAlertBar: { default: false , type: Boolean},
+    percentLiveProgress: { default: 0 , type: Number},
+    durationLivePosition: { default: 0 , type: Number},
+    listenTime: { default: 0 , type: Number},
+  },
+  mixins:[playerDisplay],
+  emits: ['stopPlayer', 'update:notListenTime', 'changePlayerLargeVersion'],
+  data() {
+    return {
+      showTimeline: false as boolean,
+    };
+  },
+  methods:{
+    stopPlayer(){
+      this.$emit('stopPlayer');
+    },
+    changePlayerLargeVersion(){
+      this.$emit('changePlayerLargeVersion');
+    }
+  }
+})
+</script>
+
+<style lang="scss">
+.octopus-app{
+  .player-grow-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    font-size: 0.8rem;
+  }
+  .player-image {
+    border-radius: 0.2rem;
+    height: 2.4rem;
+    width: 2.4rem;
+    cursor: pointer;
+    /** PHONES*/
+    @media (max-width: 450px) {
+      height: 1.8rem;
+      width: 1.8rem;
+    }
+  }
+  .play-button-box {
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.5rem;
+    border-radius: 50%;
+    font-size: 1.2rem !important;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+}
+</style>

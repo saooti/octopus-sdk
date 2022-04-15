@@ -298,4 +298,6 @@ export default{
   "User menu":"Menu utilisateur",
   'Podcast tags': "Mot-clé de l'épisode",
   "You do not have the right to access this page":"Vous n’avez pas le droit d’accéder à cette page",
+  "Enlarge":"Agrandir",
+  "Reduce":"Réduire",
 };

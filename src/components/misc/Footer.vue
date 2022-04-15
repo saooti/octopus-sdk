@@ -144,7 +144,7 @@
 <script lang="ts">
 import { cookies } from '../mixins/functions';
 import ClassicSelect from '../form/ClassicSelect.vue';
-import Player from './Player.vue';
+import Player from './player/Player.vue';
 import { state } from '../../store/paramStore';
 import {loadLocaleMessages} from '@/i18n';
 import octopusApi from '@saooti/octopus-api';
@@ -172,9 +172,6 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    isBarTop(): boolean {
-      return (state.player.barTop as boolean);
-    },
     isContactLink(): string|undefined {
       return state.footer.contactLink;
     },
@@ -198,7 +195,7 @@ export default defineComponent({
       if(null===footerElement){return}
       if (hide) {
         footerElement.classList.remove('border-round');
-      } else if (!this.isBarTop) {
+      } else {
         footerElement.className += ' border-round';
       }
     },

@@ -298,4 +298,6 @@ export default{
   "User menu":"User menu",
   'Podcast tags': 'Podcast tags',
   "You do not have the right to access this page":"You do not have the right to access this page",
+  "Enlarge":"Enlarge",
+  "Reduce":"Reduce",
 };

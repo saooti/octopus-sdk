@@ -73,8 +73,6 @@ const state:paramStore = {
   player: {
     image: true,
     emissionName: false,
-    clock: false,
-    barTop: false,
   },
   footer: {
     contactLink: undefined,
@@ -164,9 +162,7 @@ export interface SearchPage{
 }
 export interface Player{
   image?: boolean
-    emissionName?: boolean
-    clock?: boolean
-    barTop?: boolean
+  emissionName?: boolean
 }
 export interface Footer{
   contactLink?: string|undefined

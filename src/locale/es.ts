@@ -297,4 +297,6 @@ export default{
   'From RSS': "Desde un canal RSS",
   "User menu":"Menú de usuario",
   'Podcast tags': 'Etiquetas de pódcast',
+  "Enlarge":"Agrandar",
+  "Reduce":"Reducir",
 }

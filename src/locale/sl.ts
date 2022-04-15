@@ -297,4 +297,6 @@ export default{
   'From RSS': "Z vira RSS",
   "User menu":"Uporabniški meni",
   'Podcast tags': 'Oznake podkastov',
+  "Enlarge":"Povečaj",
+  "Reduce":"Zmanjšaj",
 }

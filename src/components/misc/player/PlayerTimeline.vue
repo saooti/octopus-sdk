@@ -10,22 +10,14 @@
     />
     <div>Timeline</div>
   </div>
-  <div
-    v-if="isClock"
-    class="d-flex text-light align-items-center hide-phone"
-  >
-    <div class="saooti-clock-stud m-2" />
-    <div>{{ actualTime }}</div>
-  </div>
 </template>
 
 <script lang="ts">
-import moment from 'moment';
-import { state } from '../../store/paramStore';
+import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue';
 import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({
-  name: 'PlayerClockAndTimeline',
+  name: 'PlayerTimeline',
 
   props: {
     showTimeline: { default: false, type: Boolean},
@@ -35,7 +27,6 @@ export default defineComponent({
 
   data() {
     return {
-      actualTime: '' as string,
     };
   },
 
@@ -43,24 +34,12 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    isClock(): boolean {
-      return (state.player.clock as boolean);
-    },
-
-  },
-
-  mounted() {
-    if (this.isClock) {
-      setInterval(() => {
-        this.actualTime = moment(new Date()).format('HH:mm:ss');
-      }, 1000);
-    }
   },
 
 })
 </script>
 <style lang="scss">
-@import '../../sass/_variables.scss';
+@import '../../../sass/_variables.scss';
 .octopus-app{
 .player-container {
   .timeline-button {
