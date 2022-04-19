@@ -17,7 +17,7 @@
         class="img-box"
       >
     </router-link>
-    <div class="d-flex w-100 mt-2">
+    <div class="d-flex w-100 px-2 mt-2 text-center">
       <div
         v-if="playerError"
         class="text-warning mx-2"
@@ -138,6 +138,9 @@ export default defineComponent({
   .player-grow-large-content{
     width: 100%;
     padding: 1rem 2rem;
+    @media (max-width: 960px) {
+      padding: 0.5rem;
+    }
     .progress, .progress-bar{
       height: 15px !important;
     }
