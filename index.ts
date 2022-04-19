@@ -15,7 +15,7 @@ import Rubrique from "./src/components/pages/Rubrique.vue";
 //Misc
 import Footer from "./src/components/misc/Footer.vue";
 import LeftMenu from "./src/components/misc/LeftMenu.vue";
-import Player from "./src/components/misc/Player.vue";
+import Player from "./src/components/misc/player/Player.vue";
 import Snackbar from "./src/components/misc/Snackbar.vue";
 import TopBar from "./src/components/misc/TopBar.vue";
 import HomeDropdown from "./src/components/misc/HomeDropdown.vue";

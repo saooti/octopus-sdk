@@ -1,6 +1,6 @@
 import { Podcast } from '@/store/class/general/podcast';
 import DurationHelper from '../../../helper/duration';
-import { state } from '@/store/paramStore';
+import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
 export const playerDisplay = defineComponent({
