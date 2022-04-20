@@ -23,6 +23,7 @@ export const playerLogic = defineComponent({
       hlsReady: false as boolean,
       comments: [] as Array<CommentPodcast>,
       showTimeline: false as boolean,
+      audioUrlToPlay: "" as string
     };
   },
   computed: {
@@ -44,8 +45,15 @@ export const playerLogic = defineComponent({
   },
 
   watch: {
-    audioUrl(): void{
+    async audioUrl(): Promise<void>{
       this.playerError = false;
+      if(this.media || !this.podcast || !this.podcast.availability.visibility ||this.listenError){
+        this.audioUrlToPlay = this.audioUrl;
+      }
+      if(!this.podcast){return;}
+      const response = await octopusApi.fetchPodcastDownloadUrl("podcast/download/register/"+this.podcast.podcastId+".mp3"+ this.audioUrl);
+      this.setDownloadId(response.downloadId.toString());
+      this.audioUrlToPlay = response.location;
     },
     podcast: {
       deep: true,
@@ -88,6 +96,14 @@ export const playerLogic = defineComponent({
   },
   
   methods: {
+    getDomain(): string{
+      let domain = "";
+      const domainArray: RegExpExecArray | null = /\.(.+)/.exec(window.location.host);
+      if(domainArray &&  null !== domainArray){
+        domain = domainArray[1];
+      }
+      return domain;
+    },
     getAudioUrl(): string{
       if (this.media) return this.media.audioUrl? this.media.audioUrl:"";
       if (!this.podcast) return '';
@@ -96,7 +112,6 @@ export const playerLogic = defineComponent({
       if (this.listenError) return this.podcast.audioStorageUrl;
       const parameters = [];
       parameters.push('origin=octopus');
-      parameters.push('cookieName=player_' + this.podcast.podcastId);
       parameters.push('listenerId='+this.getListenerId());
       if (
         this.$store.state.authentication &&
@@ -109,7 +124,7 @@ export const playerLogic = defineComponent({
       if("SECURED" === this.podcast.organisation.privacy && this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
         parameters.push('access_token='+this.$store.state.oAuthParam.accessToken);
       }
-      return this.podcast.audioUrl + '?' + parameters.join('&');
+      return this.podcast.podcastId + '.mp3?' + parameters.join('&');
     },
     reInitPlayer():void{
       this.setDownloadId(null);
@@ -123,12 +138,7 @@ export const playerLogic = defineComponent({
       let listenerId = this.getCookie("octopus_listenerId");
       if(!listenerId){
         listenerId = new Date().valueOf().toString() + Math.random();
-        let domain = "";
-        const domainArray: RegExpExecArray | null = /\.(.+)/.exec(window.location.host);
-        if(domainArray &&  null !== domainArray){
-          domain = domainArray[1];
-        }
-        this.setCookie("octopus_listenerId", listenerId, ';domain='+domain);
+        this.setCookie("octopus_listenerId", listenerId, ';domain='+this.getDomain());
       }
       return listenerId;
     },
@@ -153,9 +163,9 @@ export const playerLogic = defineComponent({
       );
     },
     onError(): void {
-      if (this.podcast && !this.listenError) {
+      if (this.podcast && ""!==this.audioUrlToPlay &&  !this.listenError) {
         this.listenError = true;
-      } else if (this.podcast || this.media) {
+      } else if ((this.podcast && ""!==this.audioUrlToPlay ) || this.media) {
         this.playerError = true;
       }
     },
@@ -163,7 +173,7 @@ export const playerLogic = defineComponent({
       const mediaTarget = (event.currentTarget as HTMLMediaElement);
       if (this.podcast || this.live) {
         if (!this.downloadId) {
-          this.loadDownloadId();
+          return;
         }
         if (
           this.live &&
@@ -213,22 +223,6 @@ export const playerLogic = defineComponent({
         }
       }
       this.forceHide = true;
-    },
-    loadDownloadId(): void {
-      if (!this.podcast) return;
-      const matching_cookies = document.cookie
-        .split(';')
-        .map(item => {
-          const _return = item.trim().split('=');
-          return _return.map(item => item.trim());
-        })
-        .filter(item => {
-          if(!this.podcast){return '';}
-          return 'player_' + this.podcast.podcastId === item[0];
-        });
-      if (1 === matching_cookies.length) {
-        this.setDownloadId(matching_cookies[0][1]);
-      }
     },
   },
 })

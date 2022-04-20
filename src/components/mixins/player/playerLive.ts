@@ -100,11 +100,15 @@ export const playerLive = defineComponent({
     },
     async endListeningProgress(): Promise<void> {
       if (!this.downloadId) return;
-      await octopusApi.updatePlayerTime(
-        this.downloadId,
-        Math.round(this.listenTime)
-      );
-      this.setDownloadId(null);
+      try {
+        await octopusApi.updatePlayerTime(
+          this.downloadId,
+          Math.round(this.listenTime)
+        );
+      } catch{
+        //Do nothing
+      }
+      this.downloadId = null;
       this.notListenTime = 0;
       this.lastSend = 0;
       this.listenTime = 0;

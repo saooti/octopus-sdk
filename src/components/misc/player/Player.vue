@@ -11,7 +11,7 @@
       <template v-if="display">
         <audio
           id="audio-player"
-          :src="!live? audioUrl: undefined"
+          :src="!live? audioUrlToPlay: undefined"
           autoplay
           @timeupdate="onTimeUpdate"
           @ended="onFinished"
@@ -82,6 +82,7 @@ export default defineComponent({
       comments: [] as Array<CommentPodcast>,
       showTimeline: false as boolean,
       largeVersion: false as boolean,
+      audioUrlToPlay: "" as string
     };
   },
   computed: {
