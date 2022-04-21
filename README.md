@@ -597,3 +597,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.19 Add access_token player
  * 31.0.20 Player mobile
  * 31.0.21 Player mobile
+ * 31.0.22 Merge 30
