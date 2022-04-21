@@ -598,3 +598,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.20 Player mobile
  * 31.0.21 Player mobile
  * 31.0.22 Merge 30
+ * 31.0.23 Qr Code option noir

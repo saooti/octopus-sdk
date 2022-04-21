@@ -299,4 +299,5 @@ export default{
   'Podcast tags': 'Etiquetas de pódcast',
   "Enlarge":"Agrandar",
   "Reduce":"Reducir",
+  "Use organization color":"Usar el color de la organización",
 }

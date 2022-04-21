@@ -300,4 +300,5 @@ export default{
   "You do not have the right to access this page":"Vous n’avez pas le droit d’accéder à cette page",
   "Enlarge":"Agrandir",
   "Reduce":"Réduire",
+  "Use organization color":"Utiliser la couleur de l'organisation",
 };

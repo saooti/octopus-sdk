@@ -297,4 +297,5 @@ export default{
     'More episodes of this category : ': "Altri episodi su questo tema : {name}",
     "Enlarge":"Ingrandire",
     "Reduce":"Ridurre",
+    "Use organization color":"Usa il colore dell'organizzazione",
   };

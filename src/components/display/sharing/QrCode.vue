@@ -8,6 +8,13 @@
       class="myQrCode"
       :margin="2" 
     />
+    <ClassicCheckbox
+      v-if="'#000000'!==otherColor"
+      v-model:textInit="isNotBlack"
+      class="flex-shrink-0"
+      id-checkbox="is-black-qr-code"
+      :label="$t('Use organization color')"
+    />
     <button
       class="btn m-3"
       @click="download"
@@ -22,6 +29,7 @@
 </template>
 
 <script lang="ts">
+import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
@@ -33,7 +41,8 @@ export default defineComponent({
 
   components: {
     Snackbar,
-    QrcodeVue
+    QrcodeVue,
+    ClassicCheckbox
   },
   props: {
     url: { default: '', type: String},
@@ -42,13 +51,24 @@ export default defineComponent({
   data() {
     return {
       size: 200 as number,
-      color: "#40a372" as string
+      color: "#000000" as string,
+      otherColor:"#000000" as string,
+      isNotBlack: false as boolean,
     };
   },
   computed:{
     authenticated(): boolean {
       return (state.generalParameters.authenticated as boolean);
     },
+  },
+  watch:{
+    isNotBlack(){
+      if(this.isNotBlack){
+        this.color = this.otherColor;
+      }else{
+        this.color = "#000000";
+      }
+    }
   },
   created(){
     this.initColor();
@@ -66,7 +86,7 @@ export default defineComponent({
     },
     async initColor(): Promise<void> {
       if(state.generalParameters.podcastmaker && state.generalParameters.podcastmakerColor){
-        this.color = state.generalParameters.podcastmakerColor;
+        this.otherColor = state.generalParameters.podcastmakerColor;
         return;
       }
       if (!this.authenticated) return;
@@ -79,7 +99,7 @@ export default defineComponent({
         );
       }
       if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {
-        this.color = data.COLOR;
+        this.otherColor = data.COLOR;
       }
     },
   }

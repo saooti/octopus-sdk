@@ -299,4 +299,5 @@ export default{
   'Podcast tags': 'Oznake podkastov',
   "Enlarge":"Povečaj",
   "Reduce":"Zmanjšaj",
+  "Use organization color":"Uporabite barvo organizacije",
 }
