@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="module-box text-center-mobile">
+    <div class="module-box text-center-mobile overflow-visible">
       <h3>{{ $t('Embed') }}</h3>
       <template v-if="!exclusive && (authenticated || notExclusive)">
         <div class="d-flex flex-column align-items-center">
