@@ -4,12 +4,12 @@
     class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone category-list"
   >
     <div
-      id="category-list-container"
+      ref="categoryListContainer"
       class="category-list-container"
     >
       <button
         v-for="category in categories"
-        :id="'category' + category.id"
+        :ref="'category' + category.id"
         :key="category.id"
         class="category-item text-dark bg-white"
         @click="checkIfFilter(category)"
@@ -144,14 +144,14 @@ export default defineComponent({
       this.$store.commit('filterIab',category);
     },
     resizeWindow(): void {
-      const categoryList = document.getElementById('category-list-container');
+      const categoryList = (this.$refs.categoryListContainer as HTMLElement);
       if(null === categoryList){
         return;
       }
       categoryList.style.justifyContent = 'flex-start';
       this.hidenCategories.length = 0;
       this.categories.forEach((element: Category) => {
-        const el = document.getElementById('category' + element.id);
+        const el = (this.$refs['category' + element.id] as Array<HTMLElement>)[0];
         if (!el) return;
         const parent = el.parentElement;
         if (parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {

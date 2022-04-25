@@ -26,12 +26,12 @@
         >{{ name }}
       </div>
       <div
-        :id="'description-participant-container-' + participant.participantId"
+        ref="descriptionParticipantContainer"
         class="participant-description html-wysiwyg-content"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
-          :id="'description-participant-' + participant.participantId"
+          ref="descriptionParticipant"
           v-html="urlify(participant.description|| '')"
         />
         <!-- eslint-enable -->
@@ -107,12 +107,8 @@ export default defineComponent({
     this.hasPodcast();
   },
   mounted() {
-    const participantDesc = document.getElementById(
-      'description-participant-' + this.participant.participantId
-    );
-    const participantDescContainer = document.getElementById(
-      'description-participant-container-' + this.participant.participantId
-    );
+    const participantDesc = (this.$refs.descriptionParticipant as HTMLElement);
+    const participantDescContainer = (this.$refs.descriptionParticipantContainer as HTMLElement);
     if (
       null !== participantDesc && null !==participantDescContainer && 
       participantDesc.clientHeight > participantDescContainer.clientHeight

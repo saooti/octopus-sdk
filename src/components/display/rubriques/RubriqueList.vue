@@ -1,7 +1,8 @@
 <template>
   <div class="d-inline-flex w-100 mb-3 px-3 hide-phone">
     <div
-      id="rubrique-list-container"
+      ref="rubriqueListContainer"
+      class="rubrique-list-container"
     >
       <select
         v-model="rubriquage"
@@ -18,7 +19,7 @@
       </select>
       <button
         v-for="rubrique in rubriqueDisplay"
-        :id="'rubrique' + rubrique.rubriqueId"
+        :ref="'rubrique' + rubrique.rubriqueId"
         :key="rubrique.rubriqueId"
         class="rubrique-item bg-white"
         @click="addFilter(rubrique)"
@@ -150,12 +151,12 @@ export default defineComponent({
       this.initRubriques();
     },
     resizeWindow(): void {
-      const rubriqueList = document.getElementById('rubrique-list-container');
+      const rubriqueList = (this.$refs.rubriqueListContainer as HTMLElement);
       if(null === rubriqueList){return}
       rubriqueList.style.justifyContent = 'flex-start';
       this.hidenRubriques.length = 0;
       this.rubriqueDisplay.forEach((element: Rubrique) => {
-        const el = document.getElementById('rubrique' + element.rubriqueId);
+        const el = (this.$refs['rubrique' + element.rubriqueId] as Array<HTMLElement>)[0];
         if (!el) return;
         const parent = el.parentElement;
         if (null !== parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
@@ -180,7 +181,7 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-#rubrique-list-container {
+.rubrique-list-container {
   display: flex;
   justify-content: flex-start;
   align-items: center;

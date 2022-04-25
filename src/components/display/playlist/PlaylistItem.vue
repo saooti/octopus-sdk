@@ -36,12 +36,12 @@
           >{{ name }}
         </div>
         <div
-          :id="'description-playlist-container-' + playlist.playlistId"
+          ref="descriptionPlaylistContainer"
           class="emission-description html-wysiwyg-content"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div
-            :id="'description-playlist-' + playlist.playlistId"
+            ref="descriptionPlaylist"
             v-html="urlify(description)"
           />
           <!-- eslint-enable -->
@@ -120,12 +120,8 @@ export default defineComponent({
 
 
   mounted() {
-    const playlistDesc = document.getElementById(
-      'description-playlist-' + this.playlist.playlistId
-    );
-    const playlistDescContainer = document.getElementById(
-      'description-playlist-container-' + this.playlist.playlistId
-    );
+    const playlistDesc = (this.$refs.descriptionPlaylist as HTMLElement);
+    const playlistDescContainer = (this.$refs.descriptionPlaylistContainer as HTMLElement);
     if (
       null !== playlistDesc && null !== playlistDescContainer &&
       playlistDesc.clientHeight > playlistDescContainer.clientHeight

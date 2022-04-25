@@ -28,12 +28,12 @@
           >{{ emission.name }}
         </div>
         <div
-          :id="'description-emission-container-' + emission.emissionId"
+          ref="descriptionEmissionContainer"
           class="emission-description htms-wysiwyg-content"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div
-            :id="'description-emission-' + emission.emissionId"
+            ref="descriptionEmission"
             v-html="urlify(emission.description|| '')"
           />
         <!-- eslint-enable -->
@@ -108,12 +108,8 @@ export default defineComponent({
     this.hasPodcast();
   },
   mounted() {
-    const emissionDesc = document.getElementById(
-      'description-emission-' + this.emission.emissionId
-    );
-    const emissionDescContainer = document.getElementById(
-      'description-emission-container-' + this.emission.emissionId
-    );
+    const emissionDesc = (this.$refs.descriptionEmission as HTMLElement);
+    const emissionDescContainer = (this.$refs.descriptionEmissionContainer as HTMLElement);
     if (
       null !== emissionDesc && null !== emissionDescContainer && 
       emissionDesc.clientHeight > emissionDescContainer.clientHeight

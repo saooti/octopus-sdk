@@ -36,12 +36,12 @@
           {{ emission.name }}
         </div>
         <div
-          :id="'description-emission-container-' + emission.emissionId"
+          ref="descriptionEmissionContainer"
           class="emission-description html-wysiwyg-content"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div
-            :id="'description-emission-' + emission.emissionId"
+            ref="descriptionEmission"
             v-html="urlify(emission.description)"
           />
           <!-- eslint-enable -->
@@ -79,12 +79,12 @@
               {{ p.title }}
             </div>
             <div
-              :id="'description-podcast-container-' + p.podcastId"
+              :ref="'descriptionPodcastContainer'+ p.podcastId"
               class="emission-description html-wysiwyg-content"
             >
               <!-- eslint-disable vue/no-v-html -->
               <div
-                :id="'description-podcast-' + p.podcastId"
+                :ref="'descriptionPodcast'+ p.podcastId"
                 v-html="urlify(p.description)"
               />
               <!-- eslint-enable -->
@@ -195,12 +195,8 @@ export default defineComponent({
     this.loadPodcasts();
   },
   mounted() {
-    const emissionDesc = document.getElementById(
-      'description-emission-' + this.emission.emissionId
-    );
-    const emissionDescContainer = document.getElementById(
-      'description-emission-container-' + this.emission.emissionId
-    );
+    const emissionDesc = (this.$refs.descriptionEmission as HTMLElement);
+    const emissionDescContainer = (this.$refs.descriptionEmissionContainer as HTMLElement);
     if (
       null !== emissionDesc && null !== emissionDescContainer &&
       emissionDesc.clientHeight > emissionDescContainer.clientHeight
@@ -221,12 +217,8 @@ export default defineComponent({
       this.podcasts = data.result;
       this.$nextTick(() => {
       for (let index = 0, len = this.podcasts.length; index < len; index++) {
-        const podcastDesc = document.getElementById(
-          'description-podcast-' + this.podcasts[index].podcastId
-        );
-        const podcastDescContainer = document.getElementById(
-          'description-podcast-container-' + this.podcasts[index].podcastId
-        );
+        const podcastDesc = (this.$refs['descriptionPodcast'+this.podcasts[index].podcastId] as Array<HTMLElement>)[0];
+        const podcastDescContainer = (this.$refs['descriptionPodcastContainer'+this.podcasts[index].podcastId] as Array<HTMLElement>)[0];
         if (
           null !== podcastDesc && null !== podcastDescContainer &&
           podcastDesc.clientHeight > podcastDescContainer.clientHeight

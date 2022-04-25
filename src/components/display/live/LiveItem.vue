@@ -66,12 +66,12 @@
         {{ live.emission.name }}
       </router-link>
       <div
-        :id="'description-live-container-' + live.podcastId"
+        ref="descriptionLiveContainer"
         class="live-description-container html-wysiwyg-content"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
-          :id="'description-live-' + live.podcastId"
+          ref="descriptionLive"
           v-html="urlify(description)"
         />
         <!-- eslint-enable -->
@@ -251,12 +251,8 @@ export default defineComponent({
         if(!this.live){
           return;
         }
-        const liveDesc = document.getElementById(
-          'description-live-' + this.live.podcastId
-        );
-        const liveDescContainer = document.getElementById(
-          'description-live-container-' + this.live.podcastId
-        );
+        const liveDesc = (this.$refs.descriptionLive as HTMLElement);
+        const liveDescContainer = (this.$refs.descriptionLiveContainer as HTMLElement);
         if (
           null !== liveDesc && null !== liveDescContainer && 
           liveDesc.clientHeight > liveDescContainer.clientHeight

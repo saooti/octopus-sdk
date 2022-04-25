@@ -2,6 +2,7 @@
   <div class="bg-dark">
     <div
       id="footer"
+      ref="footer"
       class="d-flex-column p-3 secondary-bg border-top"
     >
       <div class="d-flex flex-column flex-grow-1 align-items-end">
@@ -191,7 +192,7 @@ export default defineComponent({
 
   methods: {
     showBlackBorder(hide: boolean): void {
-      const footerElement = document.getElementById('footer');
+      const footerElement = (this.$refs.footer as HTMLElement);
       if(null===footerElement){return}
       if (hide) {
         footerElement.classList.remove('border-round');

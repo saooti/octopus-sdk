@@ -51,7 +51,7 @@ export const playerLogic = defineComponent({
         this.audioUrlToPlay = this.audioUrl;
       }
       if(!this.podcast){return;}
-      const response = await octopusApi.fetchPodcastDownloadUrl("podcast/download/register/"+this.podcast.podcastId+".mp3"+ this.audioUrl);
+      const response = await octopusApi.fetchPodcastDownloadUrl("podcast/download/register/"+ this.audioUrl);
       this.setDownloadId(response.downloadId.toString());
       this.audioUrlToPlay = response.location;
     },

@@ -17,7 +17,7 @@
       @showDescription="showDescription"
     />
     <div
-      :id="'description-podcast-container-' + podcast.podcastId"
+      ref="descriptionPodcastContainer"
       class="description-podcast-item html-wysiwyg-content"
       :class="[
         hover && ''!==description ? 'visible' : 'invisible',
@@ -26,7 +26,7 @@
     >
       <!-- eslint-disable vue/no-v-html -->
       <div
-        :id="'description-podcast-' + podcast.podcastId"
+        ref="descriptionPodcast"
         v-html="description"
       />
     <!-- eslint-enable -->
@@ -89,13 +89,9 @@ export default defineComponent({
     },
   },
 
-  created() {
-    const podcastDesc = document.getElementById(
-      'description-podcast-' + this.podcast.podcastId
-    );
-    const podcastDescContainer = document.getElementById(
-      'description-podcast-container-' + this.podcast.podcastId
-    );
+  mounted() {
+    const podcastDesc = (this.$refs.descriptionPodcast as HTMLElement);
+    const podcastDescContainer = (this.$refs.descriptionPodcastContainer as HTMLElement);
     if (
       null !== podcastDesc && null !== podcastDescContainer &&
       podcastDesc.clientHeight > podcastDescContainer.clientHeight
