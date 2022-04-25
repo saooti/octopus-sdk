@@ -13,6 +13,7 @@
       <span
         v-if="authenticated"
         id="popover-share-help"
+        role="button"
         tabindex="-1"
         class="saooti-help ms-2"
         :title="$t('Help')"

@@ -14,6 +14,7 @@
       v-model="emission"
       label="name"
       track-by="emissionId"
+      :aria-expanded="false"
       :placeholder="$t('Type string to filter by emission')"
       :options="emissions"
       :multiple="false"

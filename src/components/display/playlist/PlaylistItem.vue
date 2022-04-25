@@ -14,6 +14,7 @@
     >
       <img
         v-lazy="playlist.imageUrl"
+        :title="$t('Playlist name image', {name:name})"
         class="img-box"
       >
     </router-link>

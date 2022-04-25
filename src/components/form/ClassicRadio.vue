@@ -1,9 +1,13 @@
 <template>
-  <div class="d-flex flex-column">
+  <div
+    class="d-flex"
+    :class="isColumn? 'flex-column':''"
+  >
     <div
       v-for="option in options"
       :key="option.title"
       class="form-check"
+      :class="isColumn? '':'me-2'"
     >
       <input
         :id="idRadio + option.value"
@@ -34,6 +38,7 @@ export default defineComponent({
     isDisabled: { default: false, type: Boolean },
     options: { default: ()=>[], type: Array as () => Array<{title: string, value: string|undefined}> },
     textInit: { default: undefined, type: String },
+    isColumn: {default:true, type:Boolean}
   },
   emits: ['update:textInit'],
 

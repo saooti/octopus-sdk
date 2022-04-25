@@ -9,10 +9,13 @@
       type="checkbox"
       class="form-check-input"
       :disabled="isDisabled"
+      :title="displayLabel?'':label"
+      :data-selenium="selenium"
       @click="emitClickAction"
     >
     <label
       class="form-check-label"
+      :class="displayLabel? '': 'd-none'"
       :for="idCheckbox"
     >{{ label }}</label>
   </div>
@@ -28,7 +31,9 @@ export default defineComponent({
     label: { default: '', type: String },
     isDisabled: { default: false, type: Boolean },
     textInit: { default: false, type: Boolean },
-    isSwitch:{default:false, type:Boolean}
+    isSwitch:{default:false, type:Boolean},
+    displayLabel: {default:true, type: Boolean},
+    selenium: { default: '', type: String },
   },
   emits: ['update:textInit', 'clickAction'],
 

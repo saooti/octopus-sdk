@@ -14,6 +14,7 @@
       <img
         v-lazy="emission.imageUrl"
         class="img-box"
+        :title="$t('Emission name image', {name:emission.name})"
       >
       <div class="emission-item-text">
         <div

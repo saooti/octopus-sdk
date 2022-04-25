@@ -6,6 +6,7 @@
     <img
       v-lazy="podcast.imageUrl"
       class="img-box"
+      :alt="$t('Episode name image', {name:podcast.title})"
     >
     <template v-if="isPodcastmaker">
       <div

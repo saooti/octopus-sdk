@@ -13,6 +13,8 @@
         v-if="!!organisationId"
         v-model:textInit="keepOrganisation"
         class="m-3"
+        :label="$t('check this box if you want to keep this filter for the rest of your visit')"
+        :display-label="false"
         id-checkbox="organisation-checkbox"
         @clickAction="onKeepOrganisation"
       />

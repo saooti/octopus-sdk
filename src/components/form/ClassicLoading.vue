@@ -4,9 +4,9 @@
     class="d-flex justify-content-center"
   >
     <div class="spinner-border me-3" />
-    <h3 class="mt-2">
+    <div class="h3 mt-2">
       {{ loadingText }}
-    </h3>
+    </div>
   </div>
   <div
     v-else-if="errorText"

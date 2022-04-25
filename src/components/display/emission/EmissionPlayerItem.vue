@@ -21,6 +21,7 @@
       >
         <img
           v-lazy="emission.imageUrl"
+          :title="$t('Emission name image', {name:emission.name})"
           class="img-box rounded-0"
         >
         <div

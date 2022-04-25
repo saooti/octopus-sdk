@@ -13,10 +13,12 @@
     >
       <div
         :id="'tag-list-from-podcast-page'+index"
+        role="button"
       >
         <img
           v-if="isOuestFranceTag(tag)"
           class="ouest-france-logo"
+          alt="Logo Ouest France"
           src="/img/ouest_france_logo.svg"
         >
         {{ formateOfTag(tag) }}

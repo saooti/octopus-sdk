@@ -8,6 +8,7 @@
     >
       <img
         src="/img/caution.png"
+        alt="Caution"
         class="icon-caution"
       >
       <div class="alert-text">

@@ -15,6 +15,7 @@
       :disabled="isDisabled"
       label="name"
       track-by="id"
+      :aria-expanded="false"
       :placeholder="$t('Type string to filter by categories')"
       :options="categories"
       :multiple="multiple"

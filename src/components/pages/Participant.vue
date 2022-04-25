@@ -16,6 +16,7 @@
       >
         <img
           v-lazy="participant.imageUrl"
+          :title="$t('Animator image')"
           class="img-box-circle mb-3"
         >
         <h2 class="text-capitalize">

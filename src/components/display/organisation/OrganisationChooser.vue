@@ -15,6 +15,7 @@
       v-model="organisation"
       label="name"
       track-by="id"
+      :aria-expanded="false"
       :placeholder="$t('Type string to filter by organisation')"
       :options="organisations"
       :multiple="false"

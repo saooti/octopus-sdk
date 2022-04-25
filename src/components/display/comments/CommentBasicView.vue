@@ -7,6 +7,7 @@
       >{{ $t('Live') }}</b>
       <b
         :id="'popover-comment' + comment.comId"
+        role="button"
         tabindex="-1"
         :class="editRight || isValid? '':'text-danger'"
         class="me-2"

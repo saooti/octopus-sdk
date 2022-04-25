@@ -1,39 +1,39 @@
   .planned-bg {
-    background: #f09653;
+    background: rgb(188, 88, 16);
   }
   .pending-bg {
-    background: #f1643e;
+    background: rgb(216, 58, 14);
   }
   .recording-bg {
-    background: #f34a4a;
+    background: rgb(233, 12, 12);
   }
   .error-bg {
-    background: #ff0000;
+    background: rgb(173, 0, 0);
   }
   .debriefing-bg {
-    background: #6ec66e;
+    background: rgb(54, 134, 54);
   }
   .done-bg {
-    background: #679fe9;
+    background: rgb(42, 117, 218);
   }
   .publishing-bg {
-    background: #7d7d7d;
+    background: rgb(112, 112, 112);
   }
   .planned-shadow {
-    box-shadow: 0px 12px 48px 6px rgba(240, 151, 83, 0.2);
+    box-shadow: 0px 12px 48px 6px rgba(188, 88, 16, 0.2);
   }
   .pending-shadow {
-    box-shadow: 0px 12px 48px 6px rgba(241, 101, 62, 0.2);
+    box-shadow: 0px 12px 48px 6px rgba(216, 58, 14, 0.2);
   }
   .recording-shadow {
-    box-shadow: 0px 12px 48px 6px rgba(243, 74, 74, 0.2);
+    box-shadow: 0px 12px 48px 6px rgba(233, 12, 12, 0.2);
   }
   .debriefing-shadow {
-    box-shadow: 0px 12px 48px 6px rgba(110, 198, 110, 0.2);
+    box-shadow: 0px 12px 48px 6px rgba(54, 134, 54, 0.2);
   }
   .publishing-shadow {
-    box-shadow: 0px 12px 48px 6px rgba(125, 125, 125, 0.2);
+    box-shadow: 0px 12px 48px 6px rgba(112, 112, 112, 0.2);
   }
   .error-shadow {
-    box-shadow: 0px 12px 48px 6px rgba(255, 0, 0, 0.2);
+    box-shadow: 0px 12px 48px 6px rgba(173, 0, 0, 0.2);
   }

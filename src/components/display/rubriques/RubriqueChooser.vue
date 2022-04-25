@@ -16,6 +16,7 @@
       class="rubriqueChooser"
       label="name"
       track-by="rubriqueId"
+      :aria-expanded="false"
       :placeholder="$t('Type string to filter by rubrics')"
       :options="rubriques"
       :multiple="multiple"

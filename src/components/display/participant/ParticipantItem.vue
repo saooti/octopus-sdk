@@ -14,6 +14,7 @@
     >
       <img
         v-lazy="participant.imageUrl"
+        :title="$t('Animator image')"
         class="img-box-circle"
       >
       <div class="participant-name">
