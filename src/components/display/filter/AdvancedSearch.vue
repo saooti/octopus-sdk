@@ -172,10 +172,10 @@ export default defineComponent({
       isTo: false as boolean,
       fromDate: moment().subtract(10, 'days').toISOString() as string,
       toDate: moment().toISOString() as string,
-      isNotVisible: false as boolean,
+      isNotVisible: this.includeHidden as boolean,
       isNotValidate: false as boolean,
       showFilters: false as boolean,
-      sort: '' as string,
+      sort: this.sortCriteria as string,
     };
   },
 
@@ -267,16 +267,6 @@ export default defineComponent({
     sortCriteria(): void {
       this.sort = this.sortCriteria;
     },
-  },
-
-  created() {
-    if (!this.isEmission) {
-      this.isNotVisible = this.includeHidden;
-    }
-  },
-
-  mounted() {
-    this.sort = this.sortCriteria;
   },
   methods: {
     updateFromDate(): void {

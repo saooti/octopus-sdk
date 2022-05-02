@@ -23,6 +23,7 @@
       :is-search-bar="isProductorSearch"
       :sort-criteria="sortEmission"
       :organisation-id="organisationId"
+      :includeHidden="includeHidden"
       @updateCategory="updateCategory"
       @updateRubriquageFilter="updateRubriquageFilter"
       @updateMonetization="updateMonetization"
@@ -43,7 +44,6 @@
       :sort="sortEmission"
       :include-hidden="includeHidden"
       :iab-id="iabId"
-
       :rubrique-id="rubriqueId"
       :rubriquage-id="rubriquageId"
       :no-rubriquage-id="noRubriquageId"
@@ -106,6 +106,28 @@ export default defineComponent({
     titlePage(): string|undefined {
       return state.emissionsPage.titlePage;
     },
+    authenticated(): boolean {
+      return (state.generalParameters.authenticated as boolean);
+    },
+    myOrganisationId(): string|undefined {
+      return state.generalParameters.organisationId;
+    },
+    organisationRight(): boolean {
+      if (
+        (this.authenticated && this.myOrganisationId === this.organisationId) ||
+        state.generalParameters.isAdmin
+      )
+        return true;
+      return false;
+    },
+    filterOrga(): string|undefined {
+      return this.$store.state.filter.organisationId;
+    },
+    organisation(): string|undefined {
+      if (this.organisationId) return this.organisationId;
+      if (this.filterOrga) return this.filterOrga;
+      return undefined;
+    },
   },
 
   created() {
@@ -116,6 +138,9 @@ export default defineComponent({
       this.organisationId = this.productor;
     } else if (this.$store.state.filter.organisationId) {
       this.organisationId = this.$store.state.filter.organisationId;
+    }
+    if (this.organisation && this.organisationRight) {
+      this.includeHidden = true;
     }
     if(this.rubriqueFilter.length){
       this.updateRubriquageFilter(this.rubriqueFilter);

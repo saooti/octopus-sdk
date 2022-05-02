@@ -573,7 +573,14 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.74 Error locales en allemand (je sens que ça va être fun cette histoire)
  * 30.0.75 Parlement
  * 30.0.76 Space
-
+ * 30.0.77 V-Calendar bloque version
+ * 30.0.78 a -> word-break
+ * 30.0.79 DownloadId player
+ * 30.0.80 DownloadId player
+ * 30.0.81 DownloadId player
+ * 30.0.82 Cherry pick Color Qr code
+ * 30.0.83 Locales parlement
+ * 30.0.84 Une émission non visible n'apparaît pas dans la page émission
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
@@ -601,3 +608,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.23 Qr Code option noir
  * 31.0.24 Amélioration accessibilité
  * 31.0.25 Erreur audioUrl
+
