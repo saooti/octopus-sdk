@@ -12,6 +12,7 @@ import Search from "./src/components/pages/Search.vue";
 import Home from "./src/components/pages/Home.vue";
 import Category from "./src/components/pages/Category.vue";
 import Rubrique from "./src/components/pages/Rubrique.vue";
+import Error403Page from "./src/components/pages/Error403Page.vue";
 //Misc
 import Footer from "./src/components/misc/Footer.vue";
 import LeftMenu from "./src/components/misc/LeftMenu.vue";
@@ -116,7 +117,8 @@ const components = {
     ClassicLoading,
     AdvancedSearch,
     PodcastPlaylistInlineList,
-    ClassicSelect
+    ClassicSelect,
+    Error403Page
 }
 
 export default components;
@@ -171,5 +173,6 @@ export {
     ClassicLoading,
     AdvancedSearch,
     PodcastPlaylistInlineList,
-    ClassicSelect
+    ClassicSelect,
+    Error403Page
 };

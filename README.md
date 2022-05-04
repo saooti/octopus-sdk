@@ -608,4 +608,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.23 Qr Code option noir
  * 31.0.24 Amélioration accessibilité
  * 31.0.25 Erreur audioUrl
+ * 31.0.26 Erreur 403 page expose 
 

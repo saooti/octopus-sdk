@@ -177,14 +177,11 @@ export default defineComponent({
       this.$emit('update:displayMenu', false);
     },
     async onOrganisationSelected(organisation: Organisation|undefined) {
-      const queries = this.$route.query;
       if (organisation && organisation.id) {
-        if (queries.productor !== organisation.id) {
-          this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
-        }
         await this.selectOrganisation(organisation.id);
       } else {
         if (this.$route.query.productor) {
+          const queries = this.$route.query;
           this.$router.push({ query: {...queries, ...{productor: undefined} } });
         }
         this.$store.commit('filterOrga', { orgaId: undefined });

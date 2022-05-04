@@ -23,6 +23,8 @@ export const orgaFilter = defineComponent({
           }),
           isLive: isLive
         });
+        const queries = this.$route.query;
+        this.$router.replace({ query: {...queries, ...{productor: organisationId} } });
       } catch (error) {
         this.handle403((error as AxiosError));
       }

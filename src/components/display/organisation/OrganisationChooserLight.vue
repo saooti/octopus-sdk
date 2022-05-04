@@ -4,29 +4,24 @@
     class="default-multiselect-width organisation-chooser-light"
     :style="{ width: width }"
   >
-    <template v-if="!privateOrganisation">
-      <select
-        :id="'organisation_chooser_light' + page"
-        v-model="actual"
-        class="mb-0 c-hand border-0"
-        @change="onOrganisationSelected"
-      >
-        <option :value="organisation.id">
-          {{ organisation.name }}
-        </option>
-        <option :value="-1">
-          {{ $t('No organisation filter') }}
-        </option>
-      </select>
-      <label
-        :for="'organisation_chooser_light' + page"
-        class="d-inline"
-        :title="$t('select productor')"
-      />
-    </template>
-    <template v-else>
-      {{ organisation.name }}
-    </template>
+    <select
+      :id="'organisation_chooser_light' + page"
+      v-model="actual"
+      class="mb-0 c-hand border-0"
+      @change="onOrganisationSelected"
+    >
+      <option :value="organisation.id">
+        {{ organisation.name }}
+      </option>
+      <option :value="-1">
+        {{ $t('No organisation filter') }}
+      </option>
+    </select>
+    <label
+      :for="'organisation_chooser_light' + page"
+      class="d-inline"
+      :title="$t('select productor')"
+    />
   </div>
 </template>
 
@@ -48,7 +43,6 @@ export default defineComponent({
       actual: -1 as number|string,
       organisation: undefined as Organisation|undefined,
       init: false as boolean,
-      privateOrganisation: false as boolean
     };
   },
 
@@ -82,7 +76,6 @@ export default defineComponent({
       const data = await octopusApi.fetchOrganisation(this.value);
       this.organisation = data;
       this.actual = data.id;
-      this.privateOrganisation = "PUBLIC"!==data.privacy;
       this.init = true;
     },
   },

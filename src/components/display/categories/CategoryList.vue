@@ -145,7 +145,7 @@ export default defineComponent({
     },
     resizeWindow(): void {
       const categoryList = (this.$refs.categoryListContainer as HTMLElement);
-      if(null === categoryList){
+      if(null === categoryList ||!categoryList){
         return;
       }
       categoryList.style.justifyContent = 'flex-start';

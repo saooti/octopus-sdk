@@ -238,15 +238,12 @@ export default defineComponent({
       }
     },
     async onOrganisationSelected(organisation: Organisation | undefined): Promise<void> {
-      const queries = this.$route.query;
       if (organisation && organisation.id) {
-        if (this.$route.query.productor !== organisation.id) {
-          this.$router.push({ query: {...queries, ...{productor: organisation.id} } });
-        }
         await this.selectOrganisation(organisation.id);
       } else {
         this.organisationId = undefined;
         if (this.$route.query.productor) {
+          const queries = this.$route.query;
           this.$router.push({ query: { ...queries, ...{productor: undefined} } });
         }
         this.$store.commit('filterOrga', { orgaId: undefined });
