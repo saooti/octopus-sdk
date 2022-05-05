@@ -217,7 +217,7 @@ export default defineComponent({
   },
   methods: {
     handleSeeMoreButton(event: { preventDefault: () => void; }){
-      if(!this.rubriqueId || this.noRubriquageId.length){
+      if(!this.rubriqueId || 0===this.rubriqueId.length || this.noRubriquageId.length){
         return;
       }
       event.preventDefault();
@@ -263,7 +263,9 @@ export default defineComponent({
         this.totalCount = data.count;
         if (this.allPodcasts.length + data.result.length < this.totalCount) {
           const nexEl = data.result.pop() as Podcast;
-          this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
+          if(nexEl){
+            this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
+          }
         }
         this.allPodcasts = this.allPodcasts.concat(
           data.result.filter((pod: Podcast|null) => null !== pod)

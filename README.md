@@ -581,6 +581,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.82 Cherry pick Color Qr code
  * 30.0.83 Locales parlement
  * 30.0.84 Une émission non visible n'apparaît pas dans la page émission
+ * 30.0.85 PB en cliquant sur le bouton "tous les épisodes de l'organisation" dans la page d'un épisode
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
@@ -609,4 +610,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.24 Amélioration accessibilité
  * 31.0.25 Erreur audioUrl
  * 31.0.26 Erreur 403 page expose 
-

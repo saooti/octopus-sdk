@@ -23,7 +23,7 @@
       :is-search-bar="isProductorSearch"
       :sort-criteria="sortEmission"
       :organisation-id="organisationId"
-      :includeHidden="includeHidden"
+      :include-hidden="includeHidden"
       @updateCategory="updateCategory"
       @updateRubriquageFilter="updateRubriquageFilter"
       @updateMonetization="updateMonetization"

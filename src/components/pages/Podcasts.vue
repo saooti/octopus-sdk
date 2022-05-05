@@ -35,7 +35,7 @@
       :reset-rubriquage="resetRubriquage"
       :is-search-bar="isProductorSearch"
       :sort-criteria="sortCriteria"
-      :includeHidden="includeHidden"
+      :include-hidden="includeHidden"
       :organisation-id="organisationId"
       @updateCategory="updateCategory"
       @updateRubriquageFilter="updateRubriquageFilter"
