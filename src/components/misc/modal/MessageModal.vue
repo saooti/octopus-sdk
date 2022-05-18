@@ -71,8 +71,7 @@ export default defineComponent({
   },
   emits: ['close', 'validate', 'cancel', 'thirdEvent'],
   methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
     onValid(): void {

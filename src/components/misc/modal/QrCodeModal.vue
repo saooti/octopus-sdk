@@ -38,25 +38,15 @@ import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'QrCodeModal',
-
   components: {
     QrCode
   },
-
   props: {
     urlPage: { default: undefined, type: String},
   },
-
   emits: ['close'],
-
-  data() {
-    return {
-    };
-  },
-
   methods:{
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
   }

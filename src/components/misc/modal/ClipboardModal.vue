@@ -43,7 +43,6 @@ import { defineComponent, defineAsyncComponent } from 'vue';
 const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
 export default defineComponent({
   name: 'ClipboardModal',
-
   components: {
     RssSection,
   },
@@ -55,14 +54,8 @@ export default defineComponent({
   },
   emits: ['close', 'copy'],
 
-  data() {
-    return {
-    };
-  },
-
   methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
     afterCopy(): void{

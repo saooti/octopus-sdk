@@ -4,153 +4,34 @@
       {{ $t('Subscribe emission') }}
     </h3>
     <div class="d-flex flex-wrap">
-      <a
-        v-if="amazon"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="amazon"
-        title="amazon"
+      <template
+        v-for="sub in subscriptions"
+        :key="sub.name"
       >
-        <span class="saooti-amazon">
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-        </span>
-      </a>
-      <a
-        v-if="applePodcast"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="applePodcast"
-        title="Apple"
-      >
-        <span class="saooti-apple" />
-      </a>
-      <a
-        v-if="deezer"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="deezer"
-        title="Deezer"
-      >
-        <span class="saooti-deezer" />
-      </a>
-      <a
-        v-if="googlePodcasts"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="googlePodcasts"
-        title="googlePodcasts"
-      >
-        <span class="saooti-google-podcasts">
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-          <div class="path4" />
-          <div class="path5" />
-          <div class="path6" />
-          <div class="path7" />
-        </span>
-      </a>
-      <a
-        v-if="playerFm"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="playerFm"
-        title="playerFm"
-      >
-        <span class="saooti-playerfm" />
-      </a>
-      <a
-        v-if="pocketCasts"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="pocketCasts"
-        title="pocketCasts"
-      >
-        <span class="saooti-pocket-casts" />
-      </a>
-      <a
-        v-if="podcastAddict"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="podcastAddict"
-        title="podcastAddict"
-      >
-        <span class="saooti-podcast-addict" />
-      </a>
-      <a
-        v-if="radioline"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 btn-radioline share-btn"
-        :href="radioline"
-        title="Radioline"
-      >
-        <span class="saooti-radioline" />
-      </a>
-      <a
-        v-if="spotify"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="spotify"
-        title="Spotify"
-      >
-        <span class="saooti-spotify" />
-      </a>
-      <a
-        v-if="stitcher"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="stitcher"
-        title="stitcher"
-      >
-        <span class="saooti-stitcher-logo">
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-          <div class="path4" />
-          <div class="path5" />
-          <div class="path6" />
-          <div class="path7" />
-          <div class="path8" />
-          <div class="path9" />
-          <div class="path10" />
-          <div class="path11" />
-          <div class="path12" />
-          <div class="path13" />
-          <div class="path14" />
-          <div class="path15" />
-          <div class="path16" />
-          <div class="path17" />
-          <div class="path18" /> </span>
-      </a>
-      <a
-        v-if="tunein"
-        rel="noopener"
-        target="_blank"
-        class="btn me-3 mb-2 share-btn"
-        :href="tunein"
-        title="Tunin"
-      >
-        <span class="saooti-tunin" />
-      </a>
+        <a
+          v-if="getUrl(sub.name)"
+          rel="noopener"
+          target="_blank"
+          class="btn me-3 mb-2 share-btn"
+          :href="getUrl(sub.name)"
+          :title="sub.name"
+        >
+          <span :class="sub.icon">
+            <div
+              v-for="index in getPathNumber(sub.name)"
+              :key="index"
+              :class="'path'+(index+1)"
+            />
+          </span>
+        </a>
+      </template>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Emission } from '@/store/class/general/emission';
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     emission: { default: undefined, type: Object as ()=> Emission},
@@ -159,70 +40,33 @@ export default defineComponent({
    
   data() {
     return {
-      applePodcast:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.applePodcast
-          : undefined) as string | undefined,
-      deezer:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.deezer
-          : undefined) as string | undefined,
-      spotify:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.spotify
-          : undefined) as string | undefined,
-      tunein:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.tunein
-          : undefined) as string | undefined,
-      radioline:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.radioline
-          : undefined) as string | undefined,
-      podcastAddict:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.podcastAddict
-          : undefined) as string | undefined,
-      playerFm:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.playerFm
-          : undefined) as string | undefined,
-      stitcher:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.stitcher
-          : undefined) as string | undefined,
-      amazon:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.amazon
-          : undefined) as string | undefined,
-      googlePodcasts:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.googlePodcasts
-          : undefined) as string | undefined,
-      pocketCasts:
-        (this.emission && this.emission.annotations
-          ? this.emission.annotations.pocketCasts
-          : undefined) as string | undefined,
+      subscriptions : [
+        {name : 'amazon', icon : 'saooti-amazon'},
+        {name:'applePodcast', icon:'saooti-apple'},
+        {name:'deezer', icon:'saooti-deezer'},
+        {name:'googlePodcasts', icon:"saooti-google-podcasts"},
+        {name:'playerFm', icon: 'saooti-saooti-playerfm'},
+        {name:'pocketCasts', icon:'saooti-pocket-casts'},
+        {name:'podcastAddict', icon: 'saooti-podcast-addict'},
+        {name:'radioline', icon:'saooti-radioline'},
+        {name:'spotify', icon:'saooti-spotify'},
+        {name:'stitcher', icon:'saooti-stitcher-logo'},
+        {name:'tunein', icon:'saooti-tunin'}] as Array<{name:string, icon:string}>,
     };
   },
 
-  computed: {},
-
-  mounted() {
-    this.applePodcast = this.externaliseLinks(this.applePodcast);
-    this.deezer = this.externaliseLinks(this.deezer);
-    this.spotify = this.externaliseLinks(this.spotify);
-    this.tunein = this.externaliseLinks(this.tunein);
-    this.radioline = this.externaliseLinks(this.radioline);
-    this.podcastAddict = this.externaliseLinks(this.podcastAddict);
-    this.playerFm = this.externaliseLinks(this.playerFm);
-    this.stitcher = this.externaliseLinks(this.stitcher);
-    this.amazon = this.externaliseLinks(this.amazon);
-    this.googlePodcasts = this.externaliseLinks(this.googlePodcasts);
-    this.pocketCasts = this.externaliseLinks(this.pocketCasts);
-  },
-
   methods: {
+    getPathNumber(sub: string): number{
+      switch (sub) {
+        case 'amazon': return 3;
+        case 'googlePodcasts': return 7;
+        case 'stitcher': return 18;
+        default: return 0;
+      }
+    },
+    getUrl(sub: string): string | undefined{
+      return this.externaliseLinks(this.emission && this.emission.annotations? (this.emission.annotations[sub] as string): undefined);
+    },
     externaliseLinks(link?: string): string|undefined {
       if (!link) return link;
       link = link.trim();

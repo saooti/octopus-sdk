@@ -10,38 +10,17 @@
       class="input-no-outline"
       @change="$emit('update:iFrameModel',$event.target.value)"
     >
-      <option value="default">
-        {{ $t('Default version') }}
-      </option>
-      <option value="large">
-        {{ $t('Large version') }}
-      </option>
+      <template v-for="option in optionsSelect" :key="option.value">
+        <option v-if="option.condition" :value="option.value">
+          {{ option.name }}
+        </option>
+      </template>
       <option
         v-for="player in customPlayersDisplay"
         :key="player.customId"
         :value="player.customId"
       >
         {{ $t('Custom version') + " «" +player.name+"»" }}
-      </option>
-      <option
-        v-if="podcast && podcast.podcastId"
-        value="emission"
-      >
-        {{
-          $t('Emission version')
-        }}
-      </option>
-      <option
-        v-if="podcast && podcast.podcastId"
-        value="emissionLarge"
-      >
-        {{ $t('Large emission version') }}
-      </option>
-      <option
-        v-if="podcast && podcast.podcastId"
-        value="largeSuggestion"
-      >
-        {{ $t('Large suggestion version') }}
       </option>
     </select>
   </div>
@@ -70,10 +49,15 @@ export default defineComponent({
       customPlayers: [] as Array<CustomPlayer>,
     };
   },
-
   computed: {
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
+    optionsSelect(){
+      return [
+        {name: this.$t('Default version'), value: 'default', condition: true},
+        {name: this.$t('Large version'), value: 'large', condition: true},
+        {name: this.$t('Emission version'), value: 'emission', condition: this.podcast && this.podcast.podcastId},
+        {name: this.$t('Large emission version'), value: 'emissionLarge', condition: this.podcast && this.podcast.podcastId},
+        {name: this.$t('Large suggestion version'), value: 'largeSuggestion', condition: this.podcast && this.podcast.podcastId}
+      ]
     },
     customPlayersDisplay(): Array<CustomPlayer>{
       return this.customPlayers.filter((player: CustomPlayer)=>{
@@ -82,10 +66,9 @@ export default defineComponent({
       });
     },
   },
-   async created() {
+  async created() {
     await this.initCustomPlayers();
   },
-
   methods: {
     async fetchCustomPlayers(type:string, trySelect: boolean): Promise<boolean>{
       let players = await octopusApi.fetchCustomPlayer('customPlayer/type/'+ this.organisationId+'/'+type);
@@ -105,7 +88,7 @@ export default defineComponent({
       return true;
     },
     async initCustomPlayers(): Promise<void> {
-      if (!this.authenticated) return;
+      if (!state.generalParameters.authenticated) return;
       if(this.playlist){
         this.fetchCustomPlayers('PLAYLIST', true);
       }else if(this.emission  && !this.podcast){

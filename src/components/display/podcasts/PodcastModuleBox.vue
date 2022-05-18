@@ -1,26 +1,15 @@
 <template>
   <div class="module-box">
     <div
-      v-if="!isOuestFrance"
       class="text-uppercase h4"
     >
       {{ podcast.title }}
     </div>
-    <router-link
-      v-else
-      :to="{
-        name: 'emission',
-        params: { emissionId: podcast.emission.emissionId },
-        query: { productor: $store.state.filter.organisationId },
-      }"
-    >
-      <h1>{{ podcast.emission.name }}</h1>
-    </router-link>
     <div class="mb-5 mt-3 d-flex">
       <div class="w-100">
         <PodcastImage
           :class="[
-            !isOuestFrance && !isLiveReadyToRecord
+             !isLiveReadyToRecord
               ? 'shadow-element'
               : '',
             isLiveReadyToRecord &&
@@ -38,24 +27,15 @@
           :is-animator-live="isOctopusAndAnimator"
           @playPodcast="playPodcast"
         />
-        <h3 v-if="isOuestFrance">
-          {{ podcast.title }}
-        </h3>
         <div
           class="d-flex flex-wrap mb-3"
           :class="isLiveReady ? 'justify-content-between' : ''"
         >
           <div
-            v-if="!isOuestFrance && 0 !== date.length"
+            v-if="0 !== date.length"
             :class="!isLiveReady ? 'me-5' : ''"
           >
             {{ date }}
-          </div>
-          <div>
-            <span
-              v-if="isOuestFrance"
-              class="saooti-clock3"
-            />{{ $t('Duration', { duration: duration }) }}
           </div>
           <div
             v-if="isLiveReady"
@@ -72,7 +52,7 @@
         <!-- eslint-enable -->
         <div class="my-3">
           <ParticipantDescription :participants="podcast.animators" />
-          <div v-if="!isOuestFrance">
+          <div>
             {{ $t('Emission') + ' : ' }}
             <router-link
               class="fw-bold"
@@ -197,9 +177,6 @@ export default defineComponent({
     },
     authenticated(): boolean {
       return (state.generalParameters.authenticated as boolean);
-    },
-    isOuestFrance(): boolean {
-      return (state.podcastPage.ouestFranceStyle as boolean);
     },
     date(): string {
       if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){

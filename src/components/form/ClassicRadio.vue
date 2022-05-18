@@ -53,14 +53,14 @@ export default defineComponent({
 				this.$emit('update:textInit', this.textValue)
 			}
 		},
-		textInit(){
-			if(this.textInit !== this.textValue){
-				this.textValue =this.textInit;
-			}
-		}
-  },
-  mounted(){
-		this.textValue = this.textInit;
-	}
+    textInit: {
+      immediate: true,
+      handler() {
+        if(this.textInit !== this.textValue){
+          this.textValue =this.textInit;
+          }
+      },
+    },
+  }
 });
 </script>

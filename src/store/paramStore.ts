@@ -27,7 +27,6 @@ const state:paramStore = {
     ShareButtons: true,
     ShareDistribution: true,
     MiniplayerUri: 'https://playerbeta.dev2.saooti.org/',
-    ouestFranceStyle: false,
     downloadButton: false,
     hlsUri: 'https://hls.dev2.saooti.org/',
     mainRubrique: 0,
@@ -54,7 +53,6 @@ const state:paramStore = {
     progressBar:false
   },
   emissionPage: {
-    ouestFranceStyle: false,
     rssButton: false,
     isDisplayPodcasts:true,
     overflowScroll:false
@@ -117,7 +115,6 @@ export interface PodcastPage{
   ShareButtons?: boolean,
   ShareDistribution?: boolean,
   MiniplayerUri?: string,
-  ouestFranceStyle?: boolean,
   downloadButton?: boolean,
   hlsUri?: string,
   mainRubrique?: number,
@@ -144,7 +141,6 @@ export interface EmissionsPage{
   progressBar?:boolean
 }
 export interface EmissionPage{
-  ouestFranceStyle?: boolean,
   rssButton?: boolean,
   isDisplayPodcasts?:boolean,
   overflowScroll?: boolean,

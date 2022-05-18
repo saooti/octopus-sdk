@@ -1,19 +1,12 @@
 <template>
   <div class="page-box">
-    <h1 v-if="undefined === titlePage">
-      <template v-if="undefined === titlePage">
-        {{ $t('All participants') }}
-      </template>
-      <template v-else>
-        {{ titlePage }}
-      </template>
-    </h1>
+    <h1>{{ titleDisplay }}</h1>
     <ProductorSearch
       :organisation-id="organisationId"
       :search-pattern="searchPattern"
       type="participant"
-      @updateOrganisationId="updateOrganisationId"
-      @updateSearchPattern="updateSearchPattern"
+      @updateOrganisationId="organisationId = $event"
+      @updateSearchPattern="searchPattern = $event"
     />
     <ParticipantList
       :show-count="true"
@@ -26,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import { orgaComputed } from '../mixins/orgaComputed';
 import ParticipantList from '../display/participant/ParticipantList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import { state } from '../../store/paramStore';
@@ -35,10 +29,10 @@ export default defineComponent({
     ProductorSearch,
     ParticipantList,
   },
+  mixins: [orgaComputed],
   props: {
     productor: { default: undefined, type: String},
   },
-
   data() {
     return {
       first: 0 as number,
@@ -47,28 +41,16 @@ export default defineComponent({
       organisationId: undefined as string | undefined,
     };
   },
-
   computed: {
-    titlePage(): string|undefined {
+    titleDisplay(): string{
+      if(undefined === state.intervenantsPage.titlePage){
+        return this.$t('All participants');
+      }
       return state.intervenantsPage.titlePage;
     },
   },
-
   created() {
-    if (this.productor) {
-      this.organisationId = this.productor;
-    } else if (this.$store.state.filter.organisationId) {
-      this.organisationId = this.$store.state.filter.organisationId;
-    }
-  },
-  
-  methods: {
-    updateOrganisationId(value: string): void {
-      this.organisationId = value;
-    },
-    updateSearchPattern(value: string): void {
-      this.searchPattern = value;
-    },
+    this.organisationId = this.productor? this.productor : this.filterOrga;
   },
 })
 </script>

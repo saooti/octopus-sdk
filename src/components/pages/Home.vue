@@ -31,7 +31,6 @@
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../store/paramStore';
-
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
@@ -39,7 +38,6 @@ import { defineComponent } from 'vue'
 import { Category } from '@/store/class/general/category';
 export default defineComponent({
   name: 'Home',
-
   components: {
     PodcastInlineList,
   },
@@ -61,15 +59,12 @@ export default defineComponent({
     rubriqueFilter(): Array<RubriquageFilter>{
       return this.$store.state.filter.rubriqueFilter;
     },
-    isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
-    },
     categories(): Array<Category> {
       if(this.$store.state.filter.iab){
         return [this.$store.state.filter.iab];
       }
       return this.$store.state.categories.filter((c: Category) => {
-        if (this.isPodcastmaker) return c.podcastOrganisationCount;
+        if (state.generalParameters.podcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });
     },
@@ -77,14 +72,12 @@ export default defineComponent({
   watch:{
     rubriqueFilter:{
       deep: true,
+      immediate: true,
       handler(){
-      this.updateRubriquageFilter();
+        if(this.rubriqueFilter.length){
+          this.updateRubriquageFilter();
+        }
       }
-    }
-  },
-  created(){
-    if(this.rubriqueFilter.length){
-      this.updateRubriquageFilter();
     }
   },
   methods:{

@@ -33,7 +33,6 @@
 
 <script lang="ts">
 import { state } from '../../store/paramStore';
-
 import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { Conference } from '@/store/class/conference/conference';
@@ -90,11 +89,7 @@ export default defineComponent({
       this.$emit('initConferenceIds', listIds);
     },
     onOrganisationSelected(organisation: Organisation|undefined): void {
-      if (organisation && organisation.id) {
-        this.$emit('update:organisationId', organisation.id);
-      } else {
-        this.$emit('update:organisationId', undefined);
-      }
+      this.$emit('update:organisationId', organisation ? organisation.id : undefined);
     },
   },
 })

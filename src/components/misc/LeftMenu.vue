@@ -3,78 +3,22 @@
     v-show="displayMenu"
     class="left-menu-container"
   >
-    <router-link
-      class="show-phone"
-      :to="{
-        name: 'home',
-        query: { productor: $store.state.filter.organisationId,
-                 iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                 rubriquesId: rubriqueQueryParam},
-      }"
-      @click="onMenuClick"
+    <template
+      v-for="link in routerLinkArray"
+      :key="link.routeName"
     >
-      {{ $t('Home') }}
-    </router-link>
-    <router-link
-      v-if="isLiveTab && filterOrga && filterOrgaLive"
-      :to="{
-        name: 'lives',
-        query: { productor: $store.state.filter.organisationId},
-      }"
-      @click="onMenuClick"
-    >
-      {{ $t('Live') }}
-    </router-link>
-    <router-link
-      :to="{
-        name: 'podcasts',
-        query: { productor: $store.state.filter.organisationId,
-                 iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                 rubriquesId: rubriqueQueryParam},
-      }"
-      @click="onMenuClick"
-    >
-      {{ $t('Podcasts') }}
-    </router-link>
-    <router-link
-      :to="{
-        name: 'emissions',
-        query: { productor: $store.state.filter.organisationId,
-                 iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined ,
-                 rubriquesId: rubriqueQueryParam},
-      }"
-      @click="onMenuClick"
-    >
-      {{ $t('Emissions') }}
-    </router-link>
-    <router-link
-      v-if="!isPodcastmaker && (!filterOrga || isEducation)"
-      :to="{
-        name: 'productors',
-        query: { productor: $store.state.filter.organisationId },
-      }"
-      @click="onMenuClick"
-    >
-      {{ $t('Productors') }}
-    </router-link>
-    <router-link
-      :to="{
-        name: 'participants',
-        query: { productor: $store.state.filter.organisationId },
-      }"
-      @click="onMenuClick"
-    >
-      {{ $t('Speakers') }}
-    </router-link>
-    <router-link
-      :to="{
-        name: 'playlists',
-        query: { productor: $store.state.filter.organisationId },
-      }"
-      @click="onMenuClick"
-    >
-      {{ $t('Playlists') }}
-    </router-link>
+      <router-link
+        v-if="link.condition"
+        :class="'home'===link.routeName ? 'show-phone' : ''"
+        :to="{
+          name: link.routeName,
+          query: getQueriesRouter(link.routeName),
+        }"
+        @click="onMenuClick"
+      >
+        {{ link.title }}
+      </router-link>
+    </template>
     <OrganisationChooserLight
       v-if="!isPodcastmaker"
       width="auto"
@@ -111,28 +55,31 @@ import { Organisation } from '@/store/class/general/organisation';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
   name: 'LeftMenu',
-
   components: {
     OrganisationChooserLight,
   },
   mixins:[orgaFilter],
-
   props: {
     displayMenu: { default: false, type: Boolean},
     isEducation: { default: false, type: Boolean},
   },
   emits: ['update:displayMenu'],
-
   data() {
     return {
       organisationId: undefined as string|undefined,
       reset: false as boolean,
     };
   },
-
   computed: {
-    isLiveTab(): boolean {
-      return (state.generalParameters.isLiveTab as boolean);
+    routerLinkArray(){
+      return [
+        {title : this.$t('Home'), routeName: 'home', condition : true},
+        {title : this.$t('Live'), routeName: 'lives', condition : state.generalParameters.isLiveTab &&((this.filterOrga && this.filterOrgaLive) || !this.filterOrga)},
+        {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
+        {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
+        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrga || this.isEducation)},
+        {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
+        {title : this.$t('Speakers'), routeName: 'participants', condition : true},]
     },
     categories(): Array<Category> {
       return this.$store.state.categories.filter((c: Category) => {
@@ -157,22 +104,27 @@ export default defineComponent({
     },
   },
   watch: {
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.organisationId = this.filterOrga;
-      } else {
-        this.reset = !this.reset;
-      }
+    filterOrga: {
+      immediate: true,
+      handler() {
+        if (this.filterOrga) {
+          this.organisationId = this.filterOrga;
+        } else {
+          this.reset = !this.reset;
+        }
+      },
     },
-  },
-
-  mounted() {
-    if (this.filterOrga) {
-      this.organisationId = this.filterOrga;
-    }
   },
   
   methods: {
+    getQueriesRouter(routeName: string){
+      if('podcasts' !== routeName && 'emissions' !== routeName && 'home' !== routeName){
+        return { productor: this.$store.state.filter.organisationId};
+      }
+      return { productor: this.$store.state.filter.organisationId,
+                   iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
+                   rubriquesId: this.rubriqueQueryParam}
+    },
     onMenuClick() {
       this.$emit('update:displayMenu', false);
     },

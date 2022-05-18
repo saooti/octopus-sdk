@@ -25,7 +25,6 @@
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'ClassicSelect',
-
   props: {
     idSelect: { default: '', type: String },
     label: { default: '', type: String },
@@ -34,9 +33,7 @@ export default defineComponent({
     options: { default: ()=>[], type: Array as () => Array<{title: string, value: string|undefined}> },
     textInit: { default: undefined, type: String },
   },
-
   emits: ['update:textInit'],
-
   data() {
     return {
       textValue: undefined as string|undefined,
@@ -48,21 +45,21 @@ export default defineComponent({
 				this.$emit('update:textInit', this.textValue)
 			}
 		},
-		textInit(){
-			if(this.textInit !== this.textValue){
-				this.textValue =this.textInit;
-			}
-		}
-  },
-  mounted(){
-		this.textValue = this.textInit;
-	}
+    textInit: {
+      immediate: true,
+      handler() {
+        if(this.textInit !== this.textValue){
+          this.textValue =this.textInit;
+          }
+      },
+    },
+  }
 });
 </script>
 <style lang="scss">
 .octopus-app{
-.classic-select select{
-  width: inherit;
-}
+  .classic-select select{
+    width: inherit;
+  }
 }
 </style>

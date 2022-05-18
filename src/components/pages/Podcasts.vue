@@ -3,19 +3,14 @@
     <div
       class="d-flex"
       :class="
-        isEmissionChooser ? 'justify-content-between' : 'justify-content-center'
+        pageParameters.isEmissionChooser ? 'justify-content-between' : 'justify-content-center'
       "
     >
       <h1 class="flex-shrink-0">
-        <template v-if="undefined === titlePage">
-          {{ $t('All podcasts') }}
-        </template>
-        <template v-else>
-          {{ titlePage }}
-        </template>
+        {{ titleDisplay }}
       </h1>
       <EmissionChooser
-        v-if="isEmissionChooser"
+        v-if="pageParameters.isEmissionChooser"
         :defaultanswer="$t('No emission filter')"
         width="auto"
         class="ms-3"
@@ -23,7 +18,7 @@
       />
     </div>
     <ProductorSearch
-      v-if="isProductorSearch"
+      v-if="pageParameters.isProductorSearch"
       :organisation-id="organisationId"
       :search-pattern="searchPattern"
       @updateOrganisationId="updateOrganisationId"
@@ -33,18 +28,18 @@
       :is-education="isEducation"
       :is-emission="false"
       :reset-rubriquage="resetRubriquage"
-      :is-search-bar="isProductorSearch"
+      :is-search-bar="pageParameters.isProductorSearch"
       :sort-criteria="sortCriteria"
       :include-hidden="includeHidden"
       :organisation-id="organisationId"
-      @updateCategory="updateCategory"
+      @updateCategory="iabId=$event"
       @updateRubriquageFilter="updateRubriquageFilter"
-      @updateMonetization="updateMonetization"
-      @updateFromDate="updateFromDate"
-      @updateToDate="updateToDate"
-      @updateSortCriteria="updateSortCriteria"
-      @includeHidden="updateHidden"
-      @notValid="updateNotValid"
+      @updateMonetization="monetization = $event"
+      @updateFromDate="fromDate = $event"
+      @updateToDate="toDate = $event"
+      @updateSortCriteria="sortCriteria=$event"
+      @includeHidden="includeHidden = $event"
+      @notValid="notValid = $event"
     />
     <PodcastList
       :show-count="true"
@@ -68,32 +63,30 @@
 </template>
 
 <script lang="ts">
+import { orgaComputed } from '../mixins/orgaComputed';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../store/paramStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { Emission } from '@/store/class/general/emission';
-import { Category } from '@/store/class/general/category';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const EmissionChooser = defineAsyncComponent(() => import('../display/emission/EmissionChooser.vue'));
 export default defineComponent({
   name:"Podcasts",
-
   components: {
     PodcastList,
     ProductorSearch,
     EmissionChooser,
     AdvancedSearch,
   },
-
+  mixins:[orgaComputed],
   props: {
     productor: { default: undefined, type: String},
     isEducation: { default: false, type: Boolean},
     searchInit: { default: "", type: String}
   },
-
   data() {
     return {
       first: 0 as number,
@@ -116,17 +109,11 @@ export default defineComponent({
   },
 
   computed: {
-    rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
-    },
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-    myOrganisationId(): string|undefined {
-      return state.generalParameters.organisationId;
+    titleDisplay(): string{
+      if(undefined === state.podcastsPage.titlePage){
+        return this.$t('All podcasts');
+      }
+      return state.podcastsPage.titlePage;
     },
     organisationRight(): boolean {
       if (
@@ -136,62 +123,30 @@ export default defineComponent({
         return true;
       return false;
     },
-    filterOrga(): string|undefined {
-      return this.$store.state.filter.organisationId;
-    },
     organisation(): string|undefined {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
-    isProductorSearch(): boolean {
-      return (state.podcastsPage.ProductorSearch as boolean);
-    },
-    titlePage(): string|undefined {
-      return state.podcastsPage.titlePage;
-    },
-    isEmissionChooser(): boolean {
-      return (state.podcastsPage.emissionChooser as boolean);
-    },
+    pageParameters(){
+      return {
+        isProductorSearch: state.podcastsPage.ProductorSearch,
+        isEmissionChooser: state.podcastsPage.emissionChooser
+      }
+    }
   },
 
   created() {
-    if(this.searchInit){
-      this.searchPattern = this.searchInit;
-    }
-    if (this.productor) {
-      this.organisationId = this.productor;
-    } else if (this.$store.state.filter.organisationId) {
-      this.organisationId = this.$store.state.filter.organisationId;
-    }
-    if (this.organisation && this.organisationRight) {
-      this.includeHidden = true;
-    }
-    if(this.categoryFilter){
-      this.iabId = this.categoryFilter.id;
-    }
-    if(this.rubriqueFilter.length){
-      this.updateRubriquageFilter(this.rubriqueFilter);
+    this.searchPattern = this.searchInit ? this.searchInit : '';
+    this.organisationId = this.productor ? this.productor : this.filterOrga;
+    this.includeHidden = this.organisation && this.organisationRight ? true : false;
+    this.iabId = this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined;
+    if(this.$store.state.filter.rubriqueFilter.length){
+      this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
     }
   },
   
-  
   methods: {
-    updateCategory(value: number|undefined){
-      this.iabId = value;
-    },
-    updateSortCriteria(value: string): void {
-      this.sortCriteria = value;
-    },
-    updateHidden(value: boolean): void {
-      this.includeHidden = value;
-    },
-    updateToDate(value: string): void {
-      this.toDate = value;
-    },
-    updateFromDate(value: string): void {
-      this.fromDate = value;
-    },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       const length = value.length;
       const allRubriquageId: Array<number>= [];
@@ -218,25 +173,11 @@ export default defineComponent({
       this.organisationId = value;
     },
     updateSearchPattern(value: string): void {
-      if ('' !== value) {
-        this.sortCriteria = 'SCORE';
-      } else {
-        this.sortCriteria = 'DATE';
-      }
+      this.sortCriteria = '' !== value ? 'SCORE' : 'DATE';
       this.searchPattern = value;
     },
-    updateMonetization(value: string): void {
-      this.monetization = value;
-    },
-    updateNotValid(value: boolean): void {
-      this.notValid = value;
-    },
     emissionSelected(emission: Emission): void {
-      if (emission && emission.emissionId) {
-        this.emissionId = emission.emissionId;
-      } else {
-        this.emissionId = undefined;
-      }
+      this.emissionId = emission && emission.emissionId ? emission.emissionId : undefined;
     },
   },
 })

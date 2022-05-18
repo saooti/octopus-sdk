@@ -49,38 +49,38 @@ export default defineComponent({
 				this.$emit('update:textInit', this.textValue)
 			}
 		},
-		textInit(){
-			if(this.textInit !== this.textValue){
-				this.textValue =this.textInit;
-			}
-		}
-  },
-  mounted(){
-		this.textValue = this.textInit;
-	}
+    textInit: {
+      immediate: true,
+      handler() {
+        if(this.textInit !== this.textValue){
+          this.textValue =this.textInit;
+          }
+      },
+    },
+  }
 });
 </script>
 <style lang="scss">
 .octopus-app{
-.champs-searchPage{
-  input {
-    border: 2px solid #dee2e6;
-    border-radius: 10px;
-    margin: 0 !important;
-  }
-  .saooti-search-bounty,
-  .saooti-cross {
-    font-size: 1rem;
-  }
-  .search-icon-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    margin: 1rem;
-  }
-} 
+  .champs-searchPage{
+    input {
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      margin: 0 !important;
+    }
+    .saooti-search-bounty,
+    .saooti-cross {
+      font-size: 1rem;
+    }
+    .search-icon-container {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      margin: 1rem;
+    }
+  } 
 }
 </style>

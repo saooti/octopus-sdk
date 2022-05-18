@@ -35,69 +35,21 @@
       @selected="onOrganisationSelected"
     />
     <div class="d-flex justify-content-end flex-grow-1">
-      <router-link
-        v-if="
-          isLiveTab &&
-            ((filterOrga && filterOrgaLive) || !filterOrga)
-        "
-        :to="{
-          name: 'lives',
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="link-hover p-3 fw-bold"
+      <template
+        v-for="link in routerLinkArray"
+        :key="link.routeName"
       >
-        {{ $t('Live') }}
-      </router-link>
-      <router-link
-        :to="{
-          name: 'podcasts',
-          query: { productor: $store.state.filter.organisationId,
-                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                   rubriquesId: rubriqueQueryParam},
-        }"
-        class="link-hover p-3 fw-bold"
-      >
-        {{ $t('Podcasts') }}
-      </router-link>
-      <router-link
-        :to="{
-          name: 'emissions',
-          query: { productor: $store.state.filter.organisationId,
-                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                   rubriquesId: rubriqueQueryParam },
-        }"
-        class="link-hover p-3 fw-bold"
-      >
-        {{ $t('Emissions') }}
-      </router-link>
-      <router-link
-        :to="{
-          name: 'participants',
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="link-hover p-3 fw-bold"
-      >
-        {{ $t('Speakers') }}
-      </router-link>
-      <router-link
-        :to="{
-          name: 'playlists',
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="link-hover p-3 fw-bold"
-      >
-        {{ $t('Playlists') }}
-      </router-link>
-      <router-link
-        v-if="!isPodcastmaker && (!filterOrga || isEducation)"
-        :to="{
-          name: 'productors',
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="link-hover p-3 fw-bold"
-      >
-        {{ $t('Productors') }}
-      </router-link>
+        <router-link
+          v-if="link.condition"
+          :to="{
+            name: link.routeName,
+            query: getQueriesRouter(link.routeName),
+          }"
+          class="link-hover p-3 fw-bold"
+        >
+          {{ link.title }}
+        </router-link>
+      </template>
     </div>
     <div class="d-flex flex-column">
       <div class="hosted-by">
@@ -129,19 +81,16 @@ import { defineComponent,defineAsyncComponent } from 'vue';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
   name: 'TopBar',
-
   components: {
     OrganisationChooserLight,
     HomeDropdown,
   },
   mixins:[orgaFilter],
-
   props: {
     displayMenu: { default: false, type: Boolean},
     isEducation: { default: false, type: Boolean},
   },
   emits: ['update:displayMenu'],
-
   data() {
     return {
       scrolled: false as boolean,
@@ -152,8 +101,16 @@ export default defineComponent({
       dummyParam: new Date().getTime().toString() as string,
     };
   },
- 
   computed: {
+    routerLinkArray(){
+      return [
+        {title : this.$t('Live'), routeName: 'lives', condition : this.isLiveTab &&((this.filterOrga && this.filterOrgaLive) || !this.filterOrga)},
+        {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
+        {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
+        {title : this.$t('Speakers'), routeName: 'participants', condition : true},
+        {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
+        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrga || this.isEducation)}]
+    },
     rubriqueQueryParam(): string|undefined{
       if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
         return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
@@ -186,26 +143,32 @@ export default defineComponent({
     },
   },
   watch: {
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.organisationId = this.filterOrga;
-      } else {
-        this.reset = !this.reset;
-      }
+    filterOrga: {
+      immediate: true,
+      handler() {
+        if (this.filterOrga) {
+          this.organisationId = this.filterOrga;
+        } else {
+          this.reset = !this.reset;
+        }
+      },
     },
   },
-
   mounted() {
-    if (this.filterOrga) {
-      this.organisationId = this.filterOrga;
-    }
     window.addEventListener('scroll', this.handleScroll);
   },
-
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    getQueriesRouter(routeName: string){
+      if('podcasts' !== routeName && 'emissions' !== routeName){
+        return { productor: this.$store.state.filter.organisationId};
+      }
+      return { productor: this.$store.state.filter.organisationId,
+                   iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
+                   rubriquesId: this.rubriqueQueryParam}
+    },
     handleScroll(): void {
       if (
         window.scrollY - this.oldScrollY > 0 &&
@@ -231,11 +194,7 @@ export default defineComponent({
       }
     },
     onDisplayMenu(param: boolean): void {
-      if (true === param) {
-        this.$emit('update:displayMenu', false);
-      } else {
-        this.$emit('update:displayMenu', !this.displayMenu);
-      }
+      this.$emit('update:displayMenu',param?false:!this.displayMenu);
     },
     async onOrganisationSelected(organisation: Organisation | undefined): Promise<void> {
       if (organisation && organisation.id) {

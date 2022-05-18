@@ -16,7 +16,7 @@
             :src="iFrameSrc"
             scrolling="no"
             frameborder="0"
-            :width="iFrameWidth"
+            width="100%"
             :height="iFrameHeight"
             class="max-iframe my-2"
           />
@@ -52,11 +52,11 @@
           :is-visible="isVisible"
           :chose-number-episode="displayChoiceAllEpisodes|| isLargeSuggestion"
           :display-choice-all-episodes="displayChoiceAllEpisodes"
-          @displayArticle="updateDisplayArticle"
-          @episodeNumbers="updateEpisodeNumber"
-          @proceedReading="updateProceedReading"
-          @isVisible="updateIsVisible"
-          @iFrameNumber="updateIframeNumber"
+          @displayArticle="displayArticle = $event"
+          @episodeNumbers="episodeNumbers = $event"
+          @proceedReading="proceedReading = $event"
+          @isVisible="isVisible = $event"
+          @iFrameNumber="iFrameNumber = $event"
         />
       </template>
       <div v-else-if="exclusive && authenticated">
@@ -236,27 +236,18 @@ export default defineComponent({
       }
       return url.join('');
     },
-    iFrameWidth(): string {
-      return '100%';
-    },
     iFrameHeight(): string {
       switch (this.iFrameModel) {
         case 'large':
           if (this.podcast) return '180px';
           if ('number' === this.episodeNumbers) {
             switch (this.iFrameNumber.toString()) {
-              case '1':
-                return '270px';
-              case '2':
-                return '320px';
-              case '3':
-                return '360px';
-              case '4':
-                return '420px';
-              case '5':
-                return '420px';
-              default:
-                return '420px';
+              case '1': return '270px';
+              case '2': return '320px';
+              case '3': return '360px';
+              case '4': return '420px';
+              case '5': return '420px';
+              default: return '420px';
             }
           }
           return '435px';
@@ -264,28 +255,21 @@ export default defineComponent({
         case 'largeSuggestion':
           if ('number' !== this.episodeNumbers) return '510px';
           switch (this.iFrameNumber.toString()) {
-            case '1':
-              return '315px';
-            case '2':
-              return '365px';
-            case '3':
-              return '420px';
-            case '4':
-              return '470px';
-            case '5':
-              return '470px';
-            default:
-              return '470px';
+            case '1':return '315px';
+            case '2':return '365px';
+            case '3':return '420px';
+            case '4':return '470px';
+            case '5':return '470px';
+            default:return '470px';
           }
-        case 'emission':
-          return '530px';
+        case 'emission':return '530px';
         default:
           if (this.podcast) return '520px';
           return '530px';
       }
     },
     iFrame(): string {
-      return `<iframe src="${this.iFrameSrc}" width="${this.iFrameWidth}" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
+      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
     },
     isPodcastNotVisible(): boolean {
       return (
@@ -321,32 +305,9 @@ export default defineComponent({
           state.generalParameters.organisationId ? state.generalParameters.organisationId : ""
         );
       }
-      if (Object.prototype.hasOwnProperty.call(data,'COLOR')) {
-        this.color = data.COLOR;
-      } else {
-        this.color = '#40a372';
-      }
-      if (Object.prototype.hasOwnProperty.call(data,'THEME')) {
-        this.theme = data.THEME;
-      } else {
-        this.theme = '#000000';
-      }
+      this.color = Object.prototype.hasOwnProperty.call(data,'COLOR') ? data.COLOR : '#40a372';
+      this.theme = Object.prototype.hasOwnProperty.call(data,'THEME') ? data.THEME : '#000000';
     },
-    updateEpisodeNumber(value: string): void {
-      this.episodeNumbers = value;
-    },
-    updateProceedReading(value: boolean): void {
-      this.proceedReading = value;
-    },
-    updateIframeNumber(value: string): void {
-      this.iFrameNumber = value;
-    },
-    updateIsVisible(value: boolean): void {
-      this.isVisible = value;
-    },
-    updateDisplayArticle(value: boolean): void{
-      this.displayArticle = value;
-    }
   },
 })
 </script>
@@ -354,26 +315,26 @@ export default defineComponent({
 <style lang="scss">
 @import '../../../sass/_variables.scss';
 .octopus-app{
-.sticker {
-  align-self: center;
-  background: $octopus-primary-dark;
-  padding: 0.5rem;
-  transition: all 0.5s ease;
-  color: white;
-  font-weight: bold;
-  letter-spacing: 1px;
-  outline: none;
-  box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  border: solid 2px #41403e;
-  &:hover {
-    box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
-    background: transparent;
-    color: $octopus-primary-dark;
+  .sticker {
+    align-self: center;
+    background: $octopus-primary-dark;
+    padding: 0.5rem;
+    transition: all 0.5s ease;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+    outline: none;
+    box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: solid 2px #41403e;
+    &:hover {
+      box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+      background: transparent;
+      color: $octopus-primary-dark;
+    }
   }
-}
-.max-iframe {
-  max-width: 300px;
-}
+  .max-iframe {
+    max-width: 300px;
+  }
 }
 </style>

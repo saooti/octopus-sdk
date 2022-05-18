@@ -7,57 +7,21 @@
     >
       <div class="d-flex flex-column flex-grow-1 align-items-end">
         <div class="d-flex flex-column">
-          <router-link
-            :to="{
-              name: 'home',
-              query: { productor: $store.state.filter.organisationId,
-                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                       rubriquesId: rubriqueQueryParam },
-            }"
-            class="link-hover"
+          <template
+            v-for="link in routerLinkArray"
+            :key="link.routeName"
           >
-            {{ $t('Home') }}
-          </router-link>
-          <router-link
-            :to="{
-              name: 'podcasts',
-              query: { productor: $store.state.filter.organisationId,
-                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
-                       rubriquesId: rubriqueQueryParam},
-            }"
-            class="link-hover"
-          >
-            {{ $t('Podcasts') }}
-          </router-link>
-          <router-link
-            :to="{
-              name: 'emissions',
-              query: { productor: $store.state.filter.organisationId,
-                       iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined },
-            }"
-            class="link-hover"
-          >
-            {{ $t('Emissions') }}
-          </router-link>
-          <router-link
-            v-if="!isPodcastmaker"
-            :to="{
-              name: 'productors',
-              query: { productor: $store.state.filter.organisationId },
-            }"
-            class="link-hover"
-          >
-            {{ $t('Productors') }}
-          </router-link>
-          <router-link
-            :to="{
-              name: 'participants',
-              query: { productor: $store.state.filter.organisationId },
-            }"
-            class="link-hover"
-          >
-            {{ $t('Speakers') }}
-          </router-link>
+            <router-link
+              v-if="link.condition"
+              class="link-hover"
+              :to="{
+                name: link.routeName,
+                query: getQueriesRouter(link.routeName),
+              }"
+            >
+              {{ link.title }}
+            </router-link>
+          </template>
         </div>
       </div>
       <hr class="show-phone">
@@ -70,28 +34,12 @@
             &copy; Saooti 2019
           </div>
           <router-link
+            v-for="link in routerLinkSecondArray" 
+            :key="link.routeName"
             class="link-hover"
-            to="/main/pub/contact"
+            :to="link.routeName"
           >
-            {{
-              $t('Contact')
-            }}
-          </router-link>
-          <router-link
-            class="link-hover"
-            to="/main/pub/cgu"
-          >
-            {{
-              $t('Term of use')
-            }}
-          </router-link>
-          <router-link
-            class="link-hover"
-            to="/main/pub/libraries"
-          >
-            {{
-              $t('Used libraries')
-            }}
+            {{ link.title }}
           </router-link>
           <ClassicSelect
             v-model:textInit="language"
@@ -159,17 +107,31 @@ export default defineComponent({
     Player,
     ClassicSelect
   },
-
   mixins:[cookies],
-
   data() {
     return {
       language: this.$i18n.locale as string,
     };
   },
-
-
   computed: {
+    routerLinkArray(){
+      return [
+        {title : this.$t('Home'), routeName: 'home', condition : true},
+        {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
+        {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
+        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && !this.filterOrga},
+        {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
+        {title : this.$t('Speakers'), routeName: 'participants', condition : true},]
+    },
+    routerLinkSecondArray(){
+      return [
+        {title : this.$t('Contact'), routeName: '/main/pub/contact'},
+        {title : this.$t('Term of use'), routeName: '/main/pub/cgu'},
+        {title : this.$t('Used libraries'), routeName: "/main/pub/libraries"}]
+    },
+    filterOrga(): string {
+      return this.$store.state.filter.organisationId;
+    },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
@@ -183,17 +145,23 @@ export default defineComponent({
       return undefined;
     },
   },
-
   watch:{
     language(){
       this.changeLanguage();
     }
   },
-
   methods: {
+    getQueriesRouter(routeName: string){
+      if('podcasts' !== routeName && 'emissions' !== routeName && 'home' !== routeName){
+        return { productor: this.$store.state.filter.organisationId};
+      }
+      return { productor: this.$store.state.filter.organisationId,
+                   iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
+                   rubriquesId: this.rubriqueQueryParam}
+    },
     showBlackBorder(hide: boolean): void {
       const footerElement = (this.$refs.footer as HTMLElement);
-      if(null===footerElement){return}
+      if(null===footerElement){return;}
       if (hide) {
         footerElement.classList.remove('border-round');
       } else {
@@ -222,25 +190,25 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-#footer{
-  font-size: 0.7rem;
-  .acpm_image {
-    width: 70px;
-    height: 70px;
-  }
-  a{
-    color: #666;
-  }
-  .border-round {
-    border-radius: 0 0 2rem 2rem;
-  }
-  /** PHONES*/
-  @media (max-width: 960px) {
-    .align-items-center,
-    .align-items-end {
-      align-items: flex-start !important;
+  #footer{
+    font-size: 0.7rem;
+    .acpm_image {
+      width: 70px;
+      height: 70px;
+    }
+    a{
+      color: #666;
+    }
+    .border-round {
+      border-radius: 0 0 2rem 2rem;
+    }
+    /** PHONES*/
+    @media (max-width: 960px) {
+      .align-items-center,
+      .align-items-end {
+        align-items: flex-start !important;
+      }
     }
   }
-}
 }
 </style>

@@ -7,9 +7,8 @@
       <div class="d-flex">
         <div class="d-flex flex-column flex-grow-1">
           <EditBox
-            v-if="editRight && isEditBox"
+            v-if="editRight && pageParameters.isEditBox"
             :playlist="playlist"
-            :is-ready="true"
           />
           <div class="module-box">
             <h2>{{ name }}</h2>
@@ -30,12 +29,12 @@
         </div>
         <div class="d-flex flex-column flex-grow-mobile">
           <SharePlayer
-            v-if="isSharePlayer && authenticated"
+            v-if="pageParameters.isSharePlayer && authenticated"
             :playlist="playlist"
-            :organisation-id="organisationId"
+            :organisation-id="myOrganisationId"
             :is-education="isEducation"
           />
-          <ShareButtons v-if="isShareButtons" />
+          <ShareButtons v-if="pageParameters.isShareButtons" />
         </div>
       </div>
       <PodcastList :playlist="playlist" />
@@ -48,6 +47,7 @@
 </template>
 
 <script lang="ts">
+import { orgaComputed } from '../mixins/orgaComputed';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import PodcastList from '../display/playlist/PodcastList.vue';
 import octopusApi from '@saooti/octopus-api';
@@ -68,13 +68,14 @@ export default defineComponent({
     SharePlayer,
     ClassicLoading
   },
-  mixins:[displayMethods, handle403],
+  mixins:[displayMethods, handle403, orgaComputed],
+
   props: {
     playlistId: { default: undefined, type: Number},
     isEducation: { default: false, type: Boolean},
   },
-  emits: ['playlistTitle'],
 
+  emits: ['playlistTitle'],
   data() {
     return {
       loaded: false as boolean,
@@ -82,22 +83,13 @@ export default defineComponent({
       error: false as boolean,
     };
   },
-  
   computed: {
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-    isEditBox(): boolean {
-      return (state.podcastPage.EditBox as boolean);
-    },
-    isShareButtons(): boolean {
-      return (state.podcastPage.ShareButtons as boolean);
-    },
-    isSharePlayer(): boolean {
-      return (state.podcastPage.SharePlayer as boolean);
+    pageParameters(){
+      return {
+        isEditBox : (state.podcastPage.EditBox as boolean),
+        isShareButtons: (state.podcastPage.ShareButtons as boolean),
+        isSharePlayer: (state.podcastPage.SharePlayer as boolean),
+      };
     },
     name(): string {
       return this.playlist ? this.playlist.title : '';
@@ -112,26 +104,23 @@ export default defineComponent({
     editRight(): boolean {
       if (
         (state.generalParameters.isPlaylist && this.playlist &&
-          this.organisationId === this.playlist.organisation.id) ||
+          this.myOrganisationId === this.playlist.organisation.id) ||
         state.generalParameters.isAdmin
       ){
         return true;
       }
       return false;
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
   },
   watch: {
-    playlistId() {
-      this.getPlaylistDetails();
+    playlistId: {
+      immediate: true,
+      handler() {
+        this.getPlaylistDetails();
+      },
     },
   },
 
-  mounted() {
-    this.getPlaylistDetails();
-  },
   methods: {
     initError():void{
       this.error = true;

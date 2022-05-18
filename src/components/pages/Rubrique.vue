@@ -15,37 +15,26 @@ import PodcastList from '../display/podcasts/PodcastList.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name:"Rubrique",
-
   components: {
     PodcastList,
   },
-
   props: {
     firstRoute: { default: 0, type: Number},
     sizeRoute: { default: 12, type: Number},
     rubriqueId: { default: undefined, type:  [ Number ]},
   },
-
   data() {
     return {
       title: '' as string,
     };
   },
-
   watch: {
-    rubriqueId(): void {
-      this.extractTitle();
-    },
-  },
-
-  mounted() {
-    this.extractTitle();
-  },
-
-  methods: {
-    async extractTitle(): Promise<void> {
-      const data = await octopusApi.fetchRubric(this.rubriqueId);
-      this.title = data.name;
+    rubriqueId: {
+      immediate: true,
+      async handler() {
+        const data = await octopusApi.fetchRubric(this.rubriqueId);
+        this.title = data.name;
+      },
     },
   },
 })

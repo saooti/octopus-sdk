@@ -2,7 +2,7 @@
   <div class="page-box">
     <template v-if="loaded && !error">
       <div class="page-podcast-title">
-        <h1 v-if="!isOuestFrance">
+        <h1>
           {{ titlePage }}
         </h1>
         <Countdown
@@ -27,9 +27,8 @@
             @validatePodcast="updatePodcast"
           />
           <EditBox
-            v-else-if="editRight && isEditBox"
+            v-else-if="editRight && pageParameters.isEditBox"
             :podcast="podcast"
-            :is-ready="true"
             @validatePodcast="updatePodcast"
           />
           <PodcastModuleBox
@@ -38,7 +37,7 @@
             :fetch-conference="fetchConference"
           />
           <SubscribeButtons
-            v-if="isShareButtons && countLink >= 1"
+            v-if="pageParameters.isShareButtons && countLink >= 1"
             :emission="podcast.emission"
           />
         </div>
@@ -47,44 +46,42 @@
           :class="authenticated || notExclusive ? 'flex-grow-1' : ''"
         >
           <SharePlayer
-            v-if="isSharePlayer && (authenticated || notExclusive)"
+            v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
             :podcast="podcast"
             :emission="podcast.emission"
             :exclusive="exclusive"
             :not-exclusive="notExclusive"
-            :organisation-id="organisationId"
+            :organisation-id="myOrganisationId"
             :is-education="isEducation"
           />
           <ShareButtons
-            v-if="isShareButtons"
+            v-if="pageParameters.isShareButtons"
             :podcast="podcast"
             :not-exclusive="notExclusive"
           />
         </div>
       </div>
-      <template v-if="!isOuestFrance">
-        <CommentSection
-          v-if="!isPodcastmaker"
-          ref="commentSection"
-          :podcast="podcast"
-          :fetch-conference="fetchConference"
-        />
-        <PodcastInlineList
-          class="mt-4"
-          :emission-id="podcast.emission.emissionId"
-          :href="'/main/pub/emission/' + podcast.emission.emissionId"
-          :title="$t('More episodes of this emission')"
-          :button-text="$t('All podcast emission button')"
-        />
-        <PodcastInlineList
-          v-for="c in categories"
-          :key="c.id"
-          :iab-id="c.id"
-          :href="'/main/pub/category/' + c.id"
-          :title="$t('More episodes of this category : ', { name: c.name })"
-          :button-text="$t('All podcast button', { name: c.name })"
-        />
-      </template>
+      <CommentSection
+        v-if="!isPodcastmaker"
+        ref="commentSection"
+        :podcast="podcast"
+        :fetch-conference="fetchConference"
+      />
+      <PodcastInlineList
+        class="mt-4"
+        :emission-id="podcast.emission.emissionId"
+        :href="'/main/pub/emission/' + podcast.emission.emissionId"
+        :title="$t('More episodes of this emission')"
+        :button-text="$t('All podcast emission button')"
+      />
+      <PodcastInlineList
+        v-for="c in categories"
+        :key="c.id"
+        :iab-id="c.id"
+        :href="'/main/pub/category/' + c.id"
+        :title="$t('More episodes of this category : ', { name: c.name })"
+        :button-text="$t('All podcast button', { name: c.name })"
+      />
     </template>
     <ClassicLoading
       :loading-text="!loaded?$t('Loading content ...'):undefined"
@@ -94,6 +91,7 @@
 </template>
 
 <script lang="ts">
+import { orgaComputed } from '../mixins/orgaComputed';
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import PodcastModuleBox from '../display/podcasts/PodcastModuleBox.vue';
 import ClassicLoading from '../form/ClassicLoading.vue';
@@ -131,7 +129,7 @@ export default defineComponent({
     ClassicLoading
   },
 
-  mixins: [handle403],
+  mixins: [handle403, orgaComputed],
 
   props: {
     updateStatus: { default: undefined, type: String},
@@ -157,26 +155,12 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    isEditBox(): boolean {
-      return (state.podcastPage.EditBox as boolean);
-    },
-    isShareButtons(): boolean {
-      return (state.podcastPage.ShareButtons as boolean);
-    },
-    isSharePlayer(): boolean {
-      return (state.podcastPage.SharePlayer as boolean);
-    },
-    allCategories(): Array<Category> {
-      return this.$store.state.categories;
-    },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-    isOuestFrance(): boolean {
-      return (state.podcastPage.ouestFranceStyle as boolean);
+    pageParameters(){
+      return {
+        isEditBox : (state.podcastPage.EditBox as boolean),
+        isShareButtons: (state.podcastPage.ShareButtons as boolean),
+        isSharePlayer: (state.podcastPage.SharePlayer as boolean),
+      };
     },
     emissionMainCategory(): number {
       if(!this.podcast){return 0;}
@@ -195,7 +179,7 @@ export default defineComponent({
     },
     categories(): Array<Category> {
       if ('undefined' === typeof this.podcast) return [];
-      return this.allCategories
+      return this.$store.state.categories
         .filter((item: Category) => {
           return ( this.podcast &&
             this.podcast.emission.iabIds &&
@@ -211,7 +195,7 @@ export default defineComponent({
     editRight(): boolean {
       if ( this.podcast &&
         (this.authenticated &&
-          this.organisationId === this.podcast.organisation.id) ||
+          this.myOrganisationId === this.podcast.organisation.id) ||
         state.generalParameters.isAdmin
       ){
         return true;
@@ -223,8 +207,7 @@ export default defineComponent({
       if (this.podcast && this.podcast.emission && this.podcast.emission.annotations) {
         if (undefined !== this.podcast.emission.annotations.amazon) count++;
         if (undefined !== this.podcast.emission.annotations.googlePodcasts) count++;
-        if (undefined !== this.podcast.emission.annotations.applePodcast)
-          count++;
+        if (undefined !== this.podcast.emission.annotations.applePodcast)count++;
         if (undefined !== this.podcast.emission.annotations.deezer) count++;
         if (undefined !== this.podcast.emission.annotations.spotify) count++;
         if (undefined !== this.podcast.emission.annotations.tunein) count++;
@@ -269,9 +252,6 @@ export default defineComponent({
       if(!this.podcast){return "";}
       return moment(this.podcast.pubDate).diff(moment(), 'seconds').toString();
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
   },
   watch: {
     updateStatus(): void {
@@ -279,44 +259,38 @@ export default defineComponent({
         this.fetchConference.status = this.updateStatus;
       }
     },
-    podcastId(): void {
-      this.loaded = false;
-      this.error = false;
-      this.getPodcastDetails(this.podcastId);
+    podcastId: {
+      immediate: true,
+      async handler() {
+        await this.getPodcastDetails();
+        this.initConference();
+      },
     },
   },
   
-  async mounted() {
-    await this.getPodcastDetails(this.podcastId);
-    if (!this.podcast) return;
-    if (!this.isLiveReadyToRecord) return;
-    if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
-      const data = await studioApi.getConference(this.$store.state,this.podcast.conferenceId.toString());
-      if (data) {
-        this.fetchConference = data;
-      } else {
-        this.fetchConference = {conferenceId:-1, title:''};
-      }
-    } else if(undefined!==this.podcast.conferenceId){
-      const data = await octopusApi.getRealConferenceStatus(this.podcast.conferenceId.toString());
-      this.fetchConference = {
-        status: data,
-        conferenceId: this.podcast.conferenceId,
-        title:'',
-      };
-    }
-    if (
-      this.fetchConference && 
-      -1 !== this.fetchConference.conferenceId &&
-      'PUBLISHING' !== this.fetchConference.status &&
-      'DEBRIEFING' !== this.fetchConference.status
-    ) {
-      this.$emit('initConferenceId', this.podcast.conferenceId);
-    }
-  },
-  
-  
   methods: {
+    async initConference(){
+      if (!this.podcast || !this.isLiveReadyToRecord) return;
+      if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
+        const data = await studioApi.getConference(this.$store.state,this.podcast.conferenceId.toString());
+        this.fetchConference = data ? data : {conferenceId:-1, title:''};
+      } else if(undefined!==this.podcast.conferenceId){
+        const data = await octopusApi.getRealConferenceStatus(this.podcast.conferenceId.toString());
+        this.fetchConference = {
+          status: data,
+          conferenceId: this.podcast.conferenceId,
+          title:'',
+        };
+      }
+      if (
+        this.fetchConference && 
+        -1 !== this.fetchConference.conferenceId &&
+        'PUBLISHING' !== this.fetchConference.status &&
+        'DEBRIEFING' !== this.fetchConference.status
+      ) {
+        this.$emit('initConferenceId', this.podcast.conferenceId);
+      }
+    },
     updatePodcast(podcastUpdated: Podcast): void {
       this.podcast = podcastUpdated;
     },
@@ -324,36 +298,42 @@ export default defineComponent({
       this.error = true;
       this.loaded = true;
     },
-    async getPodcastDetails(podcastId: number): Promise<void> {
+    handleAnnotations(){
+      if(!this.podcast){return;}
+      if (
+        this.podcast.emission.annotations &&
+        this.podcast.emission.annotations.exclusive
+      ) {
+        this.exclusive =
+          'true' === this.podcast.emission.annotations.exclusive
+            ? true
+            : false;
+        this.exclusive =
+          this.exclusive &&
+          this.myOrganisationId !== this.podcast.organisation.id;
+      }
+      if (
+        this.podcast.emission.annotations &&
+        this.podcast.emission.annotations.notExclusive
+      ) {
+        this.notExclusive =
+          'true' === this.podcast.emission.annotations.notExclusive
+            ? true
+            : false;
+      }
+    },
+    async getPodcastDetails(): Promise<void> {
+      this.loaded = false;
+      this.error = false;
       try {
-        const data : Podcast = await octopusApi.fetchPodcast(podcastId.toString());
+        const data : Podcast = await octopusApi.fetchPodcast(this.podcastId.toString());
         if("PUBLIC"!==data.organisation.privacy && this.filterOrga!==data.organisation.id){
           this.initError();
           return;
         }
         this.podcast = data;
         this.$emit('podcastTitle', this.podcast.title);
-        if (
-          this.podcast.emission.annotations &&
-          this.podcast.emission.annotations.exclusive
-        ) {
-          this.exclusive =
-            'true' === this.podcast.emission.annotations.exclusive
-              ? true
-              : false;
-          this.exclusive =
-            this.exclusive &&
-            this.organisationId !== this.podcast.organisation.id;
-        }
-        if (
-          this.podcast.emission.annotations &&
-          this.podcast.emission.annotations.notExclusive
-        ) {
-          this.notExclusive =
-            'true' === this.podcast.emission.annotations.notExclusive
-              ? true
-              : false;
-        }
+        this.handleAnnotations();
         if (
           (!this.podcast.availability.visibility ||
             ('READY_TO_RECORD' !== this.podcast.processingStatus &&

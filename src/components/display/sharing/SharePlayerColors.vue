@@ -47,30 +47,32 @@ export default defineComponent({
     };
   },
   watch:{
-    color(){
-      if(this.color !== this.internColor){
-        this.internColor = this.color;
-      }
-    },
     internColor(){
       if(this.color !== this.internColor){
         this.$emit('update:color', this.internColor);
-      }
-    },
-    theme(){
-      if(this.theme !== this.internTheme){
-        this.internTheme = this.theme;
       }
     },
     internTheme(){
       if(this.theme !== this.internTheme ){
         this.$emit('update:theme', this.internTheme);
       }
-    }
+    },
+    theme: {
+      immediate: true,
+      handler() {
+        if(this.theme !== this.internTheme){
+          this.internTheme = this.theme;
+        }
+      },
+    },
+    color: {
+      immediate: true,
+      handler() {
+        if(this.color !== this.internColor){
+          this.internColor = this.color;
+        }
+      },
+    },
   },
-  mounted(){
-    this.internColor= this.color;
-    this.internTheme= this.theme;
-  }
 })
 </script>

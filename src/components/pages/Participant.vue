@@ -3,13 +3,8 @@
     <div
       v-if="loaded && !error"
     >
-      <h1>
-        <template v-if="undefined === titlePage ||!lightStyle">
-          {{ $t('Animator') }}
-        </template>
-        <template v-else>
-          {{ titlePage }}
-        </template>
+      <h1 v-if="!pageParameters.lightStyle">
+        titleDisplay{{ titleDisplay }}
       </h1>
       <div
         class="d-flex flex-column align-items-center mb-3"
@@ -29,7 +24,7 @@
         />
         <!-- eslint-enable -->
         <div
-          v-if="isRssButton"
+          v-if="pageParameters.isRssButton"
           class="d-flex justify-content-center"
         >
           <a
@@ -44,19 +39,19 @@
         </div>
         <div class="d-flex mt-3">
           <EditBox
-            v-if="editRight && isEditBox"
+            v-if="editRight && pageParameters.isEditBox"
             :participant="participant"
             class="flex-grow-1"
             @participantUpdate="updateParticipant"
           />
           <ShareButtons
-            v-if="isShareButtons"
+            v-if="pageParameters.isShareButtons"
             :participant-id="participantId"
           />
         </div>
       </div>
       <PodcastFilterList
-        v-if="!lightStyle"
+        v-if="!pageParameters.lightStyle"
         :participant-id="participantId"
         :name="name"
         :category-filter="true"
@@ -81,6 +76,7 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
 import { displayMethods } from '../mixins/functions';
+import { orgaComputed } from '../mixins/orgaComputed';
 import { handle403 } from '../mixins/handle403';
 import { Participant } from '@/store/class/general/participant';
 import ClassicLoading from '../form/ClassicLoading.vue';
@@ -98,7 +94,7 @@ export default defineComponent({
     PodcastList,
     ClassicLoading
   },
-  mixins: [displayMethods, handle403],
+  mixins: [displayMethods, handle403, orgaComputed],
   props: {
     participantId: { default: undefined, type: Number},
   },
@@ -112,31 +108,22 @@ export default defineComponent({
     };
   },
   computed: {
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-    isEditBox(): boolean {
-      return (state.podcastPage.EditBox as boolean);
-    },
-    isShareButtons(): boolean {
-      return (state.podcastPage.ShareButtons as boolean);
-    },
-    lightStyle(): boolean {
-      return (state.intervenantPage.lightStyle as boolean);
-    },
-    isRssButton(): boolean {
-      return (state.intervenantPage.rssButton as boolean);
-    },
-    titlePage(): string|undefined {
+    titleDisplay(): string{
+      if(undefined === state.intervenantPage.titlePage){
+        return this.$t('Animator');
+      }
       return state.intervenantPage.titlePage;
     },
+    pageParameters(){
+      return {
+        isEditBox : (state.podcastPage.EditBox as boolean),
+        isShareButtons: (state.podcastPage.ShareButtons as boolean),
+        lightStyle:(state.intervenantPage.lightStyle as boolean),
+        isRssButton: (state.intervenantPage.rssButton as boolean),
+      };
+    },
     rssUrl(): string {
-      return (
-        state.generalParameters.ApiUri + 'rss/participant/' + this.participantId
-      );
+      return state.generalParameters.ApiUri + 'rss/participant/' + this.participantId;
     },
     description(): string {
       if(!this.participant){return '';}
@@ -154,15 +141,12 @@ export default defineComponent({
       if(!this.participant || !this.participant.orga ){return false;}
       if (
         (this.authenticated &&
-          this.organisationId === this.participant.orga.id) ||
+          this.myOrganisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
       ){
         return true;
       }
       return false;
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
     },
   },
   watch: {
@@ -172,9 +156,12 @@ export default defineComponent({
       this.reload = !this.reload;
       }
     },
-  },
-  mounted() {
-    this.getParticipantDetails();
+    participantId: {
+      immediate: true,
+      handler() {
+        this.getParticipantDetails();
+      },
+    },
   },
   methods: {
     initError():void{
@@ -189,8 +176,7 @@ export default defineComponent({
           this.initError();
           return;
         }
-        this.participant = data;
-        this.$emit('participantTitle', this.name);
+        this.updateParticipant(data);
         this.loaded = true;
       } catch(error) {
         this.handle403((error as AxiosError));
@@ -207,11 +193,11 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-@media (min-width: 950px) {
-  .participant-desc {
-    max-width: 50%;
-    line-height: 1.5em;
+  @media (min-width: 950px) {
+    .participant-desc {
+      max-width: 50%;
+      line-height: 1.5em;
+    }
   }
-}
 }
 </style>

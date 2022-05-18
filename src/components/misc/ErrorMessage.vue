@@ -17,7 +17,6 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -27,14 +26,13 @@ export default defineComponent({
   },
 })
 </script>
-
 <style lang="scss">
 .octopus-app{
-.bg-error-message {
-  background-color: #ffd84a9c;
-}
-.alert-text{
-  color: darkred;
-}
+  .bg-error-message {
+    background-color: #ffd84a9c;
+  }
+  .alert-text{
+    color: darkred;
+  }
 }
 </style>
