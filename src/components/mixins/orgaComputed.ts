@@ -1,4 +1,4 @@
-import { state } from '@/store/paramStore';
+import { state } from '../../store/paramStore';
 import { defineComponent } from 'vue';
 export const orgaComputed = defineComponent({
   computed: {
