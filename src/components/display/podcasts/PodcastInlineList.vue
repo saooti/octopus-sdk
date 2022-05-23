@@ -1,108 +1,52 @@
 <template>
-  <div
-    v-if="loading || (!loading && 0 !== allPodcasts.length)"
-    class="d-flex flex-column p-3"
-  >
-    <h2>{{ title }}</h2>
-    <div class="d-flex justify-content-between">
-      <div class="d-flex">
-        <button
-          class="btn btn-underline"
-          :class="{ active: !popularSort }"
-          @click="sortChrono()"
-        >
-          {{ $t('Last added') }}
-        </button>
-        <button
-          class="btn btn-underline"
-          :class="{ active: popularSort }"
-          @click="sortPopular()"
-        >
-          {{ $t('Most popular') }}
-        </button>
-      </div>
-      <div
-        v-if="!isArrow && !overflowScroll"
-        class="hide-phone"
-      >
-        <button
-          class="btn admin-button m-1"
-          :class="{ disabled: !previousAvailable }"
-          :title="$t('Display previous')"
-          @click="displayPrevious()"
-        >
-          <div class="saooti-left fw-bold" />
-        </button>
-        <button
-          class="btn admin-button m-1"
-          :class="{ disabled: !nextAvailable }"
-          :title="$t('Display next')"
-          @click="displayNext()"
-        >
-          <div class="saooti-right fw-bold" />
-        </button>
-      </div>
-    </div>
-    <ClassicLoading
-      :loading-text="loading?$t('Loading podcasts ...'):undefined"
-    />
-    <transition-group
-      v-show="loaded"
-      :name="transitionName"
-      class="element-list-inline"
-      tag="ul"
-      :class="[
-        alignLeft ? 'justify-content-start' : '',
-        overflowScroll ? 'overflowScroll' : '',
-      ]"
-      :css="isInlineAnimation"
-    >
-      <PodcastItem
-        v-for="p in podcasts"
-        :key="p.podcastId"
-        class="flex-shrink-0 item-phone-margin"
-        :podcast="p"
-        :class="[alignLeft ? 'me-3' : '']"
-      />
-    </transition-group>
-    <router-link
-      class="btn btn-link align-self-center width-fit-content m-4"
-      :to="refTo"
-      @click="handleSeeMoreButton"
-    >
-      {{ buttonText }}
-      <div
-        v-if="buttonPlus"
-        class="ms-1 saooti-more"
-      />
-    </router-link>
-  </div>
+  <PodcastInlineListClassic
+    v-if="listTypeClassic"
+    :organisation-id="organisationId"
+    :emission-id="emissionId"
+    :iab-id="iabId"
+    :title="title"
+    :href="href"
+    :button-text="buttonText"
+    :is-arrow="isArrow"
+    :require-popular-sort="requirePopularSort"
+    :button-plus="buttonPlus"
+    :rubrique-id="rubriqueId"
+    :rubriquage-id="rubriquageId"
+    :no-rubriquage-id="noRubriquageId"
+    :query="query"
+    @update:isArrow="$emit('update:isArrow',$event)"
+  />
+  <PodcastSwiperList
+    v-else
+    :organisation-id="organisationId"
+    :emission-id="emissionId"
+    :iab-id="iabId"
+    :title="title"
+    :href="href"
+    :button-text="buttonText"
+    :is-arrow="isArrow"
+    :require-popular-sort="requirePopularSort"
+    :button-plus="buttonPlus"
+    :rubrique-id="rubriqueId"
+    :rubriquage-id="rubriquageId"
+    :no-rubriquage-id="noRubriquageId"
+    :query="query"
+    @update:isArrow="$emit('update:isArrow',$event)"
+  />
 </template>
 
 <script lang="ts">
-import { handle403 } from '../../mixins/handle403';
-import octopusApi from '@saooti/octopus-api';
-import domHelper from '../../../helper/dom';
-import PodcastItem from './PodcastItem.vue';
-import ClassicLoading from '../../form/ClassicLoading.vue';
-const PHONE_WIDTH = 960;
 import { state } from '../../../store/paramStore';
-import { Podcast } from '@/store/class/general/podcast';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
-import { defineComponent } from 'vue'
-import { RouteLocationRaw } from 'vue-router';
-import { AxiosError } from 'axios';
-import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { defineAsyncComponent, defineComponent } from 'vue';
+const PodcastInlineListClassic = defineAsyncComponent(() => import('./PodcastInlineListClassic.vue'));
+const PodcastSwiperList = defineAsyncComponent(() => import('./PodcastSwiperList.vue'));
 export default defineComponent({
   name: 'PodcastInlineList',
   
   components: {
-    PodcastItem,
-    ClassicLoading
+    PodcastInlineListClassic,
+    PodcastSwiperList,
   },
-
-  mixins: [handle403],
-
   props: {
     organisationId: { default: undefined, type: String},
     emissionId: { default: undefined, type: Number},
@@ -119,222 +63,10 @@ export default defineComponent({
     query: { default: undefined, type: String},
   },
   emits: ['update:isArrow'],
-
-  data() {
-    return {
-      loading: true as boolean,
-      loaded: true as boolean,
-      index: 0 as number,
-      first: 0 as number,
-      size: 5 as number,
-      totalCount: 0 as number,
-      popularSort: false as boolean,
-      allPodcasts: [] as Array<Podcast>,
-      direction: 1 as number,
-      alignLeft: false as boolean,
-    };
-  },
-  computed: {
-    podcasts(): Array<Podcast> {
-      return this.allPodcasts.slice(this.index, this.index + this.size);
+  computed:{
+    listTypeClassic(): boolean {
+      return (state.podcastPage.listTypeClassic as boolean);
     },
-    sizeItem(): number {
-      return state.generalParameters.podcastItem ? (state.generalParameters.podcastItem as number): 13;
-    },
-    overflowScroll(): boolean {
-      return (state.emissionPage.overflowScroll as boolean);
-    },
-    isInlineAnimation(): boolean {
-      return (state.generalParameters.isInlineAnimation as boolean);
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
-    organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
-      return undefined;
-    },
-    rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
-        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
-      }
-      return undefined;
-    },
-    refTo(): string | RouteLocationRaw {
-      if (this.href) return this.href;
-      if(this.iabId){
-        return {
-          name: 'category',
-          params:{ 'iabId': this.iabId },
-          query: { productor: this.$store.state.filter.organisationId },
-        };
-      }
-      return {
-          name: 'podcasts',
-          query: { productor: this.$store.state.filter.organisationId, 
-                  iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
-                  rubriquesId: this.rubriqueQueryParam },
-        };
-    },
-    previousAvailable(): boolean {
-      return this.index > 0;
-    },
-    nextAvailable(): boolean {
-      return this.index + this.size < this.totalCount;
-    },
-    transitionName(): string {
-      return this.direction > 0 ? 'out-left' : 'out-right';
-    },
-    watchVariable():string{
-      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
-    }
-  },
-  watch: {
-    watchVariable(): void {
-      this.reset();
-      this.fetchNext();
-    },
-  },
-  
-  created() {
-    if (undefined !== this.requirePopularSort) {
-      this.popularSort = this.requirePopularSort;
-    }
-    if (undefined !== this.isArrow) {
-      this.$emit('update:isArrow', true);
-    }
-    window.addEventListener('resize', this.handleResize);
-  },
-
-  unmounted() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-
-  mounted() {
-    this.handleResize();
-    this.fetchNext();
-  },
-  methods: {
-    handleSeeMoreButton(event: { preventDefault: () => void; }){
-      if(!this.rubriqueId || 0===this.rubriqueId.length || this.noRubriquageId.length){
-        return;
-      }
-      event.preventDefault();
-      const rubriqueChosenId = this.rubriqueId[this.rubriqueId.length - 1];
-      let filterToAdd: RubriquageFilter = {
-        rubriquageId: 0, 
-        rubriqueId: rubriqueChosenId, 
-        nameRubriquage:  '',
-        nameRubrique: ''
-      };
-      if(this.$store.state.filter.rubriquageArray.length){
-        const rubriqueChosen =  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
-        filterToAdd = {
-          rubriquageId: this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriquageId, 
-          rubriqueId: rubriqueChosenId, 
-          nameRubriquage:  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].title,
-          nameRubrique: rubriqueChosen.name
-        };
-      }
-      const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
-      newFilter.push(filterToAdd);
-      this.$store.commit('filterRubrique', newFilter);
-      const queries = this.$route.query;
-      const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
-      this.$router.push({ name: 'podcasts',query: { ...queries, ...{ rubriquesId: queryString }} });
-    },
-    async fetchNext(): Promise<void> {
-      try {
-        const data = await octopusApi.fetchPodcasts({
-          first: this.first,
-          size: this.size + 1,
-          organisationId: this.organisation,
-          emissionId: this.emissionId,
-          iabId: this.iabId,
-          rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
-          rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
-          noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
-          sort: this.popularSort ? 'POPULARITY' : 'DATE',
-          query: this.query,
-        });
-        this.loading = false;
-        this.loaded = true;
-        this.totalCount = data.count;
-        if (this.allPodcasts.length + data.result.length < this.totalCount) {
-          const nexEl = data.result.pop() as Podcast;
-          if(nexEl){
-            this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
-          }
-        }
-        this.allPodcasts = this.allPodcasts.concat(
-          data.result.filter((pod: Podcast|null) => null !== pod)
-        );
-        if (this.allPodcasts.length <= 3) {
-          this.alignLeft = true;
-        } else {
-          this.alignLeft = false;
-        }
-        this.first += this.size;
-      } catch (error) {
-        this.handle403((error as AxiosError));
-      }
-    },
-    displayPrevious(): void {
-      this.direction = -1;
-      if (this.previousAvailable) {
-        this.index -= 1;
-      }
-    },
-    displayNext(): void {
-      this.direction = 1;
-      if (!this.nextAvailable) return;
-      if (
-        this.first - (this.index + this.size) < 2 &&
-        this.allPodcasts.length < this.totalCount
-      ) {
-        this.fetchNext();
-      }
-      this.index += 1;
-    },
-    handleResize(): void {
-      if (!this.$el) return;
-      if (this.overflowScroll) {
-        this.size = 20;
-        return;
-      }
-      if (window.innerWidth <= PHONE_WIDTH) {
-        this.size = 10;
-        return;
-      }
-      const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.7);
-      this.size = Math.floor(width / sixteen);
-    },
-    sortPopular(): void {
-      if (this.popularSort) return;
-      this.popularSort = true;
-      this.reset();
-      this.fetchNext();
-    },
-    sortChrono(): void {
-      if (!this.popularSort) return;
-      this.popularSort = false;
-      this.reset();
-      this.fetchNext();
-    },
-    reset(): void {
-      this.loading = true;
-      this.loaded = true;
-      this.index = 0;
-      this.first = 0;
-      this.totalCount = 0;
-      this.allPodcasts.length = 0;
-    },
-    preloadImage(url: string): void {
-      const img = new Image();
-      img.src = url;
-    },
-  },
+  }
 })
 </script>

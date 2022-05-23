@@ -582,6 +582,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.83 Locales parlement
  * 30.0.84 Une émission non visible n'apparaît pas dans la page émission
  * 30.0.85 PB en cliquant sur le bouton "tous les épisodes de l'organisation" dans la page d'un épisode
+ * 30.0.86 Podcastmaker newest
+ * 30.0.87 Podcastmaker newest (swiper list)
+ * 30.0.88 Podcastmaker newest (swiper list)
 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts

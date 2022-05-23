@@ -237,6 +237,9 @@ export default defineComponent({
           'PENDING' === this.fetchConference.status)
       );
     },
+    clickPlayGoPage():boolean{
+      return (state.podcastPage.clickPlayGoPage as boolean);
+    },
   },
   watch: {
     arrowDirection(): void {
@@ -265,16 +268,19 @@ export default defineComponent({
       }
       if (!this.recordingLive) {
         this.$store.commit('playerPlayPodcast', this.podcast);
-        return;
+      }else{
+        this.$store.commit('playerPlayPodcast', {
+          title: this.podcast.title,
+          audioUrl: this.podcast.audioUrl,
+          duration: this.podcast.duration,
+          conferenceId: this.fetchConference ? this.fetchConference.conferenceId : undefined,
+          livePodcastId: this.podcast.podcastId,
+          organisation: this.podcast.organisation,
+        });
       }
-      this.$store.commit('playerPlayPodcast', {
-        title: this.podcast.title,
-        audioUrl: this.podcast.audioUrl,
-        duration: this.podcast.duration,
-        conferenceId: this.fetchConference ? this.fetchConference.conferenceId : undefined,
-        livePodcastId: this.podcast.podcastId,
-        organisation: this.podcast.organisation,
-      });
+      if(this.clickPlayGoPage){
+        this.$router.push('/main/pub/podcast/'+this.podcast.podcastId);
+      }
     },
     showDescription(): void {
       if (this.isDescription) {

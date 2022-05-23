@@ -12,7 +12,7 @@ const state:paramStore = {
     isPlaylist: false,
     isProduction: true,
     isContribution: true,
-    ApiUri: 'https://api.dev2.saooti.org/',
+    ApiUri: 'https://api.preprod.saooti.org/',
     podcastmaker: false,
     buttonPlus: true,
     allCategories: [],
@@ -28,9 +28,12 @@ const state:paramStore = {
     ShareDistribution: true,
     MiniplayerUri: 'https://playerbeta.dev2.saooti.org/',
     downloadButton: false,
-    hlsUri: 'https://hls.dev2.saooti.org/',
+    hlsUri: 'https://hls.preprod.saooti.org/',
     mainRubrique: 0,
-    resourceUrl: undefined
+    resourceUrl: undefined,
+    podcastItemShowEmission: false,
+    clickPlayGoPage:false,
+    listTypeClassic: true,
   },
   podcastsPage: {
     ProductorSearch: true,
@@ -81,10 +84,10 @@ const state:paramStore = {
     userName: '',
   },
   octopusApi: {
-    url: 'http://api.dev2.saooti.org/',
-    commentsUrl: 'http://comments.dev2.saooti.org/',
-    studioUrl: 'http://studio.dev2.saooti.org/',
-    playerUrl: 'https://playerbeta.dev2.saooti.org/',
+    url: 'http://api.preprod.saooti.org/',
+    commentsUrl: 'http://comments.preprod.saooti.org/',
+    studioUrl: 'http://studio.preprod.saooti.org/',
+    playerUrl: 'https://playerbeta.preprod.saooti.org/',
     organisationId: undefined,
     rubriqueIdFilter: undefined,
   },
@@ -119,6 +122,9 @@ export interface PodcastPage{
   hlsUri?: string,
   mainRubrique?: number,
   resourceUrl?: string |undefined,
+  podcastItemShowEmission?: boolean,
+  clickPlayGoPage?:boolean,
+  listTypeClassic?:boolean
 }
 export interface PodcastsPage{
   ProductorSearch?: boolean,
