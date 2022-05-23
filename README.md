@@ -613,3 +613,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.24 Amélioration accessibilité
  * 31.0.25 Erreur audioUrl
  * 31.0.26 Erreur 403 page expose 
+ * 31.0.27 Snackbar chose holdtime

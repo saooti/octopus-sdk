@@ -64,6 +64,7 @@ export default defineComponent({
           warn: '#FF6600',
         }), type: Object},
     position: { default: 'top-center', type: String},
+    holdTime: {default:5000, type:Number}
   },
   data() {
     return {
@@ -72,7 +73,6 @@ export default defineComponent({
         msg:string,
         timer: ReturnType<typeof setTimeout>|undefined,
       }>,
-      holdTime: 5000,
       baseSize: '5rem',
     };
   },
