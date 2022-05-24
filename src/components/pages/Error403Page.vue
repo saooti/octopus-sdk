@@ -7,7 +7,7 @@
     >
     <h2>{{ $t('You do not have the right to access this page' ) }}</h2>
     <a
-      class="btn btn-link"
+      class="btn btn-primary"
       href="/sso/logout"
     >{{ $t('Logout') }}</a>
   </div>

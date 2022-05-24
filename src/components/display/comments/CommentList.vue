@@ -25,7 +25,7 @@
     </transition-group>
     <button
       v-show="!allFetched && (!loading || 0!==first)"
-      class="btn btn-link mt-2"
+      class="btn btn-primary mt-2"
       :class="comId ? 'align-self-start' : 'align-self-center'"
       :disabled="loading"
       :title="$t('See more comments')"

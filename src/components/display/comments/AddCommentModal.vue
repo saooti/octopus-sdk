@@ -53,7 +53,7 @@
           </button>
           <button
             v-if="!sending"
-            class="btn btn-link m-1"
+            class="btn btn-primary m-1"
             :disabled="0 === countName || !validName"
             @click="validateName"
           >

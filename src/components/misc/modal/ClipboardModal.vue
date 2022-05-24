@@ -21,7 +21,7 @@
             <input
               type="button"
               :value="$t('Copy')"
-              class="btn btn-link"
+              class="btn btn-primary"
               :title="$t('Copy')"
               @click="onCopyCode(link, afterCopy)"
             >

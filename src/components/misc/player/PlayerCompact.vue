@@ -134,14 +134,14 @@ export default defineComponent({
     }
   }
   .play-button-box {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 2.2rem;
+    width: 2.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 0.5rem;
     border-radius: 50%;
-    font-size: 1.2rem !important;
+    font-size: 0.7rem !important;
     flex-shrink: 0;
     cursor: pointer;
   }

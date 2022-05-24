@@ -87,7 +87,7 @@
         rel="noopener"
         target="_blank"
         :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-linkedin share-btn mb-2',
+          bigRound ? 'btn btn-big-round' : 'btn btn-primaryedin share-btn mb-2',
           verticalDisplay ? '' : 'mx-2',
         ]"
         :href="linkedinURL"

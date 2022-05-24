@@ -39,7 +39,7 @@
           {{ $t('Cancel') }}
         </button>
         <button
-          class="btn btn-link m-1"
+          class="btn btn-primary m-1"
           :disabled="0 === countComment || !validComment || 0 === countName || !validName"
           @click="validEdit"
         >

@@ -43,7 +43,6 @@
         </div>
         <div
           class="d-flex flex-column flex-grow-mobile"
-          :class="authenticated || notExclusive ? 'flex-grow-1' : ''"
         >
           <SharePlayer
             v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"

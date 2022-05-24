@@ -20,22 +20,14 @@
             :height="iFrameHeight"
             class="max-iframe my-2"
           />
-          <div class="d-flex flex-column">
-            <button
-              class="btn mb-3"
-              @click="isShareModal = true"
-            >
-              {{ $t('Share the player') }}
-            </button>
-            <SharePlayerTypes 
-              v-if="!isLiveReadyToRecord"
-              v-model:iFrameModel="iFrameModel"
-              :podcast="podcast"
-              :emission="emission"
-              :playlist="playlist"
-              :organisation-id="organisationId"
-            />
-          </div>
+          <SharePlayerTypes 
+            v-if="!isLiveReadyToRecord"
+            v-model:iFrameModel="iFrameModel"
+            :podcast="podcast"
+            :emission="emission"
+            :playlist="playlist"
+            :organisation-id="organisationId"
+          />
           <SharePlayerColors
             v-model:color="color"
             v-model:theme="theme"
@@ -58,6 +50,14 @@
           @isVisible="isVisible = $event"
           @iFrameNumber="iFrameNumber = $event"
         />
+        <div class="d-flex flex-column align-items-center mt-3">
+          <button
+            class="btn btn-primary mb-3"
+            @click="isShareModal = true"
+          >
+            {{ $t('Share the player') }}
+          </button>
+        </div>
       </template>
       <div v-else-if="exclusive && authenticated">
         {{ $t('Only organisation members can share the content') }}

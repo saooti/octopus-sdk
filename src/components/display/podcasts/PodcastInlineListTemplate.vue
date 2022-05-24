@@ -44,7 +44,7 @@
     </div>
     <slot name="list-inline" />
     <router-link
-      class="btn btn-link align-self-center width-fit-content m-4"
+      class="btn btn-primary align-self-center width-fit-content m-4"
       :to="refTo"
       @click="handleSeeMoreButton"
     >

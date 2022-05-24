@@ -27,38 +27,6 @@
         &:hover{
           background: rgba($octopus-primary-color, 0.3) ;
         }
-        // Button Primary
-        &.btn-primary {
-            background: $octopus-third-color;
-            background: -moz-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
-            background: -webkit-gradient(left top, right bottom, color-stop(0%, $octopus-third-color), color-stop(100%, $octopus-primary-linear-background));
-            background: -webkit-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
-            background: -o-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
-            background: -ms-linear-gradient(-45deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
-            background: linear-gradient(135deg, $octopus-third-color 0%, $octopus-primary-linear-background 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d91f', endColorstr='#50b685', GradientType=1 );
-            border-radius: 50px;
-            height: auto;
-            border: 0;
-            color: black !important;
-            &:focus,
-            &:hover {
-            background:$octopus-third-color;
-                background: -moz-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
-                background: -webkit-gradient(left top, right bottom, color-stop(0%, darken($octopus-third-color,7%)), color-stop(100%, darken($octopus-primary-linear-background, 7%)));
-                background: -webkit-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
-                background: -o-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
-                background: -ms-linear-gradient(-45deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
-                background: linear-gradient(135deg, darken($octopus-third-color,7%) 0%, darken($octopus-primary-linear-background, 7%) 100%);
-                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d91f', endColorstr='#4fcf91', GradientType=1 );
-                border: 0;
-            }
-            &:active,
-            &.active {
-                background: darken($octopus-primary-linear-background, 4%);
-                border-color: darken($octopus-primary-linear-background, 7%);
-            }
-        }
         //Button disable halo after click
         &.btn-underline{
             background: none;
@@ -74,12 +42,13 @@
             }
         }
     
-        &.btn-link {
+        &.btn-primary {
             display: flex;
             align-items: center;
             justify-content: center;
             background: $octopus-primary-dark;
-            border: 2px solid $octopus-primary-dark;
+            border: 1px solid $octopus-primary-dark;
+            border-radius: 4px !important;
             color: white;
             font-weight: bold;
             &:focus,

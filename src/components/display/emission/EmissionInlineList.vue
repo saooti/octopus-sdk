@@ -57,7 +57,7 @@
     </transition-group>
     <router-link
       :to="href"
-      class="btn btn-link align-self-center width-fit-content m-4"
+      class="btn btn-primary align-self-center width-fit-content m-4"
     >
       {{
         buttonText
