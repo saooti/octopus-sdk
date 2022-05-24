@@ -616,3 +616,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.27 Snackbar chose holdtime
  * 31.0.28 Mixins orgComputed
  * 31.0.29 Changement css
+ * 31.0.30 Changement css

@@ -49,20 +49,20 @@
             background: $octopus-primary-dark;
             border: 1px solid $octopus-primary-dark;
             border-radius: 4px !important;
-            color: white;
+            color: white !important;
             font-weight: bold;
             &:focus,
             &:hover,
             &:active,
             &.active {
                 background: transparent;
-                color: $octopus-primary-dark;
+                color: $octopus-primary-dark !important;
             }
             &:disabled{
                 background-color: #cccccc;
                 border: black;
                 cursor: default;
-                color: gray;
+                color: gray !important;
             }
             @media (max-width: 500px){
             margin: 0.3rem;

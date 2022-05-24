@@ -10,8 +10,14 @@
       class="input-no-outline"
       @change="$emit('update:iFrameModel',$event.target.value)"
     >
-      <template v-for="option in optionsSelect" :key="option.value">
-        <option v-if="option.condition" :value="option.value">
+      <template
+        v-for="option in optionsSelect"
+        :key="option.value"
+      >
+        <option
+          v-if="option.condition"
+          :value="option.value"
+        >
           {{ option.name }}
         </option>
       </template>

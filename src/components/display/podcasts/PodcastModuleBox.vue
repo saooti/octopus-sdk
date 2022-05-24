@@ -9,7 +9,7 @@
       <div class="w-100">
         <PodcastImage
           :class="[
-             !isLiveReadyToRecord
+            !isLiveReadyToRecord
               ? 'shadow-element'
               : '',
             isLiveReadyToRecord &&
