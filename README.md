@@ -619,3 +619,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.30 Changement css
  * 31.0.31 Changement css (trop de fun)
  * 31.0.32 Changement css (toujours trop de fun)
+ * 31.0.33 Changement css (on n'arrete plus le fun)
