@@ -9,11 +9,12 @@
     }
     .btn{
         font-size:.7rem;
-        border-radius: 50px;
+        border-radius: 4px;
         background: $octopus-secondary-color; 
         transition: background .2s, border .2s, box-shadow .2s, color .2s;
         text-decoration: none !important;
         white-space: nowrap;
+        border-width: 1px;
         @media (max-width: 960px) {
             white-space: normal;
         }
