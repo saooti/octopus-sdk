@@ -617,3 +617,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.28 Mixins orgComputed
  * 31.0.29 Changement css
  * 31.0.30 Changement css
+ * 31.0.31 Changement css (trop de fun)
