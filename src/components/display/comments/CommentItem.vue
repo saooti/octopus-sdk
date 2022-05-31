@@ -61,7 +61,7 @@
           (!isFlat && comment.relatedComments) ||
             (isFlat && comment.commentIdReferer)
         "
-        class="btn py-1 px-3 me-2"
+        class="btn py-1 d-flex align-items-center px-3 me-2"
         @click="collapseVisible=!collapseVisible"
       >
         <span v-if="comment.relatedComments">
