@@ -50,21 +50,21 @@
     <div class="d-flex align-items-center mt-1">
       <button
         v-if="null === comment.commentIdReferer && 'Valid'=== comment.status"
-        class="btn py-1 px-3 me-2"
+        class="btn d-flex align-items-center py-1 px-3 me-2"
         :data-selenium="'answer-button-comment-' + seleniumFormat(comment.name)"
         @click="answerComment"
       >
         {{ $t('To answer') }}
       </button>
-      <div
+      <button
         v-if="
           (!isFlat && comment.relatedComments) ||
             (isFlat && comment.commentIdReferer)
         "
-        class="d-flex align-items-center small-text primary-darker c-hand"
+        class="btn py-1 px-3 me-2"
         @click="collapseVisible=!collapseVisible"
       >
-        <div v-if="comment.relatedComments">
+        <span v-if="comment.relatedComments">
           <template v-if="!collapseVisible">
             {{ $t('Display answers', { nb: comment.relatedComments }) }}
             <i v-if="editRight">{{
@@ -76,15 +76,15 @@
           <template v-else>
             {{ $t('Hide answers') }}
           </template>
-        </div>
-        <div v-else>
+        </span>
+        <span v-else>
           {{ $t('In response to') }}
-        </div>
+        </span>
         <span 
           :class="collapseVisible? 'arrow-transform': ''"
           class="saooti-arrow_down"
         />
-      </div>
+      </button>
       <EditCommentBox
         v-if="editRight"
         ref="editBox"

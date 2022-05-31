@@ -4,11 +4,8 @@
       :loading-text="loading?$t('Loading content ...'):undefined"
       :error-text="error?$t(`Comments loading error`):undefined"
     />
-    <transition-group
+    <div
       v-show="!loading"
-      tag="div"
-      name="comment-list"
-      class="my-transition-list-comments"
     >
       <CommentItem
         v-for="(c, indexCom) in comments"
@@ -22,7 +19,7 @@
         @deleteComment="deleteComment(c)"
         @updateComment="updateComment"
       />
-    </transition-group>
+    </div>
     <button
       v-show="!allFetched && (!loading || 0!==first)"
       class="btn btn-primary mt-2"
@@ -236,41 +233,6 @@ export default defineComponent({
 <style lang="scss">
 @import '../../../sass/_variables.scss';
 .octopus-app{
-.my-transition-list-comments {
-  position: relative;
-  .comment-list-enter-active,
-  .comment-list-leave-active {
-    transition: 1200ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
-    transition-property: opacity, transform;
-    background-color: $primaryColorReallyTransparent;
-  }
 
-  .comment-list-enter {
-    opacity: 0;
-    transform: translateX(50px) scaleY(0.5);
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-enter-to {
-    opacity: 1;
-    transform: translateX(0) scaleY(1);
-    background-color: $primaryColorReallyTransparent;
-  }
-
-  .comment-list-leave-active {
-    position: absolute;
-    background-color: $primaryColorReallyTransparent;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .comment-list-leave-to {
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: center top;
-    background-color: $primaryColorReallyTransparent;
-  }
-}
 }
 </style>
