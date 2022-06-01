@@ -58,7 +58,7 @@ export const playerLive = defineComponent({
         let hls = new Hls();
         if(this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
           hls = new Hls({xhrSetup:
-            (xhr: any) => {
+            (xhr: XMLHttpRequest) => {
               xhr.setRequestHeader("Authorization", "Bearer " + this.$store.state.oAuthParam.accessToken);
             }
             }

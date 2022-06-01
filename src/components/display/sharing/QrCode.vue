@@ -56,18 +56,9 @@ export default defineComponent({
       isNotBlack: false as boolean,
     };
   },
-  computed:{
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-  },
   watch:{
     isNotBlack(){
-      if(this.isNotBlack){
-        this.color = this.otherColor;
-      }else{
-        this.color = "#000000";
-      }
+      this.color = this.isNotBlack ? this.otherColor : "#000000";
     }
   },
   created(){
@@ -89,7 +80,7 @@ export default defineComponent({
         this.otherColor = state.generalParameters.podcastmakerColor;
         return;
       }
-      if (!this.authenticated) return;
+      if (!state.generalParameters.authenticated) return;
       let data;
       if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         data = this.$store.state.organisation.attributes;

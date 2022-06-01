@@ -36,178 +36,73 @@
       <button
         v-if="isDownloadButton"
         class="text-dark"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
+        :class="getClass()"
         :title="$t('Downloading')"
         @click="onDownload(podcast.audioUrl, podcast.title)"
       >
         <div class="saooti-download-bounty" />
       </button>
-      <a
-        rel="noopener"
-        target="_blank"
-        :href="facebookURL"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-facebook share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
-        title="Facebook"
+      <template
+        v-for="button in arrayShareButtons"
+        :key="button.title"
       >
-        <span
-          v-if="!bigRound"
-          class="saooti-facebook-bounty"
-        />
-        <div
-          v-else
-          class="saooti-facebook-bounty"
-        />
-      </a>
-      <a
-        rel="noopener"
-        target="_blank"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-twitter share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
-        :href="twitterURL"
-        title="Twitter"
-      >
-        <span
-          v-if="!bigRound"
-          class="saooti-twitter-bounty"
-        />
-        <div
-          v-else
-          class="saooti-twitter-bounty"
-        />
-      </a>
-      <a
-        rel="noopener"
-        target="_blank"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-primaryedin share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
-        :href="linkedinURL"
-        title="Linkedin"
-      >
-        <span
-          v-if="!bigRound"
-          class="saooti-linkedin1"
-        />
-        <div
-          v-else
-          class="saooti-linkedin1"
-        />
-      </a>
+        <a
+          v-if="button.condition"
+          rel="noopener"
+          target="_blank"
+          :href="button.url"
+          :class="getClass(button.className)"
+          :title="button.title"
+        >
+          <div
+            :class="button.icon"
+          >
+            <div
+              v-for="index in button.nbPath"
+              :key="index"
+              :class="'path'+(index+1)"
+            />
+          </div>
+        </a>
+      </template>
       <a
         v-if="''!==rssUrl"
         rel="noopener"
         target="_blank"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
+        :class="getClass()"
         :href="rssUrl"
         :title="$t('Subscribe to this emission')"
         @click.prevent="openPopup()"
       >
-        <span
-          v-if="!bigRound"
-          class="saooti-rss-bounty"
-        />
-        <div
-          v-else
-          class="saooti-rss-bounty"
-        />
+        <div class="saooti-rss-bounty" />
       </a>
       <a
         rel="noopener"
         target="_blank"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
+        :class="getClass()"
         :title="$t('Copy this page URL')"
         @click="onCopyCode(urlPage,afterCopy)"
       >
-        <span
-          v-if="!bigRound"
-          class="saooti-link"
-        />
-        <div
-          v-else
-          class="saooti-link"
-        />
+        <div class="saooti-link" />
       </a>
       <a
         v-if="podcast"
         rel="noopener"
         target="_blank"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
+        :class="getClass()"
         :title="$t('Share newsletter')"
         @click="newsletter = true"
       >
-        <span
-          v-if="!bigRound"
-          class="saooti-newsletter"
-        />
-        <div
-          v-else
-          class="saooti-newsletter"
-        />
+        <div class="saooti-newsletter" />
       </a>
       <a
         rel="noopener"
         target="_blank"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-rss share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
+        :class="getClass()"
         :title="$t('Share QR Code')"
         @click="qrCode = true"
       >
-        <span
-          v-if="!bigRound"
-          class="saooti-qrcode"
-        />
-        <div
-          v-else
-          class="saooti-qrcode"
-        />
-      </a>
-      <a
-        v-if="isMobile"
-        rel="noopener"
-        target="_blank"
-        :href="whatsappURL"
-        :class="[
-          bigRound ? 'btn btn-big-round' : 'btn btn-whatsapp share-btn mb-2',
-          verticalDisplay ? '' : 'mx-2',
-        ]"
-        title="Whatsapp"
-      >
-        <span
-          v-if="!bigRound"
-          class="saooti-Whatsapp"
-        >
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-        </span>
-        <div
-          v-else
-          class="saooti-Whatsapp"
-        >
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-        </div>
+        <div class="saooti-qrcode" />
       </a>
     </div>
     <ClipboardModal
@@ -271,18 +166,21 @@ export default defineComponent({
 
   data() {
     return {
-      facebookURL: `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}` as string,
-      twitterURL: `https://twitter.com/intent/tweet?text=${window.location.href}` as string,
-      linkedinURL: `https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}` as string,
-      whatsappURL: `whatsapp://send?text=${window.location.href}` as string,
       dataRSSSave: false as boolean,
       newsletter: false as boolean,
       isMobile: false as boolean,
       qrCode: false as boolean,
     };
   },
-
   computed: {
+    arrayShareButtons(){
+      return [
+        { title: 'Facebook', icon:'saooti-facebook-bounty', nbPath:0, className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
+        { title: 'Twitter', icon:'saooti-twitter-bounty', nbPath:0, className:'btn-twitter', url :`https://twitter.com/intent/tweet?text=${this.urlPage}`, condition: true},
+        { title: 'Linkedin', icon:'saooti-linkedin1', nbPath:0, className:'btn-linkedin', url :`https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`, condition: true},
+        { title: 'Whatsapp', icon:'saooti-Whatsapp', nbPath:3, className:'btn-whatsapp', url :`whatsapp://send?text=${this.urlPage}`, condition: this.isMobile}
+      ]
+    },
     isDownloadButton(): boolean{
       return this.isDownloadButtonParam && undefined!==this.podcast && (!this.podcast.tags || !this.podcast.tags.includes('copyright'));
     },
@@ -304,24 +202,16 @@ export default defineComponent({
       return (state.generalParameters.authenticated as boolean);
     },
     rssUrl(): string {
-      if (this.emission)
-        return (
-          state.generalParameters.ApiUri +
-          'rss/emission/' +
-          this.emission.emissionId + '.rss'
-        );
-      if (this.organisationId)
-        return (
-          state.generalParameters.ApiUri +
-          'rss/productor/' +
-          this.organisationId + '.rss'
-        );
-      if (this.participantId)
-        return (
-          state.generalParameters.ApiUri +
-          'rss/participant/' +
-          this.participantId + '.rss'
-        );
+      let api = state.generalParameters.ApiUri+ 'rss/';
+      if (this.emission){
+        return api +'emission/' + this.emission.emissionId + '.rss';
+      }
+      if (this.organisationId){
+        return api +'productor/' + this.organisationId + '.rss';
+      }
+      if (this.participantId){
+        return api +'participant/' + this.participantId + '.rss';
+      }
       return '';
     },
   },
@@ -330,6 +220,11 @@ export default defineComponent({
     this.isMobile = this.checkIfDeviceMobile();
   },
   methods: {
+    getClass(className='btn-rss'): string{
+      let returnString = this.bigRound ? 'btn btn-big-round' : `btn ${className} share-btn mb-2`;
+      returnString+= this.verticalDisplay ? '' : ' mx-2';
+      return returnString;
+    },
     openPopup(): void {
       this.dataRSSSave = !this.dataRSSSave;
     },

@@ -7,7 +7,7 @@
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrga },
       }"
       class="mt-3 text-dark"
       :title="$t('Participant')"
@@ -42,7 +42,7 @@
       :to="{
         name: 'productor',
         params: { productorId: participant.orga.id },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrga },
       }"
       class="participant-producer"
     >
@@ -56,36 +56,25 @@ import octopusApi from '@saooti/octopus-api';
 import { Participant } from '@/store/class/general/participant';
 import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
+import { orgaComputed } from '../../mixins/orgaComputed';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ParticpantItem',
-  mixins: [displayMethods],
+  mixins: [displayMethods, orgaComputed],
   props: {
     participant: { default: ()=>({}), type: Object as ()=> Participant},
   },
-
   data() {
     return {
       activeParticipant: true as boolean,
     };
   },
-  
   computed: {
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
     name(): string {
-      return (
-        (this.participant.firstName || '') +
-        ' ' +
-        (this.participant.lastName || '')
-      ).trim();
-    },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
+      return (`${this.participant.firstName||''} ${this.participant.lastName||''}`).trim();
     },
     editRight(): boolean {
       if(!this.participant || !this.participant.orga){
@@ -93,7 +82,7 @@ export default defineComponent({
       }
       if (
         (this.authenticated &&
-          this.organisationId === this.participant.orga.id) ||
+          this.myOrganisationId === this.participant.orga.id) ||
         state.generalParameters.isAdmin
       ){
         return true;

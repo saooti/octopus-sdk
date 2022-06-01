@@ -19,7 +19,7 @@
           {{ $t('Filter') }}
         </div>
         <MonetizableFilter
-          v-if="isMonetizableFilter && !isEducation"
+          v-if="sdkParameters.isMonetizableFilter && !isEducation"
           :is-emission="isEmission"
           @updateMonetization="updateMonetization"
         />
@@ -130,6 +130,7 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
+import { orgaComputed } from '../../mixins/orgaComputed';
 import moment from 'moment';
 import CategoryFilter from './CategoryFilter.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
@@ -148,6 +149,7 @@ export default defineComponent({
     ClassicCheckbox,
     ClassicRadio
   },
+  mixins: [orgaComputed],
   props: {
     organisationId: { default: undefined, type: String},
     isEmission: { default: false, type:  Boolean},
@@ -180,20 +182,15 @@ export default defineComponent({
   },
 
   computed: {
-    isMonetizableFilter(): boolean {
-      return (state.podcastsPage.MonetizableFilter as boolean);
+    isPodcastmaker(): boolean {
+      return (state.generalParameters.podcastmaker as boolean);
     },
-    myOrganisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
-    isProduction(): boolean {
-      return (state.generalParameters.isProduction as boolean);
-    },
-    isContribution(): boolean {
-      return (state.generalParameters.isContribution as boolean);
+    sdkParameters(){
+      return {
+        isMonetizableFilter : (state.podcastsPage.MonetizableFilter as boolean),
+        isProduction : (state.generalParameters.isProduction as boolean),
+        isContribution : (state.generalParameters.isContribution as boolean)
+      }
     },
     organisationRight(): boolean {
       if (
@@ -203,57 +200,39 @@ export default defineComponent({
         return true;
       return false;
     },
-    isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
     organisation(): string|undefined {
       if (this.organisationId) return this.organisationId;
       if (this.filterOrga) return this.filterOrga;
       return undefined;
     },
     textNotVisible(): string {
-      if (this.isEmission) return this.$t('Consider podcasts no visible').toString();
-      return this.$t('See podcasts no visible').toString();
+      if (this.isEmission) return this.$t('Consider podcasts no visible');
+      return this.$t('See podcasts no visible');
     },
     isCheckboxNotValidate(): boolean {
       return (
         undefined!==this.organisation &&
         this.organisationRight &&
-        this.isContribution &&
+        this.sdkParameters.isContribution &&
         !this.isPodcastmaker &&
         !this.isEmission &&
         this.isNotVisible
       );
     },
     textNotValidate(): string {
-      if (this.isProduction) return this.$t('Display all podcasts to validate').toString();
+      if (this.sdkParameters.isProduction) return this.$t('Display all podcasts to validate').toString();
       return this.$t('Display my podcasts to validate').toString();
     },
   },
   watch: {
     organisation(): void {
-      if (this.organisation && this.organisationRight && !this.isEmission) {
-        this.isNotVisible = true;
-      } else {
-        this.isNotVisible = false;
-      }
+      this.isNotVisible = undefined!==this.organisation && this.organisationRight && !this.isEmission;
     },
     isFrom(): void {
-      if (this.isFrom) {
-        this.$emit('updateFromDate', moment(this.fromDate).toISOString(true));
-      } else {
-        this.$emit('updateFromDate', undefined);
-      }
+      this.$emit('updateFromDate', this.isFrom ? moment(this.fromDate).toISOString(true) : undefined);
     },
     isTo(): void {
-      if (this.isTo) {
-        this.$emit('updateToDate', moment(this.toDate).toISOString(true));
-      } else {
-        this.$emit('updateToDate', undefined);
-      }
+      this.$emit('updateToDate', this.isTo ? moment(this.toDate).toISOString(true) : undefined);
     },
     sort(): void {
       this.$emit('updateSortCriteria', this.sort);
@@ -306,11 +285,7 @@ export default defineComponent({
       this.$emit('updateMonetization', value);
     },
     updateCategory(value: number){
-      if(0!==value){
-        this.$emit('updateCategory', value);
-      }else{
-        this.$emit('updateCategory', undefined);
-      }
+      this.$emit('updateCategory', 0!==value ? value : undefined);
     },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       this.$emit('updateRubriquageFilter', value);

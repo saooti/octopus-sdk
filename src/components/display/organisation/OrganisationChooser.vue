@@ -110,6 +110,7 @@
 
 <script lang="ts">
 import { selenium } from '../../mixins/functions';
+import { orgaComputed } from '../../mixins/orgaComputed';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
 import octopusApi from '@saooti/octopus-api';
@@ -131,12 +132,12 @@ const getDefaultOrganistion = (defaultName: string) => {
   };
 };
 
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   components: {
     VueMultiselect,
   },
-  mixins:[selenium],
+  mixins:[selenium, orgaComputed],
   props: {
     width: { default: '100%', type: String },
     defaultanswer: { default: '', type: String},
@@ -157,16 +158,10 @@ export default defineComponent({
   },
   
   computed: {
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     myOrganisation(): Organisation|undefined {
       if (!this.authenticated) return undefined;
       return {
-        id: this.organisationId ? this.organisationId : "",
+        id: this.myOrganisationId ? this.myOrganisationId : "",
         imageUrl: this.myImage,
         name:
           this.$t('Edit my organisation') +
@@ -194,7 +189,7 @@ export default defineComponent({
       this.authenticated &&
       undefined === this.$store.state.organisation.imageUrl
     ) {
-      const data = await octopusApi.fetchOrganisation(this.organisationId ?this.organisationId:"");
+      const data = await octopusApi.fetchOrganisation(this.myOrganisationId ?this.myOrganisationId:"");
       this.myImage = data.imageUrl;
     }
     if (this.value) {
@@ -234,12 +229,12 @@ export default defineComponent({
       if (this.myOrganisation) {
         if (undefined === query) {
           this.organisations = this.organisations.filter((obj: Organisation) => {
-            return obj.id !== this.organisationId;
+            return obj.id !== this.myOrganisationId;
           });
           this.organisations.splice(1, 0, this.myOrganisation);
         } else {
           const foundIndex = this.organisations.findIndex(
-            (obj: Organisation) => obj.id === this.organisationId
+            (obj: Organisation) => obj.id === this.myOrganisationId
           );
           if (foundIndex) {
             this.organisations[foundIndex] = this.myOrganisation;

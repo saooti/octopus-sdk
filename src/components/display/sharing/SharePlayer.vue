@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts">
+import { orgaComputed } from '../../mixins/orgaComputed';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import { Podcast } from '@/store/class/general/podcast';
@@ -96,7 +97,7 @@ export default defineComponent({
     SharePlayerTypes,
     ClassicCheckbox
   },
-
+  mixins:[orgaComputed],
   props: {
     podcast: { default: undefined, type: Object as ()=> Podcast},
     emission: { default: undefined, type: Object as ()=> Emission},
@@ -126,7 +127,7 @@ export default defineComponent({
     displayChoiceAllEpisodes():boolean{
       return !this.podcast || this.isEmission || this.isLargeEmission;
     },
-    miniplayerBaseUrl(): string{
+    baseUrl(): string{
       return (state.podcastPage.MiniplayerUri as string); 
     },
     isEmission(): boolean {
@@ -164,67 +165,36 @@ export default defineComponent({
       }
       return false;
     },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     iFrameSrc(): string {
       const url = [''];
-      let iFrameNumber = '/' + this.iFrameNumber;
-      if (this.displayChoiceAllEpisodes && 'all' === this.episodeNumbers) {
-        iFrameNumber = '/0';
-      }
+      let iFrameNumber = this.displayChoiceAllEpisodes && 'all' === this.episodeNumbers ? '/0' : '/' + this.iFrameNumber;
+      url.push(`${this.baseUrl}miniplayer/`);
       if (!this.podcast && !this.playlist && this.emission) {
-        if ('default' === this.iFrameModel) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`
-          );
-        }else if('large' === this.iFrameModel) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`
-          );
+        switch (this.iFrameModel) {
+          case 'default': url.push('emission'); break;
+          case 'large': url.push('emissionLarge'); break;
+          default: url.push(`${this.iFrameModel}`);break;
         }
-        else {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}`
-          );
-        }
+        url.push(`/${this.emission.emissionId}${iFrameNumber}`);
       } else if (this.playlist) {
-        if ('default' === this.iFrameModel) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/playlist/${this.playlist.playlistId}`
-          );
-        } else if('large' === this.iFrameModel) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/playlistLarge/${this.playlist.playlistId}`
-          );
-        }else {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.playlist.playlistId}`
-          );
+        switch (this.iFrameModel) {
+          case 'default': url.push('playlist'); break;
+          case 'large': url.push('playlistLarge'); break;
+          default: url.push(`${this.iFrameModel}`);break;
         }
+        url.push(`/${this.playlist.playlistId}`);
       } else if(this.emission && this.podcast){
+        url.push(`${this.iFrameModel}/`);
         if (this.isEmission || this.isLargeEmission) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`
-          );
+          url.push(`${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`);
         } else if (this.isLargeSuggestion) {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}${iFrameNumber}`
-          );
+          url.push(`${this.podcast.podcastId}${iFrameNumber}`);
         }  else {
-          url.push(
-            `${this.miniplayerBaseUrl}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`
-          );
+          url.push(`${this.podcast.podcastId}`);
         }
       }
       url.push('?distributorId=' + this.organisationId);
-      const theme = this.theme;
-      url.push(
-        '&color=' +
-          this.color.substring(1) +
-          '&theme=' +
-          theme.substring(1)
-      );
+      url.push(`&color=${this.color.substring(1)}&theme=${this.theme.substring(1)}`);
       if (!this.proceedReading) {
         url.push('&proceed=false');
       }
@@ -301,9 +271,7 @@ export default defineComponent({
       if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         data = this.$store.state.organisation.attributes;
       }else{
-        data= await octopusApi.fetchOrganisationAttributes(
-          state.generalParameters.organisationId ? state.generalParameters.organisationId : ""
-        );
+        data= await octopusApi.fetchOrganisationAttributes(this.myOrganisationId||'');
       }
       this.color = Object.prototype.hasOwnProperty.call(data,'COLOR') ? data.COLOR : '#40a372';
       this.theme = Object.prototype.hasOwnProperty.call(data,'THEME') ? data.THEME : '#000000';

@@ -60,7 +60,7 @@
                 name: 'emission',
                 params: { emissionId: podcast.emission.emissionId },
                 query: {
-                  productor: $store.state.filter.organisationId,
+                  productor: filterOrga,
                 },
               }"
             >
@@ -75,7 +75,7 @@
                 name: 'productor',
                 params: { productorId: podcast.organisation.id },
                 query: {
-                  productor: $store.state.filter.organisationId,
+                  productor: filterOrga,
                 },
               }"
             >
@@ -107,16 +107,8 @@
               {{ $t('From RSS') }}
             </div>
             <ErrorMessage
-              v-if="!podcast.availability.visibility"
-              :message="$t('Podcast is not visible for listeners')"
-            />
-            <ErrorMessage
-              v-if="'ERROR' === podcast.processingStatus"
-              :message="$t('Podcast in ERROR, please contact Saooti')"
-            />
-            <ErrorMessage
-              v-if="podcastNotValid"
-              :message="$t('Podcast not validated')"
+              v-if="''!==errorMessage"
+              :message="errorMessage"
             />
           </div>
         </div>
@@ -138,6 +130,7 @@ import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import { displayMethods } from '../../mixins/functions';
+import { orgaComputed } from '../../mixins/orgaComputed';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 
@@ -153,7 +146,7 @@ export default defineComponent({
     PodcastPlayBar
   },
 
-  mixins:[displayMethods],
+  mixins:[displayMethods, orgaComputed],
 
   props: {
     playingPodcast: { default: undefined, type: Object as ()=> Podcast},
@@ -163,20 +156,21 @@ export default defineComponent({
 
   emits: ['playPodcast'],
 
-  data() {
-    return {
-    };
-  },
-
   computed: {
+    errorMessage(): string{
+      if(!this.podcast?.availability.visibility){
+        return this.$t('Podcast is not visible for listeners');
+      }
+      if('ERROR' === this.podcast?.processingStatus){
+        return this.$t('Podcast in ERROR, please contact Saooti');
+      }
+      if(this.podcastNotValid){
+        return this.$t('Podcast not validated');
+      }
+      return '';
+    },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
-    },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
     },
     date(): string {
       if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){
@@ -202,7 +196,7 @@ export default defineComponent({
     editRight(): boolean {
       if ( this.podcast &&
         (this.authenticated &&
-          this.organisationId === this.podcast.organisation.id) ||
+          this.myOrganisationId === this.podcast.organisation.id) ||
         state.generalParameters.isAdmin
       )
         return true;

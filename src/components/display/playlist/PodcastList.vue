@@ -1,14 +1,7 @@
 <template>
   <div class="d-flex flex-column align-items-center">
-    <h2
-      class="mt-3 align-self-baseline"
-    >
-      <template v-if="notEmptyPlaylist">
-        {{ $t('Podcasts in the playlist') }}
-      </template>
-      <template v-else>
-        {{ $t('No podcasts in the playlist') }}
-      </template>
+    <h2 class="mt-3 align-self-baseline">
+      {{ titleList }}
     </h2>
     <ClassicLoading
       :loading-text="loading?$t('Loading podcasts ...'):undefined"
@@ -57,6 +50,7 @@
 
 <script lang="ts">
 import { handle403 } from '../../mixins/handle403';
+import { orgaComputed } from '../../mixins/orgaComputed';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
@@ -75,7 +69,7 @@ export default defineComponent({
     ClassicLoading
   },
 
-  mixins: [handle403],
+  mixins: [handle403, orgaComputed],
 
   props: {
     playlist: { default: ()=>({}), type: Object as ()=>Playlist},
@@ -94,6 +88,9 @@ export default defineComponent({
 
   
   computed: {
+    titleList(): string{
+      return this.notEmptyPlaylist ? this.$t('Podcasts in the playlist') : this.$t('No podcasts in the playlist');
+    },
     notEmptyPlaylist(): boolean {
       return 0 !== Object.keys(this.playlist.podcasts).length;
     },
@@ -105,16 +102,10 @@ export default defineComponent({
     buttonPlus(): boolean {
       return (state.generalParameters.buttonPlus as boolean);
     },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     editRight(): boolean {
       if (
         (this.authenticated &&
-          this.organisationId === this.playlist.organisation.id) ||
+          this.myOrganisationId === this.playlist.organisation.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -136,37 +127,34 @@ export default defineComponent({
   },
 
   created() {
-    if (this.notEmptyPlaylist) {
-      this.fetchContent();
-    } else {
-      this.loading = false;
-      this.loaded = true;
-    }
+    this.fetchContent();
   },
   methods: {
     async fetchContent(): Promise<void> {
-      this.podcasts.length = 0;
-      this.loading = true;
-      this.loaded = false;
-      try {
-        const content = await octopusApi.fetchPlaylistContent(
-          this.playlist.playlistId.toString()
-        );
-        for (let index = 0, len = content.length; index < len; index++) {
-          content[index].order = this.playlist.podcasts[content[index].podcastId];
+      if (this.notEmptyPlaylist){
+        this.podcasts.length = 0;
+        this.loading = true;
+        this.loaded = false;
+        try {
+          const content = await octopusApi.fetchPlaylistContent(
+            this.playlist.playlistId.toString()
+          );
+          for (let index = 0, len = content.length; index < len; index++) {
+            content[index].order = this.playlist.podcasts[content[index].podcastId];
+          }
+          this.podcasts = content;
+          if (!this.editRight) {
+            this.podcasts = this.podcasts.filter((p: Podcast|null) => {
+              return (
+                null !== p &&
+                (!p.availability || true === p.availability.visibility)
+              );
+            });
+          }
+          this.podcastsQuery = this.podcasts;
+        } catch (error) {
+          this.handle403((error as AxiosError));
         }
-        this.podcasts = content;
-        if (!this.editRight) {
-          this.podcasts = this.podcasts.filter((p: Podcast|null) => {
-            return (
-              null !== p &&
-              (!p.availability || true === p.availability.visibility)
-            );
-          });
-        }
-        this.podcastsQuery = this.podcasts;
-      } catch (error) {
-        this.handle403((error as AxiosError));
       }
       this.loading = false;
       this.loaded = true;
@@ -182,11 +170,11 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-.width-600 {
-  width: 600px;
-  @media (max-width: 600px) {
-    width: 100%;
+  .width-600 {
+    width: 600px;
+    @media (max-width: 600px) {
+      width: 100%;
+    }
   }
-}
 }
 </style>

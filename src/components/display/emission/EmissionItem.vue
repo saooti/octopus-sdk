@@ -6,7 +6,7 @@
       :to="{
         name: 'emission',
         params: { emissionId: emission.emissionId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrga },
       }"
       :title="$t('Emission')"
       class="d-flex text-dark"
@@ -44,7 +44,7 @@
           :to="{
             name: 'productor',
             params: { productorId: emission.orga.id },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: filterOrga },
           }"
         >
           <div class="emission-producer">
@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts">
+import { orgaComputed } from '../../mixins/orgaComputed';
 import { Emission } from '@/store/class/general/emission';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
@@ -65,7 +66,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionItem',
 
-  mixins: [displayMethods],
+  mixins: [displayMethods, orgaComputed],
 
   props: {
     emission: { default: ()=>({}), type: Object as ()=> Emission},
@@ -87,15 +88,9 @@ export default defineComponent({
       }
       return '';
     },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     editRight(): boolean {
       if (
-        (this.authenticated && this.organisationId === this.emission.orga.id) ||
+        (this.authenticated && this.myOrganisationId === this.emission.orga.id) ||
         state.generalParameters.isAdmin
       )
         return true;

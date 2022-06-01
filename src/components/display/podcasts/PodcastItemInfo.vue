@@ -16,7 +16,7 @@
       :to="{
         name: 'podcast',
         params: { podcastId: podcastId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrga },
       }"
       class="text-dark d-flex flex-column flex-grow-1"
     >
@@ -35,7 +35,7 @@
         :to="{
           name: 'productor',
           params: { productorId: podcastOrganisationId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: filterOrga },
         }"
         class="text-dark producer-podcast-item"
       >
@@ -52,6 +52,7 @@
 <script lang="ts">
 import AnimatorsItem from './AnimatorsItem.vue';
 import { state } from '../../../store/paramStore';
+import { orgaComputed } from '../../mixins/orgaComputed';
 import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
@@ -65,6 +66,8 @@ export default defineComponent({
     AnimatorsItem,
     PodcastPlayBar
   },
+
+  mixins:[orgaComputed],
 
   props: {
     podcastId: { default: undefined, type: Number},
@@ -84,16 +87,10 @@ export default defineComponent({
     date(): string {
       return moment(this.pubDate).format('D MMMM YYYY, HH[h]mm');
     },
-    organisationId(): string|undefined {
-      return state.generalParameters.organisationId;
-    },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     editRight(): boolean {
       if (
         (this.authenticated &&
-          this.organisationId === this.podcastOrganisationId) ||
+          this.myOrganisationId === this.podcastOrganisationId) ||
         state.generalParameters.isAdmin
       )
         return true;
