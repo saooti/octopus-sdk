@@ -166,8 +166,7 @@ export default defineComponent({
       return true;
     },
     placeholder(): string {
-      if (this.comment && this.comment.comId) return this.$t('Answer a comment').toString();
-      return this.$t('Write a comment').toString();
+      return this.comment && this.comment.comId? this.$t('Answer a comment') : this.$t('Write a comment');
     },
     isCertified(): boolean {
       if (
@@ -180,8 +179,7 @@ export default defineComponent({
       return false;
     },
     userId(): string|undefined {
-      if (state.generalParameters.authenticated) return this.$store.state.profile.userId;
-      return undefined;
+      return state.generalParameters.authenticated ? this.$store.state.profile.userId : undefined;
     },
     phase(): string|undefined {
       if(undefined === this.podcast){
@@ -237,11 +235,8 @@ export default defineComponent({
       this.editName = false;
     },
     inputExceeded(text: string, font: string): number {
-      const element = document.createElement('canvas');
-      const context = element.getContext('2d');
-      if(null === context){
-        return 0;
-      }
+      const context = document.createElement('canvas').getContext('2d');
+      if(null === context){return 0;}
       context.font = font;
       return context.measureText(text).width;
     },
@@ -259,27 +254,19 @@ export default defineComponent({
       let timeline = 0;
       if (
         undefined !== this.podcast &&(
-        (this.$store.state.player.podcast &&
-          this.$store.state.player.podcast.podcastId ===
-            this.podcast.podcastId) ||
-        (this.$store.state.player.live &&
-          this.$store.state.player.live.livePodcastId ===
-            this.podcast.podcastId))
+        (this.$store.state.player.podcast?.podcastId ===this.podcast.podcastId) ||
+        (this.$store.state.player.live?.livePodcastId ===this.podcast.podcastId))
       ) {
         timeline = Math.round(
           this.$store.state.player.elapsed * this.$store.state.player.total
         );
         if (this.podcast.duration && this.$store.state.player.podcast) {
           timeline = Math.round(
-            timeline -
-              (this.$store.state.player.total - this.podcast.duration / 1000)
+            timeline - (this.$store.state.player.total - this.podcast.duration / 1000)
           );
         }
-        if (timeline < 0) {
-          timeline = 0;
-        }
       }
-      return timeline;
+      return timeline < 0? 0 : timeline;
     },
     async postComment(name?: string): Promise<void> {
       if (name) {

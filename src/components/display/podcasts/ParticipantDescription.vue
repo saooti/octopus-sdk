@@ -67,23 +67,15 @@ export default defineComponent({
 
   computed:{
     idPopover(): string{
-      if(this.isGuest){
-        return "popover-guests-help";
-      }
-      return "popover-animators-help";
+      return this.isGuest ? "popover-guests-help" : "popover-animators-help";
     },
     title(): string{
-      if(this.isGuest){
-        return this.$t('Guests').toString();
-      }
-      return this.$t('Animated by').toString();
+      return this.isGuest ? this.$t('Guests') : this.$t('Animated by');
     }
   },
   methods: {
     getName(person: Participant): string {
-      const first = person.firstName || '';
-      const last = person.lastName || '';
-      return (first + ' ' + last).trim();
+      return (`${person.firstName||''} ${person.lastName||''}`).trim();
     },
   },
 })

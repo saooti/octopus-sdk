@@ -123,14 +123,13 @@ export default defineComponent({
     }
     window.addEventListener('resize', this.handleResize);
   },
+  mounted() {
+    this.fetchNext();
+  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
 
-
-  mounted() {
-    this.fetchNext();
-  },
   methods: {
     handleResize(): void {
       if (!this.$el) return;

@@ -80,10 +80,7 @@ export default defineComponent({
       const topicIndex = this.rubriquageDisplay.findIndex(
         ( element: Rubriquage) => element.rubriquageId === rubriquageId
       );
-      if(-1 !== topicIndex){
-        return this.rubriquageDisplay[topicIndex].rubriques;
-      }
-      return [];
+      return -1 !== topicIndex ? this.rubriquageDisplay[topicIndex].rubriques : [];
     },
     onRubriqueSelected(rubrique: Rubrique): void {
       if (rubrique.rubriqueId === this.rubriqueId) return;

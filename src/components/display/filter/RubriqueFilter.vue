@@ -151,11 +151,7 @@ export default defineComponent({
           this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""}];
           this.isRubriquage = false;
         }
-        if(this.isRubriquage){
-          this.$emit('updateRubriquageFilter', this.arrayFilter);
-        }else{
-          this.$emit('updateRubriquageFilter', []);
-        }
+        this.$emit('updateRubriquageFilter',this.isRubriquage? this.arrayFilter : []);
         this.$nextTick(() => {
           this.isInternChanged = false;
         });

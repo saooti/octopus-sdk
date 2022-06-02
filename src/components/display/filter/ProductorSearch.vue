@@ -66,7 +66,6 @@ export default defineComponent({
     return {
       keepOrganisation: false as boolean,
       showBubble: false as boolean,
-      imgUrl: '' as string,
       queryIntern: '' as string,
     };
   },
@@ -76,11 +75,10 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     searchText(): string {
-      if ('emission' === this.type) return this.$t('Look for emission name').toString();
-      if ('participant' === this.type)
-        return this.$t('Look for participant name').toString();
-      if ('playlist' === this.type) return this.$t('Look for playlist name').toString();
-      return this.$t('Look for podcast name').toString();
+      if ('emission' === this.type) return this.$t('Look for emission name');
+      if ('participant' === this.type)return this.$t('Look for participant name');
+      if ('playlist' === this.type) return this.$t('Look for playlist name');
+      return this.$t('Look for podcast name');
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -88,15 +86,14 @@ export default defineComponent({
   },
   watch: {
     queryIntern(): void {
-      if(this.queryIntern !== this.searchPattern)
-      this.$emit('updateSearchPattern', this.queryIntern);
+      if(this.queryIntern !== this.searchPattern){
+        this.$emit('updateSearchPattern', this.queryIntern);
+      }
     },
-    filterOrga(): void {
+    filterOrga():void{
+      this.keepOrganisation = undefined!==this.filterOrga;
       if (this.filterOrga) {
-        this.keepOrganisation = true;
         this.$emit('updateOrganisationId', this.filterOrga);
-      } else {
-        this.keepOrganisation = false;
       }
     },
   },
@@ -114,10 +111,7 @@ export default defineComponent({
       if (this.$route.query.productor) {
         this.$router.push({ query: { productor: undefined } });
       }
-      this.imgUrl = organisation.imageUrl;
-      this.$store.commit('filterOrga', {
-        orgaId: undefined,
-      });
+      this.$store.commit('filterOrga', {orgaId: undefined});
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
         this.$emit('updateOrganisationId', organisation.id);
@@ -153,69 +147,69 @@ export default defineComponent({
 <style lang="scss">
 @import '../../../sass/_variables.scss';
 .octopus-app{
-.filter-speech-bubble {
-  position: absolute;
-  background: $octopus-primary-dark;
-  border-radius: 0.4em;
-  width: 10rem;
-  right: 4rem;
-  padding: 5px;
-  -webkit-animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  animation: fadein 1s;
-  color: white;
-}
+  .filter-speech-bubble {
+    position: absolute;
+    background: $octopus-primary-dark;
+    border-radius: 0.4em;
+    width: 10rem;
+    right: 4rem;
+    padding: 5px;
+    -webkit-animation: fadein 1s;
+    -moz-animation: fadein 1s;
+    animation: fadein 1s;
+    color: white;
+  }
 
-.filter-speech-bubble:after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border: 18px solid transparent;
-  border-left-color: $octopus-primary-dark;
-  border-right: 0;
-  border-bottom: 0;
-  margin-top: -9px;
-  margin-right: -18px;
-  -webkit-animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  animation: fadein 1s;
-}
-@keyframes fadein {
-  from {
-    opacity: 0;
+  .filter-speech-bubble:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 18px solid transparent;
+    border-left-color: $octopus-primary-dark;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -9px;
+    margin-right: -18px;
+    -webkit-animation: fadein 1s;
+    -moz-animation: fadein 1s;
+    animation: fadein 1s;
   }
-  to {
-    opacity: 1;
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
-}
-@-moz-keyframes fadein {
-  from {
-    opacity: 0;
+  @-moz-keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
-  to {
-    opacity: 1;
+  @-webkit-keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
-}
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
+  .filter-organisation-chooser {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 10%;
+    position: relative;
+    @media (max-width: 500px) {
+      margin-right: 0;
+    }
   }
-  to {
-    opacity: 1;
-  }
-}
-.filter-organisation-chooser {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-  margin-right: 10%;
-  position: relative;
-  @media (max-width: 500px) {
-    margin-right: 0;
-  }
-}
 }
 </style>

@@ -87,46 +87,40 @@ export default defineComponent({
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
     },
+    watchVariable(): string{
+      return `${this.isDisplay}|${this.categories}`;
+    },
+    reloadVariable():string{
+      return `${this.filterOrga}|${this.categoriesWatch}`;
+    }
   },
   watch: {
-    isDisplay():void{
-      this.$nextTick(() => {
-        this.resizeWindow();
-      });
-    },
-    categories: {
+    watchVariable: {
       deep: true,
+      immediate:true,
       handler(){
         this.$nextTick(() => {
           this.resizeWindow();
         });
       }
     },
-    filterOrga(): void {
-      if (this.filterOrga) {
-        this.fetchCategories(this.filterOrga);
-      }
-    },
-    categoriesWatch:{
+    reloadVariable:{
       deep: true,
+      immediate:true,
       handler(){
-      if (this.filterOrga) {
-        this.fetchCategories(this.filterOrga);
-      }
+        if (this.filterOrga) {
+          this.fetchCategories(this.filterOrga);
+        }
       }
     }
   },
-
   mounted() {
     window.addEventListener('resize', this.resizeWindow);
-    this.resizeWindow();
-    if (this.filterOrga) {
-      this.fetchCategories(this.filterOrga);
-    }
   },
   beforeUnmount(): void {
     window.removeEventListener('resize', this.resizeWindow);
   },
+  
   methods: {
     checkIfFilter(category: Category): void{
       if(!this.isFilter){

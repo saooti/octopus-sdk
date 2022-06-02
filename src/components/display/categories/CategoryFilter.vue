@@ -102,10 +102,7 @@ export default defineComponent({
       && (this.isCategories || undefined!==this.categoryFilter || 0!==this.rubriqueFilter.length || 0!==this.rubriquageFilter.length);
     },
     rubriquageFilter(): Array<Rubriquage>{
-      if(this.$store.state.filter.organisationId){
-        return this.$store.state.filter.rubriquageArray;
-      }
-      return [];
+      return this.$store.state.filter.organisationId ? this.$store.state.filter.rubriquageArray : [];
     },
   },
   methods:{
@@ -113,44 +110,33 @@ export default defineComponent({
       this.isCategories = 0!==length;
     },
     onRubriqueSelected(index: number, rubrique: Rubrique): void {
-      if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId){
+      if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId ||rubrique.rubriqueId){
         return;
       }
-      if(rubrique.rubriqueId){
-        const filter = Array.from(this.rubriqueFilter);
-        filter[index].rubriqueId = rubrique.rubriqueId;
-        this.$store.commit('filterRubrique', filter);
-        const queries = this.$route.query;
-        const queryString = filter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
-        this.$router.replace({ query: { ...queries, ...{ rubriquesId: queryString }} });
-      }
+      const filter = Array.from(this.rubriqueFilter);
+      filter[index].rubriqueId = rubrique.rubriqueId||0;
+      this.$store.commit('filterRubrique', filter);
+      const queryString = filter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
+      this.$router.replace({ query: { ...this.$route.query, ...{ rubriquesId: queryString }} });
     },
     getRubriques(rubriquageId: number): Array<Rubrique>{
       const rubriquage = this.$store.state.filter.rubriquageArray.find((x: Rubriquage) => {
         return x.rubriquageId === rubriquageId;
       });
-      if(rubriquage){
-        return rubriquage.rubriques;
-      }
-      return [];
+      return rubriquage ? rubriquage.rubriques : [];
     },
     removeFilter(index: number, event?: { preventDefault: () => void }): void{
-      const queries = this.$route.query;
       if(this.categoryFilter){
-        if (queries.iabId) {
-          this.$router.replace({ query: {...queries, ...{iabId: undefined} } });
+        if (this.$route.query.iabId) {
+          this.$router.replace({ query: {...this.$route.query, ...{iabId: undefined} } });
         }
         this.$store.commit('filterIab', undefined);
       }else{
         const newFilter: Array<RubriquageFilter>  = Array.from(this.$store.state.filter.rubriqueFilter);
         newFilter.splice(index + 1);
-        if (queries.rubriquesId) {
+        if (this.$route.query.rubriquesId) {
           const queryString = newFilter.map(value => value.rubriquageId+':'+value.rubriqueId).join();
-          if("" !== queryString){
-            this.$router.replace({ query: { ...queries, ...{ rubriquesId: queryString }} });
-          }else{
-            this.$router.replace({ query: { ...queries, ...{ rubriquesId: undefined }} });
-          }
+          this.$router.replace({ query: { ...this.$route.query, ...{ rubriquesId:"" !== queryString? queryString : undefined}} });
         }
         this.$store.commit('filterRubrique', newFilter);
       }

@@ -47,8 +47,6 @@ export default defineComponent({
   props: {
     tagList: { default: () => [], type: Array as ()=>Array<string>},
   },
-  methods: {
-  },
 })
 </script>
 

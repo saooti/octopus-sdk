@@ -44,11 +44,7 @@ export default defineComponent({
         return;
       }
       this.isInternChanged = true;
-      if (this.isCategory) {
-        this.$emit('updateCategory', this.iabId);
-      } else {
-        this.$emit('updateCategory', 0); 
-      }
+      this.$emit('updateCategory', this.isCategory?this.iabId:0);
       this.resetCategoryFilter();
       this.$nextTick(() => {
         this.isInternChanged = false;
@@ -70,21 +66,16 @@ export default defineComponent({
     categoryFilter:{
       deep: true,
       handler(){
-      if(this.isInternChanged){
-        return;
-      }
-      this.isInternChanged = true;
-      if(this.categoryFilter){
-        this.iabId = this.categoryFilter.id;
-        this.isCategory = true;
-      }else{
-        this.iabId = 0;
-        this.isCategory = false;
-      }
-      this.$emit('updateCategory', this.iabId);
-      this.$nextTick(() => {
-        this.isInternChanged = false;
-      });
+        if(this.isInternChanged){
+          return;
+        }
+        this.isInternChanged = true;
+        this.iabId = this.categoryFilter ? this.categoryFilter.id : 0;
+        this.isCategory = this.categoryFilter ? true : false;
+        this.$emit('updateCategory', this.iabId);
+        this.$nextTick(() => {
+          this.isInternChanged = false;
+        });
       }
     },
   },

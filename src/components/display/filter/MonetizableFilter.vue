@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="d-flex align-items-center"
-  >
+  <div class="d-flex align-items-center">
     <div>{{ $t('Advertising') + ' :' }}</div>
     <label class="position-relative">
       <select
@@ -10,16 +8,7 @@
         class="ms-2 mb-0 pe-4 c-hand"
         @change="onChange"
       >
-        <option
-          v-if="isEmission"
-          value="UNDEFINED"
-        >{{
-          $t('All emissions')
-        }}</option>
-        <option
-          v-else
-          value="UNDEFINED"
-        >{{ $t('All podcasts') }}</option>
+        <option value="UNDEFINED">{{allString}}</option>
         <option value="YES">{{ $t('Authorized advertising') }}</option>
         <option value="NO">{{ $t('Prohibited advertising') }}</option>
       </select>
@@ -41,7 +30,11 @@ export default defineComponent({
       monetization: 'UNDEFINED' as string,
     };
   },
-
+  computed:{
+    allString(): string{
+      return this.isEmission? this.$t('All emissions') : this.$t('All podcasts');
+    }
+  },
   methods: {
     onChange(): void {
       this.$emit('updateMonetization', this.monetization);

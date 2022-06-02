@@ -35,32 +35,13 @@
           </router-link>
         </template>
         <template v-else>
-          <router-link
-            v-if="isContribution && !isPodcastmaker"
-            class="btn btn-primary w-100"
-            to="/main/priv/upload"
-          >
-            {{ $t('Upload') }}
-          </router-link>
-          <template v-if="!isPodcastmaker">
+          <template v-for="routerBack in routerBackoffice" :key="routerBack.path">
             <router-link
-              to="/main/priv/backoffice"
-              class="show-phone dropdown-item"
+              v-if="!isPodcastmaker && routerBack.condition"
+              :class="routerBack.class"
+              :to="routerBack.path"
             >
-              {{ $t('My space') }}
-            </router-link>
-            <router-link
-              class="dropdown-item"
-              to="/main/priv/edit/profile"
-            >
-              {{ $t('Edit my profile') }}
-            </router-link>
-            <router-link
-              v-if="isOrganisation"
-              class="dropdown-item"
-              to="/main/priv/edit/organisation"
-            >
-              {{ $t('Edit my organisation') }}
+              {{ routerBack.title }}
             </router-link>
           </template>
           <template v-if="!isEducation">
@@ -106,6 +87,13 @@ export default defineComponent({
   },
 
   computed: {
+    routerBackoffice(){
+      return [
+        {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: this.isContribution},
+        {title:this.$t('My space'),class:"show-phone dropdown-item", path:'/main/priv/backoffice', condition: true},
+        {title:this.$t('Edit my profile'),class:"dropdown-item", path:'/main/priv/edit/profile', condition: true},
+        {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: this.isOrganisation}];
+    },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },

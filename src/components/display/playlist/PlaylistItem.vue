@@ -117,8 +117,6 @@ export default defineComponent({
       return 0 !== Object.keys(this.playlist.podcasts).length;
     },
   },
-
-
   mounted() {
     const playlistDesc = (this.$refs.descriptionPlaylist as HTMLElement);
     const playlistDescContainer = (this.$refs.descriptionPlaylistContainer as HTMLElement);
@@ -129,6 +127,5 @@ export default defineComponent({
       playlistDescContainer.classList.add('after-emission-description');
     }
   },
-  methods: {},
 })
 </script>

@@ -1,13 +1,6 @@
 <template>
   <div class="p-3">
-    <h2>
-      <template v-if="name">
-        {{ $t('All podcast button', { name: name }) }}
-      </template>
-      <template v-else>
-        {{ $t('All podcast emission button') }}
-      </template>
-    </h2>
+    <h2>{{ titleFilter }}</h2>
     <div class="d-flex align-items-center flex-wrap">
       <div
         class="d-flex align-items-center flex-grow-1 me-3"
@@ -72,10 +65,13 @@ export default defineComponent({
       reloadList: false as boolean,
     };
   },
+
   computed: {
+    titleFilter():string{
+      return this.name ? this.$t('All podcast button', { name: this.name }) : this.$t('All podcast emission button');
+    },
     query(): string {
-      if (this.searchPattern.length >= 3) return this.searchPattern;
-      return '';
+      return this.searchPattern.length >= 3 ? this.searchPattern : '' ;
     },
   },
   watch: {
@@ -85,11 +81,7 @@ export default defineComponent({
   },
   methods: {
     onCategorySelected(category: Category|undefined): void {
-      if (category && category.id) {
-        this.iabId = category.id;
-        return;
-      }
-      this.iabId = undefined;
+      this.iabId = category && category.id ? category.id : undefined;
     },
     fetch(podcasts: Array<Podcast>): void {
       this.$emit('fetch', podcasts);

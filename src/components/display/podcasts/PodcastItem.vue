@@ -84,8 +84,7 @@ export default defineComponent({
       return moment(this.podcast.pubDate).format('X');
     },
     description(): string {
-      if (!this.podcast.description) return '';
-      return this.podcast.description;
+      return this.podcast.description ? this.podcast.description : '';
     },
   },
 

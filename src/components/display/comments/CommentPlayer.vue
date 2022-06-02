@@ -41,14 +41,11 @@ import { selenium } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentPlayer',
-
-  components: {},
   mixins:[selenium],
   props: {
     comments: { default: undefined, type: Array as ()=>Array<CommentPodcast>},
     totalTime: { default: 0, type: Number},
   },
-
   data() {
     return {
       displayContent: undefined as CommentPodcast|undefined,

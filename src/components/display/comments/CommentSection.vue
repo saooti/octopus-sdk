@@ -4,22 +4,12 @@
     class="module-box"
   >
     <div class="d-flex align-items-center">
-      <h2
-        class="mb-0 me-2"
-        data-selenium="episode-comment-counter"
-      >
-        {{ $t("Podcast's comments") }}
-        <template v-if="loaded && totalCount > 0">
-          {{
-            $t('()', { nb: totalCount })
-          }}
-        </template>
-      </h2>
+      <h2 class="mb-0 me-2" data-selenium="episode-comment-counter">{{commentTitle}}</h2>
       <button
         v-if="!isLive"
         :title="$t('Refresh')"
         class="btn admin-button saooti-refresh-stud"
-        @click="reloadComments"
+        @click="reload = !reload"
       />
     </div>
     <CommentInput
@@ -51,18 +41,15 @@ import CommentListVue from './CommentList.vue';
 import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({
   name: 'CommentSection',
-
   components: {
     CommentList,
     CommentInput,
   },
   mixins:[cookies],
-
   props: {
     podcast: { default: undefined, type: Object as ()=>Podcast },
     fetchConference: { default: undefined, type: Object as ()=>Conference },
   },
-  
   data() {
     return {
       totalCount: 0 as number,
@@ -70,8 +57,11 @@ export default defineComponent({
       reload: false as boolean,
     };
   },
-
   computed: {
+    commentTitle():string{
+      const count = this.loaded && this.totalCount > 0 ? this.$t('()', { nb: this.totalCount }) : '';
+      return this.$t("Podcast's comments")+count;
+    },
     isComments(): boolean {
       if (!this.podcast) return true;
       let podcastComment = 'INHERIT';
@@ -122,9 +112,6 @@ export default defineComponent({
         podcastId: this.podcast? this.podcast.podcastId: undefined,
       });
       this.totalCount = value.count;
-    },
-    reloadComments(): void {
-      this.reload = !this.reload;
     },
     newComment(comment: CommentPodcast): void {
       (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(comment, true);

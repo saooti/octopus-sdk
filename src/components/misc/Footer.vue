@@ -119,7 +119,7 @@ export default defineComponent({
         {title : this.$t('Home'), routeName: 'home', condition : true},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
         {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
-        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && !this.filterOrga},
+        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && !this.$store.state.filter.organisationId},
         {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
         {title : this.$t('Speakers'), routeName: 'participants', condition : true},]
     },
@@ -128,9 +128,6 @@ export default defineComponent({
         {title : this.$t('Contact'), routeName: '/main/pub/contact'},
         {title : this.$t('Term of use'), routeName: '/main/pub/cgu'},
         {title : this.$t('Used libraries'), routeName: "/main/pub/libraries"}]
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);

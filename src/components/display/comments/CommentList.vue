@@ -98,13 +98,16 @@ export default defineComponent({
         return true;
       return false;
     },
+    watchVariable():string{
+      return `${this.reload}|${this.status}`
+    }
   },
   watch: {
-    reload(): void {
-      this.fetchContent();
-    },
-    status(): void {
-      this.fetchContent();
+    watchVariable: {
+      immediate:true,
+      handler(){
+        this.fetchContent();
+      }
     },
     comments: {
       deep: true,
@@ -112,9 +115,6 @@ export default defineComponent({
         this.$emit('fetch', { count: this.totalCount, comments: this.comments });
       }
     },
-  },
-  created() {
-    this.fetchContent();
   },
   methods: {
     async fetchContent(reset=true): Promise<void> {
@@ -135,11 +135,7 @@ export default defineComponent({
             status:this.editRight && this.status?[this.status]: this.editRight? ['Valid','Pending', 'Invalid']:['Valid'],
             organisationId: undefined === this.podcastId? this.organisation: undefined,
           };
-          if (!this.isFlat) {
-            data = await octopusApi.fetchRootComments(param);
-          } else {
-            data = await octopusApi.fetchComments(param);
-          }
+          data = this.isFlat ? await octopusApi.fetchComments(param) : await octopusApi.fetchRootComments(param);
         }
         if(reset){
           this.comments.length = 0;
@@ -229,10 +225,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-@import '../../../sass/_variables.scss';
-.octopus-app{
-
-}
-</style>

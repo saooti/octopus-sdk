@@ -24,7 +24,6 @@
           @updateMonetization="updateMonetization"
         />
         <CategoryFilter @updateCategory="updateCategory" />
-        
         <RubriqueFilter 
           :reset-rubriquage="resetRubriquage"
           :organisation-id="organisationId"

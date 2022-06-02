@@ -28,16 +28,10 @@
               {{ countName + ' / ' + maxName }}
             </p>
             <div
-              v-if="sendError"
+              v-if="''!==errorText"
               class="mt-1 text-danger"
             >
-              {{ $t('Recaptcha error') }}
-            </div>
-            <div
-              v-if="isCaptchaTest"
-              class="mt-1 text-danger"
-            >
-              {{ $t('Recaptcha not active') }}
+              {{ errorText }}
             </div>
           </template>
           <template v-else>
@@ -85,8 +79,12 @@ export default defineComponent({
       maxName : Constants.MAX_COMMENT_NAME as number
     };
   },
-
   computed: {
+    errorText():string {
+      if(this.isCaptchaTest) return this.$t('Recaptcha not active');
+      if(this.sendError) return this.$t('Recaptcha error');
+      return '';
+    },
     validName(): boolean{
       return this.countName <= this.maxName;
     },
@@ -102,45 +100,30 @@ export default defineComponent({
     this.displayCaptcha('block');
     this.initAuthenticatedName();
   },
-
   unmounted() {
     this.displayCaptcha('none');
   },
-
   methods: {
     initAuthenticatedName():void{
-      if (state.generalParameters.authenticated) {
-        this.name = (
-          (this.$store.state.profile.firstname || '') +
-          ' ' +
-          (this.$store.state.profile.lastname || '')
-        ).trim();
-        this.needVerify = false;
-      }
+      if (!state.generalParameters.authenticated) { return; }
+      this.name = (`${this.$store.state.profile.firstname||''} ${this.$store.state.profile.lastname||''}`).trim();
+      this.needVerify = false;
     },
     displayCaptcha(displayStyle: string): void{
       const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
-      if (captcha) {
-        (captcha as HTMLElement).style.display = displayStyle;
-      }
+      if (!captcha) {return;}
+      (captcha as HTMLElement).style.display = displayStyle;
     },
     async validateName(): Promise<void> {
-      if (!this.needVerify || this.isCaptchaTest) {
-        this.sendComment();
-        return;
-      }
-      try {
-        await this.$recaptchaLoaded()
-        const token = await this.$recaptcha('login');
-        this.sendError = false;
-        const ok = await api.checkToken(token);
-        if (!ok) {
+      if (this.needVerify && this.isCaptchaTest) {
+        try {
+          await this.$recaptchaLoaded()
+          const token = await this.$recaptcha('login');
+          this.sendError = !await api.checkToken(token);
+        } catch {
           this.sendError = true;
-          return;
         }
-      } catch {
-        this.sendError = true;
-        return;
+        if(this.sendError){return;}
       }
       this.sendComment();
     },

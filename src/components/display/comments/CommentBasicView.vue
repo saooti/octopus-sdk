@@ -27,9 +27,7 @@
         :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
         :title="$t('Certified account')"
       >
-      <div class="me-2">
-        {{ date }}
-      </div>
+      <div class="me-2">{{ date }}</div>
       <span 
         v-if="editRight" 
         :class="'status-' + comment.status"
@@ -78,13 +76,10 @@ export default defineComponent({
       return 'Valid'=== this.comment.status;
     },
     date(): string {
-      if (this.comment.date)
-        return moment(this.comment.date).format('D MMMM YYYY HH[h]mm');
-      return '';
+      return this.comment.date ? moment(this.comment.date).format('D MMMM YYYY HH[h]mm') : '';
     },
     readMore(): string {
-      if (this.summary) return this.$t('Read more').toString();
-      return this.$t('Read less').toString();
+      return this.summary ? this.$t('Read more') : this.$t('Read less');
     },
     contentDisplay(): string {
       if (!this.summary){return this.comment.content;}

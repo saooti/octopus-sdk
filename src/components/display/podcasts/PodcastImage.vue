@@ -8,11 +8,7 @@
       class="img-box"
       :alt="$t('Episode name image', {name:podcast.title})"
     >
-    <template v-if="isPodcastmaker">
-      <div
-        :class="mainRubrique? 'mainRubrique' : 'notMainRubrique'"
-      />
-    </template>
+    <div v-if="isPodcastmaker" :class="mainRubrique? 'mainRubrique' : 'notMainRubrique'"/>
     <div
       v-if="fetchConference"
       class="live-image-status"
@@ -77,15 +73,10 @@
       </div>
     </div>
     <div
-      v-if="!isDescription && displayDescription && isMobile"
+      v-if="displayDescription && isMobile"
       class="background-icon primary-bg saooti-arrow-up2"
-      :title="$t('Show description')"
-      @click="showDescription"
-    />
-    <div
-      v-if="isDescription && displayDescription && isMobile"
-      class="background-icon primary-bg saooti-arrow-down2"
-      :title="$t('Hide description')"
+      :class="isDescription ? 'saooti-arrow-down2':'saooti-arrow-up2'"
+      :title="isDescription ? $t('Hide description'):$t('Show description')"
       @click="showDescription"
     />
   </div>
@@ -210,21 +201,21 @@ export default defineComponent({
       if (!this.fetchConference) return '';
       switch (this.fetchConference.status) {
         case 'PLANNED':
-          return this.$t('live in few time').toString();
+          return this.$t('live in few time');
         case 'PENDING':
-          if (this.isAnimatorLive) return this.$t('Open studio').toString();
-          return this.$t('live upcoming').toString();
+          if (this.isAnimatorLive) return this.$t('Open studio');
+          return this.$t('live upcoming');
         case 'RECORDING':
-          return this.$t('In live').toString();
+          return this.$t('In live');
         case 'DEBRIEFING':
           if (!this.isAnimatorLive) return '';
           if ('READY_TO_RECORD' === this.podcast.processingStatus)
-            return this.$t('Not recording').toString();
-          return this.$t('Debriefing').toString();
+            return this.$t('Not recording');
+          return this.$t('Debriefing');
         case 'ERROR':
-          return this.$t('In error').toString();
+          return this.$t('In error');
         case 'PUBLISHING':
-          return this.$t('Publishing').toString();
+          return this.$t('Publishing');
         default:
           return '';
       }
@@ -297,83 +288,83 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-.live-image-status {
-  text-align: center;
-  width: 100%;
-  font-size: 0.6rem;
-  padding: 0.2rem 0;
-  color: white;
-  text-transform: uppercase;
-  position: absolute;
-}
+  .live-image-status {
+    text-align: center;
+    width: 100%;
+    font-size: 0.6rem;
+    padding: 0.2rem 0;
+    color: white;
+    text-transform: uppercase;
+    position: absolute;
+  }
 
-.background-icon{
-  border-radius: 50%;
-  width: 1rem;
-  height: 1rem;
-  font-size: 1rem;
-  right: 0;
-  bottom: 0;
-  margin: 5px;
-  position: absolute;
-  cursor: pointer;
-  z-index: 3;
-}
-.special-icon-play-button {
-  width: 30px;
-  height: 30px;
-  background-color: #ffd663;
-  border-radius: 50%;
-  position: absolute;
-  right: 4.5rem;
-  top: 6rem;
-  font-size: 0.9rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.transparent-background {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-.podcast-image-play-button {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  cursor: pointer;
-  flex-direction: column;
-
-  .icon-container {
-    background: #00000050;
+  .background-icon{
     border-radius: 50%;
-    height: 3rem;
-    width: 3rem;
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+    right: 0;
+    bottom: 0;
+    margin: 5px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 3;
+  }
+  .special-icon-play-button {
+    width: 30px;
+    height: 30px;
+    background-color: #ffd663;
+    border-radius: 50%;
+    position: absolute;
+    right: 4.5rem;
+    top: 6rem;
+    font-size: 0.9rem;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    &.error-icon {
-      background: #00000050 !important;
-      cursor: default !important;
-    }
-    &:hover {
-      background: #00000030;
-    }
-    > .saooti-play2-bounty {
-      font-size: 2em;
-      position: relative;
-      right: -0.2rem;
-    }
-    .big-icon-error {
-      font-size: 2em;
-      position: relative;
-    }
-    z-index: 2;
   }
-}
+  .transparent-background {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  .podcast-image-play-button {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    flex-direction: column;
+
+    .icon-container {
+      background: #00000050;
+      border-radius: 50%;
+      height: 3rem;
+      width: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &.error-icon {
+        background: #00000050 !important;
+        cursor: default !important;
+      }
+      &:hover {
+        background: #00000030;
+      }
+      > .saooti-play2-bounty {
+        font-size: 2em;
+        position: relative;
+        right: -0.2rem;
+      }
+      .big-icon-error {
+        font-size: 2em;
+        position: relative;
+      }
+      z-index: 2;
+    }
+  }
 }
 </style>
