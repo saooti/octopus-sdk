@@ -2,9 +2,7 @@
   <div class="page-box">
     <template v-if="loaded && !error">
       <div class="page-podcast-title">
-        <h1>
-          {{ titlePage }}
-        </h1>
+        <h1>{{ titlePage }}</h1>
         <Countdown
           v-if="isCounter"
           :time-remaining="timeRemaining"

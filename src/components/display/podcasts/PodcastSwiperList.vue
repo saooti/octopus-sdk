@@ -24,7 +24,6 @@
         :loop="true"
         :navigation="true"
         :modules="modules"
-        class="mySwiper"
       >
         <swiper-slide
           v-for="p in allPodcasts"
@@ -123,18 +122,20 @@ export default defineComponent({
     }
     window.addEventListener('resize', this.handleResize);
   },
-  mounted() {
-    this.fetchNext();
-  },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
 
+
+  mounted() {
+    this.handleResize();
+    this.fetchNext();
+  },
   methods: {
     handleResize(): void {
       if (!this.$el) return;
       const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 2);
+      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.5);
       this.numberItem = Math.floor(width / sixteen);
     },
     async fetchNext(): Promise<void> {
@@ -181,7 +182,6 @@ export default defineComponent({
 .swiper {
   width: 100%;
   height: 100%;
-  padding: 50px 20px;
 }
 .swiper-button-next, .swiper-button-prev{
   color: $octopus-primary-color !important;

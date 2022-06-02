@@ -585,7 +585,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.86 Podcastmaker newest
  * 30.0.87 Podcastmaker newest (swiper list)
  * 30.0.88 Podcastmaker newest (swiper list)
-
+ * 30.0.89 Podcastmaker newest (swiper list)
+ 
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
  * 31.0.2 Gestion des 403
@@ -622,3 +623,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.33 Changement css (on n'arrete plus le fun)
  * 31.0.34 Icones
  * 31.0.35 Il faut croire que c'est SDK Day...
+
