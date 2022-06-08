@@ -1,73 +1,64 @@
 <template>
-  <div class="d-flex flex-column align-items-center">
-    <ClassicLoading
-      :loading-text="loading?$t('Loading emissions ...'):undefined"
-    />
-    <template v-if="isLoadingMoreOrFinished">
-      <div
-        v-if="showCount && emissions.length > 1"
-        class="text-secondary mb-2"
-      >
-        {{ $t('Number emissions', { nb: displayCount }) + sortText }}
-      </div>
+  <ListPaginate
+    id="emissionListPaginate"
+    v-model:first="dfirst"
+    v-model:rowsPerPage="dsize"
+    v-model:isMobile="isMobile"
+    :text-count="showCount && emissions.length > 1 ? $t('Number emissions', { nb: displayCount }) + sortText : undefined"
+    :total-count="totalCount"
+    :loading="loading"
+    :loading-text="loading?$t('Loading emissions ...'):undefined"
+  >
+    <template #list>
       <ul
         v-if="!itemPlayer"
         class="emission-list"
         :class="smallItems ? 'three-emissions' : 'two-emissions'"
       >
-        <EmissionItem
-          v-for="e in emissions"
+        <template
+          v-for="e in displayArray"
           :key="e.emissionId"
-          :emission="e"
-        />
+        >
+          <EmissionItem
+            v-if="-1!==e.emissionId"
+            :emission="e"
+          />
+        </template>
       </ul>
       <div
-        v-show="
-          (displayRubriquage && rubriques) || !(displayRubriquage)
-        "
         v-else
+        v-show="(displayRubriquage && rubriques)||!displayRubriquage"
         class="d-flex flex-wrap justify-content-around"
       >
-        <EmissionPlayerItem
-          v-for="e in emissions"
+        <template
+          v-for="e in displayArray"
           :key="e.emissionId"
-          :emission="e"
-          class="m-3 flex-shrink-0"
-          :class="mainRubriquage(e)"
-          :rubrique-name="rubriquesId(e)"
-          @emissionNotVisible="displayCount--"
-        />
-      </div>
-      <button
-        v-show="!allFetched"
-        class="btn"
-        :class="buttonPlus ? 'btn-primary align-self-center width-fit-content m-4' : 'btn-more'"
-        :disabled="loading"
-        :title="$t('See more')"
-        @click="fetchContent(false)"
-      >
-        <template v-if="buttonPlus">
-          {{ $t('See more') }}
+        >
+          <EmissionPlayerItem
+            v-if="-1!==e.emissionId"
+            :emission="e"
+            class="m-3 flex-shrink-0"
+            :class="mainRubriquage(e)"
+            :rubrique-name="rubriquesId(e)"
+            @emissionNotVisible="displayCount--"
+          />
         </template>
-        <div
-          :class="buttonPlus?'ms-1':''"
-          class="saooti-more"
-        />
-      </button>
+      </div>
     </template>
-  </div>
+  </ListPaginate>
 </template>
 
 <script lang="ts">
+import ListPaginate from '../list/ListPaginate.vue';
 import octopusApi from '@saooti/octopus-api';
 import { handle403 } from '../../mixins/handle403';
 import { state } from '../../../store/paramStore';
-import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
 import { AxiosError } from 'axios';
+import { emptyEmissionData } from '@/store/typeAppStore';
 const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
 const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({
@@ -76,14 +67,14 @@ export default defineComponent({
   components: {
     EmissionItem,
     EmissionPlayerItem,
-    ClassicLoading
+    ListPaginate
   },
 
   mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number },
-    size: { default: 12, type: Number },
+    size: { default: 30, type: Number },
     query: { default: undefined, type: String},
     iabId: { default: undefined, type: Number },
     organisationId: { default: undefined, type: String},
@@ -107,19 +98,17 @@ export default defineComponent({
       displayCount: 0 as number,
       emissions: [] as Array<Emission>,
       rubriques: undefined as Array<Rubrique>|undefined,
+      isMobile: false as boolean,
     };
   },
 
   computed: {
-    isLoadingMoreOrFinished():boolean{
-      return !this.loading || this.emissions.length > 1;
-    },
-    allFetched(): boolean {
-      return this.dfirst >= this.totalCount;
-    },
-    buttonPlus(): boolean {
-      return (state.generalParameters.buttonPlus as boolean);
-    },
+    displayArray(): Array<Emission>{
+      if(this.isMobile){
+        return this.emissions;
+      }
+      return this.emissions.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
+		},
     smallItems(): boolean {
       return (state.emissionsPage.smallItems as boolean);
     },
@@ -145,19 +134,24 @@ export default defineComponent({
           return " "+this.$t('sort by date').toString();
       }
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
     organisation(): string|undefined {
       if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
+      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
       return undefined;
     },
   },
   watch: {
     changed(): void {
-      this.fetchContent(true);
+      this.reloadList();
     },
+    dsize():void{
+      this.reloadList();
+		},
+		dfirst(): void{
+			if(!this.emissions[this.dfirst] || -1===this.emissions[this.dfirst].emissionId){
+				this.fetchContent(false);
+			}
+		},
   },
 
   mounted() {
@@ -167,11 +161,12 @@ export default defineComponent({
     }
   },
   methods: {
+    reloadList(){
+      this.dfirst = 0;
+      this.fetchContent(true);
+    },
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
-      if (reset) {
-        this.dfirst = 0;
-      }
       const param: FetchParam = {
         first: this.dfirst,
         size: this.dsize,
@@ -197,17 +192,20 @@ export default defineComponent({
     afterFetching(reset: boolean, data: {count: number, result: Array<Emission>, sort: string}): void {
       if (reset) {
         this.emissions.length = 0;
-        this.dfirst = 0;
       }
-      this.loading = false;
+      if(this.dfirst > this.emissions.length){
+        for (let i = this.emissions.length-1, len = this.dfirst + this.dsize; i < len; i++) {
+          this.emissions.push(emptyEmissionData());
+        }
+      }
       this.displayCount = data.count;
-      this.emissions = this.emissions.concat(data.result).filter((e: Emission|null) => {
+      const responseEmissions = data.result.filter((e: Emission|null) => {
         if (null === e) {
           this.displayCount--;
         }
         return null !== e;
       });
-      this.dfirst += this.dsize;
+      this.emissions = this.emissions.slice(0, this.dfirst).concat(responseEmissions).concat(this.emissions.slice(this.dfirst+this.dsize, this.emissions.length));
       this.totalCount = data.count;
       this.loading = false;
     },

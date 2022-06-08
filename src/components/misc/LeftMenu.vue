@@ -131,13 +131,9 @@ export default defineComponent({
     async onOrganisationSelected(organisation: Organisation|undefined) {
       if (organisation && organisation.id) {
         await this.selectOrganisation(organisation.id);
-      } else {
-        if (this.$route.query.productor) {
-          const queries = this.$route.query;
-          this.$router.push({ query: {...queries, ...{productor: undefined} } });
-        }
-        this.$store.commit('filterOrga', { orgaId: undefined });
+        return;
       }
+      this.removeSelectedOrga();
     },
   },
 })
@@ -149,7 +145,7 @@ export default defineComponent({
   position: fixed;
   top: 3rem;
   bottom: 0;
-  left: 0;
+  right: 0;
   z-index: 10;
   background: #fff;
   width: 20%;

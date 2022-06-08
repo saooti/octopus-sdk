@@ -1,46 +1,38 @@
 <template>
-  <div class="d-flex flex-column align-items-center">
-    <ClassicLoading
-      :loading-text="loading?$t('Loading content ...'):undefined"
-    />
-    <div
-      v-if="loaded && playlists.length > 1"
-      class="text-secondary mb-2"
-    >
-      {{ $t('Number playlists', { nb: displayCount }) +" "+ $t('sort by score') }}
-    </div>
-    <ul class="emission-list two-emissions">
-      <PlaylistItem
-        v-for="p in playlists"
-        :key="p.playlistId"
-        :playlist="p"
-      />
-    </ul>
-    <button
-      v-show="!allFetched && loaded"
-      class="btn"
-      :class="buttonPlus ? 'btn-primary align-self-center width-fit-content m-4':'btn-more'"
-      :disabled="inFetching"
-      :title="$t('See more')"
-      @click="displayMore"
-    >
-      <template v-if="buttonPlus">
-        {{ $t('See more') }}
-      </template>
-      <div
-        :class="buttonPlus?'ms-1':''"
-        class="saooti-more"
-      />
-    </button>
-  </div>
+  <ListPaginate
+    id="playlistListPaginate"
+    v-model:first="dfirst"
+    v-model:rowsPerPage="dsize"
+    v-model:isMobile="isMobile"
+    :text-count="displayCount > 1 ? `${$t('Number playlists', { nb: displayCount })} ${$t('sort by score')}`: undefined"
+    :total-count="totalCount"
+    :loading="loading"
+    :loading-text="loading?$t('Loading content ...'):undefined"
+  >
+    <template #list>
+      <ul
+        class="emission-list two-emissions"
+      >
+        <template
+          v-for="p in displayArray"
+          :key="p.playlistId"
+        >
+          <PlaylistItem
+            v-if="-1!==p.playlistId"
+            :playlist="p"
+          />
+        </template>
+      </ul>
+    </template>
+  </ListPaginate>
 </template>
 
 <script lang="ts">
+import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
-import { state } from '../../../store/paramStore';
-import ClassicLoading from '../../form/ClassicLoading.vue';
+import { emptyPlaylistData } from '@/store/typeAppStore';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
@@ -49,14 +41,14 @@ export default defineComponent({
 
   components: {
     PlaylistItem,
-    ClassicLoading
+    ListPaginate
   },
 
   mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number },
-    size: { default: 12, type: Number },
+    size: { default: 30, type: Number },
     query: { default: undefined, type: String},
     organisationId: { default: undefined, type: String},
   },
@@ -64,29 +56,25 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: true as boolean,
       dfirst: this.first as number,
       dsize: this.size as number,
       totalCount: 0 as number,
       displayCount: 0 as number,
       playlists: [] as Array<Playlist>,
-      inFetching: false as boolean,
+      isMobile: false as boolean,
     };
   },
 
   
   computed: {
-    allFetched(): boolean {
-      return this.dfirst >= this.totalCount;
-    },
-    buttonPlus(): boolean {
-      return (state.generalParameters.buttonPlus as boolean);
-    },
+    displayArray(): Array<Playlist>{
+      if(this.isMobile){
+        return this.playlists;
+      }
+      return this.playlists.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
+		},
     changed(): string {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}`;
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
     },
     sort(): string {
       if (!this.query) return 'NAME';
@@ -94,27 +82,34 @@ export default defineComponent({
     },
     organisation(): string|undefined {
       if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
+      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
       return undefined;
     },
   },
   watch: {
     changed(): void {
-      this.fetchContent(true);
+      this.reloadList();
     },
+    dsize():void{
+      this.reloadList();
+		},
+		dfirst(): void{
+			if(!this.playlists[this.dfirst] || -1===this.playlists[this.dfirst].playlistId){
+				this.fetchContent(false);
+			}
+		},
   },
 
   mounted() {
     this.fetchContent(true);
   },
   methods: {
+    reloadList(){
+      this.dfirst = 0;
+      this.fetchContent(true);
+    },
     async fetchContent(reset: boolean): Promise<void> {
-      this.inFetching = true;
-      if (reset) {
-        this.dfirst = 0;
-        this.loading = true;
-        this.loaded = false;
-      }
+      this.loading = true;
       const param = {
         first: this.dfirst,
         size: this.dsize,
@@ -132,20 +127,22 @@ export default defineComponent({
     afterFetching(reset: boolean, data: {count: number, result: Array<Playlist>, sort: string}): void {
       if (reset) {
         this.playlists.length = 0;
-        this.dfirst = 0;
       }
-      this.loading = false;
-      this.loaded = true;
+      if(this.dfirst > this.playlists.length){
+        for (let i = this.playlists.length-1, len = this.dfirst + this.dsize; i < len; i++) {
+          this.playlists.push(emptyPlaylistData());
+        }
+      }
       this.displayCount = data.count;
-      this.playlists = this.playlists.concat(data.result).filter((e: Playlist | null) => {
+      const responsePlaylists = data.result.filter((e: Playlist | null) => {
         if (null === e) {
           this.displayCount--;
         }
         return null !== e;
       });
-      this.dfirst += this.dsize;
+      this.playlists = this.playlists.slice(0, this.dfirst).concat(responsePlaylists).concat(this.playlists.slice(this.dfirst+this.dsize, this.playlists.length));
       this.totalCount = data.count;
-      this.inFetching = false;
+      this.loading = false;
     },
     displayMore(): void {
       this.fetchContent(false);

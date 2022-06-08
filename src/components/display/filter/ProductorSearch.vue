@@ -135,10 +135,7 @@ export default defineComponent({
         await this.selectOrganisation(this.organisationId);
         return;
       }
-      if (this.$route.query.productor) {
-        this.$router.push({ query: { productor: undefined } });
-      }
-      this.$store.commit('filterOrga', { orgaId: undefined });
+      this.removeSelectedOrga();
     },
   },
 })

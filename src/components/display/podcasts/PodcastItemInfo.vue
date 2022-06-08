@@ -11,7 +11,10 @@
         {{ durationString }}
       </div>
     </div>
-    <AnimatorsItem v-if="animators && 0!==animators.length" :animator="animators[0]" />
+    <AnimatorsItem
+      v-if="animators && 0!==animators.length"
+      :animator="animators[0]"
+    />
     <router-link
       :to="{
         name: 'podcast',

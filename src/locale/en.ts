@@ -301,4 +301,13 @@ export default{
   "Enlarge":"Enlarge",
   "Reduce":"Reduce",
   "Use organization color":"Use organization color",
+  "Oops":"Oups",
+  "The page you are looking for cannot be found":"The page you are looking for cannot be found",
+  'Back to home': 'Back to home',
+  "Items per page :":"Items per page :",
+  'Showing items number': "Page {page} of {totalPage}",
+  "Go to first page":"Go to first page",
+  "Go to last page":"Go to last page",
+  "Go to next page":"Go to next page",
+  "Go to previous page":"Go to previous page",
 };

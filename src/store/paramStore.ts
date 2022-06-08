@@ -56,13 +56,11 @@ const state:paramStore = {
     progressBar:false
   },
   emissionPage: {
-    rssButton: false,
     isDisplayPodcasts:true,
     overflowScroll:false
   },
   intervenantPage: {
     lightStyle: false,
-    rssButton: false,
     titlePage: undefined
   },
   intervenantsPage: {
@@ -147,14 +145,12 @@ export interface EmissionsPage{
   progressBar?:boolean
 }
 export interface EmissionPage{
-  rssButton?: boolean,
   isDisplayPodcasts?:boolean,
   overflowScroll?: boolean,
 }
 export interface IntervenantPage{
   lightStyle?: boolean,
-    rssButton?: boolean,
-    titlePage?: string|undefined
+  titlePage?: string|undefined
 }
 export interface IntervenantsPage{
   titlePage?: string|undefined

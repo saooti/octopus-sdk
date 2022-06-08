@@ -35,7 +35,10 @@
           </router-link>
         </template>
         <template v-else>
-          <template v-for="routerBack in routerBackoffice" :key="routerBack.path">
+          <template
+            v-for="routerBack in routerBackoffice"
+            :key="routerBack.path"
+          >
             <router-link
               v-if="!isPodcastmaker && routerBack.condition"
               :class="routerBack.class"
@@ -71,6 +74,12 @@
             {{ $t('Logout') }}
           </a>
         </template>
+        <router-link
+          class="dropdown-item"
+          to="/main/pub/contact"
+        >
+          {{ $t('Contact') }}
+        </router-link>
       </div>
     </div>
   </div>
@@ -85,8 +94,12 @@ export default defineComponent({
   props: {
     isEducation: { default: false, type: Boolean},
   },
-
   computed: {
+ /*    helpLink(){
+      return [
+        {title:this.$t('Help'), href:'https://help.octopus.saooti.com/Aide/'},
+        {title:this.$t('TutoMag'),href:"https://help.octopus.saooti.com/"}];
+    }, */
     routerBackoffice(){
       return [
         {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: this.isContribution},
@@ -94,6 +107,7 @@ export default defineComponent({
         {title:this.$t('Edit my profile'),class:"dropdown-item", path:'/main/priv/edit/profile', condition: true},
         {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: this.isOrganisation}];
     },
+    
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },

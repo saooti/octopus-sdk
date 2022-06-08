@@ -300,4 +300,7 @@ export default{
   "Enlarge":"Povečaj",
   "Reduce":"Zmanjšaj",
   "Use organization color":"Uporabite barvo organizacije",
+  "Oops":"Oups",
+  "The page you are looking for cannot be found":"Strani, ki jo iščete, ni mogoče najti",
+  'Back to home': 'Nazaj domov',
 }

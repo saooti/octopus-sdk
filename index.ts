@@ -58,6 +58,7 @@ import ClassicCheckbox from "./src/components/form/ClassicCheckbox.vue";
 import ClassicRadio from "./src/components/form/ClassicRadio.vue";
 import ClassicLoading from "./src/components/form/ClassicLoading.vue";
 import ClassicSelect from "./src/components/form/ClassicSelect.vue";
+import Paginate from "./src/components/display/list/Paginate.vue";
 
 //mixins
 import {selenium} from "./src/components/mixins/functions";
@@ -118,7 +119,8 @@ const components = {
     AdvancedSearch,
     PodcastPlaylistInlineList,
     ClassicSelect,
-    Error403Page
+    Error403Page,
+    Paginate
 }
 
 export default components;
@@ -174,5 +176,6 @@ export {
     AdvancedSearch,
     PodcastPlaylistInlineList,
     ClassicSelect,
-    Error403Page
+    Error403Page,
+    Paginate
 };

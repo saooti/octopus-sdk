@@ -18,6 +18,7 @@ const LivesPage = () => import('@/components/pages/Lives.vue');
 const PlaylistPage = () => import('@/components/pages/Playlist.vue');
 const PlaylistsPage = () => import('@/components/pages/Playlists.vue');
 const error403Page = () => import('@/components/pages/Error403Page.vue');
+const PageNotFound = () => import('@/components/pages/PageNotFound.vue');
 
 const routes: Array<RouteRecordRaw> = [
   /*--------------------------------------------------------------------------
@@ -191,6 +192,7 @@ const routes: Array<RouteRecordRaw> = [
       path: '/main/priv/distribution/:distrib/:id',
       component: Home,
     },
+    { path: '/:pathMatch(.*)*', component: PageNotFound }
     
 ];
 export default createRouter({

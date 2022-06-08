@@ -23,15 +23,9 @@
         </button>
       </div>
     </div>
-    <div
-      v-if="loading"
-      class="d-flex justify-content-center"
-    >
-      <div class="spinner-border me-3" />
-      <h3 class="mt-2">
-        {{ $t('Loading emissions ...') }}
-      </h3>
-    </div>
+    <ClassicLoading
+      :loading-text="loading?$t('Loading emissions ...'):undefined"
+    />
     <transition-group
       v-show="
         (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
@@ -73,7 +67,7 @@ import EmissionPlayerItem from './EmissionPlayerItem.vue';
 import { state } from '../../../store/paramStore';
 import { handle403 } from '../../mixins/handle403';
 const PHONE_WIDTH = 960;
-
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
@@ -83,6 +77,7 @@ export default defineComponent({
 
   components: {
     EmissionPlayerItem,
+    ClassicLoading
   },
 
   mixins: [handle403],

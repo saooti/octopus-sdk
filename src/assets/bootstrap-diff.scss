@@ -30,17 +30,31 @@
         }
         //Button disable halo after click
         &.btn-underline{
-            background: none;
-            padding: 0;
-            margin: 0 2rem 1rem 0;
-            border-radius: 0;
-            @media (max-width: 600px) {
-            margin: 0 1rem 1rem 0;
-            font-size: 0.8em;
-            }
-            &.active{
-                border-bottom: $octopus-primary-color 2px solid;
-            }
+					background: none;
+					padding: 0;
+					margin: 0 2rem 1rem 0;
+					border-radius: 0;
+					@media (max-width: 600px) {
+						margin: 0 1rem 1rem 0;
+						font-size: 0.8em;
+					}
+					position: relative;
+					&:after {    
+						background: none repeat scroll 0 0 transparent;
+						bottom: 0;
+						content: "";
+						display: block;
+						height: 2px;
+						left: 50%;
+						position: absolute;
+						background: $octopus-primary-color;
+						transition: width 0.3s ease 0s, left 0.3s ease 0s;
+						width: 0;
+					}
+					&:hover:after,&.active:after { 
+						width: 100%; 
+						left: 0; 
+					}
         }
     
         &.btn-primary {
@@ -82,18 +96,6 @@
             margin: 1rem;
         }
     
-        &.btn-big-round{
-            border: 1px #aaa solid;
-            background: none;
-            font-size: 3rem !important;
-            color: #666;
-            border-radius: 50%;
-            padding: 1rem;
-            margin-right: 1rem;
-            width: 5rem;
-            height: 5rem;
-        }
-    
         &.admin-button{
             padding: 0.3rem;
             height: 2.2rem !important;
@@ -109,7 +111,6 @@
         }
     
     }
-
     .share-btn {
         font-size: 1.3rem;
         width: 2.5rem !important;

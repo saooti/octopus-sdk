@@ -20,7 +20,7 @@ export default defineComponent({
   },
   props: {
     firstRoute: { default: 0, type: Number},
-    sizeRoute: { default: 12, type: Number},
+    sizeRoute: { default: 30, type: Number},
     rubriqueId: { default: undefined, type:  [ Number ]},
   },
   data() {

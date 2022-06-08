@@ -1,68 +1,57 @@
 <template>
-  <div class="d-flex flex-column align-items-center">
-    <ClassicLoading
-      :loading-text="loading?$t('Loading podcasts ...'):undefined"
-      :error-text="loaded && !podcasts.length?$t(`No podcast match your query`):undefined"
-    />
-    <template v-if="loaded">
-      <div
-        v-if="showCount && podcasts.length > 1"
-        class="text-secondary mb-2"
-      >
-        {{ $t('Number podcasts', { nb: totalCount }) + sortText }}
-      </div>
+  <ListPaginate
+    id="podcastListPaginate"
+    v-model:first="dfirst"
+    v-model:rowsPerPage="dsize"
+    v-model:isMobile="isMobile"
+    :text-count="showCount && podcasts.length > 1 ? $t('Number podcasts', { nb: totalCount }) + sortText : undefined"
+    :total-count="totalCount"
+    :loading="loading"
+    :loading-text="loading?$t('Loading podcasts ...'):undefined"
+    :error-text="!loading && !podcasts.length?$t(`No podcast match your query`):undefined"
+  >
+    <template #list>
       <ul
         class="podcast-list"
       >
-        <PodcastItem
-          v-for="p in podcasts"
+        <template
+          v-for="p in displayArray"
           :key="p.podcastId"
-          :podcast="p"
-        />
-      </ul>
-      <button
-        v-show="!allFetched"
-        class="btn"
-        :class="buttonPlus ? 'btn-primary align-self-center width-fit-content m-4' : 'btn-more'"
-        :disabled="inFetching"
-        :title="$t('See more')"
-        @click="displayMore"
-      >
-        <template v-if="buttonPlus">
-          {{ $t('See more') }}
+        >
+          <PodcastItem
+            v-if="-1!==p.podcastId"
+            :podcast="p"
+          />
         </template>
-        <div
-          :class="buttonPlus?'ms-1':''"
-          class="saooti-more"
-        />
-      </button>
+      </ul>
     </template>
-  </div>
+  </ListPaginate>
 </template>
 
 <script lang="ts">
+import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
-import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 import { FetchParam } from '@/store/class/general/fetchParam';
 import { AxiosError } from 'axios';
+import { emptyPodcastData } from '@/store/typeAppStore';
 export default defineComponent({
   name: 'PodcastList',
 
   components: {
     PodcastItem,
-    ClassicLoading
+    ListPaginate
   },
 
   mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number},
-    size: { default: 12, type: Number},
+    size: { default: 30, type: Number},
     organisationId: { default: undefined, type: String},
     emissionId: { default: undefined, type: Number},
     iabId: { default: undefined, type: Number},
@@ -86,33 +75,29 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: false as boolean,
       dfirst: this.first as number,
       dsize: this.size as number,
       totalCount: 0 as number,
       podcasts: [] as Array<Podcast>,
-      inFetching: false as boolean,
+      isMobile: false as boolean,
     };
   },
 
   computed: {
-    allFetched(): boolean {
-      return this.dfirst >= this.totalCount;
-    },
-    buttonPlus(): boolean {
-      return (state.generalParameters.buttonPlus as boolean);
-    },
+    displayArray(): Array<Podcast>{
+      if(this.isMobile){
+        return this.podcasts;
+      }
+      return this.podcasts.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
+		},
     changed(): string {
       return `${this.first}|${this.size}|${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetization}|${this.popularSort}|
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
     organisation(): string|undefined {
       if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
+      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
       return undefined;
     },
     sort(): string {
@@ -128,30 +113,33 @@ export default defineComponent({
         default:return " "+this.$t('sort by date');
       }
     },
-    isProduction(): boolean {
-      return (state.generalParameters.isProduction as boolean);
-    },
   },
   watch: {
     changed(): void {
-      this.fetchContent(true);
+      this.reloadList();
     },
     reload(): void {
-      this.fetchContent(true);
+      this.reloadList();
     },
+    dsize():void{
+      this.reloadList();
+		},
+		dfirst(): void{
+			if(!this.podcasts[this.dfirst] || -1===this.podcasts[this.dfirst].podcastId){
+				this.fetchContent(false);
+			}
+		},
   },
-  
   async created() {
     await this.fetchContent(true);
   },
   methods: {
+    reloadList(){
+      this.dfirst = 0;
+      this.fetchContent(true);
+    },
     async fetchContent(reset: boolean): Promise<void> {
-      this.inFetching = true;
-      if (reset) {
-        this.dfirst = 0;
-        this.loading = true;
-        this.loaded = false;
-      }
+      this.loading = true;
       const param: FetchParam = {
         first: this.dfirst,
         size: this.dsize,
@@ -172,7 +160,7 @@ export default defineComponent({
       if (undefined !== this.notValid) {
         param.validity = !this.notValid;
       }
-      if (this.notValid && !this.isProduction) {
+      if (this.notValid && !(state.generalParameters.isProduction as boolean)) {
         param.publisherId = this.$store.state.profile.userId;
       }
       try {
@@ -185,26 +173,22 @@ export default defineComponent({
     afterFetching(reset: boolean, data:  {count: number, result: Array<Podcast>, sort: string}): void {
       if (reset) {
         this.podcasts.length = 0;
-        this.dfirst = 0;
-        this.loading = true;
-        this.loaded = false;
       }
-      this.loading = false;
-      this.loaded = true;
-      this.podcasts = this.podcasts.concat(data.result).filter((p: Podcast|null) => {
+      if(this.dfirst > this.podcasts.length){
+        for (let i = this.podcasts.length-1, len = this.dfirst + this.dsize; i < len; i++) {
+          this.podcasts.push(emptyPodcastData());
+        }
+      }
+      const responsePodcasts= data.result.filter((p: Podcast|null) => {
         return null !== p;
       });
+      this.podcasts = this.podcasts.slice(0, this.dfirst).concat(responsePodcasts).concat(this.podcasts.slice(this.dfirst+this.dsize, this.podcasts.length));
       this.$emit('fetch', this.podcasts);
-      this.dfirst += this.dsize;
       this.totalCount = data.count;
       if (0 === this.podcasts.length) {
         this.$emit('emptyList');
       }
-      this.inFetching = false;
-    },
-    displayMore(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.fetchContent(false);
+      this.loading = false;
     },
   },
 })

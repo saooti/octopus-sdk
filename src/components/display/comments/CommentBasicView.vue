@@ -27,7 +27,9 @@
         :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
         :title="$t('Certified account')"
       >
-      <div class="me-2">{{ date }}</div>
+      <div class="me-2">
+        {{ date }}
+      </div>
       <span 
         v-if="editRight" 
         :class="'status-' + comment.status"

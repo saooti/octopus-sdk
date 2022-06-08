@@ -8,7 +8,7 @@
         class="ms-2 mb-0 pe-4 c-hand"
         @change="onChange"
       >
-        <option value="UNDEFINED">{{allString}}</option>
+        <option value="UNDEFINED">{{ allString }}</option>
         <option value="YES">{{ $t('Authorized advertising') }}</option>
         <option value="NO">{{ $t('Prohibited advertising') }}</option>
       </select>

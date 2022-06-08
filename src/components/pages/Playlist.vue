@@ -104,7 +104,7 @@ export default defineComponent({
     editRight(): boolean {
       if (
         (state.generalParameters.isPlaylist && this.playlist &&
-          this.myOrganisationId === this.playlist.organisation.id) ||
+          this.myOrganisationId === this.playlist.organisation?.id) ||
         state.generalParameters.isAdmin
       ){
         return true;
@@ -132,7 +132,7 @@ export default defineComponent({
         this.error = false;
         const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
         this.playlist = data;
-        if("PUBLIC"!==this.playlist.organisation.privacy && this.filterOrga!==this.playlist.organisation.id){
+        if("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrga!==this.playlist.organisation?.id){
           this.initError();
           return;
         }

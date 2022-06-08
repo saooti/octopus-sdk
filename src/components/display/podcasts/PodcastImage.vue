@@ -8,7 +8,10 @@
       class="img-box"
       :alt="$t('Episode name image', {name:podcast.title})"
     >
-    <div v-if="isPodcastmaker" :class="mainRubrique? 'mainRubrique' : 'notMainRubrique'"/>
+    <div
+      v-if="isPodcastmaker"
+      :class="mainRubrique? 'mainRubrique' : 'notMainRubrique'"
+    />
     <div
       v-if="fetchConference"
       class="live-image-status"

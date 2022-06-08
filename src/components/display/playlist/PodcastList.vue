@@ -1,61 +1,53 @@
 <template>
-  <div class="d-flex flex-column align-items-center">
+  <div>
     <h2 class="mt-3 align-self-baseline">
       {{ titleList }}
     </h2>
-    <ClassicLoading
-      :loading-text="loading?$t('Loading podcasts ...'):undefined"
-      :error-text="loaded && !podcasts.length && notEmptyPlaylist?$t(`No podcast match your query`):undefined"
-    />
-    <div
-      v-if="loaded && podcasts.length > 1"
-      class="text-secondary mb-4"
-    >
-      {{ $t('Number podcasts', { nb: podcasts.length }) +" "+ $t('sort by score') }}
-    </div>
     <ClassicSearch
-      v-if="notEmptyPlaylist"
+      v-if="!loading && notEmptyPlaylist"
       v-model:textInit="searchPattern"
       class="width-600 align-self-baseline"
       id-checkbox="podcast-list-search"
       :label="$t('Search')"
     />
-    <ul
-      v-show="loaded"
-      class="podcast-list"
+    <ListPaginate
+      id="podcastPlaylistListPaginate"
+      v-model:first="first"
+      v-model:rowsPerPage="size"
+      v-model:isMobile="isMobile"
+      :text-count="podcasts.length > 1 ? `${$t('Number podcasts', { nb: podcasts.length })} ${$t('sort by score')}` : undefined"
+      :total-count="podcasts.length"
+      :loading="loading"
+      :loading-text="loading?$t('Loading podcasts ...'):undefined"
+      :error-text="!loading && !podcasts.length && notEmptyPlaylist?$t(`No podcast match your query`):undefined"
     >
-      <PodcastItem
-        v-for="p in podcastsDisplay"
-        :key="p.podcastId"
-        :podcast="p"
-      />
-    </ul>
-    <button
-      v-show="size < podcasts.length && loaded"
-      class="btn"
-      :class="buttonPlus ? 'btn-primary align-self-center width-fit-content m-4':'btn-more'"
-      :title="$t('See more')"
-      @click="displayMore"
-    >
-      <template v-if="buttonPlus">
-        {{ $t('See more') }}
+      <template #list>
+        <ul
+          class="podcast-list"
+        >
+          <template
+            v-for="p in podcastsDisplay"
+            :key="p.podcastId"
+          >
+            <PodcastItem
+              v-if="-1!==p.podcastId"
+              :podcast="p"
+            />
+          </template>
+        </ul>
       </template>
-      <div
-        :class="buttonPlus?'ms-1':''"
-        class="saooti-more"
-      />
-    </button>
+    </ListPaginate>
   </div>
 </template>
 
 <script lang="ts">
+import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../store/paramStore';
 import ClassicSearch from '../../form/ClassicSearch.vue';
-import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
@@ -66,7 +58,7 @@ export default defineComponent({
   components: {
     PodcastItem,
     ClassicSearch,
-    ClassicLoading
+    ListPaginate
   },
 
   mixins: [handle403, orgaComputed],
@@ -78,11 +70,12 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: true as boolean,
       podcasts: [] as Array<Podcast>,
       podcastsQuery: [] as Array<Podcast>,
-      size: 12 as number,
+      size: 30 as number,
+      first: 0 as number,
       searchPattern: '' as string,
+      isMobile: false as boolean,
     };
   },
 
@@ -94,18 +87,16 @@ export default defineComponent({
     notEmptyPlaylist(): boolean {
       return 0 !== Object.keys(this.playlist.podcasts).length;
     },
-    podcastsDisplay(): Array<Podcast> {
-      if (this.size < this.podcastsQuery.length)
-        return this.podcastsQuery.slice(0, this.size);
-      return this.podcastsQuery.slice(0, this.podcasts.length);
-    },
-    buttonPlus(): boolean {
-      return (state.generalParameters.buttonPlus as boolean);
-    },
+    podcastsDisplay(): Array<Podcast>{
+      if(this.isMobile){
+        return this.podcastsQuery.slice(0, Math.min(this.first + this.size,this.podcasts.length));
+      }
+      return this.podcastsQuery.slice(this.first, Math.min(this.first + this.size,this.podcasts.length));
+		},
     editRight(): boolean {
       if (
         (this.authenticated &&
-          this.myOrganisationId === this.playlist.organisation.id) ||
+          this.myOrganisationId === this.playlist.organisation?.id) ||
         state.generalParameters.isAdmin
       )
         return true;
@@ -134,7 +125,6 @@ export default defineComponent({
       if (this.notEmptyPlaylist){
         this.podcasts.length = 0;
         this.loading = true;
-        this.loaded = false;
         try {
           const content = await octopusApi.fetchPlaylistContent(
             this.playlist.playlistId.toString()
@@ -157,11 +147,6 @@ export default defineComponent({
         }
       }
       this.loading = false;
-      this.loaded = true;
-    },
-    displayMore(event: { preventDefault: () => void }): void {
-      event.preventDefault();
-      this.size += 12;
     },
   },
 })

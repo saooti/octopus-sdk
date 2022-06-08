@@ -80,7 +80,7 @@ export default defineComponent({
     };
   },
   computed: {
-    errorText():string {
+    errorText():string {
       if(this.isCaptchaTest) return this.$t('Recaptcha not active');
       if(this.sendError) return this.$t('Recaptcha error');
       return '';

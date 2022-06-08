@@ -184,7 +184,7 @@ export default{
     "Partager cette page sans afficher les blocs d'édition et d'intégration du player",
   'Podcast in cancelled status': 'Épisode avec un traitement qui a été annulé',
   'Show every episode': 'Afficher tous les épisodes',
-  'Subscribe emission': "Abonnement à l'émission",
+  'Subscribe emission': "Écouter sur une plateforme de streaming",
   'Rss feed parameters': 'Paramètres du flux RSS',
   'Not share episodes before':
     'Ne pas partager les épisodes publiés il y a moins de',
@@ -301,4 +301,13 @@ export default{
   "Enlarge":"Agrandir",
   "Reduce":"Réduire",
   "Use organization color":"Utiliser la couleur de l'organisation",
+  "Oops":"Oups",
+  "The page you are looking for cannot be found":"La page que vous recherchez est introuvable",
+  'Back to home': "Retour à l'accueil",
+  "Items per page :":"Items par page :",
+  'Showing items number': "Page {page} sur {totalPage}",
+  "Go to first page":"Aller à la première page",
+  "Go to last page":"Aller à la dernière page",
+  "Go to next page":"Aller à la page suivante",
+  "Go to previous page":"Aller à la page précédente",
 };

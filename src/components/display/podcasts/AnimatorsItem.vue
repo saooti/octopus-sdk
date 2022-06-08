@@ -12,7 +12,7 @@
       :title="$t('Participant')"
     >
       <div class="podcast-item-animator text-dark">
-        {{ animatorName}}
+        {{ animatorName }}
       </div>
     </router-link>
   </div>

@@ -29,5 +29,11 @@ export const orgaFilter = defineComponent({
         this.handle403((error as AxiosError));
       }
     },
+    removeSelectedOrga(): void{
+      if (this.$route.query.productor) {
+        this.$router.push({ query: {...this.$route.query, ...{productor: undefined} } });
+      }
+      this.$store.commit('filterOrga', { orgaId: undefined });
+    }
   },
 });

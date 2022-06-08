@@ -107,7 +107,7 @@ export default defineComponent({
     editRight(): boolean {
       if (
         (state.generalParameters.isPlaylist &&
-          this.organisationId === this.playlist.organisation.id) ||
+          this.organisationId === this.playlist.organisation?.id) ||
         state.generalParameters.isAdmin
       )
         return true;

@@ -4,7 +4,12 @@
     class="module-box"
   >
     <div class="d-flex align-items-center">
-      <h2 class="mb-0 me-2" data-selenium="episode-comment-counter">{{commentTitle}}</h2>
+      <h2
+        class="mb-0 me-2"
+        data-selenium="episode-comment-counter"
+      >
+        {{ commentTitle }}
+      </h2>
       <button
         v-if="!isLive"
         :title="$t('Refresh')"

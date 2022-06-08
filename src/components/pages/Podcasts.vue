@@ -90,7 +90,7 @@ export default defineComponent({
   data() {
     return {
       first: 0 as number,
-      size: 12 as number,
+      size: 30 as number,
       searchPattern: '' as string,
       organisationId: undefined as string|undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
@@ -137,16 +137,19 @@ export default defineComponent({
   },
 
   created() {
-    this.searchPattern = this.searchInit ? this.searchInit : '';
-    this.organisationId = this.productor ? this.productor : this.filterOrga;
-    this.includeHidden = this.organisation && this.organisationRight ? true : false;
-    this.iabId = this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined;
-    if(this.$store.state.filter.rubriqueFilter.length){
-      this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
-    }
+    this.initPodcastsPage();
   },
   
   methods: {
+    initPodcastsPage(){
+      this.searchPattern = this.searchInit ? this.searchInit : '';
+      this.organisationId = this.productor ? this.productor : this.filterOrga;
+      this.includeHidden = this.organisation && this.organisationRight ? true : false;
+      this.iabId = this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined;
+      if(this.$store.state.filter.rubriqueFilter.length){
+        this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
+      }
+    },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       const length = value.length;
       const allRubriquageId: Array<number>= [];

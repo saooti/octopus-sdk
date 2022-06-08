@@ -47,7 +47,7 @@ export default defineComponent({
   data() {
     return {
       first: 0 as number,
-      size: 12 as number,
+      size: 30 as number,
       searchPattern: '' as string,
       organisationId: undefined as string | undefined,
     };

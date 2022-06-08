@@ -9,7 +9,7 @@
           </div>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             title="Close"
             @click="closePopup"
           />

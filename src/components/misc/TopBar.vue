@@ -3,11 +3,6 @@
     class="top-bar-container"
     :class="{ 'shadow-element': scrolled }"
   >
-    <div
-      class="saooti-burger-menu"
-      :title="$t('open left Menu')"
-      @click="onDisplayMenu(false)"
-    />
     <router-link
       class="top-bar-logo"
       :to="{
@@ -51,6 +46,11 @@
         </router-link>
       </template>
     </div>
+    <div
+      class="saooti-burger-menu"
+      :title="$t('open left Menu')"
+      @click="onDisplayMenu(false)"
+    />
     <div class="d-flex flex-column">
       <div class="hosted-by">
         <span>{{ $t('Hosted by') }}</span><span class="ms-1 me-1 primary-darker">Saooti</span>
@@ -104,7 +104,7 @@ export default defineComponent({
   computed: {
     routerLinkArray(){
       return [
-        {title : this.$t('Live'), routeName: 'lives', condition : this.isLiveTab &&((this.filterOrga && this.filterOrgaLive) || !this.filterOrga)},
+        {title : this.$t('Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrga && this.filterOrgaLive) || !this.filterOrga)},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
         {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
         {title : this.$t('Speakers'), routeName: 'participants', condition : true},
@@ -123,9 +123,6 @@ export default defineComponent({
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
-    },
-    isLiveTab(): boolean {
-      return (state.generalParameters.isLiveTab as boolean);
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -199,14 +196,10 @@ export default defineComponent({
     async onOrganisationSelected(organisation: Organisation | undefined): Promise<void> {
       if (organisation && organisation.id) {
         await this.selectOrganisation(organisation.id);
-      } else {
-        this.organisationId = undefined;
-        if (this.$route.query.productor) {
-          const queries = this.$route.query;
-          this.$router.push({ query: { ...queries, ...{productor: undefined} } });
-        }
-        this.$store.commit('filterOrga', { orgaId: undefined });
+        return;
       }
+      this.organisationId = undefined;
+      this.removeSelectedOrga();
     },
   },
 })

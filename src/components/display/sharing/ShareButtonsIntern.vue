@@ -1,0 +1,209 @@
+<template>
+  <button
+    v-if="isDownloadButton"
+    class="text-dark"
+    :class="getClass()"
+    :title="$t('Downloading')"
+    @click="onDownload(podcast.audioUrl, podcast.title)"
+  >
+    <div class="saooti-download-bounty" />
+  </button>
+  <template
+    v-for="button in arrayShareButtons"
+    :key="button.title"
+  >
+    <a
+      v-if="button.condition"
+      rel="noopener"
+      target="_blank"
+      :href="button.url"
+      :class="getClass(button.className)"
+      :title="button.title"
+    >
+      <div
+        :class="button.icon"
+      >
+        <div
+          v-for="index in button.nbPath"
+          :key="index"
+          :class="'path'+(index+1)"
+        />
+      </div>
+    </a>
+  </template>
+  <a
+    v-if="''!==rssUrl"
+    rel="noopener"
+    target="_blank"
+    :class="getClass()"
+    :href="rssUrl"
+    :title="$t('Subscribe to this emission')"
+    @click.prevent="openPopup()"
+  >
+    <div class="saooti-rss-bounty" />
+  </a>
+  <a
+    rel="noopener"
+    target="_blank"
+    :class="getClass()"
+    :title="$t('Copy this page URL')"
+    @click="onCopyCode(urlPage,afterCopy)"
+  >
+    <div class="saooti-link" />
+  </a>
+  <a
+    v-if="podcast"
+    rel="noopener"
+    target="_blank"
+    :class="getClass()"
+    :title="$t('Share newsletter')"
+    @click="newsletter = true"
+  >
+    <div class="saooti-newsletter" />
+  </a>
+  <a
+    rel="noopener"
+    target="_blank"
+    :class="getClass()"
+    :title="$t('Share QR Code')"
+    @click="qrCode = true"
+  >
+    <div class="saooti-qrcode" />
+  </a>
+  <ClipboardModal
+    v-if="dataRSSSave"
+    :link="rssUrl"
+    :emission="emission"
+    @close="dataRSSSave = false"
+    @copy="afterCopy"
+  />
+  <NewsletterModal
+    v-if="newsletter"
+    :closable="true"
+    :podcast="podcast"
+    @close="newsletter = false"
+  />
+  <QrCodeModal
+    v-if="qrCode"
+    :closable="true"
+    :url-page="urlPage"
+    @close="qrCode = false"
+  />
+  <Snackbar
+    ref="snackbar"
+    position="bottom-left"
+  />
+</template>
+
+<script lang="ts">
+import { Emission } from '@/store/class/general/emission';
+import { Podcast } from '@/store/class/general/podcast';
+import { state } from '../../../store/paramStore';
+import Snackbar from '../../misc/Snackbar.vue';
+import { displayMethods } from '../../mixins/functions';
+import { defineComponent, defineAsyncComponent } from 'vue';
+import SnackbarVue from '../../misc/Snackbar.vue';
+const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));
+const NewsletterModal = defineAsyncComponent(() => import('../../misc/modal/NewsletterModal.vue'));
+const QrCodeModal = defineAsyncComponent(() => import('../../misc/modal/QrCodeModal.vue'));
+export default defineComponent({
+  components: {
+    ClipboardModal,
+    NewsletterModal,
+    QrCodeModal,
+    Snackbar,
+  },
+
+  mixins: [displayMethods],
+
+  props: {
+    podcast: { default: undefined, type: Object as ()=> Podcast},
+    emission: { default: undefined, type: Object as ()=> Emission},
+    participantId: { default: undefined, type: Number},
+    organisationId: { default: undefined, type: String},
+    notExclusive: { default: true, type: Boolean},
+  },
+
+  data() {
+    return {
+      dataRSSSave: false as boolean,
+      newsletter: false as boolean,
+      qrCode: false as boolean,
+    };
+  },
+  computed: {
+    arrayShareButtons(){
+      return [
+        { title: 'Facebook', icon:'saooti-facebook-bounty', nbPath:0, className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
+        { title: 'Twitter', icon:'saooti-twitter-bounty', nbPath:0, className:'btn-twitter', url :`https://twitter.com/intent/tweet?text=${this.urlPage}`, condition: true},
+        { title: 'Linkedin', icon:'saooti-linkedin1', nbPath:0, className:'btn-linkedin', url :`https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`, condition: true},
+        { title: 'Whatsapp', icon:'saooti-Whatsapp', nbPath:3, className:'btn-whatsapp', url :`whatsapp://send?text=${this.urlPage}`, condition:  window.matchMedia('(hover: none)').matches}
+      ]
+    },
+    isDownloadButton(): boolean{
+      return this.isDownloadButtonParam && undefined!==this.podcast && (!this.podcast.tags || !this.podcast.tags.includes('copyright'));
+    },
+    isDownloadButtonParam(): boolean {
+      return (state.podcastPage.downloadButton as boolean);
+    },
+    urlPage(): string{
+      return window.location.href;
+    },
+    verticalDisplay(): boolean {
+      return (
+        !this.authenticated &&
+        !this.participantId &&
+        !this.organisationId &&
+        !this.notExclusive
+      );
+    },
+    authenticated(): boolean {
+      return (state.generalParameters.authenticated as boolean);
+    },
+    rssUrl(): string {
+      let api = state.generalParameters.ApiUri+ 'rss/';
+      if (this.emission){
+        return api +'emission/' + this.emission.emissionId + '.rss';
+      }
+      if (this.organisationId){
+        return api +'productor/' + this.organisationId + '.rss';
+      }
+      if (this.participantId){
+        return api +'participant/' + this.participantId + '.rss';
+      }
+      return '';
+    },
+  },
+
+  methods: {
+    getClass(className='btn-rss'): string{
+      let returnString = `btn ${className} share-btn mb-2`;
+      returnString+= this.verticalDisplay ? '' : ' mx-2';
+      return returnString;
+    },
+    openPopup(): void {
+      this.dataRSSSave = !this.dataRSSSave;
+    },
+    afterCopy(): void{
+      (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Link in clipboard'));
+    },
+    onDownload(urlToDownload: string, nameOfDownload: string): void{
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', urlToDownload, true);
+      xhr.responseType = 'blob';
+      xhr.onload = function() {
+        const urlCreator = window.URL || window.webkitURL;
+        const imageUrl = urlCreator.createObjectURL(this.response);
+        const tag = document.createElement('a');
+        tag.href = imageUrl;
+        tag.target = '_blank';
+        tag.download = nameOfDownload.replace(/ /g, '_');
+        document.body.appendChild(tag);
+        tag.click();
+        document.body.removeChild(tag);
+      };
+      xhr.send();
+    },
+  },
+})
+</script>

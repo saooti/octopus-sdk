@@ -3,7 +3,7 @@
     <h1>{{ title }}</h1>
     <PodcastList
       :first="0"
-      :size="12"
+      :size="30"
       :iab-id="iabId"
       :organisation-id="filterOrga"
     />

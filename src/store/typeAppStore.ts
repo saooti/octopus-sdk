@@ -3,14 +3,32 @@ import { CommentPodcast } from "./class/general/comment"
 import { Emission } from "./class/general/emission"
 import { Media } from "./class/general/media"
 import { Organisation } from "./class/general/organisation"
+import { Participant } from "./class/general/participant"
 import { Player } from "./class/general/player"
+import { Playlist } from "./class/general/playlist"
 import { Podcast } from "./class/general/podcast"
 import { Rubriquage } from "./class/rubrique/rubriquage"
 import { RubriquageFilter } from "./class/rubrique/rubriquageFilter"
 import { Rubrique } from "./class/rubrique/rubrique"
+export function emptyPlaylistData(): Playlist{
+  return {
+    description: '',
+    playlistId: -1,
+    podcasts: [],
+    score: 0,
+    title: '',
+  }
+}
+export function emptyParticipantData(): Participant{
+  return {
+    firstName: '',
+    lastName: '',
+    participantId:-1
+  }
+}
 export function emptyEmissionData(): Emission{
   return {
-      emissionId: 0 ,
+      emissionId: -1 ,
       name: '' ,
       description: '' ,
       imageUrl: '' ,
@@ -27,7 +45,7 @@ export function emptyEmissionData(): Emission{
 
 export function emptyPodcastData(): Podcast{
     return {
-        podcastId:0,
+        podcastId:-1,
         audioUrl: '' ,
         audioStorageUrl: '' ,
         imageUrl: '' ,

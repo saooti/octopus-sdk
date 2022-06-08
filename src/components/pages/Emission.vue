@@ -30,11 +30,6 @@
               />
               <!-- eslint-enable -->
             </div>
-            <ShareButtons
-              v-if="pageParameters.isRssButton"
-              :emission="emission"
-              :big-round="true"
-            />
           </div>
           <SubscribeButtons
             v-if="pageParameters.isShareButtons && countLink >= 1"
@@ -140,7 +135,6 @@ export default defineComponent({
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
         isShareDistribution:(state.podcastPage.ShareDistribution as boolean),
-        isRssButton:(state.emissionPage.rssButton as boolean),
         isDisplayPodcasts:(state.emissionPage.isDisplayPodcasts as boolean),
       };
     },

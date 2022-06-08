@@ -120,6 +120,7 @@
     }
     @media (max-width: 1200px) {
       grid-template-columns: auto !important;
+      display: flex !important;
     }
   }
     
@@ -128,6 +129,7 @@
     background: #fff;
     border-radius: 2rem;
     display: flex;
+    flex-grow: 1;
     .img-box {
       border-radius: 2rem !important;
     }

@@ -300,4 +300,7 @@ export default{
   "Enlarge":"Agrandar",
   "Reduce":"Reducir",
   "Use organization color":"Usar el color de la organización",
+  "Oops":"Oups",
+  "The page you are looking for cannot be found":"La página que busca no se encuentra",
+  'Back to home': 'Volver a la página de inicio',
 }

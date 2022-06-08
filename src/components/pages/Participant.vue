@@ -23,20 +23,6 @@
           v-html="urlify(description)"
         />
         <!-- eslint-enable -->
-        <div
-          v-if="pageParameters.isRssButton"
-          class="d-flex justify-content-center"
-        >
-          <a
-            class="btn btn-big-round"
-            :title="$t('Subscribe to this participant')"
-            :href="rssUrl"
-            rel="noopener"
-            target="_blank"
-          >
-            <div class="saooti-rss-bounty" />
-          </a>
-        </div>
         <div class="d-flex mt-3">
           <EditBox
             v-if="editRight && pageParameters.isEditBox"
@@ -119,7 +105,6 @@ export default defineComponent({
         isEditBox : (state.podcastPage.EditBox as boolean),
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         lightStyle:(state.intervenantPage.lightStyle as boolean),
-        isRssButton: (state.intervenantPage.rssButton as boolean),
       };
     },
     rssUrl(): string {
