@@ -59,6 +59,7 @@ import ClassicRadio from "./src/components/form/ClassicRadio.vue";
 import ClassicLoading from "./src/components/form/ClassicLoading.vue";
 import ClassicSelect from "./src/components/form/ClassicSelect.vue";
 import Paginate from "./src/components/display/list/Paginate.vue";
+import ListPaginate from "./src/components/display/list/ListPaginate.vue";
 
 //mixins
 import {selenium} from "./src/components/mixins/functions";
@@ -120,7 +121,8 @@ const components = {
     PodcastPlaylistInlineList,
     ClassicSelect,
     Error403Page,
-    Paginate
+    Paginate,
+    ListPaginate
 }
 
 export default components;
@@ -177,5 +179,6 @@ export {
     PodcastPlaylistInlineList,
     ClassicSelect,
     Error403Page,
-    Paginate
+    Paginate,
+    ListPaginate
 };

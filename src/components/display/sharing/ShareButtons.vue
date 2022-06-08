@@ -3,7 +3,7 @@
     <template
       v-if="authenticated || participantId || organisationId || notExclusive"
     >
-      <div class="d-flex align-items-center mb-2">
+      <div class="d-flex mb-2">
         <h3 class="mb-0">
           {{ $t('Share') }}
         </h3>
@@ -12,7 +12,7 @@
           id="popover-share-help"
           role="button"
           tabindex="-1"
-          class="saooti-help ms-2"
+          class="saooti-help ms-2 align-items-start"
           :title="$t('Help')"
         />
         <Popover
