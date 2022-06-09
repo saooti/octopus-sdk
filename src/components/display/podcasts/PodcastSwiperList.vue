@@ -10,6 +10,7 @@
     :iab-id="iabId"
     :rubrique-id="rubriqueId"
     :no-rubriquage-id="noRubriquageId"
+    :is-button-next-title="true"
     @sortChrono="sortChrono"
     @sortPopular="sortPopular"
   >
@@ -18,10 +19,10 @@
         :loading-text="loading?$t('Loading podcasts ...'):undefined"
       />
       <swiper
-        v-show="loaded"
+        v-if="!loading"
         :slides-per-view="numberItem"
         :space-between="10"
-        :loop="true"
+        :loop="allPodcasts.length>=numberItem"
         :navigation="true"
         :modules="modules"
       >
@@ -83,7 +84,6 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: true as boolean,
       popularSort: false as boolean,
       allPodcasts: [] as Array<Podcast>,
       modules: [Navigation],
@@ -151,11 +151,10 @@ export default defineComponent({
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
         query: this.query,
       });
-      this.loading = false;
-      this.loaded = true;
       this.allPodcasts = this.allPodcasts.concat(
         data.result.filter((pod: Podcast|null) => null !== pod)
       );
+      this.loading = false;
     },
     sortPopular(): void {
       if (this.popularSort) return;
@@ -171,7 +170,6 @@ export default defineComponent({
     },
     reset(): void {
       this.loading = true;
-      this.loaded = true;
       this.allPodcasts.length = 0;
     },
   },

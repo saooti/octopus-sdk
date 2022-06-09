@@ -2,7 +2,18 @@
   <div
     class="d-flex flex-column p-3"
   >
-    <h2>{{ title }}</h2>
+    <div class="d-flex align-items-center mb-2">
+      <h2 class="mb-0">
+        {{ title }}
+      </h2>
+      <router-link
+        v-if="isButtonNextTitle"
+        class="btn admin-button m-1 fw-bold saooti-right"
+        :title="buttonText"
+        :to="refTo"
+        @click="handleSeeMoreButton"
+      />
+    </div>
     <div class="d-flex justify-content-between">
       <div class="d-flex">
         <button
@@ -44,7 +55,8 @@
     </div>
     <slot name="list-inline" />
     <router-link
-      class="btn btn-primary align-self-center width-fit-content m-4"
+      v-if="!isButtonNextTitle"
+      class="btn btn-link align-self-center width-fit-content m-4"
       :to="refTo"
       @click="handleSeeMoreButton"
     >
@@ -80,6 +92,7 @@ export default defineComponent({
     iabId: { default: undefined, type: Number},
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
+    isButtonNextTitle: {default: false, type:Boolean}
   },
   emits:['sortChrono','sortPopular', 'displayPrevious', 'displayNext'],
   data() {
