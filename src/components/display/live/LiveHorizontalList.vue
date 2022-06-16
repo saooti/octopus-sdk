@@ -23,7 +23,7 @@
             :key="p.podcastId"
           >
             <PodcastItem
-              v-if="-1!==p.podcastId"
+              v-if="0!==p.podcastId"
               :podcast="p"
             />
           </template>
@@ -80,7 +80,7 @@ export default defineComponent({
       this.reloadList();
 		},
 		dfirst(): void{
-			if(!this.lives[this.dfirst] || -1===this.lives[this.dfirst].podcastId){
+			if(!this.lives[this.dfirst] || 0===this.lives[this.dfirst].podcastId){
 				this.fetchContent(false);
 			}
 		},

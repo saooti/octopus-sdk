@@ -18,7 +18,7 @@
           :key="p.participantId"
         >
           <ParticipantItem
-            v-if="-1!==p.participantId"
+            v-if="0!==p.participantId"
             :participant="p"
           />
         </template>
@@ -91,7 +91,7 @@ export default defineComponent({
       this.reloadList();
 		},
 		dfirst(): void{
-			if(!this.participants[this.dfirst] || -1===this.participants[this.dfirst].participantId){
+			if(!this.participants[this.dfirst] || 0===this.participants[this.dfirst].participantId){
 				this.fetchContent(false);
 			}
 		},

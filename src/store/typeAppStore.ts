@@ -13,7 +13,7 @@ import { Rubrique } from "./class/rubrique/rubrique"
 export function emptyPlaylistData(): Playlist{
   return {
     description: '',
-    playlistId: -1,
+    playlistId: 0,
     podcasts: [],
     score: 0,
     title: '',
@@ -23,12 +23,12 @@ export function emptyParticipantData(): Participant{
   return {
     firstName: '',
     lastName: '',
-    participantId:-1
+    participantId:0
   }
 }
 export function emptyEmissionData(): Emission{
   return {
-      emissionId: -1 ,
+      emissionId: 0,
       name: '' ,
       description: '' ,
       imageUrl: '' ,
@@ -45,7 +45,7 @@ export function emptyEmissionData(): Emission{
 
 export function emptyPodcastData(): Podcast{
     return {
-        podcastId:-1,
+        podcastId:0,
         audioUrl: '' ,
         audioStorageUrl: '' ,
         imageUrl: '' ,

@@ -30,7 +30,7 @@
             :key="p.podcastId"
           >
             <PodcastItem
-              v-if="-1!==p.podcastId"
+              v-if="0!==p.podcastId"
               :podcast="p"
             />
           </template>

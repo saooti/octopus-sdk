@@ -20,7 +20,7 @@
           :key="e.emissionId"
         >
           <EmissionItem
-            v-if="-1!==e.emissionId"
+            v-if="0!==e.emissionId"
             :emission="e"
           />
         </template>
@@ -35,7 +35,7 @@
           :key="e.emissionId"
         >
           <EmissionPlayerItem
-            v-if="-1!==e.emissionId"
+            v-if="0!==e.emissionId"
             :emission="e"
             class="m-3 flex-shrink-0"
             :class="mainRubriquage(e)"
@@ -148,7 +148,7 @@ export default defineComponent({
       this.reloadList();
 		},
 		dfirst(): void{
-			if(!this.emissions[this.dfirst] || -1===this.emissions[this.dfirst].emissionId){
+			if(!this.emissions[this.dfirst] || 0===this.emissions[this.dfirst].emissionId){
 				this.fetchContent(false);
 			}
 		},

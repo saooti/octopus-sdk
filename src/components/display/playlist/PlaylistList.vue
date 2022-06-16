@@ -18,7 +18,7 @@
           :key="p.playlistId"
         >
           <PlaylistItem
-            v-if="-1!==p.playlistId"
+            v-if="0!==p.playlistId"
             :playlist="p"
           />
         </template>
@@ -94,7 +94,7 @@ export default defineComponent({
       this.reloadList();
 		},
 		dfirst(): void{
-			if(!this.playlists[this.dfirst] || -1===this.playlists[this.dfirst].playlistId){
+			if(!this.playlists[this.dfirst] || 0===this.playlists[this.dfirst].playlistId){
 				this.fetchContent(false);
 			}
 		},
