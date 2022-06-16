@@ -34,6 +34,7 @@ const state:paramStore = {
     podcastItemShowEmission: false,
     clickPlayGoPage:false,
     listTypeClassic: true,
+    podcastItemDescription:true
   },
   podcastsPage: {
     ProductorSearch: true,
@@ -122,7 +123,8 @@ export interface PodcastPage{
   resourceUrl?: string |undefined,
   podcastItemShowEmission?: boolean,
   clickPlayGoPage?:boolean,
-  listTypeClassic?:boolean
+  listTypeClassic?:boolean,
+  podcastItemDescription?:boolean,
 }
 export interface PodcastsPage{
   ProductorSearch?: boolean,

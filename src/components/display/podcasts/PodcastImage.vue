@@ -97,7 +97,7 @@ export default defineComponent({
   props: {
     podcast: { default: ()=>({}), type: Object as ()=>Podcast},
     hidePlay: { default: false, type: Boolean},
-    displayDescription: { default: undefined, type: String},
+    displayDescription: { default: false, type: Boolean},
     arrowDirection: { default: 'up', type: String},
     isAnimatorLive: { default: false, type: Boolean},
     fetchConference: { default: undefined, type: Object as ()=>Conference},

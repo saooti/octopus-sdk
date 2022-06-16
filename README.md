@@ -587,6 +587,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 30.0.88 Podcastmaker newest (swiper list)
  * 30.0.89 Podcastmaker newest (swiper list)
  * 30.0.90 Podcastmaker newest (swiper list)
+ * 30.0.91 Encore newest
  
  * 31.0.0 Passage en 31
  * 31.0.1 Ajout pocket casts
@@ -627,4 +628,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.36 Améliorations multiples (pagination, modales, pages d'erreurs...)
  * 31.0.37 Continuation améliorations
  * 31.0.38 Changement reponsive topbar
+ * 31.0.39 Erreur refactor
 

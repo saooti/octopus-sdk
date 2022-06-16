@@ -10,13 +10,14 @@
   >
     <PodcastImage
       :podcast="podcast"
-      :hide-play="!hover || !description"
-      :display-description="description"
+      :hide-play="!podcastItemDescription || (podcastItemDescription && (!hover || !description))"
+      :display-description="description && podcastItemDescription"
       :arrow-direction="arrowDirection"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
     <div
+      v-if="podcastItemDescription"
       ref="descriptionPodcastContainer"
       class="description-podcast-item html-wysiwyg-content"
       :class="[
@@ -80,6 +81,9 @@ export default defineComponent({
     podcastBorderBottom(): boolean {
       return (state.podcastsPage.podcastBorderBottom as boolean);
     },
+    podcastItemDescription(): boolean {
+      return (state.podcastPage.podcastItemDescription as boolean);
+    },
     displayDate(): string {
       return moment(this.podcast.pubDate).format('X');
     },
@@ -89,6 +93,7 @@ export default defineComponent({
   },
 
   mounted() {
+    if(!this.podcastItemDescription){return}
     const podcastDesc = (this.$refs.descriptionPodcast as HTMLElement);
     const podcastDescContainer = (this.$refs.descriptionPodcastContainer as HTMLElement);
     if (
@@ -100,10 +105,12 @@ export default defineComponent({
   },
   methods: {
     showDescription(): void {
+      if(!this.podcastItemDescription){return}
       this.arrowDirection = 'down';
       this.hover = true;
     },
     hideDescription(): void {
+      if(!this.podcastItemDescription){return}
       this.arrowDirection = 'up';
       this.hover = false;
     },
