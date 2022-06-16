@@ -49,22 +49,16 @@
           </template>
           <template v-if="!isEducation">
             <hr class="dropdown-divider">
-            <a
-              href="https://help.octopus.saooti.com/Aide/"
-              class="dropdown-item"
-              rel="noopener"
-              target="_blank"
-            >
-              {{ $t('Help') }}
-            </a>
-            <a
-              href="https://help.octopus.saooti.com/"
-              class="dropdown-item"
-              rel="noopener"
-              target="_blank"
-            >
-              {{ $t('TutoMag') }}
-            </a>
+            <template v-for="helpLink in helpLinks" :key="helpLink.title">
+              <a
+               :href="helpLink.href"
+                class="dropdown-item"
+                rel="noopener"
+                target="_blank"
+              >
+                {{ helpLink.title }}
+              </a>
+            </template>
           </template>
           <hr class="dropdown-divider">
           <a
@@ -95,17 +89,17 @@ export default defineComponent({
     isEducation: { default: false, type: Boolean},
   },
   computed: {
- /*    helpLink(){
+    helpLinks(){
       return [
         {title:this.$t('Help'), href:'https://help.octopus.saooti.com/Aide/'},
         {title:this.$t('TutoMag'),href:"https://help.octopus.saooti.com/"}];
-    }, */
+    },
     routerBackoffice(){
       return [
-        {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: this.isContribution},
+        {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: (state.generalParameters.isContribution as boolean)},
         {title:this.$t('My space'),class:"show-phone dropdown-item", path:'/main/priv/backoffice', condition: true},
         {title:this.$t('Edit my profile'),class:"dropdown-item", path:'/main/priv/edit/profile', condition: true},
-        {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: this.isOrganisation}];
+        {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean)}];
     },
     
     isPodcastmaker(): boolean {
@@ -113,12 +107,6 @@ export default defineComponent({
     },
     authenticated(): boolean {
       return this.$store.state.authentication.isAuthenticated;
-    },
-    isOrganisation(): boolean {
-      return (state.generalParameters.isOrganisation as boolean);
-    },
-    isContribution(): boolean {
-      return (state.generalParameters.isContribution as boolean);
     },
   },
 

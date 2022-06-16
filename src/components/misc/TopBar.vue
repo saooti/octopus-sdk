@@ -261,7 +261,7 @@ export default defineComponent({
     }
   }
   /** PHONES*/
-  @media (max-width: 1200px) {
+  @media (max-width: 1470px) {
     height: 3.5rem;
     .default-multiselect-width, .hosted-by, .link-hover {
       display: none;

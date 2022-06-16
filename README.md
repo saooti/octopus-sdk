@@ -625,4 +625,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.35 Il faut croire que c'est SDK Day...
  * 31.0.36 Améliorations multiples (pagination, modales, pages d'erreurs...)
  * 31.0.37 Continuation améliorations
+ * 31.0.38 Changement reponsive topbar
 
