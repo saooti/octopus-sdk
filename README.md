@@ -629,4 +629,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.37 Continuation améliorations
  * 31.0.38 Changement reponsive topbar
  * 31.0.39 Erreur refactor
+ * 31.0.40 Erreur locale
 

@@ -4,7 +4,7 @@
       v-if="loaded && !error"
     >
       <h1 v-if="!pageParameters.lightStyle">
-        titleDisplay{{ titleDisplay }}
+        {{ titleDisplay }}
       </h1>
       <div
         class="d-flex flex-column align-items-center mb-3"
