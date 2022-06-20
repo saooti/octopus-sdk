@@ -37,6 +37,9 @@
           >
             {{ date }}
           </div>
+          <div>
+            {{ $t('Duration', { duration: duration }) }}
+          </div>
           <div
             v-if="isLiveReady"
             class="text-danger"
