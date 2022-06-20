@@ -11,7 +11,7 @@
     <PodcastImage
       :podcast="podcast"
       :hide-play="!podcastItemDescription || (podcastItemDescription && (!hover || !description))"
-      :display-description="description && podcastItemDescription"
+      :display-description="0!==description.length && podcastItemDescription"
       :arrow-direction="arrowDirection"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
