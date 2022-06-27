@@ -110,7 +110,7 @@ export default defineComponent({
       this.isCategories = 0!==length;
     },
     onRubriqueSelected(index: number, rubrique: Rubrique): void {
-      if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId ||rubrique.rubriqueId){
+      if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId){
         return;
       }
       const filter = Array.from(this.rubriqueFilter);
