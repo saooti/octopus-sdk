@@ -115,6 +115,7 @@ export default{
   Downloading: 'Descargando',
   'Subscribe to this emission': "Subscríbete a este programa",
   'Subscribe to this participant': "Subscríbete a estos participantes",
+  'Subscribe to this RSS feed': "Suscríbete a esta fuente RSS",
   'Emission have not podcasts': "No hay pódcast para este programa",
   'Participant have not podcasts':
     'No hay pódcast para este participante',

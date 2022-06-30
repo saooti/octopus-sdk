@@ -113,6 +113,7 @@ export default{
     Downloading: 'In download', 
     'Subscribe to this emission': "Iscriviti a questa serie", 
     'Subscribe to this participant': "Iscriviti a questo speaker", 
+    'Subscribe to this RSS feed': "Iscriviti a questo feed RSS",
     'Emission have not podcasts': "Questa serie non ha alcun podcast", 
     'Participant have not podcasts': 
       'Questo speaker non è associato ad alcun podcast', 

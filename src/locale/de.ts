@@ -115,6 +115,7 @@ export default{
   Downloading: "Wird heruntergeladen",
   'Subscribe to this emission': "Diese Reihe abonnieren",
   'Subscribe to this participant': "Diese Sprecher abonnieren",
+  'Subscribe to this RSS feed': "Abonnieren Sie diesen RSS-Feed",
   'Emission have not podcasts': "In dieser Reihe gibt es keine Podcasts.",
   'Participant have not podcasts':
     "Dieser Sprecher ist keinem Podcast zugeordnet.",

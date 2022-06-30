@@ -115,6 +115,7 @@ export default{
   Downloading: 'Prenos',
   'Subscribe to this emission': "Naroči se na to oddajo", 
   'Subscribe to this participant': "Naroči se na te napovedovalce",
+  'Subscribe to this RSS feed': "Naroči se na ta vir RSS",
   'Emission have not podcasts': "Ta oddaja nima podkastov",
   'Participant have not podcasts':
     'Napovedovalec ni povezan z nobenim podkastom',

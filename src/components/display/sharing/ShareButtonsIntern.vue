@@ -32,12 +32,12 @@
     </a>
   </template>
   <a
-    v-if="''!==rssUrl"
+    v-if="''!==rssUrl && displayRss"
     rel="noopener"
     target="_blank"
     :class="getClass()"
     :href="rssUrl"
-    :title="$t('Subscribe to this emission')"
+    :title="titleRssButton"
     @click.prevent="openPopup()"
   >
     <div class="saooti-rss-bounty" />
@@ -96,6 +96,7 @@
 </template>
 
 <script lang="ts">
+import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
@@ -129,9 +130,19 @@ export default defineComponent({
       dataRSSSave: false as boolean,
       newsletter: false as boolean,
       qrCode: false as boolean,
+      displayRss: false as boolean,
     };
   },
   computed: {
+    titleRssButton(): string{
+      if(this.participantId){
+        return this.$t('Subscribe to this participant');
+      }
+      if(this.emission){
+        return this.$t('Subscribe to this emission');
+      }
+      return this.$t('Subscribe to this RSS feed');
+    },
     arrayShareButtons(){
       return [
         { title: 'Facebook', icon:'saooti-facebook-bounty', nbPath:0, className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
@@ -173,6 +184,13 @@ export default defineComponent({
       }
       return '';
     },
+  },
+  async created(){
+    if(this.organisationId){
+      this.displayRss = await octopusApi.fetchDataPublic<boolean>(`rss/participants/allowed/${this.organisationId}`);
+    }else{
+      this.displayRss = true;
+    }
   },
 
   methods: {

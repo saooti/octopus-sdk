@@ -33,6 +33,7 @@
           <ShareButtons
             v-if="pageParameters.isShareButtons"
             :participant-id="participantId"
+            :organisation-id="participant.orga.id"
           />
         </div>
       </div>

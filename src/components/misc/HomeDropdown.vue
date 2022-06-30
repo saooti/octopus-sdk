@@ -49,9 +49,12 @@
           </template>
           <template v-if="!isEducation">
             <hr class="dropdown-divider">
-            <template v-for="helpLink in helpLinks" :key="helpLink.title">
+            <template
+              v-for="helpLink in helpLinks"
+              :key="helpLink.title"
+            >
               <a
-               :href="helpLink.href"
+                :href="helpLink.href"
                 class="dropdown-item"
                 rel="noopener"
                 target="_blank"
