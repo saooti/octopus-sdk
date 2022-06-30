@@ -632,3 +632,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.39 Erreur refactor
  * 31.0.40 Erreur locale
  * 31.0.41 #11220
+ * 31.0.42 #11222

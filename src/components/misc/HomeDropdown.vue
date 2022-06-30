@@ -83,12 +83,16 @@
 import { state } from '../../store/paramStore';
 
 import { defineComponent } from 'vue'
+import { Organisation } from '@/store/class/general/organisation';
 export default defineComponent({
   name: 'HomeDropdown',
   props: {
     isEducation: { default: false, type: Boolean},
   },
   computed: {
+    organisationsAvailable(): Array<Organisation>{
+      return this.$store.state.profile.organisations?? [];
+    },
     helpLinks(){
       return [
         {title:this.$t('Help'), href:'https://help.octopus.saooti.com/Aide/'},
@@ -99,7 +103,7 @@ export default defineComponent({
         {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: (state.generalParameters.isContribution as boolean)},
         {title:this.$t('My space'),class:"show-phone dropdown-item", path:'/main/priv/backoffice', condition: true},
         {title:this.$t('Edit my profile'),class:"dropdown-item", path:'/main/priv/edit/profile', condition: true},
-        {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean)}];
+        {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length}];
     },
     
     isPodcastmaker(): boolean {
