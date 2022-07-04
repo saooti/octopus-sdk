@@ -214,7 +214,7 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        const data: Emission = await octopusApi.fetchEmission(this.emissionId);
+        const data: Emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
         this.emission = data;
         if("PUBLIC"!==this.emission.orga.privacy && this.filterOrga!==this.emission.orga.id){
           this.initError();

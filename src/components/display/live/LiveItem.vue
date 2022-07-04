@@ -126,7 +126,7 @@
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import PodcastImage from '../podcasts/PodcastImage.vue';
-import studioApi from '@/api/studio';
+import crudApi from '@/api/classicCrud';
 import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
@@ -233,16 +233,11 @@ export default defineComponent({
     async fetchPodcastData(): Promise<void> {
       if (!this.fetchConference || !this.fetchConference.podcastId) return;
       try {
-        this.live = await octopusApi.fetchPodcast(
-          this.fetchConference.podcastId.toString()
-        );
+        this.live = await octopusApi.fetchData<Podcast>(0, 'podcast/'+this.fetchConference.podcastId);
       } catch {
         this.$emit('deleteItem', this.index);
         if(this.fetchConference.conferenceId){
-          studioApi.deleteConference(
-            this.$store.state,
-            this.fetchConference.conferenceId.toString()
-          );
+          await crudApi.deleteData(this.$store.state, 9 ,'conference/'+this.fetchConference.conferenceId);
         }
       }
     },

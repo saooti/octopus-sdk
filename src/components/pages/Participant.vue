@@ -157,7 +157,7 @@ export default defineComponent({
     async getParticipantDetails(): Promise<void> {
       this.loaded = false;
       try {
-        const data = await octopusApi.fetchParticipant(this.participantId ? this.participantId.toString(): "");
+        const data = await octopusApi.fetchData<Participant>(0, 'participant/'+this.participantId);
         if(data && data.orga && "PUBLIC"!==data.orga.privacy && this.filterOrga!==data.orga.id){
           this.initError();
           return;

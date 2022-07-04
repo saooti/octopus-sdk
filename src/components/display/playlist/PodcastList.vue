@@ -126,9 +126,7 @@ export default defineComponent({
         this.podcasts.length = 0;
         this.loading = true;
         try {
-          const content = await octopusApi.fetchPlaylistContent(
-            this.playlist.playlistId.toString()
-          );
+          const content = await octopusApi.fetchData<Array<Podcast>>(0, 'playlist/'+this.playlist.playlistId+'/content');
           for (let index = 0, len = content.length; index < len; index++) {
             content[index].order = this.playlist.podcasts[content[index].podcastId];
           }

@@ -13,6 +13,7 @@
 import octopusApi from '@saooti/octopus-api';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { defineComponent } from 'vue'
+import { Rubrique } from '@/store/class/rubrique/rubrique';
 export default defineComponent({
   name:"Rubrique",
   components: {
@@ -32,7 +33,7 @@ export default defineComponent({
     rubriqueId: {
       immediate: true,
       async handler() {
-        const data = await octopusApi.fetchRubric(this.rubriqueId);
+        const data = await octopusApi.fetchData<Rubrique>(0, 'rubrique/'+this.rubriqueId); 
         this.title = data.name;
       },
     },

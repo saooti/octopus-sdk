@@ -38,7 +38,7 @@ export default defineComponent({
   },
   async created() {
     if(this.comId){
-      this.comment = await octopusApi.fetchComment(this.comId);
+      this.comment = await octopusApi.fetchData<CommentPodcast>(2, `comment/${this.comId}`);
     }
     this.loading = false;
   },

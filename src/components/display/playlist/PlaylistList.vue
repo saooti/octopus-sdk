@@ -118,7 +118,7 @@ export default defineComponent({
         sort: this.sort,
       };
       try {
-        const data = await octopusApi.fetchPlaylists(param);
+        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Playlist>;sort: string;}>(0, 'playlist/search',param, true);
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403((error as AxiosError));

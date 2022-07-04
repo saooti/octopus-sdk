@@ -148,10 +148,8 @@ export default defineComponent({
     async fetchContent(): Promise<void> {
       this.allPodcasts.length = 0;
       this.loading = true;
-      this.playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
-      this.allPodcasts = await octopusApi.fetchPlaylistContent(
-        this.playlist.playlistId.toString()
-      );
+      this.playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
+      this.allPodcasts = await octopusApi.fetchData<Array<Podcast>>(0, 'playlist/'+this.playlistId+'/content');
       if (!((state.generalParameters.authenticated && state.generalParameters.organisationId === this.playlist.organisation.id) ||
         state.generalParameters.isAdmin)) {
         this.allPodcasts = this.allPodcasts.filter((p: Podcast|null) => {

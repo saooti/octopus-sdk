@@ -124,6 +124,7 @@
 </template>
 
 <script lang="ts">
+import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
@@ -156,11 +157,11 @@ export default defineComponent({
 
   methods: {
     async getEmissionDetails(): Promise<void> {
-      this.emission = await octopusApi.fetchEmission(this.emissionId);
+      this.emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
     },
     getRSS(): void {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
-      this.rss = octopusApi.fetchRSS(this.emissionId) + '.rss';
+      this.rss = `${state.octopusApi.url}rss/emission/${this.emissionId}.rss`;
     },
     afterCopy(): void{
       (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Link in clipboard'));

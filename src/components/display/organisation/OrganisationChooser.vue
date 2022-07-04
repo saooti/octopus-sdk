@@ -189,7 +189,7 @@ export default defineComponent({
       this.authenticated &&
       undefined === this.$store.state.organisation.imageUrl
     ) {
-      const data = await octopusApi.fetchOrganisation(this.myOrganisationId ?this.myOrganisationId:"");
+      const data = await octopusApi.fetchData<Organisation>(0,`organisation/${this.myOrganisationId ?this.myOrganisationId:""}`);
       this.myImage = data.imageUrl;
     }
     if (this.value) {
@@ -209,7 +209,7 @@ export default defineComponent({
     },
     async onSearchOrganisation(query?: string): Promise<void> {
       this.isLoading = true;
-      const response = await octopusApi.fetchOrganisations({
+      const response = await octopusApi.fetchDataWithParams<{count: number;result: Array<Organisation>;sort: string;}>(0, 'organisation/search',{
         query: query,
         first: 0,
         size: ELEMENTS_COUNT,
@@ -249,7 +249,7 @@ export default defineComponent({
         this.onSearchOrganisation();
       }
       if(!this.value){return;}
-      const data = await octopusApi.fetchOrganisation(this.value);
+      const data = await octopusApi.fetchData<Organisation>(0,`organisation/${this.value}`);
       this.organisation = data;
       this.init = true;
     },

@@ -4,17 +4,18 @@ import { Rubriquage } from "@/store/class/rubrique/rubriquage";
 import octopusApi from '@saooti/octopus-api';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
+import { Organisation } from '@/store/class/general/organisation';
 export const orgaFilter = defineComponent({
   mixins: [handle403],
   methods: {
     async selectOrganisation(organisationId: string): Promise<void> {
       try {
-        const response = await octopusApi.fetchOrganisation(organisationId);
-        const data = await octopusApi.fetchTopics(organisationId, {
+        const response = await octopusApi.fetchData<Organisation>(0,`organisation/${organisationId}`);
+        const data = await octopusApi.fetchDataWithParams<Array<Rubriquage>>(0, 'rubriquage/find/'+organisationId,{
           sort:'HOMEPAGEORDER',
           homePageOrder: true
-        });
-        const isLive = await octopusApi.liveEnabledOrganisation(organisationId);
+        }, true);
+        const isLive = await octopusApi.fetchData<boolean>(0, 'organisation/liveEnabled/'+organisationId);
         this.$store.commit('filterOrga', {
           orgaId: organisationId,
           imgUrl: response.imageUrl,

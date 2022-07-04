@@ -108,12 +108,12 @@ export default defineComponent({
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
       try {
-        const data = await octopusApi.fetchParticipants({
+        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Participant>;sort: string;}>(0, 'participant/search',{
           first: this.dfirst,
           size: this.dsize,
           query: this.query,
           organisationId: this.organisation,
-        });
+        }, true);
         if (reset) {
           this.participants.length = 0;
         }

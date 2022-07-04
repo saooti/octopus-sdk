@@ -58,6 +58,7 @@ import { state } from '../../../store/paramStore';
 import { displayMethods } from '../../mixins/functions';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { defineComponent } from 'vue'
+import { Podcast } from '@/store/class/general/podcast';
 export default defineComponent({
   name: 'ParticpantItem',
   mixins: [displayMethods, orgaComputed],
@@ -107,11 +108,11 @@ export default defineComponent({
   },
   methods: {
     async hasPodcast(): Promise<void> {
-      const data = await octopusApi.fetchPodcasts({
+      const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
         participantId: this.participant.participantId,
         first: 0,
         size: 0,
-      });
+      }, true);
       if (0 === data.count) {
         this.activeParticipant = false;
       }

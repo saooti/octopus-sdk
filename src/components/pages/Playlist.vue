@@ -130,7 +130,7 @@ export default defineComponent({
       try {
         this.loaded = false;
         this.error = false;
-        const data: Playlist = await octopusApi.fetchPlaylist(this.playlistId ? this.playlistId.toString(): "");
+        const data: Playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
         this.playlist = data;
         if("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrga!==this.playlist.organisation?.id){
           this.initError();

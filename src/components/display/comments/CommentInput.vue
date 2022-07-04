@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import commentApi from '@/api/comments';
+import crudApi from '@/api/classicCrud';
 import { cookies } from '../../mixins/functions';
 import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
@@ -290,9 +290,9 @@ export default defineComponent({
         let data;
         if (this.isCertified) {
           comment.status = 'Valid';
-          data = await commentApi.postComment(this.$store.state, comment);
+          data = await crudApi.postData<CommentPodcast>(this.$store.state,2, 'registeredComment/' + comment.userId, {...comment, ...{userId: undefined}});
         } else {
-          data = await octopusApi.postComment(comment);
+          data = await octopusApi.postDataPublic<CommentPodcast>(2,'unregisteredComment',comment);
         }
         this.$emit('newComment', data);
         this.newComment = '';

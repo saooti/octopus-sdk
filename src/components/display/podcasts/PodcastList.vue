@@ -164,7 +164,7 @@ export default defineComponent({
         param.publisherId = this.$store.state.profile.userId;
       }
       try {
-        const data = await octopusApi.fetchPodcasts(param);
+        const data =await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',param, true);
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403((error as AxiosError));

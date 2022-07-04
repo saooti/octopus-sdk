@@ -40,6 +40,7 @@ import { CustomPlayer } from '@/store/class/general/customPlayer';
 import { defineComponent } from 'vue';
 import { Emission } from '@/store/class/general/emission';
 import { Playlist } from '@/store/class/general/playlist';
+import { InterfacePageable } from '@/store/class/general/interfacePageable';
 export default defineComponent({
   props: {
     podcast: { default: undefined, type: Object as ()=> Podcast},
@@ -77,12 +78,12 @@ export default defineComponent({
   },
   methods: {
     async fetchCustomPlayers(type:string, trySelect: boolean): Promise<boolean>{
-      let players = await octopusApi.fetchCustomPlayer('customPlayer/type/'+ this.organisationId+'/'+type);
+      let players = await octopusApi.fetchDataPublic<InterfacePageable<CustomPlayer>>(6,'customPlayer/type/'+ this.organisationId+'/'+type);
       let playersContent = players.content;
       const totalCount = players.totalElements;
       let index = 1;
       while (totalCount > playersContent.length) {
-        players =  await octopusApi.fetchCustomPlayer('customPlayer/type/'+ this.organisationId+'/'+type+'?start='+index);
+        players =  await octopusApi.fetchDataPublic<InterfacePageable<CustomPlayer>>(6,'customPlayer/type/'+ this.organisationId+'/'+type+'?start='+index);
         playersContent = playersContent.concat(players.content);
         ++index;
       }

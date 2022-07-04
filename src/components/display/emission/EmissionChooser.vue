@@ -178,7 +178,8 @@ export default defineComponent({
           organisationId: this.organisationId,
         };
       }
-      const response = await octopusApi.fetchEmissions(standardParam);
+
+      const response = await octopusApi.fetchDataWithParams<{count: number;result:Array<Emission>;sort: string;}>(0, 'emission/search',standardParam, true);
       if (this.defaultanswer) {
         const emissionDefault = getDefaultEmission(this.defaultanswer);
         if(emissionDefault){

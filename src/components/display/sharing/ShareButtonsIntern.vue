@@ -187,7 +187,7 @@ export default defineComponent({
   },
   async created(){
     if(this.organisationId){
-      this.displayRss = await octopusApi.fetchDataPublic<boolean>(`rss/participants/allowed/${this.organisationId}`);
+      this.displayRss = await octopusApi.fetchDataPublic<boolean>(0,`rss/participants/allowed/${this.organisationId}`);
     }else{
       this.displayRss = true;
     }

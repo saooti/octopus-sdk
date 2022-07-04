@@ -155,8 +155,8 @@ export default defineComponent({
   },
   methods: {
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchPodcasts({
-        first: this.first,
+      const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
+         first: this.first,
         size: this.size + 1,
         organisationId: this.organisation,
         emissionId: this.emissionId,
@@ -166,7 +166,7 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
         query: this.query,
-      });
+      }, true);
       this.loading = false;
       this.loaded = true;
       this.totalCount = data.count;

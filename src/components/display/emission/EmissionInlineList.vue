@@ -72,6 +72,7 @@ import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 export default defineComponent({
   name: 'EmissionInlineList',
 
@@ -157,14 +158,15 @@ export default defineComponent({
   methods: {
     async fetchNext(): Promise<void> {
       try {
-        const data = await octopusApi.fetchEmissions({
+        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Emission>;sort: string;}>(0, 'emission/search',{
           first: this.first,
           size: this.size + 1,
           organisationId: this.organisationId,
           rubriqueId: this.rubriqueId ?  [this.rubriqueId] : [],
           rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
           sort: 'LAST_PODCAST_DESC',
-        });
+        }, true);
+        
         this.loading = false;
         this.loaded = true;
         this.totalCount = data.count;
@@ -225,7 +227,7 @@ export default defineComponent({
       img.src = url;
     },
     async fetchRubriques(): Promise<void> {
-      const data = await octopusApi.fetchTopic(this.displayRubriquage);
+      const data = await octopusApi.fetchData<Rubriquage>(0, 'rubriquage/'+this.displayRubriquage);
       this.rubriques = data.rubriques;
     },
     rubriquesId(emission: Emission): string|undefined {

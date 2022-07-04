@@ -6,6 +6,7 @@ import { CommentPodcast } from '@/store/class/general/comment';
 import { StoreState } from '@/store/typeAppStore';
 import { defineComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
+import { InterfacePageable } from '@/store/class/general/interfacePageable';
 export const playerComment = defineComponent({
   data() {
     return {
@@ -85,7 +86,7 @@ export const playerComment = defineComponent({
         if (!this.editRight(organisation? organisation : '')) {
           param.status = ['Valid'];
         }
-        const data = await octopusApi.fetchRootComments(param);
+        const data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, 'getRootCom',param);
         first += size;
         count = data.totalElements;
         this.comments = this.comments.concat(data.content).filter((c: CommentPodcast) => {

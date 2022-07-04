@@ -634,3 +634,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.41 #11220
  * 31.0.42 #11222
  * 31.0.43 #10963
+ * 31.0.44 Début CRUD API

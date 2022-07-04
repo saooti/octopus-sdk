@@ -59,6 +59,7 @@ import { defineComponent, defineAsyncComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
 import { AxiosError } from 'axios';
 import { emptyEmissionData } from '@/store/typeAppStore';
+import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
 const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({
@@ -183,7 +184,7 @@ export default defineComponent({
         includeHidden:this.includeHidden,
       };
       try {
-        const data = await octopusApi.fetchEmissions(param);
+        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Emission>;sort: string;}>(0, 'emission/search',param, true);
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403((error as AxiosError));
@@ -210,7 +211,7 @@ export default defineComponent({
       this.loading = false;
     },
     async fetchRubriques(): Promise<void> {
-      const data = await octopusApi.fetchTopic(this.displayRubriquage);
+      const data = await octopusApi.fetchData<Rubriquage>(0, 'rubriquage/'+this.displayRubriquage);
       this.rubriques = data.rubriques;
     },
     mainRubriquage(emission: Emission): string {

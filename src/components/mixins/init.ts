@@ -9,7 +9,7 @@ export const initSDK = defineComponent({
   methods: {
     async initSdk() {
       if (0 === (state.generalParameters.allCategories as Array<Category>).length) {
-        octopusApi.fetchCategories({ lang: this.$i18n.locale }).then((data: Array<Category>) => {
+        octopusApi.fetchDataWithParams<Array<Category>>(0, `iab/list${state.octopusApi.organisationId? '/'+state.octopusApi.organisationId : ''}`, { lang: this.$i18n.locale }).then((data: Array<Category>) => {
           this.$store.commit('categoriesSet', data);
         });
       }else{

@@ -51,7 +51,7 @@ export const playerLogic = defineComponent({
         this.audioUrlToPlay = this.audioUrl;
       }
       if(!this.podcast){return;}
-      const response = await octopusApi.fetchPodcastDownloadUrl("podcast/download/register/"+ this.audioUrl);
+      const response = await octopusApi.fetchDataPublic<{location:string, downloadId: number}>(0,"podcast/download/register/"+ this.audioUrl);
       this.setDownloadId(response.downloadId.toString());
       this.audioUrlToPlay = response.location;
     },
@@ -74,10 +74,7 @@ export const playerLogic = defineComponent({
         return;
       }
       this.lastSend = newVal;
-      await octopusApi.updatePlayerTime(
-        this.downloadId,
-        Math.round(newVal)
-      );
+      await octopusApi.putDataPublic(0, 'podcast/listen/' + this.downloadId + '?seconds=' +  Math.round(newVal), undefined);
     },
     playerSeekTime(){
       if(!this.playerSeekTime){return;}

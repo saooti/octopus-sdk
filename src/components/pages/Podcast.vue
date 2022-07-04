@@ -93,7 +93,7 @@ import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import PodcastModuleBox from '../display/podcasts/PodcastModuleBox.vue';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import octopusApi from '@saooti/octopus-api';
-import studioApi from '@/api/studio';
+import crudApi from '@/api/classicCrud';
 import { state } from '../../store/paramStore';
 import moment from 'moment';
 import { Podcast } from '@/store/class/general/podcast';
@@ -269,10 +269,10 @@ export default defineComponent({
     async initConference(){
       if (!this.podcast || !this.isLiveReadyToRecord) return;
       if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
-        const data = await studioApi.getConference(this.$store.state,this.podcast.conferenceId.toString());
+        const data = await crudApi.fetchData<Conference>(this.$store.state,9,'conference/'+this.podcast.conferenceId);
         this.fetchConference = data ? data : {conferenceId:-1, title:''};
       } else if(undefined!==this.podcast.conferenceId){
-        const data = await octopusApi.getRealConferenceStatus(this.podcast.conferenceId.toString());
+        const data = await octopusApi.fetchData<string>(9, 'conference/realstatus/'+this.podcast.conferenceId);
         this.fetchConference = {
           status: data,
           conferenceId: this.podcast.conferenceId,
@@ -323,7 +323,7 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        const data : Podcast = await octopusApi.fetchPodcast(this.podcastId.toString());
+        const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+this.podcastId); 
         if("PUBLIC"!==data.organisation.privacy && this.filterOrga!==data.organisation.id){
           this.initError();
           return;

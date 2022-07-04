@@ -68,15 +68,12 @@ export const playerLive = defineComponent({
           if(!this.live){ return; }
           let downloadId = null;
           try {
-            downloadId = await octopusApi.requestLiveDownloadId(
-              this.live.livePodcastId
-            );
-            await octopusApi.markPlayingLive(
-              this.live.livePodcastId,
-              downloadId,
-              'octopus',
-              this.$store.state.authentication.organisationId
-            );
+            downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.live.livePodcastId, undefined);
+            await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.live.livePodcastId+".m3u8",{
+              'downloadId': null!==downloadId ? downloadId : undefined,
+              'origin':'octopus',
+              'distributorId':this.$store.state.authentication.organisationId
+            });
             this.setDownloadId(downloadId);
           } catch (error) {
             console.log('ERROR downloadId');
@@ -101,10 +98,7 @@ export const playerLive = defineComponent({
     async endListeningProgress(): Promise<void> {
       if (!this.downloadId) return;
       try {
-        await octopusApi.updatePlayerTime(
-          this.downloadId,
-          Math.round(this.listenTime)
-        );
+        await octopusApi.putDataPublic(0, 'podcast/listen/' + this.downloadId + '?seconds=' +  Math.round(this.listenTime), undefined);
       } catch{
         //Do nothing
       }

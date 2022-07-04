@@ -110,9 +110,7 @@ export default defineComponent({
   watch: {
     async organisationId(): Promise<void> {
       if(!this.organisationId){return;}
-      const isLive = await octopusApi.liveEnabledOrganisation(
-        this.organisationId
-      );
+      const isLive = await octopusApi.fetchData<boolean>(0, 'organisation/liveEnabled/'+this.organisationId);
       if (isLive) {
         if(!this.loading){
           this.fetchContent();
@@ -140,9 +138,7 @@ export default defineComponent({
     if(!this.filterOrgaUsed){
       return;
     }
-    const isLive = await octopusApi.liveEnabledOrganisation(
-      this.filterOrgaUsed
-    );
+    const isLive = await octopusApi.fetchData<boolean>(0, 'organisation/liveEnabled/'+this.filterOrgaUsed);
     if (isLive) {
       this.fetchContent();
     } else {
@@ -173,11 +169,11 @@ export default defineComponent({
           ("DEBRIEFING"===this.livesArray[i].status ||"ERROR"===this.livesArray[i].status ||"PUBLISHING"===this.livesArray[i].status)) {
             continue;
           }
-          const dataLives = await octopusApi.listConferences(
-            this.filterOrgaUsed,
-            true,
-            this.livesArray[i].status
-          );
+          const dataLives = await octopusApi.fetchDataWithParams<Array<Conference>>(9, 'conference/list',{
+            organisationId: this.filterOrgaUsed,
+            withPodcastId: true,
+            status: this.livesArray[i].status,
+          });
           if("PLANNED"!==this.livesArray[i].status && "PENDING"!==this.livesArray[i].status){
             this.livesArray[i].lives = dataLives.filter((p: Conference | null) => {
               return null !== p;

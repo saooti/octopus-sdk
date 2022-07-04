@@ -139,7 +139,7 @@ export default defineComponent({
       this.numberItem = Math.floor(width / sixteen);
     },
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchPodcasts({
+      const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
         first: 0,
         size: 10,
         organisationId: this.organisation,
@@ -150,7 +150,7 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
         query: this.query,
-      });
+      }, true);
       this.allPodcasts = this.allPodcasts.concat(
         data.result.filter((pod: Podcast|null) => null !== pod)
       );

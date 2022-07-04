@@ -63,6 +63,7 @@ import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent } from 'vue'
+import { Podcast } from '@/store/class/general/podcast';
 export default defineComponent({
   name: 'EmissionItem',
 
@@ -114,11 +115,11 @@ export default defineComponent({
   },
   methods: {
     async hasPodcast(): Promise<void> {
-      const data = await octopusApi.fetchPodcasts({
+      const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
         emissionId: this.emission.emissionId,
         first: 0,
         size: 0,
-      });
+      }, true);
       if (0 === data.count) {
         this.activeEmission = false;
       }

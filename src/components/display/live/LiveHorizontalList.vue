@@ -99,13 +99,13 @@ export default defineComponent({
       if (reset) {
         this.notEmpty = false;
       }
-      const param = {
+      const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
         first: this.dfirst,
         size: this.dsize,
         emissionId: this.emissionId,
         sort: 'DATE',
-      };
-      const data = await octopusApi.fetchLives(param);
+        includeStatus:'READY_TO_RECORD'
+      }, true);
       this.afterFetching(reset, data);
     },
     afterFetching(reset: boolean, data: {count: number, result: Array<Podcast>, sort: string}): void {

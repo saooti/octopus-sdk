@@ -271,7 +271,7 @@ export default defineComponent({
       if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         data = this.$store.state.organisation.attributes;
       }else{
-        data= await octopusApi.fetchOrganisationAttributes(this.myOrganisationId||'');
+        data= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
       }
       this.color = Object.prototype.hasOwnProperty.call(data,'COLOR') ? data.COLOR : '#40a372';
       this.theme = Object.prototype.hasOwnProperty.call(data,'THEME') ? data.THEME : '#000000';

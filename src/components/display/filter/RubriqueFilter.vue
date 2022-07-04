@@ -209,7 +209,7 @@ export default defineComponent({
         this.arrayFilter.length = 0;
       }
       if (!this.organisation) return;
-      const data = await octopusApi.fetchTopics(this.organisation, undefined);
+      const data = await octopusApi.fetchDataWithParams<Array<Rubriquage>>(0, 'rubriquage/find/'+this.organisation,{}, true);
       this.rubriquageData = data.filter((element: Rubriquage)=>{
         return element.rubriques.length;
       });

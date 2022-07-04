@@ -162,9 +162,9 @@ export default defineComponent({
       }
     },
     async fetchCategories(organisationId: string): Promise<void> {
-      const data = await octopusApi.fetchCategories({
+      const data = await octopusApi.fetchDataWithParams<Array<Category>>(0, `iab/list/${organisationId}`,{
         lang: this.$i18n.locale,
-      }, organisationId);
+      });
       this.$store.commit('categoriesOrgaSet', data);
     },
   },

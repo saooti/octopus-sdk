@@ -73,7 +73,7 @@ export default defineComponent({
     },
     async fetchOrganisation(): Promise<void> {
       if(!this.value){return;}
-      const data = await octopusApi.fetchOrganisation(this.value);
+      const data = await octopusApi.fetchData<Organisation>(0,`organisation/${this.value}`);
       this.organisation = data;
       this.actual = data.id;
       this.init = true;

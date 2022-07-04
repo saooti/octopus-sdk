@@ -41,6 +41,7 @@ import moment from 'moment';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { CommentPodcast } from '@/store/class/general/comment';
+import { InterfacePageable } from '@/store/class/general/interfacePageable';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
 /* eslint-disable */
@@ -126,7 +127,7 @@ export default defineComponent({
       let data;
       try {
         if (this.comId) {
-          data = await octopusApi.fetchCommentAnswers(this.comId, {first: this.first,size: this.size});
+          data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, this.comId.toString(), {first: this.first,size: this.size});
         }else{
           const param: FetchParam = {
             first: this.first,
@@ -135,7 +136,7 @@ export default defineComponent({
             status:this.editRight && this.status?[this.status]: this.editRight? ['Valid','Pending', 'Invalid']:['Valid'],
             organisationId: undefined === this.podcastId? this.organisation: undefined,
           };
-          data = this.isFlat ? await octopusApi.fetchComments(param) : await octopusApi.fetchRootComments(param);
+          data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, this.isFlat ?'':'getRootCom',param);
         }
         if(reset){
           this.comments.length = 0;
