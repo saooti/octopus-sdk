@@ -56,14 +56,14 @@ export const playerLive = defineComponent({
           reject('Hls is not supported ! ');
         }
         let hls = new Hls();
-        if(this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
+        /* if(this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
           hls = new Hls({xhrSetup:
             (xhr: XMLHttpRequest) => {
               xhr.setRequestHeader("Authorization", "Bearer " + this.$store.state.oAuthParam.accessToken);
             }
             }
           );
-        }
+        } */
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           if(!this.live){ return; }
           let downloadId = null;

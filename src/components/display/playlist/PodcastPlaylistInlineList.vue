@@ -69,8 +69,8 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
 import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
+import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
-import { Playlist } from '@saooti/octopus-api/class/playlist';
 export default defineComponent({
   name: 'PodcastPlaylistInlineList',
   
@@ -150,7 +150,7 @@ export default defineComponent({
       this.loading = true;
       this.playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
       this.allPodcasts = await octopusApi.fetchData<Array<Podcast>>(0, 'playlist/'+this.playlistId+'/content');
-      if (!((state.generalParameters.authenticated && state.generalParameters.organisationId === this.playlist.organisation.id) ||
+      if (!((state.generalParameters.authenticated && state.generalParameters.organisationId === this.playlist?.organisation?.id) ||
         state.generalParameters.isAdmin)) {
         this.allPodcasts = this.allPodcasts.filter((p: Podcast|null) => {
           return (
