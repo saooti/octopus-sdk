@@ -637,3 +637,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.44 Début CRUD API
  * 31.0.45 Live 
  * 31.0.46 Pb css
+
+
+ * 32.0.0 Passage en 32
