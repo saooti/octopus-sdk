@@ -10,23 +10,14 @@
         query: { productor: $store.state.filter.organisationId },
       }"
       :title="$t('Playlist')"
-      class="text-dark"
+      class="d-flex flex-grow-1 text-dark"
     >
       <img
         v-lazy="playlist.imageUrl"
         :title="$t('Playlist name image', {name:name})"
         class="img-box"
       >
-    </router-link>
-    <div class="emission-item-text">
-      <router-link
-        :to="{
-          name: 'playlist',
-          params: { playlistId: playlist.playlistId },
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="text-dark"
-      >
+      <div class="emission-item-text">
         <div class="emission-name">
           <img
             v-if="!activePlaylist && !isPodcastmaker"
@@ -46,22 +37,22 @@
           />
           <!-- eslint-enable -->
         </div>
-      </router-link>
-      <div class="flex-grow-1" />
-      <router-link
-        v-if="!isPodcastmaker && playlist.organisation"
-        :to="{
-          name: 'productor',
-          params: { productorId: playlist.organisation.id },
-          query: { productor: $store.state.filter.organisationId },
-        }"
-        class="text-dark"
-      >
-        <div class="emission-producer primary-darker">
-          © {{ playlist.organisation.name }}
-        </div>
-      </router-link>
-    </div>
+        <div class="flex-grow-1" />
+        <router-link
+          v-if="!isPodcastmaker && playlist.organisation"
+          :to="{
+            name: 'productor',
+            params: { productorId: playlist.organisation.id },
+            query: { productor: $store.state.filter.organisationId },
+          }"
+          class="text-dark"
+        >
+          <div class="emission-producer primary-darker">
+            © {{ playlist.organisation.name }}
+          </div>
+        </router-link>
+      </div>
+    </router-link>
   </li>
 </template>
 

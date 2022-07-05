@@ -4,7 +4,7 @@
       <div>{{ $t('Choose color') }}</div>
       <VSwatches
         v-model="internColor"
-        class="c-hand input-no-outline"
+        class="c-hand "
         show-fallback
         colors="text-advanced"
         popover-to="right"
@@ -15,7 +15,7 @@
       <div>{{ $t('Choose theme') }}</div>
       <VSwatches
         v-model="internTheme"
-        class="c-hand input-no-outline"
+        class="c-hand "
         show-fallback
         colors="text-advanced"
         popover-to="right"

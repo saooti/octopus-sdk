@@ -140,10 +140,6 @@
         box-sizing: border-box;
     }
 
-    .multiselect:focus {
-        outline: none;
-    }
-
     .multiselect--disabled {
         background: #ededed;
         pointer-events: none;
@@ -195,7 +191,6 @@
     .multiselect__input:focus,
     .multiselect__single:focus {
         border-color: #a8a8a8;
-        outline: none;
     }
 
     .multiselect__single {
@@ -392,7 +387,6 @@
 
     .multiselect__option--highlight {
         background: #f8f9fa;
-        outline: none;
         color: #000;
     }
 

@@ -7,7 +7,7 @@
     <span
       :id="idPopover"
       role="button"
-      tabindex="-1"
+      tabindex="0"
       class="saooti-help m-0"
       :title="title"
     />

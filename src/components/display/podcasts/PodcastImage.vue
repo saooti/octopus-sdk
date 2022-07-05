@@ -29,7 +29,7 @@
     >
       {{ $t('Recorded in live') }}
     </div>
-    <div
+    <button
       v-if="hidePlay || recordingLive"
       class="podcast-image-play-button"
       :class="classicPodcastPlay ? '' : 'transparent-background'"
@@ -74,7 +74,7 @@
       >
         {{ textVisible }}
       </div>
-    </div>
+    </button>
     <div
       v-if="displayDescription && isMobile"
       class="background-icon primary-bg saooti-arrow-up2"
@@ -330,7 +330,7 @@ export default defineComponent({
   .transparent-background {
     background-color: rgba(255, 255, 255, 0.5);
   }
-  .podcast-image-play-button {
+  .podcast-image-play-button{
     position: absolute;
     display: flex;
     align-items: center;
@@ -341,6 +341,11 @@ export default defineComponent({
     bottom: 0;
     cursor: pointer;
     flex-direction: column;
+    background: transparent;
+    border-width: 0;
+    &:focus{
+      background: rgba(0, 0, 0, 0.5);
+    }
 
     .icon-container {
       background: #00000050;

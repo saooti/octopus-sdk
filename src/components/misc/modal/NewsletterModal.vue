@@ -34,7 +34,7 @@
                 <div class="d-flex align-items-center mt-2">
                   <VSwatches
                     v-model="color"
-                    class="c-hand input-no-outline me-2 mt-2"
+                    class="c-hand  me-2 mt-2"
                     show-fallback
                     colors="text-advanced"
                     popover-to="right"
@@ -319,9 +319,6 @@ export default defineComponent({
     height: 200px;
     padding: 1em;
     border-radius: 1em;
-    &:focus {
-      outline-width: 0;
-    }
   }
 
   .modal-dialog {

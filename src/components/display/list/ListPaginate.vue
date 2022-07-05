@@ -8,7 +8,7 @@
       :error-text="errorText"
     />
     <template v-if="!loading">
-      <div class="paginate-section page-box">
+      <div class="paginate-section mb-2 page-box">
         <div class="text-secondary">
           <template v-if="textCount && (windowWidth > 1300 || windowWidth<=960)">
             {{ textCount }}

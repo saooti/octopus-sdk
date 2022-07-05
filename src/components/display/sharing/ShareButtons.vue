@@ -11,7 +11,7 @@
           v-if="authenticated"
           id="popover-share-help"
           role="button"
-          tabindex="-1"
+          tabindex="0"
           class="saooti-help ms-2 align-items-start"
           :title="$t('Help')"
         />

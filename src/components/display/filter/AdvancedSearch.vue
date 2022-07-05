@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div
-      class="d-flex justify-content-center mb-3 text-secondary c-hand"
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <button
+      class="d-flex justify-content-center mb-3 text-secondary btn-transparent"
       @click="showFilters = !showFilters"
     >
       <div>{{ $t('Advanced filters') }}</div>
@@ -9,7 +9,7 @@
         class="h3 saooti-arrow_down m-0"
         :class="{ 'arrow-transform': showFilters }"
       />
-    </div>
+    </button>
     <div
       v-show="showFilters"
       class="advanced-search-container"
@@ -53,7 +53,7 @@
             >
               <template #default="{ inputValue, inputEvents }">
                 <input
-                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  class="px-2 py-1 border rounded focus:border-blue-300"
                   :value="inputValue"
                   v-on="inputEvents"
                 >
@@ -77,7 +77,7 @@
             >
               <template #default="{ inputValue, inputEvents }">
                 <input
-                  class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                  class="px-2 py-1 border rounded focus:border-blue-300"
                   :value="inputValue"
                   v-on="inputEvents"
                 >

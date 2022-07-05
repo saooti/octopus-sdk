@@ -13,6 +13,10 @@ body{
   overscroll-behavior-y: contain;
 }
 .octopus-app{
+  *:focus-visible{
+    outline: none;
+    box-shadow: 0 0 10px 1px $octopus-primary-color !important;
+  }
   a{
     word-break: break-word;
   }
@@ -138,7 +142,6 @@ body{
 	}
   a, a:hover{
     text-decoration: none;
-    outline-width: 0;
   }
   a.link-hover{
     color: black !important;

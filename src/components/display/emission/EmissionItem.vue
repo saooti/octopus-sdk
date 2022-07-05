@@ -9,7 +9,7 @@
         query: { productor: filterOrga },
       }"
       :title="$t('Emission')"
-      class="d-flex text-dark"
+      class="d-flex flex-grow-1 text-dark"
     >
       <img
         v-lazy="emission.imageUrl"

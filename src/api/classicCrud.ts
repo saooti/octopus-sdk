@@ -14,6 +14,11 @@ enum ModuleApi {
   }
 /* eslint-disable */
 export default {
+    async fetchData<Type>(state: StoreState,moduleName: ModuleApi,wsPath:string): Promise<Type>{
+        console.log(state,moduleName,wsPath);
+        const response = await axios.get('/mock');
+        return response.data;
+    },
     async postData<Type>(state: StoreState,moduleName: ModuleApi,wsPath:string, elementToCreate: unknown): Promise<Type>{
         console.log(state,moduleName,wsPath);
         const response = await axios.post('/mock', elementToCreate, {

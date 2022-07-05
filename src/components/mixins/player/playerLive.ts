@@ -55,7 +55,7 @@ export const playerLive = defineComponent({
         if (!Hls.isSupported()) {
           reject('Hls is not supported ! ');
         }
-        let hls = new Hls();
+        const hls = new Hls();
         /* if(this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
           hls = new Hls({xhrSetup:
             (xhr: XMLHttpRequest) => {

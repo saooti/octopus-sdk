@@ -7,7 +7,7 @@
     <select
       id="iframe-select"
       :value="iFrameModel"
-      class="input-no-outline"
+      class=""
       @change="$emit('update:iFrameModel',$event.target.value)"
     >
       <template

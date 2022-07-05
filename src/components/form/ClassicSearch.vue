@@ -5,7 +5,7 @@
       ref="search"
       v-model="textValue"
       type="text"
-      class="search-input w-100 p-2 input-no-outline"
+      class="search-input w-100 p-2 "
       :placeholder="label"
       :autofocus="autofocus"
     >

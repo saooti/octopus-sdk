@@ -42,34 +42,28 @@
   >
     <div class="saooti-rss-bounty" />
   </a>
-  <a
-    rel="noopener"
-    target="_blank"
+  <button
     :class="getClass()"
     :title="$t('Copy this page URL')"
     @click="onCopyCode(urlPage,afterCopy)"
   >
     <div class="saooti-link" />
-  </a>
-  <a
+  </button>
+  <button
     v-if="podcast"
-    rel="noopener"
-    target="_blank"
     :class="getClass()"
     :title="$t('Share newsletter')"
     @click="newsletter = true"
   >
     <div class="saooti-newsletter" />
-  </a>
-  <a
-    rel="noopener"
-    target="_blank"
+  </button>
+  <button
     :class="getClass()"
     :title="$t('Share QR Code')"
     @click="qrCode = true"
   >
     <div class="saooti-qrcode" />
-  </a>
+  </button>
   <ClipboardModal
     v-if="dataRSSSave"
     :link="rssUrl"
@@ -195,7 +189,7 @@ export default defineComponent({
 
   methods: {
     getClass(className='btn-rss'): string{
-      let returnString = `btn ${className} share-btn mb-2`;
+      let returnString = `btn ${className} share-btn mb-2 text-dark`;
       returnString+= this.verticalDisplay ? '' : ' mx-2';
       return returnString;
     },

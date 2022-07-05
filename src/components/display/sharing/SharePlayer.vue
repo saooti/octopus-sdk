@@ -291,7 +291,6 @@ export default defineComponent({
     color: white;
     font-weight: bold;
     letter-spacing: 1px;
-    outline: none;
     box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
     border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
     border: solid 2px #41403e;

@@ -46,8 +46,8 @@
         </router-link>
       </template>
     </div>
-    <div
-      class="saooti-burger-menu"
+    <button
+      class="btn-transparent saooti-burger-menu"
       :title="$t('open left Menu')"
       @click="onDisplayMenu(false)"
     />
@@ -63,9 +63,8 @@
             name: 'podcasts',
             query: { productor: $store.state.filter.organisationId },
           }"
-        >
-          <div class="btn admin-button m-1 saooti-search" />
-        </router-link>
+          class="btn admin-button m-1 saooti-search"
+        />
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="p-3">
     <h2>{{ titleFilter }}</h2>
-    <div class="d-flex align-items-center flex-wrap">
+    <div class="d-flex align-items-center flex-wrap mb-2">
       <div
         class="d-flex align-items-center flex-grow-1 me-3"
       >

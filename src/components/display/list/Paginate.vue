@@ -207,7 +207,6 @@ export default defineComponent({
 		border-right: 0;
 		border-left: 0;
 		background: transparent !important;
-		outline-width: 0;
 	}
   .btn{
     border-radius: 0;

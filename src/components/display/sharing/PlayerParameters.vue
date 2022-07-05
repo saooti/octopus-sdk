@@ -62,7 +62,7 @@
                 type="number"
                 min="1"
                 max="50"
-                class="input-share-player input-no-outline text-center m-2"
+                class="input-share-player  text-center m-2"
               >
               <label
                 for="number-input"
