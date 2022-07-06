@@ -8,6 +8,7 @@
     />
     <template v-else>
       <input
+        ref="focusElement"
         v-model="temporaryName"
         class="form-input"
         type="text"
@@ -135,7 +136,7 @@ import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
-import { defineComponent, defineAsyncComponent } from 'vue';
+import { defineComponent, defineAsyncComponent, nextTick } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
 const EditCommentBox = defineAsyncComponent(() => import('@/components/display/edit/EditCommentBox.vue'));
@@ -250,6 +251,9 @@ export default defineComponent({
       this.temporaryName = this.comment.name && null !== this.comment.name ? this.comment.name : '';
       this.temporaryContent = this.comment.content && null !== this.comment.content ? this.comment.content : '';
       this.isEditing = true;
+      this.$nextTick(() => {
+        (this.$refs.focusElement as HTMLElement)?.focus();
+      });
     },
     validEdit(): void {
       const comment = this.comment;

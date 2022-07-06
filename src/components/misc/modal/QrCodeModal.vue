@@ -11,6 +11,7 @@
             {{ $t('Share QR Code') }}
           </h5>
           <button
+            ref="focusElement"
             type="button"
             class="btn-close btn-close-white"
             title="Close"
@@ -45,6 +46,9 @@ export default defineComponent({
     urlPage: { default: undefined, type: String},
   },
   emits: ['close'],
+  mounted(){
+    (this.$refs.focusElement as HTMLElement)?.focus();
+  },
   methods:{
     closePopup(): void {
       this.$emit('close');

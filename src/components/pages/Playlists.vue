@@ -6,9 +6,9 @@
       to="/main/priv/edit/playlist"
       class="d-flex justify-content-center my-3"
     >
-      <button class="btn btn-primary">
+      <div class="btn btn-primary">
         {{ $t('Create playlist') }}
-      </button>
+      </div>
     </router-link>
     <ProductorSearch
       v-if="isProductorSearch"

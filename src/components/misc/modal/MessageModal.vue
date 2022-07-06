@@ -12,6 +12,7 @@
           </h5>
           <button
             v-if="closable"
+            :ref="closable?'focusElement':''"
             type="button"
             class="btn-close btn-close-white"
             title="Close"
@@ -32,6 +33,7 @@
         >
           <button
             v-if="canceltext"
+            :ref="!closable && canceltext?'focusElement':''"
             class="btn m-1"
             @click="onCancel"
           >
@@ -46,6 +48,7 @@
           </button>
           <button
             class="btn btn-primary m-1"
+            :ref="!closable && !canceltext?'focusElement':''"
             @click="onValid"
           >
             {{ validatetext }}
@@ -70,6 +73,9 @@ export default defineComponent({
     thirdText: { default: undefined, type: String},
   },
   emits: ['close', 'validate', 'cancel', 'thirdEvent'],
+  mounted(){
+    (this.$refs.focusElement as HTMLElement)?.focus();
+  },
   methods: {
     closePopup(): void {
       this.$emit('close');

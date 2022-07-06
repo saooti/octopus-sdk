@@ -12,6 +12,7 @@
               {{ $t('Share the player') }}
             </h5>
             <button
+              ref="focusElement"
               type="button"
               class="btn-close btn-close-white"
               title="Close"
@@ -125,6 +126,9 @@ export default defineComponent({
       }
       return [this.$t('Embed link'),this.$t('Embedly link')];
     }
+  },
+  mounted(){
+    (this.$refs.focusElement as HTMLElement)?.focus();
   },
   methods: {
     closePopup(event: { preventDefault: () => void }): void {

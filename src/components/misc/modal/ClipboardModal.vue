@@ -8,6 +8,7 @@
             {{ $t('RSS Link') }}
           </div>
           <button
+            ref="focusElement"
             type="button"
             class="btn-close btn-close-white"
             title="Close"
@@ -53,6 +54,9 @@ export default defineComponent({
     emission: { default: undefined, type: Object as ()=> Emission},
   },
   emits: ['close', 'copy'],
+  mounted(){
+    (this.$refs.focusElement as HTMLElement)?.focus();
+  },
 
   methods: {
     closePopup(): void {
