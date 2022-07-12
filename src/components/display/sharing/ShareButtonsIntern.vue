@@ -50,7 +50,7 @@
     <div class="saooti-link" />
   </button>
   <button
-    v-if="podcast"
+    v-if="podcast || emission ||playlist"
     :class="getClass()"
     :title="$t('Share newsletter')"
     @click="newsletter = true"
@@ -75,6 +75,8 @@
     v-if="newsletter"
     :closable="true"
     :podcast="podcast"
+    :emission="emission"
+    :playlist="playlist"
     @close="newsletter = false"
   />
   <QrCodeModal
@@ -98,6 +100,7 @@ import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import SnackbarVue from '../../misc/Snackbar.vue';
+import { Playlist } from '@/store/class/general/playlist';
 const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));
 const NewsletterModal = defineAsyncComponent(() => import('../../misc/modal/NewsletterModal.vue'));
 const QrCodeModal = defineAsyncComponent(() => import('../../misc/modal/QrCodeModal.vue'));
@@ -114,6 +117,7 @@ export default defineComponent({
   props: {
     podcast: { default: undefined, type: Object as ()=> Podcast},
     emission: { default: undefined, type: Object as ()=> Emission},
+    playlist: { default: undefined, type: Object as ()=>Playlist},
     participantId: { default: undefined, type: Number},
     organisationId: { default: undefined, type: String},
     notExclusive: { default: true, type: Boolean},

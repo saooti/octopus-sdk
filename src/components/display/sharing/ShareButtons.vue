@@ -27,6 +27,7 @@
         <ShareButtonsIntern
           :podcast="podcast"
           :emission="emission"
+          :playlist="playlist"
           :participant-id="participantId"
           :organisation-id="organisationId"
           :not-exclusive="notExclusive"
@@ -40,6 +41,7 @@
       <ShareButtonsIntern
         :podcast="podcast"
         :emission="emission"
+        :playlist="playlist"
         :participant-id="participantId"
         :organisation-id="organisationId"
         :not-exclusive="notExclusive"
@@ -56,6 +58,7 @@ import { displayMethods } from '../../mixins/functions';
 import Popover from '../../misc/Popover.vue';
 import ShareButtonsIntern from './ShareButtonsIntern.vue';
 import { defineComponent } from 'vue';
+import { Playlist } from '@/store/class/general/playlist';
 export default defineComponent({
   components: {
     ShareButtonsIntern,
@@ -65,6 +68,7 @@ export default defineComponent({
   props: {
     podcast: { default: undefined, type: Object as ()=> Podcast},
     emission: { default: undefined, type: Object as ()=> Emission},
+    playlist: { default: undefined, type: Object as ()=>Playlist},
     participantId: { default: undefined, type: Number},
     organisationId: { default: undefined, type: String},
     notExclusive: { default: true, type: Boolean},
