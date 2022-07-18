@@ -10,9 +10,20 @@
         .multiselect__tags, .multiselect__input, .multiselect__single{
             background: transparent !important;
         }
+        .multiselect__tags-wrap{
+            display: flex;
+            align-items: center;
+        }
         .multiselect__tags{
             border: 0;
             padding-left: 0;
+            padding-top: 0;
+            display: flex;
+            align-items: center;
+        }
+        .multiselect__tag{
+            margin-bottom: 0;
+            border: 1px gray solid;
         }
     }
 
