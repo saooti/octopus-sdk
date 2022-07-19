@@ -92,24 +92,19 @@ export default defineComponent({
       };
     },
     name(): string {
-      return this.playlist ? this.playlist.title : '';
+      return this.playlist?.title ??'';
     },
     imageUrl(): string {
       const dummy = new Date().getTime().toString();
       return this.playlist ? this.playlist.imageUrl + '?dummy=' + dummy : '';
     },
     description(): string {
-      return this.playlist ? this.playlist.description : '';
+      return this.playlist?.description ??'';
     },
     editRight(): boolean {
-      if (
-        (state.generalParameters.isPlaylist && this.playlist &&
-          this.myOrganisationId === this.playlist.organisation?.id) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      }
-      return false;
+      return (true===state.generalParameters.isPlaylist &&
+        this.myOrganisationId === this.playlist?.organisation?.id) ||
+        true ===state.generalParameters.isAdmin
     },
   },
   watch: {
@@ -130,8 +125,7 @@ export default defineComponent({
       try {
         this.loaded = false;
         this.error = false;
-        const data: Playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
-        this.playlist = data;
+        this.playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
         if("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrga!==this.playlist.organisation?.id){
           this.initError();
           return;

@@ -86,26 +86,17 @@ export default defineComponent({
   
   computed: {
     titleDisplay(): string{
-      if(undefined === state.emissionsPage.titlePage){
-        return this.$t('All emissions');
-      }
-      return state.emissionsPage.titlePage;
+      return state.emissionsPage.titlePage??this.$t('All emissions');
     },
     isProductorSearch(): boolean{
       return (state.podcastsPage.ProductorSearch as boolean);
     },
     organisationRight(): boolean {
-      if (
-        (this.authenticated && this.myOrganisationId === this.organisationId) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===this.authenticated && this.myOrganisationId === this.organisationId) ||
+        true===state.generalParameters.isAdmin
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
-      return undefined;
+      return this.organisationId??this.filterOrga;
     },
   },
 
@@ -114,8 +105,8 @@ export default defineComponent({
   },
   methods: {
     initComponent(): void{
-      this.iabId = this.$store.state.filter.iab? this.$store.state.filter.iab.id : undefined;
-      this.organisationId = this.productor ? this.productor : this.filterOrga;
+      this.iabId =this.$store.state.filter.iab?.id;
+      this.organisationId = this.productor?? this.filterOrga;
       if (this.organisation && this.organisationRight) {
         this.includeHidden = true;
       }

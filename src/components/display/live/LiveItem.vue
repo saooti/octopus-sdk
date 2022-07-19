@@ -164,31 +164,22 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     hours(): string {
-      if(!this.live){ return ''; }
-      return moment(this.live.pubDate).format('À HH[H]mm');
+      return !this.live?'': moment(this.live.pubDate).format('HH[H]mm');
     },
     date(): string {
-      if(!this.live){ return ''; }
-      return moment(this.live.pubDate).format('D/MM/YYYY');
+      return !this.live? '': moment(this.live.pubDate).format('D/MM/YYYY');
     },
     displayDate(): string {
-      if(!this.live){ return ''; }
-      return moment(this.live.pubDate).format('X');
+      return !this.live? '':moment(this.live.pubDate).format('X');
     },
     description(): string {
-      if (this.live && this.live.description) return this.live.description;
-      return '';
+      return this.live?.description??'';
     },
     myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     organisationRight(): boolean {
-      if (
-        this.isRoleLive && this.live && 
-        this.myOrganisationId === this.live.organisation.id
-      )
-        return true;
-      return false;
+      return true===this.isRoleLive && this.myOrganisationId === this.live?.organisation.id;
     },
     isRoleLive(): boolean {
       return (state.generalParameters.isRoleLive as boolean);
@@ -226,9 +217,7 @@ export default defineComponent({
       this.live = podcastUpdated;
     },
     getName(person: Participant): string {
-      const first = person.firstName || '';
-      const last = person.lastName || '';
-      return (first + ' ' + last).trim();
+      return (`${person.firstName??''} ${person.lastName??''}`).trim();
     },
     async fetchPodcastData(): Promise<void> {
       if (!this.fetchConference || !this.fetchConference.podcastId) return;

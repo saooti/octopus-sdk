@@ -51,10 +51,7 @@ export default defineComponent({
       return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
     },
     rubriquageFilter(): Array<Rubriquage>{
-      if(this.$store.state.filter.organisationId){
-        return this.$store.state.filter.rubriquageArray;
-      }
-      return [];
+      return this.$store.state.filter.organisationId ? this.$store.state.filter.rubriquageArray :[];
     },
     rubriqueFilter(): Array<RubriquageFilter>{
       return this.$store.state.filter.rubriqueFilter;

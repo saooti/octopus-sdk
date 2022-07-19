@@ -167,10 +167,7 @@ export default defineComponent({
       if('ERROR' === this.podcast?.processingStatus){
         return this.$t('Podcast in ERROR, please contact Saooti');
       }
-      if(this.podcastNotValid){
-        return this.$t('Podcast not validated');
-      }
-      return '';
+      return this.podcastNotValid ? this.$t('Podcast not validated') : '';
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -197,23 +194,17 @@ export default defineComponent({
       });
     },
     editRight(): boolean {
-      if ( this.podcast &&
-        (this.authenticated &&
-          this.myOrganisationId === this.podcast.organisation.id) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===this.authenticated &&
+        this.myOrganisationId === this.podcast?.organisation.id) ||true===state.generalParameters.isAdmin
     },
     isLiveReadyToRecord(): boolean {
       return (undefined!==this.podcast && undefined!==this.podcast.conferenceId && 0 !== this.podcast.conferenceId && 'READY_TO_RECORD' === this.podcast.processingStatus);
     },
     isLiveReady(): boolean {
       return (
-        undefined!==this.podcast &&
-        undefined!==this.podcast.conferenceId &&
-        0 !== this.podcast.conferenceId &&
-        'READY' === this.podcast.processingStatus
+        undefined!==this.podcast?.conferenceId &&
+        0 !== this.podcast?.conferenceId &&
+        'READY' === this.podcast?.processingStatus
       );
     },
     isNotRecorded(): boolean {
@@ -231,13 +222,7 @@ export default defineComponent({
       );
     },
     podcastNotValid(): boolean {
-      if (
-        this.podcast &&
-        this.podcast.availability &&
-        false === this.podcast.valid
-      )
-        return true;
-      return false;
+      return undefined!==this.podcast?.availability && false === this.podcast?.valid;
     },
   },
   methods: {

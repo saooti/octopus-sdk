@@ -77,13 +77,10 @@ export default defineComponent({
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}`;
     },
     sort(): string {
-      if (!this.query) return 'NAME';
-      return 'SCORE';
+      return !this.query ?'NAME': 'SCORE';
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
-      return undefined;
+      return this.organisationId ?? this.$store.state.filter.organisationId;
     },
   },
   watch: {

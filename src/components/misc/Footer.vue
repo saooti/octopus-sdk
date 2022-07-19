@@ -136,7 +136,7 @@ export default defineComponent({
       return state.footer.contactLink;
     },
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+      if(this.$store.state.filter?.rubriqueFilter?.length){
         return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
@@ -153,7 +153,7 @@ export default defineComponent({
         return { productor: this.$store.state.filter.organisationId};
       }
       return { productor: this.$store.state.filter.organisationId,
-                   iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
+                   iabId: this.$store.state.filter.iab?.id,
                    rubriquesId: this.rubriqueQueryParam}
     },
     showBlackBorder(hide: boolean): void {

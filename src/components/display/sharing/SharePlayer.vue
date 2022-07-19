@@ -140,8 +140,7 @@ export default defineComponent({
       return 'largeSuggestion' === this.iFrameModel;
     },
     titleStillAvailable(): string {
-      if (this.isPodcastNotVisible) return this.$t('Podcast still available').toString();
-      return this.$t('Podcasts still available').toString();
+      return this.isPodcastNotVisible ?this.$t('Podcast still available') : this.$t('Podcasts still available');
     },
     isLiveReadyToRecord(): boolean {
       if (this.podcast)
@@ -153,17 +152,10 @@ export default defineComponent({
       return false;
     },
     noAd(): boolean {
-      if (
-        (this.podcast &&
-          this.podcast.organisation.id !== this.organisationId &&
-          'NO' === this.podcast.monetisable) ||
-        (this.podcast &&
-          'UNDEFINED' === this.podcast.monetisable &&
-          'NO' === this.podcast.emission.monetisable)
-      ) {
-        return true;
-      }
-      return false;
+      return (this.podcast?.organisation.id !== this.organisationId &&
+          'NO' === this.podcast?.monetisable) ||
+        ('UNDEFINED' === this.podcast?.monetisable &&
+          'NO' === this.podcast?.emission.monetisable);
     },
     iFrameSrc(): string {
       const url = [''];
@@ -268,7 +260,7 @@ export default defineComponent({
     async initColor(): Promise<void> {
       if (!this.authenticated) return;
       let data;
-      if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
+      if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         data = this.$store.state.organisation.attributes;
       }else{
         data= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);

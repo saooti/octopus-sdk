@@ -84,18 +84,11 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     organisation(): string {
-      if(this.emission && this.emission.publisher && this.emission.publisher.organisation){
-        return this.emission.publisher.organisation.name;
-      }
-      return '';
+      return this.emission?.publisher?.organisation?.name ?? '';
     },
     editRight(): boolean {
-      if (
-        (this.authenticated && this.myOrganisationId === this.emission.orga.id) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true === this.authenticated && this.myOrganisationId === this.emission.orga.id) ||
+        true === state.generalParameters.isAdmin
     },
   },
 

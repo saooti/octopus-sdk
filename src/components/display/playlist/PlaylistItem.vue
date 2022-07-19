@@ -81,13 +81,10 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     organisation(): string {
-      if(this.playlist && this.playlist.publisher && this.playlist.publisher.organisation){
-        return '' + this.playlist.publisher.organisation.name;
-      }
-      return '';
+      return this.playlist?.publisher?.organisation?.name ??'';
     },
     description(): string {
-      return this.playlist.description || '';
+      return this.playlist.description ?? '';
     },
     name(): string {
       return this.playlist.title;
@@ -96,13 +93,9 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {
-      if (
-        (state.generalParameters.isPlaylist &&
-          this.organisationId === this.playlist.organisation?.id) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===state.generalParameters.isPlaylist &&
+        this.organisationId === this.playlist.organisation?.id) ||
+        true == state.generalParameters.isAdmin;
     },
     activePlaylist(): boolean {
       return 0 !== Object.keys(this.playlist.podcasts).length;
@@ -111,10 +104,7 @@ export default defineComponent({
   mounted() {
     const playlistDesc = (this.$refs.descriptionPlaylist as HTMLElement);
     const playlistDescContainer = (this.$refs.descriptionPlaylistContainer as HTMLElement);
-    if (
-      null !== playlistDesc && null !== playlistDescContainer &&
-      playlistDesc.clientHeight > playlistDescContainer.clientHeight
-    ) {
+    if (playlistDesc?.clientHeight > playlistDescContainer?.clientHeight) {
       playlistDescContainer.classList.add('after-emission-description');
     }
   },

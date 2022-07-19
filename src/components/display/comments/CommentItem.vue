@@ -192,16 +192,10 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {
-      if (
-        (state.generalParameters.isCommments &&
-          ((this.podcast &&
-            this.myOrganisationId === this.podcast.organisation.id) ||
-            this.myOrganisationId === this.organisation)) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      }
-      return false;
+      return (true === state.generalParameters.isCommments &&
+        ((this.myOrganisationId === this.podcast?.organisation.id) ||
+        this.myOrganisationId === this.organisation)) ||
+        true === state.generalParameters.isAdmin;
     },
     knownIdentity: {
       get(): string|null {
@@ -213,8 +207,7 @@ export default defineComponent({
     },
     recordingInLive(): boolean {
       return (
-        undefined!==this.podcast &&
-        undefined!==this.podcast.conferenceId &&
+        undefined!==this.podcast?.conferenceId &&
         0 !== this.podcast.conferenceId &&
         'READY' === this.podcast.processingStatus
       );

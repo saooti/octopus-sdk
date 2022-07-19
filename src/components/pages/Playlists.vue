@@ -61,13 +61,12 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     editRight(): boolean {
-      if (state.generalParameters.isPlaylist) return true;
-      return false;
+      return state.generalParameters.isPlaylist ? true : false;
     },
   },
 
   created() {
-    this.organisationId = this.productor ? this.productor : this.filterOrga;
+    this.organisationId = this.productor ??this.filterOrga;
   },
 })
 </script>

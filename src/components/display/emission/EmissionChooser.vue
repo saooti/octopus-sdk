@@ -159,27 +159,13 @@ export default defineComponent({
     },
     async onSearchEmission(query?: string): Promise<void> {
       this.isLoading = true;
-      let standardParam: FetchParam = {
+      const response = await octopusApi.fetchDataWithParams<{count: number;result:Array<Emission>;sort: string;}>(0, 'emission/search',{
         query: query,
         first: 0,
         size: ELEMENTS_COUNT,
-      };
-      if (undefined !== this.distributedBy) {
-        standardParam = { ...standardParam, distributedBy: this.distributedBy };
-      } else if (undefined !== this.organisationDistributedBy) {
-        standardParam = {
-          ...standardParam,
-          distributedBy: this.organisationDistributedBy,
-          organisationId: this.organisationId,
-        };
-      } else {
-        standardParam = {
-          ...standardParam,
-          organisationId: this.organisationId,
-        };
-      }
-
-      const response = await octopusApi.fetchDataWithParams<{count: number;result:Array<Emission>;sort: string;}>(0, 'emission/search',standardParam, true);
+        distributedBy: this.distributedBy??this.organisationDistributedBy,
+        organisationId:this.distributedBy? undefined: this.organisationId
+      }, true);
       if (this.defaultanswer) {
         const emissionDefault = getDefaultEmission(this.defaultanswer);
         if(emissionDefault){

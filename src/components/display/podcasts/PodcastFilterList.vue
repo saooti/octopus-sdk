@@ -81,7 +81,7 @@ export default defineComponent({
   },
   methods: {
     onCategorySelected(category: Category|undefined): void {
-      this.iabId = category && category.id ? category.id : undefined;
+      this.iabId = category?.id ? category.id : undefined;
     },
     fetch(podcasts: Array<Podcast>): void {
       this.$emit('fetch', podcasts);

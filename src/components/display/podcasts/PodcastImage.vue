@@ -112,22 +112,13 @@ export default defineComponent({
     ...mapState({
       playingPodcast(state: StoreState) {
         return (
-          (state.player.podcast &&
-            state.player.podcast.podcastId === this.podcast.podcastId) ||
-          (this.fetchConference &&
-            'null' !== this.fetchConference &&
-            state.player.live &&
-            state.player.live.conferenceId ===
-              this.fetchConference.conferenceId)
+          (state.player.podcast?.podcastId === this.podcast.podcastId) ||
+          ('null' !== this.fetchConference && state.player.live?.conferenceId ===this.fetchConference?.conferenceId)
         );
       },
     }),
     mainRubrique(): boolean{
-      if(this.podcast && this.podcast.rubriqueIds &&state.podcastPage.mainRubrique && this.podcast.rubriqueIds.includes(state.podcastPage.mainRubrique)){
-        return true;
-      }else{
-        return false;
-      }
+      return undefined!==state.podcastPage.mainRubrique && 0!==state.podcastPage.mainRubrique && true==this.podcast?.rubriqueIds?.includes(state.podcastPage.mainRubrique);
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -181,24 +172,24 @@ export default defineComponent({
     },
     textVisible(): string {
       if (this.isLiveToBeRecorded)
-        return this.$t('Podcast linked to waiting live').toString();
+        return this.$t('Podcast linked to waiting live');
       if ('READY' === this.podcast.processingStatus || this.fetchConference) {
-        if (false == this.podcast.valid) return this.$t('Podcast to validate').toString();
+        if (false == this.podcast.valid) return this.$t('Podcast to validate');
         if (
           !this.podcast.availability.visibility &&
           this.podcast.availability.date
         )
-          return this.$t('Podcast publish in future').toString();
-        return this.$t('Podcast no visible').toString();
+          return this.$t('Podcast publish in future');
+        return this.$t('Podcast no visible');
       }
       if (
         'PLANNED' === this.podcast.processingStatus ||
         'PROCESSING' === this.podcast.processingStatus
       )
-        return this.$t('Podcast in process').toString();
+        return this.$t('Podcast in process');
       if ('CANCELED' === this.podcast.processingStatus)
-        return this.$t('Podcast in cancelled status').toString();
-      return this.$t('Podcast in error').toString();
+        return this.$t('Podcast in cancelled status');
+      return this.$t('Podcast in error');
     },
     statusText(): string {
       if (!this.fetchConference) return '';
@@ -253,11 +244,7 @@ export default defineComponent({
         return;
       }
       if(this.playingPodcast){
-        if("PLAYING"===this.$store.state.player.status){
-          this.$store.commit('playerPause', true);
-        }else{
-          this.$store.commit('playerPause', false);
-        }
+        this.$store.commit('playerPause', "PLAYING"===this.$store.state.player.status);
         return;
       }
       if (!this.recordingLive) {
@@ -267,7 +254,7 @@ export default defineComponent({
           title: this.podcast.title,
           audioUrl: this.podcast.audioUrl,
           duration: this.podcast.duration,
-          conferenceId: this.fetchConference ? this.fetchConference.conferenceId : undefined,
+          conferenceId: this.fetchConference?.conferenceId,
           livePodcastId: this.podcast.podcastId,
           organisation: this.podcast.organisation,
         });

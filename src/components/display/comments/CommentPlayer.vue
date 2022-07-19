@@ -54,10 +54,7 @@ export default defineComponent({
   methods: {
     percentPosition(time: number): number {
       let realDuration = this.totalTime;
-      if (
-        this.$store.state.player.podcast &&
-        this.$store.state.player.podcast.duration
-      ) {
+      if (this.$store.state.player.podcast?.duration) {
         realDuration = Math.round(
           this.$store.state.player.podcast.duration / 1000
         );

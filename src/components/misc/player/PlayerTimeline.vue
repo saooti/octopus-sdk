@@ -25,11 +25,6 @@ export default defineComponent({
   },
   emits:['update:showTimeline'],
 
-  data() {
-    return {
-    };
-  },
-
   computed: {
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);

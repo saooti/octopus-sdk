@@ -95,9 +95,7 @@ export default defineComponent({
       return this.$store.state.filter.organisationId;
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
-      return undefined;
+      return this.organisationId ?? this.filterOrga;
     },
     watchVariable():string{
       return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;

@@ -68,7 +68,7 @@ export default defineComponent({
     },
     customPlayersDisplay(): Array<CustomPlayer>{
       return this.customPlayers.filter((player: CustomPlayer)=>{
-        return (('EPISODE' === player.typePlayer ||'SUGGESTION' === player.typePlayer) && this.podcast && this.podcast.podcastId) ||
+        return (('EPISODE' === player.typePlayer ||'SUGGESTION' === player.typePlayer) &&this.podcast?.podcastId) ||
                           ('EMISSION' === player.typePlayer && this.emission  && !this.podcast)|| ('PLAYLIST' === player.typePlayer && this.playlist );
       });
     },

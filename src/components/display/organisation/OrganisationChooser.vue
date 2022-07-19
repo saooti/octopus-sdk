@@ -161,13 +161,9 @@ export default defineComponent({
     myOrganisation(): Organisation|undefined {
       if (!this.authenticated) return undefined;
       return {
-        id: this.myOrganisationId ? this.myOrganisationId : "",
+        id: this.myOrganisationId??"",
         imageUrl: this.myImage,
-        name:
-          this.$t('Edit my organisation') +
-          ' (' +
-          state.organisation.name +
-          ')',
+        name: `${this.$t('Edit my organisation')} (${state.organisation.name})`
       };
     },
   },

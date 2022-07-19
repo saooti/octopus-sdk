@@ -161,15 +161,9 @@ export default defineComponent({
     },
     emissionMainCategory(): number {
       if(!this.podcast){return 0;}
-      if (
-        this.podcast.emission.annotations &&
-        this.podcast.emission.annotations.mainIabId
-      ) {
+      if (this.podcast.emission.annotations?.mainIabId) {
         return parseInt((this.podcast.emission.annotations.mainIabId as string), 10);
-      } else if (
-        this.podcast.emission.iabIds &&
-        this.podcast.emission.iabIds.length
-      ) {
+      } else if (this.podcast.emission.iabIds?.length) {
         return this.podcast.emission.iabIds[0];
       }
       return 0;
@@ -178,8 +172,7 @@ export default defineComponent({
       if ('undefined' === typeof this.podcast) return [];
       return this.$store.state.categories
         .filter((item: Category) => {
-          return ( this.podcast &&
-            this.podcast.emission.iabIds &&
+          return ( this.podcast?.emission.iabIds &&
             -1 !== this.podcast.emission.iabIds.indexOf(item.id)
           );
         })
@@ -190,34 +183,19 @@ export default defineComponent({
         });
     },
     editRight(): boolean {
-      if ( this.podcast &&
-        (this.authenticated &&
-          this.myOrganisationId === this.podcast.organisation.id) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      }
-      return false;
+      return (true ===this.authenticated &&this.myOrganisationId === this.podcast?.organisation.id) ||true===state.generalParameters.isAdmin;
     },
     countLink(): number {
+      const platformShare = ['amazon','googlePodcasts','applePodcast', 'deezer', 'spotify', 'tunein',
+       'radioline', 'podcastAddict', 'playerFm', 'stitcher', 'pocketCasts'];
       let count = 0;
-      if (this.podcast && this.podcast.emission && this.podcast.emission.annotations) {
-        if (undefined !== this.podcast.emission.annotations.amazon) count++;
-        if (undefined !== this.podcast.emission.annotations.googlePodcasts) count++;
-        if (undefined !== this.podcast.emission.annotations.applePodcast)count++;
-        if (undefined !== this.podcast.emission.annotations.deezer) count++;
-        if (undefined !== this.podcast.emission.annotations.spotify) count++;
-        if (undefined !== this.podcast.emission.annotations.tunein) count++;
-        if (undefined !== this.podcast.emission.annotations.radioline) count++;
-        if (undefined !== this.podcast.emission.annotations.podcastAddict) count++;
-        if (undefined !== this.podcast.emission.annotations.playerFm) count++;
-        if (undefined !== this.podcast.emission.annotations.stitcher) count++;
-        if (undefined !== this.podcast.emission.annotations.pocketCasts) count++;
+      for (let i = 0, len = platformShare.length; i < len; i++) {
+        if (undefined !== this.podcast?.emission?.annotations?.[platformShare[i]]) count++;
       }
       return count;
     },
     isLiveReadyToRecord(): boolean {
-      return (undefined!==this.podcast && undefined!==this.podcast.conferenceId && 0 !== this.podcast.conferenceId && 'READY_TO_RECORD' === this.podcast.processingStatus);
+      return (undefined!==this.podcast?.conferenceId && 0 !== this.podcast?.conferenceId && 'READY_TO_RECORD' === this.podcast?.processingStatus);
     },
     isCounter(): boolean {
       return (
@@ -242,12 +220,10 @@ export default defineComponent({
       );
     },
     titlePage(): string {
-      if (this.isLiveReadyToRecord) return this.$t('Live episode').toString();
-      return this.$t('Episode').toString();
+      return this.isLiveReadyToRecord ?this.$t('Live episode'): this.$t('Episode');
     },
     timeRemaining(): string {
-      if(!this.podcast){return "";}
-      return moment(this.podcast.pubDate).diff(moment(), 'seconds').toString();
+      return !this.podcast ? "":moment(this.podcast.pubDate).diff(moment(), 'seconds').toString();
     },
   },
   watch: {
@@ -297,26 +273,14 @@ export default defineComponent({
     },
     handleAnnotations(){
       if(!this.podcast){return;}
-      if (
-        this.podcast.emission.annotations &&
-        this.podcast.emission.annotations.exclusive
-      ) {
-        this.exclusive =
-          'true' === this.podcast.emission.annotations.exclusive
-            ? true
-            : false;
+      if (this.podcast.emission.annotations?.exclusive) {
+        this.exclusive ='true' === this.podcast.emission.annotations.exclusive;
         this.exclusive =
           this.exclusive &&
           this.myOrganisationId !== this.podcast.organisation.id;
       }
-      if (
-        this.podcast.emission.annotations &&
-        this.podcast.emission.annotations.notExclusive
-      ) {
-        this.notExclusive =
-          'true' === this.podcast.emission.annotations.notExclusive
-            ? true
-            : false;
+      if (this.podcast.emission.annotations?.notExclusive) {
+        this.notExclusive ='true' === this.podcast.emission.annotations.notExclusive;
       }
     },
     async getPodcastDetails(): Promise<void> {

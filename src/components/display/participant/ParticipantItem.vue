@@ -75,20 +75,15 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     name(): string {
-      return (`${this.participant.firstName||''} ${this.participant.lastName||''}`).trim();
+      return (`${this.participant.firstName??''} ${this.participant.lastName??''}`).trim();
     },
     editRight(): boolean {
       if(!this.participant || !this.participant.orga){
         return false;
       }
-      if (
-        (this.authenticated &&
-          this.myOrganisationId === this.participant.orga.id) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      }
-      return false;
+      return (true == this.authenticated &&
+        this.myOrganisationId === this.participant.orga.id) ||
+        true === state.generalParameters.isAdmin
     },
   },
 

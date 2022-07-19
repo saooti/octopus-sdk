@@ -192,21 +192,14 @@ export default defineComponent({
       }
     },
     organisationRight(): boolean {
-      if (
-        (this.authenticated && this.myOrganisationId === this.organisationId) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===this.authenticated && this.myOrganisationId === this.organisationId) ||
+        true === state.generalParameters.isAdmin;
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
-      return undefined;
+      return this.organisationId??this.filterOrga;
     },
     textNotVisible(): string {
-      if (this.isEmission) return this.$t('Consider podcasts no visible');
-      return this.$t('See podcasts no visible');
+      return this.isEmission? this.$t('Consider podcasts no visible') : this.$t('See podcasts no visible');
     },
     isCheckboxNotValidate(): boolean {
       return (
@@ -219,8 +212,7 @@ export default defineComponent({
       );
     },
     textNotValidate(): string {
-      if (this.sdkParameters.isProduction) return this.$t('Display all podcasts to validate').toString();
-      return this.$t('Display my podcasts to validate').toString();
+      return this.sdkParameters.isProduction? this.$t('Display all podcasts to validate') : this.$t('Display my podcasts to validate');
     },
   },
   watch: {

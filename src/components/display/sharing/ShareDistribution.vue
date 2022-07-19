@@ -17,103 +17,15 @@
       :emission="emission"
     />
     <div class="sharing-distribution-container">
-      <router-link
-        :to="'/main/priv/distribution/amazon/' + emissionId"
+      <router-link 
+        v-for="platform in platformShare" 
+        :key="platform.title"
+        :to="platform.url"
         class="text-dark"
       >
-        <span class="saooti-amazon">
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-        </span> Amazon Music | Podcasters
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/apple/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-apple" />Apple Podcast / iTunes
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/deezer/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-deezer" />Deezer
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/googlePodcasts/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-google-podcasts">
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-          <div class="path4" />
-          <div class="path5" />
-          <div class="path6" />
-          <div class="path7" />
-        </span> Google Podcasts
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/PlayerFM/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-playerfm" />PlayerFM
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/PocketCasts/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-pocket-casts" />Pocket Casts
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/PodcastAddict/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-podcast-addict" />Podcast Addict
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/radioline/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-radioline" />Radioline
-      </router-link>
-      <router-link
-        :to="'/main/priv/distribution/spotify/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-spotify" />Spotify
-      </router-link>
-
-      <router-link
-        :to="'/main/priv/distribution/Stitcher/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-stitcher-logo">
-          <div class="path1" />
-          <div class="path2" />
-          <div class="path3" />
-          <div class="path4" />
-          <div class="path5" />
-          <div class="path6" />
-          <div class="path7" />
-          <div class="path8" />
-          <div class="path9" />
-          <div class="path10" />
-          <div class="path11" />
-          <div class="path12" />
-          <div class="path13" />
-          <div class="path14" />
-          <div class="path15" />
-          <div class="path16" />
-          <div class="path17" />
-          <div class="path18" /> </span>Stitcher
-      </router-link>
-
-      <router-link
-        :to="'/main/priv/distribution/tuneIn/' + emissionId"
-        class="text-dark"
-      >
-        <span class="saooti-tunin" />TuneIn
+        <span :class="platform.icon">
+          <div v-for="index in platform.path" :key="index" :class="'path'+index" />
+        </span>{{platform.title}}
       </router-link>
     </div>
     <Snackbar
@@ -149,6 +61,22 @@ export default defineComponent({
       rss: '' as string,
     };
   },
+  computed:{
+    platformShare(){
+      return [
+      {url:this.getUrl('amazon'), icon:'saooti-amazon', title:'Amazon Music | Podcasters', path:3},
+      {url:this.getUrl('apple'), icon:'saooti-apple', title:'Apple Podcast / iTunes', path:0},
+      {url:this.getUrl('deezer'), icon:'saooti-deezer', title:'Deezer', path:0},
+      {url:this.getUrl('googlePodcasts'), icon:'saooti-google-podcasts', title:'Google Podcasts', path:7},
+      {url:this.getUrl('PlayerFM'), icon:'saooti-playerfm', title:'PlayerFM', path:0},
+      {url:this.getUrl('PocketCasts'), icon:'saooti-pocket-casts', title:'Pocket Casts', path:0},
+      {url:this.getUrl('PodcastAddict'), icon:'saooti-podcast-addict', title:'Podcast Addict', path:0},
+      {url:this.getUrl('radioline'), icon:'saooti-radioline', title:'Radioline', path:0},
+      {url:this.getUrl('spotify'), icon:'saooti-spotify', title:'Spotify', path:0},
+      {url:this.getUrl('Stitcher'), icon:'saooti-stitcher-logo', title:'Stitcher', path:18},
+      {url:this.getUrl('tuneIn'), icon:'saooti-tunin', title:'TuneIn', path:0}];
+    }
+  },
 
   mounted() {
     this.getEmissionDetails();
@@ -156,6 +84,9 @@ export default defineComponent({
   },
 
   methods: {
+    getUrl(platform: string): string{
+      return `/main/priv/distribution/${platform}/${this.emissionId}`;
+    },
     async getEmissionDetails(): Promise<void> {
       this.emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
     },

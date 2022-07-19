@@ -75,7 +75,7 @@ export default defineComponent({
   },
   methods: {
     getName(person: Participant): string {
-      return (`${person.firstName||''} ${person.lastName||''}`).trim();
+      return (`${person.firstName??''} ${person.lastName??''}`).trim();
     },
   },
 })

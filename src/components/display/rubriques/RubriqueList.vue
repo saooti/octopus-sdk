@@ -121,8 +121,8 @@ export default defineComponent({
     addFilter(rubrique: Rubrique): void{
       if(!this.rubriquage){ return ;}
       const filterToAdd = {
-        rubriquageId: this.rubriquage.rubriquageId?this.rubriquage.rubriquageId: 0, 
-        rubriqueId: rubrique.rubriqueId? rubrique.rubriqueId:0, 
+        rubriquageId: this.rubriquage.rubriquageId??0, 
+        rubriqueId: rubrique.rubriqueId??0, 
         nameRubriquage: this.rubriquage.title,
         nameRubrique: rubrique.name
       };

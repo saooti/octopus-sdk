@@ -96,14 +96,10 @@ export default defineComponent({
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
-      return undefined;
+      return this.organisationId ?? this.$store.state.filter.organisationId;
     },
     sort(): string {
-      if (this.popularSort) return "POPULARITY";
-      if (this.sortCriteria) return this.sortCriteria;
-      return 'DATE';
+      return this.popularSort? "POPULARITY" : this.sortCriteria??'DATE';
     },
     sortText(): string {
       switch (this.sortCriteria) {
@@ -155,14 +151,10 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
-        includeHidden: this.includeHidden
+        includeHidden: this.includeHidden,
+        validity: undefined !== this.notValid?!this.notValid: undefined,
+        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.$store.state.profile.userId:undefined
       };
-      if (undefined !== this.notValid) {
-        param.validity = !this.notValid;
-      }
-      if (this.notValid && !(state.generalParameters.isProduction as boolean)) {
-        param.publisherId = this.$store.state.profile.userId;
-      }
       try {
         const data =await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',param, true);
         this.afterFetching(reset, data);

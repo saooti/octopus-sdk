@@ -43,14 +43,11 @@ export default defineComponent({
       if(!this.hideBar){
         return this.$t('Podcast search');
       }
-      if(!this.noResult){
-        return this.$t('Search results', { query: this.rawQuery })
-      }
-      return this.$t('Search - no results', { query: this.rawQuery });
+      const locale = !this.noResult ? 'Search results' : 'Search - no results';
+      return this.$t(locale, { query: this.rawQuery });
     },
     query(): string {
-      if (this.rawQuery && this.rawQuery.length >= 3) return this.rawQuery;
-      return '';
+      return this.rawQuery && this.rawQuery.length >= 3 ? this.rawQuery : '';
     },
     hideBar(): boolean {
       return (state.searchPage.hideBar as boolean);

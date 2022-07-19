@@ -170,7 +170,7 @@ export default defineComponent({
       );
     },
     articleHtml(): string{
-      if (!this.podcast || this.podcast.article ||0 !== this.podcast.article?.length){return ''}
+      if (!this.podcast?.article ||0 === this.podcast.article?.length){return ''}
       return (`<a href="${this.podcast.article}" title="${this.$t('See associated article')}">
         <img width="44" height="44" style="display: inline-block;vertical-align: middle; margin-right:3px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA6UlEQVRIie3WPUpEMRTF8R9+4QpEBGttrcdeV+E2pp3KdYi7GBRttNVCZgOCjSuQ+UCLJzLIe7l3HpFpPJAuOf+T5F4SYh3jFZ/JMVlevJUwv8c+HvEQzD/FIBEaHOFtKdkosWb0PfdHGwXzOxxk03SpDVDNvA1Q1bwNcFMwn/cB/K6iQ+3VMsVVDQDcylVMSl1VBOea5FFjTXHWZVJqtCdcYjcI+YHnPoB3FY6qdERVVNrBHi6wGXgscK3Z8UqAE80dbAeAGV4wXhUwxk5gHurP72CtgP9Gw5oabYBhT7/wwZ/If09S35Yv52lVAXwyqt0AAAAASUVORK5CYII=">
       </a>
@@ -289,9 +289,7 @@ export default defineComponent({
       this.$emit('close');
     },
     getName(person: Participant): string {
-      const first = person.firstName || '';
-      const last = person.lastName || '';
-      return (first + ' ' + last).trim();
+      return (`${person.firstName??''} ${person.lastName??''}`).trim();
     },
     selectAll(element: Event): void {
       const target = element.target;
@@ -305,7 +303,7 @@ export default defineComponent({
     },
     async initData(): Promise<void> {
       let attributes;
-      if(this.$store.state.organisation && this.$store.state.organisation.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
+      if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         attributes = this.$store.state.organisation.attributes;
       }else{
         attributes = await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+state.generalParameters.organisationId);

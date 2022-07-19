@@ -142,42 +142,27 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     rssUrl(): string {
-      return state.generalParameters.ApiUri + 'rss/emission/' + this.emissionId;
+      return `${state.generalParameters.ApiUri}rss/emission/${this.emissionId}`;
     },
     name(): string {
-      return this.emission ? this.emission.name : '';
+      return this.emission?.name??'';
     },
     imageUrl(): string {
-      return this.emission
-        ? this.emission.imageUrl + '?dummy=' + this.dummyParam
-        : '';
+      return this.emission? `${this.emission.imageUrl}?dummy=${this.dummyParam}`:'';
     },
     description(): string {
-      return this.emission ? this.emission.description : '';
+      return this.emission?.description??'';
     },
     editRight(): boolean {
-      if (
-        (this.authenticated && this.emission && this.myOrganisationId === this.emission.orga.id) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      }
-      return false;
+      return (true===this.authenticated && this.myOrganisationId === this.emission?.orga.id) ||
+        true===state.generalParameters.isAdmin
     },
     countLink(): number {
+      const platformShare = ['amazon','googlePodcasts','applePodcast', 'deezer', 'spotify', 'tunein',
+       'radioline', 'podcastAddict', 'playerFm', 'stitcher', 'pocketCasts'];
       let count = 0;
-      if (this.emission && this.emission.annotations) {
-        if (undefined !== this.emission.annotations.amazon) count++;
-        if (undefined !== this.emission.annotations.applePodcast) count++;
-        if (undefined !== this.emission.annotations.deezer) count++;
-        if (undefined !== this.emission.annotations.googlePodcasts) count++;
-        if (undefined !== this.emission.annotations.spotify) count++;
-        if (undefined !== this.emission.annotations.tunein) count++;
-        if (undefined !== this.emission.annotations.radioline) count++;
-        if (undefined !== this.emission.annotations.podcastAddict) count++;
-        if (undefined !== this.emission.annotations.playerFm) count++;
-        if (undefined !== this.emission.annotations.stitcher) count++;
-        if (undefined !== this.emission.annotations.pocketCasts) count++;
+      for (let i = 0, len = platformShare.length; i < len; i++) {
+        if (undefined !== this.emission?.annotations?.[platformShare[i]]) count++;
       }
       return count;
     },
@@ -200,22 +185,18 @@ export default defineComponent({
       this.rssEmission = this.emission.annotations.RSS? true: false;
       this.ftpEmission = this.emission.annotations.FTP? true: false;
       if (this.emission.annotations.exclusive) {
-        this.exclusive =
-          'true' === this.emission.annotations.exclusive ? true : false;
-        this.exclusive =
-          this.exclusive && this.myOrganisationId !== this.emission.orga.id;
+        this.exclusive ='true' === this.emission.annotations.exclusive;
+        this.exclusive =this.exclusive && this.myOrganisationId !== this.emission.orga.id;
       }
       if (this.emission.annotations.notExclusive) {
-        this.notExclusive =
-          'true' === this.emission.annotations.notExclusive ? true : false;
+        this.notExclusive ='true' === this.emission.annotations.notExclusive;
       }
     },
     async getEmissionDetails(): Promise<void> {
       this.loaded = false;
       this.error = false;
       try {
-        const data: Emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
-        this.emission = data;
+        this.emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
         if("PUBLIC"!==this.emission.orga.privacy && this.filterOrga!==this.emission.orga.id){
           this.initError();
           return;

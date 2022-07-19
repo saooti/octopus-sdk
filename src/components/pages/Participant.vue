@@ -96,10 +96,7 @@ export default defineComponent({
   },
   computed: {
     titleDisplay(): string{
-      if(undefined === state.intervenantPage.titlePage){
-        return this.$t('Animator');
-      }
-      return state.intervenantPage.titlePage;
+      return state.intervenantPage.titlePage??this.$t('Animator');
     },
     pageParameters(){
       return {
@@ -109,30 +106,18 @@ export default defineComponent({
       };
     },
     rssUrl(): string {
-      return state.generalParameters.ApiUri + 'rss/participant/' + this.participantId;
+      return `${state.generalParameters.ApiUri}rss/participant/${this.participantId}`;
     },
     description(): string {
-      if(!this.participant){return '';}
-      return this.participant.description || '';
+      return this.participant?.description ?? '';
     },
     name(): string {
-      if(!this.participant){return '';}
-      return (
-        (this.participant.firstName || '') +
-        ' ' +
-        (this.participant.lastName || '')
-      ).trim();
+      return (`${this.participant?.firstName??''} ${this.participant?.lastName??''}`).trim();
     },
     editRight(): boolean {
-      if(!this.participant || !this.participant.orga ){return false;}
-      if (
-        (this.authenticated &&
-          this.myOrganisationId === this.participant.orga.id) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      }
-      return false;
+      return (true===this.authenticated &&
+          this.myOrganisationId === this.participant?.orga?.id) ||
+        true===state.generalParameters.isAdmin
     },
   },
   watch: {
@@ -158,7 +143,7 @@ export default defineComponent({
       this.loaded = false;
       try {
         const data = await octopusApi.fetchData<Participant>(0, 'participant/'+this.participantId);
-        if(data && data.orga && "PUBLIC"!==data.orga.privacy && this.filterOrga!==data.orga.id){
+        if("PUBLIC"!==data?.orga?.privacy && this.filterOrga!==data?.orga?.id){
           this.initError();
           return;
         }

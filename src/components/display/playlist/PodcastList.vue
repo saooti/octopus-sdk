@@ -94,13 +94,9 @@ export default defineComponent({
       return this.podcastsQuery.slice(this.first, Math.min(this.first + this.size,this.podcasts.length));
 		},
     editRight(): boolean {
-      if (
-        (this.authenticated &&
-          this.myOrganisationId === this.playlist.organisation?.id) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===this.authenticated &&
+        this.myOrganisationId === this.playlist.organisation?.id) ||
+        true ===state.generalParameters.isAdmin
     },
   },
   watch: {

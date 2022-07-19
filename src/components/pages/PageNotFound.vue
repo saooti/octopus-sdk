@@ -11,7 +11,7 @@
         :to="{
           name: 'home',
           query: { productor: $store.state.filter.organisationId,
-                   iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                   iabId:$store.state.filter.iab?.id,
                    rubriquesId: rubriqueQueryParam},
         }"
       >
@@ -28,7 +28,7 @@ export default defineComponent({
   name: 'PageNotFound',
   computed:{
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+      if(this.$store.state.filter?.rubriqueFilter?.length){
         return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;

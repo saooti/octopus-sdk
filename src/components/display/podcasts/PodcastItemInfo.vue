@@ -91,13 +91,8 @@ export default defineComponent({
       return moment(this.pubDate).format('D MMMM YYYY, HH[h]mm');
     },
     editRight(): boolean {
-      if (
-        (this.authenticated &&
-          this.myOrganisationId === this.podcastOrganisationId) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===this.authenticated && this.myOrganisationId === this.podcastOrganisationId) ||
+        true===state.generalParameters.isAdmin
     },
     durationString(): string {
       if (this.duration <= 1) return '';

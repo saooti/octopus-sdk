@@ -98,10 +98,7 @@ export default defineComponent({
   },
   computed: {
     title(): string{
-      if(this.playlist){
-        return this.playlist.title;
-      }
-      return "";
+      return this.playlist?.title??"";
     },
     podcasts(): Array<Podcast> {
       return this.allPodcasts.slice(this.index, this.index + this.size);
@@ -159,11 +156,7 @@ export default defineComponent({
           );
         });
       }
-      if (this.allPodcasts.length <= 3) {
-        this.alignLeft = true;
-      } else {
-        this.alignLeft = false;
-      }
+      this.alignLeft = this.allPodcasts.length <= 3;
       this.loading = false;
     },
     displayPrevious(): void {

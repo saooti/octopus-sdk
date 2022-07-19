@@ -247,12 +247,7 @@ export default defineComponent({
       }
     },
     mainRubriquage(emission: Emission): string {
-      if (
-        emission.rubriqueIds &&state.emissionsPage.mainRubrique &&
-        emission.rubriqueIds.includes(state.emissionsPage.mainRubrique)
-      )
-        return 'partenaireRubrique';
-      return '';
+      return state.emissionsPage.mainRubrique && emission.rubriqueIds?.includes(state.emissionsPage.mainRubrique) ? 'partenaireRubrique' : '';
     },
   },
 })

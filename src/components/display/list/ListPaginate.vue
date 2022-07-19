@@ -83,12 +83,7 @@ export default defineComponent({
       return 960 >= this.windowWidth;
     },
     rangeSize(){
-      if(this.windowWidth > 1600){
-        return 3;
-      }else if(this.windowWidth > 1530){
-        return 2;
-      }
-      return 1;
+      return this.windowWidth > 1600 ? 3 : this.windowWidth > 1530 ? 2 : 1;
     },
   },
   watch:{

@@ -81,9 +81,7 @@ export default defineComponent({
   },
   computed: {
     errorText():string {
-      if(this.isCaptchaTest) return this.$t('Recaptcha not active');
-      if(this.sendError) return this.$t('Recaptcha error');
-      return '';
+      return this.isCaptchaTest ? this.$t('Recaptcha not active') : this.sendError? this.$t('Recaptcha error') : '';
     },
     validName(): boolean{
       return this.countName <= this.maxName;

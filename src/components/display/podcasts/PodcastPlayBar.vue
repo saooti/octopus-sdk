@@ -48,14 +48,13 @@ export default defineComponent({
       return (state.emissionsPage.progressBar as boolean);
     },
     percentProgress(): number{
-      if(!this.$store.state.player.podcast || this.podcastId !== this.$store.state.player.podcast.podcastId){
+      if(this.podcastId !== this.$store.state.player.podcast?.podcastId){
         return 0;
       }
-      if(!this.$store.state.player.elapsed){return 0;}
-      return this.$store.state.player.elapsed * 100;
+      return !this.$store.state.player.elapsed ? 0 : this.$store.state.player.elapsed * 100;
     },
     playedTime(): string{
-      if(this.$store.state.player.podcast && this.podcastId === this.$store.state.player.podcast.podcastId){
+      if(this.podcastId === this.$store.state.player.podcast?.podcastId){
         if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {
           return DurationHelper.formatDuration(
             Math.round(this.$store.state.player.elapsed * this.$store.state.player.total)

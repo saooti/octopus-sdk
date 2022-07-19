@@ -110,23 +110,14 @@ export default defineComponent({
 
   computed: {
     titleDisplay(): string{
-      if(undefined === state.podcastsPage.titlePage){
-        return this.$t('All podcasts');
-      }
-      return state.podcastsPage.titlePage;
+      return state.podcastsPage.titlePage ?? this.$t('All podcasts');
     },
     organisationRight(): boolean {
-      if (
-        (this.authenticated && this.myOrganisationId === this.organisationId) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===this.authenticated && this.myOrganisationId === this.organisationId) ||
+        true===state.generalParameters.isAdmin;
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
-      return undefined;
+      return this.organisationId ?? this.filterOrga;
     },
     pageParameters(){
       return {
@@ -142,10 +133,10 @@ export default defineComponent({
   
   methods: {
     initPodcastsPage(){
-      this.searchPattern = this.searchInit ? this.searchInit : '';
-      this.organisationId = this.productor ? this.productor : this.filterOrga;
+      this.searchPattern = this.searchInit ?? '';
+      this.organisationId = this.productor ?? this.filterOrga;
       this.includeHidden = this.organisation && this.organisationRight ? true : false;
-      this.iabId = this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined;
+      this.iabId =this.$store.state.filter.iab?.id;
       if(this.$store.state.filter.rubriqueFilter.length){
         this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
       }

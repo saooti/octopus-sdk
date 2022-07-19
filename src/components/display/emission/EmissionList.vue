@@ -126,19 +126,17 @@ export default defineComponent({
     sortText(): string {
       switch (this.sort) {
         case 'SCORE':
-          return " "+this.$t('sort by score').toString();
+          return " "+this.$t('sort by score');
         case 'LAST_PODCAST_DESC':
-          return " "+this.$t('sort by date').toString();
+          return " "+this.$t('sort by date');
         case 'NAME':
-          return " "+this.$t('sort by alphabetical').toString();
+          return " "+this.$t('sort by alphabetical');
         default:
-          return " "+this.$t('sort by date').toString();
+          return " "+this.$t('sort by date');
       }
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
-      return undefined;
+      return this.organisationId ?? this.$store.state.filter.organisationId;
     },
   },
   watch: {
@@ -215,12 +213,7 @@ export default defineComponent({
       this.rubriques = data.rubriques;
     },
     mainRubriquage(emission: Emission): string {
-      if (
-        emission.rubriqueIds &&
-        emission.rubriqueIds[0] === state.emissionsPage.mainRubrique
-      )
-        return 'partenaireRubrique';
-      return '';
+      return emission.rubriqueIds?.[0] === state.emissionsPage.mainRubrique? 'partenaireRubrique': '';
     },
     rubriquesId(emission: Emission): string|undefined {
       if (

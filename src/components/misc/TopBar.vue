@@ -8,7 +8,7 @@
       :to="{
         name: 'home',
         query: { productor: $store.state.filter.organisationId,
-                 iabId: $store.state.filter.iab ? $store.state.filter.iab.id : undefined,
+                 iabId: $store.state.filter.iab?.id ,
                  rubriquesId: rubriqueQueryParam},
       }"
       @click="onDisplayMenu(true)"
@@ -111,14 +111,13 @@ export default defineComponent({
         {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrga || this.isEducation)}]
     },
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter && this.$store.state.filter.rubriqueFilter && this.$store.state.filter.rubriqueFilter.length){
+      if(this.$store.state.filter?.rubriqueFilter?.length){
         return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
     },
     logoUrl(): string {
-      if (this.isEducation) return '/img/logo_education.png';
-      return '/img/logo_octopus_final.svg';
+      return this.isEducation ?'/img/logo_education.png': '/img/logo_octopus_final.svg';
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -130,11 +129,8 @@ export default defineComponent({
       return this.$store.state.filter.live;
     },
     imgUrl(): string {
-      if (
-        this.$store.state.filter.imgUrl &&
-        !this.$store.state.filter.imgUrl.includes('emptypodcast')
-      )
-        return this.$store.state.filter.imgUrl + '?dummy=' + this.dummyParam;
+      if (!this.$store.state.filter.imgUrl?.includes('emptypodcast'))
+        return `${this.$store.state.filter.imgUrl}?dummy=${this.dummyParam}`;
       return '';
     },
   },
@@ -162,7 +158,7 @@ export default defineComponent({
         return { productor: this.$store.state.filter.organisationId};
       }
       return { productor: this.$store.state.filter.organisationId,
-                   iabId: this.$store.state.filter.iab ? this.$store.state.filter.iab.id : undefined,
+                   iabId: this.$store.state.filter.iab?.id,
                    rubriquesId: this.rubriqueQueryParam}
     },
     handleScroll(): void {
@@ -193,7 +189,7 @@ export default defineComponent({
       this.$emit('update:displayMenu',param?false:!this.displayMenu);
     },
     async onOrganisationSelected(organisation: Organisation | undefined): Promise<void> {
-      if (organisation && organisation.id) {
+      if (organisation?.id) {
         await this.selectOrganisation(organisation.id);
         return;
       }

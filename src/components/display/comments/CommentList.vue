@@ -85,22 +85,16 @@ export default defineComponent({
       return state.generalParameters.organisationId;
     },
     podcastId(): number|undefined {
-      if (this.podcast) return this.podcast.podcastId;
-      return undefined;
+      return this.podcast?.podcastId;
     },
     editRight(): boolean {
-      if (
-        (state.generalParameters.isCommments &&
-          ((this.podcast &&
-            this.myOrganisationId === this.podcast.organisation.id) ||
+      return (true === state.generalParameters.isCommments &&
+          ((this.myOrganisationId === this.podcast?.organisation.id) ||
             this.myOrganisationId  === this.organisation)) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+        true === state.generalParameters.isAdmin;
     },
     watchVariable():string{
-      return `${this.reload}|${this.status}`
+      return `${this.reload}|${this.status}`;
     }
   },
   watch: {
@@ -129,14 +123,13 @@ export default defineComponent({
         if (this.comId) {
           data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, this.comId.toString(), {first: this.first,size: this.size});
         }else{
-          const param: FetchParam = {
+          data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, this.isFlat ?'':'getRootCom',{
             first: this.first,
             size: this.size,
             podcastId: this.podcastId,
             status:this.editRight && this.status?[this.status]: this.editRight? ['Valid','Pending', 'Invalid']:['Valid'],
             organisationId: undefined === this.podcastId? this.organisation: undefined,
-          };
-          data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, this.isFlat ?'':'getRootCom',param);
+          });
         }
         if(reset){
           this.comments.length = 0;

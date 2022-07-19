@@ -146,37 +146,21 @@ export default defineComponent({
     },
     isPresent(): boolean {
       if (!this.podcast) return true;
-      let podcastComment = 'INHERIT';
-      if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
-        podcastComment = (this.podcast.annotations.COMMENTS as string);
-      }
-      let organisationComment = 'LIVE_ONLY';
-      if (this.podcast.organisation.comments) {
-        organisationComment = this.podcast.organisation.comments;
-      }
-      if (
-        ('LIVE_ONLY' === podcastComment &&
+      let podcastComment = this.podcast.annotations?.COMMENTS ?? 'INHERIT';
+      let organisationComment = this.podcast.organisation.comments??'LIVE_ONLY';
+      return !(('LIVE_ONLY' === podcastComment &&
           'READY_TO_RECORD' !== this.podcast.processingStatus) ||
         ('INHERIT' === podcastComment &&
           'LIVE_ONLY' === organisationComment &&
-          'READY_TO_RECORD' !== this.podcast.processingStatus)
-      ) {
-        return false;
-      }
-      return true;
+          'READY_TO_RECORD' !== this.podcast.processingStatus));
     },
     placeholder(): string {
-      return this.comment && this.comment.comId? this.$t('Answer a comment') : this.$t('Write a comment');
+      return this.comment?.comId? this.$t('Answer a comment') : this.$t('Write a comment');
     },
     isCertified(): boolean {
-      if (
-        (state.generalParameters.isCommments &&
+      return (true === state.generalParameters.isCommments &&
         state.generalParameters.organisationId === this.podcastOrga) ||
-        state.generalParameters.isAdmin
-      ){
-        return true;
-      } 
-      return false;
+        true === state.generalParameters.isAdmin;
     },
     userId(): string|undefined {
       return state.generalParameters.authenticated ? this.$store.state.profile.userId : undefined;
@@ -200,8 +184,8 @@ export default defineComponent({
       return 'Live';
     },
     podcastOrga(): string|undefined{
-      const commentOrga = this.comment ? this.comment.organisationId : '';
-      return this.podcast ? this.podcast.organisation.id : commentOrga;
+      const commentOrga = this.comment?.organisationId ??'';
+      return this.podcast?.organisation.id ?? commentOrga;
     }
   },
   watch: {
@@ -273,15 +257,15 @@ export default defineComponent({
         this.setCookie('comment-octopus-name', name);
         this.$emit('update:knownIdentity', name);
       }
-      const sendName = name ? name: this.knownIdentity;
-      const commentPodcastId = this.comment ? this.comment.podcastId : 0;
+      const sendName = name??this.knownIdentity;
+      const commentPodcastId = this.comment?.podcastId ?? 0;
       const comment: CommentPodcast = {
         content: this.newComment,
-        name: sendName ? sendName : '',
-        podcastId: this.podcast ? this.podcast.podcastId : commentPodcastId,
+        name: sendName ??'',
+        podcastId: this.podcast?.podcastId ?? commentPodcastId,
         timeline: this.defineTimelineValue(),
         organisationId: this.podcastOrga,
-        commentIdReferer: this.comment ? this.comment.comId : undefined,
+        commentIdReferer:this.comment?.comId,
         certified: this.isCertified,
         userId: this.userId,
         phase: this.phase,

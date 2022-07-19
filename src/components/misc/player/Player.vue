@@ -100,7 +100,7 @@ export default defineComponent({
 
   watch: {
     playerHeight(): void {
-      this.$emit('hide', 0 === this.playerHeight ? true : false);
+      this.$emit('hide', 0 === this.playerHeight);
     },
   },
   

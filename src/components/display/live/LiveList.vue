@@ -62,25 +62,25 @@ export default defineComponent({
     return {
       loading: true as boolean,
       loaded: true as boolean,
-      livesArray: [
+    };
+  },
+  
+  computed: {
+    livesArray(): Array<{status:string, title:string, lives:Array<Conference>}>{
+      return [
         {status: "RECORDING", title:this.$t('In live'), lives:[]},
         {status: "PENDING", title:this.$t('This live is not started yet'), lives:[]},
         {status: "PLANNED", title:this.$t('Live to be'), lives:[]},
         {status: "DEBRIEFING", title:this.$t('Live terminated'), lives:[]},
         {status: "PUBLISHING", title:this.$t('Publishing'), lives:[]},
         {status: "ERROR", title:this.$t('In error'), lives:[]}
-      ] as Array<{status:string, title:string, lives:Array<Conference>}>
-    };
-  },
-  
-  computed: {
+      ];
+    },
     isNoLive(): boolean{
       return this.loaded && !this.livesArray[0].lives.length && !this.livesArray[2].lives.length && !this.livesArray[3].lives.length;
     },
     filterOrgaUsed(): string|undefined {
-      if (this.filterOrga) return this.filterOrga;
-      if (this.organisationId) return this.organisationId;
-      return undefined;
+      return this.filterOrga??this.organisationId;
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
@@ -88,20 +88,16 @@ export default defineComponent({
     displayNextLiveMessage(): string {
       if (0 !== this.livesArray[0].lives.length) return '';
       if (this.livesArray[1].lives.length > 0)
-        return this.$t('A live can start any moment').toString();
+        return this.$t('A live can start any moment');
       if (this.livesArray[2].lives.length > 0)
-        return this.$t('Next live date', {
-          date: moment(this.livesArray[2].lives[0].date).format('LLLL'),
-        }).toString();
+        return this.$t('Next live date', {date: moment(this.livesArray[2].lives[0].date).format('LLLL'),});
       return '';
     },
     myOrganisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
     organisationRight(): boolean {
-      if (this.isRoleLive && this.myOrganisationId === this.filterOrgaUsed)
-        return true;
-      return false;
+      return this.isRoleLive && this.myOrganisationId === this.filterOrgaUsed;
     },
     isRoleLive(): boolean {
       return (state.generalParameters.isRoleLive as boolean);

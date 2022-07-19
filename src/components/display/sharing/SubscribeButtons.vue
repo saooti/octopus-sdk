@@ -67,14 +67,12 @@ export default defineComponent({
       }
     },
     getUrl(sub: string): string | undefined{
-      return this.externaliseLinks(this.emission && this.emission.annotations? (this.emission.annotations[sub] as string): undefined);
+      return this.externaliseLinks(this.emission?.annotations?.[sub] as string|undefined);
     },
     externaliseLinks(link?: string): string|undefined {
       if (!link) return link;
       link = link.trim();
-      if (!link.startsWith('http') && !link.startsWith('//'))
-        return '//' + link;
-      return link;
+      return !link.startsWith('http') && !link.startsWith('//') ? '//' + link:link;
     },
   },
 })

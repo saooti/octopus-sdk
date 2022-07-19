@@ -65,11 +65,7 @@ export default defineComponent({
 
   methods: {
     onOrganisationSelected(): void{
-      if (-1 === this.actual) {
-        this.$emit('selected', undefined);
-      } else {
-        this.$emit('selected', this.organisation);
-      }
+      this.$emit('selected', -1 === this.actual? undefined:this.organisation);
     },
     async fetchOrganisation(): Promise<void> {
       if(!this.value){return;}

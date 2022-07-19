@@ -88,7 +88,7 @@ export default defineComponent({
       return moment(this.podcast.pubDate).format('X');
     },
     description(): string {
-      return this.podcast.description ? this.podcast.description : '';
+      return this.podcast.description ?? '';
     },
   },
 
@@ -96,10 +96,7 @@ export default defineComponent({
     if(!this.podcastItemDescription){return}
     const podcastDesc = (this.$refs.descriptionPodcast as HTMLElement);
     const podcastDescContainer = (this.$refs.descriptionPodcastContainer as HTMLElement);
-    if (
-      null !== podcastDesc && null !== podcastDescContainer &&
-      podcastDesc.clientHeight > podcastDescContainer.clientHeight
-    ) {
+    if (podcastDesc?.clientHeight > podcastDescContainer?.clientHeight) {
       this.isDescriptionBig = true;
     }
   },

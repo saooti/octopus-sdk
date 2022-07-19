@@ -50,7 +50,7 @@ export default defineComponent({
       handler() {
         if(this.textInit !== this.textValue){
           this.textValue =this.textInit;
-          }
+        }
       },
     },
   }

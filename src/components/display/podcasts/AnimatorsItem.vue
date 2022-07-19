@@ -29,7 +29,7 @@ export default defineComponent({
   },
   computed:{
     animatorName(): string{
-      return (`${this.animator?.firstName||''} ${this.animator?.lastName||''}`).trim();
+      return (`${this.animator?.firstName??''} ${this.animator?.lastName??''}`).trim();
     }
   }
 })

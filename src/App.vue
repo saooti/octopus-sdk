@@ -59,7 +59,6 @@ export default defineComponent({
   },
   async created(){
     await this.initApp();
-    this.isInit =true;
   },
   methods:{
     async initApp(){
@@ -67,6 +66,7 @@ export default defineComponent({
       await this.handleOrganisationFilter();
       this.handleIabIdFilter();
       this.handleRubriquesFilter();
+      this.isInit =true;
     },
     async handleOrganisationFilter(){
       let orgaId = '';

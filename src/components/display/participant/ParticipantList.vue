@@ -75,9 +75,7 @@ export default defineComponent({
       return this.participants.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
 		},
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.$store.state.filter.organisationId) return this.$store.state.filter.organisationId;
-      return undefined;
+      return this.organisationId??this.$store.state.filter.organisationId;
     },
   },
   watch: {

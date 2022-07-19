@@ -110,15 +110,11 @@ export default defineComponent({
   },
   computed: {
     id(): string {
-      if (this.rubriquageId) return 'rubriqueChooser' + this.rubriquageId;
-      return 'rubriqueChooser';
+      return this.rubriquageId? 'rubriqueChooser' + this.rubriquageId : 'rubriqueChooser';
     },
     model: {
       get(): Rubrique| Array<Rubrique>|undefined{
-        if(false===this.multiple){
-          return this.rubrique;
-        }
-        return this.rubriqueForArray;
+        return false===this.multiple ? this.rubrique:this.rubriqueForArray;
       },
       set(value: Rubrique| Array<Rubrique>|undefined): void{
         if(false===this.multiple){
@@ -181,11 +177,8 @@ export default defineComponent({
           rubriqueDefault,
           this.withoutItem,
         ].concat(this.allRubriques);
-      } else {
-        return [rubriqueDefault].concat(
-          this.allRubriques
-        );
       }
+      return [rubriqueDefault].concat(this.allRubriques);
     },
     onOpen(): void {
       (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
@@ -200,11 +193,7 @@ export default defineComponent({
         this.initRubriqueSelected(this.rubriqueSelected);
         return;
       }
-      if ('' !== this.defaultanswer) {
-        this.rubrique = getDefaultRubrique(this.defaultanswer);
-      } else {
-        this.rubrique = undefined;
-      }
+      this.rubrique ='' !== this.defaultanswer? getDefaultRubrique(this.defaultanswer): undefined;
       this.onRubriqueSelected(this.rubrique);
     },
     onSearchRubrique(query: string): void {

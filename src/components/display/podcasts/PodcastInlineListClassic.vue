@@ -111,9 +111,7 @@ export default defineComponent({
       return this.$store.state.filter.organisationId;
     },
     organisation(): string|undefined {
-      if (this.organisationId) return this.organisationId;
-      if (this.filterOrga) return this.filterOrga;
-      return undefined;
+      return this.organisationId ?? this.filterOrga;
     },
     previousAvailable(): boolean {
       return this.index > 0;
@@ -179,11 +177,7 @@ export default defineComponent({
       this.allPodcasts = this.allPodcasts.concat(
         data.result.filter((pod: Podcast|null) => null !== pod)
       );
-      if (this.allPodcasts.length <= 3) {
-        this.alignLeft = true;
-      } else {
-        this.alignLeft = false;
-      }
+      this.alignLeft = this.allPodcasts.length <= 3;
       this.first += this.size;
     },
     displayPrevious(): void {

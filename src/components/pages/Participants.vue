@@ -37,20 +37,17 @@ export default defineComponent({
     return {
       first: 0 as number,
       size: 30 as number,
-      searchPattern: '',
+      searchPattern: '' as string,
       organisationId: undefined as string | undefined,
     };
   },
   computed: {
     titleDisplay(): string{
-      if(undefined === state.intervenantsPage.titlePage){
-        return this.$t('All participants');
-      }
-      return state.intervenantsPage.titlePage;
+      return state.intervenantsPage.titlePage ?? this.$t('All participants');
     },
   },
   created() {
-    this.organisationId = this.productor? this.productor : this.filterOrga;
+    this.organisationId = this.productor??this.filterOrga;
   },
 })
 </script>
