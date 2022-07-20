@@ -644,4 +644,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.1 Navigation clavier
  * 32.0.2 Newsletter pour emission & playlist
  * 32.0.3 Améliorations multiples
+ * 32.0.4 Correction erreur
  

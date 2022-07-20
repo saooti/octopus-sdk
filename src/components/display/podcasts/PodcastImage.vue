@@ -112,8 +112,13 @@ export default defineComponent({
     ...mapState({
       playingPodcast(state: StoreState) {
         return (
-          (state.player.podcast?.podcastId === this.podcast.podcastId) ||
-          ('null' !== this.fetchConference && state.player.live?.conferenceId ===this.fetchConference?.conferenceId)
+          (state.player.podcast &&
+            state.player.podcast.podcastId === this.podcast.podcastId) ||
+          (this.fetchConference &&
+            'null' !== this.fetchConference &&
+            state.player.live &&
+            state.player.live.conferenceId ===
+              this.fetchConference.conferenceId)
         );
       },
     }),
