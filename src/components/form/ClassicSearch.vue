@@ -19,7 +19,7 @@
     />
     <div
       v-else
-      class="saooti-cross search-icon-container c-hand"
+      class="saooti-remove-bounty search-icon-container c-hand"
       @click="textValue = ''"
     />
   </div>
@@ -69,7 +69,7 @@ export default defineComponent({
       margin: 0 !important;
     }
     .saooti-search-bounty,
-    .saooti-cross {
+    .saooti-remove-bounty {
       font-size: 1rem;
     }
     .search-icon-container {

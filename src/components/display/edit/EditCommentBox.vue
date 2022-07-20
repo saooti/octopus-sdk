@@ -28,7 +28,7 @@
       @click="commentModal('Invalid')"
     >
       <span
-        class="saooti-cross"
+        class="saooti-remove-bounty"
         :data-selenium="'Invalidate-Comment-' + seleniumFormat(comment.name)"
       />
     </button>

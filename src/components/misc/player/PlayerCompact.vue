@@ -60,7 +60,7 @@
     />
     <button
       :title="$t('Close')"
-      class="btn play-button-box primary-bg text-light saooti-cross"
+      class="btn play-button-box primary-bg text-light saooti-remove-bounty"
       @click="stopPlayer"
     />
     <PlayerTimeline

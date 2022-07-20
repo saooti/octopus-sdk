@@ -638,8 +638,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.45 Live 
  * 31.0.46 Pb css
  * 31.0.47 Pétouilles Css multiselect
-
+ * 31.0.48 Icones change
 
  * 32.0.0 Passage en 32
  * 32.0.1 Navigation clavier
  * 32.0.2 Newsletter pour emission & playlist
+ 
