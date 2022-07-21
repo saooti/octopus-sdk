@@ -8,9 +8,11 @@
 	}
 	select {
 		background: white !important;
-		padding: 0.5rem;
+		outline-color: transparent !important;
+		padding: 0.25rem 0.4rem;;
 		border: 0.1rem solid #dee2e6;
 		border-radius: 0.3rem;
+		height: 2rem;
 	}
 	.form-check-label {
 		cursor: pointer;

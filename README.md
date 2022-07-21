@@ -639,10 +639,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.46 Pb css
  * 31.0.47 Pétouilles Css multiselect
  * 31.0.48 Icones change
+ * 31.0.49 Style select
 
  * 32.0.0 Passage en 32
  * 32.0.1 Navigation clavier
  * 32.0.2 Newsletter pour emission & playlist
  * 32.0.3 Améliorations multiples
  * 32.0.4 Correction erreur
- 
