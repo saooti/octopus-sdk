@@ -16,8 +16,8 @@
       v-if="!playerError"
       :title="$t('Play')"
       :class="{
-        'saooti-play2-bounty': isPaused,
-        'saooti-pause-bounty': isPlaying,
+        'saooti-play': isPaused,
+        'saooti-pause': isPlaying,
         'spinner-border':!isPaused&&!isPlaying
       }"
       class="btn play-button-box text-light primary-bg"
@@ -55,12 +55,12 @@
     </div>
     <button
       :title="$t('Enlarge')"
-      class="btn play-button-box primary-bg text-light saooti-up-bounty"
+      class="btn play-button-box primary-bg text-light saooti-up"
       @click="changePlayerLargeVersion"
     />
     <button
       :title="$t('Close')"
-      class="btn play-button-box primary-bg text-light saooti-remove-bounty"
+      class="btn play-button-box primary-bg text-light saooti-remove"
       @click="stopPlayer"
     />
     <PlayerTimeline

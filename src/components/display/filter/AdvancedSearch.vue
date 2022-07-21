@@ -6,7 +6,7 @@
     >
       <div>{{ $t('Advanced filters') }}</div>
       <div 
-        class="h3 saooti-arrow_down m-0"
+        class="h3 saooti-down m-0"
         :class="{ 'arrow-transform': showFilters }"
       />
     </button>

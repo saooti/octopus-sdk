@@ -71,7 +71,7 @@
       <template #caret="">
         <div class="position-relative">
           <span
-            class="saooti-arrow_down octopus-arrow-down"
+            class="saooti-down octopus-arrow-down"
           />
         </div>
       </template>
@@ -108,7 +108,6 @@ const getDefaultEmission = (defaultName: string): Emission|undefined => {
 
 import { Emission } from '@/store/class/general/emission';
 import { defineComponent } from 'vue'
-import { FetchParam } from '@/store/class/general/fetchParam';
 export default defineComponent({
   components: {
     VueMultiselect

@@ -47,7 +47,7 @@
       </template>
     </div>
     <button
-      class="btn-transparent saooti-burger-menu"
+      class="btn-transparent saooti-menu"
       :title="$t('open left Menu')"
       @click="onDisplayMenu(false)"
     />
@@ -218,7 +218,7 @@ export default defineComponent({
     padding: 0 0.5rem;
   }
 
-  .saooti-burger-menu {
+  .saooti-menu {
     display: none;
     cursor: pointer;
     font-size: 2rem;
@@ -251,7 +251,7 @@ export default defineComponent({
     .link-hover,.hosted-by {
       display: none;
     }
-    .saooti-burger-menu {
+    .saooti-menu {
       display: block;
     }
   }
@@ -261,7 +261,7 @@ export default defineComponent({
     .default-multiselect-width, .hosted-by, .link-hover {
       display: none;
     }
-    .saooti-burger-menu {
+    .saooti-menu {
       display: block;
     }
   }

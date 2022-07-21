@@ -24,8 +24,12 @@
         class="text-dark"
       >
         <span :class="platform.icon">
-          <div v-for="index in platform.path" :key="index" :class="'path'+index" />
-        </span>{{platform.title}}
+          <div
+            v-for="index in platform.path"
+            :key="index"
+            :class="'path'+index"
+          />
+        </span>{{ platform.title }}
       </router-link>
     </div>
     <Snackbar

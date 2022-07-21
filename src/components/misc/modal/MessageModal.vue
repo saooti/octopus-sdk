@@ -47,8 +47,8 @@
             {{ thirdText }}
           </button>
           <button
-            class="btn btn-primary m-1"
             :ref="!closable && !canceltext?'focusElement':''"
+            class="btn btn-primary m-1"
             @click="onValid"
           >
             {{ validatetext }}

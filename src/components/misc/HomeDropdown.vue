@@ -13,7 +13,7 @@
       class="dropdown btn-group"
     >
       <button
-        class="btn dropdown-toggle m-1 admin-button dropdown-toggle-no-caret saooti-user-octopus"
+        class="btn dropdown-toggle m-1 admin-button dropdown-toggle-no-caret saooti-user"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         :title="$t('User menu')"

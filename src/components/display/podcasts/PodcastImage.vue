@@ -42,7 +42,7 @@
         <div
           v-show="!playingPodcast"
           :title="$t('Play')"
-          class="saooti-play2-bounty primary-color"
+          class="saooti-play primary-color"
         />
         <div
           v-if="!classicPodcastPlay"
@@ -77,8 +77,8 @@
     </button>
     <div
       v-if="displayDescription && isMobile"
-      class="background-icon primary-bg saooti-arrow-up2"
-      :class="isDescription ? 'saooti-arrow-down2':'saooti-arrow-up2'"
+      class="background-icon primary-bg saooti-arrow-up"
+      :class="isDescription ? 'saooti-arrow-down':'saooti-arrow-up'"
       :title="isDescription ? $t('Hide description'):$t('Show description')"
       @click="showDescription"
     />
@@ -354,7 +354,7 @@ export default defineComponent({
       &:hover {
         background: #00000030;
       }
-      > .saooti-play2-bounty {
+      > .saooti-play {
         font-size: 2em;
         position: relative;
         right: -0.2rem;

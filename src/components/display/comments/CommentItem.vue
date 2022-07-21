@@ -83,7 +83,7 @@
         </span>
         <span 
           :class="collapseVisible? 'arrow-transform': ''"
-          class="saooti-arrow_down"
+          class="saooti-down"
         />
       </button>
       <EditCommentBox
@@ -136,7 +136,7 @@ import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
-import { defineComponent, defineAsyncComponent, nextTick } from 'vue';
+import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
 const EditCommentBox = defineAsyncComponent(() => import('@/components/display/edit/EditCommentBox.vue'));

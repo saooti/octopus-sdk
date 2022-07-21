@@ -6,7 +6,7 @@
     :title="$t('Downloading')"
     @click="onDownload(podcast.audioUrl, podcast.title)"
   >
-    <div class="saooti-download-bounty" />
+    <div class="saooti-download" />
   </button>
   <template
     v-for="button in arrayShareButtons"
@@ -40,7 +40,7 @@
     :title="titleRssButton"
     @click.prevent="openPopup()"
   >
-    <div class="saooti-rss-bounty" />
+    <div class="saooti-rss" />
   </a>
   <button
     :class="getClass()"
@@ -143,9 +143,9 @@ export default defineComponent({
     },
     arrayShareButtons(){
       return [
-        { title: 'Facebook', icon:'saooti-facebook-bounty', nbPath:0, className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
-        { title: 'Twitter', icon:'saooti-twitter-bounty', nbPath:0, className:'btn-twitter', url :`https://twitter.com/intent/tweet?text=${this.urlPage}`, condition: true},
-        { title: 'Linkedin', icon:'saooti-linkedin1', nbPath:0, className:'btn-linkedin', url :`https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`, condition: true},
+        { title: 'Facebook', icon:'saooti-facebook', nbPath:0, className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
+        { title: 'Twitter', icon:'saooti-twitter', nbPath:0, className:'btn-twitter', url :`https://twitter.com/intent/tweet?text=${this.urlPage}`, condition: true},
+        { title: 'Linkedin', icon:'saooti-linkedin', nbPath:0, className:'btn-linkedin', url :`https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`, condition: true},
         { title: 'Whatsapp', icon:'saooti-Whatsapp', nbPath:3, className:'btn-whatsapp', url :`whatsapp://send?text=${this.urlPage}`, condition:  window.matchMedia('(hover: none)').matches}
       ]
     },

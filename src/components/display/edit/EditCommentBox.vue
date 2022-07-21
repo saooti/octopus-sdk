@@ -6,7 +6,7 @@
       @click="editComment"
     >
       <span
-        class="saooti-edit-bounty"
+        class="saooti-edit"
         :data-selenium="'Edit-Comment-' + seleniumFormat(comment.name)"
       />
     </button>
@@ -17,7 +17,7 @@
       @click="commentModal('Valid')"
     >
       <span
-        class="saooti-valid-stud"
+        class="saooti-checkmark"
         :data-selenium="'Validate-Comment-' + seleniumFormat(comment.name)"
       />
     </button>
@@ -28,7 +28,7 @@
       @click="commentModal('Invalid')"
     >
       <span
-        class="saooti-remove-bounty"
+        class="saooti-remove"
         :data-selenium="'Invalidate-Comment-' + seleniumFormat(comment.name)"
       />
     </button>

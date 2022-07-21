@@ -42,7 +42,7 @@
               >
                 <p>{{ embedLink }}</p>
                 <div
-                  class="saooti-copy-octopus"
+                  class="saooti-copy"
                   @click="onCopyCode(embedLink, afterCopy)"
                 />
               </div>
@@ -54,7 +54,7 @@
                   <div class="d-flex">
                     <p>{{ embedlyLink }}</p>
                     <div
-                      class="saooti-copy-octopus"
+                      class="saooti-copy"
                       @click="onCopyCode(embedlyLink, afterCopy)"
                     />
                   </div>
@@ -68,7 +68,7 @@
               >
                 <p>{{ directLink.audioUrl }}</p>
                 <div
-                  class="saooti-copy-octopus"
+                  class="saooti-copy"
                   @click="onCopyCode(directLink.audioUrl, snackbarRef)"
                 />
               </div>
@@ -178,7 +178,7 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
   }
-  .saooti-copy-octopus {
+  .saooti-copy {
     cursor: pointer;
     align-self: center;
   }

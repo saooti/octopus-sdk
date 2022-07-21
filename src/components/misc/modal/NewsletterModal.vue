@@ -21,10 +21,10 @@
                 <h4 class="mb-3">
                   {{ $t('Configuration') }}
                 </h4>
-                <label for="share-url-newsletter">{{$t('Share')}}</label>
+                <label for="share-url-newsletter">{{ $t('Share') }}</label>
                 <input
-                  v-model="shareUrl"
                   id="share-url-newsletter"
+                  v-model="shareUrl"
                   class="form-input mb-2"
                   type="text"
                   :class="{ 'border border-danger': 0 === shareUrl }"

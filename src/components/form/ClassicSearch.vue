@@ -15,11 +15,11 @@
     />
     <div
       v-if="!textValue"
-      class="saooti-search-bounty search-icon-container"
+      class="saooti-search search-icon-container"
     />
     <div
       v-else
-      class="saooti-remove-bounty search-icon-container c-hand"
+      class="saooti-remove search-icon-container c-hand"
       @click="textValue = ''"
     />
   </div>
@@ -68,8 +68,8 @@ export default defineComponent({
       border-radius: 10px;
       margin: 0 !important;
     }
-    .saooti-search-bounty,
-    .saooti-remove-bounty {
+    .saooti-search,
+    .saooti-remove {
       font-size: 1rem;
     }
     .search-icon-container {

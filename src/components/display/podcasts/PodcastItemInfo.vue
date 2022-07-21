@@ -46,7 +46,7 @@
       </router-link>
       <span
         v-if="editRight && podcastOrder && podcastOrder > 1"
-        class="saooti-pin-octopus text-danger pe-2"
+        class="saooti-pin text-danger pe-2"
       />
     </div>
   </div>
@@ -138,7 +138,7 @@ export default defineComponent({
   .text-secondary {
     margin: 0.5rem !important;
   }
-  .saooti-pin-octopus {
+  .saooti-pin {
     font-size: 22px;
   }
   .title-podcast-item {

@@ -102,7 +102,7 @@
           @click="play(p)"
         >
           <div
-            class="text-light saooti-play2-bounty"
+            class="text-light saooti-play"
             :title="$t('Play')"
           />
         </div>
@@ -112,7 +112,7 @@
           @click="pause(p)"
         >
           <div
-            class="text-light saooti-pause-bounty"
+            class="text-light saooti-pause"
             :title="$t('Pause')"
           />
         </div>

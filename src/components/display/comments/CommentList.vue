@@ -43,7 +43,6 @@ import { Conference } from '@/store/class/conference/conference';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { InterfacePageable } from '@/store/class/general/interfacePageable';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { FetchParam } from '@/store/class/general/fetchParam';
 /* eslint-disable */
 const CommentItem: any = defineAsyncComponent(() => import('./CommentItem.vue'));
 /* eslint-enable */

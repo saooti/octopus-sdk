@@ -13,7 +13,7 @@
       <button
         v-if="!isLive"
         :title="$t('Refresh')"
-        class="btn admin-button saooti-refresh-stud"
+        class="btn admin-button saooti-refresh"
         @click="reload = !reload"
       />
     </div>

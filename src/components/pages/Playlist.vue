@@ -34,7 +34,10 @@
             :organisation-id="myOrganisationId"
             :is-education="isEducation"
           />
-          <ShareButtons v-if="pageParameters.isShareButtons" :playlist="playlist" />
+          <ShareButtons
+            v-if="pageParameters.isShareButtons"
+            :playlist="playlist"
+          />
         </div>
       </div>
       <PodcastList :playlist="playlist" />

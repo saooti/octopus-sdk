@@ -4,7 +4,7 @@
   >
     <button
       :title="$t('Reduce')"
-      class="player-reduce-button btn bg-transparent text-light saooti-down-bounty"
+      class="player-reduce-button btn bg-transparent text-light saooti-down"
       @click="changePlayerLargeVersion"
     />
     <router-link
@@ -55,15 +55,15 @@
         v-if="!playerError"
         :title="$t('Play')"
         :class="{
-          'saooti-play2-bounty': isPaused,
-          'saooti-pause-bounty': isPlaying,
+          'saooti-play': isPaused,
+          'saooti-pause': isPlaying,
           'spinner-border':!isPaused&&!isPlaying
         }"
         class="btn play-big-button-box text-light primary-bg"
         @click="switchPausePlay"
       />
       <button
-        class="btn fs-1 bg-transparent text-light saooti-forward2"
+        class="btn fs-1 bg-transparent text-light saooti-forward"
         @click="seekClick(15)"
       />
     </div>

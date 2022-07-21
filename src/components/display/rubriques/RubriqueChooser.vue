@@ -60,7 +60,7 @@
         {{ $t('No elements found. Consider changing the search query.') }}
       </template>
       <template #caret>
-        <span class="saooti-arrow_down octopus-arrow-down" />
+        <span class="saooti-down octopus-arrow-down" />
       </template>
     </VueMultiselect>
   </div>
