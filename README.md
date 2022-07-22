@@ -648,3 +648,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.4 Correction erreur
  * 32.0.5 update icones
  * 32.0.6 Update icones
+ * 32.0.7 Améliorations

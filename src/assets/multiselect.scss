@@ -65,9 +65,11 @@
         margin: 0;
         background-color: #ccc;
         border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:before{
-            position: relative;
-            top:2px;
+            font-size: 0.8rem;
         }
         @media (max-width: 450px) {
             top: 14px;

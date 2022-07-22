@@ -57,11 +57,13 @@
         :class="{
           'saooti-play': isPaused,
           'saooti-pause': isPlaying,
-          'spinner-border':!isPaused&&!isPlaying
+          '':!isPaused&&!isPlaying
         }"
         class="btn play-big-button-box text-light primary-bg"
         @click="switchPausePlay"
-      />
+      >
+        <span v-if="!isPaused&&!isPlaying" class="spinner-border flex-shrink-0"></span>
+      </button>
       <button
         class="btn fs-1 bg-transparent text-light saooti-forward"
         @click="seekClick(15)"
