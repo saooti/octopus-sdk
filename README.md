@@ -647,3 +647,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.3 Améliorations multiples
  * 32.0.4 Correction erreur
  * 32.0.5 update icones
+ * 32.0.6 Update icones

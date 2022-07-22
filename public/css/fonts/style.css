@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/css/fonts/icomoon.eot?vq1mf5');
-  src:  url('/css/fonts/icomoon.eot?vq1mf5#iefix') format('embedded-opentype'),
-    url('/css/fonts/icomoon.ttf?vq1mf5') format('truetype'),
-    url('/css/fonts/icomoon.woff?vq1mf5') format('woff'),
-    url('/css/fonts/icomoon.svg?vq1mf5#icomoon') format('svg');
+  src:  url('/css/fonts/icomoon.eot?8edpg2');
+  src:  url('/css/fonts/icomoon.eot?8edpg2#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?8edpg2') format('truetype'),
+    url('/css/fonts/icomoon.woff?8edpg2') format('woff'),
+    url('/css/fonts/icomoon.svg?8edpg2#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -320,7 +320,7 @@
   content: "\e95f";
   color: rgb(244, 132, 45);
 }
-.saooti-podcast-addict:before {
+.saooti-podcast-addict:after {
   content: "\e960";
   margin-left: -0.998046875em;
   color: rgb(255, 255, 255);

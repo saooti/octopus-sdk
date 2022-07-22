@@ -14,7 +14,7 @@
         transition: background .2s, border .2s, box-shadow .2s, color .2s;
         text-decoration: none !important;
         white-space: nowrap;
-        border-width: 1px;
+        border-width: 0;
         @media (max-width: 960px) {
             white-space: normal;
         }
