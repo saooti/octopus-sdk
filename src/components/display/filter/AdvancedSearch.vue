@@ -1,12 +1,12 @@
 <template>
   <div class="d-flex flex-column justify-content-center align-items-center">
     <button
-      class="d-flex justify-content-center mb-3 text-secondary btn-transparent"
+      class="d-flex justify-content-center align-items-center mb-3 text-secondary btn-transparent"
       @click="showFilters = !showFilters"
     >
       <div>{{ $t('Advanced filters') }}</div>
       <div 
-        class="h3 saooti-down mx-1"
+        class="saooti-down mx-1"
         :class="{ 'arrow-transform': showFilters }"
       />
     </button>

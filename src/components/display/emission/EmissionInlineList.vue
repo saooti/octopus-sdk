@@ -6,21 +6,17 @@
     >
       <div class="hide-phone">
         <button
-          class="btn admin-button m-1"
+          class="btn admin-button m-1 saooti-left"
           :class="{ disabled: !previousAvailable }"
           :title="$t('Display previous')"
           @click="displayPrevious()"
-        >
-          <div class="saooti-left fw-bold" />
-        </button>
+        />
         <button
-          class="btn admin-button m-1"
+          class="btn admin-button m-1 saooti-right"
           :class="{ disabled: !nextAvailable }"
           :title="$t('Display next')"
           @click="displayNext()"
-        >
-          <div class="saooti-right fw-bold" />
-        </button>
+        />
       </div>
     </div>
     <ClassicLoading

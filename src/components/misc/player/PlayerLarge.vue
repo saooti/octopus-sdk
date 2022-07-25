@@ -62,7 +62,10 @@
         class="btn play-big-button-box text-light primary-bg"
         @click="switchPausePlay"
       >
-        <span v-if="!isPaused&&!isPlaying" class="spinner-border flex-shrink-0"></span>
+        <span
+          v-if="!isPaused&&!isPlaying"
+          class="spinner-border flex-shrink-0"
+        />
       </button>
       <button
         class="btn fs-1 bg-transparent text-light saooti-forward"

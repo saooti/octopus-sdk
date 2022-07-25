@@ -83,7 +83,7 @@
         </span>
         <span 
           :class="collapseVisible? 'arrow-transform': ''"
-          class="saooti-down"
+          class="ms-1 saooti-down"
         />
       </button>
       <EditCommentBox

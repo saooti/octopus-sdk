@@ -23,7 +23,10 @@
       class="btn play-button-box text-light primary-bg"
       @click="switchPausePlay"
     >
-      <span v-if="!isPaused&&!isPlaying" class="spinner-border flex-shrink-0"></span>
+      <span
+        v-if="!isPaused&&!isPlaying"
+        class="spinner-border flex-shrink-0"
+      />
     </button>
     <div class="text-light player-grow-content">
       <div class="d-flex mb-1">

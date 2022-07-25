@@ -221,8 +221,7 @@ export default defineComponent({
   .saooti-menu {
     display: none;
     cursor: pointer;
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 1.5rem;
     margin: 0.5rem;
   }
 
