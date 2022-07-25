@@ -92,7 +92,7 @@
           </router-link>
           <PodcastPlayBar :podcast="p" />
         </div>
-        <div
+        <button
           v-if="
             $store.state.player.podcast !== p ||
               ($store.state.player.podcast === p &&
@@ -105,8 +105,8 @@
             class="text-light saooti-play"
             :title="$t('Play')"
           />
-        </div>
-        <div
+        </button>
+        <button
           v-else
           class="play-button-box bg-secondary"
           @click="pause(p)"
@@ -115,7 +115,7 @@
             class="text-light saooti-pause"
             :title="$t('Pause')"
           />
-        </div>
+        </button>
       </div>
     </div>
     <div
