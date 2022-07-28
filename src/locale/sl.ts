@@ -304,4 +304,6 @@ export default{
   "Oops":"Oups",
   "The page you are looking for cannot be found":"Strani, ki jo iščete, ni mogoče najti",
   'Back to home': 'Nazaj domov',
+  "Warning":"Opozorilo",
+  "Visual":"Slika od {name}",
 }

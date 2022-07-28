@@ -86,6 +86,9 @@ export default createStore({
       if (filter.imgUrl || !filter.orgaId) {
         state.filter.imgUrl = filter.imgUrl;
       }
+      if (filter.name || !filter.orgaId) {
+        state.filter.name = filter.name;
+      }
       if(filter.rubriquageArray){
         state.filter.rubriquageArray = filter.rubriquageArray;
       }

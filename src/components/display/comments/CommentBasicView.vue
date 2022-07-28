@@ -26,6 +26,7 @@
         src="/img/certified.png"
         :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
         :title="$t('Certified account')"
+        :alt="$t('Certified account')"
       >
       <div class="me-2">
         {{ date }}

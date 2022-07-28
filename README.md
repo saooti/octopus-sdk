@@ -651,3 +651,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.7 Améliorations
  * 32.0.8 Navigation clavier podcastmaker
  * 32.0.9 Update icones
+ * 32.0.10 Ajout alt

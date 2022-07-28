@@ -19,6 +19,7 @@ export const orgaFilter = defineComponent({
         this.$store.commit('filterOrga', {
           orgaId: organisationId,
           imgUrl: response.imageUrl,
+          name: response.name,
           rubriquageArray: data.filter((element: Rubriquage)=>{
             return element.rubriques.length;
           }),

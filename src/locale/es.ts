@@ -304,4 +304,6 @@ export default{
   "Oops":"Oups",
   "The page you are looking for cannot be found":"La página que busca no se encuentra",
   'Back to home': 'Volver a la página de inicio',
+  "Warning":"Advertencia",
+  "Visual":"Imagen de {name}",
 }

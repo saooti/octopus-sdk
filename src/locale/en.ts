@@ -311,4 +311,6 @@ export default{
   "Go to last page":"Go to last page",
   "Go to next page":"Go to next page",
   "Go to previous page":"Go to previous page",
+  "Warning":"Warning",
+  "Visual":"Visual of {name}",
 };

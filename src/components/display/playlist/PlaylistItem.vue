@@ -15,6 +15,7 @@
       <img
         v-lazy="playlist.imageUrl"
         :title="$t('Playlist name image', {name:name})"
+        :alt="$t('Playlist name image', {name:name})"
         class="img-box"
       >
       <div class="emission-item-text">
@@ -24,6 +25,7 @@
             class="icon-caution"
             src="/img/caution.png"
             :title="$t('Playlist have not podcasts')"
+            :alt="$t('Playlist have not podcasts')"
           >{{ name }}
         </div>
         <div

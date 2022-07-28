@@ -15,6 +15,7 @@
         v-lazy="emission.imageUrl"
         class="img-box"
         :title="$t('Emission name image', {name:emission.name})"
+        :alt="$t('Emission name image', {name:emission.name})"
       >
       <div class="emission-item-text">
         <div
@@ -25,6 +26,7 @@
             class="icon-caution"
             src="/img/caution.png"
             :title="$t('Emission have not podcasts')"
+            :alt="$t('Emission have not podcasts')"
           >{{ emission.name }}
         </div>
         <div

@@ -8,7 +8,7 @@
     >
       <img
         src="/img/caution.png"
-        alt="Caution"
+        :alt="$t('Warning')"
         class="icon-caution"
       >
       <div class="alert-text">

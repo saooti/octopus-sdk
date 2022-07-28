@@ -302,4 +302,6 @@ export default{
     "Oops":"Oups",
     "The page you are looking for cannot be found":"Impossibile trovare la pagina che stai cercando",
     'Back to home': "Torna alla schermata 'home'",
+    "Warning":"Avvertimento",
+    "Visual":"Visiva di {name}",
   };

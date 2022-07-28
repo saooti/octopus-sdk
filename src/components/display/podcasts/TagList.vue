@@ -18,7 +18,7 @@
         <img
           v-if="isOuestFranceTag(tag)"
           class="ouest-france-logo"
-          alt="Logo Ouest France"
+          alt="Ouest France Logo"
           src="/img/ouest_france_logo.svg"
         >
         {{ formateOfTag(tag) }}

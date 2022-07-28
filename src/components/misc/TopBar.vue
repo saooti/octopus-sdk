@@ -15,7 +15,7 @@
     >
       <img
         :src="!filterOrga || '' === imgUrl ? logoUrl : imgUrl"
-        :alt="$t('Logo of main page')"
+        :alt="!filterOrga || '' === imgUrl ? $t('Logo of main page') : $t('Visual', {name: $store.state.filter?.name})"
         :class="isEducation ? 'educationLogo' : ''"
       >
     </router-link>

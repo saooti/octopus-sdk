@@ -91,6 +91,7 @@ export function emptyPodcastData(): Podcast{
   export interface Filter{
     organisationId: string | undefined;
     imgUrl: string | undefined;
+    name: string | undefined;
     rubriquageArray: Array<Rubriquage>;
     rubriqueFilter: Array<RubriquageFilter>;
     rubriqueDisplay: Array<Rubrique>;
@@ -304,7 +305,8 @@ export function emptyPodcastData(): Podcast{
       
           filter: {
             organisationId: undefined ,
-            imgUrl: undefined ,
+            imgUrl: undefined,
+            name:undefined,
             rubriquageArray: [],
             rubriqueFilter: [],
             rubriqueDisplay:[],

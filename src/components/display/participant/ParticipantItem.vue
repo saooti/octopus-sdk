@@ -15,6 +15,7 @@
       <img
         v-lazy="participant.imageUrl"
         :title="$t('Animator image')"
+        :alt="$t('Animator image')"
         class="img-box-circle"
       >
       <div class="participant-name">
@@ -23,6 +24,7 @@
           src="/img/caution.png"
           class="icon-caution"
           :title="$t('Participant have not podcasts')"
+          :alt="$t('Participant have not podcasts')"
         >{{ name }}
       </div>
       <div
