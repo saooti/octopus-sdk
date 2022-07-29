@@ -24,18 +24,12 @@
 		border-radius: 0.8rem 0.8rem 0 0;
 		background: $octopus-primary-dark;
 		color: white;
-        @media (max-width: 450px) {
-            padding: 1rem 0;
-        } 
     }
 	.modal-body{
 		overflow-x: auto;
 		.scroller-vertical {
 			min-height: 200px;
 			height: 200px;
-		}
-		@media (max-width: 500px){
-			padding: 0;
 		}
 	}
 	.modal-dialog, .modal-content {

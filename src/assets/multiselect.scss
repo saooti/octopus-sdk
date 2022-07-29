@@ -61,7 +61,7 @@
         cursor: pointer;
         position: absolute;
         right: 10px;
-        top: 11px;
+        top: 0.4rem;
         margin: 0;
         background-color: #ccc;
         border-radius: 50%;
@@ -70,9 +70,6 @@
         align-items: center;
         &:before{
             font-size: 0.8rem;
-        }
-        @media (max-width: 450px) {
-            top: 14px;
         }
     }
 
