@@ -655,7 +655,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.9 Update icones
  * 32.0.10 Ajout alt
  * 32.0.11 Merge 31
- * 31.0.48 Icones change 
- * 31.0.49 Style select
- * 31.0.50 Améliorations responsive
-
+ * 32.0.12 Merge 31
