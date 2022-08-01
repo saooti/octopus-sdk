@@ -641,7 +641,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.48 Icones change
  * 31.0.49 Style select
  * 31.0.50 Améliorations responsive
-
+ * 31.0.51 Newest
 
  * 32.0.0 Passage en 32
  * 32.0.1 Navigation clavier
@@ -655,3 +655,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.9 Update icones
  * 32.0.10 Ajout alt
  * 32.0.11 Merge 31
+ * 31.0.48 Icones change 
+ * 31.0.49 Style select
+ * 31.0.50 Améliorations responsive
+

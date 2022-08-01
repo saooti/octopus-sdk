@@ -33,6 +33,7 @@
       class="mx-2"
     />
     <div class="d-flex justify-content-between">
+      <div class="useless-div-for-podcastmaker" />
       <router-link
         v-if="!isPodcastmaker"
         :to="{
