@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "32.0.12",
+  "version": "32.0.13",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -12,7 +12,6 @@
     "prettifile": "prettier --single-quote --trailing-comma es5 --write",
     "prettify": "prettier --single-quote --trailing-comma es5 --write src/**/**/**/*.{js,vue}"
   },
-  "main": "./dist/octopus.common.js",
   "dependencies": {
     "@saooti/octopus-api": "^0.31.7",
     "@vue/cli": "^5.0.8",
