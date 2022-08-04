@@ -4,7 +4,6 @@ import VueLazyLoad from 'vue3-lazyload';
 import App from './App.vue';
 import {setupI18n} from './i18n';
 import router from '@/router/router';
-import moment from 'moment';
 import store from '@/store/AppStore';
 import paramStore from '@/store/paramStore';
 /* import 'popper.js/dist/popper.min.js'; */
@@ -43,7 +42,6 @@ if(0===language.length){
 }
 
 const i18n = setupI18n({locale: language}, store.state.general.education);
-moment.locale(language);
 
 paramStore.initialize({
   generalParameters: {},

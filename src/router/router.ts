@@ -196,7 +196,7 @@ const routes: Array<RouteRecordRaw> = [
     
 ];
 export default createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes: routes,
   scrollBehavior(): {left: number; top: number} {
     return { left: 0, top: 0 };

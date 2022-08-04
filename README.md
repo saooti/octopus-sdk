@@ -657,3 +657,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.11 Merge 31
  * 32.0.12 Merge 31
  * 32.0.13 Test Vite au lieu de Webpack
+ * 32.0.14 Mise en place Vite au lieu de Webpack

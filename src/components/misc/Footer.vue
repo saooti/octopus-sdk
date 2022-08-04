@@ -168,7 +168,6 @@ export default defineComponent({
     changeLanguage(): void{
       this.setCookie('octopus-language', this.language);
       loadLocaleMessages(this.$i18n, this.language, this.$store.state.general.isEducation);
-      moment.locale(this.$i18n.locale);
       octopusApi.fetchDataWithParams<Array<Category>>(0, `iab/list${state.octopusApi.organisationId? '/'+state.octopusApi.organisationId : ''}`, { lang: this.$i18n.locale }).then((data: Array<Category>) => {
         this.$store.commit('categoriesSet', data);
         if(this.$store.state.filter.iab){
