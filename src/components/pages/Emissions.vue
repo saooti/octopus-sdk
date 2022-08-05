@@ -96,7 +96,7 @@ export default defineComponent({
         true===state.generalParameters.isAdmin
     },
     organisation(): string|undefined {
-      return this.organisationId??this.filterOrga;
+      return this.organisationId?this.organisationId:this.filterOrga;
     },
   },
 
@@ -106,7 +106,7 @@ export default defineComponent({
   methods: {
     initComponent(): void{
       this.iabId =this.$store.state.filter.iab?.id;
-      this.organisationId = this.productor?? this.filterOrga;
+      this.organisationId = this.productor ?this.productor: this.filterOrga;
       if (this.organisation && this.organisationRight) {
         this.includeHidden = true;
       }

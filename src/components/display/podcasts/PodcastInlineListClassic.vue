@@ -111,7 +111,7 @@ export default defineComponent({
       return this.$store.state.filter.organisationId;
     },
     organisation(): string|undefined {
-      return this.organisationId ?? this.filterOrga;
+      return this.organisationId ?this.organisationId: this.filterOrga;
     },
     previousAvailable(): boolean {
       return this.index > 0;

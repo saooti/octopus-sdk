@@ -80,7 +80,7 @@ export default defineComponent({
       return this.loaded && !this.livesArray[0].lives.length && !this.livesArray[2].lives.length && !this.livesArray[3].lives.length;
     },
     filterOrgaUsed(): string|undefined {
-      return this.filterOrga??this.organisationId;
+      return this.filterOrga?this.filterOrga:this.organisationId;
     },
     filterOrga(): string {
       return this.$store.state.filter.organisationId;

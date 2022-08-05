@@ -136,7 +136,7 @@ export default defineComponent({
       }
     },
     organisation(): string|undefined {
-      return this.organisationId ?? this.$store.state.filter.organisationId;
+      return this.organisationId ?this.organisationId:this.$store.state.filter.organisationId;
     },
   },
   watch: {

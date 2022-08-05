@@ -96,7 +96,7 @@ export default defineComponent({
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
     },
     organisation(): string|undefined {
-      return this.organisationId ?? this.$store.state.filter.organisationId;
+      return this.organisationId ?this.organisationId: this.$store.state.filter.organisationId;
     },
     sort(): string {
       return this.popularSort? "POPULARITY" : this.sortCriteria??'DATE';

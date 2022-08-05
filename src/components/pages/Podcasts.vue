@@ -117,7 +117,7 @@ export default defineComponent({
         true===state.generalParameters.isAdmin;
     },
     organisation(): string|undefined {
-      return this.organisationId ?? this.filterOrga;
+      return this.organisationId ?this.organisationId: this.filterOrga;
     },
     pageParameters(){
       return {
@@ -134,7 +134,7 @@ export default defineComponent({
   methods: {
     initPodcastsPage(){
       this.searchPattern = this.searchInit ?? '';
-      this.organisationId = this.productor ?? this.filterOrga;
+      this.organisationId = this.productor ?this.productor: this.filterOrga;
       this.includeHidden = this.organisation && this.organisationRight ? true : false;
       this.iabId =this.$store.state.filter.iab?.id;
       if(this.$store.state.filter.rubriqueFilter.length){

@@ -72,7 +72,7 @@ export default defineComponent({
       return this.$store.state.filter.organisationId;
     },
     organisation(): string|undefined {
-      return this.organisationId ?? this.filterOrga;
+      return this.organisationId ?this.organisationId: this.filterOrga;
     },
     rubriqueFilter(): Array<RubriquageFilter>{
       return this.$store.state.filter.rubriqueFilter;

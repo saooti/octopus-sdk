@@ -47,7 +47,7 @@ export default defineComponent({
     },
   },
   created() {
-    this.organisationId = this.productor??this.filterOrga;
+    this.organisationId = this.productor ?this.productor: this.filterOrga;
   },
 })
 </script>
