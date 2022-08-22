@@ -4,6 +4,7 @@
       id="footer"
       ref="footer"
       class="d-flex-column p-3 secondary-bg border-top"
+      v-if="displayFooter"
     >
       <div class="d-flex flex-column flex-grow-1 align-items-end">
         <div class="d-flex flex-column">
@@ -97,7 +98,6 @@ import Player from './player/Player.vue';
 import { state } from '../../store/paramStore';
 import {loadLocaleMessages} from '@/i18n';
 import octopusApi from '@saooti/octopus-api';
-import moment from 'moment';
 import { Category } from '@/store/class/general/category';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
@@ -107,6 +107,10 @@ export default defineComponent({
     Player,
     ClassicSelect
   },
+  props: {
+    displayFooter: { default: true, type: Boolean},
+  },
+
   mixins:[cookies],
   data() {
     return {
@@ -158,7 +162,7 @@ export default defineComponent({
     },
     showBlackBorder(hide: boolean): void {
       const footerElement = (this.$refs.footer as HTMLElement);
-      if(null===footerElement){return;}
+      if(!footerElement){return;}
       if (hide) {
         footerElement.classList.remove('border-round');
       } else {

@@ -22,7 +22,7 @@ const state:paramStore = {
     isInlineAnimation:true,
   },
   podcastPage: {
-    EditBox: false,
+    EditBox: true,
     SharePlayer: true,
     ShareButtons: true,
     ShareDistribution: true,
