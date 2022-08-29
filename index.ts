@@ -27,30 +27,25 @@ import Popover from "./src/components/misc/Popover.vue";
 import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
 import CategoryList from "./src/components/display/categories/CategoryList.vue";
 import CategoryFilter from "./src/components/display/categories/CategoryFilter.vue";
-/*import EditBox from "./src/components/display/edit/EditBox.vue"; */
 import EmissionChooser from "./src/components/display/emission/EmissionChooser.vue";
-/* import EmissionItem from "./src/components/display/emission/EmissionItem.vue"; */
 import EmissionList from "./src/components/display/emission/EmissionList.vue";
-/*import MonetizableFilter from "./src/components/display/filter/MonetizableFilter.vue";
-import ProductorSearch from "./src/components/display/filter/ProductorSearch.vue";*/
-import AdvancedSearch from "./src/components/display/filter/AdvancedSearch.vue";
 import OrganisationChooser from "./src/components/display/organisation/OrganisationChooser.vue";
-/*import ParticipantItem from "./src/components/display/participant/ParticipantItem.vue";
-import ParticipantList from "./src/components/display/participant/ParticipantList.vue";
-import AnimatorsItem from "./src/components/display/podcasts/AnimatorsItem.vue";*/
 import PodcastFilterList from "./src/components/display/podcasts/PodcastFilterList.vue";
-/*import PodcastImage from "./src/components/display/podcasts/PodcastImage.vue";*/
 import PodcastInlineList from "./src/components/display/podcasts/PodcastInlineList.vue";
-/*import PodcastItem from "./src/components/display/podcasts/PodcastItem.vue";*/
 import PodcastList from "./src/components/display/podcasts/PodcastList.vue";
 import ShareButtons from "./src/components/display/sharing/ShareButtons.vue";
-/*import ShareDistribution from "./src/components/display/sharing/ShareDistribution.vue";
-import SharePlayer from "./src/components/display/sharing/SharePlayer.vue"; */
 import EmissionInlineList from "./src/components/display/emission/EmissionInlineList.vue";
 import RubriqueChooser from "./src/components/display/rubriques/RubriqueChooser.vue";
 import CommentList from "./src/components/display/comments/CommentList.vue";
 import CommentInput from "./src/components/display/comments/CommentInput.vue";
 import PodcastPlaylistInlineList from "./src/components/display/playlist/PodcastPlaylistInlineList.vue";
+
+//AdvancedSearch
+import AdvancedSearch from "./src/components/display/filter/AdvancedSearch.vue";
+import CategorySearchFilter from "./src/components/display/filter/CategorySearchFilter.vue";
+import RubriqueFilter from "./src/components/display/filter/RubriqueFilter.vue";
+import DateFilter from "./src/components/display/filter/DateFilter.vue";
+import SearchOrder from "./src/components/display/filter/SearchOrder.vue";
 
 //form
 import ClassicSearch from "./src/components/form/ClassicSearch.vue";
@@ -122,9 +117,12 @@ const components = {
     ClassicSelect,
     Error403Page,
     Paginate,
-    ListPaginate
+    ListPaginate,
+    CategorySearchFilter,
+    RubriqueFilter,
+    DateFilter,
+    SearchOrder
 }
-
 export default components;
 
 export {
@@ -180,5 +178,9 @@ export {
     ClassicSelect,
     Error403Page,
     Paginate,
-    ListPaginate
+    ListPaginate,
+    CategorySearchFilter,
+    RubriqueFilter,
+    DateFilter,
+    SearchOrder
 };

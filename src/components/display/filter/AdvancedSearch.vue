@@ -23,68 +23,17 @@
           :is-emission="isEmission"
           @updateMonetization="updateMonetization"
         />
-        <CategoryFilter @updateCategory="updateCategory" />
+        <CategorySearchFilter @updateCategory="updateCategory" />
         <RubriqueFilter 
           :reset-rubriquage="resetRubriquage"
           :organisation-id="organisationId"
           @updateRubriquageFilter="updateRubriquageFilter"
         />
-        <div class="d-flex mt-3 align-items-center flex-wrap">
-          <div
-            v-if="isEmission"
-            class="me-2"
-          >
-            {{ $t('Emission with episode published :') }}
-          </div>
-          <div class="d-flex align-items-center">
-            <ClassicCheckbox
-              v-model:textInit="isFrom"
-              class="flex-shrink-0"
-              id-checkbox="search-from-checkbox"
-              :label="$t('From the :')"
-            />
-            <DatePicker
-              v-model="fromDate"
-              class="ps-3 pe-3"
-              mode="dateTime"
-              color="green"
-              is24hr
-              @update:modelValue="updateFromDate()"
-            >
-              <template #default="{ inputValue, inputEvents }">
-                <input
-                  class="px-2 py-1 border rounded focus:border-blue-300"
-                  :value="inputValue"
-                  v-on="inputEvents"
-                >
-              </template>
-            </DatePicker>
-          </div>
-          <div class="d-flex align-items-center">
-            <ClassicCheckbox
-              v-model:textInit="isTo"
-              class="flex-shrink-0"
-              id-checkbox="search-to-checkbox"
-              :label="$t('To the :')"
-            />
-            <DatePicker
-              v-model="toDate"
-              class="ps-3"
-              mode="dateTime"
-              color="green"
-              is24hr
-              @update:modelValue="updateToDate()"
-            >
-              <template #default="{ inputValue, inputEvents }">
-                <input
-                  class="px-2 py-1 border rounded focus:border-blue-300"
-                  :value="inputValue"
-                  v-on="inputEvents"
-                >
-              </template>
-            </DatePicker>
-          </div>
-        </div>
+        <DateFilter
+          :isEmission="isEmission"
+          @updateToDate="updateToDate"
+          @updateFromDate="updateFromDate"
+        />
         <div
           v-if="organisation && organisationRight && !isPodcastmaker"
           class="d-flex flex-column mt-3"
@@ -113,14 +62,11 @@
         <div class="primary-darker mb-2">
           {{ $t('Sort') }}
         </div>
-        <ClassicRadio
-          v-model:textInit="sort"
-          id-radio="sort-radio"
-          :options="isSearchBar? [{title:$t('Sort score'), value:'SCORE'},
-                                  {title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
-                                  {title:$t('Sort name'), value:'NAME'}]:
-            [{title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
-             {title:$t('Sort name'), value:'NAME'}]"
+        <SearchOrder
+          :isEmission="isEmission"
+          :isSearchBar="isSearchBar"
+          :sortCriteria="sortCriteria"
+          @updateSortCriteria="updateSortCriteria"
         />
       </div>
     </div>
@@ -130,23 +76,24 @@
 <script lang="ts">
 import { state } from '../../../store/paramStore';
 import { orgaComputed } from '../../mixins/orgaComputed';
-import moment from 'moment';
-import CategoryFilter from './CategoryFilter.vue';
+import CategorySearchFilter from './CategorySearchFilter.vue';
+import DateFilter from './DateFilter.vue';
+import SearchOrder from './SearchOrder.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import ClassicRadio from '../../form/ClassicRadio.vue';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
-import { DatePicker } from 'v-calendar';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const MonetizableFilter = defineAsyncComponent(() => import('./MonetizableFilter.vue'));
 export default defineComponent({
   components: {
     MonetizableFilter,
-    DatePicker,
-    CategoryFilter,
+    CategorySearchFilter,
     RubriqueFilter,
     ClassicCheckbox,
-    ClassicRadio
+    ClassicRadio,
+    DateFilter,
+    SearchOrder
   },
   mixins: [orgaComputed],
   props: {
@@ -169,14 +116,9 @@ export default defineComponent({
           'updateRubriquageFilter'],
   data() {
     return {
-      isFrom: false as boolean,
-      isTo: false as boolean,
-      fromDate: moment().subtract(10, 'days').toISOString() as string,
-      toDate: moment().toISOString() as string,
       isNotVisible: this.includeHidden as boolean,
       isNotValidate: false as boolean,
       showFilters: false as boolean,
-      sort: this.sortCriteria as string,
     };
   },
 
@@ -219,58 +161,19 @@ export default defineComponent({
     organisation(): void {
       this.isNotVisible = undefined!==this.organisation && this.organisationRight && !this.isEmission;
     },
-    isFrom(): void {
-      this.$emit('updateFromDate', this.isFrom ? moment(this.fromDate).toISOString(true) : undefined);
-    },
-    isTo(): void {
-      this.$emit('updateToDate', this.isTo ? moment(this.toDate).toISOString(true) : undefined);
-    },
-    sort(): void {
-      this.$emit('updateSortCriteria', this.sort);
-    },
     isNotVisible(): void{
       this.$emit('includeHidden', this.isNotVisible);
     },
     isNotValidate(): void {
       this.$emit('notValid', this.isNotValidate);
     },
-    sortCriteria(): void {
-      this.sort = this.sortCriteria;
-    },
   },
   methods: {
-    updateFromDate(): void {
-      if (
-        moment(this.fromDate)
-          .startOf('minute')
-          .toISOString() ===
-        moment()
-          .subtract(10, 'days')
-          .startOf('minute')
-          .toISOString()
-      )
-        return;
-      if (this.isFrom) {
-        this.$emit('updateFromDate', moment(this.fromDate).toISOString(true));
-      } else {
-        this.isFrom = true;
-      }
+    updateFromDate(value: string): void {
+      this.$emit('updateFromDate', value);
     },
-    updateToDate(): void {
-      if (
-        moment(this.toDate)
-          .startOf('minute')
-          .toISOString() ===
-        moment()
-          .startOf('minute')
-          .toISOString()
-      )
-        return;
-      if (this.isTo) {
-        this.$emit('updateToDate', moment(this.toDate).toISOString(true));
-      } else {
-        this.isTo = true;
-      }
+    updateToDate(value: string): void {
+      this.$emit('updateToDate', value);
     },
     updateMonetization(value: string): void {
       this.$emit('updateMonetization', value);
@@ -281,6 +184,9 @@ export default defineComponent({
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       this.$emit('updateRubriquageFilter', value);
     },
+    updateSortCriteria(value: string){
+      this.$emit('updateSortCriteria', value);
+    }
   },
 })
 </script>
