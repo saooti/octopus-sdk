@@ -45,10 +45,6 @@
       >
         <div>{{ '© ' + podcastOrganisationName }}</div>
       </router-link>
-      <span
-        v-if="editRight && podcastOrder && podcastOrder > 1"
-        class="saooti-pin text-danger pe-2"
-      />
     </div>
   </div>
 </template>
@@ -79,7 +75,6 @@ export default defineComponent({
     pubDate: { default: "", type: String},
     podcastOrganisationId: { default: "", type: String},
     podcastOrganisationName: { default: "", type: String},
-    podcastOrder: { default: undefined, type: Number},
     duration: { default: 0, type: Number},
     animators: { default: undefined, type: Object as ()=> Array<Participant>},
   },

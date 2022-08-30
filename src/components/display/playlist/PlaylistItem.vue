@@ -100,7 +100,7 @@ export default defineComponent({
         true == state.generalParameters.isAdmin;
     },
     activePlaylist(): boolean {
-      return 0 !== Object.keys(this.playlist.samplingViews).length;
+      return 0 !== Object.keys(this.playlist.samplingViews??[]).length;
     },
   },
   mounted() {

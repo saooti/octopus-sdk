@@ -38,7 +38,6 @@
       :pub-date="podcast.pubDate"
       :podcast-organisation-id="podcast.organisation.id"
       :podcast-organisation-name="podcast.organisation.name"
-      :podcast-order="podcast.order"
       :duration="podcast.duration"
       :animators="podcast.animators"
       @mouseenter="showDescription"

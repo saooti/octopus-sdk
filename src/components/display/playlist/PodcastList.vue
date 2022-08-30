@@ -85,7 +85,7 @@ export default defineComponent({
       return this.notEmptyPlaylist ? this.$t('Podcasts in the playlist') : this.$t('No podcasts in the playlist');
     },
     notEmptyPlaylist(): boolean {
-      return 0 !== Object.keys(this.playlist.podcasts).length;
+      return 0 !== Object.keys(this.playlist.samplingViews??[]).length;
     },
     podcastsDisplay(): Array<Podcast>{
       if(this.isMobile){
@@ -122,11 +122,7 @@ export default defineComponent({
         this.podcasts.length = 0;
         this.loading = true;
         try {
-          const content = await octopusApi.fetchData<Array<Podcast>>(0, 'playlist/'+this.playlist.playlistId+'/content');
-          for (let index = 0, len = content.length; index < len; index++) {
-            content[index].order = this.playlist.podcasts[content[index].podcastId];
-          }
-          this.podcasts = content;
+          this.podcasts = await octopusApi.fetchData<Array<Podcast>>(0, 'playlist/'+this.playlist.playlistId+'/content');
           if (!this.editRight) {
             this.podcasts = this.podcasts.filter((p: Podcast|null) => {
               return (
