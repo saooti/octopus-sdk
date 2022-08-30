@@ -42,7 +42,6 @@ import PodcastPlaylistInlineList from "./src/components/display/playlist/Podcast
 
 //AdvancedSearch
 import AdvancedSearch from "./src/components/display/filter/AdvancedSearch.vue";
-import CategorySearchFilter from "./src/components/display/filter/CategorySearchFilter.vue";
 import RubriqueFilter from "./src/components/display/filter/RubriqueFilter.vue";
 import DateFilter from "./src/components/display/filter/DateFilter.vue";
 import SearchOrder from "./src/components/display/filter/SearchOrder.vue";
@@ -118,7 +117,6 @@ const components = {
     Error403Page,
     Paginate,
     ListPaginate,
-    CategorySearchFilter,
     RubriqueFilter,
     DateFilter,
     SearchOrder
@@ -179,7 +177,6 @@ export {
     Error403Page,
     Paginate,
     ListPaginate,
-    CategorySearchFilter,
     RubriqueFilter,
     DateFilter,
     SearchOrder

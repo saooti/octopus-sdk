@@ -25,7 +25,7 @@
         class="ms-2"
         :multiple="false"
         :rubriquage-id="rubriquageId"
-        :rubrique-selected="0 < rubriqueIdSelected? rubriqueIdSelected : undefined"
+        :rubrique-selected="0 !== rubriqueIdSelected? rubriqueIdSelected : undefined"
         :all-rubriques="getRubriques(rubriquageId)"
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
@@ -67,12 +67,23 @@ export default defineComponent({
       reset: false as boolean,
     };
   },
+  watch:{
+    rubriquageIdSelected(){
+      this.initRubriquage();
+    },
+    rubriqueIdSelected(){
+      this.initRubriquage();
+    }
+  },
 
   created(){
-    this.rubriquageId = this.rubriquageIdSelected;
+    this.initRubriquage();
   },
 
   methods: {
+    initRubriquage(){
+      this.rubriquageId = this.rubriquageIdSelected;
+    },
     deleteRubriquage(){
       this.$emit('deleteRubriqueChoice');
     },

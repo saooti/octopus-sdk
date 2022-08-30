@@ -661,3 +661,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.15 Pb lié refactor
  * 32.0.16 Pb lié refactor
  * 32.0.17 AdvancedSearch components
+ * 32.0.18 AdvancedSearch components

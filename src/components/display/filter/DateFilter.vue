@@ -70,6 +70,8 @@ export default defineComponent({
   },
   props: {
     isEmission: { default: false, type:  Boolean},
+    initToDate: { default: undefined, type:  String},
+    initFromDate: { default: undefined, type:  String},
   },
 
   emits: ['updateToDate', 'updateFromDate'],
@@ -90,6 +92,17 @@ export default defineComponent({
     isTo(): void {
       this.$emit('updateToDate', this.isTo ? moment(this.toDate).toISOString(true) : undefined);
     },
+  },
+
+  created(){
+    if(this.initToDate){
+      this.toDate = this.initToDate;
+      this.isTo = true;
+    }
+    if(this.initFromDate){
+      this.fromDate = this.initFromDate;
+      this.isFrom = true;
+    }
   },
   methods: {
     updateFromDate(): void {

@@ -51,6 +51,8 @@ export default defineComponent({
   props: {
     organisationId: { default: undefined, type: String},
     resetRubriquage: { default: false, type:  Boolean},
+    modifyFilter:{ default: true, type:  Boolean},
+    initRubriqueFilter:{ default: undefined, type: Array as ()=> Array<RubriquageFilter>},
   },
   emits: ['updateRubriquageFilter'],
 
@@ -111,7 +113,9 @@ export default defineComponent({
       }else{
         this.$emit('updateRubriquageFilter', []);
       }
-      this.resetRubriqueFilter();
+      if(this.modifyFilter){
+        this.resetRubriqueFilter();
+      }
       this.$nextTick(() => {
         this.isInternChanged = false;
       });
@@ -123,7 +127,9 @@ export default defineComponent({
           return;
         }
         this.isInternChanged = true;
-        this.resetRubriqueFilter();
+        if(this.modifyFilter){
+          this.resetRubriqueFilter();
+        }
         if(this.isRubriquage){
           this.$emit('updateRubriquageFilter', this.arrayFilter);
         }
@@ -135,7 +141,7 @@ export default defineComponent({
     rubriqueFilter:{
       deep: true,
       async handler(){
-        if(this.isInternChanged){
+        if(this.isInternChanged || !this.modifyFilter){
           return;
         }
         this.isInternChanged = true;
@@ -161,7 +167,12 @@ export default defineComponent({
   },
 
   created() {
-    if(this.rubriqueFilter.length){
+    if(!this.modifyFilter){
+      if(this.initRubriqueFilter){
+        this.arrayFilter = Array.from(this.initRubriqueFilter);
+        this.isRubriquage = true;
+      }
+    }else if(this.rubriqueFilter.length){
       this.arrayFilter = Array.from(this.rubriqueFilter);
       this.isRubriquage = true;
     }
@@ -218,7 +229,7 @@ export default defineComponent({
       }
     },
     resetRubriqueFilter(): void{
-      if(0===this.rubriqueFilter.length || this.isInit){
+      if(0===this.rubriqueFilter.length || this.isInit || !this.modifyFilter){
         return;
       }
       const queries = this.$route.query;
