@@ -168,7 +168,7 @@ export default defineComponent({
 
   created() {
     if(!this.modifyFilter){
-      if(this.initRubriqueFilter){
+      if(this.initRubriqueFilter && this.initRubriqueFilter.length > 0){
         this.arrayFilter = Array.from(this.initRubriqueFilter);
         this.isRubriquage = true;
       }
