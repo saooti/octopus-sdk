@@ -6,7 +6,7 @@
                             {title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
                             {title:$t('Sort name'), value:'NAME'}]:
       [{title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
-        {title:$t('Sort name'), value:'NAME'}]"
+       {title:$t('Sort name'), value:'NAME'}]"
   />
 </template>
 

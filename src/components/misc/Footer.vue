@@ -1,10 +1,10 @@
 <template>
   <div class="bg-dark">
     <div
+      v-if="displayFooter"
       id="footer"
       ref="footer"
       class="d-flex-column p-3 secondary-bg border-top"
-      v-if="displayFooter"
     >
       <div class="d-flex flex-column flex-grow-1 align-items-end">
         <div class="d-flex flex-column">
@@ -107,11 +107,11 @@ export default defineComponent({
     Player,
     ClassicSelect
   },
+
+  mixins:[cookies],
   props: {
     displayFooter: { default: true, type: Boolean},
   },
-
-  mixins:[cookies],
   data() {
     return {
       language: this.$i18n.locale as string,

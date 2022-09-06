@@ -30,7 +30,7 @@
           @updateRubriquageFilter="updateRubriquageFilter"
         />
         <DateFilter
-          :isEmission="isEmission"
+          :is-emission="isEmission"
           @updateToDate="updateToDate"
           @updateFromDate="updateFromDate"
         />
@@ -63,9 +63,9 @@
           {{ $t('Sort') }}
         </div>
         <SearchOrder
-          :isEmission="isEmission"
-          :isSearchBar="isSearchBar"
-          :sortCriteria="sortCriteria"
+          :is-emission="isEmission"
+          :is-search-bar="isSearchBar"
+          :sort-criteria="sortCriteria"
           @updateSortCriteria="updateSortCriteria"
         />
       </div>
@@ -81,7 +81,6 @@ import DateFilter from './DateFilter.vue';
 import SearchOrder from './SearchOrder.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import ClassicRadio from '../../form/ClassicRadio.vue';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const MonetizableFilter = defineAsyncComponent(() => import('./MonetizableFilter.vue'));
@@ -91,7 +90,6 @@ export default defineComponent({
     CategorySearchFilter,
     RubriqueFilter,
     ClassicCheckbox,
-    ClassicRadio,
     DateFilter,
     SearchOrder
   },

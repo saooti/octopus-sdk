@@ -8,14 +8,17 @@
       :error-text="errorText"
     />
     <template v-if="!loading">
-      <div class="paginate-section mb-2 page-box">
+      <div
+        v-if="!justSizeChosen"
+        class="paginate-section mb-2 page-box"
+      >
         <div class="text-secondary">
           <template v-if="textCount && (windowWidth > 1300 || windowWidth<=960)">
             {{ textCount }}
           </template>
         </div>
         <Paginate 
-          v-if="!isPhone"
+          v-if="!isPhone && !justSizeChosen"
           :first="first"
           :rows-per-page="rowsPerPage"
           :total-count="totalCount"
@@ -27,7 +30,7 @@
     </template>
     <slot name="list" />
     <button
-      v-show="((first+rowsPerPage) < totalCount) && isPhone"
+      v-show="((first+rowsPerPage) < totalCount) && (isPhone || justSizeChosen)"
       :disabled="loading"
       class="btn"
       :class="buttonPlus ? 'btn-primary align-self-center width-fit-content m-4' : 'btn-more'"
@@ -66,7 +69,8 @@ export default defineComponent({
     loadingText:{ default: undefined, type: String},
     errorText:{ default: undefined, type: String},
     loading: { default: false, type:Boolean},
-    isMobile: { default: false, type: Boolean}
+    isMobile: { default: false, type: Boolean},
+    justSizeChosen:{default: false, type: Boolean}
   },
 
   emits: ['update:first', 'update:rowsPerPage', 'update:isMobile'],

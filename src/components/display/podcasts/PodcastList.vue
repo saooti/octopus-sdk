@@ -9,6 +9,7 @@
     :loading="loading"
     :loading-text="loading?$t('Loading podcasts ...'):undefined"
     :error-text="!loading && !podcasts.length?$t(`No podcast match your query`):undefined"
+    :just-size-chosen="justSizeChosen"
   >
     <template #list>
       <ul
@@ -69,6 +70,7 @@ export default defineComponent({
     rubriqueId: { default: () => [], type: Array as ()=>Array<number> },
     rubriquageId:{ default: () => [], type: Array as ()=>Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=>Array<number> },
+    justSizeChosen:{default: false, type: Boolean}
   },
   emits: ['fetch', 'emptyList'],
 
@@ -85,7 +87,7 @@ export default defineComponent({
 
   computed: {
     displayArray(): Array<Podcast>{
-      if(this.isMobile){
+      if(this.isMobile || this.justSizeChosen){
         return this.podcasts;
       }
       return this.podcasts.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
@@ -176,7 +178,7 @@ export default defineComponent({
       });
       this.podcasts = this.podcasts.slice(0, this.dfirst).concat(responsePodcasts).concat(this.podcasts.slice(this.dfirst+this.dsize, this.podcasts.length));
       this.$emit('fetch', this.podcasts);
-      this.totalCount = data.count;
+      this.totalCount = this.justSizeChosen ? this.size : data.count;
       if (0 === this.podcasts.length) {
         this.$emit('emptyList');
       }

@@ -664,3 +664,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.18 AdvancedSearch components
  * 32.0.19 Playlist publique
  * 32.0.20 Playlist publique
+ * 32.0.21 Amélioration List Paginate
