@@ -297,7 +297,7 @@ export default{
   "Download started": 'Téléchargement lancé',
   'From RSS': "Issu d'un flux RSS",
   "User menu":"Menu utilisateur",
-  'Podcast tags': "Mot-clé de l'épisode",
+  'Podcast tags': "Mots-clés de l'épisode",
   "You do not have the right to access this page":"Vous n’avez pas le droit d’accéder à cette page",
   "Enlarge":"Agrandir",
   "Reduce":"Réduire",
