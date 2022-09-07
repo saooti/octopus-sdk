@@ -106,13 +106,17 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.octopus-app{
 .popover{
   max-height: 80vh;
-  overflow: auto;
+  max-width: 50vw;
+  display: flex;
+  flex-direction: column;
   hr{
     width: 100px;
   }
-}
+  .popover-body{
+    overflow: auto;
+    height: 100%;
+  }
 }
 </style>

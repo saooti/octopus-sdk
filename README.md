@@ -666,3 +666,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.19 Playlist publique
  * 32.0.20 Playlist publique
  * 32.0.21 Amélioration List Paginate
+ * 32.0.22 Popover
