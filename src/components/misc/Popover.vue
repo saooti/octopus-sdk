@@ -108,8 +108,8 @@ export default defineComponent({
 <style lang="scss">
 .popover{
   max-height: 80vh;
-  max-width: 50vw;
-  display: flex;
+  max-width: 50vw !important;
+  display: flex !important;
   flex-direction: column;
   hr{
     width: 100px;
