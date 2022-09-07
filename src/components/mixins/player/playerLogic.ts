@@ -50,8 +50,8 @@ export const playerLogic = defineComponent({
       if(this.media || !this.podcast || !this.podcast.availability.visibility ||this.listenError){
         this.audioUrlToPlay = this.audioUrl;
       }
-      if(!this.podcast){return;}
-      const response = await octopusApi.fetchDataPublic<{location:string, downloadId: number}>(0,"podcast/download/register/"+ this.audioUrl);
+      if(!this.podcast || !this.podcast.availability.visibility ||this.listenError){return;}
+      const response = await octopusApi.fetchDataPublic<{location:string, downloadId: number}>(0,"podcast/download/register/"+ this.getAudioUrlParameters());
       this.setDownloadId(response.downloadId.toString());
       this.audioUrlToPlay = response.location;
     },
@@ -101,12 +101,8 @@ export const playerLogic = defineComponent({
       }
       return domain;
     },
-    getAudioUrl(): string{
-      if (this.media) return this.media.audioUrl? this.media.audioUrl:"";
+    getAudioUrlParameters(): string{
       if (!this.podcast) return '';
-      if (!this.podcast.availability.visibility)
-        return this.podcast.audioStorageUrl;
-      if (this.listenError) return this.podcast.audioStorageUrl;
       const parameters = [];
       parameters.push('origin=octopus');
       parameters.push('listenerId='+this.getListenerId());
@@ -122,6 +118,14 @@ export const playerLogic = defineComponent({
         parameters.push('access_token='+this.$store.state.oAuthParam.accessToken);
       }
       return this.podcast.podcastId + '.mp3?' + parameters.join('&');
+    },
+    getAudioUrl(): string{
+      if (this.media) return this.media.audioUrl? this.media.audioUrl:"";
+      if (!this.podcast) return '';
+      if (!this.podcast.availability.visibility)
+        return this.podcast.audioStorageUrl;
+      if (this.listenError) return this.podcast.audioStorageUrl;
+      return this.getAudioUrlParameters();
     },
     reInitPlayer():void{
       this.setDownloadId(null);
