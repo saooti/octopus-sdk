@@ -669,3 +669,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.22 Popover
  * 32.0.23 Popover encore
  * 32.0.24 CDI podcastmaker
+ * 32.0.25 #11391

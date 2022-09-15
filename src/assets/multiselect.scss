@@ -13,6 +13,7 @@
         .multiselect__tags-wrap{
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
         }
         .multiselect__tags{
             border: 0;
@@ -22,7 +23,7 @@
             align-items: center;
         }
         .multiselect__tag{
-            margin-bottom: 0;
+            margin-top: 5px;
             border: 1px gray solid;
         }
     }
