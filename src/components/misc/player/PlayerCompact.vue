@@ -7,7 +7,7 @@
       :to="podcastShareUrl"
     >
       <img
-        v-lazy="podcastImage"
+        v-lazy="proxyImageUrl(podcastImage,'48')"
         :alt="$t('Podcast image')"
         class="player-image"
       >
@@ -77,6 +77,7 @@
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/general/comment';
 import { playerDisplay } from '../../mixins/player/playerDisplay';
+import { imageProxy } from '../../mixins/functions';
 import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerTimeline from './PlayerTimeline.vue';
 import { defineComponent } from 'vue';
@@ -87,7 +88,7 @@ export default defineComponent({
     PlayerProgressBar,
     PlayerTimeline
   },
-  mixins:[playerDisplay],
+  mixins:[playerDisplay, imageProxy],
 
   props: {
     playerError: { default: false, type: Boolean},

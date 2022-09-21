@@ -14,7 +14,7 @@
             <h2>{{ name }}</h2>
             <div class="mb-5 mt-3 descriptionText">
               <img
-                v-lazy="imageUrl"
+                v-lazy="proxyImageUrl(imageUrl, '260')"
                 :alt="$t('Playlist name image', { name: name })"
                 class="img-box shadow-element float-start me-3 mb-3"
               >
@@ -55,7 +55,7 @@ import ClassicLoading from '../form/ClassicLoading.vue';
 import PodcastList from '../display/playlist/PodcastList.vue';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
-import { displayMethods } from '../mixins/functions';
+import { displayMethods, imageProxy } from '../mixins/functions';
 import { handle403 } from '../mixins/handle403';
 import { Playlist } from '@/store/class/general/playlist';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -71,7 +71,7 @@ export default defineComponent({
     SharePlayer,
     ClassicLoading
   },
-  mixins:[displayMethods, handle403, orgaComputed],
+  mixins:[displayMethods, handle403, orgaComputed, imageProxy],
 
   props: {
     playlistId: { default: undefined, type: Number},

@@ -14,7 +14,7 @@
       @click="onDisplayMenu(true)"
     >
       <img
-        :src="!filterOrga || '' === imgUrl ? logoUrl : imgUrl"
+        :src="!filterOrga || '' === imgUrl ? logoUrl : proxyImageUrl(imgUrl, '160')"
         :alt="!filterOrga || '' === imgUrl ? $t('Logo of main page') : $t('Visual', {name: $store.state.filter?.name})"
         :class="isEducation ? 'educationLogo' : ''"
       >
@@ -75,6 +75,7 @@ import { state } from '../../store/paramStore';
 import HomeDropdown from './HomeDropdown.vue';
 import { Organisation } from '@/store/class/general/organisation';
 import { orgaFilter } from '../mixins/organisationFilter';
+import { imageProxy } from '../mixins/functions';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent,defineAsyncComponent } from 'vue';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
@@ -84,7 +85,7 @@ export default defineComponent({
     OrganisationChooserLight,
     HomeDropdown,
   },
-  mixins:[orgaFilter],
+  mixins:[orgaFilter, imageProxy],
   props: {
     displayMenu: { default: false, type: Boolean},
     isEducation: { default: false, type: Boolean},

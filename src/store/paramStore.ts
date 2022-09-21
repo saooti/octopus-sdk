@@ -85,6 +85,7 @@ const state:paramStore = {
   octopusApi: {
     url: 'http://api.dev2.saooti.org/',
     commentsUrl: 'http://comments.dev2.saooti.org/',
+    imageUrl:'http://imageproxy.dev2.saooti.org/',
     studioUrl: 'http://studio.dev2.saooti.org/',
     playerUrl: 'https://playerbeta.dev2.saooti.org/',
     organisationId: undefined,
@@ -175,6 +176,7 @@ export interface Organisation{
 export interface OctopusApi{
   url?: string,
   commentsUrl?: string,
+  imageUrl?: string,
   studioUrl?: string,
   playerUrl?: string,
   organisationId?: string | undefined,

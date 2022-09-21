@@ -19,7 +19,7 @@
             </h2>
             <div class="mb-5 mt-3 descriptionText">
               <img
-                v-lazy="imageUrl"
+                v-lazy="proxyImageUrl(imageUrl, '260')"
                 :alt="$t('Emission name image', { name: name })"
                 class="img-box shadow-element float-start me-3 mb-3"
               >
@@ -81,7 +81,7 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
-import { displayMethods } from '../mixins/functions';
+import { displayMethods, imageProxy } from '../mixins/functions';
 import { orgaComputed } from '../mixins/orgaComputed';
 import { handle403 } from '../mixins/handle403';
 import { Emission } from '@/store/class/general/emission';
@@ -106,7 +106,7 @@ export default defineComponent({
     LiveHorizontalList,
     ClassicLoading
   },
-  mixins: [displayMethods, handle403, orgaComputed],
+  mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
     emissionId: { default: undefined, type: Number},
     isEducation: { default: false, type: Boolean},

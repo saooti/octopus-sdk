@@ -45,7 +45,7 @@
         <div class="multiselect-octopus-proposition">
           <img
             v-if="!light"
-            v-lazy="option.imageUrl"
+            v-lazy="proxyImageUrl(option.imageUrl, '32')"
             class="option__image"
             :alt="option.name"
           >
@@ -65,7 +65,7 @@
         >
           <img
             v-if="!light"
-            v-lazy="option.imageUrl"
+            v-lazy="proxyImageUrl(option.imageUrl, '32')"
             class="option__image"
             :alt="option.name"
           >
@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts">
-import { selenium } from '../../mixins/functions';
+import { selenium, imageProxy } from '../../mixins/functions';
 import { orgaComputed } from '../../mixins/orgaComputed';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
@@ -137,7 +137,7 @@ export default defineComponent({
   components: {
     VueMultiselect,
   },
-  mixins:[selenium, orgaComputed],
+  mixins:[selenium, orgaComputed, imageProxy],
   props: {
     width: { default: '100%', type: String },
     defaultanswer: { default: '', type: String},

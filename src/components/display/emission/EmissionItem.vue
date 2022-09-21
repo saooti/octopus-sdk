@@ -12,7 +12,7 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <img
-        v-lazy="emission.imageUrl"
+        v-lazy="proxyImageUrl(emission.imageUrl, '260')"
         class="img-box"
         :title="$t('Emission name image', {name:emission.name})"
         :alt="$t('Emission name image', {name:emission.name})"
@@ -63,13 +63,13 @@ import { orgaComputed } from '../../mixins/orgaComputed';
 import { Emission } from '@/store/class/general/emission';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
-import { displayMethods } from '../../mixins/functions';
+import { displayMethods, imageProxy } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 import { Podcast } from '@/store/class/general/podcast';
 export default defineComponent({
   name: 'EmissionItem',
 
-  mixins: [displayMethods, orgaComputed],
+  mixins: [displayMethods, orgaComputed, imageProxy],
 
   props: {
     emission: { default: ()=>({}), type: Object as ()=> Emission},

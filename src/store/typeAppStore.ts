@@ -132,6 +132,9 @@ export function emptyPodcastData(): Podcast{
     CommentApi: {
         uri: string | undefined;
     };
+    imageApi: {
+      uri: string | undefined;
+    };
     studioApi: {
         uri: string | undefined;
     };
@@ -235,6 +238,9 @@ export function emptyPodcastData(): Podcast{
           },
           CommentApi: {
             uri: undefined ,
+          },
+          imageApi: {
+            uri:undefined,
           },
           studioApi: {
             uri: undefined ,

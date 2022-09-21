@@ -13,7 +13,7 @@
       :title="$t('Participant')"
     >
       <img
-        v-lazy="participant.imageUrl"
+        v-lazy="proxyImageUrl(participant.imageUrl, '200')"
         :title="$t('Animator image')"
         :alt="$t('Animator image')"
         class="img-box-circle"
@@ -57,13 +57,13 @@
 import octopusApi from '@saooti/octopus-api';
 import { Participant } from '@/store/class/general/participant';
 import { state } from '../../../store/paramStore';
-import { displayMethods } from '../../mixins/functions';
+import { displayMethods, imageProxy } from '../../mixins/functions';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { defineComponent } from 'vue'
 import { Podcast } from '@/store/class/general/podcast';
 export default defineComponent({
   name: 'ParticpantItem',
-  mixins: [displayMethods, orgaComputed],
+  mixins: [displayMethods, orgaComputed, imageProxy],
   props: {
     participant: { default: ()=>({}), type: Object as ()=> Participant},
   },

@@ -11,6 +11,8 @@ enum ModuleApi {
     RSS=7,
     STORAGE = 8,
     STUDIO = 9,
+    PROCESSOR= 10,
+    IMAGE=11
   }
 /* eslint-disable */
 export default {

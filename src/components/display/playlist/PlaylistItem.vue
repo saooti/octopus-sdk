@@ -13,7 +13,7 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <img
-        v-lazy="playlist.imageUrl"
+        v-lazy="proxyImageUrl(playlist.imageUrl, '260')"
         :title="$t('Playlist name image', {name:name})"
         :alt="$t('Playlist name image', {name:name})"
         class="img-box"
@@ -61,12 +61,12 @@
 <script lang="ts">
 import { Playlist } from '@/store/class/general/playlist';
 import { state } from '../../../store/paramStore';
-import { displayMethods } from '../../mixins/functions';
+import { displayMethods, imageProxy } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistItem',
 
-  mixins: [displayMethods],
+  mixins: [displayMethods, imageProxy],
 
   props: {
     playlist: { default: ()=>({}), type: Object as ()=>Playlist},

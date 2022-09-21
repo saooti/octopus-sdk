@@ -4,7 +4,7 @@
     class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink-0 float-start"
   >
     <img
-      v-lazy="podcast.imageUrl"
+      v-lazy="proxyImageUrl(podcast.imageUrl,'260')"
       class="img-box"
       :alt="$t('Episode name image', {name:podcast.title})"
     >
@@ -91,9 +91,11 @@ import { state } from '../../../store/paramStore';
 import {StoreState} from '@/store/typeAppStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
+import { imageProxy } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastImage',
+  mixins:[imageProxy],
   props: {
     podcast: { default: ()=>({}), type: Object as ()=>Podcast},
     hidePlay: { default: false, type: Boolean},

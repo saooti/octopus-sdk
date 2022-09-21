@@ -20,7 +20,7 @@
         class="img-box rounded-0"
       >
         <img
-          v-lazy="emission.imageUrl"
+          v-lazy="proxyImageUrl(emission.imageUrl, '260')"
           :title="$t('Emission name image', {name:emission.name})"
           :alt="$t('Emission name image', {name:emission.name})"
           class="img-box rounded-0"
@@ -143,7 +143,7 @@ import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
 import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
-import { displayMethods } from '../../mixins/functions';
+import { displayMethods, imageProxy } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
@@ -151,7 +151,7 @@ export default defineComponent({
   components:{
     PodcastPlayBar
   },
-  mixins: [displayMethods],
+  mixins: [displayMethods, imageProxy],
   props: {
     emission: { default: ()=>({}), type: Object as ()=>Emission },
     nbPodcasts: { default: undefined, type: Number },

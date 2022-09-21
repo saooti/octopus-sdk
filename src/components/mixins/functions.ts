@@ -1,8 +1,22 @@
+import { state } from '../../store/paramStore';
 
 export const selenium ={
   methods: {
     seleniumFormat(string: string): string {
       return string.toLowerCase().replace(/\s/g, '');
+    },
+  },
+};
+export const imageProxy ={
+  methods: {
+    proxyImageUrl(url:string, width:string): string{
+      if(!url){
+        return "";
+      }
+      if(state.octopusApi.imageUrl){
+        return state.octopusApi.imageUrl+"image/"+btoa(url)+"?width="+width;
+      }
+      return url;
     },
   },
 };

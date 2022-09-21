@@ -10,7 +10,7 @@
         class="d-flex flex-column align-items-center mb-3"
       >
         <img
-          v-lazy="participant.imageUrl"
+          v-lazy="proxyImageUrl(participant.imageUrl, '200')"
           :title="$t('Animator image')"
           :alt="$t('Animator image')"
           class="img-box-circle mb-3"
@@ -63,7 +63,7 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
-import { displayMethods } from '../mixins/functions';
+import { displayMethods, imageProxy } from '../mixins/functions';
 import { orgaComputed } from '../mixins/orgaComputed';
 import { handle403 } from '../mixins/handle403';
 import { Participant } from '@/store/class/general/participant';
@@ -82,7 +82,7 @@ export default defineComponent({
     PodcastList,
     ClassicLoading
   },
-  mixins: [displayMethods, handle403, orgaComputed],
+  mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
     participantId: { default: undefined, type: Number},
   },
