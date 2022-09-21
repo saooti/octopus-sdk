@@ -14,7 +14,7 @@ export const imageProxy ={
         return "";
       }
       if(state.octopusApi.imageUrl){
-        return state.octopusApi.imageUrl+"image/"+btoa(url)+"?width="+width;
+        return state.octopusApi.imageUrl+"image/"+btoa(url)+"?width="+width+"&useWebp=true";
       }
       return url;
     },
