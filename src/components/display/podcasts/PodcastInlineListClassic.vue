@@ -53,6 +53,7 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
 import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
+import { imageProxy } from '../../mixins/functions';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastInlineListClassic',
@@ -62,7 +63,7 @@ export default defineComponent({
     ClassicLoading,
     PodcastInlineListTemplate
   },
-
+  mixins:[imageProxy],
   props: {
     organisationId: { default: undefined, type: String},
     emissionId: { default: undefined, type: Number},
@@ -233,7 +234,7 @@ export default defineComponent({
     },
     preloadImage(url: string): void {
       const img = new Image();
-      img.src = url;
+      img.src = this.proxyImageUrl(url,'260');
     },
   },
 })

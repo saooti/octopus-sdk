@@ -68,6 +68,7 @@ import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
+import { imageProxy } from '../../mixins/functions';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 export default defineComponent({
   name: 'EmissionInlineList',
@@ -77,7 +78,7 @@ export default defineComponent({
     ClassicLoading
   },
 
-  mixins: [handle403],
+  mixins: [handle403,imageProxy],
 
   props: {
     organisationId: { default: undefined, type: String},
@@ -220,7 +221,7 @@ export default defineComponent({
     },
     preloadImage(url: string): void {
       const img = new Image();
-      img.src = url;
+      img.src = this.proxyImageUrl(url,'260');
     },
     async fetchRubriques(): Promise<void> {
       const data = await octopusApi.fetchData<Rubriquage>(0, 'rubriquage/'+this.displayRubriquage);
