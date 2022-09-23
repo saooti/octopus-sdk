@@ -673,3 +673,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.26 Image Proxy
  * 32.0.27 Image Proxy -> webp
  * 32.0.28 Image Proxy
+ * 32.0.29 SpeechToText

@@ -88,6 +88,7 @@ const state:paramStore = {
     imageUrl:'http://imageproxy.dev2.saooti.org/',
     studioUrl: 'http://studio.dev2.saooti.org/',
     playerUrl: 'https://playerbeta.dev2.saooti.org/',
+    speechToTextUrl:'https://speech2text.dev2.saooti.org/',
     organisationId: undefined,
     rubriqueIdFilter: undefined,
   },
@@ -179,6 +180,7 @@ export interface OctopusApi{
   imageUrl?: string,
   studioUrl?: string,
   playerUrl?: string,
+  speechToTextUrl?:string,
   organisationId?: string | undefined,
   oAuthParam?: {
     accessToken: string,
