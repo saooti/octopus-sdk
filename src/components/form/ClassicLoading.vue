@@ -1,9 +1,9 @@
 <template>
   <div
     v-if="loadingText"
-    class="d-flex justify-content-center"
+    class="d-flex align-items-center justify-content-center"
   >
-    <div class="spinner-border me-3" />
+    <div class="spinner-border me-3 flex-shrink-0" />
     <div class="h3 mt-2">
       {{ loadingText }}
     </div>

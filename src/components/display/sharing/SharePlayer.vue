@@ -44,7 +44,10 @@
           :is-visible="isVisible"
           :chose-number-episode="displayChoiceAllEpisodes|| isLargeSuggestion"
           :display-choice-all-episodes="displayChoiceAllEpisodes"
+          :displayTranscriptParam="displayTranscriptParam"
+          :displayArticleParam="displayArticleParam"
           @displayArticle="displayArticle = $event"
+          @displayTranscript="displayTranscript = $event"
           @episodeNumbers="episodeNumbers = $event"
           @proceedReading="proceedReading = $event"
           @isVisible="isVisible = $event"
@@ -119,16 +122,31 @@ export default defineComponent({
       iFrameNumber: '3' as string,
       isVisible: false as boolean,
       displayArticle: true as boolean,
+      displayTranscript: true as boolean,
       colors: ['#000000', '#ffffff'],
+      orgaAttributes: undefined as{[key: string]:string|number|boolean|undefined}|undefined,
     };
   },
   
   computed: {
+    displayArticleParam():boolean{
+      return undefined!==this.podcast && undefined!==this.podcast.article && 0 !== this.podcast.article.length;
+    },
+    displayTranscriptParam():boolean{
+      return this.isTranscriptionAuthorize && (this.isDefault || this.isEmission);
+    },
+    isTranscriptionAuthorize(): boolean{
+      if(!this.orgaAttributes){return false;}
+      return this.orgaAttributes && Object.prototype.hasOwnProperty.call(this.orgaAttributes,'speechtotext.active')?(this.orgaAttributes['speechtotext.active'] as boolean): false;
+    },
     displayChoiceAllEpisodes():boolean{
       return !this.podcast || this.isEmission || this.isLargeEmission;
     },
     baseUrl(): string{
       return (state.podcastPage.MiniplayerUri as string); 
+    },
+    isDefault(): boolean {
+      return 'default' === this.iFrameModel;
     },
     isEmission(): boolean {
       return 'emission' === this.iFrameModel;
@@ -193,6 +211,9 @@ export default defineComponent({
       if(!this.displayArticle){
         url.push('&article=false');
       }
+      if(!this.displayTranscript){
+        url.push('&transcript=false');
+      }
       if (this.isVisible) {
         url.push('&key=' + window.btoa(this.dataTitle.toString()));
       }
@@ -247,26 +268,32 @@ export default defineComponent({
       return 0;
     },
     isPlayerParameter(): boolean{
-      return (!this.podcast || (this.podcast.article && 0 !== this.podcast.article.length) || this.isEmission || this.isLargeEmission || this.isLargeSuggestion) && !this.playlist;
+      return (!this.podcast || 
+      (this.displayArticle) ||
+      this.isEmission || this.isLargeEmission || this.isLargeSuggestion || 
+      (this.displayTranscriptParam))
+      && !this.playlist;
     }
   },
   async created() {
+    await this.fetchOrgaAttributes();
     await this.initColor();
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = 'large';
     }
   },
   methods: {
-    async initColor(): Promise<void> {
-      if (!this.authenticated) return;
-      let data;
+    async fetchOrgaAttributes(): Promise<void>{
       if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
-        data = this.$store.state.organisation.attributes;
+        this.orgaAttributes = this.$store.state.organisation.attributes;
       }else{
-        data= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
+        this.orgaAttributes= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
       }
-      this.color = Object.prototype.hasOwnProperty.call(data,'COLOR') ? data.COLOR : '#40a372';
-      this.theme = Object.prototype.hasOwnProperty.call(data,'THEME') ? data.THEME : '#000000';
+    },
+    initColor(): void {
+      if(!this.orgaAttributes){return;}
+      this.color = Object.prototype.hasOwnProperty.call(this.orgaAttributes,'COLOR') ? (this.orgaAttributes.COLOR as string) : '#40a372';
+      this.theme = Object.prototype.hasOwnProperty.call(this.orgaAttributes,'THEME') ? (this.orgaAttributes.THEME as string) : '#000000';
     },
   },
 })

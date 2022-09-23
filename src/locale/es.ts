@@ -306,4 +306,5 @@ export default{
   'Back to home': 'Volver a la página de inicio',
   "Warning":"Advertencia",
   "Visual":"Imagen de {name}",
+  "If the transcript is available, show it":"Si la transcripción está disponible, muéstrela",
 }

@@ -304,4 +304,5 @@ export default{
     'Back to home': "Torna alla schermata 'home'",
     "Warning":"Avvertimento",
     "Visual":"Visiva di {name}",
+    "If the transcript is available, show it":"Se la trascrizione è disponibile, mostrala",
   };

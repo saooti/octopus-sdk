@@ -306,4 +306,5 @@ export default{
   'Back to home': 'Nazaj domov',
   "Warning":"Opozorilo",
   "Visual":"Slika od {name}",
+  "If the transcript is available, show it":"Če je prepis na voljo, ga pokažite",
 }

@@ -82,13 +82,23 @@
             />
           </div>
           <div
-            v-else
+            v-if="displayArticleParam"
             class="d-flex flex-column flex-grow-1"
           >
             <ClassicCheckbox
               v-model:textInit="displayArticle"
               id-checkbox="display-article-checkbox"
               :label="$t('Display associated article')"
+            />
+          </div>
+          <div 
+            v-if="displayTranscriptParam"
+            class="d-flex flex-column flex-grow-1"
+          >
+            <ClassicCheckbox
+              v-model:textInit="displayTranscript"
+              id-checkbox="display-transcript-checkbox"
+              :label="$t('If the transcript is available, show it')"
             />
           </div>
         </div>
@@ -107,9 +117,11 @@ export default defineComponent({
   props: {
     isVisible: { default: false, type: Boolean},
     choseNumberEpisode: {default: false, type: Boolean},
-    displayChoiceAllEpisodes: {default: false, type: Boolean}
+    displayChoiceAllEpisodes: {default: false, type: Boolean},
+    displayTranscriptParam: {default: false, type: Boolean},
+    displayArticleParam: {default: false, type: Boolean},
   },
-  emits: ['episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle'],
+  emits: ['episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle', 'displayTranscript'],
 
   data() {
     return {
@@ -118,6 +130,7 @@ export default defineComponent({
       iFrameNumberPriv: '3' as string,
       isVisibleTemp: this.isVisible as boolean,
       displayArticle: true as boolean,
+      displayTranscript:true as boolean,
     };
   },
   computed: {
@@ -151,6 +164,9 @@ export default defineComponent({
     },
     displayArticle(): void{
       this.$emit('displayArticle', this.displayArticle);
+    },
+    displayTranscript(): void{
+      this.$emit('displayTranscript', this.displayTranscript);
     }
   },
 })

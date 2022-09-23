@@ -313,4 +313,5 @@ export default{
   "Go to previous page":"Aller à la page précédente",
   "Warning":"Avertissement",
   "Visual":"Visuel de {name}",
+  "If the transcript is available, show it":"Si la transcription est disponible, l'afficher",
 };
