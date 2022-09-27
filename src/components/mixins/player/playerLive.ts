@@ -14,6 +14,7 @@ export const playerLive = defineComponent({
       lastSend: 0 as number,
       hlsReady: false as boolean,
       downloadId: null as string|null,
+      audioElement: null as HTMLAudioElement|null
     };
   },
   computed: {
@@ -33,13 +34,42 @@ export const playerLive = defineComponent({
         this.live.conferenceId +
         '/index.m3u8';
       try {
-        await this.initHls(hlsStreamUrl);
+        this.audioElement = (document.getElementById('audio-player') as HTMLAudioElement);
+        if(null===this.audioElement){
+          setTimeout(() => {
+            this.playLive();
+          }, 1000);
+          return;
+        }
+        if (this.audioElement.canPlayType('application/vnd.apple.mpegurl')) {
+          this.audioElement.src = hlsStreamUrl;
+          await this.initLiveDownloadId();
+          await (this.audioElement as HTMLAudioElement).play();
+          this.onPlay();
+        }else{
+          await this.initHls(hlsStreamUrl);
+        }
       } catch (error) {
-        console.log(error);
         setTimeout(() => {
           this.playLive();
         }, 1000);
       }
+    },
+    async initLiveDownloadId(){
+      if(!this.live){ return;}
+      let downloadId = null;
+      try {
+        downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.live.livePodcastId, undefined);
+        await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.live.livePodcastId+".m3u8",{
+          'downloadId': null!==downloadId ? downloadId : undefined,
+          'origin':'octopus',
+          'distributorId':this.$store.state.authentication.organisationId
+        });
+        this.setDownloadId(downloadId);
+      } catch (error) {
+        console.log('ERROR downloadId');
+      }
+      this.hlsReady = true;
     },
     async initHls(hlsStreamUrl: string): Promise<void> {
       return new Promise<void>(async(resolve, reject) => {
@@ -65,23 +95,9 @@ export const playerLive = defineComponent({
           );
         } */
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
-          if(!this.live){ return; }
-          let downloadId = null;
-          try {
-            downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.live.livePodcastId, undefined);
-            await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.live.livePodcastId+".m3u8",{
-              'downloadId': null!==downloadId ? downloadId : undefined,
-              'origin':'octopus',
-              'distributorId':this.$store.state.authentication.organisationId
-            });
-            this.setDownloadId(downloadId);
-          } catch (error) {
-            console.log('ERROR downloadId');
-          }
-          this.hlsReady = true;
-          const audio: HTMLElement|null = document.getElementById('audio-player');
-          hls.attachMedia((audio as HTMLAudioElement));
-          await (audio as HTMLAudioElement).play();
+          await this.initLiveDownloadId();
+          hls.attachMedia((this.audioElement as HTMLAudioElement));
+          await (this.audioElement as HTMLAudioElement).play();
           this.onPlay();
           resolve();
         });

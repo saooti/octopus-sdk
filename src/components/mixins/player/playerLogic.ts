@@ -63,10 +63,12 @@ export const playerLogic = defineComponent({
     },
     live: {
       deep: true,
-      async handler(){
-        this.hlsReady = false;
-        this.reInitPlayer();
-        await this.playLive();
+      handler(){
+        this.$nextTick(async () => {
+          this.hlsReady = false;
+          this.reInitPlayer();
+          await this.playLive();
+        });
       }
     },
     async listenTime(newVal): Promise<void> {
@@ -188,7 +190,15 @@ export const playerLogic = defineComponent({
             mediaTarget.currentTime - this.notListenTime;
         }
       }
-      const streamDuration = mediaTarget.duration;
+      let streamDuration = mediaTarget.duration;
+      if(Infinity===streamDuration){
+        const seekable = mediaTarget.seekable;
+        if(seekable){
+          streamDuration = seekable.end(seekable.length - 1);
+        }else{
+          streamDuration = mediaTarget.currentTime;
+        }
+      }
       if (!streamDuration) return;
       if (!mediaTarget.currentTime) return;
       if (!this.live) {

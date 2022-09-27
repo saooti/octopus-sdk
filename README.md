@@ -643,6 +643,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.50 Améliorations responsive
  * 31.0.51 Newest
  * 31.0.52 Locale
+ * 31.0.53 Correction playerLogic
+ * 31.0.54 Test live ios
+ * 31.0.55 Test live ios
+ * 31.0.56 Test live ios
+ * 31.0.57 Test live ios
+
 
  * 32.0.0 Passage en 32
  * 32.0.1 Navigation clavier
