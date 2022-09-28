@@ -683,3 +683,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.30 SpeechToText
  * 32.0.31 Merge live IOS
  * 32.0.32 Error player parameters
+ * 32.0.33 Pétouilles graphiques ou d'UX diverses

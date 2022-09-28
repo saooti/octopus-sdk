@@ -19,10 +19,11 @@
   >
     <template #list-inline>
       <ClassicLoading
+        class="loading-size"
         :loading-text="loading?$t('Loading podcasts ...'):undefined"
       />
       <transition-group
-        v-show="loaded"
+        v-show="!loading"
         :name="transitionName"
         class="element-list-inline"
         tag="ul"
@@ -84,7 +85,6 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      loaded: true as boolean,
       index: 0 as number,
       first: 0 as number,
       size: 5 as number,
@@ -167,7 +167,6 @@ export default defineComponent({
         query: this.query,
       }, true);
       this.loading = false;
-      this.loaded = true;
       this.totalCount = data.count;
       if (this.allPodcasts.length + data.result.length < this.totalCount) {
         const nexEl = data.result.pop() as Podcast;
@@ -226,7 +225,6 @@ export default defineComponent({
     },
     reset(): void {
       this.loading = true;
-      this.loaded = true;
       this.index = 0;
       this.first = 0;
       this.totalCount = 0;

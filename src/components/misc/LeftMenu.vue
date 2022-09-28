@@ -2,6 +2,7 @@
   <div
     v-show="displayMenu"
     class="left-menu-container"
+    @mouseleave="onMenuClick"
   >
     <template
       v-for="link in routerLinkArray"

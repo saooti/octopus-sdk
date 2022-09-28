@@ -121,6 +121,7 @@ export default defineComponent({
   list-style: none;
   position: relative;
   width: 13rem;
+  height: 21.4rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;

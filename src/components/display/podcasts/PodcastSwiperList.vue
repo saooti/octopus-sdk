@@ -16,6 +16,7 @@
   >
     <template #list-inline>
       <ClassicLoading
+        class="loading-size"
         :loading-text="loading?$t('Loading podcasts ...'):undefined"
       />
       <swiper

@@ -12,6 +12,7 @@
             {{ $t('No advertising') }}
           </div>
           <iframe
+            id="miniplayerIframe"
             title="miniplayer"
             :src="iFrameSrc"
             scrolling="no"
@@ -223,7 +224,7 @@ export default defineComponent({
       switch (this.iFrameModel) {
         case 'large':
           if (this.podcast) return '180px';
-          if ('number' === this.episodeNumbers) {
+          if ('number' === this.episodeNumbers && !this.playlist) {
             switch (this.iFrameNumber.toString()) {
               case '1': return '270px';
               case '2': return '320px';

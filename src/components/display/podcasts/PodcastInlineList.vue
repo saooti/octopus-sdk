@@ -70,3 +70,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.octopus-app .loading-size{
+  height: 21.4rem;
+}
+</style>

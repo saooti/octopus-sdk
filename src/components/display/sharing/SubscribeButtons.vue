@@ -16,13 +16,13 @@
         ]"
         class="btn share-btn mb-2 mx-2"
         :href="sub.url"
-        :title="sub.name"
+        :title="sub.title"
       >
         <span :class="sub.icon">
           <div
             v-for="indexPath in getPathNumber(sub.name)"
             :key="indexPath"
-            :class="'path'+(indexPath+1)"
+            :class="'path'+(indexPath)"
           />
         </span>
       </a>
@@ -41,17 +41,17 @@ export default defineComponent({
   computed:{
     subscriptionsDisplay(){
       const sub = [
-        {name : 'amazon', icon : 'saooti-amazon', url : this.getUrl('amazon')},
-        {name:'applePodcast', icon:'saooti-apple', url : this.getUrl('applePodcast')},
-        {name:'deezer', icon:'saooti-deezer', url : this.getUrl('deezer')},
-        {name:'googlePodcasts', icon:"saooti-google-podcasts", url : this.getUrl('googlePodcasts')},
-        {name:'playerFm', icon: 'saooti-playerfm', url : this.getUrl('playerFm')},
-        {name:'pocketCasts', icon:'saooti-pocket-casts', url : this.getUrl('pocketCasts')},
-        {name:'podcastAddict', icon: 'saooti-podcast-addict', url : this.getUrl('podcastAddict')},
-        {name:'radioline', icon:'saooti-radioline', url : this.getUrl('radioline')},
-        {name:'spotify', icon:'saooti-spotify', url : this.getUrl('spotify')},
-        {name:'stitcher', icon:'saooti-stitcher-logo', url : this.getUrl('stitcher')},
-        {name:'tunein', icon:'saooti-tunin', url : this.getUrl('tunein')}
+        {name : 'amazon', icon : 'saooti-amazon',title:'Amazon Music | Podcasters', url : this.getUrl('amazon')},
+        {name:'applePodcast', icon:'saooti-apple', title:'Apple Podcast | iTunes', url : this.getUrl('applePodcast')},
+        {name:'deezer', icon:'saooti-deezer', title:'Deezer', url : this.getUrl('deezer')},
+        {name:'googlePodcasts', icon:"saooti-google-podcasts",title:'Google Podcasts', url : this.getUrl('googlePodcasts')},
+        {name:'playerFm', icon: 'saooti-playerfm',title:'PlayerFM', url : this.getUrl('playerFm')},
+        {name:'pocketCasts', icon:'saooti-pocket-casts', title:'Pocket Casts', url : this.getUrl('pocketCasts')},
+        {name:'podcastAddict', icon: 'saooti-podcast-addict', title:'Podcast Addict', url : this.getUrl('podcastAddict')},
+        {name:'radioline', icon:'saooti-radioline',title:'Radioline', url : this.getUrl('radioline')},
+        {name:'spotify', icon:'saooti-spotify',title:'Spotify',  url : this.getUrl('spotify')},
+        {name:'stitcher', icon:'saooti-stitcher-logo', title:'Stitcher', url : this.getUrl('stitcher')},
+        {name:'tunein', icon:'saooti-tunin',title:'TuneIn', url : this.getUrl('tunein')}
       ];
       return sub.filter(item=> item.url);
     }
