@@ -269,7 +269,7 @@ export default defineComponent({
     },
     isPlayerParameter(): boolean{
       return (!this.podcast || 
-      (this.displayArticle) ||
+      (this.displayArticleParam) ||
       this.isEmission || this.isLargeEmission || this.isLargeSuggestion || 
       (this.displayTranscriptParam))
       && !this.playlist;
