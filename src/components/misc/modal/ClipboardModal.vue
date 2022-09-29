@@ -28,7 +28,7 @@
             >
           </p>
           <RssSection
-            v-if="emission"
+            v-if="emission && authenticated"
             :emission="emission"
           />
         </div>
@@ -54,6 +54,11 @@ export default defineComponent({
     emission: { default: undefined, type: Object as ()=> Emission},
   },
   emits: ['close', 'copy'],
+  computed: {
+    authenticated(): boolean {
+      return this.$store.state.authentication.isAuthenticated;
+    },
+  },
   mounted(){
     (this.$refs.focusElement as HTMLElement)?.focus();
   },
