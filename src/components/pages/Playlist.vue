@@ -98,8 +98,7 @@ export default defineComponent({
       return this.playlist?.title ??'';
     },
     imageUrl(): string {
-      const dummy = new Date().getTime().toString();
-      return this.playlist ? this.playlist.imageUrl + '?dummy=' + dummy : '';
+      return this.playlist?.imageUrl ?? '';
     },
     description(): string {
       return this.playlist?.description ??'';

@@ -71,12 +71,6 @@ export default defineComponent({
   props: {
     playlist: { default: ()=>({}), type: Object as ()=>Playlist},
   },
-
-  data() {
-    return {
-      dummyParam: new Date().getTime().toString() as string,
-    };
-  },
   
   computed: {
     isPodcastmaker(): boolean {

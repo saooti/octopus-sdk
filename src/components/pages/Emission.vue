@@ -123,7 +123,6 @@ export default defineComponent({
       ftpEmission: false as boolean,
       exclusive: false as boolean,
       notExclusive: false as boolean,
-      dummyParam: new Date().getTime().toString() as string,
       fetchLive: true as boolean,
     };
   },
@@ -148,7 +147,7 @@ export default defineComponent({
       return this.emission?.name??'';
     },
     imageUrl(): string {
-      return this.emission? `${this.emission.imageUrl}?dummy=${this.dummyParam}`:'';
+      return this.emission? `${this.emission.imageUrl}`:'';
     },
     description(): string {
       return this.emission?.description??'';

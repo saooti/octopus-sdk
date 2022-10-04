@@ -162,7 +162,6 @@ export default defineComponent({
     return {
       activeEmission: true as boolean,
       podcasts: [] as Array<Podcast>,
-      dummyParam: new Date().getTime().toString() as string,
     };
   },
   

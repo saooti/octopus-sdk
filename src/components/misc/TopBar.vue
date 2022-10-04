@@ -98,7 +98,6 @@ export default defineComponent({
       minScroll: 0 as number,
       organisationId: undefined as string | undefined,
       reset: false as boolean,
-      dummyParam: new Date().getTime().toString() as string,
     };
   },
   computed: {
@@ -131,7 +130,7 @@ export default defineComponent({
     },
     imgUrl(): string {
       if (!this.$store.state.filter.imgUrl?.includes('emptypodcast'))
-        return `${this.$store.state.filter.imgUrl}?dummy=${this.dummyParam}`;
+        return `${this.$store.state.filter.imgUrl}`;
       return '';
     },
   },

@@ -685,3 +685,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.32 Error player parameters
  * 32.0.33 Pétouilles graphiques ou d'UX diverses
  * 32.0.34 Modale RSS
+ * 32.0.35 Enlever Dummy param
