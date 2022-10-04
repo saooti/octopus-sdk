@@ -15,6 +15,7 @@
         v-for="option in options"
         :key="option.title"
         :value="option.value"
+        :style="option.fontFamily ? 'font-family:'+option.fontFamily:''"
       >
         {{ option.title }}
       </option>
@@ -30,7 +31,7 @@ export default defineComponent({
     label: { default: '', type: String },
     displayLabel:{default: true, type: Boolean},
     isDisabled: { default: false, type: Boolean },
-    options: { default: ()=>[], type: Array as () => Array<{title: string, value: string|undefined}> },
+    options: { default: ()=>[], type: Array as () => Array<{title: string, value: string|undefined, fontFamily?: string}> },
     textInit: { default: undefined, type: String },
   },
   emits: ['update:textInit'],
