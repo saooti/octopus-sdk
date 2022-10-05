@@ -67,6 +67,7 @@ export default createStore({
     },
 
     playerElapsed(state, elapsed) {
+      console.log(elapsed);
       state.player.elapsed = elapsed;
     },
 

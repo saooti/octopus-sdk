@@ -9,6 +9,7 @@ export const playerDisplay = defineComponent({
   },
 	computed:{
 		playedTime(): string{
+      console.log(this.$store.state.player.elapsed);
       if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {
         return DurationHelper.formatDuration(
           Math.round(this.$store.state.player.elapsed * this.$store.state.player.total)

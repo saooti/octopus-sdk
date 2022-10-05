@@ -26,7 +26,7 @@
         <div
           v-for="index in button.nbPath"
           :key="index"
-          :class="'path'+(index+1)"
+          :class="'path'+(index)"
         />
       </div>
     </a>
