@@ -10,6 +10,7 @@
       v-model="textValue"
       :disabled="isDisabled"
       class="c-hand"
+      :style="getFontFamily"
     >
       <option
         v-for="option in options"
@@ -24,6 +25,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { displayMethods } from '../mixins/functions';
 export default defineComponent({
   name: 'ClassicSelect',
   props: {
@@ -40,6 +42,17 @@ export default defineComponent({
       textValue: undefined as string|undefined,
     };
   },
+  computed:{
+    getFontFamily(): string{
+      const item = this.options.find((x) => {
+        return this.textValue === x.value;
+      });
+      if(item && item.fontFamily){
+        return 'font-family:'+item.fontFamily;
+      }
+      return "";
+    }
+  },
   watch: {
     textValue(){
 			if(this.textInit !== this.textValue){
@@ -54,7 +67,7 @@ export default defineComponent({
         }
       },
     },
-  }
+  },
 });
 </script>
 <style lang="scss">
