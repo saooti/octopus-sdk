@@ -9,7 +9,7 @@ const state:paramStore = {
     isRoleLive: true,
     isCommments: true,
     isOrganisation: true,
-    isPlaylist: false,
+    isPlaylist: true,
     isProduction: true,
     isContribution: true,
     ApiUri: 'https://api.dev2.saooti.org/',
@@ -209,6 +209,9 @@ const definedProps = (obj: GeneralParameters|PodcastPage|PodcastsPage|EmissionsP
 const initialize = function initialize(initObject: paramStore): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     state.generalParameters =  Object.assign(state.generalParameters, definedProps(initObject.generalParameters));
+    if(!state.generalParameters.authenticated){
+      state.generalParameters.organisationId = undefined;
+    }
     state.podcastPage =  Object.assign(state.podcastPage, definedProps(initObject.podcastPage));
     state.podcastsPage =  Object.assign(state.podcastsPage, definedProps(initObject.podcastsPage));
     state.emissionsPage =  Object.assign(state.emissionsPage, definedProps(initObject.emissionsPage));

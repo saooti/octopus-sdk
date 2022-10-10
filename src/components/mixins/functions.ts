@@ -13,7 +13,7 @@ export const imageProxy ={
       if(!url){
         return "";
       }
-      if(state.octopusApi.imageUrl){
+      if(state.octopusApi.imageUrl && url.includes('http')){
         return state.octopusApi.imageUrl+"image/"+btoa(url)+"?width="+width+"&useWebp=true";
       }
       return url;
