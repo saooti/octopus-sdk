@@ -337,6 +337,7 @@ export default defineComponent({
     flex-direction: column;
     background: transparent;
     border-width: 0;
+    width: 100%;
     &:focus{
       background: rgba(0, 0, 0, 0.5);
     }
