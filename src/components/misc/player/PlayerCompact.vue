@@ -146,7 +146,7 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     margin: 0 0.5rem;
-    border-radius: 50%;
+    border-radius: 50% !important;
     font-size: 0.7rem !important;
     flex-shrink: 0;
     cursor: pointer;
