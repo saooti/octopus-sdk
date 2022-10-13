@@ -10,7 +10,7 @@ import paramStore from '@/store/paramStore';
 const nameEQ = 'octopus-language=';
 const ca = document.cookie.split(';');
 let language = "";
-for (let valueCookie in ca) {
+for (let valueCookie of ca) {
   let c = valueCookie;
   while (c.charAt(0) == ' ') c = c.substring(1, c.length);
   if (0 === c.indexOf(nameEQ)){
