@@ -14,6 +14,7 @@
     :rubriquage-id="rubriquageId"
     :no-rubriquage-id="noRubriquageId"
     :query="query"
+    :podcastId="podcastId"
     @update:isArrow="$emit('update:isArrow',$event)"
   />
   <PodcastSwiperList
@@ -61,6 +62,7 @@ export default defineComponent({
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
     query: { default: undefined, type: String},
+    podcastId: { default: undefined, type: Number},
   },
   emits: ['update:isArrow'],
   computed:{

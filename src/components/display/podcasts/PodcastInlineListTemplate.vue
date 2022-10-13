@@ -2,7 +2,9 @@
   <div
     class="d-flex flex-column p-3"
   >
-    <div class="d-flex align-items-center mb-2">
+    <div 
+      class="d-flex align-items-center"
+      :class="podcastId?'mb-4':'mb-2'">
       <h2 class="mb-0">
         {{ title }}
       </h2>
@@ -14,7 +16,7 @@
         @click="handleSeeMoreButton"
       />
     </div>
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between" v-if="!podcastId">
       <div class="d-flex">
         <button
           class="btn btn-underline"
@@ -51,7 +53,7 @@
     </div>
     <slot name="list-inline" />
     <router-link
-      v-if="!isButtonNextTitle"
+      v-if="!isButtonNextTitle && buttonText"
       class="btn btn-primary align-self-center width-fit-content m-4"
       :to="refTo"
       @click="handleSeeMoreButton"
@@ -88,7 +90,8 @@ export default defineComponent({
     iabId: { default: undefined, type: Number},
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
-    isButtonNextTitle: {default: false, type:Boolean}
+    isButtonNextTitle: {default: false, type:Boolean},
+    podcastId: { default: undefined, type: Number},
   },
   emits:['sortChrono','sortPopular', 'displayPrevious', 'displayNext'],
   data() {

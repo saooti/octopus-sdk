@@ -12,11 +12,11 @@
     "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js",
     "prettifile": "prettier --single-quote --trailing-comma es5 --write",
     "prettify": "prettier --single-quote --trailing-comma es5 --write src/**/**/**/*.{js,vue}",
-    "sonar":"node sonarqube-scanner.js", 
-    "test":"jest --coverage"
+    "sonar": "node sonarqube-scanner.js",
+    "test": "jest --coverage"
   },
   "dependencies": {
-    "@saooti/octopus-api": "^0.32.3",
+    "@saooti/octopus-api": "^0.33.0",
     "@vue/cli": "^5.0.8",
     "@vue/compat": "^3.2.37",
     "autoprefixer": "^10.4.8",
@@ -100,9 +100,9 @@
     "type": "git",
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
-  "jestSonar":{ 
-    "reportPath":"coverage", 
-    "reportFile":"test-reporter.xml", 
-    "indent":4 
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
   }
 }

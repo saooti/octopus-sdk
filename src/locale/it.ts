@@ -67,7 +67,6 @@ export default{
     Episode: 'Episodio', 
     'Episode name image': "Immagine dell'episodio {name}", 
     'More episodes of this emission': "Altri episodi di questa serie", 
-    'More episodes of this category : {name}': "Altri episodi della categoria: {name}", 
     'All podcast emission button': "Seleziona tutte le serie",
     Duration: 'Durata: {duration}', 
     Animator: 'Host',

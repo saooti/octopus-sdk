@@ -12,6 +12,7 @@
     :previous-available="previousAvailable"
     :next-available="nextAvailable"
     :no-rubriquage-id="noRubriquageId"
+    :podcastId="podcastId"
     @sortChrono="sortChrono"
     @sortPopular="sortPopular"
     @displayPrevious="displayPrevious"
@@ -79,6 +80,7 @@ export default defineComponent({
     rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
     query: { default: undefined, type: String},
+    podcastId: { default: undefined, type: Number},
   },
   emits: ['update:isArrow'],
 
@@ -153,7 +155,26 @@ export default defineComponent({
     this.fetchNext();
   },
   methods: {
+    async fetchRecommendations(): Promise<void>{
+      const podcastIdsArray = await octopusApi.fetchDataPublicWithParams<Array<number>>(13, 'get_predicts',{
+        reco: this.podcastId,
+        n_neightbors: 5,
+      }); 
+      for (let podcastIdReco of podcastIdsArray) {
+        try {
+          const entirePodcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+podcastIdReco); 
+          this.allPodcasts.push(entirePodcast);
+        } catch {
+          //If doesn't exist, do nothing
+        }
+      }
+      this.totalCount = podcastIdsArray.length;
+      this.loading = false;
+    },
     async fetchNext(): Promise<void> {
+      if(this.podcastId){
+        return this.fetchRecommendations();
+      }
       const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
          first: this.first,
         size: this.size + 1,

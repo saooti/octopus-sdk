@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/css/fonts/icomoon.eot?8edpg2');
-  src:  url('/css/fonts/icomoon.eot?8edpg2#iefix') format('embedded-opentype'),
-    url('/css/fonts/icomoon.ttf?8edpg2') format('truetype'),
-    url('/css/fonts/icomoon.woff?8edpg2') format('woff'),
-    url('/css/fonts/icomoon.svg?8edpg2#icomoon') format('svg');
+  src:  url('/css/fonts/icomoon.eot?svfrvx');
+  src:  url('/css/fonts/icomoon.eot?svfrvx#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?svfrvx') format('truetype'),
+    url('/css/fonts/icomoon.woff?svfrvx') format('woff'),
+    url('/css/fonts/icomoon.svg?svfrvx#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.saooti-text-to-speech:before {
+  content: "\e922";
+}
 .saooti-left:before {
   content: "\e900";
 }
@@ -220,87 +223,87 @@
 }
 .saooti-stitcher-logo .path2:before {
   content: "\e94b";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path3:before {
   content: "\e94c";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path4:before {
   content: "\e94d";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path5:before {
   content: "\e94e";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path6:before {
   content: "\e94f";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path7:before {
   content: "\e950";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path8:before {
   content: "\e951";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-stitcher-logo .path9:before {
   content: "\e952";
-  
+
   color: rgb(53, 144, 197);
 }
 .saooti-stitcher-logo .path10:before {
   content: "\e953";
-  
+
   color: rgb(53, 144, 197);
 }
 .saooti-stitcher-logo .path11:before {
   content: "\e954";
-  
+
   color: rgb(197, 56, 39);
 }
 .saooti-stitcher-logo .path12:before {
   content: "\e955";
-  
+
   color: rgb(197, 56, 39);
 }
 .saooti-stitcher-logo .path13:before {
   content: "\e956";
-  
+
   color: rgb(236, 139, 36);
 }
 .saooti-stitcher-logo .path14:before {
   content: "\e957";
-  
+
   color: rgb(236, 139, 36);
 }
 .saooti-stitcher-logo .path15:before {
   content: "\e958";
-  
+
   color: rgb(251, 198, 24);
 }
 .saooti-stitcher-logo .path16:before {
   content: "\e959";
-  
+
   color: rgb(251, 198, 24);
 }
 .saooti-stitcher-logo .path17:before {
   content: "\e95a";
-  
+
   color: rgb(97, 34, 104);
 }
 .saooti-stitcher-logo .path18:before {
   content: "\e95b";
-  
+
   color: rgb(97, 34, 104);
 }
 .saooti-pocket-casts:before {
@@ -334,32 +337,32 @@
 }
 .saooti-google-podcasts .path2:before {
   content: "\e963";
-  
+
   color: rgb(66, 133, 244);
 }
 .saooti-google-podcasts .path3:before {
   content: "\e964";
-  
+
   color: rgb(234, 67, 53);
 }
 .saooti-google-podcasts .path4:before {
   content: "\e965";
-  
+
   color: rgb(52, 168, 83);
 }
 .saooti-google-podcasts .path5:before {
   content: "\e966";
-  
+
   color: rgb(250, 185, 8);
 }
 .saooti-google-podcasts .path6:before {
   content: "\e967";
-  
+
   color: rgb(52, 168, 83);
 }
 .saooti-google-podcasts .path7:before {
   content: "\e968";
-  
+
   color: rgb(250, 185, 8);
 }
 .saooti-amazon .path1:before {
@@ -368,12 +371,12 @@
 }
 .saooti-amazon .path2:before {
   content: "\e96a";
-  
+
   color: rgb(255, 153, 0);
 }
 .saooti-amazon .path3:before {
   content: "\e96b";
-  
+
   color: rgb(0, 0, 0);
 }
 .saooti-Whatsapp .path1:before {
@@ -382,12 +385,12 @@
 }
 .saooti-Whatsapp .path2:before {
   content: "\e96d";
-  
+
   color: rgb(255, 255, 255);
 }
 .saooti-Whatsapp .path3:before {
   content: "\e96e";
-  
+
   color: rgb(44, 183, 66);
 }
 .saooti-more:before {

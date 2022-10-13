@@ -72,6 +72,10 @@
         :button-text="$t('All podcast emission button')"
       />
       <PodcastInlineList
+        :podcastId="podcastId"
+        title="Les recommendations de Vincent !"
+      />
+      <PodcastInlineList
         v-for="c in categories"
         :key="c.id"
         :iab-id="c.id"
