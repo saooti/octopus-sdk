@@ -10,7 +10,7 @@
     :loading-text="loading?$t('Loading participants ...'):undefined"
   >
     <template #list>
-      <ul
+      <div
         class="participant-list"
       >
         <template
@@ -22,7 +22,7 @@
             :participant="p"
           />
         </template>
-      </ul>
+      </div>
     </template>
   </ListPaginate>
 </template>
@@ -57,8 +57,8 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      dfirst: this.first as number,
-      dsize: this.size as number,
+      dfirst: this.first,
+      dsize: this.size,
       totalCount: 0 as number,
       displayCount: 0 as number,
       participants: [] as Array<Participant>,
@@ -145,11 +145,6 @@ export default defineComponent({
   flex-grow: 1;
   margin: 0;
   padding: 0;
-  /*For ie11 */
-  display: flex;
-  flex-wrap: wrap;
-  /* end */
-
   display: grid; /* 1 */
   grid-template-columns: repeat(auto-fill, 14rem); /* 2 */
   grid-gap: 2rem; /* 3 */

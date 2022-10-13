@@ -27,7 +27,7 @@
         aria-expanded="false"
         :title="$t('See more')"
       />
-      <ul class="dropdown-menu dropdown-menu-right px-4">
+      <div class="dropdown-menu dropdown-menu-right px-4">
         <div
           v-for="category in hidenCategories"
           :key="category.id"
@@ -36,7 +36,7 @@
         >
           {{ category.name }}
         </div>
-      </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -185,7 +185,6 @@ export default defineComponent({
     font-size: 0.6rem;
     margin: 0.2rem;
     padding: 0.5rem;
-    display: block;
     height: 1.5rem;
     border-radius: 1.5rem;
     border: 0;

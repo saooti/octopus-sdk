@@ -100,7 +100,7 @@ export default defineComponent({
       return this.allPodcasts.slice(this.index, this.index + this.size);
     },
     sizeItem(): number {
-      return state.generalParameters.podcastItem ? (state.generalParameters.podcastItem as number): 13;
+      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 13;
     },
     overflowScroll(): boolean {
       return (state.emissionPage.overflowScroll as boolean);

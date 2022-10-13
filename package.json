@@ -11,7 +11,9 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js",
     "prettifile": "prettier --single-quote --trailing-comma es5 --write",
-    "prettify": "prettier --single-quote --trailing-comma es5 --write src/**/**/**/*.{js,vue}"
+    "prettify": "prettier --single-quote --trailing-comma es5 --write src/**/**/**/*.{js,vue}",
+    "sonar":"node sonarqube-scanner.js", 
+    "test":"jest --coverage"
   },
   "dependencies": {
     "@saooti/octopus-api": "^0.32.3",
@@ -20,12 +22,15 @@
     "autoprefixer": "^10.4.8",
     "axios": "^0.24.0",
     "bootstrap": "5.2.0",
+    "express": "^4.18.2",
     "hls.js": "^1.1.5",
     "humanize-duration": "^3.27.2",
+    "jest": "^29.1.2",
     "jquery": "^3.5.14",
     "moment": "^2.29.4",
     "qrcode.vue": "^3.3.3",
     "sass": "^1.53.0",
+    "sonarqube-scanner": "^2.8.2",
     "swiper": "^8.3.1",
     "v-calendar": "^3.0.0-alpha.8",
     "vite": "^3.0.4",
@@ -94,5 +99,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/saooti/octopus-sdk.git"
+  },
+  "jestSonar":{ 
+    "reportPath":"coverage", 
+    "reportFile":"test-reporter.xml", 
+    "indent":4 
   }
 }

@@ -99,7 +99,6 @@ import { state } from '../../../store/paramStore';
 import Snackbar from '../../misc/Snackbar.vue';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import SnackbarVue from '../../misc/Snackbar.vue';
 import { Playlist } from '@/store/class/general/playlist';
 const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));
 const NewsletterModal = defineAsyncComponent(() => import('../../misc/modal/NewsletterModal.vue'));
@@ -201,7 +200,7 @@ export default defineComponent({
       this.dataRSSSave = !this.dataRSSSave;
     },
     afterCopy(): void{
-      (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Link in clipboard'));
+      (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Link in clipboard'));
     },
     onDownload(urlToDownload: string, nameOfDownload: string): void{
       const xhr = new XMLHttpRequest();

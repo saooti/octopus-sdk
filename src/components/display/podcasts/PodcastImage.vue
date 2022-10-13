@@ -125,7 +125,7 @@ export default defineComponent({
       },
     }),
     mainRubrique(): boolean{
-      return undefined!==state.podcastPage.mainRubrique && 0!==state.podcastPage.mainRubrique && true==this.podcast?.rubriqueIds?.includes(state.podcastPage.mainRubrique);
+      return undefined!==state.podcastPage.mainRubrique && 0!==state.podcastPage.mainRubrique && (this.podcast?.rubriqueIds?.includes(state.podcastPage.mainRubrique) as boolean);
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -160,7 +160,7 @@ export default defineComponent({
     iconName(): string {
       if (this.isLiveToBeRecorded) return 'saooti-clock';
       if ('READY' === this.podcast.processingStatus || this.fetchConference) {
-        if (false == this.podcast.valid) return 'saooti-checkmark';
+        if (!this.podcast.valid) return 'saooti-checkmark';
         if (
           !this.podcast.availability.visibility &&
           this.podcast.availability.date
@@ -181,7 +181,7 @@ export default defineComponent({
       if (this.isLiveToBeRecorded)
         return this.$t('Podcast linked to waiting live');
       if ('READY' === this.podcast.processingStatus || this.fetchConference) {
-        if (false == this.podcast.valid) return this.$t('Podcast to validate');
+        if (!this.podcast.valid) return this.$t('Podcast to validate');
         if (
           !this.podcast.availability.visibility &&
           this.podcast.availability.date

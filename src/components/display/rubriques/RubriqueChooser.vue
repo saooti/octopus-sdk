@@ -102,7 +102,7 @@ export default defineComponent({
   data() {
     return {
       rubriques: [] as Array<Rubrique>,
-      rubrique: getDefaultRubrique(this.defaultanswer) as Rubrique|undefined,
+      rubrique: getDefaultRubrique(this.defaultanswer),
       rubriqueForArray: [] as Array<Rubrique>,
       isLoading: false as boolean,
       withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as {name: string, rubriqueId:number},

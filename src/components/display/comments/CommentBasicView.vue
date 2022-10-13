@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="d-flex small-text">
-      <b
+      <strong
         v-if="recordingInLive && ('Live' === comment.phase || 'Prelive' === comment.phase)"
         class="recording-bg me-1 text-light p-1"
-      >{{ $t('Live') }}</b>
-      <b
+      >{{ $t('Live') }}</strong>
+      <strong
         :id="'popover-comment' + comment.comId"
         role="button"
         tabindex="-1"
@@ -13,7 +13,7 @@
         class="me-2"
       >{{
         comment.name
-      }}</b>
+      }}</strong>
       <Popover
         :disable="editRight || isValid"
         :target="'popover-comment' + comment.comId"

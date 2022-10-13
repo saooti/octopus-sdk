@@ -68,11 +68,11 @@
         <span v-if="comment.relatedComments">
           <template v-if="!collapseVisible">
             {{ $t('Display answers', { nb: comment.relatedComments }) }}
-            <i v-if="editRight">{{
+            <em v-if="editRight">{{
               $t('(nb valid comment answers)', {
                 nb: comment.relatedValidComments,
               })
-            }}</i>
+            }}</em>
           </template>
           <template v-else>
             {{ $t('Hide answers') }}
@@ -264,41 +264,48 @@ export default defineComponent({
       }
       this.$emit('update:comment', updatedComment);
     },
+    receiveUpdateComment(event: {type: string; comment: CommentPodcast; oldStatus?:string }){
+      let updatedStatus = "";
+      if (event.comment.status && event.comment.status !== event.oldStatus) {
+        updatedStatus = event.comment.status;
+      }
+      const updatedComment = this.comment;
+      if(undefined !== updatedComment.relatedValidComments){
+        if ('Invalid' ===updatedStatus) {
+          updatedComment.relatedValidComments -= 1;
+        } else if ('Valid' === updatedStatus) {
+          updatedComment.relatedValidComments += 1;
+        }
+      }
+      this.$emit('update:comment', updatedComment);
+    },
+    receiveDeleteComment(event: {type: string; comment: CommentPodcast; oldStatus?:string }){
+      const deletedComment = this.comment;
+      if(undefined !== deletedComment.relatedComments){
+        deletedComment.relatedComments -= 1;
+      }
+      if (undefined !== deletedComment.relatedValidComments && 'Valid' === event.comment.status) {
+        deletedComment.relatedValidComments -= 1;
+      }
+      this.$emit('update:comment', deletedComment);
+    },
+
     receiveCommentEvent(event: {type: string; comment: CommentPodcast; oldStatus?:string }): void {
       switch (event.type) {
         case 'Create':this.newComment(event.comment, true);break;
         case 'Update':
           if (this.$refs.commentList) {
             (this.$refs.commentList as InstanceType<typeof CommentList>).updateComment(event);
-          } else {
-            const updatedComment = this.comment;
-            let updatedStatus = "";
-            if (event.comment.status && event.comment.status !== event.oldStatus) {
-              updatedStatus = event.comment.status;
-            }
-            if(undefined !== updatedComment.relatedValidComments){
-              if ('Invalid' ===updatedStatus) {
-                updatedComment.relatedValidComments -= 1;
-              } else if ('Valid' === updatedStatus) {
-                updatedComment.relatedValidComments += 1;
-              }
-            }
-            this.$emit('update:comment', updatedComment);
+            return;
           }
+          this.receiveUpdateComment(event);
           break;
         case 'Delete':
           if (this.$refs.commentList) {
             (this.$refs.commentList as InstanceType<typeof CommentList>).deleteComment(event.comment);
-          } else {
-            const deletedComment = this.comment;
-            if(undefined !== deletedComment.relatedComments){
-              deletedComment.relatedComments -= 1;
-            }
-            if (undefined !== deletedComment.relatedValidComments && 'Valid' === event.comment.status) {
-              deletedComment.relatedValidComments -= 1;
-            }
-            this.$emit('update:comment', deletedComment);
+            return;
           }
+          this.receiveDeleteComment(event);
           break;
         default:
           break;

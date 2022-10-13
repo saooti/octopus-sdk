@@ -6,19 +6,12 @@ import {setupI18n} from './i18n';
 import router from '@/router/router';
 import store from '@/store/AppStore';
 import paramStore from '@/store/paramStore';
-/* import 'popper.js/dist/popper.min.js'; */
-/* import 'jquery/src/jquery.js'; */
-/* import 'jquery';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
- */
 
-
-//TODO
 const nameEQ = 'octopus-language=';
 const ca = document.cookie.split(';');
 let language = "";
-for (let i = 0; i < ca.length; i++) {
-  let c = ca[i];
+for (let valueCookie in ca) {
+  let c = valueCookie;
   while (c.charAt(0) == ' ') c = c.substring(1, c.length);
   if (0 === c.indexOf(nameEQ)){
     language = c.substring(nameEQ.length, c.length);
@@ -26,7 +19,7 @@ for (let i = 0; i < ca.length; i++) {
   }
 }
 if(0===language.length){
-  const navigatorLang = navigator.language /* || navigator.userLanguage */;
+  const navigatorLang = navigator.language;
   language = 'fr';
   if(navigatorLang.includes('en')){
     language = 'en';

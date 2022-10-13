@@ -10,7 +10,7 @@
     :loading-text="loading?$t('Loading emissions ...'):undefined"
   >
     <template #list>
-      <ul
+      <div
         v-if="!itemPlayer"
         class="emission-list"
         :class="smallItems ? 'three-emissions' : 'two-emissions'"
@@ -24,7 +24,7 @@
             :emission="e"
           />
         </template>
-      </ul>
+      </div>
       <div
         v-else
         v-show="(displayRubriquage && rubriques)||!displayRubriquage"
@@ -92,8 +92,8 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      dfirst: this.first as number,
-      dsize: this.size as number,
+      dfirst: this.first,
+      dsize: this.size,
       totalCount: 0 as number,
       displayCount: 0 as number,
       emissions: [] as Array<Emission>,

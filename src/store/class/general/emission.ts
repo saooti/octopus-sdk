@@ -4,7 +4,7 @@ import { Person } from '../user/person';
 
 export interface Emission {
   imageUrl?: string;
-  annotations?: {[key: string]:string|number|boolean|undefined}|undefined;
+  annotations?: {[key: string]:string|number|boolean|undefined};
   description: string;
   emissionId: number;
   iabIds?: Array<number>;

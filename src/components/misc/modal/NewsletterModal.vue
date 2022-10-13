@@ -110,7 +110,6 @@ import { Participant } from '@/store/class/general/participant';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue'
-import SnackbarVue from '../../misc/Snackbar.vue';
 import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Playlist } from '@/store/class/general/playlist';
@@ -138,7 +137,7 @@ export default defineComponent({
       displayParticipantsNames: true as boolean,
       displayEmissionName: true as boolean,
       color: '#40a372' as string,
-      shareUrl: window.location.href as string,
+      shareUrl: window.location.href,
 
     };
   },
@@ -299,7 +298,7 @@ export default defineComponent({
       }
     },
     afterCopy(): void{
-      (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Data in clipboard'));
+      (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Data in clipboard'));
     },
     async initData(): Promise<void> {
       let attributes;

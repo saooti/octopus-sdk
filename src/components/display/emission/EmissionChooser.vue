@@ -127,7 +127,7 @@ export default defineComponent({
 
   data() {
     return{
-      emission: getDefaultEmission(this.defaultanswer) as Emission | undefined,
+      emission: getDefaultEmission(this.defaultanswer),
       emissions: [] as Array<Emission>,
       remainingElements: 0 as number,
       isLoading: false as boolean,

@@ -76,7 +76,7 @@ export default defineComponent({
   emits: ['update:first', 'update:rowsPerPage', 'update:isMobile'],
   data() {
     return {
-      windowWidth: window.innerWidth as number,
+      windowWidth: window.innerWidth,
 		};
   },
   computed:{
@@ -87,7 +87,10 @@ export default defineComponent({
       return 960 >= this.windowWidth;
     },
     rangeSize(){
-      return this.windowWidth > 1600 ? 3 : this.windowWidth > 1530 ? 2 : 1;
+      if(this.windowWidth > 1600){
+        return 3;
+      }
+      return this.windowWidth > 1530 ? 2 : 1;
     },
   },
   watch:{
@@ -124,7 +127,7 @@ export default defineComponent({
     scrollToTop(){
       const element = document.getElementById(this.id);
       if(!element || element.getBoundingClientRect().top > 0){return;}
-      const y = element.getBoundingClientRect().top + window.pageYOffset - domHelper.convertRemToPixels(3.5);
+      const y = element.getBoundingClientRect().top + window.scrollY - domHelper.convertRemToPixels(3.5);
       window.scrollTo({top: y, behavior: 'smooth'});
     }
 	}

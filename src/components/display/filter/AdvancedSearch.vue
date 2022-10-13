@@ -114,7 +114,7 @@ export default defineComponent({
           'updateRubriquageFilter'],
   data() {
     return {
-      isNotVisible: this.includeHidden as boolean,
+      isNotVisible: this.includeHidden,
       isNotValidate: false as boolean,
       showFilters: false as boolean,
     };

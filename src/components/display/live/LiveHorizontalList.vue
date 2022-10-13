@@ -15,7 +15,7 @@
       :loading="false"
     >
       <template #list>
-        <ul
+        <div
           class="podcast-list"
         >
           <template
@@ -27,7 +27,7 @@
               :podcast="p"
             />
           </template>
-        </ul>
+        </div>
       </template>
     </ListPaginate>
   </div>
@@ -56,8 +56,8 @@ export default defineComponent({
 
   data() {
     return {
-      dfirst: this.first as number,
-      dsize: this.size as number,
+      dfirst: this.first,
+      dsize: this.size,
       totalCount: 0 as number,
       lives: [] as Array<Podcast>,
       notEmpty: false as boolean,

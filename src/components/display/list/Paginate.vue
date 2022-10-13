@@ -126,40 +126,17 @@ export default defineComponent({
     },
     pagination(): (number | null)[] {
       if(-1===this.rangeSize){return[];}
-      const res = [];
       const minPaginationElems = 5 + this.rangeSize * 2;
       let rangeStart = this.totalPage <= minPaginationElems ? 1 : (this.page + 1) - this.rangeSize;
       let rangeEnd =this.totalPage <= minPaginationElems ? this.totalPage : (this.page + 1)+ this.rangeSize;
       rangeEnd = rangeEnd > this.totalPage ? this.totalPage : rangeEnd;
       rangeStart = rangeStart < 1 ? 1 : rangeStart;
       if (this.totalPage > minPaginationElems) {
-        const isStartBoundaryReached = rangeStart - 1 < 3;
-        const isEndBoundaryReached = this.totalPage - rangeEnd < 3;
-        if (isStartBoundaryReached) {
-          rangeEnd = minPaginationElems - 2;
-          for (let i = 1; i < rangeStart; i++) {
-            res.push(i);
-          }
-        } else {
-          res.push(1);
-          res.push(null);
-        }
-        if (isEndBoundaryReached) {
-          rangeStart = this.totalPage - (minPaginationElems - 3);
-          for (let i = rangeStart; i <= this.totalPage; i++) {
-            res.push(i);
-          }
-        } else {
-          for (let i = rangeStart; i <= rangeEnd; i++) {
-            res.push(i);
-          }
-          res.push(null);
-          res.push(this.totalPage);
-        }
-      } else {
-        for (let i = rangeStart; i <= rangeEnd; i++) {
-          res.push(i);
-        }
+        return this.getPaginationArrayWithEllipsis(rangeStart, rangeEnd, minPaginationElems);
+      }
+      const res = [];
+      for (let i = rangeStart; i <= rangeEnd; i++) {
+        res.push(i);
       }
       return res;
     },
@@ -184,6 +161,33 @@ export default defineComponent({
 	},
  
 	methods:{
+    getPaginationArrayWithEllipsis(rangeStart: number, rangeEnd:number, minPaginationElems:number){
+      const res = [];
+      const isStartBoundaryReached = rangeStart - 1 < 3;
+      const isEndBoundaryReached = this.totalPage - rangeEnd < 3;
+      if (isStartBoundaryReached) {
+        rangeEnd = minPaginationElems - 2;
+        for (let i = 1; i < rangeStart; i++) {
+          res.push(i);
+        }
+      } else {
+        res.push(1);
+        res.push(null);
+      }
+      if (isEndBoundaryReached) {
+        rangeStart = this.totalPage - (minPaginationElems - 3);
+        for (let i = rangeStart; i <= this.totalPage; i++) {
+          res.push(i);
+        }
+      } else {
+        for (let i = rangeStart; i <= rangeEnd; i++) {
+          res.push(i);
+        }
+        res.push(null);
+        res.push(this.totalPage);
+      }
+      return res;
+    },
     initRowsPerPage(){
       if(!this.optionsRowsPerPage.includes(this.rowsPerPage)){
         this.optionsRowsPerPage.push(this.rowsPerPage);

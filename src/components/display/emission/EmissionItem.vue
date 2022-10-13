@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     class="mt-3 emission-item-container shadow-element"
   >
     <router-link
@@ -55,7 +55,7 @@
         </router-link>
       </div>
     </router-link>
-  </li>
+  </div>
 </template>
 
 <script lang="ts">

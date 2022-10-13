@@ -20,9 +20,7 @@ body{
   a{
     word-break: break-word;
   }
-  h1{
-    margin-bottom: 2rem;
-  }
+
   h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{
     &:not(.text-uppercase){
       letter-spacing: -0.03em;
@@ -37,6 +35,7 @@ body{
     font-size: 1.8rem;
     text-align: center;
     color: #666;
+    margin-bottom: 2rem;
     @media (max-width: 500px){
       font-size: 1.2rem;
       margin: 0.5rem 0 1rem;

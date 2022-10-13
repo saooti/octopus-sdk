@@ -42,7 +42,6 @@ import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 
 import { defineComponent } from 'vue'
-import CommentListVue from './CommentList.vue';
 import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({
   name: 'CommentSection',
@@ -119,10 +118,10 @@ export default defineComponent({
       this.totalCount = value.count;
     },
     newComment(comment: CommentPodcast): void {
-      (this.$refs.commentList as InstanceType<typeof CommentListVue>).addNewComment(comment, true);
+      (this.$refs.commentList as InstanceType<typeof CommentList>).addNewComment(comment, true);
     },
     receiveCommentEvent(event: {type: string; comment: CommentPodcast; oldStatus?:string }): void {
-      const commentList = (this.$refs.commentList as InstanceType<typeof CommentListVue>);
+      const commentList = (this.$refs.commentList as InstanceType<typeof CommentList>);
       switch (event.type) {
         case 'Create':commentList.addNewComment(event.comment);break;
         case 'Update':commentList.updateComment(event);break;

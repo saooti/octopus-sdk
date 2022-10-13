@@ -47,7 +47,6 @@ import { displayMethods } from '../../mixins/functions';
 import { Emission } from '@/store/class/general/emission';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
-import SnackbarVue from '../../misc/Snackbar.vue';
 const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
 export default defineComponent({
   components: {
@@ -99,7 +98,7 @@ export default defineComponent({
       this.rss = `${state.octopusApi.url}rss/emission/${this.emissionId}.rss`;
     },
     afterCopy(): void{
-      (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Link in clipboard'));
+      (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Link in clipboard'));
     }
   },
 })

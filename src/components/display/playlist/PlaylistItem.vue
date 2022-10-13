@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     v-if="editRight || activePlaylist"
     class="emission-item-container shadow-element"
   >
@@ -55,7 +55,7 @@
         </router-link>
       </div>
     </router-link>
-  </li>
+  </div>
 </template>
 
 <script lang="ts">
@@ -91,7 +91,7 @@ export default defineComponent({
     editRight(): boolean {
       return (true===state.generalParameters.isPlaylist &&
         this.organisationId === this.playlist.organisation?.id) ||
-        true == state.generalParameters.isAdmin;
+        (state.generalParameters.isAdmin as boolean);
     },
     activePlaylist(): boolean {
       return 0 !== Object.keys(this.playlist.samplingViews??[]).length;

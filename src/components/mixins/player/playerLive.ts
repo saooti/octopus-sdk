@@ -44,7 +44,7 @@ export const playerLive = defineComponent({
         if (this.audioElement.canPlayType('application/vnd.apple.mpegurl')) {
           this.audioElement.src = hlsStreamUrl;
           await this.initLiveDownloadId();
-          await (this.audioElement as HTMLAudioElement).play();
+          await this.audioElement.play();
           this.onPlay();
         }else{
           await this.initHls(hlsStreamUrl);
@@ -74,7 +74,6 @@ export const playerLive = defineComponent({
     async initHls(hlsStreamUrl: string): Promise<void> {
       return new Promise<void>(async(resolve, reject) => {
         if(null === Hls){
-          //TODO -> Version light min quand ce sera possible
           await import('hls.js/dist/hls.js').then((hlsLibrary) => {
             Hls = hlsLibrary.default;
           })
@@ -86,14 +85,6 @@ export const playerLive = defineComponent({
           reject('Hls is not supported ! ');
         }
         const hls = new Hls();
-        /* if(this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
-          hls = new Hls({xhrSetup:
-            (xhr: XMLHttpRequest) => {
-              xhr.setRequestHeader("Authorization", "Bearer " + this.$store.state.oAuthParam.accessToken);
-            }
-            }
-          );
-        } */
         hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           await this.initLiveDownloadId();
           hls.attachMedia((this.audioElement as HTMLAudioElement));

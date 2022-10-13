@@ -102,7 +102,7 @@ export default defineComponent({
       return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     },
     sizeItem(): number {
-      return state.generalParameters.podcastItem ? (state.generalParameters.podcastItem as number): 13;
+      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 13;
     },
   },
   watch: {

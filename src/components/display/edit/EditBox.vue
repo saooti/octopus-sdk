@@ -9,7 +9,6 @@ export default defineComponent({
   methods:{
     updateComment(comment: CommentPodcast): void{
       console.log(comment);
-      return;
     }
   }
 })

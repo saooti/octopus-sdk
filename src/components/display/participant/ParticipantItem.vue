@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     v-if="participant"
     class="participant-item-container"
   >
@@ -50,7 +50,7 @@
     >
       © {{ participant.orga.name }}
     </router-link>
-  </li>
+  </div>
 </template>
 
 <script lang="ts">
@@ -83,7 +83,7 @@ export default defineComponent({
       if(!this.participant || !this.participant.orga){
         return false;
       }
-      return (true == this.authenticated &&
+      return (this.authenticated &&
         this.myOrganisationId === this.participant.orga.id) ||
         true === state.generalParameters.isAdmin
     },

@@ -22,7 +22,7 @@
       :error-text="!loading && !podcasts.length && notEmptyPlaylist?$t(`No podcast match your query`):undefined"
     >
       <template #list>
-        <ul
+        <div
           class="podcast-list"
         >
           <template
@@ -34,7 +34,7 @@
               :podcast="p"
             />
           </template>
-        </ul>
+        </div>
       </template>
     </ListPaginate>
   </div>

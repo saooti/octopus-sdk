@@ -39,25 +39,7 @@ export const playerComment = defineComponent({
         return true;
       return false;
     },
-    async initComments(refresh = false): Promise<void> {
-      let podcastId, organisation;
-      if (this.podcast) {
-        podcastId = this.podcast.podcastId;
-        organisation = this.podcast.organisation.id;
-      } else if (this.live) {
-        podcastId = this.live.livePodcastId;
-        organisation = this.live.organisation.id;
-      }
-      if (
-        refresh &&
-        podcastId &&
-        this.$store.state.comments.actualPodcastId !== podcastId
-      ) {
-        return;
-      }
-      let first = 0;
-      let count = 0;
-      const size = 50;
+    initCommentCurrentPodcast(podcastId?: number): Array<number>{
       if (
         podcastId &&
         this.$store.state.comments.actualPodcastId === podcastId
@@ -67,16 +49,13 @@ export const playerComment = defineComponent({
           this.commentsLoaded &&
           this.commentsLoaded.length < this.$store.state.comments.totalCount
         ) {
-          first = this.commentsLoaded.length;
-          count = this.$store.state.comments.totalCount;
+          return [this.commentsLoaded.length, this.$store.state.comments.totalCount];
         }
       }
-      if (
-        (!podcastId ||
-          this.$store.state.comments.actualPodcastId === podcastId) &&
-        0 === first
-      )
-        return;
+      return [0, 0];
+    },
+    async fetchComments(first: number, count:number,podcastId?:number,organisation?:string){
+      const size = 50;
       while (0 === first || this.comments.length < count) {
         const param: FetchParam = {
           first: first,
@@ -93,6 +72,34 @@ export const playerComment = defineComponent({
           return null !== c;
         });
       }
+    },
+    async initComments(refresh = false): Promise<void> {
+      let podcastId, organisation;
+      if (this.podcast) {
+        podcastId = this.podcast.podcastId;
+        organisation = this.podcast.organisation.id;
+      } else if (this.live) {
+        podcastId = this.live.livePodcastId;
+        organisation = this.live.organisation.id;
+      }
+      if (
+        refresh &&
+        podcastId &&
+        this.$store.state.comments.actualPodcastId !== podcastId
+      ) {
+        return;
+      }
+      const param= this.initCommentCurrentPodcast(podcastId);
+      let first = param[0];
+      let count = param[1];
+      if (
+        (!podcastId ||
+          this.$store.state.comments.actualPodcastId === podcastId) &&
+        0 === first
+      ){
+        return;
+      }
+      await this.fetchComments(first, count, podcastId, organisation);
     },
   },
 })

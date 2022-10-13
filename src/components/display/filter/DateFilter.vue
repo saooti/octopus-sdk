@@ -79,8 +79,8 @@ export default defineComponent({
     return {
       isFrom: false as boolean,
       isTo: false as boolean,
-      fromDate: moment().subtract(10, 'days').toISOString() as string,
-      toDate: moment().toISOString() as string,
+      fromDate: moment().subtract(10, 'days').toISOString(),
+      toDate: moment().toISOString(),
     };
   },
 

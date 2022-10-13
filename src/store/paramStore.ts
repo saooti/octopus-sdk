@@ -1,7 +1,7 @@
 import octopusApi from '@saooti/octopus-api';
 import { Category } from './class/general/category';
 
-const state:paramStore = {
+const state:ParamStore = {
   generalParameters: {
     organisationId:'ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c',
     authenticated: true,
@@ -94,7 +94,7 @@ const state:paramStore = {
   },
 };
 export interface GeneralParameters{
-  organisationId?: string|undefined,
+  organisationId?: string,
   authenticated?: boolean,
   isAdmin?: boolean,
   isRoleLive?: boolean,
@@ -122,7 +122,7 @@ export interface PodcastPage{
   downloadButton?: boolean,
   hlsUri?: string,
   mainRubrique?: number,
-  resourceUrl?: string |undefined,
+  resourceUrl?: string,
   podcastItemShowEmission?: boolean,
   clickPlayGoPage?:boolean,
   listTypeClassic?:boolean,
@@ -133,16 +133,16 @@ export interface PodcastsPage{
     MonetizableFilter?: boolean,
     podcastShadow?: boolean,
     podcastBorderBottom?: boolean,
-    titlePage?: string|undefined,
+    titlePage?: string,
     emissionChooser?: boolean,
 }
 export interface EmissionsPage{
   smallItems?: boolean,
   lightItems?: boolean,
-  titlePage?: string|undefined,
+  titlePage?: string,
   itemPlayer?: boolean,
-  rubriquage?: number|undefined,
-  mainRubrique?: number|undefined,
+  rubriquage?: number,
+  mainRubrique?: number,
   buttonMore?: boolean,
   overflowScroll?: boolean,
   titleInImage?: boolean,
@@ -154,10 +154,10 @@ export interface EmissionPage{
 }
 export interface IntervenantPage{
   lightStyle?: boolean,
-  titlePage?: string|undefined
+  titlePage?: string
 }
 export interface IntervenantsPage{
-  titlePage?: string|undefined
+  titlePage?: string
 }
 export interface SearchPage{
   hideBar?: boolean
@@ -167,7 +167,7 @@ export interface Player{
   emissionName?: boolean
 }
 export interface Footer{
-  contactLink?: string|undefined
+  contactLink?: string
 }
 export interface Organisation{
   imageUrl?: string,
@@ -181,7 +181,7 @@ export interface OctopusApi{
   studioUrl?: string,
   playerUrl?: string,
   speechToTextUrl?:string,
-  organisationId?: string | undefined,
+  organisationId?: string,
   oAuthParam?: {
     accessToken: string,
     refreshToken: string,
@@ -189,7 +189,7 @@ export interface OctopusApi{
   },
   rubriqueIdFilter?: Array<number>,
 }
-export interface paramStore{
+export interface ParamStore{
   generalParameters:GeneralParameters,
   podcastPage: PodcastPage,
   podcastsPage: PodcastsPage,
@@ -206,7 +206,7 @@ export interface paramStore{
 const definedProps = (obj: GeneralParameters|PodcastPage|PodcastsPage|EmissionsPage|EmissionPage|IntervenantPage|IntervenantsPage|SearchPage|Player|Footer|Organisation|OctopusApi) => Object.fromEntries(
   Object.entries(obj).filter(([, v]) => v !== undefined)
 );
-const initialize = function initialize(initObject: paramStore): Promise<void> {
+const initialize = function initialize(initObject: ParamStore): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     state.generalParameters =  Object.assign(state.generalParameters, definedProps(initObject.generalParameters));
     if(!state.generalParameters.authenticated){

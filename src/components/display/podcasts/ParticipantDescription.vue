@@ -20,7 +20,7 @@
         :key="'desc-'+participant.participantId"
         class="d-flex flex-column align-items-center"
       >
-        <b><i>{{ getName(participant) }}</i></b>
+        <strong><em>{{ getName(participant) }}</em></strong>
         <!-- eslint-disable vue/no-v-html -->
         <div
           v-if="participant.description"

@@ -37,7 +37,7 @@
         aria-expanded="false"
         :title="$t('See more')"
       />
-      <ul class="dropdown-menu dropdown-menu-right px-4">
+      <div class="dropdown-menu dropdown-menu-right px-4">
         <div
           v-for="rubrique in hidenRubriques"
           :key="rubrique.rubriqueId"
@@ -46,7 +46,7 @@
         >
           {{ rubrique.name }}
         </div>
-      </ul>
+      </div>
     </div>
   </div>
 </template>

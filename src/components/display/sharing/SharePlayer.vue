@@ -15,8 +15,6 @@
             id="miniplayerIframe"
             title="miniplayer"
             :src="iFrameSrc"
-            scrolling="no"
-            frameborder="0"
             width="100%"
             :height="iFrameHeight"
             class="max-iframe my-2"
@@ -45,8 +43,8 @@
           :is-visible="isVisible"
           :chose-number-episode="displayChoiceAllEpisodes|| isLargeSuggestion"
           :display-choice-all-episodes="displayChoiceAllEpisodes"
-          :displayTranscriptParam="displayTranscriptParam"
-          :displayArticleParam="displayArticleParam"
+          :display-transcript-param="displayTranscriptParam"
+          :display-article-param="displayArticleParam"
           @displayArticle="displayArticle = $event"
           @displayTranscript="displayTranscript = $event"
           @episodeNumbers="episodeNumbers = $event"
@@ -177,23 +175,13 @@ export default defineComponent({
           'NO' === this.podcast?.emission.monetisable);
     },
     iFrameSrc(): string {
-      const url = [''];
+      let url = [''];
       let iFrameNumber = this.displayChoiceAllEpisodes && 'all' === this.episodeNumbers ? '/0' : '/' + this.iFrameNumber;
       url.push(`${this.baseUrl}miniplayer/`);
       if (!this.podcast && !this.playlist && this.emission) {
-        switch (this.iFrameModel) {
-          case 'default': url.push('emission'); break;
-          case 'large': url.push('emissionLarge'); break;
-          default: url.push(`${this.iFrameModel}`);break;
-        }
-        url.push(`/${this.emission.emissionId}${iFrameNumber}`);
+        url = this.constructEmissionUrl(url);
       } else if (this.playlist) {
-        switch (this.iFrameModel) {
-          case 'default': url.push('playlist'); break;
-          case 'large': url.push('playlistLarge'); break;
-          default: url.push(`${this.iFrameModel}`);break;
-        }
-        url.push(`/${this.playlist.playlistId}`);
+        url = this.constructPlaylistUrl(url);
       } else if(this.emission && this.podcast){
         url.push(`${this.iFrameModel}/`);
         if (this.isEmission || this.isLargeEmission) {
@@ -204,21 +192,7 @@ export default defineComponent({
           url.push(`${this.podcast.podcastId}`);
         }
       }
-      url.push('?distributorId=' + this.organisationId);
-      url.push(`&color=${this.color.substring(1)}&theme=${this.theme.substring(1)}`);
-      if (!this.proceedReading) {
-        url.push('&proceed=false');
-      }
-      if(!this.displayArticle){
-        url.push('&article=false');
-      }
-      if(!this.displayTranscript){
-        url.push('&transcript=false');
-      }
-      if (this.isVisible) {
-        url.push('&key=' + window.btoa(this.dataTitle.toString()));
-      }
-      return url.join('');
+      return this.addUrlParameters(url).join('');
     },
     iFrameHeight(): string {
       switch (this.iFrameModel) {
@@ -278,12 +252,52 @@ export default defineComponent({
   },
   async created() {
     await this.fetchOrgaAttributes();
-    await this.initColor();
+    this.initColor();
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = 'large';
     }
   },
   methods: {
+    getIframeNumber(): string{
+      return this.displayChoiceAllEpisodes && 'all' === this.episodeNumbers ? '/0' : '/' + this.iFrameNumber;
+    },
+    constructEmissionUrl(url: Array<string>){
+      if(!this.emission){return [];}
+       switch (this.iFrameModel) {
+          case 'default': url.push('emission'); break;
+          case 'large': url.push('emissionLarge'); break;
+          default: url.push(`${this.iFrameModel}`);break;
+        }
+        url.push(`/${this.emission.emissionId}${this.getIframeNumber()}`);
+        return url;
+    },
+    constructPlaylistUrl(url: Array<string>){
+      if(!this.playlist){return [];}
+      switch (this.iFrameModel) {
+        case 'default': url.push('playlist'); break;
+        case 'large': url.push('playlistLarge'); break;
+        default: url.push(`${this.iFrameModel}`);break;
+      }
+      url.push(`/${this.playlist.playlistId}`);
+      return url;
+    },
+    addUrlParameters(url: Array<string>){
+      url.push('?distributorId=' + this.organisationId);
+      url.push(`&color=${this.color.substring(1)}&theme=${this.theme.substring(1)}`);
+      if (!this.proceedReading) {
+        url.push('&proceed=false');
+      }
+      if(!this.displayArticle){
+        url.push('&article=false');
+      }
+      if(!this.displayTranscript){
+        url.push('&transcript=false');
+      }
+      if (this.isVisible) {
+        url.push('&key=' + window.btoa(this.dataTitle.toString()));
+      }
+      return url;
+    },
     async fetchOrgaAttributes(): Promise<void>{
       if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
         this.orgaAttributes = this.$store.state.organisation.attributes;

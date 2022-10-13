@@ -128,7 +128,7 @@ export default defineComponent({
       proceedReading: true as boolean,
       episodeNumbers: 'number' as string,
       iFrameNumberPriv: '3' as string,
-      isVisibleTemp: this.isVisible as boolean,
+      isVisibleTemp: this.isVisible,
       displayArticle: true as boolean,
       displayTranscript:true as boolean,
     };

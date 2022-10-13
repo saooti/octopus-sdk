@@ -8,7 +8,7 @@ import 'moment/dist/locale/fr.js';
 import 'moment/dist/locale/it.js';
 import 'moment/dist/locale/sl.js';
 
-export function setupI18n(options = { locale: 'en' }, isEducation: boolean) {
+export function setupI18n(options: { locale: string }, isEducation: boolean) {
   const i18n = createI18n(options)
   loadLocaleMessages(i18n.global, options.locale, isEducation);
   return i18n;

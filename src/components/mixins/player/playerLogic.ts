@@ -172,6 +172,43 @@ export const playerLogic = defineComponent({
         this.playerError = true;
       }
     },
+    streamDurationForSafari(mediaTarget:HTMLMediaElement){
+      let streamDuration = mediaTarget.duration;
+      if(Infinity===streamDuration){
+        const seekable = mediaTarget.seekable;
+        if(seekable){
+          streamDuration = seekable.end(seekable.length - 1);
+        }else{
+          streamDuration = mediaTarget.currentTime;
+        }
+      }
+      return streamDuration;
+    },
+    onTimeUpdatePodcast(streamDuration:number, currentTime:number){
+      this.displayAlertBar = false;
+      this.percentLiveProgress = 100;
+      this.$store.commit('playerTotalTime', streamDuration);
+      this.$store.commit('playerElapsed', currentTime / streamDuration);
+    },
+    onTimeUpdateLive(streamDuration: number, currentTime:number){
+      if(!this.live){return;}
+      const scheduledDuration = this.live.duration / 1000;
+      if (scheduledDuration > streamDuration) {
+        this.displayAlertBar = false;
+        this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
+        this.$store.commit('playerTotalTime', scheduledDuration);
+        this.$store.commit(
+          'playerElapsed',
+          currentTime / scheduledDuration
+        );
+      } else {
+        this.percentLiveProgress = 100;
+        this.displayAlertBar = true;
+        this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
+        this.$store.commit('playerTotalTime', streamDuration);
+        this.$store.commit('playerElapsed', currentTime / streamDuration);
+      }
+    },
     onTimeUpdate(event: Event): void {
       const mediaTarget = (event.currentTarget as HTMLMediaElement);
       if (this.podcast || this.live) {
@@ -190,40 +227,14 @@ export const playerLogic = defineComponent({
             mediaTarget.currentTime - this.notListenTime;
         }
       }
-      let streamDuration = mediaTarget.duration;
-      if(Infinity===streamDuration){
-        const seekable = mediaTarget.seekable;
-        if(seekable){
-          streamDuration = seekable.end(seekable.length - 1);
-        }else{
-          streamDuration = mediaTarget.currentTime;
-        }
-      }
+      let streamDuration = this.streamDurationForSafari(mediaTarget);
       if (!streamDuration) return;
       if (!mediaTarget.currentTime) return;
       if (!this.live) {
-        this.displayAlertBar = false;
-        this.percentLiveProgress = 100;
-        this.$store.commit('playerTotalTime', streamDuration);
-        this.$store.commit('playerElapsed', mediaTarget.currentTime / streamDuration);
+        this.onTimeUpdatePodcast(streamDuration,mediaTarget.currentTime);
         return;
       }
-      const scheduledDuration = this.live.duration / 1000;
-      if (scheduledDuration > streamDuration) {
-        this.displayAlertBar = false;
-        this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
-        this.$store.commit('playerTotalTime', scheduledDuration);
-        this.$store.commit(
-          'playerElapsed',
-          mediaTarget.currentTime / scheduledDuration
-        );
-      } else {
-        this.percentLiveProgress = 100;
-        this.displayAlertBar = true;
-        this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
-        this.$store.commit('playerTotalTime', streamDuration);
-        this.$store.commit('playerElapsed', mediaTarget.currentTime / streamDuration);
-      }
+      this.onTimeUpdateLive(streamDuration,mediaTarget.currentTime);
     },
     onFinished(): void {
       this.setDownloadId(null);

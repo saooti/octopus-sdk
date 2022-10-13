@@ -32,8 +32,8 @@ export const cookies =
     getCookie(name: string): string|null {
       const nameEQ = name + '=';
       const ca = document.cookie.split(';');
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
+      for (let cookieValue of ca) {
+        let c = cookieValue;
         while (c.charAt(0) == ' ') c = c.substring(1, c.length);
         if (0 === c.indexOf(nameEQ))
           return c.substring(nameEQ.length, c.length);
@@ -53,18 +53,7 @@ export const displayMethods ={
       });
     },
     async onCopyCode(link: string, callback: () => void): Promise<void> {
-      if ('undefined' !== typeof navigator.clipboard) {
-        await navigator.clipboard.writeText(link);
-        return callback();
-      }
-      const textArea = document.createElement('textarea');
-      textArea.value = link;
-      textArea.style.position = 'fixed';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
+      await navigator.clipboard.writeText(link);
       return callback();
     },
   },

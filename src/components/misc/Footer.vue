@@ -114,7 +114,7 @@ export default defineComponent({
   },
   data() {
     return {
-      language: this.$i18n.locale as string,
+      language: this.$i18n.locale,
     };
   },
   computed: {

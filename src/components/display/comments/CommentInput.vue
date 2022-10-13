@@ -3,11 +3,11 @@
     v-if="isPresent"
     class="d-flex flex-column comment-input-container mt-3"
   >
-    <b
+    <strong
       v-if="knownIdentity && !editName"
       class="small-text mt-1 c-hand"
       @click="changeIdentity"
-    >{{ knownIdentity }}</b>
+    >{{ knownIdentity }}</strong>
     <div
       v-if="editName"
       class="d-flex"

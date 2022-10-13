@@ -35,7 +35,6 @@ import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import QrcodeVue from 'qrcode.vue'
 import { defineComponent } from 'vue'
-import SnackbarVue from '../../misc/Snackbar.vue';
 export default defineComponent({
   name: 'QrCode',
 
@@ -72,7 +71,7 @@ export default defineComponent({
       if(canvas && canvas.length > 0 && canvas[0]){
         link.href = (canvas[0] as HTMLCanvasElement).toDataURL();
         link.click();
-        (this.$refs.snackbar as InstanceType<typeof SnackbarVue>).open(this.$t('Download started'));
+        (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Download started'));
       }
     },
     async initColor(): Promise<void> {

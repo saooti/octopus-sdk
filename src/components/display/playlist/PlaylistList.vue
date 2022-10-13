@@ -10,7 +10,7 @@
     :loading-text="loading?$t('Loading content ...'):undefined"
   >
     <template #list>
-      <ul
+      <div
         class="emission-list two-emissions"
       >
         <template
@@ -22,7 +22,7 @@
             :playlist="p"
           />
         </template>
-      </ul>
+      </div>
     </template>
   </ListPaginate>
 </template>
@@ -56,8 +56,8 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      dfirst: this.first as number,
-      dsize: this.size as number,
+      dfirst: this.first,
+      dsize: this.size,
       totalCount: 0 as number,
       displayCount: 0 as number,
       playlists: [] as Array<Playlist>,

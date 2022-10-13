@@ -94,7 +94,14 @@ export default defineComponent({
     },
     watchVariable():string{
       return `${this.reload}|${this.status}`;
+    },
+    statusPost():Array<string>{
+      if(this.editRight && this.status){
+        return [this.status];
+      }
+      return this.editRight? ['Valid','Pending', 'Invalid']:['Valid'];
     }
+
   },
   watch: {
     watchVariable: {
@@ -126,7 +133,7 @@ export default defineComponent({
             first: this.first,
             size: this.size,
             podcastId: this.podcastId,
-            status:this.editRight && this.status?[this.status]: this.editRight? ['Valid','Pending', 'Invalid']:['Valid'],
+            status:this.statusPost,
             organisationId: undefined === this.podcastId? this.organisation: undefined,
           });
         }
@@ -148,11 +155,11 @@ export default defineComponent({
         (element: CommentPodcast) => element.comId === comId
       );
     },
-    commentIsNotInList(commentIdReferer:undefined|number):boolean{
+    commentInAnotherList(commentIdReferer:undefined|number):boolean{
       return !this.isFlat && undefined!==commentIdReferer && null!==commentIdReferer && this.comId !==commentIdReferer;
     },
     deleteComment(comment: CommentPodcast): void {
-      if (this.commentIsNotInList(comment.commentIdReferer)){
+      if (this.commentInAnotherList(comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
         comItem.receiveCommentEvent({ type: 'Delete', comment: comment });
         return;
@@ -165,33 +172,39 @@ export default defineComponent({
       }
       this.comments.splice(index, 1);
     },
+    updateExistingComment(comment: CommentPodcast, index: number){
+      if ((!this.editRight && 'Valid' !== comment.status) ||
+        (this.editRight && this.status && this.status !== comment.status)) {
+        this.comments.splice(index, 1);
+      } else {
+        this.comments.splice(index, 1, comment);
+      }
+    },
+    updateNotExistingComment(comment: CommentPodcast){
+      let indexNewComment = 0;
+      for (let i = 0, len = this.comments.length; i < len; i++) {
+        if (
+          moment(this.comments[i].date).isBefore(moment(comment.date))
+        ) {
+          indexNewComment = i;
+          break;
+        }
+      }
+      this.comments.splice(indexNewComment, 0, comment);
+    },
     updateComment(data: {type: string; comment: CommentPodcast; oldStatus?:string }): void {
-      if (this.commentIsNotInList(data.comment.commentIdReferer)){
+      if (this.commentInAnotherList(data.comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + data.comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
         comItem.receiveCommentEvent(data);
         return;
       }
       const index = this.findCommentIndex(data.comment.comId);
       if (-1 !== index) {
-        if ((!this.editRight && 'Valid' !== data.comment.status) ||
-          (this.editRight && this.status && this.status !== data.comment.status)) {
-          this.comments.splice(index, 1);
-        } else {
-          this.comments.splice(index, 1, data.comment);
-        }
+        this.updateExistingComment(data.comment, index);
       }else if((!this.editRight && 'Valid' === data.comment.status) ||
               (this.editRight && !this.status) ||
               (this.editRight && this.status && this.status === data.comment.status)){
-        let indexNewComment = 0;
-        for (let i = 0, len = this.comments.length; i < len; i++) {
-          if (
-            moment(this.comments[i].date).isBefore(moment(data.comment.date))
-          ) {
-            indexNewComment = i;
-            break;
-          }
-        }
-        this.comments.splice(indexNewComment, 0, data.comment);
+        this.updateNotExistingComment(data.comment);
       }
       if (this.comId && data.oldStatus!==data.comment.status) {
         this.$emit('updateStatus', data.comment.status);
@@ -201,7 +214,7 @@ export default defineComponent({
       if (!myself && !this.editRight && 'Valid' !== comment.status) {
         return;
       }
-      if (this.commentIsNotInList(comment.commentIdReferer)){
+      if (this.commentInAnotherList(comment.commentIdReferer)){
         const comItem = (this.$refs['comItem' + comment.commentIdReferer] as Array<InstanceType<typeof CommentItem>>)[0];
         comItem.receiveCommentEvent({ type: 'Create', comment: comment });
         return;

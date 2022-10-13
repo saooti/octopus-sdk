@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     class="podcast-item-container"
     :class="[
       podcastShadow ? 'shadow-element' : '',
@@ -43,7 +43,7 @@
       @mouseenter="showDescription"
       @mouseleave="hideDescription"
     />
-  </li>
+  </div>
 </template>
 
 <script lang="ts">

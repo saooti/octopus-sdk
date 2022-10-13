@@ -25,7 +25,6 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { displayMethods } from '../mixins/functions';
 export default defineComponent({
   name: 'ClassicSelect',
   props: {

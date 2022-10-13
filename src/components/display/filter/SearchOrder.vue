@@ -26,7 +26,7 @@ export default defineComponent({
   emits: ['updateSortCriteria'],
   data() {
     return {
-      sort: this.sortCriteria as string,
+      sort: this.sortCriteria,
     };
   },
   watch: {

@@ -12,7 +12,7 @@
     :just-size-chosen="justSizeChosen"
   >
     <template #list>
-      <ul
+      <div
         class="podcast-list"
       >
         <template
@@ -24,7 +24,7 @@
             :podcast="p"
           />
         </template>
-      </ul>
+      </div>
     </template>
   </ListPaginate>
 </template>
@@ -77,8 +77,8 @@ export default defineComponent({
   data() {
     return {
       loading: true as boolean,
-      dfirst: this.first as number,
-      dsize: this.size as number,
+      dfirst: this.first,
+      dsize: this.size,
       totalCount: 0 as number,
       podcasts: [] as Array<Podcast>,
       isMobile: false as boolean,

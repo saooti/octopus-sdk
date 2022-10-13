@@ -62,6 +62,7 @@ export default defineComponent({
     return {
       loading: true as boolean,
       loaded: true as boolean,
+      dataLivesToBe: [] as Array<Conference>
     };
   },
   
@@ -148,6 +149,45 @@ export default defineComponent({
         this.livesArray[i].lives.length = 0;
       }
     },
+    liveTreatement(i: number, dataLives: Array<Conference>, indexPast: number){
+      if("PLANNED"!==this.livesArray[i].status && "PENDING"!==this.livesArray[i].status){
+        this.livesArray[i].lives = dataLives.filter((p: Conference | null) => {
+          return null !== p;
+        });
+      }else if("PENDING"===this.livesArray[i].status){
+        this.dataLivesToBe = dataLives;
+        for (let index = 0, len = dataLives.length; index < len; index++) {
+          if (moment(dataLives[index].date).isBefore(moment())) {
+            this.livesArray[i].lives.push(dataLives[index]);
+            indexPast = index + 1;
+          } else {break;}
+        }
+      }else{
+        this.livesArray[i].lives = this.dataLivesToBe
+        .slice(indexPast)
+        .concat(dataLives)
+        .filter((p: Conference | null) => {
+          return null !== p;
+        });
+      }
+      return indexPast;
+    },
+    async fetchLives(): Promise<void>{
+      let indexPast = 0;
+      this.dataLivesToBe = [];
+      for (let i = 0, len = this.livesArray.length; i < len; i++) {
+        if (!this.organisationRight && 
+        ("DEBRIEFING"===this.livesArray[i].status ||"ERROR"===this.livesArray[i].status ||"PUBLISHING"===this.livesArray[i].status)) {
+          continue;
+        }
+        const dataLives = await octopusApi.fetchDataWithParams<Array<Conference>>(9, 'conference/list',{
+          organisationId: this.filterOrgaUsed,
+          withPodcastId: true,
+          status: this.livesArray[i].status,
+        });
+        indexPast = this.liveTreatement(i, dataLives, indexPast);
+      }
+    },
     async fetchContent(): Promise<void> {
       try {
         this.initArrays();
@@ -158,39 +198,7 @@ export default defineComponent({
         }
         this.loading = true;
         this.loaded = false;
-        let indexPast = 0;
-        let dataLivesToBe: Array<Conference> = [];
-        for (let i = 0, len = this.livesArray.length; i < len; i++) {
-          if (!this.organisationRight && 
-          ("DEBRIEFING"===this.livesArray[i].status ||"ERROR"===this.livesArray[i].status ||"PUBLISHING"===this.livesArray[i].status)) {
-            continue;
-          }
-          const dataLives = await octopusApi.fetchDataWithParams<Array<Conference>>(9, 'conference/list',{
-            organisationId: this.filterOrgaUsed,
-            withPodcastId: true,
-            status: this.livesArray[i].status,
-          });
-          if("PLANNED"!==this.livesArray[i].status && "PENDING"!==this.livesArray[i].status){
-            this.livesArray[i].lives = dataLives.filter((p: Conference | null) => {
-              return null !== p;
-            });
-          }else if("PENDING"===this.livesArray[i].status){
-            dataLivesToBe = dataLives;
-            for (let index = 0, len = dataLives.length; index < len; index++) {
-              if (moment(dataLives[index].date).isBefore(moment())) {
-                this.livesArray[i].lives.push(dataLives[index]);
-                indexPast = index + 1;
-              } else {break;}
-            }
-          }else{
-            this.livesArray[i].lives = dataLivesToBe
-            .slice(indexPast)
-            .concat(dataLives)
-            .filter((p: Conference | null) => {
-              return null !== p;
-            });
-          }
-        }
+        await this.fetchLives();
         const listIds = this.livesArray[0].lives
           .concat(this.livesArray[1].lives)
           .concat(this.livesArray[2].lives);

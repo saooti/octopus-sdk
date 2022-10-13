@@ -104,7 +104,7 @@ export default defineComponent({
         let playerTrySelect = true;
         playerTrySelect = await this.fetchCustomPlayers('EPISODE', playerTrySelect);
         playerTrySelect = await this.fetchCustomPlayers('EMISSION', playerTrySelect);
-        playerTrySelect = await this.fetchCustomPlayers('SUGGESTION', playerTrySelect);
+        await this.fetchCustomPlayers('SUGGESTION', playerTrySelect);
       }
     },
   }
