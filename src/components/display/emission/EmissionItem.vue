@@ -18,16 +18,16 @@
         :alt="$t('Emission name image', {name:emission.name})"
       >
       <div class="emission-item-text">
-        <div
-          class="emission-name"
-        >
-          <img
+        <div class="d-flex align-items-center">
+          <span
             v-if="!activeEmission && !isPodcastmaker && editRight"
-            class="icon-caution"
-            src="/img/caution.png"
             :title="$t('Emission have not podcasts')"
-            :alt="$t('Emission have not podcasts')"
-          >{{ emission.name }}
+            class="saooti-warning text-danger me-1"/>
+          <div
+            class="emission-name"
+          >
+            {{ emission.name }}
+          </div>
         </div>
         <div
           ref="descriptionEmissionContainer"

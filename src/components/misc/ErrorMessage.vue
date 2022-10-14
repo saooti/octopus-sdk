@@ -6,11 +6,9 @@
     <div
       class="d-flex align-items-center bg-error-message p-2 rounded my-1"
     >
-      <img
-        src="/img/caution.png"
-        :alt="$t('Warning')"
-        class="icon-caution"
-      >
+      <span
+        :title="$t('Warning')"
+        class="saooti-warning text-danger me-1"/>
       <div class="alert-text">
         {{ message }}
       </div>

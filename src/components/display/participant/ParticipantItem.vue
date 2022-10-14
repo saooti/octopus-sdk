@@ -18,14 +18,14 @@
         :alt="$t('Animator image')"
         class="img-box-circle"
       >
-      <div class="participant-name">
-        <img
+      <div class="d-flex align-items-center">
+        <span
           v-if="!activeParticipant && !isPodcastmaker && editRight"
-          src="/img/caution.png"
-          class="icon-caution"
           :title="$t('Participant have not podcasts')"
-          :alt="$t('Participant have not podcasts')"
-        >{{ name }}
+          class="saooti-warning text-danger me-1"/>
+        <div class="participant-name">
+          {{ name }}
+        </div>
       </div>
       <div
         ref="descriptionParticipantContainer"

@@ -19,14 +19,14 @@
         class="img-box"
       >
       <div class="emission-item-text">
-        <div class="emission-name">
-          <img
+        <div class="d-flex align-items-center">
+          <span
             v-if="!activePlaylist && !isPodcastmaker"
-            class="icon-caution"
-            src="/img/caution.png"
             :title="$t('Playlist have not podcasts')"
-            :alt="$t('Playlist have not podcasts')"
-          >{{ name }}
+            class="saooti-warning text-danger me-1"/>
+          <div class="emission-name">
+            {{ name }}
+          </div>
         </div>
         <div
           ref="descriptionPlaylistContainer"

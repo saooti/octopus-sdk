@@ -9,12 +9,13 @@ export const selenium ={
 };
 export const imageProxy ={
   methods: {
-    proxyImageUrl(url:string, width:string): string{
+    proxyImageUrl(url:string, width:string, height?:string): string{
       if(!url){
         return "";
       }
       if(state.octopusApi.imageUrl && url.includes('http')){
-        return state.octopusApi.imageUrl+"image/"+btoa(url)+"?width="+width+"&useWebp=true";
+        const size = height ? "height="+height:"width="+width;
+        return state.octopusApi.imageUrl+"image/"+btoa(url)+"?"+size+"&useWebp=true";
       }
       return url;
     },
