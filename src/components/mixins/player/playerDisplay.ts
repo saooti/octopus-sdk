@@ -68,6 +68,9 @@ export const playerDisplay = defineComponent({
       if (this.$store.state.player.podcast) return this.$store.state.player.podcast.emission.name;
       return '';
     },
+    transcriptText():string{
+      return this.$store.state.player.transcript?.actualText ?? "";
+    }
 	},
 	created(){
     window.addEventListener('keydown', this.addKeyboardControl);

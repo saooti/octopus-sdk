@@ -12,7 +12,7 @@
       :to="podcastShareUrl"
     >
       <img
-        v-lazy="proxyImageUrl(podcastImage,'260')"
+        v-lazy="proxyImageUrl(podcastImage,'200')"
         :alt="$t('Podcast image')"
         class="img-box"
       >
@@ -46,7 +46,10 @@
         <div>{{ totalTime }}</div>
       </div>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="flex-grow-1 d-flex align-items-center w-100" v-if="''!=transcriptText">
+      <div class="flex-grow-1 p-1 text-center mx-3 transcript-bg rounded">{{transcriptText}}</div>
+    </div>
+    <div class="d-flex align-items-center flex-grow-1">
       <button
         class="btn fs-1 bg-transparent text-light saooti-backward"
         @click="seekClick(-15)"
@@ -131,10 +134,8 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app{
   .player-container .img-box{
-    @media (max-width: 960px) {
-      width: 10rem;
-      height: 10rem;
-    }
+    width: 10rem;
+    height: 10rem;
   }
   .player-reduce-button{
     position: absolute;
@@ -162,6 +163,9 @@ export default defineComponent({
     font-size: 2.5rem !important;
     flex-shrink: 0;
     cursor: pointer;
+  }
+  .transcript-bg{
+    background: #3e3e3e;
   }
 }
 </style>

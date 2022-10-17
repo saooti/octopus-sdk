@@ -11,4 +11,5 @@ export interface Player{
     live: Podcast|undefined;
     stop?: boolean;
     seekTime?: number;
+    transcript?:{actual: number, actualText:string, value : Array<{endTime: number, startTime:number, text: string}>};
   }

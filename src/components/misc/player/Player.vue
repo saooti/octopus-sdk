@@ -18,6 +18,7 @@
           @playing="onPlay"
           @durationChange="onTimeUpdate"
           @error="onError"
+          @seeked="onSeeked"
         />
         <PlayerCompact
           v-if="!largeVersion"

@@ -80,6 +80,9 @@ export default createStore({
     playerSeekTime(state, seekTime) {
       state.player.seekTime = seekTime;
     },
+    playerTranscript(state, transcript) {
+      state.player.transcript = transcript;
+    },
 
     filterOrga(state, filter) {
       state.filter.organisationId = filter.orgaId;
