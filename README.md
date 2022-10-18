@@ -688,7 +688,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.35 Enlever Dummy param
  * 32.0.36 Select -> font family
  * 32.0.40 Problème majeur !!! 
+ * 32.0.42 Parlement européen
 
  * 33.0.3 SpeechToText player octopus
  * 33.0.4 Image webp
  * 33.0.5 Change recaptcha
+

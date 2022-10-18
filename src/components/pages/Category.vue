@@ -23,12 +23,6 @@ export default defineComponent({
     iabId: { default: undefined, type: Number},
   },
 
-  data() {
-    return {
-      title: '' as string,
-    };
-  },
-
   computed: {
     categories(): Array<Category> {
       return this.$store.state.categories;
@@ -36,22 +30,11 @@ export default defineComponent({
     filterOrga(): string {
       return this.$store.state.filter.organisationId;
     },
-  },
-  watch: {
-    iabId(): void {
-      this.extractTitle();
-    },
-  },
-
-  mounted() {
-    this.extractTitle();
-  },
-  methods: {
-    extractTitle(): void {
+    title():string{
       const matchCategories = this.categories.filter((c: Category) => c.id === this.iabId);
-      if (1 !== matchCategories.length) return;
-      this.title = matchCategories[0]['name'];
-    },
+      if (1 !== matchCategories.length) return "";
+      return matchCategories[0]['name'];
+    }
   },
 })
 </script>

@@ -4,7 +4,12 @@
       ref="rubriqueListContainer"
       class="rubrique-list-container"
     >
+      <label
+        for="rubrique-list-select"
+        class="hid"
+      >{{$t('By topic')}}</label>
       <select
+        id="rubrique-list-select"
         v-model="rubriquage"
         class="c-hand"
         @change="onRubriquageSelected"

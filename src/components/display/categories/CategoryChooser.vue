@@ -5,9 +5,8 @@
   >
     <label
       :for="id"
-      class="d-inline"
-      title="select category"
-    />
+      class="hid"
+    >{{$t('Type string to filter by categories')}}</label>
     <VueMultiselect
       :id="id"
       ref="multiselectRef"
