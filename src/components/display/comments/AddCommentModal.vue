@@ -45,7 +45,8 @@
           >
             {{ $t('Close') }}
           </button>
-          <vue-recaptcha
+          <vue-recaptcha 
+            v-if="!isVerify"
             ref="invisibleRecaptcha"
             :load-recaptcha-script="true"
             @verify="handleSuccess"
