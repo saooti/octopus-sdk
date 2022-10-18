@@ -45,11 +45,20 @@
           >
             {{ $t('Close') }}
           </button>
+          <vue-recaptcha
+            ref="invisibleRecaptcha"
+            :load-recaptcha-script="true"
+            @verify="handleSuccess"
+            @expired="handleError"
+            size="invisible"
+            sitekey="6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh"
+          >
+          </vue-recaptcha>
           <button
             v-if="!sending"
             class="btn btn-primary m-1"
             :disabled="0 === countName || !validName"
-            @click="validateName"
+            @click="submit"
           >
             {{ $t('Validate') }}
           </button>
@@ -63,9 +72,13 @@
 import Constants from '../../../../public/config';
 import { state } from '../../../store/paramStore';
 import api from '@/api/initialize';
-import { defineComponent } from 'vue'
+import { VueRecaptcha } from 'vue-recaptcha';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'AddCommentModal',
+  components:{
+    VueRecaptcha
+  },
 
   props: {},
   emits: ['close','validate'],
@@ -74,8 +87,8 @@ export default defineComponent({
     return {
       name: '' as string,
       sending: false as boolean,
-      needVerify: true as boolean,
       sendError: false as boolean,
+      isVerify: false as boolean,
       maxName : Constants.MAX_COMMENT_NAME as number
     };
   },
@@ -97,34 +110,26 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.displayCaptcha('block');
+  created() {
     this.initAuthenticatedName();
-  },
-  unmounted() {
-    this.displayCaptcha('none');
   },
   methods: {
     initAuthenticatedName():void{
       if (!state.generalParameters.authenticated) { return; }
       this.name = (`${this.$store.state.profile.firstname||''} ${this.$store.state.profile.lastname||''}`).trim();
-      this.needVerify = false;
+      this.isVerify = true;
     },
-    displayCaptcha(displayStyle: string): void{
-      const captcha = document.getElementsByClassName('grecaptcha-badge')[0];
-      if (!captcha) {return;}
-      (captcha as HTMLElement).style.display = displayStyle;
+    async handleSuccess(token: string) {
+      this.isVerify = await api.checkToken(token);
+      this.sendComment();
     },
-    async validateName(): Promise<void> {
-      if (this.needVerify && this.isCaptchaTest) {
-        try {
-          await this.$recaptchaLoaded()
-          const token = await this.$recaptcha('login');
-          this.sendError = !await api.checkToken(token);
-        } catch {
-          this.sendError = true;
-        }
-        if(this.sendError){return;}
+    handleError() {
+      this.isVerify = false;
+      this.sendError = true;
+    },
+    async submit(): Promise<void> {
+      if (!this.isVerify && !this.isCaptchaTest) {
+        return (this.$refs.invisibleRecaptcha as InstanceType<typeof VueRecaptcha>).execute();
       }
       this.sendComment();
     },

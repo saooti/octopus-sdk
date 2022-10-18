@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "33.0.4",
+  "version": "33.0.5",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -37,7 +37,7 @@
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.0-beta.40",
     "vue-multiselect": "^3.0.0-alpha.2",
-    "vue-recaptcha-v3": "^2.0.1",
+    "vue-recaptcha": "^2.0.3",
     "vue-router": "^4.1.2",
     "vue3-lazyload": "^0.2.5-beta",
     "vue3-swatches": "^1.0.10",
