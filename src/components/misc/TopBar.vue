@@ -117,7 +117,7 @@ export default defineComponent({
       return undefined;
     },
     logoUrl(): string {
-      return this.isEducation ?'/img/logo_education.png': '/img/logo_octopus_final.svg';
+      return this.isEducation ?'/img/logo_education.webp': '/img/logo_octopus_final.svg';
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);

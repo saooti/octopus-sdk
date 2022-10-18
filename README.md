@@ -690,3 +690,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 32.0.40 Problème majeur !!! 
 
  * 33.0.3 SpeechToText player octopus
+ * 33.0.4 Image webp

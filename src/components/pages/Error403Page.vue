@@ -11,7 +11,7 @@
       </div>
       <img
         class="stop-octopus-img"
-        src="/img/403.jpeg"
+        src="/img/403.webp"
         :alt="$t('You do not have the right to access this page')"
       >
     </div>

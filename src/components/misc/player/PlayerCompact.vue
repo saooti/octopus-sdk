@@ -60,12 +60,12 @@
     </div>
     <button
       :title="$t('Enlarge')"
-      class="btn play-button-box primary-bg text-light saooti-up"
+      class="btn play-button-box saooti-up"
       @click="changePlayerLargeVersion"
     />
     <button
       :title="$t('Close')"
-      class="btn play-button-box primary-bg text-light saooti-remove"
+      class="btn play-button-box saooti-remove"
       @click="stopPlayer"
     />
     <PlayerTimeline

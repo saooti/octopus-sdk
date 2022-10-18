@@ -119,7 +119,7 @@ import { Organisation } from '@/store/class/general/organisation';
 
 const ELEMENTS_COUNT = 50;
 const DEFAULT_ORGANISATION_ID = "";
-const DEFAULT_ORGANISATION_IMAGE = '/img/emptypodcast.png';
+const DEFAULT_ORGANISATION_IMAGE = '/img/emptypodcast.webp';
 
 const getDefaultOrganistion = (defaultName: string) => {
   if(''===defaultName){
