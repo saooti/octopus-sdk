@@ -146,7 +146,7 @@ export default defineComponent({
 .octopus-app{
   .filter-speech-bubble {
     position: absolute;
-    background: $octopus-primary-dark;
+    background: $octopus-primary-color;
     border-radius: 0.4em;
     width: 10rem;
     right: 4rem;
@@ -165,7 +165,7 @@ export default defineComponent({
     width: 0;
     height: 0;
     border: 18px solid transparent;
-    border-left-color: $octopus-primary-dark;
+    border-left-color: $octopus-primary-color;
     border-right: 0;
     border-bottom: 0;
     margin-top: -9px;

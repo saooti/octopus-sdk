@@ -294,7 +294,7 @@ export default defineComponent({
 .octopus-app{
   .comment-input-container {
     textarea::placeholder {
-      color: $octopus-primary-dark;
+      color: $octopus-primary-color;
     }
     textarea:focus::placeholder {
       color: black;

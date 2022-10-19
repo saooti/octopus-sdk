@@ -694,4 +694,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 33.0.4 Image webp
  * 33.0.5 Change recaptcha
  * 33.0.6 Crédits
+ * 33.0.7 Test refactor podcastmaker with scss variables
 

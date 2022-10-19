@@ -319,7 +319,7 @@ export default defineComponent({
 .octopus-app{
   .sticker {
     align-self: center;
-    background: $octopus-primary-dark;
+    background: $octopus-primary-color;
     padding: 0.5rem;
     transition: all 0.5s ease;
     color: white;
@@ -331,7 +331,7 @@ export default defineComponent({
     &:hover {
       box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
       background: transparent;
-      color: $octopus-primary-dark;
+      color: $octopus-primary-color;
     }
   }
   .max-iframe {

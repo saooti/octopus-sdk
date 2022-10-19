@@ -80,7 +80,7 @@ body{
     color: $octopus-primary-color;
   }
   .primary-darker{
-    color: $octopus-primary-dark;
+    color: $octopus-primary-color;
   }
   .primary-bg{
     background: $octopus-primary-color;
@@ -146,7 +146,7 @@ body{
     color: black !important;
   }
   a.link-hover.router-link-exact-active.router-link-active, a.link-hover:hover {
-    color: $octopus-primary-dark !important;
+    color: $octopus-primary-color !important;
   }
   .descriptionText{
     white-space: pre-wrap; 

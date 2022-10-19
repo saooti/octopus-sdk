@@ -1,35 +1,18 @@
-// Body
-$body-bg: #f8fafc;
-
 // Typography
 $font-family-sans-serif: sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
-$primary: #32815C;
-$secondary: #636C73;
-$danger: #E22C27;
 
-// Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+// bootstrap color
+$primary: #1a8658 !default;
+$secondary: #636C73 !default;
+$danger: #E22C27 !default;
 
-//Octopus style
-$octopus-background: #fafafa;
-$octopus-primary-color: #40a372;
-$octopus-secondary-color : #ddd;
-$octopus-primary-linear-background: #7fd8ab;
-$octopus-primary-dark : #1a8658;
+//SDK Octopus style
+$octopus-background: #fafafa !default;
+$octopus-primary-color: #1a8658 !default;
+$octopus-secondary-color : #ddd !default;
 
-$primaryColorTransparent : #40a37193;
-$primaryColorMoreTransparent : #40a37154;
-$primaryColorReallyTransparent : #cef7e250;
-
-
+$primaryColorTransparent : #1a865893 !default;
+$primaryColorMoreTransparent : #1a865854 !default;
+$primaryColorReallyTransparent : #cef7e250 !default;
