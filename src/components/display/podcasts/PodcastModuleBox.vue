@@ -85,6 +85,12 @@
               {{ podcast.organisation.name }}
             </router-link>
           </div>
+          <div v-if="''!==photoCredit">
+            {{ $t('Photo credits') + " : "+ photoCredit }}
+          </div>
+          <div v-if="''!==audioCredit">
+            {{ $t('Audio credits') + " : "+ audioCredit }}
+          </div>
           <a
             v-if="podcast.article"
             class="btn d-flex align-items-center my-2 width-fit-content"
@@ -224,6 +230,12 @@ export default defineComponent({
     podcastNotValid(): boolean {
       return undefined!==this.podcast?.availability && false === this.podcast?.valid;
     },
+    photoCredit():string{
+      return (this.podcast?.annotations?.photoCredit as string) ?? '';
+    },
+    audioCredit():string{
+      return (this.podcast?.annotations?.audioCredit as string) ?? '';
+    }
   },
   methods: {
     playPodcast(podcast: Podcast): void {

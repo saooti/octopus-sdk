@@ -693,4 +693,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 33.0.3 SpeechToText player octopus
  * 33.0.4 Image webp
  * 33.0.5 Change recaptcha
+ * 33.0.6 Crédits
 

@@ -307,4 +307,6 @@ export default{
   "Warning":"Opozorilo",
   "Visual":"Slika od {name}",
   "If the transcript is available, show it":"Če je prepis na voljo, ga pokažite",
+  "Photo credits":"Avtorji fotografij",
+  "Audio credits":"Avdio krediti",
 }

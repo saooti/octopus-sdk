@@ -307,4 +307,6 @@ export default{
   "Warning":"Advertencia",
   "Visual":"Imagen de {name}",
   "If the transcript is available, show it":"Si la transcripción está disponible, muéstrela",
+  "Photo credits":"Créditos fotográficos",
+  "Audio credits":"Créditos de audio",
 }
