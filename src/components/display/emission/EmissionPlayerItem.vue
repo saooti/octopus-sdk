@@ -225,7 +225,7 @@ export default defineComponent({
       });
     },
     play(podcast: Podcast): void {
-      this.$store.commit('playerPause', podcast === this.$store.state.player.podcast? false: podcast);
+      this.$store.commit('playerPlayPodcast', podcast === this.$store.state.player.podcast? false: podcast);
     },
     pause(): void {
       this.$store.commit('playerPause', true);
