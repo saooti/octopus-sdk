@@ -225,7 +225,11 @@ export default defineComponent({
       });
     },
     play(podcast: Podcast): void {
-      this.$store.commit('playerPlayPodcast', podcast === this.$store.state.player.podcast? false: podcast);
+      if (podcast === this.$store.state.player.podcast) {
+        this.$store.commit('playerPause', false);
+      } else {
+        this.$store.commit('playerPlayPodcast', podcast);
+      }
     },
     pause(): void {
       this.$store.commit('playerPause', true);
