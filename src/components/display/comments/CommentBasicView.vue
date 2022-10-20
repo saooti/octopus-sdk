@@ -20,14 +20,13 @@
       >
         {{ $t('Comment waiting') }}
       </Popover>
-      <img
+      <span
         v-if="comment.certified"
-        class="icon-certified"
-        src="/img/certified.png"
+        class="saooti-certified"
         :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
         :title="$t('Certified account')"
         :alt="$t('Certified account')"
-      >
+      />
       <div class="me-2">
         {{ date }}
       </div>

@@ -215,7 +215,7 @@ export default defineComponent({
   .btn{
     border-radius: 0;
     &.active{
-      background: rgba($octopus-primary-color, 0.3) ;
+      background: $primaryColorMoreTransparent ;
     }
   }
 }

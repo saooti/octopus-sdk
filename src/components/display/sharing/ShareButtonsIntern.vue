@@ -20,15 +20,7 @@
       :class="getClass(button.className)"
       :title="button.title"
     >
-      <div
-        :class="button.icon"
-      >
-        <div
-          v-for="index in button.nbPath"
-          :key="index"
-          :class="'path'+(index)"
-        />
-      </div>
+      <div :class="button.icon"/>
     </a>
   </template>
   <a
@@ -142,10 +134,10 @@ export default defineComponent({
     },
     arrayShareButtons(){
       return [
-        { title: 'Facebook', icon:'saooti-facebook', nbPath:0, className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
-        { title: 'Twitter', icon:'saooti-twitter', nbPath:0, className:'btn-twitter', url :`https://twitter.com/intent/tweet?text=${this.urlPage}`, condition: true},
-        { title: 'Linkedin', icon:'saooti-linkedin', nbPath:0, className:'btn-linkedin', url :`https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`, condition: true},
-        { title: 'Whatsapp', icon:'saooti-Whatsapp', nbPath:3, className:'btn-whatsapp', url :`whatsapp://send?text=${this.urlPage}`, condition:  window.matchMedia('(hover: none)').matches}
+        { title: 'Facebook', icon:'saooti-facebook', className:'btn-facebook', url :`https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`, condition: true},
+        { title: 'Twitter', icon:'saooti-twitter', className:'btn-twitter', url :`https://twitter.com/intent/tweet?text=${this.urlPage}`, condition: true},
+        { title: 'Linkedin', icon:'saooti-linkedin', className:'btn-linkedin', url :`https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`, condition: true},
+        { title: 'Whatsapp', icon:'saooti-Whatsapp', className:'btn-whatsapp', url :`whatsapp://send?text=${this.urlPage}`, condition:  window.matchMedia('(hover: none)').matches}
       ]
     },
     isDownloadButton(): boolean{

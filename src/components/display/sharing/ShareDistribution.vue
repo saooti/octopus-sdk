@@ -3,7 +3,7 @@
     <h3>{{ $t('Distribute') }}</h3>
     <p class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
-      <span class="primary-darker hide-small-screen text-break">{{ rss }}</span>
+      <div class="primary-darker hide-small-screen text-break">{{ rss }}</div>
       <input
         type="button"
         :value="$t('Copy')"
@@ -23,13 +23,7 @@
         :to="platform.url"
         class="text-dark"
       >
-        <span :class="platform.icon">
-          <div
-            v-for="index in platform.path"
-            :key="index"
-            :class="'path'+index"
-          />
-        </span>{{ platform.title }}
+        <span :class="platform.icon"></span>{{ platform.title }}
       </router-link>
     </div>
     <Snackbar
@@ -67,17 +61,17 @@ export default defineComponent({
   computed:{
     platformShare(){
       return [
-      {url:this.getUrl('amazon'), icon:'saooti-amazon', title:'Amazon Music | Podcasters', path:3},
-      {url:this.getUrl('apple'), icon:'saooti-apple', title:'Apple Podcast / iTunes', path:0},
-      {url:this.getUrl('deezer'), icon:'saooti-deezer', title:'Deezer', path:0},
-      {url:this.getUrl('googlePodcasts'), icon:'saooti-google-podcasts', title:'Google Podcasts', path:7},
-      {url:this.getUrl('PlayerFM'), icon:'saooti-playerfm', title:'PlayerFM', path:0},
-      {url:this.getUrl('PocketCasts'), icon:'saooti-pocket-casts', title:'Pocket Casts', path:0},
-      {url:this.getUrl('PodcastAddict'), icon:'saooti-podcast-addict', title:'Podcast Addict', path:0},
-      {url:this.getUrl('radioline'), icon:'saooti-radioline', title:'Radioline', path:0},
-      {url:this.getUrl('spotify'), icon:'saooti-spotify', title:'Spotify', path:0},
-      {url:this.getUrl('Stitcher'), icon:'saooti-stitcher-logo', title:'Stitcher', path:18},
-      {url:this.getUrl('tuneIn'), icon:'saooti-tunin', title:'TuneIn', path:0}];
+      {url:this.getUrl('amazon'), icon:'saooti-amazon', title:'Amazon Music | Podcasters'},
+      {url:this.getUrl('apple'), icon:'saooti-apple', title:'Apple Podcast / iTunes'},
+      {url:this.getUrl('deezer'), icon:'saooti-deezer', title:'Deezer'},
+      {url:this.getUrl('googlePodcasts'), icon:'saooti-google-podcasts', title:'Google Podcasts'},
+      {url:this.getUrl('PlayerFM'), icon:'saooti-playerfm', title:'PlayerFM'},
+      {url:this.getUrl('PocketCasts'), icon:'saooti-pocket-casts', title:'Pocket Casts'},
+      {url:this.getUrl('PodcastAddict'), icon:'saooti-podcast-addict', title:'Podcast Addict'},
+      {url:this.getUrl('radioline'), icon:'saooti-radioline', title:'Radioline'},
+      {url:this.getUrl('spotify'), icon:'saooti-spotify', title:'Spotify'},
+      {url:this.getUrl('Stitcher'), icon:'saooti-stitcher-logo', title:'Stitcher'},
+      {url:this.getUrl('tuneIn'), icon:'saooti-tunin', title:'TuneIn'}];
     }
   },
 
@@ -116,34 +110,14 @@ export default defineComponent({
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  .saooti-stitcher-logo, .saooti-amazon {
-    width: 35px;
-    height: 20px;
-    div {
-      right: 0;
-    }
-  }
-  .saooti-google-podcasts {
-    width: 15px;
-    height: 20px;
-    div {
-      right: 0;
-    }
-  }
   a {
     display: flex;
     align-items: center;
     margin: 5px;
   }
   span {
-    font-size: 1.3em;
+    font-size: 1.4rem;
     margin: 0 0.3em 0 0;
-    &.saooti-tunin {
-      font-size: 2.5em;
-    }
-    &.saooti-radioline {
-      font-size: 2em;
-    }
   }
   @media (max-width: 960px) {
     flex-wrap: wrap;

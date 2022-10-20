@@ -181,41 +181,6 @@
       height: 14px;
       border-radius: 50%;
   }
-  .icon-certified {
-      height: 15px;
-      margin-right: 0.5rem;
-  }
-
-  .saooti-stitcher-logo,
-  .saooti-google-podcasts,
-  .saooti-amazon,
-  .saooti-Whatsapp {
-    position: relative;
-    div {
-      position: absolute;
-      right: 0;
-    }
-  }
-  .saooti-Whatsapp{
-    width: 25px;
-    height: 25px;
-  }
-  .saooti-stitcher-logo,.saooti-amazon {
-    font-size: 1.7rem !important;
-    div {
-      top: -7px;
-    }
-  }
-  .share-btn{
-    .saooti-stitcher-logo, .saooti-amazon {
-        top: -0.5rem;
-        left: 0.8rem;
-    }
-    .saooti-google-podcasts{
-      top: -0.6rem;
-      left: 0.7rem;
-    }
-  }
 
   .logo-octopus{
     width: 250px;

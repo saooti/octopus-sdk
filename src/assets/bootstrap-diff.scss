@@ -25,7 +25,7 @@
           box-shadow: none;
         }
         &:hover{
-          background: rgba($octopus-primary-color, 0.3) ;
+          background: $primaryColorMoreTransparent;
         }
         //Button disable halo after click
         &.btn-underline{

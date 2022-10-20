@@ -18,13 +18,7 @@
         :href="sub.url"
         :title="sub.title"
       >
-        <span :class="sub.icon">
-          <div
-            v-for="indexPath in getPathNumber(sub.name)"
-            :key="indexPath"
-            :class="'path'+(indexPath)"
-          />
-        </span>
+        <span :class="sub.icon"></span>
       </a>
     </template>
   </div>
@@ -58,14 +52,6 @@ export default defineComponent({
   },
 
   methods: {
-    getPathNumber(sub: string): number{
-      switch (sub) {
-        case 'amazon': return 3;
-        case 'googlePodcasts': return 7;
-        case 'stitcher': return 18;
-        default: return 0;
-      }
-    },
     getUrl(sub: string): string | undefined{
       return this.externaliseLinks(this.emission?.annotations?.[sub] as string|undefined);
     },
