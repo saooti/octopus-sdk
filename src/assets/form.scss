@@ -77,4 +77,15 @@
 	.vc-select select{
 		padding: 0 20px 0 8px !important;
 	}
+	.vc-date{
+		.vc-month,.vc-day,.vc-year{
+			color: $octopus-primary-color !important;
+		}
+	}
+	.vc-highlight{
+		background-color: $octopus-primary-color !important;
+	}
+	.vc-select select:focus{
+		border-color: $octopus-primary-color !important;
+	}
 }

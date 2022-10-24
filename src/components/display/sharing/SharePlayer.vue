@@ -315,7 +315,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../../sass/_variables.scss';
+@import '@scss/_variables.scss';
 .octopus-app{
   .sticker {
     align-self: center;
