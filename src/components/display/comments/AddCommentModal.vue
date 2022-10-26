@@ -117,7 +117,7 @@ export default defineComponent({
   methods: {
     initAuthenticatedName():void{
       if (!state.generalParameters.authenticated) { return; }
-      this.name = (`${this.$store.state.profile.firstname||''} ${this.$store.state.profile.lastname||''}`).trim();
+      this.name = (`${this.$store.state.auth?.profile.firstname||''} ${this.$store.state.auth?.profile.lastname||''}`).trim();
       this.isVerify = true;
     },
     async handleSuccess(token: string) {

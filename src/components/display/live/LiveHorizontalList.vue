@@ -37,9 +37,8 @@
 import ListPaginate from '../list/ListPaginate.vue';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast, emptyPodcastData } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
-import { emptyPodcastData } from '@/store/typeAppStore';
 export default defineComponent({
   name: 'LiveHorizontalList',
 

@@ -81,8 +81,8 @@ export default defineComponent({
       }
       if (!state.generalParameters.authenticated) return;
       let data;
-      if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
-        data = this.$store.state.organisation.attributes;
+      if(this.$store.state.auth?.organisation?.attributes && Object.keys(this.$store.state.auth?.organisation.attributes).length > 1){
+        data = this.$store.state.auth?.organisation.attributes;
       }else{
         data= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+state.generalParameters.organisationId);
       }

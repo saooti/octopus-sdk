@@ -41,6 +41,7 @@
 import { Emission } from '@/store/class/general/emission';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { state } from '@/store/paramStore';
 const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
 export default defineComponent({
   name: 'ClipboardModal',
@@ -56,7 +57,7 @@ export default defineComponent({
   emits: ['close', 'copy'],
   computed: {
     authenticated(): boolean {
-      return this.$store.state.authentication.isAuthenticated;
+      return state.generalParameters.authenticated??false;
     },
   },
   mounted(){

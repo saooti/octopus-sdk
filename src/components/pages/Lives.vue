@@ -72,7 +72,7 @@ export default defineComponent({
     } else if (this.$store.state.filter.organisationId) {
       this.$emit('update:organisationId',this.$store.state.filter.organisationId);
     }
-    if (!this.$store.state.organisation?.attributes?.['live.active']) {
+    if (!this.$store.state.auth?.organisation?.attributes?.['live.active']) {
       this.live = false;
     }
   },

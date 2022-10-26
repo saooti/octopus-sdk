@@ -4,7 +4,7 @@ export const handle403 = defineComponent({
   methods: {
     handle403(error: AxiosError): void {
       if (403 === error.response?.status) {
-        if(!this.$store.state.authentication.isAuthenticated){
+        if(undefined===this.$store.state.auth){
           window.location.href = window.location.origin + "/sso/login";
         }else{
           this.$router.push({

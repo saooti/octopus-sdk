@@ -176,7 +176,7 @@ export default defineComponent({
       return (state.emissionsPage.titleInImage as boolean);
     },
     authenticated(): boolean {
-      return this.$store.state.authentication.isAuthenticated;
+      return state.generalParameters.authenticated??false;
     },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
@@ -226,13 +226,13 @@ export default defineComponent({
     },
     play(podcast: Podcast): void {
       if (podcast === this.$store.state.player.podcast) {
-        this.$store.commit('playerPause', false);
+        this.$store.commit('player/pause', false);
       } else {
-        this.$store.commit('playerPlayPodcast', podcast);
+        this.$store.commit('player/playPodcast', podcast);
       }
     },
     pause(): void {
-      this.$store.commit('playerPause', true);
+      this.$store.commit('player/pause', true);
     },
   },
 })

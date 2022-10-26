@@ -163,7 +163,7 @@ export default defineComponent({
         true === state.generalParameters.isAdmin;
     },
     userId(): string|undefined {
-      return state.generalParameters.authenticated ? this.$store.state.profile.userId : undefined;
+      return state.generalParameters.authenticated ? this.$store.state.auth?.profile.userId : undefined;
     },
     phase(): string|undefined {
       if(undefined === this.podcast){

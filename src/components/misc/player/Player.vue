@@ -1,60 +1,55 @@
 <template>
   <div
-    class="w-100 transition-height bg-dark"
+    class="player-container"
     :style="{ height: playerHeight }"
+    @transitionend="onHidden"
   >
-    <div
-      class="player-container"
-      :style="{ height: playerHeight }"
-      @transitionend="onHidden"
-    >
-      <template v-if="display">
-        <audio
-          id="audio-player"
-          :src="!live? audioUrlToPlay: undefined"
-          autoplay
-          @timeupdate="onTimeUpdate"
-          @ended="onFinished"
-          @playing="onPlay"
-          @durationChange="onTimeUpdate"
-          @error="onError"
-          @seeked="onSeeked"
-        />
-        <PlayerCompact
-          v-if="!largeVersion"
-          v-model:notListenTime="notListenTime"
-          :player-error="playerError"
-          :hls-ready="hlsReady"
-          :comments="comments"
-          :display-alert-bar="displayAlertBar"
-          :percent-live-progress="percentLiveProgress"
-          :duration-live-position="durationLivePosition"
-          :listen-time="listenTime"
-          @stopPlayer="stopPlayer"
-          @changePlayerLargeVersion="largeVersion = true"
-        />
-        <PlayerLarge
-          v-else
-          v-model:notListenTime="notListenTime"
-          :player-error="playerError"
-          :hls-ready="hlsReady"
-          :comments="comments"
-          :display-alert-bar="displayAlertBar"
-          :percent-live-progress="percentLiveProgress"
-          :duration-live-position="durationLivePosition"
-          :listen-time="listenTime"
-          @stopPlayer="stopPlayer"
-          @changePlayerLargeVersion="largeVersion = false"
-        />
-      </template>
-    </div>
+    <template v-if="display">
+      <audio
+        id="audio-player"
+        :src="!live? audioUrlToPlay: undefined"
+        autoplay
+        @timeupdate="onTimeUpdate"
+        @ended="onFinished"
+        @playing="onPlay"
+        @durationChange="onTimeUpdate"
+        @error="onError"
+        @seeked="onSeeked"
+      />
+      <PlayerCompact
+        v-if="!largeVersion"
+        v-model:notListenTime="notListenTime"
+        :player-error="playerError"
+        :hls-ready="hlsReady"
+        :comments="comments"
+        :display-alert-bar="displayAlertBar"
+        :percent-live-progress="percentLiveProgress"
+        :duration-live-position="durationLivePosition"
+        :listen-time="listenTime"
+        @stopPlayer="stopPlayer"
+        @changePlayerLargeVersion="largeVersion = true"
+      />
+      <PlayerLarge
+        v-else
+        v-model:notListenTime="notListenTime"
+        :player-error="playerError"
+        :hls-ready="hlsReady"
+        :comments="comments"
+        :display-alert-bar="displayAlertBar"
+        :percent-live-progress="percentLiveProgress"
+        :duration-live-position="durationLivePosition"
+        :listen-time="listenTime"
+        @stopPlayer="stopPlayer"
+        @changePlayerLargeVersion="largeVersion = false"
+      />
+    </template>
   </div>
 </template>
 <script lang="ts">
 import { mapState } from 'vuex';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { playerLogic } from '../../mixins/player/playerLogic';
-import { StoreState } from '@/store/typeAppStore';
+import { StoreState } from '@/store/classStore/typeAppStore';
 import PlayerCompact from '../player/PlayerCompact.vue';
 import PlayerLarge from '../player/PlayerLarge.vue';
 import { defineComponent } from 'vue';
@@ -108,7 +103,7 @@ export default defineComponent({
   methods: {
     onHidden(): void {
       if (this.forceHide) {
-        this.$store.commit('playerPlayPodcast');
+        this.$store.commit('player/playPodcast');
         this.forceHide = false;
       }
     },

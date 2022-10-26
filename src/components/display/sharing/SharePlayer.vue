@@ -299,8 +299,8 @@ export default defineComponent({
       return url;
     },
     async fetchOrgaAttributes(): Promise<void>{
-      if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
-        this.orgaAttributes = this.$store.state.organisation.attributes;
+      if(this.$store.state.auth?.organisation?.attributes && Object.keys(this.$store.state.auth?.organisation.attributes).length > 1){
+        this.orgaAttributes = this.$store.state.auth?.organisation.attributes;
       }else{
         this.orgaAttributes= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
       }

@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="displayMenu"
     class="left-menu-container"
     @mouseleave="onMenuClick"
   >
@@ -61,10 +60,9 @@ export default defineComponent({
   },
   mixins:[orgaFilter],
   props: {
-    displayMenu: { default: false, type: Boolean},
     isEducation: { default: false, type: Boolean},
   },
-  emits: ['update:displayMenu'],
+  emits: ['close'],
   data() {
     return {
       organisationId: undefined as string|undefined,
@@ -127,7 +125,7 @@ export default defineComponent({
                    rubriquesId: this.rubriqueQueryParam}
     },
     onMenuClick() {
-      this.$emit('update:displayMenu', false);
+      this.$emit('close');
     },
     async onOrganisationSelected(organisation: Organisation|undefined) {
       if (organisation?.id) {

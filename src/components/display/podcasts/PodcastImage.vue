@@ -88,7 +88,7 @@
 <script lang="ts">
 import { mapState } from 'vuex';
 import { state } from '../../../store/paramStore';
-import {StoreState} from '@/store/typeAppStore';
+import {StoreState} from '@/store/classStore/typeAppStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { imageProxy } from '../../mixins/functions';
@@ -251,13 +251,13 @@ export default defineComponent({
         return;
       }
       if(this.playingPodcast){
-        this.$store.commit('playerPause', "PLAYING"===this.$store.state.player.status);
+        this.$store.commit('player/pause', "PLAYING"===this.$store.state.player.status);
         return;
       }
       if (!this.recordingLive) {
-        this.$store.commit('playerPlayPodcast', this.podcast);
+        this.$store.commit('player/playPodcast', this.podcast);
       }else{
-        this.$store.commit('playerPlayPodcast', {
+        this.$store.commit('player/playPodcast', {
           title: this.podcast.title,
           audioUrl: this.podcast.audioUrl,
           duration: this.podcast.duration,

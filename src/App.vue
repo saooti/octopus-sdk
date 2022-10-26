@@ -10,7 +10,8 @@
       :is-education="false"
     />
     <LeftMenu
-      v-model:displayMenu="displayMenu"
+      v-if="displayMenu"
+      @close="displayMenu=false"
       :is-education="false"
     />
     <CategoryFilter />
@@ -21,7 +22,6 @@
 
 <script lang="ts">
 import TopBar from '@/components/misc/TopBar.vue';
-import LeftMenu from '@/components/misc/LeftMenu.vue';
 import Footer from '@/components/misc/Footer.vue';
 import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
 import { state } from './store/paramStore';
@@ -29,8 +29,9 @@ import { Rubriquage } from './store/class/rubrique/rubriquage';
 import { RubriquageFilter } from './store/class/rubrique/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique/rubrique';
 import { initSDK } from './components/mixins/init';
-import { defineComponent } from 'vue'
+import { defineAsyncComponent, defineComponent } from 'vue'
 import { Category } from './store/class/general/category';
+const LeftMenu = defineAsyncComponent(() => import('@/components/misc/LeftMenu.vue'));
 export default defineComponent({
   name: 'App',
   

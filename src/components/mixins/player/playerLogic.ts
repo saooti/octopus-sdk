@@ -4,8 +4,9 @@ import { CommentPodcast } from '@/store/class/general/comment';
 import { cookies } from '../functions';
 import { playerLive } from './playerLive';
 import { playerComment } from './playerComment';
-import { StoreState } from '@/store/typeAppStore';
 import { defineComponent } from 'vue';
+import { Player } from '@/store/class/general/player';
+import { StoreState } from '@/store/classStore/typeAppStore';
 export const playerLogic = defineComponent({
   mixins:[cookies,playerLive,playerComment],
   data() {
@@ -27,18 +28,20 @@ export const playerLogic = defineComponent({
     };
   },
   computed: {
-    ...mapState({
-      podcast (state: StoreState){ return state.player.podcast},
-      media: (state: StoreState) => state.player.media,
-      live: (state: StoreState) => state.player.live,
-      volume: (state: StoreState) => state.player.volume,
-      commentsLoaded: (state: StoreState) => state.comments.loadedComments,
-      percentProgress: (state: StoreState) => {
-        if(!state.player.elapsed){return 0;}
-        return state.player.elapsed * 100;
+    ...mapState('player',{
+      podcast (state: Player){ return state.podcast},
+      media: (state: Player) => state.media,
+      live: (state: Player) => state.live,
+      volume: (state: Player) => state.volume,
+      percentProgress: (state: Player) => {
+        if(!state.elapsed){return 0;}
+        return state.elapsed * 100;
       },
-      playerSeekTime: (state: StoreState) => state.player.seekTime,
+      playerSeekTime: (state: Player) => state.seekTime,
     }),
+    commentsLoaded(){
+      return this.$store.state.comments.loadedComments;
+    },
     audioUrl(): string {
       return this.getAudioUrl();
     },
@@ -98,13 +101,13 @@ export const playerLogic = defineComponent({
   methods: {
     async getTranscription(): Promise<void>{
       if(!this.podcast){
-        this.$store.commit('playerTranscript',undefined);
+        this.$store.commit('player/transcript',undefined);
         return;
       }
       const result = await octopusApi.fetchDataPublic<string>(11 , `response/${this.podcast.podcastId}`);
       const arrayTranscript = this.parseSrt(result);
       const actualText = arrayTranscript?.[0]?.startTime === 0 ? arrayTranscript[0].text : "";
-      this.$store.commit('playerTranscript',{actual: 0,actualText:actualText, value : arrayTranscript});
+      this.$store.commit('player/transcript',{actual: 0,actualText:actualText, value : arrayTranscript});
     },
     parseSrt(transcript: string){
       var pattern = /(\d+)\n([\d:,]+)\s+-{2}\>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
@@ -144,15 +147,15 @@ export const playerLogic = defineComponent({
       parameters.push('origin=octopus');
       parameters.push('listenerId='+this.getListenerId());
       if (
-        this.$store.state.authentication &&
-        this.$store.state.authentication.organisationId
+        this.$store.state.auth &&
+        this.$store.state.auth.organisationId
       ) {
         parameters.push(
-          'distributorId=' + this.$store.state.authentication.organisationId
+          'distributorId=' + this.$store.state.auth.organisationId
         );
       }
-      if("SECURED" === this.podcast.organisation.privacy && this.$store.state.authentication.isAuthenticated && this.$store.state.oAuthParam.accessToken){
-        parameters.push('access_token='+this.$store.state.oAuthParam.accessToken);
+      if("SECURED" === this.podcast.organisation.privacy && this.$store.state.auth && this.$store.state.auth.oAuthParam.accessToken){
+        parameters.push('access_token='+this.$store.state.auth?.oAuthParam.accessToken);
       }
       return this.podcast.podcastId + '.mp3?' + parameters.join('&');
     },
@@ -170,7 +173,7 @@ export const playerLogic = defineComponent({
       this.initComments();
     },
     stopPlayer(): void {
-      this.$store.commit('playerPlayPodcast');
+      this.$store.commit('player/playPodcast');
     },
     getListenerId(): string{
       let listenerId = this.getCookie("octopus_listenerId");
@@ -228,8 +231,8 @@ export const playerLogic = defineComponent({
     onTimeUpdatePodcast(streamDuration:number, currentTime:number){
       this.displayAlertBar = false;
       this.percentLiveProgress = 100;
-      this.$store.commit('playerTotalTime', streamDuration);
-      this.$store.commit('playerElapsed', currentTime / streamDuration);
+      this.$store.commit('player/totalTime', streamDuration);
+      this.$store.commit('player/elapsed', currentTime / streamDuration);
       this.onTimeUpdateTranscript(currentTime);
     },
     onTimeUpdateLive(streamDuration: number, currentTime:number){
@@ -238,7 +241,7 @@ export const playerLogic = defineComponent({
       if (scheduledDuration > streamDuration) {
         this.displayAlertBar = false;
         this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
-        this.$store.commit('playerTotalTime', scheduledDuration);
+        this.$store.commit('player/totalTime', scheduledDuration);
         this.$store.commit(
           'playerElapsed',
           currentTime / scheduledDuration
@@ -247,8 +250,8 @@ export const playerLogic = defineComponent({
         this.percentLiveProgress = 100;
         this.displayAlertBar = true;
         this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
-        this.$store.commit('playerTotalTime', streamDuration);
-        this.$store.commit('playerElapsed', currentTime / streamDuration);
+        this.$store.commit('player/totalTime', streamDuration);
+        this.$store.commit('player/elapsed', currentTime / streamDuration);
       }
     },
     onTimeUpdate(event: Event): void {

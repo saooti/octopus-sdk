@@ -21,3 +21,20 @@ export interface Emission {
   adConfigs?: {[key:string]: AdserverConfig};
   urlFeed?: string;
 }
+
+export function emptyEmissionData(): Emission{
+  return {
+      emissionId: 0,
+      name: '' ,
+      description: '' ,
+      imageUrl: '' ,
+      iabIds: undefined ,
+      orga: {
+        id: '',
+        name: '',
+        imageUrl: ''
+      },
+      rubriqueIds: [] ,
+      monetisable: 'UNDEFINED',
+  }
+}

@@ -35,11 +35,10 @@ import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from './PodcastItem.vue';
 import { state } from '../../../store/paramStore';
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast, emptyPodcastData } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 import { FetchParam } from '@/store/class/general/fetchParam';
 import { AxiosError } from 'axios';
-import { emptyPodcastData } from '@/store/typeAppStore';
 export default defineComponent({
   name: 'PodcastList',
 
@@ -155,7 +154,7 @@ export default defineComponent({
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
         includeHidden: this.includeHidden,
         validity: undefined !== this.notValid?!this.notValid: undefined,
-        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.$store.state.profile.userId:undefined
+        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.$store.state.auth?.profile.userId:undefined
       };
       try {
         const data =await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',param, true);

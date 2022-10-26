@@ -32,8 +32,7 @@ import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import ParticipantItem from './ParticipantItem.vue';
-import { Participant } from '@/store/class/general/participant';
-import { emptyParticipantData } from '@/store/typeAppStore';
+import { Participant, emptyParticipantData } from '@/store/class/general/participant';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 export default defineComponent({

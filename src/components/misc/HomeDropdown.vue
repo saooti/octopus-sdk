@@ -94,7 +94,7 @@ export default defineComponent({
   },
   computed: {
     organisationsAvailable(): Array<Organisation>{
-      return this.$store.state.profile.organisations?? [];
+      return this.$store.state.auth?.profile.organisations?? [];
     },
     helpLinks(){
       return [
@@ -113,7 +113,7 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     authenticated(): boolean {
-      return this.$store.state.authentication.isAuthenticated;
+      return state.generalParameters.authenticated??false;
     },
   },
 

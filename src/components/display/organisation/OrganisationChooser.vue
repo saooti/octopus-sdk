@@ -183,7 +183,7 @@ export default defineComponent({
   async created() {
     if (
       this.authenticated &&
-      undefined === this.$store.state.organisation.imageUrl
+      undefined === this.$store.state.auth?.organisation.imageUrl
     ) {
       const data = await octopusApi.fetchData<Organisation>(0,`organisation/${this.myOrganisationId ?this.myOrganisationId:""}`);
       this.myImage = data.imageUrl;

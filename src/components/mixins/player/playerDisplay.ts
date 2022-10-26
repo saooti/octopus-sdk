@@ -107,10 +107,10 @@ export const playerDisplay = defineComponent({
       }
     },
     onPlay(): void {
-      this.$store.commit('playerPause', false);
+      this.$store.commit('player/pause', false);
     },
     onPause(): void {
-      this.$store.commit('playerPause', true);
+      this.$store.commit('player/pause', true);
     },
 	}
 });

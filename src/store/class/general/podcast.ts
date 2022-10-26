@@ -1,4 +1,4 @@
-import { Emission } from './emission';
+import { Emission, emptyEmissionData } from './emission';
 import { Organisation } from './organisation';
 import { Participant } from './participant';
 import { Person } from '../user/person';
@@ -40,4 +40,33 @@ export interface Podcast {
   weekDownloadCount?: number;
   order?: number;
   livePodcastId?: number
+}
+export function emptyPodcastData(): Podcast {
+  return {
+    podcastId:0,
+    audioUrl: '',
+    audioStorageUrl: '',
+    article:'',
+    imageUrl: '',
+    animators: [],
+    guests: [],
+    emission: emptyEmissionData(),
+    title: '',
+    description: undefined,
+    tags: [],
+    availability: {
+      visibility: true,
+      date: undefined,
+    },
+    monetisable: 'UNDEFINED',
+    comments: 'inherit',
+    organisation: {
+      id: '',
+      name: '',
+      imageUrl: '',
+    },
+    pubDate: undefined,
+    conferenceId: 0,
+    duration: 0,
+  };
 }

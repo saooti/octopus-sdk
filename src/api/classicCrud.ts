@@ -1,4 +1,4 @@
-import { StoreState } from "@/store/typeAppStore";
+import { StoreState } from "@/store/classStore/typeAppStore";
 import axios from "axios";
 enum ModuleApi {
     DEFAULT = 0,

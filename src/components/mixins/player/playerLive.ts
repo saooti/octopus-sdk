@@ -4,8 +4,8 @@ import octopusApi from '@saooti/octopus-api';
 /* eslint-disable */
 let Hls:any = null;
 /* eslint-enable */
-import { StoreState } from '@/store/typeAppStore';
 import { defineComponent } from 'vue';
+import { Player } from '@/store/class/general/player';
 export const playerLive = defineComponent({
   data() {
     return {
@@ -18,13 +18,13 @@ export const playerLive = defineComponent({
     };
   },
   computed: {
-    ...mapState({
-      live(state: StoreState) { return state.player.live}
+    ...mapState('player',{
+      live(state: Player) { return state.live}
     }),
   },
   methods: {
     onPlay(): void {
-      this.$store.commit('playerPause', false);
+      this.$store.commit('player/pause', false);
     },
     async playLive(): Promise<void> {
       if (!this.live) return;
@@ -63,7 +63,7 @@ export const playerLive = defineComponent({
         await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.live.livePodcastId+".m3u8",{
           'downloadId': null!==downloadId ? downloadId : undefined,
           'origin':'octopus',
-          'distributorId':this.$store.state.authentication.organisationId
+          'distributorId':this.$store.state.auth?.organisationId
         });
         this.setDownloadId(downloadId);
       } catch (error) {

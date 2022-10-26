@@ -16,6 +16,19 @@ export interface Playlist {
   publisher?: Person;
 }
 
+export function emptyPlaylistData(): Playlist{
+  return {
+    description: '',
+    playlistId: 0,
+    podcasts: undefined,
+    score: 0,
+    title: '',
+    type:'DYNAMIC',
+    samplingViews:[]
+  }
+}
+
+
 export interface PlaylistRule {
   maxSize: number,
   podcastId?: number,

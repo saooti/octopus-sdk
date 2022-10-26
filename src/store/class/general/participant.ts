@@ -10,3 +10,10 @@ export interface Participant {
   score?: number;
   uid?: string;
 }
+export function emptyParticipantData(): Participant{
+  return {
+    firstName: '',
+    lastName: '',
+    participantId:0
+  }
+}

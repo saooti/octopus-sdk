@@ -32,8 +32,7 @@ import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
-import { emptyPlaylistData } from '@/store/typeAppStore';
-import { Playlist } from '@/store/class/general/playlist';
+import { Playlist, emptyPlaylistData } from '@/store/class/general/playlist';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 export default defineComponent({

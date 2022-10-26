@@ -3,7 +3,7 @@ import { mapState } from 'vuex';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import { CommentPodcast } from '@/store/class/general/comment';
-import { StoreState } from '@/store/typeAppStore';
+import { StoreState } from '@/store/classStore/typeAppStore';
 import { defineComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
 import { InterfacePageable } from '@/store/class/general/interfacePageable';

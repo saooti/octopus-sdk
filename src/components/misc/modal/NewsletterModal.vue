@@ -302,8 +302,8 @@ export default defineComponent({
     },
     async initData(): Promise<void> {
       let attributes;
-      if(this.$store.state.organisation?.attributes && Object.keys(this.$store.state.organisation.attributes).length > 1){
-        attributes = this.$store.state.organisation.attributes;
+      if(this.$store.state.auth?.organisation?.attributes && Object.keys(this.$store.state.auth?.organisation.attributes).length > 1){
+        attributes = this.$store.state.auth?.organisation.attributes;
       }else{
         attributes = await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+state.generalParameters.organisationId);
       }
