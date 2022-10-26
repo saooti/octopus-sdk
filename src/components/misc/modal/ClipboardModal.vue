@@ -41,7 +41,7 @@
 import { Emission } from '@/store/class/general/emission';
 import { displayMethods } from '../../mixins/functions';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { state } from '@/store/paramStore';
+import { state } from '../../../store/paramStore';
 const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
 export default defineComponent({
   name: 'ClipboardModal',
