@@ -109,7 +109,8 @@
 </template>
 
 <script lang="ts">
-import { selenium, imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
+import selenium from '../../mixins/selenium';
 import { orgaComputed } from '../../mixins/orgaComputed';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';

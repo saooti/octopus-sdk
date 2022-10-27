@@ -89,7 +89,7 @@ import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
 import Snackbar from '../../misc/Snackbar.vue';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { Playlist } from '@/store/class/general/playlist';
 const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));

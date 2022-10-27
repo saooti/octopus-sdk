@@ -28,7 +28,7 @@ import { state } from './store/paramStore';
 import { Rubriquage } from './store/class/rubrique/rubriquage';
 import { RubriquageFilter } from './store/class/rubrique/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique/rubrique';
-import { initSDK } from './components/mixins/init';
+import initSDK from './components/mixins/init';
 import { defineAsyncComponent, defineComponent } from 'vue'
 import { Category } from './store/class/general/category';
 const LeftMenu = defineAsyncComponent(() => import('@/components/misc/LeftMenu.vue'));

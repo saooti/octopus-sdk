@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { state } from '../../store/paramStore';
-import { orgaFilter } from '../mixins/organisationFilter';
+import orgaFilter from '../mixins/organisationFilter';
 import { Category } from '@/store/class/general/category';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';

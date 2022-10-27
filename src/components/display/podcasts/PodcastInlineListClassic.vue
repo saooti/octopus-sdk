@@ -55,7 +55,7 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
 import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
-import { imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastInlineListClassic',

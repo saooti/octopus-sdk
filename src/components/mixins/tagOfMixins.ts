@@ -1,5 +1,5 @@
 import {defineComponent } from 'vue';
-export const tagOfMixins =  defineComponent({
+export default defineComponent({
   name: 'TagOfMixins',
 	methods:{
     isOuestFranceTag(tag: string): boolean{

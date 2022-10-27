@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { selenium } from '../../mixins/functions';
+import selenium from '../../mixins/selenium';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const MessageModal = defineAsyncComponent(

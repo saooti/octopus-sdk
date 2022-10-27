@@ -37,7 +37,7 @@
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { Emission } from '@/store/class/general/emission';
 
 import { defineComponent, defineAsyncComponent } from 'vue';

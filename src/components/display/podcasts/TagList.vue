@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import Popover from '../../misc/Popover.vue';
-import { tagOfMixins } from '../../mixins/tagOfMixins';
+import tagOfMixins from '../../mixins/tagOfMixins';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'TagList',

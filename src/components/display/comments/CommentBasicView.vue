@@ -48,7 +48,8 @@
 </template>
 
 <script lang="ts">
-import { displayMethods, selenium } from '../../mixins/functions';
+import selenium from '../../mixins/selenium';
+import displayMethods from '../../mixins/displayMethods';
 import { CommentPodcast } from '@/store/class/general/comment';
 import moment from 'moment';
 import Popover from '../../misc/Popover.vue';

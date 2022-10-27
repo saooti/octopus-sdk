@@ -130,7 +130,8 @@
 
 <script lang="ts">
 import { state } from '../../../store/paramStore';
-import { displayMethods, selenium } from '../../mixins/functions';
+import selenium from '../../mixins/selenium';
+import displayMethods from '../../mixins/displayMethods';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';

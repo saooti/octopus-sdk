@@ -57,7 +57,8 @@
 import octopusApi from '@saooti/octopus-api';
 import { Participant } from '@/store/class/general/participant';
 import { state } from '../../../store/paramStore';
-import { displayMethods, imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
+import displayMethods from '../../mixins/displayMethods';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { defineComponent } from 'vue'
 import { Podcast } from '@/store/class/general/podcast';

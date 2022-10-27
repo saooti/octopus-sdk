@@ -105,7 +105,7 @@ import moment from 'moment';
 import VSwatches from 'vue3-swatches';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { Participant } from '@/store/class/general/participant';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';

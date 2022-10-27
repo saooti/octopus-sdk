@@ -94,7 +94,7 @@
 
 <script lang="ts">
 import Snackbar from '../Snackbar.vue';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'

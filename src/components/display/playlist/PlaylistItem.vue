@@ -61,7 +61,8 @@
 <script lang="ts">
 import { Playlist } from '@/store/class/general/playlist';
 import { state } from '../../../store/paramStore';
-import { displayMethods, imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
+import displayMethods from '../../mixins/displayMethods';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistItem',

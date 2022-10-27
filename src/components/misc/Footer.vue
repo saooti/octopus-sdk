@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { cookies } from '../mixins/functions';
+import cookies from '../mixins/cookies';
 import ClassicSelect from '../form/ClassicSelect.vue';
 import Player from './player/Player.vue';
 import { state } from '../../store/paramStore';

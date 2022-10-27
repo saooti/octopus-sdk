@@ -63,7 +63,8 @@ import { orgaComputed } from '../../mixins/orgaComputed';
 import { Emission } from '@/store/class/general/emission';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
-import { displayMethods, imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
+import displayMethods from '../../mixins/displayMethods';
 import { defineComponent } from 'vue'
 import { Podcast } from '@/store/class/general/podcast';
 export default defineComponent({

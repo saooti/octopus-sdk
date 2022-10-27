@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Emission } from '@/store/class/general/emission';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { state } from '../../../store/paramStore';
 const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));

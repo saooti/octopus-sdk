@@ -696,4 +696,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 33.0.6 Crédits
  * 33.0.7 Test refactor podcastmaker with scss variables
  * 33.1.0 Refacto store
+ * 33.1.2 Refacto lazy export
 

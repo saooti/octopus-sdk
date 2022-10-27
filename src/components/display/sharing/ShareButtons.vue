@@ -54,7 +54,7 @@
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import Popover from '../../misc/Popover.vue';
 import ShareButtonsIntern from './ShareButtonsIntern.vue';
 import { defineComponent } from 'vue';

@@ -269,57 +269,6 @@ body{
       margin-bottom: 0.2rem;
     }
   }
-  .btn-split{
-    display: inline-block;
-    cursor: default;
-    padding: 0;
-    position: relative;
-    text-align: center;
-    min-width: 400px;
-    @media (max-width: 400px) {
-      min-width: auto;
-    }
-    &:hover, &.mobileHover{
-      .label{
-        opacity: 0;
-        transition: opacity .5s .125s ease-out;
-      }
-      .btn {
-        margin: 0 0.3rem !important;
-      }
-    }
-    .btn{
-      transition:
-      background-color .5s ease-out,
-      border-radius .5s .25s ease-out,
-      margin .5s .25s ease-out;
-      margin: 0 !important;
-      &.first {
-        margin-left: 0;
-      }
-      &.last {
-        margin-right: 0;
-      }
-    }
-    .label {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.5rem;
-      border-radius: 4px;
-      font-weight: bold;
-      background: $octopus-secondary-color;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      opacity: 1;
-      pointer-events: none;
-      transition: opacity .5s .75s ease-out;
-    }
-  }
-  
   @media (max-width: 960px) {
     .d-flex:not(.flex-column){
       flex-wrap: wrap;

@@ -143,7 +143,8 @@ import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
 import { state } from '../../../store/paramStore';
 import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
-import { displayMethods, imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
+import displayMethods from '../../mixins/displayMethods';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',

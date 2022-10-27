@@ -74,8 +74,8 @@
 import { state } from '../../store/paramStore';
 import HomeDropdown from './HomeDropdown.vue';
 import { Organisation } from '@/store/class/general/organisation';
-import { orgaFilter } from '../mixins/organisationFilter';
-import { imageProxy } from '../mixins/functions';
+import orgaFilter from '../mixins/organisationFilter';
+import imageProxy from '../mixins/imageProxy';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent,defineAsyncComponent } from 'vue';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));

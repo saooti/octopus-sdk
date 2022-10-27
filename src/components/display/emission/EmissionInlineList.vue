@@ -68,7 +68,7 @@ import { Emission } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
-import { imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 export default defineComponent({
   name: 'EmissionInlineList',

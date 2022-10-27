@@ -37,7 +37,7 @@
 <script lang="ts">
 import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
-import { cookies } from '../../mixins/functions';
+import cookies from '../../mixins/cookies';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 

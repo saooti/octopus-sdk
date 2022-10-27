@@ -138,7 +138,7 @@ import { state } from '../../../store/paramStore';
 import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';

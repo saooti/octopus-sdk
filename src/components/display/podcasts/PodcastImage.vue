@@ -91,7 +91,7 @@ import { state } from '../../../store/paramStore';
 import {StoreState} from '@/store/classStore/typeAppStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
-import { imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastImage',

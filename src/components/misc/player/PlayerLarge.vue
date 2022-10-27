@@ -83,7 +83,7 @@
 </template>
 <script lang="ts">
 import { playerDisplay } from '../../mixins/player/playerDisplay';
-import { imageProxy } from '../../mixins/functions';
+import imageProxy from '../../mixins/imageProxy';
 import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerTimeline from './PlayerTimeline.vue';
 import { defineComponent } from 'vue';

@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/general/comment';
-import { selenium } from '../../mixins/functions';
+import selenium from '../../mixins/selenium';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentPlayer',

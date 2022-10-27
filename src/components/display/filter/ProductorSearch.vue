@@ -42,7 +42,7 @@
 <script lang="ts">
 import ClassicSearch from '../../form/ClassicSearch.vue';
 import { state } from '../../../store/paramStore';
-import { orgaFilter } from '../../mixins/organisationFilter';
+import orgaFilter from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const OrganisationChooser = defineAsyncComponent(() => import('../organisation/OrganisationChooser.vue'));

@@ -1,186 +1,81 @@
 //Pages
-import Lives from "./src/components/pages/Lives.vue";
-import Podcast from "./src/components/pages/Podcast.vue";
-import Podcasts from "./src/components/pages/Podcasts.vue";
-import Emission from "./src/components/pages/Emission.vue";
-import Emissions from "./src/components/pages/Emissions.vue";
-import Playlist from "./src/components/pages/Playlist.vue";
-import Playlists from "./src/components/pages/Playlists.vue";
-import Participant from "./src/components/pages/Participant.vue";
-import Participants from "./src/components/pages/Participants.vue";
-import Search from "./src/components/pages/Search.vue";
-import Home from "./src/components/pages/Home.vue";
-import Category from "./src/components/pages/Category.vue";
-import Rubrique from "./src/components/pages/Rubrique.vue";
-import Error403Page from "./src/components/pages/Error403Page.vue";
+export const getLives = () => import("./src/components/pages/Lives.vue");
+export const getPodcast = () => import("./src/components/pages/Podcast.vue");
+export const getPodcasts = () => import("./src/components/pages/Podcasts.vue");
+export const getEmission = () => import("./src/components/pages/Emission.vue");
+export const getEmissions = () => import("./src/components/pages/Emissions.vue");
+export const getPlaylist = () => import("./src/components/pages/Playlist.vue");
+export const getPlaylists = () => import("./src/components/pages/Playlists.vue");
+export const getParticipant = () => import("./src/components/pages/Participant.vue");
+export const getParticipants = () => import("./src/components/pages/Participants.vue");
+export const getSearch = () => import("./src/components/pages/Search.vue");
+export const getHome = () => import("./src/components/pages/Home.vue");
+export const getCategory = () => import("./src/components/pages/Category.vue");
+export const getRubrique = () => import("./src/components/pages/Rubrique.vue");
+export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
+
 //Misc
-import Footer from "./src/components/misc/Footer.vue";
-import LeftMenu from "./src/components/misc/LeftMenu.vue";
-import Player from "./src/components/misc/player/Player.vue";
-import Snackbar from "./src/components/misc/Snackbar.vue";
-import TopBar from "./src/components/misc/TopBar.vue";
-import HomeDropdown from "./src/components/misc/HomeDropdown.vue";
-import MessageModal from "./src/components/misc/modal/MessageModal.vue";
-import ErrorMessage from "./src/components/misc/ErrorMessage.vue";
-import Popover from "./src/components/misc/Popover.vue";
+export const getFooter = () => import("./src/components/misc/Footer.vue");
+export const getLeftMenu = () => import("./src/components/misc/LeftMenu.vue");
+export const getPlayer = () => import("./src/components/misc/player/Player.vue");
+export const getSnackbar = () => import("./src/components/misc/Snackbar.vue");
+export const getTopBar = () => import("./src/components/misc/TopBar.vue");
+export const getHomeDropdown = () => import("./src/components/misc/HomeDropdown.vue");
+export const getMessageModal = () => import("./src/components/misc/modal/MessageModal.vue");
+export const getErrorMessage = () => import("./src/components/misc/ErrorMessage.vue");
+export const getPopover = () => import("./src/components/misc/Popover.vue");
+
+
 //Display
-import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
-import CategoryList from "./src/components/display/categories/CategoryList.vue";
-import CategoryFilter from "./src/components/display/categories/CategoryFilter.vue";
-import EmissionChooser from "./src/components/display/emission/EmissionChooser.vue";
-import EmissionList from "./src/components/display/emission/EmissionList.vue";
-import OrganisationChooser from "./src/components/display/organisation/OrganisationChooser.vue";
-import PodcastFilterList from "./src/components/display/podcasts/PodcastFilterList.vue";
-import PodcastInlineList from "./src/components/display/podcasts/PodcastInlineList.vue";
-import PodcastList from "./src/components/display/podcasts/PodcastList.vue";
-import ShareButtons from "./src/components/display/sharing/ShareButtons.vue";
-import EmissionInlineList from "./src/components/display/emission/EmissionInlineList.vue";
-import RubriqueChooser from "./src/components/display/rubriques/RubriqueChooser.vue";
-import CommentList from "./src/components/display/comments/CommentList.vue";
-import CommentInput from "./src/components/display/comments/CommentInput.vue";
-import PodcastPlaylistInlineList from "./src/components/display/playlist/PodcastPlaylistInlineList.vue";
+export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
+export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");
+export const getCategoryFilter = () => import("./src/components/display/categories/CategoryFilter.vue");
+export const getEmissionChooser = () => import("./src/components/display/emission/EmissionChooser.vue");
+export const getEmissionList = () => import("./src/components/display/emission/EmissionList.vue");
+export const getOrganisationChooser = () => import("./src/components/display/organisation/OrganisationChooser.vue");
+export const getPodcastFilterList = () => import("./src/components/display/podcasts/PodcastFilterList.vue");
+export const getPodcastInlineList = () => import("./src/components/display/podcasts/PodcastInlineList.vue");
+export const getPodcastList = () => import("./src/components/display/podcasts/PodcastList.vue");
+export const getShareButtons = () => import("./src/components/display/sharing/ShareButtons.vue");
+export const getEmissionInlineList = () => import("./src/components/display/emission/EmissionInlineList.vue");
+export const getRubriqueChooser = () => import("./src/components/display/rubriques/RubriqueChooser.vue");
+export const getCommentList = () => import("./src/components/display/comments/CommentList.vue");
+export const getCommentInput = () => import("./src/components/display/comments/CommentInput.vue");
+export const getPodcastPlaylistInlineList = () => import("./src/components/display/playlist/PodcastPlaylistInlineList.vue");
+
 
 //AdvancedSearch
-import AdvancedSearch from "./src/components/display/filter/AdvancedSearch.vue";
-import RubriqueFilter from "./src/components/display/filter/RubriqueFilter.vue";
-import DateFilter from "./src/components/display/filter/DateFilter.vue";
-import SearchOrder from "./src/components/display/filter/SearchOrder.vue";
+export const getAdvancedSearch = () => import("./src/components/display/filter/AdvancedSearch.vue");
+export const getRubriqueFilter = () => import("./src/components/display/filter/RubriqueFilter.vue");
+export const getDateFilter = () => import("./src/components/display/filter/DateFilter.vue");
+export const getSearchOrder = () => import("./src/components/display/filter/SearchOrder.vue");
 
 //form
-import ClassicSearch from "./src/components/form/ClassicSearch.vue";
-import ClassicCheckbox from "./src/components/form/ClassicCheckbox.vue";
-import ClassicRadio from "./src/components/form/ClassicRadio.vue";
-import ClassicLoading from "./src/components/form/ClassicLoading.vue";
-import ClassicSelect from "./src/components/form/ClassicSelect.vue";
-import Paginate from "./src/components/display/list/Paginate.vue";
-import ListPaginate from "./src/components/display/list/ListPaginate.vue";
+export const getClassicSearch = () => import("./src/components/form/ClassicSearch.vue");
+export const getClassicCheckbox = () => import("./src/components/form/ClassicCheckbox.vue");
+export const getClassicRadio = () => import("./src/components/form/ClassicRadio.vue");
+export const getClassicLoading = () => import("./src/components/form/ClassicLoading.vue");
+export const getClassicSelect = () => import("./src/components/form/ClassicSelect.vue");
+export const getPaginate = () => import("./src/components/display/list/Paginate.vue");
+export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
+
 
 //mixins
-import {selenium} from "./src/components/mixins/functions";
-import {cookies} from "./src/components/mixins/functions";
-import {displayMethods} from "./src/components/mixins/functions";
-import {imageProxy} from "./src/components/mixins/functions";
-import {orgaFilter} from "./src/components/mixins/organisationFilter";
-import {initSDK} from "./src/components/mixins/init";
-import {tagOfMixins} from "./src/components/mixins/tagOfMixins";
 
-const components = {
-    Lives,
-    Podcast,
-    Podcasts,
-    Emission,
-    Emissions,
-    Playlist,
-    Playlists,
-    Participant,
-    Participants,
-    Search,
-    Home,
-    Category,
-    Footer,
-    LeftMenu,
-    Player,
-    TopBar,
-    CategoryChooser,
-    CategoryList,
-    PodcastInlineList,
-    EmissionChooser,
-    EmissionList,
-    /* EmissionItem, */
-    OrganisationChooser,
-    PodcastFilterList,
-    ShareButtons,
-    PodcastList,
-    EmissionInlineList,
-    RubriqueChooser,
-    Snackbar,
-    selenium,
-    cookies,
-    MessageModal,
-    CommentList,
-    CommentInput,
-    HomeDropdown,
-    ErrorMessage,
-    displayMethods,
-    imageProxy,
-    Rubrique,
-    CategoryFilter,
-    orgaFilter,
-    initSDK,
-    Popover,
-    tagOfMixins,
-    ClassicSearch,
-    ClassicCheckbox,
-    ClassicRadio,
-    ClassicLoading,
-    AdvancedSearch,
-    PodcastPlaylistInlineList,
-    ClassicSelect,
-    Error403Page,
-    Paginate,
-    ListPaginate,
-    RubriqueFilter,
-    DateFilter,
-    SearchOrder
-}
-export default components;
+import selenium from "./src/components/mixins/selenium";
+import cookies from "./src/components/mixins/cookies";
+import displayMethods from "./src/components/mixins/displayMethods";
+import imageProxy from "./src/components/mixins/imageProxy";
+import orgaFilter from "./src/components/mixins/organisationFilter";
+import initSDK from "./src/components/mixins/init";
+import tagOfMixins from "./src/components/mixins/tagOfMixins";
 
 export {
-    Lives,
-    Podcast,
-    Podcasts,
-    Emission,
-    Emissions,
-    Playlist,
-    Playlists,
-    Participant,
-    Participants,
-    Search,
-    Home,
-    Category,
-    Footer,
-    LeftMenu,
-    Player,
-    TopBar,
-    CategoryChooser,
-    CategoryList,
-    PodcastInlineList,
-    EmissionChooser,
-    /* EmissionItem, */
-    EmissionList,
-    OrganisationChooser,
-    PodcastFilterList,
-    ShareButtons,
-    PodcastList,
-    EmissionInlineList,
-    RubriqueChooser,
-    Snackbar,
     selenium,
     cookies,
-    MessageModal,
-    CommentList,
-    CommentInput,
-    HomeDropdown,
-    ErrorMessage,
     displayMethods,
     imageProxy,
-    Rubrique,
-    CategoryFilter,
     orgaFilter,
     initSDK,
-    Popover,
-    tagOfMixins,
-    ClassicSearch,
-    ClassicCheckbox,
-    ClassicRadio,
-    ClassicLoading,
-    AdvancedSearch,
-    PodcastPlaylistInlineList,
-    ClassicSelect,
-    Error403Page,
-    Paginate,
-    ListPaginate,
-    RubriqueFilter,
-    DateFilter,
-    SearchOrder
+    tagOfMixins
 };

@@ -81,7 +81,8 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../store/paramStore';
-import { displayMethods, imageProxy } from '../mixins/functions';
+import displayMethods from '../mixins/displayMethods';
+import imageProxy from '../mixins/imageProxy';
 import { orgaComputed } from '../mixins/orgaComputed';
 import { handle403 } from '../mixins/handle403';
 import { Emission } from '@/store/class/general/emission';

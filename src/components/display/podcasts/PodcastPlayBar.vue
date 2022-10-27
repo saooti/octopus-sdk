@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import DurationHelper from '../../../helper/duration';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue'
 export default defineComponent({

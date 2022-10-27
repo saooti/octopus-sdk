@@ -5,7 +5,7 @@ import octopusApi from '@saooti/octopus-api';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 import { Organisation } from '@/store/class/general/organisation';
-export const orgaFilter = defineComponent({
+export default defineComponent({
   mixins: [handle403],
   methods: {
     async selectOrganisation(organisationId: string): Promise<void> {

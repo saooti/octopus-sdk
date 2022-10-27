@@ -130,7 +130,7 @@ import crudApi from '@/api/classicCrud';
 import moment from 'moment';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
-import { displayMethods } from '../../mixins/functions';
+import displayMethods from '../../mixins/displayMethods';
 import { Podcast } from '@/store/class/general/podcast';
 import { Participant } from '@/store/class/general/participant';
 

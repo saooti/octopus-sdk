@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { selenium } from '../../mixins/functions';
+import selenium from '../../mixins/selenium';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
 import { Rubrique } from '@/store/class/rubrique/rubrique';

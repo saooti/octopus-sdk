@@ -91,7 +91,7 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import crudApi from '@/api/classicCrud';
-import { cookies } from '../../mixins/functions';
+import cookies from '../../mixins/cookies';
 import { state } from '../../../store/paramStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
