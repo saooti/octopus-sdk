@@ -9,88 +9,91 @@
     >
       {{ $t('My space') }}
     </button>
-    <div
-      class="dropdown btn-group"
+    <button
+      id="home-dropdown"
+      class="btn m-1 admin-button saooti-user"
+      :title="$t('User menu')"
+    />
+    <Popover
+      target="home-dropdown"
+      :onlyClick="true"
+      :isFixed="true"
+      :leftPos="true"
     >
-      <button
-        class="btn dropdown-toggle m-1 admin-button dropdown-toggle-no-caret saooti-user"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        :title="$t('User menu')"
-      />
-      <div class="dropdown-menu dropdown-menu-right px-4">
-        <template v-if="!authenticated">
-          <a
-            class="dropdown-item"
-            href="/sso/login"
-          >
-            {{ $t('Login') }}
-          </a>
+      <template v-if="!authenticated">
+        <a
+          class="octopus-dropdown-item"
+          href="/sso/login"
+        >
+          {{ $t('Login') }}
+        </a>
+        <router-link
+          v-if="!isPodcastmaker"
+          class="octopus-dropdown-item"
+          to="/main/pub/create"
+        >
+          {{ $t('Create an account') }}
+        </router-link>
+      </template>
+      <template v-else>
+        <template
+          v-for="routerBack in routerBackoffice"
+          :key="routerBack.path"
+        >
           <router-link
-            v-if="!isPodcastmaker"
-            class="dropdown-item"
-            to="/main/pub/create"
+            v-if="!isPodcastmaker && routerBack.condition"
+            :class="routerBack.class"
+            :to="routerBack.path"
           >
-            {{ $t('Create an account') }}
+            {{ routerBack.title }}
           </router-link>
         </template>
-        <template v-else>
+        <template v-if="!isEducation">
+          <hr>
           <template
-            v-for="routerBack in routerBackoffice"
-            :key="routerBack.path"
+            v-for="helpLink in helpLinks"
+            :key="helpLink.title"
           >
-            <router-link
-              v-if="!isPodcastmaker && routerBack.condition"
-              :class="routerBack.class"
-              :to="routerBack.path"
+            <a
+              :href="helpLink.href"
+              class="octopus-dropdown-item"
+              rel="noopener"
+              target="_blank"
             >
-              {{ routerBack.title }}
-            </router-link>
+              {{ helpLink.title }}
+            </a>
           </template>
-          <template v-if="!isEducation">
-            <hr class="dropdown-divider">
-            <template
-              v-for="helpLink in helpLinks"
-              :key="helpLink.title"
-            >
-              <a
-                :href="helpLink.href"
-                class="dropdown-item"
-                rel="noopener"
-                target="_blank"
-              >
-                {{ helpLink.title }}
-              </a>
-            </template>
-          </template>
-          <hr class="dropdown-divider">
-          <a
-            class="dropdown-item"
-            href="/sso/logout"
-          >
-            {{ $t('Logout') }}
-          </a>
         </template>
-        <router-link
-          class="dropdown-item"
-          to="/main/pub/contact"
+        <hr>
+        <a
+          class="octopus-dropdown-item"
+          href="/sso/logout"
         >
-          {{ $t('Contact') }}
-        </router-link>
-      </div>
-    </div>
+          {{ $t('Logout') }}
+        </a>
+      </template>
+      <router-link
+        class="octopus-dropdown-item"
+        to="/main/pub/contact"
+      >
+        {{ $t('Contact') }}
+      </router-link>
+    </Popover>
   </div>
 </template>
 
 <script lang="ts">
 import { state } from '../../store/paramStore';
-
+import Popover from '../misc/Popover.vue';
 import { defineComponent } from 'vue'
 import { Organisation } from '@/store/class/general/organisation';
 export default defineComponent({
   name: 'HomeDropdown',
   props: {
     isEducation: { default: false, type: Boolean},
+  },
+  components:{
+    Popover
   },
   computed: {
     organisationsAvailable(): Array<Organisation>{
@@ -104,9 +107,9 @@ export default defineComponent({
     routerBackoffice(){
       return [
         {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: (state.generalParameters.isContribution as boolean)},
-        {title:this.$t('My space'),class:"show-phone dropdown-item", path:'/main/priv/backoffice', condition: true},
-        {title:this.$t('Edit my profile'),class:"dropdown-item", path:'/main/priv/edit/profile', condition: true},
-        {title:this.$t('Edit my organisation'),class:"dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length}];
+        {title:this.$t('My space'),class:"show-phone octopus-dropdown-item", path:'/main/priv/backoffice', condition: true},
+        {title:this.$t('Edit my profile'),class:"octopus-dropdown-item", path:'/main/priv/edit/profile', condition: true},
+        {title:this.$t('Edit my organisation'),class:"octopus-dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length}];
     },
     
     isPodcastmaker(): boolean {

@@ -1,122 +1,155 @@
 <template>
-  <div
-    :id="id"
-    ref="element"
-    class="popover"
-    role="tooltip"
-    tabindex="-1"
-  >
-    <div ref="titleRef">
-      <slot name="title">
-        {{ title }}
-      </slot>
-    </div>
-    <div ref="contentRef">
-      <slot>
-        {{ content }}
-      </slot>
-    </div>
+  <div 
+		v-show="show && !disable"
+		tabindex="0"
+		ref="popover"
+		:id="'popover'+target"
+		class="octopus-popover"
+		:class="onlyClick?'octopus-dropdown':''"
+		@blur="clearDataBlur"
+		:style="positionInlineStyle"
+	>
+		<div v-if="title" class="bg-secondary p-2">{{title}}</div>
+		<div class="p-2">
+			<slot>{{content}}</slot>
+		</div>
   </div>
 </template>
 
 <script lang="ts">
-import {Popover} from 'bootstrap'
-import {defineComponent, onMounted, PropType, ref} from 'vue'
-import useEventListener from '../../helper/useEventListener'
+import {defineComponent} from 'vue';
 export default defineComponent({
   name: 'Popover',
-  props: {
+	props: {
     content: {type: String, default: ''},
-    id: {type: String, default: ''},
-    noninteractive: {type: Boolean, default: false},
-    placement: {type: String as PropType<Popover.Options['placement']>, default: 'right'},
+		title: {type: String, default: ''},
     target: {type: String, required: true},
-    title: {type: String, default: ''},
-    show: {type: Boolean, default: false},
     disable: {type: Boolean, default: false},
+		onlyClick: {type: Boolean, default: false},
+		isFixed: {type: Boolean, default: false},
+		leftPos: {type: Boolean, default: false},
   },
-  emits: ['show', 'shown', 'hide', 'hidden', 'inserted'],
-  setup(props, {emit}) {
-    const element = ref<HTMLElement>()
-    const target = ref<HTMLElement>()
-    const instance = ref<Popover>()
-    const titleRef = ref<HTMLElement>()
-    const contentRef = ref<HTMLElement>()
-    function initPopover(){
-      instance.value = new Popover(`#${props.target}`, {
-        container: 'body',
-        trigger: "hover focus",
-        placement: props.placement,
-        title: titleRef.value?.innerHTML || '',
-        content: contentRef.value?.innerHTML || '',
-        html: true,
-      })
-      if (document.getElementById(props.target)) {
-        target.value = document.getElementById(props.target) as HTMLElement
-      }
-      element.value?.parentNode?.removeChild(element.value)
-      if (props.show) {
-        instance.value.show()
-      }
-      if (props.disable) {
-        instance.value.disable()
-      }
-    }
-    onMounted(()=>{
-      initPopover();
-    })
-    useEventListener(target, 'show.bs.popover', () => emit('show'))
-    useEventListener(target, 'shown.bs.popover', () => emit('shown'))
-    useEventListener(target, 'hide.bs.popover', () => emit('hide'))
-    useEventListener(target, 'hidden.bs.popover', () => emit('hidden'))
-    useEventListener(target, 'inserted.bs.popover', () => emit('inserted'))
+  data () {
     return {
-      element,
-      titleRef,
-      contentRef,
-      instance,
-      initPopover
+      show: false as boolean,
+			isClick: false as boolean,
+      posX: 0 as number,
+      posY: 0 as number,
+			targetElement: null as HTMLElement|null,
     }
   },
-  watch:{
-    disable(){
-      if(!this.instance){ return; }
-      if (this.disable) {
-        this.instance.disable();
-      } else {
-        this.instance.enable();
-      }
-    },
-    content(){
-      if(!this.instance){ return; }
-      this.$nextTick(() => {
-        this.instance?.dispose();
-        this.initPopover();
-      });
-    },
-    title(){
-      if(!this.instance){ return; }
-      this.$nextTick(() => {
-        this.instance?.dispose();
-        this.initPopover();
-      });
+	computed: {
+		popoverId(): string{
+			return 'popover'+this.target;
+		},
+    positionInlineStyle(): string {
+      return `left: ${this.posX}px; top: ${this.posY}px;`;
     }
-  }
-
-})
+  },
+	mounted () {
+    this.init();
+  },
+	unmounted(){
+		this.removeListeners();
+	},
+  methods: {
+    init () {
+			this.targetElement = document.getElementById(this.target);
+			if(this.targetElement){
+				if(!this.onlyClick){
+					this.targetElement.addEventListener("mouseenter", this.setPopoverData);
+					this.targetElement.addEventListener("mouseleave", this.clearData);
+				}
+				this.targetElement.addEventListener("click", this.setPopoverData);
+				this.targetElement.addEventListener("blur", this.clearDataBlur);
+			}  
+    },
+    removeListeners () {
+			if(this.targetElement){
+				if(!this.onlyClick){
+					this.targetElement.removeEventListener("mouseenter", this.setPopoverData);
+					this.targetElement.removeEventListener("mouseleave", this.clearData);
+				}		
+				this.targetElement.removeEventListener("click", this.setPopoverData);
+				this.targetElement.addEventListener("blur", this.clearDataBlur);
+			}
+    },
+    setPopoverData (e: MouseEvent|PointerEvent) {
+			if(e && e.target){
+				this.show = true;
+				if("click"===e.type){
+					this.isClick = true;
+				}
+				const rectElement = (e.target as HTMLElement).getBoundingClientRect();
+				(this.$refs.popover as HTMLElement).style.display = 'block';
+				this.posX = this.leftPos? rectElement.right - (this.$refs.popover as HTMLElement).clientWidth : rectElement.left;
+				this.posY = rectElement.bottom + (this.isFixed ? 0 : window.scrollY)+ 5;
+			}
+    },
+		clearDataBlur (e: FocusEvent) {
+			if(e.relatedTarget){
+				const myElement = e.relatedTarget as HTMLElement;
+				debugger;
+				console.log(this.popoverId);
+				if(this.popoverId===myElement.id){return;}
+				const parent = this.$refs.popover as HTMLElement; 
+				if (parent.contains(myElement)) {
+					debugger;
+					if(myElement.classList.contains('octopus-dropdown-item')){
+						this.$nextTick(() => {
+							debugger;
+							this.isClick = false;
+							this.clearData();
+						});
+					}
+					return;
+				}
+			}
+			this.isClick = false;
+			this.clearData();
+    },
+    clearData () {
+			if(this.isClick){
+				return;
+			}
+      this.show = false;
+      this.posX = 0;
+      this.posY = 0;
+    }
+  },
+});
 </script>
 <style lang="scss">
-.popover{
-  max-height: 80vh;
-  max-width: 50vw !important;
-  display: flex !important;
-  flex-direction: column;
-  hr{
-    width: 100px;
-  }
-  .popover-body{
-    overflow: auto;
-    height: 100%;
-  }
+.octopus-popover{
+	background: white;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	position: absolute;
+	z-index: 9999;
+	&.octopus-dropdown{
+		min-width: 200px;
+		padding: 0.5rem 1rem;
+		.octopus-dropdown-item{
+			display: block;
+			color: rgb(29, 29, 29);
+			width: 100%;
+			padding: 0.25rem 1rem;
+			font-weight: 400;
+			text-align: inherit;
+			text-decoration: none;
+			white-space: nowrap;
+			background-color: transparent;
+			border: 0;
+			&:hover{
+				background: rgb(243, 243, 243);
+			}
+		}
+		hr{
+			margin: 0.5rem 0;
+			overflow: hidden;
+			border-top: 1px solid #ccc;
+			opacity: 1;
+		}
+	}
 }
 </style>

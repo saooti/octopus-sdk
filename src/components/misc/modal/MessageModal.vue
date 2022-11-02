@@ -14,7 +14,7 @@
             v-if="closable"
             :ref="closable?'focusElement':''"
             type="button"
-            class="btn-close btn-close-white"
+            class="btn-transparent text-light saooti-remove"
             title="Close"
             @click="closePopup"
           />

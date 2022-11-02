@@ -32,31 +32,32 @@
         {{ rubrique.name }}
       </button>
     </div>
-    <div
+    <button
       v-show="hidenRubriques.length"
-      class="dropdown btn-group"
+      id="rubriques-dropdown"
+      class="btn admin-button saooti-more"
+      :title="$t('See more')"
+    />
+    <Popover
+      target="rubriques-dropdown"
+      :onlyClick="true"
+      :isFixed="true"
+      :leftPos="true"
     >
-      <button
-        class="btn dropdown-toggle admin-button dropdown-toggle-no-caret saooti-more"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        :title="$t('See more')"
-      />
-      <div class="dropdown-menu dropdown-menu-right px-4">
-        <div
-          v-for="rubrique in hidenRubriques"
-          :key="rubrique.rubriqueId"
-          class="me-3 dropdown-item"
-          @click="addFilter(rubrique)"
-        >
-          {{ rubrique.name }}
-        </div>
+      <div
+        v-for="rubrique in hidenRubriques"
+        :key="rubrique.rubriqueId"
+        class="me-3 octopus-dropdown-item"
+        @click="addFilter(rubrique)"
+      >
+        {{ rubrique.name }}
       </div>
-    </div>
+    </Popover>
   </div>
 </template>
 
 <script lang="ts">
+import Popover from '../../misc/Popover.vue';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
@@ -66,6 +67,9 @@ export default defineComponent({
 
   props: {
     rubriquages: { default: () => [], type: Array as ()=>Array<Rubriquage>},
+  },
+  components:{
+    Popover
   },
 
   data() {

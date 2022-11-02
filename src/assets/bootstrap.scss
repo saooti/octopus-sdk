@@ -1,5 +1,6 @@
 // Bootstrap styles overload
 .octopus-app{
+
     .btn-group {
         > .btn:not(:first-child),
         > .btn-group:not(:first-child) {
@@ -28,30 +29,30 @@
         }
         //Button disable halo after click
         &.btn-underline{
-					background: none;
-					padding: 0;
-					margin: 0 2rem 1rem 0;
-					border-radius: 0;
-					@media (max-width: 600px) {
-						margin: 0 1rem 1rem 0;
-						font-size: 0.8em;
-					}
-					position: relative;
-					&:after {    
-						bottom: 0;
-						content: "";
-						display: block;
-						height: 2px;
-						left: 50%;
-						position: absolute;
-						background: $octopus-primary-color;
-						transition: width 0.3s ease 0s, left 0.3s ease 0s;
-						width: 0;
-					}
-					&:hover:after,&.active:after { 
-						width: 100%; 
-						left: 0; 
-					}
+            background: none;
+            padding: 0;
+            margin: 0 2rem 1rem 0;
+            border-radius: 0;
+            @media (max-width: 600px) {
+                margin: 0 1rem 1rem 0;
+                font-size: 0.8em;
+            }
+            position: relative;
+            &:after {    
+                bottom: 0;
+                content: "";
+                display: block;
+                height: 2px;
+                left: 50%;
+                position: absolute;
+                background: $octopus-primary-color;
+                transition: width 0.3s ease 0s, left 0.3s ease 0s;
+                width: 0;
+            }
+            &:hover:after,&.active:after { 
+                width: 100%; 
+                left: 0; 
+            }
         }
     
         &.btn-primary {
@@ -181,11 +182,6 @@
     }
     .accordion-item:not(:first-of-type) {
         border-top: 0.1rem solid rgba(0, 0, 0, 0.125);
-    }
-    .breadcrumb{
-        padding: 1rem;
-        align-items: center;
-        background: #FAFAFA;
     }
     .bg-secondary{
         background: #eee !important;

@@ -1,118 +1,95 @@
 <template>
-  <div
-    id="accordionParameters"
-    class="accordion mt-3"
+  <Accordion
+    class="mt-3"
+    :title="$t('player parameters')"
+    id-composer="playerParameters"
   >
-    <div class="accordion-item">
-      <h2
-        id="labelPlayerParameter"
-        class="accordion-header mb-0"
-      >
-        <button
-          class="accordion-button collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#playerParameters"
-          aria-expanded="false"
-          aria-controls="playerParameters"
-        >
-          {{ $t('player parameters') }}
-        </button>
-      </h2>
+    <div
+      v-if="choseNumberEpisode"
+      class="d-flex flex-column flex-grow-1"
+    >
       <div
-        id="playerParameters"
-        class="accordion-collapse collapse"
-        titleledby="labelPlayerParameter"
-        data-bs-parent="#accordionParameters"
+        v-if="displayChoiceAllEpisodes"
+        class="d-flex align-items-center flex-wrap mt-1"
       >
-        <div class="accordion-body">
-          <div
-            v-if="choseNumberEpisode"
-            class="d-flex flex-column flex-grow-1"
-          >
-            <div
-              v-if="displayChoiceAllEpisodes"
-              class="d-flex align-items-center flex-wrap mt-1"
-            >
-              <input
-                v-model="episodeNumbers"
-                class="form-check-input"
-                type="radio"
-                name="episodeNumbers"
-                value="all"
-              >
-              <span class="flex-shrink-0">{{ $t('Show every episode') }}</span>
-            </div>
-            <div
-              class="d-flex align-items-center flex-wrap"
-              :class="displayChoiceAllEpisodes ? '' : 'mt-3'"
-            >
-              <input
-                v-if="displayChoiceAllEpisodes"
-                v-model="episodeNumbers"
-                class="form-check-input"
-                type="radio"
-                name="episodeNumbers"
-                value="number"
-              >
-              <span class="flex-shrink-0">{{ $t('Show') }}</span>
-              <input
-                id="number-input"
-                v-model="iFrameNumber"
-                type="number"
-                min="1"
-                max="50"
-                class="input-share-player  text-center m-2"
-              >
-              <label
-                for="number-input"
-                :title="$t('Number of player podcasts')"
-              />
-              <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
-            </div>
-            <ClassicCheckbox
-              v-model:textInit="proceedReading"
-              id-checkbox="proceed-reading-checkbox"
-              :label="$t('Proceed reading')"
-            />
-            <ClassicCheckbox
-              v-model:textInit="isVisibleTemp"
-              id-checkbox="is-visible-checkbox"
-              :label="$t('Podcasts still available')"
-            />
-          </div>
-          <div
-            v-if="displayArticleParam"
-            class="d-flex flex-column flex-grow-1"
-          >
-            <ClassicCheckbox
-              v-model:textInit="displayArticle"
-              id-checkbox="display-article-checkbox"
-              :label="$t('Display associated article')"
-            />
-          </div>
-          <div 
-            v-if="displayTranscriptParam"
-            class="d-flex flex-column flex-grow-1"
-          >
-            <ClassicCheckbox
-              v-model:textInit="displayTranscript"
-              id-checkbox="display-transcript-checkbox"
-              :label="$t('If the transcript is available, show it')"
-            />
-          </div>
-        </div>
+        <input
+          v-model="episodeNumbers"
+          class="form-check-input"
+          type="radio"
+          name="episodeNumbers"
+          value="all"
+        >
+        <span class="flex-shrink-0">{{ $t('Show every episode') }}</span>
       </div>
+      <div
+        class="d-flex align-items-center flex-wrap"
+        :class="displayChoiceAllEpisodes ? '' : 'mt-3'"
+      >
+        <input
+          v-if="displayChoiceAllEpisodes"
+          v-model="episodeNumbers"
+          class="form-check-input"
+          type="radio"
+          name="episodeNumbers"
+          value="number"
+        >
+        <span class="flex-shrink-0">{{ $t('Show') }}</span>
+        <input
+          id="number-input"
+          v-model="iFrameNumber"
+          type="number"
+          min="1"
+          max="50"
+          class="input-share-player  text-center m-2"
+        >
+        <label
+          for="number-input"
+          :title="$t('Number of player podcasts')"
+        />
+        <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
+      </div>
+      <ClassicCheckbox
+        v-model:textInit="proceedReading"
+        id-checkbox="proceed-reading-checkbox"
+        :label="$t('Proceed reading')"
+      />
+      <ClassicCheckbox
+        v-model:textInit="isVisibleTemp"
+        id-checkbox="is-visible-checkbox"
+        :label="$t('Podcasts still available')"
+      />
     </div>
-  </div>
+    <div
+      v-if="displayArticleParam"
+      class="d-flex flex-column flex-grow-1"
+    >
+      <ClassicCheckbox
+        v-model:textInit="displayArticle"
+        id-checkbox="display-article-checkbox"
+        :label="$t('Display associated article')"
+      />
+    </div>
+    <div 
+      v-if="displayTranscriptParam"
+      class="d-flex flex-column flex-grow-1"
+    >
+      <ClassicCheckbox
+        v-model:textInit="displayTranscript"
+        id-checkbox="display-transcript-checkbox"
+        :label="$t('If the transcript is available, show it')"
+      />
+    </div>
+  </Accordion>
 </template>
 
 <script lang="ts">
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
+import Accordion from '../../misc/Accordion.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components:{
     ClassicCheckbox,
+    Accordion
   },
   props: {
     isVisible: { default: false, type: Boolean},

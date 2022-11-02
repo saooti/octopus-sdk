@@ -7,21 +7,21 @@
         <h3 class="mb-0">
           {{ $t('Share') }}
         </h3>
-        <span
-          v-if="authenticated"
-          id="popover-share-help"
-          role="button"
-          tabindex="0"
-          class="saooti-help ms-2 align-items-start"
-          :title="$t('Help')"
-        />
-        <Popover
+        <div class="position-relative">
+          <span
+            v-if="authenticated"
+            id="popover-share-help"
+            role="button"
+            tabindex="0"
+            class="saooti-help ms-2 align-items-start"
+          />
+          <Popover
           v-if="authenticated"
           target="popover-share-help"
-          placement="right"
-        >
-          {{ $t('Share this page without edit and share blocks') }}
-        </Popover>
+          :title="$t('Help')"
+          :content="$t('Share this page without edit and share blocks')"
+          />
+        </div>
       </div>
       <div class="d-flex align-items-center">
         <ShareButtonsIntern

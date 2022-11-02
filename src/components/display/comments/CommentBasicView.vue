@@ -17,9 +17,8 @@
       <Popover
         :disable="editRight || isValid"
         :target="'popover-comment' + comment.comId"
-      >
-        {{ $t('Comment waiting') }}
-      </Popover>
+        :content="$t('Comment waiting')"
+      />
       <span
         v-if="comment.certified"
         class="saooti-certified"

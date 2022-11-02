@@ -3,54 +3,48 @@
     v-show="isDisplay"
     class="mt-3"
   >
-    <nav
-      v-if="categoryFilter || rubriqueFilter.length"
-      title="breadcrumb"
-    >
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a
-            href="#"
-            @click="removeFilter(-1, $event)"
-          >{{ $t('All') }}</a>
-        </li>
-        <li
-          v-if="categoryFilter"
-          class="breadcrumb-item active"
-        >
-          {{ categoryFilter.name }}
-        </li>
-        <li 
-          v-for="(filter, index) in rubriqueFilter" 
-          :key="filter.rubriqueId"
-          class="breadcrumb-item d-flex align-items-center"
-          :class="rubriqueFilter.length-1 === index ? 'active':''"
-        >
-          <a
-            v-if="rubriqueFilter.length - 1 !== index"
-            href="#"
-            @click="removeFilter(index,$event)"
-          >{{ filter.nameRubriquage }}</a>
-          <template v-else>
-            {{ filter.nameRubriquage }}
-          </template>
-          <div class="mx-1">
-            :
-          </div>
-          <RubriqueChooser
-            v-if="getRubriques(filter.rubriquageId).length"
-            class="ms-2 multiselect-transparent"
-            :multiple="false"
-            :rubriquage-id="filter.rubriquageId"
-            :rubrique-selected="filter.rubriqueId"
-            :all-rubriques="getRubriques(filter.rubriquageId)"
-            :cannot-be-undefined="true"
-            width="auto"
-            @selected="onRubriqueSelected(index,$event)"
-          />
-        </li>
-      </ol>
-    </nav>
+    <ol v-if="categoryFilter || rubriqueFilter.length" class="octopus-breadcrumb d-flex align-items-center flex-wrap">
+      <li>
+        <a
+          href="#"
+          @click="removeFilter(-1, $event)"
+        >{{ $t('All') }}</a>
+      </li>
+      <li
+        v-if="categoryFilter"
+      >
+        {{ categoryFilter.name }}
+      </li>
+      <li 
+        v-for="(filter, index) in rubriqueFilter" 
+        :key="filter.rubriqueId"
+        class="d-flex align-items-center"
+        :class="rubriqueFilter.length-1 === index ? 'active':''"
+      >
+        <a
+          v-if="rubriqueFilter.length - 1 !== index"
+          href="#"
+          @click="removeFilter(index,$event)"
+        >{{ filter.nameRubriquage }}</a>
+        <template v-else>
+          {{ filter.nameRubriquage }}
+        </template>
+        <div class="mx-1">
+          :
+        </div>
+        <RubriqueChooser
+          v-if="getRubriques(filter.rubriquageId).length"
+          class="ms-2 multiselect-transparent"
+          :multiple="false"
+          :rubriquage-id="filter.rubriquageId"
+          :rubrique-selected="filter.rubriqueId"
+          :all-rubriques="getRubriques(filter.rubriquageId)"
+          :cannot-be-undefined="true"
+          width="auto"
+          @selected="onRubriqueSelected(index,$event)"
+        />
+      </li>
+    </ol>
     <CategoryList
       v-if="!categoryFilter && !rubriquageFilter.length"
       :is-filter="true"
@@ -149,6 +143,23 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .octopus-app{
+  .octopus-breadcrumb{
+    padding: 1rem;
+    align-items: center;
+    background: #FAFAFA;
+    li{
+      list-style: none;
+      &:after {
+        content: "/";
+        margin: 0 0.2rem;
+      }
+      &:last-child {
+        &:after {
+          content: "";
+        }
+      }
+    }
+  }
   .categary-filter-no-filter{
     position: absolute;
     top: 0;
