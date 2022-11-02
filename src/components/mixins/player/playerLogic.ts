@@ -1,7 +1,7 @@
 import { mapState } from 'vuex';
 import octopusApi from '@saooti/octopus-api';
 import { CommentPodcast } from '@/store/class/general/comment';
-import cookies from '../selenium';
+import cookies from '../cookies';
 import { playerLive } from './playerLive';
 import { playerComment } from './playerComment';
 import { defineComponent } from 'vue';
