@@ -15,7 +15,7 @@
         :class="{ 'border border-danger': 0 === countName || !validName }"
       >
       <p
-        class="d-flex justify-content-end small-text"
+        class="d-flex justify-content-end h6"
         :class="{ 'text-danger': !validName }"
       >
         {{ countName + ' / ' + maxName }}
@@ -27,7 +27,7 @@
         type="text"
       />
       <p
-        class="d-flex justify-content-end small-text"
+        class="d-flex justify-content-end h6"
         :class="{ 'text-danger': !validComment }"
       >
         {{ countComment + ' / ' + maxComment }}

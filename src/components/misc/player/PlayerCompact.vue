@@ -20,7 +20,7 @@
         'saooti-pause': isPlaying,
         '':!isPaused&&!isPlaying
       }"
-      class="btn play-button-box text-light primary-bg"
+      class="btn play-button-box text-light bg-primary"
       @click="switchPausePlay"
     >
       <Spinner

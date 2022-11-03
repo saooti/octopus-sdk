@@ -2,20 +2,22 @@
   <ul class="octopus-nav">
     <li
       v-for="index in tabNumber"
+      v-show="hasSlot(index-1)"
       :key="index-1"
       class="octopus-nav-item"
     >
       <div
         class="octopus-nav-link"
         :class="activeTab === (index-1)? 'active':''"
-        @click="activeTab = (index-1)"
+        @click="$emit('update:activeTab',(index-1))"
       >
         <slot :name="(index-1)" />
       </div>
     </li>
   </ul>
-  <div class="octopus-tab-content">
+  <div :class="transparent? 'd-flex flex-grow-1':'octopus-tab-content'">
     <div
+      v-show="hasSlot('tab'+(index-1))"
       v-for="index in tabNumber"
       :key="index-1"
       class="octopus-tab-pane"
@@ -32,12 +34,15 @@ export default defineComponent({
   name: 'Nav',
   props: {
     tabNumber: { default: 0, type: Number},
+    activeTab: { default: 0, type: Number},
+    transparent:{ default: false, type: Boolean},
   },
-  data() {
-    return {
-      activeTab: 0 as number,
-    };
-  },
+  emits:['update:activeTab'],
+  methods:{
+    hasSlot(name = 'default') {
+      return !!this.$slots[ name ];
+    }
+  }
 })
 </script>
 
@@ -49,6 +54,7 @@ export default defineComponent({
     flex-wrap: wrap;
     padding-left: 0;
     margin-bottom: 0;
+    margin-top: 0;
     list-style: none;
     border-bottom: 0.05rem solid #ddd;
   }
@@ -86,6 +92,7 @@ export default defineComponent({
       display: flex;
       justify-content: space-between;
       padding: 0.5rem;
+      flex-grow: 1;
     }
   }
 }

@@ -1,13 +1,14 @@
 <template>
   <div
-    class="octopus-accordion"
+    class="octopus-accordion my-2"
   >
     <button
       class="btn-transparent w-100 p-2 text-start d-flex align-items-center"
+      :class="isOpen?'really-light-primary-bg':''"
       @click="isOpen=!isOpen"
     >
       <span class="flex-grow-1">{{ title }}</span>
-      <span class="saooti-down" />
+      <span :class="isOpen?'saooti-up': 'saooti-down'" />
     </button>
     <div
       v-show="isOpen"

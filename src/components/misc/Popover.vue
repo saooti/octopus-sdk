@@ -80,6 +80,9 @@ export default defineComponent({
 			}
     },
     setPopoverData (e: MouseEvent|PointerEvent) {
+			if(this.disable){
+				return;
+			}
 			if(e && e.target){
 				if("click"===e.type){
 					if(this.show && this.isClick){
@@ -141,7 +144,6 @@ export default defineComponent({
 			width: 100%;
 			padding: 0.25rem 1rem;
 			font-weight: 400;
-			text-align: inherit;
 			text-decoration: none;
 			white-space: nowrap;
 			background-color: transparent;

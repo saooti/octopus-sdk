@@ -317,6 +317,9 @@ export default defineComponent({
 <style lang="scss">
 @import '@scss/_variables.scss';
 .octopus-app{
+  iframe{
+    border:0;
+  }
   .sticker {
     align-self: center;
     background: $octopus-primary-color;

@@ -9,7 +9,7 @@
       :id="idSelect"
       v-model="textValue"
       :disabled="isDisabled"
-      class="c-hand"
+      class="c-hand w-100"
       :style="getFontFamily"
     >
       <option
@@ -69,10 +69,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-.octopus-app{
-  .classic-select select{
-    width: inherit;
-  }
-}
-</style>

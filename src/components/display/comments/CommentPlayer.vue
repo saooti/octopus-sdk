@@ -20,9 +20,9 @@
     </div>
     <div
       v-if="displayContent"
-      class="small-text mt-auto"
+      class="h6 mt-auto"
     >
-      <div class="primary-color flex-shrink-0">
+      <div class="text-primary flex-shrink-0">
         {{ displayContent.name }}
       </div>
       <div class="ms-1 me-1">

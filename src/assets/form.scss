@@ -1,10 +1,6 @@
 .octopus-app{
-	button.btn-transparent{
-		background: transparent;
-		border: 0;
-	}
-	.width-auto{
-	width: auto !important;
+	.octopus-form-item{
+		min-height: 1.44rem;
 	}
 	select {
 		background: white !important;
@@ -15,18 +11,7 @@
 		height: 2rem;
 		padding-right: 40px;
 	}
-	.form-check-label {
-		cursor: pointer;
-		&::before {
-		top: 0;
-		}
-		&::after {
-		top: 0;
-		}
-	}
 	.form-input {
-		-webkit-appearance: none;
-		-moz-appearance: none;
 		appearance: none;
 		background: #fff;
 		background-image: none;
@@ -40,14 +25,6 @@
 		max-width: 100%;
 		padding: 0.25rem 0.4rem;
 		position: relative;
-		width: 100%;
-	}
-
-	.form-check-input{
-		margin-right: 5px;
-		cursor: pointer;
-	}
-	.classic-select select {
 		width: 100%;
 	}
 	.vc-select select{

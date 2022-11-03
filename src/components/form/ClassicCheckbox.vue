@@ -1,20 +1,21 @@
 <template>
-  <div
-    class="form-check"
-    :class="isSwitch?'form-switch':''"
-  >
-    <input
-      :id="idCheckbox"
-      v-model="textValue"
-      type="checkbox"
-      class="form-check-input"
-      :disabled="isDisabled"
-      :title="displayLabel?'':label"
-      :data-selenium="selenium"
-      @click="emitClickAction"
+  <div class="d-flex octopus-form-item">
+    <div
+      :class="isSwitch?'octopus-form-switch me-2':''"
     >
+      <input
+        :id="idCheckbox"
+        v-model="textValue"
+        type="checkbox"
+        :disabled="isDisabled"
+        :title="displayLabel?'':label"
+        :data-selenium="selenium"
+        @click="emitClickAction"
+      >
+      <span v-if="isSwitch" class="slider" @click="textValue=!textValue;emitClickAction"></span>
+    </div>
     <label
-      class="form-check-label"
+      class="c-hand"
       :class="displayLabel? '': 'd-none'"
       :for="idCheckbox"
     >{{ label }}</label>
@@ -64,3 +65,57 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="scss">
+@import '@scss/_variables.scss';
+.octopus-app{
+  input[type="checkbox"] {
+    accent-color: $octopus-primary-color;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  .octopus-form-switch{
+    position: relative;
+    display: inline-block;
+    width: 2rem;
+    height: 1rem;
+    input{
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider{
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 1rem;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 0.8rem;
+      width: 0.8rem;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: $octopus-primary-color;
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 1px $octopus-primary-color;
+    }
+    input:checked + .slider:before {
+      transform: translateX(1rem);
+    }
+
+  }
+}
+</style>

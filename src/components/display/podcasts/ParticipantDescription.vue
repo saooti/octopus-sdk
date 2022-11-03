@@ -24,7 +24,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <div
           v-if="participant.description"
-          class="h6 participant-desc html-wysiwyg-content"
+          class="participant-desc html-wysiwyg-content"
           v-html="participant.description"
         />
         <!-- eslint-enable -->

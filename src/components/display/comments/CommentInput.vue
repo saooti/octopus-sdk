@@ -5,7 +5,7 @@
   >
     <strong
       v-if="knownIdentity && !editName"
-      class="small-text mt-1 c-hand"
+      class="h6 mt-1 c-hand"
       @click="changeIdentity"
     >{{ knownIdentity }}</strong>
     <div
@@ -15,12 +15,12 @@
       <div class="d-flex flex-column">
         <input
           v-model="temporaryName"
-          class="small-text mt-1"
+          class="h6 mt-1"
           type="text"
           :class="{ 'border border-danger': 0 === countName || !validName }"
         >
         <p
-          class="d-flex justify-content-end small-text mb-0"
+          class="d-flex justify-content-end h6 mb-0"
           :class="{ 'text-danger': !validName }"
         >
           {{ countName + ' / ' + maxName }}
@@ -51,7 +51,7 @@
     />
     <template v-if="textareaFocus">
       <p
-        class="d-flex justify-content-end small-text"
+        class="d-flex justify-content-end h6"
         :class="{ 'text-danger': !validComment }"
       >
         {{ countComment + ' / ' + maxComment }}

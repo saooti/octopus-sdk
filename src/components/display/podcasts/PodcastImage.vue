@@ -42,7 +42,7 @@
         <div
           v-show="!playingPodcast"
           :title="$t('Play')"
-          class="saooti-play primary-color"
+          class="saooti-play text-primary"
         />
         <div
           v-if="!classicPodcastPlay"
@@ -70,14 +70,14 @@
       </div>
       <div
         v-if="!classicPodcastPlay"
-        class="small-text mt-3 fw-bolder"
+        class="h6 mt-3 fw-bolder"
       >
         {{ textVisible }}
       </div>
     </button>
     <div
       v-if="displayDescription && isMobile"
-      class="background-icon primary-bg saooti-arrow-up"
+      class="background-icon bg-primary saooti-arrow-up"
       :class="isDescription ? 'saooti-arrow-down':'saooti-arrow-up'"
       :title="isDescription ? $t('Hide description'):$t('Show description')"
       @click="showDescription"

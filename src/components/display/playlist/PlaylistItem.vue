@@ -50,7 +50,7 @@
           }"
           class="text-dark"
         >
-          <div class="emission-producer primary-darker">
+          <div class="emission-producer text-primary">
             © {{ playlist.organisation.name }}
           </div>
         </router-link>

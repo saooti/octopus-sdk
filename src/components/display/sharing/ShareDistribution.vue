@@ -3,7 +3,7 @@
     <h3>{{ $t('Distribute') }}</h3>
     <p class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
-    </p><div class="primary-darker hide-small-screen text-break">
+    </p><div class="text-primary hide-small-screen text-break">
       {{ rss }}
     </div>
     <input

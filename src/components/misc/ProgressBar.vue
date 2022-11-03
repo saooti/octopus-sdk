@@ -12,7 +12,7 @@
       :style="'width: ' + secondaryProgress + '%'"
     />
     <div
-      class="octopus-progress-bar primary-bg"
+      class="octopus-progress-bar bg-primary"
       role="progressbar"
       aria-valuenow="0"
       aria-valuemin="0"

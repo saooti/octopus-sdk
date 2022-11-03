@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex small-text">
+    <div class="d-flex h6">
       <strong
         v-if="recordingInLive && ('Live' === comment.phase || 'Prelive' === comment.phase)"
         class="recording-bg me-1 text-light p-1"

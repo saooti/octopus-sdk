@@ -15,6 +15,10 @@ export const getRubrique = () => import("./src/components/pages/Rubrique.vue");
 export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
 
 //Misc
+export const getAccordion = () => import("./src/components/misc/Accordion.vue");
+export const getNav = () => import("./src/components/misc/Nav.vue");
+export const getProgressBar = () => import("./src/components/misc/ProgressBar.vue");
+export const getSpinner = () => import("./src/components/misc/Spinner.vue");
 export const getFooter = () => import("./src/components/misc/Footer.vue");
 export const getLeftMenu = () => import("./src/components/misc/LeftMenu.vue");
 export const getPlayer = () => import("./src/components/misc/player/Player.vue");
@@ -24,6 +28,7 @@ export const getHomeDropdown = () => import("./src/components/misc/HomeDropdown.
 export const getMessageModal = () => import("./src/components/misc/modal/MessageModal.vue");
 export const getErrorMessage = () => import("./src/components/misc/ErrorMessage.vue");
 export const getPopover = () => import("./src/components/misc/Popover.vue");
+export const getClassicModal = () => import("./src/components/misc/modal/ClassicModal.vue");
 
 
 //Display

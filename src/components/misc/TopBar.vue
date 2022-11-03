@@ -53,7 +53,7 @@
     />
     <div class="d-flex flex-column">
       <div class="hosted-by">
-        {{ $t('Hosted by') }}<span class="ms-1 me-1 primary-darker">Saooti</span>
+        {{ $t('Hosted by') }}<span class="ms-1 me-1 text-primary">Saooti</span>
       </div>
       <div class="d-flex justify-content-end flex-nowrap">
         <HomeDropdown :is-education="isEducation" />
