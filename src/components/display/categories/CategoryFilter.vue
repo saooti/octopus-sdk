@@ -3,7 +3,10 @@
     v-show="isDisplay"
     class="mt-3"
   >
-    <ol v-if="categoryFilter || rubriqueFilter.length" class="octopus-breadcrumb d-flex align-items-center flex-wrap">
+    <ol
+      v-if="categoryFilter || rubriqueFilter.length"
+      class="octopus-breadcrumb d-flex align-items-center flex-wrap"
+    >
       <li>
         <a
           href="#"

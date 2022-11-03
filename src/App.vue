@@ -11,8 +11,8 @@
     />
     <LeftMenu
       v-if="displayMenu"
-      @close="displayMenu=false"
       :is-education="false"
+      @close="displayMenu=false"
     />
     <CategoryFilter />
     <router-view />

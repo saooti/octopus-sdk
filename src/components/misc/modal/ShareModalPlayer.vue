@@ -1,101 +1,72 @@
 <template>
-  <div>
-    <div
-      id="share-modal"
-      class="modal"
-    >
-      <div class="modal-backdrop" />
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              {{ $t('Share the player') }}
-            </h5>
-            <button
-              ref="focusElement"
-              type="button"
-              class="btn-transparent text-light saooti-remove"
-              title="Close"
-              @click="closePopup"
-            />
-          </div>
-          <div class="modal-body">
-            <ul class="nav nav-tabs">
-              <li
-                v-for="(tab, index) in tabs"
-                :key="tab"
-                class="nav-item"
-              >
-                <div
-                  class="nav-link"
-                  :class="activeTab === index? 'active':''"
-                  @click="activeTab = index"
-                >
-                  {{ tab }}
-                </div>
-              </li>
-            </ul>
-            <div class="tab-content p-2 share-modal-border">
+  <ClassicModal
+    id-modal="share-modal"
+    :title-modal="$t('Share the player')"
+    @close="closePopup"
+  >
+    <template #body>
+      <Nav :tab-number="tabs.length">
+        <template
+          v-for="(tab, index) in tabs"
+          #[index]
+        >
+          {{ tab }}
+        </template>
+        <template 
+          #tab0
+        >
+          <p>{{ embedLink }}</p>
+          <div
+            class="saooti-copy"
+            @click="onCopyCode(embedLink, afterCopy)"
+          />
+        </template>
+        <template 
+          #tab1
+        >
+          <div class="d-flex flex-column">
+            <div class="d-flex">
+              <p>{{ embedlyLink }}</p>
               <div
-                class="tab-pane tab-pane"
-                :class="activeTab === 0? 'active':''"
-              >
-                <p>{{ embedLink }}</p>
-                <div
-                  class="saooti-copy"
-                  @click="onCopyCode(embedLink, afterCopy)"
-                />
-              </div>
-              <div
-                class="tab-pane tab-pane"
-                :class="activeTab === 1? 'active':''"
-              >
-                <div class="d-flex flex-column">
-                  <div class="d-flex">
-                    <p>{{ embedlyLink }}</p>
-                    <div
-                      class="saooti-copy"
-                      @click="onCopyCode(embedlyLink, afterCopy)"
-                    />
-                  </div>
-                  <QrCode :url="embedlyLink" />
-                </div>
-              </div>
-              <div
-                v-if="directLink"
-                class="tab-pane tab-pane"
-                :class="activeTab === 2? 'active':''"
-              >
-                <p>{{ directLink.audioUrl }}</p>
-                <div
-                  class="saooti-copy"
-                  @click="onCopyCode(directLink.audioUrl, snackbarRef)"
-                />
-              </div>
+                class="saooti-copy"
+                @click="onCopyCode(embedlyLink, afterCopy)"
+              />
             </div>
+            <QrCode :url="embedlyLink" />
           </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-primary m-1"
-              @click="closePopup"
-            >
-              {{ $t('Close') }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <Snackbar
-      ref="snackbar"
-      position="bottom-left"
-    />
-  </div>
+        </template>
+        <template
+          v-if="directLink"
+          #tab2
+        >
+          <p>{{ directLink.audioUrl }}</p>
+          <div
+            class="saooti-copy"
+            @click="onCopyCode(directLink.audioUrl, snackbarRef)"
+          />
+        </template>
+      </Nav>
+    </template>
+    <template #footer>
+      <button
+        class="btn btn-primary m-1"
+        @click="closePopup"
+      >
+        {{ $t('Close') }}
+      </button>
+    </template>
+  </ClassicModal>
+  <Snackbar
+    ref="snackbar"
+    position="bottom-left"
+  />
 </template>
 
 <script lang="ts">
 import Snackbar from '../Snackbar.vue';
 import displayMethods from '../../mixins/displayMethods';
-
+import ClassicModal from '../modal/ClassicModal.vue';
+import Nav from '../Nav.vue';
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 import { Podcast } from '@/store/class/general/podcast';
@@ -104,7 +75,9 @@ export default defineComponent({
 
   components: {
     Snackbar,
-    QrCode
+    QrCode,
+    ClassicModal,
+    Nav
   },
   mixins: [displayMethods],
   props: {
@@ -126,12 +99,8 @@ export default defineComponent({
       return [this.$t('Embed link'),this.$t('Embedly link')];
     }
   },
-  mounted(){
-    (this.$refs.focusElement as HTMLElement)?.focus();
-  },
   methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
     afterCopy(): void{
@@ -143,44 +112,11 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-.share-modal-border {
-  border-right: solid 1px rgb(222, 226, 230);
-  border-left: solid 1px rgb(222, 226, 230);
-  border-bottom: solid 1px rgb(222, 226, 230);
-  background-color: #f8fafc;
-  p {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    -ms-word-break: break-all;
-    word-break: break-all;
-    word-break: break-word;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-    margin-right: 0.5rem;
+  #share-modal{
+    .saooti-copy {
+      cursor: pointer;
+      align-self: center;
+    }
   }
-}
-.nav-tabs {
-  .nav-item {
-    border-right: solid 1px rgb(222, 226, 230);
-    border-left: solid 1px rgb(222, 226, 230);
-    border-top: solid 1px rgb(222, 226, 230);
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-  }
-}
-.tab-content {
-  .tab-pane.active {
-    display: flex;
-    justify-content: space-between;
-  }
-  .saooti-copy {
-    cursor: pointer;
-    align-self: center;
-  }
-}
 }
 </style>

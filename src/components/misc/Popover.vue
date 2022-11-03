@@ -1,18 +1,23 @@
 <template>
   <div 
-		v-show="show && !disable"
-		tabindex="0"
-		ref="popover"
-		:id="'popover'+target"
-		class="octopus-popover"
-		:class="onlyClick?'octopus-dropdown':''"
-		@blur="clearDataBlur"
-		:style="positionInlineStyle"
-	>
-		<div v-if="title" class="bg-secondary p-2">{{title}}</div>
-		<div class="p-2">
-			<slot>{{content}}</slot>
-		</div>
+    v-show="show && !disable"
+    :id="'popover'+target"
+    ref="popover"
+    tabindex="0"
+    class="octopus-popover"
+    :class="onlyClick?'octopus-dropdown':''"
+    :style="positionInlineStyle"
+    @blur="clearDataBlur"
+  >
+    <div
+      v-if="title"
+      class="bg-secondary p-2"
+    >
+      {{ title }}
+    </div>
+    <div class="p-2">
+      <slot>{{ content }}</slot>
+    </div>
   </div>
 </template>
 
@@ -76,10 +81,15 @@ export default defineComponent({
     },
     setPopoverData (e: MouseEvent|PointerEvent) {
 			if(e && e.target){
-				this.show = true;
 				if("click"===e.type){
+					if(this.show && this.isClick){
+						this.isClick = false;
+						this.clearData();
+						return;
+					}
 					this.isClick = true;
 				}
+				this.show = true;
 				const rectElement = (e.target as HTMLElement).getBoundingClientRect();
 				(this.$refs.popover as HTMLElement).style.display = 'block';
 				this.posX = this.leftPos? rectElement.right - (this.$refs.popover as HTMLElement).clientWidth : rectElement.left;
@@ -89,15 +99,11 @@ export default defineComponent({
 		clearDataBlur (e: FocusEvent) {
 			if(e.relatedTarget){
 				const myElement = e.relatedTarget as HTMLElement;
-				debugger;
-				console.log(this.popoverId);
 				if(this.popoverId===myElement.id){return;}
 				const parent = this.$refs.popover as HTMLElement; 
-				if (parent.contains(myElement)) {
-					debugger;
-					if(myElement.classList.contains('octopus-dropdown-item')){
+				if (null!==parent && parent.contains(myElement)) {
+					if(null!==myElement.classList && myElement.classList.contains('octopus-dropdown-item')){
 						this.$nextTick(() => {
-							debugger;
 							this.isClick = false;
 							this.clearData();
 						});

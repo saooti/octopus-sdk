@@ -22,7 +22,8 @@
           <span
             v-if="!activeEmission && !isPodcastmaker && editRight"
             :title="$t('Emission have not podcasts')"
-            class="saooti-warning text-danger me-1"/>
+            class="saooti-warning text-danger me-1"
+          />
           <div
             class="emission-name"
           >

@@ -72,7 +72,7 @@
         :button-text="$t('All podcast emission button')"
       />
       <PodcastInlineList
-        :podcastId="podcastId"
+        :podcast-id="podcastId"
         title="Les recommendations de Vincent !"
       />
       <PodcastInlineList

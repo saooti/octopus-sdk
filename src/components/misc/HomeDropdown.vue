@@ -16,9 +16,9 @@
     />
     <Popover
       target="home-dropdown"
-      :onlyClick="true"
-      :isFixed="true"
-      :leftPos="true"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
     >
       <template v-if="!authenticated">
         <a
@@ -89,11 +89,11 @@ import { defineComponent } from 'vue'
 import { Organisation } from '@/store/class/general/organisation';
 export default defineComponent({
   name: 'HomeDropdown',
-  props: {
-    isEducation: { default: false, type: Boolean},
-  },
   components:{
     Popover
+  },
+  props: {
+    isEducation: { default: false, type: Boolean},
   },
   computed: {
     organisationsAvailable(): Array<Organisation>{

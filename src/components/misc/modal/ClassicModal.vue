@@ -1,4 +1,54 @@
-//Modal
+<template>
+  <div
+    :id="idModal"
+    class="octopus-modal"
+  >
+    <div class="octopus-modal-backdrop" />
+    <div class="octopus-modal-dialog">
+      <div class="octopus-modal-content">
+        <div class="octopus-modal-header">
+          <h5 cclass="octopus-modal-title">
+            {{ titleModal }}
+          </h5>
+          <button
+            v-if="closable"
+            :ref="closable?'focusElement':''"
+            type="button"
+            class="btn-transparent text-light saooti-remove"
+            title="Close"
+            @click="$emit('close')"
+          />
+        </div>
+        <div class="octopus-modal-body">
+          <slot name="body" />
+        </div>
+        <div
+          class="octopus-modal-footer"
+        >
+          <slot name="footer" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'ClassicModal',
+  props: {
+    idModal: { default: undefined, type: String},
+    titleModal: { default: undefined, type: String},
+    closable: { default: true, type: Boolean},
+  },
+  emits: ['close'],
+  mounted(){
+    (this.$refs.focusElement as HTMLElement)?.focus();
+  },
+})
+</script>
+<style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
 	.octopus-modal{
 		position: fixed;
@@ -68,7 +118,7 @@
 		display: flex;
 		flex-direction: column;
 		pointer-events: auto;
-    	width: 100%;
+		width: 100%;
 		background-color: white;
 		background-clip: padding-box;
 		border: 0;
@@ -88,3 +138,4 @@
 		padding: 1rem;
 	}
 }
+</style>

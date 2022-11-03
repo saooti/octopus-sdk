@@ -22,7 +22,8 @@
         <span
           v-if="!activeParticipant && !isPodcastmaker && editRight"
           :title="$t('Participant have not podcasts')"
-          class="saooti-warning text-danger me-1"/>
+          class="saooti-warning text-danger me-1"
+        />
         <div class="participant-name">
           {{ name }}
         </div>

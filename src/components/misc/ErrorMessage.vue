@@ -8,7 +8,8 @@
     >
       <span
         :title="$t('Warning')"
-        class="saooti-warning text-danger me-1"/>
+        class="saooti-warning text-danger me-1"
+      />
       <div class="alert-text">
         {{ message }}
       </div>

@@ -4,7 +4,8 @@
   >
     <div 
       class="d-flex align-items-center"
-      :class="podcastId?'mb-4':'mb-2'">
+      :class="podcastId?'mb-4':'mb-2'"
+    >
       <h2 class="mb-0">
         {{ title }}
       </h2>
@@ -16,7 +17,10 @@
         @click="handleSeeMoreButton"
       />
     </div>
-    <div class="d-flex justify-content-between" v-if="!podcastId">
+    <div
+      v-if="!podcastId"
+      class="d-flex justify-content-between"
+    >
       <div class="d-flex">
         <button
           class="btn btn-underline"

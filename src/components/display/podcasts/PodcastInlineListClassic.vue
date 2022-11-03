@@ -12,7 +12,7 @@
     :previous-available="previousAvailable"
     :next-available="nextAvailable"
     :no-rubriquage-id="noRubriquageId"
-    :podcastId="podcastId"
+    :podcast-id="podcastId"
     @sortChrono="sortChrono"
     @sortPopular="sortPopular"
     @displayPrevious="displayPrevious"

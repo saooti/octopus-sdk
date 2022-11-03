@@ -7,7 +7,7 @@
       <label
         for="rubrique-list-select"
         class="hid"
-      >{{$t('By topic')}}</label>
+      >{{ $t('By topic') }}</label>
       <select
         id="rubrique-list-select"
         v-model="rubriquage"
@@ -40,18 +40,18 @@
     />
     <Popover
       target="rubriques-dropdown"
-      :onlyClick="true"
-      :isFixed="true"
-      :leftPos="true"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
     >
-      <div
+      <button
         v-for="rubrique in hidenRubriques"
         :key="rubrique.rubriqueId"
         class="me-3 octopus-dropdown-item"
-        @click="addFilter(rubrique)"
+        @mousedown="addFilter(rubrique)"
       >
         {{ rubrique.name }}
-      </div>
+      </button>
     </Popover>
   </div>
 </template>
@@ -65,12 +65,14 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'RubriqueList',
 
-  props: {
-    rubriquages: { default: () => [], type: Array as ()=>Array<Rubriquage>},
-  },
   components:{
     Popover
   },
+
+  props: {
+    rubriquages: { default: () => [], type: Array as ()=>Array<Rubriquage>},
+  },
+  
 
   data() {
     return {
@@ -118,7 +120,6 @@ export default defineComponent({
     window.removeEventListener('resize', this.resizeWindow);
   },
   methods: {
-    
     initRubriques(): void{
       if(!this.rubriquage){ return ;}
       this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);

@@ -1,68 +1,56 @@
 <template>
-  <div
-    id="message-modal"
-    class="modal"
+  <ClassicModal
+    id-modal="message-modal"
+    :title-modal="title"
+    :closable="closable"
+    @close="closePopup"
   >
-    <div class="modal-backdrop" />
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            {{ title }}
-          </h5>
-          <button
-            v-if="closable"
-            :ref="closable?'focusElement':''"
-            type="button"
-            class="btn-transparent text-light saooti-remove"
-            title="Close"
-            @click="closePopup"
-          />
-        </div>
-        <div class="modal-body">
-          <!-- eslint-disable vue/no-v-html -->
-          <div
-            class="content"
-            v-html="message"
-          />
-          <!-- eslint-enable -->
-        </div>
-        <div
-          v-if="validatetext"
-          class="modal-footer"
-        >
-          <button
-            v-if="canceltext"
-            :ref="!closable && canceltext?'focusElement':''"
-            class="btn m-1"
-            @click="onCancel"
-          >
-            {{ canceltext }}
-          </button>
-          <button
-            v-if="thirdText"
-            class="btn btn-primary m-1"
-            @click="onThirdAction"
-          >
-            {{ thirdText }}
-          </button>
-          <button
-            :ref="!closable && !canceltext?'focusElement':''"
-            class="btn btn-primary m-1"
-            @click="onValid"
-          >
-            {{ validatetext }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <template #body>
+      <!-- eslint-disable vue/no-v-html -->
+      <div
+        class="content"
+        v-html="message"
+      />
+      <!-- eslint-enable -->
+    </template>
+    <template
+      v-if="validatetext"
+      #footer
+    >
+      <button
+        v-if="canceltext"
+        :ref="!closable && canceltext?'focusElement':''"
+        class="btn m-1"
+        @click="onCancel"
+      >
+        {{ canceltext }}
+      </button>
+      <button
+        v-if="thirdText"
+        class="btn btn-primary m-1"
+        @click="onThirdAction"
+      >
+        {{ thirdText }}
+      </button>
+      <button
+        :ref="!closable && !canceltext?'focusElement':''"
+        class="btn btn-primary m-1"
+        @click="onValid"
+      >
+        {{ validatetext }}
+      </button>
+    </template>
+  </ClassicModal>
 </template>
 
 <script lang="ts">
+import ClassicModal from '../modal/ClassicModal.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'MessageModal',
+  components: {
+    ClassicModal
+  },
   props: {
     title: { default: undefined, type: String},
     active: { default: false, type: Boolean},
@@ -73,9 +61,6 @@ export default defineComponent({
     thirdText: { default: undefined, type: String},
   },
   emits: ['close', 'validate', 'cancel', 'thirdEvent'],
-  mounted(){
-    (this.$refs.focusElement as HTMLElement)?.focus();
-  },
   methods: {
     closePopup(): void {
       this.$emit('close');

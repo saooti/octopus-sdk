@@ -7,13 +7,13 @@
       @click="isOpen=!isOpen"
     >
       <span class="flex-grow-1">{{ title }}</span>
-      <span class="saooti-down"/>
+      <span class="saooti-down" />
     </button>
     <div
       v-show="isOpen"
       class="body p-2"
     >
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

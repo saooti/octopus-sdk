@@ -14,7 +14,7 @@
     :rubriquage-id="rubriquageId"
     :no-rubriquage-id="noRubriquageId"
     :query="query"
-    :podcastId="podcastId"
+    :podcast-id="podcastId"
     @update:isArrow="$emit('update:isArrow',$event)"
   />
   <PodcastSwiperList

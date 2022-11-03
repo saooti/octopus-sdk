@@ -31,6 +31,7 @@
     <div class="player-grow-large-content">
       <PlayerProgressBar
         ref="progressbar"
+        class-progress="large"
         :hls-ready="hlsReady"
         :show-timeline="showTimeline"
         :comments="comments"
@@ -46,8 +47,13 @@
         <div>{{ totalTime }}</div>
       </div>
     </div>
-    <div class="flex-grow-1 d-flex align-items-center w-100" v-if="''!=transcriptText">
-      <div class="flex-grow-1 p-1 text-center mx-3 transcript-bg rounded">{{transcriptText}}</div>
+    <div
+      v-if="''!=transcriptText"
+      class="flex-grow-1 d-flex align-items-center w-100"
+    >
+      <div class="flex-grow-1 p-1 text-center mx-3 transcript-bg rounded">
+        {{ transcriptText }}
+      </div>
     </div>
     <div class="d-flex align-items-center flex-grow-1">
       <button
@@ -65,9 +71,8 @@
         class="btn play-big-button-box text-light primary-bg"
         @click="switchPausePlay"
       >
-        <span
+        <Spinner
           v-if="!isPaused&&!isPlaying"
-          class="spinner-border flex-shrink-0"
         />
       </button>
       <button
@@ -82,6 +87,7 @@
   </div>
 </template>
 <script lang="ts">
+import Spinner from '../Spinner.vue';
 import { playerDisplay } from '../../mixins/player/playerDisplay';
 import imageProxy from '../../mixins/imageProxy';
 import PlayerProgressBar from './PlayerProgressBar.vue';
@@ -93,7 +99,8 @@ export default defineComponent({
 
   components: {
     PlayerProgressBar,
-    PlayerTimeline
+    PlayerTimeline,
+    Spinner
   },
     mixins:[playerDisplay, imageProxy],
 
@@ -147,9 +154,6 @@ export default defineComponent({
     padding: 1rem 2rem;
     @media (max-width: 960px) {
       padding: 0.5rem;
-    }
-    .progress, .progress-bar{
-      height: 15px !important;
     }
   }
   .play-big-button-box {

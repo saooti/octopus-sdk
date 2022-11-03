@@ -1,54 +1,37 @@
 <template>
-  <div
-    id="qrcode-modal"
-    class="modal"
+  <ClassicModal
+    id-modal="qrcode-modal"
+    :title-modal="$t('Share QR Code')"
+    @close="closePopup"
   >
-    <div class="modal-backdrop" />
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            {{ $t('Share QR Code') }}
-          </h5>
-          <button
-            ref="focusElement"
-            type="button"
-            class="btn-transparent text-light saooti-remove"
-            title="Close"
-            @click="closePopup"
-          />
-        </div>
-        <div class="modal-body">
-          <QrCode :url="urlPage" />
-        </div>
-        <div class="modal-footer">
-          <button
-            class="btn btn-primary m-1"
-            @click="closePopup"
-          >
-            {{ $t('Close') }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <template #body>
+      <QrCode :url="urlPage" />
+    </template>
+    <template #footer>
+      <button
+        class="btn btn-primary m-1"
+        @click="closePopup"
+      >
+        {{ $t('Close') }}
+      </button>
+    </template>
+  </ClassicModal>
 </template>
 
 <script lang="ts">
+import ClassicModal from '../modal/ClassicModal.vue';
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'QrCodeModal',
   components: {
-    QrCode
+    QrCode,
+    ClassicModal
   },
   props: {
     urlPage: { default: undefined, type: String},
   },
   emits: ['close'],
-  mounted(){
-    (this.$refs.focusElement as HTMLElement)?.focus();
-  },
   methods:{
     closePopup(): void {
       this.$emit('close');

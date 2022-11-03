@@ -1,84 +1,77 @@
 <template>
-  <div
-    id="add-comment-modal"
-    class="modal"
+  <ClassicModal
+    id-modal="add-comment-modal"
+    :title-modal="$t('Welcome, thanks for your comment')"
+    :closable="false"
+    @close="closePopup"
   >
-    <div class="modal-backdrop" />
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            {{ $t('Welcome, thanks for your comment') }}
-          </h5>
+    <template #body>
+      <template v-if="!sending">
+        <div>{{ $t("Let's get acquainted :") }}</div>
+        <input
+          v-model="name"
+          class="form-input"
+          type="text"
+          :placeholder="$t('Your name')"
+          :class="{ 'border border-danger': 0 === countName || !validName }"
+        >
+        <p
+          class="d-flex justify-content-end small-text"
+          :class="{ 'text-danger': !validName }"
+        >
+          {{ countName + ' / ' + maxName }}
+        </p>
+        <div
+          v-if="''!==errorText"
+          class="mt-1 text-danger"
+        >
+          {{ errorText }}
         </div>
-        <div class="modal-body">
-          <template v-if="!sending">
-            <div>{{ $t("Let's get acquainted :") }}</div>
-            <input
-              v-model="name"
-              class="form-input"
-              type="text"
-              :placeholder="$t('Your name')"
-              :class="{ 'border border-danger': 0 === countName || !validName }"
-            >
-            <p
-              class="d-flex justify-content-end small-text"
-              :class="{ 'text-danger': !validName }"
-            >
-              {{ countName + ' / ' + maxName }}
-            </p>
-            <div
-              v-if="''!==errorText"
-              class="mt-1 text-danger"
-            >
-              {{ errorText }}
-            </div>
-          </template>
-          <template v-else>
-            <div>{{ $t('Send in progress') }}</div>
-          </template>
-        </div>
-        <div class="modal-footer">
-          <button
-            class="btn m-1"
-            @click="closePopup"
-          >
-            {{ $t('Close') }}
-          </button>
-          <vue-recaptcha 
-            v-if="!isVerify"
-            ref="invisibleRecaptcha"
-            :load-recaptcha-script="true"
-            @verify="handleSuccess"
-            @expired="handleError"
-            size="invisible"
-            sitekey="6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh"
-          >
-          </vue-recaptcha>
-          <button
-            v-if="!sending"
-            class="btn btn-primary m-1"
-            :disabled="0 === countName || !validName"
-            @click="submit"
-          >
-            {{ $t('Validate') }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+      </template>
+      <template v-else>
+        <div>{{ $t('Send in progress') }}</div>
+      </template>
+    </template>
+    <template #footer>
+      <button
+        class="btn m-1"
+        @click="closePopup"
+      >
+        {{ $t('Close') }}
+      </button>
+      <vue-recaptcha 
+        v-if="!isVerify"
+        ref="invisibleRecaptcha"
+        :load-recaptcha-script="true"
+        size="invisible"
+        sitekey="6LfyP_4ZAAAAAPODj8nov2LvosIwcX0GYeBSungh"
+        @verify="handleSuccess"
+        @expired="handleError"
+      />
+      <button
+        v-if="!sending"
+        class="btn btn-primary m-1"
+        :disabled="0 === countName || !validName"
+        @click="submit"
+      >
+        {{ $t('Validate') }}
+      </button>
+    </template>
+  </ClassicModal>
 </template>
 
 <script lang="ts">
 import Constants from '../../../../public/config';
 import { state } from '../../../store/paramStore';
+import ClassicModal from '../../misc/modal/ClassicModal.vue';
 import api from '@/api/initialize';
 import { VueRecaptcha } from 'vue-recaptcha';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'AddCommentModal',
   components:{
-    VueRecaptcha
+    VueRecaptcha,
+    ClassicModal
   },
 
   props: {},

@@ -18,7 +18,7 @@
         :href="sub.url"
         :title="sub.title"
       >
-        <span :class="sub.icon"></span>
+        <span :class="sub.icon" />
       </a>
     </template>
   </div>

@@ -10,7 +10,7 @@ $h5-font-size:                $font-size-base * 0.9 !default;
 $h6-font-size:                $font-size-base * 0.7 !default;
 $breadcrumb-bg:                     #f3f3f3 !default;
 $breadcrumb-border-radius:          2rem !default;
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import './utilities';
 @import './bootstrap.scss';
 @import './general.scss';
 @import './live.scss';

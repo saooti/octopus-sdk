@@ -6,7 +6,7 @@
     <label
       :for="id"
       class="hid"
-    >{{$t('Type string to filter by categories')}}</label>
+    >{{ $t('Type string to filter by categories') }}</label>
     <VueMultiselect
       :id="id"
       ref="multiselectRef"
