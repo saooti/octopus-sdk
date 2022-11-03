@@ -698,4 +698,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 33.1.0 Refacto store
  * 33.1.2 Refacto lazy export
  * 33.1.3 Refacto lazy export
+ * 33.2.0 Refacto delete bootstrap
 
