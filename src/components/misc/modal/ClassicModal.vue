@@ -135,6 +135,10 @@ export default defineComponent({
 		align-items: center;
 		justify-content: flex-end;
 		padding: 1rem;
+		flex-wrap
+		button{
+			margin: 0.1rem;
+		}
 	}
 }
 </style>
