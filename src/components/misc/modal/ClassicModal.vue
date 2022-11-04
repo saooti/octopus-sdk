@@ -91,6 +91,11 @@ export default defineComponent({
 		position: relative;
 		flex: 1 1 auto;
 		padding: 1rem;
+		overflow-x: auto;
+		.scroller-vertical {
+			min-height: 200px;
+			height: 200px;
+		}
 	}
 	.octopus-modal-header { 
 		display: flex;
@@ -103,13 +108,7 @@ export default defineComponent({
 		color: white;
 		padding: 1rem;
     }
-	.octopus-modal-body{
-		overflow-x: auto;
-		.scroller-vertical {
-			min-height: 200px;
-			height: 200px;
-		}
-	}
+	
 	.octopus-modal-dialog, .octopus-modal-content {
 		min-height: 300px;
 	}

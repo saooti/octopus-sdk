@@ -12,7 +12,7 @@
       class="btn btn-primary"
       :title="$t('Copy')"
       @click="onCopyCode(rss, afterCopy)"
-    />
+    >
     <RssSection
       v-if="emission"
       :emission="emission"

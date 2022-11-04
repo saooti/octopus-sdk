@@ -5,7 +5,10 @@
     @close="closePopup"
   >
     <template #body>
-      <Nav :tab-number="tabs.length" :activeTab="activeTab">
+      <Nav
+        v-model:activeTab="activeTab"
+        :tab-number="tabs.length"
+      >
         <template
           v-for="(tab, index) in tabs"
           #[index]

@@ -13,6 +13,7 @@
     />
     <span class="mx-1">:</span>
     <Popover
+      :title="$t('Animated by')"
       :target="idPopover"
     >
       <div 

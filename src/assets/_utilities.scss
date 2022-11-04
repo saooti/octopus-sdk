@@ -23,7 +23,7 @@ $primary:       #0d6efd !default;
 $secondary:     #6c757d !default;
 $success:       #198754 !default;
 $info:          #0dcaf0 !default;
-$warning:       #ffc107 !default;
+$warning:       #ff924f94 !default;
 $danger:        #dc3545 !default;
 $light:         #f8f9fa !default;
 $dark:          #212529 !default;
@@ -129,8 +129,17 @@ $utilities: map-merge(
       property: width,
       class: w,
       values: (
+        0: 0,
+        5: 5%,
+        10: 10%,
+        15: 15%,
+        20: 20%,
         25: 25%,
+        30: 30%,
+        35: 35%,
+        40: 40%,
         50: 50%,
+        60: 60%,
         75: 75%,
         100: 100%,
         auto: auto

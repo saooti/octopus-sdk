@@ -275,8 +275,7 @@ export default defineComponent({
     this.initData();
   },
   methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
     getName(person: Participant): string {

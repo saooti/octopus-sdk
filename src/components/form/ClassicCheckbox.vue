@@ -12,7 +12,11 @@
         :data-selenium="selenium"
         @click="emitClickAction"
       >
-      <span v-if="isSwitch" class="slider" @click="textValue=!textValue;emitClickAction"></span>
+      <span
+        v-if="isSwitch"
+        class="slider"
+        @click="textValue=!textValue;emitClickAction"
+      />
     </div>
     <label
       class="c-hand"

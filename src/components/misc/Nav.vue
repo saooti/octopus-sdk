@@ -17,8 +17,8 @@
   </ul>
   <div :class="transparent? 'd-flex flex-grow-1':'octopus-tab-content'">
     <div
-      v-show="hasSlot('tab'+(index-1))"
       v-for="index in tabNumber"
+      v-show="hasSlot('tab'+(index-1))"
       :key="index-1"
       class="octopus-tab-pane"
       :class="activeTab === (index-1)? 'active':''"
