@@ -6,7 +6,7 @@
     <label
       :for="id"
       class="hid"
-    >{{$t('Type string to filter by categories')}}</label>
+    >{{ $t('Type string to filter by categories') }}</label>
     <VueMultiselect
       :id="id"
       ref="multiselectRef"
@@ -55,7 +55,7 @@
       <template #caret="">
         <div class="position-relative">
           <span
-            class="saooti-down octopus-arrow-down"
+            class="saooti-down octopus-arrow-down octopus-arrow-down-absolute"
           />
         </div>
       </template>

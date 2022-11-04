@@ -3,7 +3,7 @@
     v-if="loadingText"
     class="d-flex align-items-center justify-content-center"
   >
-    <div class="spinner-border me-3 flex-shrink-0" />
+    <Spinner class="me-3" />
     <div class="h3 mt-2">
       {{ loadingText }}
     </div>
@@ -17,9 +17,13 @@
 </template>
 
 <script lang="ts">
+import Spinner from '../misc/Spinner.vue';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: "ClassicLoading",
+  components:{
+    Spinner
+  },
   props: {
     loadingText: { default: undefined, type: String},
     errorText: { default: undefined, type: String},

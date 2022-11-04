@@ -6,20 +6,19 @@
     <div
       v-for="option in options"
       :key="option.title"
-      class="form-check"
+      class="octopus-form-item"
       :class="isColumn? '':'me-2'"
     >
       <input
         :id="idRadio + option.value"
         v-model="textValue"
-        class="form-check-input"
         type="radio"
         :name="idRadio"
         :value="option.value"
         :disabled="isDisabled"
       >
       <label
-        class="form-check-label"
+        class="c-hand"
         :for="idRadio + option.value"
       >{{
         option.title
@@ -64,3 +63,13 @@ export default defineComponent({
   }
 });
 </script>
+<style lang="scss">
+@import '@scss/_variables.scss';
+.octopus-app{
+  input[type="radio"] {
+    accent-color: $octopus-primary-color;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+}
+</style>

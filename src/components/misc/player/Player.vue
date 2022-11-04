@@ -126,12 +126,6 @@ export default defineComponent({
   background: #282828 !important;
   font-size: 1rem;
 
-  .player-progress-border {
-    height: 10px;
-    width: 3px;
-    background: black;
-  }
-
   @media (max-width: 960px) {
     .d-flex {
       flex-wrap: nowrap !important;

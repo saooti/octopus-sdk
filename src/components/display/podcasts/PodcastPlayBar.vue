@@ -7,23 +7,11 @@
       {{ playedTime }}
     </div>
     <div class="position-relative flex-grow-1">
-      <div
-        class="progress flex-grow-1 c-hand"
+      <ProgressBar
+        :main-progress="percentProgress"
+        class="medium"
         @mouseup="seekTo"
-      >
-        <div
-          class="progress-bar primary-bg"
-          role="progressbar"
-          aria-valuenow="0"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          :style="'width: ' + percentProgress + '%'"
-        />
-        <div
-          class="progress-bar-cursor"
-          :style="'left:' + percentProgress + '%'"
-        />
-      </div>
+      />
     </div>
     <div class="ms-2">
       {{ totalTime }}
@@ -32,12 +20,16 @@
 </template>
 
 <script lang="ts">
+import ProgressBar from '../../misc/ProgressBar.vue';
 import DurationHelper from '../../../helper/duration';
 import displayMethods from '../../mixins/displayMethods';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastPlayBar',
+  components:{
+    ProgressBar
+  },
   mixins: [displayMethods],
   props: {
     podcastId: { default: undefined, type: Number},
@@ -81,21 +73,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-.octopus-app{
-.podcast-play-bar {
-  .progress{
-    height: 6px;
-  }
-  .progress-bar-cursor{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: black;
-    align-self: center;
-    position: absolute;
-  }
-}
-}
-</style>

@@ -1,43 +1,31 @@
 <template>
-  <div class="modal">
-    <div class="modal-backdrop" />
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-title h5">
-            {{ $t('RSS Link') }}
-          </div>
-          <button
-            ref="focusElement"
-            type="button"
-            class="btn-close btn-close-white"
-            title="Close"
-            @click="closePopup"
-          />
-        </div>
-        <div class="modal-body">
-          <p class="d-flex justify-content-between align-items-center">
-            {{ $t('Rss feed:') }}
-            <span id="LINK">{{ link }}</span>
-            <input
-              type="button"
-              :value="$t('Copy')"
-              class="btn btn-primary"
-              :title="$t('Copy')"
-              @click="onCopyCode(link, afterCopy)"
-            >
-          </p>
-          <RssSection
-            v-if="emission && authenticated"
-            :emission="emission"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
+  <ClassicModal
+    id-modal="clipboard-modal"
+    :title-modal="$t('RSS Link')"
+    @close="closePopup"
+  >
+    <template #body>
+      <p class="d-flex justify-content-between align-items-center">
+        {{ $t('Rss feed:') }}
+        <span id="LINK">{{ link }}</span>
+        <input
+          type="button"
+          :value="$t('Copy')"
+          class="btn btn-primary"
+          :title="$t('Copy')"
+          @click="onCopyCode(link, afterCopy)"
+        >
+      </p>
+      <RssSection
+        v-if="emission && authenticated"
+        :emission="emission"
+      />
+    </template>
+  </ClassicModal>
 </template>
 
 <script lang="ts">
+import ClassicModal from '../modal/ClassicModal.vue';
 import { Emission } from '@/store/class/general/emission';
 import displayMethods from '../../mixins/displayMethods';
 import { defineComponent, defineAsyncComponent } from 'vue';
@@ -47,6 +35,7 @@ export default defineComponent({
   name: 'ClipboardModal',
   components: {
     RssSection,
+    ClassicModal
   },
   mixins: [displayMethods],
 
@@ -60,10 +49,6 @@ export default defineComponent({
       return state.generalParameters.authenticated??false;
     },
   },
-  mounted(){
-    (this.$refs.focusElement as HTMLElement)?.focus();
-  },
-
   methods: {
     closePopup(): void {
       this.$emit('close');

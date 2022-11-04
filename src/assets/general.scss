@@ -4,6 +4,7 @@ html{
   height: 100%;
 }
 body{
+  margin: 0;
   color: #353535;
   font-family: Montserrat,sans-serif,Helvetica Neue;
   font-size: 0.8rem;
@@ -19,44 +20,22 @@ body{
   }
   a{
     word-break: break-word;
-  }
-
-  h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{
-    &:not(.text-uppercase){
-      letter-spacing: -0.03em;
+    text-decoration: none;
+    color: $octopus-primary-color;
+    &.link-hover{
+      color: black !important;
     }
-    font-weight: 600;
-    margin-top: 0;
-    @media (max-width: 500px){
-      margin: 0.2rem;
+    &.link-hover:hover, &.link-hover.router-link-exact-active.router-link-active{
+      color: $octopus-primary-color !important;
     }
-  }
-  h1{
-    font-size: 1.8rem;
-    text-align: center;
-    color: #666;
-    margin-bottom: 2rem;
-    @media (max-width: 500px){
-      font-size: 1.2rem;
-      margin: 0.5rem 0 1rem;
-    }
-  }
-  h2{
-    @media (max-width: 500px){
-      font-size: 1rem;
+    &.btn, &.btn:hover{
+      color: #383838;
     }
   }
   hr{
     height: 0.01rem;
     color: #999;
   }
-
-  .small-text{
-    font-size: 0.6rem;
-    display: flex;
-    align-items: center;
-  }
-
   .d-flex-column{
 		display: flex;
 		flex-direction: row;
@@ -72,16 +51,6 @@ body{
       flex-wrap: wrap;
 		}
 	}
-
-  .primary-color{
-    color: $octopus-primary-color;
-  }
-  .primary-darker{
-    color: $octopus-primary-color;
-  }
-  .primary-bg{
-    background: $octopus-primary-color;
-  }
   .secondary-bg{
     background: $octopus-background;
   }
@@ -94,7 +63,6 @@ body{
   .width-fit-content{
     width: fit-content !important;
   }
-
   .page-box{
     background-color: $octopus-background;
     padding: 2rem 5rem 5rem 5rem;
@@ -130,21 +98,7 @@ body{
       box-shadow:0px 6px 20px 3px $primaryColorMoreTransparent !important;
     }
   }
-  a.btn{
-		color: #383838;
-		&:hover{
-			color: #383838;
-		}
-	}
-  a, a:hover{
-    text-decoration: none;
-  }
-  a.link-hover{
-    color: black !important;
-  }
-  a.link-hover.router-link-exact-active.router-link-active, a.link-hover:hover {
-    color: $octopus-primary-color !important;
-  }
+  
   .descriptionText{
     white-space: pre-wrap; 
     word-wrap: break-word;
@@ -190,11 +144,9 @@ body{
   .hid{
     display: none !important;
   }
-
   .d-contents{
     display: contents;
   }
-
   .img-box{
     height: 13rem;
     width: 13rem;

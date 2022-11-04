@@ -20,12 +20,11 @@
         'saooti-pause': isPlaying,
         '':!isPaused&&!isPlaying
       }"
-      class="btn play-button-box text-light primary-bg"
+      class="btn play-button-box text-light bg-primary"
       @click="switchPausePlay"
     >
-      <span
+      <Spinner
         v-if="!isPaused&&!isPlaying"
-        class="spinner-border flex-shrink-0"
       />
     </button>
     <div class="text-light player-grow-content">
@@ -78,6 +77,7 @@
 import { CommentPodcast } from '@/store/class/general/comment';
 import { playerDisplay } from '../../mixins/player/playerDisplay';
 import imageProxy from '../../mixins/imageProxy';
+import Spinner from '../Spinner.vue';
 import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerTimeline from './PlayerTimeline.vue';
 import { defineComponent } from 'vue';
@@ -86,7 +86,8 @@ export default defineComponent({
 
   components: {
     PlayerProgressBar,
-    PlayerTimeline
+    PlayerTimeline,
+    Spinner
   },
   mixins:[playerDisplay, imageProxy],
 

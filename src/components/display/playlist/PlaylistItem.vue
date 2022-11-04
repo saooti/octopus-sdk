@@ -23,7 +23,8 @@
           <span
             v-if="!activePlaylist && !isPodcastmaker"
             :title="$t('Playlist have not podcasts')"
-            class="saooti-warning text-danger me-1"/>
+            class="saooti-warning text-danger me-1"
+          />
           <div class="emission-name">
             {{ name }}
           </div>
@@ -49,7 +50,7 @@
           }"
           class="text-dark"
         >
-          <div class="emission-producer primary-darker">
+          <div class="emission-producer text-primary">
             © {{ playlist.organisation.name }}
           </div>
         </router-link>

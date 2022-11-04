@@ -7,7 +7,7 @@
       <label
         for="rubrique-list-select"
         class="hid"
-      >{{$t('By topic')}}</label>
+      >{{ $t('By topic') }}</label>
       <select
         id="rubrique-list-select"
         v-model="rubriquage"
@@ -32,31 +32,32 @@
         {{ rubrique.name }}
       </button>
     </div>
-    <div
+    <button
       v-show="hidenRubriques.length"
-      class="dropdown btn-group"
+      id="rubriques-dropdown"
+      class="btn admin-button saooti-more"
+      :title="$t('See more')"
+    />
+    <Popover
+      target="rubriques-dropdown"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
     >
       <button
-        class="btn dropdown-toggle admin-button dropdown-toggle-no-caret saooti-more"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        :title="$t('See more')"
-      />
-      <div class="dropdown-menu dropdown-menu-right px-4">
-        <div
-          v-for="rubrique in hidenRubriques"
-          :key="rubrique.rubriqueId"
-          class="me-3 dropdown-item"
-          @click="addFilter(rubrique)"
-        >
-          {{ rubrique.name }}
-        </div>
-      </div>
-    </div>
+        v-for="rubrique in hidenRubriques"
+        :key="rubrique.rubriqueId"
+        class="me-3 octopus-dropdown-item"
+        @mousedown="addFilter(rubrique)"
+      >
+        {{ rubrique.name }}
+      </button>
+    </Popover>
   </div>
 </template>
 
 <script lang="ts">
+import Popover from '../../misc/Popover.vue';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
@@ -64,9 +65,14 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'RubriqueList',
 
+  components:{
+    Popover
+  },
+
   props: {
     rubriquages: { default: () => [], type: Array as ()=>Array<Rubriquage>},
   },
+  
 
   data() {
     return {
@@ -114,7 +120,6 @@ export default defineComponent({
     window.removeEventListener('resize', this.resizeWindow);
   },
   methods: {
-    
     initRubriques(): void{
       if(!this.rubriquage){ return ;}
       this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);

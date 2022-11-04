@@ -251,17 +251,6 @@ export default defineComponent({
   height: min-content;
   border-radius: 0.8rem;
   overflow: hidden;
-  .progress{
-    height: 6px;
-  }
-  .progress-bar-cursor{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: black;
-    align-self: center;
-    position: absolute;
-  }
   .emission-item-border-color {
     border-color: #ddd;
   }

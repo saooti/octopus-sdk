@@ -1,31 +1,12 @@
 <template>
-  <div
+  <ProgressBar
     v-if="!playerError"
-    class="progress c-hand"
+    :main-progress="percentProgress"
+    :secondary-progress="percentLiveProgress"
+    :alert-bar="displayAlertBar?durationLivePosition:undefined"
+    :class="classProgress"
     @mouseup="seekTo"
-  >
-    <div
-      class="progress-bar bg-light"
-      role="progressbar"
-      aria-valuenow="0"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      :style="'width: ' + percentLiveProgress + '%'"
-    />
-    <div
-      class="progress-bar primary-bg"
-      role="progressbar"
-      aria-valuenow="0"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      :style="'width: ' + percentProgress + '%'"
-    />
-    <div
-      v-if="displayAlertBar"
-      class="progress-bar progress-bar-duration bg-danger"
-      :style="'left: ' + durationLivePosition + '%'"
-    />
-  </div>
+  />
   <CommentPlayer
     v-if="showTimeline"
     :total-time="totalSecondes"
@@ -34,6 +15,7 @@
 </template>
 
 <script lang="ts">
+import ProgressBar from '../ProgressBar.vue'
 import { CommentPodcast } from '@/store/class/general/comment';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentPlayer = defineAsyncComponent(() => import('../../display/comments/CommentPlayer.vue'));
@@ -42,8 +24,10 @@ export default defineComponent({
 
   components: {
     CommentPlayer,
+    ProgressBar
   },
   props: {
+    classProgress:{ default: "", type: String},
     hlsReady: { default: false, type: Boolean},
     showTimeline: { default: false, type: Boolean},
     comments: { default: ()=>[], type: Array as ()=>Array<CommentPodcast>},
@@ -88,25 +72,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-.octopus-app{
-  .progress {
-    height: 4px;
-    position: relative;
-    @media (max-width: 960px) {
-      height: 8px;
-    }
-  }
-  .progress-bar-duration {
-    width: 10px;
-  }
-  .progress-bar {
-    height: 4px;
-    position: absolute;
-    @media (max-width: 960px) {
-      height: 8px;
-    }
-  }
-}
-</style>

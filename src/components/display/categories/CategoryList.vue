@@ -17,38 +17,41 @@
         {{ category.name }}
       </button>
     </div>
-    <div
+    <button
       v-show="hidenCategories.length"
-      class="dropdown btn-group"
+      id="categories-dropdown"
+      class="btn admin-button saooti-more"
+      :title="$t('See more')"
+    />
+    <Popover
+      target="categories-dropdown"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
     >
       <button
-        class="btn dropdown-toggle admin-button dropdown-toggle-no-caret saooti-more"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        :title="$t('See more')"
-      />
-      <div class="dropdown-menu dropdown-menu-right px-4">
-        <div
-          v-for="category in hidenCategories"
-          :key="category.id"
-          class="me-3 dropdown-item"
-          @click="checkIfFilter(category)"
-        >
-          {{ category.name }}
-        </div>
-      </div>
-    </div>
+        v-for="category in hidenCategories"
+        :key="category.id"
+        class="me-3 octopus-dropdown-item"
+        @mousedown="checkIfFilter(category)"
+      >
+        {{ category.name }}
+      </button>
+    </Popover>
   </div>
 </template>
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../store/paramStore';
-
+import Popover from '../../misc/Popover.vue';
 import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CategoryList',
+  components:{
+    Popover
+  },
 
   props: {
     isFilter: { default: false, type: Boolean },

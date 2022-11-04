@@ -26,9 +26,7 @@
       <Popover
         v-if="isOuestFranceTag(tag)"
         :target="'tag-list-from-podcast-page'+index"
-        triggers="hover"
         :content="tag.substring(4,tag.length)"
-        placement="bottom"
       />
     </div>
   </div>

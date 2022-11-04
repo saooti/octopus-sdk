@@ -1,103 +1,94 @@
 <template>
-  <div>
-    <div
-      id="newsletter-modal"
-      class="modal"
-    >
-      <div class="modal-backdrop" />
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              {{ $t('Share newsletter') }}
-            </h5>
+  <ClassicModal
+    id-modal="newsletter-modal"
+    :title-modal="$t('Share newsletter')"
+    :closable="false"
+    @close="closePopup"
+  >
+    <template #body>
+      <div class="d-flex justify-content-between">
+        <!-- eslint-disable vue/no-v-html -->
+        <div v-html="newsletterHtml" />
+        <!-- eslint-enable -->
+        <div class="d-flex flex-column flex-grow-1 ms-4">
+          <h4 class="mb-3">
+            {{ $t('Configuration') }}
+          </h4>
+          <label for="share-url-newsletter">{{ $t('Share') }}</label>
+          <input
+            id="share-url-newsletter"
+            v-model="shareUrl"
+            class="form-input mb-2"
+            type="text"
+            :class="{ 'border border-danger': 0 === shareUrl }"
+          >
+          <template v-if="podcast">
+            <ClassicCheckbox
+              v-model:textInit="displayEmissionName"
+              id-checkbox="display-emission-name"
+              :label="$t('Display emission name')"
+            />
+            <ClassicCheckbox
+              v-model:textInit="displayParticipantsNames"
+              id-checkbox="display-participants-names"
+              :label="$t('Display participants list')"
+            />
+          </template>
+          <div class="d-flex align-items-center mt-2">
+            <VSwatches
+              v-model="color"
+              class="c-hand  me-2 mt-2"
+              show-fallback
+              colors="text-advanced"
+              popover-to="right"
+              :data-color="color"
+            />
+            <div>{{ $t('Choose main color') }}</div>
           </div>
-          <div class="modal-body">
-            <div class="d-flex justify-content-between">
-              <!-- eslint-disable vue/no-v-html -->
-              <div v-html="newsletterHtml" />
-              <!-- eslint-enable -->
-              <div class="d-flex flex-column flex-grow-1 ms-4">
-                <h4 class="mb-3">
-                  {{ $t('Configuration') }}
-                </h4>
-                <label for="share-url-newsletter">{{ $t('Share') }}</label>
-                <input
-                  id="share-url-newsletter"
-                  v-model="shareUrl"
-                  class="form-input mb-2"
-                  type="text"
-                  :class="{ 'border border-danger': 0 === shareUrl }"
-                >
-                <template v-if="podcast">
-                  <ClassicCheckbox
-                    v-model:textInit="displayEmissionName"
-                    id-checkbox="display-emission-name"
-                    :label="$t('Display emission name')"
-                  />
-                  <ClassicCheckbox
-                    v-model:textInit="displayParticipantsNames"
-                    id-checkbox="display-participants-names"
-                    :label="$t('Display participants list')"
-                  />
-                </template>
-                <div class="d-flex align-items-center mt-2">
-                  <VSwatches
-                    v-model="color"
-                    class="c-hand  me-2 mt-2"
-                    show-fallback
-                    colors="text-advanced"
-                    popover-to="right"
-                    :data-color="color"
-                  />
-                  <div>{{ $t('Choose main color') }}</div>
-                </div>
-                <div
-                  class=" d-flex justify-content-between align-items-center mt-3 mb-2"
-                >
-                  <h4 class="mb-0">
-                    {{ $t('HTML Code') }}
-                  </h4>
-                  <input
-                    type="button"
-                    :value="$t('Copy')"
-                    class="btn btn-primary"
-                    :title="$t('Copy')"
-                    @click="onCopyCode(newsletterHtml, afterCopy)"
-                  >
-                </div>
-                <textarea
-                  id="newsletter_code_textarea"
-                  v-model="newsletterHtml"
-                  readonly
-                  @click="selectAll"
-                />
-                <label
-                  for="newsletter_code_textarea"
-                  :title="$t('HTML Code')"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-primary m-1"
-              @click="closePopup"
+          <div
+            class=" d-flex justify-content-between align-items-center mt-3 mb-2"
+          >
+            <h4 class="mb-0">
+              {{ $t('HTML Code') }}
+            </h4>
+            <input
+              type="button"
+              :value="$t('Copy')"
+              class="btn btn-primary"
+              :title="$t('Copy')"
+              @click="onCopyCode(newsletterHtml, afterCopy)"
             >
-              {{ $t('Close') }}
-            </button>
           </div>
+          <textarea
+            id="newsletter_code_textarea"
+            v-model="newsletterHtml"
+            readonly
+            @click="selectAll"
+          />
+          <label
+            for="newsletter_code_textarea"
+            :title="$t('HTML Code')"
+          />
         </div>
       </div>
-    </div>
-    <Snackbar
-      ref="snackbar"
-      position="bottom-left"
-    />
-  </div>
+    </template>
+    <template #footer>
+      <button
+        class="btn btn-primary m-1"
+        @click="closePopup"
+      >
+        {{ $t('Close') }}
+      </button>
+    </template>
+  </ClassicModal>
+  <Snackbar
+    ref="snackbar"
+    position="bottom-left"
+  />
 </template>
 
 <script lang="ts">
+import ClassicModal from '../modal/ClassicModal.vue';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import Snackbar from '../../misc/Snackbar.vue';
 import moment from 'moment';
@@ -119,7 +110,8 @@ export default defineComponent({
   components: {
     Snackbar,
     VSwatches,
-    ClassicCheckbox
+    ClassicCheckbox,
+    ClassicModal
   },
 
   mixins: [displayMethods],
@@ -283,8 +275,7 @@ export default defineComponent({
     this.initData();
   },
   methods: {
-    closePopup(event: { preventDefault: () => void }): void {
-      event.preventDefault();
+    closePopup(): void {
       this.$emit('close');
     },
     getName(person: Participant): string {

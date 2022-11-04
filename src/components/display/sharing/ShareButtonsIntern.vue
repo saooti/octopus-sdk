@@ -20,7 +20,7 @@
       :class="getClass(button.className)"
       :title="button.title"
     >
-      <div :class="button.icon"/>
+      <div :class="button.icon" />
     </a>
   </template>
   <a

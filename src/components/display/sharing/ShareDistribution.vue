@@ -3,15 +3,16 @@
     <h3>{{ $t('Distribute') }}</h3>
     <p class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
-      <div class="primary-darker hide-small-screen text-break">{{ rss }}</div>
-      <input
-        type="button"
-        :value="$t('Copy')"
-        class="btn btn-primary"
-        :title="$t('Copy')"
-        @click="onCopyCode(rss, afterCopy)"
-      >
-    </p>
+    </p><div class="text-primary hide-small-screen text-break">
+      {{ rss }}
+    </div>
+    <input
+      type="button"
+      :value="$t('Copy')"
+      class="btn btn-primary"
+      :title="$t('Copy')"
+      @click="onCopyCode(rss, afterCopy)"
+    >
     <RssSection
       v-if="emission"
       :emission="emission"
@@ -23,7 +24,7 @@
         :to="platform.url"
         class="text-dark"
       >
-        <span :class="platform.icon"></span>{{ platform.title }}
+        <span :class="platform.icon" />{{ platform.title }}
       </router-link>
     </div>
     <Snackbar

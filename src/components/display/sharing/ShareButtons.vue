@@ -13,15 +13,13 @@
           role="button"
           tabindex="0"
           class="saooti-help ms-2 align-items-start"
-          :title="$t('Help')"
         />
         <Popover
           v-if="authenticated"
           target="popover-share-help"
-          placement="right"
-        >
-          {{ $t('Share this page without edit and share blocks') }}
-        </Popover>
+          :title="$t('Help')"
+          :content="$t('Share this page without edit and share blocks')"
+        />
       </div>
       <div class="d-flex align-items-center">
         <ShareButtonsIntern

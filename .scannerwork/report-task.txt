@@ -2,5 +2,5 @@ projectKey=saootioctopus-sdk
 serverUrl=http://localhost:9000
 serverVersion=9.6.1.59531
 dashboardUrl=http://localhost:9000/dashboard?id=saootioctopus-sdk
-ceTaskId=AYPQo-Apro4GR80sL6y7
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYPQo-Apro4GR80sL6y7
+ceTaskId=AYRCF81irfE0_BWlkJHf
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYRCF81irfE0_BWlkJHf

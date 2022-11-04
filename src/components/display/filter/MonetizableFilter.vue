@@ -12,7 +12,7 @@
         <option value="YES">{{ $t('Authorized advertising') }}</option>
         <option value="NO">{{ $t('Prohibited advertising') }}</option>
       </select>
-      <div class="saooti-down octopus-arrow-down" />
+      <div class="saooti-down octopus-arrow-down octopus-arrow-down-absolute" />
     </label>
   </div>
 </template>

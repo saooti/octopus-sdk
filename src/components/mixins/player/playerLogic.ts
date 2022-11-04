@@ -110,8 +110,8 @@ export const playerLogic = defineComponent({
       this.$store.commit('player/transcript',{actual: 0,actualText:actualText, value : arrayTranscript});
     },
     parseSrt(transcript: string){
-      var pattern = /(\d+)\n([\d:,]+)\s+-{2}\>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
-      var result = [];
+      const pattern = /(\d+)\n([\d:,]+)\s+-{2}\>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
+      const result = [];
       if (typeof(transcript) != 'string'){
         return;
       }
@@ -130,7 +130,7 @@ export const playerLogic = defineComponent({
       return result;
     },
     srtTimeToSeconds(time:string): number{
-      var a = time.split(':'); 
+      const a = time.split(':'); 
       return (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+parseFloat(a[2])); 
     },
     getDomain(): string{

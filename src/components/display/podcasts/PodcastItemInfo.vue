@@ -1,12 +1,12 @@
 <template>
   <div class="d-contents podcast-item-info">
     <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-      <div class="me-3 small-text">
+      <div class="me-3 h6">
         {{ date }}
       </div>
       <div
         v-if="0 !== durationString.length"
-        class="small-text"
+        class="h6"
       >
         {{ durationString }}
       </div>
