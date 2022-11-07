@@ -99,13 +99,19 @@ export default defineComponent({
 				this.posY = rectElement.bottom + (this.isFixed ? 0 : window.scrollY)+ 5;
 			}
     },
-		clearDataBlur (e: FocusEvent) {
+		async clearDataBlur (e: FocusEvent) {
 			if(e.relatedTarget){
 				const myElement = e.relatedTarget as HTMLElement;
 				if(this.popoverId===myElement.id){return;}
 				const parent = this.$refs.popover as HTMLElement; 
 				if (null!==parent && parent.contains(myElement)) {
 					if(null!==myElement.classList && myElement.classList.contains('octopus-dropdown-item')){
+						if((myElement as HTMLAnchorElement).href ?? false){
+							if((myElement as HTMLAnchorElement).host !== window.location.host){
+								return;
+							}
+							await this.$router.push((myElement as any).pathname);
+						}
 						this.$nextTick(() => {
 							this.isClick = false;
 							this.clearData();

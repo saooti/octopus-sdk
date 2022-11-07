@@ -1,5 +1,5 @@
 <template>
-  <ul class="octopus-nav">
+  <ul class="octopus-nav" :class="light?'light':''">
     <li
       v-for="index in tabNumber"
       v-show="hasSlot(index-1)"
@@ -23,7 +23,7 @@
       class="octopus-tab-pane"
       :class="activeTab === (index-1)? 'active':''"
     >
-      <slot :name="'tab'+(index-1)" />
+      <slot :name="'tab'+(index-1)" :isActive="activeTab === (index-1)" />
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@ export default defineComponent({
     tabNumber: { default: 0, type: Number},
     activeTab: { default: 0, type: Number},
     transparent:{ default: false, type: Boolean},
+    light: { default: false, type: Boolean},
   },
   emits:['update:activeTab'],
   methods:{
@@ -57,6 +58,9 @@ export default defineComponent({
     margin-top: 0;
     list-style: none;
     border-bottom: 0.05rem solid #ddd;
+    &.light{
+      border: 0;
+    }
   }
   .octopus-nav-item{
     border-right: solid 1px rgb(222,226,230);
@@ -67,6 +71,10 @@ export default defineComponent({
     cursor: pointer;
     flex-grow: 1;
     text-align: center;
+  }
+  .octopus-nav.light .octopus-nav-item{
+    border: 0;
+    flex-grow: 0;
   }
   .octopus-nav-link{
     display: block;
@@ -79,6 +87,12 @@ export default defineComponent({
       border-bottom-color: $octopus-primary-color;
       color: $octopus-primary-color;
     }
+  }
+  .octopus-nav.light .octopus-nav-link{
+    border-top: 0 !important;
+    border-right: 0 !important;
+    border-left: 0 !important;
+    font-weight: bold;
   }
   .octopus-tab-content{
     border-right: solid 1px rgb(222,226,230);
