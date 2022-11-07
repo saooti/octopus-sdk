@@ -24,6 +24,7 @@
         <a
           class="octopus-dropdown-item"
           href="/sso/login"
+          realLink="true"
         >
           {{ $t('Login') }}
         </a>
@@ -59,6 +60,7 @@
               class="octopus-dropdown-item"
               rel="noopener"
               target="_blank"
+              realLink="true"
             >
               {{ helpLink.title }}
             </a>
@@ -68,6 +70,7 @@
         <a
           class="octopus-dropdown-item"
           href="/sso/logout"
+          realLink="true"
         >
           {{ $t('Logout') }}
         </a>

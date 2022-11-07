@@ -107,10 +107,11 @@ export default defineComponent({
 				if (null!==parent && parent.contains(myElement)) {
 					if(null!==myElement.classList && myElement.classList.contains('octopus-dropdown-item')){
 						if((myElement as HTMLAnchorElement).href ?? false){
-							if((myElement as HTMLAnchorElement).host !== window.location.host){
-								return;
+							if("true"===myElement.getAttribute('reallink')){
+								await myElement.click();
+							}else{
+								await this.$router.push((myElement as any).pathname);
 							}
-							await this.$router.push((myElement as any).pathname);
 						}
 						this.$nextTick(() => {
 							this.isClick = false;
