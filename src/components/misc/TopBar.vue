@@ -14,6 +14,8 @@
       @click="onDisplayMenu(true)"
     >
       <img
+        width="160"
+        height="50"
         :src="!filterOrga || '' === imgUrl ? logoUrl : proxyImageUrl(imgUrl, '', '50')"
         :alt="!filterOrga || '' === imgUrl ? $t('Logo of main page') : $t('Visual', {name: $store.state.filter?.name})"
         :class="isEducation ? 'educationLogo' : ''"

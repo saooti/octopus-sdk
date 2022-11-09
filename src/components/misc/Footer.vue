@@ -1,94 +1,92 @@
 <template>
-  <div class="bg-dark">
-    <div
-      v-if="displayFooter"
-      id="footer"
-      ref="footer"
-      class="d-flex-column p-3 secondary-bg border-top"
-    >
-      <div class="d-flex flex-column flex-grow-1 align-items-end">
-        <div class="d-flex flex-column">
-          <template
-            v-for="link in routerLinkArray"
-            :key="link.routeName"
-          >
-            <router-link
-              v-if="link.condition"
-              class="link-hover"
-              :to="{
-                name: link.routeName,
-                query: getQueriesRouter(link.routeName),
-              }"
-            >
-              {{ link.title }}
-            </router-link>
-          </template>
-        </div>
-      </div>
-      <hr class="show-phone">
-      <div
-        v-if="!isPodcastmaker"
-        class="d-flex flex-grow-1 align-items-center flex-column"
-      >
-        <div class="d-flex flex-column">
-          <div class="text-dark">
-            &copy; Saooti 2019
-          </div>
+  <div
+    v-if="displayFooter"
+    id="footer"
+    ref="footer"
+    class="d-flex-column p-3 secondary-bg border-top"
+  >
+    <div class="d-flex flex-column flex-grow-1 align-items-end">
+      <div class="d-flex flex-column">
+        <template
+          v-for="link in routerLinkArray"
+          :key="link.routeName"
+        >
           <router-link
-            v-for="link in routerLinkSecondArray" 
-            :key="link.routeName"
+            v-if="link.condition"
             class="link-hover"
-            :to="link.routeName"
+            :to="{
+              name: link.routeName,
+              query: getQueriesRouter(link.routeName),
+            }"
           >
             {{ link.title }}
           </router-link>
-          <ClassicSelect
-            v-model:textInit="language"
-            :display-label="false"
-            id-select="language-chooser-select"
-            :label="$t('Change locale')"
-            :options="[{title:'Deutsch', value:'de'},
-                       {title:'English', value:'en'},
-                       {title:'Español', value:'es'},
-                       {title:'Français', value:'fr'},
-                       {title:'Italiano', value:'it'},
-                       {title:'Slovenščina', value:'sl'}]"
-          />
-        </div>
-      </div>
-      <hr class="show-phone">
-      <div class="flex-grow-1">
-        <a
-          href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
-          rel="noopener"
-          target="_blank"
-          :title="$t('Octopus is ACPM Podcast accredited')"
-        >
-          <img
-            class="acpm_image"
-            src="/img/ACPM.webp"
-            :title="$t('Octopus is ACPM Podcast accredited')"
-            :alt="$t('Octopus is ACPM Podcast accredited')"
-          >
-        </a>
-      </div>
-      <div
-        v-if="isPodcastmaker && isContactLink"
-        class="d-flex flex-column flex-grow-1 align-items-center"
-      >
-        <div class="d-flex flex-column">
-          <a
-            id="footer-contact"
-            class="link-hover"
-            :href="isContactLink"
-            rel="noopener"
-            target="_blank"
-          >{{ $t('Contact') }}</a>
-        </div>
+        </template>
       </div>
     </div>
-    <Player @hide="showBlackBorder" />
+    <hr class="show-phone">
+    <div
+      v-if="!isPodcastmaker"
+      class="d-flex flex-grow-1 align-items-center flex-column"
+    >
+      <div class="d-flex flex-column">
+        <div class="text-dark">
+          &copy; Saooti 2019
+        </div>
+        <router-link
+          v-for="link in routerLinkSecondArray" 
+          :key="link.routeName"
+          class="link-hover"
+          :to="link.routeName"
+        >
+          {{ link.title }}
+        </router-link>
+        <ClassicSelect
+          v-model:textInit="language"
+          :display-label="false"
+          id-select="language-chooser-select"
+          :label="$t('Change locale')"
+          :options="[{title:'Deutsch', value:'de'},
+                      {title:'English', value:'en'},
+                      {title:'Español', value:'es'},
+                      {title:'Français', value:'fr'},
+                      {title:'Italiano', value:'it'},
+                      {title:'Slovenščina', value:'sl'}]"
+        />
+      </div>
+    </div>
+    <hr class="show-phone">
+    <div class="flex-grow-1">
+      <a
+        href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
+        rel="noopener"
+        target="_blank"
+        :title="$t('Octopus is ACPM Podcast accredited')"
+      >
+        <img
+          class="acpm_image"
+          src="/img/ACPM.webp"
+          :title="$t('Octopus is ACPM Podcast accredited')"
+          :alt="$t('Octopus is ACPM Podcast accredited')"
+        >
+      </a>
+    </div>
+    <div
+      v-if="isPodcastmaker && isContactLink"
+      class="d-flex flex-column flex-grow-1 align-items-center"
+    >
+      <div class="d-flex flex-column">
+        <a
+          id="footer-contact"
+          class="link-hover"
+          :href="isContactLink"
+          rel="noopener"
+          target="_blank"
+        >{{ $t('Contact') }}</a>
+      </div>
+    </div>
   </div>
+  <Player @hide="showBlackBorder" />
 </template>
 
 <script lang="ts">

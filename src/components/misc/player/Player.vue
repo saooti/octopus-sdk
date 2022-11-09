@@ -115,7 +115,7 @@ export default defineComponent({
 .octopus-app{
 .player-container {
   max-height: 94%;
-  position: fixed;
+  position: sticky;
   overflow: hidden;
   z-index: 12;
   width: 100%;
