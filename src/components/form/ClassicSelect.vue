@@ -10,6 +10,7 @@
       v-model="textValue"
       :disabled="isDisabled"
       class="c-hand w-100"
+      :class="transparent?'transparent':''"
       :style="getFontFamily"
     >
       <option
@@ -31,6 +32,7 @@ export default defineComponent({
     idSelect: { default: '', type: String },
     label: { default: '', type: String },
     displayLabel:{default: true, type: Boolean},
+    transparent:{ default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
     options: { default: ()=>[], type: Array as () => Array<{title: string, value: string|undefined, fontFamily?: string}> },
     textInit: { default: undefined, type: String },
@@ -69,3 +71,14 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app{
+  select.transparent {
+		background: transparent !important;
+		outline-color: transparent !important;
+		padding:0;
+		border: 0;
+		height: unset;
+	}
+}
+</style>

@@ -3,88 +3,55 @@
     v-if="displayFooter"
     id="footer"
     ref="footer"
-    class="d-flex-column p-3 secondary-bg border-top"
+    class="d-flex align-items-center justify-content-between border-top"
   >
-    <div class="d-flex flex-column flex-grow-1 align-items-end">
-      <div class="d-flex flex-column">
-        <template
-          v-for="link in routerLinkArray"
-          :key="link.routeName"
-        >
-          <router-link
-            v-if="link.condition"
-            class="link-hover"
-            :to="{
-              name: link.routeName,
-              query: getQueriesRouter(link.routeName),
-            }"
-          >
-            {{ link.title }}
-          </router-link>
-        </template>
+    <div class="d-flex align-items-center px-1" v-if="!isPodcastmaker">
+      <div class="text-dark me-2">
+        &copy; Saooti 2019
       </div>
-    </div>
-    <hr class="show-phone">
-    <div
-      v-if="!isPodcastmaker"
-      class="d-flex flex-grow-1 align-items-center flex-column"
-    >
-      <div class="d-flex flex-column">
-        <div class="text-dark">
-          &copy; Saooti 2019
-        </div>
-        <router-link
-          v-for="link in routerLinkSecondArray" 
-          :key="link.routeName"
-          class="link-hover"
-          :to="link.routeName"
-        >
-          {{ link.title }}
-        </router-link>
-        <ClassicSelect
-          v-model:textInit="language"
-          :display-label="false"
-          id-select="language-chooser-select"
-          :label="$t('Change locale')"
-          :options="[{title:'Deutsch', value:'de'},
-                      {title:'English', value:'en'},
-                      {title:'Español', value:'es'},
-                      {title:'Français', value:'fr'},
-                      {title:'Italiano', value:'it'},
-                      {title:'Slovenščina', value:'sl'}]"
-        />
-      </div>
-    </div>
-    <hr class="show-phone">
-    <div class="flex-grow-1">
-      <a
-        href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
-        rel="noopener"
-        target="_blank"
-        :title="$t('Octopus is ACPM Podcast accredited')"
+      <router-link
+        v-for="link in routerLinkSecondArray" 
+        :key="link.routeName"
+        class="link-hover me-2"
+        :to="link.routeName"
       >
-        <img
-          class="acpm_image"
-          src="/img/ACPM.webp"
-          :title="$t('Octopus is ACPM Podcast accredited')"
-          :alt="$t('Octopus is ACPM Podcast accredited')"
-        >
-      </a>
+        {{ link.title }}
+      </router-link>
+      <ClassicSelect
+        v-model:textInit="language"
+        :display-label="false"
+        id-select="language-chooser-select"
+        :label="$t('Change locale')"
+        :transparent="true"
+        :options="[{title:'Deutsch', value:'de'},
+                    {title:'English', value:'en'},
+                    {title:'Español', value:'es'},
+                    {title:'Français', value:'fr'},
+                    {title:'Italiano', value:'it'},
+                    {title:'Slovenščina', value:'sl'}]"
+      />
     </div>
-    <div
+    <a
       v-if="isPodcastmaker && isContactLink"
-      class="d-flex flex-column flex-grow-1 align-items-center"
+      id="footer-contact"
+      class="link-hover"
+      :href="isContactLink"
+      rel="noopener"
+      target="_blank"
+    >{{ $t('Contact') }}</a>
+    <a
+      href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
+      rel="noopener"
+      target="_blank"
+      :title="$t('Octopus is ACPM Podcast accredited')"
     >
-      <div class="d-flex flex-column">
-        <a
-          id="footer-contact"
-          class="link-hover"
-          :href="isContactLink"
-          rel="noopener"
-          target="_blank"
-        >{{ $t('Contact') }}</a>
-      </div>
-    </div>
+      <img
+        class="acpm_image"
+        src="/img/ACPM.webp"
+        :title="$t('Octopus is ACPM Podcast accredited')"
+        :alt="$t('Octopus is ACPM Podcast accredited')"
+      >
+    </a>
   </div>
   <Player @hide="showBlackBorder" />
 </template>
@@ -116,15 +83,6 @@ export default defineComponent({
     };
   },
   computed: {
-    routerLinkArray(){
-      return [
-        {title : this.$t('Home'), routeName: 'home', condition : true},
-        {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
-        {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
-        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && !this.$store.state.filter.organisationId},
-        {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
-        {title : this.$t('Speakers'), routeName: 'participants', condition : true},]
-    },
     routerLinkSecondArray(){
       return [
         {title : this.$t('Contact'), routeName: '/main/pub/contact'},
@@ -190,9 +148,13 @@ export default defineComponent({
 .octopus-app{
   #footer{
     font-size: 0.7rem;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: white;
     .acpm_image {
-      width: 70px;
-      height: 70px;
+      width: 44px;
+      height: 44px;
     }
     a{
       color: #666;

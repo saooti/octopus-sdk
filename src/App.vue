@@ -1,9 +1,8 @@
 <template>
   <div
     v-if="isInit"
-    id="app"
     :key="reload"
-    class="octopus-app"
+    class="d-flex flex-column h-100 octopus-app"
   >
     <TopBar
       v-model:displayMenu="displayMenu"

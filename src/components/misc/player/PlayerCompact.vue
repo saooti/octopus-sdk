@@ -18,13 +18,14 @@
       :class="{
         'saooti-play': isPaused,
         'saooti-pause': isPlaying,
-        '':!isPaused&&!isPlaying
+        'p-0':!isPaused&&!isPlaying
       }"
       class="btn play-button-box text-light bg-primary"
       @click="switchPausePlay"
     >
       <Spinner
         v-if="!isPaused&&!isPlaying"
+        :small="true"
       />
     </button>
     <div class="text-light player-grow-content">
