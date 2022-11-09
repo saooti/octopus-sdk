@@ -1,9 +1,8 @@
 <template>
   <div
-    v-if="displayFooter"
     id="footer"
     ref="footer"
-    class="d-flex align-items-center justify-content-between border-top"
+    class="d-flex align-items-center justify-content-between border-top mt-auto"
   >
     <div class="d-flex align-items-center px-1" v-if="!isPodcastmaker">
       <div class="text-dark me-2">
@@ -53,13 +52,11 @@
       >
     </a>
   </div>
-  <Player @hide="showBlackBorder" />
 </template>
 
 <script lang="ts">
 import cookies from '../mixins/cookies';
 import ClassicSelect from '../form/ClassicSelect.vue';
-import Player from './player/Player.vue';
 import { state } from '../../store/paramStore';
 import {loadLocaleMessages} from '@/i18n';
 import octopusApi from '@saooti/octopus-api';
@@ -69,14 +66,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Footer',
   components: {
-    Player,
     ClassicSelect
   },
 
   mixins:[cookies],
-  props: {
-    displayFooter: { default: true, type: Boolean},
-  },
   data() {
     return {
       language: this.$i18n.locale,
@@ -116,15 +109,6 @@ export default defineComponent({
                    iabId: this.$store.state.filter.iab?.id,
                    rubriquesId: this.rubriqueQueryParam}
     },
-    showBlackBorder(hide: boolean): void {
-      const footerElement = (this.$refs.footer as HTMLElement);
-      if(!footerElement){return;}
-      if (hide) {
-        footerElement.classList.remove('border-round');
-      } else {
-        footerElement.className += ' border-round';
-      }
-    },
     changeLanguage(): void{
       this.setCookie('octopus-language', this.language);
       loadLocaleMessages(this.$i18n, this.language, this.$store.state.general.isEducation);
@@ -158,16 +142,6 @@ export default defineComponent({
     }
     a{
       color: #666;
-    }
-    .border-round {
-      border-radius: 0 0 2rem 2rem;
-    }
-    /** PHONES*/
-    @media (max-width: 960px) {
-      .align-items-center,
-      .align-items-end {
-        align-items: flex-start !important;
-      }
     }
   }
 }

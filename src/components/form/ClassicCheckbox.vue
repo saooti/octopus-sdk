@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex octopus-form-item">
+  <div class="d-flex align-items-center octopus-form-item">
     <div
       :class="isSwitch?'octopus-form-switch me-2':''"
     >

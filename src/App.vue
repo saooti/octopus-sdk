@@ -16,12 +16,14 @@
     <CategoryFilter />
     <router-view />
     <Footer />
+    <Player />
   </div>
 </template>
 
 <script lang="ts">
 import TopBar from '@/components/misc/TopBar.vue';
 import Footer from '@/components/misc/Footer.vue';
+import Player from '@/components/misc/player/Player.vue';
 import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
 import { state } from './store/paramStore';
 import { Rubriquage } from './store/class/rubrique/rubriquage';
@@ -39,6 +41,7 @@ export default defineComponent({
     LeftMenu,
     CategoryFilter,
     Footer,
+    Player
   },
 
   mixins: [initSDK],

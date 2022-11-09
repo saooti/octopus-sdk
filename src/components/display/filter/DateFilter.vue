@@ -13,22 +13,12 @@
         id-checkbox="search-from-checkbox"
         :label="$t('From the :')"
       />
-      <DatePicker
-        v-model="fromDate"
+      <ClassicDatePicker
         class="ps-3 pe-3"
-        mode="dateTime"
-        color="green"
-        is24hr
-        @update:modelValue="updateFromDate()"
-      >
-        <template #default="{ inputValue, inputEvents }">
-          <input
-            class="px-2 py-1 border rounded focus:border-blue-300"
-            :value="inputValue"
-            v-on="inputEvents"
-          >
-        </template>
-      </DatePicker>
+        :date="fromDate"
+        templateClass="px-2 py-1 border rounded focus:border-blue-300"
+        @updateDate="fromDate=$event;updateFromDate"
+      />
     </div>
     <div class="d-flex align-items-center">
       <ClassicCheckbox
@@ -37,22 +27,12 @@
         id-checkbox="search-to-checkbox"
         :label="$t('To the :')"
       />
-      <DatePicker
-        v-model="toDate"
+      <ClassicDatePicker
         class="ps-3"
-        mode="dateTime"
-        color="green"
-        is24hr
-        @update:modelValue="updateToDate()"
-      >
-        <template #default="{ inputValue, inputEvents }">
-          <input
-            class="px-2 py-1 border rounded focus:border-blue-300"
-            :value="inputValue"
-            v-on="inputEvents"
-          >
-        </template>
-      </DatePicker>
+        :date="toDate"
+        templateClass="px-2 py-1 border rounded focus:border-blue-300"
+        @updateDate="toDate=$event;updateToDate"
+      />
     </div>
   </div>
 </template>
@@ -60,17 +40,17 @@
 <script lang="ts">
 import moment from 'moment';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import { DatePicker } from 'v-calendar';
+import ClassicDatePicker from '../../form/ClassicDatePicker.vue';
 import { defineComponent } from 'vue';
 export default defineComponent({
   components: {
-    DatePicker,
+    ClassicDatePicker,
     ClassicCheckbox,
   },
   props: {
     isEmission: { default: false, type:  Boolean},
-    initToDate: { default: undefined, type:  String},
-    initFromDate: { default: undefined, type:  String},
+    initToDate: { default: undefined, type:  Date},
+    initFromDate: { default: undefined, type:  Date},
   },
 
   emits: ['updateToDate', 'updateFromDate'],
@@ -79,8 +59,8 @@ export default defineComponent({
     return {
       isFrom: false as boolean,
       isTo: false as boolean,
-      fromDate: moment().subtract(10, 'days').toISOString(),
-      toDate: moment().toISOString(),
+      fromDate: moment().subtract(10, 'days').toDate(),
+      toDate: moment().toDate(),
     };
   },
 

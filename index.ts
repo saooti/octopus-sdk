@@ -61,6 +61,7 @@ export const getClassicCheckbox = () => import("./src/components/form/ClassicChe
 export const getClassicRadio = () => import("./src/components/form/ClassicRadio.vue");
 export const getClassicLoading = () => import("./src/components/form/ClassicLoading.vue");
 export const getClassicSelect = () => import("./src/components/form/ClassicSelect.vue");
+export const getClassicDatePicker = () => import("./src/components/form/ClassicDatePicker.vue");
 export const getPaginate = () => import("./src/components/display/list/Paginate.vue");
 export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
 
