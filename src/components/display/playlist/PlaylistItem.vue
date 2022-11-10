@@ -19,15 +19,13 @@
         class="img-box"
       >
       <div class="emission-item-text">
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center emission-name">
           <span
             v-if="!activePlaylist && !isPodcastmaker"
             :title="$t('Playlist have not podcasts')"
             class="saooti-warning text-danger me-1"
           />
-          <div class="emission-name">
-            {{ name }}
-          </div>
+          {{ name }}
         </div>
         <div
           ref="descriptionPlaylistContainer"
@@ -40,7 +38,6 @@
           />
           <!-- eslint-enable -->
         </div>
-        <div class="flex-grow-1" />
         <router-link
           v-if="!isPodcastmaker && playlist.organisation"
           :to="{
@@ -48,11 +45,9 @@
             params: { productorId: playlist.organisation.id },
             query: { productor: $store.state.filter.organisationId },
           }"
-          class="text-dark"
+          class="emission-producer text-primary mt-auto"
         >
-          <div class="emission-producer text-primary">
-            © {{ playlist.organisation.name }}
-          </div>
+          © {{ playlist.organisation.name }}
         </router-link>
       </div>
     </router-link>

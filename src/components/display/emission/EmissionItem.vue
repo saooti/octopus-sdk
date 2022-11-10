@@ -18,17 +18,13 @@
         :alt="$t('Emission name image', {name:emission.name})"
       >
       <div class="emission-item-text">
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center emission-name">
           <span
             v-if="!activeEmission && !isPodcastmaker && editRight"
             :title="$t('Emission have not podcasts')"
             class="saooti-warning text-danger me-1"
           />
-          <div
-            class="emission-name"
-          >
-            {{ emission.name }}
-          </div>
+          {{ emission.name }}
         </div>
         <div
           ref="descriptionEmissionContainer"
@@ -41,18 +37,16 @@
           />
         <!-- eslint-enable -->
         </div>
-        <div class="flex-grow-1" />
         <router-link
           v-if="!isPodcastmaker"
+          class="emission-producer mt-auto"
           :to="{
             name: 'productor',
             params: { productorId: emission.orga.id },
             query: { productor: filterOrga },
           }"
         >
-          <div class="emission-producer">
-            © {{ emission.orga.name }}
-          </div>
+          © {{ emission.orga.name }}
         </router-link>
       </div>
     </router-link>

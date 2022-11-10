@@ -10,10 +10,9 @@
         query: { productor: $store.state.filter.organisationId },
       }"
       :title="$t('Participant')"
+      class="podcast-item-animator text-dark"
     >
-      <div class="podcast-item-animator text-dark">
-        {{ animatorName }}
-      </div>
+      {{ animatorName }}
     </router-link>
   </div>
 </template>
@@ -38,10 +37,6 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app{
   .podcast-item-animator {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-
     font-size: 0.55rem;
     font-weight: 300;
     text-transform: capitalize;

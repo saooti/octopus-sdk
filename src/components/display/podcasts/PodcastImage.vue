@@ -36,37 +36,21 @@
       @click="play"
     >
       <div
-        v-if="!isLiveToBeRecorded"
+        :title="!playingPodcast? $t('Play') : textVisible"
         class="icon-container"
+        :class="{
+          'saooti-play text-primary': !playingPodcast,
+          'special-icon-play-button': !classicPodcastPlay,
+          iconName:!classicPodcastPlay || isLiveToBeRecorded,
+          'bloc-paddle':playingPodcast,
+          'error-icon':isLiveToBeRecorded
+        }"
       >
-        <div
-          v-show="!playingPodcast"
-          :title="$t('Play')"
-          class="saooti-play text-primary"
-        />
-        <div
-          v-if="!classicPodcastPlay"
-          class="special-icon-play-button"
-          :class="iconName"
-        />
-        <div
-          v-show="playingPodcast"
-          class="bloc-paddle"
-        >
+        <template v-if="playingPodcast">
           <span class="paddle1" />
           <span class="paddle2" />
           <span class="paddle3" />
-        </div>
-      </div>
-      <div
-        v-else
-        class="icon-container error-icon"
-      >
-        <div
-          :title="textVisible"
-          class="big-icon-error"
-          :class="iconName"
-        />
+        </template>
       </div>
       <div
         v-if="!classicPodcastPlay"
@@ -343,13 +327,14 @@ export default defineComponent({
     }
 
     .icon-container {
-      background: #00000050;
+      background: #00000050 !important;
       border-radius: 50%;
       height: 3rem;
       width: 3rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 2;
       &.error-icon {
         background: #00000050 !important;
         cursor: default !important;
@@ -357,16 +342,11 @@ export default defineComponent({
       &:hover {
         background: #00000030;
       }
-      > .saooti-play {
+      &.saooti-play {
         font-size: 2em;
         position: relative;
         right: -0.2rem;
       }
-      .big-icon-error {
-        font-size: 2em;
-        position: relative;
-      }
-      z-index: 2;
     }
   }
 }

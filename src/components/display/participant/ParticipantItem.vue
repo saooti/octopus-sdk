@@ -18,15 +18,13 @@
         :alt="$t('Animator image')"
         class="img-box-circle"
       >
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center participant-name">
         <span
           v-if="!activeParticipant && !isPodcastmaker && editRight"
           :title="$t('Participant have not podcasts')"
           class="saooti-warning text-danger me-1"
         />
-        <div class="participant-name">
-          {{ name }}
-        </div>
+        {{ name }}
       </div>
       <div
         ref="descriptionParticipantContainer"

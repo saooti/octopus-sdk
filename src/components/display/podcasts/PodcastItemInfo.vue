@@ -1,51 +1,47 @@
 <template>
-  <div class="d-contents podcast-item-info">
-    <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
-      <div class="me-3 h6">
-        {{ date }}
-      </div>
-      <div
-        v-if="0 !== durationString.length"
-        class="h6"
-      >
-        {{ durationString }}
-      </div>
+  <div class="d-flex justify-content-between flex-wrap text-secondary m-2 mb-3">
+    <div class="me-3 h6">
+      {{ date }}
     </div>
-    <AnimatorsItem
-      v-if="animators && 0!==animators.length"
-      :animator="animators[0]"
-    />
+    <div
+      v-if="0 !== durationString.length"
+      class="h6"
+    >
+      {{ durationString }}
+    </div>
+  </div>
+  <AnimatorsItem
+    v-if="animators && 0!==animators.length"
+    :animator="animators[0]"
+  />
+  <router-link
+    :to="{
+      name: 'podcast',
+      params: { podcastId: podcastId },
+      query: { productor: filterOrga },
+    }"
+    class="text-dark flex-grow-1 title-podcast-item"
+  >
+  {{ title }}
+  </router-link>
+  <PodcastPlayBar
+    :podcast-id="podcastId"
+    :duration="duration"
+    class="mx-2"
+  />
+  <div class="d-flex justify-content-between">
+    <div v-if="isPodcastmaker" class="useless-div-for-podcastmaker" />
     <router-link
+      v-if="!isPodcastmaker"
       :to="{
-        name: 'podcast',
-        params: { podcastId: podcastId },
+        name: 'productor',
+        params: { productorId: podcastOrganisationId },
         query: { productor: filterOrga },
       }"
-      class="text-dark d-flex flex-column flex-grow-1"
+      class="text-dark producer-podcast-item"
     >
-      <div class="title-podcast-item">
-        {{ title }}
-      </div>
+      {{ '© ' + podcastOrganisationName }}
     </router-link>
-    <PodcastPlayBar
-      :podcast-id="podcastId"
-      :duration="duration"
-      class="mx-2"
-    />
-    <div class="d-flex justify-content-between">
-      <div class="useless-div-for-podcastmaker" />
-      <router-link
-        v-if="!isPodcastmaker"
-        :to="{
-          name: 'productor',
-          params: { productorId: podcastOrganisationId },
-          query: { productor: filterOrga },
-        }"
-        class="text-dark producer-podcast-item"
-      >
-        <div>{{ '© ' + podcastOrganisationName }}</div>
-      </router-link>
-    </div>
   </div>
 </template>
 
@@ -130,13 +126,6 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-.podcast-item-info {
-  .text-secondary {
-    margin: 0.5rem !important;
-  }
-  .saooti-pin {
-    font-size: 22px;
-  }
   .title-podcast-item {
     font-weight: 700;
     margin: 0.25rem 0.5rem 0.5rem;
@@ -155,7 +144,7 @@ export default defineComponent({
     margin: 0.2rem 0.5rem 0.5rem;
     font-size: 0.55rem;
     color: #666;
+    margin-left: auto;
   }
-}
 }
 </style>

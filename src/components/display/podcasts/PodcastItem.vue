@@ -1,5 +1,6 @@
 <template>
   <div
+    id="podcast-item-container"
     class="podcast-item-container"
     :class="[
       podcastShadow ? 'shadow-element' : '',
@@ -10,18 +11,18 @@
   >
     <PodcastImage
       :podcast="podcast"
-      :hide-play="!podcastItemDescription || (podcastItemDescription && (!hover || !description))"
+      :hide-play="!podcastItemDescription || (podcastItemDescription && (!hoverDesc || !description))"
       :display-description="0!==description.length && podcastItemDescription"
       :arrow-direction="arrowDirection"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
     <div
-      v-if="podcastItemDescription"
+      v-if="podcastItemDescription && hoverDesc"
       ref="descriptionPodcastContainer"
       class="description-podcast-item html-wysiwyg-content"
       :class="[
-        hover && ''!==description ? 'visible' : 'invisible',
+        hoverDesc && ''!==description ? 'visible' : 'invisible',
         isDescriptionBig ? 'after-podcast-description' : '',
       ]"
     >
@@ -67,7 +68,8 @@ export default defineComponent({
 
   data() {
     return {
-      hover: false as boolean,
+      firstDisplayDesc : false as boolean,
+      hoverDesc: false as boolean,
       arrowDirection: 'up' as string,
       isDescriptionBig: false as boolean,
     };
@@ -91,24 +93,28 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    if(!this.podcastItemDescription){return}
-    const podcastDesc = (this.$refs.descriptionPodcast as HTMLElement);
-    const podcastDescContainer = (this.$refs.descriptionPodcastContainer as HTMLElement);
-    if (podcastDesc?.clientHeight > podcastDescContainer?.clientHeight) {
-      this.isDescriptionBig = true;
-    }
-  },
   methods: {
+    initDescription():void{
+      if(this.firstDisplayDesc){return;}
+      const podcastDesc = (this.$refs.descriptionPodcast as HTMLElement);
+      const podcastDescContainer = (this.$refs.descriptionPodcastContainer as HTMLElement);
+      if (podcastDesc?.clientHeight > podcastDescContainer?.clientHeight) {
+        this.isDescriptionBig = true;
+      }
+      this.firstDisplayDesc=true;
+    },
     showDescription(): void {
       if(!this.podcastItemDescription){return}
       this.arrowDirection = 'down';
-      this.hover = true;
+      this.hoverDesc = true;
+      this.$nextTick(() => {
+        this.initDescription();
+      });
     },
     hideDescription(): void {
       if(!this.podcastItemDescription){return}
       this.arrowDirection = 'up';
-      this.hover = false;
+      this.hoverDesc = false;
     },
   },
 })
