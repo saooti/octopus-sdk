@@ -14,6 +14,8 @@
         :class="icon"
       />
       <img
+        width="30"
+        height="30"
         v-if="imageUrl"
         class="img-accordion"
         :src="imageUrl"

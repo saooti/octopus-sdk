@@ -12,6 +12,8 @@
       :to="podcastShareUrl"
     >
       <img
+        width="200"
+        height="200"
         v-lazy="proxyImageUrl(podcastImage,'200')"
         :alt="$t('Podcast image')"
         class="img-box"

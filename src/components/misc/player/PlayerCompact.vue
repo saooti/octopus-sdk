@@ -7,6 +7,8 @@
       :to="podcastShareUrl"
     >
       <img
+        width="48"
+        height="48"
         v-lazy="proxyImageUrl(podcastImage,'48')"
         :alt="$t('Podcast image')"
         class="player-image"

@@ -3,6 +3,8 @@
     <div class="not-auth-content d-flex-column justify-content-between">
       <div class="d-flex flex-column justify-content-around">
         <img
+          width="250"
+          height="auto"
           class="logo-octopus"
           src="/img/logo_octopus_final.svg"
           :alt="$t('Logo of main page')"
@@ -10,6 +12,8 @@
         <h2>{{ $t('You do not have the right to access this page' ) }}</h2>
       </div>
       <img
+        width="600"
+        height="auto"
         class="stop-octopus-img"
         src="/img/403.webp"
         :alt="$t('You do not have the right to access this page')"

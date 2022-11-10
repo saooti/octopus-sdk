@@ -13,6 +13,8 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <img
+        width="260"
+        height="260"
         v-lazy="proxyImageUrl(playlist.imageUrl, '260')"
         :title="$t('Playlist name image', {name:name})"
         :alt="$t('Playlist name image', {name:name})"

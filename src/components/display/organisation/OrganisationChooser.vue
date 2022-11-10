@@ -44,6 +44,8 @@
       <template #singleLabel="{ option }">
         <div class="multiselect-octopus-proposition">
           <img
+            width="32"
+            height="32"
             v-if="!light"
             v-lazy="proxyImageUrl(option.imageUrl, '32')"
             class="option__image"
@@ -64,6 +66,8 @@
           "
         >
           <img
+            width="32"
+            height="32"
             v-if="!light"
             v-lazy="proxyImageUrl(option.imageUrl, '32')"
             class="option__image"

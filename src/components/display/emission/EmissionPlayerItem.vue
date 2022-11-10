@@ -20,6 +20,8 @@
         class="img-box rounded-0"
       >
         <img
+          width="260"
+          height="260"
           v-lazy="proxyImageUrl(emission.imageUrl, '260')"
           :title="$t('Emission name image', {name:emission.name})"
           :alt="$t('Emission name image', {name:emission.name})"

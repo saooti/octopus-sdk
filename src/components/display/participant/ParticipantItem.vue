@@ -13,6 +13,8 @@
       :title="$t('Participant')"
     >
       <img
+        width="200"
+        height="200"
         v-lazy="proxyImageUrl(participant.imageUrl, '200')"
         :title="$t('Animator image')"
         :alt="$t('Animator image')"

@@ -19,6 +19,8 @@
             </h2>
             <div class="mb-5 mt-3 descriptionText">
               <img
+                width="260"
+                height="260"
                 v-lazy="proxyImageUrl(imageUrl, '260')"
                 :alt="$t('Emission name image', { name: name })"
                 class="img-box shadow-element float-start me-3 mb-3"
