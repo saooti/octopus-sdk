@@ -11,12 +11,12 @@
     >
       <input
         :id="idRadio + option.value"
-        :model-value="textInit"
+        :checked="textInit===option.value"
         type="radio"
         :name="idRadio"
         :value="option.value"
         :disabled="isDisabled"
-        @update:modelValue="$emit('update:textInit',$event)"
+        @input="$emit('update:textInit',$event.target.value)"
       >
       <label
         class="c-hand"

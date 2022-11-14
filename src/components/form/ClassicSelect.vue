@@ -7,12 +7,12 @@
     >{{ label }}</label>
     <select
       :id="idSelect"
-      :model-value="textInit"
+      :value="textInit"
       :disabled="isDisabled"
       class="c-hand w-100"
       :class="transparent?'transparent':''"
       :style="getFontFamily"
-      @update:modelValue="$emit('update:textInit',$event)"
+      @input="$emit('update:textInit',$event.target.value)"
     >
       <option
         v-for="option in options"

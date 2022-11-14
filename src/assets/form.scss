@@ -11,6 +11,11 @@
 		height: 2rem;
 		padding-right: 40px;
 	}
+	input[type="checkbox"] {
+		accent-color: $octopus-primary-color;
+		cursor: pointer;
+		margin-right: 5px;
+	}
 	.form-input {
 		appearance: none;
 		background: #fff;

@@ -5,12 +5,12 @@
     >
       <input
         :id="idCheckbox"
-        :model-value="textInit"
+        :value="textInit"
         type="checkbox"
         :disabled="isDisabled"
         :title="displayLabel?'':label"
         :data-selenium="selenium"
-        @update:modelValue="$emit('update:textInit',$event)"
+        @input="$emit('update:textInit',!textInit)"
         @click="emitClickAction"
       >
       <span
@@ -53,11 +53,6 @@ export default defineComponent({
 <style lang="scss">
 @import '@scss/_variables.scss';
 .octopus-app{
-  input[type="checkbox"] {
-    accent-color: $octopus-primary-color;
-    cursor: pointer;
-    margin-right: 5px;
-  }
   .octopus-form-switch{
     position: relative;
     display: inline-block;

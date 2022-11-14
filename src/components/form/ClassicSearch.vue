@@ -3,12 +3,12 @@
     <input
       :id="idSearch"
       ref="search"
-      :model-value="textInit"
+      :value="textInit"
       type="text"
       class="search-input w-100 p-2 "
       :placeholder="label"
       :autofocus="autofocus"
-      @update:modelValue="$emit('update:textInit',$event)"
+      @input="$emit('update:textInit',$event.target.value)"
     >
     <label
       :for="idSearch"

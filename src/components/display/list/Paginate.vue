@@ -7,9 +7,9 @@
       <label for="rows-per-page-select">{{ $t('Items per page :') }}</label>
       <select
         id="rows-per-page-select"
-        :model-value="rowsPerPage"
+        :value="rowsPerPage"
         class="c-hand p-1 mx-2"
-        @update:modelValue="$emit('update:rowsPerPage',$event)"
+        @input="$emit('update:rowsPerPage',$event.target.value)"
       >
         <option
           v-for="option in optionsRowsPerPage"
