@@ -1,7 +1,7 @@
 <template>
   <DatePicker
     ref="datePicker"
-    :modelValue="undefined!==range ? range : date"
+    :model-value="undefined!==range ? range : date"
     :mode="mode"
     color="green"
     is24hr
@@ -14,7 +14,10 @@
     :masks="isMask ? masks : undefined"
     @update:modelValue="$emit('updateDate', $event)"
   >
-    <template v-if="templateClass" #default="{ inputValue, inputEvents }">
+    <template
+      v-if="templateClass"
+      #default="{ inputValue, inputEvents }"
+    >
       <input
         :class="templateClass"
         :value="inputValue"

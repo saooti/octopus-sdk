@@ -16,7 +16,7 @@
       <ClassicDatePicker
         class="ps-3 pe-3"
         :date="fromDate"
-        templateClass="px-2 py-1 border rounded focus:border-blue-300"
+        template-class="px-2 py-1 border rounded focus:border-blue-300"
         @updateDate="fromDate=$event;updateFromDate"
       />
     </div>
@@ -30,7 +30,7 @@
       <ClassicDatePicker
         class="ps-3"
         :date="toDate"
-        templateClass="px-2 py-1 border rounded focus:border-blue-300"
+        template-class="px-2 py-1 border rounded focus:border-blue-300"
         @updateDate="toDate=$event;updateToDate"
       />
     </div>

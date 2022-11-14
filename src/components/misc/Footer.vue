@@ -4,7 +4,10 @@
     ref="footer"
     class="d-flex align-items-center justify-content-between border-top mt-auto"
   >
-    <div class="d-flex align-items-center px-1" v-if="!isPodcastmaker">
+    <div
+      v-if="!isPodcastmaker"
+      class="d-flex align-items-center px-1"
+    >
       <div class="text-dark me-2">
         &copy; Saooti 2019
       </div>
@@ -23,11 +26,11 @@
         :label="$t('Change locale')"
         :transparent="true"
         :options="[{title:'Deutsch', value:'de'},
-                    {title:'English', value:'en'},
-                    {title:'Español', value:'es'},
-                    {title:'Français', value:'fr'},
-                    {title:'Italiano', value:'it'},
-                    {title:'Slovenščina', value:'sl'}]"
+                   {title:'English', value:'en'},
+                   {title:'Español', value:'es'},
+                   {title:'Français', value:'fr'},
+                   {title:'Italiano', value:'it'},
+                   {title:'Slovenščina', value:'sl'}]"
       />
     </div>
     <a

@@ -33,17 +33,20 @@
       />
     <!-- eslint-enable -->
     </div>
-    <PodcastItemInfo
-      :podcast-id="podcast.podcastId"
-      :title="podcast.title"
-      :pub-date="podcast.pubDate"
-      :podcast-organisation-id="podcast.organisation.id"
-      :podcast-organisation-name="podcast.organisation.name"
-      :duration="podcast.duration"
-      :animators="podcast.animators"
+    <div
       @mouseenter="showDescription"
       @mouseleave="hideDescription"
-    />
+    >
+      <PodcastItemInfo
+        :podcast-id="podcast.podcastId"
+        :title="podcast.title"
+        :pub-date="podcast.pubDate"
+        :podcast-organisation-id="podcast.organisation.id"
+        :podcast-organisation-name="podcast.organisation.name"
+        :duration="podcast.duration"
+        :animators="podcast.animators"
+      />
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,8 @@
 <template>
-  <ul class="octopus-nav" :class="light?'light':''">
+  <ul
+    class="octopus-nav"
+    :class="light?'light':''"
+  >
     <li
       v-for="index in tabNumber"
       v-show="hasSlot(index-1)"
@@ -23,7 +26,10 @@
       class="octopus-tab-pane"
       :class="activeTab === (index-1)? 'active':''"
     >
-      <slot :name="'tab'+(index-1)" :isActive="activeTab === (index-1)" />
+      <slot
+        :name="'tab'+(index-1)"
+        :isActive="activeTab === (index-1)"
+      />
     </div>
   </div>
 </template>

@@ -110,7 +110,7 @@ export default defineComponent({
 							if("true"===myElement.getAttribute('reallink')){
 								await myElement.click();
 							}else{
-								await this.$router.push((myElement as any).pathname);
+								await this.$router.push((myElement as HTMLAnchorElement).pathname);
 							}
 						}
 						this.$nextTick(() => {

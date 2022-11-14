@@ -16,9 +16,9 @@
         role="button"
       >
         <img
+          v-if="isOuestFranceTag(tag)"
           width="20"
           height="20"
-          v-if="isOuestFranceTag(tag)"
           class="ouest-france-logo"
           alt="Ouest France Logo"
           src="/img/ouest_france_logo.svg"

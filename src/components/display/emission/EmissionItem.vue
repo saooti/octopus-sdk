@@ -12,9 +12,9 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <img
+        v-lazy="proxyImageUrl(emission.imageUrl, '260')"
         width="260"
         height="260"
-        v-lazy="proxyImageUrl(emission.imageUrl, '260')"
         class="img-box"
         :title="$t('Emission name image', {name:emission.name})"
         :alt="$t('Emission name image', {name:emission.name})"

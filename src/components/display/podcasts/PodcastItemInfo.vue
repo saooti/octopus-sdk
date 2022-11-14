@@ -22,7 +22,7 @@
     }"
     class="text-dark flex-grow-1 title-podcast-item"
   >
-  {{ title }}
+    {{ title }}
   </router-link>
   <PodcastPlayBar
     :podcast-id="podcastId"
@@ -30,7 +30,10 @@
     class="mx-2"
   />
   <div class="d-flex justify-content-between">
-    <div v-if="isPodcastmaker" class="useless-div-for-podcastmaker" />
+    <div
+      v-if="isPodcastmaker"
+      class="useless-div-for-podcastmaker"
+    />
     <router-link
       v-if="!isPodcastmaker"
       :to="{
