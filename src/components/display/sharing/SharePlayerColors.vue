@@ -3,23 +3,25 @@
     <div class="d-flex flex-column align-items-center flex-shrink-0 me-3">
       <div>{{ $t('Choose color') }}</div>
       <VSwatches
-        v-model="internColor"
+        :model-value="color"
         class="c-hand "
         show-fallback
         colors="text-advanced"
         popover-to="right"
-        :data-color="internColor"
+        :data-color="color"
+        @update:modelValue="$emit('update:color',$event)"
       />
     </div>
     <div class="d-flex flex-column align-items-center">
       <div>{{ $t('Choose theme') }}</div>
       <VSwatches
-        v-model="internTheme"
+        :model-value="theme"
         class="c-hand "
         show-fallback
         colors="text-advanced"
         popover-to="right"
-        :data-color="internTheme"
+        :data-color="theme"
+        @update:modelValue="$emit('update:theme',$event)"
       />
     </div>
   </div>
@@ -39,40 +41,5 @@ export default defineComponent({
     theme: { default: '#000000', type: String},
   },
   emits:['update:color', 'update:theme'],
-
-  data() {
-    return {
-      internColor:'#40a372' as string,
-      internTheme:'#000000' as string,
-    };
-  },
-  watch:{
-    internColor(){
-      if(this.color !== this.internColor){
-        this.$emit('update:color', this.internColor);
-      }
-    },
-    internTheme(){
-      if(this.theme !== this.internTheme ){
-        this.$emit('update:theme', this.internTheme);
-      }
-    },
-    theme: {
-      immediate: true,
-      handler() {
-        if(this.theme !== this.internTheme){
-          this.internTheme = this.theme;
-        }
-      },
-    },
-    color: {
-      immediate: true,
-      handler() {
-        if(this.color !== this.internColor){
-          this.internColor = this.color;
-        }
-      },
-    },
-  },
 })
 </script>

@@ -11,11 +11,12 @@
     >
       <input
         :id="idRadio + option.value"
-        v-model="textValue"
+        :model-value="textInit"
         type="radio"
         :name="idRadio"
         :value="option.value"
         :disabled="isDisabled"
+        @update:modelValue="$emit('update:textInit',$event)"
       >
       <label
         class="c-hand"
@@ -40,27 +41,6 @@ export default defineComponent({
     isColumn: {default:true, type:Boolean}
   },
   emits: ['update:textInit'],
-
-  data() {
-    return {
-      textValue: undefined as string|undefined,
-    };
-  },
-  watch: {
-    textValue(){
-			if(this.textInit !== this.textValue){
-				this.$emit('update:textInit', this.textValue)
-			}
-		},
-    textInit: {
-      immediate: true,
-      handler() {
-        if(this.textInit !== this.textValue){
-          this.textValue =this.textInit;
-          }
-      },
-    },
-  }
 });
 </script>
 <style lang="scss">

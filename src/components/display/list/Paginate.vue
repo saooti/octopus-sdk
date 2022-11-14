@@ -7,8 +7,9 @@
       <label for="rows-per-page-select">{{ $t('Items per page :') }}</label>
       <select
         id="rows-per-page-select"
-        v-model="rowsPerPageIntern"
+        :model-value="rowsPerPage"
         class="c-hand p-1 mx-2"
+        @update:modelValue="$emit('update:rowsPerPage',$event)"
       >
         <option
           v-for="option in optionsRowsPerPage"
@@ -57,7 +58,7 @@
             v-else
             class="btn"
             :class="{ 'active': page === (pageNumber-1) }"
-            @click="changeFirst((pageNumber-1)*rowsPerPageIntern)"
+            @click="changeFirst((pageNumber-1)*rowsPerPage)"
           >
             {{ pageNumber }}
           </button>
@@ -87,26 +88,26 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: "Paginate",
-  components: {
-  },
+
 	props: {
     totalCount: { default: 0, type: Number },
     first: { default: 0, type: Number },
 		rowsPerPage:{ default:0, type:Number},
     rangeSize:{default:1, type: Number}
   },
+
 	emits:['update:first', 'update:rowsPerPage'],
+
   data() {
     return {
-			rowsPerPageIntern: 30 as number,
 			optionsRowsPerPage: [5, 10, 15, 20, 25 , 30, 50] as Array<number>,
 		};
   },
+  
 	computed:{
     buttonsLeft(){
       return [{
@@ -144,18 +145,6 @@ export default defineComponent({
 			return (this.totalPage-1)*this.rowsPerPage;
 		}
 	},
-	watch: {
-    rowsPerPageIntern(){
-			if(this.rowsPerPage !== this.rowsPerPageIntern){
-				this.$emit('update:rowsPerPage', this.rowsPerPageIntern);
-			}
-		},
-		rowsPerPage(){
-			if(this.rowsPerPage !== this.rowsPerPageIntern){
-				this.rowsPerPageIntern =this.rowsPerPage;
-			}
-		}
-  },
 	created(){
 		this.initRowsPerPage();
 	},
@@ -189,11 +178,11 @@ export default defineComponent({
       return res;
     },
     initRowsPerPage(){
-      if(!this.optionsRowsPerPage.includes(this.rowsPerPage)){
-        this.optionsRowsPerPage.push(this.rowsPerPage);
-        this.optionsRowsPerPage.sort((a,b)=>a-b);
+      if(this.optionsRowsPerPage.includes(this.rowsPerPage)){
+        return;
       }
-      this.rowsPerPageIntern = this.rowsPerPage;
+      this.optionsRowsPerPage.push(this.rowsPerPage);
+      this.optionsRowsPerPage.sort((a,b)=>a-b);
     },
 		changeFirst(newFirst: number){
 			this.$emit('update:first', newFirst);

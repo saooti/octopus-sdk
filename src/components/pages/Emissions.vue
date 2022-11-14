@@ -4,7 +4,7 @@
     <ProductorSearch
       v-if="isProductorSearch"
       v-model:organisationId="organisationId"
-      :search-pattern="searchPattern"
+      v-model:search-pattern="searchPattern"
       type="emission"
       @updateOrganisationId="updateOrganisationId"
       @updateSearchPattern="updateSearchPattern"
@@ -27,8 +27,8 @@
     />
     <EmissionList
       :show-count="true"
-      :first="first"
-      :size="size"
+      :first="0"
+      :size="30"
       :query="searchPattern"
       :organisation-id="organisationId"
       :monetization="monetization"
@@ -66,8 +66,7 @@ export default defineComponent({
 
   data() {
     return {
-      first: 0 as number,
-      size: 30 as number,
+      isInit: false as boolean,
       searchPattern: '' as string,
       organisationId: undefined as string | undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
@@ -97,6 +96,18 @@ export default defineComponent({
     },
     organisation(): string|undefined {
       return this.organisationId?this.organisationId:this.filterOrga;
+    },
+  },
+  watch:{
+    organisationId(): void {
+      if(!this.isInit){return;}
+      this.resetRubriquage = !this.resetRubriquage;
+      this.rubriquageId = [];
+      this.rubriqueId = [];
+      this.noRubriquageId = [];
+    },
+    searchPattern(value: string): void {
+      this.sortEmission = '' !== value ? 'SCORE' : 'DATE';
     },
   },
 
@@ -131,17 +142,6 @@ export default defineComponent({
       this.rubriquageId = allRubriquageId;
       this.rubriqueId = rubriqueId;
       this.noRubriquageId = noRubriquageId;
-    },
-    updateOrganisationId(value: string | undefined): void {
-      this.resetRubriquage = !this.resetRubriquage;
-      this.rubriquageId = [];
-      this.rubriqueId = [];
-      this.noRubriquageId = [];
-      this.organisationId = value;
-    },
-    updateSearchPattern(value: string): void {
-      this.sortEmission = '' !== value ? 'SCORE' : 'LAST_PODCAST_DESC';
-      this.searchPattern = value;
     },
   },
 })

@@ -5,17 +5,18 @@
     >
       <input
         :id="idCheckbox"
-        v-model="textValue"
+        :model-value="textInit"
         type="checkbox"
         :disabled="isDisabled"
         :title="displayLabel?'':label"
         :data-selenium="selenium"
+        @update:modelValue="$emit('update:textInit',$event)"
         @click="emitClickAction"
       >
       <span
         v-if="isSwitch"
         class="slider"
-        @click="textValue=!textValue;emitClickAction"
+        @click="$emit('update:textInit',!textInit);emitClickAction"
       />
     </div>
     <label
@@ -41,27 +42,6 @@ export default defineComponent({
     selenium: { default: '', type: String },
   },
   emits: ['update:textInit', 'clickAction'],
-
-  data() {
-    return {
-      textValue: false as boolean,
-    };
-  },
-  watch: {
-    textValue(){
-			if(this.textInit !== this.textValue){
-				this.$emit('update:textInit', this.textValue)
-			}
-		},
-    textInit: {
-      immediate: true,
-      handler() {
-        if(this.textInit !== this.textValue){
-					this.textValue =this.textInit;
-					}
-      },
-    },
-  },
   methods:{
     emitClickAction():void{
       this.$emit('clickAction');

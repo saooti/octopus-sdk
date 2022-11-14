@@ -30,11 +30,12 @@
       </div>
     </div>
     <ClassicSearch
-      v-model:textInit="queryIntern"
+      :text-init="searchPattern"
       class="d-flex align-items-center flex-grow-1"
       :autofocus="true"
       id-checkbox="productor-search-input"
       :label="searchText"
+      @update:textInit="$emit('update:searchPattern', $event)"
     />
   </div>
 </template>
@@ -60,16 +61,14 @@ export default defineComponent({
     searchPattern: { default: '', type: String },
     type: { default: 'podcast', type: String },
   },
-  emits: ['updateOrganisationId', 'updateSearchPattern'],
+  emits: ['update:organisationId', 'update:searchPattern'],
 
   data() {
     return {
       keepOrganisation: false as boolean,
       showBubble: false as boolean,
-      queryIntern: '' as string,
     };
   },
- 
   computed: {
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -85,22 +84,14 @@ export default defineComponent({
     },
   },
   watch: {
-    queryIntern(): void {
-      if(this.queryIntern !== this.searchPattern){
-        this.$emit('updateSearchPattern', this.queryIntern);
-      }
-    },
     filterOrga():void{
       this.keepOrganisation = undefined!==this.filterOrga;
       if (this.filterOrga) {
-        this.$emit('updateOrganisationId', this.filterOrga);
+        this.$emit('update:organisationId', this.filterOrga);
       }
     },
   },
   async created() {
-    if(this.searchPattern){
-      this.queryIntern=this.searchPattern;
-    }
     if (!this.organisationId) return;
     if(this.$store.state.filter.organisationId === this.organisationId){
       this.keepOrganisation = true;
@@ -114,7 +105,7 @@ export default defineComponent({
       this.$store.commit('filterOrga', {orgaId: undefined});
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
-        this.$emit('updateOrganisationId', organisation.id);
+        this.$emit('update:organisationId', organisation.id);
         if("PUBLIC"!==organisation.privacy){
           this.$nextTick(() => {
             this.onKeepOrganisation();
@@ -126,7 +117,7 @@ export default defineComponent({
           }, 6000);
         }
       } else {
-        this.$emit('updateOrganisationId', undefined);
+        this.$emit('update:organisationId', undefined);
       }
     },
     async onKeepOrganisation(): Promise<void> {

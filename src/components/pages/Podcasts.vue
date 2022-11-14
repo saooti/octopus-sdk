@@ -19,10 +19,8 @@
     </div>
     <ProductorSearch
       v-if="pageParameters.isProductorSearch"
-      :organisation-id="organisationId"
-      :search-pattern="searchPattern"
-      @updateOrganisationId="updateOrganisationId"
-      @updateSearchPattern="updateSearchPattern"
+      v-model:organisation-id="organisationId"
+      v-model:search-pattern="searchPattern"
     />
     <AdvancedSearch
       :is-education="isEducation"
@@ -43,8 +41,8 @@
     />
     <PodcastList
       :show-count="true"
-      :first="first"
-      :size="size"
+      :first="0"
+      :size="30"
       :organisation-id="organisationId"
       :query="searchPattern"
       :monetization="monetization"
@@ -89,8 +87,7 @@ export default defineComponent({
   },
   data() {
     return {
-      first: 0 as number,
-      size: 30 as number,
+      isInit: false as boolean,
       searchPattern: '' as string,
       organisationId: undefined as string|undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
@@ -126,11 +123,21 @@ export default defineComponent({
       }
     }
   },
-
+  watch:{
+    organisationId(): void {
+      if(!this.isInit){return;}
+      this.resetRubriquage = !this.resetRubriquage;
+      this.rubriquageId = [];
+      this.rubriqueId = [];
+      this.noRubriquageId = [];
+    },
+    searchPattern(value: string): void {
+      this.sortCriteria = '' !== value ? 'SCORE' : 'DATE';
+    },
+  },
   created() {
     this.initPodcastsPage();
   },
-  
   methods: {
     initPodcastsPage(){
       this.searchPattern = this.searchInit ?? '';
@@ -140,6 +147,7 @@ export default defineComponent({
       if(this.$store.state.filter.rubriqueFilter.length){
         this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
       }
+      this.isInit=true;
     },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       const length = value.length;
@@ -158,17 +166,6 @@ export default defineComponent({
       this.rubriquageId = allRubriquageId;
       this.rubriqueId = rubriqueId;
       this.noRubriquageId = noRubriquageId;
-    },
-    updateOrganisationId(value: string): void {
-      this.resetRubriquage = !this.resetRubriquage;
-      this.rubriquageId = [];
-      this.rubriqueId = [];
-      this.noRubriquageId = [];
-      this.organisationId = value;
-    },
-    updateSearchPattern(value: string): void {
-      this.sortCriteria = '' !== value ? 'SCORE' : 'DATE';
-      this.searchPattern = value;
     },
     emissionSelected(emission: Emission): void {
       this.emissionId = emission && emission.emissionId ? emission.emissionId : undefined;

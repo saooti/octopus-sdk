@@ -7,11 +7,12 @@
     >{{ label }}</label>
     <select
       :id="idSelect"
-      v-model="textValue"
+      :model-value="textInit"
       :disabled="isDisabled"
       class="c-hand w-100"
       :class="transparent?'transparent':''"
       :style="getFontFamily"
+      @update:modelValue="$emit('update:textInit',$event)"
     >
       <option
         v-for="option in options"
@@ -38,36 +39,16 @@ export default defineComponent({
     textInit: { default: undefined, type: String },
   },
   emits: ['update:textInit'],
-  data() {
-    return {
-      textValue: undefined as string|undefined,
-    };
-  },
   computed:{
     getFontFamily(): string{
       const item = this.options.find((x) => {
-        return this.textValue === x.value;
+        return this.textInit === x.value;
       });
       if(item && item.fontFamily){
         return 'font-family:'+item.fontFamily;
       }
       return "";
     }
-  },
-  watch: {
-    textValue(){
-			if(this.textInit !== this.textValue){
-				this.$emit('update:textInit', this.textValue)
-			}
-		},
-    textInit: {
-      immediate: true,
-      handler() {
-        if(this.textInit !== this.textValue){
-          this.textValue =this.textInit;
-        }
-      },
-    },
   },
 });
 </script>

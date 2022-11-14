@@ -3,24 +3,25 @@
     <input
       :id="idSearch"
       ref="search"
-      v-model="textValue"
+      :model-value="textInit"
       type="text"
       class="search-input w-100 p-2 "
       :placeholder="label"
       :autofocus="autofocus"
+      @update:modelValue="$emit('update:textInit',$event)"
     >
     <label
       :for="idSearch"
       :title="label"
     />
     <div
-      v-if="!textValue"
+      v-if="!textInit"
       class="saooti-search search-icon-container"
     />
     <div
       v-else
       class="saooti-remove search-icon-container c-hand"
-      @click="textValue = ''"
+      @click="$emit('update:textInit','')"
     />
   </div>
 </template>
@@ -37,27 +38,6 @@ export default defineComponent({
   },
 
   emits: ['update:textInit'],
-
-  data() {
-    return {
-      textValue: '' as string,
-    };
-  },
-  watch: {
-    textValue(){
-			if(this.textInit !== this.textValue){
-				this.$emit('update:textInit', this.textValue)
-			}
-		},
-    textInit: {
-      immediate: true,
-      handler() {
-        if(this.textInit !== this.textValue){
-          this.textValue =this.textInit;
-          }
-      },
-    },
-  }
 });
 </script>
 <style lang="scss">

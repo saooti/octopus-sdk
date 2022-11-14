@@ -2,11 +2,9 @@
   <div class="page-box">
     <h1>{{ titleDisplay }}</h1>
     <ProductorSearch
-      :organisation-id="organisationId"
-      :search-pattern="searchPattern"
+      v-model:organisation-id="organisationId"
+      v-model:search-pattern="searchPattern"
       type="participant"
-      @updateOrganisationId="organisationId = $event"
-      @updateSearchPattern="searchPattern = $event"
     />
     <ParticipantList
       :show-count="true"

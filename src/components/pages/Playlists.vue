@@ -13,10 +13,8 @@
     <ProductorSearch
       v-if="isProductorSearch"
       v-model:organisationId="organisationId"
-      :search-pattern="searchPattern"
+      v-model:search-pattern="searchPattern"
       type="playlist"
-      @updateOrganisationId="organisationId = $event"
-      @updateSearchPattern="searchPattern = $event"
     />
     <PlaylistList
       :show-count="true"
