@@ -5,7 +5,7 @@
     >
       <input
         :id="idCheckbox"
-        :value="textInit"
+        :checked="textInit"
         type="checkbox"
         :disabled="isDisabled"
         :title="displayLabel?'':label"
