@@ -7,7 +7,7 @@
       v-for="option in options"
       :key="option.title"
       class="octopus-form-item"
-      :class="isColumn? '':'me-2'"
+      :class="isColumn? 'mb-2':'me-2'"
     >
       <input
         :id="idRadio + option.value"
