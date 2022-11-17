@@ -9,7 +9,7 @@
         id="rows-per-page-select"
         :value="rowsPerPage"
         class="c-hand p-1 mx-2"
-        @input="$emit('update:rowsPerPage',$event.target.value)"
+        @change="$emit('update:rowsPerPage',$event.target.value)"
       >
         <option
           v-for="option in optionsRowsPerPage"

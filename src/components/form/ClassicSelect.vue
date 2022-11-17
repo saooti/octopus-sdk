@@ -12,7 +12,7 @@
       class="c-hand w-100"
       :class="transparent?'transparent':''"
       :style="getFontFamily"
-      @input="$emit('update:textInit',$event.target.value)"
+      @change="$emit('update:textInit',$event.target.value)"
     >
       <option
         v-for="option in options"
