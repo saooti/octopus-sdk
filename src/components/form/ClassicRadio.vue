@@ -43,13 +43,3 @@ export default defineComponent({
   emits: ['update:textInit'],
 });
 </script>
-<style lang="scss">
-@import '@scss/_variables.scss';
-.octopus-app{
-  input[type="radio"] {
-    accent-color: $octopus-primary-color;
-    cursor: pointer;
-    margin-right: 5px;
-  }
-}
-</style>

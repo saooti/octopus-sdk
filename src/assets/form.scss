@@ -11,7 +11,7 @@
 		height: 2rem;
 		padding-right: 40px;
 	}
-	input[type="checkbox"] {
+	input[type="checkbox"], input[type="radio"]{
 		accent-color: $octopus-primary-color;
 		cursor: pointer;
 		margin-right: 5px;
