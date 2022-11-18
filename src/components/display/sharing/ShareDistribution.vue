@@ -1,18 +1,19 @@
 <template>
   <div class="module-box">
     <h3>{{ $t('Distribute') }}</h3>
-    <p class="sharing-distribution-container">
+    <div class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
-    </p><div class="text-primary hide-small-screen text-break">
-      {{ rss }}
+      <div class="text-primary hide-small-screen text-break">
+        {{ rss }}
+      </div>
+      <input
+        type="button"
+        :value="$t('Copy')"
+        class="btn btn-primary"
+        :title="$t('Copy')"
+        @click="onCopyCode(rss, afterCopy)"
+      >
     </div>
-    <input
-      type="button"
-      :value="$t('Copy')"
-      class="btn btn-primary"
-      :title="$t('Copy')"
-      @click="onCopyCode(rss, afterCopy)"
-    >
     <RssSection
       v-if="emission"
       :emission="emission"
