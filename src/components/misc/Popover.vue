@@ -32,7 +32,7 @@ export default defineComponent({
     disable: {type: Boolean, default: false},
 		onlyClick: {type: Boolean, default: false},
 		isFixed: {type: Boolean, default: false},
-		isInModal: {type: Boolean, default: false},
+		relativeClass: {type: String, default: undefined},
 		leftPos: {type: Boolean, default: false},
   },
   data () {
@@ -99,8 +99,8 @@ export default defineComponent({
 				let parentRight = 0;
 				let parentTop = 0;
 				let parentScrollTop = 0;
-				if(this.isInModal){
-					const modalBody = document.getElementsByClassName('octopus-modal-body')[0];
+				if(this.relativeClass){
+					const modalBody = document.getElementsByClassName(this.relativeClass)[0];
 					const modalBodyRect = modalBody.getBoundingClientRect();
 					parentLeft = modalBodyRect.left;
 					parentRight = modalBodyRect.right;
