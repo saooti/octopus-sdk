@@ -32,6 +32,7 @@ export default defineComponent({
     disable: {type: Boolean, default: false},
 		onlyClick: {type: Boolean, default: false},
 		isFixed: {type: Boolean, default: false},
+		isInModal: {type: Boolean, default: false},
 		leftPos: {type: Boolean, default: false},
   },
   data () {
@@ -93,10 +94,23 @@ export default defineComponent({
 					this.isClick = true;
 				}
 				this.show = true;
+				
+				let parentLeft = 0;
+				let parentRight = 0;
+				let parentTop = 0;
+				let parentScrollTop = 0;
+				if(this.isInModal){
+					const modalBody = document.getElementsByClassName('octopus-modal-body')[0];
+					const modalBodyRect = modalBody.getBoundingClientRect();
+					parentLeft = modalBodyRect.left;
+					parentRight = modalBodyRect.right;
+					parentTop = modalBodyRect.top;
+					parentScrollTop=modalBody.scrollTop;
+				}
 				const rectElement = (e.target as HTMLElement).getBoundingClientRect();
 				(this.$refs.popover as HTMLElement).style.display = 'block';
-				this.posX = this.leftPos? rectElement.right - (this.$refs.popover as HTMLElement).clientWidth : rectElement.left;
-				this.posY = rectElement.bottom + (this.isFixed ? 0 : window.scrollY)+ 5;
+				this.posX = this.leftPos? (rectElement.right  -parentRight  ) - (this.$refs.popover as HTMLElement).clientWidth : (rectElement.left -parentLeft );
+				this.posY = ((rectElement.bottom+ parentScrollTop ) - parentTop ) + (this.isFixed ? 0 : window.scrollY)+ 5;
 			}
     },
 		async clearDataBlur (e: FocusEvent) {
