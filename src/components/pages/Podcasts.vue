@@ -147,7 +147,9 @@ export default defineComponent({
       if(this.$store.state.filter.rubriqueFilter.length){
         this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
       }
-      this.isInit=true;
+      this.$nextTick(() => {
+        this.isInit = true;
+      });
     },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       const length = value.length;

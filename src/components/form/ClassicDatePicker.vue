@@ -57,7 +57,7 @@ export default defineComponent({
   },
   computed: {
     now(): Date {
-      return moment().add(1, 'days').toDate();
+      return moment().toDate();
     },
   }
 })

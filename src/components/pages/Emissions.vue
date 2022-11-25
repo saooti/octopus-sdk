@@ -6,8 +6,6 @@
       v-model:organisationId="organisationId"
       v-model:search-pattern="searchPattern"
       type="emission"
-      @updateOrganisationId="updateOrganisationId"
-      @updateSearchPattern="updateSearchPattern"
     />
     <AdvancedSearch
       :is-education="isEducation"
@@ -124,6 +122,9 @@ export default defineComponent({
       if(this.$store.state.filter.rubriqueFilter.length){
         this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
       }
+      this.$nextTick(() => {
+        this.isInit = true;
+      });
     },
     updateRubriquageFilter(value: Array<RubriquageFilter>){
       const length = value.length;
