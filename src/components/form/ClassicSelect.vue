@@ -35,8 +35,8 @@ export default defineComponent({
     displayLabel:{default: true, type: Boolean},
     transparent:{ default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
-    options: { default: ()=>[], type: Array as () => Array<{title: string, value: string|undefined, fontFamily?: string}> },
-    textInit: { default: undefined, type: String },
+    options: { default: ()=>[], type: Array as () => Array<{title: string, value: number|string|undefined, fontFamily?: string}> },
+    textInit: { default: undefined, type: [ String, Number ] },
   },
   emits: ['update:textInit'],
   computed:{
