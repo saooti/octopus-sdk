@@ -49,6 +49,7 @@
         justify-items: center;
         display: flex;
         justify-content: space-around;
+        flex-wrap: wrap;
       }
   }
 
@@ -106,6 +107,7 @@
     @media (max-width: 1200px) {
       grid-template-columns: auto !important;
       display: flex !important;
+      flex-wrap: wrap;
     }
   }
     
