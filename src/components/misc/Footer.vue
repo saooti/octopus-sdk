@@ -141,6 +141,7 @@ export default defineComponent({
     bottom: 0;
     z-index: 10;
     background: white;
+    padding: 0 2rem;
     .acpm_image {
       width: 44px;
       height: 44px;
