@@ -71,10 +71,10 @@
         :title="$t('More episodes of this emission')"
         :button-text="$t('All podcast emission button')"
       />
-      <!-- <PodcastInlineList
+      <PodcastInlineList
         :podcast-id="podcastId"
         title="Les recommendations de Vincent !"
-      /> -->
+      />
       <PodcastInlineList
         v-for="c in categories"
         :key="c.id"
