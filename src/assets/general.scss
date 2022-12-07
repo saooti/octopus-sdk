@@ -172,6 +172,11 @@ body{
       display: flex;
     }
   }
+  img.img-box{
+    @media (max-width: 450px) {
+      margin: 0 !important;
+    }
+  }
   .img-box-circle {
     height: 10rem;
     width: 10rem;
