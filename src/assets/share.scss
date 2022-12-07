@@ -120,6 +120,7 @@
     flex-grow: 1;
     .img-box {
       border-radius: 2rem !important;
+      margin: auto;
     }
     @media (max-width: 680px) {
       justify-content: center;
@@ -132,10 +133,6 @@
     flex-direction: column;
     max-height: 13rem;
     flex-grow: 1;
-    @media (max-width: 450px) {
-      padding: 0.5rem 0;
-      text-align: center;
-    }
     .emission-name {
       font-size: 0.9rem;
       font-weight: 600;
