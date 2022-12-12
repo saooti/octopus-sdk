@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="podcast"
-    class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink-0 float-start"
+    class="img-box mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
   >
     <img
       v-lazy="proxyImageUrl(podcast.imageUrl,'260')"

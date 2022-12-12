@@ -112,7 +112,7 @@
     }
   }
     
-  .emission-item-container {
+  .emission-item-container{
     list-style: none;
     background: #fff;
     border-radius: 2rem;
@@ -120,10 +120,16 @@
     flex-grow: 1;
     .img-box {
       border-radius: 2rem !important;
-      margin: auto;
+      @media (max-width: 680px) {
+        margin-top: 1rem !important;
+        margin: auto;
+      }
     }
     @media (max-width: 680px) {
       justify-content: center;
+      &>a{
+        flex-direction: column;
+      }
     }
   }
 

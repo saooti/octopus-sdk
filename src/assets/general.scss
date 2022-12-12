@@ -165,16 +165,12 @@ body{
     flex-shrink: 0;
     @media (max-width: 960px) {
       flex-grow: 0;
+      margin-right: auto !important;
     }
     @media (max-width: 450px) {
-      margin: 0.5rem auto 2rem !important;
+      margin: auto;
       float: inherit !important;
       display: flex;
-    }
-  }
-  img.img-box{
-    @media (max-width: 450px) {
-      margin: 0 !important;
     }
   }
   .img-box-circle {
