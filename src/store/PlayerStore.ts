@@ -40,7 +40,7 @@ const mutations = <MutationTree<Player>>{
     } else if (podcast.mediaId) {
       state.media = podcast;
     }else if(podcast.canalId){
-      state.radio = podcast;
+      state.radio = {...podcast,...{isInit: false}};
     }
   },
 

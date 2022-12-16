@@ -5,6 +5,7 @@ export interface Radio{
   canalId: number;
   url: string;
   metadata: MediaRadio;
+  isInit: boolean,
 }
 export interface MediaRadio{
   artist:string;
@@ -17,6 +18,13 @@ export interface MediaRadio{
   title:string;
   uri:string;
 }
+
+export interface MetadataRadio{
+  channelId:number;
+  currently:MediaRadio;
+  previously:Array<MediaRadio>;
+}
+
 
 
 export interface Player{

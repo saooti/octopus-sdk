@@ -113,7 +113,11 @@ export const playerLogic = defineComponent({
       }else if('PAUSED' === this.status){
         audioPlayer.pause();
       }else if ('PLAYING' === this.status && this.radio){
-        this.playRadio();
+        if(this.radio.isInit){
+          this.playRadio();
+        }else{
+          this.radio.isInit = true;
+        }
       }else if('PLAYING' === this.status){
         audioPlayer.play();
       }
@@ -163,6 +167,9 @@ export const playerLogic = defineComponent({
       this.setDownloadId(null);
       this.listenError = false;
       this.initComments();
+      if (this.live || this.radio) {
+        this.endingLive();
+      }
     },
     stopPlayer(): void {
       this.$store.commit('player/playPodcast');
@@ -260,11 +267,5 @@ export const playerLogic = defineComponent({
       }
       this.forceHide = true;
     },
-    endingLive():void{
-      const audio: HTMLElement|null = document.getElementById('audio-player');
-      if(audio){
-        (audio as HTMLAudioElement).src = '';
-      }
-    }
   },
 })

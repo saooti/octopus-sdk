@@ -14,7 +14,8 @@ export const playerLive = defineComponent({
       lastSend: 0 as number,
       hlsReady: false as boolean,
       downloadId: null as string|null,
-      audioElement: null as HTMLAudioElement|null
+      audioElement: null as HTMLAudioElement|null,
+      hls: null as any,
     };
   },
   computed: {
@@ -84,18 +85,18 @@ export const playerLive = defineComponent({
         if (!Hls.isSupported()) {
           reject('Hls is not supported ! ');
         }
-        const hls = new Hls();
-        hls.on(Hls.Events.MANIFEST_PARSED, async () => {
+        this.hls = new Hls();
+        this.hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           await this.initLiveDownloadId();
-          hls.attachMedia((this.audioElement as HTMLAudioElement));
+          this.hls.attachMedia((this.audioElement as HTMLAudioElement));
           await (this.audioElement as HTMLAudioElement).play();
           this.onPlay();
           resolve();
         });
-        hls.on(Hls.Events.ERROR, async() => {
+        this.hls.on(Hls.Events.ERROR, async() => {
           reject('There is an error while reading media content');
         });
-        hls.loadSource(hlsStreamUrl);
+        this.hls.loadSource(hlsStreamUrl);
       });
     },
     setDownloadId(newValue: string|null): void {
@@ -114,5 +115,13 @@ export const playerLive = defineComponent({
       this.lastSend = 0;
       this.listenTime = 0;
     },
+    endingLive():void{
+      const audio: HTMLElement|null = document.getElementById('audio-player');
+      if(audio && this.hls){
+        this.hls.destroy();
+        (audio as HTMLAudioElement).src = '';
+        this.hls = null;
+      }
+    }
   },
 })
