@@ -4,11 +4,11 @@ import { CommentPodcast } from '@/store/class/general/comment';
 import cookies from '../cookies';
 import { playerLive } from './playerLive';
 import { playerComment } from './playerComment';
+import { playerTranscript } from './playerTranscript';
 import { defineComponent } from 'vue';
 import { Player } from '@/store/class/general/player';
-import { StoreState } from '@/store/classStore/typeAppStore';
 export const playerLogic = defineComponent({
-  mixins:[cookies,playerLive,playerComment],
+  mixins:[cookies,playerLive,playerComment, playerTranscript],
   data() {
     return {
       forceHide: false as boolean,
@@ -32,16 +32,15 @@ export const playerLogic = defineComponent({
       podcast (state: Player){ return state.podcast},
       media: (state: Player) => state.media,
       live: (state: Player) => state.live,
+      radio: (state: Player) => state.radio,
       volume: (state: Player) => state.volume,
+      status : (state: Player) => state.status,
       percentProgress: (state: Player) => {
         if(!state.elapsed){return 0;}
         return state.elapsed * 100;
       },
       playerSeekTime: (state: Player) => state.seekTime,
     }),
-    commentsLoaded(){
-      return this.$store.state.comments.loadedComments;
-    },
     audioUrl(): string {
       return this.getAudioUrl();
     },
@@ -71,12 +70,19 @@ export const playerLogic = defineComponent({
         this.$nextTick(async () => {
           this.hlsReady = false;
           this.reInitPlayer();
-          await this.playLive();
+          this.playLive();
         });
       }
     },
+    radio(){
+      this.$nextTick(async () => {
+        this.hlsReady = false;
+        this.reInitPlayer();
+        this.playRadio();
+      });
+    },
     async listenTime(newVal): Promise<void> {
-      if ((!this.podcast && !this.live)||(!this.downloadId)||(newVal - this.lastSend < 10)) {
+      if (this.radio && (!this.podcast && !this.live)||(!this.downloadId)||(newVal - this.lastSend < 10)) {
         return;
       }
       this.lastSend = newVal;
@@ -91,48 +97,34 @@ export const playerLogic = defineComponent({
       if (!audioPlayer) return;
       audioPlayer.currentTime = this.playerSeekTime;
     },
+    status() {
+      const audioPlayer: HTMLAudioElement | null = document.querySelector('#audio-player');
+      if (!audioPlayer) return;
+      if (this.live && !this.hlsReady) {
+        audioPlayer.pause();
+        this.percentLiveProgress = 0;
+        this.durationLivePosition = 0;
+        return;
+      }
+      if ('PAUSED' === this.status && this.radio) {
+        this.hlsReady = false;
+        this.reInitPlayer();
+        this.endingLive();
+      }else if('PAUSED' === this.status){
+        audioPlayer.pause();
+      }else if ('PLAYING' === this.status && this.radio){
+        this.playRadio();
+      }else if('PLAYING' === this.status){
+        audioPlayer.play();
+      }
+    },
   },
 
   mounted() {
     window.addEventListener('beforeunload', this.endListeningProgress);
-    this.watchPlayerStatus();
   },
   
   methods: {
-    async getTranscription(): Promise<void>{
-      if(!this.podcast){
-        this.$store.commit('player/transcript',undefined);
-        return;
-      }
-      const result = await octopusApi.fetchDataPublic<string>(11 , `response/${this.podcast.podcastId}`);
-      const arrayTranscript = this.parseSrt(result);
-      const actualText = arrayTranscript?.[0]?.startTime === 0 ? arrayTranscript[0].text : "";
-      this.$store.commit('player/transcript',{actual: 0,actualText:actualText, value : arrayTranscript});
-    },
-    parseSrt(transcript: string){
-      const pattern = /(\d+)\n([\d:,]+)\s+-{2}\>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
-      const result = [];
-      if (typeof(transcript) != 'string'){
-        return;
-      }
-      if (transcript == null){
-        return;
-      }
-      transcript = transcript.replace(/\r\n|\r|\n|\t/g, '\n');
-      let matches;
-      while ((matches = pattern.exec(transcript)) != null) {
-        result.push({
-          startTime: this.srtTimeToSeconds(matches[2]),
-          endTime: this.srtTimeToSeconds(matches[3]),
-          text: matches[4]
-        });
-      }
-      return result;
-    },
-    srtTimeToSeconds(time:string): number{
-      const a = time.split(':'); 
-      return (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+parseFloat(a[2])); 
-    },
     getDomain(): string{
       let domain = "";
       const domainArray: RegExpExecArray | null = /\.(.+)/.exec(window.location.host);
@@ -183,26 +175,6 @@ export const playerLogic = defineComponent({
       }
       return listenerId;
     },
-    watchPlayerStatus(): void {
-      this.$store.watch(
-        (state: StoreState) => state.player.status,
-        (newValue: string) => {
-          const audioPlayer: HTMLAudioElement | null = document.querySelector('#audio-player');
-          if (!audioPlayer) return;
-          if (this.live && !this.hlsReady) {
-            audioPlayer.pause();
-            this.percentLiveProgress = 0;
-            this.durationLivePosition = 0;
-            return;
-          }
-          if ('PAUSED' === newValue) {
-            audioPlayer.pause();
-          }else if ('PLAYING' === newValue){
-            audioPlayer.play();
-          }
-        }
-      );
-    },
     onError(): void {
       if (this.podcast && ""!==this.audioUrlToPlay &&  !this.listenError) {
         this.listenError = true;
@@ -222,12 +194,7 @@ export const playerLogic = defineComponent({
       }
       return streamDuration;
     },
-    onTimeUpdateTranscript(currentTime:number){
-      if((this.$store.state.player.transcript?.value[this.$store.state.player.transcript?.actual]?.endTime ?? Infinity) < currentTime){
-        this.$store.state.player.transcript.actual +=1;
-        this.$store.state.player.transcript.actualText = this.$store.state.player.transcript?.value[this.$store.state.player.transcript?.actual].text ?? "";
-      }
-    },
+    
     onTimeUpdatePodcast(streamDuration:number, currentTime:number){
       this.displayAlertBar = false;
       this.percentLiveProgress = 100;
@@ -284,23 +251,20 @@ export const playerLogic = defineComponent({
     onSeeked(event: Event):void {
       const mediaTarget = (event.currentTarget as HTMLMediaElement);
       const currentTime = mediaTarget.currentTime;
-      if(this.$store.state.player.transcript){
-        let newActual = 0;
-        while (currentTime > (this.$store.state.player.transcript.value[newActual]?.endTime ?? Infinity)){
-          newActual +=1;
-        }
-        this.$store.state.player.transcript.actual = newActual;
-      }
+      this.onSeekedTranscript(currentTime);
     },
     onFinished(): void {
       this.setDownloadId(null);
       if (this.live) {
-        const audio: HTMLElement|null = document.getElementById('audio-player');
-        if(audio){
-          (audio as HTMLAudioElement).src = '';
-        }
+        this.endingLive();
       }
       this.forceHide = true;
     },
+    endingLive():void{
+      const audio: HTMLElement|null = document.getElementById('audio-player');
+      if(audio){
+        (audio as HTMLAudioElement).src = '';
+      }
+    }
   },
 })

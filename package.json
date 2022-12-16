@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "34.0.2",
+  "version": "34.0.3",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -16,7 +16,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@saooti/octopus-api": "^0.33.0",
+    "@saooti/octopus-api": "^0.34.0",
     "@vue/cli": "^5.0.8",
     "@vue/compat": "^3.2.45",
     "autoprefixer": "^10.4.13",

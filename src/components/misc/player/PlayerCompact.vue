@@ -31,7 +31,10 @@
       />
     </button>
     <div class="text-light player-grow-content">
-      <div class="d-flex mb-1">
+      <div 
+        class="d-flex"
+        :class="!radio?'mb-1':''"
+      >
         <div
           v-if="playerError"
           class="text-warning mx-2"
@@ -42,13 +45,14 @@
           {{ podcastTitle }}
         </div>
         <div
-          v-if="!playerError"
+          v-if="!playerError && !radio"
           class="hide-phone"
         >
           {{ playedTime }} / {{ totalTime }}
         </div>
       </div>
       <PlayerProgressBar
+        v-if="!radio"
         :hls-ready="hlsReady"
         :show-timeline="showTimeline"
         :comments="comments"
@@ -61,6 +65,7 @@
       />
     </div>
     <button
+      v-if="!radio"
       :title="$t('Enlarge')"
       class="btn play-button-box btn-transparent text-light saooti-up"
       @click="changePlayerLargeVersion"
@@ -71,6 +76,7 @@
       @click="stopPlayer"
     />
     <PlayerTimeline
+      v-if="!radio"
       v-model:showTimeline="showTimeline"
       :comments="comments"
     />

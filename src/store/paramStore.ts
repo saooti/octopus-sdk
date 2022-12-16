@@ -181,6 +181,7 @@ export interface OctopusApi{
   imageUrl?: string,
   studioUrl?: string,
   playerUrl?: string,
+  radioUrl?:string,
   speechToTextUrl?:string,
   recoUrl?:string,
   organisationId?: string,

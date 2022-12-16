@@ -7,7 +7,7 @@
     <template v-if="display">
       <audio
         id="audio-player"
-        :src="!live? audioUrlToPlay: undefined"
+        :src="!live && !radio? audioUrlToPlay: undefined"
         autoplay
         @timeupdate="onTimeUpdate"
         @ended="onFinished"

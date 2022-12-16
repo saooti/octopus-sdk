@@ -3,9 +3,16 @@ import DurationHelper from '../../../helper/duration';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
+import { Radio } from '@/store/class/general/player';
+import octopusApi from '@saooti/octopus-api';
 export const playerDisplay = defineComponent({
 	props: {
     hlsReady: { default: false , type: Boolean},
+  },
+  data() {
+    return {
+      radioInterval: undefined as  ReturnType<typeof setTimeout>|undefined,
+    };
   },
 	computed:{
 		playedTime(): string{
@@ -51,6 +58,9 @@ export const playerDisplay = defineComponent({
       return (state.player.emissionName as boolean);
     },
 		podcastTitle(): string {
+      if(this.$store.state.player.radio){
+        return this.$store.state.player.radio.metadata;
+      }
       if (this.$store.state.player.podcast) {
         if (this.isEmissionName)
           return this.emissionName + ' - ' + this.$store.state.player.podcast.title;
@@ -70,16 +80,38 @@ export const playerDisplay = defineComponent({
     },
     transcriptText():string{
       return this.$store.state.player.transcript?.actualText ?? "";
+    },
+    radio(): Radio{
+      return this.$store.state.player.radio;
     }
 	},
+  watch:{
+    radio: {
+      deep: true,
+      immediate:true,
+      handler(){
+        clearInterval((this.radioInterval as unknown as number));
+        if(this.radio){
+          this.fetchRadioMetadata();
+          this.radioInterval = setInterval(() => {
+            this.fetchRadioMetadata();
+          }, 2000);
+        }
+      }
+    },
+  },
 	created(){
     window.addEventListener('keydown', this.addKeyboardControl);
   },
   beforeUnmount() {
     window.removeEventListener('keydown', this.addKeyboardControl);
+    clearInterval((this.radioInterval as unknown as number));
   },
-
   methods: {
+    async fetchRadioMetadata(): Promise<void>{
+      const metadata = await octopusApi.fetchData<string>(14, 'player/playing/'+this.$store.state.player.radio.canalId);
+      this.$store.commit('player/radioMetadata', metadata);
+    },
     addKeyboardControl(event: KeyboardEvent): void{
       if(!event || null ===event){return;}
       const element = event.target as HTMLElement; 

@@ -9,6 +9,7 @@ export function getDefaultPlayerState(): Player {
     total: 0,
     media: undefined,
     live: undefined,
+    radio: undefined,
     seekTime:0,
   };
 }

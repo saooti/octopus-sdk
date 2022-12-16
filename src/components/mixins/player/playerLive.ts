@@ -26,18 +26,21 @@ export const playerLive = defineComponent({
     onPlay(): void {
       this.$store.commit('player/pause', false);
     },
-    async playLive(): Promise<void> {
+    playRadio(){
+      if (!this.radio) return;
+      this.playHls(this.radio.url);
+    },
+    playLive() {
       if (!this.live) return;
-      const hlsStreamUrl =
-        state.podcastPage.hlsUri +
-        'stream/dev.' +
-        this.live.conferenceId +
-        '/index.m3u8';
+      const hlsStreamUrl = `${state.podcastPage.hlsUri}stream/dev.${this.live.conferenceId}/index.m3u8`;
+      this.playHls(hlsStreamUrl);
+    },
+    async playHls(hlsStreamUrl: string): Promise<void>{
       try {
         this.audioElement = (document.getElementById('audio-player') as HTMLAudioElement);
         if(null===this.audioElement){
           setTimeout(() => {
-            this.playLive();
+            this.playHls(hlsStreamUrl);
           }, 1000);
           return;
         }
@@ -51,7 +54,7 @@ export const playerLive = defineComponent({
         }
       } catch (error) {
         setTimeout(() => {
-          this.playLive();
+          this.playHls(hlsStreamUrl);
         }, 1000);
       }
     },

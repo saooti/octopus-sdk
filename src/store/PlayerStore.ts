@@ -10,6 +10,7 @@ const mutations = <MutationTree<Player>>{
       state.podcast = undefined;
       state.media = undefined;
       state.live = undefined;
+      state.radio = undefined;
       state.elapsed = 0;
       return;
     }
@@ -27,6 +28,7 @@ const mutations = <MutationTree<Player>>{
     state.podcast = undefined;
     state.media = undefined;
     state.live = undefined;
+    state.radio = undefined;
     state.elapsed = 0;
     if (
       podcast.conferenceId &&
@@ -37,7 +39,14 @@ const mutations = <MutationTree<Player>>{
       state.podcast = podcast;
     } else if (podcast.mediaId) {
       state.media = podcast;
+    }else if(podcast.canalId){
+      state.radio = podcast;
     }
+  },
+
+  radioMetadata(state, metadata){
+    if(!state.radio){return;}
+    state.radio.metadata = metadata;
   },
 
   pause(state, pause) {
@@ -63,6 +72,7 @@ const mutations = <MutationTree<Player>>{
   seekTime(state, seekTime) {
     state.seekTime = seekTime;
   },
+
   transcript(state, transcript) {
     state.transcript = transcript;
   },
