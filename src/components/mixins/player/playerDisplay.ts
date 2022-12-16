@@ -3,7 +3,7 @@ import DurationHelper from '../../../helper/duration';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
-import { Radio } from '@/store/class/general/player';
+import { MediaRadio, Radio } from '@/store/class/general/player';
 import octopusApi from '@saooti/octopus-api';
 export const playerDisplay = defineComponent({
 	props: {
@@ -59,7 +59,7 @@ export const playerDisplay = defineComponent({
     },
 		podcastTitle(): string {
       if(this.$store.state.player.radio){
-        return this.$store.state.player.radio.metadata;
+        return this.$store.state.player.radio.metadata.title + " - " + this.$store.state.player.radio.metadata.artist;
       }
       if (this.$store.state.player.podcast) {
         if (this.isEmissionName)
@@ -82,7 +82,7 @@ export const playerDisplay = defineComponent({
       return this.$store.state.player.transcript?.actualText ?? "";
     },
     radio(): Radio{
-      return this.$store.state.player.radio;
+      return this.$store.state.player.radio?.url;
     }
 	},
   watch:{
@@ -109,7 +109,7 @@ export const playerDisplay = defineComponent({
   },
   methods: {
     async fetchRadioMetadata(): Promise<void>{
-      const metadata = await octopusApi.fetchData<string>(14, 'player/playing/'+this.$store.state.player.radio.canalId);
+      const metadata = await octopusApi.fetchData<MediaRadio>(14, 'player/playing/'+this.$store.state.player.radio.canalId);
       this.$store.commit('player/radioMetadata', metadata);
     },
     addKeyboardControl(event: KeyboardEvent): void{

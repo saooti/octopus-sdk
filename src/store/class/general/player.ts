@@ -4,7 +4,18 @@ import { Podcast } from "./podcast";
 export interface Radio{
   canalId: number;
   url: string;
-  metadata: string;
+  metadata: MediaRadio;
+}
+export interface MediaRadio{
+  artist:string;
+  duration:number;
+  kind:string;
+  mediaId:number;
+  mediaType:string|null;
+  playlistId:number;
+  startDate:string;
+  title:string;
+  uri:string;
 }
 
 
