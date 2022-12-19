@@ -1,0 +1,43 @@
+
+export interface ApiState {
+    apiUrl: undefined,
+    commentUrl: undefined,
+    frontendUrl: undefined,
+    ftpUrl: undefined,
+    hlsUrl: undefined,
+    imageUrl: undefined,
+    keycloakUrl: undefined,
+    mediaUrl: undefined,
+    miniplayerUrl:undefined,
+    processorUrl: undefined,
+    radioUrl: undefined,
+    recoUrl:undefined,
+    rssUrl: undefined,
+    rtmpUrl: undefined,
+    speechToTextUrl: undefined,
+    studioUrl: undefined,
+    videoMakerUrl: undefined,
+    storageUrl: undefined,
+}
+export function getDefaultApiState(): ApiState {
+  return {
+    apiUrl: undefined,
+    commentUrl:undefined,
+    frontendUrl: undefined,
+    ftpUrl: undefined,
+    hlsUrl: undefined,
+    imageUrl: undefined,
+    keycloakUrl: undefined,
+    mediaUrl: undefined,
+    miniplayerUrl:undefined,
+    processorUrl: undefined,
+    radioUrl: undefined,
+    recoUrl:undefined,
+    rssUrl: undefined,
+    rtmpUrl: undefined,
+    speechToTextUrl: undefined,
+    studioUrl: undefined,
+    videoMakerUrl: undefined,
+    storageUrl: undefined,
+  };
+}

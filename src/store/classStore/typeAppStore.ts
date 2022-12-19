@@ -1,11 +1,12 @@
 import { Category } from '../class/general/category';
 import { CommentPodcast } from '../class/general/comment';
-import { Player } from '../class/general/player';
 import { Rubriquage } from '../class/rubrique/rubriquage';
 import { RubriquageFilter } from '../class/rubrique/rubriquageFilter';
 import { Rubrique } from '../class/rubrique/rubrique';
+import { ApiState } from './typeApiStore';
 import { AuthState } from './typeAuthStore';
 import { getDefaultPlayerState } from './typePlayerStore';
+import { Player } from '../class/general/player';
 
 export interface Filter{
   organisationId: string | undefined;
@@ -41,6 +42,7 @@ export interface StoreState {
   };
   player: Player;
   auth?: AuthState;
+  api?: ApiState;
 }
 
 export function AppStoreData(): StoreState {
