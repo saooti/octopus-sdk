@@ -316,4 +316,5 @@ export default{
   "If the transcript is available, show it":"Si la transcription est disponible, l'afficher",
   "Photo credits":"Crédits photo",
   "Audio credits":"Crédits audio",
+  "View transcript":"Afficher la transcription",
 };

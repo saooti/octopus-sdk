@@ -306,4 +306,5 @@ export default{
     "If the transcript is available, show it":"Se la trascrizione è disponibile, mostrala",
     "Photo credits":"Crediti fotografici",
     "Audio credits":"Crediti audio",
+    "View transcript":"Visualizza trascrizione",
   };

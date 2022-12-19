@@ -316,4 +316,5 @@ export default{
   "If the transcript is available, show it":"If the transcript is available, show it",
   "Photo credits":"Photo credits",
   "Audio credits":"Audio credits",
+  "View transcript":"View transcript",
 };

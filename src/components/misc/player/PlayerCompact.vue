@@ -65,9 +65,9 @@
       />
     </div>
     <button
-      v-if="!radio"
-      :title="$t('Enlarge')"
-      class="btn play-button-box btn-transparent text-light saooti-up"
+      :title="''!=transcriptText ? $t('View transcript'): $t('Enlarge')"
+      class="btn play-button-box btn-transparent text-light"
+      :class="''!=transcriptText ? 'saooti-text-to-speech':'saooti-up'"
       @click="changePlayerLargeVersion"
     />
     <button

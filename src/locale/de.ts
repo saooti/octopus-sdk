@@ -309,4 +309,5 @@ export default{
   "If the transcript is available, show it":"Wenn die Abschrift vorhanden ist, zeigen Sie sie",
   "Photo credits":"Bildnachweis",
   "Audio credits":"Audio-Credits",
+  "View transcript":"Transkript ansehen",
 }
