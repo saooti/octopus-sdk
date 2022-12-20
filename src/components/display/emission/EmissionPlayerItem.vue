@@ -209,6 +209,7 @@ export default defineComponent({
       const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
         emissionId: this.emission.emissionId,
         size: nb,
+        includeStatus:["READY","PROCESSING"]
       }, true);
       if (0 === data.count) {
         this.activeEmission = false;

@@ -66,6 +66,7 @@
           :emission-id="emissionId"
         />
         <PodcastFilterList
+          :showCount="true"
           :emission-id="emissionId"
           :category-filter="false"
           :edit-right="editRight"

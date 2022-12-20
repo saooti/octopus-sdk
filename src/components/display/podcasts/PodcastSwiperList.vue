@@ -149,6 +149,7 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
         query: this.query,
+        includeStatus:["READY","PROCESSING"]
       }, true);
       this.allPodcasts = this.allPodcasts.concat(
         data.result.filter((pod: Podcast|null) => null !== pod)

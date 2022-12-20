@@ -9,7 +9,7 @@
         id="rows-per-page-select"
         :value="rowsPerPage"
         class="c-hand p-1 mx-2"
-        @change="$emit('update:rowsPerPage',$event.target.value)"
+        @change="$emit('update:rowsPerPage',parseInt($event.target.value,10))"
       >
         <option
           v-for="option in optionsRowsPerPage"
@@ -104,7 +104,7 @@ export default defineComponent({
 
   data() {
     return {
-			optionsRowsPerPage: [5, 10, 15, 20, 25 , 30, 50] as Array<number>,
+			optionsRowsPerPage: [10, 20, 30, 40, 50, 60] as Array<number>,
 		};
   },
   

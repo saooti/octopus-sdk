@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="notEmpty"
-    class="p-3"
+    class="py-3"
   >
     <h2 class="mb-0 mt-3">
       {{ $t('All live emission button') }}

@@ -112,6 +112,7 @@ export default defineComponent({
         emissionId: this.emission.emissionId,
         first: 0,
         size: 0,
+        includeStatus:["READY","PROCESSING"]
       }, true);
       if (0 === data.count) {
         this.activeEmission = false;

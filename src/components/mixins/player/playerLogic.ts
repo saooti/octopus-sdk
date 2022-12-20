@@ -158,7 +158,7 @@ export const playerLogic = defineComponent({
     getAudioUrl(): string{
       if (this.media) return this.media.audioUrl? this.media.audioUrl:"";
       if (!this.podcast) return '';
-      if (!this.podcast.availability.visibility)
+      if (!this.podcast.availability.visibility || "PROCESSING"===this.podcast.processingStatus)
         return this.podcast.audioStorageUrl;
       if (this.listenError) return this.podcast.audioStorageUrl;
       return this.getAudioUrlParameters();

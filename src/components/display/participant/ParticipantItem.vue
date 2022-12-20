@@ -111,6 +111,7 @@ export default defineComponent({
         participantId: this.participant.participantId,
         first: 0,
         size: 0,
+        includeStatus:["READY","PROCESSING"]
       }, true);
       if (0 === data.count) {
         this.activeParticipant = false;

@@ -64,6 +64,7 @@ export default defineComponent({
     after: { default: undefined, type: String},
     includeHidden: { default: false, type: Boolean},
     showCount: { default: false, type: Boolean },
+    displaySortText: { default: true, type: Boolean },
     sortCriteria: { default: undefined, type: String},
     notValid: { default: undefined , type: Boolean},
     rubriqueId: { default: () => [], type: Array as ()=>Array<number> },
@@ -103,6 +104,9 @@ export default defineComponent({
       return this.popularSort? "POPULARITY" : this.sortCriteria??'DATE';
     },
     sortText(): string {
+      if(!this.displaySortText){
+        return "";
+      }
       switch (this.sortCriteria) {
         case 'SCORE':return " "+this.$t('sort by score');
         case 'DATE':return " "+this.$t('sort by date');
@@ -154,7 +158,8 @@ export default defineComponent({
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
         includeHidden: this.includeHidden,
         validity: undefined !== this.notValid?!this.notValid: undefined,
-        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.$store.state.auth?.profile.userId:undefined
+        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.$store.state.auth?.profile.userId:undefined,
+        includeStatus:["READY","PROCESSING"]
       };
       try {
         const data =await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',param, true);

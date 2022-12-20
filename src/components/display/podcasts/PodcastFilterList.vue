@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3">
+  <div class="py-3">
     <h2>{{ titleFilter }}</h2>
     <div class="d-flex align-items-center flex-wrap mb-2">
       <div
@@ -27,6 +27,8 @@
       :organisation-id="productorId"
       :reload="reloadList"
       :include-hidden="editRight"
+      :showCount="showCount"
+      :displaySortText="false"
       @fetch="fetch"
     />
   </div>
@@ -53,6 +55,7 @@ export default defineComponent({
     reload: { default: false, type:  Boolean},
     editRight: { default: false, type:  Boolean},
     productorId: { default: undefined, type: String},
+    showCount: { default: false, type: Boolean },
   },
   emits: ['fetch'],
 

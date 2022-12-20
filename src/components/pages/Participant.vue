@@ -46,6 +46,7 @@
         :name="name"
         :category-filter="true"
         :reload="reload"
+        :showCount="true"
       />
       <PodcastList
         v-else

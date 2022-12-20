@@ -4,7 +4,7 @@
     v-model:first="dfirst"
     v-model:rowsPerPage="dsize"
     v-model:isMobile="isMobile"
-    :text-count="displayCount > 1 ? `${$t('Number playlists', { nb: displayCount })} ${$t('sort by score')}`: undefined"
+    :text-count="displayCount > 1 ? `${$t('Number playlists', { nb: displayCount })}`: undefined"
     :total-count="totalCount"
     :loading="loading"
     :loading-text="loading?$t('Loading content ...'):undefined"

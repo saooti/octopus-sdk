@@ -186,6 +186,7 @@ export default defineComponent({
         noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
         sort: this.popularSort ? 'POPULARITY' : 'DATE',
         query: this.query,
+        includeStatus:["READY","PROCESSING"]
       }, true);
       this.loading = false;
       this.totalCount = data.count;
