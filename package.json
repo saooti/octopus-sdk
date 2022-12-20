@@ -16,7 +16,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@saooti/octopus-api": "^0.34.0",
+    "@saooti/octopus-api": "^0.34.1",
     "@vue/cli": "^5.0.8",
     "@vue/compat": "^3.2.45",
     "autoprefixer": "^10.4.13",
