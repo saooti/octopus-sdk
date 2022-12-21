@@ -15,7 +15,7 @@
       v-model:first="first"
       v-model:rowsPerPage="size"
       v-model:isMobile="isMobile"
-      :text-count="podcasts.length > 1 ? `${$t('Number podcasts', { nb: podcasts.length })} ${$t('sort by score')}` : undefined"
+      :text-count="podcasts.length > 1 ? `${$t('Number podcasts', { nb: podcasts.length })}` : undefined"
       :total-count="podcasts.length"
       :loading="loading"
       :loading-text="loading?$t('Loading podcasts ...'):undefined"
