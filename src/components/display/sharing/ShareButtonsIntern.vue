@@ -111,7 +111,7 @@ export default defineComponent({
     playlist: { default: undefined, type: Object as ()=>Playlist},
     participantId: { default: undefined, type: Number},
     organisationId: { default: undefined, type: String},
-    notExclusive: { default: true, type: Boolean},
+    isVertical: { default: false, type: Boolean},
   },
 
   data() {
@@ -149,14 +149,6 @@ export default defineComponent({
     urlPage(): string{
       return window.location.href;
     },
-    verticalDisplay(): boolean {
-      return (
-        !this.authenticated &&
-        !this.participantId &&
-        !this.organisationId &&
-        !this.notExclusive
-      );
-    },
     authenticated(): boolean {
       return (state.generalParameters.authenticated as boolean);
     },
@@ -170,6 +162,9 @@ export default defineComponent({
       }
       if (this.organisationId){
         return api +'productor/' + this.organisationId + '.rss';
+      }
+      if(this.playlist){
+        return api +'playlist/' + this.playlist.playlistId + '.rss';
       }
       return '';
     },
@@ -185,7 +180,7 @@ export default defineComponent({
   methods: {
     getClass(className='btn-rss'): string{
       let returnString = `btn ${className} share-btn mb-2 text-dark`;
-      returnString+= this.verticalDisplay ? '' : ' mx-2';
+      returnString+= this.isVertical ? '' : ' mx-2';
       return returnString;
     },
     openPopup(): void {

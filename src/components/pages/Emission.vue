@@ -50,7 +50,7 @@
           <ShareButtons
             v-if="pageParameters.isShareButtons"
             :emission="emission"
-            :not-exclusive="notExclusive"
+            :isVertical="!authenticated && !notExclusive"
           />
         </div>
       </div>

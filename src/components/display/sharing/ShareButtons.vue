@@ -1,7 +1,7 @@
 <template>
   <div class="module-box text-center-mobile">
     <template
-      v-if="authenticated || participantId || organisationId || notExclusive"
+      v-if="!isVertical"
     >
       <div class="d-flex mb-2">
         <h3 class="mb-0">
@@ -69,7 +69,7 @@ export default defineComponent({
     playlist: { default: undefined, type: Object as ()=>Playlist},
     participantId: { default: undefined, type: Number},
     organisationId: { default: undefined, type: String},
-    notExclusive: { default: true, type: Boolean},
+    isVertical: { default: false, type: Boolean},
   },
   computed: {
     authenticated(): boolean {
