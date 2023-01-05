@@ -101,6 +101,12 @@ export default defineComponent({
 				let parentScrollTop = 0;
 				if(this.relativeClass){
 					const modalBody = document.getElementsByClassName(this.relativeClass)[0];
+					if(undefined===modalBody){
+						(this.$refs.popover as HTMLElement).style.display = 'block';
+						this.posX = 0;
+						this.posY = 0;
+						return;
+					}
 					const modalBodyRect = modalBody.getBoundingClientRect();
 					parentLeft = modalBodyRect.left;
 					parentRight = modalBodyRect.right;
