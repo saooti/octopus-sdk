@@ -28,7 +28,6 @@
           :playlist="playlist"
           :participant-id="participantId"
           :organisation-id="organisationId"
-          :not-exclusive="notExclusive"
         />
       </div>
     </template>
@@ -42,7 +41,6 @@
         :playlist="playlist"
         :participant-id="participantId"
         :organisation-id="organisationId"
-        :not-exclusive="notExclusive"
       />
     </div>
   </div>
