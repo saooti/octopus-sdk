@@ -28,7 +28,7 @@
     >
       <slot
         :name="'tab'+(index-1)"
-        :isActive="activeTab === (index-1)"
+        :is-active="activeTab === (index-1)"
       />
     </div>
   </div>

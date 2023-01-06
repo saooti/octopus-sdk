@@ -54,7 +54,7 @@
           <ShareButtons
             v-if="pageParameters.isShareButtons"
             :podcast="podcast"
-            :isVertical="!authenticated && !notExclusive"
+            :is-vertical="!authenticated && !notExclusive"
           />
         </div>
       </div>

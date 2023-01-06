@@ -3,7 +3,7 @@ import DurationHelper from '../../../helper/duration';
 import { state } from '../../../store/paramStore';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
-import { MediaRadio, MetadataRadio, Radio } from '@/store/class/general/player';
+import { MetadataRadio, Radio } from '@/store/class/general/player';
 import octopusApi from '@saooti/octopus-api';
 export const playerDisplay = defineComponent({
 	props: {

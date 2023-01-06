@@ -50,7 +50,7 @@
           <ShareButtons
             v-if="pageParameters.isShareButtons"
             :emission="emission"
-            :isVertical="!authenticated && !notExclusive"
+            :is-vertical="!authenticated && !notExclusive"
           />
         </div>
       </div>
@@ -66,7 +66,7 @@
           :emission-id="emissionId"
         />
         <PodcastFilterList
-          :showCount="true"
+          :show-count="true"
           :emission-id="emissionId"
           :category-filter="false"
           :edit-right="editRight"

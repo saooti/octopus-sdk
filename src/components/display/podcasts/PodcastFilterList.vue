@@ -27,8 +27,8 @@
       :organisation-id="productorId"
       :reload="reloadList"
       :include-hidden="editRight"
-      :showCount="showCount"
-      :displaySortText="false"
+      :show-count="showCount"
+      :display-sort-text="false"
       @fetch="fetch"
     />
   </div>

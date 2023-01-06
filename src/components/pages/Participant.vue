@@ -37,7 +37,7 @@
             v-if="pageParameters.isShareButtons"
             :participant-id="participantId"
             :organisation-id="participant.orga.id"
-            :isVertical="false"
+            :is-vertical="false"
           />
         </div>
       </div>
@@ -47,7 +47,7 @@
         :name="name"
         :category-filter="true"
         :reload="reload"
-        :showCount="true"
+        :show-count="true"
       />
       <PodcastList
         v-else

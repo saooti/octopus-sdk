@@ -81,69 +81,71 @@ export default defineComponent({
 			}
     },
     setPopoverData (e: MouseEvent|PointerEvent) {
-			if(this.disable){
+			if(this.disable || !e || !e.target){
 				return;
 			}
-			if(e && e.target){
-				if("click"===e.type){
-					if(this.show && this.isClick){
-						this.isClick = false;
-						this.clearData();
-						return;
-					}
-					this.isClick = true;
-				}
-				this.show = true;
-				
-				let parentLeft = 0;
-				let parentRight = 0;
-				let parentTop = 0;
-				let parentScrollTop = 0;
-				if(this.relativeClass){
-					const modalBody = document.getElementsByClassName(this.relativeClass)[0];
-					if(undefined===modalBody){
-						(this.$refs.popover as HTMLElement).style.display = 'block';
-						this.posX = 0;
-						this.posY = 0;
-						return;
-					}
-					const modalBodyRect = modalBody.getBoundingClientRect();
-					parentLeft = modalBodyRect.left;
-					parentRight = modalBodyRect.right;
-					parentTop = modalBodyRect.top;
-					parentScrollTop=modalBody.scrollTop;
-				}
-				const rectElement = (e.target as HTMLElement).getBoundingClientRect();
-				(this.$refs.popover as HTMLElement).style.display = 'block';
-				this.posX = this.leftPos? (rectElement.right  -parentRight  ) - (this.$refs.popover as HTMLElement).clientWidth : (rectElement.left -parentLeft );
-				this.posY = ((rectElement.bottom+ parentScrollTop ) - parentTop ) + (this.isFixed ? 0 : window.scrollY)+ 5;
-			}
-    },
-		async clearDataBlur (e: FocusEvent) {
-			if(e.relatedTarget){
-				const myElement = e.relatedTarget as HTMLElement;
-				if(this.popoverId===myElement.id){return;}
-				const parent = this.$refs.popover as HTMLElement; 
-				if (null!==parent && parent.contains(myElement)) {
-					if(null!==myElement.classList && myElement.classList.contains('octopus-dropdown-item')){
-						if((myElement as HTMLAnchorElement).href ?? false){
-							if("true"===myElement.getAttribute('reallink')){
-								await myElement.click();
-							}else{
-								await this.$router.push((myElement as HTMLAnchorElement).pathname);
-							}
-						}
-						this.$nextTick(() => {
-							this.isClick = false;
-							this.clearData();
-						});
-					}
+			if("click"===e.type){
+				if(this.show && this.isClick){
+					this.isClick = false;
+					this.clearData();
 					return;
 				}
+				this.isClick = true;
 			}
+			this.show = true;
+			let parentLeft = 0;
+			let parentRight = 0;
+			let parentTop = 0;
+			let parentScrollTop = 0;
+			if(this.relativeClass){
+				const modalBody = document.getElementsByClassName(this.relativeClass)[0];
+				if(undefined===modalBody){
+					(this.$refs.popover as HTMLElement).style.display = 'block';
+					this.posX = 0;
+					this.posY = 0;
+					return;
+				}
+				const modalBodyRect = modalBody.getBoundingClientRect();
+				parentLeft = modalBodyRect.left;
+				parentRight = modalBodyRect.right;
+				parentTop = modalBodyRect.top;
+				parentScrollTop=modalBody.scrollTop;
+			}
+			const rectElement = (e.target as HTMLElement).getBoundingClientRect();
+			(this.$refs.popover as HTMLElement).style.display = 'block';
+			this.posX = this.leftPos? (rectElement.right  -parentRight  ) - (this.$refs.popover as HTMLElement).clientWidth : (rectElement.left -parentLeft );
+			this.posY = ((rectElement.bottom+ parentScrollTop ) - parentTop ) + (this.isFixed ? 0 : window.scrollY)+ 5;
+    },
+		async clearDataBlur (e: FocusEvent) {
+			if(!e.relatedTarget){
+				return this.clearClick();
+			}
+			const myElement = e.relatedTarget as HTMLElement;
+			if(this.popoverId===myElement.id){return;}
+			const parent = this.$refs.popover as HTMLElement; 
+			if (null===parent || !parent.contains(myElement)) {
+				return this.clearClick();
+			}
+			if(null===myElement.classList || !myElement.classList.contains('octopus-dropdown-item')){
+				return;
+			}
+			if(!(myElement as HTMLAnchorElement).href){
+				return this.clearClick();
+			}
+			if("true"===myElement.getAttribute('reallink')){
+				myElement.click();
+			}else{
+				await this.$router.push((myElement as HTMLAnchorElement).pathname);
+			}
+			this.$nextTick(() => {
+				this.isClick = false;
+				this.clearData();
+			});
+    },
+		clearClick(){
 			this.isClick = false;
 			this.clearData();
-    },
+		},
     clearData () {
 			if(this.isClick){
 				return;
