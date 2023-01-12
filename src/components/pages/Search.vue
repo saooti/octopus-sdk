@@ -5,7 +5,7 @@
       v-if="!hideBar"
       v-model:textInit="rawQuery"
       :autofocus="true"
-      id-checkbox="search-page-input"
+      idSearch="search-page-input"
       :label="$t('Please type at least three characters')"
     />
     <PodcastList

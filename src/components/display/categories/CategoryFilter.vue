@@ -135,6 +135,7 @@ export default defineComponent({
           const queryString = newFilter.map(value => value.rubriquageId+':'+value.rubriqueId).join();
           this.$router.replace({ query: { ...this.$route.query, ...{ rubriquesId:"" !== queryString? queryString : undefined}} });
         }
+
         this.$store.commit('filterRubrique', newFilter);
       }
       if(event){

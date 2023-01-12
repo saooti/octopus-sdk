@@ -1,6 +1,5 @@
 <template>
   <div
-    id="podcast-item-container"
     class="podcast-item-container"
     :class="[
       podcastShadow ? 'shadow-element' : '',

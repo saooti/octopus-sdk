@@ -13,7 +13,7 @@
       <ClassicSearch
         v-model:textInit="searchPattern"
         class="flex-small-grow"
-        id-checkbox="podcast-filter-search"
+        idSearch="podcast-filter-search"
         :label="$t('Search')"
       />
     </div>

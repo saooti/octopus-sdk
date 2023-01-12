@@ -71,14 +71,13 @@ export default defineComponent({
       deep: true,
       immediate: true,
       handler(){
-        if(this.rubriqueFilter.length){
-          this.updateRubriquageFilter();
-        }
+        this.updateRubriquageFilter();
       }
     }
   },
   methods:{
     updateRubriquageFilter(){
+      debugger;
       const length = this.rubriqueFilter.length;
       const rubriqueId: Array<number>= [];
       for (let index = 0; index < length; index++) {
