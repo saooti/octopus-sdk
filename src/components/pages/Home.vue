@@ -77,7 +77,6 @@ export default defineComponent({
   },
   methods:{
     updateRubriquageFilter(){
-      debugger;
       const length = this.rubriqueFilter.length;
       const rubriqueId: Array<number>= [];
       for (let index = 0; index < length; index++) {
