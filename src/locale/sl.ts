@@ -310,4 +310,5 @@ export default{
   "Photo credits":"Avtorji fotografij",
   "Audio credits":"Avdio krediti",
   "View transcript":"Ogled prepisa",
+  "Suggested listening":"Predlagano poslušanje",
 }

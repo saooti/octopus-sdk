@@ -317,4 +317,5 @@ export default{
   "Photo credits":"Photo credits",
   "Audio credits":"Audio credits",
   "View transcript":"View transcript",
+  "Suggested listening":"Suggested listening",
 };

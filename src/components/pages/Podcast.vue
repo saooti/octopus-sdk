@@ -73,7 +73,7 @@
       />
       <PodcastInlineList
         :podcast-id="podcastId"
-        title="Les recommendations de Vincent !"
+        :title="$t('Suggested listening')"
       />
       <PodcastInlineList
         v-for="c in categories"

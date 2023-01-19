@@ -307,4 +307,5 @@ export default{
     "Photo credits":"Crediti fotografici",
     "Audio credits":"Crediti audio",
     "View transcript":"Visualizza trascrizione",
+    "Suggested listening":"Ascolto suggerito",
   };

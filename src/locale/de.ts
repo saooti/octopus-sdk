@@ -310,4 +310,5 @@ export default{
   "Photo credits":"Bildnachweis",
   "Audio credits":"Audio-Credits",
   "View transcript":"Transkript ansehen",
+  "Suggested listening":"Anhören empfohlen",
 }
