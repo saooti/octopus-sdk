@@ -217,7 +217,7 @@ export const playerLogic = defineComponent({
         this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
         this.$store.commit('player/totalTime', scheduledDuration);
         this.$store.commit(
-          'playerElapsed',
+          'player/elapsed',
           currentTime / scheduledDuration
         );
       } else {
