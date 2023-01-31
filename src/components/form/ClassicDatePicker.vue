@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { DatePicker } from 'v-calendar';
 import { defineComponent } from 'vue';
 export default defineComponent({
@@ -57,7 +57,7 @@ export default defineComponent({
   },
   computed: {
     now(): Date {
-      return moment().toDate();
+      return dayjs().toDate();
     },
   }
 })

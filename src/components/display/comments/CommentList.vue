@@ -37,7 +37,7 @@
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { CommentPodcast } from '@/store/class/general/comment';
@@ -184,7 +184,7 @@ export default defineComponent({
       let indexNewComment = 0;
       for (let i = 0, len = this.comments.length; i < len; i++) {
         if (
-          moment(this.comments[i].date).isBefore(moment(comment.date))
+          dayjs(this.comments[i].date).isBefore(dayjs(comment.date))
         ) {
           indexNewComment = i;
           break;

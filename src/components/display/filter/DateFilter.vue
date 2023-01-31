@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import moment from 'moment';
+import dayjs from 'dayjs';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import ClassicDatePicker from '../../form/ClassicDatePicker.vue';
 import { defineComponent } from 'vue';
@@ -59,17 +59,17 @@ export default defineComponent({
     return {
       isFrom: false as boolean,
       isTo: false as boolean,
-      fromDate: moment().subtract(10, 'days').toDate(),
-      toDate: moment().toDate(),
+      fromDate: dayjs().subtract(10, 'days').toDate(),
+      toDate: dayjs().toDate(),
     };
   },
 
   watch: {
     isFrom(): void {
-      this.$emit('updateFromDate', this.isFrom ? moment(this.fromDate).toISOString(true) : undefined);
+      this.$emit('updateFromDate', this.isFrom ? dayjs(this.fromDate).toISOString() : undefined);
     },
     isTo(): void {
-      this.$emit('updateToDate', this.isTo ? moment(this.toDate).toISOString(true) : undefined);
+      this.$emit('updateToDate', this.isTo ? dayjs(this.toDate).toISOString() : undefined);
     },
   },
 
@@ -86,33 +86,33 @@ export default defineComponent({
   methods: {
     updateFromDate(): void {
       if (
-        moment(this.fromDate)
+        dayjs(this.fromDate)
           .startOf('minute')
           .toISOString() ===
-        moment()
+        dayjs()
           .subtract(10, 'days')
           .startOf('minute')
           .toISOString()
       )
         return;
       if (this.isFrom) {
-        this.$emit('updateFromDate', moment(this.fromDate).toISOString(true));
+        this.$emit('updateFromDate', dayjs(this.fromDate).toISOString());
       } else {
         this.isFrom = true;
       }
     },
     updateToDate(): void {
       if (
-        moment(this.toDate)
+        dayjs(this.toDate)
           .startOf('minute')
           .toISOString() ===
-        moment()
+        dayjs()
           .startOf('minute')
           .toISOString()
       )
         return;
       if (this.isTo) {
-        this.$emit('updateToDate', moment(this.toDate).toISOString(true));
+        this.$emit('updateToDate', dayjs(this.toDate).toISOString());
       } else {
         this.isTo = true;
       }

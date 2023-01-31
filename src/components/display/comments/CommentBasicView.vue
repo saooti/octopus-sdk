@@ -50,7 +50,7 @@
 import selenium from '../../mixins/selenium';
 import displayMethods from '../../mixins/displayMethods';
 import { CommentPodcast } from '@/store/class/general/comment';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import Popover from '../../misc/Popover.vue';
 import { defineComponent } from 'vue';
 export default defineComponent({
@@ -78,7 +78,7 @@ export default defineComponent({
       return 'Valid'=== this.comment.status;
     },
     date(): string {
-      return this.comment.date ? moment(this.comment.date).format('D MMMM YYYY HH[h]mm') : '';
+      return this.comment.date ? dayjs(this.comment.date).format('D MMMM YYYY HH[h]mm') : '';
     },
     readMore(): string {
       return this.summary ? this.$t('Read more') : this.$t('Read less');

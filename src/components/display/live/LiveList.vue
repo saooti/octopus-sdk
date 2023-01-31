@@ -39,7 +39,7 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 import LiveItem from './LiveItem.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference/conference';
 import { defineComponent } from 'vue'
@@ -91,7 +91,7 @@ export default defineComponent({
       if (this.livesArray[1].lives.length > 0)
         return this.$t('A live can start any moment');
       if (this.livesArray[2].lives.length > 0)
-        return this.$t('Next live date', {date: moment(this.livesArray[2].lives[0].date).format('LLLL'),});
+        return this.$t('Next live date', {date: dayjs(this.livesArray[2].lives[0].date).format('LLLL'),});
       return '';
     },
     myOrganisationId(): string|undefined {
@@ -157,7 +157,7 @@ export default defineComponent({
       }else if("PENDING"===this.livesArray[i].status){
         this.dataLivesToBe = dataLives;
         for (let index = 0, len = dataLives.length; index < len; index++) {
-          if (moment(dataLives[index].date).isBefore(moment())) {
+          if (dayjs(dataLives[index].date).isBefore(dayjs())) {
             this.livesArray[i].lives.push(dataLives[index]);
             indexPast = index + 1;
           } else {break;}

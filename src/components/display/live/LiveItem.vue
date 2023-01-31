@@ -127,7 +127,7 @@ import { state } from '../../../store/paramStore';
 import octopusApi from '@saooti/octopus-api';
 import PodcastImage from '../podcasts/PodcastImage.vue';
 import crudApi from '@/api/classicCrud';
-import moment from 'moment';
+import dayjs from 'dayjs';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
@@ -164,13 +164,10 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     hours(): string {
-      return !this.live?'': moment(this.live.pubDate).format('HH[H]mm');
+      return !this.live?'': dayjs(this.live.pubDate).format('HH[H]mm');
     },
     date(): string {
-      return !this.live? '': moment(this.live.pubDate).format('D/MM/YYYY');
-    },
-    displayDate(): string {
-      return !this.live? '':moment(this.live.pubDate).format('X');
+      return !this.live? '': dayjs(this.live.pubDate).format('D/MM/YYYY');
     },
     description(): string {
       return this.live?.description??'';

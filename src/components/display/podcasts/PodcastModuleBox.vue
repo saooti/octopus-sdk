@@ -135,7 +135,7 @@ import PodcastImage from './PodcastImage.vue';
 import ParticipantDescription from './ParticipantDescription.vue';
 import TagList from './TagList.vue';
 import { state } from '../../../store/paramStore';
-import moment from 'moment';
+import dayjs from 'dayjs';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
@@ -179,8 +179,8 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     date(): string {
-      if (this.podcast && 1970 !== moment(this.podcast.pubDate).year()){
-        return moment(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
+      if (this.podcast && 1970 !== dayjs(this.podcast.pubDate).year()){
+        return dayjs(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
       }
       return '';
     },

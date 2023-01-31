@@ -53,7 +53,7 @@
 import PodcastItemInfo from './PodcastItemInfo.vue';
 import PodcastImage from './PodcastImage.vue';
 import { state } from '../../../store/paramStore';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -88,7 +88,7 @@ export default defineComponent({
       return (state.podcastPage.podcastItemDescription as boolean);
     },
     displayDate(): string {
-      return moment(this.podcast.pubDate).format('X');
+      return dayjs(this.podcast.pubDate).format();
     },
     description(): string {
       return this.podcast.description ?? '';

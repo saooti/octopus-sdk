@@ -99,7 +99,7 @@ import ClassicLoading from '../form/ClassicLoading.vue';
 import octopusApi from '@saooti/octopus-api';
 import crudApi from '@/api/classicCrud';
 import { state } from '../../store/paramStore';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { handle403 } from '../mixins/handle403';
@@ -227,7 +227,7 @@ export default defineComponent({
       return this.isLiveReadyToRecord ?this.$t('Live episode'): this.$t('Episode');
     },
     timeRemaining(): string {
-      return !this.podcast ? "":moment(this.podcast.pubDate).diff(moment(), 'seconds').toString();
+      return !this.podcast ? "":dayjs(this.podcast.pubDate).diff(dayjs(), 'seconds').toString();
     },
   },
   watch: {

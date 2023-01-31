@@ -91,7 +91,7 @@
 import ClassicModal from '../modal/ClassicModal.vue';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import Snackbar from '../../misc/Snackbar.vue';
-import moment from 'moment';
+import dayjs from 'dayjs';
 // @ts-ignore
 import VSwatches from 'vue3-swatches';
 // @ts-ignore
@@ -136,8 +136,8 @@ export default defineComponent({
 
   computed: {
     date(): string {
-      if(!this.podcast || 1970 === moment(this.podcast.pubDate).year()){return '';}
-      return moment(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
+      if(!this.podcast || 1970 === dayjs(this.podcast.pubDate).year()){return '';}
+      return dayjs(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
     },
     duration(): string {
       if (!this.podcast || this.podcast.duration <= 1) return '';

@@ -52,7 +52,7 @@
 import AnimatorsItem from './AnimatorsItem.vue';
 import { state } from '../../../store/paramStore';
 import { orgaComputed } from '../../mixins/orgaComputed';
-import moment from 'moment';
+import dayjs from 'dayjs';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import PodcastPlayBar from './PodcastPlayBar.vue';
@@ -83,7 +83,7 @@ export default defineComponent({
       return (state.generalParameters.podcastmaker as boolean);
     },
     date(): string {
-      return moment(this.pubDate).format('D MMMM YYYY, HH[h]mm');
+      return dayjs(this.pubDate).format('D MMMM YYYY, HH[h]mm');
     },
     editRight(): boolean {
       return (true===this.authenticated && this.myOrganisationId === this.podcastOrganisationId) ||
