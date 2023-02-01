@@ -40,6 +40,8 @@ import LiveItem from './LiveItem.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat);
 import { state } from '../../../store/paramStore';
 import { Conference } from '@/store/class/conference/conference';
 import { defineComponent } from 'vue'
