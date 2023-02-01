@@ -16,7 +16,7 @@ export function setupI18n(options: { locale: string }, isEducation: boolean) {
 
 export function setI18nLanguage(i18n: any, locale: string) {
   i18n.locale = locale;
-  dayjs.locale(locale)
+  dayjs.locale(locale);
   const html= document.querySelector('html');
   if(html){
     html.setAttribute('lang', locale);

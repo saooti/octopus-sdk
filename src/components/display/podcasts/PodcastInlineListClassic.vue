@@ -27,7 +27,7 @@
         v-show="!loading"
         :name="transitionName"
         class="element-list-inline"
-        tag="ul"
+        tag="div"
         :class="[
           alignLeft ? 'justify-content-start' : '',
           overflowScroll ? 'overflowScroll' : '',
