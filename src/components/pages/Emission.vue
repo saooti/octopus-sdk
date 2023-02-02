@@ -185,7 +185,7 @@ export default defineComponent({
     },
     handleAnnotations(){
       if (!this.emission || !this.emission.annotations) return;
-      this.rssEmission = this.emission.annotations.RSS? true: false;
+      this.rssEmission = 'RSS'===this.emission.annotations.SOURCE_KIND? true: false;
       this.ftpEmission = this.emission.annotations.FTP? true: false;
       if (this.emission.annotations.exclusive) {
         this.exclusive ='true' === this.emission.annotations.exclusive;

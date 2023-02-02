@@ -16,7 +16,7 @@
 		cursor: pointer;
 		margin-right: 5px;
 	}
-	.form-input {
+	.form-input{
 		appearance: none;
 		background: #fff;
 		background-image: none;
@@ -31,5 +31,8 @@
 		padding: 0.25rem 0.4rem;
 		position: relative;
 		width: 100%;
+		&:disabled, &.disabled{
+			background: #eee;
+		}
 	}
 }

@@ -110,7 +110,7 @@
           />
           <div v-if="editRight && !isPodcastmaker">
             <div
-              v-if="podcast.annotations && podcast.annotations.RSS"
+              v-if="podcast.annotations && 'RSS'===podcast.annotations.SOURCE_KIND"
               class="me-5"
             >
               {{ $t('From RSS') }}
