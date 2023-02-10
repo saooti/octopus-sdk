@@ -33,7 +33,7 @@
       :text-init="searchPattern"
       class="d-flex align-items-center flex-grow-1"
       :autofocus="true"
-      idSearch="productor-search-input"
+      id-search="productor-search-input"
       :label="searchText"
       @update:textInit="$emit('update:searchPattern', $event)"
     />

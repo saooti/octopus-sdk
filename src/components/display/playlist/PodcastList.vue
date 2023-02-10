@@ -7,7 +7,7 @@
       v-if="!loading && notEmptyPlaylist"
       v-model:textInit="searchPattern"
       class="width-600 align-self-baseline mb-2"
-      idSearch="podcast-list-search"
+      id-search="podcast-list-search"
       :label="$t('Search')"
     />
     <ListPaginate
