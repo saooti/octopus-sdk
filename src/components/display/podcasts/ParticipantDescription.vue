@@ -41,7 +41,7 @@
         name: 'participant',
         params: { participantId: participant.participantId },
         query: {
-          productor: $store.state.filter.organisationId,
+          productor: filterOrgaId,
         },
       }"
     >
@@ -53,7 +53,9 @@
 <script lang="ts">
 import Popover from '../../misc/Popover.vue';
 import { Participant } from '@/store/class/general/participant';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'ParticipantDescription',
 
@@ -67,6 +69,7 @@ export default defineComponent({
   },
 
   computed:{
+    ...mapState(useFilterStore, ['filterOrgaId']),
     idPopover(): string{
       return this.isGuest ? "popover-guests-help" : "popover-animators-help";
     },

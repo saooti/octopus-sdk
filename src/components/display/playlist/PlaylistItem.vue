@@ -7,7 +7,7 @@
       :to="{
         name: 'playlist',
         params: { playlistId: playlist.playlistId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrgaId },
       }"
       :title="$t('Playlist')"
       class="d-flex flex-grow-1 text-dark"
@@ -45,7 +45,7 @@
           :to="{
             name: 'productor',
             params: { productorId: playlist.organisation.id },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: filterOrgaId },
           }"
           class="emission-producer text-primary mt-auto"
         >
@@ -58,9 +58,11 @@
 
 <script lang="ts">
 import { Playlist } from '@/store/class/general/playlist';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistItem',
@@ -72,6 +74,7 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },

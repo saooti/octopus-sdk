@@ -10,8 +10,8 @@
         class="btn btn-primary"
         :to="{
           name: 'home',
-          query: { productor: $store.state.filter.organisationId,
-                   iabId:$store.state.filter.iab?.id,
+          query: { productor: filterOrgaId,
+                   iabId:filterIab?.id,
                    rubriquesId: rubriqueQueryParam},
         }"
       >
@@ -23,13 +23,18 @@
 
 <script lang="ts">
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'PageNotFound',
   computed:{
+    ...mapState(useGeneralStore, ['metaTitle']),
+    ...mapState(useFilterStore, ['filterRubrique', 'filterIab', 'filterOrgaId']),
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter?.rubriqueFilter?.length){
-        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      if(this.filterRubrique?.length){
+        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
     },
@@ -38,7 +43,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    document.title = this.$store.state.general.metaTitle;
+    document.title = this.metaTitle;
   },
 });
 </script>

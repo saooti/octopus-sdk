@@ -8,7 +8,7 @@
       :to="{
         name: 'podcast',
         params: { podcastId: live.podcastId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrgaId },
       }"
     >
       <div class="fw-bold">
@@ -25,7 +25,7 @@
       :to="{
         name: 'podcast',
         params: { podcastId: live.podcastId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrgaId },
       }"
     >
       <PodcastImage
@@ -50,7 +50,7 @@
         :to="{
           name: 'podcast',
           params: { podcastId: live.podcastId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: filterOrgaId },
         }"
       >
         {{ live.title }}
@@ -60,7 +60,7 @@
         :to="{
           name: 'emission',
           params: { emissionId: live.emission.emissionId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: filterOrgaId },
         }"
       >
         {{ live.emission.name }}
@@ -91,7 +91,7 @@
           :to="{
             name: 'participant',
             params: { participantId: animator.participantId },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: filterOrgaId },
           }"
         >
           {{ getName(animator) }}
@@ -104,7 +104,7 @@
           :to="{
             name: 'productor',
             params: { productorId: live.organisation.id },
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: filterOrgaId },
           }"
         >
           {{ live.organisation.name }}
@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import PodcastImage from '../podcasts/PodcastImage.vue';
 import crudApi from '@/api/classicCrud';
@@ -133,7 +133,8 @@ import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
 import { Podcast } from '@/store/class/general/podcast';
 import { Participant } from '@/store/class/general/participant';
-
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
 export default defineComponent({
@@ -157,6 +158,7 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     isEditBox(): boolean {
       return (state.podcastPage.EditBox as boolean);
     },

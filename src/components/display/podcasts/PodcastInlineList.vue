@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { defineAsyncComponent, defineComponent } from 'vue';
 const PodcastInlineListClassic = defineAsyncComponent(() => import('./PodcastInlineListClassic.vue'));
 const PodcastSwiperList = defineAsyncComponent(() => import('./PodcastSwiperList.vue'));

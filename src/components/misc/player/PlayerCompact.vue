@@ -33,7 +33,7 @@
     <div class="text-light player-grow-content">
       <div 
         class="d-flex"
-        :class="!radio?'mb-1':''"
+        :class="!radioUrl?'mb-1':''"
       >
         <div
           v-if="playerError"
@@ -45,14 +45,14 @@
           {{ podcastTitle }}
         </div>
         <div
-          v-if="!playerError && !radio"
+          v-if="!playerError && !radioUrl"
           class="hide-phone"
         >
           {{ playedTime }} / {{ totalTime }}
         </div>
       </div>
       <PlayerProgressBar
-        v-if="!radio"
+        v-if="!radioUrl"
         :hls-ready="hlsReady"
         :show-timeline="showTimeline"
         :comments="comments"
@@ -76,7 +76,7 @@
       @click="stopPlayer"
     />
     <PlayerTimeline
-      v-if="!radio"
+      v-if="!radioUrl"
       v-model:showTimeline="showTimeline"
       :comments="comments"
     />

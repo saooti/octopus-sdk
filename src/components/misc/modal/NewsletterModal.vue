@@ -99,8 +99,10 @@ import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
 import { Participant } from '@/store/class/general/participant';
 import { Podcast } from '@/store/class/general/podcast';
-import { state } from '../../../store/paramStore';
-import { defineComponent } from 'vue'
+import { state } from '../../../stores/ParamSdkStore';
+import { defineComponent } from 'vue';
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
 import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Playlist } from '@/store/class/general/playlist';
@@ -135,6 +137,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAuthStore, ['authOrganisation']),
     date(): string {
       if(!this.podcast || 1970 === dayjs(this.podcast.pubDate).year()){return '';}
       return dayjs(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
@@ -293,8 +296,8 @@ export default defineComponent({
     },
     async initData(): Promise<void> {
       let attributes;
-      if(this.$store.state.auth?.organisation?.attributes && Object.keys(this.$store.state.auth?.organisation.attributes).length > 1){
-        attributes = this.$store.state.auth?.organisation.attributes;
+      if(""!==this.authOrganisation.id && this.authOrganisation.attributes && Object.keys(this.authOrganisation.attributes).length > 1){
+        attributes = this.authOrganisation.attributes;
       }else{
         attributes = await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+state.generalParameters.organisationId);
       }
@@ -306,7 +309,7 @@ export default defineComponent({
         return;
       }
       if (Object.prototype.hasOwnProperty.call(attributes,'COLOR')) {
-        this.color = attributes.COLOR;
+        this.color = (attributes.COLOR as string);
       }
     },
   },

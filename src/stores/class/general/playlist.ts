@@ -1,4 +1,4 @@
-import { Organisation } from '../general/organisation';
+import { Organisation } from './organisation';
 import { Person } from '../user/person';
 import { FetchParam } from './fetchParam';
 

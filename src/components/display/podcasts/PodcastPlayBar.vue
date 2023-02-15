@@ -23,7 +23,9 @@
 import ProgressBar from '../../misc/ProgressBar.vue';
 import DurationHelper from '../../../helper/duration';
 import displayMethods from '../../mixins/displayMethods';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastPlayBar',
@@ -36,21 +38,20 @@ export default defineComponent({
     duration: { default: 0, type: Number},
   },
   computed: {
+    ...mapState(usePlayerStore, ['playerPodcast', 'playerElapsed', 'playerTotal']),
     isProgressBar(): boolean{
       return (state.emissionsPage.progressBar as boolean);
     },
     percentProgress(): number{
-      if(this.podcastId !== this.$store.state.player.podcast?.podcastId){
+      if(this.podcastId !== this.playerPodcast?.podcastId){
         return 0;
       }
-      return !this.$store.state.player.elapsed ? 0 : this.$store.state.player.elapsed * 100;
+      return !this.playerElapsed ? 0 : this.playerElapsed * 100;
     },
     playedTime(): string{
-      if(this.podcastId === this.$store.state.player.podcast?.podcastId){
-        if (this.$store.state.player.elapsed && this.$store.state.player.elapsed > 0 && this.$store.state.player.total && this.$store.state.player.total > 0) {
-          return DurationHelper.formatDuration(
-            Math.round(this.$store.state.player.elapsed * this.$store.state.player.total)
-          );
+      if(this.podcastId === this.playerPodcast?.podcastId){
+        if (this.playerElapsed && this.playerElapsed > 0 && this.playerTotal && this.playerTotal > 0) {
+          return DurationHelper.formatDuration(Math.round(this.playerElapsed * this.playerTotal));
         }
       }
       return '00:00';
@@ -60,15 +61,15 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions(usePlayerStore, ['playerUpdateSeekTime']),
     seekTo(event: MouseEvent): void {
-      if(!this.$store.state.player.podcast || this.podcastId !== this.$store.state.player.podcast.podcastId){return;}
+      if(!this.playerPodcast || this.podcastId !== this.playerPodcast.podcastId){return;}
       const rect = (event.currentTarget as Element).getBoundingClientRect();
       const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
-      const seekTime = this.$store.state.player.total * percentPosition;
-      this.$store.commit("playerSeekTime", seekTime);
+      this.playerUpdateSeekTime(this.playerTotal * percentPosition);
     }
   },
 })

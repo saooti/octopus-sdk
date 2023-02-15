@@ -17,7 +17,8 @@
 <script lang="ts">
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import CategoryChooser from '../categories/CategoryChooser.vue';
-import { Category } from '@/store/class/general/category';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -34,9 +35,7 @@ export default defineComponent({
     };
   },
   computed: {
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
+    ...mapState(useFilterStore, ['filterIab']),
   },
   watch: {
     isCategory(): void {
@@ -63,15 +62,15 @@ export default defineComponent({
         this.isInternChanged = false;
       });
     },
-    categoryFilter:{
+    filterIab:{
       deep: true,
       handler(){
         if(this.isInternChanged){
           return;
         }
         this.isInternChanged = true;
-        this.iabId = this.categoryFilter ? this.categoryFilter.id : 0;
-        this.isCategory = this.categoryFilter ? true : false;
+        this.iabId = this.filterIab ? this.filterIab.id : 0;
+        this.isCategory = this.filterIab ? true : false;
         this.$emit('updateCategory', this.iabId);
         this.$nextTick(() => {
           this.isInternChanged = false;
@@ -81,8 +80,8 @@ export default defineComponent({
   },
 
   created() {
-    if(this.categoryFilter){
-      this.iabId = this.categoryFilter.id;
+    if(this.filterIab){
+      this.iabId = this.filterIab.id;
       this.isCategory = true;
     }
     this.$nextTick(() => {
@@ -90,15 +89,16 @@ export default defineComponent({
     });
   },
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateIab']),
     resetCategoryFilter(): void{
-      if(!this.categoryFilter || this.isInit){
+      if(!this.filterIab || this.isInit){
         return;
       }
       const queries = this.$route.query;
       if (queries.iabId) {
         this.$router.replace({ query: {...queries, ...{iabId: undefined} } });
       }
-      this.$store.commit('filterIab', undefined);
+      this.filterUpdateIab(undefined);
     }
   },
 })

@@ -29,7 +29,7 @@
 <script lang="ts">
 import { orgaComputed } from '../mixins/orgaComputed';
 import PlaylistList from '../display/playlist/PlaylistList.vue';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
 export default defineComponent({
@@ -64,7 +64,7 @@ export default defineComponent({
   },
 
   created() {
-    this.organisationId = this.productor ?this.productor: this.filterOrga;
+    this.organisationId = this.productor ?this.productor: this.filterOrgaId;
   },
 })
 </script>

@@ -33,7 +33,9 @@ import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PlaylistItem from './PlaylistItem.vue';
 import { Playlist, emptyPlaylistData } from '@/store/class/general/playlist';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
 import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'PlaylistList',
@@ -63,9 +65,9 @@ export default defineComponent({
       isMobile: false as boolean,
     };
   },
-
   
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     displayArray(): Array<Playlist>{
       if(this.isMobile){
         return this.playlists;
@@ -79,7 +81,7 @@ export default defineComponent({
       return !this.query ?'NAME': 'SCORE';
     },
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.$store.state.filter.organisationId;
+      return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
   },
   watch: {

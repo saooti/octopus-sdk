@@ -86,9 +86,11 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import Popover from '../misc/Popover.vue';
-import { defineComponent } from 'vue'
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
 import { Organisation } from '@/store/class/general/organisation';
 export default defineComponent({
   name: 'HomeDropdown',
@@ -99,8 +101,9 @@ export default defineComponent({
     isEducation: { default: false, type: Boolean},
   },
   computed: {
+    ...mapState(useAuthStore, ['authProfile']),
     organisationsAvailable(): Array<Organisation>{
-      return this.$store.state.auth?.profile.organisations?? [];
+      return this.authProfile.organisations?? [];
     },
     helpLinks(){
       return [

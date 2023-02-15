@@ -63,7 +63,7 @@
                 name: 'emission',
                 params: { emissionId: podcast.emission.emissionId },
                 query: {
-                  productor: filterOrga,
+                  productor: filterOrgaId,
                 },
               }"
             >
@@ -78,7 +78,7 @@
                 name: 'productor',
                 params: { productorId: podcast.organisation.id },
                 query: {
-                  productor: filterOrga,
+                  productor: filterOrgaId,
                 },
               }"
             >
@@ -134,7 +134,7 @@ import PodcastPlayBar from './PodcastPlayBar.vue';
 import PodcastImage from './PodcastImage.vue';
 import ParticipantDescription from './ParticipantDescription.vue';
 import TagList from './TagList.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import dayjs from 'dayjs';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';

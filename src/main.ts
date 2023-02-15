@@ -3,8 +3,9 @@ import VueLazyLoad from 'vue3-lazyload';
 import App from './App.vue';
 import {setupI18n} from './i18n';
 import router from '@/router/router';
-import store from '@/store/AppStore';
-import paramStore from '@/store/paramStore';
+import { createPinia } from 'pinia';
+import { useGeneralStore } from '@/stores/GeneralStore'
+import paramStore from '@/stores/ParamSdkStore';
 
 const nameEQ = 'octopus-language=';
 const ca = document.cookie.split(';');
@@ -33,7 +34,7 @@ if(0===language.length){
   }
 }
 
-const i18n = setupI18n({locale: language}, store.state.general.education);
+const i18n = setupI18n({locale: language}, false);
 
 paramStore.initialize({
   generalParameters: {},
@@ -50,10 +51,12 @@ paramStore.initialize({
   octopusApi: {}
 });
 
+const pinia = createPinia();
+
 // Initialisation store
 createApp(App)
 .use(i18n)
-.use(store)
+.use(pinia)
 .use(router)
 .use(VueLazyLoad)
 .mount('#app');

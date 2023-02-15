@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import displayMethods from '../mixins/displayMethods';
 import imageProxy from '../mixins/imageProxy';
 import { orgaComputed } from '../mixins/orgaComputed';
@@ -200,7 +200,7 @@ export default defineComponent({
       this.error = false;
       try {
         this.emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
-        if("PUBLIC"!==this.emission.orga.privacy && this.filterOrga!==this.emission.orga.id){
+        if("PUBLIC"!==this.emission.orga.privacy && this.filterOrgaId!==this.emission.orga.id){
           this.initError();
           return;
         }

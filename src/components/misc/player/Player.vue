@@ -7,7 +7,7 @@
     <template v-if="display">
       <audio
         id="audio-player"
-        :src="!live && !radio? audioUrlToPlay: undefined"
+        :src="!playerLive && !playerRadio? audioUrlToPlay: undefined"
         autoplay
         @timeupdate="onTimeUpdate"
         @ended="onFinished"
@@ -46,12 +46,12 @@
   </div>
 </template>
 <script lang="ts">
-import { mapState } from 'vuex';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { playerLogic } from '../../mixins/player/playerLogic';
-import { StoreState } from '@/store/classStore/typeAppStore';
 import PlayerCompact from '../player/PlayerCompact.vue';
 import PlayerLarge from '../player/PlayerLarge.vue';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'Player',
@@ -82,16 +82,17 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState({
-      display: (state: StoreState) => 'STOPPED' !== state.player.status,
-      playerHeight(state: StoreState) {
-        if ('STOPPED' === state.player.status || this.forceHide) return 0;
-        if (this.largeVersion) return '27rem';
-        if (window.innerWidth > 450 && !this.showTimeline) return '5rem';
-        if (window.innerWidth > 450 && this.showTimeline) return '6rem';
-        return '3.5rem';
-      },
-    }),
+    ...mapState(usePlayerStore, ['playerStatus']),
+    display(){
+      return 'STOPPED' !== this.playerStatus;
+    },
+    playerHeight() {
+      if ('STOPPED' === this.playerStatus || this.forceHide) return 0;
+      if (this.largeVersion) return '27rem';
+      if (window.innerWidth > 450 && !this.showTimeline) return '5rem';
+      if (window.innerWidth > 450 && this.showTimeline) return '6rem';
+      return '3.5rem';
+    },
   },
 
   watch: {
@@ -101,9 +102,10 @@ export default defineComponent({
   },
   
   methods: {
+    ...mapActions(usePlayerStore, ['playerPlay']),
     onHidden(): void {
       if (this.forceHide) {
-        this.$store.commit('player/playPodcast');
+        this.playerPlay();
         this.forceHide = false;
       }
     },

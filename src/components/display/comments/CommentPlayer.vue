@@ -38,6 +38,8 @@
 <script lang="ts">
 import { CommentPodcast } from '@/store/class/general/comment';
 import selenium from '../../mixins/selenium';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentPlayer',
@@ -51,13 +53,14 @@ export default defineComponent({
       displayContent: undefined as CommentPodcast|undefined,
     };
   },
+  computed: {
+    ...mapState(usePlayerStore, ['playerPodcast'])
+  },
   methods: {
     percentPosition(time: number): number {
       let realDuration = this.totalTime;
-      if (this.$store.state.player.podcast?.duration) {
-        realDuration = Math.round(
-          this.$store.state.player.podcast.duration / 1000
-        );
+      if (this.playerPodcast?.duration) {
+        realDuration = Math.round(this.playerPodcast.duration / 1000);
       }
       if (realDuration < this.totalTime) {
         time = time + (this.totalTime - realDuration);

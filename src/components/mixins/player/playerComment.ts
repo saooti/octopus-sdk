@@ -1,12 +1,12 @@
-
-import { mapState } from 'vuex';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
-import { CommentPodcast } from '@/store/class/general/comment';
-import { StoreState } from '@/store/classStore/typeAppStore';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import { defineComponent } from 'vue';
-import { FetchParam } from '@/store/class/general/fetchParam';
-import { InterfacePageable } from '@/store/class/general/interfacePageable';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
+import { FetchParam } from '@/stores/class/general/fetchParam';
+import { InterfacePageable } from '@/stores/class/general/interfacePageable';
 export const playerComment = defineComponent({
   data() {
     return {
@@ -14,11 +14,11 @@ export const playerComment = defineComponent({
     };
   },
   computed: {
-    ...mapState({
-      commentsLoaded(state: StoreState){ return state.comments.loadedComments},
-      live(state: StoreState) { return state.player.live},
-      podcast(state: StoreState) { return state.player.podcast}
-    }),
+    ...mapState(useGeneralStore, ['generalComments']),
+    ...mapState(usePlayerStore, ['playerPodcast', 'playerLive']),
+    commentsLoaded(){
+      return this.generalComments.loadedComments;
+    },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
@@ -31,25 +31,19 @@ export const playerComment = defineComponent({
   },
   methods: {
     editRight(organisation: string): boolean {
-      if (
-        (state.generalParameters.isCommments &&
-          this.organisationId === organisation) ||
-        state.generalParameters.isAdmin
-      )
-        return true;
-      return false;
+      return (true===state.generalParameters.isCommments && this.organisationId === organisation) || true===state.generalParameters.isAdmin;
     },
     initCommentCurrentPodcast(podcastId?: number): Array<number>{
       if (
         podcastId &&
-        this.$store.state.comments.actualPodcastId === podcastId
+        this.generalComments.actualPodcastId === podcastId
       ) {
         this.comments = this.commentsLoaded;
         if (
           this.commentsLoaded &&
-          this.commentsLoaded.length < this.$store.state.comments.totalCount
+          this.commentsLoaded.length < this.generalComments.totalCount
         ) {
-          return [this.commentsLoaded.length, this.$store.state.comments.totalCount];
+          return [this.commentsLoaded.length, this.generalComments.totalCount];
         }
       }
       return [0, 0];
@@ -75,17 +69,17 @@ export const playerComment = defineComponent({
     },
     async initComments(refresh = false): Promise<void> {
       let podcastId, organisation;
-      if (this.podcast) {
-        podcastId = this.podcast.podcastId;
-        organisation = this.podcast.organisation.id;
-      } else if (this.live) {
-        podcastId = this.live.livePodcastId;
-        organisation = this.live.organisation.id;
+      if (this.playerPodcast) {
+        podcastId = this.playerPodcast.podcastId;
+        organisation = this.playerPodcast.organisation.id;
+      } else if (this.playerLive) {
+        podcastId = this.playerLive.livePodcastId;
+        organisation = this.playerLive.organisation.id;
       }
       if (
         refresh &&
         podcastId &&
-        this.$store.state.comments.actualPodcastId !== podcastId
+        this.generalComments.actualPodcastId !== podcastId
       ) {
         return;
       }
@@ -94,7 +88,7 @@ export const playerComment = defineComponent({
       let count = param[1];
       if (
         (!podcastId ||
-          this.$store.state.comments.actualPodcastId === podcastId) &&
+          this.generalComments.actualPodcastId === podcastId) &&
         0 === first
       ){
         return;

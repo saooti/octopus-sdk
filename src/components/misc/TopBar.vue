@@ -7,15 +7,15 @@
       class="top-bar-logo"
       :to="{
         name: 'home',
-        query: { productor: $store.state.filter.organisationId,
-                 iabId: $store.state.filter.iab?.id ,
+        query: { productor: filterOrgaId,
+                 iabId: filterIab?.id ,
                  rubriquesId: rubriqueQueryParam},
       }"
       @click="onDisplayMenu(true)"
     >
       <img
-        :src="!filterOrga || '' === imgUrl ? logoUrl : proxyImageUrl(imgUrl, '', '50')"
-        :alt="!filterOrga || '' === imgUrl ? $t('Logo of main page') : $t('Visual', {name: $store.state.filter?.name})"
+        :src="!filterOrgaId || '' === imgUrl ? logoUrl : proxyImageUrl(imgUrl, '', '50')"
+        :alt="!filterOrgaId || '' === imgUrl ? $t('Logo of main page') : $t('Visual', {name: filterName})"
         :class="isEducation ? 'educationLogo' : ''"
       >
     </router-link>
@@ -61,7 +61,7 @@
           :title="$t('Search')"
           :to="{
             name: 'podcasts',
-            query: { productor: $store.state.filter.organisationId },
+            query: { productor: filterOrgaId },
           }"
           class="btn admin-button m-1 saooti-search"
         />
@@ -71,11 +71,13 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import HomeDropdown from './HomeDropdown.vue';
 import { Organisation } from '@/store/class/general/organisation';
 import orgaFilter from '../mixins/organisationFilter';
 import imageProxy from '../mixins/imageProxy';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent,defineAsyncComponent } from 'vue';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
@@ -101,18 +103,19 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useFilterStore, ['filterLive', 'filterOrgaId', 'filterImgUrl', 'filterIab', 'filterRubrique', 'filterName']),
     routerLinkArray(){
       return [
-        {title : this.$t('Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrga && this.filterOrgaLive) || !this.filterOrga)},
+        {title : this.$t('Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
         {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
         {title : this.$t('Speakers'), routeName: 'participants', condition : true},
         {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
-        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrga || this.isEducation)}]
+        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation)}]
     },
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter?.rubriqueFilter?.length){
-        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      if(this.filterRubrique?.length){
+        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
     },
@@ -122,24 +125,18 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
-    filterOrgaLive(): string {
-      return this.$store.state.filter.live;
-    },
     imgUrl(): string {
-      if (!this.$store.state.filter.imgUrl?.includes('emptypodcast'))
-        return `${this.$store.state.filter.imgUrl}`;
+      if (!this.filterImgUrl?.includes('emptypodcast'))
+        return `${this.filterImgUrl}`;
       return '';
     },
   },
   watch: {
-    filterOrga: {
+    filterOrgaId: {
       immediate: true,
       handler() {
-        if (this.filterOrga) {
-          this.organisationId = this.filterOrga;
+        if (this.filterOrgaId) {
+          this.organisationId = this.filterOrgaId;
         } else {
           this.reset = !this.reset;
         }
@@ -155,10 +152,10 @@ export default defineComponent({
   methods: {
     getQueriesRouter(routeName: string){
       if('podcasts' !== routeName && 'emissions' !== routeName){
-        return { productor: this.$store.state.filter.organisationId};
+        return { productor: this.filterOrgaId};
       }
-      return { productor: this.$store.state.filter.organisationId,
-                   iabId: this.$store.state.filter.iab?.id,
+      return { productor: this.filterOrgaId,
+                   iabId: this.filterIab?.id,
                    rubriquesId: this.rubriqueQueryParam}
     },
     handleScroll(): void {

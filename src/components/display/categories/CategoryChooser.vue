@@ -73,7 +73,8 @@ const getDefaultCategory = (defaultName: string) => {
   }
   return { name: defaultName, id: 0 };
 };
-
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
 import { Category } from '@/store/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -105,11 +106,12 @@ export default defineComponent({
 
 
   computed: {
+    ...mapState(useGeneralStore, ['storedCategories']),
     categoriesChosen(): Array<Category>{
       if(this.initCategories){
         return this.initCategories;
       }
-      return this.$store.state.categories;
+      return this.storedCategories;
     },
     allCategories(): Array<Category> {
       return [...this.categoriesChosen].sort((a: Category, b: Category) =>

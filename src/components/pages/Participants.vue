@@ -20,7 +20,7 @@
 import { orgaComputed } from '../mixins/orgaComputed';
 import ParticipantList from '../display/participant/ParticipantList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -45,7 +45,7 @@ export default defineComponent({
     },
   },
   created() {
-    this.organisationId = this.productor ?this.productor: this.filterOrga;
+    this.organisationId = this.productor ?this.productor: this.filterOrgaId;
   },
 })
 </script>

@@ -6,7 +6,7 @@
       :to="{
         name: 'emission',
         params: { emissionId: emission.emissionId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrgaId },
       }"
       class="d-flex flex-column text-dark"
     >
@@ -61,7 +61,7 @@
         :to="{
           name: 'podcast',
           params: { podcastId: p.podcastId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: filterOrgaId },
         }"
         class="text-dark fw-bold two-line-clamp"
       >
@@ -74,7 +74,7 @@
             :to="{
               name: 'podcast',
               params: { podcastId: p.podcastId },
-              query: { productor: $store.state.filter.organisationId },
+              query: { productor: filterOrgaId },
             }"
             class="d-flex flex-column define-width text-dark"
           >
@@ -97,9 +97,9 @@
         </div>
         <button
           v-if="
-            $store.state.player.podcast !== p ||
-              ($store.state.player.podcast === p &&
-                'PAUSED' === $store.state.player.status)
+            playerPodcast !== p ||
+              (playerPodcast === p &&
+                'PAUSED' === playerStatus)
           "
           class="play-button-box bg-secondary"
           @click="play(p)"
@@ -129,7 +129,7 @@
         :to="{
           name: 'emission',
           params: { emissionId: emission.emissionId },
-          query: { productor: $store.state.filter.organisationId },
+          query: { productor: filterOrgaId },
         }"
         class="btn"
       >
@@ -143,10 +143,13 @@
 import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'EmissionPlayerItem',
@@ -169,6 +172,8 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
+    ...mapState(usePlayerStore, ['playerPodcast', 'playerStatus']),
     isProgressBar(): boolean{
       return (state.emissionsPage.progressBar as boolean);
     },
@@ -204,6 +209,17 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions(usePlayerStore, ['playerPlay', 'playerChangeStatus']),
+    play(podcast: Podcast): void {
+      if (podcast === this.playerPodcast) {
+        this.playerChangeStatus(false);
+      } else {
+        this.playerPlay(podcast);
+      }
+    },
+    pause(): void {
+      this.playerChangeStatus(true);
+    },
     async loadPodcasts(): Promise<void> {
       const nb = this.nbPodcasts ? this.nbPodcasts : 2;
       const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
@@ -227,16 +243,6 @@ export default defineComponent({
         }
       }
       });
-    },
-    play(podcast: Podcast): void {
-      if (podcast === this.$store.state.player.podcast) {
-        this.$store.commit('player/pause', false);
-      } else {
-        this.$store.commit('player/playPodcast', podcast);
-      }
-    },
-    pause(): void {
-      this.$store.commit('player/pause', true);
     },
   },
 })

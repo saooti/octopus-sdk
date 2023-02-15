@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="filterOrga || organisationId"
+    v-if="filterOrgaId || organisationId"
     class="d-flex flex-column align-items-center"
   >
     <ClassicLoading
@@ -42,7 +42,9 @@ import octopusApi from '@saooti/octopus-api';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 dayjs.extend(localizedFormat);
-import { state } from '../../../store/paramStore';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
+import { state } from '../../../stores/ParamSdkStore';
 import { Conference } from '@/store/class/conference/conference';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
@@ -69,6 +71,7 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     livesArray(): Array<{status:string, title:string, lives:Array<Conference>}>{
       return [
         {status: "RECORDING", title:this.$t('In live'), lives:[]},
@@ -83,10 +86,7 @@ export default defineComponent({
       return this.loaded && !this.livesArray[0].lives.length && !this.livesArray[2].lives.length && !this.livesArray[3].lives.length;
     },
     filterOrgaUsed(): string|undefined {
-      return this.filterOrga?this.filterOrga:this.organisationId;
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
+      return this.filterOrgaId?this.filterOrgaId:this.organisationId;
     },
     displayNextLiveMessage(): string {
       if (0 !== this.livesArray[0].lives.length) return '';
@@ -120,7 +120,7 @@ export default defineComponent({
         this.loaded = true;
       }
     },
-    filterOrga(): void {
+    filterOrgaId(): void {
       if(!this.loading){
         this.fetchContent();
       }

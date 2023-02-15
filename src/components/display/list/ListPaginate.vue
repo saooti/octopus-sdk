@@ -51,7 +51,7 @@
 <script lang="ts">
 import domHelper from '../../../helper/dom';
 import ClassicLoading from '../../form/ClassicLoading.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import Paginate from './Paginate.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({

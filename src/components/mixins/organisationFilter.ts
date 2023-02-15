@@ -1,13 +1,16 @@
 
 import { handle403 } from '../mixins/handle403';
-import { Rubriquage } from "@/store/class/rubrique/rubriquage";
+import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import octopusApi from '@saooti/octopus-api';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapActions } from 'pinia';
+import { defineComponent } from 'vue';
 import { AxiosError } from 'axios';
-import { Organisation } from '@/store/class/general/organisation';
+import { Organisation } from '@/stores/class/general/organisation';
 export default defineComponent({
   mixins: [handle403],
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateOrga']),
     async selectOrganisation(organisationId: string): Promise<void> {
       try {
         const response = await octopusApi.fetchData<Organisation>(0,`organisation/${organisationId}`);
@@ -16,7 +19,7 @@ export default defineComponent({
           homePageOrder: true
         }, true);
         const isLive = await octopusApi.fetchData<boolean>(0, 'organisation/liveEnabled/'+organisationId);
-        this.$store.commit('filterOrga', {
+        this.filterUpdateOrga({
           orgaId: organisationId,
           imgUrl: response.imageUrl,
           name: response.name,
@@ -35,7 +38,7 @@ export default defineComponent({
       if (this.$route.query.productor) {
         this.$router.push({ query: {...this.$route.query, ...{productor: undefined} } });
       }
-      this.$store.commit('filterOrga', { orgaId: undefined });
+      this.filterUpdateOrga({ orgaId: undefined });
     }
   },
 });

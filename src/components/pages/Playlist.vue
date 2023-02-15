@@ -57,7 +57,7 @@ import { orgaComputed } from '../mixins/orgaComputed';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import PodcastList from '../display/playlist/PodcastList.vue';
 import octopusApi from '@saooti/octopus-api';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import displayMethods from '../mixins/displayMethods';
 import imageProxy from '../mixins/imageProxy';
 import { handle403 } from '../mixins/handle403';
@@ -132,7 +132,7 @@ export default defineComponent({
         this.loaded = false;
         this.error = false;
         this.playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
-        if("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrga!==this.playlist.organisation?.id){
+        if("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrgaId!==this.playlist.organisation?.id){
           this.initError();
           return;
         }

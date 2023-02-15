@@ -1,16 +1,22 @@
 import octopusApi from '@saooti/octopus-api';
 import { defineComponent } from 'vue';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState, mapActions } from 'pinia';
 export const playerTranscript = defineComponent({
+  computed: {
+    ...mapState(usePlayerStore, ['playerTranscript', 'playerPodcast']),
+  },
   methods: {
+    ...mapActions(usePlayerStore, ['playerUpdateTranscript']),
     async getTranscription(): Promise<void>{
-      if(!this.podcast){
-        this.$store.commit('player/transcript',undefined);
+      if(!this.playerPodcast){
+        this.playerUpdateTranscript(undefined);
         return;
       }
-      const result = await octopusApi.fetchDataPublic<string>(11 , `response/${this.podcast.podcastId}`);
+      const result = await octopusApi.fetchDataPublic<string>(11 , `response/${this.playerPodcast.podcastId}`);
       const arrayTranscript = this.parseSrt(result);
       const actualText = arrayTranscript?.[0]?.startTime === 0 ? arrayTranscript[0].text : "";
-      this.$store.commit('player/transcript',{actual: 0,actualText:actualText, value : arrayTranscript});
+      this.playerUpdateTranscript({actual: 0,actualText:actualText, value : arrayTranscript});
     },
     parseSrt(transcript: string){
       const pattern = /(\d+)\n([\d:,]+)\s+-{2}\>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
@@ -37,18 +43,18 @@ export const playerTranscript = defineComponent({
       return (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+parseFloat(a[2])); 
     },
     onTimeUpdateTranscript(currentTime:number){
-      if((this.$store.state.player.transcript?.value[this.$store.state.player.transcript?.actual]?.endTime ?? Infinity) < currentTime){
-        this.$store.state.player.transcript.actual +=1;
-        this.$store.state.player.transcript.actualText = this.$store.state.player.transcript?.value[this.$store.state.player.transcript?.actual].text ?? "";
+      if(this.playerTranscript && (this.playerTranscript?.value[this.playerTranscript?.actual]?.endTime ?? Infinity) < currentTime){
+        this.playerTranscript.actual +=1;
+        this.playerTranscript.actualText = this.playerTranscript?.value[this.playerTranscript?.actual].text ?? "";
       }
     },
     onSeekedTranscript(currentTime: number){
-      if(this.$store.state.player.transcript){
+      if(this.playerTranscript){
         let newActual = 0;
-        while (currentTime > (this.$store.state.player.transcript.value[newActual]?.endTime ?? Infinity)){
+        while (currentTime > (this.playerTranscript.value[newActual]?.endTime ?? Infinity)){
           newActual +=1;
         }
-        this.$store.state.player.transcript.actual = newActual;
+        this.playerTranscript.actual = newActual;
       }
     }
   },

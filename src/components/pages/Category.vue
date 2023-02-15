@@ -5,14 +5,16 @@
       :first="0"
       :size="30"
       :iab-id="iabId"
-      :organisation-id="filterOrga"
+      :organisation-id="filterOrgaId"
     />
   </div>
 </template>
 
 <script lang="ts">
 import PodcastList from '../display/podcasts/PodcastList.vue';
-
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue'
 import { Category } from '@/store/class/general/category';
 export default defineComponent({
@@ -24,14 +26,10 @@ export default defineComponent({
   },
 
   computed: {
-    categories(): Array<Category> {
-      return this.$store.state.categories;
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
+    ...mapState(useGeneralStore, ['storedCategories']),
+    ...mapState(useFilterStore, ['filterOrgaId']),
     title():string{
-      const matchCategories = this.categories.filter((c: Category) => c.id === this.iabId);
+      const matchCategories = this.storedCategories.filter((c: Category) => c.id === this.iabId);
       if (1 !== matchCategories.length) return "";
       return matchCategories[0]['name'];
     }

@@ -119,9 +119,10 @@ import { orgaComputed } from '../../mixins/orgaComputed';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
 import octopusApi from '@saooti/octopus-api';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { Organisation } from '@/store/class/general/organisation';
-
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
 const ELEMENTS_COUNT = 50;
 const DEFAULT_ORGANISATION_ID = "";
 const DEFAULT_ORGANISATION_IMAGE = '/img/emptypodcast.webp';
@@ -163,6 +164,7 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useAuthStore, ['authOrganisation']),
     myOrganisation(): Organisation|undefined {
       if (!this.authenticated) return undefined;
       return {
@@ -188,7 +190,7 @@ export default defineComponent({
   async created() {
     if (
       this.authenticated &&
-      undefined === this.$store.state.auth?.organisation.imageUrl
+      (undefined === this.authOrganisation.imageUrl ||'' === this.authOrganisation.imageUrl)
     ) {
       const data = await octopusApi.fetchData<Organisation>(0,`organisation/${this.myOrganisationId ?this.myOrganisationId:""}`);
       this.myImage = data.imageUrl;

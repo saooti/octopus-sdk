@@ -18,7 +18,7 @@
     :to="{
       name: 'podcast',
       params: { podcastId: podcastId },
-      query: { productor: filterOrga },
+      query: { productor: filterOrgaId },
     }"
     class="text-dark flex-grow-1 title-podcast-item"
   >
@@ -39,7 +39,7 @@
       :to="{
         name: 'productor',
         params: { productorId: podcastOrganisationId },
-        query: { productor: filterOrga },
+        query: { productor: filterOrgaId },
       }"
       class="text-dark producer-podcast-item"
     >
@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import AnimatorsItem from './AnimatorsItem.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import dayjs from 'dayjs';
 // @ts-ignore

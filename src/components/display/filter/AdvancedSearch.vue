@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import CategorySearchFilter from './CategorySearchFilter.vue';
 import DateFilter from './DateFilter.vue';
@@ -136,7 +136,7 @@ export default defineComponent({
         true === state.generalParameters.isAdmin;
     },
     organisation(): string|undefined {
-      return this.organisationId??this.filterOrga;
+      return this.organisationId??this.filterOrgaId;
     },
     textNotVisible(): string {
       return this.isEmission? this.$t('Consider podcasts no visible') : this.$t('See podcasts no visible');

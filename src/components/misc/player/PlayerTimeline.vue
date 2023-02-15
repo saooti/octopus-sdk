@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { defineComponent } from 'vue';
 import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({

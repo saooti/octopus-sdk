@@ -40,7 +40,8 @@ import CommentInput from './CommentInput.vue';
 import cookies from '../../mixins/cookies';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
-
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 import { CommentPodcast } from '@/store/class/general/comment';
 export default defineComponent({
@@ -62,6 +63,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useGeneralStore, ['generalComments']),
     commentTitle():string{
       const count = this.loaded && this.totalCount > 0 ? this.$t('()', { nb: this.totalCount }) : '';
       return this.$t("Podcast's comments")+count;
@@ -89,10 +91,10 @@ export default defineComponent({
     },
     knownIdentity: {
       get(): string|null {
-        return this.$store.state.comments.knownIdentity;
+        return this.generalComments.knownIdentity;
       },
       set(value: string|null) {
-        this.$store.commit('setCommentIdentity', value);
+        this.setCommentIdentity(value);
       },
     },
     isLive(): boolean {
@@ -109,9 +111,10 @@ export default defineComponent({
     this.knownIdentity = this.getCookie('comment-octopus-name');
   },
   methods: {
+    ...mapActions(useGeneralStore, ['setCommentIdentity', 'setCommentLoaded']),
     updateFetch(value: { count: number, comments: Array<CommentPodcast> }): void {
       this.loaded = true;
-      this.$store.commit('setCommentLoaded', {
+      this.setCommentLoaded({
         ...value,
         podcastId: this.podcast? this.podcast.podcastId: undefined,
       });

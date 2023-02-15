@@ -4,7 +4,7 @@
       <h1>{{ $t('In live') }}</h1>
       <template v-if="!isPodcastmaker">
         <router-link
-          v-if="liveRight && filterOrga"
+          v-if="liveRight && filterOrgaId"
           to="/main/priv/edit/live"
         >
           <button class="btn btn-primary">
@@ -23,7 +23,7 @@
       </template>
     </div>
     <LiveList
-      v-if="filterOrga || organisationId"
+      v-if="filterOrgaId || organisationId"
       :conference-watched="conferenceWatched"
       :organisation-id="organisationId"
       @initConferenceIds="initConferenceIds"
@@ -32,10 +32,13 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import { Organisation } from '@/store/class/general/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { Conference } from '@/store/class/conference/conference';
+import { useAuthStore } from '@/stores/AuthStore';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 const LiveList = defineAsyncComponent(() => import('../display/live/LiveList.vue'));
 const OrganisationChooser = defineAsyncComponent(() => import('../display/organisation/OrganisationChooser.vue'));
 export default defineComponent({
@@ -56,11 +59,10 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
+    ...mapState(useAuthStore, ['authOrganisation']),
     liveRight(): boolean {
       return (state.generalParameters.isRoleLive as boolean)&& this.live;
-    },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -69,10 +71,10 @@ export default defineComponent({
   created() {
     if (this.productor) {
       this.$emit('update:organisationId',this.productor);
-    } else if (this.$store.state.filter.organisationId) {
-      this.$emit('update:organisationId',this.$store.state.filter.organisationId);
+    } else if (this.filterOrgaId) {
+      this.$emit('update:organisationId',this.filterOrgaId);
     }
-    if (!this.$store.state.auth?.organisation?.attributes?.['live.active']) {
+    if (!this.authOrganisation.attributes?.['live.active']) {
       this.live = false;
     }
   },

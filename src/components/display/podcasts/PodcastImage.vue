@@ -88,12 +88,12 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex';
-import { state } from '../../../store/paramStore';
-import {StoreState} from '@/store/classStore/typeAppStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import imageProxy from '../../mixins/imageProxy';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastImage',
@@ -113,19 +113,14 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState({
-      playingPodcast(state: StoreState) {
-        return (
-          (state.player.podcast &&
-            state.player.podcast.podcastId === this.podcast.podcastId) ||
-          (this.fetchConference &&
-            'null' !== this.fetchConference &&
-            state.player.live &&
-            state.player.live.conferenceId ===
-              this.fetchConference.conferenceId)
-        );
-      },
-    }),
+    ...mapState(usePlayerStore, ['playerPodcast', 'playerLive', 'playerStatus']),
+    playingPodcast(){
+      return (
+        (this.playerPodcast?.podcastId === this.podcast.podcastId) ||
+        (this.fetchConference && 'null' !== this.fetchConference.toString() &&
+          this.playerLive?.conferenceId ===this.fetchConference.conferenceId)
+      );
+    },
     authenticated(): boolean {
       return (state.generalParameters.authenticated as boolean);
     },
@@ -252,18 +247,19 @@ export default defineComponent({
   },
  
   methods: {
+    ...mapActions(usePlayerStore, ['playerChangeStatus', 'playerPlay']),
     play(): void {
       if (this.isLiveToBeRecorded) {
         return;
       }
       if(this.playingPodcast){
-        this.$store.commit('player/pause', "PLAYING"===this.$store.state.player.status);
+        this.playerChangeStatus("PLAYING"===this.playerStatus);
         return;
       }
       if (!this.recordingLive) {
-        this.$store.commit('player/playPodcast', this.podcast);
+        this.playerPlay(this.podcast);
       }else{
-        this.$store.commit('player/playPodcast', {
+        this.playerPlay({
           title: this.podcast.title,
           audioUrl: this.podcast.audioUrl,
           duration: this.podcast.duration,

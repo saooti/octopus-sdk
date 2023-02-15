@@ -75,6 +75,8 @@
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 import { RouteLocationRaw } from 'vue-router';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 export default defineComponent({
   name: 'PodcastInlineListTemplate',
@@ -104,9 +106,10 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId', 'filterRubrique', 'filterIab', 'filterRubriquage']),
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter?.rubriqueFilter?.length){
-        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      if(this.filterRubrique?.length){
+        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
     },
@@ -116,19 +119,20 @@ export default defineComponent({
         return {
           name: 'category',
           params:{ 'iabId': this.iabId },
-          query: { productor: this.$store.state.filter.organisationId },
+          query: { productor: this.filterOrgaId },
         };
       }
       return {
           name: 'podcasts',
-          query: { productor: this.$store.state.filter.organisationId, 
-                  iabId:this.$store.state.filter.iab?.id,
+          query: { productor: this.filterOrgaId, 
+                  iabId:this.filterIab?.id,
                   rubriquesId: this.rubriqueQueryParam },
         };
     },
   },
 
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateRubrique']),
     sortChrono():void{
       this.$emit('sortChrono');
     },
@@ -153,18 +157,18 @@ export default defineComponent({
         nameRubriquage:  '',
         nameRubrique: ''
       };
-      if(this.$store.state.filter.rubriquageArray.length){
-        const rubriqueChosen =  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
+      if(this.filterRubriquage.length){
+        const rubriqueChosen =  this.filterRubriquage[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
         filterToAdd = {
-          rubriquageId: this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].rubriquageId, 
+          rubriquageId: this.filterRubriquage[this.rubriqueId.length - 1].rubriquageId, 
           rubriqueId: rubriqueChosenId, 
-          nameRubriquage:  this.$store.state.filter.rubriquageArray[this.rubriqueId.length - 1].title,
+          nameRubriquage:  this.filterRubriquage[this.rubriqueId.length - 1].title,
           nameRubrique: rubriqueChosen.name
         };
       }
-      const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
+      const newFilter: Array<RubriquageFilter> = Array.from(this.filterRubrique);
       newFilter.push(filterToAdd);
-      this.$store.commit('filterRubrique', newFilter);
+      this.filterUpdateRubrique(newFilter);
       const queries = this.$route.query;
       const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
       this.$router.push({ name: 'podcasts',query: { ...queries, ...{ rubriquesId: queryString }} });

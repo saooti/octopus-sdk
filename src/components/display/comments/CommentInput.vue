@@ -92,11 +92,14 @@
 import octopusApi from '@saooti/octopus-api';
 import crudApi from '@/api/classicCrud';
 import cookies from '../../mixins/cookies';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import { CommentPodcast } from '@/store/class/general/comment';
 import Constants from '../../../../public/config';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const AddCommentModal = defineAsyncComponent(() => import('./AddCommentModal.vue'));
 const MessageModal = defineAsyncComponent(() => import('../../misc/modal/MessageModal.vue'));
@@ -132,6 +135,8 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(usePlayerStore, ['playerPodcast', 'playerLive', 'playerElapsed', 'playerTotal']),
+    ...mapState(useAuthStore, ['authProfile']),
     validName(): boolean{
       return this.countName <= this.maxName;
     },
@@ -163,7 +168,7 @@ export default defineComponent({
         true === state.generalParameters.isAdmin;
     },
     userId(): string|undefined {
-      return state.generalParameters.authenticated ? this.$store.state.auth?.profile.userId : undefined;
+      return state.generalParameters.authenticated ? this.authProfile?.userId : undefined;
     },
     phase(): string|undefined {
       if(undefined === this.podcast){
@@ -235,18 +240,18 @@ export default defineComponent({
       this.$emit('cancelAction');
     },
     defineTimelineValue(): number{
-      let timeline = 0;
+      let timeline = 0; 
       if (
         undefined !== this.podcast &&(
-        (this.$store.state.player.podcast?.podcastId ===this.podcast.podcastId) ||
-        (this.$store.state.player.live?.livePodcastId ===this.podcast.podcastId))
+        (this.playerPodcast?.podcastId ===this.podcast.podcastId) ||
+        (this.playerLive?.livePodcastId ===this.podcast.podcastId))
       ) {
         timeline = Math.round(
-          this.$store.state.player.elapsed * this.$store.state.player.total
+          this.playerElapsed * this.playerTotal
         );
-        if (this.podcast.duration && this.$store.state.player.podcast) {
+        if (this.podcast.duration && this.playerPodcast) {
           timeline = Math.round(
-            timeline - (this.$store.state.player.total - this.podcast.duration / 1000)
+            timeline - (this.playerTotal - this.podcast.duration / 1000)
           );
         }
       }

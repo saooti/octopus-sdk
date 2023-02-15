@@ -1,19 +1,22 @@
 
-import { Category } from "@/store/class/general/category";
+import { Category } from "@/stores/class/general/category";
 import orgaFilter from '../mixins/organisationFilter';
 import octopusApi from '@saooti/octopus-api';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 export default defineComponent({
   mixins: [orgaFilter],
   methods: {
+    ...mapActions(useGeneralStore, ['storedUpdateCategories']),
     async initSdk() {
       if (0 === (state.generalParameters.allCategories as Array<Category>).length) {
         octopusApi.fetchDataWithParams<Array<Category>>(0, `iab/list${state.octopusApi.organisationId? '/'+state.octopusApi.organisationId : ''}`, { lang: this.$i18n.locale }).then((data: Array<Category>) => {
-          this.$store.commit('categoriesSet', data);
+          this.storedUpdateCategories(data);
         });
       }else{
-        this.$store.commit('categoriesSet', (state.generalParameters.allCategories as Array<Category>));
+        this.storedUpdateCategories((state.generalParameters.allCategories as Array<Category>));
       }
       const captcha = (document.getElementsByClassName('grecaptcha-badge')[0] as HTMLElement);
       if (captcha) {

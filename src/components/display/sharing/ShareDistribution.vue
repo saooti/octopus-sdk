@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import displayMethods from '../../mixins/displayMethods';

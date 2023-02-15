@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex align-items-center my-3">
     <div
-      v-if="!isPodcastmaker && !filterOrga"
+      v-if="!isPodcastmaker && !filterOrgaId"
       class="filter-organisation-chooser"
     >
       <OrganisationChooser
@@ -42,9 +42,11 @@
 
 <script lang="ts">
 import ClassicSearch from '../../form/ClassicSearch.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import orgaFilter from '../../mixins/organisationFilter';
 import { Organisation } from '@/store/class/general/organisation';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const OrganisationChooser = defineAsyncComponent(() => import('../organisation/OrganisationChooser.vue'));
 const ClassicCheckbox = defineAsyncComponent(() => import('../../form/ClassicCheckbox.vue'));
@@ -70,6 +72,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
@@ -79,30 +82,28 @@ export default defineComponent({
       if ('playlist' === this.type) return this.$t('Look for playlist name');
       return this.$t('Look for podcast name');
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
   },
   watch: {
-    filterOrga():void{
-      this.keepOrganisation = undefined!==this.filterOrga;
-      if (this.filterOrga) {
-        this.$emit('update:organisationId', this.filterOrga);
+    filterOrgaId():void{
+      this.keepOrganisation = undefined!==this.filterOrgaId;
+      if (this.filterOrgaId) {
+        this.$emit('update:organisationId', this.filterOrgaId);
       }
     },
   },
   async created() {
     if (!this.organisationId) return;
-    if(this.$store.state.filter.organisationId === this.organisationId){
+    if(this.filterOrgaId === this.organisationId){
       this.keepOrganisation = true;
     }
   },
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateOrga']),
     onOrganisationSelected(organisation: Organisation): void {
       if (this.$route.query.productor) {
         this.$router.push({ query: { productor: undefined } });
       }
-      this.$store.commit('filterOrga', {orgaId: undefined});
+      this.filterUpdateOrga({orgaId: undefined});
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
         this.$emit('update:organisationId', organisation.id);

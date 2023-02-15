@@ -30,11 +30,14 @@
 
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
 import { Category } from '@/store/class/general/category';
 export default defineComponent({
   name: 'Home',
@@ -47,20 +50,22 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useGeneralStore, ['storedCategories']),
+    ...mapState(useFilterStore, ['filterRubriquage', 'filterOrgaId', 'filterRubrique', 'filterRubriqueDisplay', 'filterIab']),
     rubriqueDisplay(): Array<Rubrique>{
-      return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
+      return this.filterRubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
     },
     rubriquageFilter(): Array<Rubriquage>{
-      return this.$store.state.filter.organisationId ? this.$store.state.filter.rubriquageArray :[];
+      return this.filterOrgaId? this.filterRubriquage :[];
     },
     rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
+      return this.filterRubrique;
     },
     categories(): Array<Category> {
-      if(this.$store.state.filter.iab){
-        return [this.$store.state.filter.iab];
+      if(this.filterIab){
+        return [this.filterIab];
       }
-      return this.$store.state.categories.filter((c: Category) => {
+      return this.storedCategories.filter((c: Category) => {
         if (state.generalParameters.podcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });

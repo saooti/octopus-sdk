@@ -52,7 +52,7 @@
 <script lang="ts">
 import PodcastItemInfo from './PodcastItemInfo.vue';
 import PodcastImage from './PodcastImage.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import dayjs from 'dayjs';
 import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'

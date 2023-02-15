@@ -129,7 +129,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import selenium from '../../mixins/selenium';
 import displayMethods from '../../mixins/displayMethods';
 import { CommentPodcast } from '@/store/class/general/comment';
@@ -137,6 +137,8 @@ import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
 const CommentParentInfo = defineAsyncComponent(() => import('./CommentParentInfo.vue'));
@@ -177,6 +179,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useGeneralStore, ['generalComments']),
     validName(): boolean{
       return this.countName <= this.maxName;
     },
@@ -200,10 +203,10 @@ export default defineComponent({
     },
     knownIdentity: {
       get(): string|null {
-        return this.$store.state.comments.knownIdentity;
+        return this.generalComments.knownIdentity;
       },
       set(value: string|null) {
-        this.$store.commit('setCommentIdentity', value);
+        this.setCommentIdentity(value);
       },
     },
     recordingInLive(): boolean {
@@ -215,6 +218,7 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions(useGeneralStore, ['setCommentIdentity']),
     answerComment(): void {
       this.collapseVisible = true;
       this.focus = !this.focus;

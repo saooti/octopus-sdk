@@ -9,7 +9,7 @@
   />
   <CommentPlayer
     v-if="showTimeline"
-    :total-time="totalSecondes"
+    :total-time="playerTotal"
     :comments="comments"
   />
 </template>
@@ -17,6 +17,8 @@
 <script lang="ts">
 import ProgressBar from '../ProgressBar.vue'
 import { CommentPodcast } from '@/store/class/general/comment';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentPlayer = defineAsyncComponent(() => import('../../display/comments/CommentPlayer.vue'));
 export default defineComponent({
@@ -40,12 +42,10 @@ export default defineComponent({
   emits: ['updateNotListenTime'],
   
   computed: {
+    ...mapState(usePlayerStore, ['playerElapsed', 'playerTotal', 'playerPodcast', 'playerLive']),
     percentProgress(): number{
-      if(!this.$store.state.player.elapsed){return 0;}
-      return this.$store.state.player.elapsed * 100;
-    },
-    totalSecondes(): number{
-      return this.$store.state.player.total;
+      if(!this.playerElapsed){return 0;}
+      return this.playerElapsed * 100;
     },
   },
 
@@ -59,11 +59,11 @@ export default defineComponent({
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
-      const seekTime = this.$store.state.player.total * percentPosition;
+      const seekTime = this.playerTotal * percentPosition;
       this.isSeekTo(audioPlayer, seekTime);
     },
     isSeekTo(audioPlayer: HTMLAudioElement, seekTime: number): void {
-      if (this.$store.state.player.podcast || this.$store.state.player.live) {
+      if (this.playerPodcast || this.playerLive) {
         this.$emit('updateNotListenTime',seekTime - this.listenTime);
       }
       audioPlayer.currentTime = seekTime;

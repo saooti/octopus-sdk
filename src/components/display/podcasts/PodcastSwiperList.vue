@@ -46,12 +46,14 @@ import PodcastInlineListTemplate from './PodcastInlineListTemplate.vue';
 import octopusApi from '@saooti/octopus-api';
 import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { Podcast } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 export default defineComponent({
@@ -92,14 +94,12 @@ export default defineComponent({
     };
   },
   computed: {
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
+    ...mapState(useFilterStore, ['filterOrgaId']),
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrga;
+      return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
     watchVariable():string{
-      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
+      return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     },
     sizeItem(): number {
       return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 13;

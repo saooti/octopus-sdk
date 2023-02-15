@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import ClassicSearch from '../form/ClassicSearch.vue';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { defineComponent } from 'vue';

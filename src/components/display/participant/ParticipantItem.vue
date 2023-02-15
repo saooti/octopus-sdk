@@ -7,7 +7,7 @@
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
-        query: { productor: filterOrga },
+        query: { productor: filterOrgaId },
       }"
       class="mt-3 text-dark"
       :title="$t('Participant')"
@@ -45,7 +45,7 @@
       :to="{
         name: 'productor',
         params: { productorId: participant.orga.id },
-        query: { productor: filterOrga },
+        query: { productor: filterOrgaId },
       }"
       class="participant-producer"
     >
@@ -57,7 +57,7 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import { Participant } from '@/store/class/general/participant';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';
 import { orgaComputed } from '../../mixins/orgaComputed';

@@ -49,7 +49,7 @@
 <script lang="ts">
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import displayMethods from '../../mixins/displayMethods';
 import Popover from '../../misc/Popover.vue';
 import ShareButtonsIntern from './ShareButtonsIntern.vue';

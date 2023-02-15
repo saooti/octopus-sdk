@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import { Podcast } from '@/store/class/general/podcast';
 import { CustomPlayer } from '@/store/class/general/customPlayer';

@@ -43,10 +43,13 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import Popover from '../../misc/Popover.vue';
 import { Category } from '@/store/class/general/category';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState, mapActions } from 'pinia';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'CategoryList',
   components:{
@@ -66,20 +69,19 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useGeneralStore, ['storedCategories', 'storedCategoriesOrga']),
+    ...mapState(useFilterStore, ['filterOrgaId']),
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    categoriesWatch(): Array<Category>{
-      return this.$store.state.categories;
-    },
     categories(): Array<Category> {
       let arrayCategories: Array<Category>  = [];
-      if (this.filterOrga) {
-        arrayCategories = this.$store.state.categoriesOrga.filter((c: Category) => {
+      if (this.filterOrgaId) {
+        arrayCategories = this.storedCategoriesOrga.filter((c: Category) => {
           return c.podcastOrganisationCount;
         });
       }else{
-        arrayCategories = this.$store.state.categories.filter((c: Category) => {
+        arrayCategories = this.storedCategories.filter((c: Category) => {
           if (this.isPodcastmaker) return c.podcastOrganisationCount;
           return c.podcastCount;
         });
@@ -87,14 +89,11 @@ export default defineComponent({
       this.$emit('categoriesLength', arrayCategories.length);
       return arrayCategories;
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
     watchVariable(): string{
       return `${this.isDisplay}|${this.categories}`;
     },
     reloadVariable():string{
-      return `${this.filterOrga}|${this.categoriesWatch}`;
+      return `${this.filterOrgaId}|${this.storedCategories}`;
     }
   },
   watch: {
@@ -111,8 +110,8 @@ export default defineComponent({
       deep: true,
       immediate:true,
       handler(){
-        if (this.filterOrga) {
-          this.fetchCategories(this.filterOrga);
+        if (this.filterOrgaId) {
+          this.fetchCategories(this.filterOrgaId);
         }
       }
     }
@@ -125,12 +124,14 @@ export default defineComponent({
   },
   
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateIab']),
+    ...mapActions(useGeneralStore, ['storedUpdateCategoriesOrga']),
     checkIfFilter(category: Category): void{
       if(!this.isFilter){
         this.$router.push({
           name: 'category',
           params: { iabId: category.id.toString() },
-          query: { productor: this.filterOrga },
+          query: { productor: this.filterOrgaId },
         });
         return;
       }
@@ -138,7 +139,7 @@ export default defineComponent({
       if(!queries.iabId || ('string'===typeof queries.iabId &&  parseInt(queries.iabId ,10) !== category.id)) {
         this.$router.replace({ query: { ...queries, ...{ iabId: category.id.toString() }} });
       }
-      this.$store.commit('filterIab',category);
+      this.filterUpdateIab(category);
     },
     resizeWindow(): void {
       const categoryList = (this.$refs.categoryListContainer as HTMLElement);
@@ -168,7 +169,7 @@ export default defineComponent({
       const data = await octopusApi.fetchDataWithParams<Array<Category>>(0, `iab/list/${organisationId}`,{
         lang: this.$i18n.locale,
       });
-      this.$store.commit('categoriesOrgaSet', data);
+      this.storedUpdateCategoriesOrga(data);
     },
   },
 })

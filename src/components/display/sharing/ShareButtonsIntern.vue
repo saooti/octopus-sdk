@@ -87,7 +87,7 @@
 import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/store/class/general/emission';
 import { Podcast } from '@/store/class/general/podcast';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import Snackbar from '../../misc/Snackbar.vue';
 import displayMethods from '../../mixins/displayMethods';
 import { defineComponent, defineAsyncComponent } from 'vue';

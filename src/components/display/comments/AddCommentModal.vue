@@ -62,9 +62,11 @@
 
 <script lang="ts">
 import Constants from '../../../../public/config';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import ClassicModal from '../../misc/modal/ClassicModal.vue';
 import api from '@/api/initialize';
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
 import { VueRecaptcha } from 'vue-recaptcha';
 import { defineComponent } from 'vue';
 export default defineComponent({
@@ -87,6 +89,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ['authProfile']),
     errorText():string {
       if(this.isCaptchaTest){
         return this.$t('Recaptcha not active');
@@ -110,7 +113,7 @@ export default defineComponent({
   methods: {
     initAuthenticatedName():void{
       if (!state.generalParameters.authenticated) { return; }
-      this.name = (`${this.$store.state.auth?.profile.firstname||''} ${this.$store.state.auth?.profile.lastname||''}`).trim();
+      this.name = (`${this.authProfile?.firstname||''} ${this.authProfile?.lastname||''}`).trim();
       this.isVerify = true;
     },
     async handleSuccess(token: string) {

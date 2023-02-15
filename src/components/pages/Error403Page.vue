@@ -28,11 +28,14 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'Error403Page',
   computed: {
+    ...mapState(useGeneralStore, ['metaTitle']),
     authenticated(): boolean {
       return (state.generalParameters.authenticated as boolean);
     },
@@ -41,7 +44,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    document.title = this.$store.state.general.metaTitle;
+    document.title = this.metaTitle;
   },
 });
 </script>

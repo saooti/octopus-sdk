@@ -63,12 +63,13 @@
 <script lang="ts">
 import { orgaComputed } from '../mixins/orgaComputed';
 import PodcastList from '../display/podcasts/PodcastList.vue';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { Emission } from '@/store/class/general/emission';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
-
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const EmissionChooser = defineAsyncComponent(() => import('../display/emission/EmissionChooser.vue'));
 export default defineComponent({
@@ -106,6 +107,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useFilterStore, ['filterRubrique', 'filterIab']),
     titleDisplay(): string{
       return state.podcastsPage.titlePage ?? this.$t('All podcasts');
     },
@@ -114,7 +116,7 @@ export default defineComponent({
         true===state.generalParameters.isAdmin;
     },
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrga;
+      return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
     pageParameters(){
       return {
@@ -141,11 +143,11 @@ export default defineComponent({
   methods: {
     initPodcastsPage(){
       this.searchPattern = this.searchInit ?? '';
-      this.organisationId = this.productor ?this.productor: this.filterOrga;
+      this.organisationId = this.productor ?this.productor: this.filterOrgaId;
       this.includeHidden = this.organisation && this.organisationRight ? true : false;
-      this.iabId =this.$store.state.filter.iab?.id;
-      if(this.$store.state.filter.rubriqueFilter.length){
-        this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
+      this.iabId =this.filterIab?.id;
+      if(this.filterRubrique.length){
+        this.updateRubriquageFilter(this.filterRubrique);
       }
       this.$nextTick(() => {
         this.isInit = true;

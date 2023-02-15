@@ -1,11 +1,12 @@
-import { mapState } from 'vuex';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState, mapActions } from 'pinia';
 /* eslint-disable */
 let Hls:any = null;
 /* eslint-enable */
 import { defineComponent } from 'vue';
-import { Player } from '@/store/class/general/player';
 export const playerLive = defineComponent({
   data() {
     return {
@@ -19,21 +20,21 @@ export const playerLive = defineComponent({
     };
   },
   computed: {
-    ...mapState('player',{
-      live(state: Player) { return state.live}
-    }),
+    ...mapState(usePlayerStore, ['playerLive', 'playerRadio']),
+    ...mapState(useAuthStore, ['authOrgaId'])
   },
   methods: {
+    ...mapActions(usePlayerStore, ['playerChangeStatus']),
     onPlay(): void {
-      this.$store.commit('player/pause', false);
+      this.playerChangeStatus(false);
     },
     playRadio(){
-      if (!this.radio) return;
-      this.playHls(this.radio.url);
+      if (!this.playerRadio) return;
+      this.playHls(this.playerRadio.url);
     },
     playLive() {
-      if (!this.live) return;
-      const hlsStreamUrl = `${state.podcastPage.hlsUri}stream/dev.${this.live.conferenceId}/index.m3u8`;
+      if (!this.playerLive) return;
+      const hlsStreamUrl = `${state.podcastPage.hlsUri}stream/dev.${this.playerLive.conferenceId}/index.m3u8`;
       this.playHls(hlsStreamUrl);
     },
     async playHls(hlsStreamUrl: string): Promise<void>{
@@ -60,14 +61,14 @@ export const playerLive = defineComponent({
       }
     },
     async initLiveDownloadId(){
-      if(!this.live){ return;}
+      if(!this.playerLive){ return;}
       let downloadId = null;
       try {
-        downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.live.livePodcastId, undefined);
-        await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.live.livePodcastId+".m3u8",{
+        downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.playerLive.livePodcastId, undefined);
+        await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.playerLive.livePodcastId+".m3u8",{
           'downloadId': null!==downloadId ? downloadId : undefined,
           'origin':'octopus',
-          'distributorId':this.$store.state.auth?.organisationId
+          'distributorId':this.authOrgaId
         });
         this.setDownloadId(downloadId);
       } catch (error) {

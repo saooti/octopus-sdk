@@ -98,7 +98,7 @@ import PodcastModuleBox from '../display/podcasts/PodcastModuleBox.vue';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import octopusApi from '@saooti/octopus-api';
 import crudApi from '@/api/classicCrud';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import dayjs from 'dayjs';
 import { Podcast } from '@/store/class/general/podcast';
 import { Conference } from '@/store/class/conference/conference';
@@ -107,6 +107,8 @@ import { defineComponent, defineAsyncComponent } from 'vue';
 import CommentSectionVue from '../display/comments/CommentSection.vue';
 import { CommentPodcast } from '@/store/class/general/comment';
 import { Category } from '@/store/class/general/category';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
 import { AxiosError } from 'axios';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
@@ -153,6 +155,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useGeneralStore, ['storedCategories']),
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
@@ -174,7 +177,7 @@ export default defineComponent({
     },
     categories(): Array<Category> {
       if ('undefined' === typeof this.podcast) return [];
-      return this.$store.state.categories
+      return this.storedCategories
         .filter((item: Category) => {
           return ( this.podcast?.emission.iabIds &&
             -1 !== this.podcast.emission.iabIds.indexOf(item.id)
@@ -292,7 +295,7 @@ export default defineComponent({
       this.error = false;
       try {
         const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+this.podcastId); 
-        if("PUBLIC"!==data.organisation.privacy && this.filterOrga!==data.organisation.id){
+        if("PUBLIC"!==data.organisation.privacy && this.filterOrgaId!==data.organisation.id){
           this.initError();
           return;
         }

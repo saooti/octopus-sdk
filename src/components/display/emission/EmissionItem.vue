@@ -6,7 +6,7 @@
       :to="{
         name: 'emission',
         params: { emissionId: emission.emissionId },
-        query: { productor: filterOrga },
+        query: { productor: filterOrgaId },
       }"
       :title="$t('Emission')"
       class="d-flex flex-grow-1 text-dark"
@@ -45,7 +45,7 @@
           :to="{
             name: 'productor',
             params: { productorId: emission.orga.id },
-            query: { productor: filterOrga },
+            query: { productor: filterOrgaId },
           }"
         >
           © {{ emission.orga.name }}
@@ -58,7 +58,7 @@
 <script lang="ts">
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { Emission } from '@/store/class/general/emission';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';

@@ -46,7 +46,9 @@
 import { orgaComputed } from '../mixins/orgaComputed';
 import EmissionList from '../display/emission/EmissionList.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
@@ -82,6 +84,7 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useFilterStore, ['filterIab', 'filterRubrique']),
     titleDisplay(): string{
       return state.emissionsPage.titlePage??this.$t('All emissions');
     },
@@ -93,7 +96,7 @@ export default defineComponent({
         true===state.generalParameters.isAdmin
     },
     organisation(): string|undefined {
-      return this.organisationId?this.organisationId:this.filterOrga;
+      return this.organisationId?this.organisationId:this.filterOrgaId;
     },
   },
   watch:{
@@ -114,13 +117,13 @@ export default defineComponent({
   },
   methods: {
     initComponent(): void{
-      this.iabId =this.$store.state.filter.iab?.id;
-      this.organisationId = this.productor ?this.productor: this.filterOrga;
+      this.iabId =this.filterIab?.id;
+      this.organisationId = this.productor ?this.productor: this.filterOrgaId;
       if (this.organisation && this.organisationRight) {
         this.includeHidden = true;
       }
-      if(this.$store.state.filter.rubriqueFilter.length){
-        this.updateRubriquageFilter(this.$store.state.filter.rubriqueFilter);
+      if(this.filterRubrique.length){
+        this.updateRubriquageFilter(this.filterRubrique);
       }
       this.$nextTick(() => {
         this.isInit = true;

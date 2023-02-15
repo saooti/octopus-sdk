@@ -62,9 +62,12 @@
 <script lang="ts">
 import cookies from '../mixins/cookies';
 import ClassicSelect from '../form/ClassicSelect.vue';
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import {loadLocaleMessages} from '@/i18n';
 import octopusApi from '@saooti/octopus-api';
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState, mapActions } from 'pinia';
 import { Category } from '@/store/class/general/category';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
@@ -81,6 +84,8 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useGeneralStore, ['storedCategories', 'platformEducation']),
+    ...mapState(useFilterStore, ['filterRubrique', 'filterOrgaId', 'filterIab']),
     routerLinkSecondArray(){
       return [
         {title : this.$t('Contact'), routeName: '/main/pub/contact'},
@@ -94,8 +99,8 @@ export default defineComponent({
       return state.footer.contactLink;
     },
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter?.rubriqueFilter?.length){
-        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      if(this.filterRubrique?.length){
+        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
     },
@@ -106,25 +111,27 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions(useGeneralStore, ['storedUpdateCategories']),
+    ...mapActions(useFilterStore, ['filterUpdateIab']),
     getQueriesRouter(routeName: string){
       if('podcasts' !== routeName && 'emissions' !== routeName && 'home' !== routeName){
-        return { productor: this.$store.state.filter.organisationId};
+        return { productor: this.filterOrgaId};
       }
-      return { productor: this.$store.state.filter.organisationId,
-                   iabId: this.$store.state.filter.iab?.id,
+      return { productor: this.filterOrgaId,
+                   iabId: this.filterIab?.id,
                    rubriquesId: this.rubriqueQueryParam}
     },
     changeLanguage(): void{
       this.setCookie('octopus-language', this.language);
-      loadLocaleMessages(this.$i18n, this.language, this.$store.state.general.isEducation);
+      loadLocaleMessages(this.$i18n, this.language, this.platformEducation);
       octopusApi.fetchDataWithParams<Array<Category>>(0, `iab/list${state.octopusApi.organisationId? '/'+state.octopusApi.organisationId : ''}`, { lang: this.$i18n.locale }).then((data: Array<Category>) => {
-        this.$store.commit('categoriesSet', data);
-        if(this.$store.state.filter.iab){
-          const category = this.$store.state.categories.filter((c: Category) => {
-            return c.id === this.$store.state.filter.iab.id;
+        this.storedUpdateCategories(data);
+        if(this.filterIab){
+          const category = this.storedCategories.filter((c: Category) => {
+            return c.id === this.filterIab?.id;
           });
           if(category.length){
-            this.$store.commit('filterIab', category[0]);
+            this.filterUpdateIab(category[0]);
           }
         }
       });

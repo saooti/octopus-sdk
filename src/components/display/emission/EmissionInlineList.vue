@@ -60,7 +60,7 @@
 import octopusApi from '@saooti/octopus-api';
 import domHelper from '../../../helper/dom';
 import EmissionPlayerItem from './EmissionPlayerItem.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { handle403 } from '../../mixins/handle403';
 const PHONE_WIDTH = 960;
 import ClassicLoading from '../../form/ClassicLoading.vue';

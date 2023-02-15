@@ -53,7 +53,9 @@ import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
-import { state } from '../../../store/paramStore';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
+import { state } from '../../../stores/ParamSdkStore';
 import { Podcast } from '@/store/class/general/podcast';
 import imageProxy from '../../mixins/imageProxy';
 import { defineComponent } from 'vue'
@@ -98,6 +100,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     podcasts(): Array<Podcast> {
       return this.allPodcasts.slice(this.index, this.index + this.size);
     },
@@ -110,11 +113,8 @@ export default defineComponent({
     isInlineAnimation(): boolean {
       return (state.generalParameters.isInlineAnimation as boolean);
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrga;
+      return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
     previousAvailable(): boolean {
       return this.index > 0;
@@ -126,7 +126,7 @@ export default defineComponent({
       return this.direction > 0 ? 'out-left' : 'out-right';
     },
     watchVariable():string{
-      return `${this.emissionId}|${this.organisationId}|${this.filterOrga}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
+      return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     }
   },
   watch: {

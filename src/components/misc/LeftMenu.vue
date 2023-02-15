@@ -36,7 +36,7 @@
       :to="{
         name: 'category',
         params: { iabId: category.id },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrgaId },
       }"
       @click="onMenuClick"
     >
@@ -46,11 +46,14 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 import orgaFilter from '../mixins/organisationFilter';
 import { Category } from '@/store/class/general/category';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState } from 'pinia';
 import { Organisation } from '@/store/class/general/organisation';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
@@ -70,18 +73,20 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useGeneralStore, ['storedCategories']),
+    ...mapState(useFilterStore, ['filterLive', 'filterOrgaId', 'filterIab', 'filterRubrique']),
     routerLinkArray(){
       return [
         {title : this.$t('Home'), routeName: 'home', condition : true},
-        {title : this.$t('Live'), routeName: 'lives', condition : state.generalParameters.isLiveTab &&((this.filterOrga && this.filterOrgaLive) || !this.filterOrga)},
+        {title : this.$t('Live'), routeName: 'lives', condition : state.generalParameters.isLiveTab &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
         {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
-        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrga || this.isEducation)},
+        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation)},
         {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
         {title : this.$t('Speakers'), routeName: 'participants', condition : true},]
     },
     categories(): Array<Category> {
-      return this.$store.state.categories.filter((c: Category) => {
+      return this.storedCategories.filter((c: Category) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
       });
@@ -89,25 +94,19 @@ export default defineComponent({
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
-    filterOrgaLive(): string {
-      return this.$store.state.filter.live;
-    },
     rubriqueQueryParam(): string|undefined{
-      if(this.$store.state.filter?.rubriqueFilter?.length){
-        return this.$store.state.filter.rubriqueFilter.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      if(this.filterRubrique?.length){
+        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
       }
       return undefined;
     },
   },
   watch: {
-    filterOrga: {
+    filterOrgaId: {
       immediate: true,
       handler() {
-        if (this.filterOrga) {
-          this.organisationId = this.filterOrga;
+        if (this.filterOrgaId) {
+          this.organisationId = this.filterOrgaId;
         } else {
           this.reset = !this.reset;
         }
@@ -118,10 +117,10 @@ export default defineComponent({
   methods: {
     getQueriesRouter(routeName: string){
       if('podcasts' !== routeName && 'emissions' !== routeName && 'home' !== routeName){
-        return { productor: this.$store.state.filter.organisationId};
+        return { productor: this.filterOrgaId};
       }
-      return { productor: this.$store.state.filter.organisationId,
-                   iabId: this.$store.state.filter.iab?.id,
+      return { productor: this.filterOrgaId,
+                   iabId: this.filterIab?.id,
                    rubriquesId: this.rubriqueQueryParam}
     },
     onMenuClick() {

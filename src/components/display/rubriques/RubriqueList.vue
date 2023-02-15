@@ -61,7 +61,9 @@ import Popover from '../../misc/Popover.vue';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'RubriqueList',
 
@@ -83,17 +85,12 @@ export default defineComponent({
   },
 
   computed: {
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
-    rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
-    },
+    ...mapState(useFilterStore, ['filterRubrique', 'filterRubriqueDisplay']),
     rubriqueDisplay(): Array<Rubrique>{
-      return this.$store.state.filter.rubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
+      return this.filterRubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
     },
     rubriquageDisplay(): Array<Rubriquage>{
-      const elementToNotShow = Array.from(this.rubriqueFilter);
+      const elementToNotShow = Array.from(this.filterRubrique);
       if(elementToNotShow.length){
         const rubriquageIdToNotShow = elementToNotShow.map(a => a.rubriquageId);
         return this.rubriquages.filter((element)=>{
@@ -105,7 +102,7 @@ export default defineComponent({
     },
   },
   watch:{
-    rubriqueFilter:{
+    filterRubrique:{
       deep: true,
       handler(){
         this.selectNewRubriquage();
@@ -120,9 +117,10 @@ export default defineComponent({
     window.removeEventListener('resize', this.resizeWindow);
   },
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateRubrique', 'filterUpdateRubriqueDisplay']),
     initRubriques(): void{
       if(!this.rubriquage){ return ;}
-      this.$store.commit('filterRubriqueDisplay', this.rubriquage.rubriques);
+      this.filterUpdateRubriqueDisplay(this.rubriquage.rubriques);
       window.addEventListener('resize', this.resizeWindow);
       this.$nextTick(() => {
         this.resizeWindow();
@@ -136,9 +134,9 @@ export default defineComponent({
         nameRubriquage: this.rubriquage.title,
         nameRubrique: rubrique.name
       };
-      const newFilter: Array<RubriquageFilter> = Array.from(this.$store.state.filter.rubriqueFilter);
+      const newFilter: Array<RubriquageFilter> = Array.from(this.filterRubrique);
       newFilter.push(filterToAdd);
-      this.$store.commit('filterRubrique', newFilter);
+      this.filterUpdateRubrique(newFilter);
       const queries = this.$route.query;
       const queryString = newFilter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
       this.$router.replace({ query: { ...queries, ...{ rubriquesId: queryString }} });
@@ -146,11 +144,11 @@ export default defineComponent({
     },
     selectNewRubriquage(){
       const rubriquageLength = this.rubriquages.length;
-      if(rubriquageLength === this.rubriqueFilter.length){
+      if(rubriquageLength === this.filterRubrique.length){
         return;
       }
       let index = 0;
-      const rubriquageAlreadyFilter = this.rubriqueFilter.map(a => a.rubriquageId);
+      const rubriquageAlreadyFilter = this.filterRubrique.map(a => a.rubriquageId);
       for (index; index < rubriquageLength; index++) {
         const rubriquageIdIndex = this.rubriquages[index].rubriquageId;
         if(rubriquageIdIndex && !rubriquageAlreadyFilter.includes(rubriquageIdIndex)){

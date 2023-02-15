@@ -34,7 +34,10 @@ import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from './PodcastItem.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
+import { useAuthStore } from '@/stores/AuthStore';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { Podcast, emptyPodcastData } from '@/store/class/general/podcast';
 import { defineComponent } from 'vue'
 import { FetchParam } from '@/store/class/general/fetchParam';
@@ -86,6 +89,8 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
+    ...mapState(useAuthStore, ['authProfile']),
     displayArray(): Array<Podcast>{
       if(this.isMobile || this.justSizeChosen){
         return this.podcasts;
@@ -98,7 +103,7 @@ export default defineComponent({
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
     },
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.$store.state.filter.organisationId;
+      return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
     sort(): string {
       return this.popularSort? "POPULARITY" : this.sortCriteria??'DATE';
@@ -158,7 +163,7 @@ export default defineComponent({
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
         includeHidden: this.includeHidden,
         validity: undefined !== this.notValid?!this.notValid: undefined,
-        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.$store.state.auth?.profile.userId:undefined,
+        publisherId:this.notValid && !(state.generalParameters.isProduction as boolean)?this.authProfile.userId:undefined,
         includeStatus:["READY","PROCESSING"]
       };
       try {

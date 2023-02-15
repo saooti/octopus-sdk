@@ -7,7 +7,7 @@
       :to="{
         name: 'participant',
         params: { participantId: animator.participantId },
-        query: { productor: $store.state.filter.organisationId },
+        query: { productor: filterOrgaId },
       }"
       :title="$t('Participant')"
       class="podcast-item-animator text-dark"
@@ -19,7 +19,9 @@
 
 <script lang="ts">
 import { Participant } from '@/store/class/general/participant';
-import { defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'AnimatorsItem',
 
@@ -27,6 +29,7 @@ export default defineComponent({
     animator: { default: undefined, type: Object as ()=> Participant},
   },
   computed:{
+    ...mapState(useFilterStore, ['filterOrgaId']),
     animatorName(): string{
       return (`${this.animator?.firstName??''} ${this.animator?.lastName??''}`).trim();
     }

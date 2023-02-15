@@ -41,6 +41,8 @@ import octopusApi from '@saooti/octopus-api';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const RubriqueChoice = defineAsyncComponent(() => import('./RubriqueChoice.vue'));
 export default defineComponent({
@@ -70,14 +72,9 @@ export default defineComponent({
   },
 
   computed: {
-    filterOrga(): string {
-      return this.$store.state.filter.organisationId;
-    },
+    ...mapState(useFilterStore, ['filterRubrique', 'filterOrgaId']),
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrga;
-    },
-    rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
+      return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
     availableRubriquage(): Array<Rubriquage>{
       if(this.arrayFilter.length){
@@ -138,18 +135,18 @@ export default defineComponent({
         });
       }
     },
-    rubriqueFilter:{
+    filterRubrique:{
       deep: true,
       async handler(){
         if(this.isInternChanged || !this.modifyFilter){
           return;
         }
         this.isInternChanged = true;
-        if(this.saveOrganisation !== this.filterOrga){
+        if(this.saveOrganisation !== this.filterOrgaId){
           await this.fetchTopics(false);
         }
-        if(this.rubriqueFilter.length){
-          this.arrayFilter = Array.from(this.rubriqueFilter);
+        if(this.filterRubrique.length){
+          this.arrayFilter = Array.from(this.filterRubrique);
           this.isRubriquage = true;
         }else if(this.rubriquageData[0].rubriquageId){
           this.arrayFilter = [{rubriquageId: this.rubriquageData[0].rubriquageId, rubriqueId: 0, nameRubriquage:this.rubriquageData[0].title, nameRubrique:""}];
@@ -172,8 +169,8 @@ export default defineComponent({
         this.arrayFilter = Array.from(this.initRubriqueFilter);
         this.isRubriquage = true;
       }
-    }else if(this.rubriqueFilter.length){
-      this.arrayFilter = Array.from(this.rubriqueFilter);
+    }else if(this.filterRubrique.length){
+      this.arrayFilter = Array.from(this.filterRubrique);
       this.isRubriquage = true;
     }
     this.fetchTopics(false);
@@ -182,6 +179,7 @@ export default defineComponent({
     });
   },
   methods: {
+    ...mapActions(useFilterStore, ['filterUpdateRubrique']),
     deleteRubriqueChoice(index: number): void{
       this.arrayFilter.splice(index,1);
     },
@@ -229,14 +227,14 @@ export default defineComponent({
       }
     },
     resetRubriqueFilter(): void{
-      if(0===this.rubriqueFilter.length || this.isInit || !this.modifyFilter){
+      if(0===this.filterRubrique.length || this.isInit || !this.modifyFilter){
         return;
       }
       const queries = this.$route.query;
       if (queries.rubriquesId) {
         this.$router.replace({ query: {...queries, ...{rubriquesId: undefined} } });
       }
-      this.$store.commit('filterRubrique', []);
+      this.filterUpdateRubrique([]);
     }
   },
 })

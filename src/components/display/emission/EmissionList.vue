@@ -51,13 +51,15 @@
 import ListPaginate from '../list/ListPaginate.vue';
 import octopusApi from '@saooti/octopus-api';
 import { handle403 } from '../../mixins/handle403';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { Emission, emptyEmissionData } from '@/store/class/general/emission';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { FetchParam } from '@/store/class/general/fetchParam';
 import { AxiosError } from 'axios';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
 const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
 export default defineComponent({
@@ -102,6 +104,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     displayArray(): Array<Emission>{
       if(this.isMobile){
         return this.emissions;
@@ -134,7 +137,7 @@ export default defineComponent({
       }
     },
     organisation(): string|undefined {
-      return this.organisationId ?this.organisationId:this.$store.state.filter.organisationId;
+      return this.organisationId ?this.organisationId:this.filterOrgaId;
     },
   },
   watch: {

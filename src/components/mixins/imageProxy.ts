@@ -1,4 +1,4 @@
-import { state } from '../../store/paramStore';
+import { state } from '../../stores/ParamSdkStore';
 export default {
   methods: {
     proxyImageUrl(url:string, width:string, height?:string): string{

@@ -80,11 +80,13 @@
 
 <script lang="ts">
 import { orgaComputed } from '../../mixins/orgaComputed';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import { Podcast } from '@/store/class/general/podcast';
 import { Emission } from '@/store/class/general/emission';
 import { Playlist } from '@/store/class/general/playlist';
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
 const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
@@ -128,6 +130,7 @@ export default defineComponent({
   },
   
   computed: {
+    ...mapState(useAuthStore, ['authOrganisation']),
     displayArticleParam():boolean{
       return undefined!==this.podcast && undefined!==this.podcast.article && 0 !== this.podcast.article.length;
     },
@@ -299,8 +302,8 @@ export default defineComponent({
       return url;
     },
     async fetchOrgaAttributes(): Promise<void>{
-      if(this.$store.state.auth?.organisation?.attributes && Object.keys(this.$store.state.auth?.organisation.attributes).length > 1){
-        this.orgaAttributes = this.$store.state.auth?.organisation.attributes;
+      if(""!==this.authOrganisation.id && this.authOrganisation.attributes && Object.keys(this.authOrganisation.attributes).length > 1){
+        this.orgaAttributes = this.authOrganisation.attributes;
       }else{
         this.orgaAttributes= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
       }

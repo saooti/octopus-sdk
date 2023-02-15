@@ -25,12 +25,15 @@ import TopBar from '@/components/misc/TopBar.vue';
 import FooterOctopus from '@/components/misc/Footer.vue';
 import Player from '@/components/misc/player/Player.vue';
 import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
-import { state } from './store/paramStore';
+import { state } from './stores/ParamSdkStore';
 import { Rubriquage } from './store/class/rubrique/rubriquage';
 import { RubriquageFilter } from './store/class/rubrique/rubriquageFilter';
 import { Rubrique } from './store/class/rubrique/rubrique';
 import initSDK from './components/mixins/init';
-import { defineAsyncComponent, defineComponent } from 'vue'
+import { useFilterStore } from '@/stores/FilterStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
+import { mapState, mapActions } from 'pinia';
+import { defineAsyncComponent, defineComponent } from 'vue';
 import { Category } from './store/class/general/category';
 const LeftMenu = defineAsyncComponent(() => import('@/components/misc/LeftMenu.vue'));
 export default defineComponent({
@@ -54,6 +57,11 @@ export default defineComponent({
     };
   },
 
+  computed:{
+    ...mapState(useFilterStore, ['filterRubriquage', 'filterOrgaId']),
+    ...mapState(useGeneralStore, ['storedCategories']),
+  },
+
   watch: {
     '$i18n.locale'(){
       this.$forceUpdate();
@@ -64,6 +72,7 @@ export default defineComponent({
     await this.initApp();
   },
   methods:{
+    ...mapActions(useFilterStore, ['filterUpdateIab', 'filterUpdateRubrique']),
     async initApp(){
       await this.initSdk();
       await this.handleOrganisationFilter();
@@ -84,21 +93,21 @@ export default defineComponent({
       await this.selectOrganisation(orgaId);
     },
     handleIabIdFilter(){
-      if(this.$store.state.filter.organisationId){
+      if(this.filterOrgaId){
         return;
       }
       if (this.$route.query.iabId && 'string'===typeof this.$route.query.iabId) {
         const iabId = parseInt(this.$route.query.iabId, 10);
-        const category = this.$store.state.categories.filter((c: Category) => {
+        const category = this.storedCategories.filter((c: Category) => {
           return c.id === iabId;
         });
         if(category.length){
-          this.$store.commit('filterIab', category[0]);
+          this.filterUpdateIab(category[0]);
         }
       }
     },
     handleRubriquesFilter(){
-      if(0===this.$store.state.filter.rubriquageArray.length){
+      if(0===this.filterRubriquage.length){
         return;
       }
       if (this.$route.query.rubriquesId && 'string'===typeof this.$route.query.rubriquesId) {
@@ -107,7 +116,7 @@ export default defineComponent({
         const filterLength = arrayFilter.length;
         for (let index = 0; index < filterLength; index++) {
           const rubriqueFilter = arrayFilter[index].split(':');
-          const rubriquage = this.$store.state.filter.rubriquageArray.find((x: Rubriquage) => {
+          const rubriquage = this.filterRubriquage.find((x: Rubriquage) => {
             return x.rubriquageId === parseInt(rubriqueFilter[0]);
           });
           if(rubriquage){
@@ -118,7 +127,7 @@ export default defineComponent({
           }
         }
         if(rubriquesFilter.length){
-          this.$store.commit('filterRubrique', rubriquesFilter);
+          this.filterUpdateRubrique(rubriquesFilter);
         }
       }
     }

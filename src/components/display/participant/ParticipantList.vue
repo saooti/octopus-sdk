@@ -32,6 +32,8 @@ import ListPaginate from '../list/ListPaginate.vue';
 import { handle403 } from '../../mixins/handle403';
 import octopusApi from '@saooti/octopus-api';
 import ParticipantItem from './ParticipantItem.vue';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import { Participant, emptyParticipantData } from '@/store/class/general/participant';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
@@ -67,6 +69,7 @@ export default defineComponent({
 
    
   computed: {
+    ...mapState(useFilterStore, ['filterOrgaId']),
     displayArray(): Array<Participant>{
       if(this.isMobile){
         return this.participants;
@@ -74,7 +77,7 @@ export default defineComponent({
       return this.participants.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
 		},
     organisation(): string|undefined {
-      return this.organisationId?this.organisationId:this.$store.state.filter.organisationId;
+      return this.organisationId?this.organisationId:this.filterOrgaId;
     },
   },
   watch: {

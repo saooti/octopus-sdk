@@ -4,7 +4,7 @@
     class="mt-3"
   >
     <ol
-      v-if="categoryFilter || rubriqueFilter.length"
+      v-if="filterIab || filterRubrique.length"
       class="octopus-breadcrumb d-flex align-items-center flex-wrap"
     >
       <li>
@@ -14,18 +14,18 @@
         >{{ $t('All') }}</a>
       </li>
       <li
-        v-if="categoryFilter"
+        v-if="filterIab"
       >
-        {{ categoryFilter.name }}
+        {{ filterIab.name }}
       </li>
       <li 
-        v-for="(filter, index) in rubriqueFilter" 
+        v-for="(filter, index) in filterRubrique" 
         :key="filter.rubriqueId"
         class="d-flex align-items-center"
-        :class="rubriqueFilter.length-1 === index ? 'active':''"
+        :class="filterRubrique.length-1 === index ? 'active':''"
       >
         <a
-          v-if="rubriqueFilter.length - 1 !== index"
+          v-if="filterRubrique.length - 1 !== index"
           href="#"
           @click="removeFilter(index,$event)"
         >{{ filter.nameRubriquage }}</a>
@@ -49,13 +49,13 @@
       </li>
     </ol>
     <CategoryList
-      v-if="!categoryFilter && !rubriquageFilter.length"
+      v-if="!filterIab && !rubriquageFilter.length"
       :is-filter="true"
       :is-display="isDisplay"
       @categoriesLength="checkIfCategories"
     />
     <RubriqueList
-      v-else-if="isDisplay && rubriquageFilter.length !== rubriqueFilter.length"
+      v-else-if="isDisplay && rubriquageFilter.length !== filterRubrique.length"
       :rubriquages="rubriquageFilter"
     />
   </div>
@@ -66,10 +66,11 @@
 </template>
 
 <script lang="ts">
-import { Category } from '@/store/class/general/category';
 import { Rubriquage } from '@/store/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
 import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CategoryList = defineAsyncComponent(() => import('./CategoryList.vue'));
 const RubriqueList = defineAsyncComponent(() => import('./../rubriques/RubriqueList.vue'));
@@ -88,55 +89,51 @@ export default defineComponent({
     };
   },
   computed: {
-    categoryFilter(): Category|undefined{
-      return this.$store.state.filter.iab;
-    },
-    rubriqueFilter(): Array<RubriquageFilter>{
-      return this.$store.state.filter.rubriqueFilter;
-    },
+    ...mapState(useFilterStore, ['filterIab', 'filterRubrique', 'filterRubriquage', 'filterOrgaId']),
     isDisplay(): boolean {
       return ("homePriv" === this.$route.name ||"home" === this.$route.name ||"podcasts" === this.$route.name||"emissions" === this.$route.name) 
-      && (this.isCategories || undefined!==this.categoryFilter || 0!==this.rubriqueFilter.length || 0!==this.rubriquageFilter.length);
+      && (this.isCategories || undefined!==this.filterIab || 0!==this.filterRubrique.length || 0!==this.rubriquageFilter.length);
     },
     rubriquageFilter(): Array<Rubriquage>{
-      return this.$store.state.filter.organisationId ? this.$store.state.filter.rubriquageArray : [];
+      return this.filterOrgaId ? this.filterRubriquage : [];
     },
   },
   methods:{
+    ...mapActions(useFilterStore, ['filterUpdateIab', 'filterUpdateRubrique']),
     checkIfCategories(length: number): void{
       this.isCategories = 0!==length;
     },
     onRubriqueSelected(index: number, rubrique: Rubrique): void {
-      if(!rubrique ||this.rubriqueFilter[index].rubriqueId === rubrique.rubriqueId){
+      if(!rubrique ||this.filterRubrique[index].rubriqueId === rubrique.rubriqueId){
         return;
       }
-      const filter = Array.from(this.rubriqueFilter);
+      const filter = Array.from(this.filterRubrique);
       filter[index].rubriqueId = rubrique.rubriqueId||0;
-      this.$store.commit('filterRubrique', filter);
+      this.filterUpdateRubrique(filter);
       const queryString = filter.map(value =>  value.rubriquageId+':'+value.rubriqueId).join();
       this.$router.replace({ query: { ...this.$route.query, ...{ rubriquesId: queryString }} });
     },
     getRubriques(rubriquageId: number): Array<Rubrique>{
-      const rubriquage = this.$store.state.filter.rubriquageArray.find((x: Rubriquage) => {
+      const rubriquage = this.filterRubriquage.find((x: Rubriquage) => {
         return x.rubriquageId === rubriquageId;
       });
       return rubriquage ? rubriquage.rubriques : [];
     },
     removeFilter(index: number, event?: { preventDefault: () => void }): void{
-      if(this.categoryFilter){
+      if(this.filterIab){
         if (this.$route.query.iabId) {
           this.$router.replace({ query: {...this.$route.query, ...{iabId: undefined} } });
         }
-        this.$store.commit('filterIab', undefined);
+        this.filterUpdateIab(undefined);
       }else{
-        const newFilter: Array<RubriquageFilter>  = Array.from(this.$store.state.filter.rubriqueFilter);
+        const newFilter: Array<RubriquageFilter>  = Array.from(this.filterRubrique);
         newFilter.splice(index + 1);
         if (this.$route.query.rubriquesId) {
           const queryString = newFilter.map(value => value.rubriquageId+':'+value.rubriqueId).join();
           this.$router.replace({ query: { ...this.$route.query, ...{ rubriquesId:"" !== queryString? queryString : undefined}} });
         }
 
-        this.$store.commit('filterRubrique', newFilter);
+        this.filterUpdateRubrique(newFilter);
       }
       if(event){
         event.preventDefault();

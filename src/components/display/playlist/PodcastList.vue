@@ -46,7 +46,7 @@ import { handle403 } from '../../mixins/handle403';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import ClassicSearch from '../../form/ClassicSearch.vue';
 import { Podcast } from '@/store/class/general/podcast';
 import { Playlist } from '@/store/class/general/playlist';

@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import ClassicLoading from '../../form/ClassicLoading.vue';
-import { state } from '../../../store/paramStore';
+import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import dayjs from 'dayjs';
 import { Podcast } from '@/store/class/general/podcast';
