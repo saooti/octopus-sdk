@@ -252,7 +252,7 @@ export default defineComponent({
     async initConference(){
       if (!this.podcast || !this.isLiveReadyToRecord) return;
       if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
-        const data = await crudApi.fetchData<Conference>(this.$store.state,9,'conference/'+this.podcast.conferenceId);
+        const data = await crudApi.fetchData<Conference>(9,'conference/'+this.podcast.conferenceId);
         this.fetchConference = data ? data : {conferenceId:-1, title:''};
       } else if(undefined!==this.podcast.conferenceId){
         const data = await octopusApi.fetchData<string>(9, 'conference/realstatus/'+this.podcast.conferenceId);

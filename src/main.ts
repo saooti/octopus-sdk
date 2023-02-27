@@ -4,7 +4,6 @@ import App from './App.vue';
 import {setupI18n} from './i18n';
 import router from '@/router/router';
 import { createPinia } from 'pinia';
-import { useGeneralStore } from '@/stores/GeneralStore'
 import paramStore from '@/stores/ParamSdkStore';
 
 const nameEQ = 'octopus-language=';

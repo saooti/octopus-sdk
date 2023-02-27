@@ -279,7 +279,7 @@ export default defineComponent({
         let data;
         if (this.isCertified) {
           comment.status = 'Valid';
-          data = await crudApi.postData<CommentPodcast>(this.$store.state,2, 'registeredComment/' + comment.userId, {...comment, ...{userId: undefined}});
+          data = await crudApi.postData<CommentPodcast>(2, 'registeredComment/' + comment.userId, {...comment, ...{userId: undefined}});
         } else {
           data = await octopusApi.postDataPublic<CommentPodcast>(2,'unregisteredComment',comment);
         }

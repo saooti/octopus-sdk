@@ -225,7 +225,7 @@ export default defineComponent({
       } catch {
         this.$emit('deleteItem', this.index);
         if(this.fetchConference.conferenceId){
-          await crudApi.deleteData(this.$store.state, 9 ,'conference/'+this.fetchConference.conferenceId);
+          await crudApi.deleteData(9 ,'conference/'+this.fetchConference.conferenceId);
         }
       }
     },

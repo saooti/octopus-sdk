@@ -39,6 +39,5 @@
   ],
   "files": [
     "src/shims-vue.d.ts",
-    "src/vuex-shim.d.ts"
   ]
 }
