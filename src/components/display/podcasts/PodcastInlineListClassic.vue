@@ -56,7 +56,7 @@ const PHONE_WIDTH = 960;
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
 import { state } from '../../../stores/ParamSdkStore';
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast } from '@/stores/class/general/podcast';
 import imageProxy from '../../mixins/imageProxy';
 import { defineComponent } from 'vue'
 export default defineComponent({

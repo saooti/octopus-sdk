@@ -120,7 +120,7 @@ import { orgaComputed } from '../../mixins/orgaComputed';
 import VueMultiselect from 'vue-multiselect';
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../stores/ParamSdkStore';
-import { Organisation } from '@/store/class/general/organisation';
+import { Organisation } from '@/stores/class/general/organisation';
 import { useAuthStore } from '@/stores/AuthStore';
 import { mapState } from 'pinia';
 const ELEMENTS_COUNT = 50;

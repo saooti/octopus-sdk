@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
   methods:{

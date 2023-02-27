@@ -89,8 +89,8 @@
 
 <script lang="ts">
 import { state } from '../../../stores/ParamSdkStore';
-import { Podcast } from '@/store/class/general/podcast';
-import { Conference } from '@/store/class/conference/conference';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Conference } from '@/stores/class/conference/conference';
 import imageProxy from '../../mixins/imageProxy';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { mapState, mapActions } from 'pinia';

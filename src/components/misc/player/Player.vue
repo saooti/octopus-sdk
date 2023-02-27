@@ -46,7 +46,7 @@
   </div>
 </template>
 <script lang="ts">
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import { playerLogic } from '../../mixins/player/playerLogic';
 import PlayerCompact from '../player/PlayerCompact.vue';
 import PlayerLarge from '../player/PlayerLarge.vue';

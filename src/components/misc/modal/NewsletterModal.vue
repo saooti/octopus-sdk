@@ -97,15 +97,15 @@ import VSwatches from 'vue3-swatches';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
-import { Participant } from '@/store/class/general/participant';
-import { Podcast } from '@/store/class/general/podcast';
+import { Participant } from '@/stores/class/general/participant';
+import { Podcast } from '@/stores/class/general/podcast';
 import { state } from '../../../stores/ParamSdkStore';
 import { defineComponent } from 'vue';
 import { useAuthStore } from '@/stores/AuthStore';
 import { mapState } from 'pinia';
 import octopusApi from '@saooti/octopus-api';
-import { Emission } from '@/store/class/general/emission';
-import { Playlist } from '@/store/class/general/playlist';
+import { Emission } from '@/stores/class/general/emission';
+import { Playlist } from '@/stores/class/general/playlist';
 export default defineComponent({
   name: 'NewsletterModal',
 

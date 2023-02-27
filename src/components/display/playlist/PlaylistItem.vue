@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { Playlist } from '@/store/class/general/playlist';
+import { Playlist } from '@/stores/class/general/playlist';
 import { state } from '../../../stores/ParamSdkStore';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';

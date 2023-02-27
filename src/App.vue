@@ -26,15 +26,15 @@ import FooterOctopus from '@/components/misc/Footer.vue';
 import Player from '@/components/misc/player/Player.vue';
 import CategoryFilter from '@/components/display/categories/CategoryFilter.vue';
 import { state } from './stores/ParamSdkStore';
-import { Rubriquage } from './store/class/rubrique/rubriquage';
-import { RubriquageFilter } from './store/class/rubrique/rubriquageFilter';
-import { Rubrique } from './store/class/rubrique/rubrique';
+import { Rubriquage } from './stores/class/rubrique/rubriquage';
+import { RubriquageFilter } from './stores/class/rubrique/rubriquageFilter';
+import { Rubrique } from './stores/class/rubrique/rubrique';
 import initSDK from './components/mixins/init';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';
 import { defineAsyncComponent, defineComponent } from 'vue';
-import { Category } from './store/class/general/category';
+import { Category } from './stores/class/general/category';
 const LeftMenu = defineAsyncComponent(() => import('@/components/misc/LeftMenu.vue'));
 export default defineComponent({
   name: 'App',

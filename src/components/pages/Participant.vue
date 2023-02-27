@@ -71,7 +71,7 @@ import displayMethods from '../mixins/displayMethods';
 import imageProxy from '../mixins/imageProxy';
 import { orgaComputed } from '../mixins/orgaComputed';
 import { handle403 } from '../mixins/handle403';
-import { Participant } from '@/store/class/general/participant';
+import { Participant } from '@/stores/class/general/participant';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { AxiosError } from 'axios';

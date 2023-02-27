@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import ClassicModal from '../modal/ClassicModal.vue';
-import { Emission } from '@/store/class/general/emission';
+import { Emission } from '@/stores/class/general/emission';
 import displayMethods from '../../mixins/displayMethods';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { state } from '../../../stores/ParamSdkStore';

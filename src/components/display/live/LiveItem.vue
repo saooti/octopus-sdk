@@ -131,8 +131,8 @@ import dayjs from 'dayjs';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
-import { Podcast } from '@/store/class/general/podcast';
-import { Participant } from '@/store/class/general/participant';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Participant } from '@/stores/class/general/participant';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';

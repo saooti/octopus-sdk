@@ -15,7 +15,7 @@
 <script lang="ts">
 import { state } from '../../../stores/ParamSdkStore';
 import { defineComponent } from 'vue';
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 export default defineComponent({
   name: 'PlayerTimeline',
 

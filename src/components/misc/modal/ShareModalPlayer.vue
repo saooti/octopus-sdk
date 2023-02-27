@@ -72,7 +72,7 @@ import ClassicModal from '../modal/ClassicModal.vue';
 import Nav from '../Nav.vue';
 import QrCode from '../../display/sharing/QrCode.vue';
 import { defineComponent } from 'vue'
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast } from '@/stores/class/general/podcast';
 export default defineComponent({
   name: 'ShareModalPlayer',
 

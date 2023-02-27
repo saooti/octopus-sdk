@@ -54,7 +54,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast } from '@/stores/class/general/podcast';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastSwiperList',

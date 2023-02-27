@@ -49,7 +49,7 @@ import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import { state } from '../../stores/ParamSdkStore';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
 export default defineComponent({

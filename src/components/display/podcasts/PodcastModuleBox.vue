@@ -140,8 +140,8 @@ import dayjs from 'dayjs';
 import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
 import { orgaComputed } from '../../mixins/orgaComputed';
-import { Podcast } from '@/store/class/general/podcast';
-import { Conference } from '@/store/class/conference/conference';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Conference } from '@/stores/class/conference/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ErrorMessage = defineAsyncComponent(() => import('../../misc/ErrorMessage.vue'));

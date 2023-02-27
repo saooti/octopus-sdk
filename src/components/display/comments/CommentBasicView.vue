@@ -49,7 +49,7 @@
 <script lang="ts">
 import selenium from '../../mixins/selenium';
 import displayMethods from '../../mixins/displayMethods';
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import dayjs from 'dayjs';
 import Popover from '../../misc/Popover.vue';
 import { defineComponent } from 'vue';

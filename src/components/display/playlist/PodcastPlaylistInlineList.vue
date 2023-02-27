@@ -64,8 +64,8 @@ import PodcastItem from '../podcasts/PodcastItem.vue';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 const PHONE_WIDTH = 960;
 import { state } from '../../../stores/ParamSdkStore';
-import { Podcast } from '@/store/class/general/podcast';
-import { Playlist } from '@/store/class/general/playlist';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Playlist } from '@/stores/class/general/playlist';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PodcastPlaylistInlineList',

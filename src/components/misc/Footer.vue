@@ -68,8 +68,8 @@ import octopusApi from '@saooti/octopus-api';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';
-import { Category } from '@/store/class/general/category';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { Category } from '@/stores/class/general/category';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Footer',

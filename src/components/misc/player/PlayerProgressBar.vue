@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import ProgressBar from '../ProgressBar.vue'
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';

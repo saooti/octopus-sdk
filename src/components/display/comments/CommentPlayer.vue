@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import selenium from '../../mixins/selenium';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { mapState } from 'pinia';

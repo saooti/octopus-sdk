@@ -31,14 +31,14 @@
 <script lang="ts">
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import { state } from '../../stores/ParamSdkStore';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
-import { Rubriquage } from '@/store/class/rubrique/rubriquage';
-import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
+import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
-import { Category } from '@/store/class/general/category';
+import { Category } from '@/stores/class/general/category';
 export default defineComponent({
   name: 'Home',
   components: {

@@ -39,8 +39,8 @@
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import { Rubriquage } from '@/store/class/rubrique/rubriquage';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';

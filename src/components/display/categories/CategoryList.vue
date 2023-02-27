@@ -45,7 +45,7 @@
 import octopusApi from '@saooti/octopus-api';
 import { state } from '../../../stores/ParamSdkStore';
 import Popover from '../../misc/Popover.vue';
-import { Category } from '@/store/class/general/category';
+import { Category } from '@/stores/class/general/category';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';

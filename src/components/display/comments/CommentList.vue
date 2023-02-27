@@ -38,10 +38,10 @@ import ClassicLoading from '../../form/ClassicLoading.vue';
 import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import dayjs from 'dayjs';
-import { Podcast } from '@/store/class/general/podcast';
-import { Conference } from '@/store/class/conference/conference';
-import { CommentPodcast } from '@/store/class/general/comment';
-import { InterfacePageable } from '@/store/class/general/interfacePageable';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Conference } from '@/stores/class/conference/conference';
+import { CommentPodcast } from '@/stores/class/general/comment';
+import { InterfacePageable } from '@/stores/class/general/interfacePageable';
 import { defineComponent, defineAsyncComponent } from 'vue';
 /* eslint-disable */
 const CommentItem: any = defineAsyncComponent(() => import('./CommentItem.vue'));

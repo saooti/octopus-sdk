@@ -37,9 +37,9 @@
 <script lang="ts">
 import ClassicSearch from '../../form/ClassicSearch.vue';
 import PodcastList from './PodcastList.vue';
-import { Category } from '@/store/class/general/category';
+import { Category } from '@/stores/class/general/category';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast } from '@/stores/class/general/podcast';
 const CategoryChooser = defineAsyncComponent(() => import('../categories/CategoryChooser.vue'));
 export default defineComponent({
   components: {

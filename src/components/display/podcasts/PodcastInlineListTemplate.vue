@@ -72,12 +72,12 @@
 </template>
 
 <script lang="ts">
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { defineComponent } from 'vue'
 import { RouteLocationRaw } from 'vue-router';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
-import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
 export default defineComponent({
   name: 'PodcastInlineListTemplate',
   

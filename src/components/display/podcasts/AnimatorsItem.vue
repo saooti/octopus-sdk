@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Participant } from '@/store/class/general/participant';
+import { Participant } from '@/stores/class/general/participant';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';

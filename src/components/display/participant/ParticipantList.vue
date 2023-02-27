@@ -34,7 +34,7 @@ import octopusApi from '@saooti/octopus-api';
 import ParticipantItem from './ParticipantItem.vue';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
-import { Participant, emptyParticipantData } from '@/store/class/general/participant';
+import { Participant, emptyParticipantData } from '@/stores/class/general/participant';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 export default defineComponent({

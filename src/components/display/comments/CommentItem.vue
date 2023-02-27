@@ -132,9 +132,9 @@
 import { state } from '../../../stores/ParamSdkStore';
 import selenium from '../../mixins/selenium';
 import displayMethods from '../../mixins/displayMethods';
-import { CommentPodcast } from '@/store/class/general/comment';
-import { Podcast } from '@/store/class/general/podcast';
-import { Conference } from '@/store/class/conference/conference';
+import { CommentPodcast } from '@/stores/class/general/comment';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Conference } from '@/stores/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
 import { useGeneralStore } from '@/stores/GeneralStore';

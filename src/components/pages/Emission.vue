@@ -88,7 +88,7 @@ import displayMethods from '../mixins/displayMethods';
 import imageProxy from '../mixins/imageProxy';
 import { orgaComputed } from '../mixins/orgaComputed';
 import { handle403 } from '../mixins/handle403';
-import { Emission } from '@/store/class/general/emission';
+import { Emission } from '@/stores/class/general/emission';
 import ClassicLoading from '../form/ClassicLoading.vue';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { AxiosError } from 'axios';

@@ -57,7 +57,7 @@ import dayjs from 'dayjs';
 import humanizeDuration from 'humanize-duration';
 import PodcastPlayBar from './PodcastPlayBar.vue';
 import { defineComponent } from 'vue'
-import { Participant } from '@/store/class/general/participant';
+import { Participant } from '@/stores/class/general/participant';
 export default defineComponent({
   name: 'PodcastItemInfo',
   

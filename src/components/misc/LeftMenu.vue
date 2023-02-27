@@ -48,13 +48,13 @@
 <script lang="ts">
 import { state } from '../../stores/ParamSdkStore';
 import orgaFilter from '../mixins/organisationFilter';
-import { Category } from '@/store/class/general/category';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { Category } from '@/stores/class/general/category';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState } from 'pinia';
-import { Organisation } from '@/store/class/general/organisation';
+import { Organisation } from '@/stores/class/general/organisation';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
   name: 'LeftMenu',

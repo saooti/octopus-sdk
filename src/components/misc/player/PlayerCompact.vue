@@ -83,7 +83,7 @@
   </div>
 </template>
 <script lang="ts">
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import { playerDisplay } from '../../mixins/player/playerDisplay';
 import imageProxy from '../../mixins/imageProxy';
 import Spinner from '../Spinner.vue';

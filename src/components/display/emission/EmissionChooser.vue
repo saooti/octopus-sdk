@@ -106,7 +106,7 @@ const getDefaultEmission = (defaultName: string): Emission|undefined => {
   };
 };
 
-import { Emission } from '@/store/class/general/emission';
+import { Emission } from '@/stores/class/general/emission';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {

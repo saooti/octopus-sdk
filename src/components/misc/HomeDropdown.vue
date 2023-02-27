@@ -91,7 +91,7 @@ import Popover from '../misc/Popover.vue';
 import { useAuthStore } from '@/stores/AuthStore';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
-import { Organisation } from '@/store/class/general/organisation';
+import { Organisation } from '@/stores/class/general/organisation';
 export default defineComponent({
   name: 'HomeDropdown',
   components:{

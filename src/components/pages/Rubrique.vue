@@ -13,7 +13,7 @@
 import octopusApi from '@saooti/octopus-api';
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import { defineComponent } from 'vue'
-import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
 export default defineComponent({
   name:"Rubrique",
   components: {

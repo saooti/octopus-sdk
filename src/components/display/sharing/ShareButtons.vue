@@ -47,14 +47,14 @@
 </template>
 
 <script lang="ts">
-import { Emission } from '@/store/class/general/emission';
-import { Podcast } from '@/store/class/general/podcast';
+import { Emission } from '@/stores/class/general/emission';
+import { Podcast } from '@/stores/class/general/podcast';
 import { state } from '../../../stores/ParamSdkStore';
 import displayMethods from '../../mixins/displayMethods';
 import Popover from '../../misc/Popover.vue';
 import ShareButtonsIntern from './ShareButtonsIntern.vue';
 import { defineComponent } from 'vue';
-import { Playlist } from '@/store/class/general/playlist';
+import { Playlist } from '@/stores/class/general/playlist';
 export default defineComponent({
   components: {
     ShareButtonsIntern,

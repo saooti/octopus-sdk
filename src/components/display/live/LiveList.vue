@@ -45,7 +45,7 @@ dayjs.extend(localizedFormat);
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
 import { state } from '../../../stores/ParamSdkStore';
-import { Conference } from '@/store/class/conference/conference';
+import { Conference } from '@/stores/class/conference/conference';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 export default defineComponent({

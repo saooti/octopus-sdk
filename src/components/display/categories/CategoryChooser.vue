@@ -75,7 +75,7 @@ const getDefaultCategory = (defaultName: string) => {
 };
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState } from 'pinia';
-import { Category } from '@/store/class/general/category';
+import { Category } from '@/stores/class/general/category';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {

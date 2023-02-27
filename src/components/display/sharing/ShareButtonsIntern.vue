@@ -85,13 +85,13 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { Emission } from '@/store/class/general/emission';
-import { Podcast } from '@/store/class/general/podcast';
+import { Emission } from '@/stores/class/general/emission';
+import { Podcast } from '@/stores/class/general/podcast';
 import { state } from '../../../stores/ParamSdkStore';
 import Snackbar from '../../misc/Snackbar.vue';
 import displayMethods from '../../mixins/displayMethods';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Playlist } from '@/store/class/general/playlist';
+import { Playlist } from '@/stores/class/general/playlist';
 const ClipboardModal = defineAsyncComponent(() => import('../../misc/modal/ClipboardModal.vue'));
 const NewsletterModal = defineAsyncComponent(() => import('../../misc/modal/NewsletterModal.vue'));
 const QrCodeModal = defineAsyncComponent(() => import('../../misc/modal/QrCodeModal.vue'));

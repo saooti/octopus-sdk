@@ -82,9 +82,9 @@
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
-import { Podcast } from '@/store/class/general/podcast';
-import { Emission } from '@/store/class/general/emission';
-import { Playlist } from '@/store/class/general/playlist';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Emission } from '@/stores/class/general/emission';
+import { Playlist } from '@/stores/class/general/playlist';
 import { useAuthStore } from '@/stores/AuthStore';
 import { mapState } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';

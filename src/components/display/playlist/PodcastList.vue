@@ -48,8 +48,8 @@ import octopusApi from '@saooti/octopus-api';
 import PodcastItem from '../podcasts/PodcastItem.vue';
 import { state } from '../../../stores/ParamSdkStore';
 import ClassicSearch from '../../form/ClassicSearch.vue';
-import { Podcast } from '@/store/class/general/podcast';
-import { Playlist } from '@/store/class/general/playlist';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Playlist } from '@/stores/class/general/playlist';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 export default defineComponent({

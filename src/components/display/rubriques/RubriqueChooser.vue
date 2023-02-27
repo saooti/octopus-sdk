@@ -70,7 +70,7 @@
 import selenium from '../../mixins/selenium';
 //@ts-ignore
 import VueMultiselect from 'vue-multiselect';
-import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
 const getDefaultRubrique = (defaultName: string) => {
   if ('' === defaultName){
     return undefined;

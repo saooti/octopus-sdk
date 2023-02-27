@@ -38,9 +38,9 @@ import { state } from '../../../stores/ParamSdkStore';
 import { useAuthStore } from '@/stores/AuthStore';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
-import { Podcast, emptyPodcastData } from '@/store/class/general/podcast';
+import { Podcast, emptyPodcastData } from '@/stores/class/general/podcast';
 import { defineComponent } from 'vue'
-import { FetchParam } from '@/store/class/general/fetchParam';
+import { FetchParam } from '@/stores/class/general/fetchParam';
 import { AxiosError } from 'axios';
 export default defineComponent({
   name: 'PodcastList',

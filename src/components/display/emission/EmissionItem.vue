@@ -57,13 +57,13 @@
 
 <script lang="ts">
 import { orgaComputed } from '../../mixins/orgaComputed';
-import { Emission } from '@/store/class/general/emission';
+import { Emission } from '@/stores/class/general/emission';
 import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';
 import { defineComponent } from 'vue'
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast } from '@/stores/class/general/podcast';
 export default defineComponent({
   name: 'EmissionItem',
 

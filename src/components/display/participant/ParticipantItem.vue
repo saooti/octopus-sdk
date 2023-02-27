@@ -56,13 +56,13 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { Participant } from '@/store/class/general/participant';
+import { Participant } from '@/stores/class/general/participant';
 import { state } from '../../../stores/ParamSdkStore';
 import imageProxy from '../../mixins/imageProxy';
 import displayMethods from '../../mixins/displayMethods';
 import { orgaComputed } from '../../mixins/orgaComputed';
 import { defineComponent } from 'vue'
-import { Podcast } from '@/store/class/general/podcast';
+import { Podcast } from '@/stores/class/general/podcast';
 export default defineComponent({
   name: 'ParticpantItem',
   mixins: [displayMethods, orgaComputed, imageProxy],

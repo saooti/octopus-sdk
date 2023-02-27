@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState } from 'pinia';

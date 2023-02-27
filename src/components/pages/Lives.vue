@@ -33,9 +33,9 @@
 
 <script lang="ts">
 import { state } from '../../stores/ParamSdkStore';
-import { Organisation } from '@/store/class/general/organisation';
+import { Organisation } from '@/stores/class/general/organisation';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Conference } from '@/store/class/conference/conference';
+import { Conference } from '@/stores/class/conference/conference';
 import { useAuthStore } from '@/stores/AuthStore';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';

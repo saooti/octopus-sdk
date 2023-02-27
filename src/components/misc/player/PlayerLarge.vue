@@ -95,7 +95,7 @@ import imageProxy from '../../mixins/imageProxy';
 import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerTimeline from './PlayerTimeline.vue';
 import { defineComponent } from 'vue';
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 export default defineComponent({
   name: 'PlayerLarge',
 

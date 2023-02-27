@@ -81,7 +81,7 @@ import DateFilter from './DateFilter.vue';
 import SearchOrder from './SearchOrder.vue';
 import RubriqueFilter from './RubriqueFilter.vue';
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const MonetizableFilter = defineAsyncComponent(() => import('./MonetizableFilter.vue'));
 export default defineComponent({

@@ -40,7 +40,7 @@ import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
 import Snackbar from '../../misc/Snackbar.vue';
 import displayMethods from '../../mixins/displayMethods';
-import { Emission } from '@/store/class/general/emission';
+import { Emission } from '@/stores/class/general/emission';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));

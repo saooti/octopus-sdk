@@ -38,12 +38,12 @@
 import CommentList from './CommentList.vue';
 import CommentInput from './CommentInput.vue';
 import cookies from '../../mixins/cookies';
-import { Podcast } from '@/store/class/general/podcast';
-import { Conference } from '@/store/class/conference/conference';
+import { Podcast } from '@/stores/class/general/podcast';
+import { Conference } from '@/stores/class/conference/conference';
 import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 export default defineComponent({
   name: 'CommentSection',
   components: {

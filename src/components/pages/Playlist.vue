@@ -61,7 +61,7 @@ import { state } from '../../stores/ParamSdkStore';
 import displayMethods from '../mixins/displayMethods';
 import imageProxy from '../mixins/imageProxy';
 import { handle403 } from '../mixins/handle403';
-import { Playlist } from '@/store/class/general/playlist';
+import { Playlist } from '@/stores/class/general/playlist';
 import { defineComponent, defineAsyncComponent } from 'vue';
 import { AxiosError } from 'axios';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));

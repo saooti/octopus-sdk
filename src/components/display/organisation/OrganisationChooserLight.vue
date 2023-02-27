@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Organisation } from '@/store/class/general/organisation';
+import { Organisation } from '@/stores/class/general/organisation';
 import octopusApi from '@saooti/octopus-api';
 import { defineComponent } from 'vue'
 export default defineComponent({

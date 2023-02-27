@@ -141,8 +141,8 @@
 
 <script lang="ts">
 import octopusApi from '@saooti/octopus-api';
-import { Emission } from '@/store/class/general/emission';
-import { Podcast } from '@/store/class/general/podcast';
+import { Emission } from '@/stores/class/general/emission';
+import { Podcast } from '@/stores/class/general/podcast';
 import { state } from '../../../stores/ParamSdkStore';
 import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
 import imageProxy from '../../mixins/imageProxy';

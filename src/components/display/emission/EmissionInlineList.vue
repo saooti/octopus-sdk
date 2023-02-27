@@ -64,12 +64,12 @@ import { state } from '../../../stores/ParamSdkStore';
 import { handle403 } from '../../mixins/handle403';
 const PHONE_WIDTH = 960;
 import ClassicLoading from '../../form/ClassicLoading.vue';
-import { Emission } from '@/store/class/general/emission';
-import { Rubrique } from '@/store/class/rubrique/rubrique';
+import { Emission } from '@/stores/class/general/emission';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 import imageProxy from '../../mixins/imageProxy';
-import { Rubriquage } from '@/store/class/rubrique/rubriquage';
+import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
 export default defineComponent({
   name: 'EmissionInlineList',
 

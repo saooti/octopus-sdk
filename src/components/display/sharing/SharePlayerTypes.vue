@@ -35,12 +35,12 @@
 <script lang="ts">
 import { state } from '../../../stores/ParamSdkStore';
 import octopusApi from '@saooti/octopus-api';
-import { Podcast } from '@/store/class/general/podcast';
-import { CustomPlayer } from '@/store/class/general/customPlayer';
+import { Podcast } from '@/stores/class/general/podcast';
+import { CustomPlayer } from '@/stores/class/general/customPlayer';
 import { defineComponent } from 'vue';
-import { Emission } from '@/store/class/general/emission';
-import { Playlist } from '@/store/class/general/playlist';
-import { InterfacePageable } from '@/store/class/general/interfacePageable';
+import { Emission } from '@/stores/class/general/emission';
+import { Playlist } from '@/stores/class/general/playlist';
+import { InterfacePageable } from '@/stores/class/general/interfacePageable';
 export default defineComponent({
   props: {
     podcast: { default: undefined, type: Object as ()=> Podcast},

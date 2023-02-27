@@ -15,7 +15,7 @@
 import octopusApi from '@saooti/octopus-api';
 import CommentBasicView from './CommentBasicView.vue';
 import ClassicLoading from '../../form/ClassicLoading.vue';
-import { CommentPodcast } from '@/store/class/general/comment';
+import { CommentPodcast } from '@/stores/class/general/comment';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'CommentParentInfo',

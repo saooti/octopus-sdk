@@ -58,9 +58,9 @@
 
 <script lang="ts">
 import Popover from '../../misc/Popover.vue';
-import { Rubrique } from '@/store/class/rubrique/rubrique';
-import { Rubriquage } from '@/store/class/rubrique/rubriquage';
-import { RubriquageFilter } from '@/store/class/rubrique/rubriquageFilter';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
+import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue';
