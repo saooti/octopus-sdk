@@ -40,7 +40,7 @@ import CommentInput from './CommentInput.vue';
 import cookies from '../../mixins/cookies';
 import { Podcast } from '@/stores/class/general/podcast';
 import { Conference } from '@/stores/class/conference/conference';
-import { useGeneralStore } from '@/stores/GeneralStore';
+import { useCommentStore } from '@/stores/CommentStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 import { CommentPodcast } from '@/stores/class/general/comment';
@@ -63,7 +63,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useGeneralStore, ['generalComments']),
+    ...mapState(useCommentStore, ['commentKnownIdentity']),
     commentTitle():string{
       const count = this.loaded && this.totalCount > 0 ? this.$t('()', { nb: this.totalCount }) : '';
       return this.$t("Podcast's comments")+count;
@@ -91,7 +91,7 @@ export default defineComponent({
     },
     knownIdentity: {
       get(): string|null {
-        return this.generalComments.knownIdentity;
+        return this.commentKnownIdentity;
       },
       set(value: string|null) {
         this.setCommentIdentity(value);

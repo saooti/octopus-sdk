@@ -137,7 +137,7 @@ import { Podcast } from '@/stores/class/general/podcast';
 import { Conference } from '@/stores/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
-import { useGeneralStore } from '@/stores/GeneralStore';
+import { useCommentStore } from '@/stores/CommentStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
@@ -179,7 +179,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useGeneralStore, ['generalComments']),
+    ...mapState(useCommentStore, ['commentKnownIdentity']),
     validName(): boolean{
       return this.countName <= this.maxName;
     },
@@ -203,7 +203,7 @@ export default defineComponent({
     },
     knownIdentity: {
       get(): string|null {
-        return this.generalComments.knownIdentity;
+        return this.commentKnownIdentity;
       },
       set(value: string|null) {
         this.setCommentIdentity(value);

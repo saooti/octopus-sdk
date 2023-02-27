@@ -3,7 +3,7 @@ import octopusApi from '@saooti/octopus-api';
 import { CommentPodcast } from '@/stores/class/general/comment';
 import { defineComponent } from 'vue';
 import { usePlayerStore } from '@/stores/PlayerStore';
-import { useGeneralStore } from '@/stores/GeneralStore';
+import { useCommentStore } from '@/stores/CommentStore';
 import { mapState } from 'pinia';
 import { FetchParam } from '@/stores/class/general/fetchParam';
 import { InterfacePageable } from '@/stores/class/general/interfacePageable';
@@ -14,18 +14,15 @@ export const playerComment = defineComponent({
     };
   },
   computed: {
-    ...mapState(useGeneralStore, ['generalComments']),
+    ...mapState(useCommentStore, ['commentActualPodcastId', 'commentTotalCount', 'commentLoaded']),
     ...mapState(usePlayerStore, ['playerPodcast', 'playerLive']),
-    commentsLoaded(){
-      return this.generalComments.loadedComments;
-    },
     organisationId(): string|undefined {
       return state.generalParameters.organisationId;
     },
   },
 
   watch: {
-    commentsLoaded(): void {
+    commentLoaded(): void {
       this.initComments(true);
     },
   },
@@ -36,14 +33,14 @@ export const playerComment = defineComponent({
     initCommentCurrentPodcast(podcastId?: number): Array<number>{
       if (
         podcastId &&
-        this.generalComments.actualPodcastId === podcastId
+        this.commentActualPodcastId === podcastId
       ) {
-        this.comments = this.commentsLoaded;
+        this.comments = this.commentLoaded;
         if (
-          this.commentsLoaded &&
-          this.commentsLoaded.length < this.generalComments.totalCount
+          this.commentLoaded &&
+          this.commentLoaded.length < this.commentTotalCount
         ) {
-          return [this.commentsLoaded.length, this.generalComments.totalCount];
+          return [this.commentLoaded.length, this.commentTotalCount];
         }
       }
       return [0, 0];
@@ -79,7 +76,7 @@ export const playerComment = defineComponent({
       if (
         refresh &&
         podcastId &&
-        this.generalComments.actualPodcastId !== podcastId
+        this.commentActualPodcastId !== podcastId
       ) {
         return;
       }
@@ -88,7 +85,7 @@ export const playerComment = defineComponent({
       let count = param[1];
       if (
         (!podcastId ||
-          this.generalComments.actualPodcastId === podcastId) &&
+          this.commentActualPodcastId === podcastId) &&
         0 === first
       ){
         return;

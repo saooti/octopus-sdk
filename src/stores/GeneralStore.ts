@@ -9,12 +9,6 @@ interface GeneralState{
   storedCategories: Array<Category>;
   storedCategoriesOrga: Array<Category>;
   isBeforeLive: boolean;
-  generalComments: {
-    knownIdentity: string | null;
-    actualPodcastId?: number;
-    loadedComments: Array<CommentPodcast>;
-    totalCount: number;
-  };
 }
 export const useGeneralStore = defineStore('GeneralStore', {
   state: (): GeneralState => ({
@@ -24,12 +18,6 @@ export const useGeneralStore = defineStore('GeneralStore', {
     storedCategories: [],
     storedCategoriesOrga: [],
     isBeforeLive: true,
-    generalComments: {
-      knownIdentity: null,
-      actualPodcastId: 0,
-      loadedComments: [],
-      totalCount: 0,
-    },
   }),
   actions:{
     storedUpdateCategories(categories: Array<Category>) {
@@ -41,17 +29,12 @@ export const useGeneralStore = defineStore('GeneralStore', {
     isBeforeLiveUpdate(isBeforeLive: boolean) {
       this.isBeforeLive = isBeforeLive;
     },
-    setCommentIdentity(identity:string|null) {
-      this.generalComments.knownIdentity = identity;
-    },
-    setCommentLoaded(data: {podcastId?: number, comments:Array<CommentPodcast>}) {
-      this.generalComments.actualPodcastId = data.podcastId;
-      this.generalComments.loadedComments = data.comments;
-    },
     platformUpdateEducation(isEducation: boolean) {
       this.platformEducation = isEducation;
-      this.generalLogoUrl = '/img/logo_education.webp';
-      this.metaTitle = 'RadioEducation.org';
+      if(isEducation){
+        this.generalLogoUrl = '/img/logo_education.webp';
+        this.metaTitle = 'RadioEducation.org';
+      }
     },
   }
 })

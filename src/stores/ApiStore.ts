@@ -19,7 +19,7 @@ interface ApiState {
 	videoMakerUrl: string,
 	storageUrl: string,
 }
-export const useAuthStore = defineStore('ApiStore', {
+export const useApiStore = defineStore('ApiStore', {
   state: (): ApiState => ({
     apiUrl: "",
     commentUrl: "",
