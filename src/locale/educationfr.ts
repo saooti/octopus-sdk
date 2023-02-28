@@ -1,6 +1,6 @@
 export default {
-  Productors: 'Établissements',
-  Productor: 'Établissement',
+  Productors: 'Académies & collectivités',
+  /* Productor: 'Établissement',
   'Number productors': '{nb} établissements',
   'select productor': 'Choisir un établissement',
   'Please chose a productor': 'Veuillez choisir un établissement',
@@ -9,5 +9,5 @@ export default {
   'Type string to filter by organisation': 'Filtrer les établissements par nom',
   'No organisation filter': 'Tous les établissements',
   'Loading productors ...': 'Chargement des établissements en cours...',
-  "Productor doesn't exist": "L'établissement demandé n'existe pas",
+  "Productor doesn't exist": "L'établissement demandé n'existe pas", */
 };

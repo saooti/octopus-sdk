@@ -138,6 +138,7 @@ import { Conference } from '@/stores/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
 import { useCommentStore } from '@/stores/CommentStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));

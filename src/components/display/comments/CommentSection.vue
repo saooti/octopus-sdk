@@ -41,6 +41,7 @@ import cookies from '../../mixins/cookies';
 import { Podcast } from '@/stores/class/general/podcast';
 import { Conference } from '@/stores/class/conference/conference';
 import { useCommentStore } from '@/stores/CommentStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent } from 'vue'
 import { CommentPodcast } from '@/stores/class/general/comment';
