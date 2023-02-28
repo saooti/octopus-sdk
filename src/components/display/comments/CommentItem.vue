@@ -138,7 +138,6 @@ import { Conference } from '@/stores/class/conference/conference';
 import CommentBasicView from './CommentBasicView.vue';
 import Constants from '../../../../public/config';
 import { useCommentStore } from '@/stores/CommentStore';
-import { useGeneralStore } from '@/stores/GeneralStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CommentInput = defineAsyncComponent(() => import('./CommentInput.vue'));
@@ -219,7 +218,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(useGeneralStore, ['setCommentIdentity']),
+    ...mapActions(useCommentStore, ['setCommentIdentity']),
     answerComment(): void {
       this.collapseVisible = true;
       this.focus = !this.focus;

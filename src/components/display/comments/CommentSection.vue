@@ -112,7 +112,7 @@ export default defineComponent({
     this.knownIdentity = this.getCookie('comment-octopus-name');
   },
   methods: {
-    ...mapActions(useGeneralStore, ['setCommentIdentity', 'setCommentLoaded']),
+    ...mapActions(useCommentStore, ['setCommentIdentity', 'setCommentLoaded']),
     updateFetch(value: { count: number, comments: Array<CommentPodcast> }): void {
       this.loaded = true;
       this.setCommentLoaded({
