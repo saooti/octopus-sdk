@@ -66,8 +66,7 @@
     </div>
     <button
       :title="''!=transcriptText ? $t('View transcript'): $t('Enlarge')"
-      class="btn play-button-box btn-transparent text-light"
-      :class="''!=transcriptText ? 'saooti-text-to-speech':'saooti-up'"
+      class="btn play-button-box btn-transparent text-light saooti-up me-0"
       @click="changePlayerLargeVersion"
     />
     <button
@@ -157,7 +156,7 @@ export default defineComponent({
     justify-content: center;
     margin: 0 0.5rem;
     border-radius: 50% !important;
-    font-size: 0.7rem !important;
+    font-size: 1rem !important;
     flex-shrink: 0;
     cursor: pointer;
   }
