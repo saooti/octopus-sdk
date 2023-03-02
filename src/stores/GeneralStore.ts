@@ -1,5 +1,4 @@
 import { Category } from '@/stores/class/general/category';
-import { CommentPodcast } from '@/stores/class/general/comment';
 import { defineStore } from 'pinia';
 
 interface GeneralState{

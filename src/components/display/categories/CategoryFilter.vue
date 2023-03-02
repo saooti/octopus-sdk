@@ -124,7 +124,7 @@ export default defineComponent({
         if (this.$route.query.iabId) {
           this.$router.replace({ query: {...this.$route.query, ...{iabId: undefined} } });
         }
-        this.filterUpdateIab(undefined);
+        this.filterUpdateIab();
       }else{
         const newFilter: Array<RubriquageFilter>  = Array.from(this.filterRubrique);
         newFilter.splice(index + 1);

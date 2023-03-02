@@ -10,7 +10,7 @@ export const playerTranscript = defineComponent({
     ...mapActions(usePlayerStore, ['playerUpdateTranscript']),
     async getTranscription(): Promise<void>{
       if(!this.playerPodcast){
-        this.playerUpdateTranscript(undefined);
+        this.playerUpdateTranscript();
         return;
       }
       const result = await octopusApi.fetchDataPublic<string>(11 , `response/${this.playerPodcast.podcastId}`);

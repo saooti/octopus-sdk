@@ -98,7 +98,7 @@ export default defineComponent({
       if (queries.iabId) {
         this.$router.replace({ query: {...queries, ...{iabId: undefined} } });
       }
-      this.filterUpdateIab(undefined);
+      this.filterUpdateIab();
     }
   },
 })
