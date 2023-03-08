@@ -4,7 +4,7 @@ import { Category } from './class/general/category';
 const state:ParamStore = {
   generalParameters: {
     organisationId:'ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c',
-    authenticated: false,
+    authenticated: true,
     isAdmin: false,
     isRoleLive: false,
     isCommments: false,

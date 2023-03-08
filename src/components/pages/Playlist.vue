@@ -39,7 +39,7 @@
           <ShareButtons
             v-if="pageParameters.isShareButtons"
             :playlist="playlist"
-            :is-vertical="true"
+            :is-vertical="!(pageParameters.isSharePlayer && authenticated)"
           />
         </div>
       </div>
