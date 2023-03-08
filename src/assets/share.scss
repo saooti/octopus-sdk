@@ -195,4 +195,34 @@
       width: 90%;
     }
   }
+  .advanced-search-container {
+    background: #fff;
+    border-radius: 0.8rem;
+    display: flex;
+    width: 100%;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+    justify-content: space-around;
+    @media (max-width: 720px) {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    @media (max-width: 450px) {
+      flex-direction: column;
+      padding: 1rem;
+      .vdatetime, label {
+        padding: 0.5rem 0 !important;
+        width: 100%;
+        input {
+          width: 100%;
+        }
+      }
+    }
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding-right: 40px;
+    }
+  }
 }
