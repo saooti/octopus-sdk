@@ -239,9 +239,6 @@ export default defineComponent({
     top: 5px;
     right: 0;
   }
-  .multiselect__tags {
-    padding: 6px 40px 0 10px;
-  }
   &.shadow-element {
     height: 3.5rem;
     .link-hover,.hosted-by {
