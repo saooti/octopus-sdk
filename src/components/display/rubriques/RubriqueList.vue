@@ -44,6 +44,16 @@
       :is-fixed="true"
       :left-pos="true"
     >
+      <RubriqueChooser
+        v-if="hidenRubriques.length"
+        :multiple="false"
+        :rubriquage-id="rubriquage.rubriquageId"
+        :all-rubriques="hidenRubriques"
+        :cannot-be-undefined="true"
+        class="mb-3"
+        width="auto"
+        @selected="addFilter(index,$event)"
+      />
       <button
         v-for="rubrique in hidenRubriques"
         :key="rubrique.rubriqueId"
@@ -63,12 +73,14 @@ import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineAsyncComponent, defineComponent } from 'vue';
+const RubriqueChooser = defineAsyncComponent(() => import('../rubriques/RubriqueChooser.vue'));
 export default defineComponent({
   name: 'RubriqueList',
 
   components:{
-    Popover
+    Popover,
+    RubriqueChooser
   },
 
   props: {

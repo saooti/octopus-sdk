@@ -7,7 +7,7 @@
       v-if="filterIab || filterRubrique.length"
       class="octopus-breadcrumb d-flex align-items-center flex-wrap"
     >
-      <li>
+      <li class="octopus-breadcrumb-li">
         <a
           href="#"
           @click="removeFilter(-1, $event)"
@@ -15,13 +15,14 @@
       </li>
       <li
         v-if="filterIab"
+        class="octopus-breadcrumb-li"
       >
         {{ filterIab.name }}
       </li>
       <li 
         v-for="(filter, index) in filterRubrique" 
         :key="filter.rubriqueId"
-        class="d-flex align-items-center"
+        class="d-flex align-items-center octopus-breadcrumb-li"
         :class="filterRubrique.length-1 === index ? 'active':''"
       >
         <a
@@ -148,7 +149,7 @@ export default defineComponent({
     padding: 1rem;
     align-items: center;
     background: #FAFAFA;
-    li{
+    .octopus-breadcrumb-li{
       list-style: none;
       &:after {
         content: "/";

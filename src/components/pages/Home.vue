@@ -11,19 +11,33 @@
     </template>
     <template v-else>
       <PodcastInlineList
-        v-for="r in rubriqueDisplay"
+        v-for="r in rubriqueToShow"
         :key="r.rubriqueId"
         :rubrique-id="rubriqueId.concat(r.rubriqueId)"
         :title="r.name"
         :button-text="$t('All podcast button', { name: r.name })"
       />
       <PodcastInlineList
-        v-if="rubriqueDisplay && rubriqueDisplay.length"
+        v-if="!tooManyRubrique"
         :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
         :rubrique-id="rubriqueId"
         :title="$t('Without rubric')"
         :button-text="$t('All podcast button', { name: $t('Without rubric') })"
       />
+      <router-link
+        v-else
+        :to="{
+          name: 'podcasts',
+          query: { productor: filterOrgaId, 
+                  iabId: filterIab?.id,
+                  rubriquesId: this.rubriqueQueryParam },
+          }"
+        class="btn btn-primary align-self-center width-fit-content mt-5 m-auto"
+      >
+        {{
+          $t('See more')
+        }}
+      </router-link>
     </template>
   </div>
 </template>
@@ -47,13 +61,29 @@ export default defineComponent({
   data() {
     return {
       rubriqueId: [] as Array<number>,
+      rubriqueMaxDisplay: 20 as number,
     };
   },
   computed: {
     ...mapState(useGeneralStore, ['storedCategories']),
     ...mapState(useFilterStore, ['filterRubriquage', 'filterOrgaId', 'filterRubrique', 'filterRubriqueDisplay', 'filterIab']),
+    rubriqueQueryParam(): string|undefined{
+      if(this.filterRubrique?.length){
+        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+      }
+      return undefined;
+    },
+    tooManyRubrique(): boolean{
+      return this.rubriqueDisplay && this.rubriqueDisplay.length >this.rubriqueMaxDisplay;
+    },
     rubriqueDisplay(): Array<Rubrique>{
       return this.filterRubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
+    },
+    rubriqueToShow(): Array<Rubrique>{
+      if(!this.tooManyRubrique){
+        return this.rubriqueDisplay ?? [];
+      }
+      return this.rubriqueDisplay.slice(0, this.rubriqueMaxDisplay);
     },
     rubriquageFilter(): Array<Rubriquage>{
       return this.filterOrgaId? this.filterRubriquage :[];

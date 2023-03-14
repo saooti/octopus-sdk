@@ -25,7 +25,7 @@
       :internal-search="false"
       :clear-on-select="false"
       :close-on-select="true"
-      :options-limit="200"
+      :options-limit="rubriqueLimit"
       :max-height="600"
       :show-no-results="true"
       :hide-selected="true"
@@ -61,6 +61,19 @@
       </template>
       <template #caret>
         <span class="saooti-down octopus-arrow-down octopus-arrow-down-absolute" />
+      </template>
+       <template #afterList="">
+        <div
+          v-if="rubriques.length > rubriqueLimit"
+          class="multiselect-remaining-elements"
+        >
+          {{
+            $t(
+              'Count more elements matched your query, please make a more specific search.',
+              { count: rubriques.length - rubriqueLimit }
+            )
+          }}
+        </div>
       </template>
     </VueMultiselect>
   </div>
@@ -101,6 +114,7 @@ export default defineComponent({
 
   data() {
     return {
+      rubriqueLimit: 250 as number,
       rubriques: [] as Array<Rubrique>,
       rubrique: getDefaultRubrique(this.defaultanswer),
       rubriqueForArray: [] as Array<Rubrique>,
