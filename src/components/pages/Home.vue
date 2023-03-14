@@ -17,27 +17,29 @@
         :title="r.name"
         :button-text="$t('All podcast button', { name: r.name })"
       />
-      <PodcastInlineList
-        v-if="!tooManyRubrique"
-        :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
-        :rubrique-id="rubriqueId"
-        :title="$t('Without rubric')"
-        :button-text="$t('All podcast button', { name: $t('Without rubric') })"
-      />
-      <router-link
-        v-else
-        :to="{
-          name: 'podcasts',
-          query: { productor: filterOrgaId, 
-                  iabId: filterIab?.id,
-                  rubriquesId: this.rubriqueQueryParam },
-          }"
-        class="btn btn-primary align-self-center width-fit-content mt-5 m-auto"
-      >
-        {{
-          $t('See more')
-        }}
-      </router-link>
+      <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
+        <PodcastInlineList
+          v-if="rubriqueDisplay.length < rubriqueMaxDisplay"
+          :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
+          :rubrique-id="rubriqueId"
+          :title="$t('Without rubric')"
+          :button-text="$t('All podcast button', { name: $t('Without rubric') })"
+        />
+        <router-link
+          v-else
+          :to="{
+            name: 'podcasts',
+            query: { productor: filterOrgaId, 
+                    iabId: filterIab?.id,
+                    rubriquesId: this.rubriqueQueryParam },
+            }"
+          class="btn btn-primary align-self-center width-fit-content mt-5 m-auto"
+        >
+          {{
+            $t('See more')
+          }}
+        </router-link>
+      </template>
     </template>
   </div>
 </template>
@@ -73,14 +75,11 @@ export default defineComponent({
       }
       return undefined;
     },
-    tooManyRubrique(): boolean{
-      return this.rubriqueDisplay && this.rubriqueDisplay.length >this.rubriqueMaxDisplay;
-    },
     rubriqueDisplay(): Array<Rubrique>{
       return this.filterRubriqueDisplay.filter((rubrique: Rubrique) => 0 !== rubrique.podcastCount );
     },
     rubriqueToShow(): Array<Rubrique>{
-      if(!this.tooManyRubrique){
+      if(!this.rubriqueDisplay || this.rubriqueDisplay.length < this.rubriqueMaxDisplay){
         return this.rubriqueDisplay ?? [];
       }
       return this.rubriqueDisplay.slice(0, this.rubriqueMaxDisplay);
