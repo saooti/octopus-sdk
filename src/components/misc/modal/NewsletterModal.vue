@@ -8,7 +8,7 @@
     <template #body>
       <div class="d-flex justify-content-between">
         <!-- eslint-disable vue/no-v-html -->
-        <div v-html="newsletterHtml" />
+        <div v-html="newsletterHtml"/>
         <!-- eslint-enable -->
         <div class="d-flex flex-column flex-grow-1 ms-4">
           <h4 class="mb-3">
@@ -71,6 +71,10 @@
           />
         </div>
       </div>
+      <Snackbar
+        ref="snackbar"
+        position="bottom-left"
+      />
     </template>
     <template #footer>
       <button
@@ -81,10 +85,6 @@
       </button>
     </template>
   </ClassicModal>
-  <Snackbar
-    ref="snackbar"
-    position="bottom-left"
-  />
 </template>
 
 <script lang="ts">
@@ -259,7 +259,7 @@ export default defineComponent({
           ${this.title}
 				</td>
 		</tr>
-    ${this.emissionName},${this.description}`
+    ${this.emissionName}${this.description}`
       ];
       html.push(
       `</table>
