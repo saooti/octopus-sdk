@@ -318,17 +318,20 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-#newsletter-modal {
-  textarea {
-    border: 2px solid #eee;
-    height: 200px;
-    padding: 1em;
-    border-radius: 1em;
+  #newsletter-modal{
+    textarea {
+      border: 2px solid #eee;
+      height: 200px;
+      padding: 1em;
+      border-radius: 1em;
+    }
+    .octopus-modal-dialog{
+      max-width: 80%;
+      max-height: calc(100% - 3.5rem) !important;
+    }
+    .octopus-modal-content{
+      max-height: calc(100vh - 100px) !important;
+    }
   }
-
-  .modal-dialog {
-    max-width: 60%;
-  }
-}
 }
 </style>
