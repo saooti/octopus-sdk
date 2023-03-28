@@ -93,7 +93,7 @@ export default{
   'Look for library': 'Poišči knjižnico',
   Yes: 'Da',
   No: 'Ne',
-  "Podcast doesn't exist": "Podkast ne obstaja",
+  "This episode is not available for (re)listening": "Ta epizoda ni na voljo za (ponovno) poslušanje",
   "Emission doesn't exist": "Oddaja ne obstaja",
   "Animator doesn't exist": "Napovedovalec ne obstaja",
   "Productor doesn't exist": "Producent ne obstaja",

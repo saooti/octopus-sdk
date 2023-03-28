@@ -93,7 +93,7 @@ export default{
   'Look for library': 'Look for library',
   Yes: 'Yes',
   No: 'No',
-  "Podcast doesn't exist": "Podcast doesn't exist",
+  "This episode is not available for (re)listening": "This episode is not available for (re)listening",
   "Emission doesn't exist": "Serie doesn't exist",
   "Animator doesn't exist": "Host doesn't exist",
   "Productor doesn't exist": "Producer doesn't exist",

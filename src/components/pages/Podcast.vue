@@ -86,7 +86,7 @@
     </template>
     <ClassicLoading
       :loading-text="!loaded?$t('Loading content ...'):undefined"
-      :error-text="error?$t(`Podcast doesn't exist`):undefined"
+      :error-text="error?$t(`This episode is not available for (re)listening`):undefined"
     />
   </div>
 </template>

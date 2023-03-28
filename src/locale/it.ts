@@ -90,7 +90,7 @@ export default{
     'Look for library': 'Cerca la libreria', 
     Yes: 'Sì', 
     No: 'No', 
-    "Podcast doesn't exist": "Il podcast non esiste", 
+    "This episode is not available for (re)listening": "Il podcast non è disponibile per il (ri)ascolto", 
     "Emission doesn't exist": "La serie non esiste", 
     "Animator doesn't exist": "L'host non esiste", 
     "Productor doesn't exist": "Il producer non esiste", 

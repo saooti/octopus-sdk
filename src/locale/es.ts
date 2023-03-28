@@ -93,7 +93,7 @@ export default{
   'Look for library': 'Buscar biblioteca',
   Yes: 'Sí',
   No: 'No',
-  "Podcast doesn't exist": "Ese pódcast no existe",
+  "This episode is not available for (re)listening": "Ese pódcast no está disponible para (re)escuchar",
   "Emission doesn't exist": "Ese programa no existe",
   "Animator doesn't exist": "Ese/a presentador/a no existe",
   "Productor doesn't exist": "Ese productor no existe",

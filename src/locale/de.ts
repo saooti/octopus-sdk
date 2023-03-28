@@ -93,7 +93,7 @@ export default{
   'Look for library': "Nach Bibliothek suchen",
   Yes: "Ja",
   No: "Nein",
-  "Podcast doesn't exist": "Podcast nicht gefunden",
+  "This episode is not available for (re)listening": "Diese Episode kann nicht (erneut) angehört werden",
   "Emission doesn't exist": "Reihe nicht gefunden",
   "Animator doesn't exist": "Autor nicht gefunden",
   "Productor doesn't exist": "Produzent nicht gefunden",

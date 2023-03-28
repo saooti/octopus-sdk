@@ -93,7 +93,7 @@ export default{
   'Look for library': 'Rechercher une bibliothèque',
   Yes: 'Confirmer',
   No: 'Annuler',
-  "Podcast doesn't exist": "L'épisode demandé n'existe pas",
+  "This episode is not available for (re)listening": "Cet épisode n'est pas disponible à la (ré)écoute",
   "Emission doesn't exist": "L'émission demandée n'existe pas",
   "Animator doesn't exist": "L'intervenant demandé n'existe pas",
   "Productor doesn't exist": "Le producteur demandé n'existe pas",
