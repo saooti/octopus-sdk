@@ -34,7 +34,7 @@ export const playerLive = defineComponent({
     },
     playLive() {
       if (!this.playerLive) return;
-      const hlsStreamUrl = `${state.podcastPage.hlsUri}stream/dev.${this.playerLive.conferenceId}/index.m3u8`;
+      const hlsStreamUrl = `${state.podcastPage.hlsUri}live/dev.${this.playerLive.conferenceId}/index.m3u8`;
       this.playHls(hlsStreamUrl);
     },
     async playHls(hlsStreamUrl: string): Promise<void>{
