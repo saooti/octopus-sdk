@@ -77,8 +77,8 @@ export default defineComponent({
 		position: relative;
 		pointer-events: none;
 		margin: 1.75rem auto;
-		max-height: 75vh;
-		max-width: 640px;
+		max-width: 800px;
+    max-height: 90vh;
 		width: 100%;
 		display: flex;
 		color: #353535 !important;
@@ -88,7 +88,6 @@ export default defineComponent({
 		}
 	}
 	.octopus-modal-body{
-		position: relative;
 		flex: 1 1 auto;
 		padding: 1rem;
 		overflow-x: auto;
@@ -113,7 +112,6 @@ export default defineComponent({
 		min-height: 300px;
 	}
 	.octopus-modal-content{
-		position: relative;
 		display: flex;
 		flex-direction: column;
 		pointer-events: auto;
@@ -123,7 +121,7 @@ export default defineComponent({
 		border: 0;
 		outline: 0;
 		height: auto !important;
-		max-height: calc(100vh - 250px) !important;
+		max-height: initial !important;
 		border-radius: 0.8rem;
 		box-shadow: 0 0.2rem 0.5rem rgba(40,40,40,.3);
 	}
