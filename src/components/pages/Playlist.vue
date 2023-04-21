@@ -1,50 +1,50 @@
 <template>
   <div class="page-box">
-    <div
+    <template
       v-if="loaded && !error"
     >
-      <h1>{{ $t('Playlist') }}</h1>
-      <div class="d-flex">
-        <div class="d-flex flex-column flex-grow-1">
+      <div class="page-element-title-container">
+        <div class="page-element-title">
+          <h1>{{ $t('Playlist') }}</h1>
+        </div>
+        <div class="page-element-bg" :style="backgroundDisplay"></div>
+      </div>
+      <div class="d-flex flex-column page-element">
+        <div class="module-box">
+          <div class="mb-5 mt-3 descriptionText">
+            <img
+              v-lazy="proxyImageUrl(imageUrl, '330')"
+              width="330"
+              height="330"
+              :alt="$t('Playlist name image', { name: name })"
+              class="img-box float-start me-3 mb-3"
+            >
+            <h2>{{ name }}</h2>
+            <!-- eslint-disable vue/no-v-html -->
+            <p
+              class="html-wysiwyg-content"
+              v-html="urlify(description)"
+            />
+            <!-- eslint-enable -->
+          </div>
           <EditBox
             v-if="editRight && pageParameters.isEditBox"
             :playlist="playlist"
           />
-          <div class="module-box">
-            <h2>{{ name }}</h2>
-            <div class="mb-5 mt-3 descriptionText">
-              <img
-                v-lazy="proxyImageUrl(imageUrl, '260')"
-                width="260"
-                height="260"
-                :alt="$t('Playlist name image', { name: name })"
-                class="img-box shadow-element float-start me-3 mb-3"
-              >
-              <!-- eslint-disable vue/no-v-html -->
-              <p
-                class="html-wysiwyg-content"
-                v-html="urlify(description)"
-              />
-              <!-- eslint-enable -->
-            </div>
-          </div>
         </div>
-        <div class="d-flex flex-column flex-grow-mobile">
-          <SharePlayer
-            v-if="pageParameters.isSharePlayer && authenticated"
-            :playlist="playlist"
-            :organisation-id="myOrganisationId"
-            :is-education="isEducation"
-          />
-          <ShareButtons
-            v-if="pageParameters.isShareButtons"
-            :playlist="playlist"
-            :is-vertical="!(pageParameters.isSharePlayer && authenticated)"
-          />
-        </div>
+        <SharePlayer
+          v-if="pageParameters.isSharePlayer && authenticated"
+          :playlist="playlist"
+          :organisation-id="myOrganisationId"
+          :is-education="isEducation"
+        />
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :playlist="playlist"
+        />
+        <PodcastList :playlist="playlist" />
       </div>
-      <PodcastList :playlist="playlist" />
-    </div>
+    </template>
     <ClassicLoading
       :loading-text="!loaded?$t('Loading content ...'):undefined"
       :error-text="error?$t(`Playlist doesn't exist`):undefined"
@@ -111,6 +111,12 @@ export default defineComponent({
       return (true===state.generalParameters.isPlaylist &&
         this.myOrganisationId === this.playlist?.organisation?.id) ||
         true ===state.generalParameters.isAdmin
+    },
+    backgroundDisplay():string{
+      if(!this.playlist){
+        return "";
+      }
+      return `background-image: url('${this.playlist.imageUrl}');`;
     },
   },
   watch: {

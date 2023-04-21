@@ -17,7 +17,7 @@
         @seeked="onSeeked"
       />
       <PlayerCompact
-        v-if="!largeVersion"
+        v-if="!playerLargeVersion"
         v-model:notListenTime="notListenTime"
         :player-error="playerError"
         :hls-ready="hlsReady"
@@ -27,7 +27,7 @@
         :duration-live-position="durationLivePosition"
         :listen-time="listenTime"
         @stopPlayer="stopPlayer"
-        @changePlayerLargeVersion="largeVersion = true"
+        @changePlayerLargeVersion="playerUpdateLargeVersion(true)"
       />
       <PlayerLarge
         v-else
@@ -40,7 +40,7 @@
         :duration-live-position="durationLivePosition"
         :listen-time="listenTime"
         @stopPlayer="stopPlayer"
-        @changePlayerLargeVersion="largeVersion = false"
+        @changePlayerLargeVersion="playerUpdateLargeVersion(false)"
       />
     </template>
   </div>
@@ -76,22 +76,13 @@ export default defineComponent({
       displayAlertBar: false as boolean,
       hlsReady: false as boolean,
       comments: [] as Array<CommentPodcast>,
-      showTimeline: false as boolean,
-      largeVersion: false as boolean,
       audioUrlToPlay: "" as string
     };
   },
   computed: {
-    ...mapState(usePlayerStore, ['playerStatus']),
+    ...mapState(usePlayerStore, ['playerStatus', 'playerHeight', 'playerLargeVersion']),
     display(){
       return 'STOPPED' !== this.playerStatus;
-    },
-    playerHeight() {
-      if ('STOPPED' === this.playerStatus || this.forceHide) return 0;
-      if (this.largeVersion) return '27rem';
-      if (window.innerWidth > 450 && !this.showTimeline) return '5rem';
-      if (window.innerWidth > 450 && this.showTimeline) return '6rem';
-      return '3.5rem';
     },
   },
 
@@ -102,7 +93,7 @@ export default defineComponent({
   },
   
   methods: {
-    ...mapActions(usePlayerStore, ['playerPlay']),
+    ...mapActions(usePlayerStore, ['playerPlay', 'playerUpdateLargeVersion']),
     onHidden(): void {
       if (this.forceHide) {
         this.playerPlay();

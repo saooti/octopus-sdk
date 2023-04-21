@@ -4,9 +4,9 @@
     class="img-box mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
   >
     <img
-      v-lazy="proxyImageUrl(podcast.imageUrl,'260')"
-      width="260"
-      height="260"
+      v-lazy="proxyImageUrl(podcast.imageUrl,'330')"
+      width="330"
+      height="330"
       class="img-box"
       :alt="$t('Episode name image', {name:podcast.title})"
     >
@@ -44,7 +44,7 @@
         <div
           v-if="!playingPodcast"
           :title="$t('Play')"
-          class="saooti-play text-primary"
+          class="saooti-play"
         />
         <div
           v-if="!classicPodcastPlay"
@@ -59,6 +59,7 @@
           <span class="paddle2" />
           <span class="paddle3" />
         </div>
+        <div class="ms-2">{{durationString}}</div>
       </div>
       <div
         v-else
@@ -88,6 +89,7 @@
 </template>
 
 <script lang="ts">
+import DurationHelper from '../../../helper/duration';
 import { state } from '../../../stores/ParamSdkStore';
 import { Podcast } from '@/stores/class/general/podcast';
 import { Conference } from '@/stores/class/conference/conference';
@@ -233,6 +235,9 @@ export default defineComponent({
     clickPlayGoPage():boolean{
       return (state.podcastPage.clickPlayGoPage as boolean);
     },
+    durationString(): string {
+      return DurationHelper.formatDuration(Math.round(this.podcast.duration/1000));
+    },
   },
   watch: {
     arrowDirection(): void {
@@ -286,6 +291,7 @@ export default defineComponent({
 
 
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
   .live-image-status {
     text-align: center;
@@ -316,8 +322,7 @@ export default defineComponent({
   .podcast-image-play-button{
     position: absolute;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     top: 0;
     left: 0;
     right: 0;
@@ -332,10 +337,11 @@ export default defineComponent({
     }
 
     .icon-container {
-      background: #00000050 !important;
-      border-radius: 50%;
-      height: 3rem;
-      width: 3rem;
+      background: $primaryColorLessTransparent !important;
+      border-radius: 2rem;
+      color: white;
+      padding: 0.5rem;
+      margin: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -348,12 +354,12 @@ export default defineComponent({
         background: #00000030;
       }
       .saooti-play {
-        font-size: 2em;
+        font-size: 1.2rem;
         position: relative;
-        right: -0.2rem;
+        color: white;
       }
       .big-icon-error {
-        font-size: 2em;
+        font-size: 1rem;
         position: relative;
       }
     }

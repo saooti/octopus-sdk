@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column align-items-center text-danger">
+  <div class="d-flex flex-column align-items-center text-white">
     <h3>{{ $t('This live will start') }}</h3>
     <h3
       v-if="countdownTimer"

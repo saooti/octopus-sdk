@@ -1,94 +1,76 @@
 <template>
-  <div
-    v-if="totalCount > 0"
-    class="paginate"
-  >
-    <div class="d-flex align-items-center justify-content-center">
-      <label for="rows-per-page-select">{{ $t('Items per page :') }}</label>
-      <select
-        id="rows-per-page-select"
-        :value="rowsPerPage"
-        class="c-hand p-1 mx-2"
-        @change="$emit('update:rowsPerPage',parseInt($event.target.value,10))"
+  <div class="paginate-fixed" :style="'bottom:'+playerHeight">
+    <div class="mx-2">
+      {{ $t('Showing items number', {page: (page+1), totalPage: totalPage}) }}
+    </div>
+    <div class="d-flex flex-nowrap">
+      <button
+        v-for="paginateButton in buttonsLeft"
+        :key="paginateButton.title"
+        class="btn"
+        :title="paginateButton.title"
+        :disabled="paginateButton.disabled"
+        @click="paginateButton.action"
       >
-        <option
-          v-for="option in optionsRowsPerPage"
-          :key="option"
-          :value="option"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          viewBox="0 0 16 16"
         >
-          {{ option }}
-        </option>
-      </select>
-      <div class="mx-2">
-        {{ $t('Showing items number', {page: (page+1), totalPage: totalPage}) }}
-      </div>
-      <div class="d-flex flex-nowrap">
-        <button
-          v-for="paginateButton in buttonsLeft"
-          :key="paginateButton.title"
+          <path
+            fill-rule="evenodd"
+            :d="paginateButton.path"
+          />
+        </svg>
+      </button>
+      <div
+        v-for="pageNumber in pagination"
+        :key="pageNumber"
+      >
+        <span
+          v-if="null === pageNumber"
           class="btn"
-          :title="paginateButton.title"
-          :disabled="paginateButton.disabled"
-          @click="paginateButton.action"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              :d="paginateButton.path"
-            />
-          </svg>
-        </button>
-        <div
-          v-for="pageNumber in pagination"
-          :key="pageNumber"
-        >
-          <span
-            v-if="null === pageNumber"
-            class="btn"
-          >
-            ...
-          </span>
-          <button
-            v-else
-            class="btn"
-            :class="{ 'active': page === (pageNumber-1) }"
-            @click="changeFirst((pageNumber-1)*rowsPerPage)"
-          >
-            {{ pageNumber }}
-          </button>
-        </div>
+          ...
+        </span>
         <button
-          v-for="paginateButton in buttonsRight"
-          :key="paginateButton.title"
+          v-else
           class="btn"
-          :title="paginateButton.title"
-          :disabled="paginateButton.disabled"
-          @click="paginateButton.action"
+          :class="{ 'active': page === (pageNumber-1) }"
+          @click="changeFirst((pageNumber-1)*rowsPerPage)"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              :d="paginateButton.path"
-            />
-          </svg>
+          {{ pageNumber }}
         </button>
       </div>
+      <button
+        v-for="paginateButton in buttonsRight"
+        :key="paginateButton.title"
+        class="btn"
+        :title="paginateButton.title"
+        :disabled="paginateButton.disabled"
+        @click="paginateButton.action"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            :d="paginateButton.path"
+          />
+        </svg>
+      </button>
     </div>
   </div>
 </template>
 <script lang="ts">
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: "Paginate",
@@ -100,15 +82,10 @@ export default defineComponent({
     rangeSize:{default:1, type: Number}
   },
 
-	emits:['update:first', 'update:rowsPerPage'],
-
-  data() {
-    return {
-			optionsRowsPerPage: [10, 20, 30, 40, 50, 60] as Array<number>,
-		};
-  },
+	emits:['update:first'],
   
 	computed:{
+    ...mapState(usePlayerStore, ['playerHeight']),
     buttonsLeft(){
       return [{
         title: this.$t('Go to first page'), disabled: 0===this.first, action: ()=>{this.changeFirst(0)}, path:"M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z"},
@@ -145,10 +122,7 @@ export default defineComponent({
 			return (this.totalPage-1)*this.rowsPerPage;
 		}
 	},
-	created(){
-		this.initRowsPerPage();
-	},
- 
+	
 	methods:{
     getPaginationArrayWithEllipsis(rangeStart: number, rangeEnd:number, minPaginationElems:number){
       const res = [];
@@ -177,13 +151,6 @@ export default defineComponent({
       }
       return res;
     },
-    initRowsPerPage(){
-      if(this.optionsRowsPerPage.includes(this.rowsPerPage)){
-        return;
-      }
-      this.optionsRowsPerPage.push(this.rowsPerPage);
-      this.optionsRowsPerPage.sort((a,b)=>a-b);
-    },
 		changeFirst(newFirst: number){
 			this.$emit('update:first', newFirst);
 		},
@@ -192,15 +159,15 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import '@scss/_variables.scss';
-.octopus-app .paginate{
-	display: flex;
-	justify-content: flex-end;
-	select{
-		border-top: 0;
-		border-right: 0;
-		border-left: 0;
-		background: transparent !important;
-	}
+.octopus-app .paginate-fixed{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  position: sticky;
+  background: white;
+  padding: 0.5rem 0;
+  z-index: 10;
   .btn{
     border-radius: 0;
     &.active{

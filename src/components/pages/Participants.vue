@@ -1,6 +1,5 @@
 <template>
   <div class="page-box">
-    <h1>{{ titleDisplay }}</h1>
     <ProductorSearch
       v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
@@ -20,7 +19,6 @@
 import { orgaComputed } from '../mixins/orgaComputed';
 import ParticipantList from '../display/participant/ParticipantList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
-import { state } from '../../stores/ParamSdkStore';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
@@ -38,11 +36,6 @@ export default defineComponent({
       searchPattern: '' as string,
       organisationId: undefined as string | undefined,
     };
-  },
-  computed: {
-    titleDisplay(): string{
-      return state.intervenantsPage.titlePage ?? this.$t('All participants');
-    },
   },
   created() {
     this.organisationId = this.productor ?this.productor: this.filterOrgaId;

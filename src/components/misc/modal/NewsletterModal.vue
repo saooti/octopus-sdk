@@ -323,7 +323,6 @@ export default defineComponent({
       border: 2px solid #eee;
       height: 200px;
       padding: 1em;
-      border-radius: 1em;
     }
     .octopus-modal-dialog{
       max-width: 80%;

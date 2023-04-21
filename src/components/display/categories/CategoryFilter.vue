@@ -1,68 +1,72 @@
 <template>
   <div
-    v-show="isDisplay"
-    class="mt-3"
+    v-show="isHeaderDisplay"
+    class="header-img flex-column justify-content-end"
+    :style="backgroundDisplay"
   >
-    <ol
-      v-if="filterIab || filterRubrique.length"
-      class="octopus-breadcrumb d-flex align-items-center flex-wrap"
-    >
-      <li class="octopus-breadcrumb-li">
-        <a
-          href="#"
-          @click="removeFilter(-1, $event)"
-        >{{ $t('All') }}</a>
-      </li>
-      <li
-        v-if="filterIab"
-        class="octopus-breadcrumb-li"
+    <h1>{{titleDisplay}}</h1>
+    <div v-show="isDisplay" class="d-flex flex-column justify-content-end">
+      <ol
+        v-if="filterIab || filterRubrique.length"
+        class="octopus-breadcrumb d-flex align-items-center justify-content-center flex-wrap"
       >
-        {{ filterIab.name }}
-      </li>
-      <li 
-        v-for="(filter, index) in filterRubrique" 
-        :key="filter.rubriqueId"
-        class="d-flex align-items-center octopus-breadcrumb-li"
-        :class="filterRubrique.length-1 === index ? 'active':''"
-      >
-        <a
-          v-if="filterRubrique.length - 1 !== index"
-          href="#"
-          @click="removeFilter(index,$event)"
-        >{{ filter.nameRubriquage }}</a>
-        <template v-else>
-          {{ filter.nameRubriquage }}
-        </template>
-        <div class="mx-1">
-          :
-        </div>
-        <RubriqueChooser
-          v-if="getRubriques(filter.rubriquageId).length"
-          class="ms-2 multiselect-transparent"
-          :multiple="false"
-          :rubriquage-id="filter.rubriquageId"
-          :rubrique-selected="filter.rubriqueId"
-          :all-rubriques="getRubriques(filter.rubriquageId)"
-          :cannot-be-undefined="true"
-          width="auto"
-          @selected="onRubriqueSelected(index,$event)"
-        />
-      </li>
-    </ol>
-    <CategoryList
-      v-if="!filterIab && !rubriquageFilter.length"
-      :is-filter="true"
-      :is-display="isDisplay"
-      @categoriesLength="checkIfCategories"
-    />
-    <RubriqueList
-      v-else-if="isDisplay && rubriquageFilter.length !== filterRubrique.length"
-      :rubriquages="rubriquageFilter"
-    />
+        <li class="octopus-breadcrumb-li">
+          <a
+            href="#"
+            @click="removeFilter(-1, $event)"
+          >{{ $t('All') }}</a>
+        </li>
+        <li
+          v-if="filterIab"
+          class="octopus-breadcrumb-li"
+        >
+          {{ filterIab.name }}
+        </li>
+        <li 
+          v-for="(filter, index) in filterRubrique" 
+          :key="filter.rubriqueId"
+          class="d-flex align-items-center octopus-breadcrumb-li"
+          :class="filterRubrique.length-1 === index ? 'active':''"
+        >
+          <a
+            v-if="filterRubrique.length - 1 !== index"
+            href="#"
+            @click="removeFilter(index,$event)"
+          >{{ filter.nameRubriquage }}</a>
+          <div class="fw-bold" v-else>
+            {{ filter.nameRubriquage }}
+          </div>
+          <div class="mx-1">
+            :
+          </div>
+          <RubriqueChooser
+            v-if="getRubriques(filter.rubriquageId).length"
+            class="ms-2 multiselect-transparent multiselect-white"
+            :multiple="false"
+            :rubriquage-id="filter.rubriquageId"
+            :rubrique-selected="filter.rubriqueId"
+            :all-rubriques="getRubriques(filter.rubriquageId)"
+            :cannot-be-undefined="true"
+            width="auto"
+            @selected="onRubriqueSelected(index,$event)"
+          />
+        </li>
+      </ol>
+      <CategoryList
+        v-if="!filterIab && !rubriquageFilter.length"
+        :is-filter="true"
+        :is-display="isDisplay"
+        @categoriesLength="checkIfCategories"
+      />
+      <RubriqueList
+        v-else-if="isDisplay && rubriquageFilter.length !== filterRubrique.length"
+        :rubriquages="rubriquageFilter"
+      />
+    </div>
   </div>
   <div
     v-if="!isDisplay"
-    class="categary-filter-no-filter"
+    class="category-filter-no-filter"
   />
 </template>
 
@@ -71,6 +75,7 @@ import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
 import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { Rubrique } from '@/stores/class/rubrique/rubrique';
 import { useFilterStore } from '@/stores/FilterStore';
+import { state } from '../../../stores/ParamSdkStore';
 import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const CategoryList = defineAsyncComponent(() => import('./CategoryList.vue'));
@@ -95,9 +100,34 @@ export default defineComponent({
       return ("homePriv" === this.$route.name ||"home" === this.$route.name ||"podcasts" === this.$route.name||"emissions" === this.$route.name) 
       && (this.isCategories || undefined!==this.filterIab || 0!==this.filterRubrique.length || 0!==this.rubriquageFilter.length);
     },
+    isHeaderDisplay(){
+      return this.isDisplay ||'participants' === this.$route.name || 'playlists'=== this.$route.name;
+    },
     rubriquageFilter(): Array<Rubriquage>{
       return this.filterOrgaId ? this.filterRubriquage : [];
     },
+    titleDisplay(): string{
+      let title = "";
+      switch (this.$route.name) {
+        case 'podcasts':title= state.podcastsPage.titlePage ?? this.$t('All podcasts');break;
+        case 'emissions':title= state.emissionsPage.titlePage??this.$t('All emissions');break;
+        case 'participants': title= state.intervenantsPage.titlePage ?? this.$t('All participants');break;
+        case 'playlists': title= this.$t('All playlists');break;
+        default:break;
+      }
+      return title;
+    },
+    backgroundDisplay():string{
+      let imgName = "home";
+      switch (this.$route.name) {
+        case 'podcasts': imgName= "podcasts";break;
+        case 'emissions': imgName= "emissions";break;
+        case 'participants': imgName= "intervenants";break;
+        case 'playlists': imgName= "playlists";break;
+        default:break;
+      }
+      return `background-image: url('/img/header-${imgName}.webp');`;
+    }
   },
   methods:{
     ...mapActions(useFilterStore, ['filterUpdateIab', 'filterUpdateRubrique']),
@@ -145,15 +175,32 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .octopus-app{
+  .header-img{
+    display: flex;
+    min-height: 15rem;
+    background-size: cover;
+    h1{
+      margin: 2rem 1rem auto;
+      font-size: 2rem;
+      color: white;
+    }
+    @media (max-width: 960px) {
+      min-height: 6rem;
+    }
+  }
   .octopus-breadcrumb{
     padding: 1rem;
     align-items: center;
-    background: #FAFAFA;
     .octopus-breadcrumb-li{
       list-style: none;
+      color: white !important;
+      a{
+        color: white !important;
+        font-weight: bold;
+      }
       &:after {
-        content: "/";
-        margin: 0 0.2rem;
+        content: "-";
+        margin: 0 0.5rem;
       }
       &:last-child {
         &:after {
@@ -162,7 +209,7 @@ export default defineComponent({
       }
     }
   }
-  .categary-filter-no-filter{
+  .category-filter-no-filter{
     position: absolute;
     top: 0;
     bottom: 0;

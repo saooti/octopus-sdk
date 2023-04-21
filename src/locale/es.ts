@@ -287,7 +287,7 @@ export default{
   'Refresh': 'Volver a cargar',
   'See associated article':"Leer el artículo",
   "Display associated article":"Mostrar el artículo asociado",
-  "Copy this page URL":"Copiar la URL de esta página",
+  "Copy this page URL":"Copiar link",
   "Custom version":"Versión personalizada",
   "All":"Todos",
   'By category': 'Por categoría IAB',
@@ -311,4 +311,9 @@ export default{
   "Audio credits":"Créditos de audio",
   "View transcript":"Ver transcripción",
   "Suggested listening":"Escucha sugerida",
+  "More":"Más",
+  "Social networks":"Redes sociales",
+  "Newsletter":"Newsletter",
+  "QR Code":"Código QR",
+  "Rss feed": "RSS Feed",
 }

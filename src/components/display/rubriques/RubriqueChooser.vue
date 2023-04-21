@@ -60,8 +60,8 @@
         {{ $t('No elements found. Consider changing the search query.') }}
       </template>
       <template #caret>
-        <span class="saooti-down octopus-arrow-down octopus-arrow-down-absolute" />
-      </template>
+        <span class="saooti-down octopus-arrow-down-absolute" />
+      </template> 
        <template #afterList="">
         <div
           v-if="rubriques.length > rubriqueLimit"

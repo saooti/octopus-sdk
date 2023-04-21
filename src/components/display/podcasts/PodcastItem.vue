@@ -2,7 +2,6 @@
   <div
     class="podcast-item-container"
     :class="[
-      podcastShadow ? 'shadow-element' : '',
       podcastBorderBottom ? 'border-bottom' : '',
     ]"
     :data-pubdate="displayDate"
@@ -78,9 +77,6 @@ export default defineComponent({
   },
 
   computed: {
-    podcastShadow(): boolean {
-      return (state.podcastsPage.podcastShadow as boolean);
-    },
     podcastBorderBottom(): boolean {
       return (state.podcastsPage.podcastBorderBottom as boolean);
     },
@@ -123,30 +119,32 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
 .podcast-item-container {
-  border-radius: 0.8rem;
+  border-radius: $octopus-borderradius;
   list-style: none;
   position: relative;
-  width: 13rem;
-  height: 22rem;
+  width: $octopus-item-size;
+  height: 23.5rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   text-align: left;
   background: #fff;
   flex-shrink: 0;
+  border: 2px solid #eee;
  
   .description-podcast-item {
     padding: 1rem;
     color: #333;
     background-color: rgba(255, 255, 255, 0.92);
-    height: 13rem;
+    height: $octopus-item-size;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.9em;
     position: absolute;
-    width: 13rem;
+    width: $octopus-item-size;
     word-break: break-word;
     &.after-podcast-description:after {
       content: '...';
@@ -163,6 +161,14 @@ export default defineComponent({
   }
   @media (max-width: 960px) {
     margin: 0.5rem !important;
+  }
+  @media (max-width: 450px) {
+    width: $octopus-mobile-item-size;
+    height: 18.8rem;
+    .description-podcast-item{
+      height: $octopus-mobile-item-size;
+      width: $octopus-mobile-item-size;
+    }
   }
 }
 }

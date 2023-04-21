@@ -10,25 +10,29 @@
     <template v-if="!loading">
       <div
         v-if="!justSizeChosen"
-        class="paginate-section mb-2 page-box"
+        class="d-flex justify-content-between align-items-center flex-grow-1 w-100"
       >
         <div class="text-secondary">
           <template v-if="textCount && (windowWidth > 1300 || windowWidth<=960)">
             {{ textCount }}
           </template>
         </div>
-        <Paginate 
-          v-if="!isPhone && !justSizeChosen"
-          :first="first"
+        <PaginateParams
+          v-if="!isPhone && !justSizeChosen && totalCount > 0"
           :rows-per-page="rowsPerPage"
-          :total-count="totalCount"
-          :range-size="rangeSize"
-          @update:first="changeFirst"
           @update:rowsPerPage="changeSize"
         />
       </div>
     </template>
     <slot name="list" />
+    <Paginate 
+      v-if="!isPhone && !justSizeChosen && totalCount > 0"
+      :first="first"
+      :rows-per-page="rowsPerPage"
+      :total-count="totalCount"
+      :range-size="rangeSize"
+      @update:first="changeFirst"
+    />
     <button
       v-show="((first+rowsPerPage) < totalCount) && (isPhone || justSizeChosen)"
       :disabled="loading"
@@ -52,12 +56,14 @@
 import domHelper from '../../../helper/dom';
 import ClassicLoading from '../../form/ClassicLoading.vue';
 import { state } from '../../../stores/ParamSdkStore';
+import PaginateParams from './PaginateParams.vue';
 import Paginate from './Paginate.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ListPaginate',
   components: {
     Paginate,
+    PaginateParams,
     ClassicLoading
   },
   props: {
@@ -133,20 +139,3 @@ export default defineComponent({
 	}
 })
 </script>
-<style lang="scss">
-.octopus-app .page-box.paginate-section{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 99vw;
-  position: sticky;
-  top: 3.5rem;
-  z-index: 9;
-  padding-bottom: 1rem;
-  padding-top: 1rem;
-  @media (max-width: 960px) {
-    position: initial;
-    justify-content:center;
-  }
-}
-</style>

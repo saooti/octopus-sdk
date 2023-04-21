@@ -1,24 +1,26 @@
 <template>
-  <div>
-    <div class="module-box text-center-mobile overflow-visible">
-      <h3>{{ $t('Embed') }}</h3>
-      <template v-if="!exclusive && (authenticated || notExclusive)">
-        <div class="d-flex flex-column align-items-center">
-          <div
-            v-if="noAd && !isEducation"
-            class="sticker"
-            :title="$t('You cannot insert advertising')"
-          >
-            {{ $t('No advertising') }}
-          </div>
-          <iframe
-            id="miniplayerIframe"
-            title="miniplayer"
-            :src="iFrameSrc"
-            width="100%"
-            :height="iFrameHeight"
-            class="max-iframe my-2"
-          />
+  <div class="module-box overflow-visible">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="big-h2 mb-3 height-40">{{ $t('Embed') }}</h2>
+      <div
+        v-if="noAd && !isEducation"
+        class="sticker"
+        :title="$t('You cannot insert advertising')"
+      >
+        {{ $t('No advertising') }}
+      </div>
+    </div>
+    <template v-if="!exclusive && (authenticated || notExclusive)">
+      <div class="d-flex">
+        <iframe
+          id="miniplayerIframe"
+          title="miniplayer"
+          :src="iFrameSrc"
+          width="100%"
+          :height="iFrameHeight"
+          class="max-iframe mx-3"
+        />
+        <div class="d-flex flex-column flex-grow-1">
           <SharePlayerTypes 
             v-if="!isLiveReadyToRecord"
             v-model:iFrameModel="iFrameModel"
@@ -37,44 +39,42 @@
             id-checkbox="is-visible-checkbox"
             :label="titleStillAvailable"
           />
-        </div>
-        <PlayerParameters
-          v-if="isPlayerParameter"
-          :is-visible="isVisible"
-          :chose-number-episode="displayChoiceAllEpisodes|| isLargeSuggestion"
-          :display-choice-all-episodes="displayChoiceAllEpisodes"
-          :display-transcript-param="displayTranscriptParam"
-          :display-article-param="displayArticleParam"
-          @displayArticle="displayArticle = $event"
-          @displayTranscript="displayTranscript = $event"
-          @episodeNumbers="episodeNumbers = $event"
-          @proceedReading="proceedReading = $event"
-          @isVisible="isVisible = $event"
-          @iFrameNumber="iFrameNumber = $event"
-        />
-        <div class="d-flex flex-column align-items-center mt-3">
+          <PlayerParameters
+            v-if="isPlayerParameter"
+            :is-visible="isVisible"
+            :chose-number-episode="displayChoiceAllEpisodes|| isLargeSuggestion"
+            :display-choice-all-episodes="displayChoiceAllEpisodes"
+            :display-transcript-param="displayTranscriptParam"
+            :display-article-param="displayArticleParam"
+            @displayArticle="displayArticle = $event"
+            @displayTranscript="displayTranscript = $event"
+            @episodeNumbers="episodeNumbers = $event"
+            @proceedReading="proceedReading = $event"
+            @isVisible="isVisible = $event"
+            @iFrameNumber="iFrameNumber = $event"
+          />
+          <ShareModalPlayer
+            v-if="isShareModal"
+            :embed-link="iFrame"
+            :embedly-link="iFrameSrc"
+            :direct-link="podcast"
+            @close="isShareModal = false"
+          />
           <button
-            class="btn btn-primary mb-3"
+            class="btn btn-primary width-fit-content mt-3"
             @click="isShareModal = true"
           >
             {{ $t('Share the player') }}
           </button>
         </div>
-      </template>
-      <div v-else-if="exclusive && authenticated">
-        {{ $t('Only organisation members can share the content') }}
       </div>
-      <div v-else-if="!authenticated">
-        {{ $t('Only authenticated members can share the content') }}
-      </div>
+    </template>
+    <div v-else-if="exclusive && authenticated">
+      {{ $t('Only organisation members can share the content') }}
     </div>
-    <ShareModalPlayer
-      v-if="isShareModal"
-      :embed-link="iFrame"
-      :embedly-link="iFrameSrc"
-      :direct-link="podcast"
-      @close="isShareModal = false"
-    />
+    <div v-else-if="!authenticated">
+      {{ $t('Only authenticated members can share the content') }}
+    </div>
   </div>
 </template>
 

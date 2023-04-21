@@ -18,9 +18,9 @@
         height="200"
         :title="$t('Animator image')"
         :alt="$t('Animator image')"
-        class="img-box-circle"
+        class="img-box border"
       >
-      <div class="d-flex align-items-center participant-name">
+      <div class="d-flex align-items-center h4 justify-content-center mt-2">
         <span
           v-if="!activeParticipant && !isPodcastmaker && editRight"
           :title="$t('Participant have not podcasts')"
@@ -121,27 +121,21 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
 .participant-item-container {
   list-style: none;
-  border-radius: 2rem;
+  border-radius: $octopus-borderradius;
   display: flex;
   flex-direction: column;
   margin: 1rem 0;
   align-items: center;
 
-  .participant-name {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: center;
-  }
-
   .participant-description {
     overflow: hidden;
     margin-top: 0.5em;
     word-break: break-word;
-    max-height: 4rem;
+    max-height: 3rem;
     position: relative;
     &.after-participant-description:after {
       content: '...';
@@ -156,7 +150,7 @@ export default defineComponent({
       background: linear-gradient(
         to bottom,
         rgba(255, 255, 255, 0),
-        #fafafa 40%
+        white 40%
       );
     }
   }

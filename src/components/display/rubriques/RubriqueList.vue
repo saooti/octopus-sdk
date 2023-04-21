@@ -26,7 +26,7 @@
         v-for="rubrique in rubriqueDisplay"
         :ref="'rubrique' + rubrique.rubriqueId"
         :key="rubrique.rubriqueId"
-        class="rubrique-item bg-white"
+        class="btn btn-primary btn-on-dark m-1"
         @click="addFilter(rubrique)"
       >
         {{ rubrique.name }}
@@ -35,7 +35,7 @@
     <button
       v-show="hidenRubriques.length"
       id="rubriques-dropdown"
-      class="btn admin-button saooti-more"
+      class="btn btn-primary btn-on-dark m-1 saooti-more"
       :title="$t('See more')"
     />
     <Popover
@@ -178,9 +178,15 @@ export default defineComponent({
       this.rubriqueDisplay.forEach((element: Rubrique) => {
         const el = (this.$refs['rubrique' + element.rubriqueId] as Array<HTMLElement>)[0];
         if (!el) return;
+        if (el.classList.contains('hid')) {
+          el.classList.remove('hid');
+        }
+      });
+      this.rubriqueDisplay.forEach((element: Rubrique) => {
+        const el = (this.$refs['rubrique' + element.rubriqueId] as Array<HTMLElement>)[0];
+        if (!el) return;
         const parent = el.parentElement;
         if (null !== parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
-          el.classList.remove('hid');
           return;
         }
         this.hidenRubriques.push(element);
@@ -200,6 +206,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
 .rubrique-list-container {
   display: flex;
@@ -211,25 +218,10 @@ export default defineComponent({
   padding: 0 4rem;
   select{
     width: auto;
-    border-radius: 1.5rem;
+    border-radius: $octopus-borderradius;
     margin: 0.2rem;
     font-size: 0.6rem;
     padding: 0.5rem;
-  }
-}
-.rubrique-item {
-  font-size: 0.6rem;
-  margin: 0.2rem;
-  padding: 0.5rem;
-  border-radius: 1.5rem;
-  border: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-  &:hover {
-    background: #eee !important;
   }
 }
 }

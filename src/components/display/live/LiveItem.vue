@@ -30,13 +30,6 @@
     >
       <PodcastImage
         class="me-3"
-        :class="
-          fetchConference &&
-            'null' !== fetchConference &&
-            fetchConference.status
-            ? fetchConference.status.toLowerCase() + '-shadow'
-            : ''
-        "
         :podcast="live"
         :hide-play="false"
         :playing-podcast="false"

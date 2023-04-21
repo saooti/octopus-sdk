@@ -41,21 +41,26 @@
       rel="noopener"
       target="_blank"
     >{{ $t('Contact') }}</a>
-    <a
-      href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
-      rel="noopener"
-      target="_blank"
-      :title="$t('Octopus is ACPM Podcast accredited')"
-    >
-      <img
-        width="44"
-        height="44"
-        class="acpm_image"
-        src="/img/ACPM.webp"
+    <div class="d-flex align-items-center">
+      <div class="hosted-by">
+        {{ $t('Hosted by') }}<span class="ms-1 me-1 text-primary">Saooti</span>
+      </div>
+      <a
+        href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
+        rel="noopener"
+        target="_blank"
         :title="$t('Octopus is ACPM Podcast accredited')"
-        :alt="$t('Octopus is ACPM Podcast accredited')"
       >
-    </a>
+        <img
+          width="44"
+          height="44"
+          class="acpm_image"
+          src="/img/ACPM.webp"
+          :title="$t('Octopus is ACPM Podcast accredited')"
+          :alt="$t('Octopus is ACPM Podcast accredited')"
+        >
+      </a>
+    </div>
   </div>
 </template>
 
@@ -143,8 +148,7 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app{
   #footer{
-    font-size: 0.7rem;
-    position: sticky;
+    font-size: 0.6rem;
     bottom: 0;
     z-index: 10;
     background: white;

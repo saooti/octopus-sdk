@@ -15,7 +15,7 @@
           height="200"
           :title="$t('Animator image')"
           :alt="$t('Animator image')"
-          class="img-box-circle mb-3"
+          class="img-box mb-3"
         >
         <h2 class="text-capitalize">
           {{ name }}
@@ -26,20 +26,18 @@
           v-html="urlify(description)"
         />
         <!-- eslint-enable -->
-        <div class="d-flex mt-3">
-          <EditBox
-            v-if="editRight && pageParameters.isEditBox"
-            :participant="participant"
-            class="flex-grow-1"
-            @participantUpdate="updateParticipant"
-          />
-          <ShareButtons
-            v-if="pageParameters.isShareButtons"
-            :participant-id="participantId"
-            :organisation-id="participant.orga.id"
-            :is-vertical="false"
-          />
-        </div>
+        <EditBox
+          v-if="editRight && pageParameters.isEditBox"
+          :participant="participant"
+          class="w-100"
+          @participantUpdate="updateParticipant"
+        />
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          class="w-100"
+          :participant-id="participantId"
+          :organisation-id="participant.orga.id"
+        />
       </div>
       <PodcastFilterList
         v-if="!pageParameters.lightStyle"

@@ -139,7 +139,7 @@ export default defineComponent({
   .filter-speech-bubble {
     position: absolute;
     background: $octopus-primary-color;
-    border-radius: 0.4em;
+    border-radius:$octopus-borderradius;
     width: 10rem;
     right: 4rem;
     padding: 5px;

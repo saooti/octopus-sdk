@@ -11,7 +11,7 @@
         v-for="category in categories"
         :ref="'category' + category.id"
         :key="category.id"
-        class="category-item text-dark bg-white"
+        class="btn btn-primary btn-on-dark m-1"
         @click="checkIfFilter(category)"
       >
         {{ category.name }}
@@ -20,7 +20,7 @@
     <button
       v-show="hidenCategories.length"
       id="categories-dropdown"
-      class="btn admin-button saooti-more"
+      class="btn btn-primary btn-on-dark m-1 saooti-more"
       :title="$t('See more')"
     />
     <Popover
@@ -151,9 +151,15 @@ export default defineComponent({
       this.categories.forEach((element: Category) => {
         const el = (this.$refs['category' + element.id] as Array<HTMLElement>)[0];
         if (!el) return;
+        if (el.classList.contains('hid')) {
+          el.classList.remove('hid');
+        }
+      });
+      this.categories.forEach((element: Category) => {
+        const el = (this.$refs['category' + element.id] as Array<HTMLElement>)[0];
+        if (!el) return;
         const parent = el.parentElement;
         if (parent && el.offsetLeft + el.clientWidth <= parent.clientWidth - 20) {
-          el.classList.remove('hid');
           return;
         }
         this.hidenCategories.push(element);
@@ -183,23 +189,6 @@ export default defineComponent({
     overflow: hidden;
     flex-grow: 1;
     width: 0;
-    padding: 0 4rem;
-  }
-  .category-item {
-    font-size: 0.6rem;
-    margin: 0.2rem;
-    padding: 0.5rem;
-    height: 1.5rem;
-    border-radius: 1.5rem;
-    border: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    flex-shrink: 0;
-    .router-link-active,&:hover {
-      background: $octopus-secondary-color !important;
-    }
   }
 }
 </style>

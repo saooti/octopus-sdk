@@ -1,7 +1,7 @@
 <template>
   <div
     class="top-bar-container"
-    :class="{ 'shadow-element': scrolled }"
+    :class="{ 'scrolled': scrolled }"
   >
     <router-link
       class="top-bar-logo"
@@ -25,7 +25,7 @@
       width="auto"
       :defaultanswer="$t('No organisation filter')"
       :value="organisationId"
-      class="me-2"
+      class="ms-3 me-2"
       :reset="reset"
       @selected="onOrganisationSelected"
     />
@@ -40,11 +40,39 @@
             name: link.routeName,
             query: getQueriesRouter(link.routeName),
           }"
-          class="link-hover p-3 fw-bold"
+          class="link-hover p-3"
         >
           {{ link.title }}
         </router-link>
       </template>
+      <button id="more-dropdown" class="d-flex align-items-center btn-transparent p-3">
+        <div class="link-hover">{{$t('More')}}</div>
+        <div class="hide-phone ms-1 saooti-down"></div>
+      </button>
+      <Popover
+        target="more-dropdown"
+        :only-click="true"
+        :is-fixed="true"
+        :left-pos="true"
+      >
+        <div class="d-flex flex-column">
+          <template
+            v-for="link in routerLinkInsideArray"
+            :key="link.routeName"
+          >
+            <router-link
+              v-if="link.condition"
+              :to="{
+                name: link.routeName,
+                query: getQueriesRouter(link.routeName),
+              }"
+              class="link-hover p-1 octopus-dropdown-item"
+            >
+              {{ link.title }}
+            </router-link>
+          </template>
+        </div>
+      </Popover>
     </div>
     <button
       class="btn-transparent saooti-menu"
@@ -52,9 +80,7 @@
       @click="onDisplayMenu(false)"
     />
     <div class="d-flex flex-column">
-      <div class="hosted-by">
-        {{ $t('Hosted by') }}<span class="ms-1 me-1 text-primary">Saooti</span>
-      </div>
+      
       <div class="d-flex justify-content-end flex-nowrap">
         <HomeDropdown :is-education="isEducation" />
         <router-link
@@ -79,6 +105,7 @@ import imageProxy from '../mixins/imageProxy';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
 import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
+import Popover from '../misc/Popover.vue';
 import { defineComponent,defineAsyncComponent } from 'vue';
 const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
 export default defineComponent({
@@ -86,6 +113,7 @@ export default defineComponent({
   components: {
     OrganisationChooserLight,
     HomeDropdown,
+    Popover
   },
   mixins:[orgaFilter, imageProxy],
   props: {
@@ -108,7 +136,11 @@ export default defineComponent({
       return [
         {title : this.$t('Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
-        {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
+        {title : this.$t('Emissions'), routeName: 'emissions', condition : true}
+      ]
+    },
+    routerLinkInsideArray(){
+      return [
         {title : this.$t('Speakers'), routeName: 'participants', condition : true},
         {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
         {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation)}]
@@ -204,7 +236,7 @@ export default defineComponent({
   top: 0;
   background: #fff;
   width: 100%;
-  height: 5rem;
+  height: 3.5rem;
   z-index: 10;
   padding: 0 1rem;
   display: flex;
@@ -222,26 +254,19 @@ export default defineComponent({
     margin: 0.5rem;
   }
 
-  .top-bar-logo {
-    margin: 1rem 2rem 1rem 1rem;
-    img {
-      max-width: 160px !important;
-      max-height: 2.5rem;
-      height: 2.5rem;
-      &.educationLogo {
-        height: auto;
-      }
+  .top-bar-logo img{
+    max-width: 140px !important;
+    max-height: 2.5rem;
+    height: 2.5rem;
+    &.educationLogo {
+      height: auto;
+    }
+    @media (max-width: 650px) {
+      height: 2rem;
     }
   }
-  .hosted-by {
-    font-size: 0.6rem;
-    position: absolute;
-    top: 5px;
-    right: 0;
-  }
-  &.shadow-element {
-    height: 3.5rem;
-    .link-hover,.hosted-by {
+  &.cscrolled{
+    .link-hover {
       display: none;
     }
     .saooti-menu {
@@ -249,30 +274,15 @@ export default defineComponent({
     }
   }
   /** PHONES*/
-  @media (max-width: 1470px) {
-    height: 3.5rem;
-    .default-multiselect-width, .hosted-by, .link-hover {
+  @media (max-width: 960px) {
+    .default-multiselect-width, .link-hover {
       display: none;
     }
     .saooti-menu {
       display: block;
     }
   }
-  @media (max-width: 650px) {
-    .top-bar-logo img{
-      height: 2rem;
-    }
-  }
-  @media (max-width: 380px) {
-    .top-bar-logo img{
-      height: 1rem;
-    }
-  }
-  @media (max-width: 290px) {
-    .top-bar-logo{
-      display: none;
-    }
-  }
+  
 }
 }
 </style>

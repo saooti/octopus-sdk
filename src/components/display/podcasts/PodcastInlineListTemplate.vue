@@ -1,21 +1,14 @@
 <template>
   <div
-    class="d-flex flex-column p-3"
+    class="podcast-inline-container"
   >
     <div 
       class="d-flex align-items-center"
       :class="podcastId?'mb-4':'mb-2'"
     >
-      <h2 class="mb-0">
+      <h2 class="mb-0 big-h2">
         {{ title }}
       </h2>
-      <router-link
-        v-if="isButtonNextTitle"
-        class="btn admin-button m-1 fw-bold saooti-right"
-        :title="buttonText"
-        :to="refTo"
-        @click="handleSeeMoreButton"
-      />
     </div>
     <div
       v-if="!podcastId"
@@ -57,7 +50,7 @@
     </div>
     <slot name="list-inline" />
     <router-link
-      v-if="!isButtonNextTitle && buttonText"
+      v-if="buttonText"
       class="btn btn-primary align-self-center width-fit-content m-4"
       :to="refTo"
       @click="handleSeeMoreButton"
@@ -96,7 +89,6 @@ export default defineComponent({
     iabId: { default: undefined, type: Number},
     rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
     noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
-    isButtonNextTitle: {default: false, type:Boolean},
     podcastId: { default: undefined, type: Number},
   },
   emits:['sortChrono','sortPopular', 'displayPrevious', 'displayNext'],
@@ -176,3 +168,13 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss">
+.octopus-app .podcast-inline-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  @media (max-width: 450px) {
+    padding: 1rem 0;
+  }
+}
+</style>

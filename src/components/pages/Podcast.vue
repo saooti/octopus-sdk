@@ -1,88 +1,66 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <div class="page-podcast-title">
-        <h1>{{ titlePage }}</h1>
-        <Countdown
-          v-if="isCounter"
-          :time-remaining="timeRemaining"
+      <div class="page-element-title-container">
+        <div class="page-element-title">
+          <h1>{{ titlePage }}</h1>
+          <Countdown
+            v-if="isCounter"
+            :time-remaining="timeRemaining"
+          />
+        </div>
+        <div class="page-element-bg" :style="backgroundDisplay"></div>
+      </div>
+      <div class="d-flex flex-column page-element">
+        <PodcastModuleBox
+          :playing-podcast="playingPodcast"
+          :podcast="podcast"
+          :fetch-conference="fetchConference"
+          @updatePodcast="updatePodcast"
+        />
+        <SharePlayer
+          v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
+          :podcast="podcast"
+          :emission="podcast.emission"
+          :exclusive="exclusive"
+          :not-exclusive="notExclusive"
+          :organisation-id="myOrganisationId"
+          :is-education="isEducation"
+        />
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :podcast="podcast"
+        />
+        <SubscribeButtons
+          v-if="pageParameters.isShareButtons && countLink >= 1"
+          :emission="podcast.emission"
+        />
+        <CommentSection
+          v-if="!isPodcastmaker"
+          ref="commentSection"
+          :podcast="podcast"
+          :fetch-conference="fetchConference"
+        />
+        <PodcastInlineList
+          class="mt-4"
+          :emission-id="podcast.emission.emissionId"
+          :href="'/main/pub/emission/' + podcast.emission.emissionId"
+          :title="$t('More episodes of this emission')"
+          :button-text="$t('All podcast emission button')"
+        />
+        <PodcastInlineList
+          :podcast-id="podcastId"
+          :title="$t('Suggested listening')"
+        />
+        <PodcastInlineList
+          v-for="c in categories"
+          :key="c.id"
+          :iab-id="c.id"
+          :href="'/main/pub/category/' + c.id"
+          :title="$t('More episodes of this category : ', { name: c.name })"
+          :button-text="$t('All podcast button', { name: c.name })"
         />
       </div>
-      <div class="d-flex page-podcast">
-        <div class="d-flex flex-column flex-super-grow">
-          <RecordingItemButton
-            v-if="
-              !!fetchConference &&
-                isLiveReadyToRecord &&
-                !isNotRecorded &&
-                isOctopusAndAnimator
-            "
-            class="module-box text-center-mobile flex-grow-0"
-            :podcast="podcast"
-            :live="true"
-            :recording="fetchConference"
-            @deleteItem="removeDeleted"
-            @validatePodcast="updatePodcast"
-          />
-          <EditBox
-            v-else-if="editRight && pageParameters.isEditBox"
-            :podcast="podcast"
-            @validatePodcast="updatePodcast"
-          />
-          <PodcastModuleBox
-            :playing-podcast="playingPodcast"
-            :podcast="podcast"
-            :fetch-conference="fetchConference"
-          />
-          <SubscribeButtons
-            v-if="pageParameters.isShareButtons && countLink >= 1"
-            :emission="podcast.emission"
-          />
-        </div>
-        <div
-          class="d-flex flex-column flex-grow-mobile"
-        >
-          <SharePlayer
-            v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
-            :podcast="podcast"
-            :emission="podcast.emission"
-            :exclusive="exclusive"
-            :not-exclusive="notExclusive"
-            :organisation-id="myOrganisationId"
-            :is-education="isEducation"
-          />
-          <ShareButtons
-            v-if="pageParameters.isShareButtons"
-            :podcast="podcast"
-            :is-vertical="!authenticated && !notExclusive"
-          />
-        </div>
-      </div>
-      <CommentSection
-        v-if="!isPodcastmaker"
-        ref="commentSection"
-        :podcast="podcast"
-        :fetch-conference="fetchConference"
-      />
-      <PodcastInlineList
-        class="mt-4"
-        :emission-id="podcast.emission.emissionId"
-        :href="'/main/pub/emission/' + podcast.emission.emissionId"
-        :title="$t('More episodes of this emission')"
-        :button-text="$t('All podcast emission button')"
-      />
-      <PodcastInlineList
-        :podcast-id="podcastId"
-        :title="$t('Suggested listening')"
-      />
-      <PodcastInlineList
-        v-for="c in categories"
-        :key="c.id"
-        :iab-id="c.id"
-        :href="'/main/pub/category/' + c.id"
-        :title="$t('More episodes of this category : ', { name: c.name })"
-        :button-text="$t('All podcast button', { name: c.name })"
-      />
     </template>
     <ClassicLoading
       :loading-text="!loaded?$t('Loading content ...'):undefined"
@@ -104,7 +82,6 @@ import { Podcast } from '@/stores/class/general/podcast';
 import { Conference } from '@/stores/class/conference/conference';
 import { handle403 } from '../mixins/handle403';
 import { defineComponent, defineAsyncComponent } from 'vue';
-import CommentSectionVue from '../display/comments/CommentSection.vue';
 import { CommentPodcast } from '@/stores/class/general/comment';
 import { Category } from '@/stores/class/general/category';
 import { useGeneralStore } from '@/stores/GeneralStore';
@@ -112,9 +89,7 @@ import { mapState } from 'pinia';
 import { AxiosError } from 'axios';
 const ShareButtons = defineAsyncComponent(() => import('../display/sharing/ShareButtons.vue'));
 const SharePlayer = defineAsyncComponent(() => import('../display/sharing/SharePlayer.vue'));
-const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
 const SubscribeButtons = defineAsyncComponent(() => import('../display/sharing/SubscribeButtons.vue'));
-const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
 const Countdown = defineAsyncComponent(() => import('../display/live/CountDown.vue'));
 const CommentSection = defineAsyncComponent(() => import('../display/comments/CommentSection.vue'));
 export default defineComponent({
@@ -123,9 +98,7 @@ export default defineComponent({
     PodcastInlineList,
     ShareButtons,
     SharePlayer,
-    EditBox,
     SubscribeButtons,
-    RecordingItemButton,
     Countdown,
     CommentSection,
     PodcastModuleBox,
@@ -156,12 +129,17 @@ export default defineComponent({
 
   computed: {
     ...mapState(useGeneralStore, ['storedCategories']),
+    backgroundDisplay():string{
+      if(!this.podcast){
+        return "";
+      }
+      return `background-image: url('${this.podcast.imageUrl}');`;
+    },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
     pageParameters(){
       return {
-        isEditBox : (state.podcastPage.EditBox as boolean),
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
       };
@@ -210,13 +188,6 @@ export default defineComponent({
         undefined!==this.fetchConference &&
         ('PLANNED' === this.fetchConference.status ||
           'PENDING' === this.fetchConference.status)
-      );
-    },
-    isNotRecorded(): boolean {
-      return (
-        this.isLiveReadyToRecord &&
-        undefined!==this.fetchConference &&
-        'DEBRIEFING' === this.fetchConference.status
       );
     },
     isOctopusAndAnimator(): boolean {
@@ -317,15 +288,9 @@ export default defineComponent({
         this.initError();
       }
     },
-    removeDeleted(): void {
-      if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push('/');
-      }
-    },
+
     receiveCommentEvent(event:{type: string; comment: CommentPodcast; oldStatus?:string } ): void {
-      (this.$refs.commentSection as InstanceType<typeof CommentSectionVue>).receiveCommentEvent(event);
+      (this.$refs.commentSection as InstanceType<typeof CommentSection>).receiveCommentEvent(event);
     },
   },
 })

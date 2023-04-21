@@ -1,6 +1,5 @@
 <template>
   <div class="page-box">
-    <h1>{{ $t('All playlists') }}</h1>
     <router-link
       v-if="editRight && !isPodcastmaker"
       to="/main/priv/edit/playlist"
@@ -11,7 +10,6 @@
       </div>
     </router-link>
     <ProductorSearch
-      v-if="isProductorSearch"
       v-model:organisationId="organisationId"
       v-model:search-pattern="searchPattern"
       type="playlist"
@@ -52,9 +50,6 @@ export default defineComponent({
   },
   
   computed: {
-    isProductorSearch(): boolean {
-      return (state.podcastsPage.ProductorSearch as boolean);
-    },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },

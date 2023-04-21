@@ -52,7 +52,7 @@ export default defineComponent({
     display: flex;
     overflow: hidden;
     background-color:#e9ecef;
-    border-radius: 0.375rem;
+    border-radius: $octopus-borderradius;
     position: relative;
     cursor: pointer;
 

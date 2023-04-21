@@ -128,6 +128,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
   .player-grow-content {
     display: flex;
@@ -138,7 +139,7 @@ export default defineComponent({
     font-size: 0.8rem;
   }
   .player-image {
-    border-radius: 0.2rem;
+    border-radius: $octopus-borderradius;
     height: 2.4rem;
     width: 2.4rem;
     cursor: pointer;

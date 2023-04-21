@@ -11,7 +11,7 @@
   >
     <template #list>
       <div
-        class="participant-list"
+        class="podcast-list"
       >
         <template
           v-for="p in displayArray"
@@ -139,25 +139,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-.octopus-app{
-.participant-list {
-  align-self: stretch;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0;
-  display: grid; /* 1 */
-  grid-template-columns: repeat(auto-fill, 14rem); /* 2 */
-  grid-gap: 2rem; /* 3 */
-  justify-content: space-between; /* 4 */
-}
-/** PHONES*/
-@media (max-width: 655px) {
-  .participant-list {
-    align-self: auto;
-    grid-gap: 0;
-  }
-}
-}
-</style>

@@ -1,61 +1,78 @@
 <template>
-  <button
-    v-if="isDownloadButton"
-    class="text-dark"
-    :class="getClass()"
-    :title="$t('Downloading')"
-    @click="onDownload(podcast.audioUrl, podcast.title)"
-  >
-    <div class="saooti-download" />
-  </button>
-  <template
-    v-for="button in arrayShareButtons"
-    :key="button.title"
-  >
-    <a
-      v-if="button.condition"
-      rel="noopener"
-      target="_blank"
-      :href="button.url"
-      :class="getClass(button.className)"
-      :title="button.title"
-    >
-      <div :class="button.icon" />
-    </a>
-  </template>
-  <a
-    v-if="''!==rssUrl && displayRss"
-    rel="noopener"
-    target="_blank"
-    :class="getClass()"
-    :href="rssUrl"
-    :title="titleRssButton"
-    @click.prevent="openPopup()"
-  >
-    <div class="saooti-rss" />
-  </a>
-  <button
-    :class="getClass()"
-    :title="$t('Copy this page URL')"
-    @click="onCopyCode(urlPage,afterCopy)"
-  >
-    <div class="saooti-link" />
-  </button>
-  <button
-    v-if="podcast || emission ||playlist"
-    :class="getClass()"
-    :title="$t('Share newsletter')"
-    @click="newsletter = true"
-  >
-    <div class="saooti-newsletter" />
-  </button>
-  <button
-    :class="getClass()"
-    :title="$t('Share QR Code')"
-    @click="qrCode = true"
-  >
-    <div class="saooti-qrcode" />
-  </button>
+  <div class="d-flex flex-column me-2">
+    <div class="h4 mb-2">{{$t('Social networks')}}</div>
+    <div class="d-flex align-items-center">
+      <template
+        v-for="button in arrayShareButtons"
+        :key="button.title"
+      >
+        <a
+          v-if="button.condition"
+          rel="noopener"
+          target="_blank"
+          :href="button.url"
+          :class="getClass(button.className)"
+          class="me-2"
+          :title="button.title"
+        >
+          <div :class="button.icon" />
+        </a>
+      </template>
+    </div>
+  </div>
+  <div class="d-flex flex-column me-2">
+    <div class="h4 mb-2">{{$t('Newsletter')}}</div>
+    <div class="d-flex align-items-center justify-content-center">
+      <button
+        v-if="podcast || emission ||playlist"
+        :class="getClass()"
+        class="saooti-newsletter"
+        :title="$t('Share newsletter')"
+        @click="newsletter = true"
+      />
+    </div>
+  </div>
+
+  <div class="d-flex flex-column me-2">
+    <div class="h4 mb-2">{{$t('QR Code')}}</div>
+    <div class="d-flex align-items-center justify-content-center">
+      <button
+        :class="getClass()"
+        :title="$t('Share QR Code')"
+        @click="qrCode = true"
+        class="saooti-qrcode"
+      />
+    </div>
+  </div>
+
+  <div class="d-flex flex-column me-2">
+    <div class="h4 mb-2">{{$t('Copy this page URL')}}</div>
+    <div class="d-flex align-items-center justify-content-center">
+      <button
+        :class="getClass()"
+        class="saooti-link"
+        :title="$t('Copy this page URL')"
+        @click="onCopyCode(urlPage,afterCopy)"
+      />
+    </div>
+  </div>
+
+  <div class="d-flex flex-column me-2" v-if="''!==rssUrl && displayRss">
+    <div class="h4 mb-2">{{$t('Rss feed')}}</div>
+    <div class="d-flex align-items-center justify-content-center">
+      <a
+        rel="noopener"
+        target="_blank"
+        class="saooti-rss"
+        :class="getClass()"
+        :href="rssUrl"
+        :title="titleRssButton"
+        @click.prevent="openPopup()"
+      />
+    </div>
+  </div>
+ 
+  
   <ClipboardModal
     v-if="dataRSSSave"
     :link="rssUrl"
@@ -140,12 +157,6 @@ export default defineComponent({
         { title: 'Whatsapp', icon:'saooti-Whatsapp', className:'btn-whatsapp', url :`whatsapp://send?text=${this.urlPage}`, condition:  window.matchMedia('(hover: none)').matches}
       ]
     },
-    isDownloadButton(): boolean{
-      return this.isDownloadButtonParam && undefined!==this.podcast && (!this.podcast.tags || !this.podcast.tags.includes('copyright'));
-    },
-    isDownloadButtonParam(): boolean {
-      return (state.podcastPage.downloadButton as boolean);
-    },
     urlPage(): string{
       return window.location.href;
     },
@@ -179,32 +190,13 @@ export default defineComponent({
 
   methods: {
     getClass(className='btn-rss'): string{
-      let returnString = `btn ${className} share-btn mb-2 text-dark`;
-      returnString+= this.isVertical ? '' : ' mx-2';
-      return returnString;
+      return `btn ${className} share-btn mb-2 text-dark`;
     },
     openPopup(): void {
       this.dataRSSSave = !this.dataRSSSave;
     },
     afterCopy(): void{
       (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Link in clipboard'));
-    },
-    onDownload(urlToDownload: string, nameOfDownload: string): void{
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', urlToDownload, true);
-      xhr.responseType = 'blob';
-      xhr.onload = function() {
-        const urlCreator = window.URL || window.webkitURL;
-        const imageUrl = urlCreator.createObjectURL(this.response);
-        const tag = document.createElement('a');
-        tag.href = imageUrl;
-        tag.target = '_blank';
-        tag.download = nameOfDownload.replace(/ /g, '_');
-        document.body.appendChild(tag);
-        tag.click();
-        document.body.removeChild(tag);
-      };
-      xhr.send();
     },
   },
 })

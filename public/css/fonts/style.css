@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/css/fonts/icomoon.eot?j4mzpe');
-  src:  url('/css/fonts/icomoon.eot?j4mzpe#iefix') format('embedded-opentype'),
-    url('/css/fonts/icomoon.ttf?j4mzpe') format('truetype'),
-    url('/css/fonts/icomoon.woff?j4mzpe') format('woff'),
-    url('/css/fonts/icomoon.svg?j4mzpe#icomoon') format('svg');
+  src:  url('/css/fonts/icomoon.eot?pibfh5');
+  src:  url('/css/fonts/icomoon.eot?pibfh5#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?pibfh5') format('truetype'),
+    url('/css/fonts/icomoon.woff?pibfh5') format('woff'),
+    url('/css/fonts/icomoon.svg?pibfh5#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,33 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.saooti-upload:before {
+  content: "\e97a";
+}
+.saooti-recule:before {
+  content: "\e97b";
+}
+.saooti-share:before {
+  content: "\e97c";
+}
+.saooti-admin-menu:before {
+  content: "\e97d";
+}
+.saooti-article-player:before {
+  content: "\e97e";
+}
+.saooti-avance:before {
+  content: "\e97f";
+}
+.saooti-next-octopus:before {
+  content: "\e980";
+}
+.saooti-prec-octopus:before {
+  content: "\e981";
+}
+.saooti-profil-ocotopus:before {
+  content: "\e982";
+}
 .saooti-certified:before {
   content: "\e978";
 }

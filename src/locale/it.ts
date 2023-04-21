@@ -282,7 +282,7 @@ export default{
     'Refresh': 'Aggiorna', 
     'See associated article':"Leggi l'articolo", 
     "Display associated article":"Mostra articolo associato",
-    "Copy this page URL":"Copia la URL di questa pagina", 
+    "Copy this page URL":"Copia link", 
     "Custom version":"Versione customizzata",
     "All":"Tutto", 
     'By category': 'Per categoria',
@@ -308,4 +308,9 @@ export default{
     "Audio credits":"Crediti audio",
     "View transcript":"Visualizza trascrizione",
     "Suggested listening":"Ascolto suggerito",
+    "More":"Di più",
+    "Social networks":"Social networks",
+    "Newsletter":"Newsletter",
+    "QR Code":"QR Code",
+    "Rss feed": "RSS Feed",
   };

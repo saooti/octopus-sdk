@@ -20,6 +20,7 @@ interface PlayerState{
 	playerStop?: boolean;
 	playerSeekTime?: number;
 	playerTranscript?:Transcript;
+	playerLargeVersion: boolean;
 }
 export const usePlayerStore = defineStore('PlayerStore', {
   state: (): PlayerState => ({
@@ -32,8 +33,15 @@ export const usePlayerStore = defineStore('PlayerStore', {
     playerLive: undefined,
     playerRadio: undefined,
     playerSeekTime:0,
+		playerLargeVersion: false
   }),
 	getters: {
+		playerHeight() {
+      if ('STOPPED' === this.playerStatus) return 0;
+      if (this.playerLargeVersion) return '27rem';
+      if (window.innerWidth > 450) return '5rem';
+      return '3.5rem';
+    },
 		playedTime(): string{
       if (this.playerElapsed && this.playerElapsed > 0 && this.playerTotal && this.playerTotal > 0) {
         return DurationHelper.formatDuration(
@@ -130,5 +138,8 @@ export const usePlayerStore = defineStore('PlayerStore', {
 		playerUpdateTranscript(transcript?:Transcript) {
 			this.playerTranscript = transcript;
 		},
+		playerUpdateLargeVersion(largeVersion: boolean){
+			this.playerLargeVersion = largeVersion;
+		}
   }
 })

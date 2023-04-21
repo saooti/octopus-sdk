@@ -1,11 +1,30 @@
 <template>
   <div class="page-box">
-    <div
-      v-if="loaded && !error"
-    >
-      <h1>{{ $t('Emission') }}</h1>
-      <div class="d-flex">
-        <div class="d-flex flex-column flex-grow-1">
+    <template v-if="loaded && !error" >
+      <div class="page-element-title-container">
+        <div class="page-element-title">
+          <h1>{{ $t('Emission') }}</h1>
+        </div>
+        <div class="page-element-bg" :style="backgroundDisplay"></div>
+      </div>
+      <div class="d-flex flex-column page-element">
+        <div class="module-box">
+          <div class="mb-5 descriptionText">
+            <img
+              v-lazy="proxyImageUrl(imageUrl, '330')"
+              width="330"
+              height="330"
+              :alt="$t('Emission name image', { name: name })"
+              class="img-box float-start me-3 mb-3"
+            >
+            <h2>{{ name }}</h2>
+            <!-- eslint-disable vue/no-v-html -->
+            <p
+              class="html-wysiwyg-content"
+              v-html="urlify(description)"
+            />
+            <!-- eslint-enable -->
+          </div>
           <EditBox
             v-if="editRight && pageParameters.isEditBox"
             :emission="emission"
@@ -13,67 +32,44 @@
             :ftp-emission="ftpEmission"
             @isUpdated="getEmissionDetails"
           />
-          <div class="module-box">
-            <h2>
-              {{ name }}
-            </h2>
-            <div class="mb-5 mt-3 descriptionText">
-              <img
-                v-lazy="proxyImageUrl(imageUrl, '260')"
-                width="260"
-                height="260"
-                :alt="$t('Emission name image', { name: name })"
-                class="img-box shadow-element float-start me-3 mb-3"
-              >
-              <!-- eslint-disable vue/no-v-html -->
-              <p
-                class="html-wysiwyg-content"
-                v-html="urlify(description)"
-              />
-              <!-- eslint-enable -->
-            </div>
-          </div>
-          <SubscribeButtons
-            v-if="pageParameters.isShareButtons && countLink >= 1"
-            :emission="emission"
-          />
         </div>
-        <div class="d-flex flex-column flex-grow-mobile">
-          <SharePlayer
-            v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
-            :emission="emission"
-            :exclusive="exclusive"
-            :not-exclusive="notExclusive"
-            :organisation-id="myOrganisationId"
-            :is-education="isEducation"
-          />
-          <ShareButtons
-            v-if="pageParameters.isShareButtons"
-            :emission="emission"
-            :is-vertical="!authenticated && !notExclusive"
-          />
-        </div>
-      </div>
-      <div v-if="editRight">
+        <SharePlayer
+          v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
+          :emission="emission"
+          :exclusive="exclusive"
+          :not-exclusive="notExclusive"
+          :organisation-id="myOrganisationId"
+          :is-education="isEducation"
+        />
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :emission="emission"
+        />
+        <SubscribeButtons
+          v-if="pageParameters.isShareButtons && countLink >= 1"
+          :emission="emission"
+        />
         <ShareDistribution
-          v-if="pageParameters.isShareDistribution"
+          v-if="editRight && pageParameters.isShareDistribution"
           :emission-id="emissionId"
         />
+        <template v-if="pageParameters.isDisplayPodcasts">
+          <LiveHorizontalList
+            v-if="!isPodcastmaker"
+            class="mx-2"
+            :emission-id="emissionId"
+          />
+          <PodcastFilterList
+            class="mx-2"
+            :show-count="true"
+            :emission-id="emissionId"
+            :category-filter="false"
+            :edit-right="editRight"
+            :productor-id="emission.orga.id"
+          />
+        </template>
       </div>
-      <template v-if="pageParameters.isDisplayPodcasts">
-        <LiveHorizontalList
-          v-if="!isPodcastmaker"
-          :emission-id="emissionId"
-        />
-        <PodcastFilterList
-          :show-count="true"
-          :emission-id="emissionId"
-          :category-filter="false"
-          :edit-right="editRight"
-          :productor-id="emission.orga.id"
-        />
-      </template>
-    </div>
+    </template>
     <ClassicLoading
       :loading-text="!loaded?$t('Loading content ...'):undefined"
       :error-text="error?$t(`Emission doesn't exist`):undefined"
@@ -168,6 +164,12 @@ export default defineComponent({
         if (undefined !== this.emission?.annotations?.[platformShare[i]]) count++;
       }
       return count;
+    },
+    backgroundDisplay():string{
+      if(!this.emission){
+        return "";
+      }
+      return `background-image: url('${this.emission.imageUrl}');`;
     },
   },
   watch: {

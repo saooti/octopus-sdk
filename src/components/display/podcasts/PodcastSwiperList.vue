@@ -10,7 +10,6 @@
     :iab-id="iabId"
     :rubrique-id="rubriqueId"
     :no-rubriquage-id="noRubriquageId"
-    :is-button-next-title="true"
     @sortChrono="sortChrono"
     @sortPopular="sortPopular"
   >
@@ -22,7 +21,7 @@
       <swiper
         v-if="!loading"
         :slides-per-view="numberItem"
-        :space-between="10"
+        :space-between="0"
         :loop="allPodcasts.length>=numberItem"
         :navigation="true"
         :modules="modules"
@@ -102,7 +101,10 @@ export default defineComponent({
       return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     },
     sizeItem(): number {
-      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 13;
+      if (window.innerWidth <= 450) {
+        return 12.5;
+      }
+      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 16.5;
     },
   },
   watch: {
@@ -133,9 +135,9 @@ export default defineComponent({
   methods: {
     handleResize(): void {
       if (!this.$el) return;
-      const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.5);
-      this.numberItem = Math.floor(width / sixteen);
+      const width = (this.$el as HTMLElement).offsetWidth - 95;
+      const sixteen = domHelper.convertRemToPixels(this.sizeItem+ 0.5);
+      this.numberItem = Math.max(1, Math.floor(width / sixteen));
     },
     async fetchNext(): Promise<void> {
       const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
@@ -187,17 +189,25 @@ export default defineComponent({
   top: 0;
   bottom: 0;
   margin: 0;
-  width: 50px;
 }
 .swiper-button-next{
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%,#fafafa 50%, #fafafa 100%);
   right: 0;
 }
 .swiper-button-prev{
-  background: linear-gradient(90deg, #fafafa 0%,#fafafa 50%, rgba(255, 255, 255, 0) 100%);
   left: 0;
 }
-
+.swiper-slide-active{
+  padding-left:27px;
+  @media (max-width: 550px) {
+    padding-left:0;
+  }
+}
+.swiper-slide-next{
+  padding-right:27px;
+}
+.swiper-button-lock{
+  display: flex;
+}
 .swiper-slide {
   display: flex;
   justify-content: center;

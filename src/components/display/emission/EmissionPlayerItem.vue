@@ -1,6 +1,6 @@
 <template>
   <div
-    class="emission-player-container shadow-element"
+    class="emission-player-container"
   >
     <router-link
       :to="{
@@ -20,9 +20,9 @@
         class="img-box rounded-0"
       >
         <img
-          v-lazy="proxyImageUrl(emission.imageUrl, '260')"
-          width="260"
-          height="260"
+          v-lazy="proxyImageUrl(emission.imageUrl, '330')"
+          width="330"
+          height="330"
           :title="$t('Emission name image', {name:emission.name})"
           :alt="$t('Emission name image', {name:emission.name})"
           class="img-box rounded-0"
@@ -249,16 +249,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
+@import '@scss/_variables.scss';
 .emission-player-container {
   list-style: none;
   background: #fff;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 13rem;
+  max-width: $octopus-item-size;
   height: min-content;
-  border-radius: 0.8rem;
+  border-radius: $octopus-borderradius;
   overflow: hidden;
   .emission-item-border-color {
     border-color: #ddd;
@@ -289,6 +289,9 @@ export default defineComponent({
     .d-flex:not(.flex-column) {
       flex-wrap: nowrap;
     }
+  }
+  @media (max-width: 450px) {
+    max-width: $octopus-mobile-item-size;
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="editRight || activePlaylist"
-    class="emission-item-container shadow-element"
+    class="emission-item-container"
   >
     <router-link
       :to="{
@@ -12,14 +12,6 @@
       :title="$t('Playlist')"
       class="d-flex flex-grow-1 text-dark"
     >
-      <img
-        v-lazy="proxyImageUrl(playlist.imageUrl, '260')"
-        width="260"
-        height="260"
-        :title="$t('Playlist name image', {name:name})"
-        :alt="$t('Playlist name image', {name:name})"
-        class="img-box"
-      >
       <div class="emission-item-text">
         <div class="d-flex align-items-center emission-name">
           <span
@@ -47,11 +39,19 @@
             params: { productorId: playlist.organisation.id },
             query: { productor: filterOrgaId },
           }"
-          class="emission-producer text-primary mt-auto"
+          class="text-primary mt-auto"
         >
           © {{ playlist.organisation.name }}
         </router-link>
       </div>
+      <img
+        v-lazy="proxyImageUrl(playlist.imageUrl, '330')"
+        width="330"
+        height="330"
+        :title="$t('Playlist name image', {name:name})"
+        :alt="$t('Playlist name image', {name:name})"
+        class="img-box"
+      >
     </router-link>
   </div>
 </template>

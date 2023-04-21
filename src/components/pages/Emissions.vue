@@ -1,8 +1,6 @@
 <template>
   <div class="page-box">
-    <h1>{{ titleDisplay }}</h1>
     <ProductorSearch
-      v-if="isProductorSearch"
       v-model:organisationId="organisationId"
       v-model:search-pattern="searchPattern"
       type="emission"
@@ -11,7 +9,6 @@
       :is-education="isEducation"
       :reset-rubriquage="resetRubriquage"
       :is-emission="true"
-      :is-search-bar="isProductorSearch"
       :sort-criteria="sortEmission"
       :organisation-id="organisationId"
       :include-hidden="includeHidden"
@@ -85,12 +82,6 @@ export default defineComponent({
   
   computed: {
     ...mapState(useFilterStore, ['filterIab', 'filterRubrique']),
-    titleDisplay(): string{
-      return state.emissionsPage.titlePage??this.$t('All emissions');
-    },
-    isProductorSearch(): boolean{
-      return (state.podcastsPage.ProductorSearch as boolean);
-    },
     organisationRight(): boolean {
       return (true===this.authenticated && this.myOrganisationId === this.organisationId) ||
         true===state.generalParameters.isAdmin

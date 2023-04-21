@@ -287,7 +287,7 @@ export default{
   'Refresh': 'Osveži',
   'See associated article':"Read the article",
   "Display associated article": "Prikaži povezan vir",
-  "Copy this page URL": "Kopiraj URL te strani",
+  "Copy this page URL": "Kopiraj povezavo",
   "Custom version": "Prilagojena različica",
   "All":"Vse",
   'By category': 'Po kategoriji IAB',
@@ -311,4 +311,9 @@ export default{
   "Audio credits":"Avdio krediti",
   "View transcript":"Ogled prepisa",
   "Suggested listening":"Predlagano poslušanje",
+  "More":"Več",
+  "Social networks":"Socialna omrežja",
+  "Newsletter":"Newsletter",
+  "QR Code":"koda QR",
+  "Rss feed": "Rss vir",
 }

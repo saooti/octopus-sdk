@@ -1,40 +1,24 @@
 <template>
-  <div class="module-box text-center-mobile">
-    <template
-      v-if="!isVertical"
-    >
-      <div class="d-flex mb-2">
-        <h3 class="mb-0">
-          {{ $t('Share') }}
-        </h3>
-        <span
-          v-if="authenticated"
-          id="popover-share-help"
-          role="button"
-          tabindex="0"
-          class="saooti-help ms-2 align-items-start"
-        />
-        <Popover
-          v-if="authenticated"
-          target="popover-share-help"
-          :title="$t('Help')"
-          :content="$t('Share this page without edit and share blocks')"
-        />
-      </div>
-      <div class="d-flex align-items-center">
-        <ShareButtonsIntern
-          :podcast="podcast"
-          :emission="emission"
-          :playlist="playlist"
-          :participant-id="participantId"
-          :organisation-id="organisationId"
-        />
-      </div>
-    </template>
-    <div
-      v-else
-      class="d-flex-row"
-    >
+  <div class="module-box">
+    <div class="d-flex align-items-center mb-3">
+      <h2 class="big-h2 mb-0">{{ $t('Share') }}</h2>
+      <span
+        v-if="authenticated"
+        id="popover-share-help"
+        role="button"
+        tabindex="0"
+        class="saooti-help ms-2"
+      />
+      <Popover
+        v-if="authenticated"
+        target="popover-share-help"
+        :title="$t('Help')"
+        :content="$t('Share this page without edit and share blocks')"
+        relativeClass="page-element"
+        :isFixed="true"
+      />
+    </div>
+    <div class="d-flex align-items-center justify-content-between">
       <ShareButtonsIntern
         :podcast="podcast"
         :emission="emission"
@@ -67,7 +51,6 @@ export default defineComponent({
     playlist: { default: undefined, type: Object as ()=>Playlist},
     participantId: { default: undefined, type: Number},
     organisationId: { default: undefined, type: String},
-    isVertical: { default: false, type: Boolean},
   },
   computed: {
     authenticated(): boolean {

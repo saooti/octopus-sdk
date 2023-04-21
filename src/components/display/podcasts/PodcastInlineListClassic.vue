@@ -254,7 +254,7 @@ export default defineComponent({
     },
     preloadImage(url: string): void {
       const img = new Image();
-      img.src = this.proxyImageUrl(url,'260');
+      img.src = this.proxyImageUrl(url,'330');
     },
   },
 })

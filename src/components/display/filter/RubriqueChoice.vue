@@ -13,7 +13,7 @@
         >{{ rubriquage.title }}</option>
       </select>
       <div
-        class="saooti-down octopus-arrow-down octopus-arrow-down-absolute"
+        class="saooti-down octopus-arrow-down-absolute"
       />
     </label>
     <template v-if="rubriquageId">

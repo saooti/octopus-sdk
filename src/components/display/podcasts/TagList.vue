@@ -3,7 +3,7 @@
     v-if="undefined !== tagList && 0!==tagList.length"
     class="tag-list-component d-flex align-items-center flex-wrap"
   >
-    <div class="fw-bold">
+    <div>
       {{ $t('Podcast tags') + ": " }}
     </div>
     <div
@@ -14,6 +14,7 @@
       <div
         :id="'tag-list-from-podcast-page'+index"
         role="button"
+        class="d-flex align-items-center"
       >
         <img
           v-if="isOuestFranceTag(tag)"
@@ -29,6 +30,8 @@
         v-if="isOuestFranceTag(tag)"
         :target="'tag-list-from-podcast-page'+index"
         :content="tag.substring(4,tag.length)"
+        relativeClass="page-element"
+        :isFixed="true"
       />
     </div>
   </div>
@@ -51,6 +54,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
 .tag-list-component{
   .ouest-france-logo{
@@ -60,10 +64,11 @@ export default defineComponent({
   }
   .tag-list-element {
     display: flex;
+    align-items: center;
     margin: 0.4rem;
     padding: 0.2rem;
     border: 1px solid #999;
-    border-radius: 0.5rem;
+    border-radius: $octopus-borderradius;
   }
 }
 }

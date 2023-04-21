@@ -2,13 +2,18 @@
   <div
     class="d-flex align-items-center"
   >
-    <button
+    <router-link
       v-if="authenticated"
-      class="btn btn-primary hide-phone m-1"
-      @click="goToUrl('/main/priv/backoffice')"
-    >
-      {{ $t('My space') }}
-    </button>
+      :title="$t('My space')"
+      to="/main/priv/backoffice"
+      class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu"
+    />
+    <router-link
+      v-if="isContribution"
+      :title="$t('Upload')"
+      to="/main/priv/upload"
+      class="btn admin-button hide-smallest-screen m-1 saooti-upload"
+    />
     <button
       id="home-dropdown"
       class="btn m-1 admin-button saooti-user"
@@ -112,7 +117,6 @@ export default defineComponent({
     },
     routerBackoffice(){
       return [
-        {title:this.$t('Upload'),class:"btn btn-primary w-100", path:'/main/priv/upload', condition: (state.generalParameters.isContribution as boolean)},
         {title:this.$t('My space'),class:"show-phone octopus-dropdown-item", path:'/main/priv/backoffice', condition: true},
         {title:this.$t('Edit my profile'),class:"octopus-dropdown-item", path:'/main/priv/edit/profile', condition: true},
         {title:this.$t('Edit my organisation'),class:"octopus-dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length}];
@@ -124,14 +128,10 @@ export default defineComponent({
     authenticated(): boolean {
       return state.generalParameters.authenticated??false;
     },
-  },
-
-  methods: {
-    goToUrl(url: string): void {
-      if (this.authenticated) {
-        this.$router.push(url);
-      }
+    isContribution(): boolean {
+      return state.generalParameters.isContribution??false;
     },
   },
+
 })
 </script>

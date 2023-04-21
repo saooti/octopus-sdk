@@ -104,7 +104,7 @@
           class="position-relative"
         >
           <span
-            class="saooti-down octopus-arrow-down octopus-arrow-down-absolute"
+            class="saooti-down octopus-arrow-down-absolute"
           />
         </div>
       </template>

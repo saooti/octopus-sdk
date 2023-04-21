@@ -7,7 +7,7 @@
 		outline-color: transparent !important;
 		padding: 0.25rem 0.4rem;
 		border: 0.1rem solid #dee2e6;
-		border-radius: 0.3rem;
+		border-radius: $octopus-borderradius;
 		height: 2rem;
 		padding-right: 40px;
 	}
@@ -21,7 +21,7 @@
 		background: #fff;
 		background-image: none;
 		border: 0.1rem solid #dee2e6;
-		border-radius: 0.3rem;
+		border-radius:$octopus-borderradius;
 		color: #353535;
 		display: block;
 		font-size: 0.8rem;

@@ -1,6 +1,6 @@
 <template>
   <div class="module-box">
-    <h3>{{ $t('Distribute') }}</h3>
+    <h2 class="big-h2 mb-3">{{ $t('Distribute') }}</h2>
     <div class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
       <div class="text-primary hide-small-screen text-break">
@@ -101,10 +101,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
 .sharing-distribution-container {
   border: 0.05rem solid #dee2e6;
-  border-radius: 0.3rem;
+  border-radius: $octopus-borderradius;
   padding: 0.4rem;
   margin: 0.2rem 1rem 0.2rem 0;
   display: flex;

@@ -22,14 +22,14 @@
     }
 		margin-top: 0;
 		margin-bottom:0;
-		font-weight: 600;
+		font-weight: 400;
 		line-height: 1.2;
 	}
 	h1,.h1{
 		font-size: 1.8rem;
 		text-align: center;
     color: #666;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 		@media (max-width: 500px){
       font-size: 1.2rem;
       margin: 0.5rem 0 1rem;
@@ -39,6 +39,12 @@
 		font-size: 1.17rem;
 		@media (max-width: 500px){
       font-size: 1rem;
+    }
+	}
+	.big-h2{
+		font-size: 1.7rem;
+		@media (max-width: 500px){
+      font-size: 1.1rem;
     }
 	}
 	h3,.h3{
@@ -54,6 +60,7 @@
 		font-size: .63rem;
 		display: flex;
     align-items: center;
+		font-weight: normal;
 	}
 	.text-truncate{
 		overflow: hidden;
@@ -71,7 +78,7 @@
 		user-select: none;
 		transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 		font-size:.7rem;
-		border-radius: 4px;
+		border-radius: $octopus-borderradius;
 		background: $octopus-secondary-color; 
 		text-decoration: none !important;
 		white-space: nowrap;
@@ -94,9 +101,9 @@
 				padding: 0;
 				margin: 0 2rem 1rem 0;
 				border-radius: 0;
+				font-size: 0.9rem;
 				@media (max-width: 600px) {
-						margin: 0 1rem 1rem 0;
-						font-size: 0.8em;
+					margin: 0 1rem 1rem 0;
 				}
 				position: relative;
 				&:after {    
@@ -122,15 +129,22 @@
 					justify-content: center;
 					background: $octopus-primary-color;
 					border: 1px solid $octopus-primary-color;
-					border-radius: 4px !important;
+					border-radius: $octopus-borderradius !important;
 					color: white !important;
-					font-weight: bold;
-					&:focus,
-					&:hover,
-					&:active,
-					&.active {
+					font-weight: 500;
+					&:not(.btn-on-dark):focus,
+					&:not(.btn-on-dark):hover,
+					&:not(.btn-on-dark):active,
+					&:not(.btn-on-dark).active {
 							background: transparent;
 							color: $octopus-primary-color !important;
+					}
+					&.btn-on-dark:focus,
+					&.btn-on-dark:hover,
+					&.btn-on-dark:active,
+					&.btn-on-dark.active {
+							background: transparent;
+							border-color: white !important;
 					}
 					&:disabled{
 							background-color: #cccccc;
@@ -165,7 +179,7 @@
 					justify-content: center;
 					color : $octopus-primary-color;
 					flex-shrink: 0;
-					font-weight: normal;
+					font-weight: 500;
 					border-radius: 50% !important;
 			}
 	

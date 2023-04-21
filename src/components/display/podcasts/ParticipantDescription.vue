@@ -4,39 +4,11 @@
     class="comma"
   >
     {{ title }}
-    <span
-      :id="idPopover"
-      role="button"
-      tabindex="0"
-      class="saooti-help m-0"
-      :title="title"
-    />
     <span class="mx-1">:</span>
-    <Popover
-      :title="$t('Animated by')"
-      :target="idPopover"
-    >
-      <div 
-        v-for="participant in participants"
-        :key="'desc-'+participant.participantId"
-        class="d-flex flex-column align-items-center"
-      >
-        <strong><em>{{ getName(participant) }}</em></strong>
-        <!-- eslint-disable vue/no-v-html -->
-        <div
-          v-if="participant.description"
-          class="participant-desc html-wysiwyg-content"
-          v-html="participant.description"
-        />
-        <!-- eslint-enable -->
-        <hr>
-      </div>
-    </Popover>
     <router-link
       v-for="participant in participants"
       :key="participant.participantId"
       :title="$t('Participant')"
-      class="fw-bold"
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
@@ -51,7 +23,6 @@
 </template>
 
 <script lang="ts">
-import Popover from '../../misc/Popover.vue';
 import { Participant } from '@/stores/class/general/participant';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
@@ -60,7 +31,6 @@ export default defineComponent({
   name: 'ParticipantDescription',
 
   components:{
-    Popover
   },
 
   props: {

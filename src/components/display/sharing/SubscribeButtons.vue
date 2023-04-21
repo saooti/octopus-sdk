@@ -1,8 +1,8 @@
 <template>
   <div class="module-box flex-grow-0">
-    <h3 class="mb-2 height-40">
+    <h2 class="big-h2 mb-3 height-40">
       {{ $t('Subscribe emission') }}
-    </h3>
+    </h2>
     <template
       v-for="(sub, index) in subscriptionsDisplay"
       :key="sub.name"

@@ -158,10 +158,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-popover{
 	background: white;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: $octopus-borderradius;
 	position: absolute;
 	z-index: 9999;
 	&.octopus-dropdown{

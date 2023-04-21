@@ -1,95 +1,79 @@
 <template>
-  <Accordion
-    class="mt-3"
-    :title="$t('player parameters')"
-    id-composer="playerParameters"
+  <div class="h4 mb-2 mt-3">{{ $t('player parameters') }}</div>
+  <template
+    v-if="choseNumberEpisode"
   >
     <div
-      v-if="choseNumberEpisode"
-      class="d-flex flex-column flex-grow-1"
+      v-if="displayChoiceAllEpisodes"
+      class="d-flex align-items-center flex-wrap mt-1"
     >
-      <div
-        v-if="displayChoiceAllEpisodes"
-        class="d-flex align-items-center flex-wrap mt-1"
+      <input
+        v-model="episodeNumbers"
+        class="form-check-input"
+        type="radio"
+        name="episodeNumbers"
+        value="all"
       >
-        <input
-          v-model="episodeNumbers"
-          class="form-check-input"
-          type="radio"
-          name="episodeNumbers"
-          value="all"
-        >
-        <span class="flex-shrink-0">{{ $t('Show every episode') }}</span>
-      </div>
-      <div
-        class="d-flex align-items-center flex-wrap"
-        :class="displayChoiceAllEpisodes ? '' : 'mt-3'"
-      >
-        <input
-          v-if="displayChoiceAllEpisodes"
-          v-model="episodeNumbers"
-          class="form-check-input"
-          type="radio"
-          name="episodeNumbers"
-          value="number"
-        >
-        <span class="flex-shrink-0">{{ $t('Show') }}</span>
-        <input
-          id="number-input"
-          v-model="iFrameNumber"
-          type="number"
-          min="1"
-          max="50"
-          class="input-share-player  text-center m-2"
-        >
-        <label
-          for="number-input"
-          :title="$t('Number of player podcasts')"
-        />
-        <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
-      </div>
-      <ClassicCheckbox
-        v-model:textInit="proceedReading"
-        id-checkbox="proceed-reading-checkbox"
-        :label="$t('Proceed reading')"
-      />
-      <ClassicCheckbox
-        v-model:textInit="isVisibleTemp"
-        id-checkbox="is-visible-checkbox"
-        :label="$t('Podcasts still available')"
-      />
+      <span class="flex-shrink-0">{{ $t('Show every episode') }}</span>
     </div>
     <div
-      v-if="displayArticleParam"
-      class="d-flex flex-column flex-grow-1"
+      class="d-flex align-items-center flex-wrap"
+      :class="displayChoiceAllEpisodes ? '' : 'mt-3'"
     >
-      <ClassicCheckbox
-        v-model:textInit="displayArticle"
-        id-checkbox="display-article-checkbox"
-        :label="$t('Display associated article')"
+      <input
+        v-if="displayChoiceAllEpisodes"
+        v-model="episodeNumbers"
+        class="form-check-input"
+        type="radio"
+        name="episodeNumbers"
+        value="number"
+      >
+      <span class="flex-shrink-0">{{ $t('Show') }}</span>
+      <input
+        id="number-input"
+        v-model="iFrameNumber"
+        type="number"
+        min="1"
+        max="50"
+        class="input-share-player  text-center m-2"
+      >
+      <label
+        for="number-input"
+        :title="$t('Number of player podcasts')"
       />
+      <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
     </div>
-    <div 
-      v-if="displayTranscriptParam"
-      class="d-flex flex-column flex-grow-1"
-    >
-      <ClassicCheckbox
-        v-model:textInit="displayTranscript"
-        id-checkbox="display-transcript-checkbox"
-        :label="$t('If the transcript is available, show it')"
-      />
-    </div>
-  </Accordion>
+    <ClassicCheckbox
+      v-model:textInit="proceedReading"
+      id-checkbox="proceed-reading-checkbox"
+      :label="$t('Proceed reading')"
+    />
+    <ClassicCheckbox
+      v-model:textInit="isVisibleTemp"
+      id-checkbox="is-visible-checkbox"
+      :label="$t('Podcasts still available')"
+    />
+  </template>
+  <ClassicCheckbox
+    v-if="displayArticleParam"
+    v-model:textInit="displayArticle"
+    id-checkbox="display-article-checkbox"
+    :label="$t('Display associated article')"
+  />
+  <ClassicCheckbox
+    v-if="displayTranscriptParam"
+    v-model:textInit="displayTranscript"
+    id-checkbox="display-transcript-checkbox"
+    :label="$t('If the transcript is available, show it')"
+  />
 </template>
 
 <script lang="ts">
 import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import Accordion from '../../misc/Accordion.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components:{
-    ClassicCheckbox,
-    Accordion
+    ClassicCheckbox
   },
   props: {
     isVisible: { default: false, type: Boolean},

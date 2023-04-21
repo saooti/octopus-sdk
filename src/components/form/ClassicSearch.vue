@@ -41,11 +41,12 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+@import '@scss/_variables.scss';
 .octopus-app{
   .champs-searchPage{
     input {
       border: 2px solid #dee2e6;
-      border-radius: 10px;
+      border-radius: $octopus-borderradius;
       margin: 0 !important;
     }
     .saooti-search,

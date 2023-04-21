@@ -1,24 +1,6 @@
 <template>
   <div class="page-box">
-    <div
-      class="d-flex"
-      :class="
-        pageParameters.isEmissionChooser ? 'justify-content-between' : 'justify-content-center'
-      "
-    >
-      <h1 class="flex-shrink-0">
-        {{ titleDisplay }}
-      </h1>
-      <EmissionChooser
-        v-if="pageParameters.isEmissionChooser"
-        :defaultanswer="$t('No emission filter')"
-        width="auto"
-        class="ms-3"
-        @selected="emissionSelected"
-      />
-    </div>
     <ProductorSearch
-      v-if="pageParameters.isProductorSearch"
       v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
     />
@@ -26,7 +8,6 @@
       :is-education="isEducation"
       :is-emission="false"
       :reset-rubriquage="resetRubriquage"
-      :is-search-bar="pageParameters.isProductorSearch"
       :sort-criteria="sortCriteria"
       :include-hidden="includeHidden"
       :organisation-id="organisationId"
@@ -46,7 +27,6 @@
       :organisation-id="organisationId"
       :query="searchPattern"
       :monetization="monetization"
-      :emission-id="emissionId"
       :before="toDate"
       :after="fromDate"
       :sort-criteria="sortCriteria"
@@ -66,18 +46,15 @@ import PodcastList from '../display/podcasts/PodcastList.vue';
 import { state } from '../../stores/ParamSdkStore';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
 import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
-import { Emission } from '@/stores/class/general/emission';
 import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
-import { defineComponent, defineAsyncComponent } from 'vue';
-const EmissionChooser = defineAsyncComponent(() => import('../display/emission/EmissionChooser.vue'));
+import { defineComponent } from 'vue';
 export default defineComponent({
   name:"Podcasts",
   components: {
     PodcastList,
     ProductorSearch,
-    EmissionChooser,
     AdvancedSearch,
   },
   mixins:[orgaComputed],
@@ -92,7 +69,6 @@ export default defineComponent({
       searchPattern: '' as string,
       organisationId: undefined as string|undefined,
       monetization: 'UNDEFINED' as string, // UNDEFINED, YES, NO
-      emissionId: undefined as number|undefined,
       fromDate: undefined as string|undefined,
       toDate: undefined as string|undefined,
       resetRubriquage: false as boolean,
@@ -108,9 +84,6 @@ export default defineComponent({
 
   computed: {
     ...mapState(useFilterStore, ['filterRubrique', 'filterIab']),
-    titleDisplay(): string{
-      return state.podcastsPage.titlePage ?? this.$t('All podcasts');
-    },
     organisationRight(): boolean {
       return (true===this.authenticated && this.myOrganisationId === this.organisationId) ||
         true===state.generalParameters.isAdmin;
@@ -118,12 +91,6 @@ export default defineComponent({
     organisation(): string|undefined {
       return this.organisationId ?this.organisationId: this.filterOrgaId;
     },
-    pageParameters(){
-      return {
-        isProductorSearch: state.podcastsPage.ProductorSearch,
-        isEmissionChooser: state.podcastsPage.emissionChooser
-      }
-    }
   },
   watch:{
     organisationId(): void {
@@ -170,9 +137,6 @@ export default defineComponent({
       this.rubriquageId = allRubriquageId;
       this.rubriqueId = rubriqueId;
       this.noRubriquageId = noRubriquageId;
-    },
-    emissionSelected(emission: Emission): void {
-      this.emissionId = emission && emission.emissionId ? emission.emissionId : undefined;
     },
   },
 })

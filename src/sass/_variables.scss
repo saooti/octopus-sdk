@@ -3,6 +3,10 @@ $font-family-sans-serif: sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
+$octopus-item-size: 16.5rem !default;
+$octopus-mobile-item-size: 12.5rem !default;
+$octopus-borderradius: 0.2rem !default;
+
 // bootstrap color
 $primary: #1a8658 !default;
 $secondary: #636C73 !default;
@@ -11,10 +15,11 @@ $danger: #E22C27 !default;
 $blue-octopus: #08667E !default;
 
 //SDK Octopus style
-$octopus-background: #fafafa !default;
+$octopus-background: white !default;
 $octopus-primary-color: #1a8658 !default;
 $octopus-secondary-color : #ddd !default;
 
 $primaryColorTransparent : #1a865893 !default;
+$primaryColorLessTransparent : #1a8657d0 !default;
 $primaryColorMoreTransparent : #1a865854 !default;
 $primaryColorReallyTransparent : #cef7e250 !default;

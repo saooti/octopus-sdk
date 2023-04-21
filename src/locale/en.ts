@@ -287,7 +287,7 @@ export default{
   'Refresh': 'Refresh',
   'See associated article':"Read the article",
   "Display associated article":"Display associated article",
-  "Copy this page URL":"Copy this page URL",
+  "Copy this page URL":"Copy link",
   "Custom version":"Custom version",
   "All":"All",
   'By category': 'By IAB category',
@@ -318,4 +318,9 @@ export default{
   "Audio credits":"Audio credits",
   "View transcript":"View transcript",
   "Suggested listening":"Suggested listening",
+  "More":"More",
+  "Social networks":"Social networks",
+  "Newsletter":"Newsletter",
+  "QR Code":"QR Code",
+  "Rss feed": "Rss feed",
 };

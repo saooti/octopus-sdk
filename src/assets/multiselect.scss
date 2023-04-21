@@ -52,30 +52,12 @@
         font-size: 0.65rem;
         margin: 0.2rem;
     } 
-
-    .octopus-arrow-down
-    {
-        height: 1.2rem;
-        width: 1.2rem;
-        font-size: 1.2rem;
-        cursor: pointer;
-        margin: 0;
-        background-color: #ccc;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-shrink: 0;
-        padding: 0;
-        &:before{
-            font-size: 0.8rem;
-        }
-    }
     .octopus-arrow-down-absolute
     {
         position: absolute;
         right: 10px;
-        top: 0.5rem;
+        top: 0.7rem;
+        cursor: pointer;
     }
 
 
@@ -149,6 +131,10 @@
         color: #35495e;
     }
 
+    .multiselect-white .multiselect{
+        color: white !important;
+    }
+
 
 
     .multiselect * {
@@ -176,7 +162,7 @@
         min-height: 20px;
         line-height: 28px;
         border: none;
-        border-radius: 5px;
+        border-radius: $octopus-borderradius;
         padding: 0 0 0 5px;
         width: 100%;
         transition: border 0.1s ease;
@@ -223,7 +209,7 @@
         padding-right: 40px;
         padding-left: 5px;
         align-items: center;
-        border-radius: 0.3em;
+        border-radius: $octopus-borderradius;
         border: 0.1rem solid #dee2e6;
         background: #fff;
         font-size: 14px;
@@ -237,7 +223,7 @@
         position: relative;
         display: inline-block;
         padding: 4px 26px 4px 10px;
-        border-radius: 5px;
+        border-radius: $octopus-borderradius;
         margin-right: 10px;
         color: black;
         line-height: 1;
@@ -262,7 +248,7 @@
         text-align: center;
         line-height: 22px;
         transition: all 0.2s ease;
-        border-radius: 5px;
+        border-radius: $octopus-borderradius;
     }
 
     .multiselect__tag-icon:after {
@@ -286,7 +272,7 @@
         overflow: hidden;
         padding: 8px 30px 0 12px;
         white-space: nowrap;
-        border-radius: 5px;
+        border-radius: $octopus-borderradius;
         border: 1px solid #e8e8e8;
     }
 
@@ -349,6 +335,10 @@
         z-index: 50;
         -webkit-overflow-scrolling: touch;
     }
+    .multiselect-white .multiselect__content-wrapper{
+        background: black;
+    }
+
 
     .multiselect__content {
         list-style: none;

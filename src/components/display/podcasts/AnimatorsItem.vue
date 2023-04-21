@@ -10,7 +10,7 @@
         query: { productor: filterOrgaId },
       }"
       :title="$t('Participant')"
-      class="podcast-item-animator text-dark"
+      class="podcast-item-animator text-truncate"
     >
       {{ animatorName }}
     </router-link>
@@ -43,7 +43,6 @@ export default defineComponent({
     font-size: 0.55rem;
     font-weight: 300;
     text-transform: capitalize;
-    margin: 00.25rem 0.5rem 0;
   }
 }
 </style>

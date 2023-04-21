@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mt-3 emission-item-container shadow-element"
+    class="mt-3 emission-item-container"
   >
     <router-link
       :to="{
@@ -12,9 +12,9 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <img
-        v-lazy="proxyImageUrl(emission.imageUrl, '260')"
-        width="260"
-        height="260"
+        v-lazy="proxyImageUrl(emission.imageUrl, '330')"
+        width="330"
+        height="330"
         class="img-box"
         :title="$t('Emission name image', {name:emission.name})"
         :alt="$t('Emission name image', {name:emission.name})"
@@ -41,7 +41,7 @@
         </div>
         <router-link
           v-if="!isPodcastmaker"
-          class="emission-producer mt-auto"
+          class="text-dark mt-auto"
           :to="{
             name: 'productor',
             params: { productorId: emission.orga.id },

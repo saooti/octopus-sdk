@@ -1,35 +1,33 @@
 <template>
-  <div class="d-flex flex-column">
-    <label
-      for="iframe-select"
-      title="select miniplayer"
-    />
-    <select
-      id="iframe-select"
-      :value="iFrameModel"
-      class=""
-      @change="$emit('update:iFrameModel',$event.target.value)"
+  <label
+    for="iframe-select"
+    title="select miniplayer"
+  />
+  <select
+    id="iframe-select"
+    :value="iFrameModel"
+    class=""
+    @change="$emit('update:iFrameModel',$event.target.value)"
+  >
+    <template
+      v-for="option in optionsSelect"
+      :key="option.value"
     >
-      <template
-        v-for="option in optionsSelect"
-        :key="option.value"
-      >
-        <option
-          v-if="option.condition"
-          :value="option.value"
-        >
-          {{ option.name }}
-        </option>
-      </template>
       <option
-        v-for="player in customPlayersDisplay"
-        :key="player.customId"
-        :value="player.customId"
+        v-if="option.condition"
+        :value="option.value"
       >
-        {{ $t('Custom version') + " «" +player.name+"»" }}
+        {{ option.name }}
       </option>
-    </select>
-  </div>
+    </template>
+    <option
+      v-for="player in customPlayersDisplay"
+      :key="player.customId"
+      :value="player.customId"
+    >
+      {{ $t('Custom version') + " «" +player.name+"»" }}
+    </option>
+  </select>
 </template>
 
 <script lang="ts">

@@ -102,7 +102,7 @@ export default defineComponent({
 		align-items: center;
 		justify-content: space-between;
 		border: 0;
-		border-radius: 0.8rem 0.8rem 0 0;
+		border-radius: $octopus-borderradius $octopus-borderradius 0 0;
 		background: $octopus-primary-color;
 		color: white;
 		padding: 1rem;
@@ -122,7 +122,7 @@ export default defineComponent({
 		outline: 0;
 		height: auto !important;
 		max-height: initial !important;
-		border-radius: 0.8rem;
+		border-radius: $octopus-borderradius;
 		box-shadow: 0 0.2rem 0.5rem rgba(40,40,40,.3);
 	}
 	.octopus-modal-footer{

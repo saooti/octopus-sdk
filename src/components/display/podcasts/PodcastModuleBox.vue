@@ -1,17 +1,9 @@
 <template>
   <div class="module-box">
-    <div
-      class="text-uppercase h4"
-    >
-      {{ podcast.title }}
-    </div>
-    <div class="mb-5 mt-3 d-flex">
+    <div class="mb-2 d-flex">
       <div class="w-100">
         <PodcastImage
           :class="[
-            !isLiveReadyToRecord
-              ? 'shadow-element'
-              : '',
             isLiveReadyToRecord &&
               fetchConference &&
               'null' !== fetchConference &&
@@ -28,8 +20,7 @@
           @playPodcast="playPodcast"
         />
         <div
-          class="d-flex flex-wrap mb-3"
-          :class="isLiveReady ? 'justify-content-between' : ''"
+          class="d-flex justify-content-between flex-wrap mb-2"
         >
           <div
             v-if="0 !== date.length"
@@ -38,7 +29,7 @@
             {{ date }}
           </div>
           <div>
-            {{ $t('Duration', { duration: duration }) }}
+            {{ duration}}
           </div>
           <div
             v-if="isLiveReady"
@@ -47,6 +38,11 @@
             {{ $t('Episode record in live') }}
           </div>
         </div>
+        <div
+          class="text-uppercase h2 mb-3"
+        >
+          {{ podcast.title }}
+        </div>
         <!-- eslint-disable vue/no-v-html -->
         <div
           class="descriptionText html-wysiwyg-content"
@@ -54,11 +50,10 @@
         />
         <!-- eslint-enable -->
         <div class="my-3">
-          <ParticipantDescription :participants="podcast.animators" />
-          <div>
+          <ParticipantDescription class="mb-1" :participants="podcast.animators" />
+          <div class="mb-1">
             {{ $t('Emission') + ' : ' }}
             <router-link
-              class="fw-bold"
               :to="{
                 name: 'emission',
                 params: { emissionId: podcast.emission.emissionId },
@@ -70,10 +65,9 @@
               {{ podcast.emission.name }}
             </router-link>
           </div>
-          <div v-if="!isPodcastmaker">
+          <div class="mb-1" v-if="!isPodcastmaker">
             {{ $t('Producted by : ') }}
             <router-link
-              class="fw-bold"
               :to="{
                 name: 'productor',
                 params: { productorId: podcast.organisation.id },
@@ -85,15 +79,15 @@
               {{ podcast.organisation.name }}
             </router-link>
           </div>
-          <div v-if="''!==photoCredit">
+          <div class="mb-1" v-if="''!==photoCredit">
             {{ $t('Photo credits') + " : "+ photoCredit }}
           </div>
-          <div v-if="''!==audioCredit">
+          <div class="mb-1" v-if="''!==audioCredit">
             {{ $t('Audio credits') + " : "+ audioCredit }}
           </div>
           <a
             v-if="podcast.article"
-            class="btn d-flex align-items-center my-2 width-fit-content"
+            class="btn d-flex align-items-center my-2 width-fit-content mb-1"
             :href="podcast.article"
             rel="noopener"
             target="_blank"
@@ -102,6 +96,7 @@
             <div>{{ $t('See associated article') }}</div>
           </a>
           <ParticipantDescription
+            class="mb-1"
             :participants="podcast.guests"
             :is-guest="true"
           />
@@ -111,7 +106,7 @@
           <div v-if="editRight && !isPodcastmaker">
             <div
               v-if="podcast.annotations && 'RSS'===podcast.annotations.SOURCE_KIND"
-              class="me-5"
+              class="me-5 text-secondary"
             >
               {{ $t('From RSS') }}
             </div>
@@ -123,6 +118,24 @@
         </div>
       </div>
     </div>
+    <RecordingItemButton
+      v-if="
+        !!fetchConference &&
+          isLiveReadyToRecord &&
+          !isNotRecorded &&
+          isOctopusAndAnimator
+      "
+      :podcast="podcast"
+      :live="true"
+      :recording="fetchConference"
+      @deleteItem="removeDeleted"
+      @validatePodcast="$emit('updatePodcast', $event)"
+    />
+    <EditBox
+      v-else-if="editRight && isEditBox"
+      :podcast="podcast"
+      @validatePodcast="$emit('updatePodcast', $event)"
+    />
     <TagList
       :tag-list="podcast.tags"
     />
@@ -145,6 +158,8 @@ import { Conference } from '@/stores/class/conference/conference';
 
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ErrorMessage = defineAsyncComponent(() => import('../../misc/ErrorMessage.vue'));
+const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
+const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
 export default defineComponent({
   name: "PodcastModuleBox",
   components: {
@@ -152,7 +167,9 @@ export default defineComponent({
     ParticipantDescription,
     TagList,
     ErrorMessage,
-    PodcastPlayBar
+    PodcastPlayBar,
+    EditBox, 
+    RecordingItemButton
   },
 
   mixins:[displayMethods, orgaComputed],
@@ -163,7 +180,7 @@ export default defineComponent({
     fetchConference: { default: undefined, type: Object as ()=> Conference},
   },
 
-  emits: ['playPodcast'],
+  emits: ['playPodcast', 'updatePodcast'],
 
   computed: {
     errorMessage(): string{
@@ -180,7 +197,7 @@ export default defineComponent({
     },
     date(): string {
       if (this.podcast && 1970 !== dayjs(this.podcast.pubDate).year()){
-        return dayjs(this.podcast.pubDate).format('D MMMM YYYY, HH[h]mm');
+        return dayjs(this.podcast.pubDate).format('D MMMM YYYY');
       }
       return '';
     },
@@ -235,11 +252,21 @@ export default defineComponent({
     },
     audioCredit():string{
       return (this.podcast?.annotations?.audioCredit as string) ?? '';
-    }
+    },
+    isEditBox(): boolean{
+      return (state.podcastPage.EditBox as boolean)?? false;
+    },
   },
   methods: {
     playPodcast(podcast: Podcast): void {
       this.$emit('playPodcast', podcast);
+    },
+    removeDeleted(): void {
+      if (window.history.length > 1) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push('/');
+      }
     },
   },
 })
