@@ -20,11 +20,10 @@
       </template>
     </div>
   </div>
-  <div class="d-flex flex-column me-2">
+  <div class="d-flex flex-column me-2" v-if="podcast || emission ||playlist">
     <div class="h4 mb-2">{{$t('Newsletter')}}</div>
     <div class="d-flex align-items-center justify-content-center">
       <button
-        v-if="podcast || emission ||playlist"
         :class="getClass()"
         class="saooti-newsletter"
         :title="$t('Share newsletter')"

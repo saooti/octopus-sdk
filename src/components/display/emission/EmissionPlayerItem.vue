@@ -54,7 +54,7 @@
     <div
       v-for="p in podcasts"
       :key="p.podcastId"
-      class="border-top emission-item-border-color p-2 secondary-bg d-flex flex-column"
+      class="border-top emission-item-border-color p-2 d-flex flex-column"
     >
       <router-link
         v-if="isProgressBar"
@@ -93,7 +93,7 @@
               <!-- eslint-enable -->
             </div>
           </router-link>
-          <PodcastPlayBar :podcast="p" />
+          <PodcastPlayBar  :podcast-id="p.podcastId" :duration="p.duration" />
         </div>
         <button
           v-if="
@@ -233,8 +233,8 @@ export default defineComponent({
       this.podcasts = data.result;
       this.$nextTick(() => {
       for (let index = 0, len = this.podcasts.length; index < len; index++) {
-        const podcastDesc = (this.$refs['descriptionPodcast'+this.podcasts[index].podcastId] as Array<HTMLElement>)[0];
-        const podcastDescContainer = (this.$refs['descriptionPodcastContainer'+this.podcasts[index].podcastId] as Array<HTMLElement>)[0];
+        const podcastDesc = (this.$refs['descriptionPodcast'+this.podcasts[index].podcastId] as Array<HTMLElement>)?.[0] ?? null;
+        const podcastDescContainer = (this.$refs['descriptionPodcastContainer'+this.podcasts[index].podcastId] as Array<HTMLElement>)?.[0] ?? null;
         if (
           null !== podcastDesc && null !== podcastDescContainer &&
           podcastDesc.clientHeight > podcastDescContainer.clientHeight
@@ -258,6 +258,7 @@ export default defineComponent({
   width: 100%;
   max-width: $octopus-item-size;
   height: min-content;
+  border: 2px solid #eee;
   border-radius: $octopus-borderradius;
   overflow: hidden;
   .emission-item-border-color {

@@ -165,7 +165,7 @@ export default defineComponent({
   justify-content: flex-end;
   width: 100%;
   position: sticky;
-  background: white;
+  background: $octopus-background;
   padding: 0.5rem 0;
   z-index: 10;
   .btn{

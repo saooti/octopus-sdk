@@ -101,7 +101,8 @@
             :is-guest="true"
           />
           <PodcastPlayBar
-            :podcast="podcast"
+            :podcast-id="podcast.podcastId"
+            :duration="podcast.duration"
           />
           <div v-if="editRight && !isPodcastmaker">
             <div
