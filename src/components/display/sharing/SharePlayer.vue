@@ -200,32 +200,14 @@ export default defineComponent({
     iFrameHeight(): string {
       switch (this.iFrameModel) {
         case 'large':
-          if (this.podcast) return '180px';
-          if ('number' === this.episodeNumbers && !this.playlist) {
-            switch (this.iFrameNumber.toString()) {
-              case '1': return '270px';
-              case '2': return '320px';
-              case '3': return '360px';
-              case '4': return '420px';
-              case '5': return '420px';
-              default: return '420px';
-            }
-          }
-          return '435px';
+          if (this.podcast) return '200px';
+          return '350px';
         case 'emissionLarge':
         case 'largeSuggestion':
-          if ('number' !== this.episodeNumbers) return '510px';
-          switch (this.iFrameNumber.toString()) {
-            case '1':return '315px';
-            case '2':return '365px';
-            case '3':return '420px';
-            case '4':return '470px';
-            case '5':return '470px';
-            default:return '470px';
-          }
-        case 'emission':return '530px';
+          return '350px';
+        case 'emission':return '520px';
         default:
-          if (this.podcast) return '520px';
+          if (this.podcast) return '500px';
           return '530px';
       }
     },
@@ -341,7 +323,10 @@ export default defineComponent({
     }
   }
   .max-iframe {
-    max-width: 300px;
+    width: 500px;
+    @media (max-width: 960px){
+      width: calc(100% - 2rem);
+    }
   }
 }
 </style>

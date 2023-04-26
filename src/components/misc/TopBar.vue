@@ -45,9 +45,9 @@
           {{ link.title }}
         </router-link>
       </template>
-      <button id="more-dropdown" class="d-flex align-items-center btn-transparent p-3">
+      <button id="more-dropdown" class="d-flex align-items-center hide-phone btn-transparent p-3">
         <div class="link-hover">{{$t('More')}}</div>
-        <div class="hide-phone ms-1 saooti-down"></div>
+        <div class="ms-1 saooti-down"></div>
       </button>
       <Popover
         target="more-dropdown"
