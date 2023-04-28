@@ -30,8 +30,8 @@
         v-if="isOuestFranceTag(tag)"
         :target="'tag-list-from-podcast-page'+index"
         :content="tag.substring(4,tag.length)"
-        relativeClass="page-element"
-        :isFixed="true"
+        relative-class="page-element"
+        :is-fixed="true"
       />
     </div>
   </div>

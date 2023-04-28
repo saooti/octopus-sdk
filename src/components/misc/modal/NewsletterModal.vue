@@ -8,7 +8,7 @@
     <template #body>
       <div class="d-flex justify-content-between">
         <!-- eslint-disable vue/no-v-html -->
-        <div v-html="newsletterHtml"/>
+        <div v-html="newsletterHtml" />
         <!-- eslint-enable -->
         <div class="d-flex flex-column flex-grow-1 ms-4">
           <h4 class="mb-3">

@@ -45,9 +45,14 @@
           {{ link.title }}
         </router-link>
       </template>
-      <button id="more-dropdown" class="d-flex align-items-center hide-phone btn-transparent p-3">
-        <div class="link-hover">{{$t('More')}}</div>
-        <div class="ms-1 saooti-down"></div>
+      <button
+        id="more-dropdown"
+        class="d-flex align-items-center hide-phone btn-transparent p-3"
+      >
+        <div class="link-hover">
+          {{ $t('More') }}
+        </div>
+        <div class="ms-1 saooti-down" />
       </button>
       <Popover
         target="more-dropdown"
@@ -80,7 +85,6 @@
       @click="onDisplayMenu(false)"
     />
     <div class="d-flex flex-column">
-      
       <div class="d-flex justify-content-end flex-nowrap">
         <HomeDropdown :is-education="isEducation" />
         <router-link

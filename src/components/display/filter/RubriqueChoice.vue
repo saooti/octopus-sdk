@@ -30,7 +30,7 @@
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
         :without-rubrique="true"
-        width="auto"
+        :no-deselect="true"
         @selected="onRubriqueSelected"
       />
     </template>

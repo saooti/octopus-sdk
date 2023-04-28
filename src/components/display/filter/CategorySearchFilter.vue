@@ -8,7 +8,7 @@
     />
     <CategoryChooser
       v-model:categorySelected="iabId"
-      width="auto"
+      width="100%"
       :defaultanswer="$t('No category filter')"
     />
   </div>

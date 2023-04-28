@@ -1,17 +1,17 @@
 <template>
-  <div class="d-flex align-items-center my-3">
+  <div class="d-flex-column align-items-center my-3">
     <div
       v-if="!isPodcastmaker && !filterOrgaId"
-      class="filter-organisation-chooser"
+      class="w-50-responsive pe-3 position-relative"
     >
       <OrganisationChooser
         :defaultanswer="$t('No organisation filter')"
-        :value="organisationId"
+        :orga-id-selected="organisationId"
         @selected="onOrganisationSelected"
       />
       <ClassicCheckbox
-        v-if="!!organisationId"
         v-model:textInit="keepOrganisation"
+        :class="!!organisationId? '' : 'invisible'"
         class="m-3"
         :label="$t('check this box if you want to keep this filter for the rest of your visit')"
         :display-label="false"
@@ -19,7 +19,7 @@
         @clickAction="onKeepOrganisation"
       />
       <div
-        v-if="showBubble"
+        :class="showBubble? '' : 'invisible'"
         class="filter-speech-bubble"
       >
         {{
@@ -31,7 +31,7 @@
     </div>
     <ClassicSearch
       :text-init="searchPattern"
-      class="d-flex align-items-center flex-grow-1"
+      class="w-50-responsive"
       :autofocus="true"
       id-search="productor-search-input"
       :label="searchText"
@@ -188,16 +188,6 @@ export default defineComponent({
     }
     to {
       opacity: 1;
-    }
-  }
-  .filter-organisation-chooser {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    margin-right: 10%;
-    position: relative;
-    @media (max-width: 500px) {
-      margin-right: 0;
     }
   }
 }

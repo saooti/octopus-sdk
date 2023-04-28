@@ -7,7 +7,10 @@
         <div class="page-element-title">
           <h1>{{ $t('Playlist') }}</h1>
         </div>
-        <div class="page-element-bg" :style="backgroundDisplay"></div>
+        <div
+          class="page-element-bg"
+          :style="backgroundDisplay"
+        />
       </div>
       <div class="d-flex flex-column page-element">
         <div class="module-box">

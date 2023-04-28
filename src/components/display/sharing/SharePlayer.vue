@@ -1,7 +1,9 @@
 <template>
   <div class="module-box overflow-visible">
     <div class="d-flex justify-content-between align-items-center">
-      <h2 class="big-h2 mb-3 height-40">{{ $t('Embed') }}</h2>
+      <h2 class="big-h2 mb-3 height-40">
+        {{ $t('Embed') }}
+      </h2>
       <div
         v-if="noAd && !isEducation"
         class="sticker"

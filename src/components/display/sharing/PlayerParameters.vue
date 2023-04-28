@@ -1,5 +1,7 @@
 <template>
-  <div class="h4 mb-2 mt-3">{{ $t('player parameters') }}</div>
+  <div class="h4 mb-2 mt-3">
+    {{ $t('player parameters') }}
+  </div>
   <template
     v-if="choseNumberEpisode"
   >

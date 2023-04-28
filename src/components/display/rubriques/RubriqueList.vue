@@ -39,6 +39,7 @@
       :title="$t('See more')"
     />
     <Popover
+      ref="popoverRubrique"
       target="rubriques-dropdown"
       :only-click="true"
       :is-fixed="true"
@@ -46,22 +47,20 @@
     >
       <RubriqueChooser
         v-if="hidenRubriques.length"
-        :multiple="false"
         :rubriquage-id="rubriquage.rubriquageId"
         :all-rubriques="hidenRubriques"
-        :cannot-be-undefined="true"
         class="mb-3"
         width="auto"
-        @selected="addFilter(index,$event)"
+        @selected="addFilterFromPopover($event)"
       />
-      <button
+      <!--  <button
         v-for="rubrique in hidenRubriques"
         :key="rubrique.rubriqueId"
         class="me-3 octopus-dropdown-item"
         @mousedown="addFilter(rubrique)"
       >
         {{ rubrique.name }}
-      </button>
+      </button> -->
     </Popover>
   </div>
 </template>
@@ -137,6 +136,10 @@ export default defineComponent({
       this.$nextTick(() => {
         this.resizeWindow();
       });
+    },
+    addFilterFromPopover(rubrique: Rubrique): void{
+      (this.$refs.popoverRubrique as InstanceType<typeof Popover>).clearClick();
+      this.addFilter(rubrique);
     },
     addFilter(rubrique: Rubrique): void{
       if(!this.rubriquage){ return ;}

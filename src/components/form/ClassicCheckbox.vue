@@ -72,7 +72,7 @@ export default defineComponent({
       bottom: 0;
       background-color: #ccc;
       transition: .4s;
-      border-radius: $octopus-borderradius;
+      border-radius: 1rem;
     }
     .slider:before {
       position: absolute;

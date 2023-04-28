@@ -1,7 +1,9 @@
 <template>
   <div class="module-box">
     <div class="d-flex align-items-center mb-3">
-      <h2 class="big-h2 mb-0">{{ $t('Share') }}</h2>
+      <h2 class="big-h2 mb-0">
+        {{ $t('Share') }}
+      </h2>
       <span
         v-if="authenticated"
         id="popover-share-help"
@@ -14,8 +16,8 @@
         target="popover-share-help"
         :title="$t('Help')"
         :content="$t('Share this page without edit and share blocks')"
-        relativeClass="page-element"
-        :isFixed="true"
+        relative-class="page-element"
+        :is-fixed="true"
       />
     </div>
     <div class="d-flex align-items-center justify-content-between">

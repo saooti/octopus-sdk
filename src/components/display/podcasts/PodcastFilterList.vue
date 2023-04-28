@@ -1,9 +1,11 @@
 <template>
   <div class="py-3">
-    <h2 class="big-h2 mb-2">{{ titleFilter }}</h2>
+    <h2 class="big-h2 mb-2">
+      {{ titleFilter }}
+    </h2>
     <div class="d-flex align-items-center flex-wrap mb-2">
       <div
-        class="d-flex align-items-center flex-grow-1 me-3"
+        class="w-50-responsive pe-3"
       >
         <CategoryChooser
           :defaultanswer="$t('No category filter')"
@@ -12,7 +14,7 @@
       </div>
       <ClassicSearch
         v-model:textInit="searchPattern"
-        class="flex-small-grow"
+        class="w-50-responsive"
         id-search="podcast-filter-search"
         :label="$t('Search')"
       />

@@ -93,7 +93,10 @@
               <!-- eslint-enable -->
             </div>
           </router-link>
-          <PodcastPlayBar  :podcast-id="p.podcastId" :duration="p.duration" />
+          <PodcastPlayBar
+            :podcast-id="p.podcastId"
+            :duration="p.duration"
+          />
         </div>
         <button
           v-if="

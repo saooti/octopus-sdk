@@ -30,9 +30,9 @@
           :to="{
             name: 'podcasts',
             query: { productor: filterOrgaId, 
-                    iabId: filterIab?.id,
-                    rubriquesId: this.rubriqueQueryParam },
-            }"
+                     iabId: filterIab?.id,
+                     rubriquesId: rubriqueQueryParam },
+          }"
           class="btn btn-primary align-self-center width-fit-content mt-5 m-auto"
         >
           {{

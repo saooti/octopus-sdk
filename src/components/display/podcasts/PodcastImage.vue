@@ -59,7 +59,9 @@
           <span class="paddle2" />
           <span class="paddle3" />
         </div>
-        <div class="ms-2">{{durationString}}</div>
+        <div class="ms-2">
+          {{ durationString }}
+        </div>
       </div>
       <div
         v-else

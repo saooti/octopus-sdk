@@ -18,3 +18,11 @@ export interface Organisation{
   soundcastId?: string;
   privacy?:string;
 }
+
+export function emptyOrgaData(defaultName: string): Organisation{
+  return {
+    imageUrl: "/img/emptypodcast.webp",
+    id: "",
+    name: defaultName
+  }
+}

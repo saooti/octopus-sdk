@@ -1,5 +1,8 @@
 <template>
-  <div class="paginate-fixed" :style="'bottom:'+playerHeight">
+  <div
+    class="paginate-fixed"
+    :style="'bottom:'+playerHeight"
+  >
     <div class="mx-2">
       {{ $t('Showing items number', {page: (page+1), totalPage: totalPage}) }}
     </div>

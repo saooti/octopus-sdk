@@ -11,7 +11,7 @@
     />
     <div
       v-if="isRubriquage"
-      class="d-flex flex-column mb-2"
+      class="d-flex flex-column mb-2 flex-grow-1"
     >
       <RubriqueChoice 
         v-for="(filter, index) in arrayFilter"
@@ -21,6 +21,7 @@
         :rubriquage-display="getRubriquage(index)"
         :rubrique-id-selected="filter.rubriqueId"
         :rubriquage-id-selected="filter.rubriquageId"
+        :no-deselect="true"
         @updateRubrique="updateRubrique"
         @updateRubriquage="updateRubriquage"
         @deleteRubriqueChoice="deleteRubriqueChoice(index)"

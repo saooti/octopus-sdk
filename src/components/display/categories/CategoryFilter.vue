@@ -4,8 +4,11 @@
     class="header-img flex-column justify-content-end"
     :style="backgroundDisplay"
   >
-    <h1>{{titleDisplay}}</h1>
-    <div v-show="isDisplay" class="d-flex flex-column justify-content-end">
+    <h1>{{ titleDisplay }}</h1>
+    <div
+      v-show="isDisplay"
+      class="d-flex flex-column justify-content-end"
+    >
       <ol
         v-if="filterIab || filterRubrique.length"
         class="octopus-breadcrumb d-flex align-items-center justify-content-center flex-wrap"
@@ -33,7 +36,10 @@
             href="#"
             @click="removeFilter(index,$event)"
           >{{ filter.nameRubriquage }}</a>
-          <div class="fw-bold" v-else>
+          <div
+            v-else
+            class="fw-bold"
+          >
             {{ filter.nameRubriquage }}
           </div>
           <div class="mx-1">
@@ -46,7 +52,7 @@
             :rubriquage-id="filter.rubriquageId"
             :rubrique-selected="filter.rubriqueId"
             :all-rubriques="getRubriques(filter.rubriquageId)"
-            :cannot-be-undefined="true"
+            :no-deselect="true"
             width="auto"
             @selected="onRubriqueSelected(index,$event)"
           />

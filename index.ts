@@ -35,7 +35,6 @@ export const getClassicModal = () => import("./src/components/misc/modal/Classic
 export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
 export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");
 export const getCategoryFilter = () => import("./src/components/display/categories/CategoryFilter.vue");
-export const getEmissionChooser = () => import("./src/components/display/emission/EmissionChooser.vue");
 export const getEmissionList = () => import("./src/components/display/emission/EmissionList.vue");
 export const getOrganisationChooser = () => import("./src/components/display/organisation/OrganisationChooser.vue");
 export const getPodcastFilterList = () => import("./src/components/display/podcasts/PodcastFilterList.vue");
@@ -64,7 +63,7 @@ export const getClassicSelect = () => import("./src/components/form/ClassicSelec
 export const getClassicDatePicker = () => import("./src/components/form/ClassicDatePicker.vue");
 export const getPaginate = () => import("./src/components/display/list/Paginate.vue");
 export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
-
+export const getClassicMultiselect = () => import("./src/components/form/ClassicMultiselect.vue");
 
 //mixins
 

@@ -1,11 +1,14 @@
 <template>
   <div class="page-box">
-    <template v-if="loaded && !error" >
+    <template v-if="loaded && !error">
       <div class="page-element-title-container">
         <div class="page-element-title">
           <h1>{{ $t('Emission') }}</h1>
         </div>
-        <div class="page-element-bg" :style="backgroundDisplay"></div>
+        <div
+          class="page-element-bg"
+          :style="backgroundDisplay"
+        />
       </div>
       <div class="d-flex flex-column page-element">
         <div class="module-box">

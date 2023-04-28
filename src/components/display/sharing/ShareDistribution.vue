@@ -1,6 +1,8 @@
 <template>
   <div class="module-box">
-    <h2 class="big-h2 mb-3">{{ $t('Distribute') }}</h2>
+    <h2 class="big-h2 mb-3">
+      {{ $t('Distribute') }}
+    </h2>
     <div class="sharing-distribution-container">
       {{ $t('Rss feed:') }}
       <div class="text-primary hide-small-screen text-break">

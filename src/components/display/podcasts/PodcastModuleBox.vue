@@ -29,7 +29,7 @@
             {{ date }}
           </div>
           <div>
-            {{ duration}}
+            {{ duration }}
           </div>
           <div
             v-if="isLiveReady"
@@ -50,7 +50,10 @@
         />
         <!-- eslint-enable -->
         <div class="my-3">
-          <ParticipantDescription class="mb-1" :participants="podcast.animators" />
+          <ParticipantDescription
+            class="mb-1"
+            :participants="podcast.animators"
+          />
           <div class="mb-1">
             {{ $t('Emission') + ' : ' }}
             <router-link
@@ -65,7 +68,10 @@
               {{ podcast.emission.name }}
             </router-link>
           </div>
-          <div class="mb-1" v-if="!isPodcastmaker">
+          <div
+            v-if="!isPodcastmaker"
+            class="mb-1"
+          >
             {{ $t('Producted by : ') }}
             <router-link
               :to="{
@@ -79,10 +85,16 @@
               {{ podcast.organisation.name }}
             </router-link>
           </div>
-          <div class="mb-1" v-if="''!==photoCredit">
+          <div
+            v-if="''!==photoCredit"
+            class="mb-1"
+          >
             {{ $t('Photo credits') + " : "+ photoCredit }}
           </div>
-          <div class="mb-1" v-if="''!==audioCredit">
+          <div
+            v-if="''!==audioCredit"
+            class="mb-1"
+          >
             {{ $t('Audio credits') + " : "+ audioCredit }}
           </div>
           <a

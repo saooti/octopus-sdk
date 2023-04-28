@@ -1,139 +1,87 @@
 <template>
-  <div
-    class="default-multiselect-width"
-    :style="{ width: width }"
-  >
-    <label
-      :for="id"
-      class="d-inline"
-      title="select rubrique"
-    />
-    <VueMultiselect
-      :id="id"
-      ref="multiselectRef"
-      v-model="model"
-      :disabled="isDisabled"
-      class="rubriqueChooser"
-      label="name"
-      track-by="rubriqueId"
-      :aria-expanded="false"
-      :placeholder="$t('Type string to filter by rubrics')"
-      :options="rubriques"
-      :multiple="multiple"
-      :searchable="true"
-      :loading="isLoading"
-      :internal-search="false"
-      :clear-on-select="false"
-      :close-on-select="true"
-      :options-limit="rubriqueLimit"
-      :max-height="600"
-      :show-no-results="true"
-      :hide-selected="true"
-      :show-labels="false"
-      @open="onOpen"
-      @search-change="onSearchRubrique"
-      @select="onRubriqueSelected"
-    >
-      <template #singleLabel="{ option }">
-        <div class="multiselect-octopus-proposition">
-          <span class="option__title">
-            {{ option.name }}
-          </span>
-        </div>
-      </template>
-      <template
-        #option="{ option }"
-      >
-        <div
-          v-if="undefined!==option"
-          class="multiselect-octopus-proposition"
-          :class="option.rubriqueId <= 0 ? 'text-primary' : ''"
-          :data-selenium="'rubric-chooser-' + seleniumFormat(option.name)"
-        >
-          <span class="option__title">{{ option.name }}</span>
-        </div>
-      </template>
-      <template #noOptions>
-        {{ $t('List is empty') }}
-      </template>
-      <template #noResult>
-        {{ $t('No elements found. Consider changing the search query.') }}
-      </template>
-      <template #caret>
-        <span class="saooti-down octopus-arrow-down-absolute" />
-      </template> 
-       <template #afterList="">
-        <div
-          v-if="rubriques.length > rubriqueLimit"
-          class="multiselect-remaining-elements"
-        >
-          {{
-            $t(
-              'Count more elements matched your query, please make a more specific search.',
-              { count: rubriques.length - rubriqueLimit }
-            )
-          }}
-        </div>
-      </template>
-    </VueMultiselect>
-  </div>
+  <ClassicMultiselect
+    :id="idClassicMultiselect"
+    ref="selectRubrique"
+    :option-chosen="model"
+    option-label="name"
+    :label="$t('By rubric')"
+    :placeholder="$t('Type string to filter by categories')"
+    :max-element="maxElement"
+    :multiple="multiple"
+    :min-search-length="1"
+    :width="width"
+    :in-modal="inModal"
+    :is-disabled="isDisabled"
+    :no-deselect="noDeselect"
+    @onSearch="onSearchRubrique"
+    @selected="onRubriqueSelected"
+  />
 </template>
 
 <script lang="ts">
 import selenium from '../../mixins/selenium';
-//@ts-ignore
-import VueMultiselect from 'vue-multiselect';
 import { Rubrique } from '@/stores/class/rubrique/rubrique';
-const getDefaultRubrique = (defaultName: string) => {
-  if ('' === defaultName){
-    return undefined;
-  }
-  return { name: defaultName, rubriqueId: 0 } as Rubrique;
-};
-
+import ClassicMultiselect from '../../form/ClassicMultiselect.vue';
 import { defineComponent } from 'vue'
 export default defineComponent({
   components: {
-    VueMultiselect,
+    ClassicMultiselect,
   },
   mixins:[selenium],
   props: {
-    width: { default: '100%', type: String },
     defaultanswer: { default: '', type: String },
-    rubriqueSelected: { default: undefined, type: Number },
+    width: { default: '100%', type: String },
     multiple: { default: false, type: Boolean },
-    rubriqueArray: { default: undefined, type: Object as ()=>Array<number> },
-    rubriquageId: { default: undefined, type: Number },
-    allRubriques: { default: () => [], type: Array as ()=> Array<Rubrique> },
     reset: { default: false, type: Boolean },
+    allRubriques: { default: () => [], type: Array as ()=> Array<Rubrique> },
+    rubriqueSelected: { default: undefined, type: Number },
+    rubriqueSelectedArray: { default: undefined, type: Object as ()=>Array<number> },
+    rubriquageId: { default: undefined, type: Number },
     withoutRubrique: { default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
-    cannotBeUndefined: {default: false, type: Boolean}
+    noDeselect: {default: false, type: Boolean},
+    inModal:{default: false, type: Boolean},
   },
-  emits: ['update:rubriqueSelected', 'selected'],
+  emits: ['update:rubriqueSelected', 'update:rubriqueSelectedArray', 'selected'],
 
   data() {
     return {
-      rubriqueLimit: 250 as number,
-      rubriques: [] as Array<Rubrique>,
-      rubrique: getDefaultRubrique(this.defaultanswer),
-      rubriqueForArray: [] as Array<Rubrique>,
-      isLoading: false as boolean,
+      maxElement: 250 as number,
+      rubrique: undefined as Rubrique|undefined,
+      rubriqueForArray: [] as Array<Rubrique>|undefined,
       withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as {name: string, rubriqueId:number},
     };
   },
   computed: {
-    id(): string {
+    idClassicMultiselect(): string {
       return this.rubriquageId? 'rubriqueChooser' + this.rubriquageId : 'rubriqueChooser';
+    },
+    getDefaultRubrique(): Rubrique|undefined{
+      if(''===this.defaultanswer){
+        return undefined;
+      }
+      return { name: this.defaultanswer, rubriqueId: 0 };
+    },
+    rubriques(): Array<Rubrique>{
+      let rubriques = this.allRubriques; 
+      if (!this.getDefaultRubrique) {
+        return rubriques;
+      }
+      if (this.withoutRubrique) {
+        rubriques.unshift(this.withoutItem);
+      }
+      rubriques.unshift(this.getDefaultRubrique);
+      
+      return rubriques;
     },
     model: {
       get(): Rubrique| Array<Rubrique>|undefined{
-        return false===this.multiple ? this.rubrique:this.rubriqueForArray;
+        return !this.multiple ? this.rubrique:this.rubriqueForArray;
       },
       set(value: Rubrique| Array<Rubrique>|undefined): void{
-        if(false===this.multiple){
+        if(!this.multiple){
           this.rubrique = (value as Rubrique|undefined);
-          return
+          return;
         }
         this.rubriqueForArray = (value as Array<Rubrique>);
       }
@@ -141,102 +89,60 @@ export default defineComponent({
     }
   },
   watch: {
-    model:{
-      deep: true,
-      handler(){
-        if(false===this.multiple){
-          return;
-        }
-        const selected: Array<Rubrique> = JSON.parse(JSON.stringify(this.model));
-        const idsArray: Array<number> = [];
-        selected.forEach((el: Rubrique) => {
-          if(el.rubriqueId){
-            idsArray.push(el.rubriqueId);
-          }
-        });
-        this.$emit('selected', idsArray);
-      }
-    },
     rubriqueSelected: {
-      deep: true,
+      immediate:true,
       handler(){
-        if (undefined !== this.rubriqueSelected) {
-          this.initRubriqueSelected(this.rubriqueSelected);
+        if (this.rubriqueSelected) {
+          this.initRubriqueSelected();
+        }else{
+          this.rubrique = this.getDefaultRubrique;
         }
       }
     },
     reset(): void {
-      this.rubrique = getDefaultRubrique(this.defaultanswer);
+      this.rubrique = this.getDefaultRubrique;
     }
   },
   mounted() {
-    if (undefined !== this.rubriqueSelected) {
-      this.initRubriqueSelected(this.rubriqueSelected);
-    }
-    if (undefined !== this.rubriqueArray) {
-      this.initRubriqueArray(this.rubriqueArray);
-    }
+    this.initRubriqueArray();
   },
   methods: {
-    initRubriquesArray(): Array<Rubrique>{
-      if ('' === this.defaultanswer) {
-        return this.allRubriques;
-      }
-      const rubriqueDefault = getDefaultRubrique(this.defaultanswer);
-      if(!rubriqueDefault){
-        return this.allRubriques;
-      }
-      if (this.withoutRubrique) {
-        return [
-          rubriqueDefault,
-          this.withoutItem,
-        ].concat(this.allRubriques);
-      }
-      return [rubriqueDefault].concat(this.allRubriques);
-    },
-    onOpen(): void {
-      (this.$refs.multiselectRef as VueMultiselect).$refs.search.setAttribute(
-        'autocomplete',
-        'off'
-      );
-      this.rubriques = this.initRubriquesArray();
-    },
-    onClose(): void {
-      if (this.rubrique || undefined !== this.rubriqueArray) return;
-      if(this.cannotBeUndefined && undefined !== this.rubriqueSelected){
-        this.initRubriqueSelected(this.rubriqueSelected);
-        return;
-      }
-      this.rubrique ='' !== this.defaultanswer? getDefaultRubrique(this.defaultanswer): undefined;
-      this.onRubriqueSelected(this.rubrique);
-    },
     onSearchRubrique(query: string): void {
-      this.isLoading = true;
-      this.rubriques = this.initRubriquesArray().filter((item: Rubrique) => {
-        return item.name.toUpperCase().includes(query.toUpperCase());
-      });
-      this.isLoading = false;
-    },
-    onRubriqueSelected(rubrique: Rubrique|undefined): void {
-      if (undefined !== this.rubriqueSelected && rubrique) {
-        this.$emit('update:rubriqueSelected', rubrique.rubriqueId);
+      let rubriques = this.rubriques;
+      if(query){
+        rubriques = rubriques.filter((item: Rubrique) => {
+          return item.name.toUpperCase().includes(query.toUpperCase());
+        });
       }
-      if (false === this.multiple) {
+      (this.$refs.selectRubrique as InstanceType<typeof ClassicMultiselect>).afterSearch(rubriques,rubriques.length);
+    },
+    onRubriqueSelected(rubrique: Rubrique| Array<Rubrique>): void {
+      if (undefined !== this.rubriqueSelected) {
+        this.$emit('update:rubriqueSelected', (rubrique as Rubrique).rubriqueId);
+      } else if (undefined !== this.categorySelectedArray) {
+        const idsArray: Array<number> = [];
+        (rubrique as Array<Rubrique>).forEach((el: Rubrique) => {
+          idsArray.push(el.rubriqueId??0);
+        });
+        this.$emit('update:rubriqueSelectedArray', idsArray);
+      }else{
         this.$emit('selected', rubrique);
       }
     },
-    initRubriqueSelected(val: number): void {
-      this.rubrique = this.initRubriquesArray().find((el: Rubrique) => {
-        return el.rubriqueId === val;
-      });
+    initRubriqueSelected(): void {
+      this.rubrique = this.rubriques.find((el: Rubrique) => {
+        return el.rubriqueId === this.rubriqueSelected;
+      }) ?? this.getDefaultRubrique;
     },
-    initRubriqueArray(val: number[]): void {
-      this.rubriqueForArray = [];
-      val.forEach((element: number) => {
-        const item = this.initRubriquesArray().find((el: Rubrique) => {
+
+    initRubriqueArray(): void {
+      if(!this.rubriqueForArray || !this.rubriqueSelectedArray){return; }
+      this.rubriqueForArray.length = 0;
+      this.rubriqueSelectedArray.forEach((element: number) => {
+        const item = this.rubriques.find((el: Rubrique) => {
           return el.rubriqueId === element;
         });
-        if(undefined!==item){
+        if(this.rubriqueForArray && item){
           this.rubriqueForArray.push(item);
         }
       });

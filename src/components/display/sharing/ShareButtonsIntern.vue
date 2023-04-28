@@ -1,6 +1,8 @@
 <template>
   <div class="d-flex flex-column me-2">
-    <div class="h4 mb-2">{{$t('Social networks')}}</div>
+    <div class="h4 mb-2">
+      {{ $t('Social networks') }}
+    </div>
     <div class="d-flex align-items-center">
       <template
         v-for="button in arrayShareButtons"
@@ -20,8 +22,13 @@
       </template>
     </div>
   </div>
-  <div class="d-flex flex-column me-2" v-if="podcast || emission ||playlist">
-    <div class="h4 mb-2">{{$t('Newsletter')}}</div>
+  <div
+    v-if="podcast || emission ||playlist"
+    class="d-flex flex-column me-2"
+  >
+    <div class="h4 mb-2">
+      {{ $t('Newsletter') }}
+    </div>
     <div class="d-flex align-items-center justify-content-center">
       <button
         :class="getClass()"
@@ -33,19 +40,23 @@
   </div>
 
   <div class="d-flex flex-column me-2">
-    <div class="h4 mb-2">{{$t('QR Code')}}</div>
+    <div class="h4 mb-2">
+      {{ $t('QR Code') }}
+    </div>
     <div class="d-flex align-items-center justify-content-center">
       <button
         :class="getClass()"
         :title="$t('Share QR Code')"
-        @click="qrCode = true"
         class="saooti-qrcode"
+        @click="qrCode = true"
       />
     </div>
   </div>
 
   <div class="d-flex flex-column me-2">
-    <div class="h4 mb-2">{{$t('Copy this page URL')}}</div>
+    <div class="h4 mb-2">
+      {{ $t('Copy this page URL') }}
+    </div>
     <div class="d-flex align-items-center justify-content-center">
       <button
         :class="getClass()"
@@ -56,8 +67,13 @@
     </div>
   </div>
 
-  <div class="d-flex flex-column me-2" v-if="''!==rssUrl && displayRss">
-    <div class="h4 mb-2">{{$t('Rss feed')}}</div>
+  <div
+    v-if="''!==rssUrl && displayRss"
+    class="d-flex flex-column me-2"
+  >
+    <div class="h4 mb-2">
+      {{ $t('Rss feed') }}
+    </div>
     <div class="d-flex align-items-center justify-content-center">
       <a
         rel="noopener"

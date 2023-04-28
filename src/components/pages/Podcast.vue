@@ -9,7 +9,10 @@
             :time-remaining="timeRemaining"
           />
         </div>
-        <div class="page-element-bg" :style="backgroundDisplay"></div>
+        <div
+          class="page-element-bg"
+          :style="backgroundDisplay"
+        />
       </div>
       <div class="d-flex flex-column page-element">
         <PodcastModuleBox
