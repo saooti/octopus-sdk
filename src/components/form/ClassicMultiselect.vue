@@ -163,12 +163,12 @@ import vSelect from "vue-select";
 @import "vue-select/dist/vue-select.css";
 :root{
   --vs-dropdown-z-index:1060;
-}
-.octopus-app{
   --vs-border-radius: 0.2rem;
   --vs-dropdown-option--active-bg: #ddd;
   --vs-dropdown-option--active-color: black;
   --vs-font-size:0.8rem;
+}
+.octopus-app{
   .vs__dropdown-option{
     white-space: initial;
   }
