@@ -1,21 +1,18 @@
 <template>
   <div class="d-flex align-items-center">
-    <label class="position-relative">
-      <select
-        v-model="rubriquageId"
-        class="ms-2 mb-0 c-hand"
-        @change="onRubriquageSelected"
+    <select
+      v-model="rubriquageId"
+      class="ms-2 mb-0 c-hand"
+      @change="onRubriquageSelected"
+    >
+      <option
+        v-for="rubriquage in rubriquageDisplay"
+        :key="rubriquage.rubriquageId"
+        :value="rubriquage.rubriquageId"
       >
-        <option
-          v-for="rubriquage in rubriquageDisplay"
-          :key="rubriquage.rubriquageId"
-          :value="rubriquage.rubriquageId"
-        >{{ rubriquage.title }}</option>
-      </select>
-      <div
-        class="saooti-down octopus-arrow-down-absolute"
-      />
-    </label>
+        {{ rubriquage.title }}
+      </option>
+    </select>
     <template v-if="rubriquageId">
       <div class="ms-3 flex-shrink-0">
         {{ $t('By rubric') }}
@@ -30,7 +27,6 @@
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
         :without-rubrique="true"
-        :no-deselect="true"
         @selected="onRubriqueSelected"
       />
     </template>

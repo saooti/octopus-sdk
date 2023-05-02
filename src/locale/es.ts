@@ -316,4 +316,5 @@ export default{
   "Newsletter":"Newsletter",
   "QR Code":"Código QR",
   "Rss feed": "RSS Feed",
+  "Multiselect max options":"Máximo de {max} opciones simultáneas. Primero elimine una opción para poder seleccionar una nueva",
 }

@@ -316,4 +316,5 @@ export default{
   "Newsletter":"Newsletter",
   "QR Code":"koda QR",
   "Rss feed": "Rss vir",
+  "Multiselect max options":"Največ {max} sočasnih možnosti. Najprej odstranite možnost, da boste lahko izbrali novo",
 }

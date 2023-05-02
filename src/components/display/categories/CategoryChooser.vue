@@ -12,6 +12,7 @@
     :min-search-length="1"
     :width="width"
     :is-disabled="isDisabled"
+    :no-deselect="noDeselect"
     @onSearch="onSearchCategory"
     @selected="onCategorySelected"
   />
@@ -37,6 +38,7 @@ export default defineComponent({
     categorySelected: { default: undefined, type: Number },
     categorySelectedArray: { default: undefined, type: Array as ()=>Array<number> },
     inModal:{default: false, type: Boolean},
+    noDeselect: {default: true, type: Boolean},
   },
   emits: ['update:categorySelected','update:categorySelectedArray','selected'],
   data() {

@@ -9,7 +9,9 @@
     :width="width"
     :in-modal="inModal"
     :option-chosen="organisationChosen"
-    :option-custom-templating="isImage"
+    option-custom-templating="optionTemplating"
+    option-selected-custom-templating="optionTemplating"
+    :no-deselect="noDeselect"
     @onSearch="onSearchOrganisation"
     @selected="$emit('selected', $event)"
   >
@@ -58,6 +60,7 @@ export default defineComponent({
     width: { default: '100%', type: String },
     isImage: { default: true, type: Boolean },
     inModal:{default: false, type: Boolean},
+    noDeselect: {default: true, type: Boolean},
   },
   emits: ['selected'],
   data() {
@@ -95,7 +98,7 @@ export default defineComponent({
     },
   },
 
-  async created() {
+  created() {
     this.organisationChosen = this.getDefaultOrganisation;
   },
   methods: {

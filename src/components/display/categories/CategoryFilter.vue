@@ -52,7 +52,6 @@
             :rubriquage-id="filter.rubriquageId"
             :rubrique-selected="filter.rubriqueId"
             :all-rubriques="getRubriques(filter.rubriquageId)"
-            :no-deselect="true"
             width="auto"
             @selected="onRubriqueSelected(index,$event)"
           />

@@ -39,7 +39,7 @@ export default defineComponent({
     rubriquageId: { default: undefined, type: Number },
     withoutRubrique: { default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
-    noDeselect: {default: false, type: Boolean},
+    noDeselect: {default: true, type: Boolean},
     inModal:{default: false, type: Boolean},
   },
   emits: ['update:rubriqueSelected', 'update:rubriqueSelectedArray', 'selected'],
