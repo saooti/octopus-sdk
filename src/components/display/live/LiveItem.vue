@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="live"
-    class="d-flex w-100"
+    class="d-flex-column live-item-container w-100"
   >
     <router-link
       class="live-date-box"
@@ -29,7 +29,7 @@
       }"
     >
       <PodcastImage
-        class="me-3"
+        class="me-3 flex-shrink-0"
         :podcast="live"
         :hide-play="false"
         :playing-podcast="false"
@@ -37,7 +37,7 @@
         :is-animator-live="organisationRight"
       />
     </router-link>
-    <div class="d-flex flex-column live-special-width">
+    <div class="d-flex flex-column">
       <router-link
         class="text-uppercase fw-bold text-truncate"
         :to="{
@@ -246,36 +246,38 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app{
-.live-date-box {
-  width: 200px;
-  display: flex;
-  flex-shrink: 0;
-  flex-direction: column;
-}
-.font-size-smaller {
-  font-size: smaller;
-}
-.live-description-container {
-  overflow: hidden;
-  margin-top: 0.5em;
-  word-break: break-word;
-  max-height: 6rem;
-  position: relative;
-  &.after-live-description:after {
-    content: '...';
-    position: absolute;
-    padding-left: 1rem;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: bolder;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f3f3f3 40%);
+  .live-item-container{
+    @media (max-width: 960px) {
+      align-items: center;
+      justify-content: center;
+    }
   }
-}
-.live-special-width {
-  width: 0;
-  flex-grow: 1;
-}
+  .live-date-box {
+    width: 200px;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+  }
+  .font-size-smaller {
+    font-size: smaller;
+  }
+  .live-description-container {
+    overflow: hidden;
+    margin-top: 0.5em;
+    word-break: break-word;
+    max-height: 6rem;
+    position: relative;
+    &.after-live-description:after {
+      content: '...';
+      position: absolute;
+      padding-left: 1rem;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: bolder;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f3f3f3 40%);
+    }
+  }
 }
 </style>
