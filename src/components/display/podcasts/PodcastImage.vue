@@ -372,8 +372,8 @@ export default defineComponent({
     background-color: #ffd663;
     border-radius: 50%;
     position: absolute;
-    right: 4.5rem;
-    top: 6rem;
+    left: 4.5rem;
+    bottom: 4rem;
     font-size: 0.9rem;
     font-weight: bold;
     display: flex;
