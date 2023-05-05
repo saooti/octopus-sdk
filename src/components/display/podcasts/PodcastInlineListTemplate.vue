@@ -71,6 +71,7 @@ import { RouteLocationRaw } from 'vue-router';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
 import { Rubrique } from '@/stores/class/rubrique/rubrique';
+import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
 export default defineComponent({
   name: 'PodcastInlineListTemplate',
   
@@ -150,13 +151,18 @@ export default defineComponent({
         nameRubrique: ''
       };
       if(this.filterRubriquage.length){
-        const rubriqueChosen =  this.filterRubriquage[this.rubriqueId.length - 1].rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
-        filterToAdd = {
-          rubriquageId: this.filterRubriquage[this.rubriqueId.length - 1].rubriquageId, 
-          rubriqueId: rubriqueChosenId, 
-          nameRubriquage:  this.filterRubriquage[this.rubriqueId.length - 1].title,
-          nameRubrique: rubriqueChosen.name
-        };
+        this.filterRubriquage.forEach((element:Rubriquage) => {
+          const rubriqueChosen =  element.rubriques.find((element: Rubrique) => element.rubriqueId === rubriqueChosenId);
+          if(rubriqueChosen){
+            filterToAdd = {
+              rubriquageId: element.rubriquageId??0, 
+              rubriqueId: rubriqueChosenId, 
+              nameRubriquage:  element.title,
+              nameRubrique: rubriqueChosen.name
+            };
+            return;
+          }
+        });
       }
       const newFilter: Array<RubriquageFilter> = Array.from(this.filterRubrique);
       newFilter.push(filterToAdd);

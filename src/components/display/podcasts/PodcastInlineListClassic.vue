@@ -156,19 +156,25 @@ export default defineComponent({
   },
   methods: {
     async fetchRecommendations(): Promise<void>{
-      const podcastIdsArray = await octopusApi.fetchDataPublicWithParams<Array<number>>(13, 'get_predicts',{
-        reco: this.podcastId,
-        n_neightbors: 5,
-      }); 
-      for (let podcastIdReco of podcastIdsArray) {
-        try {
-          const entirePodcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+podcastIdReco); 
-          this.allPodcasts.push(entirePodcast);
-        } catch {
-          //If doesn't exist, do nothing
+      try {
+        const podcastIdsArray = await octopusApi.fetchDataPublicWithParams<Array<number>>(13, 'get_predicts',{
+          reco: this.podcastId,
+          n_neightbors: 5,
+        }); 
+        for (let podcastIdReco of podcastIdsArray) {
+          try {
+            const entirePodcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+podcastIdReco); 
+            this.allPodcasts.push(entirePodcast);
+          } catch {
+            //If doesn't exist, do nothing
+          }
         }
+        this.totalCount = podcastIdsArray.length;
+        this.loading = false;
+      } catch {
+        this.allPodcasts=[];
+        this.totalCount = 0;
       }
-      this.totalCount = podcastIdsArray.length;
       this.loading = false;
     },
     async fetchNext(): Promise<void> {
