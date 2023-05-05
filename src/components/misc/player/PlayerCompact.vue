@@ -137,6 +137,7 @@ export default defineComponent({
     flex-shrink: 1;
     overflow: hidden;
     font-size: 0.8rem;
+    padding: 0 0.5rem;
   }
   .player-image {
     border-radius: $octopus-borderradius;

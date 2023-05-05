@@ -11,6 +11,16 @@
       aria-valuemax="100"
       :style="'width: ' + secondaryProgress + '%'"
     />
+    <template v-if="playerMedia">
+      <div
+        class="octopus-progress-bar bg-complementary"
+        :style="{'width': + mediaCueInPercent + '%'}"
+      />
+      <div
+        class="octopus-progress-bar end-0 bg-complementary"
+        :style="{'width': + 100- mediaCueOutPercent + '%'}"
+      />
+    </template>
     <div
       class="octopus-progress-bar bg-primary"
       role="progressbar"
@@ -19,6 +29,16 @@
       aria-valuemax="100"
       :style="'width: ' + mainProgress + '%'"
     />
+    <template v-if="playerMedia">
+      <div
+        class="octopus-progress-bar octopus-progress-bar-duration bg-complementary"
+        :style="{'left': + mediaCueInPercent + '%'}"
+      />
+      <div
+        class="octopus-progress-bar end-0 octopus-progress-bar-duration bg-complementary"
+        :style="{'right': + 100- mediaCueOutPercent + '%'}"
+      />
+    </template>
     <div
       v-if="alertBar"
       class="octopus-progress-bar octopus-progress-bar-duration bg-danger"
@@ -33,6 +53,8 @@
 </template>
 
 <script lang="ts">
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'ProgressBar',
@@ -42,6 +64,33 @@ export default defineComponent({
     secondaryProgress: { default: 0, type: Number},
     isProgressCursor: { default: false, type: Boolean},
   },
+  data() {
+    return {
+      mediaCueInPercent: 0 as number,
+      mediaCueOutPercent: 100 as number,
+    };
+  },
+  computed:{
+    ...mapState(usePlayerStore, ['playerMedia']),
+  },
+  watch:{
+    playerMedia: {
+      deep: true,
+      immediate:true,
+      handler(){
+        if(this.playerMedia){
+          this.mediaCueInPercent = this.timeMediaToPercent(this.playerMedia.cueIn??0);
+          this.mediaCueOutPercent = this.timeMediaToPercent(this.playerMedia.cueOut??null);
+        }
+      }
+    },
+  },
+  methods:{
+    timeMediaToPercent(value: number|null):number{
+      if(null===value || !this.playerMedia){return 100;}
+      return (value*100)/(this.playerMedia?.duration??1);
+    },
+  }
 })
 </script>
 
@@ -90,6 +139,9 @@ export default defineComponent({
       background: black;
       align-self: center;
       position: absolute;
+    }
+    .end-0{
+      right: 0;
     }
   }
 }

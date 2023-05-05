@@ -15,6 +15,7 @@
         @durationChange="onTimeUpdate"
         @error="onError"
         @seeked="onSeeked"
+        @pause="onPause"
       />
       <PlayerCompact
         v-if="!playerLargeVersion"
@@ -93,13 +94,18 @@ export default defineComponent({
   },
   
   methods: {
-    ...mapActions(usePlayerStore, ['playerPlay', 'playerUpdateLargeVersion']),
+    ...mapActions(usePlayerStore, ['playerPlay', 'playerUpdateLargeVersion', 'playerChangeStatus']),
     onHidden(): void {
       if (this.forceHide) {
         this.playerPlay();
         this.forceHide = false;
       }
     },
+    onPause(){
+      if("PLAYING"===this.playerStatus){
+        this.playerChangeStatus(true);
+      }
+    }
   },
 })
 </script>
