@@ -13,10 +13,12 @@
     />
     <template v-if="playerMedia">
       <div
+        v-if="mediaCueInPercent > 0"
         class="octopus-progress-bar bg-complementary"
         :style="{'width': + mediaCueInPercent + '%'}"
       />
       <div
+        v-if="mediaCueOutPercent < 100"
         class="octopus-progress-bar end-0 bg-complementary"
         :style="{'width': + 100- mediaCueOutPercent + '%'}"
       />
@@ -31,10 +33,12 @@
     />
     <template v-if="playerMedia">
       <div
+        v-if="mediaCueInPercent > 0"
         class="octopus-progress-bar octopus-progress-bar-duration bg-complementary"
         :style="{'left': + mediaCueInPercent + '%'}"
       />
       <div
+        v-if="mediaCueOutPercent < 100"
         class="octopus-progress-bar end-0 octopus-progress-bar-duration bg-complementary"
         :style="{'right': + 100- mediaCueOutPercent + '%'}"
       />
