@@ -6,6 +6,7 @@ import { usePlayerStore } from '@/stores/PlayerStore';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
 import octopusApi from '@saooti/octopus-api';
+import dayjs from 'dayjs';
 export const playerDisplay = defineComponent({
 	props: {
     hlsReady: { default: false , type: Boolean},
@@ -91,7 +92,14 @@ export const playerDisplay = defineComponent({
     ...mapActions(usePlayerStore, ['playerMetadata', 'playerChangeStatus']),
     async fetchRadioMetadata(): Promise<void>{
       const metadata = await octopusApi.fetchData<MetadataRadio>(14, 'player/playing/'+this.playerRadio?.canalId);
-      this.playerMetadata(metadata.currently);
+      const arrayMetadata = metadata.previously;
+      arrayMetadata.unshift(metadata.currently);
+      for(let i = 0; i < arrayMetadata.length; i++){
+        if(dayjs().valueOf()-29000 > dayjs(arrayMetadata[i].startDate).valueOf()){
+          this.playerMetadata(arrayMetadata[i]);
+          return;
+        }
+      }
     },
     addKeyboardControl(event: KeyboardEvent): void{
       if(!event || null ===event){return;}
