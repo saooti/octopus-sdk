@@ -105,7 +105,7 @@ export default defineComponent({
       return this.playlistRadio ? this.$t('Mix of episodes'):this.$t('Playlist');
     },
     playlistRadio(): boolean{
-      return "AMBIANCE"===this.playlist?.ambiance || "PROGRAMMED"===this.playlist?.ambiance
+      return "AMBIANCE"===this.playlist?.ambianceType || "AMBIANCE_PROGRAMMED"===this.playlist?.ambianceType
     },
     name(): string {
       return this.playlist?.title ??'';

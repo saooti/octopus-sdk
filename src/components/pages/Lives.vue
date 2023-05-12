@@ -10,9 +10,9 @@
       />
     </template>
     <template v-if="filterOrgaId || organisationId">
-     <!--  <LiveList
+      <LiveList
         :organisation-id="organisationId"
-      /> -->
+      />
       <RadioList
         :organisation-id="organisationId"
       />

@@ -20,7 +20,7 @@
       />
       <SwiperList
         v-if="!loading"
-        :listObject="allPodcasts"
+        :list-object="allPodcasts"
       >
         <template #octopusSlide="{option}">
           <PodcastItem

@@ -2,7 +2,7 @@
   <PodcastItem
     v-if="live && 0!==live.podcastId"
     :podcast="live"
-    :fetchConference="fetchConference"
+    :fetch-conference="fetchConference"
   />
 </template>
 

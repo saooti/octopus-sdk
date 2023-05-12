@@ -32,9 +32,9 @@
             :organisation-id="organisationId"
           />
           <SharePlayerColors
-            class="mt-3"
             v-model:color="color"
             v-model:theme="theme"
+            class="mt-3"
           />
           <ClassicCheckbox
             v-if="isPodcastNotVisible || playlist"

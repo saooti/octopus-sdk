@@ -10,25 +10,30 @@
           :style="backgroundDisplay"
         />
       </div>
-      <div v-if="radio" class="d-flex flex-column page-element">
+      <div
+        v-if="radio"
+        class="d-flex flex-column page-element"
+      >
         <div class="module-box">
           <div class="mb-5 descriptionText">
-            <RadioImage :radio="radio"/>
+            <RadioImage :radio="radio" />
             <h2>{{ radio.name }}</h2>
-            <div v-if="radio.description">{{radio.description}}</div>
+            <div v-if="radio.description">
+              {{ radio.description }}
+            </div>
           </div>
-          <RadioCurrently :radio="radio"/>
+          <RadioCurrently :radio="radio" />
           <EditBoxRadio
             v-if="editRight"
             :radio="radio"
           />
         </div>
-         <SharePlayerRadio
+        <SharePlayerRadio
           v-if="authenticated"
           :canal="radio"
           :organisation-id="myOrganisationId"
         />
-        <ShareButtons/>
+        <ShareButtons />
       </div>
     </template>
     <ClassicLoading

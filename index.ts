@@ -13,6 +13,7 @@ export const getHome = () => import("./src/components/pages/Home.vue");
 export const getCategory = () => import("./src/components/pages/Category.vue");
 export const getRubrique = () => import("./src/components/pages/Rubrique.vue");
 export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
+export const getRadio = () => import("./src/components/pages/Radio.vue");
 
 //Misc
 export const getAccordion = () => import("./src/components/misc/Accordion.vue");

@@ -4,7 +4,9 @@
     class="d-flex flex-column align-items-start mt-3"
   >
     <div class="d-flex justify-content-between amlign-items-center">
-      <h2 class="mb-0 big-h2 mb-3">{{ $t('Live') }}</h2>
+      <h2 class="mb-0 big-h2 mb-3">
+        {{ $t('Live') }}
+      </h2>
       <router-link
         v-if="liveRight && !isPodcastmaker"
         to="/main/priv/edit/live"
@@ -19,7 +21,7 @@
       v-model:textInit="selectedStatus"
       id-select="status-live-chooser-select"
       :label="$t('Selection by status')"
-      :displayLabel="false"
+      :display-label="false"
       :options="statusArraySelect"
       class="mb-3"
     />
@@ -30,7 +32,7 @@
     <template v-if="lives.length">
       <SwiperList
         v-if="!loading"
-        :listObject="lives"
+        :list-object="lives"
       >
         <template #octopusSlide="{option, index}">
           <LiveItem

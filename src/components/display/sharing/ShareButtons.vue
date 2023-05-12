@@ -41,7 +41,6 @@ import Popover from '../../misc/Popover.vue';
 import ShareButtonsIntern from './ShareButtonsIntern.vue';
 import { defineComponent } from 'vue';
 import { Playlist } from '@/stores/class/general/playlist';
-import { Canal } from '@/stores/class/radio/canal';
 export default defineComponent({
   components: {
     ShareButtonsIntern,

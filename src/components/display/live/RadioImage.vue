@@ -12,7 +12,7 @@
       class="image-play-button"
       @click="playRadio"
     >
-    <div class="icon-container">
+      <div class="icon-container">
         <div
           v-if="!playingRadio"
           :title="$t('Play')"
@@ -29,7 +29,7 @@
         <div class="ms-2">
           {{ playText }}
         </div>
-    </div>
+      </div>
     </button>
   </div>
 </template>

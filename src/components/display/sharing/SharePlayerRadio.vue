@@ -3,16 +3,16 @@
     <h2 class="big-h2 mb-3 height-40">
       {{ $t('Embed') }}
     </h2>
-      <div class="d-flex">
-        <iframe
-          id="miniplayerIframeRadio"
-          title="miniplayer"
-          :src="iFrameSrc"
-          width="100%"
-          height="140px"
-          class="max-iframe mx-3 flex-grow-1"
-        />
-        <div class="d-flex flex-column flex-grow-1 align-items-center">
+    <div class="d-flex">
+      <iframe
+        id="miniplayerIframeRadio"
+        title="miniplayer"
+        :src="iFrameSrc"
+        width="100%"
+        height="140px"
+        class="max-iframe mx-3 flex-grow-1"
+      />
+      <div class="d-flex flex-column flex-grow-1 align-items-center">
         <SharePlayerColors
           v-model:color="color"
           v-model:theme="theme"

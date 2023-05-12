@@ -10,7 +10,11 @@
       v-for="(obj, index) in listObject"
       :key="obj"
     >
-      <slot name="octopusSlide" :option="obj" :index="index"/>
+      <slot
+        name="octopusSlide"
+        :option="obj"
+        :index="index"
+      />
     </swiper-slide>
   </swiper>
 </template>

@@ -1,6 +1,11 @@
 <template>
   <div class="d-flex align-items-center">
-    <div v-if="currentlyPlayingString.length || podcastRadio" class="me-2 fw-bold">{{$t('Currently') +' : '}}</div>
+    <div
+      v-if="currentlyPlayingString.length || podcastRadio"
+      class="me-2 fw-bold"
+    >
+      {{ $t('Currently') +' : ' }}
+    </div>
     <router-link 
       v-if="podcastRadio"
       class="d-flex align-items-center"
@@ -8,18 +13,21 @@
         name: 'podcast',
         params: { podcastId: podcastRadio.podcastId },
         query: { productor: filterOrgaId },
-      }">
-        <img
-          v-lazy="proxyImageUrl(podcastRadio.imageUrl, '80')"
-          width="80"
-          height="80"
-          class="small-img-box"
-          :title="$t('Episode name image', {name:podcastRadio.title})"
-          :alt="$t('Episode name image', {name:podcastRadio.title})"
-        >
-        <div>{{podcastRadio.title}}</div>
-      </router-link>
-    <div v-else-if="currentlyPlayingString.length">{{currentlyPlayingString}}</div>
+      }"
+    >
+      <img
+        v-lazy="proxyImageUrl(podcastRadio.imageUrl, '80')"
+        width="80"
+        height="80"
+        class="small-img-box"
+        :title="$t('Episode name image', {name:podcastRadio.title})"
+        :alt="$t('Episode name image', {name:podcastRadio.title})"
+      >
+      <div>{{ podcastRadio.title }}</div>
+    </router-link>
+    <div v-else-if="currentlyPlayingString.length">
+      {{ currentlyPlayingString }}
+    </div>
   </div>
 </template>
 

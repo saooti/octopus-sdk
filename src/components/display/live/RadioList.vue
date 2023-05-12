@@ -3,7 +3,9 @@
     v-if="(filterOrgaId || organisationId) && radio.length"
     class="d-flex flex-column align-items-start mt-3"
   >
-    <h2 class="mb-0 big-h2 mb-3">{{ $t('Radio') }}</h2>
+    <h2 class="mb-0 big-h2 mb-3">
+      {{ $t('Radio') }}
+    </h2>
     <template v-if="radio.length">
       <RadioItem
         v-for="radioItem in radio"
@@ -25,7 +27,7 @@ import { Canal } from '@/stores/class/radio/canal';
 import { defineComponent } from 'vue'
 import { AxiosError } from 'axios';
 export default defineComponent({
-  name: 'ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c',
+  name: 'Ecbd98d979bd4312Ad5eFc7c1c4a191c',
   components: {
     RadioItem,
   },

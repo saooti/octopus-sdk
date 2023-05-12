@@ -20,8 +20,6 @@ export const fetchRadioData = defineComponent({
       for(let i = 0; i < arrayMetadata.length; i++){
         if(dayjs().valueOf()-29000 > dayjs(arrayMetadata[i].startDate).valueOf()){
           if(previousTitle !== arrayMetadata[i].title){
-            //todo 
-            arrayMetadata[i].podcastId = 98619;
             if(arrayMetadata[i].podcastId){
               const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+arrayMetadata[i].podcastId); 
               callbackMetadata(arrayMetadata[i], data);

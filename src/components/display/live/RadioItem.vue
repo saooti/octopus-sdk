@@ -1,6 +1,9 @@
 <template>
-  <div v-if="radio" class="d-flex border w-100 p-3">
-    <RadioImage :radio="radio"/>
+  <div
+    v-if="radio"
+    class="d-flex border w-100 p-3"
+  >
+    <RadioImage :radio="radio" />
     <router-link
       :to="{
         name: 'radio',
@@ -9,9 +12,16 @@
       }"
       class="text-dark emission-item-text"
     >
-      <div class="emission-name mb-2">{{ radio.name }}</div>
-      <div v-if="radio.description" class="ten-line-clamp">{{ radio.description }}</div>
-      <RadioCurrently :radio="radio"/>
+      <div class="emission-name mb-2">
+        {{ radio.name }}
+      </div>
+      <div
+        v-if="radio.description"
+        class="ten-line-clamp"
+      >
+        {{ radio.description }}
+      </div>
+      <RadioCurrently :radio="radio" />
     </router-link>
   </div>
 </template>

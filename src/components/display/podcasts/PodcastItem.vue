@@ -12,7 +12,7 @@
       :hide-play="!podcastItemDescription || (podcastItemDescription && (!hoverDesc || !description))"
       :display-description="0!==description.length && podcastItemDescription"
       :arrow-direction="arrowDirection"
-      :fetchConference="fetchConference"
+      :fetch-conference="fetchConference"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
