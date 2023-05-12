@@ -28,6 +28,9 @@
             :radio="radio"
           />
         </div>
+        <RadioPlanning
+          :radio="radio"
+        />
         <SharePlayerRadio
           v-if="authenticated"
           :canal="radio"
@@ -59,6 +62,7 @@ const ShareButtons = defineAsyncComponent(() => import('../display/sharing/Share
 const EditBoxRadio = defineAsyncComponent(() => import('@/components/display/edit/EditBoxRadio.vue'));
 const RadioCurrently = defineAsyncComponent(() => import('../display/live/RadioCurrently.vue'));
 const RadioImage = defineAsyncComponent(() => import('../display/live/RadioImage.vue'));
+const RadioPlanning = defineAsyncComponent(() => import('../display/live/RadioPlanning.vue'));
 export default defineComponent({
   components: {
     SharePlayerRadio,
@@ -66,7 +70,8 @@ export default defineComponent({
     EditBoxRadio,
     ClassicLoading,
     RadioCurrently,
-    RadioImage
+    RadioImage,
+    RadioPlanning
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {

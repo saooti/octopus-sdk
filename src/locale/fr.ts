@@ -329,4 +329,6 @@ export default{
   'In the process of being published': 'En cours de publication',
   "Radio":"Radio",
   "Currently":"Actuellement",
+
+  "Program":"Programme",
 };
