@@ -331,4 +331,5 @@ export default{
   "Currently":"Actuellement",
 
   "Program":"Programme",
+  "No programming":"Aucune programmation",
 };

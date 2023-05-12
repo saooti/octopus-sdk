@@ -315,7 +315,7 @@ export default defineComponent({
     background-color: rgba(255, 255, 255, 0.5);
   }
   
-  .play-button-error-icon {
+  .image-play-button .play-button-error-icon {
     background: #0000009d !important;
     cursor: default !important;
     align-self: center;

@@ -1,60 +1,105 @@
 <template>
   <div class="module-box">
     <h2 class="big-h2 mb-3 height-40">{{ $t('Program') }}</h2>
-    <div class="d-flex align-items-center w-100">
-      {{daySelected}}
-      <button
-        v-for="day in arrayDays"
-        :key="day.date"
-        class="d-flex flex-column align-items-center flex-grow-1"
-        :class="day.date==daySelected?'light-primary-bg':''"
-      >
-      {{day.date}}
-        <span class="text-capitalize">{{day.dayOfWeek}}</span>
-        <span>{{day.title}}</span>
-      </button>
+    <div class="border">
+      <div class="d-flex align-items-center w-100">
+        <button
+          v-for="day in arrayDays"
+          :key="day.date"
+          class="d-flex flex-column align-items-center flex-grow-1"
+          :class="day.date==daySelected?'bg-primary text-white':''"
+          @click="changeDate(day.date)"
+        >
+          <span class="text-capitalize">{{day.dayOfWeek}}</span>
+          <span>{{day.title}}</span>
+        </button>
+      </div>
+      <div class="d-flex flex-column p-3">
+        <ClassicLoading
+          :loading-text="loading?$t('Loading content ...'):undefined"
+          :error-text="error?$t(`Error`):undefined"
+        />
+        <template v-if="!loading && !error">
+          <div v-if="!planning[daySelected].length" class="text-center">{{$t('No programming')}}</div>
+          <div 
+            v-else
+            v-for="planningItem in planning[daySelected]"
+            :key="planningItem.occurrence.occurrenceId"
+            class="d-flex align-items-center mb-3"
+          >
+            <div class="program-item-date fw-bold flex-shrink-0">{{dateDisplay(planningItem.occurrence.startDate)}}</div>
+            <component
+              :is="planningItem.podcast.availability.visibility ? 'router-link' : 'div'"
+              class="d-flex align-items-center text-dark"
+              :to="{
+                name: 'podcast',
+                params: { podcastId: planningItem.podcast.podcastId },
+                query: { productor: filterOrgaId },
+              }"
+            >
+              <img
+                v-lazy="proxyImageUrl(planningItem.podcast.imageUrl, '150')"
+                width="150"
+                height="150"
+                class="m-2"
+                :title="$t('Episode name image', {name:planningItem.podcast.title})"
+                :alt="$t('Episode name image', {name:planningItem.podcast.title})"
+              >
+              <div class="d-flex flex-column">
+                <div class="flex-grow-1 text-truncate mb-2">{{planningItem.occurrence.podcastData.title}}</div>
+                <ParticipantDescription
+                  :participants="planningItem.podcast.animators"
+                />
+              </div>
+            </component>
+           
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { useFilterStore } from '@/stores/FilterStore';
+import { mapState } from 'pinia';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import octopusApi from '@saooti/octopus-api';
+import imageProxy from '../../mixins/imageProxy';
+import ParticipantDescription from '../podcasts/ParticipantDescription.vue';
+import ClassicLoading from '../../form/ClassicLoading.vue';
 import { defineComponent } from 'vue';
 import { Canal } from '@/stores/class/radio/canal';
 import { PlanningOccurrence } from '@/stores/class/radio/recurrence';
+import { Podcast } from '@/stores/class/general/podcast';
 export default defineComponent({
   name: 'RadioPlanning',
 
   components: {
+    ClassicLoading,
+    ParticipantDescription
   },
 
   props: {
     radio: { default: undefined, type: Object as ()=>Canal},
   },
 
+  mixins: [imageProxy],
+
   data() {
     return {
-      occurrences: [] as Array<PlanningOccurrence>,
-      daySelected: dayjs().toDate(),
+      planning: {} as {[key: number]:Array<{podcast: Podcast, occurrence: PlanningOccurrence}>},
+      daySelected: dayjs().valueOf(),
+      arrayDays: [] as Array<{title: string, date: number, dayOfWeek: string }>,
+      loading: true as boolean,
+      error: false as boolean,
     };
   },
 
   computed:{
-    arrayDays(): Array<{title: string, date: Date, dayOfWeek: string }>{
-      let days = [];
-      for (let index = 7; index > 0; index--) {
-        const dayToAdd = dayjs().subtract(index, 'day');
-        days.push(this.constructDateObject(dayToAdd));
-      }
-      for (let index = 0; index < 3; index++) {
-        const dayToAdd = dayjs().add(index, 'day');
-        days.push(this.constructDateObject(dayToAdd));
-      }
-      return days;
-    },
+    ...mapState(useFilterStore, ['filterOrgaId']),
     startOfDay(): number{
       return dayjs(this.daySelected).utcOffset(0).startOf('date').valueOf();
     },
@@ -64,21 +109,56 @@ export default defineComponent({
   },
 
   mounted(){
+    this.createArrayDays();
     this.fetchOccurrences();
   },
   
   methods: {
-    async fetchOccurrences(): Promise<void>{
-      const param = {canalId: this.radio?.id,from: this.startOfDay,to: this.endOfDay};
-      this.occurrences = await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>( 14, 'planning/occurrence/list',param);
+    createArrayDays(){
+      for (let index = -7; index < 3; index++) {
+        const dayToAdd = dayjs().add(index, 'day');
+        if(0===index){
+          this.daySelected = dayToAdd.valueOf();
+        }
+        this.arrayDays.push({title: dayToAdd.format('D/MM'), dayOfWeek:dayToAdd.format('dddd'),  date : dayToAdd.valueOf()});
+      }
     },
-    constructDateObject(date:dayjs.Dayjs){
-      return {title: date.format('D/MM'), dayOfWeek:date.format('dddd'),  date : date.toDate()};
+    async fetchOccurrences(): Promise<void>{
+      if(this.planning[this.daySelected]){return;}
+      this.loading = true;
+      this.error = false;
+      try {
+        const occurrences = await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>( 14, 'planning/occurrence/list',{
+          canalId: this.radio?.id,
+          from: this.startOfDay,
+          to: this.endOfDay
+        });
+        this.planning[this.daySelected] = [];
+        for (let oc of occurrences) {
+          if(oc.podcastId){
+            const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+oc.podcastId);
+            this.planning[this.daySelected].push({podcast: data, occurrence:oc});
+          }
+        }
+      } catch {
+        this.error = true;
+      }
+      this.loading = false;
+    },
+    changeDate(date: number){
+      this.daySelected = date;
+      this.fetchOccurrences();
+    },
+    dateDisplay(date: Date): string{
+      return dayjs(date).format('HH:mm:ss');
     }
   },
 })
 </script>
 <style lang="scss">
 .octopus-app{
+  .program-item-date{
+    width: 100px;
+  }
 }
 </style>
