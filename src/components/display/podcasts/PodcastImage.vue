@@ -33,7 +33,7 @@
     </div>
     <button
       v-if="hidePlay || recordingLive"
-      class="podcast-image-play-button"
+      class="image-play-button"
       :class="classicPodcastPlay ? '' : 'transparent-background'"
       @click="play"
     >
@@ -65,7 +65,7 @@
       </div>
       <div
         v-else
-        class="icon-container error-icon"
+        class="icon-container play-button-error-icon"
       >
         <div
           :title="textVisible"
@@ -75,7 +75,7 @@
       </div>
       <div
         v-if="!classicPodcastPlay"
-        class="h6 mt-3 fw-bolder"
+        class="live-image-status bg-dark"
       >
         {{ textVisible }}
       </div>
@@ -321,59 +321,26 @@ export default defineComponent({
   .transparent-background {
     background-color: rgba(255, 255, 255, 0.5);
   }
-  .podcast-image-play-button{
-    position: absolute;
-    display: flex;
-    justify-content: flex-end;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    cursor: pointer;
-    flex-direction: column;
-    background: transparent;
-    border-width: 0;
-    width: 100%;
-    &:focus{
-      background: rgba(0, 0, 0, 0.5);
-    }
-
-    .icon-container {
-      background: $primaryColorLessTransparent !important;
-      border-radius: 2rem;
-      color: white;
-      padding: 0.5rem;
-      margin: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-      &.error-icon {
-        background: #00000050 !important;
-        cursor: default !important;
-      }
-      &:hover {
-        background: #00000030;
-      }
-      .saooti-play {
-        font-size: 1.2rem;
-        position: relative;
-        color: white;
-      }
-      .big-icon-error {
-        font-size: 1rem;
-        position: relative;
-      }
+  
+  .play-button-error-icon {
+    background: #0000009d !important;
+    cursor: default !important;
+    align-self: center;
+    margin-bottom: calc(50% - 1rem);
+    .big-icon-error {
+      font-size: 2rem;
+      position: relative;
     }
   }
   .special-icon-play-button {
     width: 30px;
     height: 30px;
     background-color: #ffd663;
+    color: black;
     border-radius: 50%;
     position: absolute;
-    left: 4.5rem;
-    bottom: 4rem;
+    left: 4.4rem;
+    bottom: 2.2rem;
     font-size: 0.9rem;
     font-weight: bold;
     display: flex;

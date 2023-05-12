@@ -32,6 +32,7 @@
             :organisation-id="organisationId"
           />
           <SharePlayerColors
+            class="mt-3"
             v-model:color="color"
             v-model:theme="theme"
           />
@@ -126,7 +127,6 @@ export default defineComponent({
       isVisible: false as boolean,
       displayArticle: true as boolean,
       displayTranscript: true as boolean,
-      colors: ['#000000', '#ffffff'],
       orgaAttributes: undefined as{[key: string]:string|number|boolean|undefined}|undefined,
     };
   },
@@ -303,10 +303,8 @@ export default defineComponent({
 
 <style lang="scss">
 @import '@scss/_variables.scss';
+@import '../../../assets/iframe.scss';
 .octopus-app{
-  iframe{
-    border:0;
-  }
   .sticker {
     align-self: center;
     background: $octopus-primary-color;
@@ -322,12 +320,6 @@ export default defineComponent({
       box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
       background: transparent;
       color: $octopus-primary-color;
-    }
-  }
-  .max-iframe {
-    width: 500px;
-    @media (max-width: 960px){
-      width: calc(100% - 2rem);
     }
   }
 }

@@ -1,0 +1,11 @@
+.octopus-app{
+  iframe{
+    border:0;
+  }
+  .max-iframe {
+    width: 500px;
+    @media (max-width: 960px){
+      width: calc(100% - 2rem);
+    }
+  }
+}

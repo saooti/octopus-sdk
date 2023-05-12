@@ -143,6 +143,7 @@ export default defineComponent({
     border-radius: $octopus-borderradius;
     height: 2.4rem;
     width: 2.4rem;
+    margin-right: 0.5rem;
     cursor: pointer;
     /** PHONES*/
     @media (max-width: 450px) {

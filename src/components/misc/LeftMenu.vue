@@ -78,7 +78,7 @@ export default defineComponent({
     routerLinkArray(){
       return [
         {title : this.$t('Home'), routeName: 'home', condition : true},
-        {title : this.$t('Live'), routeName: 'lives', condition : state.generalParameters.isLiveTab &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
+        {title : this.$t('Radio & Live'), routeName: 'lives', condition : state.generalParameters.isLiveTab &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
         {title : this.$t('Emissions'), routeName: 'emissions', condition : true},
         {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation)},

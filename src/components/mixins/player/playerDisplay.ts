@@ -1,16 +1,19 @@
 import { state } from '../../../stores/ParamSdkStore';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
-import { MetadataRadio } from '@/stores/class/general/player';
+import {fetchRadioData} from '../../mixins/radio/fetchRadioData';
+import { MediaRadio, MetadataRadio } from '@/stores/class/general/player';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
 import octopusApi from '@saooti/octopus-api';
 import dayjs from 'dayjs';
+import { Podcast } from '@/stores/class/general/podcast';
 export const playerDisplay = defineComponent({
 	props: {
     hlsReady: { default: false , type: Boolean},
   },
+  mixins: [fetchRadioData],
   data() {
     return {
       radioInterval: undefined as  ReturnType<typeof setTimeout>|undefined,
@@ -36,6 +39,13 @@ export const playerDisplay = defineComponent({
 			return (state.player.image as boolean);
 		},
 		podcastShareUrl(): RouteLocationRaw|string {
+      if(this.playerRadio?.podcast?.podcastId){
+        return {
+					name: 'podcast',
+					params: { podcastId: this.playerRadio?.podcast?.podcastId.toString() },
+					query: { productor: this.filterOrgaId },
+				};
+      }
 			if (this.playerPodcast) {
 				return {
 					name: 'podcast',
@@ -50,7 +60,10 @@ export const playerDisplay = defineComponent({
     },
 		podcastTitle(): string {
       if(this.playerRadio){
-        return this.playerRadio.metadata.title + " " + this.playerRadio.metadata.artist;
+        if(this.playerRadio.podcast){
+          return this.playerRadio.podcast.title;
+        }
+        return this.displayTitle(this.playerRadio.metadata);
       }
       if (this.playerPodcast) {
         if (this.isEmissionName)
@@ -70,12 +83,13 @@ export const playerDisplay = defineComponent({
     playerRadio: {
       deep: true,
       immediate:true,
-      handler(){
+      handler(newValue,oldValue){
+        if(oldValue && newValue && newValue.canalId === oldValue.canalId){return;}
         clearInterval((this.radioInterval as unknown as number));
         if(this.playerRadio){
-          this.fetchRadioMetadata();
+          this.fetchCurrentlyPlaying();
           this.radioInterval = setInterval(() => {
-            this.fetchRadioMetadata();
+            this.fetchCurrentlyPlaying();
           }, 2000);
         }
       }
@@ -86,20 +100,15 @@ export const playerDisplay = defineComponent({
   },
   beforeUnmount() {
     window.removeEventListener('keydown', this.addKeyboardControl);
-    clearInterval((this.radioInterval as unknown as number));
   },
   methods: {
-    ...mapActions(usePlayerStore, ['playerMetadata', 'playerChangeStatus']),
-    async fetchRadioMetadata(): Promise<void>{
-      const metadata = await octopusApi.fetchData<MetadataRadio>(14, 'player/playing/'+this.playerRadio?.canalId);
-      const arrayMetadata = metadata.previously;
-      arrayMetadata.unshift(metadata.currently);
-      for(let i = 0; i < arrayMetadata.length; i++){
-        if(dayjs().valueOf()-29000 > dayjs(arrayMetadata[i].startDate).valueOf()){
-          this.playerMetadata(arrayMetadata[i]);
-          return;
-        }
-      }
+    ...mapActions(usePlayerStore, ['playerMetadata', 'playerChangeStatus', 'playerRadioPodcast']),
+    async fetchCurrentlyPlaying(): Promise<void>{
+      this.fetchRadioMetadata(this.playerRadio?.canalId??0,this.playerRadio?.metadata.title??"", this.updateMetadata);
+    },
+    updateMetadata(metadata: MediaRadio, podcast?:Podcast): void{
+      this.playerMetadata(metadata);
+      this.playerRadioPodcast(podcast);
     },
     addKeyboardControl(event: KeyboardEvent): void{
       if(!event || null ===event){return;}

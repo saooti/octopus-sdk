@@ -18,24 +18,17 @@
         class="loading-size"
         :loading-text="loading?$t('Loading podcasts ...'):undefined"
       />
-      <swiper
+      <SwiperList
         v-if="!loading"
-        :slides-per-view="numberItem"
-        :space-between="0"
-        :loop="allPodcasts.length>=numberItem"
-        :navigation="true"
-        :modules="modules"
+        :listObject="allPodcasts"
       >
-        <swiper-slide
-          v-for="p in allPodcasts"
-          :key="p.podcastId"
-        >
+        <template #octopusSlide="{option}">
           <PodcastItem
             class="flex-shrink-0 item-phone-margin"
-            :podcast="p"
+            :podcast="option"
           />
-        </swiper-slide>
-      </swiper>
+        </template>
+      </SwiperList>
     </template>
   </PodcastInlineListTemplate>
 </template>
@@ -43,14 +36,9 @@
 <script lang="ts">
 import PodcastInlineListTemplate from './PodcastInlineListTemplate.vue';
 import octopusApi from '@saooti/octopus-api';
-import domHelper from '../../../helper/dom';
 import PodcastItem from './PodcastItem.vue';
-import { state } from '../../../stores/ParamSdkStore';
 import ClassicLoading from '../../form/ClassicLoading.vue';
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
+import SwiperList from '../list/SwiperList.vue';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState } from 'pinia';
 import { Podcast } from '@/stores/class/general/podcast';
@@ -62,8 +50,7 @@ export default defineComponent({
     PodcastInlineListTemplate,
     PodcastItem,
     ClassicLoading,
-    Swiper,
-    SwiperSlide,
+    SwiperList
   },
 
   props: {
@@ -88,8 +75,6 @@ export default defineComponent({
       loading: true as boolean,
       popularSort: false as boolean,
       allPodcasts: [] as Array<Podcast>,
-      modules: [Navigation],
-      numberItem: 5 as number
     };
   },
   computed: {
@@ -99,12 +84,6 @@ export default defineComponent({
     },
     watchVariable():string{
       return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
-    },
-    sizeItem(): number {
-      if (window.innerWidth <= 450) {
-        return 12.5;
-      }
-      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 16.5;
     },
   },
   watch: {
@@ -121,24 +100,11 @@ export default defineComponent({
     if (undefined !== this.isArrow) {
       this.$emit('update:isArrow', true);
     }
-    window.addEventListener('resize', this.handleResize);
   },
-  unmounted() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-
-
   mounted() {
-    this.handleResize();
     this.fetchNext();
   },
   methods: {
-    handleResize(): void {
-      if (!this.$el) return;
-      const width = (this.$el as HTMLElement).offsetWidth - 95;
-      const sixteen = domHelper.convertRemToPixels(this.sizeItem+ 0.5);
-      this.numberItem = Math.max(1, Math.floor(width / sixteen));
-    },
     async fetchNext(): Promise<void> {
       const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
         first: 0,
@@ -177,40 +143,3 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss">
-@import '@scss/_variables.scss';
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-.swiper-button-next, .swiper-button-prev{
-  color: $octopus-primary-color !important;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  margin: 0;
-}
-.swiper-button-next{
-  right: 0;
-}
-.swiper-button-prev{
-  left: 0;
-}
-.swiper-slide-active{
-  padding-left:27px;
-  @media (max-width: 550px) {
-    padding-left:0;
-  }
-}
-.swiper-slide-next{
-  padding-right:27px;
-}
-.swiper-button-lock{
-  display: flex;
-}
-.swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

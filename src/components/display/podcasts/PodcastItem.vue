@@ -12,6 +12,7 @@
       :hide-play="!podcastItemDescription || (podcastItemDescription && (!hoverDesc || !description))"
       :display-description="0!==description.length && podcastItemDescription"
       :arrow-direction="arrowDirection"
+      :fetchConference="fetchConference"
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
@@ -55,6 +56,7 @@ import { state } from '../../../stores/ParamSdkStore';
 import dayjs from 'dayjs';
 import { Podcast } from '@/stores/class/general/podcast';
 import { defineComponent } from 'vue'
+import { Conference } from '@/stores/class/conference/conference';
 export default defineComponent({
   name: 'PodcastItem',
   
@@ -65,6 +67,7 @@ export default defineComponent({
 
   props: {
     podcast: { default: ()=>({}), type: Object as ()=> Podcast},
+    fetchConference: { default: undefined, type: Object as ()=>Conference},
   },
 
   data() {

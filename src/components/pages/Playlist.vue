@@ -5,7 +5,7 @@
     >
       <div class="page-element-title-container">
         <div class="page-element-title">
-          <h1>{{ $t('Playlist') }}</h1>
+          <h1>{{ pageTitle }}</h1>
         </div>
         <div
           class="page-element-bg"
@@ -101,6 +101,12 @@ export default defineComponent({
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
       };
     },
+    pageTitle(): string{
+      return this.playlistRadio ? this.$t('Mix of episodes'):this.$t('Playlist');
+    },
+    playlistRadio(): boolean{
+      return "AMBIANCE"===this.playlist?.ambiance || "PROGRAMMED"===this.playlist?.ambiance
+    },
     name(): string {
       return this.playlist?.title ??'';
     },
@@ -141,7 +147,8 @@ export default defineComponent({
         this.loaded = false;
         this.error = false;
         this.playlist = await octopusApi.fetchData<Playlist>(0, 'playlist/'+this.playlistId);
-        if("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrgaId!==this.playlist.organisation?.id){
+        if((!this.editRight && this.playlistRadio) ||
+          ("PUBLIC"!==this.playlist.organisation?.privacy && this.filterOrgaId!==this.playlist.organisation?.id)){
           this.initError();
           return;
         }

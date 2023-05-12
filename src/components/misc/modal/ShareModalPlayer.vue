@@ -27,8 +27,8 @@
         <template 
           #tab1
         >
-          <div class="d-flex flex-column">
-            <div class="d-flex">
+          <div class="d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
               <p>{{ embedlyLink }}</p>
               <div
                 class="saooti-copy"

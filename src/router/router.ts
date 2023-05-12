@@ -19,6 +19,7 @@ const PlaylistPage = () => import('@/components/pages/Playlist.vue');
 const PlaylistsPage = () => import('@/components/pages/Playlists.vue');
 const error403Page = () => import('@/components/pages/Error403Page.vue');
 const PageNotFound = () => import('@/components/pages/PageNotFound.vue');
+const RadioPage = () => import('@/components/pages/Radio.vue');
 
 const routes: Array<RouteRecordRaw> = [
   /*--------------------------------------------------------------------------
@@ -139,6 +140,15 @@ const routes: Array<RouteRecordRaw> = [
       name: 'lives',
       component: LivesPage,
       props: (route: RouteLocationNormalized) => ({
+        productor: route.params.productor,
+      }),
+    },
+    {
+      path: '/main/pub/radio/:canalId/:productor?',
+      name: 'radio',
+      component: RadioPage,
+      props: (route: RouteLocationNormalized) => ({
+        canalId: parseInt(route.params.canalId.toString(), 10),
         productor: route.params.productor,
       }),
     },

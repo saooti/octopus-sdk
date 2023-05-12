@@ -138,7 +138,7 @@ export default defineComponent({
     ...mapState(useFilterStore, ['filterLive', 'filterOrgaId', 'filterImgUrl', 'filterIab', 'filterRubrique', 'filterName']),
     routerLinkArray(){
       return [
-        {title : this.$t('Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
+        {title : this.$t('Radio & Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
         {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
         {title : this.$t('Emissions'), routeName: 'emissions', condition : true}
       ]

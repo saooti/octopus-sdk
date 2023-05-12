@@ -4,6 +4,7 @@ import { FetchParam } from './fetchParam';
 
 
 export interface Playlist {
+  ambiance?: string; //#11919 "NONE", "AMBIANCE", "PROGRAMMED"
   imageUrl?: string;
   description: string;
   organisation?: Organisation;
@@ -18,6 +19,7 @@ export interface Playlist {
 
 export function emptyPlaylistData(): Playlist{
   return {
+    ambiance:"NONE",
     description: '',
     playlistId: 0,
     podcasts: undefined,

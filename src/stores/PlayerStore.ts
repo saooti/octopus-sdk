@@ -62,6 +62,9 @@ export const usePlayerStore = defineStore('PlayerStore', {
 			return 'PAUSED' === this.playerStatus;
 		},
 		podcastImage(): string{
+			if(this.playerRadio){
+				return this.playerRadio.podcast?.imageUrl??"";
+			}
       return this.playerPodcast?.imageUrl ?? "";
 		},
 		emissionName(): string {
@@ -129,6 +132,11 @@ export const usePlayerStore = defineStore('PlayerStore', {
 			if(!this.playerRadio){return;}
 			this.playerRadio.metadata = metadata;
 		},
+		playerRadioPodcast(podcast: Podcast|undefined){
+			if(!this.playerRadio){return;}
+			this.playerRadio.podcast = podcast;
+		},
+
 
 		playerUpdateElapsed(elapsed: number, total:number){
 			this.playerElapsed = elapsed;
