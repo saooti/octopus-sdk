@@ -61,10 +61,9 @@ export const playerLive = defineComponent({
       }
     },
     async initLiveDownloadId(){
-      if(!this.playerLive){ return;}
-      let downloadId = null;
+      if(!this.playerLive || this.downloadId){ return;}
       try {
-        downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.playerLive.podcastId, undefined);
+        let downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.playerLive.podcastId, undefined);
         await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' +this.playerLive.podcastId +".m3u8",{
           'downloadId': null!==downloadId ? downloadId : undefined,
           'origin':'octopus',
@@ -72,6 +71,7 @@ export const playerLive = defineComponent({
         });
         this.setDownloadId(downloadId);
       } catch (error) {
+        this.downloadId = null;
         console.log('ERROR downloadId');
       }
       this.hlsReady = true;
