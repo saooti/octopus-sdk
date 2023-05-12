@@ -244,7 +244,7 @@ export default defineComponent({
       if (
         undefined !== this.podcast &&(
         (this.playerPodcast?.podcastId ===this.podcast.podcastId) ||
-        (this.playerLive?.livePodcastId ===this.podcast.podcastId))
+        (this.playerLive?.podcastId ===this.podcast.podcastId))
       ) {
         timeline = Math.round(
           this.playerElapsed * this.playerTotal

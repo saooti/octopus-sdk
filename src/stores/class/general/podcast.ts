@@ -39,7 +39,6 @@ export interface Podcast {
   title: string;
   weekDownloadCount?: number;
   order?: number;
-  livePodcastId?: number
 }
 export function emptyPodcastData(): Podcast {
   return {

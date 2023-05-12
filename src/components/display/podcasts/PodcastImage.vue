@@ -266,14 +266,7 @@ export default defineComponent({
       if (!this.recordingLive) {
         this.playerPlay(this.podcast);
       }else{
-        this.playerPlay({
-          title: this.podcast.title,
-          audioUrl: this.podcast.audioUrl,
-          duration: this.podcast.duration,
-          conferenceId: this.fetchConference?.conferenceId,
-          livePodcastId: this.podcast.podcastId,
-          organisation: this.podcast.organisation,
-        });
+        this.playerPlay({...this.podcast, ...{conferenceId:this.fetchConference?.conferenceId}});
       }
       if(this.clickPlayGoPage){
         this.$router.push('/main/pub/podcast/'+this.podcast.podcastId);

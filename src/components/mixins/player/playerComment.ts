@@ -70,7 +70,7 @@ export const playerComment = defineComponent({
         podcastId = this.playerPodcast.podcastId;
         organisation = this.playerPodcast.organisation.id;
       } else if (this.playerLive) {
-        podcastId = this.playerLive.livePodcastId;
+        podcastId = this.playerLive.podcastId;
         organisation = this.playerLive.organisation.id;
       }
       if (

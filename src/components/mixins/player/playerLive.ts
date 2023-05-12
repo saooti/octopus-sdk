@@ -64,8 +64,8 @@ export const playerLive = defineComponent({
       if(!this.playerLive){ return;}
       let downloadId = null;
       try {
-        downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.playerLive.livePodcastId, undefined);
-        await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' + this.playerLive.livePodcastId+".m3u8",{
+        downloadId = await octopusApi.putDataPublic<string | null>(0, 'podcast/prepare/live/'+this.playerLive.podcastId, undefined);
+        await octopusApi.fetchDataPublicWithParams<string | null>(0,'podcast/download/live/' +this.playerLive.podcastId +".m3u8",{
           'downloadId': null!==downloadId ? downloadId : undefined,
           'origin':'octopus',
           'distributorId':this.authOrgaId
