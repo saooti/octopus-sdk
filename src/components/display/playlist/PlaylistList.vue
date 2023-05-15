@@ -113,7 +113,7 @@ export default defineComponent({
         size: this.dsize,
         query: this.query,
         organisationId: this.organisation,
-        ambianceType:"NONE",
+        type:"NONE",
         sort: this.sort,
       };
       try {
