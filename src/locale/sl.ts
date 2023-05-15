@@ -322,4 +322,7 @@ export default{
   'In the process of being published': 'V postopku objave',
   "Radio":"Radio",
   "Currently":"Trenutno",
+  "Program":"Program",
+  "No programming":"Ne programiranje",
+  'Canal name image': 'Slika kanala {name}',
 }

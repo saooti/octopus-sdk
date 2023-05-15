@@ -5,8 +5,8 @@
       width="330"
       height="330"
       class="img-box"
-      :title="$t('Image')+ ' '+radio.name"
-      :alt="$t('Image')+ ' '+radio.name"
+      :title="$t('Canal name image',{name:radio.name})"
+      :alt="$t('Canal name image',{name:radio.name})"
     >
     <button
       class="image-play-button"

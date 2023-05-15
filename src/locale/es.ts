@@ -322,4 +322,7 @@ export default{
   'In the process of being published': 'En proceso de publicación',
   "Radio":"Radio",
   "Currently":"Actualmente",
+  "Program":"Programa",
+  "No programming":"No programa",
+  'Canal name image': 'Imagen del canal {name}',
 }

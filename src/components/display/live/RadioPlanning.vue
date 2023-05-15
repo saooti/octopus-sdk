@@ -1,6 +1,8 @@
 <template>
   <div class="module-box">
-    <h2 class="big-h2 mb-3 height-40">{{ $t('Program') }}</h2>
+    <h2 class="big-h2 mb-3 height-40">
+      {{ $t('Program') }}
+    </h2>
     <div class="border">
       <div class="d-flex align-items-center w-100">
         <button
@@ -10,8 +12,8 @@
           :class="day.date==daySelected?'bg-primary text-white':''"
           @click="changeDate(day.date)"
         >
-          <span class="text-capitalize">{{day.dayOfWeek}}</span>
-          <span>{{day.title}}</span>
+          <span class="text-capitalize">{{ day.dayOfWeek }}</span>
+          <span>{{ day.title }}</span>
         </button>
       </div>
       <div class="d-flex flex-column p-3">
@@ -20,14 +22,21 @@
           :error-text="error?$t(`Error`):undefined"
         />
         <template v-if="!loading && !error">
-          <div v-if="!planning[daySelected].length" class="text-center">{{$t('No programming')}}</div>
+          <div
+            v-if="!planning[daySelected].length"
+            class="text-center"
+          >
+            {{ $t('No programming') }}
+          </div>
           <div 
-            v-else
             v-for="planningItem in planning[daySelected]"
-            :key="planningItem.occurrence.occurrenceId"
+            v-else
+            :key="planningItem.occurrence.occurrenceId +''+ planningItem.occurrence.liveId"
             class="d-flex align-items-center mb-3"
           >
-            <div class="program-item-date fw-bold flex-shrink-0">{{dateDisplay(planningItem.occurrence.startDate)}}</div>
+            <div class="program-item-date fw-bold flex-shrink-0">
+              {{ dateDisplay(planningItem.occurrence.startDate) }}
+            </div>
             <component
               :is="planningItem.podcast.availability.visibility ? 'router-link' : 'div'"
               class="d-flex align-items-center text-dark"
@@ -46,13 +55,23 @@
                 :alt="$t('Episode name image', {name:planningItem.podcast.title})"
               >
               <div class="d-flex flex-column">
-                <div class="flex-grow-1 text-truncate mb-2">{{planningItem.occurrence.podcastData.title}}</div>
+                <div class="d-flex align-items-center mb-2">
+                  <div 
+                    v-if="planningItem.occurrence.liveId"
+                    class="bg-complementary text-white p-1 me-1"
+                  >
+                    {{ $t('Live') }}
+                  </div>
+                  <div class="flex-grow-1 text-truncate">
+                    {{ planningItem.occurrence.podcastData.title }}
+                  </div>
+                </div>
+
                 <ParticipantDescription
                   :participants="planningItem.podcast.animators"
                 />
               </div>
             </component>
-           
           </div>
         </template>
       </div>
@@ -74,6 +93,7 @@ import { defineComponent } from 'vue';
 import { Canal } from '@/stores/class/radio/canal';
 import { PlanningOccurrence } from '@/stores/class/radio/recurrence';
 import { Podcast } from '@/stores/class/general/podcast';
+import { PlanningLive } from '@/stores/class/radio/live';
 export default defineComponent({
   name: 'RadioPlanning',
 
@@ -90,7 +110,7 @@ export default defineComponent({
 
   data() {
     return {
-      planning: {} as {[key: number]:Array<{podcast: Podcast, occurrence: PlanningOccurrence}>},
+      planning: {} as {[key: number]:Array<{podcast: Podcast, occurrence: PlanningOccurrence|PlanningLive}>},
       daySelected: dayjs().valueOf(),
       arrayDays: [] as Array<{title: string, date: number, dayOfWeek: string }>,
       loading: true as boolean,
@@ -128,11 +148,17 @@ export default defineComponent({
       this.loading = true;
       this.error = false;
       try {
-        const occurrences = await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>( 14, 'planning/occurrence/list',{
+        const params = {
           canalId: this.radio?.id,
           from: this.startOfDay,
           to: this.endOfDay
-        });
+        };
+        let occurrences: Array<PlanningOccurrence|PlanningLive> = await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>( 14, 'planning/occurrence/list',params);
+        const lives = await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>( 14, 'live/list',params);
+        if(lives.length){
+          occurrences = occurrences.concat(lives);
+          occurrences.sort((a,b) => (a.startDate > b.startDate) ? 1 : ((b.startDate > a.startDate) ? -1 : 0))
+        }
         this.planning[this.daySelected] = [];
         for (let oc of occurrences) {
           if(oc.podcastId){
