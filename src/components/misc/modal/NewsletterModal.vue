@@ -93,7 +93,8 @@ import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
 import Snackbar from '../../misc/Snackbar.vue';
 import dayjs from 'dayjs';
 // @ts-ignore
-import VSwatches from 'vue3-swatches';
+import {VSwatches} from 'vue3-swatches';
+import 'vue3-swatches/dist/style.css';
 // @ts-ignore
 import humanizeDuration from 'humanize-duration';
 import displayMethods from '../../mixins/displayMethods';
