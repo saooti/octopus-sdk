@@ -3,8 +3,8 @@
     v-if="filterOrgaId || organisationId"
     class="d-flex flex-column align-items-start mt-3"
   >
-    <div class="d-flex justify-content-between amlign-items-center">
-      <h2 class="mb-0 big-h2 mb-3">
+    <div class="d-flex justify-content-between flex-grow-1 mb-3 w-100 align-items-center">
+      <h2 class="mb-0 big-h2">
         {{ $t('Live') }}
       </h2>
       <router-link
