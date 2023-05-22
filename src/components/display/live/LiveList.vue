@@ -97,7 +97,7 @@ export default defineComponent({
       return (true ===this.authenticated && this.myOrganisationId === this.filterOrgaUsed) ||true===state.generalParameters.isAdmin;
     },
     liveRight(): boolean {
-      return (state.generalParameters.isRoleLive as boolean)&& true===this.authOrganisation.attributes?.['live.active'];
+      return (state.generalParameters.isRoleLive as boolean)&& "true"===this.authOrganisation.attributes?.['live.active'];
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);

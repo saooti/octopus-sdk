@@ -102,12 +102,12 @@ export default defineComponent({
     ParticipantDescription
   },
 
+  mixins: [imageProxy],
+
   props: {
     radio: { default: undefined, type: Object as ()=>Canal},
   },
-
-  mixins: [imageProxy],
-
+  
   data() {
     return {
       planning: {} as {[key: number]:Array<{podcast: Podcast, occurrence: PlanningOccurrence|PlanningLive}>},

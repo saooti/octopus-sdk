@@ -36,7 +36,7 @@ export default defineComponent({
   },
 
   props: {
-    listObject: { default: [], type: Array as ()=> Array<unknown>},
+    listObject: { default: ()=>[], type: Array as ()=> Array<unknown>},
   },
 
   data() {
