@@ -64,7 +64,6 @@
         </div>
         <SearchOrder
           :is-emission="isEmission"
-          :is-search-bar="isSearchBar"
           :sort-criteria="sortCriteria"
           @updateSortCriteria="updateSortCriteria"
         />
@@ -98,7 +97,6 @@ export default defineComponent({
     organisationId: { default: undefined, type: String},
     isEmission: { default: false, type:  Boolean},
     resetRubriquage: { default: false, type:  Boolean},
-    isSearchBar: { default: false, type:  Boolean},
     isEducation: { default: false, type:  Boolean},
     includeHidden: { default: false, type:  Boolean},
     sortCriteria: { default: 'DATE', type: String},

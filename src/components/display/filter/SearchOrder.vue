@@ -2,11 +2,9 @@
   <ClassicRadio
     v-model:textInit="sort"
     id-radio="sort-radio"
-    :options="isSearchBar? [{title:$t('Sort score'), value:'SCORE'},
-                            {title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
-                            {title:$t('Sort name'), value:'NAME'}]:
-      [{title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
-       {title:$t('Sort name'), value:'NAME'}]"
+    :options="[{title:$t('Sort score'), value:'SCORE'},
+               {title:$t('Sort last'), value:isEmission?'LAST_PODCAST_DESC':'DATE'},
+               {title:$t('Sort name'), value:'NAME'}]"
   />
 </template>
 
@@ -19,7 +17,6 @@ export default defineComponent({
   },
   props: {
     isEmission: { default: false, type:  Boolean},
-    isSearchBar: { default: false, type:  Boolean},
     sortCriteria: { default: 'DATE', type: String},
   },
 
