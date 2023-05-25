@@ -51,11 +51,10 @@ paramStore.initialize({
 });
 
 const pinia = createPinia();
-
+const app = createApp(App);
 // Initialisation store
-createApp(App)
-.use(i18n)
+app.use(i18n)
 .use(pinia)
 .use(router)
-.use(VueLazyLoad)
-.mount('#app');
+.use(VueLazyLoad);
+app.mount('#app');

@@ -6,6 +6,7 @@ import { playerComment } from './playerComment';
 import { playerTranscript } from './playerTranscript';
 import { defineComponent } from 'vue';
 import { useAuthStore } from '@/stores/AuthStore';
+import { useGeneralStore } from '@/stores/GeneralStore';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { mapState, mapActions } from 'pinia';
 export const playerLogic = defineComponent({
@@ -30,6 +31,7 @@ export const playerLogic = defineComponent({
   },
   computed: {
     ...mapState(useAuthStore, ['authOrgaId', 'authParam']),
+    ...mapState(useGeneralStore, ['consentTcf']),
     ...mapState(usePlayerStore, [
       'playerPodcast',
       'playerMedia', 
@@ -146,6 +148,10 @@ export const playerLogic = defineComponent({
           'distributorId=' + this.authOrgaId
         );
       }
+      if(this.consentTcf){
+        parameters.push('consent='+this.consentTcf);
+      }
+
       if("SECURED" === this.playerPodcast.organisation.privacy && this.authParam.accessToken){
         parameters.push('access_token='+this.authParam.accessToken);
       }

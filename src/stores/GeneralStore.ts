@@ -8,6 +8,7 @@ interface GeneralState{
   storedCategories: Array<Category>;
   storedCategoriesOrga: Array<Category>;
   isBeforeLive: boolean;
+  consentTcf: string|null;
 }
 export const useGeneralStore = defineStore('GeneralStore', {
   state: (): GeneralState => ({
@@ -17,6 +18,7 @@ export const useGeneralStore = defineStore('GeneralStore', {
     storedCategories: [],
     storedCategoriesOrga: [],
     isBeforeLive: true,
+    consentTcf: null,
   }),
   actions:{
     storedUpdateCategories(categories: Array<Category>) {
@@ -27,6 +29,9 @@ export const useGeneralStore = defineStore('GeneralStore', {
     },
     isBeforeLiveUpdate(isBeforeLive: boolean) {
       this.isBeforeLive = isBeforeLive;
+    },
+    consentTcfUpdate(consentTcf: string|null) {
+      this.consentTcf = consentTcf;
     },
     platformUpdateEducation(isEducation: boolean) {
       this.platformEducation = isEducation;
