@@ -325,4 +325,5 @@ export default{
   "Program":"Programm",
   "No programming":"Nicht programmieren",
   'Canal name image': 'Kanalbild {name}',
+  "Show animated wave":"Animierte Welle anzeigen",
 }

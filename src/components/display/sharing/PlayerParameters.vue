@@ -68,6 +68,11 @@
     id-checkbox="display-transcript-checkbox"
     :label="$t('If the transcript is available, show it')"
   />
+  <ClassicCheckbox
+    v-model:textInit="displayWave"
+    id-checkbox="display-wave-checkbox"
+    :label="$t('Show animated wave')"
+  />
 </template>
 
 <script lang="ts">
@@ -84,7 +89,7 @@ export default defineComponent({
     displayTranscriptParam: {default: false, type: Boolean},
     displayArticleParam: {default: false, type: Boolean},
   },
-  emits: ['episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle', 'displayTranscript'],
+  emits: ['episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle', 'displayTranscript', 'displayWave'],
 
   data() {
     return {
@@ -94,6 +99,7 @@ export default defineComponent({
       isVisibleTemp: this.isVisible,
       displayArticle: true as boolean,
       displayTranscript:true as boolean,
+      displayWave:true as boolean,
     };
   },
   computed: {
@@ -130,6 +136,9 @@ export default defineComponent({
     },
     displayTranscript(): void{
       this.$emit('displayTranscript', this.displayTranscript);
+    },
+    displayWave(): void{
+      this.$emit('displayWave', this.displayWave);
     }
   },
 })

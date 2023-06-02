@@ -325,4 +325,5 @@ export default{
   "Program":"Program",
   "No programming":"Ne programiranje",
   'Canal name image': 'Slika kanala {name}',
+  "Show animated wave":"Prikaži animirani val",
 }

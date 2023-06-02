@@ -51,6 +51,7 @@
             :display-article-param="displayArticleParam"
             @displayArticle="displayArticle = $event"
             @displayTranscript="displayTranscript = $event"
+            @displayWave="displayWave=$event"
             @episodeNumbers="episodeNumbers = $event"
             @proceedReading="proceedReading = $event"
             @isVisible="isVisible = $event"
@@ -127,6 +128,7 @@ export default defineComponent({
       isVisible: false as boolean,
       displayArticle: true as boolean,
       displayTranscript: true as boolean,
+      displayWave: true as boolean,
       orgaAttributes: undefined as{[key: string]:string|number|boolean|undefined}|undefined,
     };
   },
@@ -279,6 +281,9 @@ export default defineComponent({
       }
       if(!this.displayTranscript){
         url.push('&transcript=false');
+      }
+      if(!this.displayWave){
+        url.push('&wave=false');
       }
       if (this.isVisible) {
         url.push('&key=' + window.btoa(this.dataTitle.toString()));
