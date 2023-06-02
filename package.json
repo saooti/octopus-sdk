@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "36.0.24",
+  "version": "36.0.25",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -18,6 +18,10 @@
   "dependencies": {
     "@popperjs/core": "^2.11.7",
     "@saooti/octopus-api": "^0.34.3",
+    "@tiptap/extension-link": "^2.0.3",
+    "@tiptap/extension-underline": "^2.0.3",
+    "@tiptap/starter-kit": "^2.0.3",
+    "@tiptap/vue-3": "^2.0.3",
     "@vue/cli": "^5.0.8",
     "@vue/compat": "^3.3.2",
     "autoprefixer": "^10.4.14",

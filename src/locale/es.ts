@@ -326,4 +326,5 @@ export default{
   "No programming":"No programa",
   'Canal name image': 'Imagen del canal {name}',
   "Show animated wave":"Mostrar onda animada",
+  'Characters number calculated over HTML code':'El número de caracteres se calcula a partir del código HTML generado por este editor. Puedes visualizar este código pulsando en «html».',
 }

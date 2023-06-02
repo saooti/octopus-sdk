@@ -65,6 +65,7 @@ export const getClassicDatePicker = () => import("./src/components/form/ClassicD
 export const getPaginate = () => import("./src/components/display/list/Paginate.vue");
 export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
 export const getClassicMultiselect = () => import("./src/components/form/ClassicMultiselect.vue");
+export const getClassicInputText = () => import("./src/components/form/ClassicInputText.vue");
 
 //mixins
 
