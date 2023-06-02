@@ -184,6 +184,7 @@ export default defineComponent({
     display: flex;
     min-height: 15rem;
     background-size: cover;
+    background-position: center;
     h1{
       margin: 2rem 1rem auto;
       font-size: 2rem;

@@ -158,6 +158,7 @@ export default defineComponent({
   .participant-producer {
     font-weight: 300;
     font-size: 0.6rem;
+    margin-top: 0.5rem;
   }
   @media (max-width: 960px) {
     margin: 0;

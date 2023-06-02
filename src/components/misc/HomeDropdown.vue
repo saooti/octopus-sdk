@@ -117,7 +117,6 @@ export default defineComponent({
     },
     routerBackoffice(){
       return [
-        {title:this.$t('My space'),class:"show-phone octopus-dropdown-item", path:'/main/priv/backoffice', condition: true},
         {title:this.$t('Edit my profile'),class:"octopus-dropdown-item", path:'/main/priv/edit/profile', condition: true},
         {title:this.$t('Edit my organisation'),class:"octopus-dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length}];
     },

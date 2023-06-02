@@ -222,7 +222,7 @@ export default defineComponent({
   select{
     width: auto;
     border-radius: $octopus-borderradius;
-    margin: 0.2rem;
+    margin: 0.25rem;
     font-size: 0.6rem;
     padding: 0.5rem;
   }
