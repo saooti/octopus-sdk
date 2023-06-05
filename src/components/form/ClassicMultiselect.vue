@@ -183,7 +183,9 @@ import vSelect from "vue-select";
   }
   .multiselect-white{
     --vs-selected-color: white;
+    --vs-selected-bg: transparent;
     --vs-dropdown-bg: black;
+    --vs-controls-color:white;
     .vs__actions path{
       fill: white;
     }

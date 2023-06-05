@@ -42,7 +42,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
     }
 	}
 	.big-h2{
-		font-size: 1.7rem;
+		font-size: 1.5rem;
 		@media (max-width: 500px){
       font-size: 1.1rem;
     }
@@ -148,7 +148,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					}
 					&:disabled{
 							background-color: #cccccc;
-							border: black;
+							border: 1px solid black;
 							cursor: default;
 							color: gray !important;
 					}

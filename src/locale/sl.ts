@@ -282,7 +282,7 @@ export default{
   'Podcast to validate': 'Podkasti, ki jih je treba potrditi',
   'Change locale': 'Spremenite jezik',
   'Refresh': 'Osveži',
-  'See associated article':"Read the article",
+  'See associated article':"Preberi članek",
   "Display associated article": "Prikaži povezan vir",
   "Copy this page URL": "Kopiraj povezavo",
   "Custom version": "Prilagojena različica",
