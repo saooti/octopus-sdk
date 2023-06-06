@@ -204,14 +204,13 @@ export default defineComponent({
     iFrameHeight(): string {
       switch (this.iFrameModel) {
         case 'large':
-          if (this.podcast) return '200px';
+          if (this.podcast) return '210px';
           return '350px';
         case 'emissionLarge':
         case 'largeSuggestion':
           return '350px';
         case 'emission':return '520px';
         default:
-          if (this.podcast) return '500px';
           return '530px';
       }
     },
