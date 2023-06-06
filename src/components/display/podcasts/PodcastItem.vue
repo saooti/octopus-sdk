@@ -128,8 +128,8 @@ export default defineComponent({
   border-radius: $octopus-borderradius;
   list-style: none;
   position: relative;
-  width: $octopus-item-size;
-  height: 23.5rem;
+  width: $octopus-item-podcast-size;
+  height: 20.5rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -142,12 +142,12 @@ export default defineComponent({
     padding: 1rem;
     color: #333;
     background-color: rgba(255, 255, 255, 0.92);
-    height: $octopus-item-size;
+    height: $octopus-item-podcast-size;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.9em;
     position: absolute;
-    width: $octopus-item-size;
+    width: $octopus-item-podcast-size;
     word-break: break-word;
     &.after-podcast-description:after {
       content: '...';

@@ -18,7 +18,7 @@ const state:ParamStore = {
     allCategories: [],
     isLiveTab: true,
     isCaptchaTest: true,
-    podcastItem:16.5,
+    podcastItem:13.5,
     isInlineAnimation:true,
   },
   podcastPage: {

@@ -130,6 +130,7 @@ export default defineComponent({
   flex-direction: column;
   margin: 1rem 0;
   align-items: center;
+  width: $octopus-item-size;
 
   .participant-description {
     overflow: hidden;

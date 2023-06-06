@@ -167,6 +167,8 @@ import vSelect from "vue-select";
   --vs-dropdown-option--active-bg: #ddd;
   --vs-dropdown-option--active-color: black;
   --vs-font-size:0.8rem;
+  --vs-border-width: 2px;
+  --vs-border-color: #dee2e6;
 }
 .octopus-app{
   .vs__dropdown-option{

@@ -77,7 +77,7 @@
       margin: 1em 0 0;
       padding: 0;
       display: grid; /* 1 */
-      grid-template-columns: repeat(auto-fill, $octopus-item-size); /* 2 */
+      grid-template-columns: repeat(auto-fill, $octopus-item-podcast-size); /* 2 */
       grid-gap: 1rem; /* 3 */
       justify-content: space-between; /* 4 */
       @media (max-width: 960px) {
@@ -280,6 +280,7 @@
       align-items: center;
       justify-content: center;
       z-index: 2;
+      width: fit-content;
       
       &:hover {
         background: #00000030;

@@ -1,13 +1,13 @@
 <template>
   <div
     v-if="podcast"
-    class="img-box mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
+    class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
   >
     <img
       v-lazy="proxyImageUrl(podcast.imageUrl,'330')"
       width="330"
       height="330"
-      class="img-box"
+      class="img-box img-box-podcast"
       :alt="$t('Episode name image', {name:podcast.title})"
     >
     <div

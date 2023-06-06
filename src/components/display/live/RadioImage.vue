@@ -1,10 +1,10 @@
 <template>
-  <div class="img-box position-relative flex-shrink-0 mb-3 me-3 float-start">
+  <div class="img-box img-box-podcast position-relative flex-shrink-0 mb-3 me-3 float-start">
     <img
       v-lazy="radio.imageUrl ?proxyImageUrl(radio.imageUrl, '330') :'/img/emptyradio.webp'"
       width="330"
       height="330"
-      class="img-box"
+      class="img-box img-box-podcast"
       :title="$t('Canal name image',{name:radio.name})"
       :alt="$t('Canal name image',{name:radio.name})"
     >

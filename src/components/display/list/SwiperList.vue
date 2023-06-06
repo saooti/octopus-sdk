@@ -50,7 +50,7 @@ export default defineComponent({
       if (window.innerWidth <= 450) {
         return 12.5;
       }
-      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 16.5;
+      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 13.5;
     },
   },
   
@@ -93,7 +93,7 @@ export default defineComponent({
 .swiper-button-prev{
   left: 0;
 }
-.swiper-slide-active{
+/* .swiper-slide-active{
   padding-left:27px;
   @media (max-width: 550px) {
     padding-left:0;
@@ -101,7 +101,7 @@ export default defineComponent({
 }
 .swiper-slide-next{
   padding-right:27px;
-}
+} */
 .swiper-button-lock{
   display: flex;
 }
