@@ -186,7 +186,7 @@ export default defineComponent({
     background-size: cover;
     background-position: center;
     h1{
-      margin: 2rem 1rem auto;
+      margin: auto 1rem auto;
       font-size: 2rem;
       color: white;
     }
