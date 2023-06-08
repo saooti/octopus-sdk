@@ -24,7 +24,7 @@
       :show-count="true"
       :first="0"
       :size="30"
-      :organisation-id="organisationId"
+      :organisation-id="orgaArray"
       :query="searchPattern"
       :monetization="monetization"
       :before="toDate"
@@ -87,6 +87,9 @@ export default defineComponent({
     organisationRight(): boolean {
       return (true===this.authenticated && this.myOrganisationId === this.organisationId) ||
         true===state.generalParameters.isAdmin;
+    },
+    orgaArray(): Array<string>{
+      return this.organisationId ? [this.organisationId] : [];
     },
     organisation(): string|undefined {
       return this.organisationId ?this.organisationId: this.filterOrgaId;

@@ -48,7 +48,7 @@ export default defineComponent({
       border: 2px solid #dee2e6;
       border-radius: $octopus-borderradius;
       margin: 0 !important;
-      height: 44px;
+      height: 48px;
     }
     .saooti-search,
     .saooti-remove {

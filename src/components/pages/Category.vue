@@ -5,7 +5,7 @@
       :first="0"
       :size="30"
       :iab-id="iabId"
-      :organisation-id="filterOrgaId"
+      :organisation-id="orgaArray"
     />
   </div>
 </template>
@@ -28,6 +28,9 @@ export default defineComponent({
   computed: {
     ...mapState(useGeneralStore, ['storedCategories']),
     ...mapState(useFilterStore, ['filterOrgaId']),
+    orgaArray(): Array<string>{
+      return this.filterOrgaId ? [this.filterOrgaId] : [];
+    },
     title():string{
       const matchCategories = this.storedCategories.filter((c: Category) => c.id === this.iabId);
       if (1 !== matchCategories.length) return "";

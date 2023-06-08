@@ -54,7 +54,7 @@ export default defineComponent({
   },
 
   props: {
-    organisationId: { default: undefined, type: String},
+    organisationId: { default: () => [], type: Array as ()=> Array<string>},
     emissionId: { default: undefined, type: Number},
     iabId: { default: undefined, type: Number},
     title: { default: '', type: String},
@@ -79,8 +79,11 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useFilterStore, ['filterOrgaId']),
-    organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrgaId;
+    organisation(): Array<string> {
+      if(this.organisationId){
+        return this.organisationId;
+      }
+      return this.filterOrgaId ? [this.filterOrgaId] : [];
     },
     watchVariable():string{
       return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;

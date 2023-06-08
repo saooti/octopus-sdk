@@ -55,7 +55,7 @@ export default defineComponent({
   props: {
     first: { default: 0, type: Number},
     size: { default: 30, type: Number},
-    organisationId: { default: undefined, type: String},
+    organisationId: { default:  () => [], type: Array as ()=> Array<string>},
     emissionId: { default: undefined, type: Number},
     iabId: { default: undefined, type: Number},
     participantId: { default: undefined, type: Number},
@@ -102,8 +102,11 @@ export default defineComponent({
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetization}|${this.popularSort}|
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
     },
-    organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrgaId;
+    organisation(): Array<string> {
+      if(this.organisationId){
+        return this.organisationId;
+      }
+      return this.filterOrgaId ? [this.filterOrgaId] : [];
     },
     sort(): string {
       return this.popularSort? "POPULARITY" : this.sortCriteria??'DATE';

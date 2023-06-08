@@ -56,7 +56,7 @@ export default defineComponent({
     categoryFilter: { default: false, type:  Boolean},
     reload: { default: false, type:  Boolean},
     editRight: { default: false, type:  Boolean},
-    productorId: { default: undefined, type: String},
+    productorId: { default: () => [], type: Array as ()=> Array<string>},
     showCount: { default: false, type: Boolean },
   },
   emits: ['fetch'],

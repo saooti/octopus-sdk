@@ -69,7 +69,7 @@ export default defineComponent({
   },
   mixins:[imageProxy],
   props: {
-    organisationId: { default: undefined, type: String},
+    organisationId: { default:  () => [], type: Array as ()=> Array<string>},
     emissionId: { default: undefined, type: Number},
     iabId: { default: undefined, type: Number},
     title: { default: '', type: String},
@@ -113,8 +113,11 @@ export default defineComponent({
     isInlineAnimation(): boolean {
       return (state.generalParameters.isInlineAnimation as boolean);
     },
-    organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrgaId;
+    organisation(): Array<string> {
+      if(this.organisationId){
+        return this.organisationId;
+      }
+      return this.filterOrgaId ? [this.filterOrgaId] : [];
     },
     previousAvailable(): boolean {
       return this.index > 0;

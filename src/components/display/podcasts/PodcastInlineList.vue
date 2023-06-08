@@ -49,7 +49,7 @@ export default defineComponent({
     PodcastSwiperList,
   },
   props: {
-    organisationId: { default: undefined, type: String},
+    organisationId: { default:  () => [], type: Array as ()=> Array<string>},
     emissionId: { default: undefined, type: Number},
     iabId: { default: undefined, type: Number},
     title: { default: '', type: String},

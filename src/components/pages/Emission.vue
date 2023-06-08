@@ -68,7 +68,7 @@
             :emission-id="emissionId"
             :category-filter="false"
             :edit-right="editRight"
-            :productor-id="emission.orga.id"
+            :productor-id="[emission.orga.id]"
           />
         </template>
       </div>
