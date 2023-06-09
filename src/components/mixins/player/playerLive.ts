@@ -46,7 +46,9 @@ export const playerLive = defineComponent({
           }, 1000);
           return;
         }
-        if (this.audioElement.canPlayType('application/vnd.apple.mpegurl')) {
+        const ua = navigator.userAgent.toLowerCase();
+        const isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+        if (this.audioElement.canPlayType('application/vnd.apple.mpegurl') && !isAndroid) {
           this.audioElement.src = hlsStreamUrl;
           await this.initLiveDownloadId();
           await this.audioElement.play();
