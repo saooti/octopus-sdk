@@ -279,7 +279,7 @@ export default defineComponent({
         if (
           (!this.podcast.availability.visibility ||
             ('READY_TO_RECORD' !== this.podcast.processingStatus &&
-              'READY' !== this.podcast.processingStatus) ||
+              'READY' !== this.podcast.processingStatus && 'PROCESSING' !== this.podcast.processingStatus) ||
             false === this.podcast.valid) &&
           !this.editRight
         ) {
