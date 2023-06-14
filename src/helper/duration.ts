@@ -9,6 +9,6 @@ export default {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
     const seconds = totalSeconds - hours * 3600 - minutes * 60;
-    return (hours > 0? this.formatToString(hours)+"'":"") + this.formatToString(minutes) +"'"+ this.formatToString(seconds)+"'";
+    return (hours > 0? this.formatToString(hours)+"'":"") + this.formatToString(minutes) +"'"+ this.formatToString(seconds)+"''";
   },
 };

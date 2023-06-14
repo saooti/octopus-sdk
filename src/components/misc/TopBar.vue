@@ -269,7 +269,7 @@ export default defineComponent({
       height: 2rem;
     }
   }
-  &.cscrolled{
+  &.scrolled{
     .link-hover {
       display: none;
     }
