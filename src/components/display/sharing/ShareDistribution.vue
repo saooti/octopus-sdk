@@ -65,7 +65,7 @@ export default defineComponent({
   computed:{
     platformShare(){
       return [
-      {url:this.getUrl('amazon'), icon:'saooti-amazon', title:'Amazon Music | Podcasters'},
+      {url:this.getUrl('amazon'), icon:'saooti-amazon-music', title:'Amazon Music | Podcasters'},
       {url:this.getUrl('apple'), icon:'saooti-apple', title:'Apple Podcast / iTunes'},
       {url:this.getUrl('deezer'), icon:'saooti-deezer', title:'Deezer'},
       {url:this.getUrl('googlePodcasts'), icon:'saooti-google-podcasts', title:'Google Podcasts'},

@@ -35,7 +35,7 @@ export default defineComponent({
   computed:{
     subscriptionsDisplay(){
       const sub = [
-        {name : 'amazon', icon : 'saooti-amazon',title:'Amazon Music | Podcasters', url : this.getUrl('amazon')},
+        {name : 'amazon', icon : 'saooti-amazon-music',title:'Amazon Music | Podcasters', url : this.getUrl('amazon')},
         {name:'applePodcast', icon:'saooti-apple', title:'Apple Podcast | iTunes', url : this.getUrl('applePodcast')},
         {name:'deezer', icon:'saooti-deezer', title:'Deezer', url : this.getUrl('deezer')},
         {name:'googlePodcasts', icon:"saooti-google-podcasts",title:'Google Podcasts', url : this.getUrl('googlePodcasts')},

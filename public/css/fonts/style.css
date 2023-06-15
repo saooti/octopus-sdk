@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/css/fonts/icomoon.eot?isy2bu');
-  src:  url('/css/fonts/icomoon.eot?isy2bu#iefix') format('embedded-opentype'),
-    url('/css/fonts/icomoon.ttf?isy2bu') format('truetype'),
-    url('/css/fonts/icomoon.woff?isy2bu') format('woff'),
-    url('/css/fonts/icomoon.svg?isy2bu#icomoon') format('svg');
+  src:  url('/css/fonts/icomoon.eot?547pif');
+  src:  url('/css/fonts/icomoon.eot?547pif#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?547pif') format('truetype'),
+    url('/css/fonts/icomoon.woff?547pif') format('woff'),
+    url('/css/fonts/icomoon.svg?547pif#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.saooti-instagram:before {
+  content: "\e938";
+}
+.saooti-website:before {
+  content: "\e939";
+}
+.saooti-youtube:before {
+  content: "\e93a";
+  color: #fe0000;
+}
+.saooti-linktree:before {
+  content: "\e93b";
+  color: #43e660;
+}
+.saooti-amazon-music:before {
+  content: "\e93c";
+}
 .saooti-calendar:before {
   content: "\e937";
 }
