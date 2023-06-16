@@ -53,14 +53,6 @@
         width="auto"
         @selected="addFilterFromPopover($event)"
       />
-      <!--  <button
-        v-for="rubrique in hidenRubriques"
-        :key="rubrique.rubriqueId"
-        class="me-3 octopus-dropdown-item"
-        @mousedown="addFilter(rubrique)"
-      >
-        {{ rubrique.name }}
-      </button> -->
     </Popover>
   </div>
 </template>

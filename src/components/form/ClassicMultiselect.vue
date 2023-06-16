@@ -48,24 +48,24 @@
         <span v-else>{{ $t('List is empty') }}</span>
       </template>
       <template #list-footer>
-        <li
+        <div
           v-if="remainingElements"
           class="vs__dropdown-option"
         >
           {{
             $t('Count more elements matched your query, please make a more specific search.',{ count: remainingElements })
           }}
-        </li>
+        </div>
       </template>
       <template #list-header>
-        <li
+        <div
           v-if="maxOptionsSelected"
           class="vs__dropdown-option"
         >
           {{
             $t('Multiselect max options', {max:maxOptions})
           }}
-        </li>
+        </div>
       </template>
     </vSelect>
   </div>

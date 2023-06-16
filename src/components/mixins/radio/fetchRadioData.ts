@@ -17,14 +17,14 @@ export const fetchRadioData = defineComponent({
       const metadata = await octopusApi.fetchData<MetadataRadio>(14, 'player/playing/'+canalId);
       const arrayMetadata = metadata.previously;
       arrayMetadata.unshift(metadata.currently);
-      for(let i = 0; i < arrayMetadata.length; i++){
-        if(dayjs().valueOf()-29000 > dayjs(arrayMetadata[i].startDate).valueOf()){
-          if(previousTitle !== arrayMetadata[i].title){
-            if(arrayMetadata[i].podcastId){
-              const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+arrayMetadata[i].podcastId); 
-              callbackMetadata(arrayMetadata[i], data);
+      for (let el of arrayMetadata) {
+        if(dayjs().valueOf()-29000 > dayjs(el.startDate).valueOf()){
+          if(previousTitle !== el.title){
+            if(el.podcastId){
+              const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+el.podcastId); 
+              callbackMetadata(el, data);
             }else{
-              callbackMetadata(arrayMetadata[i]);
+              callbackMetadata(el);
             }
           }
           return;

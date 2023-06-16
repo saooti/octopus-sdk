@@ -157,7 +157,12 @@ export default defineComponent({
         const lives = await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>( 14, 'live/list',params);
         if(lives.length){
           occurrences = occurrences.concat(lives);
-          occurrences.sort((a,b) => (a.startDate > b.startDate) ? 1 : ((b.startDate > a.startDate) ? -1 : 0))
+          occurrences.sort((a,b) => {
+            if(a.startDate > b.startDate){
+              return 1;
+            }
+            return (b.startDate > a.startDate) ? -1 : 0;
+          });
         }
         this.planning[this.daySelected] = [];
         for (let oc of occurrences) {

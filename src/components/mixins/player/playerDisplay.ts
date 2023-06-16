@@ -2,12 +2,10 @@ import { state } from '../../../stores/ParamSdkStore';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
 import {fetchRadioData} from '../../mixins/radio/fetchRadioData';
-import { MediaRadio, MetadataRadio } from '@/stores/class/general/player';
+import { MediaRadio } from '@/stores/class/general/player';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { useFilterStore } from '@/stores/FilterStore';
 import { mapState, mapActions } from 'pinia';
-import octopusApi from '@saooti/octopus-api';
-import dayjs from 'dayjs';
 import { Podcast } from '@/stores/class/general/podcast';
 export const playerDisplay = defineComponent({
 	props: {
