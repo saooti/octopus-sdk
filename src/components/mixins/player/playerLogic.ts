@@ -142,7 +142,6 @@ export const playerLogic = defineComponent({
       if (!this.playerPodcast) return '';
       const parameters = [];
       parameters.push('origin=octopus');
-      parameters.push('listenerId='+this.getListenerId());
       if (this.authOrgaId) {
         parameters.push(
           'distributorId=' + this.authOrgaId
@@ -175,14 +174,6 @@ export const playerLogic = defineComponent({
     },
     stopPlayer(): void {
       this.playerPlay();
-    },
-    getListenerId(): string{
-      let listenerId = this.getCookie("octopus_listenerId");
-      if(!listenerId){
-        listenerId = new Date().valueOf().toString() + Math.random();
-        this.setCookie("octopus_listenerId", listenerId, ';domain='+this.getDomain());
-      }
-      return listenerId;
     },
     onError(): void {
       if (this.playerPodcast && ""!==this.audioUrlToPlay &&  !this.listenError) {
