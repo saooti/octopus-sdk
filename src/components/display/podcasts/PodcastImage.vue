@@ -318,10 +318,10 @@ export default defineComponent({
   .image-play-button .play-button-error-icon {
     background: #0000009d !important;
     cursor: default !important;
-    align-self: center;
-    margin-bottom: calc(50% - 1rem);
+    /* align-self: center;
+    margin-bottom: calc(50% - 1rem); */
     .big-icon-error {
-      font-size: 2rem;
+      font-size: 1.5rem;
       position: relative;
     }
   }

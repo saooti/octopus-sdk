@@ -174,6 +174,9 @@ import vSelect from "vue-select";
   .vs__dropdown-option{
     white-space: initial;
   }
+  .vs--searchable .vs__dropdown-toggle{
+    cursor: pointer;
+  }
   .vs__search:focus{
     min-width: 150px;
   }

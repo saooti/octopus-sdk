@@ -59,6 +59,7 @@
     </div>
     <div class="d-flex align-items-center flex-grow-1">
       <button
+        title="-15''"
         class="btn fs-1 bg-transparent text-light saooti-backward"
         @click="seekClick(-15)"
       />
@@ -78,6 +79,7 @@
         />
       </button>
       <button
+        title="+15''"
         class="btn fs-1 bg-transparent text-light saooti-forward"
         @click="seekClick(15)"
       />

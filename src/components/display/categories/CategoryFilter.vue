@@ -182,7 +182,7 @@ export default defineComponent({
 .octopus-app{
   .header-img{
     display: flex;
-    min-height: 15rem;
+    min-height: 10rem;
     background-size: cover;
     background-position: center;
     h1{

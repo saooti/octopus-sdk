@@ -14,9 +14,8 @@
         :label="$t('From the :')"
       />
       <ClassicDatePicker
-        class="ps-3 pe-3"
         :date="fromDate"
-        template-class="px-2 py-1 border rounded focus:border-blue-300"
+        template-class="mx-2 px-2 py-1 border rounded focus:border-blue-300"
         @updateDate="fromDate=$event;updateFromDate"
       />
     </div>
@@ -28,9 +27,8 @@
         :label="$t('To the :')"
       />
       <ClassicDatePicker
-        class="ps-3"
         :date="toDate"
-        template-class="px-2 py-1 border rounded focus:border-blue-300"
+        template-class="ms-2 px-2 py-1 border rounded focus:border-blue-300"
         @updateDate="toDate=$event;updateToDate"
       />
     </div>

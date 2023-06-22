@@ -11,7 +11,7 @@
     />
     <div
       v-if="isRubriquage"
-      class="d-flex flex-column mb-2 flex-grow-1"
+      class="d-flex ms-1 flex-column mb-2 flex-grow-1"
     >
       <RubriqueChoice 
         v-for="(filter, index) in arrayFilter"
