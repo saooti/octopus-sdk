@@ -135,7 +135,6 @@
       v-if="
         !!fetchConference &&
           isLiveReadyToRecord &&
-          !isNotRecorded &&
           isOctopusAndAnimator
       "
       :podcast="podcast"
@@ -147,6 +146,7 @@
     <EditBox
       v-else-if="editRight && isEditBox"
       :podcast="podcast"
+      :displayStudioAccess="isDebriefing"
       @validatePodcast="$emit('updatePodcast', $event)"
     />
     <TagList
@@ -243,9 +243,8 @@ export default defineComponent({
         'READY' === this.podcast?.processingStatus
       );
     },
-    isNotRecorded(): boolean {
+    isDebriefing(): boolean {
       return (
-        this.isLiveReadyToRecord &&
         undefined!==this.fetchConference &&
         'DEBRIEFING' === this.fetchConference.status
       );

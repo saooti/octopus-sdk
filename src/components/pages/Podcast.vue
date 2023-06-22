@@ -223,18 +223,25 @@ export default defineComponent({
   },
   
   methods: {
+    async fetchConferencePublic(){
+      const data = await octopusApi.fetchData<string>(9, 'conference/realstatus/'+this.podcast.conferenceId);
+      this.fetchConference = {
+        status: data,
+        conferenceId: this.podcast.conferenceId,
+        title:'',
+      };
+    },
     async initConference(){
-      if (!this.podcast || !this.isLiveReadyToRecord) return;
-      if (this.isOctopusAndAnimator && undefined!==this.podcast.conferenceId) {
-        const data = await crudApi.fetchData<Conference>(9,'conference/'+this.podcast.conferenceId);
-        this.fetchConference = data ? data : {conferenceId:-1, title:''};
-      } else if(undefined!==this.podcast.conferenceId){
-        const data = await octopusApi.fetchData<string>(9, 'conference/realstatus/'+this.podcast.conferenceId);
-        this.fetchConference = {
-          status: data,
-          conferenceId: this.podcast.conferenceId,
-          title:'',
-        };
+      if (!this.podcast || undefined==this.podcast.conferenceId) return;
+      if (this.isOctopusAndAnimator ) {
+        try {
+          const data = await crudApi.fetchData<Conference>(9,'conference/'+this.podcast.conferenceId);
+          this.fetchConference = data ? data : {conferenceId:-1, title:''};
+        } catch {
+          await this.fetchConferencePublic();
+        }
+      } else{ 
+        await this.fetchConferencePublic();
       }
       if (
         this.fetchConference && 

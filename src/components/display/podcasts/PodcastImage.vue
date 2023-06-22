@@ -214,7 +214,7 @@ export default defineComponent({
         case 'RECORDING':
           return this.$t('In live');
         case 'DEBRIEFING':
-          if (!this.isAnimatorLive) return '';
+          /* if (!this.isAnimatorLive) return ''; */
           if ('READY_TO_RECORD' === this.podcast.processingStatus)
             return this.$t('Not recording');
           return this.$t('Debriefing');
