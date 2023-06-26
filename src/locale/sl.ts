@@ -327,4 +327,5 @@ export default{
   'Canal name image': 'Slika kanala {name}',
   "Show animated wave":"Prikaži animirani val",
   'Characters number calculated over HTML code':'Število znakov se izračuna iz kode HTML, ki jo ustvari ta urejevalnik. Ogledate si jo lahko s klikom na gumb „html“.',
+  'Previously':"Prej",
 }

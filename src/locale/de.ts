@@ -327,4 +327,5 @@ export default{
   'Canal name image': 'Kanalbild {name}',
   "Show animated wave":"Animierte Welle anzeigen",
   'Characters number calculated over HTML code':"Die Zeichenzahl wird mit dem HTML-Code ermittelt, der mit diesem Editor erstellt wurde. Über den HTML-Button können Sie diesen Code einsehen.",
+  'Previously':"Bisher",
 }
