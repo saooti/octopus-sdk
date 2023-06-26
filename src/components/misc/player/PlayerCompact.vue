@@ -63,6 +63,9 @@
         :listen-time="listenTime"
         @updateNotListenTime="$emit('update:notListenTime', $event)"
       />
+      <RadioProgressBar
+        v-else
+      />
     </div>
     <button
       :title="''!=transcriptText ? $t('View transcript'): $t('Enlarge')"
@@ -86,14 +89,16 @@ import { CommentPodcast } from '@/stores/class/general/comment';
 import { playerDisplay } from '../../mixins/player/playerDisplay';
 import imageProxy from '../../mixins/imageProxy';
 import Spinner from '../Spinner.vue';
-import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerTimeline from './PlayerTimeline.vue';
-import { defineComponent } from 'vue';
+import { defineAsyncComponent, defineComponent } from 'vue';
+const RadioProgressBar = defineAsyncComponent(() => import('./radio/RadioProgressBar.vue'));
+const PlayerProgressBar = defineAsyncComponent(() => import('./PlayerProgressBar.vue'));
 export default defineComponent({
   name: 'PlayerCompact',
 
   components: {
     PlayerProgressBar,
+    RadioProgressBar,
     PlayerTimeline,
     Spinner
   },

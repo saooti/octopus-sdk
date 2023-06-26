@@ -334,4 +334,8 @@ export default{
   'Canal name image': 'Image du canal {name}',
   "Show animated wave":"Afficher la vague animée",
   'Characters number calculated over HTML code':'Le nombre de caractères est calculé à partir du code HTML généré par cet éditeur. Vous pouvez voir ce code grâce au bouton "html".',
+
+
+  
+  'Previously':"Précédemment",
 };

@@ -88,7 +88,7 @@ export const playerDisplay = defineComponent({
           this.fetchCurrentlyPlaying();
           this.radioInterval = setInterval(() => {
             this.fetchCurrentlyPlaying();
-          }, 2000);
+          }, 10000);
         }
       }
     },
@@ -104,8 +104,8 @@ export const playerDisplay = defineComponent({
     async fetchCurrentlyPlaying(): Promise<void>{
       this.fetchRadioMetadata(this.playerRadio?.canalId??0,this.playerRadio?.metadata.title??"", this.updateMetadata);
     },
-    updateMetadata(metadata: MediaRadio, podcast?:Podcast): void{
-      this.playerMetadata(metadata);
+    updateMetadata(metadata: MediaRadio, podcast:Podcast|undefined, history?: Array<MediaRadio>): void{
+      this.playerMetadata(metadata, history??[]);
       this.playerRadioPodcast(podcast);
     },
     addKeyboardControl(event: KeyboardEvent): void{

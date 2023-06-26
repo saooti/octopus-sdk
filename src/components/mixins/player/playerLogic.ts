@@ -216,6 +216,9 @@ export const playerLogic = defineComponent({
       }
     },
     onTimeUpdate(event: Event): void {
+      if(this.playerRadio){
+        return;
+      }
       const mediaTarget = (event.currentTarget as HTMLMediaElement);
       if (this.playerPodcast || this.playerLive) {
         if (!this.downloadId) {

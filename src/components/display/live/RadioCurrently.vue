@@ -88,7 +88,7 @@ export default defineComponent({
     this.fetchCurrentlyPlaying();
     this.radioInterval = setInterval(() => {
       this.fetchCurrentlyPlaying();
-    }, 5000);
+    }, 10000);
   },
   methods: {
     async fetchCurrentlyPlaying(): Promise<void>{

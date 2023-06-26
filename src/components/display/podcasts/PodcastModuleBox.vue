@@ -146,7 +146,7 @@
     <EditBox
       v-else-if="editRight && isEditBox"
       :podcast="podcast"
-      :displayStudioAccess="isDebriefing"
+      :display-studio-access="isDebriefing"
       @validatePodcast="$emit('updatePodcast', $event)"
     />
     <TagList

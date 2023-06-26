@@ -13,18 +13,18 @@ export const fetchRadioData = defineComponent({
     clearInterval((this.radioInterval as unknown as number));
   },
   methods: {
-    async fetchRadioMetadata(canalId: number, previousTitle: string,  callbackMetadata: (metadata: MediaRadio, podcast?:Podcast) => void): Promise<void>{
+    async fetchRadioMetadata(canalId: number, previousTitle: string,  callbackMetadata: (metadata: MediaRadio, podcast:Podcast|undefined,history?: Array<MediaRadio> ) => void): Promise<void>{
       const metadata = await octopusApi.fetchData<MetadataRadio>(14, 'player/playing/'+canalId);
       const arrayMetadata = metadata.previously;
       arrayMetadata.unshift(metadata.currently);
-      for (let el of arrayMetadata) {
-        if(dayjs().valueOf()-29000 > dayjs(el.startDate).valueOf()){
-          if(previousTitle !== el.title){
-            if(el.podcastId){
-              const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+el.podcastId); 
-              callbackMetadata(el, data);
+      for (let index = 0, len = arrayMetadata.length; index < len; index++) {
+        if(dayjs().valueOf()-18000 > dayjs(arrayMetadata[index].startDate).valueOf()){
+          if(previousTitle !== arrayMetadata[index].title){
+            if(arrayMetadata[index].podcastId){
+              const data : Podcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+arrayMetadata[index].podcastId); 
+              callbackMetadata(arrayMetadata[index], data, arrayMetadata.slice(index, len));
             }else{
-              callbackMetadata(el);
+              callbackMetadata(arrayMetadata[index], undefined, arrayMetadata.slice(index, len));
             }
           }
           return;

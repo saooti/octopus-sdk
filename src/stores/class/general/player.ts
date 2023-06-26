@@ -5,18 +5,16 @@ export interface Radio{
   canalId: number;
   url: string;
   metadata: MediaRadio;
+  history: Array<MediaRadio>;
   isInit: boolean;
   podcast?: Podcast;
 }
 export interface MediaRadio{
   artist:string;
-  /* kind:string; */
   mediaId?:number;
-  /* mediaType:string|null; */
   podcastId:number;
   startDate:string;
   title:string;
-  /* uri:string; */
   mediaDuration: number,
   playDuration: number,
 }

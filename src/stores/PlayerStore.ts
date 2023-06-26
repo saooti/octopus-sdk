@@ -128,9 +128,10 @@ export const usePlayerStore = defineStore('PlayerStore', {
 			this.playerSeekTime = seekTime;
 		},
 
-		playerMetadata(metadata: MediaRadio){
+		playerMetadata(metadata: MediaRadio, history: Array<MediaRadio>){
 			if(!this.playerRadio){return;}
 			this.playerRadio.metadata = metadata;
+			this.playerRadio.history = history;
 		},
 		playerRadioPodcast(podcast: Podcast|undefined){
 			if(!this.playerRadio){return;}

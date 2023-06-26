@@ -1,0 +1,50 @@
+@import '@scss/_variables.scss';
+.octopus-app{
+  .octopus-progress{
+    display: flex;
+    overflow: hidden;
+    background-color:#e9ecef;
+    border-radius: $octopus-borderradius;
+    position: relative;
+    cursor: pointer;
+
+    .octopus-progress-bar{
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      color: white;
+      text-align: center;
+      white-space: nowrap;
+      background-color: $octopus-primary-color;
+      transition: width 0.6s ease;
+    }
+    &,.octopus-progress-bar{
+      height: 4px;
+      @media (max-width: 960px) {
+        height: 8px;
+      }
+    }
+    &.large,&.large .octopus-progress-bar{
+      height: 15px;
+    }
+    &.medium,&.medium .octopus-progress-bar{
+      height: 6px;
+    }
+    .octopus-progress-bar-duration {
+      width: 10px;
+    }
+    .octopus-progress-bar-cursor{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: black;
+      align-self: center;
+      position: absolute;
+    }
+    .end-0{
+      right: 0;
+    }
+  }
+}

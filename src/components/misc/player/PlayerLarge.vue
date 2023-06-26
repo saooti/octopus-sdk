@@ -32,6 +32,7 @@
     </div>
     <div class="player-grow-large-content">
       <PlayerProgressBar
+        v-if="!radioUrl"
         ref="progressbar"
         class-progress="large"
         :hls-ready="hlsReady"
@@ -44,11 +45,14 @@
         :listen-time="listenTime"
         @updateNotListenTime="$emit('update:notListenTime', $event)"
       />
+      <RadioProgressBar v-else />
       <div class="d-flex justify-content-between">
         <div>{{ playedTime }}</div>
         <div>{{ totalTime }}</div>
       </div>
+      <RadioHistory v-if="radioUrl" />
     </div>
+    
     <div
       v-if="''!=transcriptText"
       class="flex-grow-1 d-flex align-items-center w-100"
@@ -94,17 +98,21 @@
 import Spinner from '../Spinner.vue';
 import { playerDisplay } from '../../mixins/player/playerDisplay';
 import imageProxy from '../../mixins/imageProxy';
-import PlayerProgressBar from './PlayerProgressBar.vue';
 import PlayerTimeline from './PlayerTimeline.vue';
-import { defineComponent } from 'vue';
+import { defineAsyncComponent, defineComponent } from 'vue';
 import { CommentPodcast } from '@/stores/class/general/comment';
+const RadioProgressBar = defineAsyncComponent(() => import('./radio/RadioProgressBar.vue'));
+const RadioHistory = defineAsyncComponent(() => import('./radio/RadioHistory.vue'));
+const PlayerProgressBar = defineAsyncComponent(() => import('./PlayerProgressBar.vue'));
 export default defineComponent({
   name: 'PlayerLarge',
 
   components: {
     PlayerProgressBar,
+    RadioProgressBar,
     PlayerTimeline,
-    Spinner
+    Spinner,
+    RadioHistory
   },
     mixins:[playerDisplay, imageProxy],
 

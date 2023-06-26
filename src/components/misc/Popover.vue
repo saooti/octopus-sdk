@@ -169,7 +169,7 @@ export default defineComponent({
 		min-width: 200px;
 		.octopus-dropdown-item{
 			display: flex;
-    	justify-content: center;
+			justify-content: center;
 			color: rgb(29, 29, 29);
 			width: 100%;
 			padding: 0.25rem 1rem;
