@@ -63,6 +63,7 @@ export const getClassicLoading = () => import("./src/components/form/ClassicLoad
 export const getClassicSelect = () => import("./src/components/form/ClassicSelect.vue");
 export const getClassicDatePicker = () => import("./src/components/form/ClassicDatePicker.vue");
 export const getPaginate = () => import("./src/components/display/list/Paginate.vue");
+export const getPaginateParams = () => import("./src/components/display/list/PaginateParams.vue");
 export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
 export const getClassicMultiselect = () => import("./src/components/form/ClassicMultiselect.vue");
 export const getClassicInputText = () => import("./src/components/form/ClassicInputText.vue");
