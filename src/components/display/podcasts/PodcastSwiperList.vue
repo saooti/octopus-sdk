@@ -80,7 +80,7 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ['filterOrgaId']),
     organisation(): Array<string> {
-      if(this.organisationId){
+      if(this.organisationId.length){
         return this.organisationId;
       }
       return this.filterOrgaId ? [this.filterOrgaId] : [];

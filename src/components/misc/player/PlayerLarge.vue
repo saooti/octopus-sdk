@@ -35,7 +35,6 @@
         v-if="!radioUrl"
         ref="progressbar"
         class-progress="large"
-        :hls-ready="hlsReady"
         :show-timeline="showTimeline"
         :comments="comments"
         :display-alert-bar="displayAlertBar"
@@ -119,7 +118,6 @@ export default defineComponent({
   props: {
     playerError: { default: false, type: Boolean},
     notListenTime: { default: 0 , type: Number},
-    hlsReady: { default: false , type: Boolean},
     comments: { default: ()=>[] , type: Array as ()=> Array<CommentPodcast> },
     displayAlertBar: { default: false , type: Boolean},
     percentLiveProgress: { default: 0 , type: Number},

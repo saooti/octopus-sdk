@@ -21,7 +21,6 @@
         v-if="!playerLargeVersion"
         v-model:notListenTime="notListenTime"
         :player-error="playerError"
-        :hls-ready="hlsReady"
         :comments="comments"
         :display-alert-bar="displayAlertBar"
         :percent-live-progress="percentLiveProgress"
@@ -34,7 +33,6 @@
         v-else
         v-model:notListenTime="notListenTime"
         :player-error="playerError"
-        :hls-ready="hlsReady"
         :comments="comments"
         :display-alert-bar="displayAlertBar"
         :percent-live-progress="percentLiveProgress"
@@ -75,7 +73,6 @@ export default defineComponent({
       percentLiveProgress: 0 as number,
       durationLivePosition: 0 as number,
       displayAlertBar: false as boolean,
-      hlsReady: false as boolean,
       comments: [] as Array<CommentPodcast>,
       audioUrlToPlay: "" as string
     };
