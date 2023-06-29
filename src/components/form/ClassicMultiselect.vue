@@ -19,6 +19,7 @@
       :disabled="isDisabled"
       :loading="isLoading"
       :placeholder="placeholder"
+      :filter="fakeSearch"
       :selectable="()=>!maxOptionsSelected"
       @open="onSearch"
       @search="onSearch"
@@ -135,6 +136,9 @@ import vSelect from "vue-select";
     },
     
     methods:{
+      fakeSearch():Array<unknown>{
+        return this.options;
+      },
       onSearch(search: string): void{
         if(search && search.length < this.minSearchLength){return;}
         this.isLoading = true;
