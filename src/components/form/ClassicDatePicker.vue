@@ -2,10 +2,10 @@
   <DatePicker
     ref="datePicker"
     :model-value="undefined!==range ? range : date"
+    :model-modifiers="{ range:undefined!==range }"
     :mode="mode"
     color="green"
     is24hr
-    :is-range="undefined!==range"
     :max-date="isMaxDate ? now : undefined"
     :min-date="isMinDate ? now : undefined"
     :columns="columnNumber"
