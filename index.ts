@@ -70,13 +70,13 @@ export const getClassicInputText = () => import("./src/components/form/ClassicIn
 
 //mixins
 
-import selenium from "./src/components/mixins/selenium";
-import cookies from "./src/components/mixins/cookies";
-import displayMethods from "./src/components/mixins/displayMethods";
-import imageProxy from "./src/components/mixins/imageProxy";
-import orgaFilter from "./src/components/mixins/organisationFilter";
-import initSDK from "./src/components/mixins/init";
-import tagOfMixins from "./src/components/mixins/tagOfMixins";
+import selenium from "./src/components/mixins/selenium.ts";
+import cookies from "./src/components/mixins/cookies.ts";
+import displayMethods from "./src/components/mixins/displayMethods.ts";
+import imageProxy from "./src/components/mixins/imageProxy.ts";
+import orgaFilter from "./src/components/mixins/organisationFilter.ts";
+import initSDK from "./src/components/mixins/init.ts";
+import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
 
 export {
     selenium,
