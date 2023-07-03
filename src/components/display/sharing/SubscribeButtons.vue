@@ -44,7 +44,6 @@ export default defineComponent({
         {name:'podcastAddict', icon: 'saooti-podcast-addict', title:'Podcast Addict', url : this.getUrl('podcastAddict')},
         {name:'radioline', icon:'saooti-radioline',title:'Radioline', url : this.getUrl('radioline')},
         {name:'spotify', icon:'saooti-spotify',title:'Spotify',  url : this.getUrl('spotify')},
-        {name:'stitcher', icon:'saooti-stitcher-logo', title:'Stitcher', url : this.getUrl('stitcher')},
         {name:'tunein', icon:'saooti-tunin',title:'TuneIn', url : this.getUrl('tunein')}
       ];
       return sub.filter(item=> item.url);

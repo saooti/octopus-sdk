@@ -74,7 +74,6 @@ export default defineComponent({
       {url:this.getUrl('PodcastAddict'), icon:'saooti-podcast-addict', title:'Podcast Addict'},
       {url:this.getUrl('radioline'), icon:'saooti-radioline', title:'Radioline'},
       {url:this.getUrl('spotify'), icon:'saooti-spotify', title:'Spotify'},
-      {url:this.getUrl('Stitcher'), icon:'saooti-stitcher-logo', title:'Stitcher'},
       {url:this.getUrl('tuneIn'), icon:'saooti-tunin', title:'TuneIn'}];
     }
   },

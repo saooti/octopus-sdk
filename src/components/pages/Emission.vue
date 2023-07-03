@@ -161,7 +161,7 @@ export default defineComponent({
     },
     countLink(): number {
       const platformShare = ['amazon','googlePodcasts','applePodcast', 'deezer', 'spotify', 'tunein',
-       'radioline', 'podcastAddict', 'playerFm', 'stitcher', 'pocketCasts'];
+       'radioline', 'podcastAddict', 'playerFm', 'pocketCasts'];
       let count = 0;
       for (let i = 0, len = platformShare.length; i < len; i++) {
         if (undefined !== this.emission?.annotations?.[platformShare[i]]) count++;
