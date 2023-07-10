@@ -146,14 +146,15 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 							background: transparent;
 							border-color: white !important;
 					}
-					&:disabled{
+					&:not(.btn-on-dark):disabled,
+					&.btn-on-dark:disabled{
 							background-color: #cccccc;
 							border: 1px solid black;
 							cursor: default;
 							color: gray !important;
 					}
 					@media (max-width: 500px){
-					margin: 0.3rem;
+						margin: 0.3rem;
 					}
 			}
 

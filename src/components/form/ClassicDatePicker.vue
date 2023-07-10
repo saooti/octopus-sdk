@@ -12,6 +12,7 @@
     :is-inline="columnNumber>1"
     :update-on-input="conditionEdit"
     :masks="isMask ? masks : undefined"
+    :time-accuracy="timeAccuracy"
     @update:modelValue="$emit('updateDate', $event)"
   >
     <template
@@ -41,6 +42,7 @@ export default defineComponent({
     isMaxDate:{ default: false, type:  Boolean},
     isMinDate:{ default: false, type:  Boolean},
     columnNumber:{default:1, type: Number},
+    timeAccuracy:{default:2, type: Number},
     templateClass:{default: undefined,  type: String},
     mode:{default:"dateTime", type: String},
     isMask:{default: false,  type: Boolean},
@@ -66,6 +68,9 @@ export default defineComponent({
 @import '@scss/_variables.scss';
 @import 'v-calendar/dist/style.css';
 .octopus-app{
+  .vc-base-select select{
+    border: 0 !important;
+  }
 	.vc-select select{
 		padding: 0 !important;
 	}

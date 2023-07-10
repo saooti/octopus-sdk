@@ -1,19 +1,37 @@
 <template>
   <div 
-    v-if="playerRadio.history.length"
-    class="d-flex align-items-center flex-wrap mt-3"
+    v-if="playerRadioHistory.length"
+    class="d-flex align-items-center mt-3"
   >
     <div class="fw-bold me-3">
       {{ $t('Previously') +':' }}
     </div>
-    <div 
-      v-for="pastItem in playerRadio.history" 
-      :key="pastItem.title"
-      class="me-3"
+    <button
+      v-if="indexStart!==0"
+      class="btn btn-transparent text-light saooti-left"
+      @click="handleResize(0)"
+    />
+    <div
+      ref="historyListContainer"
+      class="history-list-container"
     >
-      <span class="me-2 hour-past-item">{{ displayTimeItem(pastItem) }}</span>
-      <span>{{ displayPreviousItem(pastItem) }}</span>
+      <div 
+        v-for="(pastItem, index) in playerRadioHistory" 
+        :key="pastItem.title"
+        :ref="'history' + index"
+        class="d-flex flex-shrink-0"
+      >
+        <div class="d-flex flex-shrink-0 align-items-end">
+          <span class="me-2 hour-past-item">{{ displayTimeItem(pastItem) }}</span>
+          <span class="me-3">{{ displayPreviousItem(pastItem) }}</span>
+        </div>
+      </div>
     </div>
+    <button
+      v-if="indexNotDisplay<=playerRadioHistory.length-1"
+      class="btn btn-transparent text-light saooti-right"
+      @click="handleResize(indexNotDisplay)"
+    />
   </div>
 </template>
 
@@ -34,16 +52,70 @@ export default defineComponent({
   emits: ['updateNotListenTime'],
   data() {
     return {
+      indexStart: 0 as number,
+      indexNotDisplay: 100 as number,
     };
   },
   
   computed: {
     ...mapState(usePlayerStore, ['playerRadio']),
+    playerRadioHistory(){
+      return this.playerRadio?.history ?? [];
+    }
   },
-  mounted(){
-    console.log(this.playerRadio);
+  watch:{
+    playerRadioHistory: {
+      deep: true,
+      immediate:true,
+      handler(){
+        this.$nextTick(() => {
+          this.handleResize(0);
+        });
+      }
+    },
+  },
+  created() {
+    window.addEventListener('resize', ()=>{this.handleResize(0);});
+  },
+  unmounted() {
+    window.removeEventListener('resize', ()=>{this.handleResize(0);});
+  },
+  mounted() {
+    this.handleResize(0);
   },
   methods:{
+    handleResize(indexAsked:number): void {
+      const historyList = (this.$refs.historyListContainer as HTMLElement);
+      if(null === historyList ||!historyList){
+        return;
+      }
+      this.indexStart = indexAsked;
+      this.indexNotDisplay = this.playerRadioHistory.length;
+      for (let index = 0; index < this.playerRadioHistory.length; index++) {
+        const el = (this.$refs['history' +index] as Array<HTMLElement>)[0];
+        if (!el) continue;
+        if(index < this.indexStart && !el.classList.contains('hid')){
+          el.classList.add('hid');
+          continue;
+        }
+        if (index >= this.indexStart && el.classList.contains('hid')) {
+          el.classList.remove('hid');
+        }
+      }
+      for (let index = this.indexStart + 1; index < this.playerRadioHistory.length; index++) {
+        const el = (this.$refs['history' +index] as Array<HTMLElement>)[0];
+        if (!el) continue;
+        if (index > this.indexNotDisplay && !el.classList.contains('hid')) {
+          el.classList.add('hid');
+          continue;
+        }
+        const parent = el.parentElement;
+        if (parent && el.offsetLeft + el.clientWidth > parent.clientWidth ) {
+          this.indexNotDisplay = index;
+          el.classList.add('hid');
+        }
+      }
+    },
     displayTimeItem(item: MediaRadio):string{
       return dayjs(item.startDate).format('HH:mm');
     },
@@ -58,6 +130,14 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .octopus-app{
+  .history-list-container {
+    display: inline-flex;
+    justify-content: flex-start;
+    overflow: hidden;
+    flex-grow: 1;
+    width: 0;
+    position: relative;
+  }
   .hour-past-item{
     font-size: 0.8rem;
     color: #dbdbdb;

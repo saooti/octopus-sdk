@@ -37,6 +37,7 @@ export default defineComponent({
 
   props: {
     listObject: { default: ()=>[], type: Array as ()=> Array<unknown>},
+    sizeItemOverload:{default: undefined, type: Number}
   },
 
   data() {
@@ -47,6 +48,9 @@ export default defineComponent({
   },
   computed: {
     sizeItem(): number {
+      if(this.sizeItemOverload){
+        return this.sizeItemOverload;
+      }
       if (window.innerWidth <= 450) {
         return 12.5;
       }
