@@ -48,6 +48,9 @@ export const getCommentList = () => import("./src/components/display/comments/Co
 export const getCommentInput = () => import("./src/components/display/comments/CommentInput.vue");
 export const getPodcastPlaylistInlineList = () => import("./src/components/display/playlist/PodcastPlaylistInlineList.vue");
 
+//Radio
+export const getRadioCurrently = () => import("./src/components/display/live/RadioCurrently.vue");
+
 
 //AdvancedSearch
 export const getAdvancedSearch = () => import("./src/components/display/filter/AdvancedSearch.vue");
