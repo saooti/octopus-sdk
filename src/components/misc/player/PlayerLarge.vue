@@ -63,7 +63,7 @@
     <div class="d-flex align-items-center flex-grow-1">
       <button
         title="-15''"
-        class="btn fs-1 bg-transparent text-light saooti-backward"
+        class="btn fs-1 bg-transparent text-light saooti-recule"
         @click="seekClick(-15)"
       />
       <button
@@ -83,7 +83,7 @@
       </button>
       <button
         title="+15''"
-        class="btn fs-1 bg-transparent text-light saooti-forward"
+        class="btn fs-1 bg-transparent text-light saooti-avance"
         @click="seekClick(15)"
       />
     </div>
@@ -177,6 +177,9 @@ export default defineComponent({
     font-size: 2.5rem !important;
     flex-shrink: 0;
     cursor: pointer;
+  }
+  .saooti-recule, .saooti-avance{
+    font-size: 2rem !important;
   }
   .transcript-bg{
     background: #3e3e3e;

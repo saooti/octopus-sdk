@@ -20,15 +20,13 @@
         :is-fixed="true"
       />
     </div>
-    <div class="d-flex align-items-center justify-content-between">
-      <ShareButtonsIntern
-        :podcast="podcast"
-        :emission="emission"
-        :playlist="playlist"
-        :participant-id="participantId"
-        :organisation-id="organisationId"
-      />
-    </div>
+    <ShareButtonsIntern
+      :podcast="podcast"
+      :emission="emission"
+      :playlist="playlist"
+      :participant-id="participantId"
+      :organisation-id="organisationId"
+    />
   </div>
 </template>
 

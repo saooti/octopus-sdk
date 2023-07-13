@@ -12,7 +12,7 @@ interface AuthState{
     refreshToken?: string;
     expiration?: Date;
   };
-  authProfile: Profile;
+  authProfile?: Profile;
   authOrganisation: Organisation;
 }
 export const useAuthStore = defineStore('AuthStore', {
@@ -24,9 +24,7 @@ export const useAuthStore = defineStore('AuthStore', {
       refreshToken: undefined,
       expiration: undefined,
     },
-    authProfile: {
-      userId: '',
-    },
+    authProfile: undefined,
     authOrganisation: {
       id: '',
       name: '',
@@ -40,4 +38,8 @@ export const useAuthStore = defineStore('AuthStore', {
       },
     },
   }),
+  getters:{
+    isGarRole():string|undefined{ return (this.authProfile?.attributes?.["GAR"] as string|undefined);/* return "ELEVE"; */ /*CHEF_ETABLISSEMENT, ENSEIGNANT, ELEVE, undefined */},
+    isGarStudent():boolean{ return "ELEVE"===this.isGarRole;},
+  },
 })

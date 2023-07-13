@@ -3,13 +3,13 @@
     class="d-flex align-items-center"
   >
     <router-link
-      v-if="authenticated"
+      v-if="isAuthenticatedWithOrga"
       :title="$t('My space')"
       to="/main/priv/backoffice"
       class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu"
     />
     <router-link
-      v-if="isContribution"
+      v-if="isAuthenticatedWithOrga && isContribution"
       :title="$t('Upload')"
       to="/main/priv/upload"
       class="btn admin-button hide-smallest-screen m-1 saooti-upload"
@@ -25,7 +25,7 @@
       :is-fixed="true"
       :left-pos="true"
     >
-      <template v-if="!authenticated">
+      <template v-if="!isAuthenticated">
         <a
           class="octopus-dropdown-item"
           href="/sso/login"
@@ -54,7 +54,7 @@
             {{ routerBack.title }}
           </router-link>
         </template>
-        <template v-if="!isEducation">
+        <template v-if="helpLinks.length">
           <hr>
           <template
             v-for="helpLink in helpLinks"
@@ -106,11 +106,12 @@ export default defineComponent({
     isEducation: { default: false, type: Boolean},
   },
   computed: {
-    ...mapState(useAuthStore, ['authProfile']),
+    ...mapState(useAuthStore, ['authProfile', 'isGarRole']),
     organisationsAvailable(): Array<Organisation>{
       return this.authProfile.organisations?? [];
     },
     helpLinks(){
+      if(this.isGarRole || this.isEducation){return [];}
       return [
         {title:this.$t('Help'), href:'https://help.octopus.saooti.com/Aide/'},
         {title:this.$t('TutoMag'),href:"https://help.octopus.saooti.com/"}];
@@ -118,13 +119,15 @@ export default defineComponent({
     routerBackoffice(){
       return [
         {title:this.$t('Edit my profile'),class:"octopus-dropdown-item", path:'/main/priv/edit/profile', condition: true},
-        {title:this.$t('Edit my organisation'),class:"octopus-dropdown-item", path:'/main/priv/edit/organisation', condition: (state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length}];
+        {title:this.$t('Edit my organisation'),class:"octopus-dropdown-item", path:'/main/priv/edit/organisation', condition: this.isAuthenticatedWithOrga && ((state.generalParameters.isOrganisation as boolean) || 1<this.organisationsAvailable.length)}];
     },
-    
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
     },
-    authenticated(): boolean {
+    isAuthenticated(): boolean {
+      return undefined!==this.authProfile?.userId;
+    },
+    isAuthenticatedWithOrga(): boolean {
       return state.generalParameters.authenticated??false;
     },
     isContribution(): boolean {
