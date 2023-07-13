@@ -14,7 +14,6 @@ export interface Emission {
   orga: Organisation;
   rubriqueIds: Array<number>;
   score?: number;
-  soundcastTag?: string;
   publisher?: Person;
   copyright?: string;
   optItunesCategories?: Array<string>;
