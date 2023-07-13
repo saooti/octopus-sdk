@@ -167,9 +167,6 @@ export default defineComponent({
         state.generalParameters.organisationId === this.podcastOrga) ||
         true === state.generalParameters.isAdmin;
     },
-    userId(): string|undefined {
-      return state.generalParameters.authenticated ? this.authProfile?.userId : undefined;
-    },
     phase(): string|undefined {
       if(undefined === this.podcast){
         return this.comment ? this.comment.phase : undefined;
@@ -272,7 +269,7 @@ export default defineComponent({
         organisationId: this.podcastOrga,
         commentIdReferer:this.comment?.comId,
         certified: this.isCertified,
-        userId: this.userId,
+        userId: this.authProfile?.userId,
         phase: this.phase,
       };
       try {

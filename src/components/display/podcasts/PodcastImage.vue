@@ -125,9 +125,6 @@ export default defineComponent({
           this.playerLive?.conferenceId ===this.fetchConference.conferenceId)
       );
     },
-    authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
-    },
     mainRubrique(): boolean{
       return undefined!==state.podcastPage.mainRubrique && 0!==state.podcastPage.mainRubrique && (this.podcast?.rubriqueIds?.includes(state.podcastPage.mainRubrique) as boolean);
     },
@@ -157,7 +154,7 @@ export default defineComponent({
         false !== this.podcast.valid &&
           ('READY_TO_RECORD' === this.podcast.processingStatus ||
             'READY' === this.podcast.processingStatus || 
-            ('PROCESSING' === this.podcast.processingStatus && !this.authenticated)) &&
+            ('PROCESSING' === this.podcast.processingStatus && !(state.generalParameters.authenticated as boolean))) &&
         !this.isLiveToBeRecorded && undefined!==this.podcast.availability.visibility 
         && this.podcast.availability.visibility
       );

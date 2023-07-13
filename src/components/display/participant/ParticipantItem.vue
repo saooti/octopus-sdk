@@ -138,6 +138,7 @@ export default defineComponent({
     word-break: break-word;
     max-height: 3rem;
     position: relative;
+    text-align: center;
     &.after-participant-description:after {
       content: '...';
       position: absolute;

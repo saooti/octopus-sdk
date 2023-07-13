@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="text-secondary h6 ms-2">
     {{ date }}
   </div>
@@ -39,6 +40,7 @@
     >
       {{ '© ' + orgaNameDisplay }}
     </router-link>
+  </div>
   </div>
 </template>
 
@@ -94,7 +96,7 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app{
   .title-podcast-item {
-    font-weight: 400;
+    font-weight: 700;
     margin: 0.25rem 0.5rem 0.5rem;
     overflow: hidden;
     display: -webkit-box;

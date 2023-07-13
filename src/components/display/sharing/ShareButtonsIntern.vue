@@ -1,121 +1,125 @@
 <template>
-  <div class="d-flex flex-column me-2">
-    <div class="h4 mb-2">
-      {{ $t('Social networks') }}
+  <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex flex-column me-2" v-if="!isGarStudent">
+      <div class="h4 mb-2">
+        {{ $t('Social networks') }}
+      </div>
+      <div class="d-flex align-items-center">
+        <template
+          v-for="button in arrayShareButtons"
+          :key="button.title"
+        >
+          <a
+            v-if="button.condition"
+            rel="noopener"
+            target="_blank"
+            :href="button.url"
+            :class="getClass(button.className)"
+            class="me-2"
+            :title="button.title"
+          >
+            <div :class="button.icon" />
+          </a>
+        </template>
+      </div>
     </div>
-    <div class="d-flex align-items-center">
-      <template
-        v-for="button in arrayShareButtons"
-        :key="button.title"
-      >
+    <div
+      v-if="podcast || emission ||playlist"
+      class="d-flex flex-column me-2"
+    >
+      <div class="h4 mb-2">
+        {{ $t('Newsletter') }}
+      </div>
+      <div class="d-flex align-items-center justify-content-center">
+        <button
+          :class="getClass()"
+          class="saooti-newsletter"
+          :title="$t('Share newsletter')"
+          @click="newsletter = true"
+        />
+      </div>
+    </div>
+
+    <div class="d-flex flex-column me-2">
+      <div class="h4 mb-2">
+        {{ $t('QR Code') }}
+      </div>
+      <div class="d-flex align-items-center justify-content-center">
+        <button
+          :class="getClass()"
+          :title="$t('Share QR Code')"
+          class="saooti-qrcode"
+          @click="qrCode = true"
+        />
+      </div>
+    </div>
+
+    <div class="d-flex flex-column me-2">
+      <div class="h4 mb-2">
+        {{ $t('Copy this page URL') }}
+      </div>
+      <div class="d-flex align-items-center justify-content-center">
+        <button
+          :class="getClass()"
+          class="saooti-link"
+          :title="$t('Copy this page URL')"
+          @click="onCopyCode(urlPage,afterCopy)"
+        />
+      </div>
+    </div>
+
+    <div
+      v-if="''!==rssUrl && displayRss"
+      class="d-flex flex-column me-2"
+    >
+      <div class="h4 mb-2">
+        {{ $t('Rss feed') }}
+      </div>
+      <div class="d-flex align-items-center justify-content-center">
         <a
-          v-if="button.condition"
           rel="noopener"
           target="_blank"
-          :href="button.url"
-          :class="getClass(button.className)"
-          class="me-2"
-          :title="button.title"
-        >
-          <div :class="button.icon" />
-        </a>
-      </template>
+          class="saooti-rss"
+          :class="getClass()"
+          :href="rssUrl"
+          :title="titleRssButton"
+          @click.prevent="openPopup()"
+        />
+      </div>
     </div>
-  </div>
-  <div
-    v-if="podcast || emission ||playlist"
-    class="d-flex flex-column me-2"
-  >
-    <div class="h4 mb-2">
-      {{ $t('Newsletter') }}
-    </div>
-    <div class="d-flex align-items-center justify-content-center">
-      <button
-        :class="getClass()"
-        class="saooti-newsletter"
-        :title="$t('Share newsletter')"
-        @click="newsletter = true"
-      />
-    </div>
-  </div>
-
-  <div class="d-flex flex-column me-2">
-    <div class="h4 mb-2">
-      {{ $t('QR Code') }}
-    </div>
-    <div class="d-flex align-items-center justify-content-center">
-      <button
-        :class="getClass()"
-        :title="$t('Share QR Code')"
-        class="saooti-qrcode"
-        @click="qrCode = true"
-      />
-    </div>
-  </div>
-
-  <div class="d-flex flex-column me-2">
-    <div class="h4 mb-2">
-      {{ $t('Copy this page URL') }}
-    </div>
-    <div class="d-flex align-items-center justify-content-center">
-      <button
-        :class="getClass()"
-        class="saooti-link"
-        :title="$t('Copy this page URL')"
-        @click="onCopyCode(urlPage,afterCopy)"
-      />
-    </div>
-  </div>
-
-  <div
-    v-if="''!==rssUrl && displayRss"
-    class="d-flex flex-column me-2"
-  >
-    <div class="h4 mb-2">
-      {{ $t('Rss feed') }}
-    </div>
-    <div class="d-flex align-items-center justify-content-center">
-      <a
-        rel="noopener"
-        target="_blank"
-        class="saooti-rss"
-        :class="getClass()"
-        :href="rssUrl"
-        :title="titleRssButton"
-        @click.prevent="openPopup()"
-      />
-    </div>
-  </div>
- 
   
-  <ClipboardModal
-    v-if="dataRSSSave"
-    :link="rssUrl"
-    :emission="emission"
-    @close="dataRSSSave = false"
-    @copy="afterCopy"
-  />
-  <NewsletterModal
-    v-if="newsletter"
-    :closable="true"
-    :podcast="podcast"
-    :emission="emission"
-    :playlist="playlist"
-    @close="newsletter = false"
-  />
-  <QrCodeModal
-    v-if="qrCode"
-    :closable="true"
-    :url-page="urlPage"
-    @close="qrCode = false"
-  />
-  <Snackbar
-    ref="snackbar"
-    position="bottom-left"
-  />
+    
+    <ClipboardModal
+      v-if="dataRSSSave"
+      :link="rssUrl"
+      :emission="emission"
+      @close="dataRSSSave = false"
+      @copy="afterCopy"
+    />
+    <NewsletterModal
+      v-if="newsletter"
+      :closable="true"
+      :podcast="podcast"
+      :emission="emission"
+      :playlist="playlist"
+      @close="newsletter = false"
+    />
+    <QrCodeModal
+      v-if="qrCode"
+      :closable="true"
+      :url-page="urlPage"
+      @close="qrCode = false"
+    />
+    <Snackbar
+      ref="snackbar"
+      position="bottom-left"
+    />
+  </div>
 </template>
 
 <script lang="ts">
+import { useAuthStore } from '@/stores/AuthStore';
+import { mapState } from 'pinia';
 import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/stores/class/general/emission';
 import { Podcast } from '@/stores/class/general/podcast';
@@ -155,6 +159,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ['isGarStudent']),
     titleRssButton(): string{
       if(this.participantId){
         return this.$t('Subscribe to this participant');

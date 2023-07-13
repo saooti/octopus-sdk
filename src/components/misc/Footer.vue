@@ -6,15 +6,15 @@
   >
     <div
       v-if="!isPodcastmaker"
-      class="d-flex align-items-center px-1"
+      class="d-flex flex-column px-1"
     >
-      <div class="text-dark me-2">
+      <div class="text-dark my-1 special-select-align-magic-trick">
         &copy; Saooti 2019
       </div>
       <router-link
         v-for="link in routerLinkSecondArray" 
         :key="link.routeName"
-        class="link-hover me-2"
+        class="link-hover my-1 special-select-align-magic-trick"
         :to="link.routeName"
       >
         {{ link.title }}
@@ -31,6 +31,7 @@
                    {title:'Français', value:'fr'},
                    {title:'Italiano', value:'it'},
                    {title:'Slovenščina', value:'sl'}]"
+        class="mb-2"
       />
     </div>
     <a
@@ -45,20 +46,16 @@
       <div class="hosted-by">
         {{ $t('Hosted by') }}<span class="ms-1 me-1 text-primary">Saooti</span>
       </div>
+
+      <AcpmImage v-if="isGarRole"/>
       <a
+        v-else
         href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
         rel="noopener"
         target="_blank"
         :title="$t('Octopus is ACPM Podcast accredited')"
       >
-        <img
-          width="44"
-          height="44"
-          class="acpm_image"
-          src="/img/ACPM.webp"
-          :title="$t('Octopus is ACPM Podcast accredited')"
-          :alt="$t('Octopus is ACPM Podcast accredited')"
-        >
+        <AcpmImage/>
       </a>
     </div>
   </div>
@@ -67,11 +64,13 @@
 <script lang="ts">
 import cookies from '../mixins/cookies';
 import ClassicSelect from '../form/ClassicSelect.vue';
+import AcpmImage from './AcpmImage.vue';
 import { state } from '../../stores/ParamSdkStore';
 import {loadLocaleMessages} from '@/i18n';
 import octopusApi from '@saooti/octopus-api';
 import { useFilterStore } from '@/stores/FilterStore';
 import { useGeneralStore } from '@/stores/GeneralStore';
+import { useAuthStore } from '@/stores/AuthStore';
 import { mapState, mapActions } from 'pinia';
 import { Category } from '@/stores/class/general/category';
 import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
@@ -79,7 +78,8 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Footer',
   components: {
-    ClassicSelect
+    ClassicSelect,
+    AcpmImage
   },
 
   mixins:[cookies],
@@ -91,11 +91,16 @@ export default defineComponent({
   computed: {
     ...mapState(useGeneralStore, ['storedCategories', 'platformEducation']),
     ...mapState(useFilterStore, ['filterRubrique', 'filterOrgaId', 'filterIab']),
+    ...mapState(useAuthStore, ['isGarRole']),
     routerLinkSecondArray(){
-      return [
+      const links = [
         {title : this.$t('Contact'), routeName: '/main/pub/contact'},
-        {title : this.$t('Term of use'), routeName: '/main/pub/cgu'},
-        {title : this.$t('Used libraries'), routeName: "/main/pub/libraries"}]
+        {title : this.$t('Term of use'), routeName: '/main/pub/cgu'}];
+
+      if(!this.isGarRole){
+        links.push({title : this.$t('Used libraries'), routeName: "/main/pub/libraries"});
+      }
+      return links;
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);
@@ -153,12 +158,11 @@ export default defineComponent({
     z-index: 10;
     background: white;
     padding: 0 2rem;
-    .acpm_image {
-      width: 44px;
-      height: 44px;
-    }
     a{
       color: #666;
+    }
+    .special-select-align-magic-trick{
+      margin-left: 0.16rem;
     }
   }
 }

@@ -112,7 +112,7 @@ export default defineComponent({
   },
   methods: {
     initAuthenticatedName():void{
-      if (!state.generalParameters.authenticated) { return; }
+      if (!this.authProfile?.userId) { return; }
       this.name = (`${this.authProfile?.firstname||''} ${this.authProfile?.lastname||''}`).trim();
       this.isVerify = true;
     },

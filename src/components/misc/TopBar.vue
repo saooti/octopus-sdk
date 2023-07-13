@@ -270,7 +270,7 @@ export default defineComponent({
     }
   }
   &.scrolled{
-    .link-hover {
+    .link-hover, .saooti-down {
       display: none;
     }
     .saooti-menu {
