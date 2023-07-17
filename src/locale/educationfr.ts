@@ -1,5 +1,5 @@
 export default {
-  Productors: 'Académies & collectivités',
+  Productors: "Académies & collectivités",
   /* Productor: 'Établissement',
   'Number productors': '{nb} établissements',
   'select productor': 'Choisir un établissement',

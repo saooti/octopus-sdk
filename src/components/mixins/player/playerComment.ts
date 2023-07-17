@@ -1,12 +1,12 @@
-import { state } from '../../../stores/ParamSdkStore';
-import octopusApi from '@saooti/octopus-api';
-import { CommentPodcast } from '@/stores/class/general/comment';
-import { defineComponent } from 'vue';
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { useCommentStore } from '@/stores/CommentStore';
-import { mapState } from 'pinia';
-import { FetchParam } from '@/stores/class/general/fetchParam';
-import { InterfacePageable } from '@/stores/class/general/interfacePageable';
+import { state } from "../../../stores/ParamSdkStore";
+import octopusApi from "@saooti/octopus-api";
+import { CommentPodcast } from "@/stores/class/general/comment";
+import { defineComponent } from "vue";
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { useCommentStore } from "@/stores/CommentStore";
+import { mapState } from "pinia";
+import { FetchParam } from "@/stores/class/general/fetchParam";
+import { InterfacePageable } from "@/stores/class/general/interfacePageable";
 export const playerComment = defineComponent({
   data() {
     return {
@@ -14,9 +14,13 @@ export const playerComment = defineComponent({
     };
   },
   computed: {
-    ...mapState(useCommentStore, ['commentActualPodcastId', 'commentTotalCount', 'commentLoaded']),
-    ...mapState(usePlayerStore, ['playerPodcast', 'playerLive']),
-    organisationId(): string|undefined {
+    ...mapState(useCommentStore, [
+      "commentActualPodcastId",
+      "commentTotalCount",
+      "commentLoaded",
+    ]),
+    ...mapState(usePlayerStore, ["playerPodcast", "playerLive"]),
+    organisationId(): string | undefined {
       return state.generalParameters.organisationId;
     },
   },
@@ -28,13 +32,14 @@ export const playerComment = defineComponent({
   },
   methods: {
     editRight(organisation: string): boolean {
-      return (true===state.generalParameters.isCommments && this.organisationId === organisation) || true===state.generalParameters.isAdmin;
+      return (
+        (true === state.generalParameters.isCommments &&
+          this.organisationId === organisation) ||
+        true === state.generalParameters.isAdmin
+      );
     },
-    initCommentCurrentPodcast(podcastId?: number): Array<number>{
-      if (
-        podcastId &&
-        this.commentActualPodcastId === podcastId
-      ) {
+    initCommentCurrentPodcast(podcastId?: number): Array<number> {
+      if (podcastId && this.commentActualPodcastId === podcastId) {
         this.comments = this.commentLoaded;
         if (
           this.commentLoaded &&
@@ -45,7 +50,12 @@ export const playerComment = defineComponent({
       }
       return [0, 0];
     },
-    async fetchComments(first: number, count:number,podcastId?:number,organisation?:string){
+    async fetchComments(
+      first: number,
+      count: number,
+      podcastId?: number,
+      organisation?: string,
+    ) {
       const size = 50;
       while (0 === first || this.comments.length < count) {
         const param: FetchParam = {
@@ -53,15 +63,19 @@ export const playerComment = defineComponent({
           size: size,
           podcastId: podcastId,
         };
-        if (!this.editRight(organisation? organisation : '')) {
-          param.status = ['Valid'];
+        if (!this.editRight(organisation ? organisation : "")) {
+          param.status = ["Valid"];
         }
-        const data = await octopusApi.postDataPublic<InterfacePageable<CommentPodcast>>(2, 'getRootCom',param);
+        const data = await octopusApi.postDataPublic<
+          InterfacePageable<CommentPodcast>
+        >(2, "getRootCom", param);
         first += size;
         count = data.totalElements;
-        this.comments = this.comments.concat(data.content).filter((c: CommentPodcast) => {
-          return null !== c;
-        });
+        this.comments = this.comments
+          .concat(data.content)
+          .filter((c: CommentPodcast) => {
+            return null !== c;
+          });
       }
     },
     async initComments(refresh = false): Promise<void> {
@@ -73,24 +87,19 @@ export const playerComment = defineComponent({
         podcastId = this.playerLive.podcastId;
         organisation = this.playerLive.organisation.id;
       }
-      if (
-        refresh &&
-        podcastId &&
-        this.commentActualPodcastId !== podcastId
-      ) {
+      if (refresh && podcastId && this.commentActualPodcastId !== podcastId) {
         return;
       }
-      const param= this.initCommentCurrentPodcast(podcastId);
-      let first = param[0];
-      let count = param[1];
+      const param = this.initCommentCurrentPodcast(podcastId);
+      const first = param[0];
+      const count = param[1];
       if (
-        (!podcastId ||
-          this.commentActualPodcastId === podcastId) &&
+        (!podcastId || this.commentActualPodcastId === podcastId) &&
         0 === first
-      ){
+      ) {
         return;
       }
       await this.fetchComments(first, count, podcastId, organisation);
     },
   },
-})
+});

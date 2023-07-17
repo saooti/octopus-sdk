@@ -13,48 +13,48 @@
       :query="query"
       :first="0"
       :size="20"
-      @emptyList="noResult = true"
+      @empty-list="noResult = true"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { state } from '../../stores/ParamSdkStore';
-import ClassicSearch from '../form/ClassicSearch.vue';
-import PodcastList from '../display/podcasts/PodcastList.vue';
-import { defineComponent } from 'vue';
+import { state } from "../../stores/ParamSdkStore";
+import ClassicSearch from "../form/ClassicSearch.vue";
+import PodcastList from "../display/podcasts/PodcastList.vue";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Search",
+  name: "SearchPage",
   components: {
     PodcastList,
-    ClassicSearch
+    ClassicSearch,
   },
   props: {
-    queryRoute: { default: '', type: String },
+    queryRoute: { default: "", type: String },
   },
   data() {
     return {
-      rawQuery: '' as string,
+      rawQuery: "" as string,
       noResult: false as boolean,
     };
   },
   computed: {
-    titlePage():string{
-      if(!this.hideBar){
-        return this.$t('Podcast search');
+    titlePage(): string {
+      if (!this.hideBar) {
+        return this.$t("Podcast search");
       }
-      const locale = !this.noResult ? 'Search results' : 'Search - no results';
+      const locale = !this.noResult ? "Search results" : "Search - no results";
       return this.$t(locale, { query: this.rawQuery });
     },
     query(): string {
-      return this.rawQuery && this.rawQuery.length >= 3 ? this.rawQuery : '';
+      return this.rawQuery && this.rawQuery.length >= 3 ? this.rawQuery : "";
     },
     hideBar(): boolean {
-      return (state.searchPage.hideBar as boolean);
+      return state.searchPage.hideBar as boolean;
     },
   },
   watch: {
-    rawQuery(): void{
+    rawQuery(): void {
       if (this.hideBar) {
         this.noResult = false;
       }
@@ -62,9 +62,9 @@ export default defineComponent({
     queryRoute: {
       immediate: true,
       handler() {
-       this.rawQuery = this.queryRoute;
+        this.rawQuery = this.queryRoute;
       },
     },
   },
-})
+});
 </script>

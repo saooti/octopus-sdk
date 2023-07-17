@@ -1,23 +1,30 @@
 <template>
-  <div
-    class="top-bar-container"
-    :class="{ 'scrolled': scrolled }"
-  >
+  <div class="top-bar-container" :class="{ scrolled: scrolled }">
     <router-link
       class="top-bar-logo"
       :to="{
         name: 'home',
-        query: { productor: filterOrgaId,
-                 iabId: filterIab?.id ,
-                 rubriquesId: rubriqueQueryParam},
+        query: {
+          productor: filterOrgaId,
+          iabId: filterIab?.id,
+          rubriquesId: rubriqueQueryParam,
+        },
       }"
       @click="onDisplayMenu(true)"
     >
       <img
-        :src="!filterOrgaId || '' === imgUrl ? logoUrl : proxyImageUrl(imgUrl, '', '50')"
-        :alt="!filterOrgaId || '' === imgUrl ? $t('Logo of main page') : $t('Visual', {name: filterName})"
+        :src="
+          !filterOrgaId || '' === imgUrl
+            ? logoUrl
+            : proxyImageUrl(imgUrl, '', '50')
+        "
+        :alt="
+          !filterOrgaId || '' === imgUrl
+            ? $t('Logo of main page')
+            : $t('Visual', { name: filterName })
+        "
         :class="isEducation ? 'educationLogo' : ''"
-      >
+      />
     </router-link>
     <OrganisationChooserLight
       v-if="!isPodcastmaker"
@@ -30,10 +37,7 @@
       @selected="onOrganisationSelected"
     />
     <div class="d-flex justify-content-end flex-grow-1">
-      <template
-        v-for="link in routerLinkArray"
-        :key="link.routeName"
-      >
+      <template v-for="link in routerLinkArray" :key="link.routeName">
         <router-link
           v-if="link.condition"
           :to="{
@@ -50,21 +54,18 @@
         class="d-flex align-items-center hide-phone btn-transparent p-3"
       >
         <div class="link-hover">
-          {{ $t('More') }}
+          {{ $t("More") }}
         </div>
         <div class="ms-1 saooti-down" />
       </button>
-      <Popover
+      <ClassicPopover
         target="more-dropdown"
         :only-click="true"
         :is-fixed="true"
         :left-pos="true"
       >
         <div class="d-flex flex-column">
-          <template
-            v-for="link in routerLinkInsideArray"
-            :key="link.routeName"
-          >
+          <template v-for="link in routerLinkInsideArray" :key="link.routeName">
             <router-link
               v-if="link.condition"
               :to="{
@@ -77,7 +78,7 @@
             </router-link>
           </template>
         </div>
-      </Popover>
+      </ClassicPopover>
     </div>
     <button
       class="btn-transparent saooti-menu"
@@ -101,30 +102,32 @@
 </template>
 
 <script lang="ts">
-import { state } from '../../stores/ParamSdkStore';
-import HomeDropdown from './HomeDropdown.vue';
-import { Organisation } from '@/stores/class/general/organisation';
-import orgaFilter from '../mixins/organisationFilter';
-import imageProxy from '../mixins/imageProxy';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
-import Popover from '../misc/Popover.vue';
-import { defineComponent,defineAsyncComponent } from 'vue';
-const OrganisationChooserLight = defineAsyncComponent(() => import('../display/organisation/OrganisationChooserLight.vue'));
+import { state } from "../../stores/ParamSdkStore";
+import HomeDropdown from "./HomeDropdown.vue";
+import { Organisation } from "@/stores/class/general/organisation";
+import orgaFilter from "../mixins/organisationFilter";
+import imageProxy from "../mixins/imageProxy";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
+import ClassicPopover from "../misc/ClassicPopover.vue";
+import { defineComponent, defineAsyncComponent } from "vue";
+const OrganisationChooserLight = defineAsyncComponent(
+  () => import("../display/organisation/OrganisationChooserLight.vue"),
+);
 export default defineComponent({
-  name: 'TopBar',
+  name: "TopBar",
   components: {
     OrganisationChooserLight,
     HomeDropdown,
-    Popover
+    ClassicPopover,
   },
-  mixins:[orgaFilter, imageProxy],
+  mixins: [orgaFilter, imageProxy],
   props: {
-    displayMenu: { default: false, type: Boolean},
-    isEducation: { default: false, type: Boolean},
+    displayMenu: { default: false, type: Boolean },
+    isEducation: { default: false, type: Boolean },
   },
-  emits: ['update:displayMenu'],
+  emits: ["update:displayMenu"],
   data() {
     return {
       scrolled: false as boolean,
@@ -135,36 +138,74 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useFilterStore, ['filterLive', 'filterOrgaId', 'filterImgUrl', 'filterIab', 'filterRubrique', 'filterName']),
-    routerLinkArray(){
+    ...mapState(useFilterStore, [
+      "filterLive",
+      "filterOrgaId",
+      "filterImgUrl",
+      "filterIab",
+      "filterRubrique",
+      "filterName",
+    ]),
+    routerLinkArray() {
       return [
-        {title : this.$t('Radio & Live'), routeName: 'lives', condition : (state.generalParameters.isLiveTab as boolean) &&((this.filterOrgaId && this.filterLive) || !this.filterOrgaId)},
-        {title : this.$t('Podcasts'), routeName: 'podcasts', condition : true},
-        {title : this.$t('Emissions'), routeName: 'emissions', condition : true}
-      ]
+        {
+          title: this.$t("Radio & Live"),
+          routeName: "lives",
+          condition:
+            (state.generalParameters.isLiveTab as boolean) &&
+            ((this.filterOrgaId && this.filterLive) || !this.filterOrgaId),
+        },
+        { title: this.$t("Podcasts"), routeName: "podcasts", condition: true },
+        {
+          title: this.$t("Emissions"),
+          routeName: "emissions",
+          condition: true,
+        },
+      ];
     },
-    routerLinkInsideArray(){
+    routerLinkInsideArray() {
       return [
-        {title : this.$t('Speakers'), routeName: 'participants', condition : true},
-        {title : this.$t('Playlists'), routeName: 'playlists', condition : true},
-        {title : this.$t('Productors'), routeName: 'productors', condition : !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation)}]
+        {
+          title: this.$t("Speakers"),
+          routeName: "participants",
+          condition: true,
+        },
+        {
+          title: this.$t("Playlists"),
+          routeName: "playlists",
+          condition: true,
+        },
+        {
+          title: this.$t("Productors"),
+          routeName: "productors",
+          condition:
+            !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation),
+        },
+      ];
     },
-    rubriqueQueryParam(): string|undefined{
-      if(this.filterRubrique?.length){
-        return this.filterRubrique.map((value: RubriquageFilter) =>  value.rubriquageId+':'+value.rubriqueId).join();
+    rubriqueQueryParam(): string | undefined {
+      if (this.filterRubrique?.length) {
+        return this.filterRubrique
+          .map(
+            (value: RubriquageFilter) =>
+              value.rubriquageId + ":" + value.rubriqueId,
+          )
+          .join();
       }
       return undefined;
     },
     logoUrl(): string {
-      return this.isEducation ?'/img/logo_education.webp': '/img/logo_octopus_final.svg';
+      return this.isEducation
+        ? "/img/logo_education.webp"
+        : "/img/logo_octopus_final.svg";
     },
     isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
+      return state.generalParameters.podcastmaker as boolean;
     },
     imgUrl(): string {
-      if (!this.filterImgUrl?.includes('emptypodcast'))
+      if (!this.filterImgUrl?.includes("emptypodcast"))
         return `${this.filterImgUrl}`;
-      return '';
+      return "";
     },
   },
   watch: {
@@ -180,19 +221,21 @@ export default defineComponent({
     },
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
-    getQueriesRouter(routeName: string){
-      if('podcasts' !== routeName && 'emissions' !== routeName){
-        return { productor: this.filterOrgaId};
+    getQueriesRouter(routeName: string) {
+      if ("podcasts" !== routeName && "emissions" !== routeName) {
+        return { productor: this.filterOrgaId };
       }
-      return { productor: this.filterOrgaId,
-                   iabId: this.filterIab?.id,
-                   rubriquesId: this.rubriqueQueryParam}
+      return {
+        productor: this.filterOrgaId,
+        iabId: this.filterIab?.id,
+        rubriquesId: this.rubriqueQueryParam,
+      };
     },
     handleScroll(): void {
       if (
@@ -215,13 +258,15 @@ export default defineComponent({
         this.minScroll = window.scrollY;
       }
       if (!this.scrolled) {
-        this.$emit('update:displayMenu', false);
+        this.$emit("update:displayMenu", false);
       }
     },
     onDisplayMenu(param: boolean): void {
-      this.$emit('update:displayMenu',param?false:!this.displayMenu);
+      this.$emit("update:displayMenu", param ? false : !this.displayMenu);
     },
-    async onOrganisationSelected(organisation: Organisation | undefined): Promise<void> {
+    async onOrganisationSelected(
+      organisation: Organisation | undefined,
+    ): Promise<void> {
       if (organisation?.id) {
         await this.selectOrganisation(organisation.id);
         return;
@@ -230,63 +275,64 @@ export default defineComponent({
       this.removeSelectedOrga();
     },
   },
-})
+});
 </script>
 
 <style lang="scss">
-.octopus-app{
-.top-bar-container {
-  position: sticky;
-  top: 0;
-  background: #fff;
-  width: 100%;
-  height: 3.5rem;
-  z-index: 10;
-  padding: 0 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: height 1s;
-  @media (max-width: 450px) {
-    padding: 0 0.5rem;
-  }
+.octopus-app {
+  .top-bar-container {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    width: 100%;
+    height: 3.5rem;
+    z-index: 10;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: height 1s;
+    @media (max-width: 450px) {
+      padding: 0 0.5rem;
+    }
 
-  .saooti-menu {
-    display: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    margin: 0.5rem;
-  }
+    .saooti-menu {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      margin: 0.5rem;
+    }
 
-  .top-bar-logo img{
-    max-width: 140px !important;
-    max-height: 2.5rem;
-    height: 2.5rem;
-    &.educationLogo {
-      height: auto;
+    .top-bar-logo img {
+      max-width: 140px !important;
+      max-height: 2.5rem;
+      height: 2.5rem;
+      &.educationLogo {
+        height: auto;
+      }
+      @media (max-width: 650px) {
+        height: 2rem;
+      }
     }
-    @media (max-width: 650px) {
-      height: 2rem;
+    &.scrolled {
+      .link-hover,
+      .saooti-down {
+        display: none;
+      }
+      .saooti-menu {
+        display: block;
+      }
+    }
+    /** PHONES*/
+    @media (max-width: 960px) {
+      .default-multiselect-width,
+      .link-hover {
+        display: none;
+      }
+      .saooti-menu {
+        display: block;
+      }
     }
   }
-  &.scrolled{
-    .link-hover, .saooti-down {
-      display: none;
-    }
-    .saooti-menu {
-      display: block;
-    }
-  }
-  /** PHONES*/
-  @media (max-width: 960px) {
-    .default-multiselect-width, .link-hover {
-      display: none;
-    }
-    .saooti-menu {
-      display: block;
-    }
-  }
-  
-}
 }
 </style>

@@ -16,13 +16,13 @@ export interface Media {
   bpm?: number;
 }
 
-export function emptyMediaData(): Media{
+export function emptyMediaData(): Media {
   return {
     mediaId: 0,
-    album: '',
-    artiste: '',
-    title: '',
-    type: '',
-    year: '',
-  }
+    album: "",
+    artiste: "",
+    title: "",
+    type: "",
+    year: "",
+  };
 }

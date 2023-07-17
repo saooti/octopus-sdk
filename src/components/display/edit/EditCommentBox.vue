@@ -1,10 +1,6 @@
 <template>
   <div class="d-flex">
-    <button
-      class="btn admin-button me-1"
-      title="edit"
-      @click="editComment"
-    >
+    <button class="btn admin-button me-1" title="edit" @click="editComment">
       <span
         class="saooti-edit"
         :data-selenium="'Edit-Comment-' + seleniumFormat(comment.name)"
@@ -68,11 +64,11 @@
 </template>
 
 <script lang="ts">
-import selenium from '../../mixins/selenium';
-import { CommentPodcast } from '@/stores/class/general/comment';
-import { defineComponent, defineAsyncComponent } from 'vue';
+import selenium from "../../mixins/selenium";
+import { CommentPodcast } from "@/stores/class/general/comment";
+import { defineComponent, defineAsyncComponent } from "vue";
 const MessageModal = defineAsyncComponent(
-  () => import('@/components/misc/modal/MessageModal.vue')
+  () => import("@/components/misc/modal/MessageModal.vue"),
 );
 export default defineComponent({
   components: {
@@ -84,69 +80,71 @@ export default defineComponent({
     comment: { default: () => ({}), type: Object as () => CommentPodcast },
     organisation: { default: undefined, type: String },
   },
-  emits: ['editComment', 'updateComment', 'deleteComment'],
+  emits: ["editComment", "updateComment", "deleteComment"],
 
   data() {
     return {
       displayModal: false as boolean,
       isDeleting: false as boolean,
-      type: 'update' as string,
+      type: "update" as string,
       seeMore: false as boolean,
     };
   },
 
   computed: {
     validateText(): string | undefined {
-      if ('Error' === this.type || 'Error403' === this.type)
-        return this.$t('Close').toString();
+      if ("Error" === this.type || "Error403" === this.type)
+        return this.$t("Close").toString();
       if (this.isDeleting) return undefined;
-      return this.$t('Yes').toString();
+      return this.$t("Yes").toString();
     },
     canceltext(): string | undefined {
-      if ('Error' === this.type || 'Error403' === this.type) return undefined;
-      return this.$t('No').toString();
+      if ("Error" === this.type || "Error403" === this.type) return undefined;
+      return this.$t("No").toString();
     },
     modalMessage(): string {
       switch (this.type) {
-        case 'Delete':
+        case "Delete":
           if (this.isDeleting)
-            return this.$t('Deleting in progress ...').toString();
-          return this.$t('Confirm comment deletion text', {
+            return this.$t("Deleting in progress ...").toString();
+          return this.$t("Confirm comment deletion text", {
             name: this.comment.name,
           }).toString();
-        case 'Error':
-          return this.$t('Error occurs while updating your comment').toString();
-        case 'Error403':
-          return this.$t('403 error forbidden').toString();
+        case "Error":
+          return this.$t("Error occurs while updating your comment").toString();
+        case "Error403":
+          return this.$t("403 error forbidden").toString();
         default:
-          return '';
+          return "";
       }
     },
     modalTitle(): string {
       switch (this.type) {
-        case 'Delete':
-          return this.$t('Delete comment').toString();
-        case 'Error403':
-        case 'Error':
-          return this.$t('Error').toString();
+        case "Delete":
+          return this.$t("Delete comment").toString();
+        case "Error403":
+        case "Error":
+          return this.$t("Error").toString();
         default:
-          return this.$t('Update comment').toString();
+          return this.$t("Update comment").toString();
       }
     },
   },
 
   methods: {
     editComment(): void {
-      this.$emit('editComment');
+      this.$emit("editComment");
     },
     commentModal(type: string): void {
-      console.log('commentModal'+ type);
+      console.log("commentModal" + type);
     },
-    async updateComment(newComment?: CommentPodcast | undefined): Promise<void> {
-      console.log('updateComment' + newComment);
+    async updateComment(
+      newComment?: CommentPodcast | undefined,
+    ): Promise<void> {
+      console.log("updateComment" + newComment);
     },
     async deleteComment(): Promise<void> {
-      console.log('deleteComment');
+      console.log("deleteComment");
     },
   },
 });

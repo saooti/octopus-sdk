@@ -1,16 +1,16 @@
 import axios from "axios";
 enum ModuleApi {
-    DEFAULT = 0,
-    MEDIA = 1,
-    COMMENT = 2,
-    KEYCLOAK = 3,
-    FRONTOFFICE = 4,
-    PLAYER = 6,
-    STORAGE = 8,
-    STUDIO = 9,
-    PROCESSOR= 10,
-    SPEECHTOTEXT=11
-  }
+  DEFAULT = 0,
+  MEDIA = 1,
+  COMMENT = 2,
+  KEYCLOAK = 3,
+  FRONTOFFICE = 4,
+  PLAYER = 6,
+  STORAGE = 8,
+  STUDIO = 9,
+  PROCESSOR = 10,
+  SPEECHTOTEXT = 11,
+}
 /* eslint-disable */
 export default {
     async fetchData<Type>(moduleName: ModuleApi,wsPath:string, forceRefresh?:boolean): Promise<Type>{
@@ -30,4 +30,4 @@ export default {
         await axios.delete('/mock');
     },
 };
-/* eslint-enable */ 
+/* eslint-enable */

@@ -1,26 +1,26 @@
-import { Category } from '@/stores/class/general/category';
-import { defineStore } from 'pinia';
+import { Category } from "@/stores/class/general/category";
+import { defineStore } from "pinia";
 
-interface GeneralState{
+interface GeneralState {
   metaTitle: string;
   platformEducation: boolean;
   generalLogoUrl: string;
   storedCategories: Array<Category>;
   storedCategoriesOrga: Array<Category>;
   isBeforeLive: boolean;
-  consentTcf: string|null;
+  consentTcf: string | null;
 }
-export const useGeneralStore = defineStore('GeneralStore', {
+export const useGeneralStore = defineStore("GeneralStore", {
   state: (): GeneralState => ({
-    metaTitle: 'Octopus by Saooti',
-    platformEducation:false,
-    generalLogoUrl: '/img/logo_octopus_final.svg',
+    metaTitle: "Octopus by Saooti",
+    platformEducation: false,
+    generalLogoUrl: "/img/logo_octopus_final.svg",
     storedCategories: [],
     storedCategoriesOrga: [],
     isBeforeLive: true,
     consentTcf: null,
   }),
-  actions:{
+  actions: {
     storedUpdateCategories(categories: Array<Category>) {
       this.storedCategories = categories;
     },
@@ -30,15 +30,15 @@ export const useGeneralStore = defineStore('GeneralStore', {
     isBeforeLiveUpdate(isBeforeLive: boolean) {
       this.isBeforeLive = isBeforeLive;
     },
-    consentTcfUpdate(consentTcf: string|null) {
+    consentTcfUpdate(consentTcf: string | null) {
       this.consentTcf = consentTcf;
     },
     platformUpdateEducation(isEducation: boolean) {
       this.platformEducation = isEducation;
-      if(isEducation){
-        this.generalLogoUrl = '/img/logo_education.webp';
-        this.metaTitle = 'RadioEducation.org';
+      if (isEducation) {
+        this.generalLogoUrl = "/img/logo_education.webp";
+        this.metaTitle = "RadioEducation.org";
       }
     },
-  }
-})
+  },
+});

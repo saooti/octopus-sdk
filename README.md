@@ -492,7 +492,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 29.0.23 Eslint
  * 29.0.24 Version stable vue3
  * 29.0.25 Specific category does not display in correct order
- * 29.0.26 Snackbar position
+ * 29.0.26 SnackBar position
  * 29.0.27 Petit cursor:pointer des familles
  * 29.0.28 Petite couleur des familles
  * 29.0.29 Amélioration Popover
@@ -617,7 +617,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 31.0.24 Amélioration accessibilité
  * 31.0.25 Erreur audioUrl
  * 31.0.26 Erreur 403 page expose 
- * 31.0.27 Snackbar chose holdtime
+ * 31.0.27 SnackBar chose holdtime
  * 31.0.28 Mixins orgComputed
  * 31.0.29 Changement css
  * 31.0.30 Changement css

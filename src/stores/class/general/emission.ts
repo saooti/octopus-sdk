@@ -1,10 +1,10 @@
-import { AdserverConfig } from '../adserver/adserverConfig';
-import { Organisation } from './organisation';
-import { Person } from '../user/person';
+import { AdserverConfig } from "../adserver/adserverConfig";
+import { Organisation } from "./organisation";
+import { Person } from "../user/person";
 
 export interface Emission {
   imageUrl?: string;
-  annotations?: {[key: string]:string|number|boolean|undefined};
+  annotations?: { [key: string]: string | number | boolean | undefined };
   description: string;
   emissionId: number;
   iabIds?: Array<number>;
@@ -17,23 +17,23 @@ export interface Emission {
   publisher?: Person;
   copyright?: string;
   optItunesCategories?: Array<string>;
-  adConfigs?: {[key:string]: AdserverConfig};
+  adConfigs?: { [key: string]: AdserverConfig };
   urlFeed?: string;
 }
 
-export function emptyEmissionData(): Emission{
+export function emptyEmissionData(): Emission {
   return {
-      emissionId: 0,
-      name: '' ,
-      description: '' ,
-      imageUrl: '' ,
-      iabIds: undefined ,
-      orga: {
-        id: '',
-        name: '',
-        imageUrl: ''
-      },
-      rubriqueIds: [] ,
-      monetisable: 'UNDEFINED',
-  }
+    emissionId: 0,
+    name: "",
+    description: "",
+    imageUrl: "",
+    iabIds: undefined,
+    orga: {
+      id: "",
+      name: "",
+      imageUrl: "",
+    },
+    rubriqueIds: [],
+    monetisable: "UNDEFINED",
+  };
 }

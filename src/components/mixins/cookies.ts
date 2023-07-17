@@ -1,17 +1,18 @@
-export default{
+export default {
   methods: {
-    setCookie(name: string, value: string, domain= ""): void {
+    setCookie(name: string, value: string, domain = ""): void {
       const date = new Date();
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
-      const expires = '; expires=' + date.toUTCString();
-      document.cookie = name + '=' + (value || '') + expires +domain+ '; path=/';
+      const expires = "; expires=" + date.toUTCString();
+      document.cookie =
+        name + "=" + (value || "") + expires + domain + "; path=/";
     },
-    getCookie(name: string): string|null {
-      const nameEQ = name + '=';
-      const ca = document.cookie.split(';');
-      for (let cookieValue of ca) {
+    getCookie(name: string): string | null {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(";");
+      for (const cookieValue of ca) {
         let c = cookieValue;
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        while (c.charAt(0) == " ") c = c.substring(1, c.length);
         if (0 === c.indexOf(nameEQ))
           return c.substring(nameEQ.length, c.length);
       }

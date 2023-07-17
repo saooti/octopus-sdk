@@ -1,5 +1,4 @@
 export interface ClassicSelectType {
-    title: string;
-    value: string;
+  title: string;
+  value: string;
 }
-  

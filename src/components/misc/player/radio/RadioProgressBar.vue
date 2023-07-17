@@ -1,7 +1,7 @@
 <template>
   <div
     class="octopus-progress c-hand-auto mt-1"
-    :class="isAmbiance?'ambiance-progress':''"
+    :class="isAmbiance ? 'ambiance-progress' : ''"
   >
     <div
       class="octopus-progress-bar"
@@ -15,39 +15,40 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { mapState, mapActions } from 'pinia';
-import dayjs from 'dayjs';
-import { defineComponent } from 'vue';
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState, mapActions } from "pinia";
+import dayjs from "dayjs";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'RadioProgressBar',
+  name: "RadioProgressBar",
 
-  components: {
-  },
-  emits: ['updateNotListenTime'],
+  components: {},
+  emits: ["updateNotListenTime"],
   data() {
     return {
-      percentInterval: undefined as ReturnType<typeof setTimeout>|undefined,
+      percentInterval: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
-  
+
   computed: {
-    ...mapState(usePlayerStore, ['playerRadio', 'playerElapsed']),
-    isAmbiance(): boolean{
-      return !this.playerRadio?.podcast?.podcastId
+    ...mapState(usePlayerStore, ["playerRadio", "playerElapsed"]),
+    isAmbiance(): boolean {
+      return !this.playerRadio?.podcast?.podcastId;
     },
-    percentProgress(): number{
-      if(!this.playerElapsed){return 0;}
+    percentProgress(): number {
+      if (!this.playerElapsed) {
+        return 0;
+      }
       return this.playerElapsed * 100;
     },
   },
-  mounted(){
+  mounted() {
     this.handlePercentInterval();
   },
-  methods:{
-    ...mapActions(usePlayerStore, ['playerUpdateElapsed']),
-    handlePercentInterval(/* clear: boolean */): void{
-     /*  if(clear){
+  methods: {
+    ...mapActions(usePlayerStore, ["playerUpdateElapsed"]),
+    handlePercentInterval(/* clear: boolean */): void {
+      /*  if(clear){
         clearInterval((this.percentInterval as unknown as number));
         this.percentInterval = undefined;
         return;
@@ -56,22 +57,30 @@ export default defineComponent({
         this.calculatePercent();
       }, 1000);
     },
-    calculatePercent(): void{
-      if(!this.playerRadio?.metadata){return;}
-      const actualMilliSecondsPlayed = dayjs().subtract(18, 'second').diff(dayjs(this.playerRadio.metadata.startDate));
-      const percentPlayed = (actualMilliSecondsPlayed) / (this.playerRadio?.metadata.mediaDuration * 1000);
-      this.playerUpdateElapsed(percentPlayed, this.playerRadio?.metadata.mediaDuration);
-    }
-  }
-
-})
+    calculatePercent(): void {
+      if (!this.playerRadio?.metadata) {
+        return;
+      }
+      const actualMilliSecondsPlayed = dayjs()
+        .subtract(18, "second")
+        .diff(dayjs(this.playerRadio.metadata.startDate));
+      const percentPlayed =
+        actualMilliSecondsPlayed /
+        (this.playerRadio?.metadata.mediaDuration * 1000);
+      this.playerUpdateElapsed(
+        percentPlayed,
+        this.playerRadio?.metadata.mediaDuration,
+      );
+    },
+  },
+});
 </script>
 <style lang="scss">
-@import '../../../../assets/progressbar.scss';
-.octopus-app{
-  .ambiance-progress{
+@import "../../../../assets/progressbar.scss";
+.octopus-app {
+  .ambiance-progress {
     background-color: #d1d1d1;
-    .octopus-progress-bar{
+    .octopus-progress-bar {
       background-color: #747474;
     }
   }

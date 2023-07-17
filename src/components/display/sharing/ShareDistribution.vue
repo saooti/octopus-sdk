@@ -1,10 +1,10 @@
 <template>
   <div class="module-box">
     <h2 class="big-h2 mb-3">
-      {{ $t('Distribute') }}
+      {{ $t("Distribute") }}
     </h2>
     <div class="sharing-distribution-container">
-      {{ $t('Rss feed:') }}
+      {{ $t("Rss feed:") }}
       <div class="text-primary hide-small-screen text-break">
         {{ rss }}
       </div>
@@ -14,15 +14,12 @@
         class="btn btn-primary"
         :title="$t('Copy')"
         @click="onCopyCode(rss, afterCopy)"
-      >
+      />
     </div>
-    <RssSection
-      v-if="emission"
-      :emission="emission"
-    />
+    <RssSection v-if="emission" :emission="emission" />
     <div class="sharing-distribution-container">
-      <router-link 
-        v-for="platform in platformShare" 
+      <router-link
+        v-for="platform in platformShare"
         :key="platform.title"
         :to="platform.url"
         class="text-dark"
@@ -30,52 +27,84 @@
         <span :class="platform.icon" />{{ platform.title }}
       </router-link>
     </div>
-    <Snackbar
-      ref="snackbar"
-      position="bottom-left"
-    />
+    <SnackBar ref="snackbar" position="bottom-left" />
   </div>
 </template>
 
 <script lang="ts">
-import { state } from '../../../stores/ParamSdkStore';
-import octopusApi from '@saooti/octopus-api';
-import Snackbar from '../../misc/Snackbar.vue';
-import displayMethods from '../../mixins/displayMethods';
-import { Emission } from '@/stores/class/general/emission';
+import { state } from "../../../stores/ParamSdkStore";
+import octopusApi from "@saooti/octopus-api";
+import SnackBar from "../../misc/SnackBar.vue";
+import displayMethods from "../../mixins/displayMethods";
+import { Emission } from "@/stores/class/general/emission";
 
-import { defineComponent, defineAsyncComponent } from 'vue';
-const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
+import { defineComponent, defineAsyncComponent } from "vue";
+const RssSection = defineAsyncComponent(
+  () => import("@/components/display/aggregator/RssSection.vue"),
+);
 export default defineComponent({
   components: {
-    Snackbar,
+    SnackBar,
     RssSection,
   },
   mixins: [displayMethods],
   props: {
-    emissionId: { default: undefined, type: Number},
+    emissionId: { default: undefined, type: Number },
   },
-  
+
   data() {
     return {
-      emission: undefined as Emission|undefined,
-      rss: '' as string,
+      emission: undefined as Emission | undefined,
+      rss: "" as string,
     };
   },
-  computed:{
-    platformShare(){
+  computed: {
+    platformShare() {
       return [
-      {url:this.getUrl('amazon'), icon:'saooti-amzn', title:'Amazon Music | Podcasters'},
-      {url:this.getUrl('apple'), icon:'saooti-apple', title:'Apple Podcast / iTunes'},
-      {url:this.getUrl('deezer'), icon:'saooti-deezer', title:'Deezer'},
-      {url:this.getUrl('googlePodcasts'), icon:'saooti-google-podcasts', title:'Google Podcasts'},
-      {url:this.getUrl('PlayerFM'), icon:'saooti-playerfm', title:'PlayerFM'},
-      {url:this.getUrl('PocketCasts'), icon:'saooti-pocket-casts', title:'Pocket Casts'},
-      {url:this.getUrl('PodcastAddict'), icon:'saooti-podcast-addict', title:'Podcast Addict'},
-      {url:this.getUrl('radioline'), icon:'saooti-radioline', title:'Radioline'},
-      {url:this.getUrl('spotify'), icon:'saooti-spotify', title:'Spotify'},
-      {url:this.getUrl('tuneIn'), icon:'saooti-tunin', title:'TuneIn'}];
-    }
+        {
+          url: this.getUrl("amazon"),
+          icon: "saooti-amzn",
+          title: "Amazon Music | Podcasters",
+        },
+        {
+          url: this.getUrl("apple"),
+          icon: "saooti-apple",
+          title: "Apple Podcast / iTunes",
+        },
+        { url: this.getUrl("deezer"), icon: "saooti-deezer", title: "Deezer" },
+        {
+          url: this.getUrl("googlePodcasts"),
+          icon: "saooti-google-podcasts",
+          title: "Google Podcasts",
+        },
+        {
+          url: this.getUrl("PlayerFM"),
+          icon: "saooti-playerfm",
+          title: "PlayerFM",
+        },
+        {
+          url: this.getUrl("PocketCasts"),
+          icon: "saooti-pocket-casts",
+          title: "Pocket Casts",
+        },
+        {
+          url: this.getUrl("PodcastAddict"),
+          icon: "saooti-podcast-addict",
+          title: "Podcast Addict",
+        },
+        {
+          url: this.getUrl("radioline"),
+          icon: "saooti-radioline",
+          title: "Radioline",
+        },
+        {
+          url: this.getUrl("spotify"),
+          icon: "saooti-spotify",
+          title: "Spotify",
+        },
+        { url: this.getUrl("tuneIn"), icon: "saooti-tunin", title: "TuneIn" },
+      ];
+    },
   },
 
   mounted() {
@@ -84,49 +113,54 @@ export default defineComponent({
   },
 
   methods: {
-    getUrl(platform: string): string{
+    getUrl(platform: string): string {
       return `/main/priv/distribution/${platform}/${this.emissionId}`;
     },
     async getEmissionDetails(): Promise<void> {
-      this.emission = await octopusApi.fetchData<Emission>(0,'emission/'+this.emissionId);
+      this.emission = await octopusApi.fetchData<Emission>(
+        0,
+        "emission/" + this.emissionId,
+      );
     },
     getRSS(): void {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
       this.rss = `${state.octopusApi.url}rss/emission/${this.emissionId}.rss`;
     },
-    afterCopy(): void{
-      (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Link in clipboard'));
-    }
+    afterCopy(): void {
+      (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
+        this.$t("Link in clipboard"),
+      );
+    },
   },
-})
+});
 </script>
 
 <style lang="scss">
-@import '@scss/_variables.scss';
-.octopus-app{
-.sharing-distribution-container {
-  border: 0.05rem solid #dee2e6;
-  border-radius: $octopus-borderradius;
-  padding: 0.4rem;
-  margin: 0.2rem 1rem 0.2rem 0;
-  display: flex;
-  font-weight: 500;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  a {
+@import "@scss/_variables.scss";
+.octopus-app {
+  .sharing-distribution-container {
+    border: 0.05rem solid #dee2e6;
+    border-radius: $octopus-borderradius;
+    padding: 0.4rem;
+    margin: 0.2rem 1rem 0.2rem 0;
     display: flex;
+    font-weight: 500;
     align-items: center;
-    margin: 5px;
-  }
-  span {
-    font-size: 1.4rem;
-    margin: 0 0.3em 0 0;
-  }
-  @media (max-width: 960px) {
+    justify-content: space-between;
     flex-wrap: wrap;
-    margin: 0.2rem 0.5rem;
+    a {
+      display: flex;
+      align-items: center;
+      margin: 5px;
+    }
+    span {
+      font-size: 1.4rem;
+      margin: 0 0.3em 0 0;
+    }
+    @media (max-width: 960px) {
+      flex-wrap: wrap;
+      margin: 0.2rem 0.5rem;
+    }
   }
-}
 }
 </style>

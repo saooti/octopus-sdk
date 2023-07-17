@@ -1,15 +1,7 @@
 <template>
-  <div
-    v-if="message && message.length"
-    class="d-flex"
-  >
-    <div
-      class="d-flex align-items-center bg-error-message p-2 rounded my-1"
-    >
-      <span
-        :title="$t('Warning')"
-        class="saooti-warning text-danger me-1"
-      />
+  <div v-if="message && message.length" class="d-flex">
+    <div class="d-flex align-items-center bg-error-message p-2 rounded my-1">
+      <span :title="$t('Warning')" class="saooti-warning text-danger me-1" />
       <div class="alert-text">
         {{ message }}
       </div>
@@ -17,20 +9,20 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'ErrorMessage',
+  name: "ErrorMessage",
   props: {
-    message: { default: undefined, type: String},
+    message: { default: undefined, type: String },
   },
-})
+});
 </script>
 <style lang="scss">
-.octopus-app{
+.octopus-app {
   .bg-error-message {
     background-color: #ffd84a9c;
   }
-  .alert-text{
+  .alert-text {
     color: darkred;
   }
 }

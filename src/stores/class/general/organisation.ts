@@ -1,27 +1,27 @@
 import { Person } from "../user/person";
 
-export interface Organisation{
+export interface Organisation {
   imageUrl: string;
   admin?: Person;
   comments?: string;
-  attributes?: {[key: string]:string|number|boolean|undefined};
+  attributes?: { [key: string]: string | number | boolean | undefined };
   description?: string;
   id: string;
   location?: {
-      longitude: number;
-      latitude: number;
+    longitude: number;
+    latitude: number;
   };
   monetisable?: string;
   name: string;
   notSeenOnKeycloak?: number;
   score?: number;
-  privacy?:string;
+  privacy?: string;
 }
 
-export function emptyOrgaData(defaultName: string): Organisation{
+export function emptyOrgaData(defaultName: string): Organisation {
   return {
     imageUrl: "/img/emptypodcast.webp",
     id: "",
-    name: defaultName
-  }
+    name: defaultName,
+  };
 }

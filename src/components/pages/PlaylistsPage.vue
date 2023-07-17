@@ -6,7 +6,7 @@
       class="d-flex justify-content-center my-3"
     >
       <div class="btn btn-primary">
-        {{ $t('Create playlist') }}
+        {{ $t("Create playlist") }}
       </div>
     </router-link>
     <ProductorSearch
@@ -25,33 +25,35 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from '../mixins/orgaComputed';
-import PlaylistList from '../display/playlist/PlaylistList.vue';
-import { state } from '../../stores/ParamSdkStore';
-import { defineComponent, defineAsyncComponent } from 'vue';
-const ProductorSearch = defineAsyncComponent(() => import('../display/filter/ProductorSearch.vue'));
+import { orgaComputed } from "../mixins/orgaComputed";
+import PlaylistList from "../display/playlist/PlaylistList.vue";
+import { state } from "../../stores/ParamSdkStore";
+import { defineComponent, defineAsyncComponent } from "vue";
+const ProductorSearch = defineAsyncComponent(
+  () => import("../display/filter/ProductorSearch.vue"),
+);
 export default defineComponent({
   components: {
     ProductorSearch,
     PlaylistList,
   },
-  mixins:[orgaComputed],
+  mixins: [orgaComputed],
   props: {
-    productor: { default: undefined, type: String},
+    productor: { default: undefined, type: String },
   },
 
   data() {
     return {
       first: 0 as number,
       size: 30 as number,
-      searchPattern: '' as string,
+      searchPattern: "" as string,
       organisationId: undefined as string | undefined,
     };
   },
-  
+
   computed: {
     isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
+      return state.generalParameters.podcastmaker as boolean;
     },
     editRight(): boolean {
       return state.generalParameters.isPlaylist ? true : false;
@@ -59,7 +61,7 @@ export default defineComponent({
   },
 
   created() {
-    this.organisationId = this.productor ?this.productor: this.filterOrgaId;
+    this.organisationId = this.productor ? this.productor : this.filterOrgaId;
   },
-})
+});
 </script>

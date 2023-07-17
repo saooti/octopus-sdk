@@ -10,19 +10,16 @@
     :iab-id="iabId"
     :rubrique-id="rubriqueId"
     :no-rubriquage-id="noRubriquageId"
-    @sortChrono="sortChrono"
-    @sortPopular="sortPopular"
+    @sort-chrono="sortChrono"
+    @sort-popular="sortPopular"
   >
     <template #list-inline>
       <ClassicLoading
         class="loading-size"
-        :loading-text="loading?$t('Loading podcasts ...'):undefined"
+        :loading-text="loading ? $t('Loading podcasts ...') : undefined"
       />
-      <SwiperList
-        v-if="!loading"
-        :list-object="allPodcasts"
-      >
-        <template #octopusSlide="{option}">
+      <SwiperList v-if="!loading" :list-object="allPodcasts">
+        <template #octopusSlide="{ option }">
           <PodcastItem
             class="flex-shrink-0 item-phone-margin"
             :podcast="option"
@@ -34,41 +31,41 @@
 </template>
 
 <script lang="ts">
-import PodcastInlineListTemplate from './PodcastInlineListTemplate.vue';
-import octopusApi from '@saooti/octopus-api';
-import PodcastItem from './PodcastItem.vue';
-import ClassicLoading from '../../form/ClassicLoading.vue';
-import SwiperList from '../list/SwiperList.vue';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { Podcast } from '@/stores/class/general/podcast';
-import { defineComponent } from 'vue'
+import PodcastInlineListTemplate from "./PodcastInlineListTemplate.vue";
+import octopusApi from "@saooti/octopus-api";
+import PodcastItem from "./PodcastItem.vue";
+import ClassicLoading from "../../form/ClassicLoading.vue";
+import SwiperList from "../list/SwiperList.vue";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { Podcast } from "@/stores/class/general/podcast";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'PodcastSwiperList',
-  
+  name: "PodcastSwiperList",
+
   components: {
     PodcastInlineListTemplate,
     PodcastItem,
     ClassicLoading,
-    SwiperList
+    SwiperList,
   },
 
   props: {
-    organisationId: { default: () => [], type: Array as ()=> Array<string>},
-    emissionId: { default: undefined, type: Number},
-    iabId: { default: undefined, type: Number},
-    title: { default: '', type: String},
-    href: { default: undefined, type: String},
-    buttonText: { default: undefined, type: String},
-    isArrow: { default: false, type: Boolean},
-    requirePopularSort: { default:undefined, type: Boolean},
-    buttonPlus: { default:false, type: Boolean},
-    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
-    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
-    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
-    query: { default: undefined, type: String},
+    organisationId: { default: () => [], type: Array as () => Array<string> },
+    emissionId: { default: undefined, type: Number },
+    iabId: { default: undefined, type: Number },
+    title: { default: "", type: String },
+    href: { default: undefined, type: String },
+    buttonText: { default: undefined, type: String },
+    isArrow: { default: false, type: Boolean },
+    requirePopularSort: { default: undefined, type: Boolean },
+    buttonPlus: { default: false, type: Boolean },
+    rubriqueId: { default: () => [], type: Array as () => Array<number> },
+    rubriquageId: { default: () => [], type: Array as () => Array<number> },
+    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+    query: { default: undefined, type: String },
   },
-  emits: ['update:isArrow'],
+  emits: ["update:isArrow"],
 
   data() {
     return {
@@ -78,14 +75,14 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     organisation(): Array<string> {
-      if(this.organisationId.length){
+      if (this.organisationId.length) {
         return this.organisationId;
       }
       return this.filterOrgaId ? [this.filterOrgaId] : [];
     },
-    watchVariable():string{
+    watchVariable(): string {
       return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
     },
   },
@@ -95,13 +92,13 @@ export default defineComponent({
       this.fetchNext();
     },
   },
-  
+
   created() {
     if (undefined !== this.requirePopularSort) {
       this.popularSort = this.requirePopularSort;
     }
     if (undefined !== this.isArrow) {
-      this.$emit('update:isArrow', true);
+      this.$emit("update:isArrow", true);
     }
   },
   mounted() {
@@ -109,21 +106,34 @@ export default defineComponent({
   },
   methods: {
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
-        first: 0,
-        size: 10,
-        organisationId: this.organisation,
-        emissionId: this.emissionId,
-        iabId: this.iabId,
-        rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
-        rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
-        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
-        sort: this.popularSort ? 'POPULARITY' : 'DATE',
-        query: this.query,
-        includeStatus:["READY","PROCESSING"]
-      }, true);
+      const data = await octopusApi.fetchDataWithParams<{
+        count: number;
+        result: Array<Podcast>;
+        sort: string;
+      }>(
+        0,
+        "podcast/search",
+        {
+          first: 0,
+          size: 10,
+          organisationId: this.organisation,
+          emissionId: this.emissionId,
+          iabId: this.iabId,
+          rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
+          rubriquageId: this.rubriquageId.length
+            ? this.rubriquageId
+            : undefined,
+          noRubriquageId: this.noRubriquageId.length
+            ? this.noRubriquageId
+            : undefined,
+          sort: this.popularSort ? "POPULARITY" : "DATE",
+          query: this.query,
+          includeStatus: ["READY", "PROCESSING"],
+        },
+        true,
+      );
       this.allPodcasts = this.allPodcasts.concat(
-        data.result.filter((pod: Podcast|null) => null !== pod)
+        data.result.filter((pod: Podcast | null) => null !== pod),
       );
       this.loading = false;
     },
@@ -144,5 +154,5 @@ export default defineComponent({
       this.allPodcasts.length = 0;
     },
   },
-})
+});
 </script>

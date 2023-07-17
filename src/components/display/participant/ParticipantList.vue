@@ -4,23 +4,21 @@
     v-model:first="dfirst"
     v-model:rowsPerPage="dsize"
     v-model:isMobile="isMobile"
-    :text-count="showCount && displayCount > 1 ? `${$t('Number participants', { nb: displayCount })} ${$t('sort by score')}`: undefined"
+    :text-count="
+      showCount && displayCount > 1
+        ? `${$t('Number participants', { nb: displayCount })} ${$t(
+            'sort by score',
+          )}`
+        : undefined
+    "
     :total-count="totalCount"
     :loading="loading"
-    :loading-text="loading?$t('Loading participants ...'):undefined"
+    :loading-text="loading ? $t('Loading participants ...') : undefined"
   >
     <template #list>
-      <div
-        class="podcast-list"
-      >
-        <template
-          v-for="p in displayArray"
-          :key="p.participantId"
-        >
-          <ParticipantItem
-            v-if="0!==p.participantId"
-            :participant="p"
-          />
+      <div class="podcast-list">
+        <template v-for="p in displayArray" :key="p.participantId">
+          <ParticipantItem v-if="0 !== p.participantId" :participant="p" />
         </template>
       </div>
     </template>
@@ -28,21 +26,24 @@
 </template>
 
 <script lang="ts">
-import ListPaginate from '../list/ListPaginate.vue';
-import { handle403 } from '../../mixins/handle403';
-import octopusApi from '@saooti/octopus-api';
-import ParticipantItem from './ParticipantItem.vue';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { Participant, emptyParticipantData } from '@/stores/class/general/participant';
-import { defineComponent } from 'vue'
-import { AxiosError } from 'axios';
+import ListPaginate from "../list/ListPaginate.vue";
+import { handle403 } from "../../mixins/handle403";
+import octopusApi from "@saooti/octopus-api";
+import ParticipantItem from "./ParticipantItem.vue";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import {
+  Participant,
+  emptyParticipantData,
+} from "@/stores/class/general/participant";
+import { defineComponent } from "vue";
+import { AxiosError } from "axios";
 export default defineComponent({
-  name: 'ParticipantList',
+  name: "ParticipantList",
 
   components: {
     ParticipantItem,
-    ListPaginate
+    ListPaginate,
   },
 
   mixins: [handle403],
@@ -50,8 +51,8 @@ export default defineComponent({
   props: {
     first: { default: 0, type: Number },
     size: { default: 30, type: Number },
-    query: { default: undefined, type: String},
-    organisationId: { default: undefined, type: String},
+    query: { default: undefined, type: String },
+    organisationId: { default: undefined, type: String },
     showCount: { default: false, type: Boolean },
   },
 
@@ -67,17 +68,19 @@ export default defineComponent({
     };
   },
 
-   
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    displayArray(): Array<Participant>{
-      if(this.isMobile){
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    displayArray(): Array<Participant> {
+      if (this.isMobile) {
         return this.participants;
       }
-      return this.participants.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
-		},
-    organisation(): string|undefined {
-      return this.organisationId?this.organisationId:this.filterOrgaId;
+      return this.participants.slice(
+        this.dfirst,
+        Math.min(this.dfirst + this.dsize, this.totalCount),
+      );
+    },
+    organisation(): string | undefined {
+      return this.organisationId ? this.organisationId : this.filterOrgaId;
     },
   },
   watch: {
@@ -87,55 +90,82 @@ export default defineComponent({
     organisation(): void {
       this.reloadList();
     },
-    dsize():void{
+    dsize(): void {
       this.reloadList();
-		},
-		dfirst(): void{
-			if(!this.participants[this.dfirst] || 0===this.participants[this.dfirst].participantId){
-				this.fetchContent(false);
-			}
-		},
+    },
+    dfirst(): void {
+      if (
+        !this.participants[this.dfirst] ||
+        0 === this.participants[this.dfirst].participantId
+      ) {
+        this.fetchContent(false);
+      }
+    },
   },
 
   created() {
     this.fetchContent(true);
   },
   methods: {
-    reloadList(){
+    reloadList() {
       this.dfirst = 0;
       this.fetchContent(true);
     },
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
       try {
-        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Participant>;sort: string;}>(0, 'participant/search',{
-          first: this.dfirst,
-          size: this.dsize,
-          query: this.query,
-          organisationId: this.organisation,
-        }, true);
+        const data = await octopusApi.fetchDataWithParams<{
+          count: number;
+          result: Array<Participant>;
+          sort: string;
+        }>(
+          0,
+          "participant/search",
+          {
+            first: this.dfirst,
+            size: this.dsize,
+            query: this.query,
+            organisationId: this.organisation,
+          },
+          true,
+        );
         if (reset) {
           this.participants.length = 0;
         }
         this.displayCount = data.count;
-        if(this.dfirst > this.participants.length){
-          for (let i = this.participants.length-1, len = this.dfirst + this.dsize; i < len; i++) {
+        if (this.dfirst > this.participants.length) {
+          for (
+            let i = this.participants.length - 1,
+              len = this.dfirst + this.dsize;
+            i < len;
+            i++
+          ) {
             this.participants.push(emptyParticipantData());
           }
         }
-        const responseParticipants = data.result.filter((p: Participant | null) => {
-          if (null === p) {
-            this.displayCount--;
-          }
-          return null !== p;
-        });
-        this.participants = this.participants.slice(0, this.dfirst).concat(responseParticipants).concat(this.participants.slice(this.dfirst+this.dsize, this.participants.length));
+        const responseParticipants = data.result.filter(
+          (p: Participant | null) => {
+            if (null === p) {
+              this.displayCount--;
+            }
+            return null !== p;
+          },
+        );
+        this.participants = this.participants
+          .slice(0, this.dfirst)
+          .concat(responseParticipants)
+          .concat(
+            this.participants.slice(
+              this.dfirst + this.dsize,
+              this.participants.length,
+            ),
+          );
         this.totalCount = data.count;
       } catch (error) {
-        this.handle403((error as AxiosError));
+        this.handle403(error as AxiosError);
       }
       this.loading = false;
     },
   },
-})
+});
 </script>

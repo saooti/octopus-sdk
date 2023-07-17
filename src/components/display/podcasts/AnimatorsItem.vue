@@ -18,27 +18,29 @@
 </template>
 
 <script lang="ts">
-import { Participant } from '@/stores/class/general/participant';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { Participant } from "@/stores/class/general/participant";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'AnimatorsItem',
+  name: "AnimatorsItem",
 
   props: {
-    animator: { default: undefined, type: Object as ()=> Participant},
+    animator: { default: undefined, type: Object as () => Participant },
   },
-  computed:{
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    animatorName(): string{
-      return (`${this.animator?.firstName??''} ${this.animator?.lastName??''}`).trim();
-    }
-  }
-})
+  computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    animatorName(): string {
+      return `${this.animator?.firstName ?? ""} ${
+        this.animator?.lastName ?? ""
+      }`.trim();
+    },
+  },
+});
 </script>
 
 <style lang="scss">
-.octopus-app{
+.octopus-app {
   .podcast-item-animator {
     font-size: 0.55rem;
     font-weight: 300;

@@ -1,11 +1,10 @@
-export interface UserRole{
+export interface UserRole {
   clientRole: boolean;
   composite: boolean;
   containerId: string;
   id: string;
   name: string;
 }
-
 
 export interface UserKeycloak {
   id?: string;
@@ -16,9 +15,9 @@ export interface UserKeycloak {
   telephone?: string;
   description?: string;
   project?: string;
-  realmRoles?: null|Array<UserRole>;
-  attributes?: {[key:string]:Array<string|boolean>|undefined};
+  realmRoles?: null | Array<UserRole>;
+  attributes?: { [key: string]: Array<string | boolean> | undefined };
   password?: string;
   isTemporary?: boolean;
-  getted?:boolean;
+  getted?: boolean;
 }

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="emission-player-container"
-  >
+  <div class="emission-player-container">
     <router-link
       :to="{
         name: 'emission',
@@ -10,27 +8,19 @@
       }"
       class="d-flex flex-column text-dark"
     >
-      <div
-        v-if="rubriqueName"
-        class="emissionPlayerItem-info"
-      >
+      <div v-if="rubriqueName" class="emissionPlayerItem-info">
         {{ rubriqueName }}
       </div>
-      <div
-        class="img-box rounded-0"
-      >
+      <div class="img-box rounded-0">
         <img
           v-lazy="proxyImageUrl(emission.imageUrl, '330')"
           width="330"
           height="330"
-          :title="$t('Emission name image', {name:emission.name})"
-          :alt="$t('Emission name image', {name:emission.name})"
+          :title="$t('Emission name image', { name: emission.name })"
+          :alt="$t('Emission name image', { name: emission.name })"
           class="img-box rounded-0"
-        >
-        <div
-          v-if="titleInImage"
-          class="titleInImage"
-        >
+        />
+        <div v-if="titleInImage" class="titleInImage">
           {{ emission.name }}
         </div>
       </div>
@@ -82,45 +72,31 @@
               {{ p.title }}
             </div>
             <div
-              :ref="'descriptionPodcastContainer'+ p.podcastId"
+              :ref="'descriptionPodcastContainer' + p.podcastId"
               class="emission-description html-wysiwyg-content"
             >
               <!-- eslint-disable vue/no-v-html -->
               <div
-                :ref="'descriptionPodcast'+ p.podcastId"
+                :ref="'descriptionPodcast' + p.podcastId"
                 v-html="urlify(p.description)"
               />
               <!-- eslint-enable -->
             </div>
           </router-link>
-          <PodcastPlayBar
-            :podcast-id="p.podcastId"
-            :duration="p.duration"
-          />
+          <PodcastPlayBar :podcast-id="p.podcastId" :duration="p.duration" />
         </div>
         <button
           v-if="
             playerPodcast !== p ||
-              (playerPodcast === p &&
-                'PAUSED' === playerStatus)
+            (playerPodcast === p && 'PAUSED' === playerStatus)
           "
           class="play-button-box bg-secondary"
           @click="play(p)"
         >
-          <div
-            class="text-light saooti-play"
-            :title="$t('Play')"
-          />
+          <div class="text-light saooti-play" :title="$t('Play')" />
         </button>
-        <button
-          v-else
-          class="play-button-box bg-secondary"
-          @click="pause(p)"
-        >
-          <div
-            class="text-light saooti-pause"
-            :title="$t('Pause')"
-          />
+        <button v-else class="play-button-box bg-secondary" @click="pause(p)">
+          <div class="text-light saooti-pause" :title="$t('Pause')" />
         </button>
       </div>
     </div>
@@ -136,35 +112,35 @@
         }"
         class="btn"
       >
-        {{ $t('More episodes') }}
+        {{ $t("More episodes") }}
       </router-link>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import octopusApi from '@saooti/octopus-api';
-import { Emission } from '@/stores/class/general/emission';
-import { Podcast } from '@/stores/class/general/podcast';
-import { state } from '../../../stores/ParamSdkStore';
-import PodcastPlayBar from '../podcasts/PodcastPlayBar.vue';
-import imageProxy from '../../mixins/imageProxy';
-import displayMethods from '../../mixins/displayMethods';
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState, mapActions } from 'pinia';
-import { defineComponent } from 'vue'
+import octopusApi from "@saooti/octopus-api";
+import { Emission } from "@/stores/class/general/emission";
+import { Podcast } from "@/stores/class/general/podcast";
+import { state } from "../../../stores/ParamSdkStore";
+import PodcastPlayBar from "../podcasts/PodcastPlayBar.vue";
+import imageProxy from "../../mixins/imageProxy";
+import displayMethods from "../../mixins/displayMethods";
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState, mapActions } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'EmissionPlayerItem',
+  name: "EmissionPlayerItem",
 
-  components:{
-    PodcastPlayBar
+  components: {
+    PodcastPlayBar,
   },
   mixins: [displayMethods, imageProxy],
   props: {
-    emission: { default: ()=>({}), type: Object as ()=>Emission },
+    emission: { default: () => ({}), type: Object as () => Emission },
     nbPodcasts: { default: undefined, type: Number },
-    rubriqueName: { default: undefined, type: String},
+    rubriqueName: { default: undefined, type: String },
   },
 
   data() {
@@ -173,28 +149,31 @@ export default defineComponent({
       podcasts: [] as Array<Podcast>,
     };
   },
-  
+
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    ...mapState(usePlayerStore, ['playerPodcast', 'playerStatus']),
-    isProgressBar(): boolean{
-      return (state.emissionsPage.progressBar as boolean);
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    ...mapState(usePlayerStore, ["playerPodcast", "playerStatus"]),
+    isProgressBar(): boolean {
+      return state.emissionsPage.progressBar as boolean;
     },
     buttonMore(): boolean {
-      return (state.emissionsPage.buttonMore as boolean);
+      return state.emissionsPage.buttonMore as boolean;
     },
     titleInImage(): boolean {
-      return (state.emissionsPage.titleInImage as boolean);
+      return state.emissionsPage.titleInImage as boolean;
     },
     authenticated(): boolean {
-      return state.generalParameters.authenticated??false;
+      return state.generalParameters.authenticated ?? false;
     },
-    organisationId(): string|undefined {
+    organisationId(): string | undefined {
       return state.generalParameters.organisationId;
     },
     editRight(): boolean {
-      return (true===this.authenticated && this.organisationId === this.emission.orga.id) ||
+      return (
+        (true === this.authenticated &&
+          this.organisationId === this.emission.orga.id) ||
         true === state.generalParameters.isAdmin
+      );
     },
   },
 
@@ -202,17 +181,19 @@ export default defineComponent({
     this.loadPodcasts();
   },
   mounted() {
-    const emissionDesc = (this.$refs.descriptionEmission as HTMLElement);
-    const emissionDescContainer = (this.$refs.descriptionEmissionContainer as HTMLElement);
+    const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
+    const emissionDescContainer = this.$refs
+      .descriptionEmissionContainer as HTMLElement;
     if (
-      null !== emissionDesc && null !== emissionDescContainer &&
+      null !== emissionDesc &&
+      null !== emissionDescContainer &&
       emissionDesc.clientHeight > emissionDescContainer.clientHeight
     ) {
-      emissionDescContainer.classList.add('after-emission-description');
+      emissionDescContainer.classList.add("after-emission-description");
     }
   },
   methods: {
-    ...mapActions(usePlayerStore, ['playerPlay', 'playerChangeStatus']),
+    ...mapActions(usePlayerStore, ["playerPlay", "playerChangeStatus"]),
     play(podcast: Podcast): void {
       if (podcast === this.playerPodcast) {
         this.playerChangeStatus(false);
@@ -225,34 +206,54 @@ export default defineComponent({
     },
     async loadPodcasts(): Promise<void> {
       const nb = this.nbPodcasts ? this.nbPodcasts : 2;
-      const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
-        emissionId: this.emission.emissionId,
-        size: nb,
-        includeStatus:["READY","PROCESSING"]
-      }, true);
+      const data = await octopusApi.fetchDataWithParams<{
+        count: number;
+        result: Array<Podcast>;
+        sort: string;
+      }>(
+        0,
+        "podcast/search",
+        {
+          emissionId: this.emission.emissionId,
+          size: nb,
+          includeStatus: ["READY", "PROCESSING"],
+        },
+        true,
+      );
       if (0 === data.count) {
         this.activeEmission = false;
       }
       this.podcasts = data.result;
       this.$nextTick(() => {
-      for (let index = 0, len = this.podcasts.length; index < len; index++) {
-        const podcastDesc = (this.$refs['descriptionPodcast'+this.podcasts[index].podcastId] as Array<HTMLElement>)?.[0] ?? null;
-        const podcastDescContainer = (this.$refs['descriptionPodcastContainer'+this.podcasts[index].podcastId] as Array<HTMLElement>)?.[0] ?? null;
-        if (
-          null !== podcastDesc && null !== podcastDescContainer &&
-          podcastDesc.clientHeight > podcastDescContainer.clientHeight
-        ) {
-          podcastDescContainer.classList.add('after-emission-description');
+        for (let index = 0, len = this.podcasts.length; index < len; index++) {
+          const podcastDesc =
+            (
+              this.$refs[
+                "descriptionPodcast" + this.podcasts[index].podcastId
+              ] as Array<HTMLElement>
+            )?.[0] ?? null;
+          const podcastDescContainer =
+            (
+              this.$refs[
+                "descriptionPodcastContainer" + this.podcasts[index].podcastId
+              ] as Array<HTMLElement>
+            )?.[0] ?? null;
+          if (
+            null !== podcastDesc &&
+            null !== podcastDescContainer &&
+            podcastDesc.clientHeight > podcastDescContainer.clientHeight
+          ) {
+            podcastDescContainer.classList.add("after-emission-description");
+          }
         }
-      }
       });
     },
   },
-})
+});
 </script>
 
 <style lang="scss">
-@import '@scss/_variables.scss';
+@import "@scss/_variables.scss";
 .emission-player-container {
   list-style: none;
   background: #fff;
@@ -274,7 +275,7 @@ export default defineComponent({
     max-height: 3.5rem;
     position: relative;
     &.after-emission-description:after {
-      content: '...';
+      content: "...";
       position: absolute;
       padding-left: 1rem;
       right: 0;
@@ -298,5 +299,4 @@ export default defineComponent({
     max-width: $octopus-mobile-item-size;
   }
 }
-
 </style>

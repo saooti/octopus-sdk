@@ -1,18 +1,13 @@
 <template>
-  <div
-    class="d-flex align-items-center flex-grow-1 ps-2"
-  >
-    <router-link
-      v-if="isImage && podcastImage"
-      :to="podcastShareUrl"
-    >
+  <div class="d-flex align-items-center flex-grow-1 ps-2">
+    <router-link v-if="isImage && podcastImage" :to="podcastShareUrl">
       <img
-        v-lazy="proxyImageUrl(podcastImage,'48')"
+        v-lazy="proxyImageUrl(podcastImage, '48')"
         width="48"
         height="48"
         :alt="$t('Podcast image')"
         class="player-image"
-      >
+      />
     </router-link>
     <button
       v-if="!playerError"
@@ -20,34 +15,22 @@
       :class="{
         'saooti-play': isPaused,
         'saooti-pause': isPlaying,
-        'p-0':!isPaused&&!isPlaying
+        'p-0': !isPaused && !isPlaying,
       }"
       class="btn play-button-box text-light bg-primary"
       @click="switchPausePlay"
     >
-      <Spinner
-        v-if="!isPaused&&!isPlaying"
-        :small="true"
-      />
+      <ClassicSpinner v-if="!isPaused && !isPlaying" :small="true" />
     </button>
     <div class="text-light player-grow-content">
-      <div 
-        class="d-flex"
-        :class="!radioUrl?'mb-1':''"
-      >
-        <div
-          v-if="playerError"
-          class="text-warning mx-2"
-        >
-          {{ $t('Podcast play error') + ' - ' }}
+      <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
+        <div v-if="playerError" class="text-warning mx-2">
+          {{ $t("Podcast play error") + " - " }}
         </div>
         <div class="flex-grow-1 text-truncate">
           {{ podcastTitle }}
         </div>
-        <div
-          v-if="!playerError && !radioUrl"
-          class="hide-phone"
-        >
+        <div v-if="!playerError && !radioUrl" class="hide-phone">
           {{ playedTime }} / {{ totalTime }}
         </div>
       </div>
@@ -60,14 +43,12 @@
         :duration-live-position="durationLivePosition"
         :player-error="playerError"
         :listen-time="listenTime"
-        @updateNotListenTime="$emit('update:notListenTime', $event)"
+        @update-not-listen-time="$emit('update:notListenTime', $event)"
       />
-      <RadioProgressBar
-        v-else
-      />
+      <RadioProgressBar v-else />
     </div>
     <button
-      :title="''!=transcriptText ? $t('View transcript'): $t('Enlarge')"
+      :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
       class="btn play-button-box btn-transparent text-light saooti-up me-0"
       @click="changePlayerLargeVersion"
     />
@@ -84,55 +65,59 @@
   </div>
 </template>
 <script lang="ts">
-import { CommentPodcast } from '@/stores/class/general/comment';
-import { playerDisplay } from '../../mixins/player/playerDisplay';
-import imageProxy from '../../mixins/imageProxy';
-import Spinner from '../Spinner.vue';
-import PlayerTimeline from './PlayerTimeline.vue';
-import { defineAsyncComponent, defineComponent } from 'vue';
-const RadioProgressBar = defineAsyncComponent(() => import('./radio/RadioProgressBar.vue'));
-const PlayerProgressBar = defineAsyncComponent(() => import('./PlayerProgressBar.vue'));
+import { CommentPodcast } from "@/stores/class/general/comment";
+import { playerDisplay } from "../../mixins/player/playerDisplay";
+import imageProxy from "../../mixins/imageProxy";
+import ClassicSpinner from "../ClassicSpinner.vue";
+import PlayerTimeline from "./PlayerTimeline.vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const RadioProgressBar = defineAsyncComponent(
+  () => import("./radio/RadioProgressBar.vue"),
+);
+const PlayerProgressBar = defineAsyncComponent(
+  () => import("./PlayerProgressBar.vue"),
+);
 export default defineComponent({
-  name: 'PlayerCompact',
+  name: "PlayerCompact",
 
   components: {
     PlayerProgressBar,
     RadioProgressBar,
     PlayerTimeline,
-    Spinner
+    ClassicSpinner,
   },
-  mixins:[playerDisplay, imageProxy],
+  mixins: [playerDisplay, imageProxy],
 
   props: {
-    playerError: { default: false, type: Boolean},
-    notListenTime: { default: 0 , type: Number},
-    comments: { default: ()=>[] , type: Array as ()=> Array<CommentPodcast> },
-    displayAlertBar: { default: false , type: Boolean},
-    percentLiveProgress: { default: 0 , type: Number},
-    durationLivePosition: { default: 0 , type: Number},
-    listenTime: { default: 0 , type: Number},
+    playerError: { default: false, type: Boolean },
+    notListenTime: { default: 0, type: Number },
+    comments: { default: () => [], type: Array as () => Array<CommentPodcast> },
+    displayAlertBar: { default: false, type: Boolean },
+    percentLiveProgress: { default: 0, type: Number },
+    durationLivePosition: { default: 0, type: Number },
+    listenTime: { default: 0, type: Number },
   },
 
-  emits: ['stopPlayer', 'update:notListenTime', 'changePlayerLargeVersion'],
+  emits: ["stopPlayer", "update:notListenTime", "changePlayerLargeVersion"],
   data() {
     return {
       showTimeline: false as boolean,
     };
   },
-  methods:{
-    stopPlayer(){
-      this.$emit('stopPlayer');
+  methods: {
+    stopPlayer() {
+      this.$emit("stopPlayer");
     },
-    changePlayerLargeVersion(){
-      this.$emit('changePlayerLargeVersion');
-    }
-  }
-})
+    changePlayerLargeVersion() {
+      this.$emit("changePlayerLargeVersion");
+    },
+  },
+});
 </script>
 
 <style lang="scss">
-@import '@scss/_variables.scss';
-.octopus-app{
+@import "@scss/_variables.scss";
+.octopus-app {
   .player-grow-content {
     display: flex;
     flex-direction: column;

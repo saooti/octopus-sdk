@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from '../mixins/orgaComputed';
-import ParticipantList from '../display/participant/ParticipantList.vue';
-import ProductorSearch from '../display/filter/ProductorSearch.vue';
-import { defineComponent } from 'vue'
+import { orgaComputed } from "../mixins/orgaComputed";
+import ParticipantList from "../display/participant/ParticipantList.vue";
+import ProductorSearch from "../display/filter/ProductorSearch.vue";
+import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     ProductorSearch,
@@ -27,18 +27,18 @@ export default defineComponent({
   },
   mixins: [orgaComputed],
   props: {
-    productor: { default: undefined, type: String},
+    productor: { default: undefined, type: String },
   },
   data() {
     return {
       first: 0 as number,
       size: 30 as number,
-      searchPattern: '' as string,
+      searchPattern: "" as string,
       organisationId: undefined as string | undefined,
     };
   },
   created() {
-    this.organisationId = this.productor ?this.productor: this.filterOrgaId;
+    this.organisationId = this.productor ? this.productor : this.filterOrgaId;
   },
-})
+});
 </script>

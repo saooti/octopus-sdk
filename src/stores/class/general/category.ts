@@ -6,5 +6,5 @@ export interface Category {
   podcastOrganisationCount?: number;
   rtbId?: string;
   adConfig?: AdserverConfig;
-  orgaAdConfigs?: {[key:string]: AdserverConfig};
+  orgaAdConfigs?: { [key: string]: AdserverConfig };
 }

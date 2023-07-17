@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="octopus-progress"
-  >
+  <div class="octopus-progress">
     <div
       v-if="secondaryProgress"
       class="octopus-progress-bar bg-light"
@@ -15,12 +13,12 @@
       <div
         v-if="mediaCueInPercent > 0"
         class="octopus-progress-bar bg-complementary"
-        :style="{'width': + mediaCueInPercent + '%'}"
+        :style="{ width: +mediaCueInPercent + '%' }"
       />
       <div
         v-if="mediaCueOutPercent < 100"
         class="octopus-progress-bar end-0 bg-complementary"
-        :style="{'width': + 100- mediaCueOutPercent + '%'}"
+        :style="{ width: +100 - mediaCueOutPercent + '%' }"
       />
     </template>
     <div
@@ -35,12 +33,12 @@
       <div
         v-if="mediaCueInPercent > 0"
         class="octopus-progress-bar octopus-progress-bar-duration bg-complementary"
-        :style="{'left': + mediaCueInPercent + '%'}"
+        :style="{ left: +mediaCueInPercent + '%' }"
       />
       <div
         v-if="mediaCueOutPercent < 100"
         class="octopus-progress-bar end-0 octopus-progress-bar-duration bg-complementary"
-        :style="{'right': + 100- mediaCueOutPercent + '%'}"
+        :style="{ right: +100 - mediaCueOutPercent + '%' }"
       />
     </template>
     <div
@@ -57,16 +55,16 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'ProgressBar',
+  name: "ProgressBar",
   props: {
-    alertBar: { default: undefined, type: Number},
-    mainProgress: { default: 0, type: Number},
-    secondaryProgress: { default: 0, type: Number},
-    isProgressCursor: { default: false, type: Boolean},
+    alertBar: { default: undefined, type: Number },
+    mainProgress: { default: 0, type: Number },
+    secondaryProgress: { default: 0, type: Number },
+    isProgressCursor: { default: false, type: Boolean },
   },
   data() {
     return {
@@ -74,30 +72,36 @@ export default defineComponent({
       mediaCueOutPercent: 100 as number,
     };
   },
-  computed:{
-    ...mapState(usePlayerStore, ['playerMedia']),
+  computed: {
+    ...mapState(usePlayerStore, ["playerMedia"]),
   },
-  watch:{
+  watch: {
     playerMedia: {
       deep: true,
-      immediate:true,
-      handler(){
-        if(this.playerMedia){
-          this.mediaCueInPercent = this.timeMediaToPercent(this.playerMedia.cueIn??0);
-          this.mediaCueOutPercent = this.timeMediaToPercent(this.playerMedia.cueOut??null);
+      immediate: true,
+      handler() {
+        if (this.playerMedia) {
+          this.mediaCueInPercent = this.timeMediaToPercent(
+            this.playerMedia.cueIn ?? 0,
+          );
+          this.mediaCueOutPercent = this.timeMediaToPercent(
+            this.playerMedia.cueOut ?? null,
+          );
         }
-      }
+      },
     },
   },
-  methods:{
-    timeMediaToPercent(value: number|null):number{
-      if(null===value || !this.playerMedia){return 100;}
-      return (value*100)/(this.playerMedia?.duration??1);
+  methods: {
+    timeMediaToPercent(value: number | null): number {
+      if (null === value || !this.playerMedia) {
+        return 100;
+      }
+      return (value * 100) / (this.playerMedia?.duration ?? 1);
     },
-  }
-})
+  },
+});
 </script>
 
 <style lang="scss">
-@import '../../assets/progressbar.scss';
+@import "../../assets/progressbar.scss";
 </style>

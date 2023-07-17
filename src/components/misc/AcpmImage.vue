@@ -6,18 +6,18 @@
     src="/img/ACPM.webp"
     :title="$t('Octopus is ACPM Podcast accredited')"
     :alt="$t('Octopus is ACPM Podcast accredited')"
-  >
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'AcpmImage',
-})
+  name: "AcpmImage",
+});
 </script>
 
 <style lang="scss">
-.octopus-app{
+.octopus-app {
   .acpm_image {
     width: 44px;
     height: 44px;

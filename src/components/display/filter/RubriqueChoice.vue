@@ -15,14 +15,16 @@
     </select>
     <template v-if="rubriquageId">
       <div class="ms-3 flex-shrink-0">
-        {{ $t('By rubric') }}
+        {{ $t("By rubric") }}
       </div>
       <RubriqueChooser
         v-if="getRubriques(rubriquageId).length"
         class="ms-2"
         :multiple="false"
         :rubriquage-id="rubriquageId"
-        :rubrique-selected="0 !== rubriqueIdSelected? rubriqueIdSelected : undefined"
+        :rubrique-selected="
+          0 !== rubriqueIdSelected ? rubriqueIdSelected : undefined
+        "
         :all-rubriques="getRubriques(rubriquageId)"
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
@@ -40,65 +42,78 @@
 </template>
 
 <script lang="ts">
-import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
-import { Rubrique } from '@/stores/class/rubrique/rubrique';
-import { defineComponent, defineAsyncComponent } from 'vue';
-const RubriqueChooser = defineAsyncComponent(() => import('../rubriques/RubriqueChooser.vue'));
+import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
+import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import { defineComponent, defineAsyncComponent } from "vue";
+const RubriqueChooser = defineAsyncComponent(
+  () => import("../rubriques/RubriqueChooser.vue"),
+);
 export default defineComponent({
   components: {
     RubriqueChooser,
   },
   props: {
-    rubriquageDisplay: { default: () => [], type: Array as ()=>Array<Rubriquage>},
-    rubriquageIdSelected:{default: 0, type: Number},
-    rubriqueIdSelected: { default: 0, type: Number},
-    index: { default: 0, type: Number},
+    rubriquageDisplay: {
+      default: () => [],
+      type: Array as () => Array<Rubriquage>,
+    },
+    rubriquageIdSelected: { default: 0, type: Number },
+    rubriqueIdSelected: { default: 0, type: Number },
+    index: { default: 0, type: Number },
   },
-  emits: ['deleteRubriqueChoice', 'updateRubrique', 'updateRubriquage'],
+  emits: ["deleteRubriqueChoice", "updateRubrique", "updateRubriquage"],
 
   data() {
     return {
-      rubriquageId: undefined as number|undefined,
-      rubriqueId: undefined as number|undefined,
+      rubriquageId: undefined as number | undefined,
+      rubriqueId: undefined as number | undefined,
       reset: false as boolean,
     };
   },
-  watch:{
-    rubriquageIdSelected(){
+  watch: {
+    rubriquageIdSelected() {
       this.initRubriquage();
     },
-    rubriqueIdSelected(){
+    rubriqueIdSelected() {
       this.initRubriquage();
-    }
+    },
   },
 
-  created(){
+  created() {
     this.initRubriquage();
   },
 
   methods: {
-    initRubriquage(){
+    initRubriquage() {
       this.rubriquageId = this.rubriquageIdSelected;
     },
-    deleteRubriquage(){
-      this.$emit('deleteRubriqueChoice');
+    deleteRubriquage() {
+      this.$emit("deleteRubriqueChoice");
     },
     getRubriques(rubriquageId: number): Array<Rubrique> {
       const topicIndex = this.rubriquageDisplay.findIndex(
-        ( element: Rubriquage) => element.rubriquageId === rubriquageId
+        (element: Rubriquage) => element.rubriquageId === rubriquageId,
       );
-      return -1 !== topicIndex ? this.rubriquageDisplay[topicIndex].rubriques : [];
+      return -1 !== topicIndex
+        ? this.rubriquageDisplay[topicIndex].rubriques
+        : [];
     },
     onRubriqueSelected(rubrique: Rubrique): void {
       if (rubrique.rubriqueId === this.rubriqueId) return;
       this.rubriqueId = rubrique.rubriqueId;
-      this.$emit('updateRubrique', {rubriqueId : rubrique.rubriqueId, index: this.index});
+      this.$emit("updateRubrique", {
+        rubriqueId: rubrique.rubriqueId,
+        index: this.index,
+      });
     },
     onRubriquageSelected(): void {
       this.reset = !this.reset;
       this.rubriqueId = 0;
-      this.$emit('updateRubriquage', {rubriquageId : this.rubriquageId, index: this.index});
+      this.$emit("updateRubriquage", {
+        rubriquageId: this.rubriquageId,
+        index: this.index,
+      });
     },
   },
-})
+});
 </script>

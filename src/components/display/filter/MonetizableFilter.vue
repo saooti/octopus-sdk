@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center">
-    <div>{{ $t('Advertising') + ' :' }}</div>
+    <div>{{ $t("Advertising") + " :" }}</div>
     <select
       ref="select"
       v-model="monetization"
@@ -11,37 +11,39 @@
         {{ allString }}
       </option>
       <option value="YES">
-        {{ $t('Authorized advertising') }}
+        {{ $t("Authorized advertising") }}
       </option>
       <option value="NO">
-        {{ $t('Prohibited advertising') }}
+        {{ $t("Prohibited advertising") }}
       </option>
     </select>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
   props: {
-    isEmission: { default: false, type:  Boolean},
+    isEmission: { default: false, type: Boolean },
   },
-  emits: ['updateMonetization'],
+  emits: ["updateMonetization"],
 
   data() {
     return {
-      monetization: 'UNDEFINED' as string,
+      monetization: "UNDEFINED" as string,
     };
   },
-  computed:{
-    allString(): string{
-      return this.isEmission? this.$t('All emissions') : this.$t('All podcasts');
-    }
+  computed: {
+    allString(): string {
+      return this.isEmission
+        ? this.$t("All emissions")
+        : this.$t("All podcasts");
+    },
   },
   methods: {
     onChange(): void {
-      this.$emit('updateMonetization', this.monetization);
+      this.$emit("updateMonetization", this.monetization);
     },
   },
-})
+});
 </script>

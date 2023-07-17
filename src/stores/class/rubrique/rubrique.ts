@@ -5,5 +5,5 @@ export interface Rubrique {
   rubriquageId?: number;
   rubriqueId?: number;
   score?: number;
-  organisationPrivacy?:string;
+  organisationPrivacy?: string;
 }

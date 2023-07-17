@@ -1,9 +1,9 @@
-import { Organisation } from '@/stores/class/general/organisation';
-import { Profile } from '@/stores/class/user/profile';
-import { defineStore } from 'pinia';
+import { Organisation } from "@/stores/class/general/organisation";
+import { Profile } from "@/stores/class/user/profile";
+import { defineStore } from "pinia";
 
-interface AuthState{
-	authName: string;
+interface AuthState {
+  authName: string;
   authOrgaId?: string;
   authOrgaName?: string;
   authRole: Array<string>;
@@ -15,10 +15,10 @@ interface AuthState{
   authProfile?: Profile;
   authOrganisation: Organisation;
 }
-export const useAuthStore = defineStore('AuthStore', {
+export const useAuthStore = defineStore("AuthStore", {
   state: (): AuthState => ({
-    authName: '',
-    authRole: [''],
+    authName: "",
+    authRole: [""],
     authParam: {
       accessToken: undefined,
       refreshToken: undefined,
@@ -26,9 +26,9 @@ export const useAuthStore = defineStore('AuthStore', {
     },
     authProfile: undefined,
     authOrganisation: {
-      id: '',
-      name: '',
-      imageUrl: '',
+      id: "",
+      name: "",
+      imageUrl: "",
       description: undefined,
       monetisable: undefined,
       location: undefined,
@@ -38,8 +38,14 @@ export const useAuthStore = defineStore('AuthStore', {
       },
     },
   }),
-  getters:{
-    isGarRole():string|undefined{ return (this.authProfile?.attributes?.["GAR"] as string|undefined);/* return "ELEVE"; */ /*CHEF_ETABLISSEMENT, ENSEIGNANT, ELEVE, undefined */},
-    isGarStudent():boolean{ return "ELEVE"===this.isGarRole;},
+  getters: {
+    isGarRole(): string | undefined {
+      return this.authProfile?.attributes?.["GAR"] as
+        | string
+        | undefined; /* return "ELEVE"; */ /*CHEF_ETABLISSEMENT, ENSEIGNANT, ELEVE, undefined */
+    },
+    isGarStudent(): boolean {
+      return "ELEVE" === this.isGarRole;
+    },
   },
-})
+});

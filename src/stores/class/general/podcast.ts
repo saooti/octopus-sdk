@@ -1,16 +1,16 @@
-import { Emission, emptyEmissionData } from './emission';
-import { Organisation } from './organisation';
-import { Participant } from './participant';
-import { Person } from '../user/person';
+import { Emission, emptyEmissionData } from "./emission";
+import { Organisation } from "./organisation";
+import { Participant } from "./participant";
+import { Person } from "../user/person";
 export interface Podcast {
   imageUrl?: string;
   animators?: Array<Participant>;
-  annotations?:{[key: string]:string|number|boolean|undefined};
+  annotations?: { [key: string]: string | number | boolean | undefined };
   audioStorageUrl: string;
   audioUrl: string;
   article?: string;
   availability: {
-    date?: number|null;
+    date?: number | null;
     visibility?: boolean;
     immediate?: boolean;
   };
@@ -35,34 +35,34 @@ export interface Podcast {
   score?: number;
   size?: number;
   tags?: Array<string>;
-  ofTags? : Array<string>;
+  ofTags?: Array<string>;
   title: string;
   weekDownloadCount?: number;
   order?: number;
 }
 export function emptyPodcastData(): Podcast {
   return {
-    podcastId:0,
-    audioUrl: '',
-    audioStorageUrl: '',
-    article:'',
-    imageUrl: '',
+    podcastId: 0,
+    audioUrl: "",
+    audioStorageUrl: "",
+    article: "",
+    imageUrl: "",
     animators: [],
     guests: [],
     emission: emptyEmissionData(),
-    title: '',
+    title: "",
     description: undefined,
     tags: [],
     availability: {
       visibility: true,
       date: undefined,
     },
-    monetisable: 'UNDEFINED',
-    comments: 'inherit',
+    monetisable: "UNDEFINED",
+    comments: "inherit",
     organisation: {
-      id: '',
-      name: '',
-      imageUrl: '',
+      id: "",
+      name: "",
+      imageUrl: "",
     },
     pubDate: undefined,
     conferenceId: 0,

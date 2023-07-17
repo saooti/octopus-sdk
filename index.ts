@@ -1,34 +1,34 @@
 //Pages
-export const getLives = () => import("./src/components/pages/Lives.vue");
-export const getPodcast = () => import("./src/components/pages/Podcast.vue");
-export const getPodcasts = () => import("./src/components/pages/Podcasts.vue");
-export const getEmission = () => import("./src/components/pages/Emission.vue");
-export const getEmissions = () => import("./src/components/pages/Emissions.vue");
-export const getPlaylist = () => import("./src/components/pages/Playlist.vue");
-export const getPlaylists = () => import("./src/components/pages/Playlists.vue");
-export const getParticipant = () => import("./src/components/pages/Participant.vue");
-export const getParticipants = () => import("./src/components/pages/Participants.vue");
-export const getSearch = () => import("./src/components/pages/Search.vue");
-export const getHome = () => import("./src/components/pages/Home.vue");
-export const getCategory = () => import("./src/components/pages/Category.vue");
-export const getRubrique = () => import("./src/components/pages/Rubrique.vue");
+export const getLives = () => import("./src/components/pages/LivesPage.vue");
+export const getPodcast = () => import("./src/components/pages/PodcastPage.vue");
+export const getPodcasts = () => import("./src/components/pages/PodcastsPage.vue");
+export const getEmission = () => import("./src/components/pages/EmissionPage.vue");
+export const getEmissions = () => import("./src/components/pages/EmissionsPage.vue");
+export const getPlaylist = () => import("./src/components/pages/PlaylistPage.vue");
+export const getPlaylists = () => import("./src/components/pages/PlaylistsPage.vue");
+export const getParticipant = () => import("./src/components/pages/ParticipantPage.vue");
+export const getParticipants = () => import("./src/components/pages/ParticipantsPage.vue");
+export const getSearch = () => import("./src/components/pages/SearchPage.vue");
+export const getHome = () => import("./src/components/pages/HomePage.vue");
+export const getCategory = () => import("./src/components/pages/CategoryPage.vue");
+export const getRubrique = () => import("./src/components/pages/RubriquePage.vue");
 export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
-export const getRadio = () => import("./src/components/pages/Radio.vue");
+export const getRadio = () => import("./src/components/pages/RadioPage.vue");
 
 //Misc
-export const getAccordion = () => import("./src/components/misc/Accordion.vue");
-export const getNav = () => import("./src/components/misc/Nav.vue");
+export const getAccordion = () => import("./src/components/misc/ClassicAccordion.vue");
+export const getNav = () => import("./src/components/misc/ClassicNav.vue");
 export const getProgressBar = () => import("./src/components/misc/ProgressBar.vue");
-export const getSpinner = () => import("./src/components/misc/Spinner.vue");
+export const getSpinner = () => import("./src/components/misc/ClassicSpinner.vue");
 export const getFooter = () => import("./src/components/misc/Footer.vue");
 export const getLeftMenu = () => import("./src/components/misc/LeftMenu.vue");
-export const getPlayer = () => import("./src/components/misc/player/Player.vue");
-export const getSnackbar = () => import("./src/components/misc/Snackbar.vue");
+export const getPlayer = () => import("./src/components/misc/player/PlayerComponent.vue");
+export const getSnackbar = () => import("./src/components/misc/SnackBar.vue");
 export const getTopBar = () => import("./src/components/misc/TopBar.vue");
 export const getHomeDropdown = () => import("./src/components/misc/HomeDropdown.vue");
 export const getMessageModal = () => import("./src/components/misc/modal/MessageModal.vue");
 export const getErrorMessage = () => import("./src/components/misc/ErrorMessage.vue");
-export const getPopover = () => import("./src/components/misc/Popover.vue");
+export const getPopover = () => import("./src/components/misc/ClassicPopover.vue");
 export const getClassicModal = () => import("./src/components/misc/modal/ClassicModal.vue");
 
 
@@ -65,7 +65,7 @@ export const getClassicRadio = () => import("./src/components/form/ClassicRadio.
 export const getClassicLoading = () => import("./src/components/form/ClassicLoading.vue");
 export const getClassicSelect = () => import("./src/components/form/ClassicSelect.vue");
 export const getClassicDatePicker = () => import("./src/components/form/ClassicDatePicker.vue");
-export const getPaginate = () => import("./src/components/display/list/Paginate.vue");
+export const getPaginate = () => import("./src/components/display/list/PaginateSection.vue");
 export const getPaginateParams = () => import("./src/components/display/list/PaginateParams.vue");
 export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
 export const getClassicMultiselect = () => import("./src/components/form/ClassicMultiselect.vue");

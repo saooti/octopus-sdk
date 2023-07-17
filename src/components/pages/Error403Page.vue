@@ -8,8 +8,8 @@
           class="logo-octopus"
           src="/img/logo_octopus_final.svg"
           :alt="$t('Logo of main page')"
-        >
-        <h2>{{ $t('You do not have the right to access this page' ) }}</h2>
+        />
+        <h2>{{ $t("You do not have the right to access this page") }}</h2>
       </div>
       <img
         width="600"
@@ -17,31 +17,32 @@
         class="stop-octopus-img"
         src="/img/403.webp"
         :alt="$t('You do not have the right to access this page')"
-      >
+      />
     </div>
-    
+
     <a
       class="btn btn-primary"
-      :href="authenticated ?'/sso/logout':'/sso/login'"
-    >{{ authText }}</a>
+      :href="authenticated ? '/sso/logout' : '/sso/login'"
+      >{{ authText }}</a
+    >
   </div>
 </template>
 
 <script lang="ts">
-import { state } from '../../stores/ParamSdkStore';
-import { useGeneralStore } from '@/stores/GeneralStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { state } from "../../stores/ParamSdkStore";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'Error403Page',
+  name: "Error403Page",
   computed: {
-    ...mapState(useGeneralStore, ['metaTitle']),
+    ...mapState(useGeneralStore, ["metaTitle"]),
     authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
+      return state.generalParameters.authenticated as boolean;
     },
-    authText():string{
-      return this.authenticated ? this.$t('Logout') : this.$t('Login');
-    }
+    authText(): string {
+      return this.authenticated ? this.$t("Logout") : this.$t("Login");
+    },
   },
   mounted() {
     document.title = this.metaTitle;
@@ -49,11 +50,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-.octopus-app .not-auth-content{
+.octopus-app .not-auth-content {
   @media (max-width: 960px) {
     align-items: center;
   }
-  .stop-octopus-img{
+  .stop-octopus-img {
     width: 600px;
     height: auto;
     @media (max-width: 1400px) {

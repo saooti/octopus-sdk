@@ -4,6 +4,6 @@ export interface Cartouchier {
   cartouchierId?: number;
   title: string;
   organisationId: string;
-  cartouches: {[key:string] : Cartouche};
-  cartoucheComplete?: {[key:string] : Cartouche};
+  cartouches: { [key: string]: Cartouche };
+  cartoucheComplete?: { [key: string]: Cartouche };
 }

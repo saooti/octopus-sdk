@@ -15,7 +15,7 @@
     :no-rubriquage-id="noRubriquageId"
     :query="query"
     :podcast-id="podcastId"
-    @update:isArrow="$emit('update:isArrow',$event)"
+    @update:is-arrow="$emit('update:isArrow', $event)"
   />
   <PodcastSwiperList
     v-else
@@ -32,48 +32,52 @@
     :rubriquage-id="rubriquageId"
     :no-rubriquage-id="noRubriquageId"
     :query="query"
-    @update:isArrow="$emit('update:isArrow',$event)"
+    @update:is-arrow="$emit('update:isArrow', $event)"
   />
 </template>
 
 <script lang="ts">
-import { state } from '../../../stores/ParamSdkStore';
-import { defineAsyncComponent, defineComponent } from 'vue';
-const PodcastInlineListClassic = defineAsyncComponent(() => import('./PodcastInlineListClassic.vue'));
-const PodcastSwiperList = defineAsyncComponent(() => import('./PodcastSwiperList.vue'));
+import { state } from "../../../stores/ParamSdkStore";
+import { defineAsyncComponent, defineComponent } from "vue";
+const PodcastInlineListClassic = defineAsyncComponent(
+  () => import("./PodcastInlineListClassic.vue"),
+);
+const PodcastSwiperList = defineAsyncComponent(
+  () => import("./PodcastSwiperList.vue"),
+);
 export default defineComponent({
-  name: 'PodcastInlineList',
-  
+  name: "PodcastInlineList",
+
   components: {
     PodcastInlineListClassic,
     PodcastSwiperList,
   },
   props: {
-    organisationId: { default:  () => [], type: Array as ()=> Array<string>},
-    emissionId: { default: undefined, type: Number},
-    iabId: { default: undefined, type: Number},
-    title: { default: '', type: String},
-    href: { default: undefined, type: String},
-    buttonText: { default: undefined, type: String},
-    isArrow: { default: false, type: Boolean},
-    requirePopularSort: { default:undefined, type: Boolean},
-    buttonPlus: { default:false, type: Boolean},
-    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
-    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
-    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
-    query: { default: undefined, type: String},
-    podcastId: { default: undefined, type: Number},
+    organisationId: { default: () => [], type: Array as () => Array<string> },
+    emissionId: { default: undefined, type: Number },
+    iabId: { default: undefined, type: Number },
+    title: { default: "", type: String },
+    href: { default: undefined, type: String },
+    buttonText: { default: undefined, type: String },
+    isArrow: { default: false, type: Boolean },
+    requirePopularSort: { default: undefined, type: Boolean },
+    buttonPlus: { default: false, type: Boolean },
+    rubriqueId: { default: () => [], type: Array as () => Array<number> },
+    rubriquageId: { default: () => [], type: Array as () => Array<number> },
+    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+    query: { default: undefined, type: String },
+    podcastId: { default: undefined, type: Number },
   },
-  emits: ['update:isArrow'],
-  computed:{
+  emits: ["update:isArrow"],
+  computed: {
     listTypeClassic(): boolean {
-      return (state.podcastPage.listTypeClassic as boolean);
+      return state.podcastPage.listTypeClassic as boolean;
     },
-  }
-})
+  },
+});
 </script>
 <style lang="scss">
-.octopus-app .loading-size{
+.octopus-app .loading-size {
   height: 21.4rem;
 }
 </style>

@@ -1,7 +1,9 @@
-import { Organisation } from '../general/organisation';
+import { Organisation } from "../general/organisation";
 
 export interface Person {
-  attributes?: {[key:string]:  string|number|boolean|undefined|Array<string>};
+  attributes?: {
+    [key: string]: string | number | boolean | undefined | Array<string>;
+  };
   email: string;
   emailVerified: boolean;
   enabled: true;

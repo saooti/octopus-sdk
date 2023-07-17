@@ -1,4 +1,4 @@
-import { Rubrique } from './rubrique';
+import { Rubrique } from "./rubrique";
 
 export interface Rubriquage {
   organisationId?: string;
@@ -6,5 +6,5 @@ export interface Rubriquage {
   rubriques: Array<Rubrique>;
   title: string;
   homePageOrder?: number | null;
-  organisationPrivacy?:string;
+  organisationPrivacy?: string;
 }

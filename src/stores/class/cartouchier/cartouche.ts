@@ -1,4 +1,4 @@
-import { Media } from '../general/media';
+import { Media } from "../general/media";
 
 export interface Cartouche {
   mediaId?: number;
@@ -9,7 +9,7 @@ export interface Cartouche {
   level?: number;
   id: number;
   width: number;
-  interval?:number;
-  elapsed?:number;
-  loop?:boolean;
+  interval?: number;
+  elapsed?: number;
+  loop?: boolean;
 }

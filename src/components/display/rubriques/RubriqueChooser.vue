@@ -13,57 +13,69 @@
     :in-modal="inModal"
     :is-disabled="isDisabled"
     :no-deselect="noDeselect"
-    @onSearch="onSearchRubrique"
+    @on-search="onSearchRubrique"
     @selected="onRubriqueSelected"
   />
 </template>
 
 <script lang="ts">
-import selenium from '../../mixins/selenium';
-import { Rubrique } from '@/stores/class/rubrique/rubrique';
-import ClassicMultiselect from '../../form/ClassicMultiselect.vue';
-import { defineComponent } from 'vue'
+import selenium from "../../mixins/selenium";
+import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import ClassicMultiselect from "../../form/ClassicMultiselect.vue";
+import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     ClassicMultiselect,
   },
-  mixins:[selenium],
+  mixins: [selenium],
   props: {
-    defaultanswer: { default: '', type: String },
-    width: { default: '100%', type: String },
+    defaultanswer: { default: "", type: String },
+    width: { default: "100%", type: String },
     multiple: { default: false, type: Boolean },
     reset: { default: false, type: Boolean },
-    allRubriques: { default: () => [], type: Array as ()=> Array<Rubrique> },
+    allRubriques: { default: () => [], type: Array as () => Array<Rubrique> },
     rubriqueSelected: { default: undefined, type: Number },
-    rubriqueSelectedArray: { default: undefined, type: Object as ()=>Array<number> },
+    rubriqueSelectedArray: {
+      default: undefined,
+      type: Object as () => Array<number>,
+    },
     rubriquageId: { default: undefined, type: Number },
     withoutRubrique: { default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
-    noDeselect: {default: true, type: Boolean},
-    inModal:{default: false, type: Boolean},
+    noDeselect: { default: true, type: Boolean },
+    inModal: { default: false, type: Boolean },
   },
-  emits: ['update:rubriqueSelected', 'update:rubriqueSelectedArray', 'selected'],
+  emits: [
+    "update:rubriqueSelected",
+    "update:rubriqueSelectedArray",
+    "selected",
+  ],
 
   data() {
     return {
       maxElement: 250 as number,
-      rubrique: undefined as Rubrique|undefined,
-      rubriqueForArray: [] as Array<Rubrique>|undefined,
-      withoutItem: { name: this.$t('Without rubric'), rubriqueId: -1 } as {name: string, rubriqueId:number},
+      rubrique: undefined as Rubrique | undefined,
+      rubriqueForArray: [] as Array<Rubrique> | undefined,
+      withoutItem: { name: this.$t("Without rubric"), rubriqueId: -1 } as {
+        name: string;
+        rubriqueId: number;
+      },
     };
   },
   computed: {
     idClassicMultiselect(): string {
-      return this.rubriquageId? 'rubriqueChooser' + this.rubriquageId : 'rubriqueChooser';
+      return this.rubriquageId
+        ? "rubriqueChooser" + this.rubriquageId
+        : "rubriqueChooser";
     },
-    getDefaultRubrique(): Rubrique|undefined{
-      if(''===this.defaultanswer){
+    getDefaultRubrique(): Rubrique | undefined {
+      if ("" === this.defaultanswer) {
         return undefined;
       }
       return { name: this.defaultanswer, rubriqueId: 0 };
     },
-    rubriques(): Array<Rubrique>{
-      let rubriques = this.allRubriques; 
+    rubriques(): Array<Rubrique> {
+      let rubriques = this.allRubriques;
       if (!this.getDefaultRubrique) {
         return rubriques;
       }
@@ -71,37 +83,36 @@ export default defineComponent({
         rubriques.unshift(this.withoutItem);
       }
       rubriques.unshift(this.getDefaultRubrique);
-      
+
       return rubriques;
     },
     model: {
-      get(): Rubrique| Array<Rubrique>|undefined{
-        return !this.multiple ? this.rubrique:this.rubriqueForArray;
+      get(): Rubrique | Array<Rubrique> | undefined {
+        return !this.multiple ? this.rubrique : this.rubriqueForArray;
       },
-      set(value: Rubrique| Array<Rubrique>|undefined): void{
-        if(!this.multiple){
-          this.rubrique = (value as Rubrique|undefined);
+      set(value: Rubrique | Array<Rubrique> | undefined): void {
+        if (!this.multiple) {
+          this.rubrique = value as Rubrique | undefined;
           return;
         }
-        this.rubriqueForArray = (value as Array<Rubrique>);
-      }
-
-    }
+        this.rubriqueForArray = value as Array<Rubrique>;
+      },
+    },
   },
   watch: {
     rubriqueSelected: {
-      immediate:true,
-      handler(){
+      immediate: true,
+      handler() {
         if (this.rubriqueSelected) {
           this.initRubriqueSelected();
-        }else{
+        } else {
           this.rubrique = this.getDefaultRubrique;
         }
-      }
+      },
     },
     reset(): void {
       this.rubrique = this.getDefaultRubrique;
-    }
+    },
   },
   mounted() {
     this.initRubriqueArray();
@@ -109,44 +120,52 @@ export default defineComponent({
   methods: {
     onSearchRubrique(query: string): void {
       let rubriques = this.rubriques;
-      if(query){
+      if (query) {
         rubriques = rubriques.filter((item: Rubrique) => {
           return item.name.toUpperCase().includes(query.toUpperCase());
         });
       }
-      (this.$refs.selectRubrique as InstanceType<typeof ClassicMultiselect>).afterSearch(rubriques,rubriques.length);
+      (
+        this.$refs.selectRubrique as InstanceType<typeof ClassicMultiselect>
+      ).afterSearch(rubriques, rubriques.length);
     },
-    onRubriqueSelected(rubrique: Rubrique| Array<Rubrique>): void {
+    onRubriqueSelected(rubrique: Rubrique | Array<Rubrique>): void {
       if (undefined !== this.rubriqueSelected) {
-        this.$emit('update:rubriqueSelected', (rubrique as Rubrique).rubriqueId);
+        this.$emit(
+          "update:rubriqueSelected",
+          (rubrique as Rubrique).rubriqueId,
+        );
       } else if (undefined !== this.rubriqueSelectedArray) {
         const idsArray: Array<number> = [];
         (rubrique as Array<Rubrique>).forEach((el: Rubrique) => {
-          idsArray.push(el.rubriqueId??0);
+          idsArray.push(el.rubriqueId ?? 0);
         });
-        this.$emit('update:rubriqueSelectedArray', idsArray);
-      }else{
-        this.$emit('selected', rubrique);
+        this.$emit("update:rubriqueSelectedArray", idsArray);
+      } else {
+        this.$emit("selected", rubrique);
       }
     },
     initRubriqueSelected(): void {
-      this.rubrique = this.rubriques.find((el: Rubrique) => {
-        return el.rubriqueId === this.rubriqueSelected;
-      }) ?? this.getDefaultRubrique;
+      this.rubrique =
+        this.rubriques.find((el: Rubrique) => {
+          return el.rubriqueId === this.rubriqueSelected;
+        }) ?? this.getDefaultRubrique;
     },
 
     initRubriqueArray(): void {
-      if(!this.rubriqueForArray || !this.rubriqueSelectedArray){return; }
+      if (!this.rubriqueForArray || !this.rubriqueSelectedArray) {
+        return;
+      }
       this.rubriqueForArray.length = 0;
       this.rubriqueSelectedArray.forEach((element: number) => {
         const item = this.rubriques.find((el: Rubrique) => {
           return el.rubriqueId === element;
         });
-        if(this.rubriqueForArray && item){
+        if (this.rubriqueForArray && item) {
           this.rubriqueForArray.push(item);
         }
       });
     },
   },
-})
+});
 </script>

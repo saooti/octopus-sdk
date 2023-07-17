@@ -14,32 +14,26 @@
           type="text"
           :placeholder="$t('Your name')"
           :class="{ 'border border-danger': 0 === countName || !validName }"
-        >
+        />
         <p
           class="d-flex justify-content-end h6"
           :class="{ 'text-danger': !validName }"
         >
-          {{ countName + ' / ' + maxName }}
+          {{ countName + " / " + maxName }}
         </p>
-        <div
-          v-if="''!==errorText"
-          class="mt-1 text-danger"
-        >
+        <div v-if="'' !== errorText" class="mt-1 text-danger">
           {{ errorText }}
         </div>
       </template>
       <template v-else>
-        <div>{{ $t('Send in progress') }}</div>
+        <div>{{ $t("Send in progress") }}</div>
       </template>
     </template>
     <template #footer>
-      <button
-        class="btn m-1"
-        @click="closePopup"
-      >
-        {{ $t('Close') }}
+      <button class="btn m-1" @click="closePopup">
+        {{ $t("Close") }}
       </button>
-      <vue-recaptcha 
+      <vue-recaptcha
         v-if="!isVerify"
         ref="invisibleRecaptcha"
         :load-recaptcha-script="true"
@@ -54,56 +48,56 @@
         :disabled="0 === countName || !validName"
         @click="submit"
       >
-        {{ $t('Validate') }}
+        {{ $t("Validate") }}
       </button>
     </template>
   </ClassicModal>
 </template>
 
 <script lang="ts">
-import Constants from '../../../../public/config';
-import { state } from '../../../stores/ParamSdkStore';
-import ClassicModal from '../../misc/modal/ClassicModal.vue';
-import api from '@/api/initialize';
-import { useAuthStore } from '@/stores/AuthStore';
-import { mapState } from 'pinia';
-import { VueRecaptcha } from 'vue-recaptcha';
-import { defineComponent } from 'vue';
+import Constants from "../../../../public/config";
+import { state } from "../../../stores/ParamSdkStore";
+import ClassicModal from "../../misc/modal/ClassicModal.vue";
+import api from "@/api/initialize";
+import { useAuthStore } from "@/stores/AuthStore";
+import { mapState } from "pinia";
+import { VueRecaptcha } from "vue-recaptcha";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'AddCommentModal',
-  components:{
+  name: "AddCommentModal",
+  components: {
     VueRecaptcha,
-    ClassicModal
+    ClassicModal,
   },
 
   props: {},
-  emits: ['close','validate'],
+  emits: ["close", "validate"],
 
   data() {
     return {
-      name: '' as string,
+      name: "" as string,
       sending: false as boolean,
       sendError: false as boolean,
       isVerify: false as boolean,
-      maxName : Constants.MAX_COMMENT_NAME as number
+      maxName: Constants.MAX_COMMENT_NAME as number,
     };
   },
   computed: {
-    ...mapState(useAuthStore, ['authProfile']),
-    errorText():string {
-      if(this.isCaptchaTest){
-        return this.$t('Recaptcha not active');
+    ...mapState(useAuthStore, ["authProfile"]),
+    errorText(): string {
+      if (this.isCaptchaTest) {
+        return this.$t("Recaptcha not active");
       }
-      return this.sendError? this.$t('Recaptcha error') : '';
+      return this.sendError ? this.$t("Recaptcha error") : "";
     },
-    validName(): boolean{
+    validName(): boolean {
       return this.countName <= this.maxName;
     },
-    countName(): number{
+    countName(): number {
       return this.name.length;
     },
     isCaptchaTest(): boolean {
-      return (state.generalParameters.isCaptchaTest as boolean);
+      return state.generalParameters.isCaptchaTest as boolean;
     },
   },
 
@@ -111,9 +105,13 @@ export default defineComponent({
     this.initAuthenticatedName();
   },
   methods: {
-    initAuthenticatedName():void{
-      if (!this.authProfile?.userId) { return; }
-      this.name = (`${this.authProfile?.firstname||''} ${this.authProfile?.lastname||''}`).trim();
+    initAuthenticatedName(): void {
+      if (!this.authProfile?.userId) {
+        return;
+      }
+      this.name = `${this.authProfile?.firstname || ""} ${
+        this.authProfile?.lastname || ""
+      }`.trim();
       this.isVerify = true;
     },
     async handleSuccess(token: string) {
@@ -126,17 +124,19 @@ export default defineComponent({
     },
     async submit(): Promise<void> {
       if (!this.isVerify && !this.isCaptchaTest) {
-        return (this.$refs.invisibleRecaptcha as InstanceType<typeof VueRecaptcha>).execute();
+        return (
+          this.$refs.invisibleRecaptcha as InstanceType<typeof VueRecaptcha>
+        ).execute();
       }
       this.sendComment();
     },
     closePopup(): void {
-      this.$emit('close');
+      this.$emit("close");
     },
     sendComment(): void {
       this.sending = true;
-      this.$emit('validate', this.name);
+      this.$emit("validate", this.name);
     },
   },
-})
+});
 </script>

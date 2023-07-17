@@ -5,45 +5,39 @@
       ref="search"
       :value="textInit"
       type="text"
-      class="search-input w-100 p-2 "
+      class="search-input w-100 p-2"
       :placeholder="label"
       :autofocus="autofocus"
-      @input="$emit('update:textInit',$event.target.value)"
-    >
-    <label
-      :for="idSearch"
-      :title="label"
+      @input="$emit('update:textInit', $event.target.value)"
     />
-    <div
-      v-if="!textInit"
-      class="saooti-search search-icon-container"
-    />
+    <label :for="idSearch" :title="label" />
+    <div v-if="!textInit" class="saooti-search search-icon-container" />
     <div
       v-else
       class="saooti-remove search-icon-container c-hand"
-      @click="$emit('update:textInit','')"
+      @click="$emit('update:textInit', '')"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'ClassicSearch',
- props: {
-    idSearch: { default: '', type: String },
-    label: { default: '', type: String },
-    textInit: { default: '', type: String },
+  name: "ClassicSearch",
+  props: {
+    idSearch: { default: "", type: String },
+    label: { default: "", type: String },
+    textInit: { default: "", type: String },
     autofocus: { default: false, type: Boolean },
   },
 
-  emits: ['update:textInit'],
+  emits: ["update:textInit"],
 });
 </script>
 <style lang="scss">
-@import '@scss/_variables.scss';
-.octopus-app{
-  .champs-searchPage{
+@import "@scss/_variables.scss";
+.octopus-app {
+  .champs-searchPage {
     input {
       border: 2px solid #dee2e6;
       border-radius: $octopus-borderradius;
@@ -63,6 +57,6 @@ export default defineComponent({
       align-items: center;
       margin: 1rem;
     }
-  } 
+  }
 }
 </style>

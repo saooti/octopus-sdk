@@ -7,6 +7,8 @@ export interface Profile {
   userId: string;
   imageUrl?: string;
   description?: string;
-  organisations?:Array<Organisation>;
-  attributes?: {[key:string]: string|number|boolean|undefined|Array<string>};
+  organisations?: Array<Organisation>;
+  attributes?: {
+    [key: string]: string | number | boolean | undefined | Array<string>;
+  };
 }

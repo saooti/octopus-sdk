@@ -4,7 +4,7 @@
     class="d-flex flex-column align-items-start mt-3"
   >
     <h2 class="mb-0 big-h2 mb-3">
-      {{ $t('Radio') }}
+      {{ $t("Radio") }}
     </h2>
     <template v-if="radio.length">
       <RadioItem
@@ -17,17 +17,17 @@
 </template>
 
 <script lang="ts">
-import RadioItem from './RadioItem.vue';
-import { handle403 } from '../../mixins/handle403';
-import { orgaComputed } from '../../mixins/orgaComputed';
-import octopusApi from '@saooti/octopus-api';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { Canal } from '@/stores/class/radio/canal';
-import { defineComponent } from 'vue'
-import { AxiosError } from 'axios';
+import RadioItem from "./RadioItem.vue";
+import { handle403 } from "../../mixins/handle403";
+import { orgaComputed } from "../../mixins/orgaComputed";
+import octopusApi from "@saooti/octopus-api";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { Canal } from "@/stores/class/radio/canal";
+import { defineComponent } from "vue";
+import { AxiosError } from "axios";
 export default defineComponent({
-  name: 'Ecbd98d979bd4312Ad5eFc7c1c4a191c',
+  name: "Ecbd98d979bd4312Ad5eFc7c1c4a191c",
   components: {
     RadioItem,
   },
@@ -35,18 +35,18 @@ export default defineComponent({
   mixins: [handle403, orgaComputed],
 
   props: {
-    organisationId: { default: undefined, type: String},
+    organisationId: { default: undefined, type: String },
   },
   data() {
     return {
-      radio: [] as Array<Canal>
+      radio: [] as Array<Canal>,
     };
   },
-  
+
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    filterOrgaUsed(): string|undefined {
-      return this.filterOrgaId?this.filterOrgaId:this.organisationId;
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    filterOrgaUsed(): string | undefined {
+      return this.filterOrgaId ? this.filterOrgaId : this.organisationId;
     },
   },
   watch: {
@@ -55,7 +55,7 @@ export default defineComponent({
         this.fetchContent();
       },
       immediate: true,
-    }
+    },
   },
   methods: {
     async fetchContent(): Promise<void> {
@@ -64,11 +64,14 @@ export default defineComponent({
         return;
       }
       try {
-        this.radio = await octopusApi.fetchData<Array<Canal>>(14, 'canal/orga/'+this.filterOrgaUsed+'/');
+        this.radio = await octopusApi.fetchData<Array<Canal>>(
+          14,
+          "canal/orga/" + this.filterOrgaUsed + "/",
+        );
       } catch (error) {
-        this.handle403((error as AxiosError));
+        this.handle403(error as AxiosError);
       }
     },
   },
-})
+});
 </script>

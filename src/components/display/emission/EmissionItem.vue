@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="mt-3 emission-item-container"
-  >
+  <div class="mt-3 emission-item-container">
     <router-link
       :to="{
         name: 'emission',
@@ -16,9 +14,9 @@
         width="330"
         height="330"
         class="img-box"
-        :title="$t('Emission name image', {name:emission.name})"
-        :alt="$t('Emission name image', {name:emission.name})"
-      >
+        :title="$t('Emission name image', { name: emission.name })"
+        :alt="$t('Emission name image', { name: emission.name })"
+      />
       <div class="emission-item-text">
         <div class="d-flex align-items-center emission-name">
           <span
@@ -35,9 +33,9 @@
           <!-- eslint-disable vue/no-v-html -->
           <div
             ref="descriptionEmission"
-            v-html="urlify(emission.description|| '')"
+            v-html="urlify(emission.description || '')"
           />
-        <!-- eslint-enable -->
+          <!-- eslint-enable -->
         </div>
         <router-link
           v-if="!isPodcastmaker"
@@ -56,21 +54,21 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from '../../mixins/orgaComputed';
-import { Emission } from '@/stores/class/general/emission';
-import { state } from '../../../stores/ParamSdkStore';
-import octopusApi from '@saooti/octopus-api';
-import imageProxy from '../../mixins/imageProxy';
-import displayMethods from '../../mixins/displayMethods';
-import { defineComponent } from 'vue'
-import { Podcast } from '@/stores/class/general/podcast';
+import { orgaComputed } from "../../mixins/orgaComputed";
+import { Emission } from "@/stores/class/general/emission";
+import { state } from "../../../stores/ParamSdkStore";
+import octopusApi from "@saooti/octopus-api";
+import imageProxy from "../../mixins/imageProxy";
+import displayMethods from "../../mixins/displayMethods";
+import { defineComponent } from "vue";
+import { Podcast } from "@/stores/class/general/podcast";
 export default defineComponent({
-  name: 'EmissionItem',
+  name: "EmissionItem",
 
   mixins: [displayMethods, orgaComputed, imageProxy],
 
   props: {
-    emission: { default: ()=>({}), type: Object as ()=> Emission},
+    emission: { default: () => ({}), type: Object as () => Emission },
   },
 
   data() {
@@ -78,46 +76,60 @@ export default defineComponent({
       activeEmission: true as boolean,
     };
   },
-  
+
   computed: {
     isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
+      return state.generalParameters.podcastmaker as boolean;
     },
     organisation(): string {
-      return this.emission?.publisher?.organisation?.name ?? '';
+      return this.emission?.publisher?.organisation?.name ?? "";
     },
     editRight(): boolean {
-      return (true === this.authenticated && this.myOrganisationId === this.emission.orga.id) ||
+      return (
+        (true === this.authenticated &&
+          this.myOrganisationId === this.emission.orga.id) ||
         true === state.generalParameters.isAdmin
+      );
     },
   },
 
   created() {
-    if(!this.editRight)return;
+    if (!this.editRight) return;
     this.hasPodcast();
   },
   mounted() {
-    const emissionDesc = (this.$refs.descriptionEmission as HTMLElement);
-    const emissionDescContainer = (this.$refs.descriptionEmissionContainer as HTMLElement);
+    const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
+    const emissionDescContainer = this.$refs
+      .descriptionEmissionContainer as HTMLElement;
     if (
-      null !== emissionDesc && null !== emissionDescContainer && 
+      null !== emissionDesc &&
+      null !== emissionDescContainer &&
       emissionDesc.clientHeight > emissionDescContainer.clientHeight
     ) {
-      emissionDescContainer.classList.add('after-emission-description');
+      emissionDescContainer.classList.add("after-emission-description");
     }
   },
   methods: {
     async hasPodcast(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
-        emissionId: this.emission.emissionId,
-        first: 0,
-        size: 0,
-        includeStatus:["READY","PROCESSING"]
-      }, true);
+      const data = await octopusApi.fetchDataWithParams<{
+        count: number;
+        result: Array<Podcast>;
+        sort: string;
+      }>(
+        0,
+        "podcast/search",
+        {
+          emissionId: this.emission.emissionId,
+          first: 0,
+          size: 0,
+          includeStatus: ["READY", "PROCESSING"],
+        },
+        true,
+      );
       if (0 === data.count) {
         this.activeEmission = false;
       }
     },
   },
-})
+});
 </script>

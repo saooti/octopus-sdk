@@ -4,23 +4,19 @@
     v-model:first="dfirst"
     v-model:rowsPerPage="dsize"
     v-model:isMobile="isMobile"
-    :text-count="displayCount > 1 ? `${$t('Number playlists', { nb: displayCount })}`: undefined"
+    :text-count="
+      displayCount > 1
+        ? `${$t('Number playlists', { nb: displayCount })}`
+        : undefined
+    "
     :total-count="totalCount"
     :loading="loading"
-    :loading-text="loading?$t('Loading content ...'):undefined"
+    :loading-text="loading ? $t('Loading content ...') : undefined"
   >
     <template #list>
-      <div
-        class="emission-list two-emissions"
-      >
-        <template
-          v-for="p in displayArray"
-          :key="p.playlistId"
-        >
-          <PlaylistItem
-            v-if="0!==p.playlistId"
-            :playlist="p"
-          />
+      <div class="emission-list two-emissions">
+        <template v-for="p in displayArray" :key="p.playlistId">
+          <PlaylistItem v-if="0 !== p.playlistId" :playlist="p" />
         </template>
       </div>
     </template>
@@ -28,21 +24,21 @@
 </template>
 
 <script lang="ts">
-import ListPaginate from '../list/ListPaginate.vue';
-import { handle403 } from '../../mixins/handle403';
-import octopusApi from '@saooti/octopus-api';
-import PlaylistItem from './PlaylistItem.vue';
-import { Playlist, emptyPlaylistData } from '@/stores/class/general/playlist';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
-import { AxiosError } from 'axios';
+import ListPaginate from "../list/ListPaginate.vue";
+import { handle403 } from "../../mixins/handle403";
+import octopusApi from "@saooti/octopus-api";
+import PlaylistItem from "./PlaylistItem.vue";
+import { Playlist, emptyPlaylistData } from "@/stores/class/general/playlist";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
+import { AxiosError } from "axios";
 export default defineComponent({
-  name: 'PlaylistList',
+  name: "PlaylistList",
 
   components: {
     PlaylistItem,
-    ListPaginate
+    ListPaginate,
   },
 
   mixins: [handle403],
@@ -50,8 +46,8 @@ export default defineComponent({
   props: {
     first: { default: 0, type: Number },
     size: { default: 30, type: Number },
-    query: { default: undefined, type: String},
-    organisationId: { default: undefined, type: String},
+    query: { default: undefined, type: String },
+    organisationId: { default: undefined, type: String },
   },
 
   data() {
@@ -65,44 +61,50 @@ export default defineComponent({
       isMobile: false as boolean,
     };
   },
-  
+
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    displayArray(): Array<Playlist>{
-      if(this.isMobile){
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    displayArray(): Array<Playlist> {
+      if (this.isMobile) {
         return this.playlists;
       }
-      return this.playlists.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
-		},
+      return this.playlists.slice(
+        this.dfirst,
+        Math.min(this.dfirst + this.dsize, this.totalCount),
+      );
+    },
     changed(): string {
       return `${this.first}|${this.size}|${this.organisationId}|${this.query}`;
     },
     sort(): string {
-      return !this.query ?'NAME': 'SCORE';
+      return !this.query ? "NAME" : "SCORE";
     },
-    organisation(): string|undefined {
-      return this.organisationId ?this.organisationId: this.filterOrgaId;
+    organisation(): string | undefined {
+      return this.organisationId ? this.organisationId : this.filterOrgaId;
     },
   },
   watch: {
     changed(): void {
       this.reloadList();
     },
-    dsize():void{
+    dsize(): void {
       this.reloadList();
-		},
-		dfirst(): void{
-			if(!this.playlists[this.dfirst] || 0===this.playlists[this.dfirst].playlistId){
-				this.fetchContent(false);
-			}
-		},
+    },
+    dfirst(): void {
+      if (
+        !this.playlists[this.dfirst] ||
+        0 === this.playlists[this.dfirst].playlistId
+      ) {
+        this.fetchContent(false);
+      }
+    },
   },
 
   mounted() {
     this.fetchContent(true);
   },
   methods: {
-    reloadList(){
+    reloadList() {
       this.dfirst = 0;
       this.fetchContent(true);
     },
@@ -113,22 +115,33 @@ export default defineComponent({
         size: this.dsize,
         query: this.query,
         organisationId: this.organisation,
-        type:"NONE",
+        type: "NONE",
         sort: this.sort,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Playlist>;sort: string;}>(0, 'playlist/search',param, true);
+        const data = await octopusApi.fetchDataWithParams<{
+          count: number;
+          result: Array<Playlist>;
+          sort: string;
+        }>(0, "playlist/search", param, true);
         this.afterFetching(reset, data);
       } catch (error) {
-        this.handle403((error as AxiosError));
+        this.handle403(error as AxiosError);
       }
     },
-    afterFetching(reset: boolean, data: {count: number, result: Array<Playlist>, sort: string}): void {
+    afterFetching(
+      reset: boolean,
+      data: { count: number; result: Array<Playlist>; sort: string },
+    ): void {
       if (reset) {
         this.playlists.length = 0;
       }
-      if(this.dfirst > this.playlists.length){
-        for (let i = this.playlists.length-1, len = this.dfirst + this.dsize; i < len; i++) {
+      if (this.dfirst > this.playlists.length) {
+        for (
+          let i = this.playlists.length - 1, len = this.dfirst + this.dsize;
+          i < len;
+          i++
+        ) {
           this.playlists.push(emptyPlaylistData());
         }
       }
@@ -139,7 +152,12 @@ export default defineComponent({
         }
         return null !== e;
       });
-      this.playlists = this.playlists.slice(0, this.dfirst).concat(responsePlaylists).concat(this.playlists.slice(this.dfirst+this.dsize, this.playlists.length));
+      this.playlists = this.playlists
+        .slice(0, this.dfirst)
+        .concat(responsePlaylists)
+        .concat(
+          this.playlists.slice(this.dfirst + this.dsize, this.playlists.length),
+        );
       this.totalCount = data.count;
       this.loading = false;
     },
@@ -147,5 +165,5 @@ export default defineComponent({
       this.fetchContent(false);
     },
   },
-})
+});
 </script>

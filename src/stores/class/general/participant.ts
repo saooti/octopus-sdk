@@ -1,4 +1,4 @@
-import { Organisation } from './organisation';
+import { Organisation } from "./organisation";
 
 export interface Participant {
   imageUrl?: string;
@@ -10,10 +10,10 @@ export interface Participant {
   score?: number;
   uid?: string;
 }
-export function emptyParticipantData(): Participant{
+export function emptyParticipantData(): Participant {
   return {
-    firstName: '',
-    lastName: '',
-    participantId:0
-  }
+    firstName: "",
+    lastName: "",
+    participantId: 0,
+  };
 }

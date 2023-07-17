@@ -15,24 +15,24 @@
       v-model:first="first"
       v-model:rowsPerPage="size"
       v-model:isMobile="isMobile"
-      :text-count="podcasts.length > 1 ? `${$t('Number podcasts', { nb: podcasts.length })}` : undefined"
+      :text-count="
+        podcasts.length > 1
+          ? `${$t('Number podcasts', { nb: podcasts.length })}`
+          : undefined
+      "
       :total-count="podcasts.length"
       :loading="loading"
-      :loading-text="loading?$t('Loading podcasts ...'):undefined"
-      :error-text="!loading && !podcasts.length && notEmptyPlaylist?$t(`No podcast match your query`):undefined"
+      :loading-text="loading ? $t('Loading podcasts ...') : undefined"
+      :error-text="
+        !loading && !podcasts.length && notEmptyPlaylist
+          ? $t(`No podcast match your query`)
+          : undefined
+      "
     >
       <template #list>
-        <div
-          class="podcast-list"
-        >
-          <template
-            v-for="p in podcastsDisplay"
-            :key="p.podcastId"
-          >
-            <PodcastItem
-              v-if="0!==p.podcastId"
-              :podcast="p"
-            />
+        <div class="podcast-list">
+          <template v-for="p in podcastsDisplay" :key="p.podcastId">
+            <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
           </template>
         </div>
       </template>
@@ -41,30 +41,30 @@
 </template>
 
 <script lang="ts">
-import ListPaginate from '../list/ListPaginate.vue';
-import { handle403 } from '../../mixins/handle403';
-import { orgaComputed } from '../../mixins/orgaComputed';
-import octopusApi from '@saooti/octopus-api';
-import PodcastItem from '../podcasts/PodcastItem.vue';
-import { state } from '../../../stores/ParamSdkStore';
-import ClassicSearch from '../../form/ClassicSearch.vue';
-import { Podcast } from '@/stores/class/general/podcast';
-import { Playlist } from '@/stores/class/general/playlist';
-import { defineComponent } from 'vue'
-import { AxiosError } from 'axios';
+import ListPaginate from "../list/ListPaginate.vue";
+import { handle403 } from "../../mixins/handle403";
+import { orgaComputed } from "../../mixins/orgaComputed";
+import octopusApi from "@saooti/octopus-api";
+import PodcastItem from "../podcasts/PodcastItem.vue";
+import { state } from "../../../stores/ParamSdkStore";
+import ClassicSearch from "../../form/ClassicSearch.vue";
+import { Podcast } from "@/stores/class/general/podcast";
+import { Playlist } from "@/stores/class/general/playlist";
+import { defineComponent } from "vue";
+import { AxiosError } from "axios";
 export default defineComponent({
-  name: 'PodcastList',
+  name: "PodcastList",
 
   components: {
     PodcastItem,
     ClassicSearch,
-    ListPaginate
+    ListPaginate,
   },
 
   mixins: [handle403, orgaComputed],
 
   props: {
-    playlist: { default: ()=>({}), type: Object as ()=>Playlist},
+    playlist: { default: () => ({}), type: Object as () => Playlist },
   },
 
   data() {
@@ -74,34 +74,43 @@ export default defineComponent({
       podcastsQuery: [] as Array<Podcast>,
       size: 30 as number,
       first: 0 as number,
-      searchPattern: '' as string,
+      searchPattern: "" as string,
       isMobile: false as boolean,
     };
   },
 
-  
   computed: {
-    titleList(): string{
-      return this.notEmptyPlaylist ? this.$t('Podcasts in the playlist') : this.$t('No podcasts in the playlist');
+    titleList(): string {
+      return this.notEmptyPlaylist
+        ? this.$t("Podcasts in the playlist")
+        : this.$t("No podcasts in the playlist");
     },
     notEmptyPlaylist(): boolean {
-      return 0 !== Object.keys(this.playlist.samplingViews??[]).length;
+      return 0 !== Object.keys(this.playlist.samplingViews ?? []).length;
     },
-    podcastsDisplay(): Array<Podcast>{
-      if(this.isMobile){
-        return this.podcastsQuery.slice(0, Math.min(this.first + this.size,this.podcasts.length));
+    podcastsDisplay(): Array<Podcast> {
+      if (this.isMobile) {
+        return this.podcastsQuery.slice(
+          0,
+          Math.min(this.first + this.size, this.podcasts.length),
+        );
       }
-      return this.podcastsQuery.slice(this.first, Math.min(this.first + this.size,this.podcasts.length));
-		},
+      return this.podcastsQuery.slice(
+        this.first,
+        Math.min(this.first + this.size, this.podcasts.length),
+      );
+    },
     editRight(): boolean {
-      return (true===this.authenticated &&
-        this.myOrganisationId === this.playlist.organisation?.id) ||
-        true ===state.generalParameters.isAdmin
+      return (
+        (true === this.authenticated &&
+          this.myOrganisationId === this.playlist.organisation?.id) ||
+        true === state.generalParameters.isAdmin
+      );
     },
   },
   watch: {
     searchPattern(): void {
-      if ('' !== this.searchPattern) {
+      if ("" !== this.searchPattern) {
         this.podcastsQuery = this.podcasts.filter((el: Podcast) => {
           return el.title
             .toLowerCase()
@@ -118,13 +127,16 @@ export default defineComponent({
   },
   methods: {
     async fetchContent(): Promise<void> {
-      if (this.notEmptyPlaylist){
+      if (this.notEmptyPlaylist) {
         this.podcasts.length = 0;
         this.loading = true;
         try {
-          this.podcasts = await octopusApi.fetchData<Array<Podcast>>(0, 'playlist/'+this.playlist.playlistId+'/content');
+          this.podcasts = await octopusApi.fetchData<Array<Podcast>>(
+            0,
+            "playlist/" + this.playlist.playlistId + "/content",
+          );
           if (!this.editRight) {
-            this.podcasts = this.podcasts.filter((p: Podcast|null) => {
+            this.podcasts = this.podcasts.filter((p: Podcast | null) => {
               return (
                 null !== p &&
                 (!p.availability || true === p.availability.visibility)
@@ -133,18 +145,17 @@ export default defineComponent({
           }
           this.podcastsQuery = this.podcasts;
         } catch (error) {
-          this.handle403((error as AxiosError));
+          this.handle403(error as AxiosError);
         }
       }
       this.loading = false;
     },
   },
-})
+});
 </script>
 
-
 <style lang="scss">
-.octopus-app{
+.octopus-app {
   .width-600 {
     width: 600px;
     @media (max-width: 600px) {

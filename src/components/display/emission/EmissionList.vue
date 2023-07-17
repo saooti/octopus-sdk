@@ -4,10 +4,14 @@
     v-model:first="dfirst"
     v-model:rowsPerPage="dsize"
     v-model:isMobile="isMobile"
-    :text-count="showCount && emissions.length > 1 ? $t('Number emissions', { nb: displayCount }) + sortText : undefined"
+    :text-count="
+      showCount && emissions.length > 1
+        ? $t('Number emissions', { nb: displayCount }) + sortText
+        : undefined
+    "
     :total-count="totalCount"
     :loading="loading"
-    :loading-text="loading?$t('Loading emissions ...'):undefined"
+    :loading-text="loading ? $t('Loading emissions ...') : undefined"
   >
     <template #list>
       <div
@@ -15,27 +19,18 @@
         class="emission-list"
         :class="smallItems ? 'three-emissions' : 'two-emissions'"
       >
-        <template
-          v-for="e in displayArray"
-          :key="e.emissionId"
-        >
-          <EmissionItem
-            v-if="0!==e.emissionId"
-            :emission="e"
-          />
+        <template v-for="e in displayArray" :key="e.emissionId">
+          <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
         </template>
       </div>
       <div
         v-else
-        v-show="(displayRubriquage && rubriques)||!displayRubriquage"
+        v-show="(displayRubriquage && rubriques) || !displayRubriquage"
         class="d-flex flex-wrap justify-content-around"
       >
-        <template
-          v-for="e in displayArray"
-          :key="e.emissionId"
-        >
+        <template v-for="e in displayArray" :key="e.emissionId">
           <EmissionPlayerItem
-            v-if="0!==e.emissionId"
+            v-if="0 !== e.emissionId"
             :emission="e"
             class="m-3 flex-shrink-0"
             :class="mainRubriquage(e)"
@@ -48,27 +43,29 @@
 </template>
 
 <script lang="ts">
-import ListPaginate from '../list/ListPaginate.vue';
-import octopusApi from '@saooti/octopus-api';
-import { handle403 } from '../../mixins/handle403';
-import { state } from '../../../stores/ParamSdkStore';
-import { Emission, emptyEmissionData } from '@/stores/class/general/emission';
-import { Rubrique } from '@/stores/class/rubrique/rubrique';
-import { defineComponent, defineAsyncComponent } from 'vue';
-import { FetchParam } from '@/stores/class/general/fetchParam';
-import { AxiosError } from 'axios';
-import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-const EmissionItem = defineAsyncComponent(() => import('./EmissionItem.vue'));
-const EmissionPlayerItem = defineAsyncComponent(() => import('./EmissionPlayerItem.vue'));
+import ListPaginate from "../list/ListPaginate.vue";
+import octopusApi from "@saooti/octopus-api";
+import { handle403 } from "../../mixins/handle403";
+import { state } from "../../../stores/ParamSdkStore";
+import { Emission, emptyEmissionData } from "@/stores/class/general/emission";
+import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import { defineComponent, defineAsyncComponent } from "vue";
+import { FetchParam } from "@/stores/class/general/fetchParam";
+import { AxiosError } from "axios";
+import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+const EmissionItem = defineAsyncComponent(() => import("./EmissionItem.vue"));
+const EmissionPlayerItem = defineAsyncComponent(
+  () => import("./EmissionPlayerItem.vue"),
+);
 export default defineComponent({
-  name: 'EmissionList',
+  name: "EmissionList",
 
   components: {
     EmissionItem,
     EmissionPlayerItem,
-    ListPaginate
+    ListPaginate,
   },
 
   mixins: [handle403],
@@ -76,18 +73,18 @@ export default defineComponent({
   props: {
     first: { default: 0, type: Number },
     size: { default: 30, type: Number },
-    query: { default: undefined, type: String},
+    query: { default: undefined, type: String },
     iabId: { default: undefined, type: Number },
-    organisationId: { default: undefined, type: String},
-    monetization: { default: 'UNDEFINED', type: String},
-    before: { default: undefined, type: String},
-    after: { default: undefined, type: String},
-    sort: { default: 'DATE', type: String},
+    organisationId: { default: undefined, type: String },
+    monetization: { default: "UNDEFINED", type: String },
+    before: { default: undefined, type: String },
+    after: { default: undefined, type: String },
+    sort: { default: "DATE", type: String },
     showCount: { default: false, type: Boolean },
     includeHidden: { default: false, type: Boolean },
-    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
-    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
-    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
+    rubriqueId: { default: () => [], type: Array as () => Array<number> },
+    rubriquageId: { default: () => [], type: Array as () => Array<number> },
+    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
   },
 
   data() {
@@ -98,26 +95,29 @@ export default defineComponent({
       totalCount: 0 as number,
       displayCount: 0 as number,
       emissions: [] as Array<Emission>,
-      rubriques: undefined as Array<Rubrique>|undefined,
+      rubriques: undefined as Array<Rubrique> | undefined,
       isMobile: false as boolean,
     };
   },
 
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    displayArray(): Array<Emission>{
-      if(this.isMobile){
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    displayArray(): Array<Emission> {
+      if (this.isMobile) {
         return this.emissions;
       }
-      return this.emissions.slice(this.dfirst, Math.min(this.dfirst + this.dsize,this.totalCount));
-		},
+      return this.emissions.slice(
+        this.dfirst,
+        Math.min(this.dfirst + this.dsize, this.totalCount),
+      );
+    },
     smallItems(): boolean {
-      return (state.emissionsPage.smallItems as boolean);
+      return state.emissionsPage.smallItems as boolean;
     },
     itemPlayer(): boolean {
-      return (state.emissionsPage.itemPlayer as boolean);
+      return state.emissionsPage.itemPlayer as boolean;
     },
-    displayRubriquage(): number|undefined {
+    displayRubriquage(): number | undefined {
       return state.emissionsPage.rubriquage;
     },
     changed(): string {
@@ -126,32 +126,35 @@ export default defineComponent({
     },
     sortText(): string {
       switch (this.sort) {
-        case 'SCORE':
-          return " "+this.$t('sort by score');
-        case 'LAST_PODCAST_DESC':
-          return " "+this.$t('sort by date');
-        case 'NAME':
-          return " "+this.$t('sort by alphabetical');
+        case "SCORE":
+          return " " + this.$t("sort by score");
+        case "LAST_PODCAST_DESC":
+          return " " + this.$t("sort by date");
+        case "NAME":
+          return " " + this.$t("sort by alphabetical");
         default:
-          return " "+this.$t('sort by date');
+          return " " + this.$t("sort by date");
       }
     },
-    organisation(): string|undefined {
-      return this.organisationId ?this.organisationId:this.filterOrgaId;
+    organisation(): string | undefined {
+      return this.organisationId ? this.organisationId : this.filterOrgaId;
     },
   },
   watch: {
     changed(): void {
       this.reloadList();
     },
-    dsize():void{
+    dsize(): void {
       this.reloadList();
-		},
-		dfirst(): void{
-			if(!this.emissions[this.dfirst] || 0===this.emissions[this.dfirst].emissionId){
-				this.fetchContent(false);
-			}
-		},
+    },
+    dfirst(): void {
+      if (
+        !this.emissions[this.dfirst] ||
+        0 === this.emissions[this.dfirst].emissionId
+      ) {
+        this.fetchContent(false);
+      }
+    },
   },
 
   mounted() {
@@ -161,7 +164,7 @@ export default defineComponent({
     }
   },
   methods: {
-    reloadList(){
+    reloadList() {
       this.dfirst = 0;
       this.fetchContent(true);
     },
@@ -177,46 +180,69 @@ export default defineComponent({
         before: this.before,
         after: this.after,
         sort: this.sort,
-        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
+        noRubriquageId: this.noRubriquageId.length
+          ? this.noRubriquageId
+          : undefined,
         rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
-        includeHidden:this.includeHidden,
+        includeHidden: this.includeHidden,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<{count: number;result:Array<Emission>;sort: string;}>(0, 'emission/search',param, true);
+        const data = await octopusApi.fetchDataWithParams<{
+          count: number;
+          result: Array<Emission>;
+          sort: string;
+        }>(0, "emission/search", param, true);
         this.afterFetching(reset, data);
       } catch (error) {
-        this.handle403((error as AxiosError));
+        this.handle403(error as AxiosError);
       }
     },
-    afterFetching(reset: boolean, data: {count: number, result: Array<Emission>, sort: string}): void {
+    afterFetching(
+      reset: boolean,
+      data: { count: number; result: Array<Emission>; sort: string },
+    ): void {
       if (reset) {
         this.emissions.length = 0;
       }
-      if(this.dfirst > this.emissions.length){
-        for (let i = this.emissions.length-1, len = this.dfirst + this.dsize; i < len; i++) {
+      if (this.dfirst > this.emissions.length) {
+        for (
+          let i = this.emissions.length - 1, len = this.dfirst + this.dsize;
+          i < len;
+          i++
+        ) {
           this.emissions.push(emptyEmissionData());
         }
       }
       this.displayCount = data.count;
-      const responseEmissions = data.result.filter((e: Emission|null) => {
+      const responseEmissions = data.result.filter((e: Emission | null) => {
         if (null === e) {
           this.displayCount--;
         }
         return null !== e;
       });
-      this.emissions = this.emissions.slice(0, this.dfirst).concat(responseEmissions).concat(this.emissions.slice(this.dfirst+this.dsize, this.emissions.length));
+      this.emissions = this.emissions
+        .slice(0, this.dfirst)
+        .concat(responseEmissions)
+        .concat(
+          this.emissions.slice(this.dfirst + this.dsize, this.emissions.length),
+        );
       this.totalCount = data.count;
       this.loading = false;
     },
     async fetchRubriques(): Promise<void> {
-      const data = await octopusApi.fetchData<Rubriquage>(0, 'rubriquage/'+this.displayRubriquage);
+      const data = await octopusApi.fetchData<Rubriquage>(
+        0,
+        "rubriquage/" + this.displayRubriquage,
+      );
       this.rubriques = data.rubriques;
     },
     mainRubriquage(emission: Emission): string {
-      return emission.rubriqueIds?.[0] === state.emissionsPage.mainRubrique? 'partenaireRubrique': '';
+      return emission.rubriqueIds?.[0] === state.emissionsPage.mainRubrique
+        ? "partenaireRubrique"
+        : "";
     },
-    rubriquesId(emission: Emission): string|undefined {
+    rubriquesId(emission: Emission): string | undefined {
       if (
         !this.displayRubriquage ||
         !emission.rubriqueIds ||
@@ -226,11 +252,13 @@ export default defineComponent({
       )
         return undefined;
       const rubrique = this.rubriques.find(
-        (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0]
+        (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0],
       );
-      if(!rubrique){ return undefined; }
+      if (!rubrique) {
+        return undefined;
+      }
       return rubrique.name;
     },
   },
-})
+});
 </script>

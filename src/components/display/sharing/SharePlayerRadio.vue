@@ -1,7 +1,7 @@
 <template>
   <div class="module-box overflow-visible">
     <h2 class="big-h2 mb-3 height-40">
-      {{ $t('Embed') }}
+      {{ $t("Embed") }}
     </h2>
     <div class="d-flex">
       <iframe
@@ -13,10 +13,7 @@
         class="max-iframe mx-3 flex-grow-1"
       />
       <div class="d-flex flex-column flex-grow-1 align-items-center">
-        <SharePlayerColors
-          v-model:color="color"
-          v-model:theme="theme"
-        />
+        <SharePlayerColors v-model:color="color" v-model:theme="theme" />
         <ShareModalPlayer
           v-if="isShareModal"
           :embed-link="iFrame"
@@ -27,7 +24,7 @@
           class="btn btn-primary width-fit-content mt-3"
           @click="isShareModal = true"
         >
-          {{ $t('Share the player') }}
+          {{ $t("Share the player") }}
         </button>
       </div>
     </div>
@@ -35,68 +32,94 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from '../../mixins/orgaComputed';
-import { state } from '../../../stores/ParamSdkStore';
-import octopusApi from '@saooti/octopus-api';
-import { useAuthStore } from '@/stores/AuthStore';
-import { mapState } from 'pinia';
-import { defineComponent, defineAsyncComponent } from 'vue';
-import { Canal } from '@/stores/class/radio/canal';
-const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
-const SharePlayerColors = defineAsyncComponent(() => import('./SharePlayerColors.vue'));
+import { orgaComputed } from "../../mixins/orgaComputed";
+import { state } from "../../../stores/ParamSdkStore";
+import octopusApi from "@saooti/octopus-api";
+import { useAuthStore } from "@/stores/AuthStore";
+import { mapState } from "pinia";
+import { defineComponent, defineAsyncComponent } from "vue";
+import { Canal } from "@/stores/class/radio/canal";
+const ShareModalPlayer = defineAsyncComponent(
+  () => import("../../misc/modal/ShareModalPlayer.vue"),
+);
+const SharePlayerColors = defineAsyncComponent(
+  () => import("./SharePlayerColors.vue"),
+);
 export default defineComponent({
   components: {
     ShareModalPlayer,
-    SharePlayerColors
+    SharePlayerColors,
   },
-  mixins:[orgaComputed],
+  mixins: [orgaComputed],
   props: {
-    canal: { default: undefined, type: Object as ()=> Canal},
-    organisationId: { default: undefined, type: String},
+    canal: { default: undefined, type: Object as () => Canal },
+    organisationId: { default: undefined, type: String },
   },
 
   data() {
     return {
       isShareModal: false as boolean,
-      color: '#40a372' as string,
-      theme: '#000000' as string,
-      orgaAttributes: undefined as{[key: string]:string|number|boolean|undefined}|undefined,
+      color: "#40a372" as string,
+      theme: "#000000" as string,
+      orgaAttributes: undefined as
+        | { [key: string]: string | number | boolean | undefined }
+        | undefined,
     };
   },
-  
+
   computed: {
-    ...mapState(useAuthStore, ['authOrganisation']),
-    iFrameSrc(): string{
-      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${this.canal?.id}?distributorId=${this.organisationId}&color=${this.color.substring(1)}&theme=${this.theme.substring(1)}`; 
+    ...mapState(useAuthStore, ["authOrganisation"]),
+    iFrameSrc(): string {
+      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${this.canal
+        ?.id}?distributorId=${this.organisationId}&color=${this.color.substring(
+        1,
+      )}&theme=${this.theme.substring(1)}`;
     },
-   
+
     iFrame(): string {
       return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" frameborder="0"></iframe>`;
     },
-    
   },
   async created() {
     await this.fetchOrgaAttributes();
     this.initColor();
   },
   methods: {
-    async fetchOrgaAttributes(): Promise<void>{
-      if(""!==this.authOrganisation.id && this.authOrganisation.attributes && Object.keys(this.authOrganisation.attributes).length > 1){
+    async fetchOrgaAttributes(): Promise<void> {
+      if (
+        "" !== this.authOrganisation.id &&
+        this.authOrganisation.attributes &&
+        Object.keys(this.authOrganisation.attributes).length > 1
+      ) {
         this.orgaAttributes = this.authOrganisation.attributes;
-      }else{
-        this.orgaAttributes= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
+      } else {
+        this.orgaAttributes = await octopusApi.fetchData<{
+          [key: string]: string;
+        }>(0, "organisation/attributes/" + this.myOrganisationId);
       }
     },
     initColor(): void {
-      if(!this.orgaAttributes){return;}
-      this.color = Object.prototype.hasOwnProperty.call(this.orgaAttributes,'COLOR') ? (this.orgaAttributes.COLOR as string) : '#40a372';
-      this.theme = Object.prototype.hasOwnProperty.call(this.orgaAttributes,'THEME') ? (this.orgaAttributes.THEME as string) : '#000000';
+      if (!this.orgaAttributes) {
+        return;
+      }
+      this.color = Object.prototype.hasOwnProperty.call(
+        this.orgaAttributes,
+        "COLOR",
+      )
+        ? (this.orgaAttributes.COLOR as string)
+        : "#40a372";
+      this.theme = Object.prototype.hasOwnProperty.call(
+        this.orgaAttributes,
+        "THEME",
+      )
+        ? (this.orgaAttributes.THEME as string)
+        : "#000000";
     },
   },
-})
+});
 </script>
 
 <style lang="scss">
-@import '@scss/_variables.scss';
-@import '../../../assets/iframe.scss';
+@import "@scss/_variables.scss";
+@import "../../../assets/iframe.scss";
 </style>

@@ -13,15 +13,15 @@
     :next-available="nextAvailable"
     :no-rubriquage-id="noRubriquageId"
     :podcast-id="podcastId"
-    @sortChrono="sortChrono"
-    @sortPopular="sortPopular"
-    @displayPrevious="displayPrevious"
-    @displayNext="displayNext"
+    @sort-chrono="sortChrono"
+    @sort-popular="sortPopular"
+    @display-previous="displayPrevious"
+    @display-next="displayNext"
   >
     <template #list-inline>
       <ClassicLoading
         class="loading-size"
-        :loading-text="loading?$t('Loading podcasts ...'):undefined"
+        :loading-text="loading ? $t('Loading podcasts ...') : undefined"
       />
       <transition-group
         v-show="!loading"
@@ -47,44 +47,44 @@
 </template>
 
 <script lang="ts">
-import PodcastInlineListTemplate from './PodcastInlineListTemplate.vue';
-import octopusApi from '@saooti/octopus-api';
-import domHelper from '../../../helper/dom';
-import PodcastItem from './PodcastItem.vue';
-import ClassicLoading from '../../form/ClassicLoading.vue';
+import PodcastInlineListTemplate from "./PodcastInlineListTemplate.vue";
+import octopusApi from "@saooti/octopus-api";
+import domHelper from "../../../helper/dom";
+import PodcastItem from "./PodcastItem.vue";
+import ClassicLoading from "../../form/ClassicLoading.vue";
 const PHONE_WIDTH = 960;
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { state } from '../../../stores/ParamSdkStore';
-import { Podcast } from '@/stores/class/general/podcast';
-import imageProxy from '../../mixins/imageProxy';
-import { defineComponent } from 'vue'
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { state } from "../../../stores/ParamSdkStore";
+import { Podcast } from "@/stores/class/general/podcast";
+import imageProxy from "../../mixins/imageProxy";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'PodcastInlineListClassic',
-  
+  name: "PodcastInlineListClassic",
+
   components: {
     PodcastItem,
     ClassicLoading,
-    PodcastInlineListTemplate
+    PodcastInlineListTemplate,
   },
-  mixins:[imageProxy],
+  mixins: [imageProxy],
   props: {
-    organisationId: { default:  () => [], type: Array as ()=> Array<string>},
-    emissionId: { default: undefined, type: Number},
-    iabId: { default: undefined, type: Number},
-    title: { default: '', type: String},
-    href: { default: undefined, type: String},
-    buttonText: { default: undefined, type: String},
-    isArrow: { default: false, type: Boolean},
-    requirePopularSort: { default:undefined, type: Boolean},
-    buttonPlus: { default:false, type: Boolean},
-    rubriqueId: { default: () => [], type: Array as ()=> Array<number> },
-    rubriquageId:{ default: () => [], type: Array as ()=> Array<number> },
-    noRubriquageId: { default: () => [], type: Array as ()=> Array<number> },
-    query: { default: undefined, type: String},
-    podcastId: { default: undefined, type: Number},
+    organisationId: { default: () => [], type: Array as () => Array<string> },
+    emissionId: { default: undefined, type: Number },
+    iabId: { default: undefined, type: Number },
+    title: { default: "", type: String },
+    href: { default: undefined, type: String },
+    buttonText: { default: undefined, type: String },
+    isArrow: { default: false, type: Boolean },
+    requirePopularSort: { default: undefined, type: Boolean },
+    buttonPlus: { default: false, type: Boolean },
+    rubriqueId: { default: () => [], type: Array as () => Array<number> },
+    rubriquageId: { default: () => [], type: Array as () => Array<number> },
+    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+    query: { default: undefined, type: String },
+    podcastId: { default: undefined, type: Number },
   },
-  emits: ['update:isArrow'],
+  emits: ["update:isArrow"],
 
   data() {
     return {
@@ -100,21 +100,23 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useFilterStore, ['filterOrgaId']),
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     podcasts(): Array<Podcast> {
       return this.allPodcasts.slice(this.index, this.index + this.size);
     },
     sizeItem(): number {
-      return state.generalParameters.podcastItem ? state.generalParameters.podcastItem: 13;
+      return state.generalParameters.podcastItem
+        ? state.generalParameters.podcastItem
+        : 13;
     },
     overflowScroll(): boolean {
-      return (state.emissionPage.overflowScroll as boolean);
+      return state.emissionPage.overflowScroll as boolean;
     },
     isInlineAnimation(): boolean {
-      return (state.generalParameters.isInlineAnimation as boolean);
+      return state.generalParameters.isInlineAnimation as boolean;
     },
     organisation(): Array<string> {
-      if(this.organisationId){
+      if (this.organisationId) {
         return this.organisationId;
       }
       return this.filterOrgaId ? [this.filterOrgaId] : [];
@@ -126,11 +128,11 @@ export default defineComponent({
       return this.index + this.size < this.totalCount;
     },
     transitionName(): string {
-      return this.direction > 0 ? 'out-left' : 'out-right';
+      return this.direction > 0 ? "out-left" : "out-right";
     },
-    watchVariable():string{
+    watchVariable(): string {
       return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
-    }
+    },
   },
   watch: {
     watchVariable(): void {
@@ -138,19 +140,19 @@ export default defineComponent({
       this.fetchNext();
     },
   },
-  
+
   created() {
     if (undefined !== this.requirePopularSort) {
       this.popularSort = this.requirePopularSort;
     }
     if (undefined !== this.isArrow) {
-      this.$emit('update:isArrow', true);
+      this.$emit("update:isArrow", true);
     }
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener("resize", this.handleResize);
   },
 
   unmounted() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
   },
 
   mounted() {
@@ -158,15 +160,20 @@ export default defineComponent({
     this.fetchNext();
   },
   methods: {
-    async fetchRecommendations(): Promise<void>{
+    async fetchRecommendations(): Promise<void> {
       try {
-        const podcastIdsArray = await octopusApi.fetchDataPublicWithParams<Array<number>>(13, 'get_predicts',{
+        const podcastIdsArray = await octopusApi.fetchDataPublicWithParams<
+          Array<number>
+        >(13, "get_predicts", {
           reco: this.podcastId,
           n_neightbors: 5,
-        }); 
+        });
         for (let podcastIdReco of podcastIdsArray) {
           try {
-            const entirePodcast = await octopusApi.fetchData<Podcast>(0, 'podcast/'+podcastIdReco); 
+            const entirePodcast = await octopusApi.fetchData<Podcast>(
+              0,
+              "podcast/" + podcastIdReco,
+            );
             this.allPodcasts.push(entirePodcast);
           } catch {
             //If doesn't exist, do nothing
@@ -175,38 +182,51 @@ export default defineComponent({
         this.totalCount = podcastIdsArray.length;
         this.loading = false;
       } catch {
-        this.allPodcasts=[];
+        this.allPodcasts = [];
         this.totalCount = 0;
       }
       this.loading = false;
     },
     async fetchNext(): Promise<void> {
-      if(this.podcastId){
+      if (this.podcastId) {
         return this.fetchRecommendations();
       }
-      const data =  await octopusApi.fetchDataWithParams<{count: number;result:Array<Podcast>;sort: string;}>(0, 'podcast/search',{
-         first: this.first,
-        size: this.size + 1,
-        organisationId: this.organisation,
-        emissionId: this.emissionId,
-        iabId: this.iabId,
-        rubriqueId: this.rubriqueId.length ?this.rubriqueId:undefined,
-        rubriquageId: this.rubriquageId.length ?this.rubriquageId : undefined,
-        noRubriquageId: this.noRubriquageId.length ? this.noRubriquageId : undefined,
-        sort: this.popularSort ? 'POPULARITY' : 'DATE',
-        query: this.query,
-        includeStatus:["READY","PROCESSING"]
-      }, true);
+      const data = await octopusApi.fetchDataWithParams<{
+        count: number;
+        result: Array<Podcast>;
+        sort: string;
+      }>(
+        0,
+        "podcast/search",
+        {
+          first: this.first,
+          size: this.size + 1,
+          organisationId: this.organisation,
+          emissionId: this.emissionId,
+          iabId: this.iabId,
+          rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
+          rubriquageId: this.rubriquageId.length
+            ? this.rubriquageId
+            : undefined,
+          noRubriquageId: this.noRubriquageId.length
+            ? this.noRubriquageId
+            : undefined,
+          sort: this.popularSort ? "POPULARITY" : "DATE",
+          query: this.query,
+          includeStatus: ["READY", "PROCESSING"],
+        },
+        true,
+      );
       this.loading = false;
       this.totalCount = data.count;
       if (this.allPodcasts.length + data.result.length < this.totalCount) {
         const nexEl = data.result.pop() as Podcast;
-        if(nexEl){
-          this.preloadImage(nexEl.imageUrl?nexEl.imageUrl:'');
+        if (nexEl) {
+          this.preloadImage(nexEl.imageUrl ? nexEl.imageUrl : "");
         }
       }
       this.allPodcasts = this.allPodcasts.concat(
-        data.result.filter((pod: Podcast|null) => null !== pod)
+        data.result.filter((pod: Podcast | null) => null !== pod),
       );
       this.alignLeft = this.allPodcasts.length <= 3;
       this.first += this.size;
@@ -263,8 +283,8 @@ export default defineComponent({
     },
     preloadImage(url: string): void {
       const img = new Image();
-      img.src = this.proxyImageUrl(url,'330');
+      img.src = this.proxyImageUrl(url, "330");
     },
   },
-})
+});
 </script>

@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="participants.length"
-    class="comma"
-  >
+  <div v-if="participants.length" class="comma">
     {{ title }}
     <span class="mx-1">:</span>
     <router-link
@@ -23,34 +20,36 @@
 </template>
 
 <script lang="ts">
-import { Participant } from '@/stores/class/general/participant';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { Participant } from "@/stores/class/general/participant";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'ParticipantDescription',
+  name: "ParticipantDescription",
 
-  components:{
-  },
+  components: {},
 
   props: {
-    participants: { default: () => [], type: Array as ()=> Array<Participant>},
-    isGuest: { default: false, type:  Boolean},
+    participants: {
+      default: () => [],
+      type: Array as () => Array<Participant>,
+    },
+    isGuest: { default: false, type: Boolean },
   },
 
-  computed:{
-    ...mapState(useFilterStore, ['filterOrgaId']),
-    idPopover(): string{
+  computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    idPopover(): string {
       return this.isGuest ? "popover-guests-help" : "popover-animators-help";
     },
-    title(): string{
-      return this.isGuest ? this.$t('Guests') : this.$t('Animated by');
-    }
+    title(): string {
+      return this.isGuest ? this.$t("Guests") : this.$t("Animated by");
+    },
   },
   methods: {
     getName(person: Participant): string {
-      return (`${person.firstName??''} ${person.lastName??''}`).trim();
+      return `${person.firstName ?? ""} ${person.lastName ?? ""}`.trim();
     },
   },
-})
+});
 </script>

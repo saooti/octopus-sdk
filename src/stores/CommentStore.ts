@@ -1,12 +1,12 @@
-import { defineStore } from 'pinia';
-import { CommentPodcast } from './class/general/comment';
+import { defineStore } from "pinia";
+import { CommentPodcast } from "./class/general/comment";
 interface CommentState {
-	commentInitialized: boolean;
+  commentInitialized: boolean;
   commentWebsocketengine: undefined;
   commentPodcastId?: number;
   commentOrgaId?: string;
   commentEventToHandle: Array<{
-    comment: CommentPodcast
+    comment: CommentPodcast;
     type: string;
   }>;
   commentKnownIdentity: string | null;
@@ -14,7 +14,7 @@ interface CommentState {
   commentLoaded: Array<CommentPodcast>;
   commentTotalCount: number;
 }
-export const useCommentStore = defineStore('CommentStore', {
+export const useCommentStore = defineStore("CommentStore", {
   state: (): CommentState => ({
     commentInitialized: false,
     commentWebsocketengine: undefined,
@@ -26,15 +26,17 @@ export const useCommentStore = defineStore('CommentStore', {
     commentLoaded: [],
     commentTotalCount: 0,
   }),
-  getters:{
-  },
+  getters: {},
   actions: {
-    setCommentIdentity(identity:string|null) {
+    setCommentIdentity(identity: string | null) {
       this.commentKnownIdentity = identity;
     },
-    setCommentLoaded(data: {podcastId?: number, comments:Array<CommentPodcast>}) {
+    setCommentLoaded(data: {
+      podcastId?: number;
+      comments: Array<CommentPodcast>;
+    }) {
       this.commentActualPodcastId = data.podcastId;
       this.commentLoaded = data.comments;
     },
-  }
-})
+  },
+});

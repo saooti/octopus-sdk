@@ -1,4 +1,4 @@
-export interface Conference{
+export interface Conference {
   album?: string;
   artist?: string;
   conferenceId: number;
@@ -14,22 +14,23 @@ export interface Conference{
   mediaId?: number;
   organisationId?: string;
   participants?: Array<{
-      conferenceGuestId: number,
-      fullName: string,
-      keycloakId:string,
-      kind: string,
-      sipIdentifier:string}>;
+    conferenceGuestId: number;
+    fullName: string;
+    keycloakId: string;
+    kind: string;
+    sipIdentifier: string;
+  }>;
   phone?: string;
   podcastId?: number;
-  prefix?: {[key:string]:string};
+  prefix?: { [key: string]: string };
   queueCode?: string;
   recordDate?: string;
   recordingPort?: number;
   status?: string;
   title: string;
   token?: string;
-  orderStatus?:number;
+  orderStatus?: number;
   websocket?: string;
   interval?: ReturnType<typeof setTimeout>;
-  duration?:number;
+  duration?: number;
 }

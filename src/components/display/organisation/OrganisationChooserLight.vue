@@ -14,7 +14,7 @@
         {{ organisation.name }}
       </option>
       <option :value="-1">
-        {{ $t('No organisation filter') }}
+        {{ $t("No organisation filter") }}
       </option>
     </select>
     <label
@@ -26,22 +26,22 @@
 </template>
 
 <script lang="ts">
-import { Organisation } from '@/stores/class/general/organisation';
-import octopusApi from '@saooti/octopus-api';
-import { defineComponent } from 'vue'
+import { Organisation } from "@/stores/class/general/organisation";
+import octopusApi from "@saooti/octopus-api";
+import { defineComponent } from "vue";
 export default defineComponent({
   props: {
-    width: { default: '100%', type: String},
-    value: { default: undefined, type: String},
-    reset: { default: false, type: Boolean},
-    page: { default: '', type: String},
+    width: { default: "100%", type: String },
+    value: { default: undefined, type: String },
+    reset: { default: false, type: Boolean },
+    page: { default: "", type: String },
   },
-  emits: ['selected'],
+  emits: ["selected"],
 
   data() {
-    return  {
-      actual: -1 as number|string,
-      organisation: undefined as Organisation|undefined,
+    return {
+      actual: -1 as number | string,
+      organisation: undefined as Organisation | undefined,
       init: false as boolean,
     };
   },
@@ -64,22 +64,30 @@ export default defineComponent({
   },
 
   methods: {
-    onOrganisationSelected(): void{
-      this.$emit('selected', -1 === this.actual? undefined:this.organisation);
+    onOrganisationSelected(): void {
+      this.$emit(
+        "selected",
+        -1 === this.actual ? undefined : this.organisation,
+      );
     },
     async fetchOrganisation(): Promise<void> {
-      if(!this.value){return;}
-      const data = await octopusApi.fetchData<Organisation>(0,`organisation/${this.value}`);
+      if (!this.value) {
+        return;
+      }
+      const data = await octopusApi.fetchData<Organisation>(
+        0,
+        `organisation/${this.value}`,
+      );
       this.organisation = data;
       this.actual = data.id;
       this.init = true;
     },
   },
-})
+});
 </script>
 
 <style lang="scss">
-.octopus-app{
+.octopus-app {
   .organisation-chooser-light select {
     -webkit-appearance: none;
     -moz-appearance: none;

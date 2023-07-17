@@ -21,21 +21,21 @@ export interface FtpEmission {
 }
 export function emptyFtpEmission(): FtpEmission {
   return {
-    email: '',
+    email: "",
     serverId: undefined,
     emissionId: undefined,
-    regexp: '',
-    directory: '',
-    formatDescription: '',
-    formatTitre: '',
+    regexp: "",
+    directory: "",
+    formatDescription: "",
+    formatTitre: "",
     rubriqueIds: [],
     guests: [],
-    formatDate: '',
-    parsingDate: '',
+    formatDate: "",
+    parsingDate: "",
     visibility: true,
-    commentable: 'INHERIT',
+    commentable: "INHERIT",
     animators: [],
     tags: [],
-    importType: 'standard',
+    importType: "standard",
   };
 }

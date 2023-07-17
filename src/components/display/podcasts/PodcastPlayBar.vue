@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="isProgressBar"
-    class="d-flex align-items-center podcast-play-bar"
-  >
+  <div v-if="isProgressBar" class="d-flex align-items-center podcast-play-bar">
     <div class="me-2">
       {{ playedTime }}
     </div>
@@ -20,57 +17,73 @@
 </template>
 
 <script lang="ts">
-import ProgressBar from '../../misc/ProgressBar.vue';
-import DurationHelper from '../../../helper/duration';
-import displayMethods from '../../mixins/displayMethods';
-import { state } from '../../../stores/ParamSdkStore';
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { mapState, mapActions } from 'pinia';
-import { defineComponent } from 'vue'
+import ProgressBar from "../../misc/ProgressBar.vue";
+import DurationHelper from "../../../helper/duration";
+import displayMethods from "../../mixins/displayMethods";
+import { state } from "../../../stores/ParamSdkStore";
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState, mapActions } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'PodcastPlayBar',
-  components:{
-    ProgressBar
+  name: "PodcastPlayBar",
+  components: {
+    ProgressBar,
   },
   mixins: [displayMethods],
   props: {
-    podcastId: { default: undefined, type: Number},
-    duration: { default: 0, type: Number},
+    podcastId: { default: undefined, type: Number },
+    duration: { default: 0, type: Number },
   },
   computed: {
-    ...mapState(usePlayerStore, ['playerPodcast', 'playerElapsed', 'playerTotal']),
-    isProgressBar(): boolean{
-      return (state.emissionsPage.progressBar as boolean);
+    ...mapState(usePlayerStore, [
+      "playerPodcast",
+      "playerElapsed",
+      "playerTotal",
+    ]),
+    isProgressBar(): boolean {
+      return state.emissionsPage.progressBar as boolean;
     },
-    percentProgress(): number{
-      if(this.podcastId !== this.playerPodcast?.podcastId){
+    percentProgress(): number {
+      if (this.podcastId !== this.playerPodcast?.podcastId) {
         return 0;
       }
       return !this.playerElapsed ? 0 : this.playerElapsed * 100;
     },
-    playedTime(): string{
-      if(this.podcastId === this.playerPodcast?.podcastId){
-        if (this.playerElapsed && this.playerElapsed > 0 && this.playerTotal && this.playerTotal > 0) {
-          return DurationHelper.formatDuration(Math.round(this.playerElapsed * this.playerTotal));
+    playedTime(): string {
+      if (this.podcastId === this.playerPodcast?.podcastId) {
+        if (
+          this.playerElapsed &&
+          this.playerElapsed > 0 &&
+          this.playerTotal &&
+          this.playerTotal > 0
+        ) {
+          return DurationHelper.formatDuration(
+            Math.round(this.playerElapsed * this.playerTotal),
+          );
         }
       }
-      return '00:00';
+      return "00:00";
     },
     totalTime(): string {
-      return DurationHelper.formatDuration(Math.round(this.duration/1000));
+      return DurationHelper.formatDuration(Math.round(this.duration / 1000));
     },
   },
   methods: {
-    ...mapActions(usePlayerStore, ['playerUpdateSeekTime']),
+    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
     seekTo(event: MouseEvent): void {
-      if(!this.playerPodcast || this.podcastId !== this.playerPodcast.podcastId){return;}
+      if (
+        !this.playerPodcast ||
+        this.podcastId !== this.playerPodcast.podcastId
+      ) {
+        return;
+      }
       const rect = (event.currentTarget as Element).getBoundingClientRect();
       const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
       if (percentPosition * 100 >= this.percentLiveProgress) return;
       this.playerUpdateSeekTime(this.playerTotal * percentPosition);
-    }
+    },
   },
-})
+});
 </script>

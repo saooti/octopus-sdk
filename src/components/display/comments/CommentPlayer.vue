@@ -18,16 +18,11 @@
         :data-selenium="'comment-' + seleniumFormat(c.name)"
       />
     </div>
-    <div
-      v-if="displayContent"
-      class="h6 mt-auto"
-    >
+    <div v-if="displayContent" class="h6 mt-auto">
       <div class="text-primary flex-shrink-0">
         {{ displayContent.name }}
       </div>
-      <div class="ms-1 me-1">
-        -
-      </div>
+      <div class="ms-1 me-1">-</div>
       <div class="text-truncate">
         {{ displayContent.content }}
       </div>
@@ -36,25 +31,28 @@
 </template>
 
 <script lang="ts">
-import { CommentPodcast } from '@/stores/class/general/comment';
-import selenium from '../../mixins/selenium';
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue'
+import { CommentPodcast } from "@/stores/class/general/comment";
+import selenium from "../../mixins/selenium";
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'CommentPlayer',
-  mixins:[selenium],
+  name: "CommentPlayer",
+  mixins: [selenium],
   props: {
-    comments: { default: undefined, type: Array as ()=>Array<CommentPodcast>},
-    totalTime: { default: 0, type: Number},
+    comments: {
+      default: undefined,
+      type: Array as () => Array<CommentPodcast>,
+    },
+    totalTime: { default: 0, type: Number },
   },
   data() {
     return {
-      displayContent: undefined as CommentPodcast|undefined,
+      displayContent: undefined as CommentPodcast | undefined,
     };
   },
   computed: {
-    ...mapState(usePlayerStore, ['playerPodcast'])
+    ...mapState(usePlayerStore, ["playerPodcast"]),
   },
   methods: {
     percentPosition(time: number): number {
@@ -68,31 +66,31 @@ export default defineComponent({
       return Math.round((time * 100) / this.totalTime);
     },
   },
-})
+});
 </script>
 
 <style lang="scss">
-.octopus-app{
-.comment-player-container {
-  position: relative;
-  width: 100%;
-  height: 3rem;
-  display: flex;
-  @media (max-width: 960px) {
-    display: none;
+.octopus-app {
+  .comment-player-container {
+    position: relative;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    @media (max-width: 960px) {
+      display: none;
+    }
+    .comment-border {
+      width: auto;
+      position: absolute;
+      border-left: solid 1px #555;
+      height: 20px;
+    }
+    .status-Valid,
+    .status-Invalid,
+    .status-Pending {
+      margin-top: 20px;
+      position: absolute;
+    }
   }
-  .comment-border {
-    width: auto;
-    position: absolute;
-    border-left: solid 1px #555;
-    height: 20px;
-  }
-  .status-Valid,
-  .status-Invalid,
-  .status-Pending {
-    margin-top: 20px;
-    position: absolute;
-  }
-}
 }
 </style>

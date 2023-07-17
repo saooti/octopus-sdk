@@ -1,10 +1,8 @@
 <template>
   <div class="h4 mb-2 mt-3">
-    {{ $t('player parameters') }}
+    {{ $t("player parameters") }}
   </div>
-  <template
-    v-if="choseNumberEpisode"
-  >
+  <template v-if="choseNumberEpisode">
     <div
       v-if="displayChoiceAllEpisodes"
       class="d-flex align-items-center flex-wrap mt-1"
@@ -15,8 +13,8 @@
         type="radio"
         name="episodeNumbers"
         value="all"
-      >
-      <span class="flex-shrink-0">{{ $t('Show every episode') }}</span>
+      />
+      <span class="flex-shrink-0">{{ $t("Show every episode") }}</span>
     </div>
     <div
       class="d-flex align-items-center flex-wrap"
@@ -29,21 +27,18 @@
         type="radio"
         name="episodeNumbers"
         value="number"
-      >
-      <span class="flex-shrink-0">{{ $t('Show') }}</span>
+      />
+      <span class="flex-shrink-0">{{ $t("Show") }}</span>
       <input
         id="number-input"
         v-model="iFrameNumber"
         type="number"
         min="1"
         max="50"
-        class="input-share-player  text-center m-2"
-      >
-      <label
-        for="number-input"
-        :title="$t('Number of player podcasts')"
+        class="input-share-player text-center m-2"
       />
-      <span class="flex-shrink-0">{{ $t('Last podcasts') }}</span>
+      <label for="number-input" :title="$t('Number of player podcasts')" />
+      <span class="flex-shrink-0">{{ $t("Last podcasts") }}</span>
     </div>
     <ClassicCheckbox
       v-model:textInit="proceedReading"
@@ -76,30 +71,38 @@
 </template>
 
 <script lang="ts">
-import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import { defineComponent } from 'vue'
+import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
+import { defineComponent } from "vue";
 export default defineComponent({
-  components:{
-    ClassicCheckbox
+  components: {
+    ClassicCheckbox,
   },
   props: {
-    isVisible: { default: false, type: Boolean},
-    choseNumberEpisode: {default: false, type: Boolean},
-    displayChoiceAllEpisodes: {default: false, type: Boolean},
-    displayTranscriptParam: {default: false, type: Boolean},
-    displayArticleParam: {default: false, type: Boolean},
+    isVisible: { default: false, type: Boolean },
+    choseNumberEpisode: { default: false, type: Boolean },
+    displayChoiceAllEpisodes: { default: false, type: Boolean },
+    displayTranscriptParam: { default: false, type: Boolean },
+    displayArticleParam: { default: false, type: Boolean },
   },
-  emits: ['episodeNumbers', 'proceedReading', 'isVisible', 'iFrameNumber', 'displayArticle', 'displayTranscript', 'displayWave'],
+  emits: [
+    "episodeNumbers",
+    "proceedReading",
+    "isVisible",
+    "iFrameNumber",
+    "displayArticle",
+    "displayTranscript",
+    "displayWave",
+  ],
 
   data() {
     return {
       proceedReading: true as boolean,
-      episodeNumbers: 'number' as string,
-      iFrameNumberPriv: '3' as string,
+      episodeNumbers: "number" as string,
+      iFrameNumberPriv: "3" as string,
       isVisibleTemp: this.isVisible,
       displayArticle: true as boolean,
-      displayTranscript:true as boolean,
-      displayWave:true as boolean,
+      displayTranscript: true as boolean,
+      displayWave: true as boolean,
     };
   },
   computed: {
@@ -117,35 +120,35 @@ export default defineComponent({
   },
   watch: {
     episodeNumbers(): void {
-      this.$emit('episodeNumbers', this.episodeNumbers);
+      this.$emit("episodeNumbers", this.episodeNumbers);
     },
     proceedReading(): void {
-      this.$emit('proceedReading', this.proceedReading);
+      this.$emit("proceedReading", this.proceedReading);
     },
     isVisibleTemp(): void {
-      this.$emit('isVisible', this.isVisibleTemp);
+      this.$emit("isVisible", this.isVisibleTemp);
     },
     isVisible(): void {
       this.isVisibleTemp = this.isVisible;
     },
     iFrameNumberPriv(): void {
-      this.$emit('iFrameNumber', this.iFrameNumberPriv);
+      this.$emit("iFrameNumber", this.iFrameNumberPriv);
     },
-    displayArticle(): void{
-      this.$emit('displayArticle', this.displayArticle);
+    displayArticle(): void {
+      this.$emit("displayArticle", this.displayArticle);
     },
-    displayTranscript(): void{
-      this.$emit('displayTranscript', this.displayTranscript);
+    displayTranscript(): void {
+      this.$emit("displayTranscript", this.displayTranscript);
     },
-    displayWave(): void{
-      this.$emit('displayWave', this.displayWave);
-    }
+    displayWave(): void {
+      this.$emit("displayWave", this.displayWave);
+    },
   },
-})
+});
 </script>
 
 <style lang="scss">
-.octopus-app{
+.octopus-app {
   .input-share-player {
     border: 1px solid #ddd;
     border-radius: 50px;

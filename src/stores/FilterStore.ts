@@ -1,11 +1,11 @@
-import { Category } from '@/stores/class/general/category';
-import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
-import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
-import { Rubrique } from '@/stores/class/rubrique/rubrique';
-import { defineStore } from 'pinia';
+import { Category } from "@/stores/class/general/category";
+import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
+import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
+import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import { defineStore } from "pinia";
 
-interface FilterState{
-	filterOrgaId?: string;
+interface FilterState {
+  filterOrgaId?: string;
   filterImgUrl?: string;
   filterName?: string;
   filterRubriquage: Array<Rubriquage>;
@@ -17,15 +17,21 @@ interface FilterState{
   filterLive?: boolean;
   filterIab?: Category;
 }
-export const useFilterStore = defineStore('FilterStore', {
+export const useFilterStore = defineStore("FilterStore", {
   state: (): FilterState => ({
     filterRubriquage: [],
     filterRubrique: [],
     filterRubriqueDisplay: [],
     filterLive: false,
   }),
-  actions : {
-    filterUpdateOrga(filter: {orgaId?:string,imgUrl?:string,name?:string,rubriquageArray?:Array<Rubriquage>, isLive?:boolean }) {
+  actions: {
+    filterUpdateOrga(filter: {
+      orgaId?: string;
+      imgUrl?: string;
+      name?: string;
+      rubriquageArray?: Array<Rubriquage>;
+      isLive?: boolean;
+    }) {
       this.filterOrgaId = filter.orgaId;
       if (filter.imgUrl || !filter.orgaId) {
         this.filterImgUrl = filter.imgUrl;
@@ -33,13 +39,13 @@ export const useFilterStore = defineStore('FilterStore', {
       if (filter.name || !filter.orgaId) {
         this.filterName = filter.name;
       }
-      if(filter.rubriquageArray){
+      if (filter.rubriquageArray) {
         this.filterRubriquage = filter.rubriquageArray;
       }
       this.filterLive = filter.isLive;
       this.filterIab = undefined;
     },
-    filterUpdateIab(iab?:Category) {
+    filterUpdateIab(iab?: Category) {
       this.filterIab = iab;
     },
     filterUpdateRubrique(rubriqueFilter: Array<RubriquageFilter>) {
@@ -48,7 +54,11 @@ export const useFilterStore = defineStore('FilterStore', {
     filterUpdateRubriqueDisplay(rubriques: Array<Rubrique>) {
       this.filterRubriqueDisplay = rubriques;
     },
-    filterUpdateMedia(filter: {type?:string, order?:string, field?:string}) {
+    filterUpdateMedia(filter: {
+      type?: string;
+      order?: string;
+      field?: string;
+    }) {
       if (filter.type) {
         this.filterTypeMedia = filter.type;
       }
@@ -59,5 +69,5 @@ export const useFilterStore = defineStore('FilterStore', {
         this.filterSortField = filter.field;
       }
     },
-  }
-})
+  },
+});

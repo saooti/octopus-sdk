@@ -16,7 +16,7 @@ export interface PlanningLive {
   startDate: Date;
   endDate: Date;
   podcastId: number;
-  podcastData : {
+  podcastData: {
     title: string;
     artist: string;
     duration: number;
@@ -25,10 +25,10 @@ export interface PlanningLive {
 }
 
 export function emptyCrudPlanningLive(): CrudPlanningLive {
-	return {
-		isLive: false,
+  return {
+    isLive: false,
     dateValid: false,
     canalId: 0,
-    liveId:0
-	};
+    liveId: 0,
+  };
 }

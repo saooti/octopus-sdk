@@ -7,19 +7,13 @@
   >
     <template #body>
       <!-- eslint-disable vue/no-v-html -->
-      <div
-        class="content"
-        v-html="message"
-      />
+      <div class="content" v-html="message" />
       <!-- eslint-enable -->
     </template>
-    <template
-      v-if="validatetext"
-      #footer
-    >
+    <template v-if="validatetext" #footer>
       <button
         v-if="canceltext"
-        :ref="!closable && canceltext?'focusElement':''"
+        :ref="!closable && canceltext ? 'focusElement' : ''"
         class="btn m-1"
         @click="onCancel"
       >
@@ -33,7 +27,7 @@
         {{ thirdText }}
       </button>
       <button
-        :ref="!closable && !canceltext?'focusElement':''"
+        :ref="!closable && !canceltext ? 'focusElement' : ''"
         class="btn btn-primary m-1"
         @click="onValid"
       >
@@ -44,36 +38,36 @@
 </template>
 
 <script lang="ts">
-import ClassicModal from '../modal/ClassicModal.vue';
-import { defineComponent } from 'vue'
+import ClassicModal from "../modal/ClassicModal.vue";
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: 'MessageModal',
+  name: "MessageModal",
   components: {
-    ClassicModal
+    ClassicModal,
   },
   props: {
-    title: { default: undefined, type: String},
-    active: { default: false, type: Boolean},
-    closable: { default: true, type: Boolean},
-    message: { default: undefined, type: String},
-    validatetext: { default: undefined, type: String},
-    canceltext: { default: undefined, type: String},
-    thirdText: { default: undefined, type: String},
+    title: { default: undefined, type: String },
+    active: { default: false, type: Boolean },
+    closable: { default: true, type: Boolean },
+    message: { default: undefined, type: String },
+    validatetext: { default: undefined, type: String },
+    canceltext: { default: undefined, type: String },
+    thirdText: { default: undefined, type: String },
   },
-  emits: ['close', 'validate', 'cancel', 'thirdEvent'],
+  emits: ["close", "validate", "cancel", "thirdEvent"],
   methods: {
     closePopup(): void {
-      this.$emit('close');
+      this.$emit("close");
     },
     onValid(): void {
-      this.$emit('validate');
+      this.$emit("validate");
     },
     onCancel(): void {
-      this.$emit('cancel');
+      this.$emit("cancel");
     },
     onThirdAction(): void {
-      this.$emit('thirdEvent');
+      this.$emit("thirdEvent");
     },
   },
-})
+});
 </script>

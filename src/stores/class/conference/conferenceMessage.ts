@@ -1,4 +1,4 @@
-import { Conference } from './conference';
+import { Conference } from "./conference";
 
 export interface ConferenceMessage {
   conference?: Conference;

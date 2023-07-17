@@ -15,17 +15,17 @@
 </template>
 
 <script lang="ts">
-import ClassicCheckbox from '../../form/ClassicCheckbox.vue';
-import CategoryChooser from '../categories/CategoryChooser.vue';
-import { useFilterStore } from '@/stores/FilterStore';
-import { mapState, mapActions } from 'pinia';
-import { defineComponent } from 'vue'
+import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
+import CategoryChooser from "../categories/CategoryChooser.vue";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState, mapActions } from "pinia";
+import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     CategoryChooser,
-    ClassicCheckbox
+    ClassicCheckbox,
   },
-  emits: ['updateCategory'],
+  emits: ["updateCategory"],
   data() {
     return {
       isCategory: false as boolean,
@@ -35,52 +35,52 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useFilterStore, ['filterIab']),
+    ...mapState(useFilterStore, ["filterIab"]),
   },
   watch: {
     isCategory(): void {
-      if(this.isInternChanged ||this.isInit){
+      if (this.isInternChanged || this.isInit) {
         return;
       }
       this.isInternChanged = true;
-      this.$emit('updateCategory', this.isCategory?this.iabId:0);
+      this.$emit("updateCategory", this.isCategory ? this.iabId : 0);
       this.resetCategoryFilter();
       this.$nextTick(() => {
         this.isInternChanged = false;
       });
     },
     iabId(): void {
-      if(this.isInternChanged ||this.isInit){
+      if (this.isInternChanged || this.isInit) {
         return;
       }
       this.isInternChanged = true;
       this.resetCategoryFilter();
-      if(this.isCategory){
-        this.$emit('updateCategory', this.iabId);
+      if (this.isCategory) {
+        this.$emit("updateCategory", this.iabId);
       }
       this.$nextTick(() => {
         this.isInternChanged = false;
       });
     },
-    filterIab:{
+    filterIab: {
       deep: true,
-      handler(){
-        if(this.isInternChanged){
+      handler() {
+        if (this.isInternChanged) {
           return;
         }
         this.isInternChanged = true;
         this.iabId = this.filterIab ? this.filterIab.id : 0;
         this.isCategory = this.filterIab ? true : false;
-        this.$emit('updateCategory', this.iabId);
+        this.$emit("updateCategory", this.iabId);
         this.$nextTick(() => {
           this.isInternChanged = false;
         });
-      }
+      },
     },
   },
 
   created() {
-    if(this.filterIab){
+    if (this.filterIab) {
       this.iabId = this.filterIab.id;
       this.isCategory = true;
     }
@@ -89,17 +89,19 @@ export default defineComponent({
     });
   },
   methods: {
-    ...mapActions(useFilterStore, ['filterUpdateIab']),
-    resetCategoryFilter(): void{
-      if(!this.filterIab || this.isInit){
+    ...mapActions(useFilterStore, ["filterUpdateIab"]),
+    resetCategoryFilter(): void {
+      if (!this.filterIab || this.isInit) {
         return;
       }
       const queries = this.$route.query;
       if (queries.iabId) {
-        this.$router.replace({ query: {...queries, ...{iabId: undefined} } });
+        this.$router.replace({
+          query: { ...queries, ...{ iabId: undefined } },
+        });
       }
       this.filterUpdateIab();
-    }
+    },
   },
-})
+});
 </script>

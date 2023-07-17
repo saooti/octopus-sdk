@@ -1,9 +1,6 @@
 <template>
   <div class="wysiwyg-editor">
-    <div
-      v-if="editor"
-      class="editor-menubar"
-    >
+    <div v-if="editor" class="editor-menubar">
       <button
         title="Bold"
         data-selenium="Bold"
@@ -49,10 +46,7 @@
         :class="{ 'is-active': editor.isActive('link') }"
         @click="setLink"
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-        >
+        <svg viewBox="0 0 24 24" fill="none">
           <path
             transform="translate(2, 2)scale(0.8)"
             d="M7.7574 10.5858L4.92897 13.4142C3.7574 14.5858 3.7574 16.4853 4.92897 17.6569L6.34319 19.0711C7.51476 20.2427 9.41425 20.2427 10.5858 19.0711L13.4143 16.2427M9.87873 14.1214L14.1214 9.87873M10.5858 7.7574L13.4142 4.92897C14.5858 3.7574 16.4853 3.7574 17.6569 4.92897L19.0711 6.34319C20.2427 7.51476 20.2427 9.41425 19.0711 10.5858L16.2427 13.4143"
@@ -67,10 +61,7 @@
         :disabled="!editor.isActive('link')"
         @click="editor.chain().focus().unsetLink().run()"
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-        >
+        <svg viewBox="0 0 24 24" fill="none">
           <path
             transform="translate(2, 2)scale(0.8)"
             d="M7.05029 11.2929L4.92897 13.4142C3.7574 14.5858 3.7574 16.4853 4.92897 17.6568L6.34319 19.0711C7.51476 20.2426 9.41425 20.2426 10.5858 19.0711L12.7071 16.9497M5.00004 5L19 19"
@@ -112,32 +103,17 @@
         @click="editor.chain().focus().toggleBulletList().run()"
       >
         <svg>
-          <circle
-            transform="translate(8, 8)"
-            cx="2.5"
-            cy="3.998"
-            r="2.5"
-          />
+          <circle transform="translate(8, 8)" cx="2.5" cy="3.998" r="2.5" />
           <path
             transform="translate(8, 8)"
             d="M8.5 5H23a1 1 0 000-2H8.5a1 1 0 000 2z"
           />
-          <circle
-            transform="translate(8, 8)"
-            cx="2.5"
-            cy="11.998"
-            r="2.5"
-          />
+          <circle transform="translate(8, 8)" cx="2.5" cy="11.998" r="2.5" />
           <path
             transform="translate(8, 8)"
             d="M23 11H8.5a1 1 0 000 2H23a1 1 0 000-2z"
           />
-          <circle
-            transform="translate(8, 8)"
-            cx="2.5"
-            cy="19.998"
-            r="2.5"
-          />
+          <circle transform="translate(8, 8)" cx="2.5" cy="19.998" r="2.5" />
           <path
             transform="translate(8, 8)"
             d="M23 19H8.5a1 1 0 000 2H23a1 1 0 000-2z"
@@ -170,24 +146,31 @@
     <editor-content
       v-if="!isHtmlDisplay"
       class="form-input html-wysiwyg-content"
-      :class="{ 'border border-danger': errorDescription, 'disabled':isDisabled }"
+      :class="{
+        'border border-danger': errorDescription,
+        disabled: isDisabled,
+      }"
       :editor="editor"
     />
     <pre
       v-else
       class="form-input"
-      :class="{ 'border border-danger': errorDescription, 'disabled':isDisabled }"
+      :class="{
+        'border border-danger': errorDescription,
+        disabled: isDisabled,
+      }"
     ><code>{{ html }}</code></pre>
   </div>
 </template>
 
 <script lang="ts">
-import { EditorContent, Editor } from '@tiptap/vue-3';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import { defineComponent } from 'vue';
+import { EditorContent, Editor } from "@tiptap/vue-3";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
+import { defineComponent } from "vue";
 export default defineComponent({
+  name: "ClassicWysiwyg",
   components: {
     EditorContent,
   },
@@ -197,21 +180,23 @@ export default defineComponent({
     errorDescription: { default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
   },
-  emits: ['update:content'],
+  emits: ["update:content"],
   data() {
     return {
       isHtmlDisplay: false as boolean,
       html: this.content as string,
-      editor: null as Editor|null,
+      editor: null as Editor | null,
     };
   },
   watch: {
     content(): void {
-      if(this.content===this.html){return;}
+      if (this.content === this.html) {
+        return;
+      }
       this.initContent();
     },
     isDisabled(): void {
-      if(this.editor){
+      if (this.editor) {
         this.editor.setOptions({
           editable: true !== this.isDisabled,
         });
@@ -219,21 +204,24 @@ export default defineComponent({
     },
   },
 
-  mounted(){
+  mounted() {
     this.editor = new Editor({
-        extensions: [StarterKit, Underline, 
+      extensions: [
+        StarterKit,
+        Underline,
         Link.configure({
           openOnClick: false,
-        })],
-        content: '',
-        editable: true !== this.isDisabled,
-        onUpdate: this.updateHtml,
+        }),
+      ],
+      content: "",
+      editable: true !== this.isDisabled,
+      onUpdate: this.updateHtml,
     });
     this.initContent();
   },
   beforeUnmount() {
-    if(this.editor){
-    this.editor.destroy();
+    if (this.editor) {
+      this.editor.destroy();
     }
   },
 
@@ -245,31 +233,28 @@ export default defineComponent({
       }
     },
     updateHtml(): void {
-      if(this.editor){
+      if (this.editor) {
         this.html = this.editor.getHTML();
-        this.$emit('update:content', this.html);
+        this.$emit("update:content", this.html);
       }
     },
     setLink() {
-      if(!this.editor){return;}
-      const previousUrl = this.editor.getAttributes('link').href;
-      const url = window.prompt('URL', previousUrl)
-      if(!url) {
+      if (!this.editor) {
         return;
       }
-      if(""===url) {
-        this.editor
-          .chain()
-          .focus()
-          .extendMarkRange('link')
-          .unsetLink()
-          .run()
+      const previousUrl = this.editor.getAttributes("link").href;
+      const url = window.prompt("URL", previousUrl);
+      if (!url) {
+        return;
+      }
+      if ("" === url) {
+        this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
         return;
       }
       this.editor
         .chain()
         .focus()
-        .extendMarkRange('link')
+        .extendMarkRange("link")
         .setLink({ href: url })
         .run();
     },
@@ -277,55 +262,55 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import '@scss/_variables.scss';
-.octopus-app{
-.wysiwyg-editor {
-  .form-input {
-    height: 200px;
-    display: flex;
-  }
-  pre {
-    background: #ddd;
-    margin: 0;
-  }
-  code {
-    display: block;
-    white-space: pre-wrap;
-    width: 0;
-    flex-grow: 1;
-  }
-  .editor-menubar {
-    display: flex;
-    padding: 0.2rem;
-    flex-wrap: wrap;
-    button {
-      width: 40px;
-      height: 40px;
-      background: $octopus-secondary-color;
-      border-width: 0;
-      border-radius: $octopus-borderradius;
-      margin: 0.2rem;
-      padding: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      &:hover,
-      &.is-active {
-        background: $primaryColorTransparent;
+@import "@scss/_variables.scss";
+.octopus-app {
+  .wysiwyg-editor {
+    .form-input {
+      height: 200px;
+      display: flex;
+    }
+    pre {
+      background: #ddd;
+      margin: 0;
+    }
+    code {
+      display: block;
+      white-space: pre-wrap;
+      width: 0;
+      flex-grow: 1;
+    }
+    .editor-menubar {
+      display: flex;
+      padding: 0.2rem;
+      flex-wrap: wrap;
+      button {
+        width: 40px;
+        height: 40px;
+        background: $octopus-secondary-color;
+        border-width: 0;
+        border-radius: $octopus-borderradius;
+        margin: 0.2rem;
+        padding: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        &:hover,
+        &.is-active {
+          background: $primaryColorTransparent;
+        }
+      }
+      .html-button {
+        font-size: 12px;
+      }
+      svg {
+        width: 40px;
+        height: 40px;
       }
     }
-    .html-button {
-      font-size: 12px;
-    }
-    svg {
-      width: 40px;
-      height: 40px;
+    .ProseMirror {
+      width: 0;
+      flex-grow: 1;
+      overflow: auto;
     }
   }
-  .ProseMirror {
-    width: 0;
-    flex-grow: 1;
-    overflow: auto;
-  }
-}
 }
 </style>

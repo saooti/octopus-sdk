@@ -1,23 +1,23 @@
-import octopusApi from '@saooti/octopus-api';
-import { CommentPodcast } from '@/stores/class/general/comment';
-import cookies from '../cookies';
-import { playerLive } from './playerLive';
-import { playerComment } from './playerComment';
-import { playerTranscript } from './playerTranscript';
-import { defineComponent } from 'vue';
-import { useAuthStore } from '@/stores/AuthStore';
-import { useGeneralStore } from '@/stores/GeneralStore';
-import { usePlayerStore } from '@/stores/PlayerStore';
-import { mapState, mapActions } from 'pinia';
+import octopusApi from "@saooti/octopus-api";
+import { CommentPodcast } from "@/stores/class/general/comment";
+import cookies from "../cookies";
+import { playerLive } from "./playerLive";
+import { playerComment } from "./playerComment";
+import { playerTranscript } from "./playerTranscript";
+import { defineComponent } from "vue";
+import { useAuthStore } from "@/stores/AuthStore";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState, mapActions } from "pinia";
 export const playerLogic = defineComponent({
-  mixins:[cookies,playerLive,playerComment, playerTranscript],
+  mixins: [cookies, playerLive, playerComment, playerTranscript],
   data() {
     return {
       forceHide: false as boolean,
       listenTime: 0 as number,
       notListenTime: 0 as number,
       lastSend: 0 as number,
-      downloadId: null as string|null,
+      downloadId: null as string | null,
       playerError: false as boolean,
       listenError: false as boolean,
       percentLiveProgress: 0 as number,
@@ -26,55 +26,70 @@ export const playerLogic = defineComponent({
       hlsReady: false as boolean,
       comments: [] as Array<CommentPodcast>,
       showTimeline: false as boolean,
-      audioUrlToPlay: "" as string
+      audioUrlToPlay: "" as string,
     };
   },
   computed: {
-    ...mapState(useAuthStore, ['authOrgaId', 'authParam']),
-    ...mapState(useGeneralStore, ['consentTcf']),
+    ...mapState(useAuthStore, ["authOrgaId", "authParam"]),
+    ...mapState(useGeneralStore, ["consentTcf"]),
     ...mapState(usePlayerStore, [
-      'playerPodcast',
-      'playerMedia', 
-      'playerLive', 
-      'playerRadio', 
-      'playerVolume', 
-      'playerStatus', 
-      'playerSeekTime']),
-      
+      "playerPodcast",
+      "playerMedia",
+      "playerLive",
+      "playerRadio",
+      "playerVolume",
+      "playerStatus",
+      "playerSeekTime",
+    ]),
+
     audioUrl(): string {
       return this.getAudioUrl();
     },
   },
 
   watch: {
-    async audioUrl(): Promise<void>{
+    async audioUrl(): Promise<void> {
       this.playerError = false;
-      if(this.playerMedia || !this.playerPodcast || !this.playerPodcast.availability.visibility ||this.listenError){
+      if (
+        this.playerMedia ||
+        !this.playerPodcast ||
+        !this.playerPodcast.availability.visibility ||
+        this.listenError
+      ) {
         this.audioUrlToPlay = this.audioUrl;
       }
-      if(!this.playerPodcast || !this.playerPodcast.availability.visibility ||this.listenError){return;}
-      const response = await octopusApi.fetchDataPublic<{location:string, downloadId: number}>(0,"podcast/download/register/"+ this.getAudioUrlParameters());
+      if (
+        !this.playerPodcast ||
+        !this.playerPodcast.availability.visibility ||
+        this.listenError
+      ) {
+        return;
+      }
+      const response = await octopusApi.fetchDataPublic<{
+        location: string;
+        downloadId: number;
+      }>(0, "podcast/download/register/" + this.getAudioUrlParameters());
       this.setDownloadId(response.downloadId.toString());
       this.audioUrlToPlay = response.location;
     },
     playerPodcast: {
       deep: true,
-      handler(){
+      handler() {
         this.reInitPlayer();
         this.getTranscription();
-      }
+      },
     },
     playerLive: {
       deep: true,
-      handler(){
+      handler() {
         this.$nextTick(async () => {
           this.hlsReady = false;
           this.reInitPlayer();
           this.playLive();
         });
-      }
+      },
     },
-    playerRadio(){
+    playerRadio() {
       this.$nextTick(async () => {
         this.hlsReady = false;
         this.reInitPlayer();
@@ -82,23 +97,35 @@ export const playerLogic = defineComponent({
       });
     },
     async listenTime(newVal): Promise<void> {
-      if (this.playerRadio && (!this.playerPodcast && !this.playerLive)||(!this.downloadId)||(newVal - this.lastSend < 10)) {
+      if (
+        (this.playerRadio && !this.playerPodcast && !this.playerLive) ||
+        !this.downloadId ||
+        newVal - this.lastSend < 10
+      ) {
         return;
       }
       this.lastSend = newVal;
-      await octopusApi.putDataPublic(0, 'podcast/listen/' + this.downloadId + '?seconds=' +  Math.round(newVal), undefined);
+      await octopusApi.putDataPublic(
+        0,
+        "podcast/listen/" + this.downloadId + "?seconds=" + Math.round(newVal),
+        undefined,
+      );
     },
-    playerSeekTime(){
-      if(!this.playerSeekTime){return;}
+    playerSeekTime() {
+      if (!this.playerSeekTime) {
+        return;
+      }
       if (this.playerPodcast || this.playerLive) {
         this.notListenTime = this.playerSeekTime - this.listenTime;
       }
-      const audioPlayer: HTMLAudioElement | null = document.querySelector('#audio-player');
+      const audioPlayer: HTMLAudioElement | null =
+        document.querySelector("#audio-player");
       if (!audioPlayer) return;
       audioPlayer.currentTime = this.playerSeekTime;
     },
     playerStatus() {
-      const audioPlayer: HTMLAudioElement | null = document.querySelector('#audio-player');
+      const audioPlayer: HTMLAudioElement | null =
+        document.querySelector("#audio-player");
       if (!audioPlayer) return;
       if (this.playerLive && !this.hlsReady) {
         audioPlayer.pause();
@@ -106,65 +133,72 @@ export const playerLogic = defineComponent({
         this.durationLivePosition = 0;
         return;
       }
-      if ('PAUSED' === this.playerStatus && this.playerRadio) {
+      if ("PAUSED" === this.playerStatus && this.playerRadio) {
         this.hlsReady = false;
         this.reInitPlayer();
         this.endingLive();
-      }else if('PAUSED' === this.playerStatus){
+      } else if ("PAUSED" === this.playerStatus) {
         audioPlayer.pause();
-      }else if ('PLAYING' === this.playerStatus && this.playerRadio){
-        if(this.playerRadio.isInit){
+      } else if ("PLAYING" === this.playerStatus && this.playerRadio) {
+        if (this.playerRadio.isInit) {
           this.playRadio();
-        }else{
+        } else {
           this.playerRadio.isInit = true;
         }
-      }else if('PLAYING' === this.playerStatus){
+      } else if ("PLAYING" === this.playerStatus) {
         audioPlayer.play();
       }
     },
   },
 
   mounted() {
-    window.addEventListener('beforeunload', this.endListeningProgress);
+    window.addEventListener("beforeunload", this.endListeningProgress);
   },
-  
+
   methods: {
-    ...mapActions(usePlayerStore, ['playerPlay', 'playerUpdateElapsed']),
-    getDomain(): string{
+    ...mapActions(usePlayerStore, ["playerPlay", "playerUpdateElapsed"]),
+    getDomain(): string {
       let domain = "";
-      const domainArray: RegExpExecArray | null = /\.(.+)/.exec(window.location.host);
-      if(domainArray &&  null !== domainArray){
+      const domainArray: RegExpExecArray | null = /\.(.+)/.exec(
+        window.location.host,
+      );
+      if (domainArray && null !== domainArray) {
         domain = domainArray[1];
       }
       return domain;
     },
-    getAudioUrlParameters(): string{
-      if (!this.playerPodcast) return '';
+    getAudioUrlParameters(): string {
+      if (!this.playerPodcast) return "";
       const parameters = [];
-      parameters.push('origin=octopus');
+      parameters.push("origin=octopus");
       if (this.authOrgaId) {
-        parameters.push(
-          'distributorId=' + this.authOrgaId
-        );
+        parameters.push("distributorId=" + this.authOrgaId);
       }
-      if(this.consentTcf){
-        parameters.push('consent='+this.consentTcf);
+      if (this.consentTcf) {
+        parameters.push("consent=" + this.consentTcf);
       }
 
-      if("SECURED" === this.playerPodcast.organisation.privacy && this.authParam.accessToken){
-        parameters.push('access_token='+this.authParam.accessToken);
+      if (
+        "SECURED" === this.playerPodcast.organisation.privacy &&
+        this.authParam.accessToken
+      ) {
+        parameters.push("access_token=" + this.authParam.accessToken);
       }
-      return this.playerPodcast.podcastId + '.mp3?' + parameters.join('&');
+      return this.playerPodcast.podcastId + ".mp3?" + parameters.join("&");
     },
-    getAudioUrl(): string{
-      if (this.playerMedia) return this.playerMedia.audioUrl? this.playerMedia.audioUrl:"";
-      if (!this.playerPodcast) return '';
-      if (!this.playerPodcast.availability.visibility || "PROCESSING"===this.playerPodcast.processingStatus)
+    getAudioUrl(): string {
+      if (this.playerMedia)
+        return this.playerMedia.audioUrl ? this.playerMedia.audioUrl : "";
+      if (!this.playerPodcast) return "";
+      if (
+        !this.playerPodcast.availability.visibility ||
+        "PROCESSING" === this.playerPodcast.processingStatus
+      )
         return this.playerPodcast.audioStorageUrl;
       if (this.listenError) return this.playerPodcast.audioStorageUrl;
       return this.getAudioUrlParameters();
     },
-    reInitPlayer():void{
+    reInitPlayer(): void {
       this.setDownloadId(null);
       this.listenError = false;
       this.initComments();
@@ -176,38 +210,50 @@ export const playerLogic = defineComponent({
       this.playerPlay();
     },
     onError(): void {
-      if (this.playerPodcast && ""!==this.audioUrlToPlay &&  !this.listenError) {
+      if (
+        this.playerPodcast &&
+        "" !== this.audioUrlToPlay &&
+        !this.listenError
+      ) {
         this.listenError = true;
-      } else if ((this.playerPodcast && ""!==this.audioUrlToPlay ) || this.playerMedia) {
+      } else if (
+        (this.playerPodcast && "" !== this.audioUrlToPlay) ||
+        this.playerMedia
+      ) {
         this.playerError = true;
       }
     },
-    streamDurationForSafari(mediaTarget:HTMLMediaElement){
+    streamDurationForSafari(mediaTarget: HTMLMediaElement) {
       let streamDuration = mediaTarget.duration;
-      if(Infinity===streamDuration){
+      if (Infinity === streamDuration) {
         const seekable = mediaTarget.seekable;
-        if(seekable){
+        if (seekable) {
           streamDuration = seekable.end(seekable.length - 1);
-        }else{
+        } else {
           streamDuration = mediaTarget.currentTime;
         }
       }
       return streamDuration;
     },
-    
-    onTimeUpdatePodcast(streamDuration:number, currentTime:number){
+
+    onTimeUpdatePodcast(streamDuration: number, currentTime: number) {
       this.displayAlertBar = false;
       this.percentLiveProgress = 100;
       this.playerUpdateElapsed(currentTime / streamDuration, streamDuration);
       this.onTimeUpdateTranscript(currentTime);
     },
-    onTimeUpdateLive(streamDuration: number, currentTime:number){
-      if(!this.playerLive){return;}
+    onTimeUpdateLive(streamDuration: number, currentTime: number) {
+      if (!this.playerLive) {
+        return;
+      }
       const scheduledDuration = this.playerLive.duration / 1000;
       if (scheduledDuration > streamDuration) {
         this.displayAlertBar = false;
         this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
-        this.playerUpdateElapsed(currentTime / scheduledDuration, scheduledDuration);
+        this.playerUpdateElapsed(
+          currentTime / scheduledDuration,
+          scheduledDuration,
+        );
       } else {
         this.percentLiveProgress = 100;
         this.displayAlertBar = true;
@@ -216,10 +262,10 @@ export const playerLogic = defineComponent({
       }
     },
     onTimeUpdate(event: Event): void {
-      if(this.playerRadio){
+      if (this.playerRadio) {
         return;
       }
-      const mediaTarget = (event.currentTarget as HTMLMediaElement);
+      const mediaTarget = event.currentTarget as HTMLMediaElement;
       if (this.playerPodcast || this.playerLive) {
         if (!this.downloadId) {
           return;
@@ -232,21 +278,20 @@ export const playerLogic = defineComponent({
           this.notListenTime = mediaTarget.currentTime;
           this.listenTime = 1;
         } else {
-          this.listenTime =
-            mediaTarget.currentTime - this.notListenTime;
+          this.listenTime = mediaTarget.currentTime - this.notListenTime;
         }
       }
-      let streamDuration = this.streamDurationForSafari(mediaTarget);
+      const streamDuration = this.streamDurationForSafari(mediaTarget);
       if (!streamDuration) return;
       if (!mediaTarget.currentTime) return;
       if (!this.playerLive) {
-        this.onTimeUpdatePodcast(streamDuration,mediaTarget.currentTime);
+        this.onTimeUpdatePodcast(streamDuration, mediaTarget.currentTime);
         return;
       }
-      this.onTimeUpdateLive(streamDuration,mediaTarget.currentTime);
+      this.onTimeUpdateLive(streamDuration, mediaTarget.currentTime);
     },
-    onSeeked(event: Event):void {
-      const mediaTarget = (event.currentTarget as HTMLMediaElement);
+    onSeeked(event: Event): void {
+      const mediaTarget = event.currentTarget as HTMLMediaElement;
       const currentTime = mediaTarget.currentTime;
       this.onSeekedTranscript(currentTime);
     },
@@ -258,4 +303,4 @@ export const playerLogic = defineComponent({
       this.forceHide = true;
     },
   },
-})
+});

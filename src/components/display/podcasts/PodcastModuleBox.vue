@@ -5,9 +5,9 @@
         <PodcastImage
           :class="[
             isLiveReadyToRecord &&
-              fetchConference &&
-              'null' !== fetchConference &&
-              fetchConference.status
+            fetchConference &&
+            'null' !== fetchConference &&
+            fetchConference.status
               ? fetchConference.status.toLowerCase() + '-shadow'
               : '',
           ]"
@@ -17,30 +17,20 @@
           :playing-podcast="playingPodcast"
           :fetch-conference="fetchConference"
           :is-animator-live="isOctopusAndAnimator"
-          @playPodcast="playPodcast"
+          @play-podcast="playPodcast"
         />
-        <div
-          class="d-flex justify-content-between flex-wrap mb-2"
-        >
-          <div
-            v-if="0 !== date.length"
-            :class="!isLiveReady ? 'me-5' : ''"
-          >
+        <div class="d-flex justify-content-between flex-wrap mb-2">
+          <div v-if="0 !== date.length" :class="!isLiveReady ? 'me-5' : ''">
             {{ date }}
           </div>
           <div>
             {{ duration }}
           </div>
-          <div
-            v-if="isLiveReady"
-            class="text-danger"
-          >
-            {{ $t('Episode record in live') }}
+          <div v-if="isLiveReady" class="text-danger">
+            {{ $t("Episode record in live") }}
           </div>
         </div>
-        <div
-          class="text-uppercase h2 mb-3"
-        >
+        <div class="text-uppercase h2 mb-3">
           {{ podcast.title }}
         </div>
         <!-- eslint-disable vue/no-v-html -->
@@ -55,7 +45,7 @@
             :participants="podcast.animators"
           />
           <div class="mb-1">
-            {{ $t('Emission') + ' : ' }}
+            {{ $t("Emission") + " : " }}
             <router-link
               :to="{
                 name: 'emission',
@@ -68,11 +58,8 @@
               {{ podcast.emission.name }}
             </router-link>
           </div>
-          <div
-            v-if="!isPodcastmaker"
-            class="mb-1"
-          >
-            {{ $t('Producted by : ') }}
+          <div v-if="!isPodcastmaker" class="mb-1">
+            {{ $t("Producted by : ") }}
             <router-link
               :to="{
                 name: 'productor',
@@ -85,17 +72,11 @@
               {{ podcast.organisation.name }}
             </router-link>
           </div>
-          <div
-            v-if="''!==photoCredit"
-            class="mb-1"
-          >
-            {{ $t('Photo credits') + " : "+ photoCredit }}
+          <div v-if="'' !== photoCredit" class="mb-1">
+            {{ $t("Photo credits") + " : " + photoCredit }}
           </div>
-          <div
-            v-if="''!==audioCredit"
-            class="mb-1"
-          >
-            {{ $t('Audio credits') + " : "+ audioCredit }}
+          <div v-if="'' !== audioCredit" class="mb-1">
+            {{ $t("Audio credits") + " : " + audioCredit }}
           </div>
           <a
             v-if="podcast.article"
@@ -105,7 +86,7 @@
             target="_blank"
           >
             <span class="saooti-newspaper me-1" />
-            <div>{{ $t('See associated article') }}</div>
+            <div>{{ $t("See associated article") }}</div>
           </a>
           <ParticipantDescription
             class="mb-1"
@@ -118,61 +99,60 @@
           />
           <div v-if="editRight && !isPodcastmaker">
             <div
-              v-if="podcast.annotations && 'RSS'===podcast.annotations.SOURCE_KIND"
+              v-if="
+                podcast.annotations && 'RSS' === podcast.annotations.SOURCE_KIND
+              "
               class="me-5 text-secondary"
             >
-              {{ $t('From RSS') }}
+              {{ $t("From RSS") }}
             </div>
-            <ErrorMessage
-              v-if="''!==errorMessage"
-              :message="errorMessage"
-            />
+            <ErrorMessage v-if="'' !== errorMessage" :message="errorMessage" />
           </div>
         </div>
       </div>
     </div>
     <RecordingItemButton
-      v-if="
-        !!fetchConference &&
-          isLiveReadyToRecord &&
-          isOctopusAndAnimator
-      "
+      v-if="!!fetchConference && isLiveReadyToRecord && isOctopusAndAnimator"
       :podcast="podcast"
       :live="true"
       :recording="fetchConference"
-      @deleteItem="removeDeleted"
-      @validatePodcast="$emit('updatePodcast', $event)"
+      @delete-item="removeDeleted"
+      @validate-podcast="$emit('updatePodcast', $event)"
     />
     <EditBox
       v-else-if="editRight && isEditBox"
       :podcast="podcast"
       :display-studio-access="isDebriefing"
-      @validatePodcast="$emit('updatePodcast', $event)"
+      @validate-podcast="$emit('updatePodcast', $event)"
     />
-    <TagList
-      :tag-list="podcast.tags"
-    />
+    <TagList :tag-list="podcast.tags" />
   </div>
 </template>
 
 <script lang="ts">
-import PodcastPlayBar from './PodcastPlayBar.vue';
-import PodcastImage from './PodcastImage.vue';
-import ParticipantDescription from './ParticipantDescription.vue';
-import TagList from './TagList.vue';
-import { state } from '../../../stores/ParamSdkStore';
-import dayjs from 'dayjs';
+import PodcastPlayBar from "./PodcastPlayBar.vue";
+import PodcastImage from "./PodcastImage.vue";
+import ParticipantDescription from "./ParticipantDescription.vue";
+import TagList from "./TagList.vue";
+import { state } from "../../../stores/ParamSdkStore";
+import dayjs from "dayjs";
 // @ts-ignore
-import humanizeDuration from 'humanize-duration';
-import displayMethods from '../../mixins/displayMethods';
-import { orgaComputed } from '../../mixins/orgaComputed';
-import { Podcast } from '@/stores/class/general/podcast';
-import { Conference } from '@/stores/class/conference/conference';
+import humanizeDuration from "humanize-duration";
+import displayMethods from "../../mixins/displayMethods";
+import { orgaComputed } from "../../mixins/orgaComputed";
+import { Podcast } from "@/stores/class/general/podcast";
+import { Conference } from "@/stores/class/conference/conference";
 
-import { defineComponent, defineAsyncComponent } from 'vue';
-const ErrorMessage = defineAsyncComponent(() => import('../../misc/ErrorMessage.vue'));
-const RecordingItemButton = defineAsyncComponent(() => import('@/components/display/studio/RecordingItemButton.vue'));
-const EditBox = defineAsyncComponent(() => import('@/components/display/edit/EditBox.vue'));
+import { defineComponent, defineAsyncComponent } from "vue";
+const ErrorMessage = defineAsyncComponent(
+  () => import("../../misc/ErrorMessage.vue"),
+);
+const RecordingItemButton = defineAsyncComponent(
+  () => import("@/components/display/studio/RecordingItemButton.vue"),
+);
+const EditBox = defineAsyncComponent(
+  () => import("@/components/display/edit/EditBox.vue"),
+);
 export default defineComponent({
   name: "PodcastModuleBox",
   components: {
@@ -181,41 +161,41 @@ export default defineComponent({
     TagList,
     ErrorMessage,
     PodcastPlayBar,
-    EditBox, 
-    RecordingItemButton
+    EditBox,
+    RecordingItemButton,
   },
 
-  mixins:[displayMethods, orgaComputed],
+  mixins: [displayMethods, orgaComputed],
 
   props: {
-    playingPodcast: { default: undefined, type: Object as ()=> Podcast},
-    podcast: { default: undefined, type: Object as ()=> Podcast},
-    fetchConference: { default: undefined, type: Object as ()=> Conference},
+    playingPodcast: { default: undefined, type: Object as () => Podcast },
+    podcast: { default: undefined, type: Object as () => Podcast },
+    fetchConference: { default: undefined, type: Object as () => Conference },
   },
 
-  emits: ['playPodcast', 'updatePodcast'],
+  emits: ["playPodcast", "updatePodcast"],
 
   computed: {
-    errorMessage(): string{
-      if(!this.podcast?.availability.visibility){
-        return this.$t('Podcast is not visible for listeners');
+    errorMessage(): string {
+      if (!this.podcast?.availability.visibility) {
+        return this.$t("Podcast is not visible for listeners");
       }
-      if('ERROR' === this.podcast?.processingStatus){
-        return this.$t('Podcast in ERROR, please contact Saooti');
+      if ("ERROR" === this.podcast?.processingStatus) {
+        return this.$t("Podcast in ERROR, please contact Saooti");
       }
-      return this.podcastNotValid ? this.$t('Podcast not validated') : '';
+      return this.podcastNotValid ? this.$t("Podcast not validated") : "";
     },
     isPodcastmaker(): boolean {
-      return (state.generalParameters.podcastmaker as boolean);
+      return state.generalParameters.podcastmaker as boolean;
     },
     date(): string {
-      if (this.podcast && 1970 !== dayjs(this.podcast.pubDate).year()){
-        return dayjs(this.podcast.pubDate).format('D MMMM YYYY');
+      if (this.podcast && 1970 !== dayjs(this.podcast.pubDate).year()) {
+        return dayjs(this.podcast.pubDate).format("D MMMM YYYY");
       }
-      return '';
+      return "";
     },
     duration(): string {
-      if (!this.podcast || this.podcast.duration <= 1) return '';
+      if (!this.podcast || this.podcast.duration <= 1) return "";
       if (this.podcast.duration > 600000) {
         return humanizeDuration(this.podcast.duration, {
           language: this.$i18n.locale,
@@ -230,23 +210,31 @@ export default defineComponent({
       });
     },
     editRight(): boolean {
-      return (true===this.authenticated &&
-        this.myOrganisationId === this.podcast?.organisation.id) ||true===state.generalParameters.isAdmin
+      return (
+        (true === this.authenticated &&
+          this.myOrganisationId === this.podcast?.organisation.id) ||
+        true === state.generalParameters.isAdmin
+      );
     },
     isLiveReadyToRecord(): boolean {
-      return (undefined!==this.podcast && undefined!==this.podcast.conferenceId && 0 !== this.podcast.conferenceId && 'READY_TO_RECORD' === this.podcast.processingStatus);
+      return (
+        undefined !== this.podcast &&
+        undefined !== this.podcast.conferenceId &&
+        0 !== this.podcast.conferenceId &&
+        "READY_TO_RECORD" === this.podcast.processingStatus
+      );
     },
     isLiveReady(): boolean {
       return (
-        undefined!==this.podcast?.conferenceId &&
+        undefined !== this.podcast?.conferenceId &&
         0 !== this.podcast?.conferenceId &&
-        'READY' === this.podcast?.processingStatus
+        "READY" === this.podcast?.processingStatus
       );
     },
     isDebriefing(): boolean {
       return (
-        undefined!==this.fetchConference &&
-        'DEBRIEFING' === this.fetchConference.status
+        undefined !== this.fetchConference &&
+        "DEBRIEFING" === this.fetchConference.status
       );
     },
     isOctopusAndAnimator(): boolean {
@@ -257,29 +245,32 @@ export default defineComponent({
       );
     },
     podcastNotValid(): boolean {
-      return undefined!==this.podcast?.availability && false === this.podcast?.valid;
+      return (
+        undefined !== this.podcast?.availability &&
+        false === this.podcast?.valid
+      );
     },
-    photoCredit():string{
-      return (this.podcast?.annotations?.photoCredit as string) ?? '';
+    photoCredit(): string {
+      return (this.podcast?.annotations?.photoCredit as string) ?? "";
     },
-    audioCredit():string{
-      return (this.podcast?.annotations?.audioCredit as string) ?? '';
+    audioCredit(): string {
+      return (this.podcast?.annotations?.audioCredit as string) ?? "";
     },
-    isEditBox(): boolean{
-      return (state.podcastPage.EditBox as boolean)?? false;
+    isEditBox(): boolean {
+      return (state.podcastPage.EditBox as boolean) ?? false;
     },
   },
   methods: {
     playPodcast(podcast: Podcast): void {
-      this.$emit('playPodcast', podcast);
+      this.$emit("playPodcast", podcast);
     },
     removeDeleted(): void {
       if (window.history.length > 1) {
         this.$router.go(-1);
       } else {
-        this.$router.push('/');
+        this.$router.push("/");
       }
     },
   },
-})
+});
 </script>

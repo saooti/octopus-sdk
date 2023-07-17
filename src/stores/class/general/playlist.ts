@@ -1,7 +1,6 @@
-import { Organisation } from './organisation';
-import { Person } from '../user/person';
-import { FetchParam } from './fetchParam';
-
+import { Organisation } from "./organisation";
+import { Person } from "../user/person";
+import { FetchParam } from "./fetchParam";
 
 export interface Playlist {
   ambianceType?: string; //#11919 "NONE", "AMBIANCE", "PROGRAMMED"
@@ -17,32 +16,31 @@ export interface Playlist {
   publisher?: Person;
 }
 
-export function emptyPlaylistData(): Playlist{
+export function emptyPlaylistData(): Playlist {
   return {
-    ambianceType:"NONE",
-    description: '',
+    ambianceType: "NONE",
+    description: "",
     playlistId: 0,
     podcasts: undefined,
     score: 0,
-    title: '',
-    type:'DYNAMIC',
-    samplingViews:[]
-  }
+    title: "",
+    type: "DYNAMIC",
+    samplingViews: [],
+  };
 }
-
 
 export interface PlaylistRule {
-  maxSize: number,
-  podcastId?: number,
-  query?: FetchParam,
-  type?:string,
-  title?: string,
+  maxSize: number;
+  podcastId?: number;
+  query?: FetchParam;
+  type?: string;
+  title?: string;
 }
 
-export function emptyPlaylistRule(): PlaylistRule{
+export function emptyPlaylistRule(): PlaylistRule {
   return {
     maxSize: 1,
     query: {},
     title: undefined,
-  }
+  };
 }

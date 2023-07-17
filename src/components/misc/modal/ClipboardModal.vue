@@ -6,7 +6,7 @@
   >
     <template #body>
       <p class="d-flex justify-content-between align-items-center">
-        {{ $t('Rss feed:') }}
+        {{ $t("Rss feed:") }}
         <span id="LINK">{{ link }}</span>
         <input
           type="button"
@@ -14,49 +14,47 @@
           class="btn btn-primary"
           :title="$t('Copy')"
           @click="onCopyCode(link, afterCopy)"
-        >
+        />
       </p>
-      <RssSection
-        v-if="emission && authenticated"
-        :emission="emission"
-      />
+      <RssSection v-if="emission && authenticated" :emission="emission" />
     </template>
   </ClassicModal>
 </template>
 
 <script lang="ts">
-import ClassicModal from '../modal/ClassicModal.vue';
-import { Emission } from '@/stores/class/general/emission';
-import displayMethods from '../../mixins/displayMethods';
-import { defineComponent, defineAsyncComponent } from 'vue';
-import { state } from '../../../stores/ParamSdkStore';
-const RssSection = defineAsyncComponent(() => import('@/components/display/aggregator/RssSection.vue'));
+import ClassicModal from "../modal/ClassicModal.vue";
+import { Emission } from "@/stores/class/general/emission";
+import displayMethods from "../../mixins/displayMethods";
+import { defineComponent, defineAsyncComponent } from "vue";
+import { state } from "../../../stores/ParamSdkStore";
+const RssSection = defineAsyncComponent(
+  () => import("@/components/display/aggregator/RssSection.vue"),
+);
 export default defineComponent({
-  name: 'ClipboardModal',
+  name: "ClipboardModal",
   components: {
     RssSection,
-    ClassicModal
+    ClassicModal,
   },
   mixins: [displayMethods],
 
   props: {
-    link: { default: '', type: String},
-    emission: { default: undefined, type: Object as ()=> Emission},
+    link: { default: "", type: String },
+    emission: { default: undefined, type: Object as () => Emission },
   },
-  emits: ['close', 'copy'],
+  emits: ["close", "copy"],
   computed: {
     authenticated(): boolean {
-      return state.generalParameters.authenticated??false;
+      return state.generalParameters.authenticated ?? false;
     },
   },
   methods: {
     closePopup(): void {
-      this.$emit('close');
+      this.$emit("close");
     },
-    afterCopy(): void{
+    afterCopy(): void {
       this.$emit("copy");
-    }
+    },
   },
-})
+});
 </script>
-

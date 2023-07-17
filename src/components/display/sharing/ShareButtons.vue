@@ -2,7 +2,7 @@
   <div class="module-box">
     <div class="d-flex align-items-center mb-3">
       <h2 class="big-h2 mb-0">
-        {{ $t('Share') }}
+        {{ $t("Share") }}
       </h2>
       <span
         v-if="authenticated"
@@ -11,7 +11,7 @@
         tabindex="0"
         class="saooti-help ms-2"
       />
-      <Popover
+      <ClassicPopover
         v-if="authenticated"
         target="popover-share-help"
         :title="$t('Help')"
@@ -31,31 +31,31 @@
 </template>
 
 <script lang="ts">
-import { Emission } from '@/stores/class/general/emission';
-import { Podcast } from '@/stores/class/general/podcast';
-import { state } from '../../../stores/ParamSdkStore';
-import displayMethods from '../../mixins/displayMethods';
-import Popover from '../../misc/Popover.vue';
-import ShareButtonsIntern from './ShareButtonsIntern.vue';
-import { defineComponent } from 'vue';
-import { Playlist } from '@/stores/class/general/playlist';
+import { Emission } from "@/stores/class/general/emission";
+import { Podcast } from "@/stores/class/general/podcast";
+import { state } from "../../../stores/ParamSdkStore";
+import displayMethods from "../../mixins/displayMethods";
+import ClassicPopover from "../../misc/ClassicPopover.vue";
+import ShareButtonsIntern from "./ShareButtonsIntern.vue";
+import { defineComponent } from "vue";
+import { Playlist } from "@/stores/class/general/playlist";
 export default defineComponent({
   components: {
     ShareButtonsIntern,
-    Popover,
+    ClassicPopover,
   },
   mixins: [displayMethods],
   props: {
-    podcast: { default: undefined, type: Object as ()=> Podcast},
-    emission: { default: undefined, type: Object as ()=> Emission},
-    playlist: { default: undefined, type: Object as ()=>Playlist},
-    participantId: { default: undefined, type: Number},
-    organisationId: { default: undefined, type: String},
+    podcast: { default: undefined, type: Object as () => Podcast },
+    emission: { default: undefined, type: Object as () => Emission },
+    playlist: { default: undefined, type: Object as () => Playlist },
+    participantId: { default: undefined, type: Number },
+    organisationId: { default: undefined, type: String },
   },
   computed: {
     authenticated(): boolean {
-      return (state.generalParameters.authenticated as boolean);
+      return state.generalParameters.authenticated as boolean;
     },
   },
-})
+});
 </script>
