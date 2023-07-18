@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "37.0.7",
+  "version": "37.0.8",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -10,8 +10,6 @@
     "dev": "vite",
     "lint": "eslint --ext .js,.vue --fix src",
     "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js",
-    "prettifile": "prettier --single-quote --trailing-comma es5 --write",
-    "prettify": "prettier --single-quote --trailing-comma es5 --write src/**/**/**/*.{js,vue}",
     "sonar": "node sonarqube-scanner.js",
     "test": "jest --coverage"
   },

@@ -36,7 +36,7 @@
       :reset="reset"
       @selected="onOrganisationSelected"
     />
-    <div class="d-flex justify-content-end flex-grow-1">
+    <div class="d-flex align-items-center justify-content-end flex-grow-1">
       <template v-for="link in routerLinkArray" :key="link.routeName">
         <router-link
           v-if="link.condition"

@@ -125,16 +125,23 @@ export default defineComponent({
       ${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubriquageId}`;
     },
     sortText(): string {
+      let textSort = "";
       switch (this.sort) {
         case "SCORE":
-          return " " + this.$t("sort by score");
+          textSort = " " + this.$t("sort by score");
+          break;
         case "LAST_PODCAST_DESC":
-          return " " + this.$t("sort by date");
+          textSort = " " + this.$t("sort by date");
+          break;
         case "NAME":
-          return " " + this.$t("sort by alphabetical");
+          textSort = " " + this.$t("sort by alphabetical");
+          break;
         default:
-          return " " + this.$t("sort by date");
+          textSort = " " + this.$t("sort by date");
+          break;
       }
+
+      return textSort.replace("triés", "triées");
     },
     organisation(): string | undefined {
       return this.organisationId ? this.organisationId : this.filterOrgaId;

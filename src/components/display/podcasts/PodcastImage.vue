@@ -41,7 +41,11 @@
           class="special-icon-play-button"
           :class="iconName"
         />
-        <div v-if="playingPodcast" class="bloc-paddle">
+        <div
+          v-if="playingPodcast"
+          :class="'PLAYING' === playerStatus ? 'play-animation' : ''"
+          class="bloc-paddle"
+        >
           <span class="paddle1" />
           <span class="paddle2" />
           <span class="paddle3" />

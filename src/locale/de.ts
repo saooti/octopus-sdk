@@ -334,4 +334,13 @@ export default {
   "Characters number calculated over HTML code":
     "Die Zeichenzahl wird mit dem HTML-Code ermittelt, der mit diesem Editor erstellt wurde. Über den HTML-Button können Sie diesen Code einsehen.",
   Previously: "Bisher",
+  "Bold":"Deutlich",
+  "Italic":"Kursiv",
+  "Underline":"Unterstreichen",
+  "Link":"Verknüpfung",
+  "Heading3":"Überschrift 3",
+  "Heading4":"Überschrift 4",
+  "UnorderedList":"Ungeordnete Liste",
+  "List":"Aufführen",
+  "Display HTML":"HTML anzeigen",
 };

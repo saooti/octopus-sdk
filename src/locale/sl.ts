@@ -324,4 +324,13 @@ export default {
   "Characters number calculated over HTML code":
     "Število znakov se izračuna iz kode HTML, ki jo ustvari ta urejevalnik. Ogledate si jo lahko s klikom na gumb „html“.",
   Previously: "Prej",
+  "Bold":"Krepko",
+  "Italic":"Ležeče",
+  "Underline":"Podčrtaj",
+  "Link":"Povezava",
+  "Heading3":"Naslov 3",
+  "Heading4":"Naslov 4",
+  "UnorderedList":"Neurejen seznam",
+  "List":"Seznam",
+  "Display HTML":"Prikaži HTML",
 };

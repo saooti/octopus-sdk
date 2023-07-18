@@ -335,4 +335,13 @@ export default {
   "Characters number calculated over HTML code":
     "El número de caracteres se calcula a partir del código HTML generado por este editor. Puedes visualizar este código pulsando en «html».",
   Previously: "Previamente",
+  "Bold":"Atrevido",
+  "Italic":"Itálico",
+  "Underline":"Subrayar",
+  "Link":"Enlace",
+  "Heading3":"Título 3",
+  "Heading4":"Título 4",
+  "UnorderedList":"Lista desordenada",
+  "List":"Lista",
+  "Display HTML":"Mostrar HTML",
 };

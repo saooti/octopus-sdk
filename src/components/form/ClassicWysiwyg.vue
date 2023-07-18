@@ -2,7 +2,7 @@
   <div class="wysiwyg-editor">
     <div v-if="editor" class="editor-menubar">
       <button
-        title="Bold"
+        :title="$t('Bold')"
         data-selenium="Bold"
         :class="{ 'is-active': editor.isActive('bold') }"
         @click="editor.chain().focus().toggleBold().run()"
@@ -15,7 +15,7 @@
         </svg>
       </button>
       <button
-        title="Italic"
+        :title="$t('Italic')"
         data-selenium="Italic"
         :class="{ 'is-active': editor.isActive('italic') }"
         @click="editor.chain().focus().toggleItalic().run()"
@@ -28,7 +28,7 @@
         </svg>
       </button>
       <button
-        title="Underline"
+        :title="$t('Underline')"
         data-selenium="Underline"
         :class="{ 'is-active': editor.isActive('underline') }"
         @click="editor.chain().focus().toggleUnderline().run()"
@@ -41,7 +41,7 @@
         </svg>
       </button>
       <button
-        title="Link"
+        :title="$t('Link')"
         data-selenium="Link"
         :class="{ 'is-active': editor.isActive('link') }"
         @click="setLink"
@@ -80,7 +80,7 @@
         </svg>
       </button>
       <button
-        title="Heading3"
+        :title="$t('Heading3')"
         data-selenium="Heading3"
         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
@@ -88,7 +88,7 @@
         H3
       </button>
       <button
-        title="Heading4"
+        :title="$t('Heading4')"
         data-selenium="Heading4"
         :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
@@ -96,7 +96,7 @@
         H4
       </button>
       <button
-        title="UnorderedList"
+        :title="$t('UnorderedList')"
         data-selenium="UnorderedList"
         class="saooti-ul"
         :class="{ 'is-active': editor.isActive('bulletList') }"
@@ -121,7 +121,7 @@
         </svg>
       </button>
       <button
-        title="List"
+        :title="$t('List')"
         data-selenium="List"
         :class="{ 'is-active': editor.isActive('orderedList') }"
         @click="editor.chain().focus().toggleOrderedList().run()"
@@ -134,7 +134,7 @@
         </svg>
       </button>
       <button
-        title="Display HTML"
+        :title="$t('Display HTML')"
         data-selenium="Display-HTML"
         class="html-button"
         :class="{ 'is-active': isHtmlDisplay }"
