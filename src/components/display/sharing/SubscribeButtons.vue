@@ -39,6 +39,7 @@ export default defineComponent({
         {name:'applePodcast', icon:'saooti-apple', title:'Apple Podcast | iTunes', url : this.getUrl('applePodcast')},
         {name:'deezer', icon:'saooti-deezer', title:'Deezer', url : this.getUrl('deezer')},
         {name:'googlePodcasts', icon:"saooti-google-podcasts",title:'Google Podcasts', url : this.getUrl('googlePodcasts')},
+        {name:'iHeart', icon:"saooti-iheart",title:'iHeart', url : this.getUrl('iHeart')},
         {name:'playerFm', icon: 'saooti-playerfm',title:'PlayerFM', url : this.getUrl('playerFm')},
         {name:'pocketCasts', icon:'saooti-pocket-casts', title:'Pocket Casts', url : this.getUrl('pocketCasts')},
         {name:'podcastAddict', icon: 'saooti-podcast-addict', title:'Podcast Addict', url : this.getUrl('podcastAddict')},
