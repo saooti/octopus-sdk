@@ -182,6 +182,7 @@ export default defineComponent({
         "podcastAddict",
         "playerFm",
         "pocketCasts",
+        "iHeart"
       ];
       let count = 0;
       for (let i = 0, len = platformShare.length; i < len; i++) {

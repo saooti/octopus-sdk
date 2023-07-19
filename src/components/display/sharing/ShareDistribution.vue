@@ -77,6 +77,7 @@ export default defineComponent({
           icon: "saooti-google-podcasts",
           title: "Google Podcasts",
         },
+        {url:this.getUrl('iHeart'), icon:'saooti-iheart', title:'iHeart'},
         {
           url: this.getUrl("PlayerFM"),
           icon: "saooti-playerfm",
