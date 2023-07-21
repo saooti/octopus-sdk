@@ -96,6 +96,7 @@ export default defineComponent({
     percentLiveProgress: { default: 0, type: Number },
     durationLivePosition: { default: 0, type: Number },
     listenTime: { default: 0, type: Number },
+    hlsReady: { default: false , type: Boolean},
   },
 
   emits: ["stopPlayer", "update:notListenTime", "changePlayerLargeVersion"],

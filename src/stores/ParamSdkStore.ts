@@ -27,7 +27,7 @@ const state: ParamStore = {
     ShareButtons: true,
     ShareDistribution: true,
     MiniplayerUri: "https://playerbeta.dev2.saooti.org/",
-    hlsUri: "https://hls.dev2.saooti.org/",
+    hlsUri: "https://hls.live.dev2.saooti.org/",
     mainRubrique: 0,
     resourceUrl: undefined,
     podcastItemShowEmission: false,
