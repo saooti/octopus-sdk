@@ -30,7 +30,6 @@ export default defineComponent({
   },
   props: {
     classProgress:{ default: "", type: String},
-    hlsReady: { default: false, type: Boolean},
     showTimeline: { default: false, type: Boolean},
     comments: { default: ()=>[], type: Array as ()=>Array<CommentPodcast>},
     displayAlertBar: { default: false, type: Boolean},

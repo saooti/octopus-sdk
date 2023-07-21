@@ -26,6 +26,7 @@
         :percent-live-progress="percentLiveProgress"
         :duration-live-position="durationLivePosition"
         :listen-time="listenTime"
+        :hlsReady="hlsReady"
         @stopPlayer="stopPlayer"
         @changePlayerLargeVersion="playerUpdateLargeVersion(true)"
       />
@@ -38,6 +39,7 @@
         :percent-live-progress="percentLiveProgress"
         :duration-live-position="durationLivePosition"
         :listen-time="listenTime"
+        :hlsReady="hlsReady"
         @stopPlayer="stopPlayer"
         @changePlayerLargeVersion="playerUpdateLargeVersion(false)"
       />
@@ -74,7 +76,8 @@ export default defineComponent({
       durationLivePosition: 0 as number,
       displayAlertBar: false as boolean,
       comments: [] as Array<CommentPodcast>,
-      audioUrlToPlay: "" as string
+      audioUrlToPlay: "" as string,
+      hlsReady: false as boolean,
     };
   },
   computed: {
