@@ -15,8 +15,11 @@
       />
       <ClassicDatePicker
         :date="fromDate"
-        template-class="mx-2 px-2 py-1 border rounded focus:border-blue-300"
-        @updateDate="fromDate=$event;updateFromDate"
+        class="mx-2"
+        @update-date="
+          fromDate = $event;
+          updateFromDate();
+        "
       />
     </div>
     <div class="d-flex align-items-center">
@@ -28,8 +31,11 @@
       />
       <ClassicDatePicker
         :date="toDate"
-        template-class="ms-2 px-2 py-1 border rounded focus:border-blue-300"
-        @updateDate="toDate=$event;updateToDate"
+        class="mx-2"
+        @update-date="
+          toDate = $event;
+          updateToDate();
+        "
       />
     </div>
   </div>
