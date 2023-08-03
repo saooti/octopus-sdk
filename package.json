@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "37.0.8",
+  "version": "37.0.9",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -23,6 +23,7 @@
     "@tiptap/vue-3": "^2.0.4",
     "@vue/cli": "^5.0.8",
     "@vue/compat": "^3.3.4",
+    "@vuepic/vue-datepicker": "^5.4.0",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
@@ -75,14 +76,19 @@
       "prettier",
       "plugin:prettier/recommended"
     ],
-    "plugins": ["prettier"],
+    "plugins": [
+      "prettier"
+    ],
     "rules": {
       "no-console": "off",
       "no-debugger": "off",
       "@typescript-eslint/ban-ts-ignore": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "no-async-promise-executor": "off",
-      "prettier/prettier": ["error", {}]
+      "prettier/prettier": [
+        "error",
+        {}
+      ]
     },
     "parserOptions": {
       "parser": "@typescript-eslint/parser"

@@ -1,59 +1,72 @@
 <template>
-  <DatePicker
-    ref="datePicker"
-    :model-value="undefined !== range ? range : date"
-    :model-modifiers="{ range: undefined !== range }"
-    :mode="mode"
-    color="green"
-    is24hr
+  <VueDatePicker
+    :model-value="modelVal"
+    :range="undefined !== range"
     :max-date="isMaxDate ? now : undefined"
     :min-date="isMinDate ? now : undefined"
-    :columns="columnNumber"
-    :is-inline="columnNumber > 1"
-    :update-on-input="conditionEdit"
-    :masks="isMask ? masks : undefined"
-    :time-accuracy="timeAccuracy"
+    :multi-calendars="columnNumber>1 && !isTimePicker? columnNumber : false"
+    :enable-time-picker="displayTimePicker && !isTimePicker"
+    :time-picker="isTimePicker"
+    :inline="columnNumber > 1"
+    :enable-seconds="displaySeconds"
+    :locale="formatLocale"
+    :format="format"
+    :auto-apply="true"
+    :readonly="readonly"
+    :teleport="useTeleport"
+    :clearable="false"
+    :time-picker-inline="!isTimePicker ? true : false"
+    :input-class-name="templateClass"
     @update:model-value="$emit('updateDate', $event)"
-  >
-    <template v-if="templateClass" #default="{ inputValue, inputEvents }">
-      <input :class="templateClass" :value="inputValue" v-on="inputEvents" />
-    </template>
-  </DatePicker>
+  />
 </template>
 
 <script lang="ts">
 import dayjs from "dayjs";
-import { DatePicker } from "v-calendar";
+import VueDatePicker from '@vuepic/vue-datepicker';
 import { defineComponent } from "vue";
 export default defineComponent({
   components: {
-    DatePicker,
+    VueDatePicker,
   },
   props: {
+    time: { default:undefined, type: Object as () => {hours:number, minutes:number, seconds:number} },
     date: { default: undefined, type: Date },
-    range: {
-      default: undefined,
-      type: Object as () => { start: Date; end: Date },
-    },
+    range: {default: undefined,type: Array as () => Array<Date>},
     isMaxDate: { default: false, type: Boolean },
     isMinDate: { default: false, type: Boolean },
     columnNumber: { default: 1, type: Number },
-    timeAccuracy: { default: 2, type: Number },
+    displaySeconds: { default: false, type: Boolean },
+    displayTimePicker:{ default: true, type: Boolean },
+    isTimePicker:{ default: false, type: Boolean },
+    useTeleport:{ default: false, type: Boolean },
     templateClass: { default: undefined, type: String },
-    mode: { default: "dateTime", type: String },
-    isMask: { default: false, type: Boolean },
-    conditionEdit: { default: true, type: Boolean },
+    readonly: { default: false, type: Boolean },
   },
 
   emits: ["updateDate", "update:date"],
   data() {
     return {
-      masks: {
-        input: "YYYY-MM-DD",
-      },
     };
   },
   computed: {
+    modelVal(){
+      return this.time ?? this.range ?? this.date;
+    },
+    formatLocale(){
+      return this.$i18n.locale;
+    },
+    format(){
+      let timeString = '';
+      if(this.displayTimePicker || this.isTimePicker){
+        timeString ='HH:mm';
+        if(this.displaySeconds){
+          timeString ='HH:mm:ss';
+        } 
+      }
+      const dayString = this.isTimePicker ? timeString : 'dd/MM/yyyy '+timeString;
+      return this.range ? dayString+' - '+dayString : dayString;
+    },
     now(): Date {
       return dayjs().toDate();
     },
@@ -61,27 +74,9 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
-@import "v-calendar/dist/style.css";
-.octopus-app {
-  .vc-base-select select {
-    border: 0 !important;
-  }
-  .vc-select select {
-    padding: 0 !important;
-  }
-  .vc-date {
-    .vc-month,
-    .vc-day,
-    .vc-year {
-      color: $octopus-primary-color !important;
-    }
-  }
-  .vc-highlight {
-    background-color: $octopus-primary-color !important;
-  }
-  .vc-select select:focus {
-    border-color: $octopus-primary-color !important;
-  }
+@import '@vuepic/vue-datepicker/dist/main.css';
+.dp__theme_light {
+   --dp-primary-color: #1a8658;
+   --dp-time-font-size: 1rem;
 }
 </style>
