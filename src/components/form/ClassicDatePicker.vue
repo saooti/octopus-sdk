@@ -16,10 +16,10 @@
     :multi-calendars="columnNumber>1 ? columnNumber : false"
     :inline="columnNumber > 1"
     :enable-time-picker="!isTimePicker ?displayTimePicker : undefined"
-    :time-picker-inline="!isTimePicker ? true : undefined"
     :aria-labels="ariaLabels"
     @update:model-value="$emit('updateDate', $event)"
-  />
+  >
+  </VueDatePicker>
 </template>
 
 <script lang="ts">
@@ -80,7 +80,8 @@ export default defineComponent({
   },
   methods:{
     formatDate(value: Date): string{
-      return value.getDay()+' '+value.getDate()+'/'+value.getMonth()+'/'+value.getFullYear();
+      const realMonth = value.getMonth() + 1;
+      return value.getDate()+'/'+(realMonth < 10 ? "0" : "") + realMonth+'/'+value.getFullYear();
     }
   }
 })
