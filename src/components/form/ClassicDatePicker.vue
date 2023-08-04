@@ -17,6 +17,7 @@
     :inline="columnNumber > 1"
     :enable-time-picker="!isTimePicker ?displayTimePicker : undefined"
     :time-picker-inline="!isTimePicker ? true : undefined"
+    :aria-labels="ariaLabels"
     @update:model-value="$emit('updateDate', $event)"
   />
 </template>
@@ -50,6 +51,12 @@ export default defineComponent({
     };
   },
   computed: {
+    ariaLabels(){
+      return {
+        input: this.date ? this.formatDate(this.date) : undefined,
+        day : (value: {value: Date}) => {return this.formatDate(value.value);}
+      }
+    },
     modelVal(){
       return this.time ?? this.range ?? this.date;
     },
@@ -70,6 +77,11 @@ export default defineComponent({
     now(): Date {
       return dayjs().toDate();
     },
+  },
+  methods:{
+    formatDate(value: Date): string{
+      return value.getDay()+' '+value.getDate()+'/'+value.getMonth()+'/'+value.getFullYear();
+    }
   }
 })
 </script>
