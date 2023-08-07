@@ -5,6 +5,7 @@
   >
     <div
       class="octopus-progress-bar"
+      :class="isBack ? 'no-transition': ''"
       role="progressbar"
       aria-valuenow="0"
       aria-valuemin="0"
@@ -27,6 +28,7 @@ export default defineComponent({
   data() {
     return {
       percentInterval: undefined as ReturnType<typeof setTimeout> | undefined,
+      isBack: false as boolean,
     };
   },
 
@@ -44,6 +46,9 @@ export default defineComponent({
   },
   mounted() {
     this.handlePercentInterval();
+  },
+  unmounted() {
+    clearInterval(this.percentInterval as unknown as number);
   },
   methods: {
     ...mapActions(usePlayerStore, ["playerUpdateElapsed"]),
@@ -66,10 +71,11 @@ export default defineComponent({
         .diff(dayjs(this.playerRadio.metadata.startDate));
       const percentPlayed =
         actualMilliSecondsPlayed /
-        (this.playerRadio?.metadata.mediaDuration * 1000);
+        (this.playerRadio?.metadata.playDuration * 1000);
+      this.isBack = percentPlayed < this.playerElapsed;
       this.playerUpdateElapsed(
         percentPlayed,
-        this.playerRadio?.metadata.mediaDuration,
+        this.playerRadio?.metadata.playDuration,
       );
     },
   },
@@ -82,6 +88,9 @@ export default defineComponent({
     background-color: #d1d1d1;
     .octopus-progress-bar {
       background-color: #747474;
+    }
+    .no-transition{
+      transition: none !important;
     }
   }
 }

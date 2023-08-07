@@ -83,8 +83,8 @@ export const usePlayerStore = defineStore("PlayerStore", {
     transcriptText(): string {
       return this.playerTranscript?.actualText ?? "";
     },
-    radioUrl(): string {
-      return this.playerRadio?.url ?? "";
+    radioUrl(): string|undefined {
+      return this.playerRadio?.url ?? undefined;
     },
   },
   actions: {
