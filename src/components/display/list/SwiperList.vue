@@ -29,7 +29,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { resizePhone } from "../../mixins/resizePhone";
+import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "SwiperList",

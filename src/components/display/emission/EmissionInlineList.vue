@@ -64,7 +64,7 @@ import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
 import imageProxy from "../../mixins/imageProxy";
-import { resizePhone } from "../../mixins/resizePhone";
+import resizePhone  from "../../mixins/resizePhone";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 export default defineComponent({
   name: "EmissionInlineList",

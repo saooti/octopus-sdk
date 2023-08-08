@@ -61,7 +61,7 @@ const PHONE_WIDTH = 960;
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Playlist } from "@/stores/class/general/playlist";
-import { resizePhone } from "../../mixins/resizePhone";
+import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PodcastPlaylistInlineList",

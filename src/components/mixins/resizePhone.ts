@@ -1,6 +1,6 @@
 
 import { defineComponent } from 'vue';
-export const resizePhone = defineComponent({
+export default defineComponent({
   data() {
     return {
       isPhone: false as boolean,
@@ -11,11 +11,9 @@ export const resizePhone = defineComponent({
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
-
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
   },
-
   methods: {
     handleResize(): void {
       this.windowWidth= window.innerWidth;

@@ -58,7 +58,7 @@ import { mapState } from "pinia";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import imageProxy from "../../mixins/imageProxy";
-import { resizePhone } from "../../mixins/resizePhone";
+import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PodcastInlineListClassic",

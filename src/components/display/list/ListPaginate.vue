@@ -55,7 +55,7 @@ import ClassicLoading from "../../form/ClassicLoading.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
-import { resizePhone } from "../../mixins/resizePhone";
+import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ListPaginate",
