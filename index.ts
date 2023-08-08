@@ -80,6 +80,7 @@ import imageProxy from "./src/components/mixins/imageProxy.ts";
 import orgaFilter from "./src/components/mixins/organisationFilter.ts";
 import initSDK from "./src/components/mixins/init.ts";
 import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
+import resizePhone from "./src/components/mixins/resizePhone.ts";
 
 export {
     selenium,
@@ -88,5 +89,6 @@ export {
     imageProxy,
     orgaFilter,
     initSDK,
-    tagOfMixins
+    tagOfMixins,
+    resizePhone
 };

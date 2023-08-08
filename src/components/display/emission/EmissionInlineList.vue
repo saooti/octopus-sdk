@@ -64,6 +64,7 @@ import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
 import imageProxy from "../../mixins/imageProxy";
+import { resizePhone } from "../../mixins/resizePhone";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 export default defineComponent({
   name: "EmissionInlineList",
@@ -73,7 +74,7 @@ export default defineComponent({
     ClassicLoading,
   },
 
-  mixins: [handle403, imageProxy],
+  mixins: [handle403, imageProxy, resizePhone],
 
   props: {
     organisationId: { default: undefined, type: String },
@@ -98,6 +99,8 @@ export default defineComponent({
       direction: 1 as number,
       alignLeft: false as boolean,
       rubriques: undefined as Array<Rubrique> | undefined,
+      isPhone: false as boolean,
+      windowWidth: 0 as number
     };
   },
 
@@ -129,18 +132,23 @@ export default defineComponent({
     sizeItem() {
       this.handleResize();
     },
-  },
-
-  created() {
-    window.addEventListener("resize", this.handleResize);
-  },
-
-  unmounted() {
-    window.removeEventListener("resize", this.handleResize);
+    windowWidth(){
+      if (!this.$el) return;
+      if (this.overflowScroll) {
+        this.size = 20;
+        return;
+      }
+      if (window.innerWidth <= PHONE_WIDTH) {
+        this.size = 10;
+        return;
+      }
+      const width = (this.$el as HTMLElement).offsetWidth;
+      const sixteen = domHelper.convertRemToPixels(this.itemSize + 0.7);
+      this.size = Math.floor(width / sixteen);
+    }
   },
 
   mounted() {
-    this.handleResize();
     this.fetchNext();
     if (this.displayRubriquage) {
       this.fetchRubriques();
@@ -199,20 +207,6 @@ export default defineComponent({
         this.fetchNext();
       }
       this.index += 1;
-    },
-    handleResize(): void {
-      if (!this.$el) return;
-      if (this.overflowScroll) {
-        this.size = 20;
-        return;
-      }
-      if (window.innerWidth <= PHONE_WIDTH) {
-        this.size = 10;
-        return;
-      }
-      const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(this.itemSize + 0.7);
-      this.size = Math.floor(width / sixteen);
     },
     reset(): void {
       this.loading = true;

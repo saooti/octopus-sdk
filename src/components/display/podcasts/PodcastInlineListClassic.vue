@@ -58,6 +58,7 @@ import { mapState } from "pinia";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import imageProxy from "../../mixins/imageProxy";
+import { resizePhone } from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PodcastInlineListClassic",
@@ -67,7 +68,7 @@ export default defineComponent({
     ClassicLoading,
     PodcastInlineListTemplate,
   },
-  mixins: [imageProxy],
+  mixins: [imageProxy, resizePhone],
   props: {
     organisationId: { default: () => [], type: Array as () => Array<string> },
     emissionId: { default: undefined, type: Number },
@@ -97,6 +98,8 @@ export default defineComponent({
       allPodcasts: [] as Array<Podcast>,
       direction: 1 as number,
       alignLeft: false as boolean,
+      isPhone: false as boolean,
+      windowWidth: 0 as number
     };
   },
   computed: {
@@ -139,6 +142,20 @@ export default defineComponent({
       this.reset();
       this.fetchNext();
     },
+    windowWidth(){
+      if (!this.$el) return;
+      if (this.overflowScroll) {
+        this.size = 20;
+        return;
+      }
+      if (this.windowWidth <= PHONE_WIDTH) {
+        this.size = 10;
+        return;
+      }
+      const width = (this.$el as HTMLElement).offsetWidth;
+      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.8);
+      this.size = Math.floor(width / sixteen);
+    }
   },
 
   created() {
@@ -148,15 +165,9 @@ export default defineComponent({
     if (undefined !== this.isArrow) {
       this.$emit("update:isArrow", true);
     }
-    window.addEventListener("resize", this.handleResize);
-  },
-
-  unmounted() {
-    window.removeEventListener("resize", this.handleResize);
   },
 
   mounted() {
-    this.handleResize();
     this.fetchNext();
   },
   methods: {
@@ -248,20 +259,7 @@ export default defineComponent({
       }
       this.index += 1;
     },
-    handleResize(): void {
-      if (!this.$el) return;
-      if (this.overflowScroll) {
-        this.size = 20;
-        return;
-      }
-      if (window.innerWidth <= PHONE_WIDTH) {
-        this.size = 10;
-        return;
-      }
-      const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.8);
-      this.size = Math.floor(width / sixteen);
-    },
+
     sortPopular(): void {
       if (this.popularSort) return;
       this.popularSort = true;

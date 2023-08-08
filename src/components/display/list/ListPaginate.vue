@@ -55,6 +55,7 @@ import ClassicLoading from "../../form/ClassicLoading.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
+import { resizePhone } from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ListPaginate",
@@ -63,6 +64,7 @@ export default defineComponent({
     PaginateParams,
     ClassicLoading,
   },
+  mixins: [resizePhone],
   props: {
     first: { default: 0, type: Number },
     rowsPerPage: { default: 30, type: Number },
@@ -79,15 +81,13 @@ export default defineComponent({
   emits: ["update:first", "update:rowsPerPage", "update:isMobile"],
   data() {
     return {
-      windowWidth: window.innerWidth,
+      isPhone: false as boolean,
+      windowWidth: 0 as number
     };
   },
   computed: {
     buttonPlus(): boolean {
       return state.generalParameters.buttonPlus as boolean;
-    },
-    isPhone() {
-      return 960 >= this.windowWidth;
     },
     rangeSize() {
       if (this.windowWidth > 1600) {
@@ -104,18 +104,7 @@ export default defineComponent({
       },
     },
   },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener("resize", this.onResize);
-    });
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.onResize);
-  },
   methods: {
-    onResize() {
-      this.windowWidth = window.innerWidth;
-    },
     fetchMore() {
       this.$emit("update:first", this.first + this.rowsPerPage);
     },

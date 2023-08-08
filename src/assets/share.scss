@@ -100,7 +100,7 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     @media (max-width: 960px) {
-      overflow-y: scroll;
+      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
       padding-bottom: 1rem;

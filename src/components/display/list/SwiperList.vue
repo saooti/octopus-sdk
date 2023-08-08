@@ -1,15 +1,25 @@
 <template>
-  <swiper
-    :slides-per-view="numberItem"
-    :space-between="0"
-    :loop="listObject.length >= numberItem"
-    :navigation="true"
-    :modules="modules"
-  >
-    <swiper-slide v-for="(obj, index) in listObject" :key="obj">
-      <slot name="octopusSlide" :option="obj" :index="index" />
-    </swiper-slide>
-  </swiper>
+  <div class="position-relative">
+    <template v-if="!isPhone">
+      <button class="btn-transparent swiper-button-prev" v-show="isLoop" @click="slidePrevButton()"></button>
+      <swiper
+        :slides-per-view="numberItem"
+        :space-between="0"
+        :loop="isLoop"
+        :navigation="true"
+        :modules="modules"
+      >
+        <swiper-slide v-for="(obj, index) in listObject" :key="obj">
+          <slot name="octopusSlide" :option="obj" :index="index" />
+        </swiper-slide>
+      </swiper>
+    </template>
+    <div class="element-list-inline" v-else>
+      <div v-for="(obj, index) in listObject" :key="obj">
+        <slot name="octopusSlide" :option="obj" :index="index" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,6 +29,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { resizePhone } from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "SwiperList",
@@ -27,6 +38,7 @@ export default defineComponent({
     Swiper,
     SwiperSlide,
   },
+  mixins:[resizePhone],
 
   props: {
     listObject: { default: () => [], type: Array as () => Array<unknown> },
@@ -37,6 +49,8 @@ export default defineComponent({
     return {
       modules: [Navigation],
       numberItem: 5 as number,
+      isPhone: false as boolean,
+      windowWidth: 0 as number
     };
   },
   computed: {
@@ -44,31 +58,29 @@ export default defineComponent({
       if (this.sizeItemOverload) {
         return this.sizeItemOverload;
       }
-      if (window.innerWidth <= 450) {
+      if (this.windowWidth <= 450) {
         return 12.5;
       }
       return state.generalParameters.podcastItem
         ? state.generalParameters.podcastItem
         : 13.5;
     },
+    isLoop():boolean{
+      return this.listObject.length >= this.numberItem;
+    },
   },
-
-  created() {
-    window.addEventListener("resize", this.handleResize);
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.handleResize);
-  },
-
-  mounted() {
-    this.handleResize();
-  },
-  methods: {
-    handleResize(): void {
+  watch:{
+    windowWidth(){
       if (!this.$el) return;
       const width = (this.$el as HTMLElement).offsetWidth - 95;
       const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.5);
       this.numberItem = Math.max(1, Math.floor(width / sixteen));
+    }
+  },
+
+  methods: {
+    slidePrevButton(){
+      this.$el.querySelector(".swiper").swiper.slidePrev();
     },
   },
 });
@@ -91,23 +103,14 @@ export default defineComponent({
   right: 0;
 }
 .swiper-button-prev {
-  left: 0;
+  left: -35px;
 }
-/* .swiper-slide-active{
-  padding-left:27px;
-  @media (max-width: 550px) {
-    padding-left:0;
-  }
-}
-.swiper-slide-next{
-  padding-right:27px;
-} */
 .swiper-button-lock {
   display: flex;
 }
 .swiper-slide {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
 }
 </style>
