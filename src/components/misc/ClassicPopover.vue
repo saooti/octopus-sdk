@@ -31,6 +31,8 @@ export default defineComponent({
     isFixed: { type: Boolean, default: false },
     relativeClass: { type: String, default: undefined },
     leftPos: { type: Boolean, default: false },
+    topPos: { type: Boolean, default: false },
+
   },
   data() {
     return {
@@ -123,12 +125,13 @@ export default defineComponent({
           parentRight -
           (this.$refs.popover as HTMLElement).clientWidth
         : rectElement.left - parentLeft;
-      this.posY =
-        rectElement.bottom +
+      const yPosParent = this.topPos ? rectElement.top:rectElement.bottom;
+      const yGap = this.topPos ? -5 - (this.$refs.popover as HTMLElement).clientHeight :5;
+      this.posY = yPosParent +
         parentScrollTop -
         parentTop +
         (this.isFixed ? 0 : window.scrollY) +
-        5;
+        yGap;
     },
     async clearDataBlur(e: FocusEvent) {
       if (!e.relatedTarget) {

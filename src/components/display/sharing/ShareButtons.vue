@@ -16,8 +16,6 @@
         target="popover-share-help"
         :title="$t('Help')"
         :content="$t('Share this page without edit and share blocks')"
-        relative-class="page-element"
-        :is-fixed="true"
       />
     </div>
     <ShareButtonsIntern
