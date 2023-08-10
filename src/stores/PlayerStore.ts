@@ -21,6 +21,7 @@ interface PlayerState {
   playerSeekTime?: number;
   playerTranscript?: Transcript;
   playerLargeVersion: boolean;
+  playerVideo: boolean;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -34,10 +35,12 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerRadio: undefined,
     playerSeekTime: 0,
     playerLargeVersion: false,
+    playerVideo: false,
   }),
   getters: {
     playerHeight() {
       if ("STOPPED" === this.playerStatus) return 0;
+      if (this.playerVideo) return "0px"/* "281px" */;
       if (this.playerLargeVersion) return "27rem";
       if (window.innerWidth > 450) return "5rem";
       return "3.5rem";
@@ -88,7 +91,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
   },
   actions: {
-    playerPlay(param?: any) {
+    playerPlay(param?: any, isVideo = false) {
       if (!param) {
         this.playerStatus = "STOPPED";
         this.playerPodcast = undefined;
@@ -96,11 +99,12 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerLive = undefined;
         this.playerRadio = undefined;
         this.playerElapsed = 0;
+        this.playerVideo = false;
         return;
       }
       if (
         (this.playerPodcast &&
-          this.playerPodcast.podcastId === param.podcastId) ||
+          this.playerPodcast.podcastId === param.podcastId && isVideo === this.playerVideo) ||
         (this.playerMedia && this.playerMedia.mediaId === param.mediaId) ||
         (this.playerLive && this.playerLive.conferenceId === param.conferenceId)
       ) {
@@ -112,6 +116,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerMedia = undefined;
       this.playerLive = undefined;
       this.playerRadio = undefined;
+      this.playerVideo = isVideo;
       this.playerElapsed = 0;
       if (
         param.conferenceId &&

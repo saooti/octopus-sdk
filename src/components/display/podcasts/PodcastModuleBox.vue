@@ -17,7 +17,6 @@
           :playing-podcast="playingPodcast"
           :fetch-conference="fetchConference"
           :is-animator-live="isOctopusAndAnimator"
-          @play-podcast="playPodcast"
         />
         <div class="d-flex justify-content-between flex-wrap mb-2">
           <div v-if="0 !== date.length" :class="!isLiveReady ? 'me-5' : ''">
@@ -173,7 +172,7 @@ export default defineComponent({
     fetchConference: { default: undefined, type: Object as () => Conference },
   },
 
-  emits: ["playPodcast", "updatePodcast"],
+  emits: ["updatePodcast"],
 
   computed: {
     errorMessage(): string {
@@ -261,9 +260,6 @@ export default defineComponent({
     },
   },
   methods: {
-    playPodcast(podcast: Podcast): void {
-      this.$emit("playPodcast", podcast);
-    },
     removeDeleted(): void {
       if (window.history.length > 1) {
         this.$router.go(-1);

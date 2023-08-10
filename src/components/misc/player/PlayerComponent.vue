@@ -1,48 +1,55 @@
 <template>
   <div
     class="player-container"
+    :class="playerVideo? 'player-video':''"
     :style="{ height: playerHeight }"
     @transitionend="onHidden"
   >
     <template v-if="display">
-      <audio
-        id="audio-player"
-        :src="!playerLive && !playerRadio ? audioUrlToPlay : undefined"
-        autoplay
-        @timeupdate="onTimeUpdate"
-        @ended="onFinished"
-        @playing="onPlay"
-        @durationChange="onTimeUpdate"
-        @error="onError"
-        @seeked="onSeeked"
-        @pause="onPause"
+      <PlayerVideo 
+        v-if="playerVideo"
+        @close="closePlayer"
       />
-      <PlayerCompact
-        v-if="!playerLargeVersion"
-        v-model:notListenTime="notListenTime"
-        :player-error="playerError"
-        :comments="comments"
-        :display-alert-bar="displayAlertBar"
-        :percent-live-progress="percentLiveProgress"
-        :duration-live-position="durationLivePosition"
-        :listen-time="listenTime"
-        :hlsReady="hlsReady"
-        @stop-player="stopPlayer"
-        @change-player-large-version="playerUpdateLargeVersion(true)"
-      />
-      <PlayerLarge
-        v-else
-        v-model:notListenTime="notListenTime"
-        :player-error="playerError"
-        :comments="comments"
-        :display-alert-bar="displayAlertBar"
-        :percent-live-progress="percentLiveProgress"
-        :duration-live-position="durationLivePosition"
-        :listen-time="listenTime"
-        :hlsReady="hlsReady"
-        @stop-player="stopPlayer"
-        @change-player-large-version="playerUpdateLargeVersion(false)"
-      />
+      <template v-else>
+        <audio
+          id="audio-player"
+          :src="!playerLive && !playerRadio ? audioUrlToPlay : undefined"
+          autoplay
+          @timeupdate="onTimeUpdate"
+          @ended="onFinished"
+          @playing="onPlay"
+          @durationChange="onTimeUpdate"
+          @error="onError"
+          @seeked="onSeeked"
+          @pause="onPause"
+        />
+        <PlayerCompact
+          v-if="!playerLargeVersion"
+          v-model:notListenTime="notListenTime"
+          :player-error="playerError"
+          :comments="comments"
+          :display-alert-bar="displayAlertBar"
+          :percent-live-progress="percentLiveProgress"
+          :duration-live-position="durationLivePosition"
+          :listen-time="listenTime"
+          :hlsReady="hlsReady"
+          @stop-player="stopPlayer"
+          @change-player-large-version="playerUpdateLargeVersion(true)"
+        />
+        <PlayerLarge
+          v-else
+          v-model:notListenTime="notListenTime"
+          :player-error="playerError"
+          :comments="comments"
+          :display-alert-bar="displayAlertBar"
+          :percent-live-progress="percentLiveProgress"
+          :duration-live-position="durationLivePosition"
+          :listen-time="listenTime"
+          :hlsReady="hlsReady"
+          @stop-player="stopPlayer"
+          @change-player-large-version="playerUpdateLargeVersion(false)"
+        />
+      </template>
     </template>
   </div>
 </template>
@@ -53,13 +60,17 @@ import PlayerCompact from "../player/PlayerCompact.vue";
 import PlayerLarge from "../player/PlayerLarge.vue";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
+const PlayerVideo = defineAsyncComponent(
+  () => import("../player/PlayerVideo.vue"),
+);
 export default defineComponent({
   name: "PlayerComponent",
 
   components: {
     PlayerCompact,
     PlayerLarge,
+    PlayerVideo
   },
   mixins: [playerLogic],
   emits: ["hide"],
@@ -85,6 +96,7 @@ export default defineComponent({
       "playerStatus",
       "playerHeight",
       "playerLargeVersion",
+      "playerVideo"
     ]),
     display() {
       return "STOPPED" !== this.playerStatus;
@@ -109,6 +121,9 @@ export default defineComponent({
         this.forceHide = false;
       }
     },
+    closePlayer(){
+      this.playerPlay();
+    },
     onPause() {
       if ("PLAYING" === this.playerStatus) {
         this.playerChangeStatus(true);
@@ -120,7 +135,7 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app {
-  .player-container {
+  .player-container{
     max-height: 94%;
     position: sticky;
     overflow: hidden;
