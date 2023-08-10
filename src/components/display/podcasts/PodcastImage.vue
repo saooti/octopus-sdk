@@ -32,7 +32,7 @@
       v-if="hidePlay || recordingLive"
       class="image-play-button"
       :class="classicPodcastPlay ? '' : 'transparent-background'"
-      @click="play"
+      @click="play(false)"
     >
       <div v-if="!isLiveToBeRecorded" class="icon-container">
         <div v-if="!playingPodcast" :title="$t('Play')" class="saooti-play" />
@@ -61,6 +61,11 @@
         {{ textVisible }}
       </div>
     </button>
+    <button 
+      v-if="isVideoPodcast"
+      class="btn admin-button btn-play-video saooti-video"
+      @click="play(true)"
+    ></button>
     <div
       v-if="displayDescription && isMobile"
       class="background-icon bg-primary saooti-arrow-up"
@@ -102,7 +107,11 @@ export default defineComponent({
       "playerPodcast",
       "playerLive",
       "playerStatus",
+      "playerVideo"
     ]),
+    isVideoPodcast(): boolean{
+      return undefined!==this.podcast.video?.videoId;
+    },
     playingPodcast() {
       return (
         this.playerPodcast?.podcastId === this.podcast.podcastId ||
@@ -248,16 +257,16 @@ export default defineComponent({
 
   methods: {
     ...mapActions(usePlayerStore, ["playerChangeStatus", "playerPlay"]),
-    play(): void {
+    play(isVideo: boolean): void {
       if (this.isLiveToBeRecorded) {
         return;
       }
-      if (this.playingPodcast) {
+      if (this.playingPodcast && isVideo===this.playerVideo) {
         this.playerChangeStatus("PLAYING" === this.playerStatus);
         return;
       }
       if (!this.recordingLive) {
-        this.playerPlay(this.podcast);
+        this.playerPlay(this.podcast, isVideo);
       } else {
         this.playerPlay({
           ...this.podcast,
@@ -308,6 +317,15 @@ export default defineComponent({
   }
   .transparent-background {
     background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .btn.btn-play-video{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0.5rem;
+    background: $primaryColorLessTransparent !important;
+    color:white !important
   }
 
   .image-play-button .play-button-error-icon {

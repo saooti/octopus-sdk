@@ -2,6 +2,7 @@ import { Emission, emptyEmissionData } from "./emission";
 import { Organisation } from "./organisation";
 import { Participant } from "./participant";
 import { Person } from "../user/person";
+import { Video } from "./video";
 export interface Podcast {
   imageUrl?: string;
   animators?: Array<Participant>;
@@ -39,7 +40,9 @@ export interface Podcast {
   title: string;
   weekDownloadCount?: number;
   order?: number;
+  video?: Video;
 }
+
 export function emptyPodcastData(): Podcast {
   return {
     podcastId: 0,
