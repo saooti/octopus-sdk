@@ -110,7 +110,7 @@ export default defineComponent({
       "playerVideo"
     ]),
     isVideoPodcast(): boolean{
-      return undefined!==this.podcast.video?.videoId;
+      return this.fetchConference?.videoProfile?.includes('video_') || undefined!==this.podcast.video?.videoId;
     },
     playingPodcast() {
       return (
@@ -271,7 +271,7 @@ export default defineComponent({
         this.playerPlay({
           ...this.podcast,
           ...{ conferenceId: this.fetchConference?.conferenceId },
-        });
+        }, isVideo);
       }
       if (this.clickPlayGoPage) {
         this.$router.push("/main/pub/podcast/" + this.podcast.podcastId);

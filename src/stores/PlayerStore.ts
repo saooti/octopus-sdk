@@ -106,7 +106,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
         (this.playerPodcast &&
           this.playerPodcast.podcastId === param.podcastId && isVideo === this.playerVideo) ||
         (this.playerMedia && this.playerMedia.mediaId === param.mediaId) ||
-        (this.playerLive && this.playerLive.conferenceId === param.conferenceId)
+        (this.playerLive && this.playerLive.conferenceId === param.conferenceId && isVideo === this.playerVideo)
       ) {
         //Do nothing
         return;

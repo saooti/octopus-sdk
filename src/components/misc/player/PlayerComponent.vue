@@ -6,10 +6,7 @@
     @transitionend="onHidden"
   >
     <template v-if="display">
-      <PlayerVideo 
-        v-if="playerVideo"
-        @close="closePlayer"
-      />
+      <PlayerVideo v-if="playerVideo"/>
       <template v-else>
         <audio
           id="audio-player"
@@ -62,7 +59,7 @@ import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const PlayerVideo = defineAsyncComponent(
-  () => import("../player/PlayerVideo.vue"),
+  () => import("./PlayerVideo.vue"),
 );
 export default defineComponent({
   name: "PlayerComponent",
@@ -120,9 +117,6 @@ export default defineComponent({
         this.playerPlay();
         this.forceHide = false;
       }
-    },
-    closePlayer(){
-      this.playerPlay();
     },
     onPause() {
       if ("PLAYING" === this.playerStatus) {

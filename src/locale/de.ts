@@ -343,4 +343,5 @@ export default {
   "UnorderedList":"Ungeordnete Liste",
   "List":"Aufführen",
   "Display HTML":"HTML anzeigen",
+  "Video is unavailable":"Video ist nicht verfügbar",
 };

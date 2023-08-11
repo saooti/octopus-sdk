@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative">
+  <div class="position-relative w-100">
     <template v-if="!isPhone">
       <button class="btn-transparent swiper-button-prev" v-show="isLoop" @click="slidePrevButton()"></button>
       <swiper

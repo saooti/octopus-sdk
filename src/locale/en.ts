@@ -343,4 +343,5 @@ export default {
   "UnorderedList":"Unordered list",
   "List":"List",
   "Display HTML":"Display HTML",
+  "Video is unavailable":"Video is unavailable",
 };

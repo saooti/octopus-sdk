@@ -350,4 +350,5 @@ export default {
   "UnorderedList":"Liste non ordonnée",
   "List":"Liste",
   "Display HTML":"Afficher HTML",
+  "Video is unavailable":"La vidéo est indisponible",
 };

@@ -333,4 +333,5 @@ export default {
   "UnorderedList":"Neurejen seznam",
   "List":"Seznam",
   "Display HTML":"Prikaži HTML",
+  "Video is unavailable":"Videoposnetek ni na voljo",
 };

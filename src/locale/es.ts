@@ -344,4 +344,5 @@ export default {
   "UnorderedList":"Lista desordenada",
   "List":"Lista",
   "Display HTML":"Mostrar HTML",
+  "Video is unavailable":"El vídeo no está disponible",
 };

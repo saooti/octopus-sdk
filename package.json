@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "37.0.16",
+  "version": "37.0.17",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -14,6 +14,8 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "@clappr/core": "0.4.27",
+    "@clappr/hlsjs-playback": "^1.1.0",
     "@popperjs/core": "^2.11.8",
     "@saooti/octopus-api": "^0.34.3",
     "@tiptap/extension-link": "^2.0.4",

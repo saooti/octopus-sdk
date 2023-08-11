@@ -3,74 +3,60 @@
     <template v-if="playerVideo">
       <button 
         class="btn btn-transparent video-close saooti-remove"
-        @click="$emit('close')"
+        @click="closePlayer"
       />
       <div class="video-wrapper">
-        <iframe 
-          ref="iframeVideo"
-          :src="srcVideo"
-          width="500" 
-          height="281" 
-          style="z-index:1;" 
-          allowfullscreen="true" 
-          allow="autoplay" 
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+        <PlayerVideoDigiteka 
+          v-if="!playerLive"
+        />
+        <PlayerVideoHls
+          v-else
+          :hls-url="hlsUrl"
+        />
       </div>
     </template>
   </teleport>
 </template>
-
 <script lang="ts">
+import { state } from "../../../stores/ParamSdkStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
-import { mapState } from "pinia";
-import { defineComponent } from "vue";
+import { mapState, mapActions } from "pinia";
+import { defineComponent, defineAsyncComponent } from "vue";
+const PlayerVideoDigiteka = defineAsyncComponent(
+  () => import("./PlayerVideoDigiteka.vue"),
+);
+const PlayerVideoHls = defineAsyncComponent(
+  () => import("./PlayerVideoHls.vue"),
+);
 export default defineComponent({
   name: "PlayerVideo",
-  components: {
-  },
-  emits:['close'],
 
-  computed:{
-    ...mapState(usePlayerStore, [
-      "playerPodcast",
-      "playerVideo"
-    ]),
-    srcVideo(): string{
-      if(this.playerVideo){
-        return "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/"+ this.playerPodcast?.video?.videoId+"/autoplay/1";
-      }
-      return "";
+  components: {
+    PlayerVideoDigiteka,
+    PlayerVideoHls
+  },
+  data() {
+    return {
+    };
+  },
+  computed: {
+    ...mapState(usePlayerStore, ["playerVideo", "playerLive"]),
+    hlsUrl(): string{
+      if(!this.playerLive){return "";}
+      return `${state.podcastPage.hlsUri}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
+      //return "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8";
     }
   },
-  watch:{
-    srcVideo() {
-      this.goFullScreen();
+
+  methods: {
+    ...mapActions(usePlayerStore, ["playerPlay",]),
+    closePlayer(){
+      this.playerPlay();
     },
   },
-  mounted(){
-    this.goFullScreen();
-  },
-  methods:{
-    goFullScreen(){
-      if(""===this.srcVideo){return;}
-      switch (screen.orientation.type) {
-        case "landscape-primary":
-        case "landscape-secondary":
-          (this.$refs.iframeVideo as Element).requestFullscreen();
-          break;
-        case "portrait-secondary":
-        case "portrait-primary":
-          console.log("Portrait mode");
-          break;
-        default:
-          console.log("The orientation API isn't supported in this browser :(");
-      }
-    }
-  }
-
 });
 </script>
+
 <style lang="scss">
 .octopus-app {
   .video-wrapper{
@@ -85,7 +71,6 @@ export default defineComponent({
     position: fixed;
     bottom: 16.5rem;
     right: 1rem;
-
   }
   @media (max-width: 500px) {
     .video-wrapper{

@@ -33,4 +33,5 @@ export interface Conference {
   websocket?: string;
   interval?: ReturnType<typeof setTimeout>;
   duration?: number;
+  videoProfile?:string;
 }
