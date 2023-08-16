@@ -33,7 +33,8 @@ const state:ParamStore = {
     podcastItemShowEmission: false,
     clickPlayGoPage:false,
     listTypeClassic: false,
-    podcastItemDescription:true
+    podcastItemDescription:true,
+    commentBox:false,
   },
   podcastsPage: {
     MonetizableFilter: true,
@@ -122,6 +123,7 @@ export interface PodcastPage{
   podcastItemShowEmission?: boolean,
   clickPlayGoPage?:boolean,
   listTypeClassic?:boolean,
+  commentBox?:boolean,
   podcastItemDescription?:boolean,
 }
 export interface PodcastsPage{

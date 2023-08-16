@@ -39,7 +39,7 @@
           :emission="podcast.emission"
         />
         <CommentSection
-          v-if="!isPodcastmaker"
+          v-if="!pageParameters.isNotCommentBox"
           ref="commentSection"
           :podcast="podcast"
           :fetch-conference="fetchConference"
@@ -143,6 +143,7 @@ export default defineComponent({
     },
     pageParameters(){
       return {
+        isNotCommentBox: (state.generalParameters.podcastmaker as boolean) && !(state.podcastPage.commentBox as boolean),
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
       };
