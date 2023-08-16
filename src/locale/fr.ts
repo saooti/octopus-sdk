@@ -351,4 +351,7 @@ export default {
   "List":"Liste",
   "Display HTML":"Afficher HTML",
   "Video is unavailable":"La vidéo est indisponible",
+
+
+  "Show only episodes with video":"Afficher uniquement les épisodes avec une vidéo",
 };

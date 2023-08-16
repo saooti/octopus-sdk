@@ -5,6 +5,7 @@
       v-model:search-pattern="searchPattern"
     />
     <AdvancedSearch
+      v-model:only-video="onlyVideo"
       :is-education="isEducation"
       :is-emission="false"
       :reset-rubriquage="resetRubriquage"
@@ -79,6 +80,8 @@ export default defineComponent({
       noRubriquageId: [] as Array<number>,
       rubriquageId: [] as Array<number>,
       rubriqueId: [] as Array<number>,
+      //VIDEO_WORK
+      onlyVideo: false as boolean,
     };
   },
 
