@@ -60,7 +60,7 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   .video-wrapper{
-    border-radius: 2rem;
+    border-radius: 1rem;
     overflow: hidden;
     position: fixed;
     bottom: 2.5rem;

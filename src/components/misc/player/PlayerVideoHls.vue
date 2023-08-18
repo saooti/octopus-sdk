@@ -1,23 +1,19 @@
 <template>
-  <div class="video-player">
+  <div id="player-video-hls" class="video-player">
     <div v-if="errorPlay.length" class="video-live-error">{{errorPlay}}</div>
-    <video
-      v-show="useVideoSrc"
-      ref="videoelement"
-      playsinline
-    />
-    <div
-      ref="videocontainer"
-      class="video-container"
-    />
+    <video id="video-element-hls" ref="videoelement" class="video-js" playsinline></video>
   </div>
 </template>
 <script lang="ts">
-
-// @ts-ignore
-import Clappr from '@clappr/core';
-// @ts-ignore
-import HlsjsPlayback from '@clappr/hlsjs-playback';
+import videojs, { VideoJsPlayer } from 'video.js';
+import qualitySelector from 'videojs-hls-quality-selector';
+import qualityLevels from 'videojs-contrib-quality-levels';
+if (!videojs.getPlugin('qualityLevels')) {
+  videojs.registerPlugin('qualityLevels', qualityLevels);
+}
+if (!videojs.getPlugin('hlsQualitySelector')) {
+  videojs.registerPlugin('hlsQualitySelector', qualitySelector);
+}
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: "PlayerVideoHls",
@@ -31,21 +27,44 @@ export default defineComponent({
     return {
       errorPlay: "" as string,
       useVideoSrc: false as boolean,
-      player: undefined as Clappr.Player,
+      player: undefined as VideoJsPlayer|undefined,
       playing: false as boolean,
       stalledTimout: undefined as ReturnType<typeof setTimeout>|undefined,
     };
   },
   computed:{
-    videoContainer(): HTMLElement{
-      return (this.$refs.videocontainer as HTMLElement);
-    },
     videoElement(): HTMLVideoElement{
       return (this.$refs.videoelement as HTMLVideoElement);
     },
+    videoOptions(){
+      return {
+        autoplay: true,
+        controls: true,
+        liveui: true,
+        sources: [
+          {
+            src: this.hlsUrl,
+            type: 'application/x-mpegURL',
+          }
+        ],
+        html5: {
+          vhs: {
+            overrideNative:  !videojs.browser.IS_SAFARI,
+          },
+          nativeAudioTracks: false,
+          nativeVideoTracks: false,
+        },
+        plugins: {
+          hlsQualitySelector: {
+            displayCurrentQuality: true,
+          },
+        },
+      }
+    }
   },
   mounted(){
     this.playLive();
+    this.useVideoSrc = ""!==this.videoElement.canPlayType('application/vnd.apple.mpegurl') && !navigator.userAgent.includes('Android');
   },
 
   beforeUnmount() { 
@@ -64,51 +83,26 @@ export default defineComponent({
     async playLive(): Promise<void> {
       clearTimeout(this.stalledTimout);
       this.definedStalledTimeout();
-      if (this.videoElement.canPlayType('application/vnd.apple.mpegurl') && !navigator.userAgent.includes('Android')) {
-        this.useVideoSrc = true;
+      if (this.useVideoSrc) {
         this.playLiveIos();
         return;
       }
-      this.player = new Clappr.Player({
-        source: this.hlsUrl,
-        autoPlay: false,
-        height: '100%',
-        width: '100%',
-        plugins: {
-          playback: [HlsjsPlayback],
-        },
-        playback: {
-          controls: true,
-          playInline: true,
-          hlsjsConfig: {
-            enableWorker: false,
-            debug:true,
-          }
-        },
-        events: {
-          onError: async(error: Clappr.error) =>{
-            this.stopLive();
-            if (error.description && error.description.includes('403')) {
-              this.errorPlay = this.$t('Video is unavailable');
-            }else{
-              this.errorPlay = this.$t('Podcast play error');
-            }
-          },
-          onPlay:()=>{
-            this.errorPlay = "";
-            this.playing = true; 
-          },
-          onTimeUpdate:()=>{
-            clearTimeout(this.stalledTimout);
-            this.definedStalledTimeout();
-          }
+      this.player = videojs((document.getElementById("video-element-hls") as Element), this.videoOptions, () => {
+        this.errorPlay = "";
+        this.playing = true; 
+      });
+      this.player.on('timeupdate', () => {
+        clearTimeout(this.stalledTimout);
+        this.definedStalledTimeout();
+      });
+      this.player.on('error', (error) => {
+        this.stopLive();
+        if (error.description && error.description.includes('403')) {
+          this.errorPlay = this.$t('Video is unavailable');
+        }else{
+          this.errorPlay = this.$t('Podcast play error');
         }
       });
-      this.playing = true; 
-      this.player.attachTo(this.videoContainer);
-      if(0!==this.videoContainer.getElementsByTagName("video").length){
-        this.videoContainer.getElementsByTagName("video")[0].play();
-      }
     },
     async playLiveIos(): Promise<void>{
       this.videoElement.onloadedmetadata = ()=>{
@@ -140,7 +134,19 @@ export default defineComponent({
         this.videoElement.load();
         return;
       }
-      this.player.destroy();
+      if(this.player){
+        this.player.dispose();
+        //Redraw
+        const video_parent = document.getElementById("player-video-hls");
+        if(video_parent){
+          const video = document.createElement('video');
+          video.id="video-element-hls";
+          video.className="video-js";
+          video.preload="auto";
+          video.setAttribute("playsinline","true");
+          video_parent.appendChild(video);
+        }
+      }
     },
     stopLive(): void{
       clearTimeout(this.stalledTimout);
@@ -154,6 +160,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'video.js';
 @import "@scss/_variables.scss";
 .octopus-app{
   .video-live-error{
@@ -168,7 +175,7 @@ export default defineComponent({
     background: $danger;
     z-index: 1;
   }
-  .video-container{
+  .video-js{
     width: 500px;
     height: 281px;
   }

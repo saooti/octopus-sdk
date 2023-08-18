@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "37.0.17",
+  "version": "37.0.18",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -14,10 +14,8 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@clappr/core": "0.4.27",
-    "@clappr/hlsjs-playback": "^1.1.0",
     "@popperjs/core": "^2.11.8",
-    "@saooti/octopus-api": "^0.34.3",
+    "@saooti/octopus-api": "^0.36.0",
     "@tiptap/extension-link": "^2.0.4",
     "@tiptap/extension-underline": "^2.0.4",
     "@tiptap/pm": "^2.0.4",
@@ -40,6 +38,9 @@
     "sass": "^1.63.6",
     "sonarqube-scanner": "^3.0.0",
     "swiper": "^10.0.4",
+    "video.js": "^7.21.5",
+    "videojs-contrib-quality-levels": "^2.2.1",
+    "videojs-hls-quality-selector": "^1.1.4",
     "vite": "^4.4.4",
     "vue": "^3.3.4",
     "vue-i18n": "^9.2.2",
@@ -50,6 +51,8 @@
     "vue3-swatches": "^1.2.3"
   },
   "devDependencies": {
+    "@types/videojs-contrib-quality-levels": "^2.0.1",
+    "@types/videojs-hls-quality-selector": "^1.1.0",
     "@types/vue-select": "^3.16.2",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
