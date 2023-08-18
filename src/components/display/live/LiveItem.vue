@@ -29,6 +29,7 @@ export default defineComponent({
   data() {
     return {
       live: undefined as Podcast | undefined,
+      watchInterval: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
 
@@ -36,7 +37,14 @@ export default defineComponent({
     this.fetchPodcastData();
     this.watchStatus();
   },
+  unmounted() {
+    this.clearWatchStatus();
+  },
   methods: {
+    clearWatchStatus(){
+      clearInterval(this.watchInterval as unknown as number);
+      this.watchInterval = undefined;
+    },
     async fetchPodcastData(): Promise<void> {
       if (!this.fetchConference || !this.fetchConference.podcastId) return;
       try {
@@ -73,7 +81,8 @@ export default defineComponent({
           ...{ status: newStatus },
         });
       } else {
-        setTimeout(() => {
+        this.clearWatchStatus();
+        this.watchInterval = setTimeout(() => {
           this.watchStatus();
         }, 5000);
       }
