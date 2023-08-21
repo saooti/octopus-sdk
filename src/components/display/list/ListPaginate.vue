@@ -82,7 +82,7 @@ export default defineComponent({
   data() {
     return {
       isPhone: false as boolean,
-      windowWidth: 0 as number
+      windowWidth: 0 as number,
     };
   },
   computed: {

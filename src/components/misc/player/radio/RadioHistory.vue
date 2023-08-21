@@ -83,6 +83,19 @@ export default defineComponent({
     this.handleResize(0);
   },
   methods: {
+    displayEverythingAfterIndex(indexAsked: number){
+      for (let index = 0; index < this.playerRadioHistory.length; index++) {
+        const el = (this.$refs["history" + index] as Array<HTMLElement>)[0];
+        if (!el) continue;
+        if (index < indexAsked && !el.classList.contains("hid")) {
+          el.classList.add("hid");
+          continue;
+        }
+        if (index >= indexAsked && el.classList.contains("hid")) {
+          el.classList.remove("hid");
+        }
+      }
+    },
     handleResize(indexAsked: number): void {
       const historyList = this.$refs.historyListContainer as HTMLElement;
       if (null === historyList || !historyList) {
@@ -90,17 +103,7 @@ export default defineComponent({
       }
       this.indexStart = indexAsked;
       this.indexNotDisplay = this.playerRadioHistory.length;
-      for (let index = 0; index < this.playerRadioHistory.length; index++) {
-        const el = (this.$refs["history" + index] as Array<HTMLElement>)[0];
-        if (!el) continue;
-        if (index < this.indexStart && !el.classList.contains("hid")) {
-          el.classList.add("hid");
-          continue;
-        }
-        if (index >= this.indexStart && el.classList.contains("hid")) {
-          el.classList.remove("hid");
-        }
-      }
+      this.displayEverythingAfterIndex(indexAsked);
       for (
         let index = this.indexStart + 1;
         index < this.playerRadioHistory.length;

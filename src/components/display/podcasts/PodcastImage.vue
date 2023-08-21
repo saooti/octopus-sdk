@@ -61,7 +61,7 @@
         {{ textVisible }}
       </div>
     </button>
-    <button 
+    <button
       v-if="isVideoPodcast"
       class="btn admin-button btn-play-video saooti-video"
       @click="play(true)"
@@ -107,10 +107,13 @@ export default defineComponent({
       "playerPodcast",
       "playerLive",
       "playerStatus",
-      "playerVideo"
+      "playerVideo",
     ]),
-    isVideoPodcast(): boolean{
-      return this.fetchConference?.videoProfile?.includes('video_') || undefined!==this.podcast.video?.videoId;
+    isVideoPodcast(): boolean {
+      return (
+        this.fetchConference?.videoProfile?.includes("video_") ||
+        undefined !== this.podcast.video?.videoId
+      );
     },
     playingPodcast() {
       return (
@@ -214,7 +217,6 @@ export default defineComponent({
         case "RECORDING":
           return this.$t("In live");
         case "DEBRIEFING":
-          /* if (!this.isAnimatorLive) return ''; */
           if ("READY_TO_RECORD" === this.podcast.processingStatus)
             return this.$t("Not recording");
           return this.$t("Debriefing");
@@ -261,17 +263,20 @@ export default defineComponent({
       if (this.isLiveToBeRecorded) {
         return;
       }
-      if (this.playingPodcast && isVideo===this.playerVideo) {
+      if (this.playingPodcast && isVideo === this.playerVideo) {
         this.playerChangeStatus("PLAYING" === this.playerStatus);
         return;
       }
       if (!this.recordingLive) {
         this.playerPlay(this.podcast, isVideo);
       } else {
-        this.playerPlay({
-          ...this.podcast,
-          ...{ conferenceId: this.fetchConference?.conferenceId },
-        }, isVideo);
+        this.playerPlay(
+          {
+            ...this.podcast,
+            ...{ conferenceId: this.fetchConference?.conferenceId },
+          },
+          isVideo,
+        );
       }
       if (this.clickPlayGoPage) {
         this.$router.push("/main/pub/podcast/" + this.podcast.podcastId);
@@ -319,13 +324,13 @@ export default defineComponent({
     background-color: rgba(255, 255, 255, 0.5);
   }
 
-  .btn.btn-play-video{
+  .btn.btn-play-video {
     position: absolute;
     bottom: 0;
     right: 0;
     margin: 0.5rem;
     background: $primaryColorLessTransparent !important;
-    color:white !important
+    color: white !important;
   }
 
   .image-play-button .play-button-error-icon {

@@ -53,13 +53,12 @@
         </div>
         <ClassicCheckbox
           v-if="!isEmission"
-          :textInit="onlyVideo"
+          :text-init="onlyVideo"
           class="flex-shrink-0 mt-3"
           id-checkbox="only-video-checkbox"
           :label="$t('Show only episodes with video')"
-          @update:textInit="$emit('update:onlyVideo', $event)"
+          @update:text-init="$emit('update:onlyVideo', $event)"
         />
-        
       </div>
       <div class="d-flex flex-column">
         <div class="text-primary mb-2">
@@ -117,7 +116,7 @@ export default defineComponent({
     "includeHidden",
     "notValid",
     "updateRubriquageFilter",
-    "update:onlyVideo"
+    "update:onlyVideo",
   ],
   data() {
     return {

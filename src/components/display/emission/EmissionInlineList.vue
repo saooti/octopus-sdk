@@ -64,7 +64,7 @@ import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
 import imageProxy from "../../mixins/imageProxy";
-import resizePhone  from "../../mixins/resizePhone";
+import resizePhone from "../../mixins/resizePhone";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 export default defineComponent({
   name: "EmissionInlineList",
@@ -100,7 +100,7 @@ export default defineComponent({
       alignLeft: false as boolean,
       rubriques: undefined as Array<Rubrique> | undefined,
       isPhone: false as boolean,
-      windowWidth: 0 as number
+      windowWidth: 0 as number,
     };
   },
 
@@ -132,7 +132,7 @@ export default defineComponent({
     sizeItem() {
       this.handleResize();
     },
-    windowWidth(){
+    windowWidth() {
       if (!this.$el) return;
       if (this.overflowScroll) {
         this.size = 20;
@@ -145,7 +145,7 @@ export default defineComponent({
       const width = (this.$el as HTMLElement).offsetWidth;
       const sixteen = domHelper.convertRemToPixels(this.itemSize + 0.7);
       this.size = Math.floor(width / sixteen);
-    }
+    },
   },
 
   mounted() {

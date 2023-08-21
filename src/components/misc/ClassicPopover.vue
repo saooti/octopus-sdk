@@ -32,7 +32,6 @@ export default defineComponent({
     relativeClass: { type: String, default: undefined },
     leftPos: { type: Boolean, default: false },
     topPos: { type: Boolean, default: false },
-
   },
   data() {
     return {
@@ -125,9 +124,12 @@ export default defineComponent({
           parentRight -
           (this.$refs.popover as HTMLElement).clientWidth
         : rectElement.left - parentLeft;
-      const yPosParent = this.topPos ? rectElement.top:rectElement.bottom;
-      const yGap = this.topPos ? -5 - (this.$refs.popover as HTMLElement).clientHeight :5;
-      this.posY = yPosParent +
+      const yPosParent = this.topPos ? rectElement.top : rectElement.bottom;
+      const yGap = this.topPos
+        ? -5 - (this.$refs.popover as HTMLElement).clientHeight
+        : 5;
+      this.posY =
+        yPosParent +
         parentScrollTop -
         parentTop +
         (this.isFixed ? 0 : window.scrollY) +

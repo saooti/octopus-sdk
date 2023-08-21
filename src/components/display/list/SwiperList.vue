@@ -1,7 +1,11 @@
 <template>
   <div class="position-relative w-100">
     <template v-if="!isPhone">
-      <button class="btn-transparent swiper-button-prev" v-show="isLoop" @click="slidePrevButton()"></button>
+      <button
+        v-show="isLoop"
+        class="btn-transparent swiper-button-prev"
+        @click="slidePrevButton()"
+      ></button>
       <swiper
         :slides-per-view="numberItem"
         :space-between="0"
@@ -14,7 +18,7 @@
         </swiper-slide>
       </swiper>
     </template>
-    <div class="element-list-inline" v-else>
+    <div v-else class="element-list-inline">
       <div v-for="(obj, index) in listObject" :key="obj">
         <slot name="octopusSlide" :option="obj" :index="index" />
       </div>
@@ -38,7 +42,7 @@ export default defineComponent({
     Swiper,
     SwiperSlide,
   },
-  mixins:[resizePhone],
+  mixins: [resizePhone],
 
   props: {
     listObject: { default: () => [], type: Array as () => Array<unknown> },
@@ -50,7 +54,7 @@ export default defineComponent({
       modules: [Navigation],
       numberItem: 5 as number,
       isPhone: false as boolean,
-      windowWidth: 0 as number
+      windowWidth: 0 as number,
     };
   },
   computed: {
@@ -65,21 +69,21 @@ export default defineComponent({
         ? state.generalParameters.podcastItem
         : 13.5;
     },
-    isLoop():boolean{
+    isLoop(): boolean {
       return this.listObject.length >= this.numberItem;
     },
   },
-  watch:{
-    windowWidth(){
+  watch: {
+    windowWidth() {
       if (!this.$el) return;
       const width = (this.$el as HTMLElement).offsetWidth - 95;
       const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.5);
       this.numberItem = Math.max(1, Math.floor(width / sixteen));
-    }
+    },
   },
 
   methods: {
-    slidePrevButton(){
+    slidePrevButton() {
       this.$el.querySelector(".swiper").swiper.slidePrev();
     },
   },

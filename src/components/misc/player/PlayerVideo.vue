@@ -1,18 +1,13 @@
 <template>
   <teleport to=".octopus-app">
     <template v-if="playerVideo">
-      <button 
+      <button
         class="btn btn-transparent video-close saooti-remove"
         @click="closePlayer"
       />
       <div class="video-wrapper">
-        <PlayerVideoDigiteka 
-          v-if="!playerLive"
-        />
-        <PlayerVideoHls
-          v-else
-          :hls-url="hlsUrl"
-        />
+        <PlayerVideoDigiteka v-if="!playerLive" />
+        <PlayerVideoHls v-else :hls-url="hlsUrl" />
       </div>
     </template>
   </teleport>
@@ -33,24 +28,24 @@ export default defineComponent({
 
   components: {
     PlayerVideoDigiteka,
-    PlayerVideoHls
+    PlayerVideoHls,
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     ...mapState(usePlayerStore, ["playerVideo", "playerLive"]),
-    hlsUrl(): string{
-      if(!this.playerLive){return "";}
+    hlsUrl(): string {
+      if (!this.playerLive) {
+        return "";
+      }
       return `${state.podcastPage.hlsUri}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
-      //return "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8";
-    }
+    },
   },
 
   methods: {
-    ...mapActions(usePlayerStore, ["playerPlay",]),
-    closePlayer(){
+    ...mapActions(usePlayerStore, ["playerPlay"]),
+    closePlayer() {
       this.playerPlay();
     },
   },
@@ -59,7 +54,7 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app {
-  .video-wrapper{
+  .video-wrapper {
     border-radius: 1rem;
     overflow: hidden;
     position: fixed;
@@ -67,24 +62,24 @@ export default defineComponent({
     right: 0;
     z-index: 10;
   }
-  .video-close{
+  .video-close {
     position: fixed;
     bottom: 16.5rem;
     right: 1rem;
   }
   @media (max-width: 500px) {
-    .video-wrapper{
-      position:relative;
-      padding-bottom:56.25%;
-      height:0;
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
     }
     .video-wrapper iframe {
-      position:absolute;
-      top:0;
-      left:0;
-      width:100% !important;
-      height:100%;
-      margin:0 !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100%;
+      margin: 0 !important;
     }
   }
 }

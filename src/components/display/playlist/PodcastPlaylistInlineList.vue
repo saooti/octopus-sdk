@@ -88,7 +88,7 @@ export default defineComponent({
       direction: 1 as number,
       alignLeft: false as boolean,
       isPhone: false as boolean,
-      windowWidth: 0 as number
+      windowWidth: 0 as number,
     };
   },
   computed: {
@@ -124,7 +124,7 @@ export default defineComponent({
       this.reset();
       this.fetchContent();
     },
-    windowWidth(){
+    windowWidth() {
       if (!this.$el) return;
       if (this.overflowScroll) {
         this.size = 20;
@@ -137,7 +137,7 @@ export default defineComponent({
       const width = (this.$el as HTMLElement).offsetWidth;
       const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.8);
       this.size = Math.floor(width / sixteen);
-    }
+    },
   },
 
   mounted() {

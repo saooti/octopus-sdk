@@ -5,7 +5,7 @@
   >
     <div
       class="octopus-progress-bar"
-      :class="isBack ? 'no-transition': ''"
+      :class="isBack ? 'no-transition' : ''"
       role="progressbar"
       aria-valuenow="0"
       aria-valuemin="0"
@@ -89,7 +89,7 @@ export default defineComponent({
     .octopus-progress-bar {
       background-color: #747474;
     }
-    .no-transition{
+    .no-transition {
       transition: none !important;
     }
   }

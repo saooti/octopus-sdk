@@ -1,12 +1,13 @@
 <template>
-  <iframe 
+  <iframe
     ref="iframeVideo"
     :src="srcVideo"
-    width="500" 
-    height="281" 
-    style="z-index:1;" 
-    allowfullscreen="true" 
-    allow="autoplay" 
+    :title="$t('Video')"
+    width="500"
+    height="281"
+    style="z-index: 1"
+    allowfullscreen="true"
+    allow="autoplay"
     referrerpolicy="no-referrer-when-downgrade"
   ></iframe>
 </template>
@@ -17,32 +18,34 @@ import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PlayerVideo",
-  components: {
-  },
+  components: {},
 
-  computed:{
-    ...mapState(usePlayerStore, [
-      "playerPodcast",
-      "playerVideo"
-    ]),
-    srcVideo(): string{
-      if(this.playerVideo){
-        return "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/"+ this.playerPodcast?.video?.videoId+"/autoplay/1";
+  computed: {
+    ...mapState(usePlayerStore, ["playerPodcast", "playerVideo"]),
+    srcVideo(): string {
+      if (this.playerVideo) {
+        return (
+          "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
+          this.playerPodcast?.video?.videoId +
+          "/autoplay/1"
+        );
       }
       return "";
-    }
+    },
   },
-  watch:{
+  watch: {
     srcVideo() {
       this.goFullScreen();
     },
   },
-  mounted(){
+  mounted() {
     this.goFullScreen();
   },
-  methods:{
-    goFullScreen(){
-      if(""===this.srcVideo){return;}
+  methods: {
+    goFullScreen() {
+      if ("" === this.srcVideo) {
+        return;
+      }
       switch (screen.orientation.type) {
         case "landscape-primary":
         case "landscape-secondary":
@@ -55,8 +58,7 @@ export default defineComponent({
         default:
           console.log("The orientation API isn't supported in this browser :(");
       }
-    }
-  }
-
+    },
+  },
 });
 </script>

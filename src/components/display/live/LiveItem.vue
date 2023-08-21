@@ -41,7 +41,7 @@ export default defineComponent({
     this.clearWatchStatus();
   },
   methods: {
-    clearWatchStatus(){
+    clearWatchStatus() {
       clearInterval(this.watchInterval as unknown as number);
       this.watchInterval = undefined;
     },

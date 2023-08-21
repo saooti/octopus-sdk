@@ -1,12 +1,12 @@
 <template>
   <div
     class="player-container"
-    :class="playerVideo? 'player-video':''"
+    :class="playerVideo ? 'player-video' : ''"
     :style="{ height: playerHeight }"
     @transitionend="onHidden"
   >
     <template v-if="display">
-      <PlayerVideo v-if="playerVideo"/>
+      <PlayerVideo v-if="playerVideo" />
       <template v-else>
         <audio
           id="audio-player"
@@ -29,7 +29,7 @@
           :percent-live-progress="percentLiveProgress"
           :duration-live-position="durationLivePosition"
           :listen-time="listenTime"
-          :hlsReady="hlsReady"
+          :hls-ready="hlsReady"
           @stop-player="stopPlayer"
           @change-player-large-version="playerUpdateLargeVersion(true)"
         />
@@ -42,7 +42,7 @@
           :percent-live-progress="percentLiveProgress"
           :duration-live-position="durationLivePosition"
           :listen-time="listenTime"
-          :hlsReady="hlsReady"
+          :hls-ready="hlsReady"
           @stop-player="stopPlayer"
           @change-player-large-version="playerUpdateLargeVersion(false)"
         />
@@ -58,16 +58,14 @@ import PlayerLarge from "../player/PlayerLarge.vue";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
-const PlayerVideo = defineAsyncComponent(
-  () => import("./PlayerVideo.vue"),
-);
+const PlayerVideo = defineAsyncComponent(() => import("./PlayerVideo.vue"));
 export default defineComponent({
   name: "PlayerComponent",
 
   components: {
     PlayerCompact,
     PlayerLarge,
-    PlayerVideo
+    PlayerVideo,
   },
   mixins: [playerLogic],
   emits: ["hide"],
@@ -93,7 +91,7 @@ export default defineComponent({
       "playerStatus",
       "playerHeight",
       "playerLargeVersion",
-      "playerVideo"
+      "playerVideo",
     ]),
     display() {
       return "STOPPED" !== this.playerStatus;
@@ -129,7 +127,7 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app {
-  .player-container{
+  .player-container {
     max-height: 94%;
     position: sticky;
     overflow: hidden;
