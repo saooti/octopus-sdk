@@ -48,24 +48,13 @@ export default defineComponent({
   computed: {
     optionsSelect() {
       return [
-        { name: this.$t("Default version"), value: "default", condition: true },
-        { name: this.$t("Large version"), value: "large", condition: true },
-        {
-          name: this.$t("Emission version"),
-          value: "emission",
-          condition: this.podcast && this.podcast.podcastId,
-        },
-        {
-          name: this.$t("Large emission version"),
-          value: "emissionLarge",
-          condition: this.podcast && this.podcast.podcastId,
-        },
-        {
-          name: this.$t("Large suggestion version"),
-          value: "largeSuggestion",
-          condition: this.podcast && this.podcast.podcastId,
-        },
-      ];
+        {name: this.$t('Default version'), value: 'default', condition: true},
+        {name: this.$t('Large version'), value: 'large', condition: true},
+        {name: this.$t('Full Large version'), value: 'largeMore', condition: this.podcast && this.podcast.podcastId},
+        {name: this.$t('Emission version'), value: 'emission', condition: this.podcast && this.podcast.podcastId},
+        {name: this.$t('Large emission version'), value: 'emissionLarge', condition: this.podcast && this.podcast.podcastId},
+        {name: this.$t('Large suggestion version'), value: 'largeSuggestion', condition: this.podcast && this.podcast.podcastId}
+      ]
     },
     customPlayersDisplay(): Array<CustomPlayer> {
       return this.customPlayers.filter((player: CustomPlayer) => {
