@@ -10,13 +10,13 @@
           {{ tab }}
         </template>
         <template #tab0>
-          <p>{{ embedLink }}</p>
+          <p class="word-break-word">{{ embedLink }}</p>
           <div class="saooti-copy" @click="onCopyCode(embedLink, afterCopy)" />
         </template>
         <template #tab1>
           <div class="d-flex flex-column flex-grow-1">
             <div class="d-flex justify-content-between align-items-center">
-              <p>{{ embedlyLink }}</p>
+              <p class="word-break-word">{{ embedlyLink }}</p>
               <div
                 class="saooti-copy"
                 @click="onCopyCode(embedlyLink, afterCopy)"
@@ -26,7 +26,7 @@
           </div>
         </template>
         <template v-if="directLink" #tab2>
-          <p>{{ directLink.audioUrl }}</p>
+          <p class="word-break-word">{{ directLink.audioUrl }}</p>
           <div
             class="saooti-copy"
             @click="onCopyCode(directLink.audioUrl, snackbarRef)"

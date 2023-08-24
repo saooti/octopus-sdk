@@ -335,5 +335,8 @@ export default{
   "List":"Elenco",
   "Display HTML":"Visualizza HTML",
   "Video is unavailable":"Il video non è disponibile",
-    'Full Large version': 'Versione completa di grandi dimensioni',
+  'Full Large version': 'Versione completa di grandi dimensioni',
+  "Show only episodes with video":"Mostra solo episodi con video",
+  "Video":"Video",
+  "Video Version":"Versione video",
   };

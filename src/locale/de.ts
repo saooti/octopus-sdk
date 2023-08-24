@@ -343,4 +343,7 @@ export default {
   "Display HTML":"HTML anzeigen",
   "Video is unavailable":"Video ist nicht verfügbar",
   'Full Large version': 'Vollständige große Version',
+  "Show only episodes with video":"Nur Episoden mit Video anzeigen",
+  "Video":"Video",
+  "Video Version":"Videoversion",
 }

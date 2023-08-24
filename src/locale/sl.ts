@@ -333,4 +333,7 @@ export default {
   "Display HTML":"Prikaži HTML",
   "Video is unavailable":"Videoposnetek ni na voljo",
   'Full Large version': 'Popolna velika različica',
+  "Show only episodes with video":"Prikaži samo epizode z videom",
+  "Video":"Video",
+  "Video Version":"Video različica",
 }

@@ -17,6 +17,9 @@
         <iframe
           id="miniplayerIframe"
           title="miniplayer"
+          allowfullscreen="true"
+          allow="autoplay"
+          referrerpolicy="no-referrer-when-downgrade"
           :src="iFrameSrc"
           width="100%"
           :height="iFrameHeight"
@@ -214,6 +217,9 @@ export default defineComponent({
       );
     },
     iFrameSrc(): string {
+      if("video" === this.iFrameModel){
+        return "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" + this.podcast?.video?.videoId
+      }
       let url = [""];
       let iFrameNumber =
         this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
@@ -240,6 +246,7 @@ export default defineComponent({
     },
     iFrameHeight(): string {
       switch (this.iFrameModel) {
+        case 'video': return 'auto';
         case 'large':
           if (this.podcast) return '140px';
           return '350px';
@@ -254,7 +261,8 @@ export default defineComponent({
       }
     },
     iFrame(): string {
-      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
+      const specialDigiteka = this.podcast?.video?.videoId ? 'allowfullscreen="true" allow="autoplay" referrerpolicy="no-referrer-when-downgrade"' : '';
+      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0" ${specialDigiteka}></iframe>`;
     },
     isPodcastNotVisible(): boolean {
       return (

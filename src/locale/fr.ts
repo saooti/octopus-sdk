@@ -354,4 +354,5 @@ export default {
 
   "Show only episodes with video":"Afficher uniquement les épisodes avec une vidéo",
   "Video":"Vidéo",
+  "Video Version":"Version vidéo",
 };
