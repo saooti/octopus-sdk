@@ -3,6 +3,7 @@
     <template v-if="!isPhone">
       <button
         v-show="isLoop"
+        :title="$t('Display previous')"
         class="btn-transparent swiper-button-prev"
         @click="slidePrevButton()"
       ></button>

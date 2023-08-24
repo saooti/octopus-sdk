@@ -63,6 +63,7 @@
     </button>
     <button
       v-if="isVideoPodcast"
+      :title="$t('Video')"
       class="btn admin-button btn-play-video saooti-video"
       @click="play(true)"
     ></button>
