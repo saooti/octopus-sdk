@@ -5,11 +5,11 @@
     <img
       v-lazy="
         radio.imageUrl
-          ? proxyImageUrl(radio.imageUrl, '330')
+          ? proxyImageUrl(radio.imageUrl, '270')
           : '/img/emptyradio.webp'
       "
-      width="330"
-      height="330"
+      width="270"
+      height="270"
       class="img-box img-box-podcast"
       :title="$t('Canal name image', { name: radio.name })"
       :alt="$t('Canal name image', { name: radio.name })"

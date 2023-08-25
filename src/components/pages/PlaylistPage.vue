@@ -11,9 +11,9 @@
         <div class="module-box">
           <div class="mb-5 mt-3 descriptionText">
             <img
-              v-lazy="proxyImageUrl(imageUrl, '330')"
-              width="330"
-              height="330"
+              v-lazy="proxyImageUrl(imageUrl, '250')"
+              width="250"
+              height="250"
               :alt="$t('Playlist name image', { name: name })"
               class="img-box float-start me-3 mb-3"
             />

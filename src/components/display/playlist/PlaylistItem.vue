@@ -39,9 +39,9 @@
         </router-link>
       </div>
       <img
-        v-lazy="proxyImageUrl(playlist.imageUrl, '330')"
-        width="330"
-        height="330"
+        v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
+        width="250"
+        height="250"
         :title="$t('Playlist name image', { name: name })"
         :alt="$t('Playlist name image', { name: name })"
         class="img-box"

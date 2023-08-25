@@ -4,9 +4,9 @@
     class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
   >
     <img
-      v-lazy="proxyImageUrl(podcast.imageUrl, '330')"
-      width="330"
-      height="330"
+      v-lazy="proxyImageUrl(podcast.imageUrl, '270')"
+      width="270"
+      height="270"
       class="img-box img-box-podcast"
       :alt="$t('Episode name image', { name: podcast.title })"
     />
