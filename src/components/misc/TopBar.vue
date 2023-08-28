@@ -13,16 +13,17 @@
       @click="onDisplayMenu(true)"
     >
       <img
-        :src="
-          !filterOrgaId || '' === imgUrl
-            ? logoUrl
-            : proxyImageUrl(imgUrl, '', '50')
-        "
-        :alt="
-          !filterOrgaId || '' === imgUrl
-            ? $t('Logo of main page')
-            : $t('Visual', { name: filterName })
-        "
+        v-if="!filterOrgaId || '' === imgUrl"
+        :src="logoUrl"
+        :alt="$t('Logo of main page')"
+        width="140"
+        height="50"
+        :class="isEducation ? 'educationLogo' : ''"
+      />
+      <img
+        v-else
+        :src="proxyImageUrl(imgUrl, '', '50')"
+        :alt="$t('Visual', { name: filterName })"
         :class="isEducation ? 'educationLogo' : ''"
       />
     </router-link>
@@ -51,6 +52,7 @@
       </template>
       <button
         id="more-dropdown"
+        :title="$t('More')"
         class="d-flex align-items-center hide-phone btn-transparent p-3"
       >
         <div class="link-hover">
