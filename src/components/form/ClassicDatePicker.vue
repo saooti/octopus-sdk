@@ -38,6 +38,7 @@ export default defineComponent({
     date: { default: undefined, type: Date },
     range: { default: undefined, type: Array as () => Array<Date> },
     isMaxDate: { default: false, type: Boolean },
+    dateLimit: { default: undefined, type: Date },
     isMinDate: { default: false, type: Boolean },
     columnNumber: { default: 1, type: Number },
     displaySeconds: { default: false, type: Boolean },
@@ -81,6 +82,9 @@ export default defineComponent({
       return this.range ? dayString + " - " + dayString : dayString;
     },
     now(): Date {
+      if(this.dateLimit){
+        return this.dateLimit;
+      }
       return dayjs().toDate();
     },
   },
