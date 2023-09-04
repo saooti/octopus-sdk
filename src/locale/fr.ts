@@ -350,9 +350,8 @@ export default {
   "Display HTML":"Afficher HTML",
   "Video is unavailable":"La vidéo est indisponible",
   'Full Large version': 'Version en longueur complète',
-
-
   "Show only episodes with video":"Afficher uniquement les épisodes avec une vidéo",
   "Video":"Vidéo",
   "Video Version":"Version vidéo",
+  "Chronological":"Chronologique",
 };

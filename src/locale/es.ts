@@ -347,4 +347,5 @@ export default {
   "Show only episodes with video":"Mostrar solo episodios con video",
   "Video":"Video",
   "Video Version":"Versión de vídeo",
+  "Chronological":"Cronológico",
 }

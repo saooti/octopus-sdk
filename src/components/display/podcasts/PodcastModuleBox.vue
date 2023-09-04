@@ -188,10 +188,13 @@ export default defineComponent({
       return state.generalParameters.podcastmaker as boolean;
     },
     date(): string {
-      if (this.podcast && 1970 !== dayjs(this.podcast.pubDate).year()) {
-        return dayjs(this.podcast.pubDate).format("D MMMM YYYY");
+      if (!this.podcast || 1970 === dayjs(this.podcast.pubDate).year()) {
+        return "";
       }
-      return "";
+      if(this.isLiveReadyToRecord){
+        return dayjs(this.podcast.pubDate).format("D MMMM YYYY - HH:mm");
+      }
+      return dayjs(this.podcast.pubDate).format("D MMMM YYYY");
     },
     duration(): string {
       if (!this.podcast || this.podcast.duration <= 1) return "";
@@ -261,7 +264,9 @@ export default defineComponent({
   },
   methods: {
     removeDeleted(): void {
-      if (window.history.length > 1) {
+      if(this.isLiveReadyToRecord){
+        this.$router.push("/main/pub/lives");
+      }else if (window.history.length > 1) {
         this.$router.go(-1);
       } else {
         this.$router.push("/");

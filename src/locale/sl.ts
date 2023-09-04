@@ -336,4 +336,5 @@ export default {
   "Show only episodes with video":"Prikaži samo epizode z videom",
   "Video":"Video",
   "Video Version":"Video različica",
+  "Chronological":"Kronološko",
 }

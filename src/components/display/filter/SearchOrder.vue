@@ -2,14 +2,7 @@
   <ClassicRadio
     v-model:textInit="sort"
     id-radio="sort-radio"
-    :options="[
-      { title: $t('Sort score'), value: 'SCORE' },
-      {
-        title: $t('Sort last'),
-        value: isEmission ? 'LAST_PODCAST_DESC' : 'DATE',
-      },
-      { title: $t('Sort name'), value: 'NAME' },
-    ]"
+    :options="optionsArray"
   />
 </template>
 
@@ -30,6 +23,22 @@ export default defineComponent({
     return {
       sort: this.sortCriteria,
     };
+  },
+  computed:{
+    optionsArray(){
+      let options =  [
+        { title: this.$t('Sort score'), value: 'SCORE' },
+        {
+          title: this.$t('Sort last'),
+          value: this.isEmission ? 'LAST_PODCAST_DESC' : 'DATE',
+        },
+        { title: this.$t('Sort name'), value: 'NAME' },
+      ];
+      if(!this.isEmission){
+        options.splice(2,0, { title: this.$t('Chronological'), value: 'DATE_ASC' });
+      }
+      return options;
+    }
   },
   watch: {
     sort(): void {
