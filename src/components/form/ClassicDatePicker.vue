@@ -82,7 +82,7 @@ export default defineComponent({
       return this.range ? dayString + " - " + dayString : dayString;
     },
     now(): Date {
-      if(this.dateLimit){
+      if (this.dateLimit) {
         return this.dateLimit;
       }
       return dayjs().toDate();

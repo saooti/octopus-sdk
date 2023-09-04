@@ -41,6 +41,7 @@
         <ShareButtons
           v-if="pageParameters.isShareButtons"
           :emission="emission"
+          :organisation-id="emission.orga.id"
         />
         <SubscribeButtons
           v-if="pageParameters.isShareButtons && countLink >= 1"

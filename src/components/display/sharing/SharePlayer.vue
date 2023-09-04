@@ -90,12 +90,12 @@
 <script lang="ts">
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
 import { useAuthStore } from "@/stores/AuthStore";
-import { mapState } from "pinia";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const ShareModalPlayer = defineAsyncComponent(
   () => import("../../misc/modal/ShareModalPlayer.vue"),
@@ -217,8 +217,11 @@ export default defineComponent({
       );
     },
     iFrameSrc(): string {
-      if("video" === this.iFrameModel){
-        return "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" + this.podcast?.video?.videoId
+      if ("video" === this.iFrameModel) {
+        return (
+          "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
+          this.podcast?.video?.videoId
+        );
       }
       let url = [""];
       let iFrameNumber =
@@ -246,22 +249,26 @@ export default defineComponent({
     },
     iFrameHeight(): string {
       switch (this.iFrameModel) {
-        case 'video': return 'auto';
-        case 'large':
-          if (this.podcast) return '140px';
-          return '350px';
-        case 'largeMore':
-          return '210px';
-        case 'emissionLarge':
-        case 'largeSuggestion':
-          return '350px';
-        case 'emission':return '520px';
+        case "video":
+          return "auto";
+        case "large":
+          if (this.podcast) return "140px";
+          return "350px";
+        case "largeMore":
+          return "210px";
+        case "emissionLarge":
+        case "largeSuggestion":
+          return "350px";
+        case "emission":
+          return "520px";
         default:
           return "530px";
       }
     },
     iFrame(): string {
-      const specialDigiteka = this.podcast?.video?.videoId ? 'allowfullscreen="true" allow="autoplay" referrerpolicy="no-referrer-when-downgrade"' : '';
+      const specialDigiteka = this.podcast?.video?.videoId
+        ? 'allowfullscreen="true" allow="autoplay" referrerpolicy="no-referrer-when-downgrade"'
+        : "";
       return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0" ${specialDigiteka}></iframe>`;
     },
     isPodcastNotVisible(): boolean {
@@ -290,13 +297,18 @@ export default defineComponent({
     },
   },
   async created() {
-    await this.fetchOrgaAttributes();
+    const orgaId =
+      "" !== this.authOrganisation.id
+        ? this.authOrganisation.id
+        : state.generalParameters.organisationId;
+    this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
     this.initColor();
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = "large";
     }
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     getIframeNumber(): string {
       return this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
         ? "/0"
@@ -359,19 +371,6 @@ export default defineComponent({
         url.push("&key=" + window.btoa(this.dataTitle.toString()));
       }
       return url;
-    },
-    async fetchOrgaAttributes(): Promise<void> {
-      if (
-        "" !== this.authOrganisation.id &&
-        this.authOrganisation.attributes &&
-        Object.keys(this.authOrganisation.attributes).length > 1
-      ) {
-        this.orgaAttributes = this.authOrganisation.attributes;
-      } else {
-        this.orgaAttributes = await octopusApi.fetchData<{
-          [key: string]: string;
-        }>(0, "organisation/attributes/" + this.myOrganisationId);
-      }
     },
     initColor(): void {
       if (!this.orgaAttributes) {

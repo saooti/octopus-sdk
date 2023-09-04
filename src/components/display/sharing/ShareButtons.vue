@@ -1,5 +1,5 @@
 <template>
-  <div class="module-box">
+  <div v-if="!isLoading && !noSharing" class="module-box">
     <div class="d-flex align-items-center mb-3">
       <h2 class="big-h2 mb-0">
         {{ $t("Share") }}
@@ -31,6 +31,8 @@
 </template>
 
 <script lang="ts">
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { mapActions } from "pinia";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
@@ -52,10 +54,27 @@ export default defineComponent({
     participantId: { default: undefined, type: Number },
     organisationId: { default: undefined, type: String },
   },
+  data() {
+    return {
+      noSharing: true as boolean,
+      isLoading: true as boolean,
+    };
+  },
   computed: {
     authenticated(): boolean {
       return state.generalParameters.authenticated as boolean;
     },
+  },
+  async created() {
+    if (!this.organisationId) {
+      return;
+    }
+    const attributes = await this.getOrgaAttributes(this.organisationId);
+    this.noSharing = "true" === attributes.noSharing;
+    this.isLoading = false;
+  },
+  methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
   },
 });
 </script>

@@ -24,21 +24,24 @@ export default defineComponent({
       sort: this.sortCriteria,
     };
   },
-  computed:{
-    optionsArray(){
-      let options =  [
-        { title: this.$t('Sort score'), value: 'SCORE' },
+  computed: {
+    optionsArray() {
+      let options = [
+        { title: this.$t("Sort score"), value: "SCORE" },
         {
-          title: this.$t('Sort last'),
-          value: this.isEmission ? 'LAST_PODCAST_DESC' : 'DATE',
+          title: this.$t("Sort last"),
+          value: this.isEmission ? "LAST_PODCAST_DESC" : "DATE",
         },
-        { title: this.$t('Sort name'), value: 'NAME' },
+        { title: this.$t("Sort name"), value: "NAME" },
       ];
-      if(!this.isEmission){
-        options.splice(2,0, { title: this.$t('Chronological'), value: 'DATE_ASC' });
+      if (!this.isEmission) {
+        options.splice(2, 0, {
+          title: this.$t("Chronological"),
+          value: "DATE_ASC",
+        });
       }
       return options;
-    }
+    },
   },
   watch: {
     sort(): void {

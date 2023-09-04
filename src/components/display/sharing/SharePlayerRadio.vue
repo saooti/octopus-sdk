@@ -34,9 +34,9 @@
 <script lang="ts">
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 import { useAuthStore } from "@/stores/AuthStore";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 const ShareModalPlayer = defineAsyncComponent(
@@ -81,23 +81,15 @@ export default defineComponent({
     },
   },
   async created() {
-    await this.fetchOrgaAttributes();
+    const orgaId =
+      "" !== this.authOrganisation.id
+        ? this.authOrganisation.id
+        : state.generalParameters.organisationId;
+    this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
     this.initColor();
   },
   methods: {
-    async fetchOrgaAttributes(): Promise<void> {
-      if (
-        "" !== this.authOrganisation.id &&
-        this.authOrganisation.attributes &&
-        Object.keys(this.authOrganisation.attributes).length > 1
-      ) {
-        this.orgaAttributes = this.authOrganisation.attributes;
-      } else {
-        this.orgaAttributes = await octopusApi.fetchData<{
-          [key: string]: string;
-        }>(0, "organisation/attributes/" + this.myOrganisationId);
-      }
-    },
+    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     initColor(): void {
       if (!this.orgaAttributes) {
         return;

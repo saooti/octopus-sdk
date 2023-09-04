@@ -25,7 +25,7 @@
           :canal="radio"
           :organisation-id="myOrganisationId"
         />
-        <ShareButtons />
+        <ShareButtons :organisation-id="radio.organisationId" />
       </div>
     </template>
     <ClassicLoading

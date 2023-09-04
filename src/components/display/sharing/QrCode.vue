@@ -25,11 +25,11 @@
 <script lang="ts">
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
 import SnackBar from "../../misc/SnackBar.vue";
 import QrcodeVue from "qrcode.vue";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 import { useAuthStore } from "@/stores/AuthStore";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "QrCode",
@@ -62,6 +62,7 @@ export default defineComponent({
     this.initColor();
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     download(): void {
       const link = document.createElement("a");
       link.download = "qrcode.png";
@@ -83,21 +84,13 @@ export default defineComponent({
         return;
       }
       if (!state.generalParameters.authenticated) return;
-      let data;
-      if (
-        "" !== this.authOrganisation.id &&
-        this.authOrganisation.attributes &&
-        Object.keys(this.authOrganisation.attributes).length > 1
-      ) {
-        data = this.authOrganisation.attributes;
-      } else {
-        data = await octopusApi.fetchData<{ [key: string]: string }>(
-          0,
-          "organisation/attributes/" + state.generalParameters.organisationId,
-        );
-      }
-      if (Object.prototype.hasOwnProperty.call(data, "COLOR")) {
-        this.otherColor = data.COLOR as string;
+      const orgaId =
+        "" !== this.authOrganisation.id
+          ? this.authOrganisation.id
+          : state.generalParameters.organisationId;
+      const attributes = await this.getOrgaAttributes(orgaId ?? "");
+      if (Object.prototype.hasOwnProperty.call(attributes, "COLOR")) {
+        this.otherColor = attributes.COLOR as string;
       }
     },
   },

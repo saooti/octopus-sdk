@@ -83,7 +83,7 @@ export default defineComponent({
     this.handleResize(0);
   },
   methods: {
-    displayEverythingAfterIndex(indexAsked: number){
+    displayEverythingAfterIndex(indexAsked: number) {
       for (let index = 0; index < this.playerRadioHistory.length; index++) {
         const el = (this.$refs["history" + index] as Array<HTMLElement>)[0];
         if (!el) continue;

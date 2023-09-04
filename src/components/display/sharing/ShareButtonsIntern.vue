@@ -208,17 +208,17 @@ export default defineComponent({
       if (this.participantId) {
         return api + "participant/" + this.participantId + ".rss";
       }
-      if (this.organisationId) {
-        return api + "productor/" + this.organisationId + ".rss";
-      }
       if (this.playlist) {
         return api + "playlist/" + this.playlist.playlistId + ".rss";
+      }
+      if (this.organisationId) {
+        return api + "productor/" + this.organisationId + ".rss";
       }
       return "";
     },
   },
   async created() {
-    if (this.organisationId || this.participantId) {
+    if (undefined !== this.participantId) {
       this.displayRss = await octopusApi.fetchDataPublic<boolean>(
         0,
         `rss/participants/allowed/${this.organisationId}`,

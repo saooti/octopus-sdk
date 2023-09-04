@@ -36,6 +36,7 @@
         <ShareButtons
           v-if="pageParameters.isShareButtons"
           :playlist="playlist"
+          :organisation-id="playlist.organisation.id"
         />
         <PodcastList :playlist="playlist" />
       </div>

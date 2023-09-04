@@ -46,19 +46,41 @@ export default defineComponent({
     };
   },
   computed: {
-    isVideoPodcast(): boolean{
-      return undefined!==this.podcast && undefined!==this.podcast.video?.videoId;
+    isVideoPodcast(): boolean {
+      return (
+        undefined !== this.podcast && undefined !== this.podcast.video?.videoId
+      );
     },
     optionsSelect() {
       return [
-        {name: this.$t('Video Version'), value: 'video', condition:  this.isVideoPodcast},
-        {name: this.$t('Default version'), value: 'default', condition: true},
-        {name: this.$t('Large version'), value: 'large', condition: true},
-        {name: this.$t('Full Large version'), value: 'largeMore', condition: this.podcast && this.podcast.podcastId},
-        {name: this.$t('Emission version'), value: 'emission', condition: this.podcast && this.podcast.podcastId},
-        {name: this.$t('Large emission version'), value: 'emissionLarge', condition: this.podcast && this.podcast.podcastId},
-        {name: this.$t('Large suggestion version'), value: 'largeSuggestion', condition: this.podcast && this.podcast.podcastId}
-      ]
+        {
+          name: this.$t("Video Version"),
+          value: "video",
+          condition: this.isVideoPodcast,
+        },
+        { name: this.$t("Default version"), value: "default", condition: true },
+        { name: this.$t("Large version"), value: "large", condition: true },
+        {
+          name: this.$t("Full Large version"),
+          value: "largeMore",
+          condition: this.podcast && this.podcast.podcastId,
+        },
+        {
+          name: this.$t("Emission version"),
+          value: "emission",
+          condition: this.podcast && this.podcast.podcastId,
+        },
+        {
+          name: this.$t("Large emission version"),
+          value: "emissionLarge",
+          condition: this.podcast && this.podcast.podcastId,
+        },
+        {
+          name: this.$t("Large suggestion version"),
+          value: "largeSuggestion",
+          condition: this.podcast && this.podcast.podcastId,
+        },
+      ];
     },
     customPlayersDisplay(): Array<CustomPlayer> {
       return this.customPlayers.filter((player: CustomPlayer) => {
@@ -75,8 +97,8 @@ export default defineComponent({
     },
   },
   async created() {
-    if(this.isVideoPodcast){
-      this.$emit("update:iFrameModel","video");
+    if (this.isVideoPodcast) {
+      this.$emit("update:iFrameModel", "video");
     }
     await this.initCustomPlayers();
   },
@@ -108,7 +130,7 @@ export default defineComponent({
       }
       this.customPlayers = this.customPlayers.concat(playersContent);
       if (
-        'video'!==this.iFrameModel && 
+        "video" !== this.iFrameModel &&
         trySelect &&
         this.customPlayers[0] &&
         this.customPlayers[0].selected

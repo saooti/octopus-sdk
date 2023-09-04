@@ -24,7 +24,11 @@
           :organisation-id="myOrganisationId"
           :is-education="isEducation"
         />
-        <ShareButtons v-if="pageParameters.isShareButtons" :podcast="podcast" />
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :podcast="podcast"
+          :organisation-id="podcast.organisation.id"
+        />
         <SubscribeButtons
           v-if="pageParameters.isShareButtons && countLink >= 1"
           :emission="podcast.emission"

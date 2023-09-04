@@ -191,7 +191,7 @@ export default defineComponent({
       if (!this.podcast || 1970 === dayjs(this.podcast.pubDate).year()) {
         return "";
       }
-      if(this.isLiveReadyToRecord){
+      if (this.isLiveReadyToRecord) {
         return dayjs(this.podcast.pubDate).format("D MMMM YYYY - HH:mm");
       }
       return dayjs(this.podcast.pubDate).format("D MMMM YYYY");
@@ -264,9 +264,9 @@ export default defineComponent({
   },
   methods: {
     removeDeleted(): void {
-      if(this.isLiveReadyToRecord){
+      if (this.isLiveReadyToRecord) {
         this.$router.push("/main/pub/lives");
-      }else if (window.history.length > 1) {
+      } else if (window.history.length > 1) {
         this.$router.go(-1);
       } else {
         this.$router.push("/");
