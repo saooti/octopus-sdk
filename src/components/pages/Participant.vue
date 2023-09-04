@@ -33,7 +33,7 @@
           @participantUpdate="updateParticipant"
         />
         <ShareButtons
-          v-if="pageParameters.isShareButtons && !noSharingOrga"
+          v-if="pageParameters.isShareButtons"
           class="w-100"
           :participant-id="participantId"
           :organisation-id="participant.orga.id"
@@ -108,9 +108,6 @@ export default defineComponent({
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         lightStyle:(state.intervenantPage.lightStyle as boolean),
       };
-    },
-    noSharingOrga(): boolean {
-      return 'true' === this.participant?.orga?.attributes?.noSharing;
     },
     rssUrl(): string {
       return `${state.generalParameters.ApiUri}rss/participant/${this.participantId}`;

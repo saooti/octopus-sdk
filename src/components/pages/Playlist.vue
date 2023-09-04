@@ -42,8 +42,9 @@
           :is-education="isEducation"
         />
         <ShareButtons
-          v-if="pageParameters.isShareButtons && !noSharingOrga"
+          v-if="pageParameters.isShareButtons"
           :playlist="playlist"
+          :organisation-id="playlist.organisation.id"
         />
         <PodcastList :playlist="playlist" />
       </div>
@@ -100,9 +101,6 @@ export default defineComponent({
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
       };
-    },
-    noSharingOrga(): boolean {
-      return 'true' === this.playlist?.organisation?.attributes?.noSharing;
     },
     pageTitle(): string{
       return this.playlistRadio ? this.$t('Mix of episodes'):this.$t('Playlist');

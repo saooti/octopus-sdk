@@ -31,8 +31,9 @@
           :is-education="isEducation"
         />
         <ShareButtons
-          v-if="pageParameters.isShareButtons && !noSharingOrga"
+          v-if="pageParameters.isShareButtons"
           :podcast="podcast"
+          :organisation-id="podcast.organisation.id"
         />
         <SubscribeButtons
           v-if="pageParameters.isShareButtons && countLink >= 1"
@@ -147,9 +148,6 @@ export default defineComponent({
         isShareButtons: (state.podcastPage.ShareButtons as boolean),
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
       };
-    },
-    noSharingOrga(): boolean {
-      return 'true' === this.podcast?.organisation?.attributes?.noSharing;
     },
     emissionMainCategory(): number {
       if(!this.podcast){return 0;}

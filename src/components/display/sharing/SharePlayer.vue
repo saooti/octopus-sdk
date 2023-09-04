@@ -90,7 +90,8 @@ import { Podcast } from '@/stores/class/general/podcast';
 import { Emission } from '@/stores/class/general/emission';
 import { Playlist } from '@/stores/class/general/playlist';
 import { useAuthStore } from '@/stores/AuthStore';
-import { mapState } from 'pinia';
+import { useSaveFetchStore } from '@/stores/SaveFetchStore';
+import { mapState, mapActions } from 'pinia';
 import { defineComponent, defineAsyncComponent } from 'vue';
 const ShareModalPlayer = defineAsyncComponent(() => import('../../misc/modal/ShareModalPlayer.vue'));
 const PlayerParameters = defineAsyncComponent(() => import('./PlayerParameters.vue'));
@@ -241,13 +242,15 @@ export default defineComponent({
     }
   },
   async created() {
-    await this.fetchOrgaAttributes();
+    const orgaId = ""!==this.authOrganisation.id ?  this.authOrganisation.id : state.generalParameters.organisationId;
+    this.orgaAttributes = await this.getOrgaAttributes(orgaId??"");
     this.initColor();
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = 'large';
     }
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ['getOrgaAttributes']),
     getIframeNumber(): string{
       return this.displayChoiceAllEpisodes && 'all' === this.episodeNumbers ? '/0' : '/' + this.iFrameNumber;
     },
@@ -290,13 +293,6 @@ export default defineComponent({
         url.push('&key=' + window.btoa(this.dataTitle.toString()));
       }
       return url;
-    },
-    async fetchOrgaAttributes(): Promise<void>{
-      if(""!==this.authOrganisation.id && this.authOrganisation.attributes && Object.keys(this.authOrganisation.attributes).length > 1){
-        this.orgaAttributes = this.authOrganisation.attributes;
-      }else{
-        this.orgaAttributes= await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+this.myOrganisationId);
-      }
     },
     initColor(): void {
       if(!this.orgaAttributes){return;}

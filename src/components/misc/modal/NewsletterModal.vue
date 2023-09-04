@@ -102,8 +102,9 @@ import { Participant } from '@/stores/class/general/participant';
 import { Podcast } from '@/stores/class/general/podcast';
 import { state } from '../../../stores/ParamSdkStore';
 import { defineComponent } from 'vue';
+import { useSaveFetchStore } from '@/stores/SaveFetchStore';
 import { useAuthStore } from '@/stores/AuthStore';
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import octopusApi from '@saooti/octopus-api';
 import { Emission } from '@/stores/class/general/emission';
 import { Playlist } from '@/stores/class/general/playlist';
@@ -279,6 +280,7 @@ export default defineComponent({
     this.initData();
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ['getOrgaAttributes']),
     closePopup(): void {
       this.$emit('close');
     },
@@ -296,12 +298,8 @@ export default defineComponent({
       (this.$refs.snackbar as InstanceType<typeof Snackbar>).open(this.$t('Data in clipboard'));
     },
     async initData(): Promise<void> {
-      let attributes;
-      if(""!==this.authOrganisation.id && this.authOrganisation.attributes && Object.keys(this.authOrganisation.attributes).length > 1){
-        attributes = this.authOrganisation.attributes;
-      }else{
-        attributes = await octopusApi.fetchData<{[key:string]:string}>(0, 'organisation/attributes/'+state.generalParameters.organisationId);
-      }
+      const orgaId = ""!==this.authOrganisation.id ?  this.authOrganisation.id : state.generalParameters.organisationId;
+      const attributes = await this.getOrgaAttributes(orgaId??"");
       if (Object.prototype.hasOwnProperty.call(attributes,'podcastmakerUrl')) {
         this.shareUrl = attributes.podcastmakerUrl + window.location.pathname+window.location.search;
       }
