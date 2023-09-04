@@ -29,7 +29,7 @@
       :reset="reset"
       @selected="onOrganisationSelected"
     />
-    <div class="d-flex justify-content-end flex-grow-1">
+    <div class="d-flex justify-content-end align-items-center flex-grow-1">
       <template
         v-for="link in routerLinkArray"
         :key="link.routeName"

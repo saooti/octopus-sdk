@@ -45,7 +45,7 @@
           :is-education="isEducation"
         />
         <ShareButtons
-          v-if="pageParameters.isShareButtons"
+          v-if="pageParameters.isShareButtons && !noSharingOrga"
           :emission="emission"
         />
         <SubscribeButtons
@@ -139,6 +139,9 @@ export default defineComponent({
         isShareDistribution:(state.podcastPage.ShareDistribution as boolean),
         isDisplayPodcasts:(state.emissionPage.isDisplayPodcasts as boolean),
       };
+    },
+    noSharingOrga(): boolean {
+      return 'true' === this.emission?.orga.attributes?.noSharing;
     },
     isPodcastmaker(): boolean {
       return (state.generalParameters.podcastmaker as boolean);

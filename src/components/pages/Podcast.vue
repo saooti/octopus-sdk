@@ -31,7 +31,7 @@
           :is-education="isEducation"
         />
         <ShareButtons
-          v-if="pageParameters.isShareButtons"
+          v-if="pageParameters.isShareButtons && !noSharingOrga"
           :podcast="podcast"
         />
         <SubscribeButtons
@@ -148,6 +148,9 @@ export default defineComponent({
         isSharePlayer: (state.podcastPage.SharePlayer as boolean),
       };
     },
+    noSharingOrga(): boolean {
+      return 'true' === this.podcast?.organisation?.attributes?.noSharing;
+    },
     emissionMainCategory(): number {
       if(!this.podcast){return 0;}
       if (this.podcast.emission.annotations?.mainIabId) {
@@ -225,10 +228,10 @@ export default defineComponent({
   
   methods: {
     async fetchConferencePublic(){
-      const data = await octopusApi.fetchData<string>(9, 'conference/realstatus/'+this.podcast.conferenceId);
+      const data = await octopusApi.fetchData<string>(9, 'conference/realstatus/'+this.podcast?.conferenceId);
       this.fetchConference = {
         status: data,
-        conferenceId: this.podcast.conferenceId,
+        conferenceId: this.podcast?.conferenceId,
         title:'',
       };
     },

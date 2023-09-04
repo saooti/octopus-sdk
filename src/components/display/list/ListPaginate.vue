@@ -12,8 +12,8 @@
         v-if="!justSizeChosen"
         class="d-flex justify-content-between align-items-center flex-grow-1 w-100"
       >
-        <div class="text-secondary">
-          <template v-if="textCount && (windowWidth > 1300 || windowWidth<=960)">
+        <div class="text-secondary me-3">
+          <template v-if="textCount">
             {{ textCount }}
           </template>
         </div>
