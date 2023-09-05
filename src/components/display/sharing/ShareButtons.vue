@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading && !noSharing" class="module-box">
+  <div v-if="!isLoading && (authenticated || !noSharing)" class="module-box">
     <div class="d-flex align-items-center mb-3">
       <h2 class="big-h2 mb-0">
         {{ $t("Share") }}
@@ -21,6 +21,7 @@
       />
     </div>
     <ShareButtonsIntern
+      :no-sharing="noSharing"
       :podcast="podcast"
       :emission="emission"
       :playlist="playlist"
