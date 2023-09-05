@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center justify-content-between">
-    <div class="d-flex flex-column me-2" v-if="!isGarStudent">
+    <div class="d-flex flex-column me-2" v-if="!isGarStudent && !noSharing">
       <div class="h4 mb-2">
         {{ $t('Social networks') }}
       </div>
@@ -142,6 +142,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
+    noSharing: { default: false, type: Boolean},
     podcast: { default: undefined, type: Object as ()=> Podcast},
     emission: { default: undefined, type: Object as ()=> Emission},
     playlist: { default: undefined, type: Object as ()=>Playlist},
