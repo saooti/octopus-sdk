@@ -135,7 +135,7 @@ export default defineComponent({
   mixins: [displayMethods],
 
   props: {
-    noSharing: { default: false, type: Boolean},
+    noSharing: { default: false, type: Boolean },
     podcast: { default: undefined, type: Object as () => Podcast },
     emission: { default: undefined, type: Object as () => Emission },
     playlist: { default: undefined, type: Object as () => Playlist },

@@ -219,7 +219,7 @@ export default defineComponent({
     iFrameSrc(): string {
       if ("video" === this.iFrameModel) {
         return (
-          "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
+          "http://www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
           this.podcast?.video?.videoId
         );
       }
