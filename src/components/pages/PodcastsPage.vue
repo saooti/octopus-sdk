@@ -37,6 +37,7 @@
       :rubrique-id="rubriqueId"
       :rubriquage-id="rubriquageId"
       :no-rubriquage-id="noRubriquageId"
+      :with-video="withVideo"
     />
   </div>
 </template>
@@ -80,7 +81,6 @@ export default defineComponent({
       noRubriquageId: [] as Array<number>,
       rubriquageId: [] as Array<number>,
       rubriqueId: [] as Array<number>,
-      //VIDEO_WORK
       onlyVideo: false as boolean,
     };
   },
@@ -100,6 +100,9 @@ export default defineComponent({
     organisation(): string | undefined {
       return this.organisationId ? this.organisationId : this.filterOrgaId;
     },
+    withVideo(): boolean|undefined{
+      return false===this.onlyVideo ? undefined : true;
+    }
   },
   watch: {
     organisationId(): void {

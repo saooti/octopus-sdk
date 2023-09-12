@@ -74,6 +74,7 @@ export default defineComponent({
     rubriquageId: { default: () => [], type: Array as () => Array<number> },
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
     justSizeChosen: { default: false, type: Boolean },
+    withVideo: { default: undefined, type: Boolean },
   },
   emits: ["fetch", "emptyList"],
 
@@ -103,7 +104,8 @@ export default defineComponent({
     changed(): string {
       return `${this.first}|${this.size}|${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetization}|${this.popularSort}|
-      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}`;
+      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}|
+      ${this.withVideo}`;
     },
     organisation(): Array<string> {
       if (this.organisationId) {
@@ -183,6 +185,7 @@ export default defineComponent({
             ? this.authProfile?.userId
             : undefined,
         includeStatus: ["READY", "PROCESSING"],
+        withVideo: this.withVideo
       };
       try {
         const data = await octopusApi.fetchDataWithParams<{
