@@ -4,6 +4,7 @@
     :time-picker="isTimePicker"
     :input-class-name="templateClass"
     :clearable="false"
+    :text-input="true"
     :readonly="readonly"
     :teleport="useTeleport"
     :locale="formatLocale"
