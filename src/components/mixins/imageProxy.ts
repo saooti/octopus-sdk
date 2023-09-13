@@ -7,7 +7,8 @@ export default {
       }
       if(state.octopusApi.imageUrl && url.includes('http')){
         const size = height ? "height="+height:"width="+width;
-        return state.octopusApi.imageUrl+"image/"+btoa(url)+"?"+size+"&useWebp=true";
+        const encode = btoa(url).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        return state.octopusApi.imageUrl+"image/"+encode+"?"+size+"&useWebp=true";
       }
       return url;
     },
