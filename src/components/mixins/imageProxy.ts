@@ -7,10 +7,11 @@ export default {
       }
       if (state.octopusApi.imageUrl && url.includes("http")) {
         const size = height ? "height=" + height : "width=" + width;
+        const encode = btoa(url).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
         return (
           state.octopusApi.imageUrl +
           "image/" +
-          btoa(url) +
+          encode +
           "?" +
           size +
           "&useWebp=true"
