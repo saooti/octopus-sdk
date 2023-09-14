@@ -18,6 +18,7 @@
     :inline="columnNumber > 1"
     :enable-time-picker="!isTimePicker ? displayTimePicker : undefined"
     :aria-labels="ariaLabels"
+    :max-time="maxTime"
     @update:model-value="$emit('updateDate', $event)"
   >
   </VueDatePicker>
@@ -48,6 +49,7 @@ export default defineComponent({
     useTeleport: { default: false, type: Boolean },
     templateClass: { default: undefined, type: String },
     readonly: { default: false, type: Boolean },
+    maxTime:{default: null, type: Object as () => { hours?: number | string; minutes?: number | string; seconds?: number | string }}
   },
 
   emits: ["updateDate", "update:date"],
