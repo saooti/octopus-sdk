@@ -1,25 +1,34 @@
 <template>
-  <div :id="idModal" class="octopus-modal">
-    <div class="octopus-modal-backdrop" />
-    <div class="octopus-modal-dialog">
+  <div :id="idModal" class="octopus-modal" :class="onlyHeader? 'octopus-only-header-modal':''">
+    <div class="octopus-modal-backdrop"/>
+    <div class="octopus-modal-dialog" >
       <div class="octopus-modal-content">
         <div class="octopus-modal-header">
           <h5 cclass="octopus-modal-title">
             {{ titleModal }}
           </h5>
-          <button
-            v-if="closable"
-            :ref="closable ? 'focusElement' : ''"
-            type="button"
-            class="btn-transparent text-light saooti-remove"
-            title="Close"
-            @click="$emit('close')"
-          />
+          <div class="d-flex align-items-center">
+            <button
+              v-if="canBeReduced"
+              class="btn-transparent text-light"
+              :class="onlyHeader? 'saooti-down':'saooti-up'"
+              :title="onlyHeader? $t('Enlarge'):$t('Reduce')"
+              @click="onlyHeader = !onlyHeader"
+            />
+            <button
+              v-if="closable"
+              :ref="closable ? 'focusElement' : ''"
+              type="button"
+              class="btn-transparent text-light saooti-remove"
+              :title="$t('Close')"
+              @click="$emit('close')"
+            />
+          </div>
         </div>
-        <div class="octopus-modal-body">
+        <div v-show="!onlyHeader" class="octopus-modal-body">
           <slot name="body" />
         </div>
-        <div class="octopus-modal-footer">
+        <div v-show="!onlyHeader" class="octopus-modal-footer">
           <slot name="footer" />
         </div>
       </div>
@@ -35,8 +44,14 @@ export default defineComponent({
     idModal: { default: undefined, type: String },
     titleModal: { default: undefined, type: String },
     closable: { default: true, type: Boolean },
+    canBeReduced: { default: false, type: Boolean },
   },
   emits: ["close"],
+  data() {
+    return {
+      onlyHeader: false as boolean,
+    };
+  },
   mounted() {
     (this.$refs.focusElement as HTMLElement)?.focus();
   },
@@ -66,6 +81,9 @@ export default defineComponent({
     width: 100vw;
     height: 100vh;
     background-color: black;
+  }
+  .octopus-modal.octopus-only-header-modal .octopus-modal-backdrop {
+    opacity: 0.1;
   }
 
   .octopus-modal-dialog {
@@ -103,8 +121,8 @@ export default defineComponent({
     padding: 1rem;
   }
 
-  .octopus-modal-dialog,
-  .octopus-modal-content {
+  .octopus-modal:not(.octopus-only-header-modal) .octopus-modal-dialog,
+  .octopus-modal:not(.octopus-only-header-modal) .octopus-modal-content {
     min-height: 300px;
   }
   .octopus-modal-content {
