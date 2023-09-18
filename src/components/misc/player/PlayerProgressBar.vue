@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts">
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState, mapActions } from "pinia";
 import ProgressBar from "../ProgressBar.vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const CommentPlayer = defineAsyncComponent(
   () => import("../../display/comments/CommentPlayer.vue"),
@@ -40,7 +40,6 @@ export default defineComponent({
     playerError: { default: false, type: Boolean },
     listenTime: { default: 0, type: Number },
   },
-  emits: ["updateNotListenTime"],
 
   computed: {
     ...mapState(usePlayerStore, [
@@ -58,6 +57,7 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
     seekTo(event: MouseEvent): void {
       const audioPlayer: HTMLAudioElement | null =
         document.querySelector("#audio-player");
@@ -74,7 +74,7 @@ export default defineComponent({
     },
     isSeekTo(audioPlayer: HTMLAudioElement, seekTime: number): void {
       if (this.playerPodcast || this.playerLive) {
-        this.$emit("updateNotListenTime", seekTime - this.listenTime);
+        this.playerUpdateSeekTime(seekTime);
       }
       audioPlayer.currentTime = seekTime;
     },

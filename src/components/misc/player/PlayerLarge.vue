@@ -36,7 +36,6 @@
         :duration-live-position="durationLivePosition"
         :player-error="playerError"
         :listen-time="listenTime"
-        @update-not-listen-time="$emit('update:notListenTime', $event)"
       />
       <RadioProgressBar v-else />
       <div class="d-flex justify-content-between">
@@ -112,7 +111,6 @@ export default defineComponent({
 
   props: {
     playerError: { default: false, type: Boolean },
-    notListenTime: { default: 0, type: Number },
     comments: { default: () => [], type: Array as () => Array<CommentPodcast> },
     displayAlertBar: { default: false, type: Boolean },
     percentLiveProgress: { default: 0, type: Number },
@@ -121,7 +119,7 @@ export default defineComponent({
     hlsReady: { default: false, type: Boolean },
   },
 
-  emits: ["stopPlayer", "update:notListenTime", "changePlayerLargeVersion"],
+  emits: ["stopPlayer", "changePlayerLargeVersion"],
   data() {
     return {
       showTimeline: false as boolean,

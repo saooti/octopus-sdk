@@ -22,7 +22,6 @@
         />
         <PlayerCompact
           v-if="!playerLargeVersion"
-          v-model:notListenTime="notListenTime"
           :player-error="playerError"
           :comments="comments"
           :display-alert-bar="displayAlertBar"
@@ -35,7 +34,6 @@
         />
         <PlayerLarge
           v-else
-          v-model:notListenTime="notListenTime"
           :player-error="playerError"
           :comments="comments"
           :display-alert-bar="displayAlertBar"

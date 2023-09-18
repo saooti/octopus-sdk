@@ -40,6 +40,7 @@ export const playerLogic = defineComponent({
       "playerVolume",
       "playerStatus",
       "playerSeekTime",
+      "playerVideo"
     ]),
 
     audioUrl(): string {
@@ -82,6 +83,9 @@ export const playerLogic = defineComponent({
     playerLive: {
       deep: true,
       handler() {
+        if(this.playerVideo){
+          return;
+        }
         this.$nextTick(async () => {
           this.hlsReady = false;
           this.reInitPlayer();
@@ -95,33 +99,6 @@ export const playerLogic = defineComponent({
         this.reInitPlayer();
         this.playRadio();
       });
-    },
-    async listenTime(newVal): Promise<void> {
-      if (
-        (this.playerRadio && !this.playerPodcast && !this.playerLive) ||
-        !this.downloadId ||
-        newVal - this.lastSend < 10
-      ) {
-        return;
-      }
-      this.lastSend = newVal;
-      await octopusApi.putDataPublic(
-        0,
-        "podcast/listen/" + this.downloadId + "?seconds=" + Math.round(newVal),
-        undefined,
-      );
-    },
-    playerSeekTime() {
-      if (!this.playerSeekTime) {
-        return;
-      }
-      if (this.playerPodcast || this.playerLive) {
-        this.notListenTime = this.playerSeekTime - this.listenTime;
-      }
-      const audioPlayer: HTMLAudioElement | null =
-        document.querySelector("#audio-player");
-      if (!audioPlayer) return;
-      audioPlayer.currentTime = this.playerSeekTime;
     },
     playerStatus() {
       const audioPlayer: HTMLAudioElement | null =
@@ -149,10 +126,6 @@ export const playerLogic = defineComponent({
         audioPlayer.play();
       }
     },
-  },
-
-  mounted() {
-    window.addEventListener("beforeunload", this.endListeningProgress);
   },
 
   methods: {
@@ -267,19 +240,7 @@ export const playerLogic = defineComponent({
       }
       const mediaTarget = event.currentTarget as HTMLMediaElement;
       if (this.playerPodcast || this.playerLive) {
-        if (!this.downloadId) {
-          return;
-        }
-        if (
-          this.playerLive &&
-          0 === this.listenTime &&
-          0 !== mediaTarget.currentTime
-        ) {
-          this.notListenTime = mediaTarget.currentTime;
-          this.listenTime = 1;
-        } else {
-          this.listenTime = mediaTarget.currentTime - this.notListenTime;
-        }
+        this.onTimeUpdateProgress(mediaTarget.currentTime);
       }
       const streamDuration = this.streamDurationForSafari(mediaTarget);
       if (!streamDuration) return;

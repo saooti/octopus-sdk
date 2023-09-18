@@ -10,6 +10,9 @@
   </div>
 </template>
 <script lang="ts">
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapActions } from "pinia";
+import { playerLogicProgress } from "../../mixins/player/playerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
 import qualitySelector from "videojs-hls-quality-selector";
 import qualityLevels from "videojs-contrib-quality-levels";
@@ -26,7 +29,7 @@ export default defineComponent({
   props: {
     hlsUrl: { default: "", type: String },
   },
-
+  mixins: [playerLogicProgress],
   emits: ["changeValid"],
   data() {
     return {
@@ -34,7 +37,13 @@ export default defineComponent({
       useVideoSrc: false as boolean,
       player: undefined as VideoJsPlayer | undefined,
       playing: false as boolean,
+      isPaused: false as boolean,
       stalledTimout: undefined as ReturnType<typeof setTimeout> | undefined,
+      //playerLive mixins
+      downloadId: null as string | null,
+      listenTime: 0 as number,
+      notListenTime: 0 as number,
+      lastSend: 0 as number,
     };
   },
   computed: {
@@ -68,10 +77,10 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.playLive();
     this.useVideoSrc =
       "" !== this.videoElement.canPlayType("application/vnd.apple.mpegurl") &&
       !navigator.userAgent.includes("Android");
+    this.playLive();
   },
 
   beforeUnmount() {
@@ -81,8 +90,13 @@ export default defineComponent({
   },
 
   methods: {
+     ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
     definedStalledTimeout() {
+      this.isPaused = false;
       this.stalledTimout = setTimeout(() => {
+        if(this.isPaused){
+          return;
+        }
         this.videoClean();
         this.playLive();
       }, 5000);
@@ -90,6 +104,7 @@ export default defineComponent({
     async playLive(): Promise<void> {
       clearTimeout(this.stalledTimout);
       this.definedStalledTimeout();
+      await this.initLiveDownloadId();
       if (this.useVideoSrc) {
         this.playLiveIos();
         return;
@@ -102,10 +117,6 @@ export default defineComponent({
           this.playing = true;
         },
       );
-      this.player.on("timeupdate", () => {
-        clearTimeout(this.stalledTimout);
-        this.definedStalledTimeout();
-      });
       this.player.on("error", (error) => {
         this.stopLive();
         if (error.description && error.description.includes("403")) {
@@ -113,6 +124,20 @@ export default defineComponent({
         } else {
           this.errorPlay = this.$t("Podcast play error");
         }
+      });
+      this.player.on('seeking', () => {
+        this.playerUpdateSeekTime(this.player?.currentTime()??0);
+      });
+      this.player.on('pause', () => {
+        this.isPaused=true;
+      });
+      this.player.on("timeupdate", () => {
+        clearTimeout(this.stalledTimout);
+        this.definedStalledTimeout();
+        this.onTimeUpdateVideo();
+      });
+      this.player.on('seeking', () => {
+        this.playerUpdateSeekTime(this.player?.currentTime()??0);
       });
     },
     async playLiveIos(): Promise<void> {
@@ -136,6 +161,13 @@ export default defineComponent({
       this.videoElement.ontimeupdate = async () => {
         clearTimeout(this.stalledTimout);
         this.definedStalledTimeout();
+        this.onTimeUpdateVideo();
+      };
+      this.videoElement.onpause = async () => {
+        this.isPaused=true;
+      };
+      this.videoElement.onseeking = async () => {
+        this.playerUpdateSeekTime(this.videoElement.currentTime);
       };
       this.videoElement.src = this.hlsUrl;
     },
@@ -165,8 +197,14 @@ export default defineComponent({
       this.errorPlay = "";
       this.videoClean();
       this.playing = false;
+      this.endListeningProgress();
     },
-  },
+    onTimeUpdateVideo(): void {
+      if (!this.downloadId) { return;}
+      const currentTime = this.player?.currentTime() ?? this.videoElement.currentTime;
+      this.onTimeUpdateProgress(currentTime);
+    },
+    },
 });
 </script>
 

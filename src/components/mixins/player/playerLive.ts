@@ -1,5 +1,5 @@
 import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
+import { playerLogicProgress} from "./playerLogicProgress";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
@@ -8,6 +8,7 @@ let Hls:any = null;
 /* eslint-enable */
 import { defineComponent } from "vue";
 export const playerLive = defineComponent({
+  mixins: [playerLogicProgress],
   data() {
     return {
       listenTime: 0 as number,
@@ -20,7 +21,7 @@ export const playerLive = defineComponent({
     };
   },
   computed: {
-    ...mapState(usePlayerStore, ["playerLive", "playerRadio"]),
+    ...mapState(usePlayerStore, ["playerLive", "playerRadio", "playerVideo"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
   },
   methods: {
@@ -56,6 +57,7 @@ export const playerLive = defineComponent({
         ) {
           this.audioElement.src = hlsStreamUrl;
           await this.initLiveDownloadId();
+          this.hlsReady = true;
           await this.audioElement.play();
           this.onPlay();
         } else {
@@ -66,32 +68,6 @@ export const playerLive = defineComponent({
           this.playHls(hlsStreamUrl);
         }, 1000);
       }
-    },
-    async initLiveDownloadId() {
-      if (!this.playerLive || this.downloadId) {
-        return;
-      }
-      try {
-        const downloadId = await octopusApi.putDataPublic<string | null>(
-          0,
-          "podcast/prepare/live/" + this.playerLive.podcastId,
-          undefined,
-        );
-        await octopusApi.fetchDataPublicWithParams<string | null>(
-          0,
-          "podcast/download/live/" + this.playerLive.podcastId + ".m3u8",
-          {
-            downloadId: null !== downloadId ? downloadId : undefined,
-            origin: "octopus",
-            distributorId: this.authOrgaId,
-          },
-        );
-        this.setDownloadId(downloadId);
-      } catch (error) {
-        this.downloadId = null;
-        console.log("ERROR downloadId");
-      }
-      this.hlsReady = true;
     },
     async initHls(hlsStreamUrl: string): Promise<void> {
       return new Promise<void>(async (resolve, reject) => {
@@ -106,6 +82,7 @@ export const playerLive = defineComponent({
         this.hls = new Hls();
         this.hls.on(Hls.Events.MANIFEST_PARSED, async () => {
           await this.initLiveDownloadId();
+          this.hlsReady = true;
           this.hls.attachMedia(this.audioElement as HTMLAudioElement);
           await (this.audioElement as HTMLAudioElement).play();
           this.onPlay();
@@ -116,29 +93,6 @@ export const playerLive = defineComponent({
         });
         this.hls.loadSource(hlsStreamUrl);
       });
-    },
-    setDownloadId(newValue: string | null): void {
-      this.endListeningProgress();
-      this.downloadId = newValue;
-    },
-    async endListeningProgress(): Promise<void> {
-      if (!this.downloadId) return;
-      try {
-        await octopusApi.putDataPublic(
-          0,
-          "podcast/listen/" +
-            this.downloadId +
-            "?seconds=" +
-            Math.round(this.listenTime),
-          undefined,
-        );
-      } catch {
-        //Do nothing
-      }
-      this.downloadId = null;
-      this.notListenTime = 0;
-      this.lastSend = 0;
-      this.listenTime = 0;
     },
     endingLive(): void {
       const audio: HTMLElement | null = document.getElementById("audio-player");
