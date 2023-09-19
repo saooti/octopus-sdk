@@ -6,8 +6,10 @@
     width="500"
     height="281"
     style="z-index: 1"
+    ebkitallowfullscreen="true"
+    mozallowfullscreen="true"
     allowfullscreen="true"
-    allow="autoplay"
+    allow="fullscreen, autoplay"
     referrerpolicy="no-referrer-when-downgrade"
   ></iframe>
 </template>
@@ -27,22 +29,22 @@ export default defineComponent({
         return (
           "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
           this.playerPodcast?.video?.videoId +
-          "/autoplay/1"
+          "/sound/true/autoplay/1"
         );
       }
       return "";
     },
   },
   watch: {
-    srcVideo() {
+    /* srcVideo() {
       this.goFullScreen();
-    },
+    }, */
   },
   mounted() {
-    this.goFullScreen();
+    /* this.goFullScreen(); */
   },
   methods: {
-    goFullScreen() {
+    /* goFullScreen() {
       if ("" === this.srcVideo) {
         return;
       }
@@ -58,7 +60,7 @@ export default defineComponent({
         default:
           console.log("The orientation API isn't supported in this browser :(");
       }
-    },
+    }, */
   },
 });
 </script>
