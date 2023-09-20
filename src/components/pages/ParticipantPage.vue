@@ -25,7 +25,7 @@
         <EditBox
           v-if="editRight && pageParameters.isEditBox"
           :participant="participant"
-          class="w-100"
+          class="w-100 justify-content-center"
           @participant-update="updateParticipant"
         />
         <ShareButtons
