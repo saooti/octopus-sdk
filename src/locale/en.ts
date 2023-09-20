@@ -29,10 +29,10 @@ export default{
   'Count more elements matched your query, please make a more specific search.':
     'There are still {count} item (s) matching your search. Please do a more specific search.',
   'Animator image': "Host image",
-  Emission: 'Serie',
-  'Emission description': "Serie description",
-  'Emission image': "Serie image",
-  'Emission name': "Serie title",
+  Emission: 'Series',
+  'Emission description': "Series description",
+  'Emission image': "Series image",
+  'Emission name': "Series title",
   'No elements found. Consider changing the search query.':
     'No elements found. Consider changing the search query.',
   'Podcast is not visible for listeners':
@@ -94,7 +94,7 @@ export default{
   Yes: 'Yes',
   No: 'No',
   "This episode is not available for (re)listening": "This episode is not available for (re)listening",
-  "Emission doesn't exist": "Serie doesn't exist",
+  "Emission doesn't exist": "Series doesn't exist",
   "Animator doesn't exist": "Host doesn't exist",
   "Productor doesn't exist": "Producer doesn't exist",
   'Create an account': 'Create an account',
@@ -121,7 +121,7 @@ export default{
     'Speaker is not associated to any podcasts',
   'Default version': 'Default version',
   'Large version': 'Large version',
-  'Emission version': 'Serie version',
+  'Emission version': 'Series version',
   'Large emission version': 'Large series version',
   'Large suggestion version': 'Large suggestion version',
   'Embed link': 'Embed miniplayer',
@@ -140,7 +140,7 @@ export default{
   'Publish in future': 'See the episodes hidden from the audience',
   'In error': 'In error',
   'Emission with episode published :':
-    'Serie with episode published since :',
+    'Series with episode published since :',
   Sort: 'Sorted',
   Filter: 'Filter',
   'Sort score': 'Sorted by relevancy score',
