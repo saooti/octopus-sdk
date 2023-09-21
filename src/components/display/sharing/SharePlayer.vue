@@ -18,7 +18,7 @@
           id="miniplayerIframe"
           title="miniplayer"
           allowfullscreen="true"
-          allow="autoplay"
+          allow="clipboard-read; clipboard-write; autoplay"
           referrerpolicy="no-referrer-when-downgrade"
           :src="iFrameSrc"
           width="100%"
