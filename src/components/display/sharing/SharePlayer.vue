@@ -19,6 +19,7 @@
           title="miniplayer"
           :src="iFrameSrc"
           width="100%"
+          allow="clipboard-read; clipboard-write"
           :height="iFrameHeight"
           class="max-iframe mx-3"
         />
