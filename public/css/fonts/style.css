@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/css/fonts/icomoon.eot?cswzn');
-  src:  url('/css/fonts/icomoon.eot?cswzn#iefix') format('embedded-opentype'),
-    url('/css/fonts/icomoon.ttf?cswzn') format('truetype'),
-    url('/css/fonts/icomoon.woff?cswzn') format('woff'),
-    url('/css/fonts/icomoon.svg?cswzn#icomoon') format('svg');
+  src:  url('/css/fonts/icomoon.eot?kq297p');
+  src:  url('/css/fonts/icomoon.eot?kq297p#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?kq297p') format('truetype'),
+    url('/css/fonts/icomoon.woff?kq297p') format('woff'),
+    url('/css/fonts/icomoon.svg?kq297p#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.saooti-play-video:before {
+  content: "\e940";
+}
+.saooti-edit-ftp:before {
+  content: "\e93f";
+}
 .saooti-iheart:before {
   content: "\e93e";
   color: #e11b22;
