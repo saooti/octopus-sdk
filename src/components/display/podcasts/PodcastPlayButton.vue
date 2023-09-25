@@ -81,7 +81,7 @@ export default defineComponent({
     ]),
     isVideoPodcast(): boolean {
       return (
-        this.fetchConference?.videoProfile?.includes("video_") ||
+        (this.fetchConference?.videoProfile?.includes("video_") && "READY_TO_RECORD" === this.podcast.processingStatus) ||
         undefined !== this.podcast.video?.videoId
       );
     },

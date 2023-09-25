@@ -273,7 +273,7 @@ $newLightenColor:lighten($octopus-primary-color, 55%);
       background: rgba(0, 0, 0, 0.09);
     }
     .multiple-play-buttons-container{
-      background-color:rgba(0, 0, 0, 0.7);
+      background-color:$primaryColorLessTransparent;
       border-radius: $octopus-borderradius;
       color: white;
       padding: 0.3rem;
