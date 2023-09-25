@@ -1,6 +1,6 @@
 <template>
   <button 
-    v-if="!hidePlay && (!isLiveReadyToRecord || recordingLive)"
+    v-if="!hidePlay || recordingLive"
     class="image-play-button"
     @mouseenter="hoverType='audio'"
     @mouseleave="hoverType=''"

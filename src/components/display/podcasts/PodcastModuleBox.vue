@@ -12,6 +12,7 @@
               : '',
           ]"
           class="me-3"
+          :hide-play="isLiveReadyToRecord"
           :podcast="podcast"
           :playing-podcast="playingPodcast"
           :fetch-conference="fetchConference"
