@@ -250,7 +250,7 @@ export default defineComponent({
     iFrameHeight(): string {
       switch (this.iFrameModel) {
         case "video":
-          return "auto";
+          return "281px";
         case "large":
           if (this.podcast) return "140px";
           return "350px";
