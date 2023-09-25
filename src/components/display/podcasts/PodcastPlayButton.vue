@@ -2,6 +2,7 @@
   <button 
     v-if="!hidePlay || recordingLive"
     class="image-play-button"
+    :class="classicPodcastPlay ? '' : 'transparent-background'"
     @mouseenter="hoverType='audio'"
     @mouseleave="hoverType=''"
     @click="play(false)"
@@ -210,6 +211,9 @@ export default defineComponent({
     text-transform: uppercase;
     position: absolute;
     top: 0;
+  }
+  .transparent-background {
+    background-color: #ffffff80;
   }
 
   .big-icon-error {
