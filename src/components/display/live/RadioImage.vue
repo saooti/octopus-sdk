@@ -15,9 +15,9 @@
       :alt="$t('Canal name image', { name: radio.name })"
     />
     <button class="image-play-button" @click="playRadio">
-      <div class="icon-container">
+      <div class="multiple-play-buttons-container">
         <div v-if="!playingRadio" :title="$t('Play')" class="saooti-play" />
-        <div v-else class="bloc-paddle">
+        <div v-else class="bloc-paddle" :class="playingRadio && 'PLAYING' === playerStatus ? 'play-animation' : ''">
           <span class="paddle1" />
           <span class="paddle2" />
           <span class="paddle3" />

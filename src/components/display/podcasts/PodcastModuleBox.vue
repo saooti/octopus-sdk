@@ -13,7 +13,6 @@
           ]"
           class="me-3"
           :podcast="podcast"
-          :hide-play="!isLiveReadyToRecord"
           :playing-podcast="playingPodcast"
           :fetch-conference="fetchConference"
           :is-animator-live="isOctopusAndAnimator"

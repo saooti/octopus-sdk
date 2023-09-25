@@ -5,15 +5,15 @@
     .bloc-paddle{
       align-items: flex-end;
       display: flex;
-      width: 0.9rem;
-      height: 1.2rem;
+      width: 1.4rem;
+      height: 1.8rem;
       justify-content: space-around;
       align-content: flex-start;
       border-radius: 50%;
       background: transparent !important;
       
       > span {
-          width: 0.1rem;
+          width: 0.2rem;
           margin: 0.05rem;
           background: #fff;
       }
