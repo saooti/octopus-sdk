@@ -275,8 +275,8 @@ export default defineComponent({
         }
         if(arrayFilterToUpdate.length !== this.arrayFilter.length){
           this.arrayFilter = arrayFilterToUpdate;
+          this.$emit('warning');
         }
-        this.$emit('warning');
       }
     },
     resetRubriqueFilter(): void {
