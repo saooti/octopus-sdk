@@ -59,7 +59,7 @@ export default defineComponent({
       type: Array as () => Array<RubriquageFilter>,
     },
   },
-  emits: ["updateRubriquageFilter"],
+  emits: ["updateRubriquageFilter", "warning"],
 
   data() {
     return {
@@ -276,6 +276,7 @@ export default defineComponent({
         if(arrayFilterToUpdate.length !== this.arrayFilter.length){
           this.arrayFilter = arrayFilterToUpdate;
         }
+        this.$emit('warning');
       }
     },
     resetRubriqueFilter(): void {
