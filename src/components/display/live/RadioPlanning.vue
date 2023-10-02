@@ -138,11 +138,11 @@ export default defineComponent({
 
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
-    startOfDay(): number {
-      return dayjs(this.daySelected).utcOffset(0).startOf("date").valueOf();
+    startOfDay(): string {
+      return dayjs(this.daySelected).utcOffset(0).startOf("date").toISOString();
     },
-    endOfDay(): number {
-      return dayjs(this.daySelected).utcOffset(0).endOf("date").valueOf();
+    endOfDay(): string {
+      return dayjs(this.daySelected).utcOffset(0).endOf("date").toISOString();
     },
   },
 
