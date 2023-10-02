@@ -49,7 +49,14 @@ export default defineComponent({
     useTeleport: { default: false, type: Boolean },
     templateClass: { default: undefined, type: String },
     readonly: { default: false, type: Boolean },
-    maxTime:{default: null, type: Object as () => { hours?: number | string; minutes?: number | string; seconds?: number | string }}
+    maxTime: {
+      default: null,
+      type: Object as () => {
+        hours?: number | string;
+        minutes?: number | string;
+        seconds?: number | string;
+      },
+    },
   },
 
   emits: ["updateDate", "update:date"],

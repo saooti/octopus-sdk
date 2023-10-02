@@ -26,12 +26,12 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "PlayerVideo",
   components: {
-    SnackBar
+    SnackBar,
   },
 
   computed: {
     ...mapState(usePlayerStore, ["playerPodcast", "playerVideo"]),
-    videoId(): string|undefined{
+    videoId(): string | undefined {
       return this.playerPodcast?.video?.videoId;
     },
     srcVideo(): string {
@@ -51,12 +51,12 @@ export default defineComponent({
     }, */
   },
   mounted() {
-    if(undefined===this.videoId){
+    if (undefined === this.videoId) {
       (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
         this.$t("Podcast play error"),
       );
     }
-    
+
     /* this.goFullScreen(); */
   },
   methods: {

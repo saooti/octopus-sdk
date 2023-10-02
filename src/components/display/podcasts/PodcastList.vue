@@ -185,7 +185,7 @@ export default defineComponent({
             ? this.authProfile?.userId
             : undefined,
         includeStatus: ["READY", "PROCESSING"],
-        withVideo: this.withVideo
+        withVideo: this.withVideo,
       };
       try {
         const data = await octopusApi.fetchDataWithParams<{

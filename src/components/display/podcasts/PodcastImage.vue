@@ -28,10 +28,10 @@
     <div v-if="isRecordedInLive" class="live-image-status recording-bg">
       {{ $t("Recorded in live") }}
     </div>
-    <PodcastPlayButton 
+    <PodcastPlayButton
       :podcast="podcast"
-      :hidePlay="hidePlay"
-      :fetchConference="fetchConference"
+      :hide-play="hidePlay"
+      :fetch-conference="fetchConference"
     />
     <div
       v-if="displayDescription && isMobile"
@@ -52,8 +52,8 @@ import imageProxy from "../../mixins/imageProxy";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PodcastImage",
-  components:{
-    PodcastPlayButton
+  components: {
+    PodcastPlayButton,
   },
   mixins: [imageProxy],
   props: {
@@ -94,26 +94,25 @@ export default defineComponent({
       );
     },
     statusText(): string {
-      if (!this.fetchConference) return '';
+      if (!this.fetchConference) return "";
       switch (this.fetchConference.status) {
-        case 'PLANNED':
-          return this.$t('live in few time');
-        case 'PENDING':
-          if (this.isAnimatorLive) return this.$t('Open studio');
-          return this.$t('live upcoming');
-        case 'RECORDING':
-          return this.$t('In live');
-        case 'DEBRIEFING':
-          /* if (!this.isAnimatorLive) return ''; */
-          if ('READY_TO_RECORD' === this.podcast.processingStatus)
-            return this.$t('Not recording');
-          return this.$t('Debriefing');
-        case 'ERROR':
-          return this.$t('In error');
-        case 'PUBLISHING':
-          return this.$t('Publishing');
+        case "PLANNED":
+          return this.$t("live in few time");
+        case "PENDING":
+          if (this.isAnimatorLive) return this.$t("Open studio");
+          return this.$t("live upcoming");
+        case "RECORDING":
+          return this.$t("In live");
+        case "DEBRIEFING":
+          if ("READY_TO_RECORD" === this.podcast.processingStatus)
+            return this.$t("Not recording");
+          return this.$t("Debriefing");
+        case "ERROR":
+          return this.$t("In error");
+        case "PUBLISHING":
+          return this.$t("Publishing");
         default:
-          return '';
+          return "";
       }
     },
   },

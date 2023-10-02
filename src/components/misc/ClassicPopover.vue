@@ -119,14 +119,15 @@ export default defineComponent({
       }
       const rectElement = (e.target as HTMLElement).getBoundingClientRect();
       (this.$refs.popover as HTMLElement).style.display = "block";
-      if(this.leftPos){
-        this.posX = rectElement.right -
+      if (this.leftPos) {
+        this.posX =
+          rectElement.right -
           parentRight -
           (this.$refs.popover as HTMLElement).clientWidth;
-      }else{
+      } else {
         this.posX = rectElement.left - parentLeft;
       }
-      this.posX = Math.max(0, this.posX);  
+      this.posX = Math.max(0, this.posX);
       const yPosParent = this.topPos ? rectElement.top : rectElement.bottom;
       const yGap = this.topPos
         ? -5 - (this.$refs.popover as HTMLElement).clientHeight

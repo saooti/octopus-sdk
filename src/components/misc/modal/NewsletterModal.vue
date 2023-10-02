@@ -274,7 +274,7 @@ export default defineComponent({
     ${this.emissionName}${this.description}`,
       ];
       html.push(
-      `</table>
+        `</table>
       <table width='100%' style="width:100%;background:#f3f3f3;font-family: Arial, sans-serif;font-size: 12px;line-height: 20px;">
       <tr style="font-family: Arial, sans-serif;font-size: 12px;line-height: 20px;background: #f3f3f3;vertical-align: middle;padding: 15px 10px;display: flex; align-items:center; flex-wrap:wrap">
         <td><a href="${this.shareUrl}">
@@ -283,7 +283,7 @@ export default defineComponent({
         <td style="margin-left:10px"><a style="color: #000;text-decoration: none; margin-right:8px" href="${this.shareUrl}">${this.shareText}</a></td>
         ${this.articleHtml}
       </tr>
-      </table>${this.participantsName}`
+      </table>${this.participantsName}`,
       );
       return html.join("");
     },

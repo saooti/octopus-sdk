@@ -220,7 +220,8 @@ export default defineComponent({
       if ("video" === this.iFrameModel) {
         return (
           "https://www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
-          this.podcast?.video?.videoId + "/sound/true"
+          this.podcast?.video?.videoId +
+          "/sound/true"
         );
       }
       let url = [""];

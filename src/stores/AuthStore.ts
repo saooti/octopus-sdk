@@ -42,7 +42,7 @@ export const useAuthStore = defineStore("AuthStore", {
     isGarRole(): string | undefined {
       return this.authProfile?.attributes?.["GAR"] as
         | string
-        | undefined; /* return "ELEVE"; */ /*CHEF_ETABLISSEMENT, ENSEIGNANT, ELEVE, undefined */
+        | undefined; /*CHEF_ETABLISSEMENT, ENSEIGNANT, ELEVE, undefined */
     },
     isGarStudent(): boolean {
       return "ELEVE" === this.isGarRole;

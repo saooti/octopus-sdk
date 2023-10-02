@@ -1,21 +1,25 @@
 <template>
-  <button 
+  <button
     v-if="!hidePlay || recordingLive"
     class="image-play-button"
     :class="classicPodcastPlay ? '' : 'transparent-background'"
-    @mouseenter="hoverType='audio'"
-    @mouseleave="hoverType=''"
+    @mouseenter="hoverType = 'audio'"
+    @mouseleave="hoverType = ''"
     @click="play(false)"
   >
     <div
       class="multiple-play-buttons-container"
       :class="[
-        hoverType ? 'hover-type-'+hoverType : '',
+        hoverType ? 'hover-type-' + hoverType : '',
         isVideoPodcast ? 'has-video' : '',
       ]"
     >
       <template v-if="!isLiveToBeRecorded">
-        <div v-if="!playingPodcast || (playingPodcast && playerVideo)" :title="$t('Play')" class="saooti-play me-1" />
+        <div
+          v-if="!playingPodcast || (playingPodcast && playerVideo)"
+          :title="$t('Play')"
+          class="saooti-play me-1"
+        />
         <div
           v-if="playingPodcast"
           :class="'PLAYING' === playerStatus ? 'play-animation' : ''"
@@ -29,11 +33,11 @@
           v-if="isVideoPodcast && !playerVideo"
           :title="$t('Video')"
           class="btn-transparent d-flex align-items-center saooti-play-video"
-          @mouseenter="hoverType='video'"
-          @mouseleave="hoverType='audio'"
+          @mouseenter="hoverType = 'video'"
+          @mouseleave="hoverType = 'audio'"
           @click.stop="play(true)"
         />
-         <div
+        <div
           v-if="!classicPodcastPlay"
           class="special-icon-play-button"
           :class="iconName"
@@ -42,7 +46,12 @@
           {{ durationString }}
         </div>
       </template>
-      <div v-else :title="textVisible" class="big-icon-error" :class="iconName" />
+      <div
+        v-else
+        :title="textVisible"
+        class="big-icon-error"
+        :class="iconName"
+      />
     </div>
     <div v-if="!classicPodcastPlay" class="live-image-status bg-dark">
       {{ textVisible }}
@@ -81,35 +90,50 @@ export default defineComponent({
     ]),
     isVideoPodcast(): boolean {
       return (
-        (this.fetchConference?.videoProfile?.includes("video_") && "READY_TO_RECORD" === this.podcast.processingStatus) ||
+        (this.fetchConference?.videoProfile?.includes("video_") &&
+          "READY_TO_RECORD" === this.podcast.processingStatus) ||
         undefined !== this.podcast.video?.videoId
       );
     },
-    playingLive(): boolean{
-      return undefined!==this.fetchConference && "null" !== this.fetchConference.toString() &&
-          this.playerLive?.conferenceId === this.fetchConference.conferenceId; 
+    playingLive(): boolean {
+      return (
+        undefined !== this.fetchConference &&
+        "null" !== this.fetchConference.toString() &&
+        this.playerLive?.conferenceId === this.fetchConference.conferenceId
+      );
     },
     playingPodcast() {
-      return this.playerPodcast?.podcastId === this.podcast.podcastId || this.playingLive;
+      return (
+        this.playerPodcast?.podcastId === this.podcast.podcastId ||
+        this.playingLive
+      );
     },
     isLiveToBeRecorded(): boolean {
       return undefined === this.fetchConference && this.isLiveReadyToRecord;
     },
     isLiveReadyToRecord(): boolean {
-      return undefined !== this.podcast?.conferenceId && 0 !== this.podcast.conferenceId &&
-      "READY_TO_RECORD" === this.podcast.processingStatus;
+      return (
+        undefined !== this.podcast?.conferenceId &&
+        0 !== this.podcast.conferenceId &&
+        "READY_TO_RECORD" === this.podcast.processingStatus
+      );
     },
-    isLiveValidAndVisible():boolean{
-      return undefined !== this.podcast && false !== this.podcast.valid &&
-      undefined !== this.podcast.availability.visibility && this.podcast.availability.visibility;
+    isLiveValidAndVisible(): boolean {
+      return (
+        undefined !== this.podcast &&
+        false !== this.podcast.valid &&
+        undefined !== this.podcast.availability.visibility &&
+        this.podcast.availability.visibility
+      );
     },
     classicPodcastPlay(): boolean {
       return (
         this.isLiveValidAndVisible &&
         !this.isLiveToBeRecorded &&
         ("READY_TO_RECORD" === this.podcast.processingStatus ||
-        "READY" === this.podcast.processingStatus ||
-        ("PROCESSING" === this.podcast.processingStatus && !(state.generalParameters.authenticated as boolean)))
+          "READY" === this.podcast.processingStatus ||
+          ("PROCESSING" === this.podcast.processingStatus &&
+            !(state.generalParameters.authenticated as boolean)))
       );
     },
     iconName(): string {
@@ -219,7 +243,7 @@ export default defineComponent({
   .big-icon-error {
     font-size: 1.5rem;
   }
-  .special-icon-play-button{
+  .special-icon-play-button {
     width: 30px;
     height: 30px;
     background-color: #ffd663;
@@ -234,7 +258,7 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
   }
-  .has-video .special-icon-play-button{
+  .has-video .special-icon-play-button {
     left: 7.4rem;
   }
 }

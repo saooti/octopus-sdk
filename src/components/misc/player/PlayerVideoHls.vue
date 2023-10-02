@@ -25,11 +25,11 @@ if (!videojs.getPlugin("hlsQualitySelector")) {
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PlayerVideoHls",
+  mixins: [playerLogicProgress],
 
   props: {
     hlsUrl: { default: "", type: String },
   },
-  mixins: [playerLogicProgress],
   emits: ["changeValid"],
   data() {
     return {
@@ -90,11 +90,11 @@ export default defineComponent({
   },
 
   methods: {
-     ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
+    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
     definedStalledTimeout() {
       this.isPaused = false;
       this.stalledTimout = setTimeout(() => {
-        if(this.isPaused){
+        if (this.isPaused) {
           return;
         }
         this.videoClean();
@@ -125,19 +125,19 @@ export default defineComponent({
           this.errorPlay = this.$t("Podcast play error");
         }
       });
-      this.player.on('seeking', () => {
-        this.playerUpdateSeekTime(this.player?.currentTime()??0);
+      this.player.on("seeking", () => {
+        this.playerUpdateSeekTime(this.player?.currentTime() ?? 0);
       });
-      this.player.on('pause', () => {
-        this.isPaused=true;
+      this.player.on("pause", () => {
+        this.isPaused = true;
       });
       this.player.on("timeupdate", () => {
         clearTimeout(this.stalledTimout);
         this.definedStalledTimeout();
         this.onTimeUpdateVideo();
       });
-      this.player.on('seeking', () => {
-        this.playerUpdateSeekTime(this.player?.currentTime()??0);
+      this.player.on("seeking", () => {
+        this.playerUpdateSeekTime(this.player?.currentTime() ?? 0);
       });
     },
     async playLiveIos(): Promise<void> {
@@ -164,7 +164,7 @@ export default defineComponent({
         this.onTimeUpdateVideo();
       };
       this.videoElement.onpause = async () => {
-        this.isPaused=true;
+        this.isPaused = true;
       };
       this.videoElement.onseeking = async () => {
         this.playerUpdateSeekTime(this.videoElement.currentTime);
@@ -200,11 +200,14 @@ export default defineComponent({
       this.endListeningProgress();
     },
     onTimeUpdateVideo(): void {
-      if (!this.downloadId) { return;}
-      const currentTime = this.player?.currentTime() ?? this.videoElement.currentTime;
+      if (!this.downloadId) {
+        return;
+      }
+      const currentTime =
+        this.player?.currentTime() ?? this.videoElement.currentTime;
       this.onTimeUpdateProgress(currentTime);
     },
-    },
+  },
 });
 </script>
 

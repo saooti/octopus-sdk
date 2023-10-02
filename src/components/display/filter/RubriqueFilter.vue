@@ -257,7 +257,7 @@ export default defineComponent({
       });
       this.saveOrganisation = this.organisation;
       if (0 === this.rubriquageData.length) return;
-     
+
       if (initArrayFilter && this.rubriquageData[0].rubriquageId) {
         this.arrayFilter.push({
           rubriquageId: this.rubriquageData[0].rubriquageId,
@@ -265,17 +265,19 @@ export default defineComponent({
           nameRubriquage: this.rubriquageData[0].title,
           nameRubrique: "",
         });
-      }else{
+      } else {
         const arrayFilterToUpdate = [];
-        for(const filter of this.arrayFilter){
-          const rubriquageExist = this.rubriquageData.find( (element) => element.rubriquageId === filter.rubriquageId);
-          if(rubriquageExist){
+        for (const filter of this.arrayFilter) {
+          const rubriquageExist = this.rubriquageData.find(
+            (element) => element.rubriquageId === filter.rubriquageId,
+          );
+          if (rubriquageExist) {
             arrayFilterToUpdate.push(filter);
           }
         }
-        if(arrayFilterToUpdate.length !== this.arrayFilter.length){
+        if (arrayFilterToUpdate.length !== this.arrayFilter.length) {
           this.arrayFilter = arrayFilterToUpdate;
-          this.$emit('warning');
+          this.$emit("warning");
         }
       }
     },

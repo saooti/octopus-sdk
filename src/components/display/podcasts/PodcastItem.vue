@@ -7,7 +7,9 @@
   >
     <PodcastImage
       :podcast="podcast"
-      :hide-play="hoverDesc && 0 !== description.length && podcastItemDescription"
+      :hide-play="
+        hoverDesc && 0 !== description.length && podcastItemDescription
+      "
       :display-description="0 !== description.length && podcastItemDescription"
       :arrow-direction="arrowDirection"
       :fetch-conference="fetchConference"

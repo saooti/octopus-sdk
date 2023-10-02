@@ -1,7 +1,11 @@
 <template>
-  <div :id="idModal" class="octopus-modal" :class="onlyHeader? 'octopus-only-header-modal':''">
-    <div class="octopus-modal-backdrop"/>
-    <div class="octopus-modal-dialog" >
+  <div
+    :id="idModal"
+    class="octopus-modal"
+    :class="onlyHeader ? 'octopus-only-header-modal' : ''"
+  >
+    <div class="octopus-modal-backdrop" />
+    <div class="octopus-modal-dialog">
       <div class="octopus-modal-content">
         <div class="octopus-modal-header">
           <h5 cclass="octopus-modal-title">
@@ -11,8 +15,8 @@
             <button
               v-if="canBeReduced"
               class="btn-transparent text-light"
-              :class="onlyHeader? 'saooti-down':'saooti-up'"
-              :title="onlyHeader? $t('Enlarge'):$t('Reduce')"
+              :class="onlyHeader ? 'saooti-down' : 'saooti-up'"
+              :title="onlyHeader ? $t('Enlarge') : $t('Reduce')"
               @click="onlyHeader = !onlyHeader"
             />
             <button

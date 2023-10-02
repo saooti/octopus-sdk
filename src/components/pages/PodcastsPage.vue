@@ -100,9 +100,9 @@ export default defineComponent({
     organisation(): string | undefined {
       return this.organisationId ? this.organisationId : this.filterOrgaId;
     },
-    withVideo(): boolean|undefined{
-      return false===this.onlyVideo ? undefined : true;
-    }
+    withVideo(): boolean | undefined {
+      return false === this.onlyVideo ? undefined : true;
+    },
   },
   watch: {
     organisationId(): void {
