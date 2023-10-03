@@ -19,6 +19,7 @@
     :enable-time-picker="!isTimePicker ? displayTimePicker : undefined"
     :aria-labels="ariaLabels"
     :max-time="maxTime"
+    :month-picker="monthPicker"
     @update:model-value="$emit('updateDate', $event)"
   >
   </VueDatePicker>
@@ -57,6 +58,7 @@ export default defineComponent({
         seconds?: number | string;
       },
     },
+    monthPicker:{ default: false, type: Boolean },
   },
 
   emits: ["updateDate", "update:date"],
@@ -73,13 +75,28 @@ export default defineComponent({
       };
     },
     modelVal() {
-      return this.time ?? this.range ?? this.date;
+      if(this.time){
+        return this.time;
+      }
+      if(this.range){
+        return this.range;
+      }
+      if(this.date && this.monthPicker){
+        return {
+          month: this.date.getMonth(),
+          year: this.date.getFullYear()
+        };
+      }
+      return this.date;
     },
     formatLocale() {
       return this.$i18n.locale;
     },
     format() {
       let timeString = "";
+      if(this.monthPicker){
+        return "MM/yyyy";
+      }
       if (this.displayTimePicker || this.isTimePicker) {
         timeString = "HH:mm";
         if (this.displaySeconds) {
