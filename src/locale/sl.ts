@@ -337,4 +337,5 @@ export default {
   "Video":"Video",
   "Video Version":"Video različica",
   "Chronological":"Kronološko",
+  "Trigger automatic reading if this is possible":"Sprožite samodejno branje, če je to mogoče",
 }

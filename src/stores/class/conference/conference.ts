@@ -35,3 +35,8 @@ export interface Conference {
   duration?: number;
   videoProfile?:string;
 }
+
+export interface ConferencePublicInfo {
+  status: string;
+  videoProfile:string;
+}

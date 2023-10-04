@@ -340,4 +340,5 @@ export default{
   "Video":"Video",
   "Video Version":"Versione video",
   "Chronological":"Cronologico",
+  "Trigger automatic reading if this is possible":"Attivare la lettura automatica, se possibile",
   };

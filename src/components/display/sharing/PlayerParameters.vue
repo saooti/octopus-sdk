@@ -41,32 +41,43 @@
       <span class="flex-shrink-0">{{ $t("Last podcasts") }}</span>
     </div>
     <ClassicCheckbox
-      v-model:textInit="proceedReading"
+      :text-init="proceedReading"
+      @update:text-init="$emit('update:proceedReading', $event)"
       id-checkbox="proceed-reading-checkbox"
       :label="$t('Proceed reading')"
     />
     <ClassicCheckbox
-      v-model:textInit="isVisibleTemp"
+      :text-init="isVisible"
+      @update:text-init="$emit('update:isVisible', $event)"
       id-checkbox="is-visible-checkbox"
       :label="$t('Podcasts still available')"
     />
   </template>
   <ClassicCheckbox
     v-if="displayArticleParam"
-    v-model:textInit="displayArticle"
+    :text-init="displayArticle"
+    @update:text-init="$emit('update:displayArticle', $event)"
     id-checkbox="display-article-checkbox"
     :label="$t('Display associated article')"
   />
   <ClassicCheckbox
     v-if="displayTranscriptParam"
-    v-model:textInit="displayTranscript"
+    :text-init="displayTranscript"
+    @update:text-init="$emit('update:displayTranscript', $event)"
     id-checkbox="display-transcript-checkbox"
     :label="$t('If the transcript is available, show it')"
   />
   <ClassicCheckbox
-    v-model:textInit="displayWave"
+    :text-init="displayWave"
+    @update:text-init="$emit('update:displayWave', $event)"
     id-checkbox="display-wave-checkbox"
     :label="$t('Show animated wave')"
+  />
+  <ClassicCheckbox
+    :text-init="playerAutoPlay"
+    @update:text-init="$emit('update:playerAutoPlay', $event)"
+    id-checkbox="player-autoplay-checkbox"
+    :label="$t('Trigger automatic reading if this is possible')"
   />
 </template>
 
@@ -83,26 +94,27 @@ export default defineComponent({
     displayChoiceAllEpisodes: { default: false, type: Boolean },
     displayTranscriptParam: { default: false, type: Boolean },
     displayArticleParam: { default: false, type: Boolean },
+    proceedReading: { default: true, type: Boolean },
+    displayArticle: { default: true, type: Boolean },
+    displayTranscript: { default: true, type: Boolean },
+    displayWave: { default: true, type: Boolean },
+    playerAutoPlay: { default: false, type: Boolean },
   },
   emits: [
     "episodeNumbers",
-    "proceedReading",
-    "isVisible",
+    "update:proceedReading",
+    "update:isVisible",
     "iFrameNumber",
-    "displayArticle",
-    "displayTranscript",
-    "displayWave",
+    "update:displayArticle",
+    "update:displayTranscript",
+    "update:displayWave",
+    "update:playerAutoPlay"
   ],
 
   data() {
     return {
-      proceedReading: true as boolean,
       episodeNumbers: "number" as string,
       iFrameNumberPriv: "3" as string,
-      isVisibleTemp: this.isVisible,
-      displayArticle: true as boolean,
-      displayTranscript: true as boolean,
-      displayWave: true as boolean,
     };
   },
   computed: {
@@ -122,26 +134,8 @@ export default defineComponent({
     episodeNumbers(): void {
       this.$emit("episodeNumbers", this.episodeNumbers);
     },
-    proceedReading(): void {
-      this.$emit("proceedReading", this.proceedReading);
-    },
-    isVisibleTemp(): void {
-      this.$emit("isVisible", this.isVisibleTemp);
-    },
-    isVisible(): void {
-      this.isVisibleTemp = this.isVisible;
-    },
     iFrameNumberPriv(): void {
       this.$emit("iFrameNumber", this.iFrameNumberPriv);
-    },
-    displayArticle(): void {
-      this.$emit("displayArticle", this.displayArticle);
-    },
-    displayTranscript(): void {
-      this.$emit("displayTranscript", this.displayTranscript);
-    },
-    displayWave(): void {
-      this.$emit("displayWave", this.displayWave);
     },
   },
 });

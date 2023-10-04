@@ -13,7 +13,7 @@ import crudApi from "@/api/classicCrud";
 import displayMethods from "../../mixins/displayMethods";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
-import { Conference } from "@/stores/class/conference/conference";
+import { Conference, ConferencePublicInfo } from "@/stores/class/conference/conference";
 export default defineComponent({
   name: "LiveItem",
 
@@ -71,10 +71,11 @@ export default defineComponent({
       ) {
         return;
       }
-      const newStatus = await octopusApi.fetchData<string>(
+      const confInfo = await octopusApi.fetchData<ConferencePublicInfo>(
         9,
-        "conference/realstatus/" + this.fetchConference.conferenceId,
+        "conference/info/" + this.fetchConference.conferenceId,
       );
+      const newStatus = confInfo.status;
       if (newStatus !== this.fetchConference.status) {
         this.$emit("updateItem", {
           ...this.fetchConference,

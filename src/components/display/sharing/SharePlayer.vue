@@ -48,19 +48,18 @@
           <PlayerParameters
             v-if="isPlayerParameter"
             :is-visible="isVisible"
-            :chose-number-episode="
-              displayChoiceAllEpisodes || isLargeSuggestion
-            "
+            :chose-number-episode="displayChoiceAllEpisodes || isLargeSuggestion"
             :display-choice-all-episodes="displayChoiceAllEpisodes"
             :display-transcript-param="displayTranscriptParam"
             :display-article-param="displayArticleParam"
-            @display-article="displayArticle = $event"
-            @display-transcript="displayTranscript = $event"
-            @display-wave="displayWave = $event"
-            @episode-numbers="episodeNumbers = $event"
-            @proceed-reading="proceedReading = $event"
-            @is-visible="isVisible = $event"
+            v-model:display-article="displayArticle"
+            v-model:display-transcript="displayTranscript"
+            v-model:display-wave="displayWave"
+            v-model:proceed-reading="proceedReading"
+            v-model:is-visible="isVisible"
+            v-model:player-auto-play="playerAutoPlay"
             @i-frame-number="iFrameNumber = $event"
+            @episode-numbers="episodeNumbers = $event"
           />
           <ShareModalPlayer
             v-if="isShareModal"
@@ -144,6 +143,7 @@ export default defineComponent({
       displayArticle: true as boolean,
       displayTranscript: true as boolean,
       displayWave: true as boolean,
+      playerAutoPlay: false as boolean,
       orgaAttributes: undefined as
         | { [key: string]: string | number | boolean | undefined }
         | undefined,
@@ -367,6 +367,9 @@ export default defineComponent({
       }
       if (!this.displayWave) {
         url.push("&wave=false");
+      }
+      if(this.playerAutoPlay){
+        url.push('&autoplay=true');
       }
       if (this.isVisible) {
         url.push("&key=" + window.btoa(this.dataTitle.toString()));

@@ -81,7 +81,7 @@ import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
-import { Conference } from "@/stores/class/conference/conference";
+import { Conference, ConferencePublicInfo } from "@/stores/class/conference/conference";
 import { handle403 } from "../mixins/handle403";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
@@ -265,14 +265,16 @@ export default defineComponent({
 
   methods: {
     async fetchConferencePublic() {
-      const data = await octopusApi.fetchData<string>(
+      const data = await octopusApi.fetchData<ConferencePublicInfo>(
         9,
-        "conference/realstatus/" + this.podcast.conferenceId,
+        "conference/info/" + this.podcast?.conferenceId,
       );
       this.fetchConference = {
-        status: data,
-        conferenceId: this.podcast.conferenceId,
-        title: "",
+        ...data,
+        ...{
+          conferenceId: this.podcast?.conferenceId??0,
+          title: ""
+        }
       };
     },
     async initConference() {

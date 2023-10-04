@@ -347,4 +347,5 @@ export default {
   "Video":"Video",
   "Video Version":"Videoversion",
   "Chronological":"Chronologisch",
+  "Trigger automatic reading if this is possible":"Wenn möglich, automatisches Auslesen auslösen",
 }
