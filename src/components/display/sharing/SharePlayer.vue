@@ -219,7 +219,7 @@ export default defineComponent({
       }
     },
     iFrame(): string {
-      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
+      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" allow="clipboard-read; clipboard-write; autoplay" scrolling="no" frameborder="0"></iframe>`;
     },
     isPodcastNotVisible(): boolean {
       return (
