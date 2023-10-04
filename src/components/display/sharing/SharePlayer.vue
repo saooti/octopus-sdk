@@ -46,12 +46,12 @@
             :label="titleStillAvailable"
           />
           <PlayerParameters
-            v-if="isPlayerParameter"
             :is-visible="isVisible"
             :chose-number-episode="displayChoiceAllEpisodes || isLargeSuggestion"
             :display-choice-all-episodes="displayChoiceAllEpisodes"
             :display-transcript-param="displayTranscriptParam"
             :display-article-param="displayArticleParam"
+            :display-classic-parameter="isPlayerParameter"
             v-model:display-article="displayArticle"
             v-model:display-transcript="displayTranscript"
             v-model:display-wave="displayWave"
