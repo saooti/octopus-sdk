@@ -77,7 +77,7 @@ export default defineComponent({
     },
 
     iFrame(): string {
-      return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" frameborder="0"></iframe>`;
+      return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay" frameborder="0"></iframe>`;
     },
   },
   async created() {

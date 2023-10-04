@@ -268,9 +268,9 @@ export default defineComponent({
     },
     iFrame(): string {
       const specialDigiteka = this.podcast?.video?.videoId
-        ? 'allowfullscreen="true" allow="autoplay" referrerpolicy="no-referrer-when-downgrade"'
+        ? 'allowfullscreen="true" referrerpolicy="no-referrer-when-downgrade"'
         : "";
-      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0" ${specialDigiteka}></iframe>`;
+      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0" ${specialDigiteka} allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
     },
     isPodcastNotVisible(): boolean {
       return (
