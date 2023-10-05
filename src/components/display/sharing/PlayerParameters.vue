@@ -99,7 +99,7 @@ export default defineComponent({
       isVisibleTemp: this.isVisible,
       displayArticle: true as boolean,
       displayTranscript:true as boolean,
-      displayWave:true as boolean,
+      displayWave:false as boolean,
     };
   },
   computed: {

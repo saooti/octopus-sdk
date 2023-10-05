@@ -130,7 +130,7 @@ export default defineComponent({
       isVisible: false as boolean,
       displayArticle: true as boolean,
       displayTranscript: true as boolean,
-      displayWave: true as boolean,
+      displayWave: false as boolean,
       orgaAttributes: undefined as{[key: string]:string|number|boolean|undefined}|undefined,
     };
   },
@@ -236,9 +236,10 @@ export default defineComponent({
     },
     isPlayerParameter(): boolean{
       return (!this.podcast || 
+      !this.iFrameModel.includes('large')||
       (this.displayArticleParam) ||
       this.isEmission || this.isLargeEmission || this.isLargeSuggestion || 
-      (this.displayTranscriptParam))
+      (this.displayTranscriptParam ))
       && !this.playlist;
     }
   },
