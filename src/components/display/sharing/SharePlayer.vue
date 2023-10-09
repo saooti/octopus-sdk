@@ -51,7 +51,7 @@
             :display-choice-all-episodes="displayChoiceAllEpisodes"
             :display-transcript-param="displayTranscriptParam"
             :display-article-param="displayArticleParam"
-            :display-classic-parameter="isPlayerParameter"
+            :display-wave-param="displayWaveParam"
             v-model:display-article="displayArticle"
             v-model:display-transcript="displayTranscript"
             v-model:display-wave="displayWave"
@@ -142,7 +142,7 @@ export default defineComponent({
       isVisible: false as boolean,
       displayArticle: true as boolean,
       displayTranscript: true as boolean,
-      displayWave: true as boolean,
+      displayWave: false as boolean,
       playerAutoPlay: false as boolean,
       orgaAttributes: undefined as
         | { [key: string]: string | number | boolean | undefined }
@@ -152,6 +152,9 @@ export default defineComponent({
 
   computed: {
     ...mapState(useAuthStore, ["authOrganisation"]),
+    displayWaveParam(): boolean {
+      return !this.iFrameModel.includes('large');
+    },
     displayArticleParam(): boolean {
       return (
         undefined !== this.podcast &&
@@ -284,17 +287,6 @@ export default defineComponent({
       if (this.emission) return this.emission.emissionId;
       if (this.playlist) return this.playlist.playlistId;
       return 0;
-    },
-    isPlayerParameter(): boolean {
-      return (
-        (!this.podcast ||
-          this.displayArticleParam ||
-          this.isEmission ||
-          this.isLargeEmission ||
-          this.isLargeSuggestion ||
-          this.displayTranscriptParam) &&
-        !this.playlist
-      );
     },
   },
   async created() {

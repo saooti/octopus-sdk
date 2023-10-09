@@ -53,28 +53,27 @@
       :label="$t('Podcasts still available')"
     />
   </template>
-  <template v-if="displayClassicParameter">
-    <ClassicCheckbox
-      v-if="displayArticleParam"
-      :text-init="displayArticle"
-      @update:text-init="$emit('update:displayArticle', $event)"
-      id-checkbox="display-article-checkbox"
-      :label="$t('Display associated article')"
-    />
-    <ClassicCheckbox
-      v-if="displayTranscriptParam"
-      :text-init="displayTranscript"
-      @update:text-init="$emit('update:displayTranscript', $event)"
-      id-checkbox="display-transcript-checkbox"
-      :label="$t('If the transcript is available, show it')"
-    />
-    <ClassicCheckbox
-      :text-init="displayWave"
-      @update:text-init="$emit('update:displayWave', $event)"
-      id-checkbox="display-wave-checkbox"
-      :label="$t('Show animated wave')"
-    />
-  </template>
+  <ClassicCheckbox
+    v-if="displayArticleParam"
+    :text-init="displayArticle"
+    @update:text-init="$emit('update:displayArticle', $event)"
+    id-checkbox="display-article-checkbox"
+    :label="$t('Display associated article')"
+  />
+  <ClassicCheckbox
+    v-if="displayTranscriptParam"
+    :text-init="displayTranscript"
+    @update:text-init="$emit('update:displayTranscript', $event)"
+    id-checkbox="display-transcript-checkbox"
+    :label="$t('If the transcript is available, show it')"
+  />
+  <ClassicCheckbox
+    v-if="displayWaveParam"
+    :text-init="displayWave"
+    @update:text-init="$emit('update:displayWave', $event)"
+    id-checkbox="display-wave-checkbox"
+    :label="$t('Show animated wave')"
+  />
   <ClassicCheckbox
     :text-init="playerAutoPlay"
     @update:text-init="$emit('update:playerAutoPlay', $event)"
@@ -93,7 +92,7 @@ export default defineComponent({
   props: {
     isVisible: { default: false, type: Boolean },
     choseNumberEpisode: { default: false, type: Boolean },
-    displayClassicParameter: { default: true, type: Boolean },
+    displayWaveParam: { default: true, type: Boolean },
     displayChoiceAllEpisodes: { default: false, type: Boolean },
     displayTranscriptParam: { default: false, type: Boolean },
     displayArticleParam: { default: false, type: Boolean },

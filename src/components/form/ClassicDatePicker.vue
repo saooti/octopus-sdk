@@ -22,6 +22,9 @@
     :month-picker="monthPicker"
     @update:model-value="$emit('updateDate', $event)"
   >
+   <template v-if="time" #input-icon>
+      <div class="ms-2 saooti-clock"/>
+    </template>
   </VueDatePicker>
 </template>
 
