@@ -34,6 +34,7 @@
             :emission="e"
             class="m-3 flex-shrink-0"
             :class="mainRubriquage(e)"
+            :nb-podcasts="nbPodcasts"
             :rubrique-name="rubriquesId(e)"
           />
         </template>
@@ -85,6 +86,7 @@ export default defineComponent({
     rubriqueId: { default: () => [], type: Array as () => Array<number> },
     rubriquageId: { default: () => [], type: Array as () => Array<number> },
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+    nbPodcasts: { default: undefined, type: Number },
   },
 
   data() {
