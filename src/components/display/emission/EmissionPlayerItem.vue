@@ -24,21 +24,8 @@
           {{ emission.name }}
         </div>
       </div>
-      <div class="d-flex flex-column p-2">
-        <div class="fw-bold text-uppercase text-truncate">
-          {{ emission.name }}
-        </div>
-        <div
-          ref="descriptionEmissionContainer"
-          class="emission-description html-wysiwyg-content"
-        >
-          <!-- eslint-disable vue/no-v-html -->
-          <div
-            ref="descriptionEmission"
-            v-html="urlify(emission.description)"
-          />
-          <!-- eslint-enable -->
-        </div>
+      <div class="fw-bold text-uppercase text-truncate p-2">
+        {{ emission.name }}
       </div>
     </router-link>
     <div
@@ -66,21 +53,10 @@
               params: { podcastId: p.podcastId },
               query: { productor: filterOrgaId },
             }"
-            class="d-flex flex-column define-width text-dark"
+            class="d-flex flex-grow-1 align-items-center define-width text-dark"
           >
             <div class="fw-bold text-truncate">
               {{ p.title }}
-            </div>
-            <div
-              :ref="'descriptionPodcastContainer' + p.podcastId"
-              class="emission-description html-wysiwyg-content"
-            >
-              <!-- eslint-disable vue/no-v-html -->
-              <div
-                :ref="'descriptionPodcast' + p.podcastId"
-                v-html="urlify(p.description)"
-              />
-              <!-- eslint-enable -->
             </div>
           </router-link>
           <PodcastPlayBar :podcast-id="p.podcastId" :duration="p.duration" />
@@ -180,18 +156,6 @@ export default defineComponent({
   created() {
     this.loadPodcasts();
   },
-  mounted() {
-    const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
-    const emissionDescContainer = this.$refs
-      .descriptionEmissionContainer as HTMLElement;
-    if (
-      null !== emissionDesc &&
-      null !== emissionDescContainer &&
-      emissionDesc.clientHeight > emissionDescContainer.clientHeight
-    ) {
-      emissionDescContainer.classList.add("after-emission-description");
-    }
-  },
   methods: {
     ...mapActions(usePlayerStore, ["playerPlay", "playerChangeStatus"]),
     play(podcast: Podcast): void {
@@ -224,29 +188,6 @@ export default defineComponent({
         this.activeEmission = false;
       }
       this.podcasts = data.result;
-      this.$nextTick(() => {
-        for (let index = 0, len = this.podcasts.length; index < len; index++) {
-          const podcastDesc =
-            (
-              this.$refs[
-                "descriptionPodcast" + this.podcasts[index].podcastId
-              ] as Array<HTMLElement>
-            )?.[0] ?? null;
-          const podcastDescContainer =
-            (
-              this.$refs[
-                "descriptionPodcastContainer" + this.podcasts[index].podcastId
-              ] as Array<HTMLElement>
-            )?.[0] ?? null;
-          if (
-            null !== podcastDesc &&
-            null !== podcastDescContainer &&
-            podcastDesc.clientHeight > podcastDescContainer.clientHeight
-          ) {
-            podcastDescContainer.classList.add("after-emission-description");
-          }
-        }
-      });
     },
   },
 });
@@ -267,25 +208,6 @@ export default defineComponent({
   overflow: hidden;
   .emission-item-border-color {
     border-color: #ddd;
-  }
-  .emission-description {
-    overflow: hidden;
-    margin-top: 0.5em;
-    word-break: break-word;
-    max-height: 3.5rem;
-    position: relative;
-    &.after-emission-description:after {
-      content: "...";
-      position: absolute;
-      padding-left: 1rem;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      font-size: 1rem;
-      font-weight: bolder;
-      text-align: center;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
-    }
   }
   .define-width {
     width: 9rem;

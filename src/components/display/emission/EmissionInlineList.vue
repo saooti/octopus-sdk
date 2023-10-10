@@ -1,47 +1,19 @@
 <template>
   <div class="d-flex flex-column p-3 list-episode">
-    <div v-if="!overflowScroll" class="d-flex justify-content-end">
-      <div class="hide-phone">
-        <button
-          class="btn admin-button m-1 saooti-left"
-          :class="{ disabled: !previousAvailable }"
-          :title="$t('Display previous')"
-          @click="displayPrevious()"
-        />
-        <button
-          class="btn admin-button m-1 saooti-right"
-          :class="{ disabled: !nextAvailable }"
-          :title="$t('Display next')"
-          @click="displayNext()"
-        />
-      </div>
-    </div>
     <ClassicLoading
       :loading-text="loading ? $t('Loading emissions ...') : undefined"
     />
-    <transition-group
-      v-show="
-        (displayRubriquage && rubriques) || !(displayRubriquage && loaded)
-      "
-      :name="transitionName"
-      class="element-list-inline"
-      tag="div"
-      :class="[
-        alignLeft ? 'justify-content-start' : '',
-        overflowScroll ? 'overflowScroll' : '',
-      ]"
-      :css="isInlineAnimation"
-    >
-      <EmissionPlayerItem
-        v-for="e in emissions"
-        :key="e.emissionId"
-        class="flex-shrink-0 item-phone-margin"
-        :emission="e"
-        :class="[alignLeft ? 'me-3' : '', mainRubriquage(e)]"
-        :nb-podcasts="nbPodcasts"
-        :rubrique-name="rubriquesId(e)"
-      />
-    </transition-group>
+    <SwiperList v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)" :sizeItemOverload="itemSize"  :list-object="allEmissions">
+      <template #octopusSlide="{ option }">
+        <EmissionPlayerItem
+          class="flex-shrink-0 item-phone-margin"
+          :emission="option"
+          :class="[mainRubriquage(option)]"
+          :nb-podcasts="nbPodcasts"
+          :rubrique-name="rubriquesId(option)"
+        />
+      </template>
+    </SwiperList>
     <router-link
       :to="href"
       class="btn btn-primary align-self-center width-fit-content m-4"
@@ -52,12 +24,11 @@
 </template>
 
 <script lang="ts">
+import SwiperList from "../list/SwiperList.vue";
 import octopusApi from "@saooti/octopus-api";
-import domHelper from "../../../helper/dom";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { handle403 } from "../../mixins/handle403";
-const PHONE_WIDTH = 960;
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
@@ -72,6 +43,7 @@ export default defineComponent({
   components: {
     EmissionPlayerItem,
     ClassicLoading,
+    SwiperList
   },
 
   mixins: [handle403, imageProxy, resizePhone],
@@ -83,68 +55,20 @@ export default defineComponent({
     rubriqueId: { default: undefined, type: Number },
     rubriquageId: { default: undefined, type: Number },
     nbPodcasts: { default: undefined, type: Number },
-    itemSize: { default: 13, type: Number },
+    itemSize: { default: undefined, type: Number },
   },
 
   data() {
     return {
       loading: true as boolean,
-      loaded: true as boolean,
-      index: 0 as number,
-      first: 0 as number,
-      size: 5 as number,
-      totalCount: 0 as number,
-      popularSort: true as boolean,
       allEmissions: [] as Array<Emission>,
-      direction: 1 as number,
-      alignLeft: false as boolean,
       rubriques: undefined as Array<Rubrique> | undefined,
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
     };
   },
 
   computed: {
-    emissions(): Array<Emission> {
-      return this.allEmissions.slice(this.index, this.index + this.size);
-    },
-    overflowScroll(): boolean {
-      return state.emissionsPage.overflowScroll as boolean;
-    },
-    previousAvailable(): boolean {
-      return this.index > 0;
-    },
-    nextAvailable(): boolean {
-      return this.index + this.size < this.totalCount;
-    },
     displayRubriquage(): number | undefined {
       return state.emissionsPage.rubriquage;
-    },
-    transitionName(): string {
-      return this.direction > 0 ? "out-left" : "out-right";
-    },
-    isInlineAnimation(): boolean {
-      return state.generalParameters.isInlineAnimation as boolean;
-    },
-  },
-
-  watch: {
-    sizeItem() {
-      this.handleResize();
-    },
-    windowWidth() {
-      if (!this.$el) return;
-      if (this.overflowScroll) {
-        this.size = 20;
-        return;
-      }
-      if (window.innerWidth <= PHONE_WIDTH) {
-        this.size = 10;
-        return;
-      }
-      const width = (this.$el as HTMLElement).offsetWidth;
-      const sixteen = domHelper.convertRemToPixels(this.itemSize + 0.7);
-      this.size = Math.floor(width / sixteen);
     },
   },
 
@@ -165,8 +89,8 @@ export default defineComponent({
           0,
           "emission/search",
           {
-            first: this.first,
-            size: this.size + 1,
+            first: 0,
+            size: 10,
             organisationId: this.organisationId,
             rubriqueId: this.rubriqueId ? [this.rubriqueId] : [],
             rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
@@ -174,51 +98,18 @@ export default defineComponent({
           },
           true,
         );
-
+        this.allEmissions = this.allEmissions.concat(
+          data.result.filter((em: Emission | null) => null !== em),
+        );
         this.loading = false;
-        this.loaded = true;
-        this.totalCount = data.count;
-        if (this.allEmissions.length + data.result.length < this.totalCount) {
-          const nexEl = data.result.pop() as Emission;
-          this.preloadImage(nexEl.imageUrl ? nexEl.imageUrl : "");
-        }
-        this.allEmissions = this.allEmissions.concat(data.result);
-        if (this.allEmissions.length <= 3) {
-          this.alignLeft = true;
-        }
-        this.first += this.size;
       } catch (error) {
         this.handle403(error as AxiosError);
       }
     },
-    displayPrevious(): void {
-      this.direction = -1;
-      if (this.previousAvailable) {
-        this.index -= 1;
-      }
-    },
-    displayNext(): void {
-      this.direction = 1;
-      if (!this.nextAvailable) return;
-      if (
-        this.first - (this.index + this.size) < 2 &&
-        this.allEmissions.length < this.totalCount
-      ) {
-        this.fetchNext();
-      }
-      this.index += 1;
-    },
+
     reset(): void {
       this.loading = true;
-      this.loaded = true;
-      this.index = 0;
-      this.first = 0;
-      this.totalCount = 0;
       this.allEmissions.length = 0;
-    },
-    preloadImage(url: string): void {
-      const img = new Image();
-      img.src = this.proxyImageUrl(url, "330");
     },
     async fetchRubriques(): Promise<void> {
       const data = await octopusApi.fetchData<Rubriquage>(
