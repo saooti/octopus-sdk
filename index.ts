@@ -47,9 +47,12 @@ export const getRubriqueChooser = () => import("./src/components/display/rubriqu
 export const getCommentList = () => import("./src/components/display/comments/CommentList.vue");
 export const getCommentInput = () => import("./src/components/display/comments/CommentInput.vue");
 export const getPodcastPlaylistInlineList = () => import("./src/components/display/playlist/PodcastPlaylistInlineList.vue");
+export const getLiveList = () => import("./src/components/display/live/LiveList.vue");
+
 
 //Radio
 export const getRadioCurrently = () => import("./src/components/display/live/RadioCurrently.vue");
+export const getRadioPlanning = () => import("./src/components/display/live/RadioPlanning.vue");
 
 
 //AdvancedSearch
