@@ -153,7 +153,7 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["authOrganisation"]),
     displayWaveParam(): boolean {
-      return !this.iFrameModel.includes('large');
+      return 'default'===this.iFrameModel || 'emission'===this.iFrameModel;
     },
     displayArticleParam(): boolean {
       return (
