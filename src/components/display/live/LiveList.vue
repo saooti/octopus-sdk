@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="filterOrgaId || organisationId"
+    v-if="displayLiveList"
     class="d-flex flex-column align-items-start mt-3"
   >
     <div
@@ -73,6 +73,7 @@ export default defineComponent({
 
   props: {
     organisationId: { default: undefined, type: String },
+    hideIfEmpty: { default: false, type: Boolean },
   },
   data() {
     return {
@@ -89,6 +90,10 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["authOrganisation"]),
+    displayLiveList(): boolean{
+      return (undefined!==this.filterOrgaId || undefined!==this.organisationId) &&
+        (!this.hideIfEmpty || (this.hideIfEmpty && 0!==this.lives.length) ) ;
+    },
     filterOrgaUsed(): string | undefined {
       return this.filterOrgaId ? this.filterOrgaId : this.organisationId;
     },
