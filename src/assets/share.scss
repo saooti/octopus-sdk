@@ -285,35 +285,19 @@
         font-size: 1.8rem;
         color: white;
       }
-      /* &.hover-type-audio, &.hover-type-video{
-        color: $newLightenColor;
-        .bloc-paddle > span{
-          background: $newLightenColor !important;
-        }
-      } */
-      &.hover-type-video{
-        /*.saooti-play{
-          color: white;
-        }
-        .saooti-play-video{
-          color: $newLightenColor;
-        } */
-        &.has-video{
-          .saooti-play-video{
-            font-size: 2.5rem;
+      @media (min-width: 500px) {
+        &.hover-type-video{
+          &.has-video{
+            .saooti-play-video{
+              font-size: 2.5rem;
+            }
           }
-        }
-      } 
-      &.hover-type-audio{
-        /* .saooti-play{
-          color: $newLightenColor;
-        }
-        .saooti-play-video{
-          color: white;
-        } */
-        &.has-video{
-          .saooti-play{
-            font-size: 2.5rem;
+        } 
+        &.hover-type-audio{
+          &.has-video{
+            .saooti-play{
+              font-size: 2.5rem;
+            }
           }
         }
       }

@@ -94,13 +94,15 @@ export const playerLive = defineComponent({
         this.hls.loadSource(hlsStreamUrl);
       });
     },
-    endingLive(): void {
+    async endingLive(): Promise<void> {
       const audio: HTMLElement | null = document.getElementById("audio-player");
       if (audio && this.hls) {
         this.hls.destroy();
-        (audio as HTMLAudioElement).src = "";
         this.hls = null;
+      }else{
+        await (audio as HTMLAudioElement).pause();
       }
+      (audio as HTMLAudioElement).src = "";
     },
   },
 });

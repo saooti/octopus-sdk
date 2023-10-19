@@ -68,18 +68,12 @@ export default defineComponent({
     right: 1rem;
   }
   @media (max-width: 500px) {
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
+    .video-close {
+      bottom: 10.5rem;
     }
     .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100% !important;
-      height: 100%;
-      margin: 0 !important;
+      width: 100%;
+      max-height: 150px;
     }
   }
 }
