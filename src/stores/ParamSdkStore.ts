@@ -3,15 +3,15 @@ import { Category } from "./class/general/category";
 
 const state: ParamStore = {
   generalParameters: {
-    organisationId: /* "7e67406d-c1f5-4f98-91ca-dd45583aa1a6" */"ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c",
-    authenticated: true,
-    isAdmin: true,
-    isRoleLive: true,
+    organisationId: undefined/* "ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c" */,
+    authenticated: false,
+    isAdmin: false,
+    isRoleLive: false,
     isCommments: false,
     isOrganisation: false,
     isPlaylist: false,
     isProduction: false,
-    isContribution: true,
+    isContribution: false,
     ApiUri: "https://api.dev2.saooti.org/",
     podcastmaker: false,
     buttonPlus: true,

@@ -34,9 +34,13 @@
 </template>
 
 <script lang="ts">
-import ClassicPopover from "../../misc/ClassicPopover.vue";
-import tagOfMixins from "../../mixins/tagOfMixins";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const ClassicPopover = defineAsyncComponent(
+  () => import("../../misc/ClassicPopover.vue"),
+);
+const tagOfMixins = defineAsyncComponent(
+  () => import("../../mixins/tagOfMixins"),
+);
 export default defineComponent({
   name: "TagList",
   components: {

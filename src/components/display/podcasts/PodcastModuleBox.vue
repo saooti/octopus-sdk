@@ -93,6 +93,7 @@
             :is-guest="true"
           />
           <PodcastPlayBar
+            v-if="isProgressBar"
             :podcast-id="podcast.podcastId"
             :duration="podcast.duration"
           />
@@ -129,7 +130,6 @@
 </template>
 
 <script lang="ts">
-import PodcastPlayBar from "./PodcastPlayBar.vue";
 import PodcastImage from "./PodcastImage.vue";
 import ParticipantDescription from "./ParticipantDescription.vue";
 import TagList from "./TagList.vue";
@@ -151,6 +151,9 @@ const RecordingItemButton = defineAsyncComponent(
 );
 const EditBox = defineAsyncComponent(
   () => import("@/components/display/edit/EditBox.vue"),
+);
+const PodcastPlayBar = defineAsyncComponent(
+  () => import("./PodcastPlayBar.vue"),
 );
 export default defineComponent({
   name: "PodcastModuleBox",
@@ -186,6 +189,9 @@ export default defineComponent({
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
+    },
+    isProgressBar(): boolean {
+      return state.emissionsPage.progressBar as boolean;
     },
     date(): string {
       if (!this.podcast || 1970 === dayjs(this.podcast.pubDate).year()) {

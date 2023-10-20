@@ -13,7 +13,7 @@
     >
       {{ title }}
     </router-link>
-    <PodcastPlayBar :podcast-id="podcastId" :duration="duration" class="mx-2" />
+    <PodcastPlayBar v-if="isProgressBar" :podcast-id="podcastId" :duration="duration" class="mx-2" />
 
     <div class="mx-2 d-flex align-items-center justify-content-between mt-2">
       <div v-if="isPodcastmaker" class="useless-div-for-podcastmaker" />
@@ -42,9 +42,11 @@ import AnimatorsItem from "./AnimatorsItem.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import dayjs from "dayjs";
-import PodcastPlayBar from "./PodcastPlayBar.vue";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
 import { Participant } from "@/stores/class/general/participant";
+const PodcastPlayBar = defineAsyncComponent(
+  () => import("./PodcastPlayBar.vue"),
+);
 export default defineComponent({
   name: "PodcastItemInfo",
 
@@ -66,6 +68,9 @@ export default defineComponent({
   },
 
   computed: {
+    isProgressBar(): boolean {
+      return state.emissionsPage.progressBar as boolean;
+    },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
     },

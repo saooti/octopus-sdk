@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isProgressBar" class="d-flex align-items-center podcast-play-bar">
+  <div class="d-flex align-items-center podcast-play-bar">
     <div class="me-2">
       {{ playedTime }}
     </div>
@@ -20,7 +20,6 @@
 import ProgressBar from "../../misc/ProgressBar.vue";
 import DurationHelper from "../../../helper/duration";
 import displayMethods from "../../mixins/displayMethods";
-import { state } from "../../../stores/ParamSdkStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
@@ -40,9 +39,6 @@ export default defineComponent({
       "playerElapsed",
       "playerTotal",
     ]),
-    isProgressBar(): boolean {
-      return state.emissionsPage.progressBar as boolean;
-    },
     percentProgress(): number {
       if (this.podcastId !== this.playerPodcast?.podcastId) {
         return 0;

@@ -14,7 +14,7 @@
       </router-link>
     </template>
     <OrganisationChooserLight
-      v-if="!isPodcastmaker"
+      v-if="!isPodcastmaker && organisationId"
       width="auto"
       page="leftMenu"
       :defaultanswer="$t('No organisation filter')"

@@ -100,7 +100,7 @@
       :url-page="urlPage"
       @close="qrCode = false"
     />
-    <SnackBar ref="snackbar" position="bottom-left" />
+    <SnackBar v-if="lazyLoadingSnackbar" ref="snackbar" position="bottom-left" />
   </div>
 </template>
 
@@ -111,7 +111,6 @@ import octopusApi from "@saooti/octopus-api";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
-import SnackBar from "../../misc/SnackBar.vue";
 import displayMethods from "../../mixins/displayMethods";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Playlist } from "@/stores/class/general/playlist";
@@ -123,6 +122,9 @@ const NewsletterModal = defineAsyncComponent(
 );
 const QrCodeModal = defineAsyncComponent(
   () => import("../../misc/modal/QrCodeModal.vue"),
+);
+const SnackBar = defineAsyncComponent(
+  () => import("../../misc/SnackBar.vue"),
 );
 export default defineComponent({
   components: {
@@ -150,6 +152,7 @@ export default defineComponent({
       newsletter: false as boolean,
       qrCode: false as boolean,
       displayRss: false as boolean,
+      lazyLoadingSnackbar: false as boolean,
     };
   },
   computed: {
@@ -237,9 +240,16 @@ export default defineComponent({
       this.dataRSSSave = !this.dataRSSSave;
     },
     afterCopy(): void {
-      (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-        this.$t("Link in clipboard"),
-      );
+      if(!this.lazyLoadingSnackbar){
+        this.lazyLoadingSnackbar = true;
+        setTimeout(() => {
+          this.afterCopy();
+        }, 500);
+      }else{
+        (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
+          this.$t("Link in clipboard"),
+        );
+      }
     },
   },
 });

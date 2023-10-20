@@ -59,7 +59,7 @@
               {{ p.title }}
             </div>
           </router-link>
-          <PodcastPlayBar :podcast-id="p.podcastId" :duration="p.duration" />
+          <PodcastPlayBar v-else :podcast-id="p.podcastId" :duration="p.duration" />
         </div>
         <button
           v-if="
@@ -99,13 +99,15 @@ import octopusApi from "@saooti/octopus-api";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
-import PodcastPlayBar from "../podcasts/PodcastPlayBar.vue";
 import imageProxy from "../../mixins/imageProxy";
 import displayMethods from "../../mixins/displayMethods";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { useFilterStore } from "@/stores/FilterStore";
 import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const PodcastPlayBar = defineAsyncComponent(
+  () => import("../podcasts/PodcastPlayBar.vue"),
+);
 export default defineComponent({
   name: "EmissionPlayerItem",
 
