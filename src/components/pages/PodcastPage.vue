@@ -72,6 +72,7 @@
 </template>
 
 <script lang="ts">
+import imageProxy from "../mixins/imageProxy";
 import { orgaComputed } from "../mixins/orgaComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import PodcastModuleBox from "../display/podcasts/PodcastModuleBox.vue";
@@ -117,7 +118,7 @@ export default defineComponent({
     ClassicLoading,
   },
 
-  mixins: [handle403, orgaComputed],
+  mixins: [handle403, orgaComputed, imageProxy],
 
   props: {
     updateStatus: { default: undefined, type: String },
@@ -145,7 +146,7 @@ export default defineComponent({
       if (!this.podcast) {
         return "";
       }
-      return `background-image: url('${this.podcast.imageUrl}');`;
+      return `background-image: url('${this.proxyImageUrl(this.podcast.imageUrl, '270')}');`;
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;

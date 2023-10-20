@@ -11,7 +11,7 @@
         <div class="module-box">
           <div class="mb-5 mt-3 descriptionText">
             <img
-              v-lazy="proxyImageUrl(imageUrl, '250')"
+              v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
               width="250"
               height="250"
               :alt="$t('Playlist name image', { name: name })"
@@ -114,9 +114,6 @@ export default defineComponent({
     name(): string {
       return this.playlist?.title ?? "";
     },
-    imageUrl(): string {
-      return this.playlist?.imageUrl ?? "";
-    },
     description(): string {
       return this.playlist?.description ?? "";
     },
@@ -131,7 +128,7 @@ export default defineComponent({
       if (!this.playlist) {
         return "";
       }
-      return `background-image: url('${this.playlist.imageUrl}');`;
+      return `background-image: url('${this.proxyImageUrl(this.playlist.imageUrl, '250')}');`;
     },
   },
   watch: {

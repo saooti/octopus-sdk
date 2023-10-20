@@ -7,9 +7,9 @@ import "dayjs/locale/fr";
 import "dayjs/locale/it";
 import "dayjs/locale/sl";
 
-export function setupI18n(options: { locale: string }, isEducation: boolean) {
+export function setupI18n(options: { locale: string }, isAuthenticated: boolean, isEducation: boolean) {
   const i18n = createI18n(options);
-  loadLocaleMessages(i18n.global, options.locale, isEducation);
+  loadLocaleMessages(i18n.global, options.locale,  isAuthenticated, isEducation);
   return i18n;
 }
 
@@ -25,6 +25,7 @@ export function setI18nLanguage(i18n: any, locale: string) {
 export async function loadLocaleMessages(
   i18n: any,
   locale: string,
+  isAuthenticated: boolean,
   isEducation: boolean,
 ) {
   if (

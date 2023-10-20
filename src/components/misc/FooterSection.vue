@@ -66,6 +66,7 @@ import cookies from "../mixins/cookies";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
+import { orgaComputed } from "../mixins/orgaComputed";
 import { loadLocaleMessages } from "@/i18n";
 import octopusApi from "@saooti/octopus-api";
 import { useFilterStore } from "@/stores/FilterStore";
@@ -82,7 +83,7 @@ export default defineComponent({
     AcpmImage,
   },
 
-  mixins: [cookies],
+  mixins: [cookies, orgaComputed],
   data() {
     return {
       language: this.$i18n.locale,
@@ -152,7 +153,7 @@ export default defineComponent({
     },
     changeLanguage(): void {
       this.setCookie("octopus-language", this.language);
-      loadLocaleMessages(this.$i18n, this.language, this.platformEducation);
+      loadLocaleMessages(this.$i18n, this.language, this.authenticated, this.platformEducation);
       octopusApi
         .fetchDataWithParams<Array<Category>>(
           0,

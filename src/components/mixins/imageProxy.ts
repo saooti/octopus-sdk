@@ -1,7 +1,7 @@
 import { state } from "../../stores/ParamSdkStore";
 export default {
   methods: {
-    proxyImageUrl(url: string, width: string, height?: string): string {
+    proxyImageUrl(url: string|undefined, width: string, height?: string): string {
       if (!url) {
         return "";
       }

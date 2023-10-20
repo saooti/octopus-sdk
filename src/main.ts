@@ -33,7 +33,7 @@ if (0 === language.length) {
   }
 }
 
-const i18n = setupI18n({ locale: language }, false);
+const i18n = setupI18n({ locale: language }, false, false);
 
 paramStore.initialize({
   generalParameters: {},

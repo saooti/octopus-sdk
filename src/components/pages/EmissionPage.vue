@@ -11,7 +11,7 @@
         <div class="module-box">
           <div class="mb-5 descriptionText">
             <img
-              v-lazy="proxyImageUrl(imageUrl, '250')"
+              v-lazy="proxyImageUrl(emission.imageUrl, '250')"
               width="250"
               height="250"
               :alt="$t('Emission name image', { name: name })"
@@ -158,9 +158,6 @@ export default defineComponent({
     name(): string {
       return this.emission?.name ?? "";
     },
-    imageUrl(): string {
-      return this.emission ? `${this.emission.imageUrl}` : "";
-    },
     description(): string {
       return this.emission?.description ?? "";
     },
@@ -196,7 +193,7 @@ export default defineComponent({
       if (!this.emission) {
         return "";
       }
-      return `background-image: url('${this.emission.imageUrl}');`;
+      return `background-image: url('${this.proxyImageUrl(this.emission.imageUrl, '250')}');`;
     },
   },
   watch: {
