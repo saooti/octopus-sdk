@@ -19,9 +19,19 @@
         class="emission-list"
         :class="smallItems ? 'three-emissions' : 'two-emissions'"
       >
-        <template v-for="e in displayArray" :key="e.emissionId">
+        <ClassicLazy v-for="e in displayArray" :key="e.emissionId" :minHeight="250" :unrender="true">
           <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
-        </template>
+          <template #preview>
+            <router-link
+              :to="{
+                name: 'emission',
+                params: { emissionId: e.emissionId }
+              }"
+            >
+              {{ e.name }}
+            </router-link>
+          </template>
+        </ClassicLazy>
       </div>
       <div
         v-else
@@ -46,6 +56,7 @@
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import octopusApi from "@saooti/octopus-api";
+import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { handle403 } from "../../mixins/handle403";
 import { state } from "../../../stores/ParamSdkStore";
 import { Emission, emptyEmissionData } from "@/stores/class/general/emission";
@@ -67,6 +78,7 @@ export default defineComponent({
     EmissionItem,
     EmissionPlayerItem,
     ListPaginate,
+    ClassicLazy
   },
 
   mixins: [handle403],

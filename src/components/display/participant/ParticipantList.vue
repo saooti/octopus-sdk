@@ -17,9 +17,19 @@
   >
     <template #list>
       <div class="podcast-list">
-        <template v-for="p in displayArray" :key="p.participantId">
+        <ClassicLazy v-for="p in displayArray" :key="p.participantId" :minHeight="360" :unrender="true">
           <ParticipantItem v-if="0 !== p.participantId" :participant="p" />
-        </template>
+          <template #preview>
+            <router-link
+              :to="{
+                name: 'participant',
+                params: { participantId: p.participantId },
+              }"
+            >
+              {{ p.lastName }}
+            </router-link>
+          </template>
+        </ClassicLazy>
       </div>
     </template>
   </ListPaginate>
@@ -27,6 +37,7 @@
 
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
+import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { handle403 } from "../../mixins/handle403";
 import octopusApi from "@saooti/octopus-api";
 import ParticipantItem from "./ParticipantItem.vue";
@@ -44,6 +55,7 @@ export default defineComponent({
   components: {
     ParticipantItem,
     ListPaginate,
+    ClassicLazy
   },
 
   mixins: [handle403],

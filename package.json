@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "37.0.58",
+  "version": "37.0.59",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -24,6 +24,7 @@
     "@vue/cli": "^5.0.8",
     "@vue/compat": "^3.3.4",
     "@vuepic/vue-datepicker": "^7.0.0",
+    "@vueuse/core": "^10.5.0",
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
     "dayjs": "^1.11.10",

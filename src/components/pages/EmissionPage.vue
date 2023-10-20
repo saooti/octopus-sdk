@@ -116,7 +116,7 @@ export default defineComponent({
     EditBox,
     SubscribeButtons,
     LiveHorizontalList,
-    ClassicLoading,
+    ClassicLoading
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {

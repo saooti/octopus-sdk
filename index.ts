@@ -30,6 +30,7 @@ export const getMessageModal = () => import("./src/components/misc/modal/Message
 export const getErrorMessage = () => import("./src/components/misc/ErrorMessage.vue");
 export const getPopover = () => import("./src/components/misc/ClassicPopover.vue");
 export const getClassicModal = () => import("./src/components/misc/modal/ClassicModal.vue");
+export const getClassicLazy = () => import("./src/components/misc/ClassicLazy.vue");
 
 
 //Display

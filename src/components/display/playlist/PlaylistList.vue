@@ -15,15 +15,26 @@
   >
     <template #list>
       <div class="emission-list two-emissions">
-        <template v-for="p in displayArray" :key="p.playlistId">
+        <ClassicLazy v-for="p in displayArray" :key="p.playlistId" :minHeight="250" :unrender="true">
           <PlaylistItem v-if="0 !== p.playlistId" :playlist="p" />
-        </template>
+          <template #preview>
+            <router-link
+              :to="{
+                name: 'playlist',
+                params: { playlistId: p.playlistId },
+              }"
+            >
+              {{ p.title }}
+            </router-link>
+          </template>
+        </ClassicLazy>
       </div>
     </template>
   </ListPaginate>
 </template>
 
 <script lang="ts">
+import ClassicLazy from "../../misc/ClassicLazy.vue";
 import ListPaginate from "../list/ListPaginate.vue";
 import { handle403 } from "../../mixins/handle403";
 import octopusApi from "@saooti/octopus-api";
@@ -39,6 +50,7 @@ export default defineComponent({
   components: {
     PlaylistItem,
     ListPaginate,
+    ClassicLazy
   },
 
   mixins: [handle403],

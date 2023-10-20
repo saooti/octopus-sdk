@@ -1,22 +1,32 @@
 <template>
   <div class="page-box">
     <template v-if="0 === rubriquageFilter.length">
-      <PodcastInlineList
+      <ClassicLazy 
         v-for="c in categories"
         :key="c.id"
-        :iab-id="c.id"
-        :title="c.name"
-        :button-text="$t('All podcast button', { name: c.name })"
-      />
+        :minHeight="650" 
+        :unrender="true"
+      >
+        <PodcastInlineList
+          :iab-id="c.id"
+          :title="c.name"
+          :button-text="$t('All podcast button', { name: c.name })"
+        />
+      </ClassicLazy>
     </template>
     <template v-else>
-      <PodcastInlineList
+      <ClassicLazy 
         v-for="r in rubriqueToShow"
         :key="r.rubriqueId"
-        :rubrique-id="rubriqueId.concat(r.rubriqueId)"
-        :title="r.name"
-        :button-text="$t('All podcast button', { name: r.name })"
-      />
+        :minHeight="650" 
+        :unrender="true"
+      >
+        <PodcastInlineList
+          :rubrique-id="rubriqueId.concat(r.rubriqueId)"
+          :title="r.name"
+          :button-text="$t('All podcast button', { name: r.name })"
+        />
+      </ClassicLazy>
       <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
         <PodcastInlineList
           v-if="rubriqueDisplay.length < rubriqueMaxDisplay"
@@ -48,6 +58,7 @@
 
 <script lang="ts">
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
+import ClassicLazy from "../misc/ClassicLazy.vue";
 import { state } from "../../stores/ParamSdkStore";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
@@ -61,6 +72,7 @@ export default defineComponent({
   name: "HomePage",
   components: {
     PodcastInlineList,
+    ClassicLazy
   },
   data() {
     return {

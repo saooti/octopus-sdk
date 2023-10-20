@@ -21,9 +21,19 @@
   >
     <template #list>
       <div class="podcast-list">
-        <template v-for="p in displayArray" :key="p.podcastId">
+        <ClassicLazy v-for="p in displayArray" :key="p.podcastId" :minHeight="410" :unrender="true">
           <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
-        </template>
+          <template #preview>
+            <router-link
+              :to="{
+                name: 'podcast',
+                params: { podcastId: p.podcastId }
+              }"
+            >
+              {{ p.title }}
+            </router-link>
+          </template>
+        </ClassicLazy>
       </div>
     </template>
   </ListPaginate>
@@ -34,6 +44,7 @@ import ListPaginate from "../list/ListPaginate.vue";
 import { handle403 } from "../../mixins/handle403";
 import octopusApi from "@saooti/octopus-api";
 import PodcastItem from "./PodcastItem.vue";
+import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { useFilterStore } from "@/stores/FilterStore";
@@ -48,6 +59,7 @@ export default defineComponent({
   components: {
     PodcastItem,
     ListPaginate,
+    ClassicLazy
   },
 
   mixins: [handle403],

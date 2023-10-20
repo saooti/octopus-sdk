@@ -46,18 +46,28 @@
           :title="$t('More episodes of this emission')"
           :button-text="$t('All podcast emission button')"
         />
-        <PodcastInlineList
-          :podcast-id="podcastId"
-          :title="$t('Suggested listening')"
-        />
-        <PodcastInlineList
+        <ClassicLazy
+          :min-height="550"
+          :unrender="true"
+        >
+          <PodcastInlineList
+            :podcast-id="podcastId"
+            :title="$t('Suggested listening')"
+          />
+        </ClassicLazy>
+        <ClassicLazy
           v-for="c in categories"
           :key="c.id"
-          :iab-id="c.id"
-          :href="'/main/pub/category/' + c.id"
-          :title="$t('More episodes of this category : ', { name: c.name })"
-          :button-text="$t('All podcast button', { name: c.name })"
-        />
+          :min-height="550"
+          :unrender="true"
+        >
+          <PodcastInlineList
+            :iab-id="c.id"
+            :href="'/main/pub/category/' + c.id"
+            :title="$t('More episodes of this category : ', { name: c.name })"
+            :button-text="$t('All podcast button', { name: c.name })"
+          />
+        </ClassicLazy>
       </div>
     </template>
     <ClassicLoading
@@ -76,6 +86,7 @@ import imageProxy from "../mixins/imageProxy";
 import { orgaComputed } from "../mixins/orgaComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import PodcastModuleBox from "../display/podcasts/PodcastModuleBox.vue";
+import ClassicLazy from "../misc/ClassicLazy.vue";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import octopusApi from "@saooti/octopus-api";
 import crudApi from "@/api/classicCrud";
@@ -116,6 +127,7 @@ export default defineComponent({
     CommentSection,
     PodcastModuleBox,
     ClassicLoading,
+    ClassicLazy,
   },
 
   mixins: [handle403, orgaComputed, imageProxy],

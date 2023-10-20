@@ -8,16 +8,22 @@
     />
     <CategoryFilter />
     <router-view />
-    <FooterOctopus />
+    <ClassicLazy
+      v-if="pageFullyLoad"
+      :min-height="125"
+      :unrender="true"
+    >
+      <FooterOctopus />
+    </ClassicLazy>
     <PlayerComponent />
   </div>
 </template>
 
 <script lang="ts">
 import TopBar from "@/components/misc/TopBar.vue";
-import FooterOctopus from "@/components/misc/FooterSection.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
 import CategoryFilter from "@/components/display/categories/CategoryFilter.vue";
+import ClassicLazy from "@/components/misc/ClassicLazy.vue";
 import { state } from "./stores/ParamSdkStore";
 import { Rubriquage } from "./stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "./stores/class/rubrique/rubriquageFilter";
@@ -31,6 +37,9 @@ import { Category } from "./stores/class/general/category";
 const LeftMenu = defineAsyncComponent(
   () => import("@/components/misc/LeftMenu.vue"),
 );
+const FooterOctopus = defineAsyncComponent(
+  () => import("@/components/misc/FooterSection.vue"),
+);
 export default defineComponent({
   name: "App",
 
@@ -40,6 +49,7 @@ export default defineComponent({
     CategoryFilter,
     FooterOctopus,
     PlayerComponent,
+    ClassicLazy
   },
 
   mixins: [initSDK],
@@ -49,6 +59,7 @@ export default defineComponent({
       displayMenu: false as boolean,
       reload: false as boolean,
       isInit: false as boolean,
+      pageFullyLoad: false as boolean
     };
   },
 
@@ -65,6 +76,9 @@ export default defineComponent({
   },
   async created() {
     await this.initApp();
+    setTimeout(()=>{
+      this.pageFullyLoad = true;
+    }, 2000)
   },
   methods: {
     ...mapActions(useFilterStore, ["filterUpdateIab", "filterUpdateRubrique"]),
