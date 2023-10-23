@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isComments" class="module-box">
+  <div class="module-box">
     <div class="d-flex align-items-center">
       <h2 class="mb-0 me-2" data-selenium="episode-comment-counter">
         {{ commentTitle }}
@@ -29,15 +29,19 @@
 </template>
 
 <script lang="ts">
-import CommentList from "./CommentList.vue";
-import CommentInput from "./CommentInput.vue";
 import cookies from "../../mixins/cookies";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import { useCommentStore } from "@/stores/CommentStore";
 import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
+const CommentList = defineAsyncComponent(
+  () => import("./CommentList.vue"),
+);
+const CommentInput = defineAsyncComponent(
+  () => import("./CommentInput.vue"),
+);
 export default defineComponent({
   name: "CommentSection",
   components: {
@@ -64,27 +68,6 @@ export default defineComponent({
           ? this.$t("()", { nb: this.totalCount })
           : "";
       return this.$t("Podcast's comments") + count;
-    },
-    isComments(): boolean {
-      if (!this.podcast) return true;
-      let podcastComment = "INHERIT";
-      if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
-        podcastComment = this.podcast.annotations.COMMENTS as string;
-      }
-      let organisationComment = "LIVE_ONLY";
-      if (this.podcast.organisation.comments) {
-        organisationComment = this.podcast.organisation.comments;
-      }
-      return !(
-        "NO" === podcastComment ||
-        ("INHERIT" === podcastComment && "NO" === organisationComment) ||
-        ("LIVE_RECORD" === podcastComment &&
-          "READY_TO_RECORD" !== this.podcast.processingStatus) ||
-        ("INHERIT" === podcastComment &&
-          "LIVE_ONLY" === organisationComment &&
-          !this.podcast.conferenceId &&
-          0 !== this.podcast.conferenceId)
-      );
     },
     knownIdentity: {
       get(): string | null {

@@ -35,8 +35,8 @@ export default {
     const shouldRender = ref(false);
     const targetEl = ref();
     const fixedMinHeight = ref(0);
-    let unrenderTimer;
-    let renderTimer;
+    let unrenderTimer: ReturnType<typeof setTimeout> | undefined;
+    let renderTimer: ReturnType<typeof setTimeout> | undefined;
 
     const { stop } = useIntersectionObserver(
       targetEl,
@@ -57,7 +57,7 @@ export default {
           // if the component was set to render, cancel that
           clearTimeout(renderTimer);
           unrenderTimer = setTimeout(() => {
-            fixedMinHeight.value = targetEl.value.clientHeight;
+            fixedMinHeight.value = targetEl.value?.clientHeight ?? 0;
             shouldRender.value = false;
           }, props.unrenderDelay);
         }

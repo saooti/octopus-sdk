@@ -34,7 +34,7 @@
           :emission="podcast.emission"
         />
         <CommentSection
-          v-if="!isPodcastmaker"
+          v-if="!isPodcastmaker && isComments"
           ref="commentSection"
           :podcast="podcast"
           :fetch-conference="fetchConference"
@@ -154,6 +154,27 @@ export default defineComponent({
 
   computed: {
     ...mapState(useGeneralStore, ["storedCategories"]),
+     isComments(): boolean {
+      if (!this.podcast) return true;
+      let podcastComment = "INHERIT";
+      if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
+        podcastComment = this.podcast.annotations.COMMENTS as string;
+      }
+      let organisationComment = "LIVE_ONLY";
+      if (this.podcast.organisation.comments) {
+        organisationComment = this.podcast.organisation.comments;
+      }
+      return !(
+        "NO" === podcastComment ||
+        ("INHERIT" === podcastComment && "NO" === organisationComment) ||
+        ("LIVE_RECORD" === podcastComment &&
+          "READY_TO_RECORD" !== this.podcast.processingStatus) ||
+        ("INHERIT" === podcastComment &&
+          "LIVE_ONLY" === organisationComment &&
+          !this.podcast.conferenceId &&
+          0 !== this.podcast.conferenceId)
+      );
+    },
     backgroundDisplay(): string {
       if (!this.podcast) {
         return "";

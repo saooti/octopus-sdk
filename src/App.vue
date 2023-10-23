@@ -6,7 +6,7 @@
       :is-education="false"
       @close="displayMenu = false"
     />
-    <CategoryFilter />
+    <CategoryFilter v-if="firstDisplayCategoryFilter" />
     <router-view />
     <ClassicLazy
       v-if="pageFullyLoad"
@@ -22,7 +22,6 @@
 <script lang="ts">
 import TopBar from "@/components/misc/TopBar.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
-import CategoryFilter from "@/components/display/categories/CategoryFilter.vue";
 import ClassicLazy from "@/components/misc/ClassicLazy.vue";
 import { state } from "./stores/ParamSdkStore";
 import { Rubriquage } from "./stores/class/rubrique/rubriquage";
@@ -39,6 +38,9 @@ const LeftMenu = defineAsyncComponent(
 );
 const FooterOctopus = defineAsyncComponent(
   () => import("@/components/misc/FooterSection.vue"),
+);
+const CategoryFilter = defineAsyncComponent(
+  () => import("@/components/display/categories/CategoryFilter.vue"),
 );
 export default defineComponent({
   name: "App",
@@ -59,7 +61,8 @@ export default defineComponent({
       displayMenu: false as boolean,
       reload: false as boolean,
       isInit: false as boolean,
-      pageFullyLoad: false as boolean
+      pageFullyLoad: false as boolean,
+      firstDisplayCategoryFilter: false as boolean,
     };
   },
 
@@ -69,6 +72,17 @@ export default defineComponent({
   },
 
   watch: {
+    $route: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if(this.firstDisplayCategoryFilter){
+          return;
+        }
+        const namesRouteWithCategoryFilter = ["homePriv", "home", "podcasts", "emissions", "participants", "playlists"];
+        this.firstDisplayCategoryFilter = namesRouteWithCategoryFilter.includes(this.$route.name?.toString()?? "");
+      },
+    },
     "$i18n.locale"() {
       this.$forceUpdate();
       this.reload = !this.reload;

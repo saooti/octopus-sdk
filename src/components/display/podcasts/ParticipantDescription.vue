@@ -39,9 +39,6 @@ export default defineComponent({
 
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
-    idPopover(): string {
-      return this.isGuest ? "popover-guests-help" : "popover-animators-help";
-    },
     title(): string {
       return this.isGuest ? this.$t("Guests") : this.$t("Animated by");
     },
