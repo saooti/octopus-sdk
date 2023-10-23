@@ -176,7 +176,7 @@ export default defineComponent({
           condition: true,
         },
         {
-          title: "Twitter",
+          title: "X",
           icon: "saooti-twitter",
           className: "btn-twitter",
           url: `https://twitter.com/intent/tweet?text=${this.urlPage}`,
