@@ -55,8 +55,12 @@ import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const PlayerVideo = defineAsyncComponent(() => import("./PlayerVideo.vue"));
-const PlayerCompact = defineAsyncComponent(() => import("../player/PlayerCompact.vue"));
-const PlayerLarge = defineAsyncComponent(() => import("../player/PlayerLarge.vue"));
+const PlayerCompact = defineAsyncComponent(
+  () => import("../player/PlayerCompact.vue"),
+);
+const PlayerLarge = defineAsyncComponent(
+  () => import("../player/PlayerLarge.vue"),
+);
 export default defineComponent({
   name: "PlayerComponent",
 

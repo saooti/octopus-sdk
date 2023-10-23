@@ -46,10 +46,7 @@
           :title="$t('More episodes of this emission')"
           :button-text="$t('All podcast emission button')"
         />
-        <ClassicLazy
-          :min-height="550"
-          :unrender="true"
-        >
+        <ClassicLazy :min-height="550" :unrender="true">
           <PodcastInlineList
             :podcast-id="podcastId"
             :title="$t('Suggested listening')"
@@ -93,7 +90,10 @@ import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
-import { Conference, ConferencePublicInfo } from "@/stores/class/conference/conference";
+import {
+  Conference,
+  ConferencePublicInfo,
+} from "@/stores/class/conference/conference";
 import { handle403 } from "../mixins/handle403";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
@@ -154,7 +154,7 @@ export default defineComponent({
 
   computed: {
     ...mapState(useGeneralStore, ["storedCategories"]),
-     isComments(): boolean {
+    isComments(): boolean {
       if (!this.podcast) return true;
       let podcastComment = "INHERIT";
       if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
@@ -179,7 +179,10 @@ export default defineComponent({
       if (!this.podcast) {
         return "";
       }
-      return `background-image: url('${this.proxyImageUrl(this.podcast.imageUrl, '270')}');`;
+      return `background-image: url('${this.proxyImageUrl(
+        this.podcast.imageUrl,
+        "270",
+      )}');`;
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
@@ -306,9 +309,9 @@ export default defineComponent({
       this.fetchConference = {
         ...data,
         ...{
-          conferenceId: this.podcast?.conferenceId??0,
-          title: ""
-        }
+          conferenceId: this.podcast?.conferenceId ?? 0,
+          title: "",
+        },
       };
     },
     async initConference() {

@@ -47,7 +47,7 @@ export default {
           // if we're dealing underndering lets add a waiting period of 200ms before rendering. If a component enters the viewport and also leaves it within 200ms it will not render at all. This saves work and improves performance when user scrolls very fast
           renderTimer = setTimeout(
             () => (shouldRender.value = true),
-            props.unrender ? 200 : 0
+            props.unrender ? 200 : 0,
           );
           shouldRender.value = true;
           if (!props.unrender) {
@@ -64,7 +64,7 @@ export default {
       },
       {
         rootMargin: "600px",
-      }
+      },
     );
 
     if (props.renderOnIdle) {

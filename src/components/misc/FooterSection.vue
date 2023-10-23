@@ -153,7 +153,12 @@ export default defineComponent({
     },
     changeLanguage(): void {
       this.setCookie("octopus-language", this.language);
-      loadLocaleMessages(this.$i18n, this.language, this.authenticated, this.platformEducation);
+      loadLocaleMessages(
+        this.$i18n,
+        this.language,
+        this.authenticated,
+        this.platformEducation,
+      );
       octopusApi
         .fetchDataWithParams<Array<Category>>(
           0,

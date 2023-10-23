@@ -36,12 +36,8 @@ import { useCommentStore } from "@/stores/CommentStore";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
-const CommentList = defineAsyncComponent(
-  () => import("./CommentList.vue"),
-);
-const CommentInput = defineAsyncComponent(
-  () => import("./CommentInput.vue"),
-);
+const CommentList = defineAsyncComponent(() => import("./CommentList.vue"));
+const CommentInput = defineAsyncComponent(() => import("./CommentInput.vue"));
 export default defineComponent({
   name: "CommentSection",
   components: {

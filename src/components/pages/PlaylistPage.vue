@@ -128,7 +128,10 @@ export default defineComponent({
       if (!this.playlist) {
         return "";
       }
-      return `background-image: url('${this.proxyImageUrl(this.playlist.imageUrl, '250')}');`;
+      return `background-image: url('${this.proxyImageUrl(
+        this.playlist.imageUrl,
+        "250",
+      )}');`;
     },
   },
   watch: {

@@ -99,7 +99,10 @@ export default defineComponent({
     backgroundDisplay(): string {
       return !this.radio
         ? ""
-        : `background-image: url('${this.proxyImageUrl(this.radio.imageUrl, '270')}');`;
+        : `background-image: url('${this.proxyImageUrl(
+            this.radio.imageUrl,
+            "270",
+          )}');`;
     },
   },
   watch: {

@@ -59,7 +59,11 @@
               {{ p.title }}
             </div>
           </router-link>
-          <PodcastPlayBar v-else :podcast-id="p.podcastId" :duration="p.duration" />
+          <PodcastPlayBar
+            v-else
+            :podcast-id="p.podcastId"
+            :duration="p.duration"
+          />
         </div>
         <button
           v-if="

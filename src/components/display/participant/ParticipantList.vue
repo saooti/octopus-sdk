@@ -17,7 +17,12 @@
   >
     <template #list>
       <div class="podcast-list">
-        <ClassicLazy v-for="p in displayArray" :key="p.participantId" :minHeight="360" :unrender="true">
+        <ClassicLazy
+          v-for="p in displayArray"
+          :key="p.participantId"
+          :min-height="360"
+          :unrender="true"
+        >
           <ParticipantItem v-if="0 !== p.participantId" :participant="p" />
           <template #preview>
             <router-link
@@ -55,7 +60,7 @@ export default defineComponent({
   components: {
     ParticipantItem,
     ListPaginate,
-    ClassicLazy
+    ClassicLazy,
   },
 
   mixins: [handle403],

@@ -19,13 +19,18 @@
         class="emission-list"
         :class="smallItems ? 'three-emissions' : 'two-emissions'"
       >
-        <ClassicLazy v-for="e in displayArray" :key="e.emissionId" :minHeight="250" :unrender="true">
+        <ClassicLazy
+          v-for="e in displayArray"
+          :key="e.emissionId"
+          :min-height="250"
+          :unrender="true"
+        >
           <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
           <template #preview>
             <router-link
               :to="{
                 name: 'emission',
-                params: { emissionId: e.emissionId }
+                params: { emissionId: e.emissionId },
               }"
             >
               {{ e.name }}
@@ -78,7 +83,7 @@ export default defineComponent({
     EmissionItem,
     EmissionPlayerItem,
     ListPaginate,
-    ClassicLazy
+    ClassicLazy,
   },
 
   mixins: [handle403],

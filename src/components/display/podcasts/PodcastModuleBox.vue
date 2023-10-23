@@ -125,7 +125,10 @@
       :display-studio-access="isDebriefing"
       @validate-podcast="$emit('updatePodcast', $event)"
     />
-    <TagList v-if="undefined !== podcast.tags && 0 !== podcast.tags.length" :tag-list="podcast.tags" />
+    <TagList
+      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
+      :tag-list="podcast.tags"
+    />
   </div>
 </template>
 
@@ -154,9 +157,7 @@ const EditBox = defineAsyncComponent(
 const PodcastPlayBar = defineAsyncComponent(
   () => import("./PodcastPlayBar.vue"),
 );
-const TagList = defineAsyncComponent(
-  () => import("./TagList.vue"),
-);
+const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 export default defineComponent({
   name: "PodcastModuleBox",
   components: {

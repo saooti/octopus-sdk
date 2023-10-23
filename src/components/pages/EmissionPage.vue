@@ -116,7 +116,7 @@ export default defineComponent({
     EditBox,
     SubscribeButtons,
     LiveHorizontalList,
-    ClassicLoading
+    ClassicLoading,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
@@ -193,7 +193,10 @@ export default defineComponent({
       if (!this.emission) {
         return "";
       }
-      return `background-image: url('${this.proxyImageUrl(this.emission.imageUrl, '250')}');`;
+      return `background-image: url('${this.proxyImageUrl(
+        this.emission.imageUrl,
+        "250",
+      )}');`;
     },
   },
   watch: {

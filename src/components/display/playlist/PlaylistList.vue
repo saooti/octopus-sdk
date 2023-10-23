@@ -15,7 +15,12 @@
   >
     <template #list>
       <div class="emission-list two-emissions">
-        <ClassicLazy v-for="p in displayArray" :key="p.playlistId" :minHeight="250" :unrender="true">
+        <ClassicLazy
+          v-for="p in displayArray"
+          :key="p.playlistId"
+          :min-height="250"
+          :unrender="true"
+        >
           <PlaylistItem v-if="0 !== p.playlistId" :playlist="p" />
           <template #preview>
             <router-link
@@ -50,7 +55,7 @@ export default defineComponent({
   components: {
     PlaylistItem,
     ListPaginate,
-    ClassicLazy
+    ClassicLazy,
   },
 
   mixins: [handle403],

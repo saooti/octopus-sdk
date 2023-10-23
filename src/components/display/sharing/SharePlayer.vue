@@ -46,18 +46,20 @@
             :label="titleStillAvailable"
           />
           <PlayerParameters
-            :is-visible="isVisible"
-            :chose-number-episode="displayChoiceAllEpisodes || isLargeSuggestion"
-            :display-choice-all-episodes="displayChoiceAllEpisodes"
-            :display-transcript-param="displayTranscriptParam"
-            :display-article-param="displayArticleParam"
-            :display-wave-param="displayWaveParam"
             v-model:display-article="displayArticle"
             v-model:display-transcript="displayTranscript"
             v-model:display-wave="displayWave"
             v-model:proceed-reading="proceedReading"
             v-model:is-visible="isVisible"
+            :is-visible="isVisible"
             v-model:player-auto-play="playerAutoPlay"
+            :chose-number-episode="
+              displayChoiceAllEpisodes || isLargeSuggestion
+            "
+            :display-choice-all-episodes="displayChoiceAllEpisodes"
+            :display-transcript-param="displayTranscriptParam"
+            :display-article-param="displayArticleParam"
+            :display-wave-param="displayWaveParam"
             @i-frame-number="iFrameNumber = $event"
             @episode-numbers="episodeNumbers = $event"
           />
@@ -153,7 +155,7 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["authOrganisation"]),
     displayWaveParam(): boolean {
-      return 'default'===this.iFrameModel || 'emission'===this.iFrameModel;
+      return "default" === this.iFrameModel || "emission" === this.iFrameModel;
     },
     displayArticleParam(): boolean {
       return (
@@ -360,8 +362,8 @@ export default defineComponent({
       if (!this.displayWave) {
         url.push("&wave=false");
       }
-      if(this.playerAutoPlay){
-        url.push('&autoplay=true');
+      if (this.playerAutoPlay) {
+        url.push("&autoplay=true");
       }
       if (this.isVisible) {
         url.push("&key=" + window.btoa(this.dataTitle.toString()));

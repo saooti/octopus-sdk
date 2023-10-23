@@ -100,7 +100,11 @@
       :url-page="urlPage"
       @close="qrCode = false"
     />
-    <SnackBar v-if="lazyLoadingSnackbar" ref="snackbar" position="bottom-left" />
+    <SnackBar
+      v-if="lazyLoadingSnackbar"
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 
@@ -123,9 +127,7 @@ const NewsletterModal = defineAsyncComponent(
 const QrCodeModal = defineAsyncComponent(
   () => import("../../misc/modal/QrCodeModal.vue"),
 );
-const SnackBar = defineAsyncComponent(
-  () => import("../../misc/SnackBar.vue"),
-);
+const SnackBar = defineAsyncComponent(() => import("../../misc/SnackBar.vue"));
 export default defineComponent({
   components: {
     ClipboardModal,
@@ -240,12 +242,12 @@ export default defineComponent({
       this.dataRSSSave = !this.dataRSSSave;
     },
     afterCopy(): void {
-      if(!this.lazyLoadingSnackbar){
+      if (!this.lazyLoadingSnackbar) {
         this.lazyLoadingSnackbar = true;
         setTimeout(() => {
           this.afterCopy();
         }, 500);
-      }else{
+      } else {
         (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
           this.$t("Link in clipboard"),
         );

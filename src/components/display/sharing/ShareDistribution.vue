@@ -27,7 +27,11 @@
         <span :class="platform.icon" />{{ platform.title }}
       </router-link>
     </div>
-    <SnackBar v-if="lazyLoadingSnackbar" ref="snackbar" position="bottom-left" />
+    <SnackBar
+      v-if="lazyLoadingSnackbar"
+      ref="snackbar"
+      position="bottom-left"
+    />
   </div>
 </template>
 
@@ -129,12 +133,12 @@ export default defineComponent({
       this.rss = `${state.octopusApi.url}rss/emission/${this.emissionId}.rss`;
     },
     afterCopy(): void {
-      if(!this.lazyLoadingSnackbar){
+      if (!this.lazyLoadingSnackbar) {
         this.lazyLoadingSnackbar = true;
         setTimeout(() => {
           this.afterCopy();
         }, 500);
-      }else{
+      } else {
         (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
           this.$t("Link in clipboard"),
         );

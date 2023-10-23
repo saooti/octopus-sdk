@@ -13,7 +13,10 @@ import crudApi from "@/api/classicCrud";
 import displayMethods from "../../mixins/displayMethods";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
-import { Conference, ConferencePublicInfo } from "@/stores/class/conference/conference";
+import {
+  Conference,
+  ConferencePublicInfo,
+} from "@/stores/class/conference/conference";
 export default defineComponent({
   name: "LiveItem",
 

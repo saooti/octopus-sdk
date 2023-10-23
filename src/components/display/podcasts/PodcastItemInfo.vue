@@ -13,7 +13,12 @@
     >
       {{ title }}
     </router-link>
-    <PodcastPlayBar v-if="isProgressBar" :podcast-id="podcastId" :duration="duration" class="mx-2" />
+    <PodcastPlayBar
+      v-if="isProgressBar"
+      :podcast-id="podcastId"
+      :duration="duration"
+      class="mx-2"
+    />
 
     <div class="mx-2 d-flex align-items-center justify-content-between mt-2">
       <div v-if="isPodcastmaker" class="useless-div-for-podcastmaker" />

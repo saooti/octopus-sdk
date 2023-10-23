@@ -1,10 +1,10 @@
 <template>
   <div class="page-box">
     <template v-if="0 === rubriquageFilter.length">
-      <ClassicLazy 
+      <ClassicLazy
         v-for="c in categories"
         :key="c.id"
-        :minHeight="650" 
+        :min-height="650"
         :unrender="true"
       >
         <PodcastInlineList
@@ -15,10 +15,10 @@
       </ClassicLazy>
     </template>
     <template v-else>
-      <ClassicLazy 
+      <ClassicLazy
         v-for="r in rubriqueToShow"
         :key="r.rubriqueId"
-        :minHeight="650" 
+        :min-height="650"
         :unrender="true"
       >
         <PodcastInlineList
@@ -72,7 +72,7 @@ export default defineComponent({
   name: "HomePage",
   components: {
     PodcastInlineList,
-    ClassicLazy
+    ClassicLazy,
   },
   data() {
     return {

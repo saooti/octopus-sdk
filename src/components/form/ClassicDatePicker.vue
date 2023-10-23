@@ -22,8 +22,8 @@
     :month-picker="monthPicker"
     @update:model-value="$emit('updateDate', $event)"
   >
-   <template v-if="time" #input-icon>
-      <div class="ms-2 saooti-clock"/>
+    <template v-if="time" #input-icon>
+      <div class="ms-2 saooti-clock" />
     </template>
   </VueDatePicker>
 </template>
@@ -61,7 +61,7 @@ export default defineComponent({
         seconds?: number | string;
       },
     },
-    monthPicker:{ default: false, type: Boolean },
+    monthPicker: { default: false, type: Boolean },
   },
 
   emits: ["updateDate", "update:date"],
@@ -78,16 +78,16 @@ export default defineComponent({
       };
     },
     modelVal() {
-      if(this.time){
+      if (this.time) {
         return this.time;
       }
-      if(this.range){
+      if (this.range) {
         return this.range;
       }
-      if(this.date && this.monthPicker){
+      if (this.date && this.monthPicker) {
         return {
           month: this.date.getMonth(),
-          year: this.date.getFullYear()
+          year: this.date.getFullYear(),
         };
       }
       return this.date;
@@ -97,7 +97,7 @@ export default defineComponent({
     },
     format() {
       let timeString = "";
-      if(this.monthPicker){
+      if (this.monthPicker) {
         return "MM/yyyy";
       }
       if (this.displayTimePicker || this.isTimePicker) {

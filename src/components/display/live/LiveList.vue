@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="displayLiveList"
-    class="d-flex flex-column align-items-start mt-3"
-  >
+  <div v-if="displayLiveList" class="d-flex flex-column align-items-start mt-3">
     <div
       class="d-flex justify-content-between flex-grow-1 mb-3 w-100 align-items-center"
     >
@@ -90,9 +87,12 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["authOrganisation"]),
-    displayLiveList(): boolean{
-      return (undefined!==this.filterOrgaId || undefined!==this.organisationId) &&
-        (!this.hideIfEmpty || (this.hideIfEmpty && 0!==this.lives.length) ) ;
+    displayLiveList(): boolean {
+      return (
+        (undefined !== this.filterOrgaId ||
+          undefined !== this.organisationId) &&
+        (!this.hideIfEmpty || (this.hideIfEmpty && 0 !== this.lives.length))
+      );
     },
     filterOrgaUsed(): string | undefined {
       return this.filterOrgaId ? this.filterOrgaId : this.organisationId;

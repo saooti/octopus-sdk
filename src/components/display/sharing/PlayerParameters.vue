@@ -42,43 +42,43 @@
     </div>
     <ClassicCheckbox
       :text-init="proceedReading"
-      @update:text-init="$emit('update:proceedReading', $event)"
       id-checkbox="proceed-reading-checkbox"
       :label="$t('Proceed reading')"
+      @update:text-init="$emit('update:proceedReading', $event)"
     />
     <ClassicCheckbox
       :text-init="isVisible"
-      @update:text-init="$emit('update:isVisible', $event)"
       id-checkbox="is-visible-checkbox"
       :label="$t('Podcasts still available')"
+      @update:text-init="$emit('update:isVisible', $event)"
     />
   </template>
   <ClassicCheckbox
     v-if="displayArticleParam"
     :text-init="displayArticle"
-    @update:text-init="$emit('update:displayArticle', $event)"
     id-checkbox="display-article-checkbox"
     :label="$t('Display associated article')"
+    @update:text-init="$emit('update:displayArticle', $event)"
   />
   <ClassicCheckbox
     v-if="displayTranscriptParam"
     :text-init="displayTranscript"
-    @update:text-init="$emit('update:displayTranscript', $event)"
     id-checkbox="display-transcript-checkbox"
     :label="$t('If the transcript is available, show it')"
+    @update:text-init="$emit('update:displayTranscript', $event)"
   />
   <ClassicCheckbox
     v-if="displayWaveParam"
     :text-init="displayWave"
-    @update:text-init="$emit('update:displayWave', $event)"
     id-checkbox="display-wave-checkbox"
     :label="$t('Show animated wave')"
+    @update:text-init="$emit('update:displayWave', $event)"
   />
   <ClassicCheckbox
     :text-init="playerAutoPlay"
-    @update:text-init="$emit('update:playerAutoPlay', $event)"
     id-checkbox="player-autoplay-checkbox"
     :label="$t('Trigger automatic reading if this is possible')"
+    @update:text-init="$emit('update:playerAutoPlay', $event)"
   />
 </template>
 
@@ -110,7 +110,7 @@ export default defineComponent({
     "update:displayArticle",
     "update:displayTranscript",
     "update:displayWave",
-    "update:playerAutoPlay"
+    "update:playerAutoPlay",
   ],
 
   data() {

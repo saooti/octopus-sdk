@@ -31,13 +31,18 @@
     >
       <template #list>
         <div class="podcast-list">
-          <ClassicLazy v-for="p in podcastsDisplay" :key="p.podcastId" :minHeight="410" :unrender="true">
+          <ClassicLazy
+            v-for="p in podcastsDisplay"
+            :key="p.podcastId"
+            :min-height="410"
+            :unrender="true"
+          >
             <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
             <template #preview>
               <router-link
                 :to="{
                   name: 'podcast',
-                  params: { podcastId: p.podcastId }
+                  params: { podcastId: p.podcastId },
                 }"
               >
                 {{ p.title }}
@@ -70,7 +75,7 @@ export default defineComponent({
     PodcastItem,
     ClassicSearch,
     ListPaginate,
-    ClassicLazy
+    ClassicLazy,
   },
 
   mixins: [handle403, orgaComputed],

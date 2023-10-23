@@ -3,7 +3,11 @@
     <ClassicLoading
       :loading-text="loading ? $t('Loading emissions ...') : undefined"
     />
-    <SwiperList v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)" :sizeItemOverload="itemSize"  :list-object="allEmissions">
+    <SwiperList
+      v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)"
+      :size-item-overload="itemSize"
+      :list-object="allEmissions"
+    >
       <template #octopusSlide="{ option }">
         <EmissionPlayerItem
           class="flex-shrink-0 item-phone-margin"
@@ -43,7 +47,7 @@ export default defineComponent({
   components: {
     EmissionPlayerItem,
     ClassicLoading,
-    SwiperList
+    SwiperList,
   },
 
   mixins: [handle403, imageProxy, resizePhone],
