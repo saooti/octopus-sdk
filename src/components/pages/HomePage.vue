@@ -4,7 +4,7 @@
       <ClassicLazy
         v-for="c in categories"
         :key="c.id"
-        :min-height="650"
+        :min-height="0"
         :unrender="true"
       >
         <PodcastInlineList
@@ -12,13 +12,16 @@
           :title="c.name"
           :button-text="$t('All podcast button', { name: c.name })"
         />
+        <template #preview>
+          <div style="min-height: 650px"></div>
+        </template>
       </ClassicLazy>
     </template>
     <template v-else>
       <ClassicLazy
         v-for="r in rubriqueToShow"
         :key="r.rubriqueId"
-        :min-height="650"
+        :min-height="0"
         :unrender="true"
       >
         <PodcastInlineList
@@ -26,6 +29,9 @@
           :title="r.name"
           :button-text="$t('All podcast button', { name: r.name })"
         />
+        <template #preview>
+          <div style="min-height: 650px"></div>
+        </template>
       </ClassicLazy>
       <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
         <PodcastInlineList
@@ -81,7 +87,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useGeneralStore, ["storedCategories"]),
+    ...mapState(useGeneralStore, ["storedCategories", "storedCategoriesOrga"]),
     ...mapState(useFilterStore, [
       "filterRubriquage",
       "filterOrgaId",
@@ -121,15 +127,23 @@ export default defineComponent({
       return this.filterRubrique;
     },
     categories(): Array<Category> {
+      let arrayCategories: Array<Category> = [];
       if (this.filterIab) {
         return [this.filterIab];
       }
-      return this.storedCategories.filter((c: Category) => {
-        if (state.generalParameters.podcastmaker)
+      if (this.filterOrgaId) {
+        arrayCategories = this.storedCategoriesOrga.filter((c: Category) => {
           return c.podcastOrganisationCount;
-        return c.podcastCount;
-      });
-    },
+        });
+      } else {
+        arrayCategories = this.storedCategories.filter((c: Category) => {
+          if (state.generalParameters.podcastmaker) return c.podcastOrganisationCount;
+          return c.podcastCount;
+        });
+      }
+      this.$emit("categoriesLength", arrayCategories.length);
+      return arrayCategories;
+    }
   },
   watch: {
     rubriqueFilter: {
