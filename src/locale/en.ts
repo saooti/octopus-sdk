@@ -348,4 +348,5 @@ export default {
   "Video Version":"Video version",
   "Chronological":"Chronological",
   "Trigger automatic reading if this is possible":"Trigger automatic reading if this is possible",
+  "High version":"High version",
 };

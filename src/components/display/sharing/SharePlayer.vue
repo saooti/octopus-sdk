@@ -27,12 +27,12 @@
         />
         <div class="d-flex flex-column flex-grow-1">
           <SharePlayerTypes
-            v-if="!isLiveReadyToRecord"
             v-model:iFrameModel="iFrameModel"
             :podcast="podcast"
             :emission="emission"
             :playlist="playlist"
             :organisation-id="organisationId"
+            :is-live="isLiveReadyToRecord"
           />
           <SharePlayerColors
             v-model:color="color"
@@ -267,6 +267,8 @@ export default defineComponent({
           return "350px";
         case "emission":
           return "520px";
+        case "videoLive":
+          return "450px";
         default:
           return "530px";
       }

@@ -338,4 +338,5 @@ export default {
   "Video Version":"Video različica",
   "Chronological":"Kronološko",
   "Trigger automatic reading if this is possible":"Sprožite samodejno branje, če je to mogoče",
+  "High version":"Visoka različica",
 }
