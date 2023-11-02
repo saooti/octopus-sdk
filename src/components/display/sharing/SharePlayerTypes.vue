@@ -37,6 +37,7 @@ export default defineComponent({
     playlist: { default: undefined, type: Object as () => Playlist },
     iFrameModel: { default: "default", type: String },
     organisationId: { default: undefined, type: String },
+    isLive: { default: false, type: Boolean },
   },
   emits: ["update:iFrameModel"],
 
@@ -51,7 +52,20 @@ export default defineComponent({
         undefined !== this.podcast && undefined !== this.podcast.video?.videoId
       );
     },
+    optionsSelectLive(){
+      return [
+        { name: this.$t("Large version"), value: "large", condition: true },
+        {
+          name: this.$t("High version"),
+          value: "videoLive",
+          condition: this.podcast && this.podcast.podcastId,
+        }
+      ];
+    },
     optionsSelect() {
+      if(this.isLive){
+        return this.optionsSelectLive;
+      }
       return [
         {
           name: this.$t("Video Version"),
@@ -99,6 +113,9 @@ export default defineComponent({
   async created() {
     if (this.isVideoPodcast) {
       this.$emit("update:iFrameModel", "video");
+    }
+    if(this.isLive){
+      return;
     }
     await this.initCustomPlayers();
   },
