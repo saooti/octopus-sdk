@@ -8,11 +8,7 @@
     />
     <CategoryFilter v-if="firstDisplayCategoryFilter" />
     <router-view />
-    <ClassicLazy
-      v-if="pageFullyLoad"
-      :min-height="125"
-      :unrender="true"
-    >
+    <ClassicLazy v-if="pageFullyLoad" :min-height="125" :unrender="true">
       <FooterOctopus />
     </ClassicLazy>
     <PlayerComponent />
@@ -51,7 +47,7 @@ export default defineComponent({
     CategoryFilter,
     FooterOctopus,
     PlayerComponent,
-    ClassicLazy
+    ClassicLazy,
   },
 
   mixins: [initSDK],
@@ -76,11 +72,20 @@ export default defineComponent({
       deep: true,
       immediate: true,
       async handler() {
-        if(this.firstDisplayCategoryFilter){
+        if (this.firstDisplayCategoryFilter) {
           return;
         }
-        const namesRouteWithCategoryFilter = ["homePriv", "home", "podcasts", "emissions", "participants", "playlists"];
-        this.firstDisplayCategoryFilter = namesRouteWithCategoryFilter.includes(this.$route.name?.toString()?? "");
+        const namesRouteWithCategoryFilter = [
+          "homePriv",
+          "home",
+          "podcasts",
+          "emissions",
+          "participants",
+          "playlists",
+        ];
+        this.firstDisplayCategoryFilter = namesRouteWithCategoryFilter.includes(
+          this.$route.name?.toString() ?? "",
+        );
       },
     },
     "$i18n.locale"() {
@@ -90,9 +95,9 @@ export default defineComponent({
   },
   async created() {
     await this.initApp();
-    setTimeout(()=>{
+    setTimeout(() => {
       this.pageFullyLoad = true;
-    }, 2000)
+    }, 2000);
   },
   methods: {
     ...mapActions(useFilterStore, ["filterUpdateIab", "filterUpdateRubrique"]),

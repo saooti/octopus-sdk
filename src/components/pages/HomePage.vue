@@ -80,6 +80,7 @@ export default defineComponent({
     PodcastInlineList,
     ClassicLazy,
   },
+  emits: ["categoriesLength"],
   data() {
     return {
       rubriqueId: [] as Array<number>,
@@ -137,13 +138,14 @@ export default defineComponent({
         });
       } else {
         arrayCategories = this.storedCategories.filter((c: Category) => {
-          if (state.generalParameters.podcastmaker) return c.podcastOrganisationCount;
+          if (state.generalParameters.podcastmaker)
+            return c.podcastOrganisationCount;
           return c.podcastCount;
         });
       }
       this.$emit("categoriesLength", arrayCategories.length);
       return arrayCategories;
-    }
+    },
   },
   watch: {
     rubriqueFilter: {

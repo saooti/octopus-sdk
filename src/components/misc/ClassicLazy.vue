@@ -25,7 +25,10 @@ export default {
   props: {
     renderOnIdle: Boolean,
     unrender: Boolean,
-    minHeight: Number,
+    minHeight: {
+      type: Number,
+      default: 0,
+    },
     unrenderDelay: {
       type: Number,
       default: 10000,

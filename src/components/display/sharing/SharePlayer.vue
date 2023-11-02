@@ -51,8 +51,8 @@
             v-model:display-wave="displayWave"
             v-model:proceed-reading="proceedReading"
             v-model:is-visible="isVisible"
-            :is-visible="isVisible"
             v-model:player-auto-play="playerAutoPlay"
+            :is-visible="isVisible"
             :chose-number-episode="
               displayChoiceAllEpisodes || isLargeSuggestion
             "
