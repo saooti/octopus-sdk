@@ -3,7 +3,7 @@
     <template v-if="displayAccordion">
       <button
         :id="'accordion-' + idComposer"
-        class="btn-transparent bg-white w-100 p-2 text-start d-flex align-items-center"
+        class="btn-transparent bg-white w-100 p-2 text-start d-flex flex-no-wrap align-items-center"
         :class="isOpen ? 'really-light-primary-bg' : ''"
         @click="isOpen = !isOpen"
       >
@@ -55,7 +55,7 @@ export default defineComponent({
 .octopus-accordion {
   border: 1px solid #ccc;
   > button {
-    height: 50px;
+    min-height: 50px;
   }
   .img-accordion {
     width: 30px;

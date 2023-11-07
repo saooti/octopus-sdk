@@ -1,11 +1,6 @@
 <template>
   <div v-if="isInit" :key="reload" class="d-flex flex-column h-100 octopus-app">
-    <TopBar v-model:displayMenu="displayMenu" :is-education="false" />
-    <LeftMenu
-      v-if="displayMenu"
-      :is-education="false"
-      @close="displayMenu = false"
-    />
+    <TopBar :is-education="false" />
     <CategoryFilter v-if="firstDisplayCategoryFilter" />
     <router-view />
     <ClassicLazy v-if="pageFullyLoad" :min-height="125" :unrender="true">
@@ -54,7 +49,6 @@ export default defineComponent({
 
   data() {
     return {
-      displayMenu: false as boolean,
       reload: false as boolean,
       isInit: false as boolean,
       pageFullyLoad: false as boolean,

@@ -193,6 +193,8 @@ export default defineComponent({
   border-radius: $octopus-borderradius;
   position: absolute;
   z-index: 9999;
+  max-height: 80vh;
+  overflow: auto;
   &.octopus-dropdown {
     min-width: 200px;
     .octopus-dropdown-item {

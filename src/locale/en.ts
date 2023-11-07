@@ -18,7 +18,7 @@ export default {
   "See my statistics": "Audience Report",
   "Edit / Delete episodes": "My episodes",
   "Welcome in the Backoffice": "Administration",
-  "Please set an animator": "Please select or create a facilitator.",
+  "Please set an animator": "Please select or create a host.",
   "Term of use": "Terms of use",
   "Producted by : ": "Produced by : ",
   "Loading podcasts ...": "Loading podcasts ...",

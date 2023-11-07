@@ -218,6 +218,9 @@ export default defineComponent({
     isProduction() : boolean{
       return state.generalParameters.isProduction as boolean;
     },
+    isPodcastmaker(): boolean {
+      return state.generalParameters.podcastmaker as boolean;
+    },
     rssUrl(): string {
       let api = state.generalParameters.ApiUri + "rss/";
       if (this.emission) {

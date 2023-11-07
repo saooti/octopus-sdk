@@ -21,7 +21,6 @@ export const getNav = () => import("./src/components/misc/ClassicNav.vue");
 export const getProgressBar = () => import("./src/components/misc/ProgressBar.vue");
 export const getSpinner = () => import("./src/components/misc/ClassicSpinner.vue");
 export const getFooter = () => import("./src/components/misc/FooterSection.vue");
-export const getLeftMenu = () => import("./src/components/misc/LeftMenu.vue");
 export const getPlayer = () => import("./src/components/misc/player/PlayerComponent.vue");
 export const getSnackbar = () => import("./src/components/misc/SnackBar.vue");
 export const getTopBar = () => import("./src/components/misc/TopBar.vue");

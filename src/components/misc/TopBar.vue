@@ -10,7 +10,6 @@
           rubriquesId: rubriqueQueryParam,
         },
       }"
-      @click="onDisplayMenu(true)"
     >
       <img
         v-if="!filterOrgaId || '' === imgUrl"
@@ -33,7 +32,7 @@
       width="auto"
       :defaultanswer="$t('No organisation filter')"
       :value="organisationId"
-      class="ms-3 me-2"
+      class="ms-3 me-2 hide-phone"
       :reset="reset"
       @selected="onOrganisationSelected"
     />
@@ -82,11 +81,8 @@
         </div>
       </ClassicPopover>
     </div>
-    <button
-      class="btn-transparent saooti-menu"
-      :title="$t('open left Menu')"
-      @click="onDisplayMenu(false)"
-    />
+    <MobileMenu :is-education="isEducation"/>
+
     <div class="d-flex flex-column">
       <div class="d-flex justify-content-end flex-nowrap">
         <HomeDropdown :is-education="isEducation" />
@@ -117,19 +113,21 @@ import { defineComponent, defineAsyncComponent } from "vue";
 const OrganisationChooserLight = defineAsyncComponent(
   () => import("../display/organisation/OrganisationChooserLight.vue"),
 );
+const MobileMenu = defineAsyncComponent(
+  () => import("./MobileMenu.vue"),
+);
 export default defineComponent({
   name: "TopBar",
   components: {
     OrganisationChooserLight,
     HomeDropdown,
     ClassicPopover,
+    MobileMenu
   },
   mixins: [orgaFilter, imageProxy],
   props: {
-    displayMenu: { default: false, type: Boolean },
     isEducation: { default: false, type: Boolean },
   },
-  emits: ["update:displayMenu"],
   data() {
     return {
       scrolled: false as boolean,
@@ -259,12 +257,6 @@ export default defineComponent({
       if (this.minScroll < window.scrollY) {
         this.minScroll = window.scrollY;
       }
-      if (!this.scrolled) {
-        this.$emit("update:displayMenu", false);
-      }
-    },
-    onDisplayMenu(param: boolean): void {
-      this.$emit("update:displayMenu", param ? false : !this.displayMenu);
     },
     async onOrganisationSelected(
       organisation: Organisation | undefined,
@@ -327,7 +319,6 @@ export default defineComponent({
     }
     /** PHONES*/
     @media (max-width: 960px) {
-      .default-multiselect-width,
       .link-hover {
         display: none;
       }
