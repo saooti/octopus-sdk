@@ -349,4 +349,5 @@ export default {
   "Chronological":"Chronologisch",
   "Trigger automatic reading if this is possible":"Wenn möglich, automatisches Auslesen auslösen",
   "High version":"Hohe Version",
+  "Advanced sharing":"Erweitertes Teilen",
 }

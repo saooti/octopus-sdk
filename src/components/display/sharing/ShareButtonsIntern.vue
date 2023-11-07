@@ -18,6 +18,15 @@
             <div :class="button.icon" />
           </a>
         </template>
+        <router-link
+          v-if="!isPodcastmaker && authenticated && podcast && isProduction"
+          :class="getClass('saooti-share')"
+          :title="$t('Advanced sharing')"
+          :to="{
+            name: 'advancedShare',
+            params: { podcastId: podcast.podcastId }
+          }"
+        />
       </div>
     </div>
     <div v-if="podcast || emission || playlist" class="d-flex flex-column me-2">
@@ -205,6 +214,9 @@ export default defineComponent({
     },
     authenticated(): boolean {
       return state.generalParameters.authenticated as boolean;
+    },
+    isProduction() : boolean{
+      return state.generalParameters.isProduction as boolean;
     },
     rssUrl(): string {
       let api = state.generalParameters.ApiUri + "rss/";

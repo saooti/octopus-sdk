@@ -349,4 +349,5 @@ export default {
   "Chronological":"Chronological",
   "Trigger automatic reading if this is possible":"Trigger automatic reading if this is possible",
   "High version":"High version",
+  "Advanced sharing":"Advanced sharing",
 };

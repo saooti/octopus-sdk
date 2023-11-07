@@ -339,4 +339,5 @@ export default {
   "Chronological":"Kronološko",
   "Trigger automatic reading if this is possible":"Sprožite samodejno branje, če je to mogoče",
   "High version":"Visoka različica",
+  "Advanced sharing":"Napredno deljenje",
 }

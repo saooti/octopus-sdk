@@ -212,6 +212,11 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
   },
   {
+    path: "/main/priv/share",
+    name: "advancedShare",
+    component: Home,
+  },
+  {
     path: "/main/pub/cgu",
     component: Home,
   },
