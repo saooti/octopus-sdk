@@ -9,18 +9,20 @@
       </div>
       <div class="d-flex flex-column page-element">
         <div class="module-box">
-          <div class="mb-5 descriptionText">
-            <img
-              v-lazy="proxyImageUrl(emission.imageUrl, '250')"
-              width="250"
-              height="250"
-              :alt="$t('Emission name image', { name: name })"
-              class="img-box float-start me-3 mb-3"
-            />
-            <h2>{{ name }}</h2>
-            <!-- eslint-disable vue/no-v-html -->
-            <p class="html-wysiwyg-content" v-html="urlify(description)" />
-            <!-- eslint-enable -->
+          <div class="d-flex mb-2">
+            <div class="w-100">
+              <img
+                v-lazy="proxyImageUrl(emission.imageUrl, '250')"
+                width="250"
+                height="250"
+                :alt="$t('Emission name image', { name: name })"
+                class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
+              />
+              <div class="text-uppercase h2 mb-3">{{ name }}</div>
+              <!-- eslint-disable vue/no-v-html -->
+              <p class="html-wysiwyg-content descriptionText" v-html="urlify(description)" />
+              <!-- eslint-enable -->
+            </div>
           </div>
           <EditBox
             v-if="editRight && pageParameters.isEditBox"
