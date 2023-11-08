@@ -1,8 +1,10 @@
+import { Occurrence } from "./recurrence";
+
 export interface CrudPlanningLive {
   isLive: boolean;
   dateValid: boolean;
   canalId: number;
-  liveId: number;
+  occurrenceId: number;
 }
 
 export interface TimeRangeAvailable {
@@ -10,25 +12,14 @@ export interface TimeRangeAvailable {
   end: Date;
 }
 
-export interface PlanningLive {
-  canalId: number;
-  liveId: number;
-  startDate: Date;
-  endDate: Date;
-  podcastId: number;
-  podcastData: {
-    title: string;
-    artist: string;
-    duration: number;
-    conferenceId: number;
-  };
+export interface PlanningLive extends Occurrence {
 }
 
 export function emptyCrudPlanningLive(): CrudPlanningLive {
-  return {
-    isLive: false,
+	return {
+		isLive: false,
     dateValid: false,
     canalId: 0,
-    liveId: 0,
-  };
+    occurrenceId:0,
+	};
 }

@@ -29,58 +29,58 @@
             v-for="planningItem in planning[daySelected]"
             v-else
             :key="
-              planningItem.occurrence.occurrenceId +
+              planningItem.occurrenceId +
               '' +
-              planningItem.occurrence.liveId
+              planningItem.liveId
             "
             class="d-flex align-items-center mb-3"
           >
             <div class="program-item-date fw-bold flex-shrink-0">
-              {{ dateDisplay(planningItem.occurrence.startDate) }}
+              {{ dateDisplay(planningItem.startDate) }}
             </div>
-            <component
-              :is="
+            <!-- <component :is="
                 planningItem.podcast.availability.visibility
                   ? 'router-link'
                   : 'div'
-              "
+              " -->
+            <router-link
               class="d-flex align-items-center text-dark"
               :to="{
                 name: 'podcast',
-                params: { podcastId: planningItem.podcast.podcastId },
+                params: { podcastId: planningItem.podcastId },
                 query: { productor: filterOrgaId },
               }"
             >
               <img
-                v-lazy="proxyImageUrl(planningItem.podcast.imageUrl, '150')"
+                v-lazy="proxyImageUrl(planningItem.podcastData.imageUrl, '150')"
                 width="150"
                 height="150"
                 class="m-2"
                 :title="
-                  $t('Episode name image', { name: planningItem.podcast.title })
+                  $t('Episode name image', { name: planningItem.podcastData.title })
                 "
                 :alt="
-                  $t('Episode name image', { name: planningItem.podcast.title })
+                  $t('Episode name image', { name: planningItem.podcastData.title })
                 "
               />
               <div class="d-flex flex-column">
                 <div class="d-flex align-items-center mb-2">
                   <div
-                    v-if="planningItem.occurrence.liveId"
+                    v-if="planningItem.liveId"
                     class="bg-complementary text-white p-1 me-1"
                   >
                     {{ $t("Live") }}
                   </div>
                   <div class="flex-grow-1 text-truncate fw-bold">
-                    {{ planningItem.occurrence.podcastData.title }}
+                    {{ planningItem.podcastData.title }}
                   </div>
                 </div>
 
-                <ParticipantDescription
+                <!-- <ParticipantDescription
                   :participants="planningItem.podcast.animators"
-                />
+                /> -->
               </div>
-            </component>
+            </router-link>
           </div>
         </template>
       </div>
@@ -96,19 +96,16 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import octopusApi from "@saooti/octopus-api";
 import imageProxy from "../../mixins/imageProxy";
-import ParticipantDescription from "../podcasts/ParticipantDescription.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 import { PlanningOccurrence } from "@/stores/class/radio/recurrence";
-import { Podcast } from "@/stores/class/general/podcast";
 import { PlanningLive } from "@/stores/class/radio/live";
 export default defineComponent({
   name: "RadioPlanning",
 
   components: {
     ClassicLoading,
-    ParticipantDescription,
   },
 
   mixins: [imageProxy],
@@ -120,10 +117,7 @@ export default defineComponent({
   data() {
     return {
       planning: {} as {
-        [key: number]: Array<{
-          podcast: Podcast;
-          occurrence: PlanningOccurrence | PlanningLive;
-        }>;
+        [key: number]: Array<PlanningOccurrence | PlanningLive>;
       },
       daySelected: dayjs().valueOf(),
       arrayDays: [] as Array<{
@@ -195,6 +189,8 @@ export default defineComponent({
             return b.startDate > a.startDate ? -1 : 0;
           });
         }
+        this.planning[this.daySelected] = occurrences;
+        /* 
         this.planning[this.daySelected] = [];
         for (let oc of occurrences) {
           if (oc.podcastId) {
@@ -207,7 +203,7 @@ export default defineComponent({
               occurrence: oc,
             });
           }
-        }
+        } */
       } catch {
         this.error = true;
       }
