@@ -3,12 +3,12 @@
     <h2 class="big-h2 mb-3 height-40">
       {{ $t("Program") }}
     </h2>
-    <div class="border">
+    <div class="py-3">
       <div class="d-flex align-items-center w-100">
         <button
           v-for="day in arrayDays"
           :key="day.date"
-          class="d-flex flex-column align-items-center flex-grow-1"
+          class="d-flex flex-column align-items-center flex-grow-1 button-date"
           :class="day.date == daySelected ? 'bg-primary text-white' : ''"
           @click="changeDate(day.date)"
         >
@@ -71,7 +71,7 @@
                   >
                     {{ $t("Live") }}
                   </div>
-                  <div class="flex-grow-1 text-truncate">
+                  <div class="flex-grow-1 text-truncate fw-bold">
                     {{ planningItem.occurrence.podcastData.title }}
                   </div>
                 </div>
@@ -227,6 +227,14 @@ export default defineComponent({
 .octopus-app {
   .program-item-date {
     width: 100px;
+    font-size: 1.1rem;
+  }
+  .button-date{
+    border: 1px solid #ddd;
+    padding: 0.5rem 0;
+    &:hover{
+      background: #ddd;
+    }
   }
 }
 </style>
