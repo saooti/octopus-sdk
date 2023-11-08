@@ -24,6 +24,7 @@ export const getFooter = () => import("./src/components/misc/FooterSection.vue")
 export const getPlayer = () => import("./src/components/misc/player/PlayerComponent.vue");
 export const getSnackbar = () => import("./src/components/misc/SnackBar.vue");
 export const getTopBar = () => import("./src/components/misc/TopBar.vue");
+export const getMobileMenu = () => import("./src/components/misc/MobileMenu.vue");
 export const getHomeDropdown = () => import("./src/components/misc/HomeDropdown.vue");
 export const getMessageModal = () => import("./src/components/misc/modal/MessageModal.vue");
 export const getErrorMessage = () => import("./src/components/misc/ErrorMessage.vue");
