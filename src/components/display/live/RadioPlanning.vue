@@ -75,10 +75,6 @@
                     {{ planningItem.podcastData.title }}
                   </div>
                 </div>
-
-                <!-- <ParticipantDescription
-                  :participants="planningItem.podcast.animators"
-                /> -->
               </div>
             </router-link>
           </div>
@@ -189,21 +185,7 @@ export default defineComponent({
             return b.startDate > a.startDate ? -1 : 0;
           });
         }
-        this.planning[this.daySelected] = occurrences;
-        /* 
-        this.planning[this.daySelected] = [];
-        for (let oc of occurrences) {
-          if (oc.podcastId) {
-            const data: Podcast = await octopusApi.fetchData<Podcast>(
-              0,
-              "podcast/" + oc.podcastId,
-            );
-            this.planning[this.daySelected].push({
-              podcast: data,
-              occurrence: oc,
-            });
-          }
-        } */
+        this.planning[this.daySelected] = occurrences.filter((oc) => oc.podcastId);
       } catch {
         this.error = true;
       }
