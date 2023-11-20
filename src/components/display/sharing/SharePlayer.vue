@@ -161,7 +161,10 @@ export default defineComponent({
       return (
         undefined !== this.podcast &&
         undefined !== this.podcast.article &&
-        0 !== this.podcast.article.length
+        0 !== this.podcast.article.length && 
+        ("default" === this.iFrameModel || 
+        "large" === this.iFrameModel ||
+        "largeMore" === this.iFrameModel)
       );
     },
     displayTranscriptParam(): boolean {
@@ -355,7 +358,7 @@ export default defineComponent({
       if (!this.proceedReading) {
         url.push("&proceed=false");
       }
-      if (!this.displayArticle) {
+      if (!this.displayArticle && this.displayArticleParam) {
         url.push("&article=false");
       }
       if (!this.displayTranscript) {
