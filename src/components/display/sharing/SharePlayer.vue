@@ -161,10 +161,10 @@ export default defineComponent({
       return (
         undefined !== this.podcast &&
         undefined !== this.podcast.article &&
-        0 !== this.podcast.article.length && 
-        ("default" === this.iFrameModel || 
-        "large" === this.iFrameModel ||
-        "largeMore" === this.iFrameModel)
+        0 !== this.podcast.article.length &&
+        ("default" === this.iFrameModel ||
+          "large" === this.iFrameModel ||
+          "largeMore" === this.iFrameModel)
       );
     },
     displayTranscriptParam(): boolean {

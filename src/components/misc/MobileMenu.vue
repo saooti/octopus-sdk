@@ -4,8 +4,10 @@
       id="mobile-menu-dropdown"
       class="btn-transparent saooti-menu"
       :title="$t('open left Menu')"
+      @click="handleMenuClick"
     />
     <ClassicPopover
+      v-if="firstLoaded"
       target="mobile-menu-dropdown"
       :only-click="true"
       :is-fixed="true"
@@ -14,7 +16,11 @@
       <template v-for="link in routerLinkArray" :key="link.routeName">
         <router-link
           v-if="link.condition"
-          :class="'home' === link.routeName ? 'octopus-dropdown-item show-phone-flex' : 'octopus-dropdown-item'"
+          :class="
+            'home' === link.routeName
+              ? 'octopus-dropdown-item show-phone-flex'
+              : 'octopus-dropdown-item'
+          "
           :to="{
             name: link.routeName,
             query: getQueriesRouter(link.routeName),
@@ -63,12 +69,14 @@ import { Organisation } from "@/stores/class/general/organisation";
 const OrganisationChooserLight = defineAsyncComponent(
   () => import("../display/organisation/OrganisationChooserLight.vue"),
 );
-import ClassicPopover from "../misc/ClassicPopover.vue";
+const ClassicPopover = defineAsyncComponent(
+  () => import("../misc/ClassicPopover.vue"),
+);
 export default defineComponent({
   name: "MobileMenu",
   components: {
     OrganisationChooserLight,
-    ClassicPopover
+    ClassicPopover,
   },
   mixins: [orgaFilter],
   props: {
@@ -78,9 +86,10 @@ export default defineComponent({
     return {
       organisationId: undefined as string | undefined,
       reset: false as boolean,
+      firstLoaded: false as boolean,
     };
   },
-  computed:{
+  computed: {
     ...mapState(useGeneralStore, ["storedCategories"]),
     ...mapState(useFilterStore, [
       "filterLive",
@@ -122,7 +131,7 @@ export default defineComponent({
         },
       ];
     },
-     categories(): Array<Category> {
+    categories(): Array<Category> {
       return this.storedCategories.filter((c: Category) => {
         if (this.isPodcastmaker) return c.podcastOrganisationCount;
         return c.podcastCount;
@@ -156,6 +165,15 @@ export default defineComponent({
     },
   },
   methods: {
+    handleMenuClick() {
+      if (this.firstLoaded) {
+        return;
+      }
+      this.firstLoaded = true;
+      setTimeout(() => {
+        document.getElementById("mobile-menu-dropdown")?.click();
+      }, 200);
+    },
     getQueriesRouter(routeName: string) {
       if (
         "podcasts" !== routeName &&
@@ -179,6 +197,5 @@ export default defineComponent({
       this.removeSelectedOrga();
     },
   },
-
 });
 </script>

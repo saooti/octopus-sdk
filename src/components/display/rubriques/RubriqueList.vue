@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-flex w-100 mb-3 px-3 hide-phone">
+  <div class="d-inline-flex w-100 mb-3 px-3">
     <div ref="rubriqueListContainer" class="rubrique-list-container">
       <label for="rubrique-list-select" class="hid">{{ $t("By topic") }}</label>
       <select

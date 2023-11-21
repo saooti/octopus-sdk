@@ -27,12 +27,12 @@
       />
     </router-link>
     <OrganisationChooserLight
-      v-if="!isPodcastmaker && organisationId"
+      v-if="!isPodcastmaker && organisationId && !isPhone"
       page="topBar"
       width="auto"
       :defaultanswer="$t('No organisation filter')"
       :value="organisationId"
-      class="ms-3 me-2 hide-phone"
+      class="ms-3 me-2"
       :reset="reset"
       @selected="onOrganisationSelected"
     />
@@ -50,9 +50,10 @@
         </router-link>
       </template>
       <button
+        v-if="!isPhone"
         id="more-dropdown"
         :title="$t('More')"
-        class="d-flex align-items-center hide-phone btn-transparent p-3"
+        class="d-flex align-items-center btn-transparent p-3"
       >
         <div class="link-hover">
           {{ $t("More") }}
@@ -81,7 +82,7 @@
         </div>
       </ClassicPopover>
     </div>
-    <MobileMenu :is-education="isEducation"/>
+    <MobileMenu :is-education="isEducation" />
 
     <div class="d-flex flex-column">
       <div class="d-flex justify-content-end flex-nowrap">
@@ -109,22 +110,21 @@ import { useFilterStore } from "@/stores/FilterStore";
 import { mapState } from "pinia";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import ClassicPopover from "../misc/ClassicPopover.vue";
+import resizePhone from "../mixins/resizePhone";
 import { defineComponent, defineAsyncComponent } from "vue";
 const OrganisationChooserLight = defineAsyncComponent(
   () => import("../display/organisation/OrganisationChooserLight.vue"),
 );
-const MobileMenu = defineAsyncComponent(
-  () => import("./MobileMenu.vue"),
-);
+const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
 export default defineComponent({
   name: "TopBar",
   components: {
     OrganisationChooserLight,
     HomeDropdown,
     ClassicPopover,
-    MobileMenu
+    MobileMenu,
   },
-  mixins: [orgaFilter, imageProxy],
+  mixins: [orgaFilter, imageProxy, resizePhone],
   props: {
     isEducation: { default: false, type: Boolean },
   },
@@ -135,6 +135,8 @@ export default defineComponent({
       minScroll: 0 as number,
       organisationId: undefined as string | undefined,
       reset: false as boolean,
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
     };
   },
   computed: {

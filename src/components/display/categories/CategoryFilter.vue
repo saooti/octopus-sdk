@@ -5,7 +5,11 @@
     :style="backgroundDisplay"
   >
     <h1>{{ titleDisplay }}</h1>
-    <div v-show="isDisplay" class="d-flex flex-column justify-content-end">
+    <div
+      v-if="!isPhone"
+      v-show="isDisplay"
+      class="d-flex flex-column justify-content-end"
+    >
       <ol
         v-if="filterIab || filterRubrique.length"
         class="octopus-breadcrumb d-flex align-items-center justify-content-center flex-wrap"
@@ -67,6 +71,7 @@ import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { useFilterStore } from "@/stores/FilterStore";
 import { state } from "../../../stores/ParamSdkStore";
+import resizePhone from "../../mixins/resizePhone";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const CategoryList = defineAsyncComponent(() => import("./CategoryList.vue"));
@@ -84,9 +89,12 @@ export default defineComponent({
     RubriqueList,
     RubriqueChooser,
   },
+  mixins: [resizePhone],
   data() {
     return {
       isCategories: false as boolean,
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
     };
   },
   computed: {

@@ -24,9 +24,6 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { Category } from "./stores/class/general/category";
-const LeftMenu = defineAsyncComponent(
-  () => import("@/components/misc/LeftMenu.vue"),
-);
 const FooterOctopus = defineAsyncComponent(
   () => import("@/components/misc/FooterSection.vue"),
 );
@@ -38,7 +35,6 @@ export default defineComponent({
 
   components: {
     TopBar,
-    LeftMenu,
     CategoryFilter,
     FooterOctopus,
     PlayerComponent,

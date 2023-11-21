@@ -20,7 +20,10 @@
               />
               <div class="text-uppercase h2 mb-3">{{ name }}</div>
               <!-- eslint-disable vue/no-v-html -->
-              <p class="html-wysiwyg-content descriptionText" v-html="urlify(description)" />
+              <p
+                class="html-wysiwyg-content descriptionText"
+                v-html="urlify(description)"
+              />
               <!-- eslint-enable -->
             </div>
           </div>

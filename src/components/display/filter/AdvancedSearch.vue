@@ -2,7 +2,7 @@
   <div class="d-flex flex-column justify-content-center align-items-center">
     <button
       class="d-flex justify-content-center align-items-center mb-3 text-secondary btn-transparent"
-      @click="showFilters = !showFilters"
+      @click="clickShowFilters"
     >
       <div>{{ $t("Advanced filters") }}</div>
       <div
@@ -10,7 +10,11 @@
         :class="{ 'arrow-transform': showFilters }"
       />
     </button>
-    <div v-show="showFilters" class="advanced-search-container">
+    <div
+      v-if="firstLoaded"
+      v-show="showFilters"
+      class="advanced-search-container"
+    >
       <div class="d-flex flex-column">
         <div class="text-primary mb-2">
           {{ $t("Filter") }}
@@ -77,16 +81,22 @@
 <script lang="ts">
 import { state } from "../../../stores/ParamSdkStore";
 import { orgaComputed } from "../../mixins/orgaComputed";
-import CategorySearchFilter from "./CategorySearchFilter.vue";
-import DateFilter from "./DateFilter.vue";
-import SearchOrder from "./SearchOrder.vue";
-import RubriqueFilter from "./RubriqueFilter.vue";
-import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
 const MonetizableFilter = defineAsyncComponent(
   () => import("./MonetizableFilter.vue"),
 );
+const CategorySearchFilter = defineAsyncComponent(
+  () => import("./CategorySearchFilter.vue"),
+);
+const RubriqueFilter = defineAsyncComponent(
+  () => import("./RubriqueFilter.vue"),
+);
+const ClassicCheckbox = defineAsyncComponent(
+  () => import("../../form/ClassicCheckbox.vue"),
+);
+const DateFilter = defineAsyncComponent(() => import("./DateFilter.vue"));
+const SearchOrder = defineAsyncComponent(() => import("./SearchOrder.vue"));
 export default defineComponent({
   components: {
     MonetizableFilter,
@@ -123,6 +133,7 @@ export default defineComponent({
       isNotVisible: this.includeHidden,
       isNotValidate: false as boolean,
       showFilters: false as boolean,
+      firstLoaded: false as boolean,
     };
   },
 
@@ -183,6 +194,12 @@ export default defineComponent({
     },
   },
   methods: {
+    clickShowFilters(): void {
+      if (!this.firstLoaded) {
+        this.firstLoaded = true;
+      }
+      this.showFilters = !this.showFilters;
+    },
     updateFromDate(value: string): void {
       this.$emit("updateFromDate", value);
     },

@@ -106,13 +106,13 @@ export default defineComponent({
     routerBackoffice() {
       return [
         {
-          title: this.$t('My space'),
+          title: this.$t("My space"),
           class: "octopus-dropdown-item show-small-phone-flex",
           path: "/main/priv/backoffice",
           condition: this.isAuthenticatedWithOrga,
         },
         {
-          title: this.$t('Upload'),
+          title: this.$t("Upload"),
           class: "octopus-dropdown-item show-small-phone-flex",
           path: "/main/priv/upload",
           condition: this.isAuthenticatedWithOrga && this.isContribution,

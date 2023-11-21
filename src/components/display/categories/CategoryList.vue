@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="categories.length"
-    class="d-inline-flex w-100 mb-3 ps-3 pe-3 hide-phone category-list"
+    class="d-inline-flex w-100 mb-3 ps-3 pe-3 category-list"
   >
     <div ref="categoryListContainer" class="category-list-container">
       <button

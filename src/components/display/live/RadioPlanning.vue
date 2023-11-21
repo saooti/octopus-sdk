@@ -28,11 +28,7 @@
           <div
             v-for="planningItem in planning[daySelected]"
             v-else
-            :key="
-              planningItem.occurrenceId +
-              '' +
-              planningItem.liveId
-            "
+            :key="planningItem.occurrenceId + '' + planningItem.liveId"
             class="d-flex align-items-center mb-3"
           >
             <div class="program-item-date fw-bold flex-shrink-0">
@@ -57,10 +53,14 @@
                 height="150"
                 class="m-2"
                 :title="
-                  $t('Episode name image', { name: planningItem.podcastData.title })
+                  $t('Episode name image', {
+                    name: planningItem.podcastData.title,
+                  })
                 "
                 :alt="
-                  $t('Episode name image', { name: planningItem.podcastData.title })
+                  $t('Episode name image', {
+                    name: planningItem.podcastData.title,
+                  })
                 "
               />
               <div class="d-flex flex-column">
@@ -185,7 +185,9 @@ export default defineComponent({
             return b.startDate > a.startDate ? -1 : 0;
           });
         }
-        this.planning[this.daySelected] = occurrences.filter((oc) => oc.podcastId);
+        this.planning[this.daySelected] = occurrences.filter(
+          (oc) => oc.podcastId,
+        );
       } catch {
         this.error = true;
       }
@@ -207,10 +209,10 @@ export default defineComponent({
     width: 100px;
     font-size: 1.1rem;
   }
-  .button-date{
+  .button-date {
     border: 1px solid #ddd;
     padding: 0.5rem 0;
-    &:hover{
+    &:hover {
       background: #ddd;
     }
   }

@@ -52,18 +52,18 @@ export default defineComponent({
         undefined !== this.podcast && undefined !== this.podcast.video?.videoId
       );
     },
-    optionsSelectLive(){
+    optionsSelectLive() {
       return [
         { name: this.$t("Large version"), value: "large", condition: true },
         {
           name: this.$t("High version"),
           value: "videoLive",
           condition: this.podcast && this.podcast.podcastId,
-        }
+        },
       ];
     },
     optionsSelect() {
-      if(this.isLive){
+      if (this.isLive) {
         return this.optionsSelectLive;
       }
       return [
@@ -114,7 +114,7 @@ export default defineComponent({
     if (this.isVideoPodcast) {
       this.$emit("update:iFrameModel", "video");
     }
-    if(this.isLive){
+    if (this.isLive) {
       return;
     }
     await this.initCustomPlayers();

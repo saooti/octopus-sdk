@@ -24,7 +24,7 @@
           :title="$t('Advanced sharing')"
           :to="{
             name: 'advancedShare',
-            params: { podcastId: podcast.podcastId }
+            params: { podcastId: podcast.podcastId },
           }"
         />
       </div>
@@ -215,7 +215,7 @@ export default defineComponent({
     authenticated(): boolean {
       return state.generalParameters.authenticated as boolean;
     },
-    isProduction() : boolean{
+    isProduction(): boolean {
       return state.generalParameters.isProduction as boolean;
     },
     isPodcastmaker(): boolean {
