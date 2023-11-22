@@ -29,30 +29,43 @@ export default {
       type: Number,
       default: 0,
     },
+    initRenderDelay: {
+      type: Number,
+      default: 0,
+    },
     unrenderDelay: {
       type: Number,
       default: 10000,
     },
   },
   setup(props) {
+    const waitBeforeInit = ref(true);
     const shouldRender = ref(false);
     const targetEl = ref();
     const fixedMinHeight = ref(0);
     let unrenderTimer: ReturnType<typeof setTimeout> | undefined;
     let renderTimer: ReturnType<typeof setTimeout> | undefined;
-
+    setTimeout(() => {
+      waitBeforeInit.value = false;
+    }, props.initRenderDelay);
     const { stop } = useIntersectionObserver(
       targetEl,
       ([{ isIntersecting }]) => {
+        if (waitBeforeInit.value) {
+          return;
+        }
         if (isIntersecting) {
           // perhaps the user re-scrolled to a component that was set to unrender. In that case stop the unrendering timer
           clearTimeout(unrenderTimer);
           // if we're dealing underndering lets add a waiting period of 200ms before rendering. If a component enters the viewport and also leaves it within 200ms it will not render at all. This saves work and improves performance when user scrolls very fast
+
           renderTimer = setTimeout(
-            () => (shouldRender.value = true),
+            () => {
+              shouldRender.value = true;
+            },
             props.unrender ? 200 : 0,
           );
-          shouldRender.value = true;
+          //shouldRender.value = true;
           if (!props.unrender) {
             stop();
           }

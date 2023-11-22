@@ -1,18 +1,21 @@
 
+import {debounce} from './debounce';
 import { defineComponent } from 'vue';
 export default defineComponent({
   data() {
     return {
       isPhone: false as boolean,
-      windowWidth: 0 as number
+      windowWidth: 0 as number,
+      debounceResizeEvent: undefined as undefined|((...args: any[]) => void)
     };
   },
   created() {
-    window.addEventListener('resize', this.handleResize);
+    this.debounceResizeEvent = debounce(this.handleResize, 500);
+    window.addEventListener('resize', this.debounceResizeEvent);
     this.handleResize();
   },
   unmounted() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.debounceResizeEvent);
   },
   methods: {
     handleResize(): void {

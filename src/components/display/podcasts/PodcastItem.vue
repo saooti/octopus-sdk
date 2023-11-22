@@ -29,7 +29,10 @@
       <div ref="descriptionPodcast" v-html="description" />
       <!-- eslint-enable -->
     </div>
-    <div @mouseenter="showDescription" @mouseleave="hideDescription">
+    <div
+      @mouseenter="debounceShowDescriptionEvent"
+      @mouseleave="debounceHideDescriptionEvent"
+    >
       <PodcastItemInfo
         :podcast-id="podcast.podcastId"
         :title="podcast.title"
@@ -44,6 +47,7 @@
 </template>
 
 <script lang="ts">
+import { debounce } from "../../mixins/debounce";
 import PodcastItemInfo from "./PodcastItemInfo.vue";
 import PodcastImage from "./PodcastImage.vue";
 import { state } from "../../../stores/ParamSdkStore";
@@ -70,6 +74,8 @@ export default defineComponent({
       hoverDesc: false as boolean,
       arrowDirection: "up" as string,
       isDescriptionBig: false as boolean,
+      debounceShowDescriptionEvent: undefined as undefined | (() => void),
+      debounceHideDescriptionEvent: undefined as undefined | (() => void),
     };
   },
 
@@ -86,6 +92,10 @@ export default defineComponent({
     description(): string {
       return this.podcast.description ?? "";
     },
+  },
+  created() {
+    this.debounceShowDescriptionEvent = debounce(this.showDescription, 100);
+    this.debounceHideDescriptionEvent = debounce(this.hideDescription, 100);
   },
 
   methods: {
