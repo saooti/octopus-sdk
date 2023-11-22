@@ -3,7 +3,7 @@
     <TopBar :is-education="false" />
     <CategoryFilter v-if="firstDisplayCategoryFilter" />
     <router-view />
-    <ClassicLazy v-if="pageFullyLoad" :min-height="125" :unrender="true">
+    <ClassicLazy v-if="pageFullyLoad" :min-height="125">
       <FooterOctopus />
     </ClassicLazy>
     <PlayerComponent />

@@ -46,7 +46,7 @@
           :title="$t('More episodes of this emission')"
           :button-text="$t('All podcast emission button')"
         />
-        <ClassicLazy :min-height="550" :unrender="true">
+        <ClassicLazy :min-height="550">
           <PodcastInlineList
             :podcast-id="podcastId"
             :title="$t('Suggested listening')"
@@ -56,7 +56,6 @@
           v-for="c in categories"
           :key="c.id"
           :min-height="550"
-          :unrender="true"
         >
           <PodcastInlineList
             :iab-id="c.id"

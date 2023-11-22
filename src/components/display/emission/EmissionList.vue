@@ -23,7 +23,6 @@
           v-for="e in displayArray"
           :key="e.emissionId"
           :min-height="250"
-          :unrender="true"
         >
           <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
           <template #preview>

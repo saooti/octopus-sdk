@@ -5,7 +5,6 @@
         v-for="(c, index) in categories"
         :key="c.id"
         :min-height="0"
-        :unrender="true"
         :init-render-delay="3 < index ? 1000 : 0"
       >
         <PodcastInlineList
@@ -23,7 +22,6 @@
         v-for="(r, index) in rubriqueToShow"
         :key="r.rubriqueId"
         :min-height="0"
-        :unrender="true"
         :init-render-delay="3 < index ? 1000 : 0"
       >
         <PodcastInlineList

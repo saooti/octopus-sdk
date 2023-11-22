@@ -35,7 +35,6 @@
             v-for="p in podcastsDisplay"
             :key="p.podcastId"
             :min-height="410"
-            :unrender="true"
           >
             <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
             <template #preview>

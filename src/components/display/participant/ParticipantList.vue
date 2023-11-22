@@ -21,7 +21,6 @@
           v-for="p in displayArray"
           :key="p.participantId"
           :min-height="360"
-          :unrender="true"
         >
           <ParticipantItem v-if="0 !== p.participantId" :participant="p" />
           <template #preview>

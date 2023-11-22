@@ -19,7 +19,6 @@
           v-for="p in displayArray"
           :key="p.playlistId"
           :min-height="250"
-          :unrender="true"
         >
           <PlaylistItem v-if="0 !== p.playlistId" :playlist="p" />
           <template #preview>
