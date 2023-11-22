@@ -226,13 +226,13 @@ export default defineComponent({
       return "";
     },
     description(): string {
-      if (this.podcast && this.podcast.description) {
+      if (this.podcast?.description) {
         return `<tr><td colspan="2" valign="top" style="line-height:24px;font-size: 14px;max-width: 500px;">${this.podcast.description}</td></tr>`;
       }
-      if (this.emission && this.emission.description) {
+      if (this.emission?.description) {
         return `<tr><td colspan="2" valign="top" style="line-height:24px;font-size: 14px;max-width: 500px;">${this.emission.description}</td></tr>`;
       }
-      if (this.playlist && this.playlist.description) {
+      if (this.playlist?.description) {
         return `<tr><td colspan="2" valign="top" style="line-height:24px;font-size: 14px;max-width: 500px;">${this.playlist.description}</td></tr>`;
       }
       return "";
@@ -317,7 +317,7 @@ export default defineComponent({
           ? this.authOrganisation.id
           : state.generalParameters.organisationId;
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
-      if (Object.prototype.hasOwnProperty.call(attributes, "podcastmakerUrl")) {
+      if (Object.hasOwn(attributes, "podcastmakerUrl")) {
         this.shareUrl =
           attributes.podcastmakerUrl +
           window.location.pathname +
@@ -330,7 +330,7 @@ export default defineComponent({
         this.color = state.generalParameters.podcastmakerColor;
         return;
       }
-      if (Object.prototype.hasOwnProperty.call(attributes, "COLOR")) {
+      if (Object.hasOwn(attributes, "COLOR")) {
         this.color = attributes.COLOR as string;
       }
     },

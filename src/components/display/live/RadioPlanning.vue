@@ -34,11 +34,6 @@
             <div class="program-item-date fw-bold flex-shrink-0">
               {{ dateDisplay(planningItem.startDate) }}
             </div>
-            <!-- <component :is="
-                planningItem.podcast.availability.visibility
-                  ? 'router-link'
-                  : 'div'
-              " -->
             <router-link
               class="d-flex align-items-center text-dark"
               :to="{

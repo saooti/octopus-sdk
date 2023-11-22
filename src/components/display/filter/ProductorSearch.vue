@@ -111,7 +111,7 @@ export default defineComponent({
       }
       this.filterUpdateOrga({ orgaId: undefined });
       this.keepOrganisation = false;
-      if (organisation && organisation.id) {
+      if (organisation?.id) {
         this.$emit("update:organisationId", organisation.id);
         if ("PUBLIC" !== organisation.privacy) {
           this.$nextTick(() => {

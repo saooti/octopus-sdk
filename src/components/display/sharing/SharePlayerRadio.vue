@@ -94,16 +94,10 @@ export default defineComponent({
       if (!this.orgaAttributes) {
         return;
       }
-      this.color = Object.prototype.hasOwnProperty.call(
-        this.orgaAttributes,
-        "COLOR",
-      )
+      this.color = Object.hasOwn(this.orgaAttributes, "COLOR")
         ? (this.orgaAttributes.COLOR as string)
         : "#40a372";
-      this.theme = Object.prototype.hasOwnProperty.call(
-        this.orgaAttributes,
-        "THEME",
-      )
+      this.theme = Object.hasOwn(this.orgaAttributes, "THEME")
         ? (this.orgaAttributes.THEME as string)
         : "#000000";
     },

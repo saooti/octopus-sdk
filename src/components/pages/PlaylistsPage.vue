@@ -56,7 +56,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker as boolean;
     },
     editRight(): boolean {
-      return state.generalParameters.isPlaylist ? true : false;
+      return state.generalParameters.isPlaylist ?? false;
     },
   },
 

@@ -126,7 +126,7 @@ export default defineComponent({
       this.searchPattern = this.searchInit ?? "";
       this.organisationId = this.productor ? this.productor : this.filterOrgaId;
       this.includeHidden =
-        this.organisation && this.organisationRight ? true : false;
+        undefined !== this.organisation && this.organisationRight;
       this.iabId = this.filterIab?.id;
       if (this.filterRubrique.length) {
         this.updateRubriquageFilter(this.filterRubrique);

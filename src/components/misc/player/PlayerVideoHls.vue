@@ -119,7 +119,7 @@ export default defineComponent({
       );
       this.player.on("error", (error) => {
         this.stopLive();
-        if (error.description && error.description.includes("403")) {
+        if (error.description?.includes("403")) {
           this.errorPlay = this.$t("Video is unavailable");
         } else {
           this.errorPlay = this.$t("Podcast play error");

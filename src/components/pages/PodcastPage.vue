@@ -52,11 +52,7 @@
             :title="$t('Suggested listening')"
           />
         </ClassicLazy>
-        <ClassicLazy
-          v-for="c in categories"
-          :key="c.id"
-          :min-height="550"
-        >
+        <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
           <PodcastInlineList
             :iab-id="c.id"
             :href="'/main/pub/category/' + c.id"
@@ -156,7 +152,7 @@ export default defineComponent({
     isComments(): boolean {
       if (!this.podcast) return true;
       let podcastComment = "INHERIT";
-      if (this.podcast.annotations && this.podcast.annotations.COMMENTS) {
+      if (this.podcast.annotations?.COMMENTS) {
         podcastComment = this.podcast.annotations.COMMENTS as string;
       }
       let organisationComment = "LIVE_ONLY";
@@ -321,7 +317,7 @@ export default defineComponent({
             9,
             "conference/" + this.podcast.conferenceId,
           );
-          this.fetchConference = data ? data : { conferenceId: -1, title: "" };
+          this.fetchConference = data ?? { conferenceId: -1, title: "" };
         } catch {
           await this.fetchConferencePublic();
         }

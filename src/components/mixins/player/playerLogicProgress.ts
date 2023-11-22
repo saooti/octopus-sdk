@@ -76,7 +76,7 @@ export const playerLogicProgress = defineComponent({
           0,
           "podcast/download/live/" + this.playerLive.podcastId + ".m3u8",
           {
-            downloadId: null !== downloadId ? downloadId : undefined,
+            downloadId: downloadId ?? undefined,
             origin: "octopus",
             distributorId: this.authOrgaId,
           },

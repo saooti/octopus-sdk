@@ -11,7 +11,7 @@ const ca = document.cookie.split(";");
 let language = "";
 for (const valueCookie of ca) {
   let c = valueCookie;
-  while (c.charAt(0) == " ") c = c.substring(1, c.length);
+  while (c.startsWith(" ")) c = c.substring(1, c.length);
   if (0 === c.indexOf(nameEQ)) {
     language = c.substring(nameEQ.length, c.length);
     break;

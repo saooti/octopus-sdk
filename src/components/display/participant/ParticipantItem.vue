@@ -81,7 +81,7 @@ export default defineComponent({
       }`.trim();
     },
     editRight(): boolean {
-      if (!this.participant || !this.participant.orga) {
+      if (!this.participant?.orga) {
         return false;
       }
       return (

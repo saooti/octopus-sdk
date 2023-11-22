@@ -154,16 +154,13 @@ export default defineComponent({
       return this.maxLength >= this.countValue;
     },
     valueRegexValid(): boolean {
-      if (this.regex !== undefined) {
-        if (!this.textValue || "" === this.textValue) {
-          if (this.canBeNull) {
-            return true;
-          }
-          return false;
-        }
-        return this.textValue.match(this.regex) !== null;
+      if (this.regex === undefined) {
+        return true;
       }
-      return true;
+      if (!this.textValue || "" === this.textValue) {
+        return this.canBeNull;
+      }
+      return this.regex.exec(this.textValue) !== null;
     },
   },
   watch: {

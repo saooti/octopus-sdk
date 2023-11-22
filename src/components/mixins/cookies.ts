@@ -12,7 +12,7 @@ export default {
       const ca = document.cookie.split(";");
       for (const cookieValue of ca) {
         let c = cookieValue;
-        while (c.charAt(0) == " ") c = c.substring(1, c.length);
+        while (c.startsWith(" ")) c = c.substring(1, c.length);
         if (0 === c.indexOf(nameEQ))
           return c.substring(nameEQ.length, c.length);
       }

@@ -109,8 +109,8 @@ export default defineComponent({
       if (!this.authProfile?.userId) {
         return;
       }
-      this.name = `${this.authProfile?.firstname || ""} ${
-        this.authProfile?.lastname || ""
+      this.name = `${this.authProfile?.firstname ?? ""} ${
+        this.authProfile?.lastname ?? ""
       }`.trim();
       this.isVerify = true;
     },

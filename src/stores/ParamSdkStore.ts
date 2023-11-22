@@ -266,7 +266,7 @@ const initialize = function initialize(initObject: ParamStore): Promise<void> {
         octopusApi.initialize(state.octopusApi);
         resolve();
       } catch (error) {
-        reject();
+        reject(new Error());
       }
     } else {
       resolve();

@@ -49,7 +49,7 @@ export default defineComponent({
       this.watchInterval = undefined;
     },
     async fetchPodcastData(): Promise<void> {
-      if (!this.fetchConference || !this.fetchConference.podcastId) return;
+      if (!this.fetchConference?.podcastId) return;
       try {
         this.live = await octopusApi.fetchData<Podcast>(
           0,

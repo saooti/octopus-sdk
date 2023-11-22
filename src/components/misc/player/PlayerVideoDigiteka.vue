@@ -45,38 +45,12 @@ export default defineComponent({
       return "";
     },
   },
-  watch: {
-    /* srcVideo() {
-      this.goFullScreen();
-    }, */
-  },
   mounted() {
     if (undefined === this.videoId) {
       (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
         this.$t("Podcast play error"),
       );
     }
-
-    /* this.goFullScreen(); */
-  },
-  methods: {
-    /* goFullScreen() {
-      if ("" === this.srcVideo) {
-        return;
-      }
-      switch (screen.orientation.type) {
-        case "landscape-primary":
-        case "landscape-secondary":
-          (this.$refs.iframeVideo as Element).requestFullscreen();
-          break;
-        case "portrait-secondary":
-        case "portrait-primary":
-          console.log("Portrait mode");
-          break;
-        default:
-          console.log("The orientation API isn't supported in this browser :(");
-      }
-    }, */
   },
 });
 </script>

@@ -9,7 +9,7 @@ scanner({
     },
 serverUrl:"http://localhost:9000", 
 login:"admin", 
-password:"admin", 
+password:"saooti", 
 options:{ 
     "sonar.sources":"./src" 
 }, 

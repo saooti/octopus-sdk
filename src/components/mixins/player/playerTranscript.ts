@@ -28,7 +28,7 @@ export const playerTranscript = defineComponent({
     },
     parseSrt(transcript: string) {
       const pattern =
-        /(\d+)\n([\d:,]+)\s+-{2}\>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
+        /(\d+)\n([\d:,]+)\s+-{2}>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
       const result = [];
       if (typeof transcript != "string") {
         return;

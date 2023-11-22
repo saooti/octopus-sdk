@@ -60,8 +60,7 @@ export const playerLogic = defineComponent({
         this.audioUrlToPlay = this.audioUrl;
       }
       if (
-        !this.playerPodcast ||
-        !this.playerPodcast.availability.visibility ||
+        !this.playerPodcast?.availability.visibility ||
         this.listenError
       ) {
         return;

@@ -77,7 +77,7 @@ export const playerLive = defineComponent({
           });
         }
         if (!Hls.isSupported()) {
-          reject("Hls is not supported ! ");
+          reject(new Error("Hls is not supported ! "));
         }
         this.hls = new Hls();
         this.hls.on(Hls.Events.MANIFEST_PARSED, async () => {
@@ -89,7 +89,7 @@ export const playerLive = defineComponent({
           resolve();
         });
         this.hls.on(Hls.Events.ERROR, async () => {
-          reject("There is an error while reading media content");
+          reject(new Error("There is an error while reading media content"));
         });
         this.hls.loadSource(hlsStreamUrl);
       });
@@ -100,7 +100,7 @@ export const playerLive = defineComponent({
         this.hls.destroy();
         this.hls = null;
       }else{
-        await (audio as HTMLAudioElement).pause();
+        (audio as HTMLAudioElement).pause();
       }
       (audio as HTMLAudioElement).src = "";
     },

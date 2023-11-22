@@ -115,7 +115,6 @@ export default defineComponent({
 }
 .swiper-slide {
   display: flex;
-  /* justify-content: center; */
   align-items: center;
 }
 </style>

@@ -52,7 +52,7 @@ export default defineComponent({
       const item = this.options.find((x) => {
         return this.textInit === x.value;
       });
-      if (item && item.fontFamily) {
+      if (item?.fontFamily) {
         return "font-family:" + item.fontFamily;
       }
       return "";

@@ -89,7 +89,7 @@ export default defineComponent({
           ? this.authOrganisation.id
           : state.generalParameters.organisationId;
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
-      if (Object.prototype.hasOwnProperty.call(attributes, "COLOR")) {
+      if (Object.hasOwn(attributes, "COLOR")) {
         this.otherColor = attributes.COLOR as string;
       }
     },

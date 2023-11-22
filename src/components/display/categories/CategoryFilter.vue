@@ -173,7 +173,7 @@ export default defineComponent({
         return;
       }
       const filter = Array.from(this.filterRubrique);
-      filter[index].rubriqueId = rubrique.rubriqueId || 0;
+      filter[index].rubriqueId = rubrique.rubriqueId ?? 0;
       this.filterUpdateRubrique(filter);
       const queryString = filter
         .map((value) => value.rubriquageId + ":" + value.rubriqueId)

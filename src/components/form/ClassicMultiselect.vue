@@ -90,7 +90,7 @@ export default {
 
   data() {
     return {
-      optionSelected: undefined as unknown | undefined,
+      optionSelected: undefined as unknown,
       options: [] as Array<unknown>,
       remainingElements: 0 as number,
       isLoading: false as boolean,

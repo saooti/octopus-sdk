@@ -58,7 +58,7 @@ export default defineComponent({
         {
           name: this.$t("High version"),
           value: "videoLive",
-          condition: this.podcast && this.podcast.podcastId,
+          condition: this.podcast?.podcastId,
         },
       ];
     },
@@ -77,22 +77,22 @@ export default defineComponent({
         {
           name: this.$t("Full Large version"),
           value: "largeMore",
-          condition: this.podcast && this.podcast.podcastId,
+          condition: this.podcast?.podcastId,
         },
         {
           name: this.$t("Emission version"),
           value: "emission",
-          condition: this.podcast && this.podcast.podcastId,
+          condition: this.podcast?.podcastId,
         },
         {
           name: this.$t("Large emission version"),
           value: "emissionLarge",
-          condition: this.podcast && this.podcast.podcastId,
+          condition: this.podcast?.podcastId,
         },
         {
           name: this.$t("Large suggestion version"),
           value: "largeSuggestion",
-          condition: this.podcast && this.podcast.podcastId,
+          condition: this.podcast?.podcastId,
         },
       ];
     },

@@ -63,7 +63,7 @@ export const playerComment = defineComponent({
           size: size,
           podcastId: podcastId,
         };
-        if (!this.editRight(organisation ? organisation : "")) {
+        if (!this.editRight(organisation ?? "")) {
           param.status = ["Valid"];
         }
         const data = await octopusApi.postDataPublic<

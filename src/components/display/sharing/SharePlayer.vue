@@ -177,10 +177,7 @@ export default defineComponent({
         return false;
       }
       return this.orgaAttributes &&
-        Object.prototype.hasOwnProperty.call(
-          this.orgaAttributes,
-          "speechtotext.active",
-        )
+        Object.hasOwn(this.orgaAttributes, "speechtotext.active")
         ? (this.orgaAttributes["speechtotext.active"] as boolean)
         : false;
     },
@@ -379,16 +376,10 @@ export default defineComponent({
       if (!this.orgaAttributes) {
         return;
       }
-      this.color = Object.prototype.hasOwnProperty.call(
-        this.orgaAttributes,
-        "COLOR",
-      )
+      this.color = Object.hasOwn(this.orgaAttributes, "COLOR")
         ? (this.orgaAttributes.COLOR as string)
         : "#40a372";
-      this.theme = Object.prototype.hasOwnProperty.call(
-        this.orgaAttributes,
-        "THEME",
-      )
+      this.theme = Object.hasOwn(this.orgaAttributes, "THEME")
         ? (this.orgaAttributes.THEME as string)
         : "#000000";
     },

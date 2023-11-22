@@ -70,7 +70,7 @@ export default defineComponent({
         }
         this.isInternChanged = true;
         this.iabId = this.filterIab ? this.filterIab.id : 0;
-        this.isCategory = this.filterIab ? true : false;
+        this.isCategory = undefined !== this.filterIab;
         this.$emit("updateCategory", this.iabId);
         this.$nextTick(() => {
           this.isInternChanged = false;
