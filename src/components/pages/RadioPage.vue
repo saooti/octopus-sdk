@@ -91,7 +91,7 @@ export default defineComponent({
   computed: {
     editRight(): boolean {
       return (
-        (true === this.authenticated &&
+        (true === this.authenticated && true === state.generalParameters.isRadio && 
           this.myOrganisationId === this.radio?.organisationId) ||
         true === state.generalParameters.isAdmin
       );

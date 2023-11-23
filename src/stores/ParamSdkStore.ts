@@ -12,6 +12,7 @@ const state: ParamStore = {
     isPlaylist: false,
     isProduction: false,
     isContribution: false,
+    isRadio: false,
     ApiUri: "https://api.preprod.saooti.org/",
     podcastmaker: false,
     buttonPlus: true,
@@ -101,6 +102,7 @@ export interface GeneralParameters {
   isPlaylist?: boolean;
   isProduction?: boolean;
   isContribution?: boolean;
+  isRadio?:boolean;
   ApiUri?: string;
   podcastmaker?: boolean;
   buttonPlus?: boolean;
