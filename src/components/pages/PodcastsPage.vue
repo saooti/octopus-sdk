@@ -117,6 +117,18 @@ export default defineComponent({
     searchPattern(value: string): void {
       this.sortCriteria = "" !== value ? "SCORE" : "DATE";
     },
+    filterRubrique: {
+      deep: true,
+      handler() {
+        this.updateRubriquageFilter(this.filterRubrique);
+      },
+    },
+    filterIab: {
+      deep: true,
+      handler() {
+        this.iabId = this.filterIab?.id;
+      },
+    },
   },
   created() {
     this.initPodcastsPage();
