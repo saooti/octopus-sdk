@@ -350,4 +350,5 @@ export default {
   "Trigger automatic reading if this is possible":"Trigger automatic reading if this is possible",
   "High version":"High version",
   "Advanced sharing":"Advanced sharing",
+  "Chaptering":"Chaptering",
 };

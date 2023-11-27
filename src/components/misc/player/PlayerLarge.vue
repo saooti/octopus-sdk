@@ -24,6 +24,7 @@
         {{ podcastTitle }}
       </div>
     </div>
+    <PlayerChaptering class="w-100" />
     <div class="player-grow-large-content">
       <PlayerProgressBar
         v-if="!radioUrl"
@@ -86,6 +87,7 @@ import ClassicSpinner from "../ClassicSpinner.vue";
 import { playerDisplay } from "../../mixins/player/playerDisplay";
 import imageProxy from "../../mixins/imageProxy";
 import PlayerTimeline from "./PlayerTimeline.vue";
+import PlayerChaptering from "./PlayerChaptering.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 const RadioProgressBar = defineAsyncComponent(
@@ -106,6 +108,7 @@ export default defineComponent({
     PlayerTimeline,
     ClassicSpinner,
     RadioHistory,
+    PlayerChaptering,
   },
   mixins: [playerDisplay, imageProxy],
 

@@ -1,4 +1,15 @@
 export default {
+  convertTimestamptoSeconds(timestamp: string){
+    const count = (/:/g.exec(timestamp) || []).length;
+    if(0 === count){
+      return 0;
+    }
+    if(count<2){
+      timestamp = "0:"+timestamp;
+    }
+    const [hours, minutes, seconds] = timestamp.split(':');
+    return Number(hours) * 60 * 60 + Number(minutes) * 60 + Number(seconds);
+  },
   formatToString(value: number) {
     if (value < 10) {
       return "0" + value;

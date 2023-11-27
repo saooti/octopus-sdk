@@ -351,4 +351,5 @@ export default {
   "Trigger automatic reading if this is possible":"Activar la lectura automática si esto es posible",
   "High version":"Versión alta",
   "Advanced sharing":"Reparto adelantado",
+  "Chaptering":"Capítulos",
 }

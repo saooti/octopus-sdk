@@ -343,4 +343,5 @@ export default{
   "Trigger automatic reading if this is possible":"Attivare la lettura automatica, se possibile",
   "High version":"Versione alta",
   "Advanced sharing":"Condivisione avanzata",
+  "Chaptering":"Capitolazione",
   };

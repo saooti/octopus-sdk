@@ -3,6 +3,7 @@ import { Media } from "@/stores/class/general/media";
 import { MediaRadio, Radio } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
+import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
 interface Transcript {
   actual: number;
   actualText: string;
@@ -22,6 +23,7 @@ interface PlayerState {
   playerTranscript?: Transcript;
   playerLargeVersion: boolean;
   playerVideo: boolean;
+  playerChaptering?: Chaptering;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -36,13 +38,34 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerSeekTime: 0,
     playerLargeVersion: false,
     playerVideo: false,
+    playerChaptering:[{startTime:'0:00', title:"Mon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitre"},
+                      {startTime:'0:20', title:"Mon deuxième chapitre"},
+                      {startTime:'1:00', title:"Mon troisième chapitre"}
+                    ]
   }),
   getters: {
+    playerChapteringPercent(): ChapteringPercent|undefined{
+      if(!this.playerChaptering){
+        return;
+      }
+      let chapteringPercent: ChapteringPercent = [];
+      for (let i = 0, len = this.playerChaptering.length; i < len; i++) {
+        chapteringPercent.push({
+          startPercent: DurationHelper.convertTimestamptoSeconds(this.playerChaptering[i].startTime),
+          endPercent:100,
+          title: this.playerChaptering[i].title
+        });
+      }
+      for (let i = 0, len = chapteringPercent.length; i < len; i++) {
+        chapteringPercent[i].endPercent = chapteringPercent[i].startPercent + ((chapteringPercent[i+1]?.startPercent ?? 100) - chapteringPercent[i].startPercent);
+      }
+      return chapteringPercent;
+    },
     playerHeight() {
       if ("STOPPED" === this.playerStatus) return 0;
       if (this.playerVideo) return "0px"/* "281px" */;
       if (this.playerLargeVersion) return "27rem";
-      if (window.innerWidth > 450) return "5rem";
+      if (window.innerWidth > 450) return "6rem";
       return "3.5rem";
     },
     playedTime(): string {
