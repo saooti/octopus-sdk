@@ -38,10 +38,10 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerSeekTime: 0,
     playerLargeVersion: false,
     playerVideo: false,
-    playerChaptering:[{startTime:'0:00', title:"Mon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitre"},
+    playerChaptering: undefined/* [{startTime:'0:00', title:"Mon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitre"},
                       {startTime:'0:20', title:"Mon deuxième chapitre"},
                       {startTime:'1:00', title:"Mon troisième chapitre"}
-                    ]
+                    ] */
   }),
   getters: {
     playerChapteringPercent(): ChapteringPercent|undefined{
@@ -51,7 +51,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       let chapteringPercent: ChapteringPercent = [];
       for (let i = 0, len = this.playerChaptering.length; i < len; i++) {
         chapteringPercent.push({
-          startPercent: DurationHelper.convertTimestamptoSeconds(this.playerChaptering[i].startTime),
+          startPercent: (DurationHelper.convertTimestamptoSeconds(this.playerChaptering[i].startTime) * 100 ) / (Math.round(this.playerTotal)),
           endPercent:100,
           title: this.playerChaptering[i].title
         });
@@ -123,6 +123,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerRadio = undefined;
         this.playerElapsed = 0;
         this.playerVideo = false;
+        this.playerChaptering=undefined;
         return;
       }
       if (
@@ -141,6 +142,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerRadio = undefined;
       this.playerVideo = isVideo;
       this.playerElapsed = 0;
+      this.playerChaptering=undefined;
       if (
         param.conferenceId &&
         (!param.podcastId || param.processingStatus !== "READY")
