@@ -1,13 +1,12 @@
-export interface Chapter {
-  startTime: string;
-  title: string;
+export interface Chaptering {
+  [startTime: string] : string;
 }
 
 export interface ChapterPercent {
+  startTime: string;
   startPercent: number;
   endPercent: number;
   title: string;
 }
 
-export type Chaptering = Array<Chapter>;
 export type ChapteringPercent = Array<ChapterPercent>;

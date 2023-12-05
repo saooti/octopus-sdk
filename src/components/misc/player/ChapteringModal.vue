@@ -7,7 +7,7 @@
     <template #body>
       <div class="d-flex flex-column">
         <a
-          v-for="(chapter, index) in playerChaptering"
+          v-for="(chapter, index) in playerChapteringPercent"
           :key="chapter"
           class="c-hand text-truncate mb-1"
           @click="goToChapter(index)"
@@ -45,7 +45,6 @@ export default defineComponent({
     ...mapState(usePlayerStore, [
       "playerPodcast",
       "playerLive",
-      "playerChaptering",
       "playerChapteringPercent",
       "playerTotal",
       "playerElapsed",

@@ -4,6 +4,7 @@ import { MediaRadio, Radio } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
 import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
+import octopusApi from "@saooti/octopus-api";
 interface Transcript {
   actual: number;
   actualText: string;
@@ -38,22 +39,21 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerSeekTime: 0,
     playerLargeVersion: false,
     playerVideo: false,
-    playerChaptering: undefined/* [{startTime:'0:00', title:"Mon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitreMon premier chapitre"},
-                      {startTime:'0:20', title:"Mon deuxième chapitre"},
-                      {startTime:'1:00', title:"Mon troisième chapitre"}
-                    ] */
+    playerChaptering: undefined,
   }),
   getters: {
     playerChapteringPercent(): ChapteringPercent|undefined{
-      if(!this.playerChaptering){
+      if(!this.playerChaptering || 0===this.playerTotal){
         return;
       }
+      const chapteringKeys = Object.keys(this.playerChaptering);
       let chapteringPercent: ChapteringPercent = [];
-      for (let i = 0, len = this.playerChaptering.length; i < len; i++) {
+      for (let i = 0, len = chapteringKeys.length; i < len; i++) {
         chapteringPercent.push({
-          startPercent: (DurationHelper.convertTimestamptoSeconds(this.playerChaptering[i].startTime) * 100 ) / (Math.round(this.playerTotal)),
+          startTime : chapteringKeys[i],
+          startPercent: (DurationHelper.convertTimestamptoSeconds(chapteringKeys[i]) * 100 ) / (Math.round(this.playerTotal)),
           endPercent:100,
-          title: this.playerChaptering[i].title
+          title: this.playerChaptering[chapteringKeys[i]]
         });
       }
       for (let i = 0, len = chapteringPercent.length; i < len; i++) {
@@ -114,7 +114,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
   },
   actions: {
-    playerPlay(param?: any, isVideo = false) {
+    async playerPlay(param?: any, isVideo = false) {
       if (!param) {
         this.playerStatus = "STOPPED";
         this.playerPodcast = undefined;
@@ -148,11 +148,20 @@ export const usePlayerStore = defineStore("PlayerStore", {
         (!param.podcastId || param.processingStatus !== "READY")
       ) {
         this.playerLive = param;
-      } else if (param.podcastId) {
+        return;
+      }
+      if (param.podcastId) {
         this.playerPodcast = param;
-      } else if (param.mediaId) {
+        if(param.annotations?.chaptering){
+          this.playerChaptering =  await octopusApi.fetchDataPublic<Chaptering>(4, (param.annotations.chaptering as string));
+        }
+        return;
+      }
+      if (param.mediaId) {
         this.playerMedia = param;
-      } else if (param.canalId) {
+        return;
+      }
+      if (param.canalId) {
         this.playerRadio = { ...param, ...{ isInit: false } };
       }
     },
