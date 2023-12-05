@@ -24,7 +24,7 @@
         {{ podcastTitle }}
       </div>
     </div>
-    <PlayerChaptering class="w-100" />
+    <PlayerChaptering class="justify-content-center w-100" />
     <div class="player-grow-large-content">
       <PlayerProgressBar
         v-if="!radioUrl"

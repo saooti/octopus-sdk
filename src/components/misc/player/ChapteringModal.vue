@@ -54,7 +54,10 @@ export default defineComponent({
     this.audioPlayer = document.querySelector("#audio-player");
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
+    ...mapActions(usePlayerStore, [
+      "playerUpdateSeekTime",
+      "playerUpdateElapsed",
+    ]),
     closePopup(): void {
       this.$emit("close");
     },
@@ -65,8 +68,9 @@ export default defineComponent({
       const seekTime =
         this.playerTotal *
         (this.playerChapteringPercent[index].startPercent / 100);
-      if (this.playerPodcast || this.playerLive) {
-        this.playerUpdateSeekTime(seekTime);
+      this.playerUpdateSeekTime(seekTime);
+      if (0 === seekTime) {
+        this.playerUpdateElapsed(0);
       }
       this.audioPlayer.currentTime = seekTime;
     },

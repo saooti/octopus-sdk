@@ -41,7 +41,7 @@ export const playerLogicProgress = defineComponent({
       );
     },
     playerSeekTime() {
-      if (!this.playerSeekTime) {
+      if (undefined===this.playerSeekTime) {
         return;
       }
       if (this.playerPodcast || this.playerLive) {

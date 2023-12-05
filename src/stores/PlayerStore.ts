@@ -192,9 +192,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerRadio.podcast = podcast;
     },
 
-    playerUpdateElapsed(elapsed: number, total: number) {
+    playerUpdateElapsed(elapsed: number, total?: number) {
       this.playerElapsed = elapsed;
-      this.playerTotal = total;
+      if(total){
+        this.playerTotal = total;
+      }
     },
 
     playerUpdateTranscript(transcript?: Transcript) {
