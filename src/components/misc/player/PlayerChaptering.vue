@@ -4,7 +4,9 @@
       class="btn-transparent d-flex align-items-center text-truncate medium-text text-light"
       @click="showChaptering = !showChaptering"
     >
-      <div class="text-truncate">{{ "• " + actualChapter.title }}</div>
+      <div class="text-truncate">
+        {{ actualIndex + 1 + " - " + actualChapter.title }}
+      </div>
       <span class="saooti-right small-text" />
     </button>
     <ChapteringModal v-if="showChaptering" @close="showChaptering = false" />
@@ -27,6 +29,7 @@ export default defineComponent({
   data() {
     return {
       actualChapter: undefined as ChapterPercent | undefined,
+      actualIndex: 0 as number,
       showChaptering: false as boolean,
     };
   },
@@ -57,6 +60,7 @@ export default defineComponent({
             this.isInChapter(progressPercent, this.playerChapteringPercent[i])
           ) {
             this.actualChapter = this.playerChapteringPercent[i];
+            this.actualIndex = i;
             return;
           }
         }

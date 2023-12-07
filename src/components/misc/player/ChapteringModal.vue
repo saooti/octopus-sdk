@@ -6,14 +6,15 @@
   >
     <template #body>
       <div class="d-flex flex-column">
-        <a
+        <button
           v-for="(chapter, index) in playerChapteringPercent"
           :key="chapter"
-          class="c-hand text-truncate mb-1"
+          class="btn d-flex flex-nowrap align-items-center p-2 mt-1 c-hand text-truncate mb-1 border"
           @click="goToChapter(index)"
         >
-          {{ chapter.startTime + " - " + chapter.title }}
-        </a>
+          <div class="me-auto">{{ index + 1 + " - " + chapter.title }}</div>
+          <div>{{ chapter.startDisplay }}</div>
+        </button>
       </div>
     </template>
     <template #footer>

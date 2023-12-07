@@ -46,14 +46,14 @@ export const usePlayerStore = defineStore("PlayerStore", {
       if(!this.playerChaptering || 0===this.playerTotal){
         return;
       }
-      const chapteringKeys = Object.keys(this.playerChaptering);
       let chapteringPercent: ChapteringPercent = [];
-      for (let i = 0, len = chapteringKeys.length; i < len; i++) {
+      for (let i = 0, len = this.playerChaptering.chapters.length; i < len; i++) {
         chapteringPercent.push({
-          startTime : chapteringKeys[i],
-          startPercent: (DurationHelper.convertTimestamptoSeconds(chapteringKeys[i]) * 100 ) / (Math.round(this.playerTotal)),
+          startTime : this.playerChaptering.chapters[i].startTime,
+          startDisplay: DurationHelper.formatDuration(this.playerChaptering.chapters[i].startTime, ':', false),
+          startPercent: (this.playerChaptering.chapters[i].startTime * 100 ) / (Math.round(this.playerTotal)),
           endPercent:100,
-          title: this.playerChaptering[chapteringKeys[i]]
+          title: this.playerChaptering.chapters[i].title
         });
       }
       for (let i = 0, len = chapteringPercent.length; i < len; i++) {
