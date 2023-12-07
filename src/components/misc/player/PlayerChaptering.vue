@@ -11,6 +11,7 @@
     </button>
     <ChapteringModal v-if="showChaptering" @close="showChaptering = false" />
   </div>
+  <div v-else class="margin-chaptering"></div>
 </template>
 <script lang="ts">
 import { ChapterPercent } from "@/stores/class/chaptering/chaptering";
@@ -64,6 +65,8 @@ export default defineComponent({
             return;
           }
         }
+        this.actualChapter = undefined;
+        this.actualIndex = 0;
       },
     },
   },
@@ -74,3 +77,10 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app {
+ .margin-chaptering{
+  height: 23px;
+ }
+}
+</style>

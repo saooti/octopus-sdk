@@ -153,10 +153,10 @@ export default defineComponent({
     background: #282828 !important;
     font-size: 1rem;
     .medium-text {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
     }
     .small-text {
-      font-size: 0.6rem;
+      font-size: 0.5rem;
     }
 
     @media (max-width: 960px) {
