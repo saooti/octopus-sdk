@@ -9,9 +9,9 @@
       </div>
       <span class="saooti-right small-text" />
     </button>
-    <ChapteringModal v-if="showChaptering" @close="showChaptering = false" />
+    <ChapteringModal v-if="showChaptering" @close="showChaptering = false" :actual-chapter="actualIndex" />
   </div>
-  <div v-else class="margin-chaptering"></div>
+  <div v-else-if="playerChapteringPercent" class="margin-chaptering"></div>
 </template>
 <script lang="ts">
 import { ChapterPercent } from "@/stores/class/chaptering/chaptering";
@@ -30,7 +30,7 @@ export default defineComponent({
   data() {
     return {
       actualChapter: undefined as ChapterPercent | undefined,
-      actualIndex: 0 as number,
+      actualIndex: -1 as number,
       showChaptering: false as boolean,
     };
   },
@@ -66,13 +66,13 @@ export default defineComponent({
           }
         }
         this.actualChapter = undefined;
-        this.actualIndex = 0;
+        this.actualIndex = -1;
       },
     },
   },
   methods: {
     isInChapter(val: number, chapter: ChapterPercent) {
-      return chapter.startPercent <= val && val < chapter.endPercent;
+      return Math.floor(chapter.startPercent) <= val && val < Math.floor(chapter.endPercent);
     },
   },
 });
