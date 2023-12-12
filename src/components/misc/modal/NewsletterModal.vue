@@ -39,6 +39,7 @@
               v-model="color"
               class="c-hand me-2 mt-2"
               show-fallback
+              fallback-input-type="color"
               colors="text-advanced"
               popover-to="right"
               :data-color="color"
