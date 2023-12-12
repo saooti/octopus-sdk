@@ -357,4 +357,5 @@ export default {
   "Trigger automatic reading if this is possible":"Déclencher la lecture automatique si celle ci est possible",
   "High version":"Version en hauteur",
   "Advanced sharing":"Partage avancé",
+  "Chaptering":"Chapitrage",
 };

@@ -5,7 +5,7 @@
     ref="popover"
     tabindex="0"
     class="octopus-popover"
-    :class="onlyClick ? 'octopus-dropdown' : ''"
+    :class="[onlyClick ? 'octopus-dropdown' : '', popoverClass]"
     :style="positionInlineStyle"
     @blur="clearDataBlur"
   >
@@ -28,10 +28,12 @@ export default defineComponent({
     target: { type: String, required: true },
     disable: { type: Boolean, default: false },
     onlyClick: { type: Boolean, default: false },
+    onlyMouse: { type: Boolean, default: false },
     isFixed: { type: Boolean, default: false },
     relativeClass: { type: String, default: undefined },
     leftPos: { type: Boolean, default: false },
     topPos: { type: Boolean, default: false },
+    popoverClass: { type: String, default: undefined },
   },
   data() {
     return {
@@ -67,7 +69,9 @@ export default defineComponent({
           );
           this.targetElement.addEventListener("mouseleave", this.clearData);
         }
-        this.targetElement.addEventListener("click", this.setPopoverData);
+        if (!this.onlyMouse) {
+          this.targetElement.addEventListener("click", this.setPopoverData);
+        }
         this.targetElement.addEventListener("blur", this.clearDataBlur);
       }
     },
@@ -80,7 +84,9 @@ export default defineComponent({
           );
           this.targetElement.removeEventListener("mouseleave", this.clearData);
         }
-        this.targetElement.removeEventListener("click", this.setPopoverData);
+        if (!this.onlyMouse) {
+          this.targetElement.removeEventListener("click", this.setPopoverData);
+        }
         this.targetElement.addEventListener("blur", this.clearDataBlur);
       }
     },

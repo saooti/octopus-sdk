@@ -18,7 +18,7 @@
             <div :class="button.icon" />
           </a>
         </template>
-        <router-link
+        <!-- <router-link
           v-if="!isPodcastmaker && authenticated && podcast && isProduction"
           :class="getClass('saooti-share')"
           :title="$t('Advanced sharing')"
@@ -26,7 +26,7 @@
             name: 'advancedShare',
             params: { podcastId: podcast.podcastId },
           }"
-        />
+        /> -->
       </div>
     </div>
     <div v-if="podcast || emission || playlist" class="d-flex flex-column me-2">

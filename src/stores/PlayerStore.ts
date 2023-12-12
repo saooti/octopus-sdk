@@ -3,6 +3,8 @@ import { Media } from "@/stores/class/general/media";
 import { MediaRadio, Radio } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
+import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
+import octopusApi from "@saooti/octopus-api";
 interface Transcript {
   actual: number;
   actualText: string;
@@ -22,6 +24,7 @@ interface PlayerState {
   playerTranscript?: Transcript;
   playerLargeVersion: boolean;
   playerVideo: boolean;
+  playerChaptering?: Chaptering;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -36,13 +39,33 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerSeekTime: 0,
     playerLargeVersion: false,
     playerVideo: false,
+    playerChaptering: undefined,
   }),
   getters: {
+    playerChapteringPercent(): ChapteringPercent|undefined{
+      if(!this.playerChaptering || 0===this.playerTotal){
+        return;
+      }
+      let chapteringPercent: ChapteringPercent = [];
+      for (let i = 0, len = this.playerChaptering.chapters.length; i < len; i++) {
+        chapteringPercent.push({
+          startTime : this.playerChaptering.chapters[i].startTime,
+          startDisplay: DurationHelper.formatDuration(this.playerChaptering.chapters[i].startTime, ':', false),
+          startPercent: (this.playerChaptering.chapters[i].startTime * 100 ) / (Math.round(this.playerTotal)),
+          endPercent:100,
+          title: this.playerChaptering.chapters[i].title
+        });
+      }
+      for (let i = 0, len = chapteringPercent.length; i < len; i++) {
+        chapteringPercent[i].endPercent = chapteringPercent[i].startPercent + ((chapteringPercent[i+1]?.startPercent ?? 100) - chapteringPercent[i].startPercent);
+      }
+      return chapteringPercent;
+    },
     playerHeight() {
       if ("STOPPED" === this.playerStatus) return 0;
       if (this.playerVideo) return "0px"/* "281px" */;
       if (this.playerLargeVersion) return "27rem";
-      if (window.innerWidth > 450) return "5rem";
+      if (window.innerWidth > 450) return "6rem";
       return "3.5rem";
     },
     playedTime(): string {
@@ -91,7 +114,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
   },
   actions: {
-    playerPlay(param?: any, isVideo = false) {
+    async playerPlay(param?: any, isVideo = false) {
       if (!param) {
         this.playerStatus = "STOPPED";
         this.playerPodcast = undefined;
@@ -100,6 +123,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerRadio = undefined;
         this.playerElapsed = 0;
         this.playerVideo = false;
+        this.playerChaptering=undefined;
         return;
       }
       if (
@@ -118,16 +142,26 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerRadio = undefined;
       this.playerVideo = isVideo;
       this.playerElapsed = 0;
+      this.playerChaptering=undefined;
       if (
         param.conferenceId &&
         (!param.podcastId || param.processingStatus !== "READY")
       ) {
         this.playerLive = param;
-      } else if (param.podcastId) {
+        return;
+      }
+      if (param.podcastId) {
         this.playerPodcast = param;
-      } else if (param.mediaId) {
+        if(param.annotations?.chaptering){
+          this.playerChaptering =  await octopusApi.fetchDataPublic<Chaptering>(4, (param.annotations.chaptering as string));
+        }
+        return;
+      }
+      if (param.mediaId) {
         this.playerMedia = param;
-      } else if (param.canalId) {
+        return;
+      }
+      if (param.canalId) {
         this.playerRadio = { ...param, ...{ isInit: false } };
       }
     },
@@ -158,9 +192,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerRadio.podcast = podcast;
     },
 
-    playerUpdateElapsed(elapsed: number, total: number) {
+    playerUpdateElapsed(elapsed: number, total?: number) {
       this.playerElapsed = elapsed;
-      this.playerTotal = total;
+      if(total){
+        this.playerTotal = total;
+      }
     },
 
     playerUpdateTranscript(transcript?: Transcript) {
