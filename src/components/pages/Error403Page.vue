@@ -22,7 +22,7 @@
 
     <a
       class="btn btn-primary"
-      :href="authenticated ? '/sso/logout' : '/sso/login'"
+      :href="authenticated ? '/logout' : '/login'"
       >{{ authText }}</a
     >
   </div>
