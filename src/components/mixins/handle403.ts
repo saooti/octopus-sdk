@@ -10,7 +10,7 @@ export const handle403 = defineComponent({
     handle403(error: AxiosError): void {
       if (403 === error.response?.status) {
         if (undefined === this.authOrgaId) {
-          window.location.href = window.location.origin + "/login";
+          window.location.href = window.location.origin + "/sso/login";
         } else {
           this.$router.push({
             path: "/main/pub/error",

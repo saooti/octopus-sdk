@@ -24,7 +24,7 @@
       :left-pos="true"
     >
       <template v-if="!isAuthenticated">
-        <a class="octopus-dropdown-item" href="/login" realLink="true">
+        <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
           {{ $t("Login") }}
         </a>
         <router-link
