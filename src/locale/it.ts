@@ -303,7 +303,6 @@ export default{
     "If the transcript is available, show it":"Se la trascrizione è disponibile, mostrala",
     "Photo credits":"Crediti fotografici",
     "Audio credits":"Crediti audio",
-    "Author credits": "Crediti dell'autore",
     "View transcript":"Visualizza trascrizione",
     "Suggested listening":"Ascolto suggerito",
     "More":"Di più",

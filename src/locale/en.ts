@@ -310,7 +310,6 @@ export default {
     "If the transcript is available, show it",
   "Photo credits": "Photo credits",
   "Audio credits": "Audio credits",
-  "Author credits": "Author credits",
   "View transcript": "View transcript",
   "Suggested listening": "Suggested listening",
   More: "More",

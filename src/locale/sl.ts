@@ -300,7 +300,6 @@ export default {
     "Če je prepis na voljo, ga pokažite",
   "Photo credits": "Avtorji fotografij",
   "Audio credits": "Avdio krediti",
-  "Author credits": "Zasluge avtorja",
   "View transcript": "Ogled prepisa",
   "Suggested listening": "Predlagano poslušanje",
   More: "Več",

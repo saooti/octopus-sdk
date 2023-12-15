@@ -77,11 +77,6 @@
           <div v-if="'' !== audioCredit" class="mb-1">
             {{ $t("Audio credits") + " : " + audioCredit }}
           </div>
-          <div v-if="'' !== authorCredit" class="mb-1">
-            {{ $t("Author credits") + " : " + authorCredit }}
-          </div>
-
-          
           <a
             v-if="podcast.article"
             class="btn d-flex align-items-center my-2 width-fit-content mb-1"
@@ -271,9 +266,6 @@ export default defineComponent({
     },
     audioCredit(): string {
       return (this.podcast?.annotations?.audioCredit as string) ?? "";
-    },
-    authorCredit(): string {
-      return (this.podcast?.annotations?.authorCredit as string) ?? "";
     },
     isEditBox(): boolean {
       return (state.podcastPage.EditBox as boolean) ?? false;
