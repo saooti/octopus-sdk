@@ -32,7 +32,7 @@ export default {
   Emission: "Émission",
   "Emission description": "Description de l'émission",
   "Emission image": "Image de l'émission",
-  "Emission name": "Nom de l'émission",
+  "Emission name": "Title de l'émission",
   "No elements found. Consider changing the search query.":
     "Aucun élement ne correspond à votre recherche",
   "Podcast is not visible for listeners":
@@ -317,6 +317,7 @@ export default {
     "Si la transcription est disponible, l'afficher",
   "Photo credits": "Crédits photo",
   "Audio credits": "Crédits audio",
+  "Author credits": "Crédits auteur",
   "View transcript": "Afficher la transcription",
   "Suggested listening": "Suggestion d'écoute",
   More: "Plus",

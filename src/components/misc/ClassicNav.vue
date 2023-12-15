@@ -85,11 +85,15 @@ export default defineComponent({
       background-color 0.15s ease-in-out,
       border-color 0.15s ease-in-out;
     border: 0.1rem solid transparent;
-    &:hover,
-    &.active {
+    &:hover{
       border-color: #dee2e6;
       border-bottom-color: $octopus-primary-color;
       color: $octopus-primary-color;
+    }
+    &.active{
+      border-color: $octopus-primary-color;
+      background: $octopus-primary-color;
+      color:white;
     }
   }
   .octopus-nav.light .octopus-nav-link {
