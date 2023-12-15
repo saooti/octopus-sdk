@@ -8,7 +8,6 @@
         :model-value="color"
         class="c-hand"
         show-fallback
-        fallback-input-type="color"
         colors="text-advanced"
         popover-to="right"
         :data-color="color"
@@ -23,7 +22,6 @@
         :model-value="theme"
         class="c-hand"
         show-fallback
-        fallback-input-type="color"
         colors="text-advanced"
         popover-to="right"
         :data-color="theme"

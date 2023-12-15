@@ -61,16 +61,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
 .octopus-app {
-  select option:checked,
-  select option:hover {
-    box-shadow: 0 0 10px 100px #dddddd inset;
-  }
-  select:focus > option:checked { 
-      background: #dddddd !important;
-  }
-
   select.transparent {
     background: transparent !important;
     outline-color: transparent !important;

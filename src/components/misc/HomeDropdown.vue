@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex align-items-center">
-    <button
+    <router-link
       v-if="isAuthenticatedWithOrga"
       :title="$t('My space')"
-      @click="goToAdministration"
+      to="/main/priv/backoffice"
       class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu"
     />
     <router-link
@@ -147,16 +147,5 @@ export default defineComponent({
       return state.generalParameters.isContribution ?? false;
     },
   },
-  methods:{
-    goToAdministration(){
-      if("homePriv" !== this.$route.name){
-        this.$router.push("/main/priv/backoffice");
-      }else if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push("/");
-      }
-    }
-  }
 });
 </script>
