@@ -317,6 +317,7 @@ export default {
     "Si la transcription est disponible, l'afficher",
   "Photo credits": "Crédits photo",
   "Audio credits": "Crédits audio",
+  "Author credits": "Crédits auteur",
   "View transcript": "Afficher la transcription",
   "Suggested listening": "Suggestion d'écoute",
   More: "Plus",

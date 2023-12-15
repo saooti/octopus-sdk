@@ -3,7 +3,7 @@
     <template v-if="displayAccordion">
       <button
         :id="'accordion-' + idComposer"
-        class="w-100 py-2 text-start d-flex flex-no-wrap align-items-center"
+        class="w-100 py-2 text-start d-flex flex-nowrap align-items-center"
         @click="isOpen = !isOpen"
       >
         <span v-if="icon" class="img-accordion text-primary" :class="icon" />
@@ -57,7 +57,6 @@ export default defineComponent({
     background: white;
     min-height: 50px;
     color: $octopus-primary-color;
-    font-size: 1.2rem;
     border: 1px solid transparent;
     &:hover{
       border: 1px solid $octopus-primary-color;

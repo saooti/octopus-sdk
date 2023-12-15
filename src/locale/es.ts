@@ -311,6 +311,7 @@ export default {
     "Si la transcripción está disponible, muéstrela",
   "Photo credits": "Créditos fotográficos",
   "Audio credits": "Créditos de audio",
+  "Author credits": "Créditos del autor",
   "View transcript": "Ver transcripción",
   "Suggested listening": "Escucha sugerida",
   More: "Más",
