@@ -25,6 +25,7 @@ interface PlayerState {
   playerLargeVersion: boolean;
   playerVideo: boolean;
   playerChaptering?: Chaptering;
+  playerDelayStitching: number;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -40,6 +41,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerLargeVersion: false,
     playerVideo: false,
     playerChaptering: undefined,
+    playerDelayStitching:0,
   }),
   getters: {
     playerChapteringPercent(): ChapteringPercent|undefined{
@@ -48,10 +50,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
       }
       let chapteringPercent: ChapteringPercent = [];
       for (let i = 0, len = this.playerChaptering.chapters.length; i < len; i++) {
+        const startTimeWithDelay = this.playerChaptering.chapters[i].startTime + Math.floor(this.playerDelayStitching);
         chapteringPercent.push({
-          startTime : this.playerChaptering.chapters[i].startTime,
-          startDisplay: DurationHelper.formatDuration(this.playerChaptering.chapters[i].startTime, ':', false),
-          startPercent: (this.playerChaptering.chapters[i].startTime * 100 ) / (Math.round(this.playerTotal)),
+          startTime : startTimeWithDelay,
+          startDisplay: DurationHelper.formatDuration(startTimeWithDelay, ':', false),
+          startPercent: (startTimeWithDelay * 100 ) / (Math.round(this.playerTotal)),
           endPercent:100,
           title: this.playerChaptering.chapters[i].title
         });
@@ -202,8 +205,14 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerUpdateTranscript(transcript?: Transcript) {
       this.playerTranscript = transcript;
     },
+    playerUpdateDelayStitching(delay: number){
+      this.playerDelayStitching = delay;
+    },
     playerUpdateLargeVersion(largeVersion: boolean) {
       this.playerLargeVersion = largeVersion;
     },
+    playerUpdateChaptering(chaptering?: Chaptering){
+      this.playerChaptering = chaptering;
+    }
   },
 });

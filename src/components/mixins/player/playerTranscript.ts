@@ -2,12 +2,33 @@ import octopusApi from "@saooti/octopus-api";
 import { defineComponent } from "vue";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
+import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
 export const playerTranscript = defineComponent({
   computed: {
-    ...mapState(usePlayerStore, ["playerTranscript", "playerPodcast"]),
+    ...mapState(usePlayerStore, ["playerTranscript", "playerPodcast", 'playerDelayStitching']),
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateTranscript"]),
+    ...mapActions(usePlayerStore, ["playerUpdateTranscript", "playerUpdateDelayStitching"]),
+    async checkDelaytWithStitching(){
+      this.playerUpdateDelayStitching(0);
+      const audioPlayer = document.querySelector("#audio-player") as HTMLAudioElement;
+      if (!this.playerTranscript || !audioPlayer || !this.playerPodcast ||
+        audioPlayer.duration <= this.playerPodcast.duration / 1000 + 5) 
+      {
+        return;
+      }
+      let adserverConfig = await octopusApi.fetchDataPublic<AdserverOtherEmission>(0,`ad/test/podcast/${this.playerPodcast.podcastId}`);
+      const doubletsLength = adserverConfig.config.doublets.length;
+      if(1=== doubletsLength &&  "pre" === adserverConfig.config.doublets[0].timing.insertion){
+        this.playerUpdateDelayStitching( audioPlayer.duration - (this.playerPodcast.duration / 1000));
+      }else if(0===doubletsLength || 1=== doubletsLength &&  "post" === adserverConfig.config.doublets[0].timing.insertion){
+        return;
+      }else{
+        // todo remove chaptering
+        this.playerUpdateChaptering();
+        this.playerUpdateTranscript();
+      }
+    },
     async getTranscription(): Promise<void> {
       if (!this.playerPodcast) {
         this.playerUpdateTranscript();
@@ -20,10 +41,13 @@ export const playerTranscript = defineComponent({
       const arrayTranscript = this.parseSrt(result);
       const actualText =
         arrayTranscript?.[0]?.startTime === 0 ? arrayTranscript[0].text : "";
+      if(!arrayTranscript){
+        return;
+      }
       this.playerUpdateTranscript({
         actual: 0,
         actualText: actualText,
-        value: arrayTranscript,
+        value: arrayTranscript
       });
     },
     parseSrt(transcript: string) {
@@ -52,23 +76,30 @@ export const playerTranscript = defineComponent({
       return +a[0] * 60 * 60 + +a[1] * 60 + +parseFloat(a[2]);
     },
     onTimeUpdateTranscript(currentTime: number) {
+      if(!this.playerTranscript || !this.playerTranscript.value.length){
+        return;
+      }
+      const startTime = (this.playerTranscript.value[this.playerTranscript.actual]?.startTime ?? 0) + this.playerDelayStitching;
+      if (startTime <= currentTime) {
+        this.playerTranscript.actualText = this.playerTranscript.value[this.playerTranscript?.actual]?.text ??"";
+      }
       if (
-        this.playerTranscript &&
-        (this.playerTranscript?.value[this.playerTranscript?.actual]?.endTime ??
-          Infinity) < currentTime
+        (this.playerTranscript.value[this.playerTranscript.actual]?.endTime ??
+          Infinity) + this.playerDelayStitching < currentTime
       ) {
         this.playerTranscript.actual += 1;
         this.playerTranscript.actualText =
-          this.playerTranscript?.value[this.playerTranscript?.actual].text ??
+          this.playerTranscript?.value[this.playerTranscript.actual]?.text ??
           "";
       }
     },
+    
     onSeekedTranscript(currentTime: number) {
       if (this.playerTranscript) {
         let newActual = 0;
         while (
           currentTime >
-          (this.playerTranscript.value[newActual]?.endTime ?? Infinity)
+          (this.playerTranscript.value[newActual]?.endTime ?? Infinity) + this.playerDelayStitching
         ) {
           newActual += 1;
         }

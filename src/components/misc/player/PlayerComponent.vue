@@ -20,6 +20,7 @@
           @error="onError"
           @seeked="onSeeked"
           @pause="onPause"
+          @loadedmetadata="checkDelaytWithStitching"
         />
         <PlayerCompact
           v-if="!playerLargeVersion"
