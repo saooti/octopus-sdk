@@ -20,15 +20,24 @@
       />
     </div>
 
-    <a
+    <button
+      v-if="authenticated"
       class="btn btn-primary"
-      :href="authenticated ? '/logout' : '/sso/login'"
+      @click="logoutFunction"
+
+      >{{ authText }}</button
+    >
+    <a
+      v-else
+      class="btn btn-primary"
+      href="/sso/login"
       >{{ authText }}</a
     >
   </div>
 </template>
 
 <script lang="ts">
+import octopusApi from "@saooti/octopus-api";
 import { state } from "../../stores/ParamSdkStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
@@ -47,6 +56,16 @@ export default defineComponent({
   mounted() {
     document.title = this.metaTitle;
   },
+  methods:{
+    async logoutFunction(){
+      try {
+        await octopusApi.postDataPublic(4, '/logout', undefined);
+        this.$router.push('/');
+      } catch (error) {
+        //Do nothing
+      }
+    }
+  }
 });
 </script>
 <style lang="scss">
