@@ -152,7 +152,8 @@ export default defineComponent({
     async logoutFunction(){
       try {
         await crudApi.postData(4, '/logout', undefined);
-        this.$router.push('/');
+        await this.$router.push({ path: '/' });
+        location.reload();
       } catch (error) {
         //Do nothing
       }
