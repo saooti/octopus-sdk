@@ -60,7 +60,7 @@
           </template>
         </template>
         <hr />
-        <a class="octopus-dropdown-item" @click="logoutFunction" >
+        <a class="octopus-dropdown-item c-hand" @click="logoutFunction" >
           {{ $t("Logout") }}
         </a>
       </template>
