@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
@@ -59,7 +59,7 @@ export default defineComponent({
   methods:{
     async logoutFunction(){
       try {
-        await octopusApi.postDataPublic(4, '/logout', undefined);
+        await crudApi.postData(4, '/logout', undefined);
         this.$router.push('/');
       } catch (error) {
         //Do nothing

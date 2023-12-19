@@ -60,9 +60,9 @@
           </template>
         </template>
         <hr />
-        <button class="octopus-dropdown-item" @click="logoutFunction">
+        <a class="octopus-dropdown-item" @click="logoutFunction" >
           {{ $t("Logout") }}
-        </button>
+        </a>
       </template>
       <router-link class="octopus-dropdown-item" to="/main/pub/contact">
         {{ $t("Contact") }}
@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import { useAuthStore } from "@/stores/AuthStore";
@@ -151,7 +151,7 @@ export default defineComponent({
   methods:{
     async logoutFunction(){
       try {
-        await octopusApi.postDataPublic(4, '/logout', undefined);
+        await crudApi.postData(4, '/logout', undefined);
         this.$router.push('/');
       } catch (error) {
         //Do nothing
