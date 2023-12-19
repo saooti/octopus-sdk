@@ -5,7 +5,7 @@ import { setupI18n } from "./i18n";
 import router from "@/router/router";
 import { createPinia } from "pinia";
 import paramStore from "@/stores/ParamSdkStore";
-
+import '../public/css/fonts/localFonts/style.css';
 const nameEQ = "octopus-language=";
 const ca = document.cookie.split(";");
 let language = "";
