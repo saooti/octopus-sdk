@@ -32,7 +32,7 @@ export default {
   Emission: "Émission",
   "Emission description": "Description de l'émission",
   "Emission image": "Image de l'émission",
-  "Emission name": "Nom de l'émission",
+  "Emission name": "Titre de l'émission",
   "No elements found. Consider changing the search query.":
     "Aucun élement ne correspond à votre recherche",
   "Podcast is not visible for listeners":

@@ -135,7 +135,8 @@ export default defineComponent({
           "update:rubriqueSelected",
           (rubrique as Rubrique).rubriqueId,
         );
-      } else if (undefined !== this.rubriqueSelectedArray) {
+      }
+      if (undefined !== this.rubriqueSelectedArray) {
         const idsArray: Array<number> = [];
         (rubrique as Array<Rubrique>).forEach((el: Rubrique) => {
           idsArray.push(el.rubriqueId ?? 0);
