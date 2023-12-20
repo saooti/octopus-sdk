@@ -182,8 +182,6 @@ export default {
   "Podcast play error": "Erreur à la lecture de cette ressource",
   "More episodes": "Plus d’épisodes",
   Stop: "Stop",
-  "Share this page without edit and share blocks":
-    "Partager cette page sans afficher les blocs d'édition et d'intégration du player",
   "Podcast in cancelled status": "Épisode avec un traitement qui a été annulé",
   "Show every episode": "Afficher tous les épisodes",
   "Subscribe emission": "Écouter sur une plateforme de streaming",
@@ -357,5 +355,6 @@ export default {
   "Chronological":"Chronologique",
   "Trigger automatic reading if this is possible":"Déclencher la lecture automatique si celle ci est possible",
   "High version":"Version en hauteur",
-  "Advanced sharing":"Partage avancé",
+  "Generate a social media post (with AI)":"Générer un post réseaux sociaux (avec IA)",
+  "Share in one click":"Partager en un clic",
 };

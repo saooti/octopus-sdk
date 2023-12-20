@@ -182,8 +182,6 @@ export default {
     "Beim Abspielen des Podcasts ist ein Fehler aufgetreten.",
   "More episodes": "Mehr Folgen",
   Stop: "Anhalten",
-  "Share this page without edit and share blocks":
-    "Diese Seite ohne Bearbeitungsblöcke teilen",
   "Podcast in cancelled status": "Dieser Podcast wurde gestrichen",
   "Show every episode": "Alle Folgen anzeigen",
   "Subscribe emission": "Reihe abonnieren",
@@ -350,5 +348,6 @@ export default {
   "Chronological":"Chronologisch",
   "Trigger automatic reading if this is possible":"Wenn möglich, automatisches Auslesen auslösen",
   "High version":"Hohe Version",
-  "Advanced sharing":"Erweitertes Teilen",
+  "Generate a social media post (with AI)":"Einen Social-Media-Beitrag erstellen (mit KI)",
+  "Share in one click":"Mit einem Klick teilen",
 }

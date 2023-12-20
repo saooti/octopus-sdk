@@ -181,8 +181,6 @@ export default {
   "Podcast play error": "Se ha producido un error al reproducir el pódcast",
   "More episodes": "Más episodios",
   Stop: "Detener",
-  "Share this page without edit and share blocks":
-    "Compartir esta página sin editar y compartir bloques",
   "Podcast in cancelled status": "Pódcast cancelado",
   "Show every episode": "Mostrar cada episodio",
   "Subscribe emission": "Subscribir el programa",
@@ -351,5 +349,6 @@ export default {
   "Chronological":"Cronológico",
   "Trigger automatic reading if this is possible":"Activar la lectura automática si esto es posible",
   "High version":"Versión alta",
-  "Advanced sharing":"Reparto adelantado",
+  "Generate a social media post (with AI)":"Generar una publicación en las redes sociales (con IA)",
+  "Share in one click":"Comparte en un clic",
 }

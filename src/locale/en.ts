@@ -180,8 +180,6 @@ export default {
   "Podcast play error": "An error occured while playing Podcast",
   "More episodes": "More episodes",
   Stop: "Stop",
-  "Share this page without edit and share blocks":
-    "Share this page without edit and share blocks",
   "Podcast in cancelled status": "Podcast has a cancelled status",
   "Show every episode": "Show every episode",
   "Subscribe emission": "Subscribe to the series",
@@ -350,5 +348,6 @@ export default {
   "Chronological":"Chronological",
   "Trigger automatic reading if this is possible":"Trigger automatic reading if this is possible",
   "High version":"High version",
-  "Advanced sharing":"Advanced sharing",
+  "Generate a social media post (with AI)":"Generate a social media post (with AI)",
+  "Share in one click":"Share in one click",
 };

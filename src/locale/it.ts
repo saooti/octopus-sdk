@@ -177,8 +177,6 @@ export default{
     'Podcast play error': 'Si è verificato un errore durante la riproduzione del podcast',
     'More episodes': 'Altri episodi',
     Stop: 'Stop',
-    'Share this page without edit and share blocks':
-      "Condividi questa pagina senza modificare",
     'Podcast in cancelled status': 'Podcast contrassegnato come eliminato',
     'Show every episode': 'Mostra tutti gli episodi',
     'Subscribe emission': "Iscriviti alla serie",
@@ -343,5 +341,6 @@ export default{
   "Chronological":"Cronologico",
   "Trigger automatic reading if this is possible":"Attivare la lettura automatica, se possibile",
   "High version":"Versione alta",
-  "Advanced sharing":"Condivisione avanzata",
+  "Generate a social media post (with AI)":"Genera un post sui social media (con AI)",
+  "Share in one click":"Condividi con un clic",
   };

@@ -176,8 +176,6 @@ export default {
   "Podcast play error": "Pri predvajanju podkasta je prišlo do napake",
   "More episodes": "Več epizod",
   Stop: "Stop",
-  "Share this page without edit and share blocks":
-    "Deli stran brez možnosti za urejanje in deljenje",
   "Podcast in cancelled status": "Podkast ima status „odpovedan“",
   "Show every episode": "Prikaži vse epizode",
   "Subscribe emission": "Naroči se na oddajo",
@@ -340,5 +338,6 @@ export default {
   "Chronological":"Kronološko",
   "Trigger automatic reading if this is possible":"Sprožite samodejno branje, če je to mogoče",
   "High version":"Visoka različica",
-  "Advanced sharing":"Napredno deljenje",
+  "Generate a social media post (with AI)":"Ustvarite objavo v družabnem omrežju (z AI)",
+  "Share in one click":"Delite z enim klikom",
 }
