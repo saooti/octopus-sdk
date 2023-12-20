@@ -10,11 +10,11 @@
         role="button"
         tabindex="0"
         class="saooti-help ms-2"
+        :aria-label="$t('Help')"
       />
       <ClassicPopover
         v-if="authenticated"
         target="popover-share-help"
-        :title="$t('Help')"
         :content="$t('Share this page without edit and share blocks')"
         relative-class="page-element"
         :is-fixed="true"

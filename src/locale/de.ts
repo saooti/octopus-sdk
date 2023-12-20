@@ -310,6 +310,7 @@ export default {
     "Wenn die Abschrift vorhanden ist, zeigen Sie sie",
   "Photo credits": "Bildnachweis",
   "Audio credits": "Audio-Credits",
+  "Author credits": "Autorennachweise",
   "View transcript": "Transkript ansehen",
   "Suggested listening": "Anhören empfohlen",
   More: "Mehr",

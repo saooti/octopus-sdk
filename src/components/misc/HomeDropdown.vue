@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex align-items-center">
-    <router-link
+    <button
       v-if="isAuthenticatedWithOrga"
       :title="$t('My space')"
-      to="/main/priv/backoffice"
+      @click="goToAdministration"
       class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu"
     />
     <router-link
@@ -156,6 +156,15 @@ export default defineComponent({
         location.reload();
       } catch (error) {
         //Do nothing
+      }
+    },
+    goToAdministration(){
+      if("homePriv" !== this.$route.name){
+        this.$router.push("/main/priv/backoffice");
+      }else if (window.history.length > 1) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push("/");
       }
     }
   }
