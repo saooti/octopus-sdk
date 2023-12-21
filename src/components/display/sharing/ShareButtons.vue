@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <div v-if="!isGarStudent && !noSharing" class="d-flex flex-column me-2">
         <div class="h4 mb-2">
-          {{ $t("SShare in one click") }}
+          {{ $t("Share in one click") }}
         </div>
         <div class="d-flex align-items-center">
           <template v-for="button in arrayShareButtons" :key="button.title">
