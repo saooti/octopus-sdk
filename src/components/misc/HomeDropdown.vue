@@ -159,7 +159,7 @@ export default defineComponent({
       }
     },
     goToAdministration(){
-      if("homePriv" !== this.$route.name){
+      if("backoffice" !== this.$route.name){
         this.$router.push("/main/priv/backoffice");
       }else if (window.history.length > 1) {
         this.$router.go(-1);
