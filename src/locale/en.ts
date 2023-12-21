@@ -350,4 +350,5 @@ export default {
   "High version":"High version",
   "Generate a social media post (with AI)":"Generate a social media post (with AI)",
   "Share in one click":"Share in one click",
+  "Chaptering":"Chaptering",
 };

@@ -357,4 +357,5 @@ export default {
   "High version":"Version en hauteur",
   "Generate a social media post (with AI)":"Générer un post réseaux sociaux (avec IA)",
   "Share in one click":"Partager en un clic",
+  "Chaptering":"Chapitrage",
 };

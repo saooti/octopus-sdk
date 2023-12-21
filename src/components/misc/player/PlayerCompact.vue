@@ -34,6 +34,7 @@
           {{ playedTime }} / {{ totalTime }}
         </div>
       </div>
+      <PlayerChaptering />
       <PlayerProgressBar
         v-if="!radioUrl"
         :show-timeline="showTimeline"
@@ -69,6 +70,7 @@ import { playerDisplay } from "../../mixins/player/playerDisplay";
 import imageProxy from "../../mixins/imageProxy";
 import ClassicSpinner from "../ClassicSpinner.vue";
 import PlayerTimeline from "./PlayerTimeline.vue";
+import PlayerChaptering from "./PlayerChaptering.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 const RadioProgressBar = defineAsyncComponent(
   () => import("./radio/RadioProgressBar.vue"),
@@ -84,6 +86,7 @@ export default defineComponent({
     RadioProgressBar,
     PlayerTimeline,
     ClassicSpinner,
+    PlayerChaptering,
   },
   mixins: [playerDisplay, imageProxy],
 

@@ -1,11 +1,12 @@
 <template>
   <div
+    id="octopus-player-component"
     class="player-container"
     :class="playerVideo ? 'player-video' : ''"
     :style="{ height: playerHeight }"
     @transitionend="onHidden"
   >
-    <template v-if="display">
+    <template v-if="displayWithTimeout">
       <PlayerVideo v-if="playerVideo" />
       <template v-else>
         <audio
@@ -19,6 +20,7 @@
           @error="onError"
           @seeked="onSeeked"
           @pause="onPause"
+          @loadedmetadata="checkDelaytWithStitching"
         />
         <PlayerCompact
           v-if="!playerLargeVersion"
@@ -86,6 +88,7 @@ export default defineComponent({
       comments: [] as Array<CommentPodcast>,
       audioUrlToPlay: "" as string,
       hlsReady: false as boolean,
+      displayWithTimeout: false as boolean,
     };
   },
   computed: {
@@ -103,6 +106,15 @@ export default defineComponent({
   watch: {
     playerHeight(): void {
       this.$emit("hide", 0 === this.playerHeight);
+    },
+    display(): void {
+      if (this.display) {
+        this.displayWithTimeout = this.display;
+      } else {
+        setTimeout(() => {
+          this.displayWithTimeout = this.display;
+        }, 3000);
+      }
     },
   },
 
@@ -141,6 +153,12 @@ export default defineComponent({
     transition: height 1s;
     background: #282828 !important;
     font-size: 1rem;
+    .medium-text {
+      font-size: 0.65rem;
+    }
+    .small-text {
+      font-size: 0.5rem;
+    }
 
     @media (max-width: 960px) {
       .d-flex {

@@ -60,7 +60,7 @@
           </template>
         </template>
         <hr />
-        <a class="octopus-dropdown-item" href="/sso/logout" realLink="true">
+        <a class="octopus-dropdown-item c-hand" @click="logoutFunction" >
           {{ $t("Logout") }}
         </a>
       </template>
@@ -72,6 +72,7 @@
 </template>
 
 <script lang="ts">
+import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import { useAuthStore } from "@/stores/AuthStore";
@@ -148,8 +149,17 @@ export default defineComponent({
     },
   },
   methods:{
+    async logoutFunction(){
+      try {
+        await crudApi.postData(4, '/logout', undefined);
+        await this.$router.push({ path: '/' });
+        location.reload();
+      } catch (error) {
+        //Do nothing
+      }
+    },
     goToAdministration(){
-      if("homePriv" !== this.$route.name){
+      if("backoffice" !== this.$route.name){
         this.$router.push("/main/priv/backoffice");
       }else if (window.history.length > 1) {
         this.$router.go(-1);

@@ -343,4 +343,5 @@ export default{
   "High version":"Versione alta",
   "Generate a social media post (with AI)":"Genera un post sui social media (con AI)",
   "Share in one click":"Condividi con un clic",
+  "Chaptering":"Capitolazione",
   };

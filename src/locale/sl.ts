@@ -340,4 +340,5 @@ export default {
   "High version":"Visoka različica",
   "Generate a social media post (with AI)":"Ustvarite objavo v družabnem omrežju (z AI)",
   "Share in one click":"Delite z enim klikom",
+  "Chaptering":"Poglavje",
 }

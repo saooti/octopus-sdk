@@ -350,4 +350,5 @@ export default {
   "High version":"Hohe Version",
   "Generate a social media post (with AI)":"Einen Social-Media-Beitrag erstellen (mit KI)",
   "Share in one click":"Mit einem Klick teilen",
+  "Chaptering":"Kapitelaufteilung",
 }
