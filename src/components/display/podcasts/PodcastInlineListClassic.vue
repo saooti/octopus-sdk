@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts">
+import dayjs from "dayjs";
 import PodcastInlineListTemplate from "./PodcastInlineListTemplate.vue";
 import octopusApi from "@saooti/octopus-api";
 import domHelper from "../../../helper/dom";
@@ -84,6 +85,7 @@ export default defineComponent({
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
     query: { default: undefined, type: String },
     podcastId: { default: undefined, type: Number },
+    lastThreeMonths: { default: false, type: Boolean },
   },
   emits: ["update:isArrow"],
 
@@ -225,6 +227,7 @@ export default defineComponent({
           sort: this.popularSort ? "POPULARITY" : "DATE",
           query: this.query,
           includeStatus: ["READY", "PROCESSING"],
+          after: this.popularSort && this.lastThreeMonths ? dayjs().subtract(3, 'months').toISOString(): undefined
         },
         true,
       );
