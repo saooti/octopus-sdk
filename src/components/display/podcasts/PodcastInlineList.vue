@@ -15,6 +15,7 @@
     :no-rubriquage-id="noRubriquageId"
     :query="query"
     :podcast-id="podcastId"
+    :last-three-months="lastThreeMonths"
     @update:is-arrow="$emit('update:isArrow', $event)"
   />
   <PodcastSwiperList
@@ -32,6 +33,7 @@
     :rubriquage-id="rubriquageId"
     :no-rubriquage-id="noRubriquageId"
     :query="query"
+    :last-three-months="lastThreeMonths"
     @update:is-arrow="$emit('update:isArrow', $event)"
   />
 </template>
@@ -67,6 +69,7 @@ export default defineComponent({
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
     query: { default: undefined, type: String },
     podcastId: { default: undefined, type: Number },
+    lastThreeMonths: { default: false, type: Boolean },
   },
   emits: ["update:isArrow"],
   computed: {

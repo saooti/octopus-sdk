@@ -1,5 +1,5 @@
 <template>
-  <div v-if="display" id="test-menu-dropdown" class="octopus-progress">
+  <div v-if="!inPlayer || display" id="test-menu-dropdown" class="octopus-progress">
     <div
       v-if="secondaryProgress"
       class="octopus-progress-bar bg-light"
@@ -97,6 +97,7 @@ export default defineComponent({
     mainProgress: { default: 0, type: Number },
     secondaryProgress: { default: 0, type: Number },
     isProgressCursor: { default: false, type: Boolean },
+    inPlayer: { default: false, type: Boolean },
   },
   data() {
     return {
