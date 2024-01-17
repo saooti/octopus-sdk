@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts">
+import { isServer } from "../../helper/environment";
 import { state } from "../../stores/ParamSdkStore";
 import orgaFilter from "../mixins/organisationFilter";
 import { Category } from "@/stores/class/general/category";
@@ -171,6 +172,9 @@ export default defineComponent({
       }
       this.firstLoaded = true;
       setTimeout(() => {
+        if (isServer) {
+          return;
+        }
         document.getElementById("mobile-menu-dropdown")?.click();
       }, 200);
     },

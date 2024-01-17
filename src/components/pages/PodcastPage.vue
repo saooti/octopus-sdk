@@ -146,6 +146,10 @@ export default defineComponent({
       fetchConference: undefined as Conference | undefined,
     };
   },
+  async serverPrefetch() {
+    await this.getPodcastDetails();
+    this.initConference();
+  },
 
   computed: {
     ...mapState(useGeneralStore, ["storedCategories"]),
@@ -287,7 +291,6 @@ export default defineComponent({
       }
     },
     podcastId: {
-      immediate: true,
       async handler() {
         await this.getPodcastDetails();
         this.initConference();

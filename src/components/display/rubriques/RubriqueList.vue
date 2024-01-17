@@ -57,6 +57,7 @@ import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { useFilterStore } from "@/stores/FilterStore";
+import resizePhone from "../../mixins/resizePhone";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 const RubriqueChooser = defineAsyncComponent(
@@ -70,6 +71,8 @@ export default defineComponent({
     RubriqueChooser,
   },
 
+  mixins: [resizePhone],
+
   props: {
     rubriquages: { default: () => [], type: Array as () => Array<Rubriquage> },
   },
@@ -79,6 +82,8 @@ export default defineComponent({
       hidenRubriques: [] as Array<Rubrique>,
       rubriques: [] as Array<Rubrique>,
       rubriquage: undefined as Rubriquage | undefined,
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
     };
   },
 
@@ -108,17 +113,14 @@ export default defineComponent({
   watch: {
     filterRubrique: {
       deep: true,
+      immediate:true,
       handler() {
         this.selectNewRubriquage();
       },
     },
-  },
-
-  mounted() {
-    this.selectNewRubriquage();
-  },
-  beforeUnmount(): void {
-    window.removeEventListener("resize", this.resizeWindow);
+    windowWidth() {
+      this.resizeWindow();
+    },
   },
   methods: {
     ...mapActions(useFilterStore, [
@@ -130,7 +132,6 @@ export default defineComponent({
         return;
       }
       this.filterUpdateRubriqueDisplay(this.rubriquage.rubriques);
-      window.addEventListener("resize", this.resizeWindow);
       this.$nextTick(() => {
         this.resizeWindow();
       });
@@ -186,7 +187,7 @@ export default defineComponent({
     },
     resizeWindow(): void {
       const rubriqueList = this.$refs.rubriqueListContainer as HTMLElement;
-      if (null === rubriqueList) {
+      if (!rubriqueList) {
         return;
       }
       rubriqueList.style.justifyContent = "flex-start";

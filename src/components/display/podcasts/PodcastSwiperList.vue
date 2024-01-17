@@ -103,8 +103,13 @@ export default defineComponent({
       this.$emit("update:isArrow", true);
     }
   },
+  async serverPrefetch () {
+    await this.fetchNext();
+  },
   mounted() {
-    this.fetchNext();
+    if(!this.allPodcasts.length){
+      this.fetchNext();
+    }
   },
   methods: {
     async fetchNext(): Promise<void> {
@@ -131,7 +136,10 @@ export default defineComponent({
           sort: this.popularSort ? "POPULARITY" : "DATE",
           query: this.query,
           includeStatus: ["READY", "PROCESSING"],
-          after: this.popularSort && this.lastThreeMonths ? dayjs().subtract(3, 'months').toISOString(): undefined
+          after:
+            this.popularSort && this.lastThreeMonths
+              ? dayjs().subtract(3, "months").toISOString()
+              : undefined,
         },
         true,
       );

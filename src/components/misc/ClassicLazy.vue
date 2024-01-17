@@ -9,10 +9,11 @@
 </template>
 <script lang="ts">
 import { useIntersectionObserver } from "@vueuse/core";
-import { ref, nextTick } from "vue";
+import { isClient } from "../../helper/environment";
+import { ref, nextTick, defineComponent } from "vue";
 
 function onIdle(cb = () => {}) {
-  if ("requestIdleCallback" in window) {
+  if (isClient && "requestIdleCallback" in window) {
     window.requestIdleCallback(cb);
   } else {
     setTimeout(() => {
@@ -21,7 +22,7 @@ function onIdle(cb = () => {}) {
   }
 }
 
-export default {
+export default defineComponent({
   props: {
     renderOnIdle: Boolean,
     unrender: Boolean,
@@ -94,5 +95,5 @@ export default {
 
     return { targetEl, shouldRender, fixedMinHeight };
   },
-};
+});
 </script>

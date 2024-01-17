@@ -1,4 +1,5 @@
 import { nextTick } from "vue";
+import { isClient } from './helper/environment';
 import { createI18n } from "vue-i18n";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
@@ -16,9 +17,11 @@ export function setupI18n(options: { locale: string }, isAuthenticated: boolean,
 export function setI18nLanguage(i18n: any, locale: string) {
   i18n.locale = locale;
   dayjs.locale(locale);
-  const html = document.querySelector("html");
-  if (html) {
-    html.setAttribute("lang", locale);
+  if(isClient){
+    const html = document.querySelector("html");
+    if (html) {
+      html.setAttribute("lang", locale);
+    }
   }
 }
 

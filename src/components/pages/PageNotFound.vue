@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import { defineTitle } from "../../helper/environment";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { useFilterStore } from "@/stores/FilterStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -54,7 +55,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    document.title = this.metaTitle;
+    defineTitle(this.metaTitle);
   },
 });
 </script>

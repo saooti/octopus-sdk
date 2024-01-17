@@ -1,5 +1,6 @@
 
 import {debounce} from './debounce';
+import { isServer } from '../../helper/environment';
 import { defineComponent } from 'vue';
 export default defineComponent({
   data() {
@@ -10,11 +11,13 @@ export default defineComponent({
     };
   },
   created() {
+    if(isServer){return;}
     this.debounceResizeEvent = debounce(this.handleResize, 500);
     window.addEventListener('resize', this.debounceResizeEvent);
     this.handleResize();
   },
   unmounted() {
+    if(isServer){return;}
     window.removeEventListener('resize', this.debounceResizeEvent);
   },
   methods: {

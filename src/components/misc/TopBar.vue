@@ -101,6 +101,7 @@
 </template>
 
 <script lang="ts">
+import { isServer, onClient } from "../../helper/environment";
 import { state } from "../../stores/ParamSdkStore";
 import HomeDropdown from "./HomeDropdown.vue";
 import { Organisation } from "@/stores/class/general/organisation";
@@ -223,10 +224,14 @@ export default defineComponent({
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    onClient(() => {
+      window.addEventListener("scroll", this.handleScroll);
+    });
   },
   beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
+    onClient(() => {
+      window.removeEventListener("scroll", this.handleScroll);
+    });
   },
   methods: {
     getQueriesRouter(routeName: string) {
@@ -240,24 +245,28 @@ export default defineComponent({
       };
     },
     handleScroll(): void {
+      if (isServer) {
+        return;
+      }
+      const scrollY = window.scrollY;
       if (
-        window.scrollY - this.oldScrollY > 0 &&
-        window.scrollY > 1 &&
+        scrollY - this.oldScrollY > 0 &&
+        scrollY > 1 &&
         document.body.offsetHeight - window.innerHeight > 40
       ) {
         this.scrolled = true;
         this.minScroll = 0;
       } else if (
-        window.scrollY - this.oldScrollY < 0 &&
-        window.scrollY < 1 &&
+        scrollY - this.oldScrollY < 0 &&
+        scrollY < 1 &&
         this.minScroll > 20
       ) {
         this.scrolled = false;
         this.minScroll = 0;
       }
-      this.oldScrollY = window.scrollY;
-      if (this.minScroll < window.scrollY) {
-        this.minScroll = window.scrollY;
+      this.oldScrollY = scrollY;
+      if (this.minScroll < scrollY) {
+        this.minScroll = scrollY;
       }
     },
     async onOrganisationSelected(

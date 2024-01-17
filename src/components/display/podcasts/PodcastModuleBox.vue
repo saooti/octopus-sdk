@@ -81,7 +81,6 @@
             {{ $t("Author credits") + " : " + authorCredit }}
           </div>
 
-          
           <a
             v-if="podcast.article"
             class="btn d-flex align-items-center my-2 width-fit-content mb-1"
@@ -145,6 +144,7 @@ import dayjs from "dayjs";
 // @ts-ignore
 import humanizeDuration from "humanize-duration";
 import displayMethods from "../../mixins/displayMethods";
+import goBackPage from "../../mixins/goBackPage";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
@@ -175,7 +175,7 @@ export default defineComponent({
     RecordingItemButton,
   },
 
-  mixins: [displayMethods, orgaComputed],
+  mixins: [displayMethods, orgaComputed, goBackPage],
 
   props: {
     playingPodcast: { default: undefined, type: Object as () => Podcast },
@@ -283,11 +283,9 @@ export default defineComponent({
     removeDeleted(): void {
       if (this.isLiveReadyToRecord) {
         this.$router.push("/main/pub/lives");
-      } else if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push("/");
+        return;
       }
+      this.goBack("/");
     },
   },
 });

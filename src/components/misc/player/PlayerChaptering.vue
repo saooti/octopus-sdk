@@ -9,7 +9,11 @@
       </div>
       <span class="saooti-right small-text" />
     </button>
-    <ChapteringModal v-if="showChaptering" @close="showChaptering = false" :actual-chapter="actualIndex" />
+    <ChapteringModal
+      v-if="showChaptering"
+      :actual-chapter="actualIndex"
+      @close="showChaptering = false"
+    />
   </div>
   <div v-else-if="playerChapteringPercent" class="margin-chaptering"></div>
 </template>
@@ -72,15 +76,18 @@ export default defineComponent({
   },
   methods: {
     isInChapter(val: number, chapter: ChapterPercent) {
-      return Math.floor(chapter.startPercent) <= val && val < Math.floor(chapter.endPercent);
+      return (
+        Math.floor(chapter.startPercent) <= val &&
+        val < Math.floor(chapter.endPercent)
+      );
     },
   },
 });
 </script>
 <style lang="scss">
 .octopus-app {
- .margin-chaptering{
-  height: 23px;
- }
+  .margin-chaptering {
+    height: 23px;
+  }
 }
 </style>

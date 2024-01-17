@@ -3,8 +3,8 @@
     <button
       v-if="isAuthenticatedWithOrga"
       :title="$t('My space')"
-      @click="goToAdministration"
       class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu"
+      @click="goToAdministration"
     />
     <router-link
       v-if="isAuthenticatedWithOrga && isContribution"
@@ -60,7 +60,7 @@
           </template>
         </template>
         <hr />
-        <a class="octopus-dropdown-item c-hand" @click="logoutFunction" >
+        <a class="octopus-dropdown-item c-hand" @click="logoutFunction">
           {{ $t("Logout") }}
         </a>
       </template>
@@ -72,6 +72,7 @@
 </template>
 
 <script lang="ts">
+import goBackPage from "../mixins/goBackPage";
 import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
@@ -84,6 +85,7 @@ export default defineComponent({
   components: {
     ClassicPopover,
   },
+  mixins: [goBackPage],
   props: {
     isEducation: { default: false, type: Boolean },
   },
@@ -148,25 +150,23 @@ export default defineComponent({
       return state.generalParameters.isContribution ?? false;
     },
   },
-  methods:{
-    async logoutFunction(){
+  methods: {
+    async logoutFunction() {
       try {
-        await crudApi.postData(4, '/logout', undefined);
-        await this.$router.push({ path: '/' });
+        await crudApi.postData(4, "/logout", undefined);
+        await this.$router.push({ path: "/" });
         location.reload();
       } catch (error) {
         //Do nothing
       }
     },
-    goToAdministration(){
-      if("backoffice" !== this.$route.name){
+    goToAdministration() {
+      if ("backoffice" !== this.$route.name) {
         this.$router.push("/main/priv/backoffice");
-      }else if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push("/");
+        return;
       }
-    }
-  }
+      this.goBack("/");
+    },
+  },
 });
 </script>

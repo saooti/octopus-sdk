@@ -1,3 +1,4 @@
+import { isServer } from '../../helper/environment';
 import { Category } from "@/stores/class/general/category";
 import orgaFilter from "../mixins/organisationFilter";
 import octopusApi from "@saooti/octopus-api";
@@ -30,6 +31,9 @@ export default defineComponent({
         this.storedUpdateCategories(
           state.generalParameters.allCategories as Array<Category>,
         );
+      }
+      if(isServer){
+        return;
       }
       const captcha = document.getElementsByClassName(
         "grecaptcha-badge",

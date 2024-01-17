@@ -41,6 +41,7 @@
 <script lang="ts">
 import octopusApi from "@saooti/octopus-api";
 import { state } from "../../../stores/ParamSdkStore";
+import resizePhone from "../../mixins/resizePhone";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Category } from "@/stores/class/general/category";
 import { useFilterStore } from "@/stores/FilterStore";
@@ -53,6 +54,8 @@ export default defineComponent({
     ClassicPopover,
   },
 
+  mixins: [resizePhone],
+
   props: {
     isFilter: { default: false, type: Boolean },
     isDisplay: { default: false, type: Boolean },
@@ -62,6 +65,8 @@ export default defineComponent({
   data() {
     return {
       hidenCategories: [] as Array<Category>,
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
     };
   },
 
@@ -94,6 +99,9 @@ export default defineComponent({
     },
   },
   watch: {
+    windowWidth() {
+      this.resizeWindow();
+    },
     watchVariable: {
       deep: true,
       immediate: true,
@@ -112,12 +120,6 @@ export default defineComponent({
         }
       },
     },
-  },
-  mounted() {
-    window.addEventListener("resize", this.resizeWindow);
-  },
-  beforeUnmount(): void {
-    window.removeEventListener("resize", this.resizeWindow);
   },
 
   methods: {

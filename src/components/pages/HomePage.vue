@@ -1,7 +1,8 @@
 <template>
   <div class="page-box">
     <template v-if="0 === rubriquageFilter.length">
-      <ClassicLazy
+      <component 
+        :is="3<index ? 'classic-lazy':'div'"
         v-for="(c, index) in categories"
         :key="c.id"
         :min-height="0"
@@ -15,10 +16,11 @@
         <template #preview>
           <div style="min-height: 650px"></div>
         </template>
-      </ClassicLazy>
+      </component>
     </template>
     <template v-else>
-      <ClassicLazy
+     <component 
+        :is="3<index ? 'classic-lazy':'div'"
         v-for="(r, index) in rubriqueToShow"
         :key="r.rubriqueId"
         :min-height="0"
@@ -32,7 +34,7 @@
         <template #preview>
           <div style="min-height: 650px"></div>
         </template>
-      </ClassicLazy>
+      </component>
       <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
         <PodcastInlineList
           v-if="rubriqueDisplay.length < rubriqueMaxDisplay"

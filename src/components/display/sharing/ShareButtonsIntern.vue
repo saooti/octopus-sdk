@@ -18,15 +18,6 @@
             <div :class="button.icon" />
           </a>
         </template>
-        <!-- <router-link
-          v-if="!isPodcastmaker && authenticated && podcast && isProduction"
-          :class="getClass('saooti-share')"
-          :title="$t('Advanced sharing')"
-          :to="{
-            name: 'advancedShare',
-            params: { podcastId: podcast.podcastId },
-          }"
-        /> -->
       </div>
     </div>
     <div v-if="podcast || emission || playlist" class="d-flex flex-column me-2">
@@ -87,37 +78,40 @@
         />
       </div>
     </div>
-
-    <ClipboardModal
-      v-if="dataRSSSave"
-      :link="rssUrl"
-      :emission="emission"
-      @close="dataRSSSave = false"
-      @copy="afterCopy"
-    />
-    <NewsletterModal
-      v-if="newsletter"
-      :closable="true"
-      :podcast="podcast"
-      :emission="emission"
-      :playlist="playlist"
-      @close="newsletter = false"
-    />
-    <QrCodeModal
-      v-if="qrCode"
-      :closable="true"
-      :url-page="urlPage"
-      @close="qrCode = false"
-    />
-    <SnackBar
-      v-if="lazyLoadingSnackbar"
-      ref="snackbar"
-      position="bottom-left"
-    />
+    <ClientOnly>
+      <ClipboardModal
+        v-if="dataRSSSave"
+        :link="rssUrl"
+        :emission="emission"
+        @close="dataRSSSave = false"
+        @copy="afterCopy"
+      />
+      <NewsletterModal
+        v-if="newsletter"
+        :closable="true"
+        :podcast="podcast"
+        :emission="emission"
+        :playlist="playlist"
+        @close="newsletter = false"
+      />
+      <QrCodeModal
+        v-if="qrCode"
+        :closable="true"
+        :url-page="urlPage"
+        @close="qrCode = false"
+      />
+      <SnackBar
+        v-if="lazyLoadingSnackbar"
+        ref="snackbar"
+        position="bottom-left"
+      />
+    </ClientOnly>
   </div>
 </template>
 
 <script lang="ts">
+import ClientOnly from "../../misc/ClientOnly.vue";
+import { isMobile, pageUrl } from "../../../helper/environment";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapState } from "pinia";
 import octopusApi from "@saooti/octopus-api";
@@ -143,6 +137,7 @@ export default defineComponent({
     NewsletterModal,
     QrCodeModal,
     SnackBar,
+    ClientOnly,
   },
 
   mixins: [displayMethods],
@@ -205,12 +200,12 @@ export default defineComponent({
           icon: "saooti-Whatsapp",
           className: "btn-whatsapp",
           url: `whatsapp://send?text=${this.urlPage}`,
-          condition: window.matchMedia("(hover: none)").matches,
+          condition: isMobile,
         },
       ];
     },
     urlPage(): string {
-      return window.location.href;
+      return pageUrl();
     },
     authenticated(): boolean {
       return state.generalParameters.authenticated as boolean;

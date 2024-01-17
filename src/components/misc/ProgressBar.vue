@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!inPlayer || display" id="test-menu-dropdown" class="octopus-progress">
+  <div
+    v-if="!inPlayer || display"
+    id="test-menu-dropdown"
+    class="octopus-progress"
+  >
     <div
       v-if="secondaryProgress"
       class="octopus-progress-bar bg-light"

@@ -80,6 +80,7 @@
 </template>
 
 <script lang="ts">
+import { pageUrl } from "../../../helper/environment";
 import ClassicModal from "../modal/ClassicModal.vue";
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import SnackBar from "../../misc/SnackBar.vue";
@@ -124,7 +125,7 @@ export default defineComponent({
       displayParticipantsNames: true as boolean,
       displayEmissionName: true as boolean,
       color: "#40a372" as string,
-      shareUrl: window.location.href,
+      shareUrl: pageUrl(),
     };
   },
 

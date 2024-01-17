@@ -5,7 +5,7 @@
     :secondary-progress="percentLiveProgress"
     :alert-bar="displayAlertBar ? durationLivePosition : undefined"
     :class="classProgress"
-    :inPlayer="true"
+    :in-player="true"
     @mouseup="seekTo"
   />
   <CommentPlayer

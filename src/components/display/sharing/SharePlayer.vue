@@ -89,6 +89,7 @@
 </template>
 
 <script lang="ts">
+import { isClient } from "../../../helper/environment";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -367,7 +368,7 @@ export default defineComponent({
       if (this.playerAutoPlay) {
         url.push("&autoplay=true");
       }
-      if (this.isVisible) {
+      if (this.isVisible && isClient) {
         url.push("&key=" + window.btoa(this.dataTitle.toString()));
       }
       return url;

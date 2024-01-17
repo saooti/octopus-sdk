@@ -48,6 +48,7 @@
 </template>
 
 <script lang="ts">
+import { onClient, windowScrollY } from "../../../helper/environment";
 import domHelper from "../../../helper/dom";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { state } from "../../../stores/ParamSdkStore";
@@ -115,15 +116,17 @@ export default defineComponent({
       this.$emit("update:rowsPerPage", sizeValue);
     },
     scrollToTop() {
-      const element = document.getElementById(this.id);
-      if (!element || element.getBoundingClientRect().top > 0) {
-        return;
-      }
-      const y =
-        element.getBoundingClientRect().top +
-        window.scrollY -
-        domHelper.convertRemToPixels(3.5);
-      window.scrollTo({ top: y, behavior: "smooth" });
+      onClient(() => {
+        const element = document.getElementById(this.id);
+        if (!element || element.getBoundingClientRect().top > 0) {
+          return;
+        }
+        const y =
+          element.getBoundingClientRect().top +
+          windowScrollY() -
+          domHelper.convertRemToPixels(3.5);
+        window.scrollTo({ top: y, behavior: "smooth" });
+      });
     },
   },
 });

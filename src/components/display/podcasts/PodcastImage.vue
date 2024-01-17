@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts">
+import { isMobile } from "../../../helper/environment";
 import PodcastPlayButton from "./PodcastPlayButton.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -84,7 +85,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker as boolean;
     },
     isMobile(): boolean {
-      return window.matchMedia("(hover: none)").matches;
+      return isMobile;
     },
     isRecordedInLive(): boolean {
       return (

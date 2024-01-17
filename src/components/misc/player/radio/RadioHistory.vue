@@ -34,6 +34,7 @@
 <script lang="ts">
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState } from "pinia";
+import resizePhone from "../../../mixins/resizePhone";
 import dayjs from "dayjs";
 import { fetchRadioData } from "../../../mixins/radio/fetchRadioData";
 import { defineComponent } from "vue";
@@ -43,12 +44,14 @@ export default defineComponent({
 
   components: {},
 
-  mixins: [fetchRadioData],
+  mixins: [fetchRadioData, resizePhone],
   emits: ["updateNotListenTime"],
   data() {
     return {
       indexStart: 0 as number,
       indexNotDisplay: 100 as number,
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
     };
   },
 
@@ -68,16 +71,9 @@ export default defineComponent({
         });
       },
     },
-  },
-  created() {
-    window.addEventListener("resize", () => {
+    windowWidth() {
       this.handleResize(0);
-    });
-  },
-  unmounted() {
-    window.removeEventListener("resize", () => {
-      this.handleResize(0);
-    });
+    },
   },
   mounted() {
     this.handleResize(0);

@@ -62,7 +62,8 @@
 
 <script lang="ts">
 import vSelect from "vue-select";
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   components: {
     vSelect,
   },
@@ -160,7 +161,7 @@ export default {
       this.$emit("selected", this.optionSelected);
     },
   },
-};
+});
 </script>
 <style lang="scss">
 @import "vue-select/dist/vue-select.css";

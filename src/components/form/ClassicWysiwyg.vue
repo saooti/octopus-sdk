@@ -164,6 +164,7 @@
 </template>
 
 <script lang="ts">
+import { isServer } from "../../helper/environment";
 import { EditorContent, Editor } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -239,7 +240,7 @@ export default defineComponent({
       }
     },
     setLink() {
-      if (!this.editor) {
+      if (!this.editor || isServer) {
         return;
       }
       const previousUrl = this.editor.getAttributes("link").href;

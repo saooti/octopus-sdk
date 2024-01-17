@@ -31,6 +31,8 @@ export const getErrorMessage = () => import("./src/components/misc/ErrorMessage.
 export const getPopover = () => import("./src/components/misc/ClassicPopover.vue");
 export const getClassicModal = () => import("./src/components/misc/modal/ClassicModal.vue");
 export const getClassicLazy = () => import("./src/components/misc/ClassicLazy.vue");
+export const getClientOnly = () => import("./src/components/misc/ClientOnly.vue");
+export const getServerOnly = () => import("./src/components/misc/ServerOnly.vue");
 
 
 //Display
@@ -86,6 +88,9 @@ import initSDK from "./src/components/mixins/init.ts";
 import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
 import resizePhone from "./src/components/mixins/resizePhone.ts";
 
+//Helpers
+import { isClient, isServer, onClient, onServer, defineTitle, pageUrl, isMobile } from './src/helper/environment.ts';
+
 export {
     selenium,
     cookies,
@@ -94,5 +99,12 @@ export {
     orgaFilter,
     initSDK,
     tagOfMixins,
-    resizePhone
+    resizePhone,
+    isClient,
+    isServer,
+    onClient,
+    onServer,
+    defineTitle, 
+    pageUrl,
+    isMobile
 };
