@@ -8,6 +8,8 @@ export interface Radio {
   history: Array<MediaRadio>;
   isInit: boolean;
   podcast?: Podcast;
+  sessionId?: string;
+  dateSessionId?:string;
 }
 export interface MediaRadio {
   artist: string;
