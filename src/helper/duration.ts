@@ -10,9 +10,10 @@ export default {
     return value.toString();
   },
   formatDuration(totalSeconds: number, separator="'", isLast=true): string {
+    const secondSeparator = "'"===separator ? "''": separator;
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
     const seconds = totalSeconds - hours * 3600 - minutes * 60;
-    return (hours > 0? this.formatToString(hours)+separator:"") + this.formatToString(minutes) +separator+ this.formatToString(seconds) + (isLast?separator:'' );
+    return (hours > 0? this.formatToString(hours)+separator:"") + this.formatToString(minutes) +separator+ this.formatToString(seconds) + (isLast?secondSeparator:'' );
   },
 };

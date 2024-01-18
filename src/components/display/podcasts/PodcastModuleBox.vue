@@ -133,6 +133,7 @@
     <TagList
       v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
       :tag-list="podcast.tags"
+      :podcast-annotations="podcast.annotations"
     />
   </div>
 </template>
