@@ -6,7 +6,12 @@
     <div>
       {{ $t("Podcast tags") + ": " }}
     </div>
-    <div v-for="(tag, index) in tagList" :key="tag" class="tag-list-element" :class="ouestFranceMainTag === tag ? 'main-of-tag':''">
+    <div
+      v-for="(tag, index) in tagList"
+      :key="tag"
+      class="tag-list-element"
+      :class="ouestFranceMainTag === tag ? 'main-of-tag' : ''"
+    >
       <div
         :id="'tag-list-from-podcast-page' + index"
         role="button"
@@ -47,20 +52,29 @@ export default defineComponent({
   mixins: [tagOfMixins],
   props: {
     tagList: { default: () => [], type: Array as () => Array<string> },
-    podcastAnnotations: { default: () => {}, type: Object as () => { [key: string]: string | number | boolean | undefined } },
+    podcastAnnotations: {
+      default: () => {},
+      type: Object as () => {
+        [key: string]: string | number | boolean | undefined;
+      },
+    },
   },
-  computed:{
-    ouestFranceMainTag():string|undefined{
-      if(this.podcastAnnotations?.["mainOfTag"]){
+  computed: {
+    ouestFranceMainTag(): string | undefined {
+      if (this.podcastAnnotations?.["mainOfTag"]) {
         for (var key in this.podcastAnnotations) {
-          if(this.podcastAnnotations[key] === this.podcastAnnotations["mainOfTag"] && key!=="mainOfTag"){
-            return '[of]'+key;
+          if (
+            this.podcastAnnotations[key] ===
+              this.podcastAnnotations["mainOfTag"] &&
+            key !== "mainOfTag"
+          ) {
+            return "[of]" + key;
           }
         }
       }
       return undefined;
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -81,7 +95,7 @@ export default defineComponent({
       border: 1px solid #999;
       border-radius: $octopus-borderradius;
     }
-    .main-of-tag{
+    .main-of-tag {
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
       font-size: 0.9rem;
     }

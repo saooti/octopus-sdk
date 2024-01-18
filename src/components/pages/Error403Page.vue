@@ -24,15 +24,10 @@
       v-if="authenticated"
       class="btn btn-primary"
       @click="logoutFunction"
-
-      >{{ authText }}</button
     >
-    <a
-      v-else
-      class="btn btn-primary"
-      href="/sso/login"
-      >{{ authText }}</a
-    >
+      {{ authText }}
+    </button>
+    <a v-else class="btn btn-primary" href="/sso/login">{{ authText }}</a>
   </div>
 </template>
 
@@ -56,17 +51,17 @@ export default defineComponent({
   mounted() {
     document.title = this.metaTitle;
   },
-  methods:{
-    async logoutFunction(){
+  methods: {
+    async logoutFunction() {
       try {
-        await crudApi.postData(4, '/logout', undefined);
-        await this.$router.push({ path: '/' });
+        await crudApi.postData(4, "/logout", undefined);
+        await this.$router.push({ path: "/" });
         location.reload();
       } catch (error) {
         //Do nothing
       }
-    }
-  }
+    },
+  },
 });
 </script>
 <style lang="scss">

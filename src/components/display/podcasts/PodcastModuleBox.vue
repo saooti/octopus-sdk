@@ -81,7 +81,6 @@
             {{ $t("Author credits") + " : " + authorCredit }}
           </div>
 
-          
           <a
             v-if="podcast.article"
             class="btn d-flex align-items-center my-2 width-fit-content mb-1"
