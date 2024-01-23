@@ -39,10 +39,6 @@
         />
         <!-- eslint-enable -->
         <div class="my-3">
-          <ParticipantDescription
-            class="mb-1"
-            :participants="podcast.animators"
-          />
           <div class="mb-1">
             {{ $t("Emission") + " : " }}
             <router-link
@@ -57,6 +53,15 @@
               {{ podcast.emission.name }}
             </router-link>
           </div>
+          <ParticipantDescription
+            class="mb-1"
+            :participants="podcast.animators"
+          />
+          <ParticipantDescription
+            class="mb-1"
+            :participants="podcast.guests"
+            :is-guest="true"
+          />
           <div v-if="!isPodcastmaker" class="mb-1">
             {{ $t("Producted by : ") }}
             <router-link
@@ -91,11 +96,6 @@
             <span class="saooti-newspaper me-1" />
             <div>{{ $t("See associated article") }}</div>
           </a>
-          <ParticipantDescription
-            class="mb-1"
-            :participants="podcast.guests"
-            :is-guest="true"
-          />
           <PodcastPlayBar
             v-if="isProgressBar"
             :podcast-id="podcast.podcastId"
