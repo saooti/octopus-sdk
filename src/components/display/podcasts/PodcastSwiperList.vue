@@ -131,7 +131,10 @@ export default defineComponent({
           sort: this.popularSort ? "POPULARITY" : "DATE",
           query: this.query,
           includeStatus: ["READY", "PROCESSING"],
-          after: this.popularSort && this.lastThreeMonths ? dayjs().subtract(3, 'months').toISOString(): undefined
+          after:
+            this.popularSort && this.lastThreeMonths
+              ? dayjs().subtract(3, "months").toISOString()
+              : undefined,
         },
         true,
       );
