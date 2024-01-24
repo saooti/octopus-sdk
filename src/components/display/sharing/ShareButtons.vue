@@ -69,7 +69,7 @@
           />
         </div>
       </div>
-      <div v-if="!isPodcastmaker && authenticated && podcast && isProduction" class="d-flex flex-column me-2">
+      <div v-if="shareAiAuth" class="d-flex flex-column me-2">
         <div class="h4 mb-2">
           {{ $t("Generate a social media post (with AI)") }}
         </div>
@@ -167,9 +167,16 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useAuthStore, ["isGarStudent"]),
+    ...mapState(useAuthStore, ["isGarStudent", "authOrganisation"]),
     authenticated(): boolean {
       return state.generalParameters.authenticated as boolean;
+    },
+    shareAiAuth(): boolean{
+      return !this.isPodcastmaker && this.authenticated && undefined!==this.podcast && this.isProduction && 
+      ((this.authOrganisation.attributes?.["openAi"] as
+          | string
+          | undefined) === "true" ?? false
+      );
     },
     titleRssButton(): string {
       if (this.participantId) {
