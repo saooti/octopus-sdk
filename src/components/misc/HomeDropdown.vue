@@ -3,18 +3,18 @@
     <button
       v-if="isAuthenticatedWithOrga"
       :title="$t('My space')"
-      class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu"
+      class="btn admin-button hide-smallest-screen m-1 saooti-admin-menu text-blue-octopus"
       @click="goToAdministration"
     />
     <router-link
       v-if="isAuthenticatedWithOrga && isContribution"
       :title="$t('Upload')"
       to="/main/priv/upload"
-      class="btn admin-button hide-smallest-screen m-1 saooti-upload"
+      class="btn admin-button hide-smallest-screen m-1 saooti-download text-blue-octopus"
     />
     <button
       id="home-dropdown"
-      class="btn m-1 admin-button saooti-user"
+      class="btn m-1 admin-button saooti-user text-blue-octopus"
       :title="$t('User menu')"
     />
     <ClassicPopover

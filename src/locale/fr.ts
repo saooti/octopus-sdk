@@ -184,7 +184,6 @@ export default {
   Stop: "Stop",
   "Podcast in cancelled status": "Épisode avec un traitement qui a été annulé",
   "Show every episode": "Afficher tous les épisodes",
-  "Subscribe emission": "Écouter sur une plateforme de streaming",
   "Rss feed parameters": "Paramètres du flux RSS",
   "Not share episodes before":
     "Ne pas partager les épisodes publiés il y a moins de",
@@ -358,4 +357,5 @@ export default {
   "Generate a social media post (with AI)":"Générer un post réseaux sociaux (avec IA)",
   "Share in one click":"Partager en un clic",
   "Chaptering":"Chapitrage",
+  "Listen to the latest episode":"Écouter le dernier épisode",
 };

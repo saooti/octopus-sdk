@@ -1,7 +1,7 @@
 <template>
   <div class="module-box overflow-visible">
     <div class="d-flex justify-content-between align-items-center">
-      <h2 class="big-h2 mb-3 height-40">
+      <h2 class="big-h2 mb-3">
         {{ $t("Embed") }}
       </h2>
       <div

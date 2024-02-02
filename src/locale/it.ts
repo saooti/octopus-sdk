@@ -179,7 +179,6 @@ export default{
     Stop: 'Stop',
     'Podcast in cancelled status': 'Podcast contrassegnato come eliminato',
     'Show every episode': 'Mostra tutti gli episodi',
-    'Subscribe emission': "Iscriviti alla serie",
     'Rss feed parameters': 'Impostazioni RSS Feed',
     'Not share episodes before':
       'Non condividere episodi prima',
@@ -344,4 +343,5 @@ export default{
   "Generate a social media post (with AI)":"Genera un post sui social media (con AI)",
   "Share in one click":"Condividi con un clic",
   "Chaptering":"Capitolazione",
+  "Listen to the latest episode":"Ascolta l'ultimo episodio",
   };

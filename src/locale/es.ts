@@ -183,7 +183,6 @@ export default {
   Stop: "Detener",
   "Podcast in cancelled status": "Pódcast cancelado",
   "Show every episode": "Mostrar cada episodio",
-  "Subscribe emission": "Subscribir el programa",
   "Rss feed parameters": "Ajustes del canal RSS",
   "Not share episodes before": "No compartir episodios anteriores al",
   "Not share episodes after": "No compartir episodios a partir del",
@@ -352,4 +351,5 @@ export default {
   "Generate a social media post (with AI)":"Generar una publicación en las redes sociales (con IA)",
   "Share in one click":"Comparte en un clic",
   "Chaptering":"Capítulos",
+  "Listen to the latest episode":"Escuche el último episodio",
 }

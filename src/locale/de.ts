@@ -184,7 +184,6 @@ export default {
   Stop: "Anhalten",
   "Podcast in cancelled status": "Dieser Podcast wurde gestrichen",
   "Show every episode": "Alle Folgen anzeigen",
-  "Subscribe emission": "Reihe abonnieren",
   "Rss feed parameters": "RSS-Feed-Einstellungen",
   "Not share episodes before": "Folgen erst teilen ab",
   "Not share episodes after": "Folgen nicht mehr teilen ab",
@@ -351,4 +350,5 @@ export default {
   "Generate a social media post (with AI)":"Einen Social-Media-Beitrag erstellen (mit KI)",
   "Share in one click":"Mit einem Klick teilen",
   "Chaptering":"Kapitelaufteilung",
+  "Listen to the latest episode":"Hören Sie sich die neueste Folge an",
 }

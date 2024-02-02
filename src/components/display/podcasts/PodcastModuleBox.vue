@@ -32,6 +32,7 @@
         <div class="text-uppercase h2 mb-3">
           {{ podcast.title }}
         </div>
+        <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
         <!-- eslint-disable vue/no-v-html -->
         <div
           class="descriptionText html-wysiwyg-content"
@@ -134,6 +135,13 @@
       :tag-list="podcast.tags"
       :podcast-annotations="podcast.annotations"
     />
+    <SubscribeButtons 
+      v-if="isPodcastmaker"
+      class="mt-4"
+      :emission="podcast.emission"
+      :window-width="1000"
+      :justify-center="false"
+    />
   </div>
 </template>
 
@@ -162,6 +170,12 @@ const EditBox = defineAsyncComponent(
 const PodcastPlayBar = defineAsyncComponent(
   () => import("./PodcastPlayBar.vue"),
 );
+const SubscribeButtons = defineAsyncComponent(
+  () => import("../sharing/SubscribeButtons.vue"),
+);
+const Countdown = defineAsyncComponent(
+  () => import("../live/CountDown.vue"),
+);
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 export default defineComponent({
   name: "PodcastModuleBox",
@@ -173,6 +187,8 @@ export default defineComponent({
     PodcastPlayBar,
     EditBox,
     RecordingItemButton,
+    SubscribeButtons,
+    Countdown
   },
 
   mixins: [displayMethods, orgaComputed],
@@ -186,6 +202,19 @@ export default defineComponent({
   emits: ["updatePodcast"],
 
   computed: {
+    isCounter(): boolean {
+      return (
+        this.isLiveReadyToRecord &&
+        undefined !== this.fetchConference &&
+        ("PLANNED" === this.fetchConference.status ||
+          "PENDING" === this.fetchConference.status)
+      );
+    },
+    timeRemaining(): string {
+      return !this.podcast
+        ? ""
+        : dayjs(this.podcast.pubDate).diff(dayjs(), "seconds").toString();
+    },
     errorMessage(): string {
       if (!this.podcast?.availability.visibility) {
         return this.$t("Podcast is not visible for listeners");

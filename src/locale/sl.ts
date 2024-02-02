@@ -178,7 +178,6 @@ export default {
   Stop: "Stop",
   "Podcast in cancelled status": "Podkast ima status „odpovedan“",
   "Show every episode": "Prikaži vse epizode",
-  "Subscribe emission": "Naroči se na oddajo",
   "Rss feed parameters": "Nastavitve vira RSS",
   "Not share episodes before": "Ne deli epizod pred",
   "Not share episodes after": "Ne deli epizod po",
@@ -341,4 +340,5 @@ export default {
   "Generate a social media post (with AI)":"Ustvarite objavo v družabnem omrežju (z AI)",
   "Share in one click":"Delite z enim klikom",
   "Chaptering":"Poglavje",
+  "Listen to the latest episode":"Poslušajte najnovejšo epizodo",
 }

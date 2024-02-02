@@ -1,12 +1,11 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <div class="page-element-title-container">
-        <div class="page-element-title">
-          <h1>{{ $t("Emission") }}</h1>
-        </div>
-        <div class="page-element-bg" :style="backgroundDisplay" />
-      </div>
+      <PodcastmakerHeader
+        v-if="isPodcastmaker"
+        :pageTitle="$t('Emission')"
+        :imageUrl="emission.imageUrl"
+      />
       <div class="d-flex flex-column page-element">
         <div class="module-box">
           <div class="d-flex mb-2">
@@ -25,6 +24,20 @@
                 v-html="urlify(description)"
               />
               <!-- eslint-enable -->
+              <div v-if="lastPodcast" class="d-flex align-items-center mt-3">
+                <PodcastPlayButton
+                  :podcast="lastPodcast"
+                  :just-buttons="true"
+                />
+                <div class="ms-2 fw-bold">{{ $t('Listen to the latest episode') }}</div>
+              </div>
+              <SubscribeButtons 
+                v-if="isPodcastmaker"
+                class="mt-4"
+                :emission="emission"
+                :window-width="1000"
+                :justify-center="false"
+              />
             </div>
           </div>
           <EditBox
@@ -43,20 +56,7 @@
           :organisation-id="myOrganisationId"
           :is-education="isEducation"
         />
-        <ShareButtons
-          v-if="pageParameters.isShareButtons"
-          :emission="emission"
-          :organisation-id="emission.orga.id"
-        />
-        <SubscribeButtons
-          v-if="pageParameters.isShareButtons && countLink >= 1"
-          :emission="emission"
-        />
-        <ShareDistribution
-          v-if="editRight && pageParameters.isShareDistribution"
-          :emission-id="emissionId"
-        />
-        <template v-if="pageParameters.isDisplayPodcasts">
+        <div v-if="pageParameters.isDisplayPodcasts" class="module-box">
           <LiveHorizontalList
             v-if="!isPodcastmaker"
             class="mx-2"
@@ -69,8 +69,18 @@
             :category-filter="false"
             :edit-right="editRight"
             :productor-id="[emission.orga.id]"
+            @fetch="podcastsFetched"
           />
-        </template>
+        </div>
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :emission="emission"
+          :organisation-id="emission.orga.id"
+        />
+        <ShareDistribution
+          v-if="editRight && pageParameters.isShareDistribution"
+          :emission-id="emissionId"
+        />
       </div>
     </template>
     <ClassicLoading
@@ -91,6 +101,9 @@ import { Emission } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
+import { mapActions } from "pinia";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { Podcast } from "@/stores/class/general/podcast";
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
 );
@@ -112,6 +125,12 @@ const SubscribeButtons = defineAsyncComponent(
 const LiveHorizontalList = defineAsyncComponent(
   () => import("../display/live/LiveHorizontalList.vue"),
 );
+const PodcastPlayButton = defineAsyncComponent(
+  () => import("../display/podcasts/PodcastPlayButton.vue"),
+);
+const PodcastmakerHeader = defineAsyncComponent(
+  () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
+);
 export default defineComponent({
   components: {
     PodcastFilterList,
@@ -122,6 +141,8 @@ export default defineComponent({
     SubscribeButtons,
     LiveHorizontalList,
     ClassicLoading,
+    PodcastPlayButton,
+    PodcastmakerHeader
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
@@ -141,6 +162,7 @@ export default defineComponent({
       exclusive: false as boolean,
       notExclusive: false as boolean,
       fetchLive: true as boolean,
+      lastPodcast: undefined as Podcast | undefined,
     };
   },
 
@@ -173,36 +195,6 @@ export default defineComponent({
         true === state.generalParameters.isAdmin
       );
     },
-    countLink(): number {
-      const platformShare = [
-        "amazon",
-        "googlePodcasts",
-        "applePodcast",
-        "deezer",
-        "spotify",
-        "tunein",
-        "radioline",
-        "podcastAddict",
-        "playerFm",
-        "pocketCasts",
-        "iHeart",
-      ];
-      let count = 0;
-      for (let i = 0, len = platformShare.length; i < len; i++) {
-        if (undefined !== this.emission?.annotations?.[platformShare[i]])
-          count++;
-      }
-      return count;
-    },
-    backgroundDisplay(): string {
-      if (!this.emission) {
-        return "";
-      }
-      return `background-image: url('${this.proxyImageUrl(
-        this.emission.imageUrl,
-        "250",
-      )}');`;
-    },
   },
   watch: {
     emissionId: {
@@ -212,7 +204,12 @@ export default defineComponent({
       },
     },
   },
+  beforeUnmount(){
+    this.contentToDisplayUpdate(null);
+  },
+
   methods: {
+    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     initError(): void {
       this.error = true;
       this.loaded = true;
@@ -245,6 +242,7 @@ export default defineComponent({
           this.initError();
           return;
         }
+        this.contentToDisplayUpdate(this.emission);
         this.$emit("emissionTitle", this.name);
         this.loaded = true;
         this.handleAnnotations();
@@ -253,6 +251,11 @@ export default defineComponent({
         this.initError();
       }
     },
+    podcastsFetched(podcasts: Array<Podcast>){
+      if(podcasts.length){
+        this.lastPodcast = podcasts[0];
+      }
+    }
   },
 });
 </script>

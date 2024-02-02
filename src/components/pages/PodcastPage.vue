@@ -1,13 +1,11 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <div class="page-element-title-container">
-        <div class="page-element-title">
-          <h1>{{ titlePage }}</h1>
-          <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
-        </div>
-        <div class="page-element-bg" :style="backgroundDisplay" />
-      </div>
+      <PodcastmakerHeader
+        v-if="isPodcastmaker"
+        :pageTitle="titlePage"
+        :imageUrl="podcast.imageUrl"
+      />
       <div class="d-flex flex-column page-element">
         <PodcastModuleBox
           :playing-podcast="playingPodcast"
@@ -24,15 +22,7 @@
           :organisation-id="myOrganisationId"
           :is-education="isEducation"
         />
-        <ShareButtons
-          v-if="pageParameters.isShareButtons"
-          :podcast="podcast"
-          :organisation-id="podcast.organisation.id"
-        />
-        <SubscribeButtons
-          v-if="pageParameters.isShareButtons && countLink >= 1"
-          :emission="podcast.emission"
-        />
+        
         <CommentSection
           v-if="!isPodcastmaker && isComments"
           ref="commentSection"
@@ -40,11 +30,16 @@
           :fetch-conference="fetchConference"
         />
         <PodcastInlineList
-          class="mt-4"
+          class="mt-4 module-box"
           :emission-id="podcast.emission.emissionId"
           :href="'/main/pub/emission/' + podcast.emission.emissionId"
           :title="$t('More episodes of this emission')"
           :button-text="$t('All podcast emission button')"
+        />
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :podcast="podcast"
+          :organisation-id="podcast.organisation.id"
         />
         <ClassicLazy :min-height="550">
           <PodcastInlineList
@@ -83,7 +78,6 @@ import ClassicLoading from "../form/ClassicLoading.vue";
 import octopusApi from "@saooti/octopus-api";
 import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
-import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
 import {
   Conference,
@@ -94,7 +88,7 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Category } from "@/stores/class/general/category";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
 const ShareButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareButtons.vue"),
@@ -102,14 +96,11 @@ const ShareButtons = defineAsyncComponent(
 const SharePlayer = defineAsyncComponent(
   () => import("../display/sharing/SharePlayer.vue"),
 );
-const SubscribeButtons = defineAsyncComponent(
-  () => import("../display/sharing/SubscribeButtons.vue"),
-);
-const Countdown = defineAsyncComponent(
-  () => import("../display/live/CountDown.vue"),
-);
 const CommentSection = defineAsyncComponent(
   () => import("../display/comments/CommentSection.vue"),
+);
+const PodcastmakerHeader = defineAsyncComponent(
+  () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
 export default defineComponent({
   name: "PodcastPage",
@@ -117,12 +108,11 @@ export default defineComponent({
     PodcastInlineList,
     ShareButtons,
     SharePlayer,
-    SubscribeButtons,
-    Countdown,
     CommentSection,
     PodcastModuleBox,
     ClassicLoading,
     ClassicLazy,
+    PodcastmakerHeader
   },
 
   mixins: [handle403, orgaComputed, imageProxy],
@@ -170,15 +160,6 @@ export default defineComponent({
           0 !== this.podcast.conferenceId)
       );
     },
-    backgroundDisplay(): string {
-      if (!this.podcast) {
-        return "";
-      }
-      return `background-image: url('${this.proxyImageUrl(
-        this.podcast.imageUrl,
-        "270",
-      )}');`;
-    },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
     },
@@ -224,42 +205,11 @@ export default defineComponent({
         true === state.generalParameters.isAdmin
       );
     },
-    countLink(): number {
-      const platformShare = [
-        "amazon",
-        "googlePodcasts",
-        "applePodcast",
-        "deezer",
-        "spotify",
-        "tunein",
-        "radioline",
-        "podcastAddict",
-        "playerFm",
-        "pocketCasts",
-        "iHeart",
-      ];
-      let count = 0;
-      for (let i = 0, len = platformShare.length; i < len; i++) {
-        if (
-          undefined !== this.podcast?.emission?.annotations?.[platformShare[i]]
-        )
-          count++;
-      }
-      return count;
-    },
     isLiveReadyToRecord(): boolean {
       return (
         undefined !== this.podcast?.conferenceId &&
         0 !== this.podcast?.conferenceId &&
         "READY_TO_RECORD" === this.podcast?.processingStatus
-      );
-    },
-    isCounter(): boolean {
-      return (
-        this.isLiveReadyToRecord &&
-        undefined !== this.fetchConference &&
-        ("PLANNED" === this.fetchConference.status ||
-          "PENDING" === this.fetchConference.status)
       );
     },
     isOctopusAndAnimator(): boolean {
@@ -273,11 +223,6 @@ export default defineComponent({
       return this.isLiveReadyToRecord
         ? this.$t("Live episode")
         : this.$t("Episode");
-    },
-    timeRemaining(): string {
-      return !this.podcast
-        ? ""
-        : dayjs(this.podcast.pubDate).diff(dayjs(), "seconds").toString();
     },
   },
   watch: {
@@ -294,8 +239,12 @@ export default defineComponent({
       },
     },
   },
+  beforeUnmount(){
+    this.contentToDisplayUpdate(null);
+  },
 
   methods: {
+    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     async fetchConferencePublic() {
       const data = await octopusApi.fetchData<ConferencePublicInfo>(
         9,
@@ -371,6 +320,7 @@ export default defineComponent({
           return;
         }
         this.podcast = data;
+        this.contentToDisplayUpdate(data);
         this.$emit("podcastTitle", this.podcast.title);
         this.handleAnnotations();
         if (

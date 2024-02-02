@@ -1,6 +1,6 @@
 <template>
   <div class="module-box">
-    <h2 class="big-h2 mb-3 height-40">
+    <h2 class="big-h2 mb-3">
       {{ $t("Program") }}
     </h2>
     <div class="py-3">

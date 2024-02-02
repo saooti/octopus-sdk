@@ -1,8 +1,9 @@
 <template>
   <div>
     <button
+      v-show="show"
       id="mobile-menu-dropdown"
-      class="btn-transparent saooti-menu"
+      class="btn-transparent saooti-menu text-white c-hand m-2 h2"
       :title="$t('open left Menu')"
       @click="handleMenuClick"
     />
@@ -29,16 +30,6 @@
           {{ link.title }}
         </router-link>
       </template>
-      <OrganisationChooserLight
-        v-if="!isPodcastmaker && organisationId"
-        width="auto"
-        class="octopus-dropdown-item"
-        page="leftMenu"
-        :defaultanswer="$t('No organisation filter')"
-        :value="organisationId"
-        :reset="reset"
-        @selected="onOrganisationSelected"
-      />
       <hr class="show-phone" />
       <router-link
         v-for="category in categories"
@@ -65,27 +56,22 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import { useFilterStore } from "@/stores/FilterStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
-import { Organisation } from "@/stores/class/general/organisation";
-const OrganisationChooserLight = defineAsyncComponent(
-  () => import("../display/organisation/OrganisationChooserLight.vue"),
-);
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
 export default defineComponent({
   name: "MobileMenu",
   components: {
-    OrganisationChooserLight,
     ClassicPopover,
   },
   mixins: [orgaFilter],
   props: {
     isEducation: { default: false, type: Boolean },
+    show: { default: false, type: Boolean },
+    notPodcastAndEmission: { default: false, type: Boolean },
   },
   data() {
     return {
-      organisationId: undefined as string | undefined,
-      reset: false as boolean,
       firstLoaded: false as boolean,
     };
   },
@@ -107,11 +93,11 @@ export default defineComponent({
             state.generalParameters.isLiveTab &&
             ((this.filterOrgaId && this.filterLive) || !this.filterOrgaId),
         },
-        { title: this.$t("Podcasts"), routeName: "podcasts", condition: true },
+        { title: this.$t("Podcasts"), routeName: "podcasts", condition: !this.notPodcastAndEmission },
         {
           title: this.$t("Emissions"),
           routeName: "emissions",
-          condition: true,
+          condition: !this.notPodcastAndEmission,
         },
         {
           title: this.$t("Productors"),
@@ -152,18 +138,7 @@ export default defineComponent({
       return undefined;
     },
   },
-  watch: {
-    filterOrgaId: {
-      immediate: true,
-      handler() {
-        if (this.filterOrgaId) {
-          this.organisationId = this.filterOrgaId;
-        } else {
-          this.reset = !this.reset;
-        }
-      },
-    },
-  },
+
   methods: {
     handleMenuClick() {
       if (this.firstLoaded) {
@@ -187,14 +162,6 @@ export default defineComponent({
         iabId: this.filterIab?.id,
         rubriquesId: this.rubriqueQueryParam,
       };
-    },
-
-    async onOrganisationSelected(organisation: Organisation | undefined) {
-      if (organisation?.id) {
-        await this.selectOrganisation(organisation.id);
-        return;
-      }
-      this.removeSelectedOrga();
     },
   },
 });

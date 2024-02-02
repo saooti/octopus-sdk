@@ -30,8 +30,17 @@
           { title: 'Italiano', value: 'it' },
           { title: 'Slovenščina', value: 'sl' },
         ]"
-        class="mb-2"
+        class="mb-1"
       />
+      <OrganisationChooserLight
+        v-if="!isPodcastmaker && organisationId && authenticated"
+        page="footer"
+        width="auto"
+        :defaultanswer="$t('No organisation filter')"
+        :value="organisationId"
+        :reset="reset"
+        @selected="onOrganisationSelected"
+      /> 
     </div>
     <a
       v-if="isPodcastmaker && isContactLink"
@@ -63,6 +72,7 @@
 
 <script lang="ts">
 import cookies from "../mixins/cookies";
+import orgaFilter from "../mixins/organisationFilter";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
@@ -75,18 +85,25 @@ import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { Category } from "@/stores/class/general/category";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+import { Organisation } from "@/stores/class/general/organisation";
+const OrganisationChooserLight = defineAsyncComponent(
+  () => import("../display/organisation/OrganisationChooserLight.vue"),
+);
 export default defineComponent({
   name: "FooterSection",
   components: {
     ClassicSelect,
     AcpmImage,
+    OrganisationChooserLight
   },
 
-  mixins: [cookies, orgaComputed],
+  mixins: [cookies, orgaComputed, orgaFilter],
   data() {
     return {
       language: this.$i18n.locale,
+      organisationId: undefined as string | undefined,
+      reset: false as boolean,
     };
   },
   computed: {
@@ -132,6 +149,16 @@ export default defineComponent({
   watch: {
     language() {
       this.changeLanguage();
+    },
+    filterOrgaId: {
+      immediate: true,
+      handler() {
+        if (this.filterOrgaId) {
+          this.organisationId = this.filterOrgaId;
+        } else {
+          this.reset = !this.reset;
+        }
+      },
     },
   },
   methods: {
@@ -180,6 +207,16 @@ export default defineComponent({
             }
           }
         });
+    },
+    async onOrganisationSelected(
+      organisation: Organisation | undefined,
+    ): Promise<void> {
+      if (organisation?.id) {
+        await this.selectOrganisation(organisation.id);
+        return;
+      }
+      this.organisationId = undefined;
+      this.removeSelectedOrga();
     },
   },
 });

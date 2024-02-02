@@ -2,7 +2,8 @@
   <button
     v-if="!hidePlay || recordingLive"
     class="image-play-button"
-    :class="classicPodcastPlay ? '' : 'transparent-background'"
+    :class="[classicPodcastPlay ? '' : 'transparent-background',
+            justButtons?'not-image':'']"
     @mouseenter="hoverType = 'audio'"
     @mouseleave="hoverType = ''"
     @click="play(false)"
@@ -75,6 +76,7 @@ export default defineComponent({
     podcast: { default: () => ({}), type: Object as () => Podcast },
     hidePlay: { default: false, type: Boolean },
     fetchConference: { default: undefined, type: Object as () => Conference },
+    justButtons: { default: false, type: Boolean },
   },
   data() {
     return {
@@ -226,6 +228,10 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app {
+  .image-play-button.not-image{
+    position: relative;
+    width: auto;
+  }
   .live-image-status {
     text-align: center;
     width: 100%;

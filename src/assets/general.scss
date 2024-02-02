@@ -31,12 +31,12 @@ body{
     text-decoration: none;
     color: $octopus-primary-color;
     &.link-hover{
-      color: black !important;
+      color: black;
       font-weight: 500;
       word-break: normal;
     }
     &.link-hover:hover, &.link-hover.router-link-exact-active.router-link-active{
-      color: $octopus-primary-color !important;
+      color: $octopus-primary-color;
     }
     &.btn, &.btn:hover{
       color: #383838;
@@ -72,6 +72,9 @@ body{
 	}
   .width-fit-content{
     width: fit-content !important;
+  }
+  .text-blue-octopus{
+    color: $blue-octopus !important
   }
   .page-box{
     background-color: $octopus-background;

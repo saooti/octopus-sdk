@@ -182,7 +182,6 @@ export default {
   Stop: "Stop",
   "Podcast in cancelled status": "Podcast has a cancelled status",
   "Show every episode": "Show every episode",
-  "Subscribe emission": "Subscribe to the series",
   "Rss feed parameters": "RSS Feed settings",
   "Not share episodes before": "Do not share episodes before",
   "Not share episodes after": "Do not share episodes after",
@@ -351,4 +350,5 @@ export default {
   "Generate a social media post (with AI)":"Generate a social media post (with AI)",
   "Share in one click":"Share in one click",
   "Chaptering":"Chaptering",
+  "Listen to the latest episode":"Listen to the latest episode",
 };
