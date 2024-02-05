@@ -254,8 +254,11 @@ export default defineComponent({
       }
     },
     podcastsFetched(podcasts: Array<Podcast>) {
-      if (podcasts.length) {
-        this.lastPodcast = podcasts[0];
+      for(const podcast of podcasts){
+        if("READY"===podcast.processingStatus){
+          this.lastPodcast = podcast;
+          return;
+        }
       }
     },
   },
