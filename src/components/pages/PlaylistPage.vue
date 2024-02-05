@@ -3,8 +3,8 @@
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :pageTitle="pageTitle"
-        :imageUrl="playlist.imageUrl"
+        :page-title="pageTitle"
+        :image-url="playlist.imageUrl"
       />
       <div class="d-flex flex-column page-element">
         <div class="module-box">
@@ -80,7 +80,7 @@ export default defineComponent({
     PodcastList,
     SharePlayer,
     ClassicLoading,
-    PodcastmakerHeader
+    PodcastmakerHeader,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
 
@@ -141,7 +141,7 @@ export default defineComponent({
       },
     },
   },
-  beforeUnmount(){
+  beforeUnmount() {
     this.contentToDisplayUpdate(null);
   },
 

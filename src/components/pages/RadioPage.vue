@@ -3,8 +3,8 @@
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :pageTitle="$t('Radio')"
-        :imageUrl="radio.imageUrl"
+        :page-title="$t('Radio')"
+        :image-url="radio.imageUrl"
       />
       <div v-if="radio" class="d-flex flex-column page-element">
         <div class="module-box">
@@ -77,7 +77,7 @@ export default defineComponent({
     RadioCurrently,
     RadioImage,
     RadioPlanning,
-    PodcastmakerHeader
+    PodcastmakerHeader,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
@@ -114,7 +114,7 @@ export default defineComponent({
       },
     },
   },
-  beforeUnmount(){
+  beforeUnmount() {
     this.contentToDisplayUpdate(null);
   },
   methods: {

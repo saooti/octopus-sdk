@@ -40,7 +40,7 @@
         :value="organisationId"
         :reset="reset"
         @selected="onOrganisationSelected"
-      /> 
+      />
     </div>
     <a
       v-if="isPodcastmaker && isContactLink"
@@ -95,7 +95,7 @@ export default defineComponent({
   components: {
     ClassicSelect,
     AcpmImage,
-    OrganisationChooserLight
+    OrganisationChooserLight,
   },
 
   mixins: [cookies, orgaComputed, orgaFilter],

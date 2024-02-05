@@ -3,8 +3,8 @@
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :pageTitle="$t('Emission')"
-        :imageUrl="emission.imageUrl"
+        :page-title="$t('Emission')"
+        :image-url="emission.imageUrl"
       />
       <div class="d-flex flex-column page-element">
         <div class="module-box">
@@ -29,9 +29,11 @@
                   :podcast="lastPodcast"
                   :just-buttons="true"
                 />
-                <div class="ms-2 fw-bold">{{ $t('Listen to the latest episode') }}</div>
+                <div class="ms-2 fw-bold">
+                  {{ $t("Listen to the latest episode") }}
+                </div>
               </div>
-              <SubscribeButtons 
+              <SubscribeButtons
                 v-if="isPodcastmaker"
                 class="mt-4"
                 :emission="emission"
@@ -142,7 +144,7 @@ export default defineComponent({
     LiveHorizontalList,
     ClassicLoading,
     PodcastPlayButton,
-    PodcastmakerHeader
+    PodcastmakerHeader,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
@@ -204,7 +206,7 @@ export default defineComponent({
       },
     },
   },
-  beforeUnmount(){
+  beforeUnmount() {
     this.contentToDisplayUpdate(null);
   },
 
@@ -251,11 +253,11 @@ export default defineComponent({
         this.initError();
       }
     },
-    podcastsFetched(podcasts: Array<Podcast>){
-      if(podcasts.length){
+    podcastsFetched(podcasts: Array<Podcast>) {
+      if (podcasts.length) {
         this.lastPodcast = podcasts[0];
       }
-    }
+    },
   },
 });
 </script>

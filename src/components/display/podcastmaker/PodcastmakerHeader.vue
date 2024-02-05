@@ -28,26 +28,25 @@ export default defineComponent({
       )}');`;
     },
   },
-
 });
 </script>
 <style lang="scss">
 @import "@scss/_variables.scss";
 .octopus-app {
-  .page-box{
+  .page-box {
     position: relative;
   }
-  .page-element{
+  .page-element {
     margin-top: 12rem;
   }
-  .page-element-title-container{
+  .page-element-title-container {
     background: black;
     position: absolute;
     right: 0;
     left: 0;
     top: 0;
   }
-  .page-element-bg{
+  .page-element-bg {
     height: 15rem;
     opacity: 0.5;
     filter: blur(8px);
@@ -56,20 +55,20 @@ export default defineComponent({
     background-repeat: no-repeat;
     background-size: cover;
   }
-  .page-element-title{
+  .page-element-title {
     position: absolute;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    h1{
+    h1 {
       color: white !important;
       font-size: 2rem;
     }
-  } 
+  }
 }
 </style>

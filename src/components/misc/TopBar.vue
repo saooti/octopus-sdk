@@ -1,20 +1,18 @@
 <template>
-  <div class="top-bar-container" 
-    :class="{ scrolled: scrolled, 'content-top-bar':isContentToDisplay }"
+  <div
+    class="top-bar-container"
+    :class="{ scrolled: scrolled, 'content-top-bar': isContentToDisplay }"
   >
-    <TopBarMainContent 
-      :is-education="isEducation" 
+    <TopBarMainContent
+      :is-education="isEducation"
       :is-phone="isPhone"
       :scrolled="scrolled"
       :title-display="titleToDisplay"
     />
     <template v-if="isContentToDisplay">
       <div class="page-element-bg" :style="backgroundDisplay" />
-      <h1 
-        v-show="!scrolled"
-        class="text-truncate"
-      >{{ titleToDisplay }}</h1>
-      <SubscribeButtons 
+      <h1 v-show="!scrolled" class="text-truncate">{{ titleToDisplay }}</h1>
+      <SubscribeButtons
         v-show="!scrolled"
         :emission="emissionObject"
         :playlist-id="contentToDisplay?.playlistId"
@@ -42,7 +40,7 @@ export default defineComponent({
   name: "TopBar",
   components: {
     TopBarMainContent,
-    SubscribeButtons
+    SubscribeButtons,
   },
 
   mixins: [imageProxy, resizePhone],
@@ -61,8 +59,8 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useGeneralStore, ["contentToDisplay"]),
-    isContentToDisplay(): boolean{
-      return null!==this.contentToDisplay;
+    isContentToDisplay(): boolean {
+      return null !== this.contentToDisplay;
     },
     backgroundDisplay(): string {
       if (!this.contentToDisplay) {
@@ -73,30 +71,30 @@ export default defineComponent({
         "270",
       )}');`;
     },
-    titleToDisplay(): string{
-      if((this.contentToDisplay as Podcast)?.podcastId){
+    titleToDisplay(): string {
+      if ((this.contentToDisplay as Podcast)?.podcastId) {
         return (this.contentToDisplay as Podcast).emission.name;
       }
-      if((this.contentToDisplay as Playlist)?.playlistId){
+      if ((this.contentToDisplay as Playlist)?.playlistId) {
         return (this.contentToDisplay as Playlist).title;
       }
-      if((this.contentToDisplay as Emission)?.emissionId){
+      if ((this.contentToDisplay as Emission)?.emissionId) {
         return (this.contentToDisplay as Emission).name;
       }
-      if((this.contentToDisplay as Canal)?.id){
+      if ((this.contentToDisplay as Canal)?.id) {
         return (this.contentToDisplay as Canal).name;
       }
       return "";
     },
-    emissionObject(): Emission|null{
-      if((this.contentToDisplay as Podcast)?.podcastId){
+    emissionObject(): Emission | null {
+      if ((this.contentToDisplay as Podcast)?.podcastId) {
         return (this.contentToDisplay as Podcast).emission;
       }
-      if((this.contentToDisplay as Emission)?.emissionId){
-        return (this.contentToDisplay as Emission);
+      if ((this.contentToDisplay as Emission)?.emissionId) {
+        return this.contentToDisplay as Emission;
       }
       return null;
-    }
+    },
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -137,55 +135,80 @@ export default defineComponent({
     position: sticky;
     top: 0;
     background: $octopus-primary-color;
-    background: linear-gradient(90deg, $octopus-primary-color 0%, $blue-octopus 100%);;
+    background: linear-gradient(
+      90deg,
+      $octopus-primary-color 0%,
+      $blue-octopus 100%
+    );
     width: 100%;
     height: 5rem;
     display: flex;
     flex-direction: column;
     transition: height 0.7s;
+    box-shadow: 0px 2px 15px 5px rgba(0, 0, 0, 0.4) !important;
 
-    &.content-top-bar{
+    &.content-top-bar {
       height: 22rem;
       background: black;
-      .page-element-bg{
+      .page-element-bg {
         height: 22rem;
       }
     }
-    &.content-top-bar.scrolled{
+    &.content-top-bar.scrolled {
       height: 5rem;
-      .page-element-bg{
+      .page-element-bg {
         height: 5rem;
       }
     }
 
     &.scrolled {
       z-index: 11;
-      box-shadow:0px 2px 15px 5px rgba(0, 0, 0, 0.4) !important;
     }
 
-    h1{
+    h1 {
       color: white !important;
       font-size: 2rem;
       margin: 2rem 5rem;
     }
+    @media (max-width: 650px) {
+      height: 3.5rem;
+      &.content-top-bar.scrolled {
+        height: 3.5rem;
+        .page-element-bg {
+          height: 3.5rem;
+        }
+      }
+    }
 
-    .page-element-bg{
+    @media (max-width: 550px) {
+      h1 {
+        font-size: 1rem;
+        margin: 1rem 0.5rem 0.5rem 0.5rem;
+      }
+      &.content-top-bar {
+        height: 13rem;
+        .page-element-bg {
+          height: 13rem;
+        }
+      }
+    }
+    .page-element-bg {
       opacity: 0.5;
       filter: blur(8px);
       -webkit-filter: blur(8px);
       background-position: center;
       background-repeat: no-repeat;
-      background-size: cover; 
+      background-size: cover;
       width: 100%;
       position: absolute;
       z-index: -1;
       transition: height 0.7s;
     }
 
-    .admin-button:hover, .share-btn:hover{
-			background: white;
-		}
-
+    .admin-button:hover,
+    .share-btn:hover {
+      background: white;
+    }
   }
 }
 </style>

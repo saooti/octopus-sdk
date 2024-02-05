@@ -138,12 +138,7 @@ body{
     }
   }
   .hide-small-screen{
-		@media (max-width: 450px) {
-			display: none !important;
-		}
-	}
-  .hide-smallest-screen{
-		@media (max-width: 380px) {
+		@media (max-width: 500px) {
 			display: none !important;
 		}
 	}

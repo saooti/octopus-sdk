@@ -3,8 +3,8 @@
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :pageTitle="titlePage"
-        :imageUrl="podcast.imageUrl"
+        :page-title="titlePage"
+        :image-url="podcast.imageUrl"
       />
       <div class="d-flex flex-column page-element">
         <PodcastModuleBox
@@ -22,7 +22,7 @@
           :organisation-id="myOrganisationId"
           :is-education="isEducation"
         />
-        
+
         <CommentSection
           v-if="!isPodcastmaker && isComments"
           ref="commentSection"
@@ -112,7 +112,7 @@ export default defineComponent({
     PodcastModuleBox,
     ClassicLoading,
     ClassicLazy,
-    PodcastmakerHeader
+    PodcastmakerHeader,
   },
 
   mixins: [handle403, orgaComputed, imageProxy],
@@ -239,7 +239,7 @@ export default defineComponent({
       },
     },
   },
-  beforeUnmount(){
+  beforeUnmount() {
     this.contentToDisplayUpdate(null);
   },
 

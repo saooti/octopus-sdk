@@ -18,7 +18,7 @@
         <span :class="sub.icon" />
       </a>
     </div>
-     <button
+    <button
       v-show="hiddenLinks.length"
       id="subscribe-buttons-dropdown"
       class="btn share-btn mx-2 saooti-more"
@@ -44,7 +44,6 @@
       </ClassicPopover>
     </teleport>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -52,11 +51,11 @@ import { state } from "../../../stores/ParamSdkStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { defineComponent } from "vue";
-type Link ={
-  name: string,
-  icon: string,
-  title: string,
-  url: string|undefined,
+type Link = {
+  name: string;
+  icon: string;
+  title: string;
+  url: string | undefined;
 };
 export default defineComponent({
   name: "SubscribeButtons",
@@ -65,14 +64,14 @@ export default defineComponent({
   },
   props: {
     emission: { default: undefined, type: Object as () => Emission },
-    playlistId: { default: undefined, type:  Number},
-    windowWidth: { default: 0, type: Number},
-    justifyCenter: { default: true, type: Boolean},
+    playlistId: { default: undefined, type: Number },
+    windowWidth: { default: 0, type: Number },
+    justifyCenter: { default: true, type: Boolean },
   },
   data() {
     return {
       hiddenLinks: [] as Array<Link>,
-      lastWindowWidth: 420 as number
+      lastWindowWidth: 420 as number,
     };
   },
   computed: {
@@ -105,7 +104,7 @@ export default defineComponent({
         {
           name: "RSS",
           icon: "saooti-rss",
-          title: this.$t('Rss feed'),
+          title: this.$t("Rss feed"),
           url: this.rssUrl,
         },
         {
@@ -114,7 +113,7 @@ export default defineComponent({
           title: "Amazon Music | Podcasters",
           url: this.getUrl("amazon"),
         },
-      
+
         {
           name: "iHeart",
           icon: "saooti-iheart",
@@ -145,7 +144,7 @@ export default defineComponent({
           title: "Radioline",
           url: this.getUrl("radioline"),
         },
-        
+
         {
           name: "tunein",
           icon: "saooti-tunin",
@@ -155,12 +154,12 @@ export default defineComponent({
       ];
       return sub.filter((item) => item.url);
     },
-    rssUrl(): string|undefined {
+    rssUrl(): string | undefined {
       let api = state.generalParameters.ApiUri + "rss/";
-      if(this.emission){
+      if (this.emission) {
         return api + "emission/" + this.emission?.emissionId + ".rss";
       }
-      if(this.playlistId){
+      if (this.playlistId) {
         return api + "playlist/" + this.playlistId + ".rss";
       }
       return undefined;
@@ -171,7 +170,7 @@ export default defineComponent({
       this.resizeWindow();
     },
   },
-  mounted(){
+  mounted() {
     this.resizeWindow();
   },
   methods: {
@@ -187,16 +186,21 @@ export default defineComponent({
         ? "//" + link
         : link;
     },
-    resizeWindow(){
-      if(this.windowWidth > 420 && this.lastWindowWidth > 420){
+    resizeWindow() {
+      if (this.windowWidth > 420 && this.lastWindowWidth > 420) {
         this.lastWindowWidth = this.windowWidth;
         return;
       }
-      this.lastWindowWidth = this.windowWidth;
+
       const subscribeList = this.$refs.subscribeButtonsContainer as HTMLElement;
-      if (null === subscribeList || !subscribeList) {
+      if (
+        null === subscribeList ||
+        !subscribeList ||
+        "none" === subscribeList?.parentElement?.style.display
+      ) {
         return;
       }
+      this.lastWindowWidth = this.windowWidth;
       subscribeList.style.justifyContent = "flex-start";
       this.hiddenLinks.length = 0;
       this.subscriptionsDisplay.forEach((element: Link) => {
@@ -216,7 +220,8 @@ export default defineComponent({
         const parent = el.parentElement;
         if (
           parent &&
-          (el.offsetLeft + el.clientWidth + 20) < (parent.clientWidth + parent.offsetLeft)
+          el.offsetLeft + el.clientWidth + 20 <
+            parent.clientWidth + parent.offsetLeft
         ) {
           return;
         }
@@ -228,18 +233,18 @@ export default defineComponent({
       if (!this.hiddenLinks.length && this.justifyCenter) {
         subscribeList.style.justifyContent = "center";
       }
-    }
+    },
   },
 });
 </script>
 <style lang="scss">
 .octopus-app {
-  .subscribe-buttons-container{
+  .subscribe-buttons-container {
     max-width: 420px;
     align-self: center;
     display: inline-flex;
     width: 100%;
-    &>div {
+    & > div {
       display: inline-flex;
       justify-content: flex-start;
       overflow: hidden;

@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar-grid" :class="{scrolled: titleIsDisplayed}">
+  <div class="top-bar-grid" :class="{ scrolled: titleIsDisplayed }">
     <router-link
       class="top-bar-logo"
       :to="{
@@ -26,18 +26,21 @@
         :class="isEducation ? 'educationLogo' : ''"
       />
     </router-link>
-    <h1 
-      v-if="titleIsDisplayed"
-      class="text-truncate m-0 align-self-center"
-    >{{ titleDisplay}}</h1>
-    <div 
-      class="d-flex" 
-      :class="[scrolled || inContentDisplayPage?'flex-row-reverse align-items-center':'flex-column align-items-end']"
+    <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
+      {{ titleDisplay }}
+    </h1>
+    <div
+      class="d-flex"
+      :class="[
+        scrolled || inContentDisplayPage || isPhone
+          ? 'flex-row-reverse align-items-center'
+          : 'flex-column align-items-end',
+      ]"
     >
-      <a 
-        v-if="filterOrgaId && '' ==! imgUrl"
+      <a
+        v-if="filterOrgaId && '' == !imgUrl"
         href="https://www.saooti.com/"
-        target="_blank" 
+        target="_blank"
         rel="noopener"
       >
         <img
@@ -81,7 +84,10 @@
           :left-pos="true"
         >
           <div class="d-flex flex-column">
-            <template v-for="link in routerLinkInsideArray" :key="link.routeName">
+            <template
+              v-for="link in routerLinkInsideArray"
+              :key="link.routeName"
+            >
               <router-link
                 v-if="link.condition"
                 :to="{
@@ -95,7 +101,11 @@
             </template>
           </div>
         </ClassicPopover>
-        <MobileMenu :is-education="isEducation" :show="scrolled || isPhone || inContentDisplayPage" :not-podcast-and-emission="inContentDisplayPage && !scrolled" />
+        <MobileMenu
+          :is-education="isEducation"
+          :show="scrolled || isPhone || inContentDisplayPage"
+          :not-podcast-and-emission="inContentDisplayPage && !scrolled"
+        />
         <HomeDropdown :is-education="isEducation" />
         <router-link
           v-show="!scrolled && !isPhone && !inContentDisplayPage"
@@ -136,8 +146,7 @@ export default defineComponent({
     scrolled: { default: false, type: Boolean },
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     ...mapState(useFilterStore, [
@@ -148,11 +157,11 @@ export default defineComponent({
       "filterRubrique",
       "filterName",
     ]),
-    titleIsDisplayed():boolean{
+    titleIsDisplayed(): boolean {
       return this.inContentDisplayPage && this.scrolled && !this.isPhone;
     },
-    inContentDisplayPage():boolean{
-      return 0!==this.titleDisplay.length;
+    inContentDisplayPage(): boolean {
+      return 0 !== this.titleDisplay.length;
     },
     routerLinkArray() {
       return [
@@ -235,23 +244,23 @@ export default defineComponent({
 <style lang="scss">
 @import "@scss/_variables.scss";
 .octopus-app {
-  .top-bar-grid{
+  .top-bar-grid {
     display: grid;
     grid-template-columns: 1fr 3fr;
     margin-top: 0.5rem;
     padding: 0 1rem;
-    &.scrolled{
+    &.scrolled {
       grid-template-columns: 1fr 2fr 1fr;
     }
     @media (max-width: 450px) {
       padding: 0 0.5rem;
     }
 
-
-    a.link-hover{
+    a.link-hover {
       color: white;
       font-weight: bold;
-      &.link-hover:hover, &.link-hover.router-link-exact-active.router-link-active{
+      &.link-hover:hover,
+      &.link-hover.router-link-exact-active.router-link-active {
         color: white;
         text-decoration: underline;
         text-underline-offset: 8px;
@@ -268,9 +277,6 @@ export default defineComponent({
         height: 2rem;
       }
     }
-
   }
 }
 </style>
-
-

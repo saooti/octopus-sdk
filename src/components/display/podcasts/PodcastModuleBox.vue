@@ -135,7 +135,7 @@
       :tag-list="podcast.tags"
       :podcast-annotations="podcast.annotations"
     />
-    <SubscribeButtons 
+    <SubscribeButtons
       v-if="isPodcastmaker"
       class="mt-4"
       :emission="podcast.emission"
@@ -173,9 +173,7 @@ const PodcastPlayBar = defineAsyncComponent(
 const SubscribeButtons = defineAsyncComponent(
   () => import("../sharing/SubscribeButtons.vue"),
 );
-const Countdown = defineAsyncComponent(
-  () => import("../live/CountDown.vue"),
-);
+const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 export default defineComponent({
   name: "PodcastModuleBox",
@@ -188,7 +186,7 @@ export default defineComponent({
     EditBox,
     RecordingItemButton,
     SubscribeButtons,
-    Countdown
+    Countdown,
   },
 
   mixins: [displayMethods, orgaComputed],
