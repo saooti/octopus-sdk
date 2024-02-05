@@ -219,7 +219,7 @@ export default defineComponent({
     logoUrl(): string {
       return this.isEducation
         ? "/img/logo_education_white.svg"
-        : "/img/logo_octopus_white.svg";
+        : "/img/logo_octopus_white2.svg";
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
