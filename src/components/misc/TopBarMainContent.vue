@@ -103,10 +103,11 @@
         </ClassicPopover>
         <MobileMenu
           :is-education="isEducation"
-          :show="scrolled || isPhone || inContentDisplayPage"
+          :show="mobileMenuDisplay"
           :not-podcast-and-emission="inContentDisplayPage && !scrolled"
+          :scrolled="scrolled"
         />
-        <HomeDropdown :is-education="isEducation" />
+        <HomeDropdown :is-education="isEducation" :mobile-menu-display="mobileMenuDisplay" />
         <router-link
           v-show="!scrolled && !isPhone && !inContentDisplayPage"
           :title="$t('Search')"
@@ -157,6 +158,9 @@ export default defineComponent({
       "filterRubrique",
       "filterName",
     ]),
+    mobileMenuDisplay():boolean{
+      return this.scrolled || this.isPhone || this.inContentDisplayPage;
+    },
     titleIsDisplayed(): boolean {
       return this.inContentDisplayPage && this.scrolled && !this.isPhone;
     },

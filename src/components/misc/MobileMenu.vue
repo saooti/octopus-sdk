@@ -7,7 +7,7 @@
       :title="$t('open left Menu')"
       @click="handleMenuClick"
     />
-    <teleport to=".octopus-app">
+    <teleport to=".octopus-app" :disabled="scrolled">
       <ClassicPopover
         v-if="firstLoaded"
         target="mobile-menu-dropdown"
@@ -31,24 +31,25 @@
             {{ link.title }}
           </router-link>
         </template>
-        <a
-          v-if="!isAuthenticatedWithOrga"
-          class="octopus-dropdown-item"
-          href="/sso/login"
-          realLink="true"
-        >
-          {{ $t("Login") }}
-        </a>
-        <a v-else class="octopus-dropdown-item c-hand" @click="logoutFunction">
-          {{ $t("Logout") }}
-        </a>
+        <template v-if="!isAuthenticatedWithOrga">
+          <a
+            class="octopus-dropdown-item"
+            href="/sso/login"
+            realLink="true"
+          >
+            {{ $t("Login") }}
+          </a>
+          <router-link class="octopus-dropdown-item" to="/main/pub/contact">
+            {{ $t("Contact") }}
+          </router-link>
+        </template>
+
       </ClassicPopover>
     </teleport>
   </div>
 </template>
 
 <script lang="ts">
-import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import orgaFilter from "../mixins/organisationFilter";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
@@ -68,6 +69,7 @@ export default defineComponent({
     isEducation: { default: false, type: Boolean },
     show: { default: false, type: Boolean },
     notPodcastAndEmission: { default: false, type: Boolean },
+    scrolled: { default: false, type: Boolean },
   },
   data() {
     return {
@@ -149,15 +151,6 @@ export default defineComponent({
   },
 
   methods: {
-    async logoutFunction() {
-      try {
-        await crudApi.postData(4, "/logout", undefined);
-        await this.$router.push({ path: "/" });
-        location.reload();
-      } catch (error) {
-        //Do nothing
-      }
-    },
     handleMenuClick() {
       if (this.firstLoaded) {
         return;
