@@ -6,7 +6,7 @@
         :page-title="pageTitle"
         :image-url="playlist.imageUrl"
       />
-      <div class="d-flex flex-column page-element">
+      <div class="d-flex flex-column page-element" :class="isPodcastmaker? 'page-element-podcastmaker':''">
         <div class="module-box">
           <div class="mb-5 mt-3 descriptionText">
             <img

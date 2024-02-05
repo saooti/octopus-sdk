@@ -6,7 +6,7 @@
         :page-title="titlePage"
         :image-url="podcast.imageUrl"
       />
-      <div class="d-flex flex-column page-element">
+      <div class="d-flex flex-column page-element" :class="isPodcastmaker? 'page-element-podcastmaker':''">
         <PodcastModuleBox
           :playing-podcast="playingPodcast"
           :podcast="podcast"

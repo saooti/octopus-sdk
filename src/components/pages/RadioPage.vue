@@ -6,7 +6,7 @@
         :page-title="$t('Radio')"
         :image-url="radio.imageUrl"
       />
-      <div v-if="radio" class="d-flex flex-column page-element">
+      <div v-if="radio" class="d-flex flex-column page-element" :class="isPodcastmaker? 'page-element-podcastmaker':''">
         <div class="module-box">
           <div class="mb-5 descriptionText">
             <RadioImage :radio="radio" />

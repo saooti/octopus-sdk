@@ -36,7 +36,7 @@ export default defineComponent({
   .page-box {
     position: relative;
   }
-  .page-element {
+  .page-element.page-element-podcastmaker{
     margin-top: 12rem;
   }
   .page-element-title-container {
@@ -45,8 +45,7 @@ export default defineComponent({
     right: 0;
     left: 0;
     top: 0;
-  }
-  .page-element-bg {
+    .page-element-bg {
     height: 15rem;
     opacity: 0.5;
     filter: blur(8px);
@@ -69,6 +68,7 @@ export default defineComponent({
       color: white !important;
       font-size: 2rem;
     }
+  }
   }
 }
 </style>
