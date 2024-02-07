@@ -162,7 +162,7 @@ export default defineComponent({
       "filterName",
     ]),
     mobileMenuDisplay(): boolean {
-      return this.scrolled || this.isPhone || this.inContentDisplayPage;
+      return this.isPhone || this.inContentDisplayPage;
     },
     titleIsDisplayed(): boolean {
       return this.inContentDisplayPage && this.scrolled && !this.isPhone;

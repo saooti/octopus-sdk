@@ -109,8 +109,10 @@ export default defineComponent({
         window.scrollY > 1 &&
         document.body.offsetHeight - window.innerHeight > 40
       ) {
-        this.scrolled = true;
-        this.minScroll = 0;
+        if(!this.scrolled){
+          this.scrolled = true;
+          this.minScroll = 0;
+        }
       } else if (
         window.scrollY - this.oldScrollY < 0 &&
         window.scrollY < 1 &&
