@@ -1,5 +1,5 @@
 <template>
-  <div v-if="subscriptionsDisplay.length" class="subscribe-buttons-container">
+  <div v-if="subscriptionsDisplay.length || rssUrl" class="subscribe-buttons-container">
     <div ref="subscribeButtonsContainer">
       <a
         v-for="(sub, index) in subscriptionsDisplay"
@@ -108,12 +108,6 @@ export default defineComponent({
           title: "Spotify",
           url: this.getUrl("spotify"),
         },
-        /*  {
-          name: "RSS",
-          icon: "saooti-rss",
-          title: this.$t("Rss feed"),
-          url: this.rssUrl,
-        }, */
         {
           name: "amazon",
           icon: "saooti-amzn",
