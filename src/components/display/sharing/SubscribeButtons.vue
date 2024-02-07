@@ -46,7 +46,7 @@
           class="octopus-dropdown-item justify-content-start"
           :href="link.url"
         >
-          <span :class="link.icon" class="me-1" /> {{ link.name }}
+          <span :class="link.icon" class="me-1" /> {{ link.title }}
         </a>
       </ClassicPopover>
     </teleport>
