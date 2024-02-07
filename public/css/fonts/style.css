@@ -1,11 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/css/fonts/icomoon.eot?bv0n4g');
-  src:  url('/css/fonts/icomoon.woff2?bv0n4g') format('woff2'),
-    url('/css/fonts/icomoon.eot?bv0n4g#iefix') format('embedded-opentype'),
-    url('/css/fonts/icomoon.ttf?bv0n4g') format('truetype'),
-    url('/css/fonts/icomoon.woff?bv0n4g') format('woff'),
-    url('/css/fonts/icomoon.svg?bv0n4g#icomoon') format('svg');
+  src:  url('/css/fonts/icomoon.eot?kej63r');
+  src:  url('/css/fonts/icomoon.eot?kej63r#iefix') format('embedded-opentype'),
+    url('/css/fonts/icomoon.ttf?kej63r') format('truetype'),
+    url('/css/fonts/icomoon.woff?kej63r') format('woff'),
+    url('/css/fonts/icomoon.svg?kej63r#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,6 +25,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.saooti-amazon-music:before {
+  content: "\e93c";
+  color: #0c6cb3;
+}
+.saooti-apple-podcast:before {
+  content: "\e94c";
+  color: #aa1dd3;
+}
 .saooti-play-novideo:before {
   content: "\e94b";
 }
@@ -55,9 +62,6 @@
 .saooti-linktree:before {
   content: "\e93b";
   color: #43e660;
-}
-.saooti-amazon-music:before {
-  content: "\e93c";
 }
 .saooti-calendar:before {
   content: "\e937";

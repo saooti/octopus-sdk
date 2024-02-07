@@ -86,7 +86,7 @@ export default defineComponent({
       const sub = [
         {
           name: "applePodcast",
-          icon: "saooti-apple",
+          icon: "saooti-apple-podcast",
           title: "Apple Podcast | iTunes",
           url: this.getUrl("applePodcast"),
         },
@@ -110,7 +110,7 @@ export default defineComponent({
         },
         {
           name: "amazon",
-          icon: "saooti-amzn",
+          icon: "saooti-amazon-music",
           title: "Amazon Music | Podcasters",
           url: this.getUrl("amazon"),
         },

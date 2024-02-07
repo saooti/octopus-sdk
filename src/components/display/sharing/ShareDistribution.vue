@@ -68,12 +68,12 @@ export default defineComponent({
       return [
         {
           url: this.getUrl("amazon"),
-          icon: "saooti-amzn",
+          icon: "saooti-amazon-music",
           title: "Amazon Music | Podcasters",
         },
         {
           url: this.getUrl("apple"),
-          icon: "saooti-apple",
+          icon: "saooti-apple-podcast",
           title: "Apple Podcast / iTunes",
         },
         { url: this.getUrl("deezer"), icon: "saooti-deezer", title: "Deezer" },
