@@ -1,6 +1,6 @@
 <template>
   <div class="module-box overflow-visible">
-    <h2 class="big-h2 mb-3">
+    <h2 class="mb-3">
       {{ $t("Embed") }}
     </h2>
     <div class="d-flex">

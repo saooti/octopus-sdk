@@ -29,7 +29,7 @@
             {{ $t("Episode record in live") }}
           </div>
         </div>
-        <div class="text-uppercase h2 mb-3">
+        <div class="h2 mb-3">
           {{ podcast.title }}
         </div>
         <Countdown v-if="isCounter" :time-remaining="timeRemaining" />

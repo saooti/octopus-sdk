@@ -1,6 +1,6 @@
 <template>
   <div class="module-box">
-    <h2 class="big-h2 mb-3">
+    <h2 class="mb-3">
       {{ $t("Distribute") }}
     </h2>
     <div class="sharing-distribution-container">

@@ -1,7 +1,7 @@
 <template>
   <div class="podcast-inline-container">
     <div class="d-flex align-items-center" :class="podcastId ? 'mb-4' : 'mb-2'">
-      <h2 class="mb-0 big-h2">
+      <h2 class="mb-0">
         {{ title }}
       </h2>
     </div>

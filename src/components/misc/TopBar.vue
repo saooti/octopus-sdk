@@ -9,7 +9,7 @@
       :scrolled="scrolled"
       :title-display="titleToDisplay"
     />
-    <template v-if="isContentToDisplay">
+    <template v-if="contentToDisplay">
       <div class="page-element-bg" :style="backgroundDisplay" />
       <h1 v-show="!scrolled" class="text-truncate">{{ titleToDisplay }}</h1>
       <SubscribeButtons
@@ -60,7 +60,7 @@ export default defineComponent({
   computed: {
     ...mapState(useGeneralStore, ["contentToDisplay"]),
     isContentToDisplay(): boolean {
-      return null !== this.contentToDisplay;
+      return "podcast" === this.$route.name || "emission" === this.$route.name;
     },
     backgroundDisplay(): string {
       if (!this.contentToDisplay) {

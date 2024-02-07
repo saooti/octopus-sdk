@@ -32,7 +32,7 @@
     <div
       class="d-flex"
       :class="[
-        scrolled || inContentDisplayPage || isPhone
+        inContentDisplayPage || isPhone
           ? 'flex-row-reverse align-items-center'
           : 'flex-column align-items-end',
       ]"
@@ -55,22 +55,22 @@
       <div class="d-flex align-items-center justify-content-end flex-grow-1">
         <template v-for="link in routerLinkArray" :key="link.routeName">
           <router-link
-            v-show="!scrolled && !isPhone"
+            v-show="!isPhone"
             v-if="link.condition"
             :to="{
               name: link.routeName,
               query: getQueriesRouter(link.routeName),
             }"
-            class="link-hover p-2"
+            class="link-hover py-2 px-3"
           >
             {{ link.title }}
           </router-link>
         </template>
         <button
-          v-show="!isPhone && !scrolled && !inContentDisplayPage"
+          v-show="!isPhone && !inContentDisplayPage"
           id="more-dropdown"
           :title="$t('More')"
-          class="d-flex-column align-items-center btn-transparent p-2 text-white"
+          class="d-flex-column flex-nowrap align-items-center btn-transparent py-2 px-3 text-white"
         >
           <div class="link-hover">
             {{ $t("More") }}
@@ -107,9 +107,12 @@
           :not-podcast-and-emission="inContentDisplayPage && !scrolled"
           :scrolled="scrolled"
         />
-        <HomeDropdown :is-education="isEducation" :mobile-menu-display="mobileMenuDisplay" />
+        <HomeDropdown
+          :is-education="isEducation"
+          :mobile-menu-display="mobileMenuDisplay"
+        />
         <router-link
-          v-show="!scrolled && !isPhone && !inContentDisplayPage"
+          v-show="!isPhone && !inContentDisplayPage"
           :title="$t('Search')"
           :to="{
             name: 'podcasts',
@@ -158,7 +161,7 @@ export default defineComponent({
       "filterRubrique",
       "filterName",
     ]),
-    mobileMenuDisplay():boolean{
+    mobileMenuDisplay(): boolean {
       return this.scrolled || this.isPhone || this.inContentDisplayPage;
     },
     titleIsDisplayed(): boolean {
@@ -177,11 +180,19 @@ export default defineComponent({
             (state.generalParameters.isLiveTab as boolean) &&
             ((this.filterOrgaId && this.filterLive) || !this.filterOrgaId),
         },
-        { title: this.$t("Podcasts"), routeName: "podcasts", condition: true },
+        {
+          title: this.$t("Podcasts"),
+          routeName: "podcasts",
+          condition:
+            !this.inContentDisplayPage ||
+            (this.inContentDisplayPage && !this.scrolled),
+        },
         {
           title: this.$t("Emissions"),
           routeName: "emissions",
-          condition: true,
+          condition:
+            !this.inContentDisplayPage ||
+            (this.inContentDisplayPage && !this.scrolled),
         },
       ];
     },

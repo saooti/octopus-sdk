@@ -6,7 +6,7 @@
   >
     <div v-if="!isPodcastmaker" class="d-flex flex-column px-1">
       <div class="text-dark my-1 special-select-align-magic-trick">
-        &copy; Saooti 2019
+        &copy; Saooti 2024
       </div>
       <router-link
         v-for="link in routerLinkSecondArray"

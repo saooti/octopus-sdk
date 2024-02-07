@@ -13,7 +13,7 @@
       class="btn admin-button hide-small-screen m-1 saooti-download text-blue-octopus"
     />
     <button
-      v-show="!mobileMenuDisplay  || isAuthenticatedWithOrga"
+      v-show="!mobileMenuDisplay || isAuthenticatedWithOrga"
       id="home-dropdown"
       class="btn m-1 admin-button hide-small-screen saooti-user text-blue-octopus"
       :title="$t('User menu')"

@@ -6,7 +6,10 @@
         :page-title="$t('Emission')"
         :image-url="emission.imageUrl"
       />
-      <div class="d-flex flex-column page-element" :class="isPodcastmaker? 'page-element-podcastmaker':''">
+      <div
+        class="d-flex flex-column page-element"
+        :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
+      >
         <div class="module-box">
           <div class="d-flex mb-2">
             <div class="w-100">
@@ -17,7 +20,7 @@
                 :alt="$t('Emission name image', { name: name })"
                 class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
               />
-              <div class="text-uppercase h2 mb-3">{{ name }}</div>
+              <div class="h2 mb-3">{{ name }}</div>
               <!-- eslint-disable vue/no-v-html -->
               <p
                 class="html-wysiwyg-content descriptionText"
@@ -254,8 +257,8 @@ export default defineComponent({
       }
     },
     podcastsFetched(podcasts: Array<Podcast>) {
-      for(const podcast of podcasts){
-        if("READY"===podcast.processingStatus){
+      for (const podcast of podcasts) {
+        if ("READY" === podcast.processingStatus) {
           this.lastPodcast = podcast;
           return;
         }

@@ -36,7 +36,7 @@ export default defineComponent({
   /* .page-box {
     position: relative;
   } */
-  .page-element.page-element-podcastmaker{
+  .page-element.page-element-podcastmaker {
     margin-top: 12rem;
   }
   .page-element-title-container {
@@ -46,29 +46,29 @@ export default defineComponent({
     left: 0;
     top: 0;
     .page-element-bg {
-    height: 15rem;
-    opacity: 0.5;
-    filter: blur(8px);
-    -webkit-filter: blur(8px);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  .page-element-title {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    h1 {
-      color: white !important;
-      font-size: 2rem;
+      height: 15rem;
+      opacity: 0.5;
+      filter: blur(8px);
+      -webkit-filter: blur(8px);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
-  }
+    .page-element-title {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      h1 {
+        color: white !important;
+        font-size: 2rem;
+      }
+    }
   }
 }
 </style>

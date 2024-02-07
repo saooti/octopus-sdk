@@ -1,6 +1,6 @@
 <template>
   <div class="py-3">
-    <h2 class="big-h2 mb-2">
+    <h2 class="mb-2">
       {{ titleFilter }}
     </h2>
     <div class="d-flex align-items-center flex-wrap mb-2">

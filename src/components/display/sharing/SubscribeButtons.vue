@@ -18,6 +18,13 @@
         <span :class="sub.icon" />
       </a>
     </div>
+    <a
+      rel="noopener"
+      target="_blank"
+      class="btn share-btn mx-2 saooti-rss"
+      :href="rssUrl"
+      :title="$t('Rss feed')"
+    />
     <button
       v-show="hiddenLinks.length"
       id="subscribe-buttons-dropdown"
@@ -101,12 +108,12 @@ export default defineComponent({
           title: "Spotify",
           url: this.getUrl("spotify"),
         },
-        {
+        /*  {
           name: "RSS",
           icon: "saooti-rss",
           title: this.$t("Rss feed"),
           url: this.rssUrl,
-        },
+        }, */
         {
           name: "amazon",
           icon: "saooti-amzn",
@@ -244,12 +251,14 @@ export default defineComponent({
     align-self: center;
     display: inline-flex;
     width: 100%;
+    justify-content: center;
     & > div {
       display: inline-flex;
       justify-content: flex-start;
       overflow: hidden;
-      flex-grow: 1;
-      width: 0;
+      //flex-grow: 1;
+      width: fit-content;
+      //width: 0;
     }
   }
 }

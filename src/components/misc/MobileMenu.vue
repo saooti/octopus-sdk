@@ -32,18 +32,13 @@
           </router-link>
         </template>
         <template v-if="!isAuthenticatedWithOrga">
-          <a
-            class="octopus-dropdown-item"
-            href="/sso/login"
-            realLink="true"
-          >
+          <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
             {{ $t("Login") }}
           </a>
           <router-link class="octopus-dropdown-item" to="/main/pub/contact">
             {{ $t("Contact") }}
           </router-link>
         </template>
-
       </ClassicPopover>
     </teleport>
   </div>
