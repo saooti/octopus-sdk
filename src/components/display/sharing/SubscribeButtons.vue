@@ -203,6 +203,7 @@ export default defineComponent({
       }
       this.lastWindowWidth = this.windowWidth;
       subscribeList.style.justifyContent = "flex-start";
+      subscribeList.style.flexGrow = "1";
       this.hiddenLinks.length = 0;
       this.subscriptionsDisplay.forEach((element: Link) => {
         const el = (
@@ -234,6 +235,7 @@ export default defineComponent({
       if (!this.hiddenLinks.length && this.justifyCenter) {
         subscribeList.style.justifyContent = "center";
       }
+      subscribeList.style.flexGrow = "0";
     },
   },
 });
