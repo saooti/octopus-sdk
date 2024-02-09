@@ -37,7 +37,7 @@ export default defineComponent({
     position: relative;
   } */
   .page-element.page-element-podcastmaker {
-    margin-top: 12rem;
+    margin-top: 11rem;
   }
   .page-element-title-container {
     background: black;

@@ -46,12 +46,14 @@
         />
         <ClassicLazy :min-height="550">
           <PodcastInlineList
+            class="module-box"
             :podcast-id="podcastId"
             :title="$t('Suggested listening')"
           />
         </ClassicLazy>
         <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
           <PodcastInlineList
+            class="module-box"
             :iab-id="c.id"
             :href="'/main/pub/category/' + c.id"
             :title="$t('More episodes of this category : ', { name: c.name })"

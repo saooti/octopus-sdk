@@ -1,12 +1,12 @@
 <template>
   <div class="position-relative w-100">
     <template v-if="!isPhone">
-      <button
+      <!-- <button
         v-show="isLoop"
         :title="$t('Display previous')"
         class="btn-transparent swiper-button-prev"
         @click="slidePrevButton()"
-      ></button>
+      ></button> -->
       <swiper
         :slides-per-view="numberItem"
         :space-between="0"
