@@ -111,7 +111,7 @@ export default defineComponent({
         {
           name: "amazon",
           icon: "saooti-amazon-music",
-          title: "Amazon Music | Podcasters",
+          title: "Amazon Music",
           url: this.getUrl("amazon"),
         },
 

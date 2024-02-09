@@ -69,7 +69,7 @@ export default defineComponent({
         {
           url: this.getUrl("amazon"),
           icon: "saooti-amazon-music",
-          title: "Amazon Music | Podcasters",
+          title: "Amazon Music",
         },
         {
           url: this.getUrl("apple"),
