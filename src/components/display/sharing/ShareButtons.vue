@@ -191,7 +191,7 @@ export default defineComponent({
         this.authenticated &&
         undefined !== this.podcast &&
         this.isProduction &&
-        ((this.authOrganisation.attributes?.["openAi"] as
+        ((this.authOrganisation.attributes?.["openAi.active"] as
           | string
           | undefined) === "true" ??
           false)
