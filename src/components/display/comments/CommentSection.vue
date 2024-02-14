@@ -63,7 +63,7 @@ export default defineComponent({
         this.loaded && this.totalCount > 0
           ? this.$t("()", { nb: this.totalCount })
           : "";
-      return this.$t("Podcast's comments") + count;
+      return this.$t("Podcast's comments") + " " + count;
     },
     knownIdentity: {
       get(): string | null {

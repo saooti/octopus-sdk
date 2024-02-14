@@ -1,5 +1,8 @@
 <template>
-  <div v-if="subscriptionsDisplay.length || rssUrl" class="subscribe-buttons-container">
+  <div
+    v-if="subscriptionsDisplay.length || rssUrl"
+    class="subscribe-buttons-container"
+  >
     <div ref="subscribeButtonsContainer">
       <a
         v-for="(sub, index) in subscriptionsDisplay"

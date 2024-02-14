@@ -33,7 +33,7 @@
           :fetch-conference="fetchConference"
         />
         <PodcastInlineList
-          class="mt-4 module-box"
+          class="module-box"
           :emission-id="podcast.emission.emissionId"
           :href="'/main/pub/emission/' + podcast.emission.emissionId"
           :title="$t('More episodes of this emission')"
@@ -46,14 +46,14 @@
         />
         <ClassicLazy :min-height="550">
           <PodcastInlineList
-            class="module-box"
+            class="mt-4"
             :podcast-id="podcastId"
             :title="$t('Suggested listening')"
           />
         </ClassicLazy>
         <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
           <PodcastInlineList
-            class="module-box"
+            class="mt-4"
             :iab-id="c.id"
             :href="'/main/pub/category/' + c.id"
             :title="$t('More episodes of this category : ', { name: c.name })"

@@ -2,7 +2,7 @@
   <div v-if="!isLoading && (authenticated || !noSharing)" class="module-box">
     <div class="d-flex align-items-center justify-content-between">
       <div v-if="!isGarStudent && !noSharing" class="d-flex flex-column me-2">
-        <div class="h4 mb-2">
+        <div class="h2 mb-2">
           {{ $t("Share in one click") }}
         </div>
         <div class="d-flex align-items-center">
@@ -28,11 +28,11 @@
         </div>
       </div>
       <div class="d-flex align-items-center">
-        <div
+        <!-- <div
           v-if="podcast || emission || playlist"
           class="d-flex flex-column ms-4"
         >
-          <div class="h4 mb-2">
+          <div class="h2 mb-2">
             {{ $t("Newsletter") }}
           </div>
           <div class="d-flex align-items-center justify-content-center">
@@ -43,9 +43,9 @@
               @click="newsletter = true"
             />
           </div>
-        </div>
+        </div> -->
         <div class="d-flex flex-column ms-4">
-          <div class="h4 mb-2">
+          <div class="h2 mb-2">
             {{ $t("QR Code") }}
           </div>
           <div class="d-flex align-items-center justify-content-center">
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div v-if="'' !== rssUrl && displayRss" class="d-flex flex-column ms-4">
-          <div class="h4 mb-2">
+          <div class="h2 mb-2">
             {{ $t("Rss feed") }}
           </div>
           <div class="d-flex align-items-center justify-content-center">
@@ -74,7 +74,7 @@
           </div>
         </div>
         <div v-if="shareAiAuth" class="d-flex flex-column ms-4">
-          <div class="h4 mb-2">
+          <div class="h2 mb-2">
             {{ $t("Generate a social media post (with AI)") }}
           </div>
           <div class="d-flex align-items-center justify-content-center">

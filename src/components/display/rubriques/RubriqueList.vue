@@ -41,10 +41,9 @@
     >
       <RubriqueChooser
         v-if="hidenRubriques.length"
+        class="rubrique-chooser-minwidth"
         :rubriquage-id="rubriquage.rubriquageId"
         :all-rubriques="hidenRubriques"
-        class="mb-3"
-        width="auto"
         @selected="addFilterFromPopover($event)"
       />
     </ClassicPopover>
@@ -245,6 +244,15 @@ export default defineComponent({
       margin: 0.25rem;
       font-size: 0.6rem;
       padding: 0.5rem;
+    }
+  }
+  #popoverrubriques-dropdown {
+    overflow: initial !important;
+  }
+  .rubrique-chooser-minwidth {
+    min-width: 400px;
+    @media (max-width: 500px) {
+      min-width: 90vw;
     }
   }
 }
