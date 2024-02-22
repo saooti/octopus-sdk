@@ -112,8 +112,7 @@ export default defineComponent({
           imageUrl: `${this.podcast.imageUrl}" alt="${this.$t(
             "Podcast image",
           )}`,
-          title:
-            "Un super podcast de camille !Un super podcast de camille !Un super podcast de camille !!Un super podcast de camille ", //this.podcast.title,
+          title:this.podcast.title,
           description: this.podcast.description ?? "",
           shareText: this.$t("Listen this episode"),
           emissionHtml: `<tr><td>
@@ -169,11 +168,11 @@ export default defineComponent({
       };
     },
     newsletterHtml(): string {
-      return `<table style=" table-layout: fixed;width:100%;font-family: Arial,sans-serif;font-size: 14px;line-height: 20px; border:1px solid gray;">
+      return `<table style="background:white;color:black;table-layout: fixed;width:100%;font-family: Arial,sans-serif;font-size: 14px;line-height: 20px; border:1px solid gray;">
 <tr>
 <td valign="top" width="30%" rowspan="7"><img width="100%" src="${
         this.newsletterInfo.imageUrl
-      }" style="border-radius: 4px; padding-right:5px;"></td>
+      }" style="border-radius: 4px;"></td>
 <td valign="top" width="70%"><div style="margin-top:5px;font-size: 24px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;font-weight:bold;${
         this.newsletterInfo.colorTitle
       }">${this.newsletterInfo.title}</div></td>
@@ -181,7 +180,7 @@ export default defineComponent({
 <tr><td><div style="overflow: hidden;display: -webkit-box;-webkit-line-clamp: 6;-webkit-box-orient: vertical;word-break: break-word;">${
         this.newsletterInfo.description
       }</div></td></tr>
-<tr><td valign="top"><a href="${this.shareUrl}" style="font-size: 18px;color: ${
+<tr><td valign="top"><a href="${this.shareUrl}" style="color: ${
         this.color
       };">${this.$t("See more")}</a></td></tr>
 <tr>${this.newsletterInfo.articleHtml}
