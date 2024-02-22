@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="d-flex align-items-center">
-        <!-- <div
+        <div
           v-if="podcast || emission || playlist"
           class="d-flex flex-column ms-4"
         >
@@ -43,7 +43,7 @@
               @click="newsletter = true"
             />
           </div>
-        </div> -->
+        </div>
         <div class="d-flex flex-column ms-4">
           <div class="h2 mb-2">
             {{ $t("QR Code") }}
