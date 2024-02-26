@@ -303,6 +303,9 @@ export default defineComponent({
     if (this.isLiveReadyToRecord) {
       this.iFrameModel = "large";
     }
+    if("true"===this.podcast?.annotations?.["fromTTS"]){
+      this.displayTranscript = false;
+    }
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
