@@ -19,7 +19,7 @@ export const useGeneralStore = defineStore("GeneralStore", {
   state: (): GeneralState => ({
     metaTitle: "Octopus by Saooti",
     platformEducation: false,
-    generalLogoUrl: "/img/logo_octopus_final.svg",
+    generalLogoUrl: "/img/logo_octopus_black.png",
     storedCategories: [],
     storedCategoriesOrga: [],
     isBeforeLive: true,
