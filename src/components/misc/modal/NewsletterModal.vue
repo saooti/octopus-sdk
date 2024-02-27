@@ -111,12 +111,12 @@ export default defineComponent({
           shareText: this.$t("Listen this episode"),
           emissionHtml: `<tr><td style="padding:5px 0;">
           <div style="display:flex; margin-top:5px;">
-          <div style="font-size:20px; color:${this.arrayColors[1].color}; margin-right:5px;">${this.$t(
+          <div style="font-size:20px; color:${this.arrayColors[1].color}; margin-right:5px;text-wrap: nowrap;">${this.$t(
             "Emission",
           )} :</div>
           <a href="${this.shareUrl}" style="font-size: 18px;color: ${
             this.arrayColors[0].color
-          };">${this.podcast.emission.name}</a>
+          };overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">${this.podcast.emission.name}</a>
           </div></td></tr>`,
           articleHtml:
             !this.podcast?.article || 0 === this.podcast.article?.length
