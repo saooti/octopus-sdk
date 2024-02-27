@@ -162,7 +162,7 @@ export default defineComponent({
       };
     },
     newsletterHtml(): string {
-      return `<table style="background:${this.arrayColors[2].color};color:${this.arrayColors[1].color};table-layout: fixed;width:100%;font-size: 14px;line-height: 20px;">
+      return `<table style="background:${this.arrayColors[2].color};color:${this.arrayColors[1].color};table-layout: fixed;width:100%;font-size: 14px;">
 <tr>
 <td valign="top" width="30%" rowspan="7" style="padding-right:5px;"><img width="100%" src="${
         this.newsletterInfo.imageUrl
@@ -206,8 +206,11 @@ export default defineComponent({
         "" !== this.authOrganisation.id
           ? this.authOrganisation.id
           : state.generalParameters.organisationId;
+      if(!orgaId ||orgaId?.length){
+        return;
+      }
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
-      if (Object.hasOwn(attributes, "podcastmakerUrl")) {
+      if (Object.hasOwn(attributes, "podcastmakerUrl") && (attributes.podcastmakerUrl as string|undefined|null)?.length) {
         this.shareUrl =
           attributes.podcastmakerUrl +
           window.location.pathname +
@@ -233,6 +236,9 @@ export default defineComponent({
   #newsletter-modal {
     .octopus-modal-body{
       overflow-x: inherit;
+      @media (max-width: 500px){
+        overflow-x: auto;
+      }
     }
     .octopus-modal-dialog {
       max-width: 80%;

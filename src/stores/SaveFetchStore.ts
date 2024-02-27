@@ -12,6 +12,9 @@ export const useSaveFetchStore = defineStore('SaveFetchStore', {
   }),
   actions:{
     async getOrgaAttributes(orgaId: string): Promise<{ [key: string]: string | number | boolean | undefined; }>{
+      if(!orgaId.length){
+        return {};
+      }
       if(this.orgaPublicAttributes[orgaId]){
         return this.orgaPublicAttributes[orgaId];
       }
