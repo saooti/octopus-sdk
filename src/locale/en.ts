@@ -354,4 +354,6 @@ export default {
   "Share the playlist in your newsletter": "Share the playlist in your newsletter",
   "Listen to all episodes":"Listen to all episodes",
   "Newsletter elements":"Play pictogram, name of the show, See more",
+  "Choose text color":"Choose text color",
+  "Choose background color":"Choose background color",
 };

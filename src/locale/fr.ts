@@ -205,7 +205,7 @@ export default {
   "Configure your Newsletter tile": "Configurez votre vignette Newsletter",
   "Copy and embed the HTML code into your email tool": "Copiez et intégrez le code HTML dans votre outil d'e-mailing",
   "Listen this episode": "Écouter ce podcast",
-  "Choose main color": "Choisir la couleur des éléments du module newsletter",
+  "Choose main color": "Choisir la couleur des éléments du module",
   "Octopus is ACPM Podcast accredited": "Octopus est accrédité ACPM Podcasts",
   "Live episode": "Épisode en live",
   "This live will start": "Ce live débutera",
@@ -361,4 +361,6 @@ export default {
   "Share the playlist in your newsletter": "Partagez la playlist dans votre newsletter",
   "Listen to all episodes":"Écouter tous les épisodes",
   "Newsletter elements":"Pictogramme Play, nom de l'émission, Voir plus",
+  "Choose text color":"Choisir la couleur du texte",
+  "Choose background color":"Choisir la couleur du fond",
 };

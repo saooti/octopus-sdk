@@ -347,4 +347,6 @@ export default{
   "Share the playlist in your newsletter": "Condividi la playlist nella tua newsletter",
   "Listen to all episodes":"Ascolta tutti gli episodi",
   "Newsletter elements":"Riproduci pittogramma, nome dello spettacolo, vedi altro",
-  };
+  "Choose text color":"Scegli il colore del testo",
+  "Choose background color":"Scegli il colore dello sfondo",  
+};

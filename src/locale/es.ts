@@ -355,4 +355,6 @@ export default {
   "Share the playlist in your newsletter": "Comparte la lista de reproducción en tu newsletter",
   "Listen to all episodes":"Escuche todos los episodios",
   "Newsletter elements":"Pictograma de reproducción, nombre del programa, Ver más",
+  "Choose text color":"Elige el color del texto",
+  "Choose background color":"Elige el color de fondo",
 }

@@ -354,4 +354,6 @@ export default {
   "Share the playlist in your newsletter": "Teilen Sie die Playlist in Ihrem Newsletter",
   "Listen to all episodes":"Hören Sie sich alle Folgen an",
   "Newsletter elements":"Piktogramm abspielen, Name der Show, Mehr anzeigen",
+  "Choose text color":"Wählen Sie Textfarbe",
+  "Choose background color":"Wählen Sie die Hintergrundfarbe",
 }

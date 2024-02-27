@@ -344,4 +344,6 @@ export default {
   "Share the playlist in your newsletter": "Delite seznam predvajanja v svojem glasilu",
   "Listen to all episodes":"Poslušaj vse epizode",
   "Newsletter elements":"Predvajaj piktogram, ime oddaje, Poglej več",
+  "Choose text color":"Izberite barvo besedila",
+  "Choose background color":"Izberite barvo ozadja",
 }
