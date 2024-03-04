@@ -84,8 +84,8 @@ export default defineComponent({
       this.reload = !this.reload;
     },
   },
-  async created() {
-    await this.initApp();
+  created() {
+    this.initApp();
     setTimeout(() => {
       this.pageFullyLoad = true;
     }, 2000);

@@ -13,15 +13,15 @@
   </teleport>
 </template>
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
+import { state } from "../../../../stores/ParamSdkStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const PlayerVideoDigiteka = defineAsyncComponent(
-  () => import("./PlayerVideoDigiteka.vue"),
+  () => import("../video/PlayerVideoDigiteka.vue"),
 );
 const PlayerVideoHls = defineAsyncComponent(
-  () => import("./PlayerVideoHls.vue"),
+  () => import("../video/PlayerVideoHls.vue"),
 );
 export default defineComponent({
   name: "PlayerVideo",

@@ -21,13 +21,13 @@ export const playerLive = defineComponent({
     };
   },
   computed: {
-    ...mapState(usePlayerStore, ["playerLive", "playerRadio", "playerVideo"]),
+    ...mapState(usePlayerStore, ["playerLive", "playerRadio", "playerVideo", "playerStatus"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
   },
   methods: {
     ...mapActions(usePlayerStore, ["playerChangeStatus"]),
     onPlay(): void {
-      this.playerChangeStatus(false);
+      this.playerChangeStatus("PAUSED"===this.playerStatus);
     },
     playRadio() {
       if (!this.playerRadio) return;

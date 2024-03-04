@@ -110,14 +110,14 @@ export default defineComponent({
       });
     },
   },
-  async created() {
+  created() {
     if (this.isVideoPodcast) {
       this.$emit("update:iFrameModel", "video");
     }
     if (this.isLive) {
       return;
     }
-    await this.initCustomPlayers();
+    this.initCustomPlayers();
   },
   methods: {
     async fetchCustomPlayers(

@@ -33,9 +33,6 @@ export default defineComponent({
 <style lang="scss">
 @import "@scss/_variables.scss";
 .octopus-app {
-  /* .page-box {
-    position: relative;
-  } */
   .page-element.page-element-podcastmaker {
     margin-top: 11rem;
   }

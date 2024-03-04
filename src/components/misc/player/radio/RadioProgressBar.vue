@@ -83,15 +83,4 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import "../../../../assets/progressbar.scss";
-.octopus-app {
-  .ambiance-progress {
-    background-color: #d1d1d1;
-    .octopus-progress-bar {
-      background-color: #747474;
-    }
-    .no-transition {
-      transition: none !important;
-    }
-  }
-}
 </style>

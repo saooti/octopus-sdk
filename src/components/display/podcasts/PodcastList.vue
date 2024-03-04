@@ -167,8 +167,8 @@ export default defineComponent({
       }
     },
   },
-  async created() {
-    await this.fetchContent(true);
+  created() {
+    this.fetchContent(true);
   },
   methods: {
     reloadList() {

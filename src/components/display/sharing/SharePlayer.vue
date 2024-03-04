@@ -293,22 +293,25 @@ export default defineComponent({
       return 0;
     },
   },
-  async created() {
-    const orgaId =
-      "" !== this.authOrganisation.id
-        ? this.authOrganisation.id
-        : state.generalParameters.organisationId;
-    this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
-    this.initColor();
-    if (this.isLiveReadyToRecord) {
-      this.iFrameModel = "large";
-    }
-    if("true"===this.podcast?.annotations?.["fromTTS"]){
-      this.displayTranscript = false;
-    }
+  created() {
+    this.initSharePlayer();
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
+    async initSharePlayer(){
+      const orgaId =
+      "" !== this.authOrganisation.id
+        ? this.authOrganisation.id
+        : state.generalParameters.organisationId;
+      this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
+      this.initColor();
+      if (this.isLiveReadyToRecord) {
+        this.iFrameModel = "large";
+      }
+      if ("true" === this.podcast?.annotations?.["fromTTS"]) {
+        this.displayTranscript = false;
+      }
+    },
     getIframeNumber(): string {
       return this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
         ? "/0"

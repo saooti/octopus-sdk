@@ -1,18 +1,10 @@
 const scanner = require('sonarqube-scanner'); 
 scanner({ 
     options:{
-        "sonar.exclusions":"**/*.test.tsx", 
-     "sonar.tests":"./src", 
-     "sonar.test.inclusions":"**/*.test.tsx,**/*.test.ts", 
-     "sonar.typescript.lcov.reportPaths": "coverage/lcov.info", 
-   "sonar.testExecutionReportPaths": "coverage/test-report.xml" 
+        "sonar.sources":"./src" 
     },
-serverUrl:"http://localhost:9000", 
-login:"admin", 
-password:"saooti", 
-options:{ 
-    "sonar.sources":"./src" 
-}, 
+    serverUrl:"http://localhost:9000",
 }, 
 ()=>process.exit() 
 );
+//Login/password not working with last version sonar so give the permission with admin and then run

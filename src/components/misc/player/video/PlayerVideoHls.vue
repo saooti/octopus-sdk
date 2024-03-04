@@ -12,7 +12,7 @@
 <script lang="ts">
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapActions } from "pinia";
-import { playerLogicProgress } from "../../mixins/player/playerLogicProgress";
+import { playerLogicProgress } from "../../../mixins/player/playerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
 import qualitySelector from "videojs-hls-quality-selector";
 import qualityLevels from "videojs-contrib-quality-levels";

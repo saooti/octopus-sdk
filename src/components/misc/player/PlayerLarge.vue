@@ -7,28 +7,16 @@
       class="player-reduce-button btn bg-transparent text-light saooti-down"
       @click="changePlayerLargeVersion"
     />
-    <router-link v-if="isImage && podcastImage" :to="podcastShareUrl">
-      <img
-        v-lazy="proxyImageUrl(podcastImage, '200')"
-        width="200"
-        height="200"
-        :alt="$t('Podcast image')"
-        class="img-box"
-      />
-    </router-link>
-    <div class="d-flex w-100 px-2 mt-2 text-center">
-      <div v-if="playerError" class="text-warning mx-2">
-        {{ $t("Podcast play error") + " - " }}
-      </div>
-      <div class="flex-grow-1 text-truncate h3">
-        {{ podcastTitle }}
-      </div>
-    </div>
+    <PlayerImage :image-width="200" />
+    <PlayerTitle
+      class="w-100 px-2 mt-2 text-center"
+      :player-error="playerError"
+      :hls-ready="hlsReady"
+      title-class="h3"
+    />
     <PlayerChaptering class="justify-content-center w-100" />
     <div class="player-grow-large-content">
       <PlayerProgressBar
-        v-if="!radioUrl"
-        ref="progressbar"
         class-progress="large"
         :show-timeline="showTimeline"
         :comments="comments"
@@ -38,16 +26,18 @@
         :player-error="playerError"
         :listen-time="listenTime"
       />
-      <RadioProgressBar v-else />
-      <div class="d-flex justify-content-between">
-        <div>{{ playedTime }}</div>
-        <div>{{ totalTime }}</div>
+      <div
+        v-if="!playerError && (!radioUrl || isAdPlaying)"
+        class="d-flex justify-content-between"
+      >
+        <div>{{ displayPlayTime }}</div>
+        <div>{{ displayTotalTime }}</div>
       </div>
       <RadioHistory v-if="radioUrl" />
     </div>
 
     <div
-      v-if="'' != transcriptText"
+      v-if="'' != transcriptText && !isAdPlaying"
       class="flex-grow-1 d-flex align-items-center w-100"
     >
       <div class="flex-grow-1 p-1 text-center mx-3 transcript-bg rounded">
@@ -58,24 +48,15 @@
       <button
         title="-15''"
         class="btn fs-1 bg-transparent text-light saooti-recule"
+        :disabled="isAdPlaying"
         @click="seekClick(-15)"
       />
-      <button
-        v-if="!playerError"
-        :title="$t('Play')"
-        :class="{
-          'saooti-play': isPaused,
-          'saooti-pause': isPlaying,
-          '': !isPaused && !isPlaying,
-        }"
-        class="btn play-big-button-box text-light bg-primary"
-        @click="switchPausePlay"
-      >
-        <ClassicSpinner v-if="!isPaused && !isPlaying" />
-      </button>
+      <PlayerPlayButton :player-error="playerError" :is-big-button="true" />
+
       <button
         title="+15''"
         class="btn fs-1 bg-transparent text-light saooti-avance"
+        :disabled="isAdPlaying"
         @click="seekClick(15)"
       />
     </div>
@@ -83,34 +64,36 @@
   </div>
 </template>
 <script lang="ts">
-import ClassicSpinner from "../ClassicSpinner.vue";
-import { playerDisplay } from "../../mixins/player/playerDisplay";
+import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
 import imageProxy from "../../mixins/imageProxy";
-import PlayerTimeline from "./PlayerTimeline.vue";
-import PlayerChaptering from "./PlayerChaptering.vue";
+import PlayerTimeline from "./elements/PlayerTimeline.vue";
+import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
+import PlayerImage from "./elements/PlayerImage.vue";
+import PlayerTitle from "./elements/PlayerTitle.vue";
+import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
-const RadioProgressBar = defineAsyncComponent(
-  () => import("./radio/RadioProgressBar.vue"),
-);
+import { mapState, mapActions } from "pinia";
+import { usePlayerStore } from "@/stores/PlayerStore";
 const RadioHistory = defineAsyncComponent(
   () => import("./radio/RadioHistory.vue"),
 );
 const PlayerProgressBar = defineAsyncComponent(
-  () => import("./PlayerProgressBar.vue"),
+  () => import("./progressbar/PlayerProgressBar.vue"),
 );
 export default defineComponent({
   name: "PlayerLarge",
 
   components: {
     PlayerProgressBar,
-    RadioProgressBar,
     PlayerTimeline,
-    ClassicSpinner,
     RadioHistory,
     PlayerChaptering,
+    PlayerImage,
+    PlayerPlayButton,
+    PlayerTitle,
   },
-  mixins: [playerDisplay, imageProxy],
+  mixins: [playerDisplayTime, imageProxy],
 
   props: {
     playerError: { default: false, type: Boolean },
@@ -128,7 +111,11 @@ export default defineComponent({
       showTimeline: false as boolean,
     };
   },
+  computed: {
+    ...mapState(usePlayerStore, ["playerPodcast", "playerLive"]),
+  },
   methods: {
+    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
     stopPlayer() {
       this.$emit("stopPlayer");
     },
@@ -142,9 +129,10 @@ export default defineComponent({
         return;
       }
       const seekTo = audioPlayer.currentTime + addTime;
-      (
-        this.$refs.progressbar as InstanceType<typeof PlayerProgressBar>
-      ).isSeekTo(audioPlayer, seekTo > 0 ? seekTo : 0);
+      if (this.playerPodcast || this.playerLive) {
+        this.playerUpdateSeekTime(seekTo > 0 ? seekTo : 0);
+      }
+      audioPlayer.currentTime = seekTo > 0 ? seekTo : 0;
     },
   },
 });
@@ -168,18 +156,7 @@ export default defineComponent({
       padding: 0.5rem;
     }
   }
-  .play-big-button-box {
-    height: 5rem;
-    width: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.5rem;
-    border-radius: 50% !important;
-    font-size: 2.5rem !important;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
+
   .saooti-recule,
   .saooti-avance {
     font-size: 2rem !important;

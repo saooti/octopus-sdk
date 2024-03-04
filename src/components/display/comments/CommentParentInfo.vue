@@ -36,14 +36,19 @@ export default defineComponent({
       comment: undefined as CommentPodcast | undefined,
     };
   },
-  async created() {
-    if (this.comId) {
-      this.comment = await octopusApi.fetchData<CommentPodcast>(
-        2,
-        `comment/${this.comId}`,
-      );
-    }
-    this.loading = false;
+  created() {
+   this.fetchComment();
   },
+  methods:{
+    async fetchComment():Promise<void>{
+      if (this.comId) {
+        this.comment = await octopusApi.fetchData<CommentPodcast>(
+          2,
+          `comment/${this.comId}`,
+        );
+      }
+      this.loading = false;
+    }
+  }
 });
 </script>

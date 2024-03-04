@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
+import { state } from "../../../../stores/ParamSdkStore";
 import { defineComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 export default defineComponent({

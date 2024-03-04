@@ -363,4 +363,6 @@ export default {
   "Newsletter elements":"Pictogramme Play, nom de l'émission, Voir plus",
   "Choose text color":"Choisir la couleur du texte",
   "Choose background color":"Choisir la couleur du fond",
+  "Skip ad":"Ignorer l'annonce",
+  "Skip ad in seconds":"Ignorer l'annonce dans {seconds} secondes",
 };

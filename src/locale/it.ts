@@ -348,5 +348,7 @@ export default{
   "Listen to all episodes":"Ascolta tutti gli episodi",
   "Newsletter elements":"Riproduci pittogramma, nome dello spettacolo, vedi altro",
   "Choose text color":"Scegli il colore del testo",
-  "Choose background color":"Scegli il colore dello sfondo",  
+  "Choose background color":"Scegli il colore dello sfondo",
+  "Skip ad":"Salta annuncio",
+  "Skip ad in seconds":"Salta l'annuncio tra {seconds} secondi",
 };

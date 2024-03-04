@@ -12,7 +12,7 @@
             <h4 class="mb-3">
               {{ $t("Configure your Newsletter tile") }}
             </h4>
-            <div 
+            <div
               v-for="colors in arrayColors"
               :key="colors.mainText"
               class="d-flex align-items-center mb-3"
@@ -28,11 +28,13 @@
               />
               <div class="d-flex flex-column">
                 <div class="fw-bold">{{ colors.mainText }}</div>
-                <div v-if="colors.secondText" class="descriptionText">{{ colors.secondText }}</div>
+                <div v-if="colors.secondText" class="descriptionText">
+                  {{ colors.secondText }}
+                </div>
               </div>
             </div>
           </div>
-        <!-- eslint-disable vue/no-v-html -->
+          <!-- eslint-disable vue/no-v-html -->
           <div v-html="newsletterHtml" />
           <!-- eslint-enable -->
         </div>
@@ -40,7 +42,7 @@
           class="btn flex-grow-1 mt-3 fw-bold"
           @click="onCopyCode(newsletterHtml, afterCopy)"
         >
-          <span class="saooti-copy me-2"/>
+          <span class="saooti-copy me-2" />
           {{ $t("Copy and embed the HTML code into your email tool") }}
         </button>
         <SnackBar ref="snackbar" position="bottom-left" />
@@ -91,9 +93,14 @@ export default defineComponent({
   data() {
     return {
       arrayColors: [
-        {color:"#40a372", mainText: this.$t('Choose main color'),secondText: this.$t('Newsletter elements') },
-        {color:"#000000", mainText: this.$t('Choose text color') },
-        {color:"#FFFFFF", mainText: this.$t('Choose background color') }],
+        {
+          color: "#40a372",
+          mainText: this.$t("Choose main color"),
+          secondText: this.$t("Newsletter elements"),
+        },
+        { color: "#000000", mainText: this.$t("Choose text color") },
+        { color: "#FFFFFF", mainText: this.$t("Choose background color") },
+      ],
       shareUrl: window.location.href,
     };
   },
@@ -106,17 +113,19 @@ export default defineComponent({
           imageUrl: `${this.podcast.imageUrl}" alt="${this.$t(
             "Podcast image",
           )}`,
-          title:this.podcast.title,
+          title: this.podcast.title,
           description: this.podcast.description ?? "",
           shareText: this.$t("Listen this episode"),
           emissionHtml: `<tr><td style="padding:5px 0;">
           <div style="display:flex; margin-top:5px;">
-          <div style="font-size:20px; color:${this.arrayColors[1].color}; margin-right:5px;text-wrap: nowrap;">${this.$t(
-            "Emission",
-          )} :</div>
+          <div style="font-size:20px; color:${
+            this.arrayColors[1].color
+          }; margin-right:5px;text-wrap: nowrap;">${this.$t("Emission")} :</div>
           <a href="${this.shareUrl}" style="font-size: 18px;color: ${
             this.arrayColors[0].color
-          };overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">${this.podcast.emission.name}</a>
+          };overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">${
+            this.podcast.emission.name
+          }</a>
           </div></td></tr>`,
           articleHtml:
             !this.podcast?.article || 0 === this.podcast.article?.length
@@ -124,11 +133,9 @@ export default defineComponent({
               : `<tr><td style="padding:5px 0;">
           <div style="display:flex;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M7 17h7v-2H7zm0-4h10v-2H7zm0-4h10V7H7zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zM5 5v14z"/></svg>
-          <a href="${
-            this.podcast.article
-          }" style="color: ${this.arrayColors[1].color};margin-top:2px">${this.$t(
-            "See associated article",
-          )}</a>
+          <a href="${this.podcast.article}" style="color: ${
+            this.arrayColors[1].color
+          };margin-top:2px">${this.$t("See associated article")}</a>
           </div></td></tr>
           `,
           colorTitle: `color:${this.arrayColors[1].color};`,
@@ -162,7 +169,9 @@ export default defineComponent({
       };
     },
     newsletterHtml(): string {
-      return `<table style="background:${this.arrayColors[2].color};color:${this.arrayColors[1].color};table-layout: fixed;width:100%;font-size: 14px;">
+      return `<table style="background:${this.arrayColors[2].color};color:${
+        this.arrayColors[1].color
+      };table-layout: fixed;width:100%;font-size: 14px;">
 <tr>
 <td valign="top" width="30%" rowspan="7" style="padding-right:5px;"><img width="100%" src="${
         this.newsletterInfo.imageUrl
@@ -174,15 +183,19 @@ export default defineComponent({
 <tr><td style="padding:5px 0;"><div style="overflow: hidden;display: -webkit-box;-webkit-line-clamp: 6;-webkit-box-orient: vertical;word-break: break-word;">${
         this.newsletterInfo.description
       }</div></td></tr>
-<tr><td valign="top" style="padding:5px 0;"><a href="${this.shareUrl}" style="color: ${
-        this.arrayColors[0].color
-      };">${this.$t("See more")}</a></td></tr>
+<tr><td valign="top" style="padding:5px 0;"><a href="${
+        this.shareUrl
+      }" style="color: ${this.arrayColors[0].color};">${this.$t(
+        "See more",
+      )}</a></td></tr>
 <tr>${this.newsletterInfo.articleHtml}
-<td width="1" style="padding:5px 0;"><a href="${this.shareUrl}" style="font-size: 18px;color: ${
+<td width="1" style="padding:5px 0;"><a href="${
+        this.shareUrl
+      }" style="font-size: 18px;color: ${
         this.arrayColors[0].color
-      };text-decoration: none; display:flex;"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path fill="currentColor" d="m9.5 16.5l7-4.5l-7-4.5zM12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg><div style="margin-top: 15px; color:${this.arrayColors[1].color};">${
-        this.newsletterInfo.shareText
-      }</div></a></td>
+      };text-decoration: none; display:flex;"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path fill="currentColor" d="m9.5 16.5l7-4.5l-7-4.5zM12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg><div style="margin-top: 15px; color:${
+        this.arrayColors[1].color
+      };">${this.newsletterInfo.shareText}</div></a></td>
 </tr>
 </table>
 `;
@@ -206,11 +219,14 @@ export default defineComponent({
         "" !== this.authOrganisation.id
           ? this.authOrganisation.id
           : state.generalParameters.organisationId;
-      if(!orgaId ||orgaId?.length){
+      if (!orgaId || orgaId?.length) {
         return;
       }
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
-      if (Object.hasOwn(attributes, "podcastmakerUrl") && (attributes.podcastmakerUrl as string|undefined|null)?.length) {
+      if (
+        Object.hasOwn(attributes, "podcastmakerUrl") &&
+        (attributes.podcastmakerUrl as string | undefined | null)?.length
+      ) {
         this.shareUrl =
           attributes.podcastmakerUrl +
           window.location.pathname +
@@ -234,9 +250,9 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   #newsletter-modal {
-    .octopus-modal-body{
+    .octopus-modal-body {
       overflow-x: inherit;
-      @media (max-width: 500px){
+      @media (max-width: 500px) {
         overflow-x: auto;
       }
     }

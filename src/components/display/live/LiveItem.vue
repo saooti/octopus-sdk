@@ -36,7 +36,7 @@ export default defineComponent({
     };
   },
 
-  async created() {
+  created() {
     this.fetchPodcastData();
     this.watchStatus();
   },

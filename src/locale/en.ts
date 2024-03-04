@@ -356,4 +356,6 @@ export default {
   "Newsletter elements":"Play pictogram, name of the show, See more",
   "Choose text color":"Choose text color",
   "Choose background color":"Choose background color",
+  "Skip ad":"Skip ad",
+  "Skip ad in seconds":"Skip ad in {seconds} seconds",
 };

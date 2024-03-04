@@ -193,8 +193,7 @@ export default defineComponent({
         this.isProduction &&
         ((this.authOrganisation.attributes?.["openAi.active"] as
           | string
-          | undefined) === "true" ??
-          false)
+          | undefined) === "true")
       );
     },
     titleRssButton(): string {
@@ -268,24 +267,27 @@ export default defineComponent({
       return "";
     },
   },
-  async created() {
-    if (undefined !== this.participantId) {
-      this.displayRss = await octopusApi.fetchDataPublic<boolean>(
-        0,
-        `rss/participants/allowed/${this.organisationId}`,
-      );
-    } else {
-      this.displayRss = true;
-    }
-    if (!this.organisationId) {
-      return;
-    }
-    const attributes = await this.getOrgaAttributes(this.organisationId);
-    this.noSharing = "true" === attributes.noSharing;
-    this.isLoading = false;
+  created() {
+    this.initShareButtons();
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
+    async initShareButtons(){
+      if (undefined !== this.participantId) {
+        this.displayRss = await octopusApi.fetchDataPublic<boolean>(
+          0,
+          `rss/participants/allowed/${this.organisationId}`,
+        );
+      } else {
+        this.displayRss = true;
+      }
+      if (!this.organisationId) {
+        return;
+      }
+      const attributes = await this.getOrgaAttributes(this.organisationId);
+      this.noSharing = "true" === attributes.noSharing;
+      this.isLoading = false;
+    },
     getClass(className = "btn-rss"): string {
       return `btn ${className} share-btn mb-2 text-dark`;
     },

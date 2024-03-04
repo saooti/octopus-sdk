@@ -97,7 +97,7 @@ export default defineComponent({
       }
     },
   },
-  async created() {
+  created() {
     if (!this.organisationId) return;
     if (this.filterOrgaId === this.organisationId) {
       this.keepOrganisation = true;

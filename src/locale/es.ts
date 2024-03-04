@@ -357,4 +357,6 @@ export default {
   "Newsletter elements":"Pictograma de reproducción, nombre del programa, Ver más",
   "Choose text color":"Elige el color del texto",
   "Choose background color":"Elige el color de fondo",
+  "Skip ad":"Omitir aviso publicitario",
+  "Skip ad in seconds":"Saltar anuncio en {segundos} segundos",
 }

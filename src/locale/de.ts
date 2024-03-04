@@ -356,4 +356,6 @@ export default {
   "Newsletter elements":"Piktogramm abspielen, Name der Show, Mehr anzeigen",
   "Choose text color":"Wählen Sie Textfarbe",
   "Choose background color":"Wählen Sie die Hintergrundfarbe",
+  "Skip ad":"Überspringen",
+  "Skip ad in seconds":"Anzeige in {seconds} Sekunden überspringen",
 }

@@ -4,13 +4,14 @@ import cookies from "../cookies";
 import { playerLive } from "./playerLive";
 import { playerComment } from "./playerComment";
 import { playerTranscript } from "./playerTranscript";
+import { playerVast } from "./playerVast";
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/stores/AuthStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 export const playerLogic = defineComponent({
-  mixins: [cookies, playerLive, playerComment, playerTranscript],
+  mixins: [cookies, playerLive, playerComment, playerTranscript, playerVast],
   data() {
     return {
       forceHide: false as boolean,
@@ -257,6 +258,7 @@ export const playerLogic = defineComponent({
     },
     onFinished(): void {
       this.setDownloadId(null);
+      this.contentEndedAdsLoader();
       if (this.playerLive) {
         this.endingLive();
       }

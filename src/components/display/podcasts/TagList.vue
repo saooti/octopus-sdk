@@ -62,7 +62,7 @@ export default defineComponent({
   computed: {
     ouestFranceMainTag(): string | undefined {
       if (this.podcastAnnotations?.["mainOfTag"]) {
-        for (var key in this.podcastAnnotations) {
+        for (let key in this.podcastAnnotations) {
           if (
             this.podcastAnnotations[key] ===
               this.podcastAnnotations["mainOfTag"] &&

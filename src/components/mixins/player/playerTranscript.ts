@@ -24,7 +24,6 @@ export const playerTranscript = defineComponent({
       }else if(0===doubletsLength || 1=== doubletsLength &&  "post" === adserverConfig.config.doublets[0].timing.insertion){
         return;
       }else{
-        // todo remove chaptering
         this.playerUpdateChaptering();
         this.playerUpdateTranscript();
       }
@@ -76,7 +75,7 @@ export const playerTranscript = defineComponent({
       return +a[0] * 60 * 60 + +a[1] * 60 + +parseFloat(a[2]);
     },
     onTimeUpdateTranscript(currentTime: number) {
-      if(!this.playerTranscript || !this.playerTranscript.value.length){
+      if(!this.playerTranscript?.value.length){
         return;
       }
       const startTime = (this.playerTranscript.value[this.playerTranscript.actual]?.startTime ?? 0) + this.playerDelayStitching;

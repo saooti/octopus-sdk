@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import SnackBar from "../../misc/SnackBar.vue";
+import SnackBar from "../../SnackBar.vue";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";

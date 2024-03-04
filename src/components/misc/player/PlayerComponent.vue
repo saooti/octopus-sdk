@@ -6,22 +6,23 @@
     :style="{ height: playerHeight }"
     @transitionend="onHidden"
   >
+    <audio
+      id="audio-player"
+      :src="!playerLive && !playerRadio ? audioUrlToPlay : undefined"
+      autoplay
+      @timeupdate="onTimeUpdate"
+      @ended="onFinished"
+      @playing="onPlay"
+      @durationChange="onTimeUpdate"
+      @error="onError"
+      @seeked="onSeeked"
+      @pause="onPause"
+      @loadedmetadata="checkDelaytWithStitching"
+    />
+    <div id="ad-container"></div>
     <template v-if="displayWithTimeout">
       <PlayerVideo v-if="playerVideo" />
       <template v-else>
-        <audio
-          id="audio-player"
-          :src="!playerLive && !playerRadio ? audioUrlToPlay : undefined"
-          autoplay
-          @timeupdate="onTimeUpdate"
-          @ended="onFinished"
-          @playing="onPlay"
-          @durationChange="onTimeUpdate"
-          @error="onError"
-          @seeked="onSeeked"
-          @pause="onPause"
-          @loadedmetadata="checkDelaytWithStitching"
-        />
         <PlayerCompact
           v-if="!playerLargeVersion"
           :player-error="playerError"
@@ -56,7 +57,9 @@ import { playerLogic } from "../../mixins/player/playerLogic";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
-const PlayerVideo = defineAsyncComponent(() => import("./PlayerVideo.vue"));
+const PlayerVideo = defineAsyncComponent(
+  () => import("./video/PlayerVideo.vue"),
+);
 const PlayerCompact = defineAsyncComponent(
   () => import("../player/PlayerCompact.vue"),
 );
@@ -165,6 +168,9 @@ export default defineComponent({
         flex-wrap: nowrap !important;
       }
     }
+  }
+  #ad-container {
+    display: none;
   }
 }
 </style>

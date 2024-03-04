@@ -20,7 +20,7 @@ const getStyle = (
     wrap: {
       position: "fixed",
       left: 0,
-      pos: pos ? pos : c(0.05),
+      pos: pos ?? c(0.05),
       zIndex: 9999,
       width: "100%",
       padding: `0 ${c(0.2)}`,

@@ -195,7 +195,6 @@ export default defineComponent({
         this.lastWindowWidth = this.windowWidth;
         return;
       }
-
       const subscribeList = this.$refs.subscribeButtonsContainer as HTMLElement;
       if (
         null === subscribeList ||
@@ -255,9 +254,7 @@ export default defineComponent({
       display: inline-flex;
       justify-content: flex-start;
       overflow: hidden;
-      //flex-grow: 1;
       width: fit-content;
-      //width: 0;
     }
   }
 }

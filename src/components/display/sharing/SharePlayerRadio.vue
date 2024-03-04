@@ -80,16 +80,19 @@ export default defineComponent({
       return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay" frameborder="0"></iframe>`;
     },
   },
-  async created() {
-    const orgaId =
-      "" !== this.authOrganisation.id
-        ? this.authOrganisation.id
-        : state.generalParameters.organisationId;
-    this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
-    this.initColor();
+  created() {
+    this.initSharePlayer();
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
+    async initSharePlayer(){
+      const orgaId =
+        "" !== this.authOrganisation.id
+          ? this.authOrganisation.id
+          : state.generalParameters.organisationId;
+      this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
+      this.initColor();
+    },
     initColor(): void {
       if (!this.orgaAttributes) {
         return;

@@ -95,6 +95,12 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		&:hover{
 			background: $primaryColorMoreTransparent;
 		}
+		&:not(.btn-underline, .btn-primary, .btn-more, .btn-on-dark, .btn-transparent, .admin-button, .share-btn):disabled
+		{
+			background-color: #dddddd;
+			cursor: default;
+			color: #616161 !important;
+		}
 		//Button disable halo after click
 		&.btn-underline{
 				background: none;

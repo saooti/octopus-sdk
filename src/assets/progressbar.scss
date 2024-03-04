@@ -60,4 +60,13 @@
       right: 0;
     }
   }
+  .ambiance-progress {
+    background-color: #d1d1d1;
+    .octopus-progress-bar {
+      background-color: #747474;
+    }
+    .no-transition {
+      transition: none !important;
+    }
+  }
 }

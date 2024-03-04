@@ -18,14 +18,14 @@
 <script lang="ts">
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
-import ProgressBar from "../ProgressBar.vue";
+import ProgressBar from "../../ProgressBar.vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { defineComponent, defineAsyncComponent } from "vue";
 const CommentPlayer = defineAsyncComponent(
-  () => import("../../display/comments/CommentPlayer.vue"),
+  () => import("../../../display/comments/CommentPlayer.vue"),
 );
 export default defineComponent({
-  name: "PlayerProgressBar",
+  name: "PodcastProgressBar",
 
   components: {
     CommentPlayer,
