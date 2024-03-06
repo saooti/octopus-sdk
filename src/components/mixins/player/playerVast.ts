@@ -27,18 +27,6 @@ export const playerVast = defineComponent({
     ...mapState(useVastStore, ["isAdPlaying", "currentAd", "isAdPaused", "isAdSkipped", "vastUrl"]),
   },
   watch:{
-    playerCurrentChange(): void {
-      if(null!==adsManager){
-        this.destroyAdManager();
-      }
-      if (("STOPPED" ===this.playerStatus) || !this.vastUrl || this.playerVideo) {return;}
-      if(!this.imaLoaded){
-        this.imaLoaded = true;
-        this.loadIMA();
-      }else{
-        this.requestAds();
-      }
-    },
     isAdPaused(){
       this.onAdChangePlayingStatus();
     },
@@ -49,10 +37,18 @@ export const playerVast = defineComponent({
   methods: {
     ...mapActions(useVastStore, ["updateIsAdPlaying", "updateSkippableData", "updateCurrentAd", "updateProgressionData", "restartVastData"]),
     ...mapActions(usePlayerStore, ["playerChangeStatus"]),
+    requestAds(){
+      if(!this.imaLoaded){
+        this.imaLoaded = true;
+        this.loadIMA();
+      }else{
+        this.onRequestAds();
+      }
+    },
     loadIMA(){
       this.loadScript('//imasdk.googleapis.com/js/sdkloader/ima3.js', true, (isIMALoaded:boolean) => {
         if(isIMALoaded) {
-          this.requestAds();
+          this.onRequestAds();
         }
       });
     },
@@ -84,7 +80,7 @@ export const playerVast = defineComponent({
       adsRequest.setAdWillAutoPlay(true);
       adsRequest.adTagUrl = this.vastUrl;
     },
-    requestAds(): void {
+    onRequestAds(): void {
       this.initializeDisplayContainer();
       if(!adDisplayContainer || !adsLoader){
         return;
@@ -128,6 +124,7 @@ export const playerVast = defineComponent({
       this.destroyAdManager();
     },
     destroyAdManager(){
+      if(!adsManager){return;}
       console.log("Destroy manager");
       adsManager?.destroy();
       adsManager = null;

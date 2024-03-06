@@ -4,14 +4,14 @@ import cookies from "../cookies";
 import { playerLive } from "./playerLive";
 import { playerComment } from "./playerComment";
 import { playerTranscript } from "./playerTranscript";
-import { playerVast } from "./playerVast";
+import { playerStitching } from "./playerStitching";
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/stores/AuthStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 export const playerLogic = defineComponent({
-  mixins: [cookies, playerLive, playerComment, playerTranscript, playerVast],
+  mixins: [cookies, playerLive, playerComment, playerTranscript, playerStitching],
   data() {
     return {
       forceHide: false as boolean,

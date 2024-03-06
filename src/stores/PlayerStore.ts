@@ -11,7 +11,7 @@ interface Transcript {
   value: Array<{ endTime: number; startTime: number; text: string }>;
 }
 interface PlayerState {
-  playerCurrentChange: boolean;
+  playerCurrentChange: number|null;
   playerStatus: string; //STOPPED, LOADING, PLAYING, PAUSED
   playerPodcast: Podcast | undefined;
   playerVolume?: number; //From 0 to 1
@@ -30,7 +30,7 @@ interface PlayerState {
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
-    playerCurrentChange:false,
+    playerCurrentChange:null,
     playerStatus: "STOPPED",
     playerPodcast: undefined,
     playerVolume: 1,
@@ -121,7 +121,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
   actions: {
     async playerPlay(param?: any, isVideo = false) {
       if (!param) {
-        this.playerCurrentChange = !this.playerCurrentChange;
+        this.playerCurrentChange = null;
         this.playerStatus = "STOPPED";
         this.playerPodcast = undefined;
         this.playerMedia = undefined;
@@ -149,21 +149,23 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerVideo = isVideo;
       this.playerElapsed = 0;
       this.playerChaptering=undefined;
-      this.playerCurrentChange = !this.playerCurrentChange;
       if (
         param.conferenceId &&
         (!param.podcastId || param.processingStatus !== "READY")
       ) {
         this.playerLive = param;
+        this.playerCurrentChange = null;
         return;
       }
       if (param.podcastId) {
         this.playerPodcast = param;
+        this.playerCurrentChange = param.podcastId;
         if(param.annotations?.chaptering){
           this.playerChaptering =  await octopusApi.fetchDataPublic<Chaptering>(4, (param.annotations.chaptering as string));
         }
         return;
       }
+      this.playerCurrentChange = null;
       if (param.mediaId) {
         this.playerMedia = param;
         return;
