@@ -148,7 +148,6 @@ export default defineComponent({
     flex-direction: column;
     transition: height 0.7s;
     box-shadow: 0px 2px 15px 5px rgba(0, 0, 0, 0.4) !important;
-    z-index: 11;
 
     &.content-top-bar {
       height: 22rem;
@@ -162,6 +161,10 @@ export default defineComponent({
       .page-element-bg {
         height: 5rem;
       }
+    }
+
+    &.scrolled {
+      z-index: 11;
     }
 
     h1 {

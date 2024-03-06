@@ -18,6 +18,7 @@
       class="btn m-1 admin-button hide-small-screen saooti-user text-blue-octopus"
       :title="$t('User menu')"
     />
+    <teleport to=".octopus-app">
     <ClassicPopover
       target="home-dropdown"
       :only-click="true"
@@ -69,6 +70,7 @@
         {{ $t("Contact") }}
       </router-link>
     </ClassicPopover>
+    </teleport>
   </div>
 </template>
 
