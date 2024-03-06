@@ -17,7 +17,7 @@
       @error="onError"
       @seeked="onSeeked"
       @pause="onPause"
-      @loadedmetadata="checkDelaytWithStitching"
+      @loadedmetadata="checkDelayWithStitching"
     />
     <div id="ad-container"></div>
     <template v-if="displayWithTimeout">

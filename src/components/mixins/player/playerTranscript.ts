@@ -9,7 +9,7 @@ export const playerTranscript = defineComponent({
   },
   methods: {
     ...mapActions(usePlayerStore, ["playerUpdateTranscript", "playerUpdateDelayStitching"]),
-    async checkDelaytWithStitching(){
+    async checkDelayWithStitching(){
       this.playerUpdateDelayStitching(0);
       const audioPlayer = document.querySelector("#audio-player") as HTMLAudioElement;
       if (!this.playerTranscript || !audioPlayer || !this.playerPodcast ||
@@ -17,6 +17,7 @@ export const playerTranscript = defineComponent({
       {
         return;
       }
+      //TODO save config to use with vast
       let adserverConfig = await octopusApi.fetchDataPublic<AdserverOtherEmission>(0,`ad/test/podcast/${this.playerPodcast.podcastId}`);
       const doubletsLength = adserverConfig.config.doublets.length;
       if(1=== doubletsLength &&  "pre" === adserverConfig.config.doublets[0].timing.insertion){
