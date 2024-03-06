@@ -60,7 +60,7 @@ export default defineComponent({
   computed: {
     ...mapState(useGeneralStore, ["contentToDisplay"]),
     isContentToDisplay(): boolean {
-      return "podcast" === this.$route.name || "emission" === this.$route.name;
+      return "podcast" === this.$route.name || "emission" === this.$route.name || "playlist" === this.$route.name|| "radio" === this.$route.name;
     },
     backgroundDisplay(): string {
       if (!this.contentToDisplay) {
