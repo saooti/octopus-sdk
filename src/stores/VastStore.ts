@@ -12,9 +12,10 @@ interface VastState {
   timeTillSkipInSeconds: number;
   currentTimeAd:number;
   currentDurationAd: number;
+
   vastUrl?: string;
-  adConfigPodcasts: {[key:number]:AdserverOtherEmission}
-  adPositionPodcasts: {[key:number]:Array<AdPosition>}
+  adPositionIndex:number,
+  adPositionsPodcasts: {[key:number]:Array<AdPosition>}
 }
 //TODO remove vastUrl for dynamic url
 
@@ -30,12 +31,9 @@ function emptyVastState(): VastState{
     currentTimeAd:0,
     currentDurationAd:0,
 
-    
-    //TODO soit faire un nouveau store soit gérer le rest mieux !!!!
-
     vastUrl: "https://pubads.g.doubleclick.net/gampad/ads?iu=/6075/Rahul_AdUnit_Test_1&description_url=[placeholder]&tfcd=0&npa=0&ad_type=audio_video&sz=640x360&ciu_szs=640x360&cust_params=yt_channel_id%3Drtryuyuu&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=",
-    adConfigPodcasts:{},
-    adPositionPodcasts:{}
+    adPositionIndex:0,
+    adPositionsPodcasts:{}
   }
 }
 
@@ -63,13 +61,15 @@ export const useVastStore = defineStore("VastStore", {
   },
   actions: {
     restartVastData(){
-      const saveAdConfigPodcasts = this.adConfigPodcasts;
+      const saveAdPositionsPodcasts = this.adPositionsPodcasts;
       this.$state = emptyVastState();
-      this.adConfigPodcasts = saveAdConfigPodcasts;
+      this.adPositionsPodcasts = saveAdPositionsPodcasts;
     },
-    updateAdConfigPodcasts(podcastId:number, adConfig: AdserverOtherEmission){
-      this.adConfigPodcasts[podcastId] = adConfig;
-      console.log(this.adConfigPodcasts);
+    updateAdPositionIndex(index:number){
+      this.adPositionIndex = index;
+    },
+    updateAdPositionsPodcasts(podcastId:number, adPositions: Array<AdPosition>){
+      this.adPositionsPodcasts[podcastId] = adPositions;
     },
     updateCurrentAd(currentAd: any){
       this.currentAd = currentAd;

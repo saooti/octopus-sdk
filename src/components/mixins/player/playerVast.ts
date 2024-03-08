@@ -8,7 +8,7 @@ let adsLoader: any;
 let adsManager:any;
 let adDisplayContainer:any;
 let adsRequest: any;
-
+//TODO stop launching ad when loading
 //TODO multiples pub 
 //TODO multiples request at precise time
 //TODO keep track ad listen (stats)
@@ -20,6 +20,7 @@ export const playerVast = defineComponent({
       imaLoaded: false as boolean,
       isContentFinished: false as boolean,
       audioContainer: null as HTMLAudioElement|null,
+      isAdRequested: false as boolean,
     };
   },
   computed: {
@@ -37,20 +38,34 @@ export const playerVast = defineComponent({
   methods: {
     ...mapActions(useVastStore, ["updateIsAdPlaying", "updateSkippableData", "updateCurrentAd", "updateProgressionData", "restartVastData"]),
     ...mapActions(usePlayerStore, ["playerChangeStatus"]),
-    requestAds(){
+    prepareIMA(){
       if(!this.imaLoaded){
         this.imaLoaded = true;
         this.loadIMA();
       }else{
-        this.onRequestAds();
+        this.initializeIMA();
       }
     },
     loadIMA(){
       this.loadScript('//imasdk.googleapis.com/js/sdkloader/ima3.js', true, (isIMALoaded:boolean) => {
         if(isIMALoaded) {
-          this.onRequestAds();
+          this.initializeIMA();
         }
       });
+    },
+    initializeIMA(): void {
+      this.initializeDisplayContainer();
+      if(!adDisplayContainer || !adsLoader){
+        return;
+      }
+      /* this.initializeAdsRequest();
+      adsLoader.requestAds(adsRequest);  */
+    },
+    onRequestAd(vastUrl: string){
+      this.isAdRequested = true;
+      console.log("Request ad "+vastUrl);
+      this.initializeAdsRequest(vastUrl);
+      adsLoader.requestAds(adsRequest);
     },
     initializeDisplayContainer():void{
       if(adDisplayContainer){return};
@@ -74,19 +89,12 @@ export const playerVast = defineComponent({
         false
       );
     },
-    initializeAdsRequest():void{
+    initializeAdsRequest(vastUrl: string):void{
       adsRequest = new google.ima.AdsRequest();
       //TODO here check if I can start manually
       adsRequest.setAdWillAutoPlay(true);
-      adsRequest.adTagUrl = this.vastUrl;
-    },
-    onRequestAds(): void {
-      this.initializeDisplayContainer();
-      if(!adDisplayContainer || !adsLoader){
-        return;
-      }
-      this.initializeAdsRequest();
-      adsLoader.requestAds(adsRequest); 
+      //TODO replace vastUrlWith dynamic adPositionsPodcasts
+      adsRequest.adTagUrl = vastUrl;
     },
     onAdsManagerLoaded(adsManagerLoadedEvent: any) {
       const adsRenderingSettings = new google.ima.AdsRenderingSettings();
@@ -95,6 +103,7 @@ export const playerVast = defineComponent({
       this.startAdManager();
     },
     startAdManager(){
+      //TODO destroy before start ? 
       console.log("Start manager");
       this.initAdManagerEvents();
       try {
@@ -103,6 +112,7 @@ export const playerVast = defineComponent({
       } catch (adError) {
         console.log(adError);
         this.playerChangeStatus(false);
+        this.destroyAdManager();
       }
     },
     initAdManagerEvents(){
@@ -130,6 +140,7 @@ export const playerVast = defineComponent({
       adsManager = null;
       this.restartVastData();
       this.isContentFinished=false;
+      this.isAdRequested = false;
     },
     onAdEvent(adEvent: any) {
       const ad = adEvent.getAd();
@@ -140,9 +151,11 @@ export const playerVast = defineComponent({
         case google.ima.AdEvent.Type.LOADED:
           if (!ad.isLinear()) {
             this.playerChangeStatus(false);
+            this.isAdRequested = false;
           }
           break;
         case google.ima.AdEvent.Type.AD_PROGRESS:
+          this.isAdRequested = false;
           const adProgressData = adEvent.getAdData();
           this.updateProgressionData(adProgressData.duration,adProgressData.currentTime);
           this.updateSkippableData(

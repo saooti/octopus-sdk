@@ -73,15 +73,25 @@ export const usePlayerStore = defineStore("PlayerStore", {
       if (window.innerWidth > 450) return "6rem";
       return "3.5rem";
     },
-    playedTime(): string {
+
+    playerElapsedSeconds(): number{
       if (
         this.playerElapsed &&
         this.playerElapsed > 0 &&
         this.playerTotal &&
         this.playerTotal > 0
       ) {
+      return this.playerElapsed * this.playerTotal
+      }else{
+        return -1;
+      }
+    },
+    playedTime(): string {
+      if (
+        -1!==this.playerElapsedSeconds
+      ) {
         return DurationHelper.formatDuration(
-          Math.round(this.playerElapsed * this.playerTotal),
+          Math.round(this.playerElapsedSeconds),
         );
       }
       return "--:--";
