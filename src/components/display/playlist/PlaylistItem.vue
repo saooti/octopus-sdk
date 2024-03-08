@@ -1,5 +1,5 @@
 <template>
-  <div v-if="editRight || activePlaylist" class="emission-item-container">
+  <div class="emission-item-container">
     <router-link
       :to="{
         name: 'playlist',
@@ -10,12 +10,13 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <div class="emission-item-text">
+        <div
+          v-if="!activePlaylist"
+          class="sticker-empty-ressource"
+        >
+          {{ $t('Empty playlist') }}
+        </div>
         <div class="d-flex align-items-center emission-name">
-          <span
-            v-if="!activePlaylist && !isPodcastmaker"
-            :title="$t('Playlist have not podcasts')"
-            class="saooti-warning text-danger me-1"
-          />
           {{ name }}
         </div>
         <div
@@ -83,13 +84,6 @@ export default defineComponent({
     },
     organisationId(): string | undefined {
       return state.generalParameters.organisationId;
-    },
-    editRight(): boolean {
-      return (
-        (true === state.generalParameters.isPlaylist &&
-          this.organisationId === this.playlist.organisation?.id) ||
-        (state.generalParameters.isAdmin as boolean)
-      );
     },
     activePlaylist(): boolean {
       return 0 !== Object.keys(this.playlist.samplingViews ?? []).length;

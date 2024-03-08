@@ -1,4 +1,25 @@
 .octopus-app{
+  .sticker-empty-ressource{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    align-self: center;
+    background: $blue-octopus;
+    padding: 0.5rem;
+    transition: all 0.5s ease;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: solid 2px #41403e;
+    cursor: auto;
+    &:hover {
+      box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+      background: $octopus-primary-color;
+    }
+  }
   .category-filter-no-filter {
     position: absolute;
     top: 0;
@@ -146,6 +167,7 @@
   }
     
   .emission-item-container{
+    position: relative;
     list-style: none;
     background: #fff;
     border-radius: $octopus-borderradius;

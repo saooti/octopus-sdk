@@ -223,8 +223,7 @@ export default {
   "All playlists": "Alle Wiedergabelisten",
   "Look for playlist name": "Wiedergabeliste nach Titel suchen",
   "Number playlists": "{NB} Wiedergabelisten",
-  "Playlist have not podcasts":
-    "In der Wiedergabeliste gibt es keinen Podcast.",
+  "Empty playlist":"Leere Playlist",
   "Playlist doesn't exist": "Gesuchte Wiedergabeliste nicht gefunden",
   "Playlist name image": "Wiedergabeliste {name}",
   "Create playlist": "Wiedergabeliste erstellen",
