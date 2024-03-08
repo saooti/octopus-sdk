@@ -110,6 +110,7 @@
         <HomeDropdown
           :is-education="isEducation"
           :mobile-menu-display="mobileMenuDisplay"
+          :scrolled="scrolled"
         />
         <router-link
           v-show="!isPhone && !inContentDisplayPage"

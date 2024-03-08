@@ -18,7 +18,7 @@
       class="btn m-1 admin-button hide-small-screen saooti-user text-blue-octopus"
       :title="$t('User menu')"
     />
-    <teleport to=".octopus-app">
+    <teleport to=".octopus-app" :disabled="scrolled">
     <ClassicPopover
       target="home-dropdown"
       :only-click="true"
@@ -90,6 +90,7 @@ export default defineComponent({
   props: {
     isEducation: { default: false, type: Boolean },
     mobileMenuDisplay: { default: false, type: Boolean },
+    scrolled: { default: false, type: Boolean },
   },
   computed: {
     ...mapState(useAuthStore, ["authProfile", "isGarRole"]),
