@@ -220,7 +220,7 @@ export default {
   "All playlists": "All playlists",
   "Look for playlist name": "Look for playlist by title",
   "Number playlists": "{nb} playlists",
-  "Playlist have not podcasts": "Playlist does not have any podcasts",
+  "Empty playlist": "Empty playlist",
   "Playlist doesn't exist": "The playlist requested doesn't exist",
   "Playlist name image": "Playlist title {name}",
   "Create playlist": "Create playlist",

@@ -224,8 +224,7 @@ export default {
   "All playlists": "Todas las listas de reproducción",
   "Look for playlist name": "Buscar lista de reproducción por título",
   "Number playlists": "{nb} listas de reproducción",
-  "Playlist have not podcasts":
-    "Esta lista de reproducción no contiene pódcast",
+  "Empty playlist":"Lista de reproducción vacía",
   "Playlist doesn't exist": "La lista de reproducción solicitada no existe",
   "Playlist name image": "Título de la lista de reproducción {name}",
   "Create playlist": "Crear lista de reproducción",

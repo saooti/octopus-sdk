@@ -218,7 +218,7 @@ export default {
   "All playlists": "Vsi seznami predvajanja",
   "Look for playlist name": "Poišči seznam predvajanja po naslovu",
   "Number playlists": "{nb} seznamov predvajanja?",
-  "Playlist have not podcasts": "Seznam predvajanja ne vsebuje podkastov",
+  "Empty playlist": "Prazen seznam predvajanja",
   "Playlist doesn't exist": "Zahtevani seznam predvajanja ne obstaja",
   "Playlist name image": "Naslov seznama predvajanja {name}",
   "Create playlist": "Ustvari seznam predvajanja",

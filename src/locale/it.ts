@@ -219,7 +219,7 @@ export default{
     'All playlists': 'Tutte le playlist',
     'Look for playlist name': 'Ricerca playlist per titolo',
     'Number playlists': '{nb} playlist',
-    'Playlist have not podcasts': "Questa playlist non contiene nessun podcast",
+    'Empty playlist': "Playlist vuota",
     "Playlist doesn't exist": "La playlist richiesta non esiste",
     'Playlist name image': 'Titolo playlist {name}',
     'Create playlist': 'Crea playlist',
