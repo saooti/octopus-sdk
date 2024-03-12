@@ -100,20 +100,26 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerMetadata", "playerRadioPodcast"]),
+    ...mapActions(usePlayerStore, ["playerMetadata", "playerRadioPodcast", "playerRadioUpdateNextAdvertisingStartDate"]),
     async fetchCurrentlyPlaying(): Promise<void> {
       this.fetchRadioMetadata(
         this.playerRadio?.canalId ?? 0,
         this.playerRadio?.metadata.title ?? "",
         this.updateMetadata,
+        this.updateAdvertising
       );
+    },
+    updateAdvertising(
+      nextAdvertisingStartDate: string|null
+    ): void {
+      this.playerRadioUpdateNextAdvertisingStartDate(nextAdvertisingStartDate)
     },
     updateMetadata(
       metadata: MediaRadio,
       podcast: Podcast | undefined,
-      history?: Array<MediaRadio>,
+      history: Array<MediaRadio>,
     ): void {
-      this.playerMetadata(metadata, history ?? []);
+      this.playerMetadata(metadata, history);
       this.playerRadioPodcast(podcast);
     },
   },

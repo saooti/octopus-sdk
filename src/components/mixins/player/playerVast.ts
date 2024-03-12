@@ -8,10 +8,6 @@ let adsLoader: any;
 let adsManager:any;
 let adDisplayContainer:any;
 let adsRequest: any;
-//TODO stop launching ad when loading
-//TODO multiples pub 
-//TODO multiples request at precise time
-//TODO keep track ad listen (stats)
 
 export const playerVast = defineComponent({
   mixins:[loadScript],
@@ -21,6 +17,7 @@ export const playerVast = defineComponent({
       isContentFinished: false as boolean,
       audioContainer: null as HTMLAudioElement|null,
       isAdRequested: false as boolean,
+      statusPlayerWhenLoaded: "" as string
     };
   },
   computed: {
@@ -36,7 +33,7 @@ export const playerVast = defineComponent({
     }
   },
   methods: {
-    ...mapActions(useVastStore, ["updateIsAdPlaying", "updateSkippableData", "updateCurrentAd", "updateProgressionData", "restartVastData"]),
+    ...mapActions(useVastStore, ["updateIsAdPlaying","updateIsAdPaused", "updateSkippableData", "updateCurrentAd", "updateProgressionData", "restartVastData"]),
     ...mapActions(usePlayerStore, ["playerChangeStatus"]),
     prepareIMA(){
       if(!this.imaLoaded){
@@ -54,12 +51,11 @@ export const playerVast = defineComponent({
       });
     },
     initializeIMA(): void {
+      console.log("Initialize IMA");
       this.initializeDisplayContainer();
       if(!adDisplayContainer || !adsLoader){
         return;
       }
-      /* this.initializeAdsRequest();
-      adsLoader.requestAds(adsRequest);  */
     },
     onRequestAd(vastUrl: string){
       this.isAdRequested = true;
@@ -91,9 +87,7 @@ export const playerVast = defineComponent({
     },
     initializeAdsRequest(vastUrl: string):void{
       adsRequest = new google.ima.AdsRequest();
-      //TODO here check if I can start manually
       adsRequest.setAdWillAutoPlay(true);
-      //TODO replace vastUrlWith dynamic adPositionsPodcasts
       adsRequest.adTagUrl = vastUrl;
     },
     onAdsManagerLoaded(adsManagerLoadedEvent: any) {
@@ -103,7 +97,6 @@ export const playerVast = defineComponent({
       this.startAdManager();
     },
     startAdManager(){
-      //TODO destroy before start ? 
       console.log("Start manager");
       this.initAdManagerEvents();
       try {
@@ -149,9 +142,17 @@ export const playerVast = defineComponent({
       }
       switch (adEvent.type) {
         case google.ima.AdEvent.Type.LOADED:
+          this.statusPlayerWhenLoaded= this.playerStatus;
           if (!ad.isLinear()) {
             this.playerChangeStatus(false);
             this.isAdRequested = false;
+          }
+          break;
+        case google.ima.AdEvent.Type.STARTED:
+          console.log("Launched status : "+this.statusPlayerWhenLoaded);
+          if("PLAYING"!==this.statusPlayerWhenLoaded){
+            this.updateIsAdPaused(true);
+            adsManager.pause();
           }
           break;
         case google.ima.AdEvent.Type.AD_PROGRESS:

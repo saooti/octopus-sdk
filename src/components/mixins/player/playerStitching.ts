@@ -1,5 +1,6 @@
 import { defineComponent } from "vue";
 import octopusApi from "@saooti/octopus-api";
+import dayjs from "dayjs";
 import { playerVast } from "./playerVast";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { useVastStore } from "@/stores/VastStore";
@@ -11,27 +12,61 @@ import fetchParameters from "../fetchParameters";
 
 export const playerStitching = defineComponent({
   mixins:[playerVast,fetchParameters],
+  data() {
+    return {
+      radioInterval: undefined as ReturnType<typeof setTimeout> | undefined,
+    };
+  },
   computed: {
     ...mapState(useVastStore, ["adPositionsPodcasts", "adPositionIndex"]),
-    ...mapState(usePlayerStore, ["playerElapsedSeconds"]),
+    ...mapState(usePlayerStore, ["playerElapsedSeconds", "playerRadio"]),
+    radioNextAdvertisingStartDate(){
+      return this.playerRadio?.nextAdvertisingStartDate;
+    }
   },
   watch:{
     playerCurrentChange(): void {
      this.onPlayerChange();
     },
+    //launch advertising for podcast
     playerElapsedSeconds():void{
       if(!this.isAdRequested && this.checkAdNeedToBeLaunch()){
         this.onRequestAd(this.adPositionsPodcasts[this.playerCurrentChange??0][this.adPositionIndex].vastUrl);
         this.updateAdPositionIndex(this.adPositionIndex+1); 
       }
-    }
+    },
+    // launch advertising for radio
+    radioNextAdvertisingStartDate: {
+      immediate: true,
+      handler() {
+        if(!this.radioNextAdvertisingStartDate){
+          return;
+        }
+        this.defineRadioInterval();
+      },
+    },
+    
   },
   methods: {
     ...mapActions(useVastStore, ["updateAdPositionsPodcasts", "updateAdPositionIndex"]),
+    defineRadioInterval(){
+      //TODO remove tag en dur
+      this.clearRadioInterval();
+      const timeRemaining = dayjs(this.radioNextAdvertisingStartDate).diff(dayjs(), "millisecond");
+      console.log("TimeRemaining "+timeRemaining);
+      if(timeRemaining < 0){
+        return;
+      }
+      this.radioInterval = setTimeout(() => {
+        this.onRequestAd(this.getVastUrl("5e385e1b51c86"));
+      }, timeRemaining);
+    },
+    clearRadioInterval() {
+      clearInterval(this.radioInterval as unknown as number);
+      this.radioInterval = undefined;
+    },
     checkAdNeedToBeLaunch(){
       if(!this.playerCurrentChange || !this.adPositionsPodcasts[this.playerCurrentChange]?.[this.adPositionIndex]){return false;}
-      console.log(this.adPositionsPodcasts[this.playerCurrentChange][this.adPositionIndex]?.seconds);
-      console.log(this.playerElapsedSeconds);
       return this.adPositionsPodcasts[this.playerCurrentChange][this.adPositionIndex]?.seconds <= this.playerElapsedSeconds;
     },
     async onPlayerChange(){
@@ -41,14 +76,13 @@ export const playerStitching = defineComponent({
       await this.fetchPodcastAdConfig();
     },
     async fetchPodcastAdConfig(){
-      if(!this.playerCurrentChange || (this.playerCurrentChange && this.adPositionsPodcasts[this.playerCurrentChange])){
+      if(!this.playerCurrentChange || !this.playerPodcast ||(this.playerCurrentChange && this.adPositionsPodcasts[this.playerCurrentChange])){
         return;
       }
       let adserverConfig = await octopusApi.fetchDataPublic<AdserverOtherEmission>(0,`ad/test/podcast/${this.playerCurrentChange}`);
       const podcastDurationSeconds = Math.round((this.playerPodcast?.duration??0) / 1000);
       const allAdPositions =this.generateAllAdPositions(adserverConfig.config.doublets, podcastDurationSeconds);
       const selectedAdPositions = this.selectCorrectAdPositions(allAdPositions, podcastDurationSeconds, adserverConfig.config.minIntervalDuration, adserverConfig.config.minTailDuration);
-      console.log(selectedAdPositions);
       this.updateAdPositionsPodcasts(this.playerCurrentChange, selectedAdPositions);
     },
     generateAllAdPositions(doublets: Array<AdserverTiming>, podcastDuration: number): Array<AdPosition>{
@@ -117,34 +151,18 @@ export const playerStitching = defineComponent({
     },
 
     defineVastUrl(adPosition: AdPosition): AdPosition{
-      let baseUrl = "https://api.soundcast.io/v1/vast/"+adPosition.impressId;
+      adPosition.vastUrl = this.getVastUrl(adPosition.impressId);
+      //const apiHeader = { "Authorization": "e37205128cf4492fa23cd46e9806fe3d"}; //TODO need to hide ? 
+      return adPosition;
+    },
+    getVastUrl(tag: string): string{
+      let baseUrl = "https://api.soundcast.io/v1/vast/"+tag;
       const parameters = this.getUriSearchParams({
         adCount: 1,
-        //ip:,
         ua:navigator.userAgent,
         pageUrl:document.referrer
       });
-      baseUrl += '?' + parameters.toString();
-      adPosition.vastUrl = baseUrl;
-      
-      //TODO get ip
-      //Add apiKey (voir ou on stocke) et si on doit faire un service externe du coup (appel au service de l'api qui existe déjà )
-      //TODO API request builder https://gitlab.saooti.net/ouest-france/catalogue/-/blob/dev/api/src/main/java/com/saooti/ouestfrance/api/service/ad/stitching/saooti/RequestBuilder.java?ref_type=heads
-      /* var3 = var3
-      .queryParamIfPresent("ip", optional(vast.getIp()))
-      .queryParamIfPresent("ua", optional(vast.getUa()))
-      .queryParamIfPresent("consent", optional(vast.getConsent()))
-      .queryParamIfPresent("pageUrl", optional(vast.getPageUrl()))
-      .queryParamIfPresent("cookieId", optional(vast.getCookieId()))
-      .queryParamIfPresent("deviceId", optional(vast.getDeviceId()))
-      .queryParamIfPresent("keywords", keywords(vast.getKeywords()))
-      .queryParamIfPresent("adCount", Optional.ofNullable(vast.getAdCount()))
-      .queryParamIfPresent("lng", optional(vast.getLng()))
-      .queryParamIfPresent("bannedCategories", bannedCategories(vast.getBannedCategories()));
-      HttpHeaders var4 = new HttpHeaders();
-      var4.add("X-API-KEY", this.config.getApiKey());
-      HttpEntity var5 = new HttpEntity((Object)null, var4);*/
-      return adPosition;
+      return baseUrl + '?' + parameters.toString();
     }
   },
 });

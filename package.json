@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "@saooti/octopus-api": "^0.36.0",
+    "@saooti/octopus-api": "^0.38.0",
     "@tiptap/extension-link": "^2.2.4",
     "@tiptap/extension-underline": "^2.2.4",
     "@tiptap/pm": "^2.2.4",

@@ -19,13 +19,21 @@ export const fetchRadioData = defineComponent({
       callbackMetadata: (
         metadata: MediaRadio,
         podcast: Podcast | undefined,
-        history?: Array<MediaRadio>,
+        history: Array<MediaRadio>
+      ) => void,
+      callbackAdvertising?: (
+        nextAdvertisingStartDate: string|null
       ) => void,
     ): Promise<void> {
       const metadata = await octopusApi.fetchData<MetadataRadio>(
         14,
         "player/playing/" + canalId,
       );
+      if(callbackAdvertising){
+        //TODO remove mock
+        callbackAdvertising("2024-03-12T15:25:00Z");
+        //callbackAdvertising(metadata.nextAdvertisingStartDate);
+      }
       const arrayMetadata = metadata.previously;
       arrayMetadata.unshift(metadata.currently);
       for (let index = 0, len = arrayMetadata.length; index < len; index++) {

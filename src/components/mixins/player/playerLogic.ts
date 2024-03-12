@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/AuthStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
+import { FetchParam } from "@/stores/class/general/fetchParam";
 export const playerLogic = defineComponent({
   mixins: [cookies, playerLive, playerComment, playerTranscript, playerStitching],
   data() {
@@ -66,10 +67,10 @@ export const playerLogic = defineComponent({
       ) {
         return;
       }
-      const response = await octopusApi.fetchDataPublic<{
+      const response = await octopusApi.fetchDataPublicWithParams<{
         location: string;
         downloadId: number;
-      }>(0, "podcast/download/register/" + this.getAudioUrlParameters());
+      }>(0, "podcast/download/register/"+this.playerPodcast.podcastId + ".mp3", this.getAudioUrlParameters(), {'X-Extra-UA':'Saooti Player'});
       this.setDownloadId(response.downloadId.toString());
       this.audioUrlToPlay = response.location;
     },
@@ -140,24 +141,25 @@ export const playerLogic = defineComponent({
       }
       return domain;
     },
-    getAudioUrlParameters(): string {
-      if (!this.playerPodcast) return "";
-      const parameters = [];
-      parameters.push("origin=octopus");
+    getAudioUrlParameters(): FetchParam {
+      if (!this.playerPodcast) return {};
+      const parameters: FetchParam = {
+        origin: "octopus",
+        accepted:true
+      };
       if (this.authOrgaId) {
-        parameters.push("distributorId=" + this.authOrgaId);
+        parameters.distributorId = this.authOrgaId;
       }
       if (this.consentTcf) {
-        parameters.push("consent=" + this.consentTcf);
+        parameters.consent = this.consentTcf;
       }
-
       if (
         "SECURED" === this.playerPodcast.organisation.privacy &&
         this.authParam.accessToken
       ) {
-        parameters.push("access_token=" + this.authParam.accessToken);
+        parameters.access_token =this.authParam.accessToken;
       }
-      return this.playerPodcast.podcastId + ".mp3?" + parameters.join("&");
+      return parameters;
     },
     getAudioUrl(): string {
       if (this.playerMedia)
@@ -169,7 +171,7 @@ export const playerLogic = defineComponent({
       )
         return this.playerPodcast.audioStorageUrl;
       if (this.listenError) return this.playerPodcast.audioStorageUrl;
-      return this.getAudioUrlParameters();
+      return this.playerPodcast.podcastId + ".mp3?"+this.getAudioUrlParameters().toString();
     },
     reInitPlayer(): void {
       this.setDownloadId(null);
