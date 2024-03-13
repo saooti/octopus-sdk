@@ -173,15 +173,14 @@ export const usePlayerStore = defineStore("PlayerStore", {
         }
         return;
       }
-      this.playerCurrentChange = null;
       if (param.mediaId) {
         this.playerMedia = param;
+        this.playerCurrentChange = null;
         return;
       }
       if (param.canalId) {
         this.playerRadio = { ...param, ...{ isInit: false } };
-        //TODO pb si podcastId === canalId ? 
-        this.playerCurrentChange = param.canalId;
+        this.playerCurrentChange = -param.canalId;
       }
     },
 

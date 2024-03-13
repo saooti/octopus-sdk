@@ -18,7 +18,7 @@ export const playerStitching = defineComponent({
     };
   },
   computed: {
-    ...mapState(useVastStore, ["adPositionsPodcasts", "adPositionIndex"]),
+    ...mapState(useVastStore, ["adPositionsPodcasts", "adPositionIndex", "useVastPlayer"]),
     ...mapState(usePlayerStore, ["playerElapsedSeconds", "playerRadio"]),
     radioNextAdvertisingStartDate(){
       return this.playerRadio?.nextAdvertisingStartDate;
@@ -26,10 +26,12 @@ export const playerStitching = defineComponent({
   },
   watch:{
     playerCurrentChange(): void {
+      if(!this.checkUsePlayerStitching()){return;}
      this.onPlayerChange();
     },
     //launch advertising for podcast
     playerElapsedSeconds():void{
+      if(!this.checkUsePlayerStitching()){return;}
       if(!this.isAdRequested && this.checkAdNeedToBeLaunch()){
         this.onRequestAd(this.adPositionsPodcasts[this.playerCurrentChange??0][this.adPositionIndex].vastUrl);
         this.updateAdPositionIndex(this.adPositionIndex+1); 
@@ -39,6 +41,7 @@ export const playerStitching = defineComponent({
     radioNextAdvertisingStartDate: {
       immediate: true,
       handler() {
+        if(!this.checkUsePlayerStitching()){return;}
         if(!this.radioNextAdvertisingStartDate){
           return;
         }
@@ -47,8 +50,14 @@ export const playerStitching = defineComponent({
     },
     
   },
+  mounted(){
+    this.updateUseVastPlayer("true"===this.$route.query.vast);
+  },
   methods: {
-    ...mapActions(useVastStore, ["updateAdPositionsPodcasts", "updateAdPositionIndex"]),
+    ...mapActions(useVastStore, ["updateAdPositionsPodcasts", "updateAdPositionIndex", "updateUseVastPlayer"]),
+    checkUsePlayerStitching():boolean{
+      return this.useVastPlayer;
+    },
     defineRadioInterval(){
       //TODO remove tag en dur
       this.clearRadioInterval();
@@ -80,6 +89,10 @@ export const playerStitching = defineComponent({
         return;
       }
       let adserverConfig = await octopusApi.fetchDataPublic<AdserverOtherEmission>(0,`ad/test/podcast/${this.playerCurrentChange}`);
+      if(!adserverConfig || "SOUNDCAST_VAST"!==adserverConfig.config?.server){
+        this.updateAdPositionsPodcasts(this.playerCurrentChange, []);
+        return;
+      }
       const podcastDurationSeconds = Math.round((this.playerPodcast?.duration??0) / 1000);
       const allAdPositions =this.generateAllAdPositions(adserverConfig.config.doublets, podcastDurationSeconds);
       const selectedAdPositions = this.selectCorrectAdPositions(allAdPositions, podcastDurationSeconds, adserverConfig.config.minIntervalDuration, adserverConfig.config.minTailDuration);
@@ -87,6 +100,9 @@ export const playerStitching = defineComponent({
     },
     generateAllAdPositions(doublets: Array<AdserverTiming>, podcastDuration: number): Array<AdPosition>{
       let adPositions: Array<AdPosition> = [];
+      if(doublets.some((element: AdserverTiming)=>{return "TAG_NO_AD"===element.tag})){
+        return [];
+      }
       for (let doublet of doublets) {
         if(!doublet.tag){continue;}
         let seconds = 0;

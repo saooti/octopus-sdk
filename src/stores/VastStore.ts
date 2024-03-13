@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { AdserverOtherEmission } from "./class/adserver/adserverOtherEmission";
 import { AdPosition } from "./class/adserver/adPosition";
 
 interface VastState {
@@ -13,11 +12,11 @@ interface VastState {
   currentTimeAd:number;
   currentDurationAd: number;
 
-  vastUrl?: string;
+  useVastPlayer: boolean,
   adPositionIndex:number,
   adPositionsPodcasts: {[key:number]:Array<AdPosition>}
 }
-//TODO remove vastUrl for dynamic url
+
 
 function emptyVastState(): VastState{
   return{
@@ -31,7 +30,7 @@ function emptyVastState(): VastState{
     currentTimeAd:0,
     currentDurationAd:0,
 
-    vastUrl: "https://pubads.g.doubleclick.net/gampad/ads?iu=/6075/Rahul_AdUnit_Test_1&description_url=[placeholder]&tfcd=0&npa=0&ad_type=audio_video&sz=640x360&ciu_szs=640x360&cust_params=yt_channel_id%3Drtryuyuu&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=",
+    useVastPlayer:false,
     adPositionIndex:0,
     adPositionsPodcasts:{}
   }
@@ -92,6 +91,9 @@ export const useVastStore = defineStore("VastStore", {
       this.isAdSkippable= isAdSkippable;
       this.isSkipCurrentlyAllowed= isSkipCurrentlyAllowed;
       this.timeTillSkipInSeconds= timeTillSkipInSeconds;
+    },
+    updateUseVastPlayer(useVastPlayer:boolean){
+      this.useVastPlayer = useVastPlayer;
     }
   },
 });

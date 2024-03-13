@@ -17,7 +17,7 @@
 </template>
 <script lang="ts">
 import { fetchRadioData } from "../../../mixins/radio/fetchRadioData";
-import { state } from "@/stores/ParamSdkStore";
+import { state } from "../../../../stores/ParamSdkStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { useVastStore } from "@/stores/VastStore";
 import { mapState, mapActions } from "pinia";

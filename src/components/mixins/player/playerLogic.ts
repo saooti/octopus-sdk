@@ -11,6 +11,7 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { FetchParam } from "@/stores/class/general/fetchParam";
+import { useVastStore } from "@/stores/VastStore";
 export const playerLogic = defineComponent({
   mixins: [cookies, playerLive, playerComment, playerTranscript, playerStitching],
   data() {
@@ -44,6 +45,7 @@ export const playerLogic = defineComponent({
       "playerSeekTime",
       "playerVideo"
     ]),
+    ...mapState(useVastStore, ["useVastPlayer"]),
 
     audioUrl(): string {
       return this.getAudioUrl();
@@ -145,7 +147,7 @@ export const playerLogic = defineComponent({
       if (!this.playerPodcast) return {};
       const parameters: FetchParam = {
         origin: "octopus",
-        accepted:true
+        accepted: this.useVastPlayer
       };
       if (this.authOrgaId) {
         parameters.distributorId = this.authOrgaId;

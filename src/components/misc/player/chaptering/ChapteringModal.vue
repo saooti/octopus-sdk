@@ -46,7 +46,7 @@
 <script lang="ts">
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
-import ClassicModal from "../modal/ClassicModal.vue";
+import ClassicModal from "../../modal/ClassicModal.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ChapteringModal",
