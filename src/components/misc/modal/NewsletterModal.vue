@@ -12,7 +12,7 @@
             <h4 class="mb-3">
               {{ $t("Configure your Newsletter tile") }}
             </h4>
-            <div 
+            <div
               v-for="colors in arrayColors"
               :key="colors.mainText"
               class="d-flex align-items-center mb-3"
@@ -28,11 +28,13 @@
               />
               <div class="d-flex flex-column">
                 <div class="fw-bold">{{ colors.mainText }}</div>
-                <div v-if="colors.secondText" class="descriptionText">{{ colors.secondText }}</div>
+                <div v-if="colors.secondText" class="descriptionText">
+                  {{ colors.secondText }}
+                </div>
               </div>
             </div>
           </div>
-        <!-- eslint-disable vue/no-v-html -->
+          <!-- eslint-disable vue/no-v-html -->
           <div v-html="newsletterHtml" />
           <!-- eslint-enable -->
         </div>
@@ -40,7 +42,7 @@
           class="btn flex-grow-1 mt-3 fw-bold"
           @click="onCopyCode(newsletterHtml, afterCopy)"
         >
-          <span class="saooti-copy me-2"/>
+          <span class="saooti-copy me-2" />
           {{ $t("Copy and embed the HTML code into your email tool") }}
         </button>
         <SnackBar ref="snackbar" position="bottom-left" />
@@ -91,9 +93,14 @@ export default defineComponent({
   data() {
     return {
       arrayColors: [
-        {color:"#40a372", mainText: this.$t('Choose main color'),secondText: this.$t('Newsletter elements') },
-        {color:"#000000", mainText: this.$t('Choose text color') },
-        {color:"#FFFFFF", mainText: this.$t('Choose background color') }],
+        {
+          color: "#40a372",
+          mainText: this.$t("Choose main color"),
+          secondText: this.$t("Newsletter elements"),
+        },
+        { color: "#000000", mainText: this.$t("Choose text color") },
+        { color: "#FFFFFF", mainText: this.$t("Choose background color") },
+      ],
       shareUrl: window.location.href,
     };
   },
@@ -106,7 +113,7 @@ export default defineComponent({
           imageUrl: `${this.podcast.imageUrl}" alt="${this.$t(
             "Podcast image",
           )}`,
-          title:this.podcast.title,
+          title: this.podcast.title,
           description: this.podcast.description ?? "",
           shareText: this.$t("Listen this episode"),
           emissionHtml: `<tr><td style="padding:5px 0;">
@@ -206,11 +213,14 @@ export default defineComponent({
         "" !== this.authOrganisation.id
           ? this.authOrganisation.id
           : state.generalParameters.organisationId;
-      if(!orgaId ||orgaId?.length){
+      if (!orgaId || orgaId?.length) {
         return;
       }
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
-      if (Object.hasOwn(attributes, "podcastmakerUrl") && (attributes.podcastmakerUrl as string|undefined|null)?.length) {
+      if (
+        Object.hasOwn(attributes, "podcastmakerUrl") &&
+        (attributes.podcastmakerUrl as string | undefined | null)?.length
+      ) {
         this.shareUrl =
           attributes.podcastmakerUrl +
           window.location.pathname +
@@ -234,9 +244,9 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   #newsletter-modal {
-    .octopus-modal-body{
+    .octopus-modal-body {
       overflow-x: inherit;
-      @media (max-width: 500px){
+      @media (max-width: 500px) {
         overflow-x: auto;
       }
     }

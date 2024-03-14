@@ -10,11 +10,8 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <div class="emission-item-text">
-        <div
-          v-if="!activePlaylist"
-          class="sticker-empty-ressource"
-        >
-          {{ $t('Empty playlist') }}
+        <div v-if="!activePlaylist" class="sticker-empty-ressource">
+          {{ $t("Empty playlist") }}
         </div>
         <div class="d-flex align-items-center emission-name">
           {{ name }}

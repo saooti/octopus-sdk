@@ -44,22 +44,24 @@
           :podcast="podcast"
           :organisation-id="podcast.organisation.id"
         />
-        <ClassicLazy :min-height="550">
-          <PodcastInlineList
-            class="mt-4"
-            :podcast-id="podcastId"
-            :title="$t('Suggested listening')"
-          />
-        </ClassicLazy>
-        <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
-          <PodcastInlineList
-            class="mt-4"
-            :iab-id="c.id"
-            :href="'/main/pub/category/' + c.id"
-            :title="$t('More episodes of this category : ', { name: c.name })"
-            :button-text="$t('All podcast button', { name: c.name })"
-          />
-        </ClassicLazy>
+        <template v-if="!hideSuggestions">
+          <ClassicLazy :min-height="550">
+            <PodcastInlineList
+              class="mt-4"
+              :podcast-id="podcastId"
+              :title="$t('Suggested listening')"
+            />
+          </ClassicLazy>
+          <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
+            <PodcastInlineList
+              class="mt-4"
+              :iab-id="c.id"
+              :href="'/main/pub/category/' + c.id"
+              :title="$t('More episodes of this category : ', { name: c.name })"
+              :button-text="$t('All podcast button', { name: c.name })"
+            />
+          </ClassicLazy>
+        </template>
       </div>
     </template>
     <ClassicLoading
@@ -144,6 +146,14 @@ export default defineComponent({
 
   computed: {
     ...mapState(useGeneralStore, ["storedCategories"]),
+    hideSuggestions(): boolean {
+      return (
+        "true" ===
+        (this.podcast?.emission?.annotations?.["HIDE_SUGGESTIONS"] as
+          | string
+          | undefined)
+      );
+    },
     isComments(): boolean {
       if (!this.podcast) return true;
       let podcastComment = "INHERIT";
