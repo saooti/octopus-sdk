@@ -45,7 +45,7 @@ export const playerLogic = defineComponent({
       "playerSeekTime",
       "playerVideo"
     ]),
-    ...mapState(useVastStore, ["useVastPlayer"]),
+    ...mapState(useVastStore, ["useVastPlayerPodcast"]),
 
     audioUrl(): string {
       return this.getAudioUrl();
@@ -147,7 +147,7 @@ export const playerLogic = defineComponent({
       if (!this.playerPodcast) return {};
       const parameters: FetchParam = {
         origin: "octopus",
-        accepted: this.useVastPlayer
+        accepted: this.useVastPlayerPodcast
       };
       if (this.authOrgaId) {
         parameters.distributorId = this.authOrgaId;

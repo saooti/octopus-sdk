@@ -187,15 +187,9 @@ export default defineComponent({
         this.platformEducation,
       );
       octopusApi
-        .fetchDataWithParams<Array<Category>>(
-          0,
-          `iab/list${
-            state.octopusApi.organisationId
-              ? "/" + state.octopusApi.organisationId
-              : ""
-          }`,
-          { lang: this.$i18n.locale },
-        )
+        .fetchDataWithParams<
+          Array<Category>
+        >(0, `iab/list${state.octopusApi.organisationId ? "/" + state.octopusApi.organisationId : ""}`, { lang: this.$i18n.locale })
         .then((data: Array<Category>) => {
           this.storedUpdateCategories(data);
           if (this.filterIab) {

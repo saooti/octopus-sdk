@@ -19,57 +19,60 @@
       :title="$t('User menu')"
     />
     <teleport to=".octopus-app" :disabled="scrolled">
-    <ClassicPopover
-      target="home-dropdown"
-      :only-click="true"
-      :is-fixed="true"
-      :left-pos="true"
-    >
-      <template v-if="!isAuthenticated">
-        <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
-          {{ $t("Login") }}
-        </a>
-        <router-link
-          v-if="!isPodcastmaker"
-          class="octopus-dropdown-item"
-          to="/main/pub/create"
-        >
-          {{ $t("Create an account") }}
-        </router-link>
-      </template>
-      <template v-else>
-        <template v-for="routerBack in routerBackoffice" :key="routerBack.path">
+      <ClassicPopover
+        target="home-dropdown"
+        :only-click="true"
+        :is-fixed="true"
+        :left-pos="true"
+      >
+        <template v-if="!isAuthenticated">
+          <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
+            {{ $t("Login") }}
+          </a>
           <router-link
-            v-if="!isPodcastmaker && routerBack.condition"
-            :class="routerBack.class"
-            :to="routerBack.path"
+            v-if="!isPodcastmaker"
+            class="octopus-dropdown-item"
+            to="/main/pub/create"
           >
-            {{ routerBack.title }}
+            {{ $t("Create an account") }}
           </router-link>
         </template>
-        <template v-if="helpLinks.length">
-          <hr />
-          <template v-for="helpLink in helpLinks" :key="helpLink.title">
-            <a
-              :href="helpLink.href"
-              class="octopus-dropdown-item"
-              rel="noopener"
-              target="_blank"
-              realLink="true"
+        <template v-else>
+          <template
+            v-for="routerBack in routerBackoffice"
+            :key="routerBack.path"
+          >
+            <router-link
+              v-if="!isPodcastmaker && routerBack.condition"
+              :class="routerBack.class"
+              :to="routerBack.path"
             >
-              {{ helpLink.title }}
-            </a>
+              {{ routerBack.title }}
+            </router-link>
           </template>
+          <template v-if="helpLinks.length">
+            <hr />
+            <template v-for="helpLink in helpLinks" :key="helpLink.title">
+              <a
+                :href="helpLink.href"
+                class="octopus-dropdown-item"
+                rel="noopener"
+                target="_blank"
+                realLink="true"
+              >
+                {{ helpLink.title }}
+              </a>
+            </template>
+          </template>
+          <hr />
+          <a class="octopus-dropdown-item c-hand" @click="logoutFunction">
+            {{ $t("Logout") }}
+          </a>
         </template>
-        <hr />
-        <a class="octopus-dropdown-item c-hand" @click="logoutFunction">
-          {{ $t("Logout") }}
-        </a>
-      </template>
-      <router-link class="octopus-dropdown-item" to="/main/pub/contact">
-        {{ $t("Contact") }}
-      </router-link>
-    </ClassicPopover>
+        <router-link class="octopus-dropdown-item" to="/main/pub/contact">
+          {{ $t("Contact") }}
+        </router-link>
+      </ClassicPopover>
     </teleport>
   </div>
 </template>

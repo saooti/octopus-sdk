@@ -1,6 +1,6 @@
 <template>
-<!-- v-if="isInit" -->
-  <div  :key="reload" class="d-flex flex-column h-100 octopus-app">
+  <!-- v-if="isInit" -->
+  <div :key="reload" class="d-flex flex-column h-100 octopus-app">
     <TopBar :is-education="false" />
     <CategoryFilter v-if="firstDisplayCategoryFilter" />
     <div v-else class="category-filter-no-filter" />

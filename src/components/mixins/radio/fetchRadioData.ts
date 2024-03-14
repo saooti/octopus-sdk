@@ -1,5 +1,5 @@
 import { defineComponent } from "vue";
-import { MediaRadio, MetadataRadio } from "@/stores/class/general/player";
+import { MediaRadio, MetadataRadio, NextAdvertising } from "@/stores/class/general/player";
 import octopusApi from "@saooti/octopus-api";
 import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -22,7 +22,7 @@ export const fetchRadioData = defineComponent({
         history: Array<MediaRadio>
       ) => void,
       callbackAdvertising?: (
-        nextAdvertisingStartDate: string|null
+        nextAdvertising: NextAdvertising
       ) => void,
     ): Promise<void> {
       const metadata = await octopusApi.fetchData<MetadataRadio>(
@@ -32,7 +32,7 @@ export const fetchRadioData = defineComponent({
       if(callbackAdvertising){
         //TODO remove mock
         //callbackAdvertising("2024-03-12T15:25:00Z");
-        callbackAdvertising(metadata.nextAdvertisingStartDate);
+        callbackAdvertising(metadata.nextAdvertising);
       }
       const arrayMetadata = metadata.previously;
       arrayMetadata.unshift(metadata.currently);

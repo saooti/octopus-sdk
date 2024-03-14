@@ -6,7 +6,7 @@ export interface Radio {
   url: string;
   metadata: MediaRadio;
   history: Array<MediaRadio>;
-  nextAdvertisingStartDate: string|null;
+  nextAdvertising:NextAdvertising;
   isInit: boolean;
   podcast?: Podcast;
 }
@@ -19,12 +19,16 @@ export interface MediaRadio {
   mediaDuration: number;
   playDuration: number;
 }
+export interface NextAdvertising {
+  startDate?: string;
+  tag?: string
+}
 
 export interface MetadataRadio {
   channelId: number;
   currently: MediaRadio;
   previously: Array<MediaRadio>;
-  nextAdvertisingStartDate: string|null;
+  nextAdvertising: NextAdvertising;
 }
 
 export interface Player {

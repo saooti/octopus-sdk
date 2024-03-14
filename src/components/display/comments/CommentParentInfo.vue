@@ -37,10 +37,10 @@ export default defineComponent({
     };
   },
   created() {
-   this.fetchComment();
+    this.fetchComment();
   },
-  methods:{
-    async fetchComment():Promise<void>{
+  methods: {
+    async fetchComment(): Promise<void> {
       if (this.comId) {
         this.comment = await octopusApi.fetchData<CommentPodcast>(
           2,
@@ -48,7 +48,7 @@ export default defineComponent({
         );
       }
       this.loading = false;
-    }
-  }
+    },
+  },
 });
 </script>

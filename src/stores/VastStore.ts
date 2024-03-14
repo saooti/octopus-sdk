@@ -12,7 +12,7 @@ interface VastState {
   currentTimeAd:number;
   currentDurationAd: number;
 
-  useVastPlayer: boolean,
+  useVastPlayerPodcast: boolean,
   adPositionIndex:number,
   adPositionsPodcasts: {[key:number]:Array<AdPosition>}
 }
@@ -30,7 +30,7 @@ function emptyVastState(): VastState{
     currentTimeAd:0,
     currentDurationAd:0,
 
-    useVastPlayer:false,
+    useVastPlayerPodcast:false,
     adPositionIndex:0,
     adPositionsPodcasts:{}
   }
@@ -92,8 +92,8 @@ export const useVastStore = defineStore("VastStore", {
       this.isSkipCurrentlyAllowed= isSkipCurrentlyAllowed;
       this.timeTillSkipInSeconds= timeTillSkipInSeconds;
     },
-    updateUseVastPlayer(useVastPlayer:boolean){
-      this.useVastPlayer = useVastPlayer;
+    updateuseVastPlayerPodcast(useVastPlayerPodcast:boolean){
+      this.useVastPlayerPodcast = useVastPlayerPodcast;
     }
   },
 });

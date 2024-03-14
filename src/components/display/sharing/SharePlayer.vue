@@ -298,11 +298,11 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
-    async initSharePlayer(){
+    async initSharePlayer() {
       const orgaId =
-      "" !== this.authOrganisation.id
-        ? this.authOrganisation.id
-        : state.generalParameters.organisationId;
+        "" !== this.authOrganisation.id
+          ? this.authOrganisation.id
+          : state.generalParameters.organisationId;
       this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
       this.initColor();
       if (this.isLiveReadyToRecord) {

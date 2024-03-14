@@ -191,9 +191,9 @@ export default defineComponent({
         this.authenticated &&
         undefined !== this.podcast &&
         this.isProduction &&
-        ((this.authOrganisation.attributes?.["openAi.active"] as
+        (this.authOrganisation.attributes?.["openAi.active"] as
           | string
-          | undefined) === "true")
+          | undefined) === "true"
       );
     },
     titleRssButton(): string {
@@ -272,7 +272,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
-    async initShareButtons(){
+    async initShareButtons() {
       if (undefined !== this.participantId) {
         this.displayRss = await octopusApi.fetchDataPublic<boolean>(
           0,

@@ -22,7 +22,7 @@ import { usePlayerStore } from "@/stores/PlayerStore";
 import { useVastStore } from "@/stores/VastStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
-import { MediaRadio } from "@/stores/class/general/player";
+import { MediaRadio, NextAdvertising } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 export default defineComponent({
   name: "PlayerTitle",
@@ -100,19 +100,21 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerMetadata", "playerRadioPodcast", "playerRadioUpdateNextAdvertisingStartDate"]),
+    ...mapActions(usePlayerStore, [
+      "playerMetadata",
+      "playerRadioPodcast",
+      "playerRadioUpdateNextAdvertising",
+    ]),
     async fetchCurrentlyPlaying(): Promise<void> {
       this.fetchRadioMetadata(
         this.playerRadio?.canalId ?? 0,
         this.playerRadio?.metadata.title ?? "",
         this.updateMetadata,
-        this.updateAdvertising
+        this.updateAdvertising,
       );
     },
-    updateAdvertising(
-      nextAdvertisingStartDate: string|null
-    ): void {
-      this.playerRadioUpdateNextAdvertisingStartDate(nextAdvertisingStartDate)
+    updateAdvertising(nextAdvertising: NextAdvertising): void {
+      this.playerRadioUpdateNextAdvertising(nextAdvertising);
     },
     updateMetadata(
       metadata: MediaRadio,

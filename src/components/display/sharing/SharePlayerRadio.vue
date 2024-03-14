@@ -70,8 +70,9 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["authOrganisation"]),
     iFrameSrc(): string {
-      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${this.canal
-        ?.id}?distributorId=${this.organisationId}&color=${this.color.substring(
+      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${
+        this.canal?.id
+      }?distributorId=${this.organisationId}&color=${this.color.substring(
         1,
       )}&theme=${this.theme.substring(1)}`;
     },
@@ -85,7 +86,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
-    async initSharePlayer(){
+    async initSharePlayer() {
       const orgaId =
         "" !== this.authOrganisation.id
           ? this.authOrganisation.id

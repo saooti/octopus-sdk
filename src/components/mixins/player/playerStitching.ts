@@ -18,20 +18,20 @@ export const playerStitching = defineComponent({
     };
   },
   computed: {
-    ...mapState(useVastStore, ["adPositionsPodcasts", "adPositionIndex", "useVastPlayer"]),
+    ...mapState(useVastStore, ["adPositionsPodcasts", "adPositionIndex", "useVastPlayerPodcast"]),
     ...mapState(usePlayerStore, ["playerElapsedSeconds", "playerRadio"]),
     radioNextAdvertisingStartDate(){
-      return this.playerRadio?.nextAdvertisingStartDate;
+      return this.playerRadio?.nextAdvertising?.startDate;
     }
   },
   watch:{
     playerCurrentChange(): void {
-      if(!this.checkUsePlayerStitching()){return;}
-     this.onPlayerChange();
+      if(this.playerCurrentChange && this.playerCurrentChange > 0 && !this.checkUsePlayerPodcastStitching()){return;}
+      this.onPlayerChange();
     },
     //launch advertising for podcast
     playerElapsedSeconds():void{
-      if(!this.checkUsePlayerStitching()){return;}
+      if(!this.checkUsePlayerPodcastStitching()){return;}
       if(!this.isAdRequested && this.checkAdNeedToBeLaunch()){
         this.onRequestAd(this.adPositionsPodcasts[this.playerCurrentChange??0][this.adPositionIndex].vastUrl);
         this.updateAdPositionIndex(this.adPositionIndex+1); 
@@ -41,7 +41,6 @@ export const playerStitching = defineComponent({
     radioNextAdvertisingStartDate: {
       immediate: true,
       handler() {
-        if(!this.checkUsePlayerStitching()){return;}
         if(!this.radioNextAdvertisingStartDate){
           return;
         }
@@ -51,12 +50,12 @@ export const playerStitching = defineComponent({
     
   },
   mounted(){
-    this.updateUseVastPlayer("true"===this.$route.query.vast);
+    this.updateuseVastPlayerPodcast("true"===this.$route.query.vast);
   },
   methods: {
-    ...mapActions(useVastStore, ["updateAdPositionsPodcasts", "updateAdPositionIndex", "updateUseVastPlayer"]),
-    checkUsePlayerStitching():boolean{
-      return this.useVastPlayer;
+    ...mapActions(useVastStore, ["updateAdPositionsPodcasts", "updateAdPositionIndex", "updateuseVastPlayerPodcast"]),
+    checkUsePlayerPodcastStitching():boolean{
+      return this.useVastPlayerPodcast;
     },
     defineRadioInterval(){
       //TODO remove tag en dur
@@ -67,7 +66,7 @@ export const playerStitching = defineComponent({
         return;
       }
       this.radioInterval = setTimeout(() => {
-        this.onRequestAd(this.getVastUrl("5e385e1b51c86"));
+        this.onRequestAd(this.getVastUrl(this.playerRadio?.nextAdvertising?.tag ??"5e385e1b51c86"));
       }, timeRemaining);
     },
     clearRadioInterval() {

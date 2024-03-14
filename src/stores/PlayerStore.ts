@@ -1,6 +1,6 @@
 import DurationHelper from "../helper/duration";
 import { Media } from "@/stores/class/general/media";
-import { MediaRadio, Radio } from "@/stores/class/general/player";
+import { MediaRadio, NextAdvertising, Radio } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
 import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
@@ -202,11 +202,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerRadio.metadata = metadata;
       this.playerRadio.history = history;
     },
-    playerRadioUpdateNextAdvertisingStartDate(nextAdvertisingStartDate:string|null) {
+    playerRadioUpdateNextAdvertising(nextAdvertising:NextAdvertising) {
       if (!this.playerRadio) {
         return;
       }
-      this.playerRadio.nextAdvertisingStartDate = nextAdvertisingStartDate;
+      this.playerRadio.nextAdvertising = nextAdvertising;
     },
     playerRadioPodcast(podcast: Podcast | undefined) {
       if (!this.playerRadio) {
