@@ -26,6 +26,7 @@ interface PlayerState {
   playerLargeVersion: boolean;
   playerVideo: boolean;
   playerChaptering?: Chaptering;
+  playerDelayStitching: number;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -42,6 +43,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerLargeVersion: false,
     playerVideo: false,
     playerChaptering: undefined,
+    playerDelayStitching:0,
   }),
   getters: {
     playerChapteringPercent(): ChapteringPercent|undefined{
@@ -230,6 +232,9 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
     playerUpdateChaptering(chaptering?: Chaptering){
       this.playerChaptering = chaptering;
-    }
+    },
+    playerUpdateDelayStitching(delay: number){
+      this.playerDelayStitching = delay;
+    },
   },
 });
