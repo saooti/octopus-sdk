@@ -1,5 +1,11 @@
 <template>
-  <div class="my-2" :class="[displayAccordion ? 'octopus-accordion' : '', isOpen?'octopus-accordion-open':'' ]">
+  <div
+    class="my-2"
+    :class="[
+      displayAccordion ? 'octopus-accordion' : '',
+      isOpen ? 'octopus-accordion-open' : '',
+    ]"
+  >
     <template v-if="displayAccordion">
       <button
         :id="'accordion-' + idComposer"
@@ -51,20 +57,20 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import '@scss/_variables.scss';
-.octopus-accordion{
-  > button{
+@import "@scss/_variables.scss";
+.octopus-accordion {
+  > button {
     background: white;
     min-height: 50px;
     color: $octopus-primary-color;
     border: 1px solid transparent;
-    &:hover{
+    &:hover {
       border: 1px solid $octopus-primary-color;
     }
   }
-  &.octopus-accordion-open{
+  &.octopus-accordion-open {
     border: 1px solid $octopus-primary-color;
-    > button{
+    > button {
       background: $octopus-primary-color;
       color: white;
     }

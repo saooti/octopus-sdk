@@ -1,13 +1,15 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <div class="page-element-title-container">
-        <div class="page-element-title">
-          <h1>{{ pageTitle }}</h1>
-        </div>
-        <div class="page-element-bg" :style="backgroundDisplay" />
-      </div>
-      <div class="d-flex flex-column page-element">
+      <PodcastmakerHeader
+        v-if="isPodcastmaker"
+        :page-title="pageTitle"
+        :image-url="playlist.imageUrl"
+      />
+      <div
+        class="d-flex flex-column page-element"
+        :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
+      >
         <div class="module-box">
           <div class="mb-5 mt-3 descriptionText">
             <img
@@ -49,6 +51,8 @@
 </template>
 
 <script lang="ts">
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { mapActions } from "pinia";
 import { orgaComputed } from "../mixins/orgaComputed";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import PodcastList from "../display/playlist/PodcastList.vue";
@@ -69,6 +73,9 @@ const EditBox = defineAsyncComponent(
 const SharePlayer = defineAsyncComponent(
   () => import("../display/sharing/SharePlayer.vue"),
 );
+const PodcastmakerHeader = defineAsyncComponent(
+  () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
+);
 export default defineComponent({
   components: {
     ShareButtons,
@@ -76,6 +83,7 @@ export default defineComponent({
     PodcastList,
     SharePlayer,
     ClassicLoading,
+    PodcastmakerHeader,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
 
@@ -111,6 +119,9 @@ export default defineComponent({
         "AMBIANCE_PROGRAMMED" === this.playlist?.ambianceType
       );
     },
+    isPodcastmaker(): boolean {
+      return state.generalParameters.podcastmaker as boolean;
+    },
     name(): string {
       return this.playlist?.title ?? "";
     },
@@ -124,15 +135,6 @@ export default defineComponent({
         true === state.generalParameters.isAdmin
       );
     },
-    backgroundDisplay(): string {
-      if (!this.playlist) {
-        return "";
-      }
-      return `background-image: url('${this.proxyImageUrl(
-        this.playlist.imageUrl,
-        "250",
-      )}');`;
-    },
   },
   watch: {
     playlistId: {
@@ -142,8 +144,12 @@ export default defineComponent({
       },
     },
   },
+  beforeUnmount() {
+    this.contentToDisplayUpdate(null);
+  },
 
   methods: {
+    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     initError(): void {
       this.error = true;
       this.loaded = true;
@@ -164,6 +170,7 @@ export default defineComponent({
           this.initError();
           return;
         }
+        this.contentToDisplayUpdate(this.playlist);
         this.$emit("playlistTitle", this.playlist.title);
       } catch (error) {
         this.handle403(error as AxiosError);

@@ -36,6 +36,16 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
   },
   {
+    path: "/",
+    name: "backoffice",
+    component: Home,
+  },
+  {
+    path: "/",
+    name: "createAccount",
+    component: Home,
+  },
+  {
     path: "/main/pub/error",
     name: "error",
     component: error403Page,

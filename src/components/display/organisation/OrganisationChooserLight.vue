@@ -1,13 +1,13 @@
 <template>
   <div
     v-if="(!value || init) && organisation"
-    class="default-multiselect-width organisation-chooser-light"
+    class="default-multiselect-width organisation-chooser-light mb-1 ms-1"
     :style="{ width: width }"
   >
     <select
       :id="'organisation_chooser_light' + page"
       v-model="actual"
-      class="mb-0 c-hand border-0"
+      class="c-hand w-100 transparent"
       @change="onOrganisationSelected"
     >
       <option :value="organisation.id">

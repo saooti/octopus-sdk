@@ -1,6 +1,6 @@
 <template>
   <div class="module-box">
-    <h2 class="big-h2 mb-3">
+    <h2 class="mb-3">
       {{ $t("Distribute") }}
     </h2>
     <div class="sharing-distribution-container">
@@ -68,12 +68,12 @@ export default defineComponent({
       return [
         {
           url: this.getUrl("amazon"),
-          icon: "saooti-amzn",
-          title: "Amazon Music | Podcasters",
+          icon: "saooti-amazon-music",
+          title: "Amazon Music",
         },
         {
           url: this.getUrl("apple"),
-          icon: "saooti-apple",
+          icon: "saooti-apple-podcast",
           title: "Apple Podcast / iTunes",
         },
         { url: this.getUrl("deezer"), icon: "saooti-deezer", title: "Deezer" },

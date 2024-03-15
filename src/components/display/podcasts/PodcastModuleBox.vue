@@ -29,9 +29,10 @@
             {{ $t("Episode record in live") }}
           </div>
         </div>
-        <div class="text-uppercase h2 mb-3">
+        <div class="h2 mb-3">
           {{ podcast.title }}
         </div>
+        <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
         <!-- eslint-disable vue/no-v-html -->
         <div
           class="descriptionText html-wysiwyg-content"
@@ -39,10 +40,6 @@
         />
         <!-- eslint-enable -->
         <div class="my-3">
-          <ParticipantDescription
-            class="mb-1"
-            :participants="podcast.animators"
-          />
           <div class="mb-1">
             {{ $t("Emission") + " : " }}
             <router-link
@@ -57,6 +54,15 @@
               {{ podcast.emission.name }}
             </router-link>
           </div>
+          <ParticipantDescription
+            class="mb-1"
+            :participants="podcast.animators"
+          />
+          <ParticipantDescription
+            class="mb-1"
+            :participants="podcast.guests"
+            :is-guest="true"
+          />
           <div v-if="!isPodcastmaker" class="mb-1">
             {{ $t("Producted by : ") }}
             <router-link
@@ -81,7 +87,6 @@
             {{ $t("Author credits") + " : " + authorCredit }}
           </div>
 
-          
           <a
             v-if="podcast.article"
             class="btn d-flex align-items-center my-2 width-fit-content mb-1"
@@ -92,11 +97,6 @@
             <span class="saooti-newspaper me-1" />
             <div>{{ $t("See associated article") }}</div>
           </a>
-          <ParticipantDescription
-            class="mb-1"
-            :participants="podcast.guests"
-            :is-guest="true"
-          />
           <PodcastPlayBar
             v-if="isProgressBar"
             :podcast-id="podcast.podcastId"
@@ -133,6 +133,14 @@
     <TagList
       v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
       :tag-list="podcast.tags"
+      :podcast-annotations="podcast.annotations"
+    />
+    <SubscribeButtons
+      v-if="isPodcastmaker"
+      class="mt-4"
+      :emission="podcast.emission"
+      :window-width="1000"
+      :justify-center="false"
     />
   </div>
 </template>
@@ -162,6 +170,10 @@ const EditBox = defineAsyncComponent(
 const PodcastPlayBar = defineAsyncComponent(
   () => import("./PodcastPlayBar.vue"),
 );
+const SubscribeButtons = defineAsyncComponent(
+  () => import("../sharing/SubscribeButtons.vue"),
+);
+const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 export default defineComponent({
   name: "PodcastModuleBox",
@@ -173,6 +185,8 @@ export default defineComponent({
     PodcastPlayBar,
     EditBox,
     RecordingItemButton,
+    SubscribeButtons,
+    Countdown,
   },
 
   mixins: [displayMethods, orgaComputed],
@@ -186,6 +200,19 @@ export default defineComponent({
   emits: ["updatePodcast"],
 
   computed: {
+    isCounter(): boolean {
+      return (
+        this.isLiveReadyToRecord &&
+        undefined !== this.fetchConference &&
+        ("PLANNED" === this.fetchConference.status ||
+          "PENDING" === this.fetchConference.status)
+      );
+    },
+    timeRemaining(): string {
+      return !this.podcast
+        ? ""
+        : dayjs(this.podcast.pubDate).diff(dayjs(), "seconds").toString();
+    },
     errorMessage(): string {
       if (!this.podcast?.availability.visibility) {
         return this.$t("Podcast is not visible for listeners");

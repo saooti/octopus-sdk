@@ -325,6 +325,7 @@ export default defineComponent({
       box-shadow: unset !important;
       background: transparent !important;
       height: 50px;
+      resize: none;
       &.short {
         max-height: 38px;
       }

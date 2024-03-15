@@ -6,7 +6,7 @@
   >
     <div v-if="!isPodcastmaker" class="d-flex flex-column px-1">
       <div class="text-dark my-1 special-select-align-magic-trick">
-        &copy; Saooti 2019
+        &copy; Saooti 2024
       </div>
       <router-link
         v-for="link in routerLinkSecondArray"
@@ -30,7 +30,16 @@
           { title: 'Italiano', value: 'it' },
           { title: 'Slovenščina', value: 'sl' },
         ]"
-        class="mb-2"
+        class="mb-1"
+      />
+      <OrganisationChooserLight
+        v-if="!isPodcastmaker && organisationId && authenticated"
+        page="footer"
+        width="auto"
+        :defaultanswer="$t('No organisation filter')"
+        :value="organisationId"
+        :reset="reset"
+        @selected="onOrganisationSelected"
       />
     </div>
     <a
@@ -63,6 +72,7 @@
 
 <script lang="ts">
 import cookies from "../mixins/cookies";
+import orgaFilter from "../mixins/organisationFilter";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
@@ -75,18 +85,25 @@ import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { Category } from "@/stores/class/general/category";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+import { Organisation } from "@/stores/class/general/organisation";
+const OrganisationChooserLight = defineAsyncComponent(
+  () => import("../display/organisation/OrganisationChooserLight.vue"),
+);
 export default defineComponent({
   name: "FooterSection",
   components: {
     ClassicSelect,
     AcpmImage,
+    OrganisationChooserLight,
   },
 
-  mixins: [cookies, orgaComputed],
+  mixins: [cookies, orgaComputed, orgaFilter],
   data() {
     return {
       language: this.$i18n.locale,
+      organisationId: undefined as string | undefined,
+      reset: false as boolean,
     };
   },
   computed: {
@@ -133,6 +150,16 @@ export default defineComponent({
     language() {
       this.changeLanguage();
     },
+    filterOrgaId: {
+      immediate: true,
+      handler() {
+        if (this.filterOrgaId) {
+          this.organisationId = this.filterOrgaId;
+        } else {
+          this.reset = !this.reset;
+        }
+      },
+    },
   },
   methods: {
     ...mapActions(useGeneralStore, ["storedUpdateCategories"]),
@@ -160,15 +187,9 @@ export default defineComponent({
         this.platformEducation,
       );
       octopusApi
-        .fetchDataWithParams<Array<Category>>(
-          0,
-          `iab/list${
-            state.octopusApi.organisationId
-              ? "/" + state.octopusApi.organisationId
-              : ""
-          }`,
-          { lang: this.$i18n.locale },
-        )
+        .fetchDataWithParams<
+          Array<Category>
+        >(0, `iab/list${state.octopusApi.organisationId ? "/" + state.octopusApi.organisationId : ""}`, { lang: this.$i18n.locale })
         .then((data: Array<Category>) => {
           this.storedUpdateCategories(data);
           if (this.filterIab) {
@@ -180,6 +201,16 @@ export default defineComponent({
             }
           }
         });
+    },
+    async onOrganisationSelected(
+      organisation: Organisation | undefined,
+    ): Promise<void> {
+      if (organisation?.id) {
+        await this.selectOrganisation(organisation.id);
+        return;
+      }
+      this.organisationId = undefined;
+      this.removeSelectedOrga();
     },
   },
 });

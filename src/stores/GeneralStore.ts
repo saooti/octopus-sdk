@@ -1,5 +1,9 @@
 import { Category } from "@/stores/class/general/category";
 import { defineStore } from "pinia";
+import { Podcast } from "./class/general/podcast";
+import { Emission } from "./class/general/emission";
+import { Playlist } from "./class/general/playlist";
+import { Canal } from "./class/radio/canal";
 
 interface GeneralState {
   metaTitle: string;
@@ -9,18 +13,23 @@ interface GeneralState {
   storedCategoriesOrga: Array<Category>;
   isBeforeLive: boolean;
   consentTcf: string | null;
+  contentToDisplay: Podcast|Emission|Playlist|Canal|null;
 }
 export const useGeneralStore = defineStore("GeneralStore", {
   state: (): GeneralState => ({
     metaTitle: "Octopus by Saooti",
     platformEducation: false,
-    generalLogoUrl: "/img/logo_octopus_final.svg",
+    generalLogoUrl: "/img/logo_octopus_black.png",
     storedCategories: [],
     storedCategoriesOrga: [],
     isBeforeLive: true,
     consentTcf: null,
+    contentToDisplay: null
   }),
   actions: {
+    contentToDisplayUpdate(contentToDisplay:Podcast|Emission|Playlist|Canal|null) {
+      this.contentToDisplay = contentToDisplay;
+    },
     storedUpdateCategories(categories: Array<Category>) {
       this.storedCategories = categories;
     },

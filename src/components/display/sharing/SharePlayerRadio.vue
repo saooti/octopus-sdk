@@ -1,6 +1,6 @@
 <template>
   <div class="module-box overflow-visible">
-    <h2 class="big-h2 mb-3 height-40">
+    <h2 class="mb-3">
       {{ $t("Embed") }}
     </h2>
     <div class="d-flex">
@@ -70,8 +70,9 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["authOrganisation"]),
     iFrameSrc(): string {
-      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${this.canal
-        ?.id}?distributorId=${this.organisationId}&color=${this.color.substring(
+      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${
+        this.canal?.id
+      }?distributorId=${this.organisationId}&color=${this.color.substring(
         1,
       )}&theme=${this.theme.substring(1)}`;
     },

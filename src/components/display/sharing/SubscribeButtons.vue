@@ -1,46 +1,95 @@
 <template>
-  <div class="module-box flex-grow-0">
-    <h2 class="big-h2 mb-3 height-40">
-      {{ $t("Subscribe emission") }}
-    </h2>
-    <template v-for="(sub, index) in subscriptionsDisplay" :key="sub.name">
+  <div
+    v-if="subscriptionsDisplay.length || rssUrl"
+    class="subscribe-buttons-container"
+  >
+    <div ref="subscribeButtonsContainer">
       <a
+        v-for="(sub, index) in subscriptionsDisplay"
+        :key="sub.name"
+        :ref="'subLink' + sub.name"
         rel="noopener"
         target="_blank"
         :class="[
           0 === index ? 'first' : '',
           subscriptionsDisplay.length - 1 === index ? 'last' : '',
         ]"
-        class="btn share-btn mb-2 mx-2"
+        class="btn share-btn mx-2"
         :href="sub.url"
         :title="sub.title"
       >
         <span :class="sub.icon" />
       </a>
-    </template>
+    </div>
+    <a
+      rel="noopener"
+      target="_blank"
+      class="btn share-btn mx-2 saooti-rss"
+      :href="rssUrl"
+      :title="$t('Rss feed')"
+    />
+    <button
+      v-show="hiddenLinks.length"
+      id="subscribe-buttons-dropdown"
+      class="btn share-btn mx-2 saooti-more"
+      :title="$t('See more')"
+    />
+    <teleport to=".octopus-app">
+      <ClassicPopover
+        target="subscribe-buttons-dropdown"
+        :only-click="true"
+        :is-fixed="true"
+        :left-pos="true"
+      >
+        <a
+          v-for="link in hiddenLinks"
+          :key="link.name"
+          rel="noopener"
+          target="_blank"
+          class="octopus-dropdown-item justify-content-start"
+          :href="link.url"
+        >
+          <span :class="link.icon" class="me-1" /> {{ link.title }}
+        </a>
+      </ClassicPopover>
+    </teleport>
   </div>
 </template>
 
 <script lang="ts">
+import { state } from "../../../stores/ParamSdkStore";
+import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { defineComponent } from "vue";
+type Link = {
+  name: string;
+  icon: string;
+  title: string;
+  url: string | undefined;
+};
 export default defineComponent({
+  name: "SubscribeButtons",
+  components: {
+    ClassicPopover,
+  },
   props: {
     emission: { default: undefined, type: Object as () => Emission },
-    podcastId: { default: undefined, type: Number },
+    playlistId: { default: undefined, type: Number },
+    windowWidth: { default: 0, type: Number },
+    justifyCenter: { default: true, type: Boolean },
+  },
+  data() {
+    return {
+      hiddenLinks: [] as Array<Link>,
+      lastWindowWidth: 420 as number,
+    };
   },
   computed: {
-    subscriptionsDisplay() {
+    subscriptionsDisplay(): Array<Link> {
       const sub = [
         {
-          name: "amazon",
-          icon: "saooti-amzn",
-          title: "Amazon Music | Podcasters",
-          url: this.getUrl("amazon"),
-        },
-        {
           name: "applePodcast",
-          icon: "saooti-apple",
+          icon: "saooti-apple-podcast",
           title: "Apple Podcast | iTunes",
           url: this.getUrl("applePodcast"),
         },
@@ -56,6 +105,19 @@ export default defineComponent({
           title: "Google Podcasts",
           url: this.getUrl("googlePodcasts"),
         },
+        {
+          name: "spotify",
+          icon: "saooti-spotify",
+          title: "Spotify",
+          url: this.getUrl("spotify"),
+        },
+        {
+          name: "amazon",
+          icon: "saooti-amazon-music",
+          title: "Amazon Music",
+          url: this.getUrl("amazon"),
+        },
+
         {
           name: "iHeart",
           icon: "saooti-iheart",
@@ -86,12 +148,7 @@ export default defineComponent({
           title: "Radioline",
           url: this.getUrl("radioline"),
         },
-        {
-          name: "spotify",
-          icon: "saooti-spotify",
-          title: "Spotify",
-          url: this.getUrl("spotify"),
-        },
+
         {
           name: "tunein",
           icon: "saooti-tunin",
@@ -101,8 +158,25 @@ export default defineComponent({
       ];
       return sub.filter((item) => item.url);
     },
+    rssUrl(): string | undefined {
+      let api = state.generalParameters.ApiUri + "rss/";
+      if (this.emission) {
+        return api + "emission/" + this.emission?.emissionId + ".rss";
+      }
+      if (this.playlistId) {
+        return api + "playlist/" + this.playlistId + ".rss";
+      }
+      return undefined;
+    },
   },
-
+  watch: {
+    windowWidth() {
+      this.resizeWindow();
+    },
+  },
+  mounted() {
+    this.resizeWindow();
+  },
   methods: {
     getUrl(sub: string): string | undefined {
       return this.externaliseLinks(
@@ -116,11 +190,75 @@ export default defineComponent({
         ? "//" + link
         : link;
     },
+    resizeWindow() {
+      if (this.windowWidth > 420 && this.lastWindowWidth > 420) {
+        this.lastWindowWidth = this.windowWidth;
+        return;
+      }
+
+      const subscribeList = this.$refs.subscribeButtonsContainer as HTMLElement;
+      if (
+        null === subscribeList ||
+        !subscribeList ||
+        "none" === subscribeList?.parentElement?.style.display
+      ) {
+        return;
+      }
+      this.lastWindowWidth = this.windowWidth;
+      subscribeList.style.justifyContent = "flex-start";
+      subscribeList.style.flexGrow = "1";
+      this.hiddenLinks.length = 0;
+      this.subscriptionsDisplay.forEach((element: Link) => {
+        const el = (
+          this.$refs["subLink" + element.name] as Array<HTMLElement>
+        )[0];
+        if (!el) return;
+        if (el.classList.contains("hid")) {
+          el.classList.remove("hid");
+        }
+      });
+      this.subscriptionsDisplay.forEach((element: Link) => {
+        const el = (
+          this.$refs["subLink" + element.name] as Array<HTMLElement>
+        )[0];
+        if (!el) return;
+        const parent = el.parentElement;
+        if (
+          parent &&
+          el.offsetLeft + el.clientWidth + 20 <
+            parent.clientWidth + parent.offsetLeft
+        ) {
+          return;
+        }
+        this.hiddenLinks.push(element);
+        if (!el.classList.contains("hid")) {
+          el.className += " hid";
+        }
+      });
+      if (!this.hiddenLinks.length && this.justifyCenter) {
+        subscribeList.style.justifyContent = "center";
+      }
+      subscribeList.style.flexGrow = "0";
+    },
   },
 });
 </script>
 <style lang="scss">
-.height-40 {
-  height: 40px;
+.octopus-app {
+  .subscribe-buttons-container {
+    max-width: 420px;
+    align-self: center;
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    & > div {
+      display: inline-flex;
+      justify-content: flex-start;
+      overflow: hidden;
+      //flex-grow: 1;
+      width: fit-content;
+      //width: 0;
+    }
+  }
 }
 </style>

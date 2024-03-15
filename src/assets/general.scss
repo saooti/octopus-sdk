@@ -31,12 +31,12 @@ body{
     text-decoration: none;
     color: $octopus-primary-color;
     &.link-hover{
-      color: black !important;
+      color: black;
       font-weight: 500;
       word-break: normal;
     }
     &.link-hover:hover, &.link-hover.router-link-exact-active.router-link-active{
-      color: $octopus-primary-color !important;
+      color: $octopus-primary-color;
     }
     &.btn, &.btn:hover{
       color: #383838;
@@ -73,9 +73,12 @@ body{
   .width-fit-content{
     width: fit-content !important;
   }
+  .text-blue-octopus{
+    color: $blue-octopus !important
+  }
   .page-box{
     background-color: $octopus-background;
-    padding: 0 5rem 5rem 5rem;
+    padding: 1rem 5rem 5rem 5rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -93,7 +96,7 @@ body{
   .module-box{
     background-color: white;
     padding: 1.3rem;
-    margin: 0.5rem 0.5rem 0 0.5rem;
+    margin: 1.5rem 0.5rem 0 0.5rem;
     border-radius: $octopus-borderradius;
     flex-grow: 1;
     overflow: auto;
@@ -135,12 +138,7 @@ body{
     }
   }
   .hide-small-screen{
-		@media (max-width: 450px) {
-			display: none !important;
-		}
-	}
-  .hide-smallest-screen{
-		@media (max-width: 380px) {
+		@media (max-width: 500px) {
 			display: none !important;
 		}
 	}

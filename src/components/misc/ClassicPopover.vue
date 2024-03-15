@@ -8,8 +8,11 @@
     :class="[onlyClick ? 'octopus-dropdown' : '', popoverClass]"
     :style="positionInlineStyle"
     @blur="clearDataBlur"
-    @mouseenter="overPopover=true"
-    @mouseleave="overPopover=false;clearData();"
+    @mouseenter="overPopover = true"
+    @mouseleave="
+      overPopover = false;
+      clearData();
+    "
   >
     <div v-if="title" class="bg-secondary p-2">
       {{ title }}
@@ -44,7 +47,7 @@ export default defineComponent({
       posX: 0 as number,
       posY: 0 as number,
       targetElement: null as HTMLElement | null,
-      overPopover: false as boolean
+      overPopover: false as boolean,
     };
   },
   computed: {
@@ -70,7 +73,10 @@ export default defineComponent({
             "mouseenter",
             this.setPopoverData,
           );
-          this.targetElement.addEventListener("mouseleave", this.clearDataTimeout);
+          this.targetElement.addEventListener(
+            "mouseleave",
+            this.clearDataTimeout,
+          );
         }
         if (!this.onlyMouse) {
           this.targetElement.addEventListener("click", this.setPopoverData);
@@ -85,7 +91,10 @@ export default defineComponent({
             "mouseenter",
             this.setPopoverData,
           );
-          this.targetElement.removeEventListener("mouseleave", this.clearDataTimeout);
+          this.targetElement.removeEventListener(
+            "mouseleave",
+            this.clearDataTimeout,
+          );
         }
         if (!this.onlyMouse) {
           this.targetElement.removeEventListener("click", this.setPopoverData);
@@ -185,7 +194,7 @@ export default defineComponent({
     },
     clearDataTimeout() {
       setTimeout(() => {
-        if(!this.overPopover){
+        if (!this.overPopover) {
           this.clearData();
         }
       }, 500);

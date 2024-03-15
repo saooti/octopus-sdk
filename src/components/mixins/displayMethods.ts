@@ -1,7 +1,7 @@
 export default {
   methods: {
     urlify(text: string): string {
-      const urlRegex = /[^"](https?:\/\/[^\s<]+)/g;
+      const urlRegex = /[^">](https?:\/\/[^\s<]+)/g;
       if (!text) return "";
       return text.replace(urlRegex, (url: string) => {
         return (

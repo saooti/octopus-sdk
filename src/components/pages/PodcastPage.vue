@@ -1,14 +1,15 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <div class="page-element-title-container">
-        <div class="page-element-title">
-          <h1>{{ titlePage }}</h1>
-          <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
-        </div>
-        <div class="page-element-bg" :style="backgroundDisplay" />
-      </div>
-      <div class="d-flex flex-column page-element">
+      <PodcastmakerHeader
+        v-if="isPodcastmaker"
+        :page-title="titlePage"
+        :image-url="podcast.imageUrl"
+      />
+      <div
+        class="d-flex flex-column page-element"
+        :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
+      >
         <PodcastModuleBox
           :playing-podcast="playingPodcast"
           :podcast="podcast"
@@ -24,15 +25,7 @@
           :organisation-id="myOrganisationId"
           :is-education="isEducation"
         />
-        <ShareButtons
-          v-if="pageParameters.isShareButtons"
-          :podcast="podcast"
-          :organisation-id="podcast.organisation.id"
-        />
-        <SubscribeButtons
-          v-if="pageParameters.isShareButtons && countLink >= 1"
-          :emission="podcast.emission"
-        />
+
         <CommentSection
           v-if="!isPodcastmaker && isComments"
           ref="commentSection"
@@ -40,26 +33,35 @@
           :fetch-conference="fetchConference"
         />
         <PodcastInlineList
-          class="mt-4"
+          class="module-box"
           :emission-id="podcast.emission.emissionId"
           :href="'/main/pub/emission/' + podcast.emission.emissionId"
           :title="$t('More episodes of this emission')"
           :button-text="$t('All podcast emission button')"
         />
-        <ClassicLazy :min-height="550">
-          <PodcastInlineList
-            :podcast-id="podcastId"
-            :title="$t('Suggested listening')"
-          />
-        </ClassicLazy>
-        <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
-          <PodcastInlineList
-            :iab-id="c.id"
-            :href="'/main/pub/category/' + c.id"
-            :title="$t('More episodes of this category : ', { name: c.name })"
-            :button-text="$t('All podcast button', { name: c.name })"
-          />
-        </ClassicLazy>
+        <ShareButtons
+          v-if="pageParameters.isShareButtons"
+          :podcast="podcast"
+          :organisation-id="podcast.organisation.id"
+        />
+        <template v-if="!hideSuggestions">
+          <ClassicLazy :min-height="550">
+            <PodcastInlineList
+              class="mt-4"
+              :podcast-id="podcastId"
+              :title="$t('Suggested listening')"
+            />
+          </ClassicLazy>
+          <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
+            <PodcastInlineList
+              class="mt-4"
+              :iab-id="c.id"
+              :href="'/main/pub/category/' + c.id"
+              :title="$t('More episodes of this category : ', { name: c.name })"
+              :button-text="$t('All podcast button', { name: c.name })"
+            />
+          </ClassicLazy>
+        </template>
       </div>
     </template>
     <ClassicLoading
@@ -83,7 +85,6 @@ import ClassicLoading from "../form/ClassicLoading.vue";
 import octopusApi from "@saooti/octopus-api";
 import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
-import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
 import {
   Conference,
@@ -94,7 +95,7 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Category } from "@/stores/class/general/category";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
 const ShareButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareButtons.vue"),
@@ -102,14 +103,11 @@ const ShareButtons = defineAsyncComponent(
 const SharePlayer = defineAsyncComponent(
   () => import("../display/sharing/SharePlayer.vue"),
 );
-const SubscribeButtons = defineAsyncComponent(
-  () => import("../display/sharing/SubscribeButtons.vue"),
-);
-const Countdown = defineAsyncComponent(
-  () => import("../display/live/CountDown.vue"),
-);
 const CommentSection = defineAsyncComponent(
   () => import("../display/comments/CommentSection.vue"),
+);
+const PodcastmakerHeader = defineAsyncComponent(
+  () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
 export default defineComponent({
   name: "PodcastPage",
@@ -117,12 +115,11 @@ export default defineComponent({
     PodcastInlineList,
     ShareButtons,
     SharePlayer,
-    SubscribeButtons,
-    Countdown,
     CommentSection,
     PodcastModuleBox,
     ClassicLoading,
     ClassicLazy,
+    PodcastmakerHeader,
   },
 
   mixins: [handle403, orgaComputed, imageProxy],
@@ -149,6 +146,14 @@ export default defineComponent({
 
   computed: {
     ...mapState(useGeneralStore, ["storedCategories"]),
+    hideSuggestions(): boolean {
+      return (
+        "true" ===
+        (this.podcast?.emission?.annotations?.["HIDE_SUGGESTIONS"] as
+          | string
+          | undefined)
+      );
+    },
     isComments(): boolean {
       if (!this.podcast) return true;
       let podcastComment = "INHERIT";
@@ -169,15 +174,6 @@ export default defineComponent({
           !this.podcast.conferenceId &&
           0 !== this.podcast.conferenceId)
       );
-    },
-    backgroundDisplay(): string {
-      if (!this.podcast) {
-        return "";
-      }
-      return `background-image: url('${this.proxyImageUrl(
-        this.podcast.imageUrl,
-        "270",
-      )}');`;
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
@@ -224,42 +220,11 @@ export default defineComponent({
         true === state.generalParameters.isAdmin
       );
     },
-    countLink(): number {
-      const platformShare = [
-        "amazon",
-        "googlePodcasts",
-        "applePodcast",
-        "deezer",
-        "spotify",
-        "tunein",
-        "radioline",
-        "podcastAddict",
-        "playerFm",
-        "pocketCasts",
-        "iHeart",
-      ];
-      let count = 0;
-      for (let i = 0, len = platformShare.length; i < len; i++) {
-        if (
-          undefined !== this.podcast?.emission?.annotations?.[platformShare[i]]
-        )
-          count++;
-      }
-      return count;
-    },
     isLiveReadyToRecord(): boolean {
       return (
         undefined !== this.podcast?.conferenceId &&
         0 !== this.podcast?.conferenceId &&
         "READY_TO_RECORD" === this.podcast?.processingStatus
-      );
-    },
-    isCounter(): boolean {
-      return (
-        this.isLiveReadyToRecord &&
-        undefined !== this.fetchConference &&
-        ("PLANNED" === this.fetchConference.status ||
-          "PENDING" === this.fetchConference.status)
       );
     },
     isOctopusAndAnimator(): boolean {
@@ -273,11 +238,6 @@ export default defineComponent({
       return this.isLiveReadyToRecord
         ? this.$t("Live episode")
         : this.$t("Episode");
-    },
-    timeRemaining(): string {
-      return !this.podcast
-        ? ""
-        : dayjs(this.podcast.pubDate).diff(dayjs(), "seconds").toString();
     },
   },
   watch: {
@@ -294,8 +254,12 @@ export default defineComponent({
       },
     },
   },
+  beforeUnmount() {
+    this.contentToDisplayUpdate(null);
+  },
 
   methods: {
+    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     async fetchConferencePublic() {
       const data = await octopusApi.fetchData<ConferencePublicInfo>(
         9,
@@ -371,6 +335,7 @@ export default defineComponent({
           return;
         }
         this.podcast = data;
+        this.contentToDisplayUpdate(data);
         this.$emit("podcastTitle", this.podcast.title);
         this.handleAnnotations();
         if (

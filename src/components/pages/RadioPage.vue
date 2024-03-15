@@ -1,13 +1,16 @@
 <template>
   <div class="page-box">
     <template v-if="loaded && !error">
-      <div class="page-element-title-container">
-        <div class="page-element-title">
-          <h1>{{ $t("Radio") }}</h1>
-        </div>
-        <div class="page-element-bg" :style="backgroundDisplay" />
-      </div>
-      <div v-if="radio" class="d-flex flex-column page-element">
+      <PodcastmakerHeader
+        v-if="isPodcastmaker"
+        :page-title="$t('Radio')"
+        :image-url="radio.imageUrl"
+      />
+      <div
+        v-if="radio"
+        class="d-flex flex-column page-element"
+        :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
+      >
         <div class="module-box">
           <div class="mb-5 descriptionText">
             <RadioImage :radio="radio" />
@@ -36,6 +39,8 @@
 </template>
 
 <script lang="ts">
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { mapActions } from "pinia";
 import octopusApi from "@saooti/octopus-api";
 import { state } from "../../stores/ParamSdkStore";
 import displayMethods from "../mixins/displayMethods";
@@ -64,6 +69,9 @@ const RadioImage = defineAsyncComponent(
 const RadioPlanning = defineAsyncComponent(
   () => import("../display/live/RadioPlanning.vue"),
 );
+const PodcastmakerHeader = defineAsyncComponent(
+  () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
+);
 export default defineComponent({
   components: {
     SharePlayerRadio,
@@ -73,6 +81,7 @@ export default defineComponent({
     RadioCurrently,
     RadioImage,
     RadioPlanning,
+    PodcastmakerHeader,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
   props: {
@@ -97,13 +106,8 @@ export default defineComponent({
         true === state.generalParameters.isAdmin
       );
     },
-    backgroundDisplay(): string {
-      return !this.radio
-        ? ""
-        : `background-image: url('${this.proxyImageUrl(
-            this.radio.imageUrl,
-            "270",
-          )}');`;
+    isPodcastmaker(): boolean {
+      return state.generalParameters.podcastmaker as boolean;
     },
   },
   watch: {
@@ -114,7 +118,11 @@ export default defineComponent({
       },
     },
   },
+  beforeUnmount() {
+    this.contentToDisplayUpdate(null);
+  },
   methods: {
+    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     async getRadioDetails(): Promise<void> {
       this.loaded = false;
       this.error = false;
@@ -123,6 +131,7 @@ export default defineComponent({
           14,
           "canal/" + this.canalId,
         );
+        this.contentToDisplayUpdate(this.radio);
         this.$emit("radioTitle", this.radio.name);
       } catch (error) {
         this.handle403(error as AxiosError);

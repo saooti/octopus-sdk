@@ -1,130 +1,50 @@
 <template>
-  <div class="top-bar-container" :class="{ scrolled: scrolled }">
-    <router-link
-      class="top-bar-logo"
-      :to="{
-        name: 'home',
-        query: {
-          productor: filterOrgaId,
-          iabId: filterIab?.id,
-          rubriquesId: rubriqueQueryParam,
-        },
-      }"
-    >
-      <img
-        v-if="!filterOrgaId || '' === imgUrl"
-        :src="logoUrl"
-        :alt="$t('Logo of main page')"
-        width="140"
-        height="50"
-        :class="isEducation ? 'educationLogo' : ''"
-      />
-      <img
-        v-else
-        :src="proxyImageUrl(imgUrl, '', '50')"
-        :alt="$t('Visual', { name: filterName })"
-        :class="isEducation ? 'educationLogo' : ''"
-      />
-    </router-link>
-    <OrganisationChooserLight
-      v-if="!isPodcastmaker && organisationId && !isPhone"
-      page="topBar"
-      width="auto"
-      :defaultanswer="$t('No organisation filter')"
-      :value="organisationId"
-      class="ms-3 me-2"
-      :reset="reset"
-      @selected="onOrganisationSelected"
+  <div
+    class="top-bar-container"
+    :class="{ scrolled: scrolled, 'content-top-bar': isContentToDisplay }"
+  >
+    <TopBarMainContent
+      :is-education="isEducation"
+      :is-phone="isPhone"
+      :scrolled="scrolled"
+      :title-display="titleToDisplay"
     />
-    <div class="d-flex align-items-center justify-content-end flex-grow-1">
-      <template v-for="link in routerLinkArray" :key="link.routeName">
-        <router-link
-          v-if="link.condition"
-          :to="{
-            name: link.routeName,
-            query: getQueriesRouter(link.routeName),
-          }"
-          class="link-hover p-3"
-        >
-          {{ link.title }}
-        </router-link>
-      </template>
-      <button
-        v-if="!isPhone"
-        id="more-dropdown"
-        :title="$t('More')"
-        class="d-flex align-items-center btn-transparent p-3"
-      >
-        <div class="link-hover">
-          {{ $t("More") }}
-        </div>
-        <div class="ms-1 saooti-down" />
-      </button>
-      <ClassicPopover
-        target="more-dropdown"
-        :only-click="true"
-        :is-fixed="true"
-        :left-pos="true"
-      >
-        <div class="d-flex flex-column">
-          <template v-for="link in routerLinkInsideArray" :key="link.routeName">
-            <router-link
-              v-if="link.condition"
-              :to="{
-                name: link.routeName,
-                query: getQueriesRouter(link.routeName),
-              }"
-              class="link-hover p-1 octopus-dropdown-item"
-            >
-              {{ link.title }}
-            </router-link>
-          </template>
-        </div>
-      </ClassicPopover>
-    </div>
-    <MobileMenu :is-education="isEducation" />
-
-    <div class="d-flex flex-column">
-      <div class="d-flex justify-content-end flex-nowrap">
-        <HomeDropdown :is-education="isEducation" />
-        <router-link
-          :title="$t('Search')"
-          :to="{
-            name: 'podcasts',
-            query: { productor: filterOrgaId },
-          }"
-          class="btn admin-button m-1 saooti-search"
-        />
-      </div>
-    </div>
+    <template v-if="contentToDisplay">
+      <div class="page-element-bg" :style="backgroundDisplay" />
+      <h1 v-show="!scrolled" class="text-truncate">{{ titleToDisplay }}</h1>
+      <SubscribeButtons
+        v-show="!scrolled"
+        :emission="emissionObject"
+        :playlist-id="contentToDisplay?.playlistId"
+        :window-width="windowWidth"
+      />
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { state } from "../../stores/ParamSdkStore";
-import HomeDropdown from "./HomeDropdown.vue";
-import { Organisation } from "@/stores/class/general/organisation";
-import orgaFilter from "../mixins/organisationFilter";
 import imageProxy from "../mixins/imageProxy";
-import { useFilterStore } from "@/stores/FilterStore";
+import TopBarMainContent from "./TopBarMainContent.vue";
 import { mapState } from "pinia";
-import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import ClassicPopover from "../misc/ClassicPopover.vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { Podcast } from "@/stores/class/general/podcast";
+import { Emission } from "@/stores/class/general/emission";
 import resizePhone from "../mixins/resizePhone";
-import { defineComponent, defineAsyncComponent } from "vue";
-const OrganisationChooserLight = defineAsyncComponent(
-  () => import("../display/organisation/OrganisationChooserLight.vue"),
+import { Playlist } from "@/stores/class/general/playlist";
+import { Canal } from "@/stores/class/radio/canal";
+const SubscribeButtons = defineAsyncComponent(
+  () => import("../display/sharing/SubscribeButtons.vue"),
 );
-const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
 export default defineComponent({
   name: "TopBar",
   components: {
-    OrganisationChooserLight,
-    HomeDropdown,
-    ClassicPopover,
-    MobileMenu,
+    TopBarMainContent,
+    SubscribeButtons,
   },
-  mixins: [orgaFilter, imageProxy, resizePhone],
+
+  mixins: [imageProxy, resizePhone],
+
   props: {
     isEducation: { default: false, type: Boolean },
   },
@@ -133,93 +53,52 @@ export default defineComponent({
       scrolled: false as boolean,
       oldScrollY: 0 as number,
       minScroll: 0 as number,
-      organisationId: undefined as string | undefined,
-      reset: false as boolean,
       isPhone: false as boolean,
       windowWidth: 0 as number,
     };
   },
   computed: {
-    ...mapState(useFilterStore, [
-      "filterLive",
-      "filterOrgaId",
-      "filterImgUrl",
-      "filterIab",
-      "filterRubrique",
-      "filterName",
-    ]),
-    routerLinkArray() {
-      return [
-        {
-          title: this.$t("Radio & Live"),
-          routeName: "lives",
-          condition:
-            (state.generalParameters.isLiveTab as boolean) &&
-            ((this.filterOrgaId && this.filterLive) || !this.filterOrgaId),
-        },
-        { title: this.$t("Podcasts"), routeName: "podcasts", condition: true },
-        {
-          title: this.$t("Emissions"),
-          routeName: "emissions",
-          condition: true,
-        },
-      ];
+    ...mapState(useGeneralStore, ["contentToDisplay"]),
+    isContentToDisplay(): boolean {
+      return (
+        "podcast" === this.$route.name ||
+        "emission" === this.$route.name ||
+        "playlist" === this.$route.name ||
+        "radio" === this.$route.name
+      );
     },
-    routerLinkInsideArray() {
-      return [
-        {
-          title: this.$t("Speakers"),
-          routeName: "participants",
-          condition: true,
-        },
-        {
-          title: this.$t("Playlists"),
-          routeName: "playlists",
-          condition: true,
-        },
-        {
-          title: this.$t("Productors"),
-          routeName: "productors",
-          condition:
-            !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation),
-        },
-      ];
-    },
-    rubriqueQueryParam(): string | undefined {
-      if (this.filterRubrique?.length) {
-        return this.filterRubrique
-          .map(
-            (value: RubriquageFilter) =>
-              value.rubriquageId + ":" + value.rubriqueId,
-          )
-          .join();
+    backgroundDisplay(): string {
+      if (!this.contentToDisplay) {
+        return "";
       }
-      return undefined;
+      return `background-image: url('${this.proxyImageUrl(
+        this.contentToDisplay.imageUrl,
+        "270",
+      )}');`;
     },
-    logoUrl(): string {
-      return this.isEducation
-        ? "/img/logo_education.webp"
-        : "/img/logo_octopus_final.svg";
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    imgUrl(): string {
-      if (!this.filterImgUrl?.includes("emptypodcast"))
-        return `${this.filterImgUrl}`;
+    titleToDisplay(): string {
+      if ((this.contentToDisplay as Podcast)?.podcastId) {
+        return (this.contentToDisplay as Podcast).emission.name;
+      }
+      if ((this.contentToDisplay as Playlist)?.playlistId) {
+        return (this.contentToDisplay as Playlist).title;
+      }
+      if ((this.contentToDisplay as Emission)?.emissionId) {
+        return (this.contentToDisplay as Emission).name;
+      }
+      if ((this.contentToDisplay as Canal)?.id) {
+        return (this.contentToDisplay as Canal).name;
+      }
       return "";
     },
-  },
-  watch: {
-    filterOrgaId: {
-      immediate: true,
-      handler() {
-        if (this.filterOrgaId) {
-          this.organisationId = this.filterOrgaId;
-        } else {
-          this.reset = !this.reset;
-        }
-      },
+    emissionObject(): Emission | null {
+      if ((this.contentToDisplay as Podcast)?.podcastId) {
+        return (this.contentToDisplay as Podcast).emission;
+      }
+      if ((this.contentToDisplay as Emission)?.emissionId) {
+        return this.contentToDisplay as Emission;
+      }
+      return null;
     },
   },
   mounted() {
@@ -229,24 +108,16 @@ export default defineComponent({
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
-    getQueriesRouter(routeName: string) {
-      if ("podcasts" !== routeName && "emissions" !== routeName) {
-        return { productor: this.filterOrgaId };
-      }
-      return {
-        productor: this.filterOrgaId,
-        iabId: this.filterIab?.id,
-        rubriquesId: this.rubriqueQueryParam,
-      };
-    },
     handleScroll(): void {
       if (
         window.scrollY - this.oldScrollY > 0 &&
         window.scrollY > 1 &&
         document.body.offsetHeight - window.innerHeight > 40
       ) {
-        this.scrolled = true;
-        this.minScroll = 0;
+        if (!this.scrolled) {
+          this.scrolled = true;
+          this.minScroll = 0;
+        }
       } else if (
         window.scrollY - this.oldScrollY < 0 &&
         window.scrollY < 1 &&
@@ -260,73 +131,90 @@ export default defineComponent({
         this.minScroll = window.scrollY;
       }
     },
-    async onOrganisationSelected(
-      organisation: Organisation | undefined,
-    ): Promise<void> {
-      if (organisation?.id) {
-        await this.selectOrganisation(organisation.id);
-        return;
-      }
-      this.organisationId = undefined;
-      this.removeSelectedOrga();
-    },
   },
 });
 </script>
 
 <style lang="scss">
+@import "@scss/_variables.scss";
 .octopus-app {
   .top-bar-container {
     position: sticky;
     top: 0;
-    background: #fff;
+    background: $octopus-primary-color;
+    background: linear-gradient(
+      90deg,
+      $octopus-primary-color 0%,
+      $blue-octopus 100%
+    );
     width: 100%;
-    height: 3.5rem;
-    z-index: 10;
-    padding: 0 1rem;
+    height: 5rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: height 1s;
-    @media (max-width: 450px) {
-      padding: 0 0.5rem;
-    }
+    flex-direction: column;
+    transition: height 0.7s;
+    box-shadow: 0px 2px 15px 5px rgba(0, 0, 0, 0.4) !important;
 
-    .saooti-menu {
-      display: none;
-      cursor: pointer;
-      font-size: 1.5rem;
-      margin: 0.5rem;
-    }
-
-    .top-bar-logo img {
-      max-width: 140px !important;
-      max-height: 2.5rem;
-      height: 2.5rem;
-      &.educationLogo {
-        height: auto;
-      }
-      @media (max-width: 650px) {
-        height: 2rem;
+    &.content-top-bar {
+      height: 22rem;
+      background: black;
+      .page-element-bg {
+        height: 22rem;
       }
     }
+    &.content-top-bar.scrolled {
+      height: 5rem;
+      .page-element-bg {
+        height: 5rem;
+      }
+    }
+
     &.scrolled {
-      .link-hover,
-      .saooti-down {
-        display: none;
-      }
-      .saooti-menu {
-        display: block;
+      z-index: 11;
+    }
+
+    h1 {
+      color: white !important;
+      font-size: 2rem;
+      margin: 2rem 5rem;
+    }
+    @media (max-width: 650px) {
+      height: 3.5rem;
+      &.content-top-bar.scrolled {
+        height: 3.5rem;
+        .page-element-bg {
+          height: 3.5rem;
+        }
       }
     }
-    /** PHONES*/
-    @media (max-width: 960px) {
-      .link-hover {
-        display: none;
+
+    @media (max-width: 550px) {
+      h1 {
+        font-size: 1rem;
+        margin: 1rem 0.5rem 0.5rem 0.5rem;
       }
-      .saooti-menu {
-        display: block;
+      &.content-top-bar {
+        height: 13rem;
+        .page-element-bg {
+          height: 13rem;
+        }
       }
+    }
+    .page-element-bg {
+      opacity: 0.5;
+      filter: blur(8px);
+      -webkit-filter: blur(8px);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 100%;
+      position: absolute;
+      z-index: -1;
+      transition: height 0.7s;
+    }
+
+    .admin-button:hover,
+    .share-btn:hover {
+      background: white;
     }
   }
 }
