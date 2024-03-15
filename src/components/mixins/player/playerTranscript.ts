@@ -8,7 +8,7 @@ export const playerTranscript = defineComponent({
     ...mapState(usePlayerStore, ["playerTranscript", "playerPodcast", 'playerDelayStitching']),
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateTranscript", "playerUpdateDelayStitching"]),
+    ...mapActions(usePlayerStore, ["playerUpdateTranscript", "playerUpdateChaptering", "playerUpdateDelayStitching"]),
     async checkDelaytWithStitching(){
       this.playerUpdateDelayStitching(0);
       const audioPlayer = document.querySelector("#audio-player") as HTMLAudioElement;
