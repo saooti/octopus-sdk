@@ -1,13 +1,15 @@
 <template>
-  <div v-if="isInit" :key="reload" class="d-flex flex-column h-100 octopus-app">
-    <TopBar :is-education="false" />
-    <CategoryFilter v-if="firstDisplayCategoryFilter" />
-    <div v-else class="category-filter-no-filter" />
-    <router-view />
-    <ClassicLazy v-if="pageFullyLoad" :min-height="125">
-      <FooterOctopus />
-    </ClassicLazy>
-    <PlayerComponent />
+  <div class="d-flex flex-column h-100 octopus-app">
+    <template v-if="pageFullyLoad">
+      <TopBar :is-education="false" />
+      <CategoryFilter v-if="firstDisplayCategoryFilter" />
+      <div v-else class="category-filter-no-filter" />
+      <router-view />
+      <ClassicLazy :min-height="125">
+        <FooterOctopus />
+      </ClassicLazy>
+      <PlayerComponent />
+    </template>
   </div>
 </template>
 
@@ -47,7 +49,6 @@ export default defineComponent({
   data() {
     return {
       reload: false as boolean,
-      isInit: false as boolean,
       pageFullyLoad: false as boolean,
       firstDisplayCategoryFilter: false as boolean,
     };
@@ -97,7 +98,6 @@ export default defineComponent({
       await this.handleOrganisationFilter();
       this.handleIabIdFilter();
       this.handleRubriquesFilter();
-      this.isInit = true;
     },
     async handleOrganisationFilter() {
       let orgaId = "";
