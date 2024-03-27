@@ -258,7 +258,7 @@ export default defineComponent({
     },
     podcastsFetched(podcasts: Array<Podcast>) {
       for (const podcast of podcasts) {
-        if ("READY" === podcast.processingStatus) {
+        if ("READY" === podcast.processingStatus && podcast.availability.visibility) {
           this.lastPodcast = podcast;
           return;
         }
