@@ -31,7 +31,10 @@ export const fetchRadioData = defineComponent({
       );
       if(callbackAdvertising){
         //TODO remove mock
-        //callbackAdvertising("2024-03-12T15:25:00Z");
+        /* callbackAdvertising({
+          startDate: "2024-03-25T08:21:00Z",
+          tag: "5e385e1b51c86"
+        }); */
         callbackAdvertising(metadata.nextAdvertising);
       }
       const arrayMetadata = metadata.previously;

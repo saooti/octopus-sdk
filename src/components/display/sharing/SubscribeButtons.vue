@@ -48,6 +48,7 @@
           target="_blank"
           class="octopus-dropdown-item justify-content-start"
           :href="link.url"
+          realLink="true"
         >
           <span :class="link.icon" class="me-1" /> {{ link.title }}
         </a>

@@ -58,7 +58,6 @@ export const playerStitching = defineComponent({
       return this.useVastPlayerPodcast;
     },
     defineRadioInterval(){
-      //TODO remove tag en dur
       this.clearRadioInterval();
       const timeRemaining = dayjs(this.radioNextAdvertisingStartDate).diff(dayjs(), "millisecond");
       console.log("TimeRemaining "+timeRemaining);
@@ -66,6 +65,8 @@ export const playerStitching = defineComponent({
         return;
       }
       this.radioInterval = setTimeout(() => {
+        //If pause when ad needs to be played then skipped (TO THINK)
+        if("PAUSED"===this.playerStatus){return;}
         this.onRequestAd(this.getVastUrl(this.playerRadio?.nextAdvertising?.tag ??"5e385e1b51c86"));
       }, timeRemaining);
     },

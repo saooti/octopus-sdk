@@ -12,6 +12,7 @@ import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { useVastStore } from "@/stores/VastStore";
+import dayjs from "dayjs";
 export const playerLogic = defineComponent({
   mixins: [cookies, playerLive, playerComment, playerTranscript, playerStitching],
   data() {
@@ -114,6 +115,7 @@ export const playerLogic = defineComponent({
         return;
       }
       if ("PAUSED" === this.playerStatus && this.playerRadio) {
+        this.playerRadio.dateSessionId = dayjs().toISOString();
         this.hlsReady = false;
         this.reInitPlayer();
         this.endingLive();

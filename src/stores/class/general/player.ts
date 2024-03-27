@@ -9,6 +9,8 @@ export interface Radio {
   nextAdvertising:NextAdvertising;
   isInit: boolean;
   podcast?: Podcast;
+  sessionId?: string;
+  dateSessionId?:string;
 }
 export interface MediaRadio {
   artist: string;

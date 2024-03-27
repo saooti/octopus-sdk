@@ -1,4 +1,5 @@
 import { state } from "../../../stores/ParamSdkStore";
+import dayjs from "dayjs";
 import { playerLogicProgress} from "./playerLogicProgress";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { useAuthStore } from "@/stores/AuthStore";
@@ -6,6 +7,7 @@ import { mapState, mapActions } from "pinia";
 /* eslint-disable */
 let Hls:any = null;
 /* eslint-enable */
+const maxMinutesSessionId = 1;
 import { defineComponent } from "vue";
 export const playerLive = defineComponent({
   mixins: [playerLogicProgress],
@@ -31,7 +33,20 @@ export const playerLive = defineComponent({
     },
     playRadio() {
       if (!this.playerRadio) return;
-      this.playHls(this.playerRadio.url);
+      this.handleSessionIdRadio();
+      this.playHls(this.playerRadio.url+"?origin=octopus&sessionId="+this.playerRadio.sessionId);
+    },
+    handleSessionIdRadio(){
+      if(!this.playerRadio) return;
+      if(this.playerRadio.sessionId && dayjs().diff(dayjs(this.playerRadio.dateSessionId), 'm')<maxMinutesSessionId){
+        return;
+      }
+      this.playerRadio.sessionId = this.uuidv4();
+    },
+    uuidv4() {
+      return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
     },
     playLive() {
       if (!this.playerLive) return;
