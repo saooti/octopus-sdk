@@ -10,6 +10,9 @@
         :src="iFrameSrc"
         width="100%"
         height="140px"
+        scrolling="no" 
+        allow="clipboard-read; clipboard-write; autoplay" 
+        frameborder="0"
         class="max-iframe mx-3 flex-grow-1"
       />
       <div class="d-flex flex-column flex-grow-1 align-items-center">
@@ -76,7 +79,6 @@ export default defineComponent({
         1,
       )}&theme=${this.theme.substring(1)}`;
     },
-
     iFrame(): string {
       return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay" frameborder="0"></iframe>`;
     },
