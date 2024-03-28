@@ -52,11 +52,12 @@ import { orgaComputed } from "../../mixins/orgaComputed";
 import octopusApi from "@saooti/octopus-api";
 import { useFilterStore } from "@/stores/FilterStore";
 import { useAuthStore } from "@/stores/AuthStore";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { state } from "../../../stores/ParamSdkStore";
 import { Conference } from "@/stores/class/conference/conference";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 export default defineComponent({
   name: "LiveList",
   components: {
@@ -163,14 +164,12 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaLiveEnabled"]),
     async checkIfLiveAuthorized(): Promise<void> {
       if (!this.filterOrgaUsed) {
         return;
       }
-      this.isLiveAuthorized = await octopusApi.fetchData<boolean>(
-        0,
-        "organisation/liveEnabled/" + this.filterOrgaUsed,
-      );
+      this.isLiveAuthorized =  await this.getOrgaLiveEnabled(this.filterOrgaUsed);
     },
     endLoading(): void {
       this.loading = false;
