@@ -147,7 +147,9 @@ export default defineComponent({
       ).afterSearch(notNullOrga, response.count);
     },
     async fetchOrganisation(): Promise<void> {
-      this.organisationChosen =await this.getOrgaData(this.orgaIdSelected ?? "");
+      this.organisationChosen = await this.getOrgaData(
+        this.orgaIdSelected ?? "",
+      );
       this.initLoaded = true;
     },
   },

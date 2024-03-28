@@ -169,7 +169,9 @@ export default defineComponent({
       if (!this.filterOrgaUsed) {
         return;
       }
-      this.isLiveAuthorized =  await this.getOrgaLiveEnabled(this.filterOrgaUsed);
+      this.isLiveAuthorized = await this.getOrgaLiveEnabled(
+        this.filterOrgaUsed,
+      );
     },
     endLoading(): void {
       this.loading = false;

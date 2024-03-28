@@ -28,7 +28,6 @@
 <script lang="ts">
 import { Organisation } from "@/stores/class/general/organisation";
 import { useSaveFetchStore } from "@/stores/SaveFetchStore";
-import octopusApi from "@saooti/octopus-api";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -78,7 +77,7 @@ export default defineComponent({
         return;
       }
       this.organisation = await this.getOrgaData(this.value);
-      this.actual = this.organisation.id ;
+      this.actual = this.organisation.id;
       this.init = true;
     },
   },
