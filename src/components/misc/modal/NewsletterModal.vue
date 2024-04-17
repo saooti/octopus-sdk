@@ -213,7 +213,7 @@ export default defineComponent({
         "" !== this.authOrganisation.id
           ? this.authOrganisation.id
           : state.generalParameters.organisationId;
-      if (!orgaId || orgaId?.length) {
+      if (!orgaId?.length) {
         return;
       }
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
