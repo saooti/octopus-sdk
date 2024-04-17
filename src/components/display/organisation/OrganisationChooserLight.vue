@@ -27,7 +27,8 @@
 
 <script lang="ts">
 import { Organisation } from "@/stores/class/general/organisation";
-import octopusApi from "@saooti/octopus-api";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   props: {
@@ -64,6 +65,7 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaData"]),
     onOrganisationSelected(): void {
       this.$emit(
         "selected",
@@ -74,12 +76,8 @@ export default defineComponent({
       if (!this.value) {
         return;
       }
-      const data = await octopusApi.fetchData<Organisation>(
-        0,
-        `organisation/${this.value}`,
-      );
-      this.organisation = data;
-      this.actual = data.id;
+      this.organisation = await this.getOrgaData(this.value);
+      this.actual = this.organisation.id;
       this.init = true;
     },
   },

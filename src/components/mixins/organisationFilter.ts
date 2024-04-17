@@ -5,17 +5,15 @@ import { useFilterStore } from "@/stores/FilterStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
-import { Organisation } from "@/stores/class/general/organisation";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 export default defineComponent({
   mixins: [handle403],
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaLiveEnabled", "getOrgaData"]),
     ...mapActions(useFilterStore, ["filterUpdateOrga"]),
     async selectOrganisation(organisationId: string): Promise<void> {
       try {
-        const response = await octopusApi.fetchData<Organisation>(
-          0,
-          `organisation/${organisationId}`,
-        );
+        const response = await this.getOrgaData(organisationId);
         const data = await octopusApi.fetchDataWithParams<Array<Rubriquage>>(
           0,
           "rubriquage/find/" + organisationId,
@@ -25,10 +23,7 @@ export default defineComponent({
           },
           true,
         );
-        const isLive = await octopusApi.fetchData<boolean>(
-          0,
-          "organisation/liveEnabled/" + organisationId,
-        );
+        const isLive = await this.getOrgaLiveEnabled(organisationId);
         this.filterUpdateOrga({
           orgaId: organisationId,
           imgUrl: response.imageUrl,

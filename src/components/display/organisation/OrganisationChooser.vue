@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { useAuthStore } from "@/stores/AuthStore";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import imageProxy from "../../mixins/imageProxy";
 import selenium from "../../mixins/selenium";
 import { orgaComputed } from "../../mixins/orgaComputed";
@@ -48,6 +48,7 @@ import {
   emptyOrgaData,
   Organisation,
 } from "@/stores/class/general/organisation";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 export default defineComponent({
   components: {
     ClassicMultiselect,
@@ -109,6 +110,7 @@ export default defineComponent({
     this.organisationChosen = this.getDefaultOrganisation;
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaData"]),
     async onSearchOrganisation(query?: string): Promise<void> {
       const response = await octopusApi.fetchDataWithParams<{
         count: number;
@@ -145,9 +147,8 @@ export default defineComponent({
       ).afterSearch(notNullOrga, response.count);
     },
     async fetchOrganisation(): Promise<void> {
-      this.organisationChosen = await octopusApi.fetchData<Organisation>(
-        0,
-        `organisation/${this.orgaIdSelected}`,
+      this.organisationChosen = await this.getOrgaData(
+        this.orgaIdSelected ?? "",
       );
       this.initLoaded = true;
     },
