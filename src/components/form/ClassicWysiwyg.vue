@@ -235,7 +235,7 @@ export default defineComponent({
     updateHtml(): void {
       if (this.editor) {
         this.html = this.editor.getHTML().trim();
-        if(this.html.startsWith("<p>")){
+        if(this.html.startsWith("<p>") && this.html.endsWith("</p>")&& 1===(this.html.match(/<p>/g) || []).length){
           this.html = this.html.substring(3, this.html.length - 4);
         }
         this.html = this.html.replaceAll("&nbsp;", " ");
