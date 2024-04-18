@@ -235,6 +235,9 @@ export default defineComponent({
     updateHtml(): void {
       if (this.editor) {
         this.html = this.editor.getHTML();
+        if(this.html.startsWith("<p>")){
+          this.html.substring(3, this.html.length - 4);
+        }
         this.$emit("update:content", this.html);
       }
     },
@@ -278,6 +281,7 @@ export default defineComponent({
       white-space: pre-wrap;
       width: 0;
       flex-grow: 1;
+      overflow: auto;
     }
     .editor-menubar {
       display: flex;
