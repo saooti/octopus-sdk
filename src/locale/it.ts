@@ -351,4 +351,5 @@ export default{
   "Choose background color":"Scegli il colore dello sfondo",
   "Skip ad":"Salta annuncio",
   "Skip ad in seconds":"Salta l'annuncio tra {seconds} secondi",
+  "Insert custom code":"Inserisci il codice personalizzato",
 };

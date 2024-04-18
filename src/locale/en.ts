@@ -358,4 +358,5 @@ export default {
   "Choose background color":"Choose background color",
   "Skip ad":"Skip ad",
   "Skip ad in seconds":"Skip ad in {seconds} seconds",
+  "Insert custom code":"Insert custom code",
 };

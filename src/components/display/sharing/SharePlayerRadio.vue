@@ -10,13 +10,18 @@
         :src="iFrameSrc"
         width="100%"
         height="140px"
-        scrolling="no" 
-        allow="clipboard-read; clipboard-write; autoplay" 
+        scrolling="no"
+        allow="clipboard-read; clipboard-write; autoplay"
         frameborder="0"
         class="max-iframe mx-3 flex-grow-1"
       />
-      <div class="d-flex flex-column flex-grow-1 align-items-center">
+      <div class="d-flex flex-column">
         <SharePlayerColors v-model:color="color" v-model:theme="theme" />
+        <div class="h4 mb-2 mt-3">{{ $t("player parameters") }}</div>
+        <PlayerCommonParameters
+          v-if="displayInsertCode"
+          v-model:insertCode="insertCode"
+        />
         <ShareModalPlayer
           v-if="isShareModal"
           :embed-link="iFrame"
@@ -48,10 +53,14 @@ const ShareModalPlayer = defineAsyncComponent(
 const SharePlayerColors = defineAsyncComponent(
   () => import("./SharePlayerColors.vue"),
 );
+const PlayerCommonParameters = defineAsyncComponent(
+  () => import("./PlayerCommonParameters.vue"),
+);
 export default defineComponent({
   components: {
     ShareModalPlayer,
     SharePlayerColors,
+    PlayerCommonParameters,
   },
   mixins: [orgaComputed],
   props: {
@@ -67,17 +76,28 @@ export default defineComponent({
       orgaAttributes: undefined as
         | { [key: string]: string | number | boolean | undefined }
         | undefined,
+      insertCode: false as boolean,
     };
   },
 
   computed: {
     ...mapState(useAuthStore, ["authOrganisation"]),
+    displayInsertCode(): boolean {
+      return (
+        this.authenticated &&
+        this.canal?.organisationId === this.myOrganisationId
+      );
+    },
     iFrameSrc(): string {
-      return `${state.podcastPage.MiniplayerUri}miniplayer/radio/${
+      let url = `${state.podcastPage.MiniplayerUri}miniplayer/radio/${
         this.canal?.id
       }?distributorId=${this.organisationId}&color=${this.color.substring(
         1,
       )}&theme=${this.theme.substring(1)}`;
+      if (this.insertCode) {
+        url += "&insertCode=true";
+      }
+      return url;
     },
     iFrame(): string {
       return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay" frameborder="0"></iframe>`;
