@@ -234,10 +234,11 @@ export default defineComponent({
     },
     updateHtml(): void {
       if (this.editor) {
-        this.html = this.editor.getHTML();
+        this.html = this.editor.getHTML().trim();
         if(this.html.startsWith("<p>")){
-          this.html.substring(3, this.html.length - 4);
+          this.html = this.html.substring(3, this.html.length - 4);
         }
+        this.html = this.html.replaceAll("&nbsp;", " ");
         this.$emit("update:content", this.html);
       }
     },
