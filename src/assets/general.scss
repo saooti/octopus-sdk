@@ -180,8 +180,8 @@ body{
       margin: auto;
       float: inherit !important;
       display: flex;
-      width: $octopus-mobile-item-size;
-      height: $octopus-mobile-item-size;
+      width: $octopus-mobile-item-size !important;
+      height: $octopus-mobile-item-size !important;
     }
   }
   .img-box-podcast{

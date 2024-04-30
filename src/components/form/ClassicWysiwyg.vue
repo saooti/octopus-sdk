@@ -234,7 +234,11 @@ export default defineComponent({
     },
     updateHtml(): void {
       if (this.editor) {
-        this.html = this.editor.getHTML();
+        this.html = this.editor.getHTML().trim();
+        if(this.html.startsWith("<p>") && this.html.endsWith("</p>")&& 1===(this.html.match(/<p>/g) || []).length){
+          this.html = this.html.substring(3, this.html.length - 4);
+        }
+        this.html = this.html.replaceAll("&nbsp;", " ");
         this.$emit("update:content", this.html);
       }
     },
@@ -278,6 +282,7 @@ export default defineComponent({
       white-space: pre-wrap;
       width: 0;
       flex-grow: 1;
+      overflow: auto;
     }
     .editor-menubar {
       display: flex;
