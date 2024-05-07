@@ -142,7 +142,7 @@ export default defineComponent({
         return;
       }
       event.preventDefault();
-      const rubriqueChosenId = this.rubriqueId[this.rubriqueId.length - 1];
+      const rubriqueChosenId = this.rubriqueId.at(-1);
       let filterToAdd: RubriquageFilter = {
         rubriquageId: 0,
         rubriqueId: rubriqueChosenId,

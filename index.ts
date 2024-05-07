@@ -86,6 +86,9 @@ import initSDK from "./src/components/mixins/init.ts";
 import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
 import resizePhone from "./src/components/mixins/resizePhone.ts";
 
+
+import TopBar from "./src/components/misc/TopBar.vue";
+
 export {
     selenium,
     cookies,
@@ -94,5 +97,6 @@ export {
     orgaFilter,
     initSDK,
     tagOfMixins,
-    resizePhone
+    resizePhone,
+    TopBar
 };
