@@ -3,6 +3,7 @@ import octopusApi from "@saooti/octopus-api";
 import dayjs from "dayjs";
 import { playerVast } from "./playerVast";
 import { usePlayerStore } from "@/stores/PlayerStore";
+import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 import { useVastStore } from "@/stores/VastStore";
 import { mapState, mapActions } from "pinia";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
@@ -19,7 +20,7 @@ export const playerStitching = defineComponent({
   },
   computed: {
     ...mapState(useVastStore, ["adPositionsPodcasts", "adPositionIndex", "useVastPlayerPodcast"]),
-    ...mapState(usePlayerStore, ["playerElapsedSeconds", "playerRadio"]),
+    ...mapState(usePlayerStore, ["playerElapsedSeconds", "playerRadio", "playerPodcast"]),
     radioNextAdvertisingStartDate(){
       return this.playerRadio?.nextAdvertising?.startDate;
     }
@@ -53,6 +54,7 @@ export const playerStitching = defineComponent({
     this.updateuseVastPlayerPodcast("true"===this.$route.query.vast);
   },
   methods: {
+    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     ...mapActions(useVastStore, ["updateAdPositionsPodcasts", "updateAdPositionIndex", "updateuseVastPlayerPodcast"]),
     checkUsePlayerPodcastStitching():boolean{
       return this.useVastPlayerPodcast;
@@ -64,10 +66,10 @@ export const playerStitching = defineComponent({
       if(timeRemaining < 0){
         return;
       }
-      this.radioInterval = setTimeout(() => {
+      this.radioInterval = setTimeout(async () => {
         //If pause when ad needs to be played then skipped (TO THINK)
         if("PAUSED"===this.playerStatus){return;}
-        this.onRequestAd(this.getVastUrl(this.playerRadio?.nextAdvertising?.tag ??"5e385e1b51c86"));
+        this.onRequestAd(await this.getVastUrl(this.playerRadio?.nextAdvertising?.tag ??"5e385e1b51c86"));
       }, timeRemaining);
     },
     clearRadioInterval() {
@@ -95,7 +97,7 @@ export const playerStitching = defineComponent({
       }
       const podcastDurationSeconds = Math.round((this.playerPodcast?.duration??0) / 1000);
       const allAdPositions =this.generateAllAdPositions(adserverConfig.config.doublets, podcastDurationSeconds);
-      const selectedAdPositions = this.selectCorrectAdPositions(allAdPositions, podcastDurationSeconds, adserverConfig.config.minIntervalDuration, adserverConfig.config.minTailDuration);
+      const selectedAdPositions = await this.selectCorrectAdPositions(allAdPositions, podcastDurationSeconds, adserverConfig.config.minIntervalDuration, adserverConfig.config.minTailDuration);
       this.updateAdPositionsPodcasts(this.playerCurrentChange, selectedAdPositions);
     },
     generateAllAdPositions(doublets: Array<AdserverTiming>, podcastDuration: number): Array<AdPosition>{
@@ -131,13 +133,13 @@ export const playerStitching = defineComponent({
         return b.seconds > a.seconds ? -1 : 0;
       });
     },
-    selectCorrectAdPositions(allAdPositions: Array<AdPosition>, podcastDuration: number, minIntervalDuration:number, minTailDuration:number): Array<AdPosition>{
+    async selectCorrectAdPositions(allAdPositions: Array<AdPosition>, podcastDuration: number, minIntervalDuration:number, minTailDuration:number): Promise<Array<AdPosition>>{
       let adPositions: Array<AdPosition> = [];
       let previousPosition = -1;
       for(let adPosition of allAdPositions){
         switch (adPosition.policy) {
           case "pre":
-            adPositions.push(this.defineVastUrl(adPosition));
+            adPositions.push(await this.defineVastUrl(adPosition));
             previousPosition = 0;
             break;
           case "mid":
@@ -150,7 +152,7 @@ export const playerStitching = defineComponent({
               //Too close to previous ad
               continue;
             }
-            adPositions.push(this.defineVastUrl(adPosition));
+            adPositions.push(await this.defineVastUrl(adPosition));
             previousPosition = position;
             break;
           case "post":
@@ -158,7 +160,7 @@ export const playerStitching = defineComponent({
               //Too close to previous ad
               continue;
             }
-            adPositions.push(this.defineVastUrl(adPosition));
+            adPositions.push(await this.defineVastUrl(adPosition));
             break;
           default:break;
         }
@@ -166,17 +168,26 @@ export const playerStitching = defineComponent({
       return adPositions;
     },
 
-    defineVastUrl(adPosition: AdPosition): AdPosition{
-      adPosition.vastUrl = this.getVastUrl(adPosition.impressId);
-      //const apiHeader = { "Authorization": "e37205128cf4492fa23cd46e9806fe3d"}; //TODO need to hide ? 
+    async defineVastUrl(adPosition: AdPosition): Promise<AdPosition>{
+      adPosition.vastUrl = await this.getVastUrl(adPosition.impressId);
       return adPosition;
     },
-    getVastUrl(tag: string): string{
+    async getVastUrl(tag: string): Promise<string>{
       let baseUrl = "https://api.soundcast.io/v1/vast/"+tag;
+      let keywords: Array<string> = [];
+      if(this.playerPodcast && this.playerPodcast?.tags?.length){
+        const attributes = await this.getOrgaAttributes(this.playerPodcast.organisation.id);
+        if ("true"===attributes["AD_CONFIG_PODCAST_TAG"]) {
+          keywords = this.playerPodcast.tags.map((e) => {
+            return "tag:" + e;
+          });
+        }
+      }
       const parameters = this.getUriSearchParams({
         adCount: 1,
         ua:navigator.userAgent,
-        pageUrl:document.referrer
+        pageUrl:document.referrer,
+        keywords:keywords
       });
       return baseUrl + '?' + parameters.toString();
     }
