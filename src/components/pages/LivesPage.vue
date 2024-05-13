@@ -11,7 +11,7 @@
     </template>
     <template v-if="filterOrgaId || organisationId">
       <LiveList :organisation-id="organisationId" />
-      <RadioList :organisation-id="organisationId" />
+      <RadioList v-if="!notRadios" :organisation-id="organisationId" />
     </template>
   </div>
 </template>
@@ -40,6 +40,7 @@ export default defineComponent({
   props: {
     organisationId: { default: undefined, type: String },
     productor: { default: undefined, type: String },
+    notRadios: { default: false, type: Boolean },
   },
   emits: ["update:organisationId"],
 
