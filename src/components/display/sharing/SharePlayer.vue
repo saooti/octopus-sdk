@@ -63,6 +63,10 @@
             @i-frame-number="iFrameNumber = $event"
             @episode-numbers="episodeNumbers = $event"
           />
+          <PlayerCommonParameters
+            v-if="displayInsertCode"
+            v-model:insertCode="insertCode"
+          />
           <ShareModalPlayer
             v-if="isShareModal"
             :embed-link="iFrame"
@@ -104,6 +108,9 @@ const ShareModalPlayer = defineAsyncComponent(
 const PlayerParameters = defineAsyncComponent(
   () => import("./PlayerParameters.vue"),
 );
+const PlayerCommonParameters = defineAsyncComponent(
+  () => import("./PlayerCommonParameters.vue"),
+);
 const SharePlayerTypes = defineAsyncComponent(
   () => import("./SharePlayerTypes.vue"),
 );
@@ -120,6 +127,7 @@ export default defineComponent({
     PlayerParameters,
     SharePlayerTypes,
     ClassicCheckbox,
+    PlayerCommonParameters,
   },
   mixins: [orgaComputed],
   props: {
@@ -149,6 +157,7 @@ export default defineComponent({
       orgaAttributes: undefined as
         | { [key: string]: string | number | boolean | undefined }
         | undefined,
+      insertCode: false as boolean,
     };
   },
 
@@ -166,6 +175,19 @@ export default defineComponent({
           "large" === this.iFrameModel ||
           "largeMore" === this.iFrameModel)
       );
+    },
+    displayInsertCode(): boolean {
+      let orgaResourceId = "";
+      if (this.podcast) {
+        orgaResourceId = this.podcast.organisation.id;
+      }
+      if (this.emission) {
+        orgaResourceId = this.emission.orga.id;
+      }
+      if (this.playlist) {
+        orgaResourceId = this.playlist.organisation?.id ?? "";
+      }
+      return this.authenticated && orgaResourceId === this.myOrganisationId;
     },
     displayTranscriptParam(): boolean {
       return (
@@ -375,6 +397,9 @@ export default defineComponent({
       }
       if (this.isVisible) {
         url.push("&key=" + window.btoa(this.dataTitle.toString()));
+      }
+      if (this.insertCode) {
+        url.push("&insertCode=true");
       }
       return url;
     },

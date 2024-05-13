@@ -348,4 +348,5 @@ export default {
   "Choose background color":"Izberite barvo ozadja",
   "Skip ad":"Preskočite oglas",
   "Skip ad in seconds":"Preskoči oglas čez {seconds} sekund",
+  "Insert custom code":"Vstavite kodo po meri",
 }

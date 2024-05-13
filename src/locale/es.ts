@@ -358,4 +358,5 @@ export default {
   "Choose background color":"Elige el color de fondo",
   "Skip ad":"Omitir aviso publicitario",
   "Skip ad in seconds":"Saltar anuncio en {segundos} segundos",
+  "Insert custom code":"Insertar código personalizado",
 }

@@ -357,4 +357,5 @@ export default {
   "Choose background color":"Wählen Sie die Hintergrundfarbe",
   "Skip ad":"Überspringen",
   "Skip ad in seconds":"Anzeige in {seconds} Sekunden überspringen",
+  "Insert custom code":"Fügen Sie benutzerdefinierten Code ein",
 }
