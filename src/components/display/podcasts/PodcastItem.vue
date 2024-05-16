@@ -21,6 +21,7 @@
       ref="descriptionPodcastContainer"
       class="description-podcast-item html-wysiwyg-content"
       :class="[
+        isMobile ? 'mobile-description-podcast-item' : '',
         hoverDesc && '' !== description ? 'visible' : 'invisible',
         isDescriptionBig ? 'after-podcast-description' : '',
       ]"
@@ -92,6 +93,9 @@ export default defineComponent({
     description(): string {
       return this.podcast.description ?? "";
     },
+    isMobile(): boolean {
+      return window.matchMedia("(hover: none)").matches;
+    },
   },
   created() {
     this.debounceShowDescriptionEvent = debounce(this.showDescription, 100);
@@ -100,7 +104,7 @@ export default defineComponent({
 
   methods: {
     initDescription(): void {
-      if (this.firstDisplayDesc) {
+      if (this.firstDisplayDesc /* || this.isMobile */) {
         return;
       }
       const podcastDesc = this.$refs.descriptionPodcast as HTMLElement;
@@ -160,7 +164,7 @@ export default defineComponent({
       position: absolute;
       width: $octopus-item-podcast-size;
       word-break: break-word;
-      &.after-podcast-description:after {
+      &:not(.mobile-description-podcast-item).after-podcast-description:after {
         content: "...";
         position: absolute;
         padding-left: 1rem;
@@ -175,6 +179,9 @@ export default defineComponent({
           rgba(255, 255, 255, 0),
           #fff 40%
         );
+      }
+      &.mobile-description-podcast-item {
+        overflow: auto;
       }
     }
     @media (max-width: 960px) {

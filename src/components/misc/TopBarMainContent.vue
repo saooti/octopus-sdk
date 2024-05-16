@@ -229,8 +229,11 @@ export default defineComponent({
       return undefined;
     },
     logoUrl(): string {
-      return this.isEducation
-        ? "/img/logo_education_white.svg"
+      if (this.isEducation) {
+        return "/img/logo_education_white.svg";
+      }
+      return this.isPhone
+        ? "/img/logo_octopus_bubble.svg"
         : "/img/logo_octopus_white2.svg";
     },
     isPodcastmaker(): boolean {
@@ -289,8 +292,11 @@ export default defineComponent({
       &.educationLogo {
         height: auto;
       }
+      @media (max-width: 960px) {
+        max-width: 30px !important;
+      }
       @media (max-width: 650px) {
-        height: 2rem;
+        max-height: 2rem;
       }
     }
   }

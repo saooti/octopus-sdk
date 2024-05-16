@@ -176,8 +176,9 @@ body{
     @media (max-width: 960px) {
       flex-grow: 0;
     }
-    @media (max-width: 450px) {
-      margin: auto;
+    @media (max-width: 550px) {
+      margin-left: auto !important;
+      margin-right: auto !important;
       float: inherit !important;
       display: flex;
       width: $octopus-mobile-item-size !important;

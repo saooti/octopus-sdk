@@ -131,7 +131,7 @@
       @validate-podcast="$emit('updatePodcast', $event)"
     />
     <TagList
-      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
+      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length && !isPhone"
       :tag-list="podcast.tags"
       :podcast-annotations="podcast.annotations"
     />
@@ -175,6 +175,7 @@ const SubscribeButtons = defineAsyncComponent(
 );
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
+import resizePhone from "../../mixins/resizePhone";
 export default defineComponent({
   name: "PodcastModuleBox",
   components: {
@@ -189,7 +190,7 @@ export default defineComponent({
     Countdown,
   },
 
-  mixins: [displayMethods, orgaComputed],
+  mixins: [displayMethods, orgaComputed, resizePhone],
 
   props: {
     playingPodcast: { default: undefined, type: Object as () => Podcast },
@@ -198,6 +199,13 @@ export default defineComponent({
   },
 
   emits: ["updatePodcast"],
+
+  data() {
+    return {
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
+    };
+  },
 
   computed: {
     isCounter(): boolean {

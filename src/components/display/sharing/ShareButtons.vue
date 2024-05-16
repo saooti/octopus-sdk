@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isLoading && (authenticated || !noSharing)" class="module-box">
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="share-buttons-display">
       <div v-if="!isGarStudent && !noSharing" class="d-flex flex-column me-2">
         <div class="h2 mb-2">
           {{ $t("Share in one click") }}
@@ -27,35 +27,31 @@
           />
         </div>
       </div>
-      <div class="d-flex align-items-center">
+      <div class="d-flex-column align-items-center">
         <div
           v-if="podcast || emission || playlist"
-          class="d-flex flex-column ms-4"
+          class="d-flex flex-column share-left-not-phone"
         >
           <div class="h2 mb-2">
             {{ $t("Newsletter") }}
           </div>
-          <div class="d-flex align-items-center justify-content-center">
-            <button
-              :class="getClass()"
-              class="saooti-newsletter"
-              :title="$t('Share newsletter')"
-              @click="newsletter = true"
-            />
-          </div>
+          <button
+            :class="getClass()"
+            class="saooti-newsletter"
+            :title="$t('Share newsletter')"
+            @click="newsletter = true"
+          />
         </div>
-        <div class="d-flex flex-column ms-4">
+        <div class="d-flex flex-column share-left-not-phone">
           <div class="h2 mb-2">
             {{ $t("QR Code") }}
           </div>
-          <div class="d-flex align-items-center justify-content-center">
-            <button
-              :class="getClass()"
-              :title="$t('Share QR Code')"
-              class="saooti-qrcode"
-              @click="qrCode = true"
-            />
-          </div>
+          <button
+            :class="getClass()"
+            :title="$t('Share QR Code')"
+            class="saooti-qrcode"
+            @click="qrCode = true"
+          />
         </div>
         <div v-if="'' !== rssUrl && displayRss" class="d-flex flex-column ms-4">
           <div class="h2 mb-2">
@@ -309,3 +305,26 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app {
+  .share-buttons-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media (max-width: 960px) {
+      flex-direction: column;
+      align-items: baseline;
+    }
+    > .d-flex-column {
+      align-items: flex-start !important;
+    }
+  }
+  @media (min-width: 960px) {
+    .share-left-not-phone {
+      align-items: center;
+      justify-content: center;
+      margin-left: 1.5rem !important;
+    }
+  }
+}
+</style>

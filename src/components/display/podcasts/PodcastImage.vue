@@ -35,8 +35,8 @@
     />
     <div
       v-if="displayDescription && isMobile"
-      class="background-icon bg-primary saooti-arrow-up"
-      :class="isDescription ? 'saooti-arrow-down' : 'saooti-arrow-up'"
+      class="background-icon bg-dark text-white"
+      :class="isDescription ? 'saooti-down' : 'saooti-up'"
       :title="isDescription ? $t('Hide description') : $t('Show description')"
       @click="showDescription"
     />
@@ -157,15 +157,18 @@ export default defineComponent({
 
   .background-icon {
     border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
-    font-size: 1rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: 0.7rem;
     right: 0;
     bottom: 0;
     margin: 5px;
     position: absolute;
     cursor: pointer;
     z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

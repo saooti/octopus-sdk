@@ -208,6 +208,7 @@ export default defineComponent({
       subscribeList.style.justifyContent = "flex-start";
       subscribeList.style.flexGrow = "1";
       this.hiddenLinks.length = 0;
+      let parentWidth = 0;
       this.subscriptionsDisplay.forEach((element: Link) => {
         const el = (
           this.$refs["subLink" + element.name] as Array<HTMLElement>
@@ -222,12 +223,14 @@ export default defineComponent({
           this.$refs["subLink" + element.name] as Array<HTMLElement>
         )[0];
         if (!el) return;
-        const parent = el.parentElement;
-        if (
-          parent &&
-          el.offsetLeft + el.clientWidth + 20 <
-            parent.clientWidth + parent.offsetLeft
-        ) {
+        if (!parentWidth) {
+          const buttonMoreWidth = el.clientWidth + 20;
+          parentWidth =
+            (el.parentElement?.clientWidth ?? 0) +
+            (el.parentElement?.offsetLeft ?? 0) -
+            buttonMoreWidth;
+        }
+        if (el.offsetLeft + el.clientWidth + 20 < parentWidth) {
           return;
         }
         this.hiddenLinks.push(element);
@@ -256,6 +259,9 @@ export default defineComponent({
       justify-content: flex-start;
       overflow: hidden;
       width: fit-content;
+    }
+    @media (max-width: 960px) {
+      margin-top: 0.8rem;
     }
   }
 }
