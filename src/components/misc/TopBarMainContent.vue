@@ -1,7 +1,7 @@
 <template>
   <div class="top-bar-grid" :class="{ scrolled: titleIsDisplayed }">
     <router-link
-      class="top-bar-logo"
+      class="top-bar-logo d-flex align-items-center"
       :to="{
         name: 'home',
         query: {
@@ -17,7 +17,7 @@
         :alt="$t('Logo of main page')"
         width="140"
         height="50"
-        :class="isEducation ? 'educationLogo' : ''"
+        :class="isEducation ? 'educationLogo' : 'octopusLogo'"
       />
       <img
         v-else
@@ -49,7 +49,7 @@
           width="100"
           height="29"
           class="ms-2"
-          :class="isEducation ? 'educationLogo' : ''"
+          :class="isEducation ? 'educationLogo' : 'octopusLogo'"
         />
       </a>
       <div class="d-flex align-items-center justify-content-end flex-grow-1">
@@ -292,11 +292,13 @@ export default defineComponent({
       &.educationLogo {
         height: auto;
       }
-      @media (max-width: 960px) {
-        max-width: 30px !important;
-      }
       @media (max-width: 650px) {
         max-height: 2rem;
+      }
+    }
+    .octopusLogo{
+      @media (max-width: 960px) {
+        max-width: 30px !important;
       }
     }
   }
