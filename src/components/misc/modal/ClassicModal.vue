@@ -69,7 +69,7 @@ export default defineComponent({
     top: 0;
     left: 0;
     display: block;
-    z-index: 1055;
+    z-index: 1400;
     width: 100%;
     height: 100%;
     overflow-x: hidden;
