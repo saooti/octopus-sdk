@@ -160,7 +160,8 @@ export default defineComponent({
         );
         if (
           "PUBLIC" !== data?.orga?.privacy &&
-          this.filterOrgaId !== data?.orga?.id
+          this.filterOrgaId !== data?.orga?.id&&
+          this.$route.query.productor !== data?.orga?.id
         ) {
           this.initError();
           return;

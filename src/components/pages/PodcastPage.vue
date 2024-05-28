@@ -329,7 +329,8 @@ export default defineComponent({
         );
         if (
           "PUBLIC" !== data.organisation.privacy &&
-          this.filterOrgaId !== data.organisation.id
+          this.filterOrgaId !== data.organisation.id &&
+          this.$route.query.productor !== data.organisation.id
         ) {
           this.initError();
           return;

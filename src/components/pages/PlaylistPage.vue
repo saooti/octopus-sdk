@@ -165,7 +165,8 @@ export default defineComponent({
         if (
           (!this.editRight && this.playlistRadio) ||
           ("PUBLIC" !== this.playlist.organisation?.privacy &&
-            this.filterOrgaId !== this.playlist.organisation?.id)
+          this.filterOrgaId !== this.playlist.organisation?.id && 
+          this.$route.query.productor !== this.playlist.organisation?.id)
         ) {
           this.initError();
           return;

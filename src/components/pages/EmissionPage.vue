@@ -242,7 +242,8 @@ export default defineComponent({
         );
         if (
           "PUBLIC" !== this.emission.orga.privacy &&
-          this.filterOrgaId !== this.emission.orga.id
+          this.filterOrgaId !== this.emission.orga.id &&
+          this.$route.query.productor !== this.emission.orga.id
         ) {
           this.initError();
           return;

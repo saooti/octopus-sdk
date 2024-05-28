@@ -56,6 +56,9 @@
           {{ $t("Multiselect max options", { max: maxOptions }) }}
         </div>
       </template>
+      <template #open-indicator="{ attributes }">
+        <span v-bind="attributes" class="saooti-down"/>
+      </template>
     </vSelect>
   </div>
 </template>
@@ -179,6 +182,9 @@ export default {
   }
   .vs--searchable .vs__dropdown-toggle {
     cursor: pointer;
+  }
+  .vs__dropdown-toggle {
+    padding: 0;
   }
   .vs__search:focus {
     min-width: 150px;

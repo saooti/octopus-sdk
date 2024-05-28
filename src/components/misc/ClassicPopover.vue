@@ -7,7 +7,7 @@
     class="octopus-popover"
     :class="[onlyClick ? 'octopus-dropdown' : '', popoverClass]"
     :style="positionInlineStyle"
-    @blur="clearDataBlur"
+    @focusout="clearDataBlur"
     @mouseenter="overPopover = true"
     @mouseleave="
       overPopover = false;
