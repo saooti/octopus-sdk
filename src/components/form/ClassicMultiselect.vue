@@ -168,7 +168,7 @@ export default {
 <style lang="scss">
 @import "vue-select/dist/vue-select.css";
 :root {
-  --vs-dropdown-z-index: 1060;
+  --vs-dropdown-z-index: 1405;
   --vs-border-radius: 0.2rem;
   --vs-dropdown-option--active-bg: #ddd;
   --vs-dropdown-option--active-color: black;
