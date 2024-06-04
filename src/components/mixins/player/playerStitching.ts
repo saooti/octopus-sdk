@@ -66,11 +66,16 @@ export const playerStitching = defineComponent({
       if(timeRemaining < 0){
         return;
       }
-      this.radioInterval = setTimeout(async () => {
-        //If pause when ad needs to be played then skipped (TO THINK)
-        if("PAUSED"===this.playerStatus){return;}
-        this.onRequestAd(await this.getVastUrl(this.playerRadio?.nextAdvertising?.tag ??"5e385e1b51c86"));
+      this.radioInterval = setTimeout(() => {
+        this.radioIntervalExecute();
       }, timeRemaining);
+    },
+    async radioIntervalExecute(){
+      //If pause when ad needs to be played then skipped (TO THINK)
+      if("PAUSED"===this.playerStatus){return;}
+      const vastUrl = await this.getVastUrl(this.playerRadio?.nextAdvertising?.tag ??"5e385e1b51c86");
+      console.log("vastUrl "+vastUrl);
+      this.onRequestAd(vastUrl);
     },
     clearRadioInterval() {
       clearInterval(this.radioInterval as unknown as number);
