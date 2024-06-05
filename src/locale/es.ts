@@ -359,4 +359,8 @@ export default {
   "Skip ad":"Omitir aviso publicitario",
   "Skip ad in seconds":"Saltar anuncio en {segundos} segundos",
   "Insert custom code":"Insertar código personalizado",
+  "Morning":"Mañana",
+  "Afternoon":"Tarde",
+  "Evening":"Noche",
+  "Now":"Ahora",
 }

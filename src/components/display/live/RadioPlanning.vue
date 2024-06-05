@@ -16,62 +16,86 @@
           <span>{{ day.title }}</span>
         </button>
       </div>
+      <div class="d-flex align-items-center justify-content-center border-bottom">
+        <button
+          v-for="period in periodOfDay"
+          :key="period.id"
+          class="btn btn-underline mb-2"
+          @click="scrollToElement('planning-period-'+period.id)"
+        >
+          {{period.title}}
+        </button>
+        <button
+          class="btn btn-underline mb-2"
+          @click="changePeriodNow"
+        >
+          {{$t('Now')}}
+        </button>
+      </div>
+
       <div class="d-flex flex-column p-3">
         <ClassicLoading
           :loading-text="loading ? $t('Loading content ...') : undefined"
           :error-text="error ? $t(`Error`) : undefined"
         />
         <template v-if="!loading && !error">
-          <div v-if="!planning[daySelected].length" class="text-center">
+          <div v-if="!planningLength[daySelected]" class="text-center">
             {{ $t("No programming") }}
           </div>
           <div
-            v-for="planningItem in planning[daySelected]"
             v-else
-            :key="planningItem.occurrenceId + '' + planningItem.liveId"
-            class="d-flex align-items-center mb-3"
+            v-for="period in periodOfDay"
+            :key="period.id"
           >
-            <div class="program-item-date fw-bold flex-shrink-0">
-              {{ dateDisplay(planningItem.startDate) }}
-            </div>
-            <router-link
-              class="d-flex align-items-center text-dark"
-              :to="{
-                name: 'podcast',
-                params: { podcastId: planningItem.podcastId },
-                query: { productor: filterOrgaId },
-              }"
-            >
-              <img
-                v-lazy="proxyImageUrl(planningItem.podcastData.imageUrl, '150')"
-                width="150"
-                height="150"
-                class="m-2"
-                :title="
-                  $t('Episode name image', {
-                    name: planningItem.podcastData.title,
-                  })
-                "
-                :alt="
-                  $t('Episode name image', {
-                    name: planningItem.podcastData.title,
-                  })
-                "
-              />
-              <div class="d-flex flex-column">
-                <div class="d-flex align-items-center mb-2">
-                  <div
-                    v-if="planningItem.liveId"
-                    class="bg-complementary text-white p-1 me-1"
-                  >
-                    {{ $t("Live") }}
-                  </div>
-                  <div class="flex-grow-1 text-truncate fw-bold">
-                    {{ planningItem.podcastData.title }}
-                  </div>
+            <template v-if="planning[daySelected][period.id].length">
+              <div 
+                :id="'planning-period-'+period.id"
+                class="fw-bold my-3 pb-2 border-bottom border-primary text-primary"
+              >{{period.title}}</div>
+              <div
+                v-for="planningItem in planning[daySelected][period.id]"
+                :key="planningItem.occurrenceId + '' + planningItem.liveId"
+                :id="'planning-occurrence-'+planningItem.occurrenceId + '' + planningItem.liveId"
+                class="d-flex align-items-center mb-3"
+              >
+                <div class="program-item-date fw-bold flex-shrink-0">
+                  {{ dateDisplay(planningItem.startDate) }}
                 </div>
+                <router-link
+                  class="d-flex align-items-center text-dark"
+                  :to="{
+                    name: 'podcast',
+                    params: { podcastId: planningItem.podcastId },
+                    query: { productor: filterOrgaId },
+                  }"
+                >
+                  <img
+                    v-lazy="proxyImageUrl(planningItem.podcastData.imageUrl, '150')"
+                    width="150"
+                    height="150"
+                    class="m-2"
+                    :title="
+                      $t('Episode name image', {
+                        name: planningItem.podcastData.title,
+                      })
+                    "
+                  />
+                  <div class="d-flex flex-column">
+                    <div class="d-flex align-items-center mb-2">
+                      <div
+                        v-if="planningItem.liveId"
+                        class="bg-complementary text-white p-1 me-1"
+                      >
+                        {{ $t("Live") }}
+                      </div>
+                      <div class="flex-grow-1 text-truncate fw-bold">
+                        {{ planningItem.podcastData.title }}
+                      </div>
+                    </div>
+                  </div>
+                </router-link>
               </div>
-            </router-link>
+            </template>
           </div>
         </template>
       </div>
@@ -108,8 +132,13 @@ export default defineComponent({
   data() {
     return {
       planning: {} as {
-        [key: number]: Array<PlanningOccurrence | PlanningLive>;
+        [key: number]: {
+          morning:Array<PlanningOccurrence | PlanningLive>,
+          afternoon:Array<PlanningOccurrence | PlanningLive>,
+          evening:Array<PlanningOccurrence | PlanningLive>
+        };
       },
+      planningLength: {} as {[key:number]: number},
       daySelected: dayjs().valueOf(),
       arrayDays: [] as Array<{
         title: string;
@@ -124,10 +153,17 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
     startOfDay(): string {
-      return dayjs(this.daySelected).utcOffset(0).startOf("date").toISOString();
+      return dayjs(this.daySelected).startOf("date").toISOString();
     },
     endOfDay(): string {
-      return dayjs(this.daySelected).utcOffset(0).endOf("date").toISOString();
+      return dayjs(this.daySelected).endOf("date").toISOString();
+    },
+    periodOfDay(){
+      return [
+        {id:"morning", title: this.$t('Morning'), end: dayjs(this.daySelected).hour(14).minute(0).second(0).millisecond(0)},
+        {id:"afternoon", title: this.$t('Afternoon'), end: dayjs(this.daySelected).hour(19).minute(0).second(0).millisecond(0)},
+        {id:"evening", title: this.$t('Evening'), end: dayjs(this.daySelected).endOf("date")},
+      ]
     },
   },
 
@@ -137,6 +173,32 @@ export default defineComponent({
   },
 
   methods: {
+    scrollToElement(id: string){
+      const element = document.getElementById(id);
+      if(element){
+        const yOffset = -110; 
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'smooth'});
+      }
+    },
+    changePeriodNow(){
+      const now = dayjs();
+      if(!dayjs(this.daySelected).isSame(now, 'day')){
+        this.changeDate(this.arrayDays[7].date);
+      }
+      this.$nextTick(() => {
+        if(!this.planningLength[this.daySelected]){return;}
+        const arrayOccurrences = Object.values(this.planning[this.daySelected]).reduce((r,c) => r.concat(c), [])
+        let selectedOccurrence = arrayOccurrences[0];
+        for (let index = 0; index < arrayOccurrences.length; index++) {
+          selectedOccurrence = arrayOccurrences[index];
+          if(dayjs(arrayOccurrences[index].endDate).isAfter(now)){
+            break;
+          }
+        }
+        this.scrollToElement('planning-occurrence-'+selectedOccurrence.occurrenceId + '' + selectedOccurrence.liveId);
+      });
+    },
     createArrayDays() {
       for (let index = -7; index < 3; index++) {
         const dayToAdd = dayjs().add(index, "day");
@@ -154,6 +216,8 @@ export default defineComponent({
       if (this.planning[this.daySelected]) {
         return;
       }
+      this.planning[this.daySelected] = {morning:[], afternoon:[], evening: []};
+      this.planningLength[this.daySelected] = 0;
       this.loading = true;
       this.error = false;
       try {
@@ -180,9 +244,20 @@ export default defineComponent({
             return b.startDate > a.startDate ? -1 : 0;
           });
         }
-        this.planning[this.daySelected] = occurrences.filter(
-          (oc) => oc.podcastId,
-        );
+        let periodDayIndex = 0;
+        for (let index = 0; index < occurrences.length; index++) {
+          if(!occurrences[index].podcastId){continue;}
+          if(!dayjs(occurrences[index].startDate).isBefore(this.periodOfDay[periodDayIndex].end)){
+            periodDayIndex+=1;
+          }
+          switch (this.periodOfDay[periodDayIndex].id) {
+            case "morning": this.planning[this.daySelected].morning.push(occurrences[index]); break;
+            case "afternoon": this.planning[this.daySelected].afternoon.push(occurrences[index]); break;
+            case "evening": this.planning[this.daySelected].evening.push(occurrences[index]); break;
+            default:break;
+          }
+          this.planningLength[this.daySelected]+=1;
+        }
       } catch {
         this.error = true;
       }

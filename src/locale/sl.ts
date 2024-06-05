@@ -349,4 +349,8 @@ export default {
   "Skip ad":"Preskočite oglas",
   "Skip ad in seconds":"Preskoči oglas čez {seconds} sekund",
   "Insert custom code":"Vstavite kodo po meri",
+  "Morning":"Jutro",
+  "Afternoon":"Popoldan",
+  "Evening":"Večer",
+  "Now":"Zdaj",
 }

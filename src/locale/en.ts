@@ -359,4 +359,8 @@ export default {
   "Skip ad":"Skip ad",
   "Skip ad in seconds":"Skip ad in {seconds} seconds",
   "Insert custom code":"Insert custom code",
+  "Morning":"Morning",
+  "Afternoon":"Afternoon",
+  "Evening":"Evening",
+  "Now":"Now",
 };

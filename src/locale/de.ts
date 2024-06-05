@@ -358,4 +358,8 @@ export default {
   "Skip ad":"Überspringen",
   "Skip ad in seconds":"Anzeige in {seconds} Sekunden überspringen",
   "Insert custom code":"Fügen Sie benutzerdefinierten Code ein",
+  "Morning":"Morgen",
+  "Afternoon":"Nachmittag",
+  "Evening":"Abend",
+  "Now":"Jetzt",
 }
