@@ -7,7 +7,7 @@
     class="octopus-popover"
     :class="[onlyClick ? 'octopus-dropdown' : '', popoverClass]"
     :style="positionInlineStyle"
-    @focusout="clearDataBlur"
+    @blur="clearDataBlur"
     @mouseenter="overPopover = true"
     @mouseleave="
       overPopover = false;
@@ -40,6 +40,7 @@ export default defineComponent({
     topPos: { type: Boolean, default: false },
     popoverClass: { type: String, default: undefined },
   },
+  emits: ["updateVisibility"],
   data() {
     return {
       show: false as boolean,
@@ -57,6 +58,11 @@ export default defineComponent({
     positionInlineStyle(): string {
       return `left: ${this.posX}px; top: ${this.posY}px;`;
     },
+  },
+  watch:{
+    show(){
+      this.$emit('updateVisibility', this.show);
+    }
   },
   mounted() {
     this.init();

@@ -190,7 +190,6 @@ export const playerStitching = defineComponent({
       }
       const parameters = this.getUriSearchParams({
         adCount: 1,
-        ua:navigator.userAgent,
         pageUrl:document.referrer,
         keywords:keywords
       });
