@@ -54,8 +54,6 @@ export const playerTranscript = defineComponent({
       });
     },
     parseSrt(transcript: string) {
-      const pattern =
-        /(\d+)\n([\d:,]+)\s+-{2}>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
       const result = [];
       if (typeof transcript != "string") {
         return;
@@ -65,7 +63,7 @@ export const playerTranscript = defineComponent({
       }
       transcript = transcript.replace(/\r\n|\r|\n|\t/g, "\n");
       let matches;
-      while ((matches = pattern.exec(transcript)) != null) {
+      while ((matches = /(\d+)\n([\d:,]+)\s+-{2}>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm.exec(transcript)) != null) {
         result.push({
           startTime: this.srtTimeToSeconds(matches[2]),
           endTime: this.srtTimeToSeconds(matches[3]),

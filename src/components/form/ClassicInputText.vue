@@ -160,7 +160,7 @@ export default defineComponent({
       if (!this.textValue || "" === this.textValue) {
         return this.canBeNull;
       }
-      return this.regex.exec(this.textValue) !== null;
+      return this.textValue.match(this.regex) !== null;
     },
   },
   watch: {
