@@ -7,7 +7,7 @@
     class="octopus-popover"
     :class="[onlyClick ? 'octopus-dropdown' : '', popoverClass]"
     :style="positionInlineStyle"
-    @blur="clearDataBlur"
+    @focusout="clearDataBlur"
     @mouseenter="overPopover = true"
     @mouseleave="
       overPopover = false;
@@ -87,7 +87,7 @@ export default defineComponent({
         if (!this.onlyMouse) {
           this.targetElement.addEventListener("click", this.setPopoverData);
         }
-        this.targetElement.addEventListener("blur", this.clearDataBlur);
+        this.targetElement.addEventListener("focusout", this.clearDataBlur);
       }
     },
     removeListeners() {
@@ -105,7 +105,7 @@ export default defineComponent({
         if (!this.onlyMouse) {
           this.targetElement.removeEventListener("click", this.setPopoverData);
         }
-        this.targetElement.addEventListener("blur", this.clearDataBlur);
+        this.targetElement.addEventListener("focusout", this.clearDataBlur);
       }
     },
     setPopoverData(e: MouseEvent | PointerEvent) {
@@ -223,7 +223,7 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: $octopus-borderradius;
   position: absolute;
-  z-index: 9999;
+  /* z-index: 9999; */
   max-height: 80vh;
   overflow: auto;
   &.octopus-dropdown {
