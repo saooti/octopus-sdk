@@ -21,6 +21,7 @@
     <teleport to=".octopus-app" :disabled="scrolled">
       <ClassicPopover
         target="home-dropdown"
+        popover-class="popover-z-index"
         :only-click="true"
         :is-fixed="true"
         :left-pos="true"

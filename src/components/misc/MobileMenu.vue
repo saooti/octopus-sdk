@@ -11,6 +11,7 @@
       <ClassicPopover
         v-if="firstLoaded"
         target="mobile-menu-dropdown"
+        popover-class="popover-z-index"
         :only-click="true"
         :is-fixed="true"
         :left-pos="true"

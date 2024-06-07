@@ -75,7 +75,7 @@
             :is-fixed="true"
             relative-class="player-container"
             :only-mouse="true"
-            popover-class="octopus-small-popover"
+            popover-class="octopus-small-popover popover-z-index"
             :content="chapter.title"
           />
         </Teleport>

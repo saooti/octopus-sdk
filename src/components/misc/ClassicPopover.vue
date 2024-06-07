@@ -226,6 +226,9 @@ export default defineComponent({
   /* z-index: 9999; */
   max-height: 80vh;
   overflow: auto;
+  &.popover-z-index{
+    z-index: 9999;
+  }
   &.octopus-dropdown {
     min-width: 200px;
     .octopus-dropdown-item {
