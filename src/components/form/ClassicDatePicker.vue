@@ -1,4 +1,5 @@
 <template>
+  <div ref="divContainer" tabindex="0">
   <VueDatePicker
     :model-value="modelVal"
     :time-picker="isTimePicker"
@@ -15,17 +16,19 @@
     :min-date="isMinDate && !isTimePicker ? now : undefined"
     :range="undefined !== range"
     :multi-calendars="columnNumber > 1 ? columnNumber : false"
-    :inline="columnNumber > 1"
+    :inline="isInline"
     :enable-time-picker="!isTimePicker ? displayTimePicker : undefined"
     :aria-labels="ariaLabels"
     :max-time="maxTime"
     :month-picker="monthPicker"
-    @update:model-value="$emit('updateDate', $event)"
+    :alt-position="customPosition"
+    @update:model-value="updateValue($event)"
   >
     <template v-if="time" #input-icon>
       <div class="ms-2 saooti-clock" />
     </template>
   </VueDatePicker>
+  </div>
 </template>
 
 <script lang="ts">
@@ -61,7 +64,10 @@ export default defineComponent({
         seconds?: number | string;
       },
     },
+    forceFormat: { default: undefined, type: String },
     monthPicker: { default: false, type: Boolean },
+    customPosition: { default: null, type: Function },
+    isInline: { default: false, type: Boolean },
   },
 
   emits: ["updateDate", "update:date"],
@@ -96,10 +102,13 @@ export default defineComponent({
       return this.$i18n.locale;
     },
     format() {
-      let timeString = "";
+      if(this.forceFormat){
+        return this.forceFormat;
+      }
       if (this.monthPicker) {
         return "MM/yyyy";
       }
+      let timeString = "";
       if (this.displayTimePicker || this.isTimePicker) {
         timeString = "HH:mm";
         if (this.displaySeconds) {
@@ -119,6 +128,12 @@ export default defineComponent({
     },
   },
   methods: {
+    updateValue(date: Date){
+      if(!this.isInline){
+        this.$refs.divContainer?.focus();
+      }
+      this.$emit('updateDate', date);
+    },
     formatDate(value: Date): string {
       const realMonth = value.getMonth() + 1;
       return (
