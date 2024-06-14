@@ -59,15 +59,11 @@ export const playerLogic = defineComponent({
       if (
         this.playerMedia ||
         !this.playerPodcast ||
+        this.playerVideo ||
         !this.playerPodcast.availability.visibility ||
         this.listenError
       ) {
         this.audioUrlToPlay = this.audioUrl;
-      }
-      if (
-        !this.playerPodcast?.availability.visibility ||
-        this.listenError
-      ) {
         return;
       }
       const response = await octopusApi.fetchDataPublicWithParams<{
@@ -166,9 +162,10 @@ export const playerLogic = defineComponent({
       return parameters;
     },
     getAudioUrl(): string {
-      if (this.playerMedia)
+      if (this.playerMedia){
         return this.playerMedia.audioUrl ? this.playerMedia.audioUrl : "";
-      if (!this.playerPodcast) return "";
+      }
+      if (!this.playerPodcast || this.playerVideo) return "";
       if (
         !this.playerPodcast.availability.visibility ||
         "PROCESSING" === this.playerPodcast.processingStatus

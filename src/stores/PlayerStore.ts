@@ -169,9 +169,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
       }
       if (param.podcastId) {
         this.playerPodcast = param;
-        this.playerCurrentChange = param.podcastId;
-        if(param.annotations?.chaptering){
-          this.playerChaptering =  await octopusApi.fetchDataPublic<Chaptering>(4, (param.annotations.chaptering as string));
+        if(!this.playerVideo){
+          this.playerCurrentChange = param.podcastId;
+          if(param.annotations?.chaptering){
+            this.playerChaptering =  await octopusApi.fetchDataPublic<Chaptering>(4, (param.annotations.chaptering as string));
+          }
         }
         return;
       }

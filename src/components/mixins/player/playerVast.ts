@@ -179,7 +179,7 @@ export const playerVast = defineComponent({
     contentEndedAdsLoader():void{
       if (this.isAdPlaying) return;
       this.isContentFinished = true;
-      adsLoader.contentComplete();
+      adsLoader?.contentComplete();
     },
     onAdChangePlayingStatus(){
       if(!adsManager){return;}

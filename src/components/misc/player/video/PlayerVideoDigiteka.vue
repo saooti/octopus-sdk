@@ -11,7 +11,7 @@
       ebkitallowfullscreen="true"
       mozallowfullscreen="true"
       allowfullscreen="true"
-      allow="fullscreen, autoplay"
+      allow="fullscreen; autoplay"
       referrerpolicy="no-referrer-when-downgrade"
     ></iframe>
     <SnackBar ref="snackbar" position="bottom-left" />
@@ -23,6 +23,7 @@ import SnackBar from "../../SnackBar.vue";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
+import { state } from "@/stores/ParamSdkStore";
 export default defineComponent({
   name: "PlayerVideo",
   components: {
@@ -31,6 +32,9 @@ export default defineComponent({
 
   computed: {
     ...mapState(usePlayerStore, ["playerPodcast", "playerVideo"]),
+    isVideoFullscreen(): boolean {
+      return state.player.isVideoFullscreen as boolean;
+    },
     videoId(): string | undefined {
       return this.playerPodcast?.video?.videoId;
     },
@@ -39,7 +43,7 @@ export default defineComponent({
         return (
           "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
           this.videoId +
-          "/sound/true/autoplay/1"
+          "/sound/yes/autoplay/1"
         );
       }
       return "";
@@ -51,6 +55,20 @@ export default defineComponent({
         this.$t("Podcast play error"),
       );
     }
+    if(!this.isVideoFullscreen){
+      return;
+    }
+    this.$nextTick(() => {
+      this.goFullScreen();
+    });
   },
+  methods:{
+    goFullScreen() {
+      if ("" === this.srcVideo) {
+        return;
+      }
+      (this.$refs.iframeVideo as Element).requestFullscreen();
+    }, 
+  }
 });
 </script>

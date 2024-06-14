@@ -13,7 +13,7 @@ const state: ParamStore = {
     isProduction: true,
     isContribution: true,
     isRadio: true,
-    ApiUri: "https://api.dev2.saooti.org/",
+    ApiUri: "https://api.staging.saooti.org/",
     podcastmaker: false,
     buttonPlus: true,
     allCategories: [],
@@ -27,8 +27,8 @@ const state: ParamStore = {
     SharePlayer: true,
     ShareButtons: true,
     ShareDistribution: true,
-    MiniplayerUri: "https://playerbeta.dev2.saooti.org/",
-    hlsUri: "https://hls.live.dev2.saooti.org/",
+    MiniplayerUri: "https://playerbeta.staging.saooti.org/",
+    hlsUri: "https://hls.live.staging.saooti.org/",
     mainRubrique: 0,
     resourceUrl: undefined,
     podcastItemShowEmission: false,
@@ -70,6 +70,7 @@ const state: ParamStore = {
   player: {
     image: true,
     emissionName: false,
+    isVideoFullscreen:false,
   },
   footer: {
     contactLink: undefined,
@@ -80,14 +81,14 @@ const state: ParamStore = {
     userName: "",
   },
   octopusApi: {
-    url: "https://api.dev2.saooti.org/",
-    commentsUrl: "https://comments.dev2.saooti.org/",
-    imageUrl: "https://imageproxy.dev2.saooti.org/",
-    studioUrl: "https://studio.dev2.saooti.org/",
-    playerUrl: "https://playerbeta.dev2.saooti.org/",
-    speechToTextUrl: "https://speech2text.dev2.saooti.org/",
-    radioUrl:"https://radio.dev2.saooti.org/",
-    recoUrl: "https://reco.dev2.saooti.org/",
+    url: "https://api.staging.saooti.org/",
+    commentsUrl: "https://comments.staging.saooti.org/",
+    imageUrl: "https://imageproxy.staging.saooti.org/",
+    studioUrl: "https://studio.staging.saooti.org/",
+    playerUrl: "https://playerbeta.staging.saooti.org/",
+    speechToTextUrl: "https://speech2text.staging.saooti.org/",
+    radioUrl:"https://radio.staging.saooti.org/",
+    recoUrl: "https://reco.staging.saooti.org/",
     organisationId: undefined,
     rubriqueIdFilter: undefined,
   },
@@ -161,6 +162,7 @@ export interface SearchPage {
 export interface Player {
   image?: boolean;
   emissionName?: boolean;
+  isVideoFullscreen?:boolean;
 }
 export interface Footer {
   contactLink?: string;
