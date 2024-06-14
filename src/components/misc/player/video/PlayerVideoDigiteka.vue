@@ -23,7 +23,7 @@ import SnackBar from "../../SnackBar.vue";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
-import { state } from "@/stores/ParamSdkStore";
+import { state } from "../../../../stores/ParamSdkStore";
 export default defineComponent({
   name: "PlayerVideo",
   components: {
