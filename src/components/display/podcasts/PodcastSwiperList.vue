@@ -90,7 +90,6 @@ export default defineComponent({
   },
   watch: {
     watchVariable(): void {
-      this.reset();
       this.fetchNext();
     },
   },
@@ -138,6 +137,7 @@ export default defineComponent({
         },
         true,
       );
+      this.reset();
       this.allPodcasts = this.allPodcasts.concat(
         data.result.filter((pod: Podcast | null) => null !== pod),
       );
@@ -146,13 +146,11 @@ export default defineComponent({
     sortPopular(): void {
       if (this.popularSort) return;
       this.popularSort = true;
-      this.reset();
       this.fetchNext();
     },
     sortChrono(): void {
       if (!this.popularSort) return;
       this.popularSort = false;
-      this.reset();
       this.fetchNext();
     },
     reset(): void {
