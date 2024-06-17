@@ -1,7 +1,7 @@
 <template>
   <div
     ref="targetEl"
-    :style="`min-height:${fixedMinHeight ? fixedMinHeight : minHeight}px`"
+    :style="`min-height:${minHeight}px`"
   >
     <slot v-if="shouldRender" />
     <slot v-else name="preview" />
@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { useIntersectionObserver } from "@vueuse/core";
-import { ref, nextTick } from "vue";
+import { ref, nextTick, watch } from "vue";
 
 function onIdle(cb = () => {}) {
   if ("requestIdleCallback" in window) {
@@ -43,13 +43,13 @@ export default {
     const waitBeforeInit = ref(true);
     const shouldRender = ref(false);
     const targetEl = ref();
-    const fixedMinHeight = ref(0);
+    //const fixedMinHeight = ref(0);
     let unrenderTimer: ReturnType<typeof setTimeout> | undefined;
     let renderTimer: ReturnType<typeof setTimeout> | undefined;
     setTimeout(() => {
       waitBeforeInit.value = false;
     }, props.initRenderDelay);
-    const { stop } = useIntersectionObserver(
+    const { isActive, pause, resume } = useIntersectionObserver(
       targetEl,
       ([{ isIntersecting }]) => {
         if (waitBeforeInit.value) {
@@ -67,15 +67,14 @@ export default {
             },
             props.unrender ? 200 : 0,
           );
-          //shouldRender.value = true;
           if (!props.unrender) {
-            stop();
+            pause();
           }
         } else if (props.unrender) {
           // if the component was set to render, cancel that
           clearTimeout(renderTimer);
           unrenderTimer = setTimeout(() => {
-            fixedMinHeight.value = targetEl.value?.clientHeight ?? 0;
+            //fixedMinHeight.value = targetEl.value?.clientHeight ?? 0;
             shouldRender.value = false;
             context.emit('isRender', false);
           }, props.unrenderDelay);
@@ -91,12 +90,22 @@ export default {
         shouldRender.value = true;
         context.emit('isRender', true);
         if (!props.unrender) {
-          stop();
+          pause();
         }
       });
     }
+    watch(() => props.unrender, (newValue, oldValue) => {
+     if (newValue) {
+        clearTimeout(renderTimer);
+        unrenderTimer = setTimeout(() => {
+          shouldRender.value = false;
+          context.emit('isRender', false);
+          resume();
+        }, props.unrenderDelay);
+      }
+    });
 
-    return { targetEl, shouldRender, fixedMinHeight };
+    return { targetEl, shouldRender/* , fixedMinHeight  */};
   },
 };
 </script>
