@@ -42,6 +42,7 @@ export default defineComponent({
     icon: { default: undefined, type: String },
     imageUrl: { default: undefined, type: String },
     displayAccordion: { default: true, type: Boolean },
+    initOpen: { default: false, type: Boolean },
   },
   emits: ["open"],
   data() {
@@ -54,6 +55,9 @@ export default defineComponent({
       this.$emit("open");
     },
   },
+  created(){
+    this.isOpen= this.initOpen;
+  }
 });
 </script>
 <style lang="scss">

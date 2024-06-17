@@ -41,6 +41,7 @@ export const playerTranscript = defineComponent({
         11,
         `response/${this.playerPodcast.podcastId}`,
       );
+
       const arrayTranscript = this.parseSrt(result);
       const actualText =
         arrayTranscript?.[0]?.startTime === 0 ? arrayTranscript[0].text : "";
@@ -61,9 +62,11 @@ export const playerTranscript = defineComponent({
       if (transcript == null) {
         return;
       }
+      const pattern =
+      /(\d+)\n([\d:,]+)\s+-{2}>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm;
       transcript = transcript.replace(/\r\n|\r|\n|\t/g, "\n");
       let matches;
-      while ((matches = /(\d+)\n([\d:,]+)\s+-{2}>\s+([\d:,]+)\n([\s\S]*?(?=\n{2}|$))/gm.exec(transcript)) != null) {
+      while ((matches = pattern.exec(transcript)) != null) {
         result.push({
           startTime: this.srtTimeToSeconds(matches[2]),
           endTime: this.srtTimeToSeconds(matches[3]),

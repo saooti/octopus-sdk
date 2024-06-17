@@ -54,4 +54,22 @@ const pinia = createPinia();
 const app = createApp(App);
 // Initialisation store
 app.use(i18n).use(pinia).use(router).use(VueLazyLoad);
-app.mount("#app");
+router.isReady().then(() => {
+  /* app.mixin({
+    beforeCreate() {
+      if (this.$options.watch) {
+        Object.entries(this.$options.watch).forEach(([watcherKey, func]) => {
+          // @ts-ignore
+          this.$options.watch[watcherKey] = new Proxy(func, {
+            apply(target, thisArg) {
+              let targetAny : any= target;
+              console.log(`Called watcher ${targetAny.name} on component ${thisArg.$options.name}`);
+            },
+          });
+        });
+      }
+    },
+  });  */
+  app.mount('#app');
+})
+//app.mount("#app");

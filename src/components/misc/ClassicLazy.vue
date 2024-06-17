@@ -38,7 +38,8 @@ export default {
       default: 10000,
     },
   },
-  setup(props) {
+  emits:['isRender'],
+  setup(props, context) {
     const waitBeforeInit = ref(true);
     const shouldRender = ref(false);
     const targetEl = ref();
@@ -62,6 +63,7 @@ export default {
           renderTimer = setTimeout(
             () => {
               shouldRender.value = true;
+              context.emit('isRender', true);
             },
             props.unrender ? 200 : 0,
           );
@@ -75,6 +77,7 @@ export default {
           unrenderTimer = setTimeout(() => {
             fixedMinHeight.value = targetEl.value?.clientHeight ?? 0;
             shouldRender.value = false;
+            context.emit('isRender', false);
           }, props.unrenderDelay);
         }
       },
@@ -86,6 +89,7 @@ export default {
     if (props.renderOnIdle) {
       onIdle(() => {
         shouldRender.value = true;
+        context.emit('isRender', true);
         if (!props.unrender) {
           stop();
         }
