@@ -1,8 +1,8 @@
 <template>
-  <div class="classic-select">
+  <div class="classic-select" :class="{'form-margin':displayLabel}">
     <label
       :for="idSelect"
-      class="form-label mt-2"
+      class="form-label"
       :class="displayLabel ? '' : 'd-none'"
       >{{ label }}</label
     >

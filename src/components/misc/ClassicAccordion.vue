@@ -1,6 +1,6 @@
 <template>
   <div
-    class="my-2"
+    class="my-4"
     :class="[
       displayAccordion ? 'octopus-accordion' : '',
       isOpen ? 'octopus-accordion-open' : '',
@@ -67,16 +67,22 @@ export default defineComponent({
     background: white;
     min-height: 50px;
     color: $octopus-primary-color;
+    font-size:0.9rem;
     border: 1px solid transparent;
+    border-bottom-color: #b8b8b8;
+    font-weight: bold;
     &:hover {
-      border: 1px solid $octopus-primary-color;
+      border-bottom-color: #535353;
     }
   }
   &.octopus-accordion-open {
-    border: 1px solid $octopus-primary-color;
+    border-radius: $octopus-borderradius;
+    border: 1px solid #e0e0e0;
     > button {
-      background: $octopus-primary-color;
-      color: white;
+      border-radius: $octopus-borderradius 0 0;
+      background: #e9e9e9;
+      border-color: transparent;
+      color: black;
     }
   }
   .img-accordion {
@@ -87,9 +93,6 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  .body {
-    border-top: 1px solid $octopus-primary-color;
   }
 }
 </style>

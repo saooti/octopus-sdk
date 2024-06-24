@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex flex-column classic-input-text">
+  <div 
+    class="d-flex flex-column classic-input-text" 
+    :class="{'form-margin':displayLabel}"
+  >
     <div class="d-flex">
       <label
         class="form-label"

@@ -3,6 +3,7 @@
     :class="{
       'multiselect-in-modal': inModal,
       'multiselect-no-deselect': noDeselect,
+      'form-margin':displayLabel
     }"
     :style="{ width: width }"
   >

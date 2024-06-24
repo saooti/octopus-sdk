@@ -231,6 +231,9 @@ body{
   .word-break-word{
     word-break: break-word;
   }
+  .border{
+		border-radius: $octopus-borderradius;
+	}
 
   .html-wysiwyg-content{
     h3,h4{

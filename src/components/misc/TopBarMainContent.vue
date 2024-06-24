@@ -23,6 +23,7 @@
         v-else
         :src="proxyImageUrl(imgUrl, '', '80')"
         :alt="$t('Visual', { name: filterName })"
+        class="client-logo"
         :class="isEducation ? 'educationLogo' : ''"
       />
     </router-link>
@@ -284,6 +285,9 @@ export default defineComponent({
         text-decoration: underline;
         text-underline-offset: 8px;
       }
+    }
+    .client-logo{
+      border-radius: $octopus-borderradius;
     }
     .top-bar-logo img {
       max-width: 140px !important;
