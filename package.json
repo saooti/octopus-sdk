@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "39.0.34",
+  "version": "39.0.35",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "@saooti/octopus-api": "^0.38.0",
+    "@saooti/octopus-api": "^0.39.0",
     "@tiptap/extension-link": "^2.2.4",
     "@tiptap/extension-underline": "^2.2.4",
     "@tiptap/pm": "^2.2.4",

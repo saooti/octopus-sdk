@@ -35,11 +35,13 @@
           :organisation-id="participant.orga.id"
         />
       </div>
+      <!-- productorId define to avoid overwrite #12817 -->
       <PodcastFilterList
         v-if="!pageParameters.lightStyle"
         :participant-id="participantId"
         :name="name"
         :category-filter="true"
+        :productorId="['']" 
         :reload="reload"
         :show-count="true"
       />
