@@ -64,7 +64,6 @@ export default defineComponent({
 @import "@scss/_variables.scss";
 .octopus-accordion {
   > button {
-    background: white;
     min-height: 50px;
     color: $octopus-primary-color;
     font-size:0.9rem;
@@ -74,6 +73,12 @@ export default defineComponent({
     &:hover {
       border-bottom-color: #535353;
     }
+  }
+  &:not(.octopus-accordion-open)> button{
+    background: transparent;
+  }
+  .body{
+    background: white;
   }
   &.octopus-accordion-open {
     border-radius: $octopus-borderradius;
