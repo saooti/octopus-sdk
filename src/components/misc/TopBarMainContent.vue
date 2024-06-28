@@ -286,7 +286,7 @@ export default defineComponent({
         text-underline-offset: 8px;
       }
     }
-    .client-logo{
+    .client-logo {
       border-radius: $octopus-borderradius;
     }
     .top-bar-logo img {
@@ -300,7 +300,7 @@ export default defineComponent({
         max-height: 2rem;
       }
     }
-    .octopusLogo{
+    .octopusLogo {
       @media (max-width: 960px) {
         max-width: 30px !important;
       }

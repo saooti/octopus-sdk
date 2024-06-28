@@ -55,20 +55,20 @@ export default defineComponent({
         this.$t("Podcast play error"),
       );
     }
-    if(!this.isVideoFullscreen){
+    if (!this.isVideoFullscreen) {
       return;
     }
     this.$nextTick(() => {
       this.goFullScreen();
     });
   },
-  methods:{
+  methods: {
     goFullScreen() {
       if ("" === this.srcVideo) {
         return;
       }
       (this.$refs.iframeVideo as Element).requestFullscreen();
-    }, 
-  }
+    },
+  },
 });
 </script>

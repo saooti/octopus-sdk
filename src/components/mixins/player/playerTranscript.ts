@@ -27,7 +27,6 @@ export const playerTranscript = defineComponent({
       }else if(0===doubletsLength || 1=== doubletsLength &&  "post" === adserverConfig.config.doublets[0].timing.insertion){
         return;
       }else{
-        // todo remove chaptering
         this.playerUpdateChaptering();
         this.playerUpdateTranscript();
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="classic-select" :class="{'form-margin':displayLabel}">
+  <div class="classic-select" :class="{ 'form-margin': displayLabel }">
     <label
       :for="idSelect"
       class="form-label"

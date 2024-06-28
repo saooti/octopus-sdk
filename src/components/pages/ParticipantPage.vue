@@ -41,7 +41,7 @@
         :participant-id="participantId"
         :name="name"
         :category-filter="true"
-        :productorId="['']" 
+        :productor-id="['']"
         :reload="reload"
         :show-count="true"
       />
@@ -162,7 +162,7 @@ export default defineComponent({
         );
         if (
           "PUBLIC" !== data?.orga?.privacy &&
-          this.filterOrgaId !== data?.orga?.id&&
+          this.filterOrgaId !== data?.orga?.id &&
           this.$route.query.productor !== data?.orga?.id
         ) {
           this.initError();

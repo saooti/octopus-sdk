@@ -59,10 +59,10 @@ export default defineComponent({
       return `left: ${this.posX}px; top: ${this.posY}px;`;
     },
   },
-  watch:{
-    show(){
-      this.$emit('updateVisibility', this.show);
-    }
+  watch: {
+    show() {
+      this.$emit("updateVisibility", this.show);
+    },
   },
   mounted() {
     this.init();
@@ -105,7 +105,7 @@ export default defineComponent({
         if (!this.onlyMouse) {
           this.targetElement.removeEventListener("click", this.setPopoverData);
         }
-        this.targetElement.addEventListener("focusout", this.clearDataBlur);
+        this.targetElement.removeEventListener("focusout", this.clearDataBlur);
       }
     },
     setPopoverData(e: MouseEvent | PointerEvent) {
@@ -163,7 +163,7 @@ export default defineComponent({
         (this.isFixed ? 0 : window.scrollY) +
         yGap;
     },
-    async clearDataBlur(e: FocusEvent) {
+    clearDataBlur(e: FocusEvent) {
       if (!e.relatedTarget) {
         return this.clearClick();
       }
@@ -187,7 +187,7 @@ export default defineComponent({
       if ("true" === myElement.getAttribute("reallink")) {
         myElement.click();
       } else {
-        await this.$router.push((myElement as HTMLAnchorElement).pathname);
+        this.$router.push((myElement as HTMLAnchorElement).pathname);
       }
       this.$nextTick(() => {
         this.isClick = false;
@@ -223,10 +223,9 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: $octopus-borderradius;
   position: absolute;
-  /* z-index: 9999; */
   max-height: 80vh;
   overflow: auto;
-  &.popover-z-index{
+  &.popover-z-index {
     z-index: 9999;
   }
   &.octopus-dropdown {

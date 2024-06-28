@@ -1,33 +1,33 @@
 <template>
   <div ref="divContainer" tabindex="0">
-  <VueDatePicker
-    :model-value="modelVal"
-    :time-picker="isTimePicker"
-    :input-class-name="templateClass"
-    :clearable="false"
-    :text-input="true"
-    :readonly="readonly"
-    :teleport="useTeleport"
-    :locale="formatLocale"
-    :format="format"
-    :auto-apply="true"
-    :enable-seconds="displaySeconds"
-    :max-date="isMaxDate && !isTimePicker ? now : undefined"
-    :min-date="isMinDate && !isTimePicker ? now : undefined"
-    :range="undefined !== range"
-    :multi-calendars="columnNumber > 1 ? columnNumber : false"
-    :inline="isInline"
-    :enable-time-picker="!isTimePicker ? displayTimePicker : undefined"
-    :aria-labels="ariaLabels"
-    :max-time="maxTime"
-    :month-picker="monthPicker"
-    :alt-position="customPosition"
-    @update:model-value="updateValue($event)"
-  >
-    <template v-if="time" #input-icon>
-      <div class="ms-2 saooti-clock" />
-    </template>
-  </VueDatePicker>
+    <VueDatePicker
+      :model-value="modelVal"
+      :time-picker="isTimePicker"
+      :input-class-name="templateClass"
+      :clearable="false"
+      :text-input="true"
+      :readonly="readonly"
+      :teleport="useTeleport"
+      :locale="formatLocale"
+      :format="format"
+      :auto-apply="true"
+      :enable-seconds="displaySeconds"
+      :max-date="isMaxDate && !isTimePicker ? now : undefined"
+      :min-date="isMinDate && !isTimePicker ? now : undefined"
+      :range="undefined !== range"
+      :multi-calendars="columnNumber > 1 ? columnNumber : false"
+      :inline="isInline"
+      :enable-time-picker="!isTimePicker ? displayTimePicker : undefined"
+      :aria-labels="ariaLabels"
+      :max-time="maxTime"
+      :month-picker="monthPicker"
+      :alt-position="customPosition"
+      @update:model-value="updateValue($event)"
+    >
+      <template v-if="time" #input-icon>
+        <div class="ms-2 saooti-clock" />
+      </template>
+    </VueDatePicker>
   </div>
 </template>
 
@@ -102,7 +102,7 @@ export default defineComponent({
       return this.$i18n.locale;
     },
     format() {
-      if(this.forceFormat){
+      if (this.forceFormat) {
         return this.forceFormat;
       }
       if (this.monthPicker) {
@@ -128,11 +128,11 @@ export default defineComponent({
     },
   },
   methods: {
-    updateValue(date: Date){
-      if(!this.isInline){
+    updateValue(date: Date) {
+      if (!this.isInline) {
         this.$refs.divContainer?.focus();
       }
-      this.$emit('updateDate', date);
+      this.$emit("updateDate", date);
     },
     formatDate(value: Date): string {
       const realMonth = value.getMonth() + 1;

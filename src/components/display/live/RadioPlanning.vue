@@ -16,20 +16,19 @@
           <span>{{ day.title }}</span>
         </button>
       </div>
-      <div class="d-flex align-items-center justify-content-center border-bottom">
+      <div
+        class="d-flex align-items-center justify-content-center border-bottom"
+      >
         <button
           v-for="period in periodOfDay"
           :key="period.id"
           class="btn btn-underline mb-2"
-          @click="scrollToElement('planning-period-'+period.id)"
+          @click="scrollToElement('planning-period-' + period.id)"
         >
-          {{period.title}}
+          {{ period.title }}
         </button>
-        <button
-          class="btn btn-underline mb-2"
-          @click="changePeriodNow"
-        >
-          {{$t('Now')}}
+        <button class="btn btn-underline mb-2" @click="changePeriodNow">
+          {{ $t("Now") }}
         </button>
       </div>
 
@@ -42,20 +41,23 @@
           <div v-if="!planningLength[daySelected]" class="text-center">
             {{ $t("No programming") }}
           </div>
-          <div
-            v-else
-            v-for="period in periodOfDay"
-            :key="period.id"
-          >
+          <div v-for="period in periodOfDay" v-else :key="period.id">
             <template v-if="planning[daySelected][period.id].length">
-              <div 
-                :id="'planning-period-'+period.id"
+              <div
+                :id="'planning-period-' + period.id"
                 class="fw-bold my-3 pb-2 border-bottom border-primary text-primary"
-              >{{period.title}}</div>
+              >
+                {{ period.title }}
+              </div>
               <div
                 v-for="planningItem in planning[daySelected][period.id]"
+                :id="
+                  'planning-occurrence-' +
+                  planningItem.occurrenceId +
+                  '' +
+                  planningItem.liveId
+                "
                 :key="planningItem.occurrenceId + '' + planningItem.liveId"
-                :id="'planning-occurrence-'+planningItem.occurrenceId + '' + planningItem.liveId"
                 class="d-flex align-items-center mb-3"
               >
                 <div class="program-item-date fw-bold flex-shrink-0">
@@ -70,11 +72,18 @@
                   }"
                 >
                   <img
-                    v-lazy="proxyImageUrl(planningItem.podcastData.imageUrl, '150')"
+                    v-lazy="
+                      proxyImageUrl(planningItem.podcastData.imageUrl, '150')
+                    "
                     width="150"
                     height="150"
                     class="m-2"
                     :title="
+                      $t('Episode name image', {
+                        name: planningItem.podcastData.title,
+                      })
+                    "
+                    :alt="
                       $t('Episode name image', {
                         name: planningItem.podcastData.title,
                       })
@@ -133,12 +142,12 @@ export default defineComponent({
     return {
       planning: {} as {
         [key: number]: {
-          morning:Array<PlanningOccurrence | PlanningLive>,
-          afternoon:Array<PlanningOccurrence | PlanningLive>,
-          evening:Array<PlanningOccurrence | PlanningLive>
+          morning: Array<PlanningOccurrence | PlanningLive>;
+          afternoon: Array<PlanningOccurrence | PlanningLive>;
+          evening: Array<PlanningOccurrence | PlanningLive>;
         };
       },
-      planningLength: {} as {[key:number]: number},
+      planningLength: {} as { [key: number]: number },
       daySelected: dayjs().valueOf(),
       arrayDays: [] as Array<{
         title: string;
@@ -158,12 +167,32 @@ export default defineComponent({
     endOfDay(): string {
       return dayjs(this.daySelected).endOf("date").toISOString();
     },
-    periodOfDay(){
+    periodOfDay() {
       return [
-        {id:"morning", title: this.$t('Morning'), end: dayjs(this.daySelected).hour(14).minute(0).second(0).millisecond(0)},
-        {id:"afternoon", title: this.$t('Afternoon'), end: dayjs(this.daySelected).hour(19).minute(0).second(0).millisecond(0)},
-        {id:"evening", title: this.$t('Evening'), end: dayjs(this.daySelected).endOf("date")},
-      ]
+        {
+          id: "morning",
+          title: this.$t("Morning"),
+          end: dayjs(this.daySelected)
+            .hour(14)
+            .minute(0)
+            .second(0)
+            .millisecond(0),
+        },
+        {
+          id: "afternoon",
+          title: this.$t("Afternoon"),
+          end: dayjs(this.daySelected)
+            .hour(19)
+            .minute(0)
+            .second(0)
+            .millisecond(0),
+        },
+        {
+          id: "evening",
+          title: this.$t("Evening"),
+          end: dayjs(this.daySelected).endOf("date"),
+        },
+      ];
     },
   },
 
@@ -173,30 +202,40 @@ export default defineComponent({
   },
 
   methods: {
-    scrollToElement(id: string){
+    scrollToElement(id: string) {
       const element = document.getElementById(id);
-      if(element){
-        const yOffset = -110; 
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({top: y, behavior: 'smooth'});
+      if (element) {
+        const yOffset = -110;
+        const y =
+          element.getBoundingClientRect().top + window.scrollY + yOffset;
+        window.scrollTo({ top: y, behavior: "smooth" });
       }
     },
-    changePeriodNow(){
+    changePeriodNow() {
       const now = dayjs();
-      if(!dayjs(this.daySelected).isSame(now, 'day')){
+      if (!dayjs(this.daySelected).isSame(now, "day")) {
         this.changeDate(this.arrayDays[7].date);
       }
       this.$nextTick(() => {
-        if(!this.planningLength[this.daySelected]){return;}
-        const arrayOccurrences = Object.values(this.planning[this.daySelected]).reduce((r,c) => r.concat(c), [])
+        if (!this.planningLength[this.daySelected]) {
+          return;
+        }
+        const arrayOccurrences = Object.values(
+          this.planning[this.daySelected],
+        ).reduce((r, c) => r.concat(c), []);
         let selectedOccurrence = arrayOccurrences[0];
-        for (let index = 0; index < arrayOccurrences.length; index++) {
-          selectedOccurrence = arrayOccurrences[index];
-          if(dayjs(arrayOccurrences[index].endDate).isAfter(now)){
+        for (let occ of arrayOccurrences) {
+          selectedOccurrence = occ;
+          if (dayjs(occ.endDate).isAfter(now)) {
             break;
           }
         }
-        this.scrollToElement('planning-occurrence-'+selectedOccurrence.occurrenceId + '' + selectedOccurrence.liveId);
+        this.scrollToElement(
+          "planning-occurrence-" +
+            selectedOccurrence.occurrenceId +
+            "" +
+            selectedOccurrence.liveId,
+        );
       });
     },
     createArrayDays() {
@@ -212,51 +251,72 @@ export default defineComponent({
         });
       }
     },
+    async fetchOccurrencesAndLives(): Promise<
+      Array<PlanningOccurrence | PlanningLive>
+    > {
+      const params = {
+        canalId: this.radio?.id,
+        from: this.startOfDay,
+        to: this.endOfDay,
+      };
+      let occurrences: Array<PlanningOccurrence | PlanningLive> =
+        await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>(
+          14,
+          "planning/occurrence/list",
+          params,
+        );
+      const lives = await octopusApi.fetchDataWithParams<
+        Array<PlanningOccurrence>
+      >(14, "live/list", params);
+      if (lives.length) {
+        occurrences = occurrences.concat(lives);
+        occurrences.sort((a, b) => {
+          if (a.startDate > b.startDate) {
+            return 1;
+          }
+          return b.startDate > a.startDate ? -1 : 0;
+        });
+      }
+      return occurrences;
+    },
     async fetchOccurrences(): Promise<void> {
       if (this.planning[this.daySelected]) {
         return;
       }
-      this.planning[this.daySelected] = {morning:[], afternoon:[], evening: []};
+      this.planning[this.daySelected] = {
+        morning: [],
+        afternoon: [],
+        evening: [],
+      };
       this.planningLength[this.daySelected] = 0;
       this.loading = true;
       this.error = false;
       try {
-        const params = {
-          canalId: this.radio?.id,
-          from: this.startOfDay,
-          to: this.endOfDay,
-        };
-        let occurrences: Array<PlanningOccurrence | PlanningLive> =
-          await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>(
-            14,
-            "planning/occurrence/list",
-            params,
-          );
-        const lives = await octopusApi.fetchDataWithParams<
-          Array<PlanningOccurrence>
-        >(14, "live/list", params);
-        if (lives.length) {
-          occurrences = occurrences.concat(lives);
-          occurrences.sort((a, b) => {
-            if (a.startDate > b.startDate) {
-              return 1;
-            }
-            return b.startDate > a.startDate ? -1 : 0;
-          });
-        }
+        let occurrences = await this.fetchOccurrencesAndLives();
         let periodDayIndex = 0;
-        for (let index = 0; index < occurrences.length; index++) {
-          if(!occurrences[index].podcastId){continue;}
-          if(!dayjs(occurrences[index].startDate).isBefore(this.periodOfDay[periodDayIndex].end)){
-            periodDayIndex+=1;
+        for (let occ of occurrences) {
+          if (!occ.podcastId) {
+            continue;
+          }
+          if (
+            !dayjs(occ.startDate).isBefore(this.periodOfDay[periodDayIndex].end)
+          ) {
+            periodDayIndex += 1;
           }
           switch (this.periodOfDay[periodDayIndex].id) {
-            case "morning": this.planning[this.daySelected].morning.push(occurrences[index]); break;
-            case "afternoon": this.planning[this.daySelected].afternoon.push(occurrences[index]); break;
-            case "evening": this.planning[this.daySelected].evening.push(occurrences[index]); break;
-            default:break;
+            case "morning":
+              this.planning[this.daySelected].morning.push(occ);
+              break;
+            case "afternoon":
+              this.planning[this.daySelected].afternoon.push(occ);
+              break;
+            case "evening":
+              this.planning[this.daySelected].evening.push(occ);
+              break;
+            default:
+              break;
           }
-          this.planningLength[this.daySelected]+=1;
+          this.planningLength[this.daySelected] += 1;
         }
       } catch {
         this.error = true;

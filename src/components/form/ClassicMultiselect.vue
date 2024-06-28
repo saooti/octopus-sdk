@@ -3,7 +3,7 @@
     :class="{
       'multiselect-in-modal': inModal,
       'multiselect-no-deselect': noDeselect,
-      'form-margin':displayLabel
+      'form-margin': displayLabel,
     }"
     :style="{ width: width }"
   >
@@ -58,7 +58,7 @@
         </div>
       </template>
       <template #open-indicator="{ attributes }">
-        <span v-bind="attributes" class="saooti-down"/>
+        <span v-bind="attributes" class="saooti-down" />
       </template>
     </vSelect>
   </div>

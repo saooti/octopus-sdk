@@ -5,8 +5,8 @@
     :button-text="$t('See more')"
     :button-plus="true"
     :title="playlist?.title ?? ''"
-    :href="'/main/pub/playlist/'+playlistId"
-    :podcastId="playlistId"
+    :href="'/main/pub/playlist/' + playlistId"
+    :podcast-id="playlistId"
   >
     <template #list-inline>
       <ClassicLoading
@@ -42,7 +42,7 @@ export default defineComponent({
     PodcastItem,
     ClassicLoading,
     PodcastInlineListTemplate,
-    SwiperList
+    SwiperList,
   },
 
   props: {
@@ -57,8 +57,7 @@ export default defineComponent({
       allPodcasts: [] as Array<Podcast>,
     };
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     playlistId(): void {
       this.reset();

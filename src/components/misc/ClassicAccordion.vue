@@ -55,9 +55,9 @@ export default defineComponent({
       this.$emit("open");
     },
   },
-  created(){
-    this.isOpen= this.initOpen;
-  }
+  created() {
+    this.isOpen = this.initOpen;
+  },
 });
 </script>
 <style lang="scss">
@@ -66,7 +66,7 @@ export default defineComponent({
   > button {
     min-height: 50px;
     color: $octopus-primary-color;
-    font-size:0.9rem;
+    font-size: 0.9rem;
     border: 1px solid transparent;
     border-bottom-color: #b8b8b8;
     font-weight: bold;
@@ -74,10 +74,10 @@ export default defineComponent({
       border-bottom-color: #535353;
     }
   }
-  &:not(.octopus-accordion-open)> button{
+  &:not(.octopus-accordion-open) > button {
     background: transparent;
   }
-  .body{
+  .body {
     background: white;
   }
   &.octopus-accordion-open {

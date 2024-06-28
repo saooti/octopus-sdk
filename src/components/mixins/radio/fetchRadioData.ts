@@ -30,11 +30,6 @@ export const fetchRadioData = defineComponent({
         "player/playing/" + canalId,
       );
       if(callbackAdvertising){
-        //TODO remove mock
-        /* callbackAdvertising({
-          startDate: "2024-03-25T08:21:00Z",
-          tag: "5e385e1b51c86"
-        }); */
         callbackAdvertising(metadata.nextAdvertising);
       }
       const arrayMetadata = metadata.previously;
@@ -44,20 +39,27 @@ export const fetchRadioData = defineComponent({
           dayjs().valueOf() - 18000 >
           dayjs(arrayMetadata[index].startDate).valueOf()
         ) {
-          if (previousTitle !== arrayMetadata[index].title) {
-            const historyIndex = index + 1 < len ? index + 1 : index;
-            const history = arrayMetadata.slice(historyIndex, len);
-            if (arrayMetadata[index].podcastId) {
-              const data: Podcast = await octopusApi.fetchData<Podcast>(
-                0,
-                "podcast/" + arrayMetadata[index].podcastId,
-              );
-              callbackMetadata(arrayMetadata[index], data, history);
-            } else {
-              callbackMetadata(arrayMetadata[index], undefined, history);
-            }
-          }
+          await this.useCallbackIfNewMetadata(previousTitle, arrayMetadata, index, len,callbackMetadata);
           return;
+        }
+      }
+    },
+    async useCallbackIfNewMetadata(previousTitle: string, arrayMetadata: Array<MediaRadio>, index:number, len: number, callbackMetadata: (
+      metadata: MediaRadio,
+      podcast: Podcast | undefined,
+      history: Array<MediaRadio>
+    ) => void){
+      if (previousTitle !== arrayMetadata[index].title) {
+        const historyIndex = index + 1 < len ? index + 1 : index;
+        const history = arrayMetadata.slice(historyIndex, len);
+        if (arrayMetadata[index].podcastId) {
+          const data: Podcast = await octopusApi.fetchData<Podcast>(
+            0,
+            "podcast/" + arrayMetadata[index].podcastId,
+          );
+          callbackMetadata(arrayMetadata[index], data, history);
+        } else {
+          callbackMetadata(arrayMetadata[index], undefined, history);
         }
       }
     },

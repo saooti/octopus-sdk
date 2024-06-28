@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="targetEl"
-    :style="`min-height:${minHeight}px`"
-  >
+  <div ref="targetEl" :style="`min-height:${minHeight}px`">
     <slot v-if="shouldRender" />
     <slot v-else name="preview" />
   </div>
@@ -38,12 +35,11 @@ export default {
       default: 10000,
     },
   },
-  emits:['isRender'],
+  emits: ["isRender"],
   setup(props, context) {
     const waitBeforeInit = ref(true);
     const shouldRender = ref(false);
     const targetEl = ref();
-    //const fixedMinHeight = ref(0);
     let unrenderTimer: ReturnType<typeof setTimeout> | undefined;
     let renderTimer: ReturnType<typeof setTimeout> | undefined;
     setTimeout(() => {
@@ -63,7 +59,7 @@ export default {
           renderTimer = setTimeout(
             () => {
               shouldRender.value = true;
-              context.emit('isRender', true);
+              context.emit("isRender", true);
             },
             props.unrender ? 200 : 0,
           );
@@ -74,9 +70,8 @@ export default {
           // if the component was set to render, cancel that
           clearTimeout(renderTimer);
           unrenderTimer = setTimeout(() => {
-            //fixedMinHeight.value = targetEl.value?.clientHeight ?? 0;
             shouldRender.value = false;
-            context.emit('isRender', false);
+            context.emit("isRender", false);
           }, props.unrenderDelay);
         }
       },
@@ -88,24 +83,27 @@ export default {
     if (props.renderOnIdle) {
       onIdle(() => {
         shouldRender.value = true;
-        context.emit('isRender', true);
+        context.emit("isRender", true);
         if (!props.unrender) {
           pause();
         }
       });
     }
-    watch(() => props.unrender, (newValue, oldValue) => {
-     if (newValue) {
-        clearTimeout(renderTimer);
-        unrenderTimer = setTimeout(() => {
-          shouldRender.value = false;
-          context.emit('isRender', false);
-          resume();
-        }, props.unrenderDelay);
-      }
-    });
+    watch(
+      () => props.unrender,
+      (newValue, _) => {
+        if (newValue) {
+          clearTimeout(renderTimer);
+          unrenderTimer = setTimeout(() => {
+            shouldRender.value = false;
+            context.emit("isRender", false);
+            resume();
+          }, props.unrenderDelay);
+        }
+      },
+    );
 
-    return { targetEl, shouldRender/* , fixedMinHeight  */};
+    return { targetEl, shouldRender };
   },
 };
 </script>

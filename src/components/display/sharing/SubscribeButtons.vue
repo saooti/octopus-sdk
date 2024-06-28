@@ -192,24 +192,7 @@ export default defineComponent({
         ? "//" + link
         : link;
     },
-    resizeWindow() {
-      if (this.windowWidth > 420 && this.lastWindowWidth > 420) {
-        this.lastWindowWidth = this.windowWidth;
-        return;
-      }
-      const subscribeList = this.$refs.subscribeButtonsContainer as HTMLElement;
-      if (
-        null === subscribeList ||
-        !subscribeList ||
-        "none" === subscribeList?.parentElement?.style.display
-      ) {
-        return;
-      }
-      this.lastWindowWidth = this.windowWidth;
-      subscribeList.style.justifyContent = "flex-start";
-      subscribeList.style.flexGrow = "1";
-      this.hiddenLinks.length = 0;
-      let parentWidth = 0;
+    showAllElements() {
       this.subscriptionsDisplay.forEach((element: Link) => {
         const el = (
           this.$refs["subLink" + element.name] as Array<HTMLElement>
@@ -219,6 +202,9 @@ export default defineComponent({
           el.classList.remove("hid");
         }
       });
+    },
+    hideOnlyNecessaryElements() {
+      let parentWidth = 0;
       this.subscriptionsDisplay.forEach((element: Link) => {
         const el = (
           this.$refs["subLink" + element.name] as Array<HTMLElement>
@@ -239,6 +225,26 @@ export default defineComponent({
           el.className += " hid";
         }
       });
+    },
+    resizeWindow() {
+      if (this.windowWidth > 420 && this.lastWindowWidth > 420) {
+        this.lastWindowWidth = this.windowWidth;
+        return;
+      }
+      const subscribeList = this.$refs.subscribeButtonsContainer as HTMLElement;
+      if (
+        null === subscribeList ||
+        !subscribeList ||
+        "none" === subscribeList?.parentElement?.style.display
+      ) {
+        return;
+      }
+      this.lastWindowWidth = this.windowWidth;
+      subscribeList.style.justifyContent = "flex-start";
+      subscribeList.style.flexGrow = "1";
+      this.hiddenLinks.length = 0;
+      this.showAllElements();
+      this.hideOnlyNecessaryElements();
       if (!this.hiddenLinks.length && this.justifyCenter) {
         subscribeList.style.justifyContent = "center";
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="page-box">
-    <slot name="new-emission"/>
+    <slot name="new-emission" />
     <ProductorSearch
       v-model:organisationId="organisationId"
       v-model:search-pattern="searchPattern"

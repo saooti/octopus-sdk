@@ -10,9 +10,8 @@
         :src="iFrameSrc"
         width="100%"
         height="140px"
-        scrolling="no"
+        style="overflow: hidden"
         allow="clipboard-read; clipboard-write; autoplay"
-        frameborder="0"
         class="max-iframe mx-3 flex-grow-1"
       />
       <div class="d-flex flex-column">

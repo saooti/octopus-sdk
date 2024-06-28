@@ -180,7 +180,7 @@ export const playerStitching = defineComponent({
     async getVastUrl(tag: string): Promise<string>{
       let baseUrl = "https://api.soundcast.io/v1/vast/"+tag;
       let keywords: Array<string> = [];
-      if(this.playerPodcast && this.playerPodcast?.tags?.length){
+      if(this.playerPodcast?.tags?.length){
         const attributes = await this.getOrgaAttributes(this.playerPodcast.organisation.id);
         if ("true"===attributes["AD_CONFIG_PODCAST_TAG"]) {
           keywords = this.playerPodcast.tags.map((e) => {

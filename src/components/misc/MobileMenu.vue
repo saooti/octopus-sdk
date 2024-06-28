@@ -32,7 +32,12 @@
             {{ link.title }}
           </router-link>
         </template>
-        <a  v-if="!isAuthenticatedWithOrga" class="octopus-dropdown-item" href="/sso/login" realLink="true">
+        <a
+          v-if="!isAuthenticatedWithOrga"
+          class="octopus-dropdown-item"
+          href="/sso/login"
+          realLink="true"
+        >
           {{ $t("Login") }}
         </a>
         <a v-else class="octopus-dropdown-item" @click="logoutFunction">
