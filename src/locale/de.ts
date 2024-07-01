@@ -331,6 +331,7 @@ export default {
   "Italic":"Kursiv",
   "Underline":"Unterstreichen",
   "Link":"Verknüpfung",
+  "Delete link":"Link löschen",
   "Heading3":"Überschrift 3",
   "Heading4":"Überschrift 4",
   "UnorderedList":"Ungeordnete Liste",

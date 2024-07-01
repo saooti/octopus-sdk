@@ -13,6 +13,7 @@
       class="c-hand w-100"
       :class="transparent ? 'transparent' : ''"
       :style="getFontFamily"
+      :aria-label="label"
       @change="$emit('update:textInit', $event.target.value)"
     >
       <option

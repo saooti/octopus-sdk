@@ -332,6 +332,7 @@ export default {
   "Italic":"Italic",
   "Underline":"Underline",
   "Link":"Link",
+  "Delete link":"Delete link",
   "Heading3":"Heading 3",
   "Heading4":"Heading 4",
   "UnorderedList":"Unordered list",

@@ -41,8 +41,8 @@
         </svg>
       </button>
       <button
-        :title="$t('Link')"
-        data-selenium="Link"
+        :title="$t('Delete link')"
+        data-selenium="unlink"
         :class="{ 'is-active': editor.isActive('link') }"
         @click="setLink"
       >
@@ -58,6 +58,8 @@
         </svg>
       </button>
       <button
+        :title="$t('Unlink')"
+        data-selenium="Heading3"
         :disabled="!editor.isActive('link')"
         @click="editor.chain().focus().unsetLink().run()"
       >

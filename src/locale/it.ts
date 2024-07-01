@@ -325,6 +325,7 @@ export default{
   "Italic":"Corsivo",
   "Underline":"Sottolineare",
   "Link":"Collegamento",
+  "Delete link":"Elimina collegamento",
   "Heading3":"Titolo 3",
   "Heading4":"Titolo 4",
   "UnorderedList":"Lista non ordinata",

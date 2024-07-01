@@ -6,7 +6,7 @@
           width="250"
           height="auto"
           class="logo-octopus"
-          src="/img/logo_octopus_black.png"
+          src="/img/logo_octopus_black.webp"
           :alt="$t('Logo of main page')"
         />
         <h2>{{ $t("You do not have the right to access this page") }}</h2>

@@ -322,6 +322,7 @@ export default {
   "Italic":"Ležeče",
   "Underline":"Podčrtaj",
   "Link":"Povezava",
+  "Delete link":"Izbriši povezavo",
   "Heading3":"Naslov 3",
   "Heading4":"Naslov 4",
   "UnorderedList":"Neurejen seznam",
