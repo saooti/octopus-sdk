@@ -5,6 +5,7 @@ import { useFilterStore } from "@/stores/FilterStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
+import { state } from "../../stores/ParamSdkStore";
 import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 export default defineComponent({
   mixins: [handle403],
@@ -33,10 +34,12 @@ export default defineComponent({
           }),
           isLive: isLive,
         });
-        const queries = this.$route.query;
-        this.$router.replace({
-          query: { ...queries, ...{ productor: organisationId } },
-        });
+        if(!state.generalParameters.podcastmaker){
+          const queries = this.$route.query;
+          this.$router.replace({
+            query: { ...queries, ...{ productor: organisationId } },
+          });
+        }
       } catch (error) {
         this.handle403(error as AxiosError);
       }

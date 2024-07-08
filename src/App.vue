@@ -5,7 +5,7 @@
       <CategoryFilter v-if="firstDisplayCategoryFilter" />
       <div v-else class="category-filter-no-filter" />
       <router-view />
-      <ClassicLazy :min-height="125">
+      <ClassicLazy :min-height="123">
         <FooterOctopus />
       </ClassicLazy>
       <PlayerComponent />

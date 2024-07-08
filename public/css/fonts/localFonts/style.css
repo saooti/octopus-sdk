@@ -1,6 +1,7 @@
 @font-face {
   font-family: "Montserrat";
   src: local("Montserrat"),
+    url("./Montserrat-Regular.woff2") format('woff2'),
     url("./Montserrat-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -9,6 +10,7 @@
 @font-face {
   font-family: "Montserrat";
   src: local("Montserrat"),
+    url("./Montserrat-Medium.woff2") format('woff2'),
     url("./Montserrat-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
@@ -17,6 +19,7 @@
 @font-face {
   font-family: "Montserrat";
   src: local("Montserrat"),
+    url("./Montserrat-SemiBold.woff2") format('woff2'),
     url("./Montserrat-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
@@ -25,6 +28,7 @@
 @font-face {
   font-family: "Montserrat";
   src: local("Montserrat"),
+    url("./Montserrat-Bold.woff2") format('woff2'),
     url("./Montserrat-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
@@ -33,6 +37,7 @@
 @font-face {
   font-family: "Cookie";
   src: local("Cookie"),
+    url("./Cookie-Regular.woff2") format('woff2'),
     url("./Cookie-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -41,6 +46,7 @@
 @font-face {
   font-family: "Comfortaa";
   src: local("Comfortaa"),
+    url("./Comfortaa-Regular.woff2") format('woff2'),
     url("./Comfortaa-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -49,6 +55,7 @@
 @font-face {
   font-family: "Roboto";
   src: local("Roboto"),
+    url("./Roboto-Regular.woff2") format('woff2'),
     url("./Roboto-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -57,7 +64,8 @@
 @font-face {
   font-family: "Roboto Slab";
   src: local("Roboto Slab"),
-    url("./Roboto-Regular.ttf") format("truetype");
+    url("./RobotoSlab-Regular.woff2") format('woff2'),
+    url("./RobotoSlab-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;

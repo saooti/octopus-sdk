@@ -5,9 +5,10 @@
         v-for="(c, index) in categories"
         :key="c.id"
         :min-height="0"
-        :init-render-delay="3 < index ? 1000 : 0"
+        :init-render-delay="2 < index ? 1000 : 0"
       >
         <PodcastInlineList
+          style="min-height: 650px"
           :iab-id="c.id"
           :title="c.name"
           :button-text="$t('All podcast button', { name: c.name })"
@@ -22,9 +23,10 @@
         v-for="(r, index) in rubriqueToShow"
         :key="r.rubriqueId"
         :min-height="0"
-        :init-render-delay="3 < index ? 1000 : 0"
+        :init-render-delay="2 < index ? 1000 : 0"
       >
         <PodcastInlineList
+          style="min-height: 650px"
           :rubrique-id="rubriqueId.concat(r.rubriqueId)"
           :title="r.name"
           :button-text="$t('All podcast button', { name: r.name })"
