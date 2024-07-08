@@ -83,6 +83,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		text-decoration: none !important;
 		white-space: nowrap;
 		border-width: 0;
+		min-width: 24px;
 		@media (max-width: 960px) {
 				white-space: normal;
 		}
