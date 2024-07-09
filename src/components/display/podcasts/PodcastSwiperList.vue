@@ -137,10 +137,8 @@ export default defineComponent({
         },
         true,
       );
-      this.reset();
-      this.allPodcasts = this.allPodcasts.concat(
-        data.result.filter((pod: Podcast | null) => null !== pod),
-      );
+      this.loading = true;
+      this.allPodcasts = data.result.filter((pod: Podcast | null) => null !== pod);
       this.loading = false;
     },
     sortPopular(): void {
@@ -152,11 +150,7 @@ export default defineComponent({
       if (!this.popularSort) return;
       this.popularSort = false;
       this.fetchNext();
-    },
-    reset(): void {
-      this.loading = true;
-      this.allPodcasts.length = 0;
-    },
+    }
   },
 });
 </script>

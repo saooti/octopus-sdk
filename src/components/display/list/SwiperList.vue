@@ -2,6 +2,7 @@
   <div class="position-relative w-100">
     <template v-if="!isPhone">
       <swiper
+        :key="manualReload"
         :slides-per-view="numberItem"
         :space-between="0"
         :loop="isLoop"
@@ -50,6 +51,7 @@ export default defineComponent({
 
   data() {
     return {
+      manualReload: 0 as number,
       modules: [Navigation],
       numberItem: 5 as number,
       isPhone: false as boolean,
@@ -90,6 +92,12 @@ export default defineComponent({
       );
       this.itemSizeWithoutRecalculed =
         (this.$el as HTMLElement).offsetWidth / this.numberItem;
+    },
+    listObject: {
+      deep: true,
+      handler() {
+        this.manualReload+=1;
+      },
     },
   },
 
