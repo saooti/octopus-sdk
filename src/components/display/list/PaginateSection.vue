@@ -23,10 +23,10 @@
         </svg>
       </button>
       <div v-for="pageNumber in pagination" :key="pageNumber">
-        <span v-if="null === pageNumber" class="btn"> ... </span>
+        <span v-if="null === pageNumber" class="btn btn-min-width"> ... </span>
         <button
           v-else
-          class="btn"
+          class="btn btn-min-width"
           :class="{ active: page === pageNumber - 1 }"
           @click="changeFirst((pageNumber - 1) * rowsPerPage)"
         >
@@ -36,7 +36,7 @@
       <button
         v-for="paginateButton in buttonsRight"
         :key="paginateButton.title"
-        class="btn"
+        class="btn btn-min-width"
         :title="paginateButton.title"
         :disabled="paginateButton.disabled"
         @click="paginateButton.action"

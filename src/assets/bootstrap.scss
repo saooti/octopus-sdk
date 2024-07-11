@@ -83,7 +83,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		text-decoration: none !important;
 		white-space: nowrap;
 		border-width: 0;
-		min-width: 24px;
+		//min-width: 24px; Problème avec flex-shrink
 		@media (max-width: 960px) {
 				white-space: normal;
 		}
@@ -137,6 +137,9 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 						width: 100%; 
 						left: 0; 
 				}
+		}
+		&.btn-min-width{
+			min-width: 24px;
 		}
 	
 			&.btn-primary {
