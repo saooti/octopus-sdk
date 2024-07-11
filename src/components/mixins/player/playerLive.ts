@@ -79,6 +79,9 @@ export const playerLive = defineComponent({
           await this.initHls(hlsStreamUrl);
         }
       } catch (error) {
+        if("STOPPED"===this.playerStatus){
+          return;
+        }
         setTimeout(() => {
           this.playHls(hlsStreamUrl);
         }, 1000);
@@ -103,8 +106,8 @@ export const playerLive = defineComponent({
           this.onPlay();
           resolve();
         });
-        this.hls.on(Hls.Events.ERROR, async () => {
-          reject(new Error("There is an error while reading media content"));
+        this.hls.on(Hls.Events.ERROR, async (event, data) => {
+          reject(new Error("There is an error while reading media content"+data.details));
         });
         this.hls.loadSource(hlsStreamUrl);
       });

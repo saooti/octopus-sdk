@@ -72,6 +72,7 @@ export const playerLogicProgress = defineComponent({
           "podcast/prepare/live/" + this.playerLive.podcastId+"?mediaType="+mediaType,
           undefined,
         );
+        //TODO check if we can do otherwise
         await octopusApi.fetchDataPublicWithParams<string | null>(
           0,
           "podcast/download/live/" + this.playerLive.podcastId + ".m3u8",

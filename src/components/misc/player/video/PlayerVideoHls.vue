@@ -14,13 +14,9 @@ import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapActions } from "pinia";
 import { playerLogicProgress } from "../../../mixins/player/playerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
-import qualitySelector from "videojs-hls-quality-selector";
-import qualityLevels from "videojs-contrib-quality-levels";
-if (!videojs.getPlugin("qualityLevels")) {
-  videojs.registerPlugin("qualityLevels", qualityLevels);
-}
-if (!videojs.getPlugin("hlsQualitySelector")) {
-  videojs.registerPlugin("hlsQualitySelector", qualitySelector);
+import qualitySelectorHls from "videojs-quality-selector-hls";
+if (undefined===videojs.getPlugin("qualitySelectorHls")) {
+  videojs.registerPlugin("qualitySelectorHls", qualitySelectorHls);
 }
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -68,11 +64,6 @@ export default defineComponent({
           nativeAudioTracks: false,
           nativeVideoTracks: false,
         },
-        plugins: {
-          hlsQualitySelector: {
-            displayCurrentQuality: true,
-          },
-        },
       };
     },
   },
@@ -99,7 +90,7 @@ export default defineComponent({
         }
         this.videoClean();
         this.playLive();
-      }, 5000);
+      }, 15000);
     },
     async playLive(): Promise<void> {
       clearTimeout(this.stalledTimout);
@@ -113,6 +104,8 @@ export default defineComponent({
         document.getElementById("video-element-hls") as Element,
         this.videoOptions,
         () => {
+          this.player.qualitySelectorHls( {displayCurrentQuality: true} );
+          /*console.log(this.player.tech(true).vhs.playlistController_); */
           this.errorPlay = "";
           this.playing = true;
         },

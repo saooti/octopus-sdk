@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "39.0.42",
+  "version": "39.0.43",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -40,8 +40,7 @@
     "sonarqube-scanner": "^3.3.0",
     "swiper": "^11.1.4",
     "video.js": "^8.12.0",
-    "videojs-contrib-quality-levels": "^4.1.0",
-    "videojs-hls-quality-selector": "^2.0.0",
+    "videojs-quality-selector-hls": "^1.1.1",
     "vite": "^5.3.1",
     "vue": "^3.4.30",
     "vue-i18n": "^9.13.1",
@@ -52,8 +51,6 @@
     "vue3-swatches": "^1.2.4"
   },
   "devDependencies": {
-    "@types/videojs-contrib-quality-levels": "^2.0.4",
-    "@types/videojs-hls-quality-selector": "^1.1.3",
     "@types/vue-select": "^3.16.8",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
