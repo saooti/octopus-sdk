@@ -28,6 +28,7 @@
         <div class="d-flex flex-column flex-grow-1">
           <SharePlayerTypes
             v-model:iFrameModel="iFrameModel"
+            v-model:typeCustomPlayer="typeCustomPlayer"
             :podcast="podcast"
             :emission="emission"
             :playlist="playlist"
@@ -53,9 +54,7 @@
             v-model:is-visible="isVisible"
             v-model:player-auto-play="playerAutoPlay"
             :is-visible="isVisible"
-            :chose-number-episode="
-              displayChoiceAllEpisodes || isLargeSuggestion
-            "
+            :chose-number-episode="choseNumberEpisodes"
             :display-choice-all-episodes="displayChoiceAllEpisodes"
             :display-transcript-param="displayTranscriptParam"
             :display-article-param="displayArticleParam"
@@ -142,6 +141,7 @@ export default defineComponent({
 
   data() {
     return {
+      typeCustomPlayer: "",
       iFrameModel: "default" as string,
       isShareModal: false as boolean,
       color: "#40a372" as string,
@@ -165,6 +165,9 @@ export default defineComponent({
     ...mapState(useAuthStore, ["authOrganisation"]),
     displayWaveParam(): boolean {
       return "default" === this.iFrameModel || "emission" === this.iFrameModel;
+    },
+    choseNumberEpisodes():boolean{
+      return this.displayChoiceAllEpisodes || this.isTypeSuggestion;
     },
     displayArticleParam(): boolean {
       return (
@@ -204,7 +207,7 @@ export default defineComponent({
         : false;
     },
     displayChoiceAllEpisodes(): boolean {
-      return !this.podcast || this.isEmission || this.isLargeEmission;
+      return !this.podcast || this.isTypeEmission;
     },
     baseUrl(): string {
       return state.podcastPage.MiniplayerUri as string;
@@ -218,8 +221,11 @@ export default defineComponent({
     isLargeEmission(): boolean {
       return "emissionLarge" === this.iFrameModel;
     },
-    isLargeSuggestion(): boolean {
-      return "largeSuggestion" === this.iFrameModel;
+    isTypeSuggestion(): boolean {
+      return "largeSuggestion" === this.iFrameModel || "SUGGESTION"===this.typeCustomPlayer;
+    },
+    isTypeEmission():boolean{
+      return this.isEmission || this.isLargeEmission || "EMISSION"===this.typeCustomPlayer;
     },
     titleStillAvailable(): string {
       return this.isPodcastNotVisible
@@ -263,11 +269,11 @@ export default defineComponent({
         url = this.constructPlaylistUrl(url);
       } else if (this.emission && this.podcast) {
         url.push(`${this.iFrameModel}/`);
-        if (this.isEmission || this.isLargeEmission) {
+        if (this.isTypeEmission) {
           url.push(
             `${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`,
           );
-        } else if (this.isLargeSuggestion) {
+        } else if (this.isTypeSuggestion) {
           url.push(`${this.podcast.podcastId}${iFrameNumber}`);
         } else {
           url.push(`${this.podcast.podcastId}`);

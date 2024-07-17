@@ -3,8 +3,7 @@
   <select
     id="iframe-select"
     :value="iFrameModel"
-    class=""
-    @change="$emit('update:iFrameModel', $event.target.value)"
+    @change="selectChange($event)"
   >
     <template v-for="option in optionsSelect" :key="option.value">
       <option v-if="option.condition" :value="option.value">
@@ -36,10 +35,11 @@ export default defineComponent({
     emission: { default: undefined, type: Object as () => Emission },
     playlist: { default: undefined, type: Object as () => Playlist },
     iFrameModel: { default: "default", type: String },
+    typeCustomPlayer: { default: "", type: String },
     organisationId: { default: undefined, type: String },
     isLive: { default: false, type: Boolean },
   },
-  emits: ["update:iFrameModel"],
+  emits: ["update:iFrameModel", "update:typeCustomPlayer"],
 
   data() {
     return {
@@ -120,10 +120,24 @@ export default defineComponent({
     this.initCustomPlayers();
   },
   methods: {
-    async fetchCustomPlayers(
-      type: string,
-      trySelect: boolean,
-    ): Promise<boolean> {
+    isNumeric(value: string):boolean {
+      return /^-?\d+$/.test(value);
+    },
+    selectChange($event: any){
+      const val = $event.target.value;
+      if(!val){
+        return;
+      }
+      if(this.isNumeric(val)){
+        var customPlayer = this.customPlayersDisplay.find((p) => {return p.customId.toString() === val});
+        if(customPlayer){
+          this.selectCustomPlayer(customPlayer);
+        }
+      }else{
+        this.$emit('update:iFrameModel',val)
+      }
+    },
+    async fetchPlayerPaginate(type: string): Promise<CustomPlayer[]>{
       let players = await octopusApi.fetchDataPublic<
         InterfacePageable<CustomPlayer>
       >(6, "customPlayer/type/" + this.organisationId + "/" + type);
@@ -145,38 +159,35 @@ export default defineComponent({
         playersContent = playersContent.concat(players.content);
         ++index;
       }
-      this.customPlayers = this.customPlayers.concat(playersContent);
+      return playersContent;
+    },
+    selectCustomPlayer(customPlayer: CustomPlayer){
+      this.$emit("update:typeCustomPlayer", customPlayer.typePlayer);
+      this.$emit("update:iFrameModel",customPlayer.customId.toString());
+    },
+    async fetchCustomPlayers(type: string, selectIfPossible = true): Promise<boolean> {
+      let customPlayersForType = await this.fetchPlayerPaginate(type);
+      this.customPlayers = this.customPlayers.concat(customPlayersForType);
       if (
         "video" !== this.iFrameModel &&
-        trySelect &&
-        this.customPlayers[0] &&
-        this.customPlayers[0].selected
+        selectIfPossible &&
+        customPlayersForType?.[0]?.selected
       ) {
-        this.$emit(
-          "update:iFrameModel",
-          this.customPlayers[0].customId.toString(),
-        );
-        return false;
+        this.selectCustomPlayer(this.customPlayers[0]);
+        return true;
       }
-      return true;
+      return false;
     },
     async initCustomPlayers(): Promise<void> {
       if (!state.generalParameters.authenticated) return;
       if (this.playlist) {
-        this.fetchCustomPlayers("PLAYLIST", true);
+        this.fetchCustomPlayers("PLAYLIST");
       } else if (this.emission && !this.podcast) {
-        this.fetchCustomPlayers("EMISSION", true);
+        this.fetchCustomPlayers("EMISSION");
       } else {
-        let playerTrySelect = true;
-        playerTrySelect = await this.fetchCustomPlayers(
-          "EPISODE",
-          playerTrySelect,
-        );
-        playerTrySelect = await this.fetchCustomPlayers(
-          "EMISSION",
-          playerTrySelect,
-        );
-        await this.fetchCustomPlayers("SUGGESTION", playerTrySelect);
+        const episodeSelected = await this.fetchCustomPlayers("EPISODE");
+        const emissionSelected = await this.fetchCustomPlayers("EMISSION", !episodeSelected);
+        await this.fetchCustomPlayers("SUGGESTION", !episodeSelected && !emissionSelected);
       }
     },
   },
