@@ -20,10 +20,12 @@
       :disabled="isDisabled"
       :loading="isLoading"
       :placeholder="placeholder"
+      :clearSearchOnBlur="()=>{return true}"
       :filter="fakeSearch"
       :selectable="() => !maxOptionsSelected"
       @open="onSearch"
       @search="onSearch"
+      @close="onClose"
       @option:selected="onOptionSelected"
       @option:deselected="onOptionDeselect"
     >
@@ -90,7 +92,7 @@ export default {
     allowEmpty: { default: true, type: Boolean },
   },
 
-  emits: ["onSearch", "selected"],
+  emits: ["onSearch", "selected", "onClose"],
 
   data() {
     return {
@@ -99,6 +101,7 @@ export default {
       remainingElements: 0 as number,
       isLoading: false as boolean,
       nbOptionsSelected: 0 as number,
+      searchInput: "" as string
     };
   },
   computed: {
@@ -135,12 +138,18 @@ export default {
     fakeSearch(): Array<unknown> {
       return this.options;
     },
-    onSearch(search: string): void {
+    onSearch(search?: string): void {
       if (search && search.length < this.minSearchLength) {
         return;
+      }else if(search){
+        this.searchInput = search;
       }
       this.isLoading = true;
       this.$emit("onSearch", search);
+    },
+    onClose(){
+      this.$emit("onClose", this.searchInput);
+      this.searchInput = "";
     },
     afterSearch(optionsFetched: Array<unknown>, count: number): void {
       this.options = optionsFetched;
@@ -156,7 +165,7 @@ export default {
       }
       if (
         !this.allowEmpty &&
-        1 >= (this.optionSelected as Array<unknown>).length
+        0 === (this.optionSelected as Array<unknown>).length
       ) {
         (this.optionSelected as Array<unknown>).push(event);
         return;
