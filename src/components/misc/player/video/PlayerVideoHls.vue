@@ -15,7 +15,7 @@ import { mapActions } from "pinia";
 import { playerLogicProgress } from "../../../mixins/player/playerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
 import qualitySelectorHls from "videojs-quality-selector-hls";
-if (undefined===videojs.getPlugin("qualitySelectorHls")) {
+if (undefined === videojs.getPlugin("qualitySelectorHls")) {
   videojs.registerPlugin("qualitySelectorHls", qualitySelectorHls);
 }
 import { defineComponent } from "vue";
@@ -104,7 +104,7 @@ export default defineComponent({
         document.getElementById("video-element-hls") as Element,
         this.videoOptions,
         () => {
-          this.player.qualitySelectorHls( {displayCurrentQuality: true} );
+          this.player.qualitySelectorHls({ displayCurrentQuality: true });
           /*console.log(this.player.tech(true).vhs.playlistController_); */
           this.errorPlay = "";
           this.playing = true;

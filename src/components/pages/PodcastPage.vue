@@ -28,9 +28,7 @@
 
         <CommentSection
           v-if="!isPodcastmaker && isComments"
-          ref="commentSection"
           :podcast="podcast"
-          :fetch-conference="fetchConference"
         />
         <PodcastInlineList
           class="module-box"
@@ -92,7 +90,6 @@ import {
 } from "@/stores/class/conference/conference";
 import { handle403 } from "../mixins/handle403";
 import { defineComponent, defineAsyncComponent } from "vue";
-import { CommentPodcast } from "@/stores/class/general/comment";
 import { Category } from "@/stores/class/general/category";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
@@ -155,7 +152,9 @@ export default defineComponent({
       );
     },
     isComments(): boolean {
-      if (!this.podcast) return true;
+      return true;
+      //TODO condition
+      /*  if (!this.podcast) return true;
       let podcastComment = "INHERIT";
       if (this.podcast.annotations?.COMMENTS) {
         podcastComment = this.podcast.annotations.COMMENTS as string;
@@ -173,7 +172,7 @@ export default defineComponent({
           "LIVE_ONLY" === organisationComment &&
           !this.podcast.conferenceId &&
           0 !== this.podcast.conferenceId)
-      );
+      ); */
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
@@ -354,16 +353,6 @@ export default defineComponent({
         this.handle403(error as AxiosError);
         this.initError();
       }
-    },
-
-    receiveCommentEvent(event: {
-      type: string;
-      comment: CommentPodcast;
-      oldStatus?: string;
-    }): void {
-      (
-        this.$refs.commentSection as InstanceType<typeof CommentSection>
-      ).receiveCommentEvent(event);
     },
   },
 });

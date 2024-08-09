@@ -28,6 +28,7 @@
     <input
       v-if="!isWysiwyg && !isTextarea"
       :id="inputId"
+      ref="focusElement"
       v-model="textValue"
       type="text"
       class="form-input"
@@ -45,6 +46,7 @@
     <textarea
       v-else-if="isTextarea"
       :id="inputId"
+      ref="focusElement"
       v-model="textValue"
       :data-selenium="dataSelenium"
       :placeholder="placeholder"
@@ -64,7 +66,12 @@
       "
       :is-disabled="isDisable"
     />
-    <div class="d-flex justify-content-between">
+    <div class="d-flex">
+      <ClassicEmojiPicker
+        v-if="isEmojiPicker"
+        :popover-relative-class="inModal ? 'octopus-modal-dialog' : ''"
+        @emoji-selected="addEmojiSelected"
+      />
       <div v-if="isWysiwyg" class="h6">
         {{ $t("Characters number calculated over HTML code") }}
       </div>
@@ -97,10 +104,14 @@ const ClassicPopover = defineAsyncComponent(
 const ClassicWysiwyg = defineAsyncComponent(
   () => import("./ClassicWysiwyg.vue"),
 );
+const ClassicEmojiPicker = defineAsyncComponent(
+  () => import("./ClassicEmojiPicker.vue"),
+);
 export default defineComponent({
   components: {
     ClassicWysiwyg,
     ClassicPopover,
+    ClassicEmojiPicker,
   },
   props: {
     inputId: { default: "", type: String },
@@ -122,6 +133,9 @@ export default defineComponent({
     readonly: { default: false, type: Boolean },
     forceError: { default: false, type: Boolean },
     displayLabel: { default: true, type: Boolean },
+    focus: { default: true, type: Boolean },
+    isEmojiPicker: { default: false, type: Boolean },
+    inModal: { default: false, type: Boolean },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {
@@ -182,10 +196,18 @@ export default defineComponent({
     },
   },
   mounted() {
+    if (this.focus) {
+      (this.$refs.focusElement as HTMLElement)?.focus();
+    }
     this.textValue = this.textInit;
     if (this.errorVariable !== this.isError) {
       this.$emit("update:errorVariable", this.isError);
     }
+  },
+  methods: {
+    addEmojiSelected(emoji: string) {
+      this.textValue = (this.textValue ?? "") + emoji;
+    },
   },
 });
 </script>

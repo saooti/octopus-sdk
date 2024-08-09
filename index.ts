@@ -74,6 +74,8 @@ export const getPaginateParams = () => import("./src/components/display/list/Pag
 export const getListPaginate = () => import("./src/components/display/list/ListPaginate.vue");
 export const getClassicMultiselect = () => import("./src/components/form/ClassicMultiselect.vue");
 export const getClassicInputText = () => import("./src/components/form/ClassicInputText.vue");
+export const getClassicEmojiPicker = () => import("./src/components/form/ClassicEmojiPicker.vue");
+export const getClassicContentEditable = () => import("./src/components/form/ClassicContentEditable.vue");
 
 //mixins
 

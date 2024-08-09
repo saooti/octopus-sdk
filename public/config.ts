@@ -1,4 +1,4 @@
 export default Object.freeze({
-    MAX_COMMENT : 4096,
-    MAX_COMMENT_NAME : 127
+    MAX_COMMENT : 4095,
+    MAX_COMMENT_NAME : 255
 });

@@ -82,7 +82,7 @@ const state: ParamStore = {
   },
   octopusApi: {
     url: "https://api.dev2.saooti.org/",
-    commentsUrl: "https://comments.dev2.saooti.org/",
+    commentsUrl: "https://comments.dev2.saooti.org/", //TODO cors ? 
     imageUrl: "https://imageproxy.dev2.saooti.org/",
     studioUrl: "https://studio.dev2.saooti.org/",
     playerUrl: "https://playerbeta.dev2.saooti.org/",

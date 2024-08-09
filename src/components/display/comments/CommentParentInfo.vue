@@ -4,7 +4,7 @@
       :loading-text="loading ? $t('Loading content ...') : undefined"
     />
     <CommentBasicView
-      v-if="!loading"
+      v-if="!loading && comment"
       :comment="comment"
       :edit-right="editRight"
     />
@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import octopusApi from "@saooti/octopus-api";
-import CommentBasicView from "./CommentBasicView.vue";
+import CommentBasicView from "./item/CommentBasicView.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { defineComponent } from "vue";
@@ -26,7 +26,7 @@ export default defineComponent({
   },
 
   props: {
-    comId: { default: undefined, type: Number },
+    commentId: { default: undefined, type: Number },
     editRight: { default: false, type: Boolean },
   },
 
@@ -41,10 +41,10 @@ export default defineComponent({
   },
   methods: {
     async fetchComment(): Promise<void> {
-      if (this.comId) {
+      if (this.commentId) {
         this.comment = await octopusApi.fetchData<CommentPodcast>(
           2,
-          `comment/${this.comId}`,
+          `comment/${this.commentId}`,
         );
       }
       this.loading = false;

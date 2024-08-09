@@ -1,5 +1,12 @@
 import { defineStore } from "pinia";
+import cookies from "../components/mixins/cookies";
 import { CommentPodcast } from "./class/general/comment";
+import { useAuthStore } from "./AuthStore";
+import uuidGenerator from "../helper/uuidGenerator";
+export interface CommentUser{
+  name: string|null;
+  uuid: string|null;
+}
 interface CommentState {
   commentInitialized: boolean;
   commentWebsocketengine: undefined;
@@ -9,10 +16,8 @@ interface CommentState {
     comment: CommentPodcast;
     type: string;
   }>;
-  commentKnownIdentity: string | null;
   commentActualPodcastId?: number;
-  commentLoaded: Array<CommentPodcast>;
-  commentTotalCount: number;
+  commentUser?:CommentUser;
 }
 export const useCommentStore = defineStore("CommentStore", {
   state: (): CommentState => ({
@@ -21,22 +26,39 @@ export const useCommentStore = defineStore("CommentStore", {
     commentPodcastId: undefined,
     commentOrgaId: undefined,
     commentEventToHandle: [],
-    commentKnownIdentity: null,
     commentActualPodcastId: 0,
-    commentLoaded: [],
-    commentTotalCount: 0,
   }),
   getters: {},
   actions: {
-    setCommentIdentity(identity: string | null) {
-      this.commentKnownIdentity = identity;
+    initCommentUser(){
+      if(this.commentUser){
+        return;
+      }
+      const authStore = useAuthStore();
+      if(authStore.authProfile){
+        this.commentUser = {
+          name:authStore.authName,
+          uuid:authStore.authProfile.userId
+        }; 
+        return;
+      }
+      var uuid = cookies.methods.getCookie("comment-octopus-uuid");
+      if(null===uuid){
+        uuid = uuidGenerator.uuidv4();
+        cookies.methods.setCookie("comment-octopus-uuid", uuid);
+      }
+      this.commentUser = {
+        name:cookies.methods.getCookie("comment-octopus-name"),
+        uuid:uuid
+      }; 
     },
-    setCommentLoaded(data: {
-      podcastId?: number;
-      comments: Array<CommentPodcast>;
-    }) {
-      this.commentActualPodcastId = data.podcastId;
-      this.commentLoaded = data.comments;
+    setCommentUser(name:string) {
+      const authStore = useAuthStore();
+      if(authStore.authProfile || !this.commentUser){
+        return;
+      }
+      cookies.methods.setCookie("comment-octopus-name", name);
+      this.commentUser.name = name;
     },
   },
 });
