@@ -148,6 +148,7 @@ export default defineComponent({
           );
         }
         this.$emit("update:comment", commentUpdated);
+        this.closePopup();
       } catch {
         this.errorUpdate = true;
       }

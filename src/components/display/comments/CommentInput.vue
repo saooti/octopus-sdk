@@ -175,6 +175,7 @@ export default defineComponent({
         }
         this.$emit("newComment", commentReceived);
         this.newComment = "";
+        this.isTextareaActive = false;
       } catch (error) {
         this.postError = true;
       }

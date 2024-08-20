@@ -93,12 +93,16 @@ export const useCommentStore = defineStore("CommentStore", {
       cookies.methods.setCookie("comment-octopus-name", name);
       this.commentUser.name = name;
     },
-    async getCommentsConfig(podcastId: number): Promise<CommentsConfig> {
-      if (this.podcastsCommentsConfig[podcastId]) {
-        return this.podcastsCommentsConfig[podcastId];
+    async getCommentsConfig(podcast: Podcast): Promise<CommentsConfig> {
+      if (this.podcastsCommentsConfig[podcast.podcastId]) {
+        return this.podcastsCommentsConfig[podcast.podcastId];
       }
-      this.podcastsCommentsConfig[podcastId] = await octopusApi.fetchData<CommentsConfig>(2, "config/podcast/" + podcastId);
-      return this.podcastsCommentsConfig[podcastId];
+      try {
+        this.podcastsCommentsConfig[podcast.podcastId] = await octopusApi.fetchData<CommentsConfig>(2, "config/podcast/" + podcast.podcastId);
+      } catch {
+        this.podcastsCommentsConfig[podcast.podcastId] = await octopusApi.fetchData<CommentsConfig>(2, "config/emission/" + podcast.emission.emissionId);
+      }
+      return this.podcastsCommentsConfig[podcast.podcastId];
     },
     resetPodcastsConfig() {
       this.podcastsCommentsConfig = {};

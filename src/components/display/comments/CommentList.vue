@@ -62,7 +62,7 @@ export default defineComponent({
   mixins: [handle403],
 
   props: {
-    size: { default: 20, type: Number },
+    size: { default: 10, type: Number },
     podcast: { default: undefined, type: Object as () => Podcast },
     reload: { default: false, type: Boolean },
     answerToComment: { default: undefined, type: Number },
@@ -108,7 +108,6 @@ export default defineComponent({
         if (!this.eventToHandle) {
           return;
         }
-        console.log(this.eventToHandle);
         if (this.answerToComment === this.eventToHandle.comment.answerTo) {
           switch (this.eventToHandle.type) {
             case "CREATE":

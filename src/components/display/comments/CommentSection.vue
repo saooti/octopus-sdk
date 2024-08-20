@@ -109,7 +109,7 @@ export default defineComponent({
       if (!this.podcast?.podcastId) {
         return;
       }
-      this.configPodcast = await this.getCommentsConfig(this.podcast.podcastId);
+      this.configPodcast = await this.getCommentsConfig(this.podcast);
       if (!this.eventActive) {
         return;
       }
