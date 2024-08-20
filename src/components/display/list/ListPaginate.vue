@@ -21,6 +21,7 @@
     <slot name="list" />
     <PaginateSection
       v-if="!isPhone && !justSizeChosen && totalCount > 0"
+      :style="playerResponsive ? 'bottom:' + playerHeight : ''"
       :first="first"
       :rows-per-page="rowsPerPage"
       :total-count="totalCount"
@@ -55,6 +56,8 @@ import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
 import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
+import { usePlayerStore } from "@/stores/PlayerStore";
+import { mapState } from "pinia";
 export default defineComponent({
   name: "ListPaginate",
   components: {
@@ -74,6 +77,7 @@ export default defineComponent({
     loading: { default: false, type: Boolean },
     isMobile: { default: false, type: Boolean },
     justSizeChosen: { default: false, type: Boolean },
+    playerResponsive: { default: false, type: Boolean },
   },
 
   emits: ["update:first", "update:rowsPerPage", "update:isMobile"],
@@ -84,6 +88,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(usePlayerStore, ["playerHeight"]),
     buttonPlus(): boolean {
       return state.generalParameters.buttonPlus as boolean;
     },

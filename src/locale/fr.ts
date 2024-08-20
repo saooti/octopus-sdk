@@ -38,6 +38,7 @@ export default {
   "Podcast is not visible for listeners":
     "L'épisode n'est pas disponible pour les auditeurs",
   Validate: "Valider",
+  Invalidate: "Invalider",
   Cancel: "Annuler",
   "Most popular": "Les plus populaires",
   "Last added": "Les derniers ajoutés",
@@ -252,7 +253,6 @@ export default {
   "Error occurs while post your comment...":
     "Une erreur est survenue lors de l'envoi de votre commentaire",
   "Comments loading error": "Commentaires indisponibles pour le moment",
-  "Certified account": "Compte certifié",
   "No comments": "Aucun commentaire",
   "In response to": "En réponse à",
   "Please chose a productor": "Veuillez choisir un producteur",
@@ -367,15 +367,12 @@ export default {
   "Afternoon":"Après-midi",
   "Evening":"Soirée",
   "Now":"Maintenant",
-
-
-  //////////////////// TODO 
   "Number comments": "{nb} commentaires",
   "Like":"J'aime",
   "Dislike":"Je n'aime pas",
   "Welcome, thanks for your interaction": "Bienvenue, merci pour votre intéraction",
   "Report abuse":"Dénoncer un abus",
-  Send: "Envoyer", //REMOVE FROM FRONT
+  Send: "Envoyer",
   "Describe the reason for the report":"Décrivez la raison de la dénonciation",
   "Thank you for reporting abuse":"Merci d'avoir dénoncé un abus",
   "abuse denounced":"{nb} abus dénoncé(s)",
@@ -383,4 +380,10 @@ export default {
   "Edit comment": "Éditer le commentaire",
   "Comment":"Commentaire",
   "Please provide a comment":"Merci de saisir un commentaire",
+  "Pick your emoji":"Choisissez votre emoji",
+  "Comment information": "Information du commentaire",
+  "Delete comment": "Supprimer le commentaire",
+  "Confirm comment deletion text":
+    "Êtes-vous sûr de vouloir supprimer le commentaire de {name} ?",
+  "Update comment": "Mise à jour du commentaire",
 };

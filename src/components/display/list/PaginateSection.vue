@@ -1,5 +1,5 @@
 <template>
-  <div class="paginate-fixed" :style="'bottom:' + playerHeight">
+  <div class="paginate-fixed">
     <div class="mx-2">
       {{ $t("Showing items number", { page: page + 1, totalPage: totalPage }) }}
     </div>
@@ -55,8 +55,6 @@
   </div>
 </template>
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PaginateSection",
@@ -71,7 +69,6 @@ export default defineComponent({
   emits: ["update:first"],
 
   computed: {
-    ...mapState(usePlayerStore, ["playerHeight"]),
     buttonsLeft() {
       return [
         {

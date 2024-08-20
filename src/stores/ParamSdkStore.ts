@@ -4,7 +4,7 @@ import { Category } from "./class/general/category";
 const state: ParamStore = {
   generalParameters: {
     organisationId: "ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c",
-    authenticated: false,
+    authenticated: true,
     isAdmin: true,
     isRoleLive: true,
     isCommments: true,
@@ -82,7 +82,7 @@ const state: ParamStore = {
   },
   octopusApi: {
     url: "https://api.dev2.saooti.org/",
-    commentsUrl: "https://comments.dev2.saooti.org/", //TODO cors ? 
+    commentsUrl: "https://comments.dev2.saooti.org/",
     imageUrl: "https://imageproxy.dev2.saooti.org/",
     studioUrl: "https://studio.dev2.saooti.org/",
     playerUrl: "https://playerbeta.dev2.saooti.org/",

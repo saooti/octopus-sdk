@@ -26,7 +26,6 @@
         <PlayerCompact
           v-if="!playerLargeVersion"
           :player-error="playerError"
-          :comments="comments"
           :display-alert-bar="displayAlertBar"
           :percent-live-progress="percentLiveProgress"
           :duration-live-position="durationLivePosition"
@@ -38,7 +37,6 @@
         <PlayerLarge
           v-else
           :player-error="playerError"
-          :comments="comments"
           :display-alert-bar="displayAlertBar"
           :percent-live-progress="percentLiveProgress"
           :duration-live-position="durationLivePosition"
@@ -52,7 +50,6 @@
   </div>
 </template>
 <script lang="ts">
-import { CommentPodcast } from "@/stores/class/general/comment";
 import { playerLogic } from "../../mixins/player/playerLogic";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
@@ -88,7 +85,6 @@ export default defineComponent({
       percentLiveProgress: 0 as number,
       durationLivePosition: 0 as number,
       displayAlertBar: false as boolean,
-      comments: [] as Array<CommentPodcast>,
       audioUrlToPlay: "" as string,
       hlsReady: false as boolean,
       displayWithTimeout: false as boolean,

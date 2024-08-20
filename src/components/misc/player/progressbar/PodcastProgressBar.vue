@@ -8,18 +8,13 @@
     :in-player="true"
     @mouseup="seekTo"
   />
-  <CommentPlayer
-    v-if="showTimeline"
-    :total-time="playerTotal"
-    :comments="comments"
-  />
+  <CommentPlayer v-if="showComments" />
 </template>
 
 <script lang="ts">
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import ProgressBar from "../../ProgressBar.vue";
-import { CommentPodcast } from "@/stores/class/general/comment";
 import { defineComponent, defineAsyncComponent } from "vue";
 const CommentPlayer = defineAsyncComponent(
   () => import("../../../display/comments/CommentPlayer.vue"),
@@ -33,8 +28,7 @@ export default defineComponent({
   },
   props: {
     classProgress: { default: "", type: String },
-    showTimeline: { default: false, type: Boolean },
-    comments: { default: () => [], type: Array as () => Array<CommentPodcast> },
+    showComments: { default: false, type: Boolean },
     displayAlertBar: { default: false, type: Boolean },
     percentLiveProgress: { default: 0, type: Number },
     durationLivePosition: { default: 0, type: Number },

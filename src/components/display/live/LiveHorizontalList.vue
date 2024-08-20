@@ -10,6 +10,7 @@
       v-model:isMobile="isMobile"
       :total-count="totalCount"
       :loading="false"
+      :player-responsive="true"
     >
       <template #list>
         <div class="podcast-list">

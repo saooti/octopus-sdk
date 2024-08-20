@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="canAddComment"
-    class="d-flex flex-column comment-input-container mt-3"
-  >
+  <div class="d-flex flex-column comment-input-container mt-3">
     <CommentName v-if="commentUser?.name" />
     <ClassicContentEditable
       ref="textarea"
@@ -52,14 +49,17 @@
 </template>
 
 <script lang="ts">
+import crudApi from "@/api/classicCrud";
 import octopusApi from "@saooti/octopus-api";
 import cookies from "../../mixins/cookies";
+import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { CommentCreate, CommentPodcast } from "@/stores/class/general/comment";
 import Constants from "../../../../public/config";
-import { mapActions, mapState } from "pinia";
+import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { useCommentStore } from "@/stores/CommentStore";
+import { usePlayerStore } from "@/stores/PlayerStore";
 const CheckIdentityModal = defineAsyncComponent(
   () => import("./modal/CheckIdentityModal.vue"),
 );
@@ -105,6 +105,12 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(usePlayerStore, [
+      "playerPodcast",
+      "playerLive",
+      "playerElapsed",
+      "playerTotal",
+    ]),
     ...mapState(useCommentStore, ["commentUser"]),
     commentTooLong(): boolean {
       return this.countComment <= this.maxComment;
@@ -112,63 +118,21 @@ export default defineComponent({
     countComment(): number {
       return this.newComment.length;
     },
+    authenticated(): boolean {
+      return state.generalParameters.authenticated as boolean;
+    },
     placeholder(): string {
       return this.inAnswerComment?.commentId
         ? this.$t("Answer a comment")
         : this.$t("Write a comment");
     },
-    canAddComment(): boolean {
-      return true;
-      //TODO
-      /*  if (!this.podcast) return true;
-      let podcastComment = this.podcast.annotations?.COMMENTS ?? "INHERIT";
-      let organisationComment =
-        this.podcast.organisation.comments ?? "LIVE_ONLY";
-      return !(
-        ("LIVE_ONLY" === podcastComment &&
-          "READY_TO_RECORD" !== this.podcast.processingStatus) ||
-        ("INHERIT" === podcastComment &&
-          "LIVE_ONLY" === organisationComment &&
-          "READY_TO_RECORD" !== this.podcast.processingStatus)
-      ); */
-    },
-    /* isCertified(): boolean {
-      return (
-        (true === state.generalParameters.isCommments &&
-          state.generalParameters.organisationId === this.podcastOrga) ||
-        true === state.generalParameters.isAdmin
-      );
-    }, */
-    /* phase(): string | undefined {
-      if (undefined === this.podcast) {
-        return this.comment ? this.comment.phase : undefined;
-      }
-      if (
-        !this.podcast.conferenceId ||
-        0 === this.podcast.conferenceId ||
-        "READY_TO_RECORD" !== this.podcast.processingStatus
-      )
-        return "Podcast";
-      if (
-        this.fetchConference &&
-        ("PLANNED" === this.fetchConference.status ||
-          "PENDING" === this.fetchConference.status)
-      )
-        return "Prelive";
-      return "Live";
-    }, */
   },
   watch: {
     focus(): void {
       (this.$refs.textarea as HTMLElement).focus();
     },
   },
-  created() {
-    this.initCommentUser();
-  },
   methods: {
-    //TODO trim comment ?
-    ...mapActions(useCommentStore, ["initCommentUser"]),
     addEmojiSelected(emoji: string) {
       this.newComment += emoji;
     },
@@ -187,32 +151,36 @@ export default defineComponent({
     async postComment(): Promise<void> {
       const comment: CommentCreate = {
         answerTo: this.inAnswerComment?.commentId,
-        content: this.newComment,
+        content: this.newComment.trim(),
         name: this.commentUser?.name ?? "",
         podcastId:
           this.podcast?.podcastId ?? this.inAnswerComment?.podcastId ?? 0,
         uuid: this.commentUser?.uuid ?? "",
-        //TODO state ?
-        state: "VALIDATED",
-        //certified: this.isCertified,
-        //timeline: this.defineTimelineValue(),
-        //phase: this.phase,
+        timeline: this.defineTimelineValue(),
       };
       try {
-        //TODO auth et pas auth
-        const commentReceived = await octopusApi.postDataPublic<CommentPodcast>(
-          2,
-          "comment/",
-          comment,
-        );
-        this.$emit("newComment", commentReceived.commentId);
+        var commentReceived;
+        if (this.authenticated) {
+          commentReceived = await octopusApi.postDataPublic<CommentPodcast>(
+            2,
+            "comment/",
+            comment,
+          );
+        } else {
+          commentReceived = await crudApi.postData<CommentPodcast>(
+            2,
+            "comment/",
+            comment,
+          );
+        }
+        this.$emit("newComment", commentReceived);
         this.newComment = "";
       } catch (error) {
         this.postError = true;
       }
       this.isCheckIdentity = false;
     },
-    /* defineTimelineValue(): number {
+    defineTimelineValue(): number {
       let timeline = 0;
       if (
         undefined !== this.podcast &&
@@ -227,7 +195,7 @@ export default defineComponent({
         }
       }
       return timeline < 0 ? 0 : timeline;
-    }, */
+    },
   },
 });
 </script>

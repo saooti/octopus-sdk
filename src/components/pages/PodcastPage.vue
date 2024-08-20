@@ -26,10 +26,7 @@
           :is-education="isEducation"
         />
 
-        <CommentSection
-          v-if="!isPodcastmaker && isComments"
-          :podcast="podcast"
-        />
+        <CommentSection v-if="!isPodcastmaker" :podcast="podcast" />
         <PodcastInlineList
           class="module-box"
           :emission-id="podcast.emission.emissionId"
@@ -128,7 +125,7 @@ export default defineComponent({
     isEducation: { default: false, type: Boolean },
   },
 
-  emits: ["initConferenceId", "podcastTitle"],
+  emits: ["initConferenceId", "podcastInfo"],
 
   data() {
     return {
@@ -150,29 +147,6 @@ export default defineComponent({
           | string
           | undefined)
       );
-    },
-    isComments(): boolean {
-      return true;
-      //TODO condition
-      /*  if (!this.podcast) return true;
-      let podcastComment = "INHERIT";
-      if (this.podcast.annotations?.COMMENTS) {
-        podcastComment = this.podcast.annotations.COMMENTS as string;
-      }
-      let organisationComment = "LIVE_ONLY";
-      if (this.podcast.organisation.comments) {
-        organisationComment = this.podcast.organisation.comments;
-      }
-      return !(
-        "NO" === podcastComment ||
-        ("INHERIT" === podcastComment && "NO" === organisationComment) ||
-        ("LIVE_RECORD" === podcastComment &&
-          "READY_TO_RECORD" !== this.podcast.processingStatus) ||
-        ("INHERIT" === podcastComment &&
-          "LIVE_ONLY" === organisationComment &&
-          !this.podcast.conferenceId &&
-          0 !== this.podcast.conferenceId)
-      ); */
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
@@ -336,7 +310,7 @@ export default defineComponent({
         }
         this.podcast = data;
         this.contentToDisplayUpdate(data);
-        this.$emit("podcastTitle", this.podcast.title);
+        this.$emit("podcastInfo", { title: this.podcast.title });
         this.handleAnnotations();
         if (
           (!this.podcast.availability.visibility ||

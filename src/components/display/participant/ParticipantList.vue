@@ -14,6 +14,7 @@
     :total-count="totalCount"
     :loading="loading"
     :loading-text="loading ? $t('Loading participants ...') : undefined"
+    :player-responsive="true"
   >
     <template #list>
       <div class="podcast-list">

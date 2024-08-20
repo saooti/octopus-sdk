@@ -2,7 +2,6 @@ import octopusApi from "@saooti/octopus-api";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import cookies from "../cookies";
 import { playerLive } from "./playerLive";
-import { playerComment } from "./playerComment";
 import { playerTranscript } from "./playerTranscript";
 import { playerStitching } from "./playerStitching";
 import { defineComponent } from "vue";
@@ -14,7 +13,7 @@ import { FetchParam } from "@/stores/class/general/fetchParam";
 import { useVastStore } from "@/stores/VastStore";
 import dayjs from "dayjs";
 export const playerLogic = defineComponent({
-  mixins: [cookies, playerLive, playerComment, playerTranscript, playerStitching],
+  mixins: [cookies, playerLive, playerTranscript, playerStitching],
   data() {
     return {
       forceHide: false as boolean,

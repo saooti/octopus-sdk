@@ -29,5 +29,10 @@ export default {
         console.log(moduleName,wsPath);
         await axios.delete('/mock');
     },
+    async updateData<Type>(moduleName: ModuleApi,wsPath:string, elementToUpdate: Type): Promise<Type>{
+        console.log(moduleName,wsPath,elementToUpdate);
+        const response = await axios.get('/mock');
+        return response.data;
+    },
 };
 /* eslint-enable */

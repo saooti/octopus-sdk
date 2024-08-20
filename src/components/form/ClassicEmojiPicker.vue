@@ -2,8 +2,9 @@
   <div class="classic-emoji-picker">
     <button
       id="emoji-picker-dropdown"
+      ref="emojiButton"
       class="btn btn-transparent d-flex align-items-center justify-content-center"
-      title="TODO"
+      :title="$t('Pick your emoji')"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -24,13 +25,13 @@
       target="emoji-picker-dropdown"
       :only-click="true"
       :is-fixed="true"
+      :top-pos="isReallyTopPosition"
       :relative-class="popoverRelativeClass"
       popover-class="popover-z-index"
     >
-      <!-- TODO default value -->
       <Picker
         :data="emojiIndex"
-        title="Pick your emoji…"
+        :title="$t('Pick your emoji')"
         emoji="point_up"
         @select="$emit('emojiSelected', $event.native)"
       />
@@ -53,13 +54,29 @@ export default defineComponent({
   },
   props: {
     popoverRelativeClass: { default: undefined, type: String },
+    isTopPosition: { default: false, type: Boolean },
   },
   emits: ["emojiSelected"],
 
   data() {
     return {
       emojiIndex: emojiIndex,
+      hasPlaceAboveButton: true as boolean,
     };
+  },
+  computed: {
+    isReallyTopPosition(): boolean {
+      return this.isTopPosition && this.hasPlaceAboveButton;
+    },
+  },
+  mounted() {
+    if (this.$refs.emojiButton) {
+      this.hasPlaceAboveButton =
+        (this.$refs.emojiButton as HTMLButtonElement).getBoundingClientRect()
+          .top +
+          window.scrollY >
+        450;
+    }
   },
 });
 </script>

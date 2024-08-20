@@ -10,7 +10,7 @@
   .status-VALIDATED {
     background: $octopus-primary-color;
   }
-  .status-VALIDATED, .status-NOT_VALID, .status-PENDING {
+  .status-comment, .status-VALIDATED, .status-NOT_VALID, .status-PENDING {
     width: 14px;
     height: 14px;
     border-radius: 50%;

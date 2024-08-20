@@ -3,8 +3,7 @@
   <RadioProgressBar v-else-if="radioUrl" :class="classProgress" />
   <PodcastProgressBar
     v-else
-    :show-timeline="showTimeline"
-    :comments="comments"
+    :show-comments="showComments"
     :display-alert-bar="displayAlertBar"
     :percent-live-progress="percentLiveProgress"
     :duration-live-position="durationLivePosition"
@@ -15,7 +14,6 @@
 </template>
 <script lang="ts">
 import { defineAsyncComponent, defineComponent } from "vue";
-import { CommentPodcast } from "@/stores/class/general/comment";
 import { usePlayerStore } from "@/stores/PlayerStore";
 import { useVastStore } from "@/stores/VastStore";
 import { mapState } from "pinia";
@@ -40,8 +38,7 @@ export default defineComponent({
   props: {
     classProgress: { default: "", type: String },
     playerError: { default: false, type: Boolean },
-    showTimeline: { default: false, type: Boolean },
-    comments: { default: () => [], type: Array as () => Array<CommentPodcast> },
+    showComments: { default: false, type: Boolean },
     displayAlertBar: { default: false, type: Boolean },
     percentLiveProgress: { default: 0, type: Number },
     durationLivePosition: { default: 0, type: Number },

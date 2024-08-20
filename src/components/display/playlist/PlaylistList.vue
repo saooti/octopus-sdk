@@ -12,6 +12,7 @@
     :total-count="totalCount"
     :loading="loading"
     :loading-text="loading ? $t('Loading content ...') : undefined"
+    :player-responsive="true"
   >
     <template #list>
       <div class="emission-list two-emissions">

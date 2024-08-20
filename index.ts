@@ -87,6 +87,8 @@ import orgaFilter from "./src/components/mixins/organisationFilter.ts";
 import initSDK from "./src/components/mixins/init.ts";
 import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
 import resizePhone from "./src/components/mixins/resizePhone.ts";
+import wss from "./src/websocket/wss.ts";
+import commentWebsocket from "./src/websocket/commentWebsocket.ts";
 
 
 import TopBar from "./src/components/misc/TopBar.vue";
@@ -100,5 +102,7 @@ export {
     initSDK,
     tagOfMixins,
     resizePhone,
+    wss,
+    commentWebsocket,
     TopBar
 };

@@ -15,24 +15,23 @@
         v-model:comment="commentForVmodel"
         :edit-right="editRight"
         :podcast="podcast"
-        @delete-comment="$emit('deleteComment')"
+        @delete-comment="emitDeleteComment"
       />
     </div>
     <template v-if="isValidComment">
       <div class="d-flex align-items-center mt-1">
-        <CommentLikeButton
-          :like="true"
-          :is-active="'like' === userFeeling"
-          @like-action="initiateLikeActions"
-        />
-        <span v-if="comment.likes" class="ms-1 me-2">{{
-          commentLikeCounter
-        }}</span>
-        <CommentLikeButton
-          :like="false"
-          :is-active="'dislike' === userFeeling"
-          @like-action="initiateLikeActions"
-        />
+        <template v-for="section in feelingSection" :key="section.name">
+          <template v-if="section.condition">
+            <CommentLikeButton
+              :like="'like' === section.name"
+              :is-active="section.name === userFeeling"
+              @like-action="initiateLikeActions"
+            />
+            <span v-if="section.counter" class="ms-1 me-2">{{
+              transformInThousands(section.counter)
+            }}</span>
+          </template>
+        </template>
         <button
           v-if="!comment.answerTo"
           class="btn btn-transparent"
@@ -80,8 +79,10 @@
           ref="commentList"
           :podcast="podcast"
           :size="5"
-          :reload="reloadAnswers"
           :answer-to-comment="comment.commentId"
+          :config="config"
+          :event-to-handle="eventToHandle"
+          @comment-deleted="updateForAnswerDeleted"
         />
       </div>
     </template>
@@ -92,7 +93,6 @@
       :edit-right="editRight"
     />
   </div>
-  <!-- TODO show status -->
 </template>
 
 <script lang="ts">
@@ -102,12 +102,17 @@ import {
   CommentFeelings,
   CommentPodcast,
 } from "@/stores/class/general/comment";
-import { Podcast } from "@/stores/class/general/podcast";
+import { Podcast } from "../../../../stores/class/general/podcast";
 import CommentBasicView from "./CommentBasicView.vue";
 import { useCommentStore } from "@/stores/CommentStore";
 import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import octopusApi from "@saooti/octopus-api";
+import {
+  CommentMessage,
+  CommentsConfig,
+} from "../../../../stores/class/config/commentsConfig";
+import { state } from "../../../../stores/ParamSdkStore";
 const CommentInput = defineAsyncComponent(() => import("../CommentInput.vue"));
 const CommentParentInfo = defineAsyncComponent(
   () => import("../CommentParentInfo.vue"),
@@ -141,6 +146,8 @@ export default defineComponent({
     comment: { default: () => ({}), type: Object as () => CommentPodcast },
     podcast: { default: undefined, type: Object as () => Podcast },
     isFlatList: { default: false, type: Boolean },
+    config: { default: undefined, type: Object as () => CommentsConfig },
+    organisationId: { default: undefined, type: String },
   },
 
   emits: ["deleteComment", "update:comment"],
@@ -152,48 +159,64 @@ export default defineComponent({
       focus: false as boolean,
       isCheckIdentityActions: undefined as string | undefined,
       userFeeling: undefined as string | undefined,
-      reloadAnswers: false as boolean,
       showParentComment: false as boolean,
+      eventToHandle: undefined as CommentMessage | undefined,
     };
   },
   computed: {
     ...mapState(useCommentStore, ["commentUser"]),
+    feelingSection() {
+      return [
+        {
+          name: "like",
+          counter: this.comment.likes,
+          condition: this.config?.commentLikes.likeEnabled ?? false,
+        },
+        {
+          name: "dislike",
+          counter: this.editRight ? this.comment.dislikes : 0,
+          condition: this.config?.commentLikes.dislikeEnabled ?? false,
+        },
+      ];
+    },
     commentForVmodel: {
       get(): CommentPodcast {
         return this.comment;
       },
       set(value: CommentPodcast) {
-        this.$emit("update:comment", value);
+        if (!this.eventActive) {
+          this.$emit("update:comment", value);
+        }
       },
     },
     isAnAnswer() {
       return undefined !== this.comment.answerTo;
     },
-    commentLikeCounter(): string {
-      if (this.comment.likes >= 1000) {
-        return Math.round(this.comment.likes / 100) / 10 + "k";
-      }
-      return this.comment.likes.toString();
+    myOrganisationId(): string | undefined {
+      return state.generalParameters.organisationId;
     },
     editRight(): boolean {
-      //TODO check edit right
-      return true;
-      /*  return (
+      return (
         (true === state.generalParameters.isCommments &&
           (this.myOrganisationId === this.podcast?.organisation.id ||
-            this.myOrganisationId === this.organisation)) ||
+            this.myOrganisationId === this.organisationId)) ||
         true === state.generalParameters.isAdmin
-      ); 
-      
-      /* myOrganisationId(): string | undefined {
-      return state.generalParameters.organisationId;
-    }, */
+      );
     },
     isValidComment() {
       return "VALIDATED" === this.comment.state;
     },
+    eventActive(): boolean {
+      return undefined !== this.podcast?.conferenceId;
+    },
   },
   methods: {
+    transformInThousands(nb: number) {
+      if (nb >= 1000) {
+        return Math.round(nb / 100) / 10 + "k";
+      }
+      return nb.toString();
+    },
     async initiateLikeActions(actionName: string) {
       if (!this.commentUser?.name) {
         this.isCheckIdentityActions = actionName;
@@ -223,16 +246,44 @@ export default defineComponent({
       this.isAnsweringComment = true;
       this.focus = !this.focus;
     },
-    newComment(commentId: number): void {
+    newComment(comment: CommentPodcast): void {
+      this.modifyAnswerNumber(comment.commentId);
+      if (!this.eventActive) {
+        this.eventToHandle = { type: "CREATE", comment: comment };
+      }
+      this.isAnsweringComment = false;
+    },
+    modifyAnswerNumber(commentId: number, isAdd = true) {
       const commentToEdit = this.comment;
       if (commentToEdit.responses) {
-        commentToEdit.responses.push(commentId);
-      } else {
+        if (this.isAdd) {
+          commentToEdit.responses.push(commentId);
+        } else {
+          var index = commentToEdit.responses.indexOf(commentId);
+          if (index !== -1) {
+            commentToEdit.responses.splice(index, 1);
+          }
+        }
+      } else if (isAdd) {
         commentToEdit.responses = [commentId];
       }
       this.$emit("update:comment", commentToEdit);
-      this.reloadAnswers = !this.reloadAnswers;
-      this.isAnsweringComment = false;
+    },
+    emitDeleteComment() {
+      if (!this.eventActive) {
+        this.$emit("deleteComment");
+      }
+    },
+    receiveEvent(event: CommentMessage) {
+      if ("CREATE" === event.type) {
+        this.modifyAnswerNumber(event.comment.commentId);
+      } else if ("DELETE" === event.type) {
+        this.modifyAnswerNumber(event.comment.commentId, false);
+      }
+      this.eventToHandle = event;
+    },
+    updateForAnswerDeleted(commentId: number) {
+      this.modifyAnswerNumber(commentId, false);
     },
   },
 });

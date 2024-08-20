@@ -15,7 +15,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "ClassicContentEditable",
   props: {
-    tag: { default: "div", type: String },
+    tag: { default: "span", type: String },
     modelValue: { default: "", type: String },
     placeholder: { default: "", type: String },
   },

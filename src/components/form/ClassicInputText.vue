@@ -69,7 +69,8 @@
     <div class="d-flex">
       <ClassicEmojiPicker
         v-if="isEmojiPicker"
-        :popover-relative-class="inModal ? 'octopus-modal-dialog' : ''"
+        :popover-relative-class="emojiRelativeClass"
+        :is-top-position="true"
         @emoji-selected="addEmojiSelected"
       />
       <div v-if="isWysiwyg" class="h6">
@@ -135,7 +136,7 @@ export default defineComponent({
     displayLabel: { default: true, type: Boolean },
     focus: { default: true, type: Boolean },
     isEmojiPicker: { default: false, type: Boolean },
-    inModal: { default: false, type: Boolean },
+    emojiRelativeClass: { default: undefined, type: String },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {

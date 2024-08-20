@@ -18,8 +18,6 @@
       </div>
       <PlayerChaptering />
       <PlayerProgressBar
-        :show-timeline="showTimeline"
-        :comments="comments"
         :display-alert-bar="displayAlertBar"
         :percent-live-progress="percentLiveProgress"
         :duration-live-position="durationLivePosition"
@@ -38,18 +36,11 @@
       class="btn play-button-box btn-transparent text-light saooti-remove"
       @click="stopPlayer"
     />
-    <PlayerTimeline
-      v-if="!radioUrl"
-      v-model:showTimeline="showTimeline"
-      :comments="comments"
-    />
   </div>
 </template>
 <script lang="ts">
-import { CommentPodcast } from "@/stores/class/general/comment";
 import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
 import imageProxy from "../../mixins/imageProxy";
-import PlayerTimeline from "./elements/PlayerTimeline.vue";
 import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
 /* import AdsSkipButton from "./ads/AdsSkipButton.vue"; */
@@ -64,18 +55,15 @@ export default defineComponent({
 
   components: {
     PlayerProgressBar,
-    PlayerTimeline,
     PlayerChaptering,
     PlayerImage,
     PlayerPlayButton,
     PlayerTitle,
-    /* AdsSkipButton */
   },
   mixins: [playerDisplayTime, imageProxy],
 
   props: {
     playerError: { default: false, type: Boolean },
-    comments: { default: () => [], type: Array as () => Array<CommentPodcast> },
     displayAlertBar: { default: false, type: Boolean },
     percentLiveProgress: { default: 0, type: Number },
     durationLivePosition: { default: 0, type: Number },

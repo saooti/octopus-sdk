@@ -28,6 +28,7 @@
           ? $t(`No podcast match your query`)
           : undefined
       "
+      :player-responsive="true"
     >
       <template #list>
         <div class="podcast-list">

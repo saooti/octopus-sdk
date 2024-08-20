@@ -1,15 +1,6 @@
 <template>
   <div class="d-flex flex-column w-100">
     <div class="d-flex align-items-center h6 mb-2">
-      <!-- <strong
-        v-if="
-          recordingInLive &&
-          ('Live' === comment.phase || 'Prelive' === comment.phase)
-        "
-        class="recording-bg me-1 text-light p-1"
-        >{{ $t("Live") }}</strong
-      > -->
-      <!-- TODO check non valid -->
       <strong
         :id="'popover-comment' + comment.commentId"
         role="button"
@@ -23,13 +14,6 @@
         :target="'popover-comment' + comment.commentId"
         :content="$t('Comment waiting')"
       />
-      <!--  <span
-        v-if="comment.certified"
-        class="saooti-certified"
-        :data-selenium="'certified-icon-' + seleniumFormat(comment.name)"
-        :title="$t('Certified account')"
-        :alt="$t('Certified account')"
-      /> -->
       <div class="me-2">
         {{ date }}
       </div>
@@ -43,7 +27,7 @@
       <span v-if="editRight" :class="'status-' + comment.state" />
     </div>
     <!-- eslint-disable vue/no-v-html -->
-    <div v-html="urlify(contentDisplay)" />
+    <pre v-html="urlify(contentDisplay)" />
     <!-- eslint-enable -->
     <a
       v-if="commentTooLong"

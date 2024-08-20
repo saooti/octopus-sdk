@@ -1,26 +1,28 @@
 <template>
-  <div class="comment-player-container">
+  <div v-if="commentsToDisplay.length" class="comment-player-container">
     <div
-      v-for="c in comments"
-      :key="c.comId"
+      v-for="c in commentsToDisplay"
+      :key="c.commentId"
       class="c-hand"
       @mouseenter="displayContent = c"
       @mouseleave="displayContent = undefined"
       @click="displayContent = c"
     >
       <div
-        :style="'margin-left: ' + percentPosition(c.timeline) + '%'"
+        :style="'margin-left: ' + percentPosition(c.timeline ?? 0) + '%'"
         class="comment-border"
       />
       <div
-        :style="'margin-left: calc(' + percentPosition(c.timeline) + '% - 7px)'"
-        :class="'status-' + c.status"
-        :data-selenium="'comment-' + seleniumFormat(c.name)"
+        :style="
+          'margin-left: calc(' + percentPosition(c.timeline ?? 0) + '% - 7px)'
+        "
+        class="status-comment"
+        :data-selenium="'comment-' + seleniumFormat(c.poster.userName)"
       />
     </div>
-    <div v-if="displayContent" class="h6 mt-auto">
+    <div v-if="displayContent" class="d-flex align-itemx-center mt-4">
       <div class="text-primary flex-shrink-0">
-        {{ displayContent.name }}
+        {{ displayContent.poster.userName }}
       </div>
       <div class="ms-1 me-1">-</div>
       <div class="text-truncate">
@@ -34,47 +36,62 @@
 import { CommentPodcast } from "@/stores/class/general/comment";
 import selenium from "../../mixins/selenium";
 import { usePlayerStore } from "@/stores/PlayerStore";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
+import { useCommentStore } from "@/stores/CommentStore";
 export default defineComponent({
   name: "CommentPlayer",
   mixins: [selenium],
-  props: {
-    comments: {
-      default: undefined,
-      type: Array as () => Array<CommentPodcast>,
-    },
-    totalTime: { default: 0, type: Number },
-  },
   data() {
     return {
       displayContent: undefined as CommentPodcast | undefined,
+      commentsToDisplay: [] as Array<CommentPodcast>,
     };
   },
   computed: {
-    ...mapState(usePlayerStore, ["playerPodcast"]),
+    ...mapState(usePlayerStore, ["playerPodcast", "playerTotal"]),
+    podcastId() {
+      return this.playerPodcast?.podcastId;
+    },
+  },
+  watch: {
+    podcastId: {
+      immediate: true,
+      handler() {
+        this.initComments();
+      },
+    },
   },
   methods: {
+    ...mapActions(useCommentStore, ["fetchCommentsForPlayer"]),
+    async initComments() {
+      if (this.playerPodcast?.podcastId) {
+        this.commentsToDisplay = await this.fetchCommentsForPlayer(
+          this.playerPodcast.podcastId,
+        );
+      }
+    },
     percentPosition(time: number): number {
-      let realDuration = this.totalTime;
+      let realDuration = this.playerTotal;
       if (this.playerPodcast?.duration) {
         realDuration = Math.round(this.playerPodcast.duration / 1000);
       }
-      if (realDuration < this.totalTime) {
-        time = time + (this.totalTime - realDuration);
+      if (realDuration < this.playerTotal) {
+        time = time + (this.playerTotal - realDuration);
       }
-      return Math.round((time * 100) / this.totalTime);
+      return Math.round((time * 100) / this.playerTotal);
     },
   },
 });
 </script>
 
 <style lang="scss">
+@import "../../../assets/comments.scss";
 .octopus-app {
   .comment-player-container {
     position: relative;
     width: 100%;
-    height: 3rem;
+    height: 60px;
     display: flex;
     @media (max-width: 960px) {
       display: none;
@@ -82,14 +99,13 @@ export default defineComponent({
     .comment-border {
       width: auto;
       position: absolute;
-      border-left: solid 1px #555;
-      height: 20px;
+      border-left: solid 1px #ffffff;
+      height: 10px;
     }
-    .status-Valid,
-    .status-Invalid,
-    .status-Pending {
-      margin-top: 20px;
+    .status-comment {
+      margin-top: 10px;
       position: absolute;
+      background: white;
     }
   }
 }

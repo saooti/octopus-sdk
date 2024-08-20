@@ -18,6 +18,7 @@
         : undefined
     "
     :just-size-chosen="justSizeChosen"
+    :player-responsive="true"
   >
     <template #list>
       <div class="podcast-list">

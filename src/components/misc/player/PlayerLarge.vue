@@ -18,8 +18,7 @@
     <div class="player-grow-large-content">
       <PlayerProgressBar
         class-progress="large"
-        :show-timeline="showTimeline"
-        :comments="comments"
+        :show-comments="true"
         :display-alert-bar="displayAlertBar"
         :percent-live-progress="percentLiveProgress"
         :duration-live-position="durationLivePosition"
@@ -60,19 +59,16 @@
         @click="seekClick(15)"
       />
     </div>
-    <PlayerTimeline v-model:showTimeline="showTimeline" :comments="comments" />
   </div>
 </template>
 <script lang="ts">
 import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
 import imageProxy from "../../mixins/imageProxy";
-import PlayerTimeline from "./elements/PlayerTimeline.vue";
 import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
 import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
-import { CommentPodcast } from "@/stores/class/general/comment";
 import { mapState, mapActions } from "pinia";
 import { usePlayerStore } from "@/stores/PlayerStore";
 const RadioHistory = defineAsyncComponent(
@@ -86,7 +82,6 @@ export default defineComponent({
 
   components: {
     PlayerProgressBar,
-    PlayerTimeline,
     RadioHistory,
     PlayerChaptering,
     PlayerImage,
@@ -97,7 +92,6 @@ export default defineComponent({
 
   props: {
     playerError: { default: false, type: Boolean },
-    comments: { default: () => [], type: Array as () => Array<CommentPodcast> },
     displayAlertBar: { default: false, type: Boolean },
     percentLiveProgress: { default: 0, type: Number },
     durationLivePosition: { default: 0, type: Number },
