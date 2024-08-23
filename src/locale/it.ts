@@ -357,4 +357,5 @@ export default{
   "Afternoon":"Pomeriggio",
   "Evening":"Sera",
   "Now":"Ora",
+  "Change speed":"Cambia velocità",
 };

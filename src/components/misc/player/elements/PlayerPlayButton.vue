@@ -124,9 +124,11 @@ export default defineComponent({
     justify-content: center;
     margin: 0 0.5rem;
     border-radius: 50% !important;
-    font-size: 1rem !important;
     flex-shrink: 0;
     cursor: pointer;
+  }
+  .play-button-box:not(.small-font){
+    font-size: 1rem !important;
   }
   .play-big-button-box {
     height: 5rem;

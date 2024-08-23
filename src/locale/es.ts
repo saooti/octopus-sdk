@@ -364,4 +364,5 @@ export default {
   "Afternoon":"Tarde",
   "Evening":"Noche",
   "Now":"Ahora",
+  "Change speed":"Cambiar velocidad",
 }

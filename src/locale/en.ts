@@ -364,4 +364,5 @@ export default {
   "Afternoon":"Afternoon",
   "Evening":"Evening",
   "Now":"Now",
+  "Change speed":"Change speed",
 };

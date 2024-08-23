@@ -354,4 +354,5 @@ export default {
   "Afternoon":"Popoldan",
   "Evening":"Večer",
   "Now":"Zdaj",
+  "Change speed":"Spremenite hitrost",
 }
