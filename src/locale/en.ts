@@ -365,4 +365,6 @@ export default {
   "Evening":"Evening",
   "Now":"Now",
   "Change speed":"Change speed",
+  "Hide transcript":"Hide transcript",
+  "Transcript does not yet exist for this episode":"Transcript does not yet exist for this episode",
 };

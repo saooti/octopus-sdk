@@ -127,7 +127,7 @@ export default defineComponent({
     flex-shrink: 0;
     cursor: pointer;
   }
-  .play-button-box:not(.small-font){
+  .play-button-box:not(.small-font) {
     font-size: 1rem !important;
   }
   .play-big-button-box {

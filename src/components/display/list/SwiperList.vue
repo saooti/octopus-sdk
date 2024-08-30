@@ -96,7 +96,7 @@ export default defineComponent({
     listObject: {
       deep: true,
       handler() {
-        this.manualReload+=1;
+        this.manualReload += 1;
       },
     },
   },

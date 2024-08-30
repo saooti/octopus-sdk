@@ -166,7 +166,7 @@ export default defineComponent({
     displayWaveParam(): boolean {
       return "default" === this.iFrameModel || "emission" === this.iFrameModel;
     },
-    choseNumberEpisodes():boolean{
+    choseNumberEpisodes(): boolean {
       return this.displayChoiceAllEpisodes || this.isTypeSuggestion;
     },
     displayArticleParam(): boolean {
@@ -222,10 +222,17 @@ export default defineComponent({
       return "emissionLarge" === this.iFrameModel;
     },
     isTypeSuggestion(): boolean {
-      return "largeSuggestion" === this.iFrameModel || "SUGGESTION"===this.typeCustomPlayer;
+      return (
+        "largeSuggestion" === this.iFrameModel ||
+        "SUGGESTION" === this.typeCustomPlayer
+      );
     },
-    isTypeEmission():boolean{
-      return this.isEmission || this.isLargeEmission || "EMISSION"===this.typeCustomPlayer;
+    isTypeEmission(): boolean {
+      return (
+        this.isEmission ||
+        this.isLargeEmission ||
+        "EMISSION" === this.typeCustomPlayer
+      );
     },
     titleStillAvailable(): string {
       return this.isPodcastNotVisible

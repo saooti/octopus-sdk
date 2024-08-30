@@ -20,7 +20,11 @@
       :disabled="isDisabled"
       :loading="isLoading"
       :placeholder="placeholder"
-      :clearSearchOnBlur="()=>{return true}"
+      :clear-search-on-blur="
+        () => {
+          return true;
+        }
+      "
       :filter="fakeSearch"
       :selectable="() => !maxOptionsSelected"
       @open="onSearch"
@@ -101,7 +105,7 @@ export default {
       remainingElements: 0 as number,
       isLoading: false as boolean,
       nbOptionsSelected: 0 as number,
-      searchInput: "" as string
+      searchInput: "" as string,
     };
   },
   computed: {
@@ -141,13 +145,13 @@ export default {
     onSearch(search?: string): void {
       if (search && search.length < this.minSearchLength) {
         return;
-      }else if(search){
+      } else if (search) {
         this.searchInput = search;
       }
       this.isLoading = true;
       this.$emit("onSearch", search);
     },
-    onClose(){
+    onClose() {
       this.$emit("onClose", this.searchInput);
       this.searchInput = "";
     },

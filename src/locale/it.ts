@@ -358,4 +358,6 @@ export default{
   "Evening":"Sera",
   "Now":"Ora",
   "Change speed":"Cambia velocità",
+  "Hide transcript":"Nascondi trascrizione",
+  "Transcript does not yet exist for this episode":"La trascrizione di questo episodio non esiste ancora",
 };

@@ -365,4 +365,6 @@ export default {
   "Evening":"Noche",
   "Now":"Ahora",
   "Change speed":"Cambiar velocidad",
+  "Hide transcript":"Ocultar transcripción",
+  "Transcript does not yet exist for this episode":"La transcripción aún no existe para este episodio",
 }

@@ -1,5 +1,8 @@
 <template>
-  <div class="emission-item-container emission-presentation-container mt-3" :class="isVertical?'emission-vertical-item':''">
+  <div
+    class="emission-item-container emission-presentation-container mt-3"
+    :class="isVertical ? 'emission-vertical-item' : ''"
+  >
     <router-link
       :to="{
         name: 'emission',
@@ -8,13 +11,13 @@
       }"
       :title="$t('Emission')"
       class="d-flex-column flex-grow-1 text-dark"
-      :class="isVertical? 'flex-column':''"
+      :class="isVertical ? 'flex-column' : ''"
     >
       <img
-        v-lazy="proxyImageUrl(emission.imageUrl, isVertical?'400':'250')"
-        :width="isVertical?'400':'250'"
-        :height="isVertical?'400':'250'"
-        :class="isVertical?'img-box-bigger':''"
+        v-lazy="proxyImageUrl(emission.imageUrl, isVertical ? '400' : '250')"
+        :width="isVertical ? '400' : '250'"
+        :height="isVertical ? '400' : '250'"
+        :class="isVertical ? 'img-box-bigger' : ''"
         class="img-box"
         :title="$t('Emission name image', { name: emission.name })"
         :alt="$t('Emission name image', { name: emission.name })"
@@ -43,23 +46,22 @@ export default defineComponent({
     emission: { default: () => ({}), type: Object as () => Emission },
     isVertical: { default: false, type: Boolean },
   },
-
 });
 </script>
 <style lang="scss">
 .octopus-app {
-  .emission-presentation-container{
+  .emission-presentation-container {
     @media (max-width: 960px) {
       width: 250px !important;
       margin-right: 0.5rem;
     }
   }
-  .emission-item-container.emission-vertical-item{
+  .emission-item-container.emission-vertical-item {
     flex-grow: 0;
     width: 400px;
     flex-shrink: 0;
   }
-  .img-box-bigger{
+  .img-box-bigger {
     width: 400px;
     height: 400px;
   }

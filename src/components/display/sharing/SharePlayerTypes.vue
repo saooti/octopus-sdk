@@ -120,24 +120,26 @@ export default defineComponent({
     this.initCustomPlayers();
   },
   methods: {
-    isNumeric(value: string):boolean {
+    isNumeric(value: string): boolean {
       return /^-?\d+$/.test(value);
     },
-    selectChange($event: any){
+    selectChange($event: any) {
       const val = $event.target.value;
-      if(!val){
+      if (!val) {
         return;
       }
-      if(this.isNumeric(val)){
-        var customPlayer = this.customPlayersDisplay.find((p) => {return p.customId.toString() === val});
-        if(customPlayer){
+      if (this.isNumeric(val)) {
+        var customPlayer = this.customPlayersDisplay.find((p) => {
+          return p.customId.toString() === val;
+        });
+        if (customPlayer) {
           this.selectCustomPlayer(customPlayer);
         }
-      }else{
-        this.$emit('update:iFrameModel',val)
+      } else {
+        this.$emit("update:iFrameModel", val);
       }
     },
-    async fetchPlayerPaginate(type: string): Promise<CustomPlayer[]>{
+    async fetchPlayerPaginate(type: string): Promise<CustomPlayer[]> {
       let players = await octopusApi.fetchDataPublic<
         InterfacePageable<CustomPlayer>
       >(6, "customPlayer/type/" + this.organisationId + "/" + type);
@@ -161,11 +163,14 @@ export default defineComponent({
       }
       return playersContent;
     },
-    selectCustomPlayer(customPlayer: CustomPlayer){
+    selectCustomPlayer(customPlayer: CustomPlayer) {
       this.$emit("update:typeCustomPlayer", customPlayer.typePlayer);
-      this.$emit("update:iFrameModel",customPlayer.customId.toString());
+      this.$emit("update:iFrameModel", customPlayer.customId.toString());
     },
-    async fetchCustomPlayers(type: string, selectIfPossible = true): Promise<boolean> {
+    async fetchCustomPlayers(
+      type: string,
+      selectIfPossible = true,
+    ): Promise<boolean> {
       let customPlayersForType = await this.fetchPlayerPaginate(type);
       this.customPlayers = this.customPlayers.concat(customPlayersForType);
       if (
@@ -186,8 +191,14 @@ export default defineComponent({
         this.fetchCustomPlayers("EMISSION");
       } else {
         const episodeSelected = await this.fetchCustomPlayers("EPISODE");
-        const emissionSelected = await this.fetchCustomPlayers("EMISSION", !episodeSelected);
-        await this.fetchCustomPlayers("SUGGESTION", !episodeSelected && !emissionSelected);
+        const emissionSelected = await this.fetchCustomPlayers(
+          "EMISSION",
+          !episodeSelected,
+        );
+        await this.fetchCustomPlayers(
+          "SUGGESTION",
+          !episodeSelected && !emissionSelected,
+        );
       }
     },
   },

@@ -355,4 +355,6 @@ export default {
   "Evening":"Večer",
   "Now":"Zdaj",
   "Change speed":"Spremenite hitrost",
+  "Hide transcript":"Skrij prepis",
+  "Transcript does not yet exist for this episode":"Prepis za to epizodo še ne obstaja",
 }

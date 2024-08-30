@@ -7,20 +7,38 @@
     />
     <template v-if="!loading && !error">
       <div class="d-flex flex-nowrap align-items-stretch overflow-phone-auto">
-          <EmissionItemPresentation 
-            v-if="allEmissions[0]" 
-            :class="!isPhone? 'me-3':''"
-            :emission="allEmissions[0]" 
-            :isVertical="!isPhone"
+        <EmissionItemPresentation
+          v-if="allEmissions[0]"
+          :class="!isPhone ? 'me-3' : ''"
+          :emission="allEmissions[0]"
+          :is-vertical="!isPhone"
+        />
+        <div
+          v-if="allEmissions.length > 1"
+          class="emission-column emission-column-margin d-flex-row flex-nowrap"
+        >
+          <EmissionItemPresentation
+            v-if="allEmissions[1]"
+            :emission="allEmissions[1]"
           />
-          <div v-if="allEmissions.length > 1" class="emission-column emission-column-margin d-flex-row flex-nowrap">
-            <EmissionItemPresentation v-if="allEmissions[1]" :emission="allEmissions[1]" />
-            <EmissionItemPresentation  v-if="allEmissions[2]" :emission="allEmissions[2]"/>
-          </div>
-          <div v-if="allEmissions.length > 3" class="emission-column d-flex-row flex-nowrap show-emission-column">
-            <EmissionItemPresentation v-if="allEmissions[3]" :emission="allEmissions[3]" />
-            <EmissionItemPresentation  v-if="allEmissions[4]" :emission="allEmissions[4]"/>
-          </div>
+          <EmissionItemPresentation
+            v-if="allEmissions[2]"
+            :emission="allEmissions[2]"
+          />
+        </div>
+        <div
+          v-if="allEmissions.length > 3"
+          class="emission-column d-flex-row flex-nowrap show-emission-column"
+        >
+          <EmissionItemPresentation
+            v-if="allEmissions[3]"
+            :emission="allEmissions[3]"
+          />
+          <EmissionItemPresentation
+            v-if="allEmissions[4]"
+            :emission="allEmissions[4]"
+          />
+        </div>
       </div>
       <router-link
         v-if="buttonText && href"
@@ -34,9 +52,7 @@
 </template>
 
 <script lang="ts">
-import SwiperList from "../list/SwiperList.vue";
 import octopusApi from "@saooti/octopus-api";
-import EmissionPlayerItem from "./EmissionPlayerItem.vue";
 import { handle403 } from "../../mixins/handle403";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
@@ -44,14 +60,14 @@ import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
 import imageProxy from "../../mixins/imageProxy";
 import resizePhone from "../../mixins/resizePhone";
-const EmissionItemPresentation = defineAsyncComponent(() => import("./EmissionPresentationItem.vue"));
+const EmissionItemPresentation = defineAsyncComponent(
+  () => import("./EmissionPresentationItem.vue"),
+);
 export default defineComponent({
   name: "EmissionPresentationList",
   components: {
-    EmissionPlayerItem,
     ClassicLoading,
-    SwiperList,
-    EmissionItemPresentation
+    EmissionItemPresentation,
   },
 
   mixins: [handle403, imageProxy, resizePhone],
@@ -102,36 +118,36 @@ export default defineComponent({
         this.handle403(error as AxiosError);
         this.error = true;
       }
-      this.loading= false;
+      this.loading = false;
     },
   },
 });
 </script>
 <style lang="scss">
 .octopus-app {
-  .overflow-phone-auto{
+  .overflow-phone-auto {
     @media (max-width: 960px) {
       overflow-y: auto;
     }
   }
-  .emission-column{
+  .emission-column {
     flex-shrink: 0;
     width: calc((100% - 420px) / 2);
     @media (max-width: 1550px) {
-      width: calc((100% - 420px)) ;
+      width: calc((100% - 420px));
     }
     @media (max-width: 960px) {
       width: auto;
       flex-direction: row !important;
     }
   }
-  .emission-column-margin{
-      margin-right: 1rem;
-      @media (max-width: 960px) {
-        margin-right: 0;
-      }
+  .emission-column-margin {
+    margin-right: 1rem;
+    @media (max-width: 960px) {
+      margin-right: 0;
     }
-  .show-emission-column{
+  }
+  .show-emission-column {
     display: flex;
     @media (max-width: 1550px) {
       display: none !important;

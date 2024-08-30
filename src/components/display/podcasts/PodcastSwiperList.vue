@@ -138,7 +138,9 @@ export default defineComponent({
         true,
       );
       this.loading = true;
-      this.allPodcasts = data.result.filter((pod: Podcast | null) => null !== pod);
+      this.allPodcasts = data.result.filter(
+        (pod: Podcast | null) => null !== pod,
+      );
       this.loading = false;
     },
     sortPopular(): void {
@@ -150,7 +152,7 @@ export default defineComponent({
       if (!this.popularSort) return;
       this.popularSort = false;
       this.fetchNext();
-    }
+    },
   },
 });
 </script>
