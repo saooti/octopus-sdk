@@ -28,7 +28,34 @@ export interface CommentCreate {
 export interface CommentFeelings{
   dislikesCount: number;
   feeling: string;
+  error?:string;
   likesCount:  number;
+}
+export interface CommentAbuse {
+  commentId: number;
+  date: string;
+  description: string;
+  organisationId: string;
+  podcastId:number;
+  uuid:  string;
+}
+
+export interface CommentAbuseInfo {
+  abuseCount: number;
+  commentId: number;
+  date: string;
+  uuid:  string;
+}
+
+export function emptyCommentAbuse(): CommentAbuse {
+  return {
+    commentId: 0,
+    date: "",
+    description:"",
+    organisationId:"",
+    podcastId:0,
+    uuid:""
+  };
 }
 
 export function emptyComment(): CommentPodcast {

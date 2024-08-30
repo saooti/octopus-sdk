@@ -9,10 +9,12 @@ import octopusApi from "@saooti/octopus-api";
 import { CommentMessage, CommentsConfig } from "./class/config/commentsConfig";
 import { Podcast } from "./class/general/podcast";
 import CommentEngine from "../websocket/commentWebsocket";
-
+import { ListClassicReturn } from "./class/general/listReturn";
+import murmurHash3 from 'murmurhash3js';
 export interface CommentUser{
   name: string|null;
   uuid: string|null;
+  uuidHash: string|null;
 }
 interface CommentState {
   commentInitialized: boolean;
@@ -44,11 +46,7 @@ export const useCommentStore = defineStore("CommentStore", {
         let first = 0;
         let keepFetching = true;
         while (keepFetching) {
-          const data = await octopusApi.fetchDataPublicWithParams<{
-            count: number;
-            result: Array<CommentPodcast>;
-            sort: string;
-          }>(2, "comment/list", {
+          const data = await octopusApi.fetchDataPublicWithParams<ListClassicReturn<CommentPodcast>>(2, "comment/list", {
             first: first,
             size: size,
             podcastId: podcastId,
@@ -80,9 +78,13 @@ export const useCommentStore = defineStore("CommentStore", {
         uuid = uuidGenerator.uuidv4();
         cookies.methods.setCookie("comment-octopus-uuid", uuid);
       }
+      //1642d8b8-7af7-412a-bf50-c5f96b163bf3
+      //525d0736eb47d5482b60de5704635f4e
+      //TODO if not authenticated (+hash)
       this.commentUser = {
         name:cookies.methods.getCookie("comment-octopus-name"),
-        uuid:uuid
+        uuid:uuid,
+        uuidHash: murmurHash3.x64.hash128(uuid)
       }; 
     },
     setCommentUser(name:string) {
@@ -110,14 +112,23 @@ export const useCommentStore = defineStore("CommentStore", {
     updatePodcastsConfig(podcastId:number, config: CommentsConfig) {
       this.podcastsCommentsConfig[podcastId] = config;
     },
-    getCanPostComment(config: CommentsConfig|undefined, podcast: Podcast|undefined): boolean{
-      if(!config || !podcast || "NONE"===config.comments.commentAllowed){
+    getCanPostCommentAllowed(config: CommentsConfig, podcast: Podcast): boolean{
+      if("NONE"===config.comments.commentAllowed){
         return false;
       }
       const rightsLiveOnly = "LIVE_ONLY"===config.comments.commentAllowed && undefined !==podcast.conferenceId && "READY_TO_RECORD"===podcast.processingStatus;
       const rightsLiveRecord = "LIVE_AND_REPLAY"===config.comments.commentAllowed && undefined !==podcast.conferenceId;
       return "ALL"===config.comments.commentAllowed || rightsLiveOnly || rightsLiveRecord;
     },
+    getCanPostComment(config: CommentsConfig|undefined, podcast: Podcast|undefined, isAuth: boolean):boolean{
+      if(!config || !podcast){return false;}
+      return this.getCanPostCommentAllowed(config, podcast) && (!config.comments.authRequired || (config.comments.authRequired && isAuth));
+    },
+    getCanReportAbuse(config: CommentsConfig|undefined, isAuth: boolean):boolean{
+      if(!config){return false;}
+      return (!config.abuse.authRequired || (config.abuse.authRequired && isAuth));
+    },
+
 
     /*--------------------------------------------------------------------------------------------------------------
     |                                                                                                              |
@@ -125,6 +136,7 @@ export const useCommentStore = defineStore("CommentStore", {
     |                                                                                                              |
     --------------------------------------------------------------------------------------------------------------*/
     async initialize() {
+      
       const commentUrl = state.octopusApi.commentsUrl?? "https://comments.dev2.saooti.org/";
       const url =  StringHelper.trimChar(commentUrl.replace("https://", ""),"/");
       const engine = new CommentEngine(url);

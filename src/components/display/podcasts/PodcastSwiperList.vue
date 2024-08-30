@@ -41,6 +41,7 @@ import { useFilterStore } from "@/stores/FilterStore";
 import { mapState } from "pinia";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "PodcastSwiperList",
 
@@ -107,11 +108,9 @@ export default defineComponent({
   },
   methods: {
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<{
-        count: number;
-        result: Array<Podcast>;
-        sort: string;
-      }>(
+      const data = await octopusApi.fetchDataWithParams<
+        ListClassicReturn<Podcast>
+      >(
         0,
         "podcast/search",
         {

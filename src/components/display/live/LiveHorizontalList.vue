@@ -29,6 +29,7 @@ import octopusApi from "@saooti/octopus-api";
 import PodcastItem from "../podcasts/PodcastItem.vue";
 import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "LiveHorizontalList",
 
@@ -90,11 +91,9 @@ export default defineComponent({
       if (reset) {
         this.notEmpty = false;
       }
-      const data = await octopusApi.fetchDataWithParams<{
-        count: number;
-        result: Array<Podcast>;
-        sort: string;
-      }>(
+      const data = await octopusApi.fetchDataWithParams<
+        ListClassicReturn<Podcast>
+      >(
         0,
         "podcast/search",
         {

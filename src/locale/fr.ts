@@ -386,4 +386,9 @@ export default {
   "Confirm comment deletion text":
     "Êtes-vous sûr de vouloir supprimer le commentaire de {name} ?",
   "Update comment": "Mise à jour du commentaire",
+  "Managing reported abuses":"Gérer les abus dénoncés",
+  "Sort by":"Trier par",
+  "Top comments":"Top des commentaires",
+  "The most recent":"Les plus récents",
+  "Log in to access this service":"Se connecter pour accéder à ce service",
 };

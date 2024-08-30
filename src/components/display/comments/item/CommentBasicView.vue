@@ -63,6 +63,8 @@ export default defineComponent({
   data() {
     return {
       displayPreview: true as boolean,
+      dateInterval: undefined as ReturnType<typeof setTimeout> | undefined,
+      date: "" as string,
     };
   },
   computed: {
@@ -75,12 +77,6 @@ export default defineComponent({
     isValidComment() {
       return "VALIDATED" === this.comment.state;
     },
-    date(): string {
-      if (!this.comment.date) {
-        return "";
-      }
-      return dayjs(this.comment.date).fromNow();
-    },
     readMore(): string {
       return this.displayPreview ? this.$t("Read more") : this.$t("Read less");
     },
@@ -89,6 +85,23 @@ export default defineComponent({
         return this.comment.content;
       }
       return this.comment.content.substring(0, 300) + "...";
+    },
+  },
+  mounted() {
+    this.defineDateFromNow();
+    this.dateInterval = setInterval(() => {
+      this.defineDateFromNow();
+    }, 60000);
+  },
+  unmounted() {
+    clearInterval(this.dateInterval as unknown as number);
+  },
+  methods: {
+    defineDateFromNow() {
+      if (!this.comment.date) {
+        this.date = "";
+      }
+      this.date = dayjs(this.comment.date).fromNow();
     },
   },
 });

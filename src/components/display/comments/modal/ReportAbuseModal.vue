@@ -32,6 +32,8 @@
 </template>
 
 <script lang="ts">
+import crudApi from "@/api/classicCrud";
+import { state } from "../../../../stores/ParamSdkStore";
 import Constants from "../../../../../public/config";
 import ClassicInputText from "../../../form/ClassicInputText.vue";
 import RecaptchaModal from "./RecaptchaModal.vue";
@@ -39,6 +41,10 @@ import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useCommentStore } from "@/stores/CommentStore";
 import octopusApi from "@saooti/octopus-api";
+import {
+  CommentAbuseInfo,
+  CommentPodcast,
+} from "@/stores/class/general/comment";
 export default defineComponent({
   name: "ReportAbuseModal",
   components: {
@@ -46,10 +52,10 @@ export default defineComponent({
     ClassicInputText,
   },
   props: {
-    commentId: { default: undefined, type: Number },
+    comment: { default: undefined, type: Object as () => CommentPodcast },
   },
 
-  emits: ["close"],
+  emits: ["close", "update:comment"],
 
   data() {
     return {
@@ -65,6 +71,9 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useCommentStore, ["commentUser"]),
+    authenticated(): boolean {
+      return state.generalParameters.authenticated as boolean;
+    },
   },
   methods: {
     ...mapActions(useCommentStore, ["setCommentUser"]),
@@ -73,10 +82,24 @@ export default defineComponent({
         this.setCommentUser(this.name ?? "");
       }
       try {
-        await octopusApi.postDataPublic(2, "abuse/", {
-          commentId: this.commentId,
+        const abuseObject = {
+          commentId: this.comment?.commentId,
           description: this.abuseDescription,
           uuid: this.commentUser?.uuid,
+        };
+        var commentAbuseInfo: CommentAbuseInfo;
+        if (!this.authenticated) {
+          commentAbuseInfo = await octopusApi.postDataPublic(
+            2,
+            "abuse/",
+            abuseObject,
+          );
+        } else {
+          commentAbuseInfo = await crudApi.postData(2, "abuse/", abuseObject);
+        }
+        this.$emit("update:comment", {
+          ...this.comment,
+          ...{ abuse: commentAbuseInfo.abuseCount },
         });
         this.successText = this.$t("Thank you for reporting abuse");
       } catch {

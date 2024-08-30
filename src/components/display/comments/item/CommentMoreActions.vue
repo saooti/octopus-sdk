@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="isAtLeastOneMoreAction">
     <ReportAbuseModal
       v-if="isReportAbuse"
-      :comment-id="comment.commentId"
+      v-model:comment="commentForVmodel"
       @close="isReportAbuse = false"
     />
     <EditCommentModal
@@ -53,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import { state } from "../../../../stores/ParamSdkStore";
 import octopusApi from "@saooti/octopus-api";
 import crudApi from "@/api/classicCrud";
 import CommentMoreActionsAdmin from "@/components/display/comments/item/CommentMoreActionsAdmin.vue";
@@ -60,8 +61,9 @@ import { useAuthStore } from "@/stores/AuthStore";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useCommentStore } from "@/stores/CommentStore";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
+import { CommentsConfig } from "@/stores/class/config/commentsConfig";
 const ClassicPopover = defineAsyncComponent(
   () => import("../../../misc/ClassicPopover.vue"),
 );
@@ -88,6 +90,7 @@ export default defineComponent({
   props: {
     comment: { default: () => ({}), type: Object as () => CommentPodcast },
     podcast: { default: undefined, type: Object as () => Podcast },
+    config: { default: undefined, type: Object as () => CommentsConfig },
     editRight: { default: false, type: Boolean },
   },
 
@@ -116,9 +119,16 @@ export default defineComponent({
       },
     },
     isMyComment() {
-      const uuid = this.authProfile?.userId;
-      //TODO if not authenticated (+hash)
+      const uuid = this.authProfile?.userId ?? this.commentUser?.uuidHash;
       return uuid === this.comment?.poster.uuid;
+    },
+    authenticated(): boolean {
+      return state.generalParameters.authenticated as boolean;
+    },
+    isAtLeastOneMoreAction() {
+      return this.moreActions.some((el) => {
+        return el.condition;
+      });
     },
     moreActions() {
       return [
@@ -127,7 +137,14 @@ export default defineComponent({
           actionClick: () => {
             this.isReportAbuse = true;
           },
-          condition: true,
+          condition: this.getCanReportAbuse(this.config, this.authenticated),
+        },
+        {
+          title: this.$t("Managing reported abuses"),
+          actionClick: () => {
+            this.actionsAdmin = "abuse";
+          },
+          condition: this.editRight && this.comment.abuse,
         },
         {
           title: this.$t("Edit comment"),
@@ -214,6 +231,7 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions(useCommentStore, ["getCanReportAbuse"]),
     async actionComment() {
       if (!this.comment) {
         return;

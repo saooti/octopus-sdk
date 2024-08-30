@@ -369,4 +369,9 @@ export default {
   "Confirm comment deletion text":
   "Ali ste prepričani, da želite izbrisati komentar uporabnika {name}?",
   "Update comment": "Posodobi komentar",
+  "Managing reported abuses":"Upravljanje prijavljenih zlorab",
+  "Sort by":"Razvrsti po",
+  "Top comments":"Top komentarji",
+  "The most recent":"Najnovejša",
+  "Log in to access this service":"Za dostop do te storitve se prijavite",
 }

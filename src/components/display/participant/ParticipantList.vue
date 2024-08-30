@@ -54,6 +54,7 @@ import {
 } from "@/stores/class/general/participant";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "ParticipantList",
 
@@ -131,11 +132,9 @@ export default defineComponent({
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
       try {
-        const data = await octopusApi.fetchDataWithParams<{
-          count: number;
-          result: Array<Participant>;
-          sort: string;
-        }>(
+        const data = await octopusApi.fetchDataWithParams<
+          ListClassicReturn<Participant>
+        >(
           0,
           "participant/search",
           {

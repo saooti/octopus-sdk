@@ -49,6 +49,7 @@ import { useFilterStore } from "@/stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "PlaylistList",
 
@@ -136,11 +137,9 @@ export default defineComponent({
         sort: this.sort,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<{
-          count: number;
-          result: Array<Playlist>;
-          sort: string;
-        }>(0, "playlist/search", param, true);
+        const data = await octopusApi.fetchDataWithParams<
+          ListClassicReturn<Playlist>
+        >(0, "playlist/search", param, true);
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403(error as AxiosError);

@@ -3,37 +3,25 @@
     class="d-flex flex-column flex-grow-1 w-100 really-light-secondary-bg"
     :class="isAnAnswer && !isFlatList ? 'my-1 p-0' : 'my-3 p-2'"
   >
-    <CheckIdentityModal
-      v-if="isCheckIdentityActions"
-      :title="$t('Welcome, thanks for your interaction')"
-      @validate="likeActions(isCheckIdentityActions)"
-      @close="isCheckIdentityActions = undefined"
-    />
     <div class="d-flex justify-content-between align-items-center">
       <CommentBasicView :comment="comment" :edit-right="editRight" />
       <CommentMoreActions
         v-model:comment="commentForVmodel"
         :edit-right="editRight"
         :podcast="podcast"
+        :config="config"
         @delete-comment="emitDeleteComment"
       />
     </div>
     <template v-if="isValidComment">
       <div class="d-flex align-items-center mt-1">
-        <template v-for="section in feelingSection" :key="section.name">
-          <template v-if="section.condition">
-            <CommentLikeButton
-              :like="'like' === section.name"
-              :is-active="section.name === userFeeling"
-              @like-action="initiateLikeActions"
-            />
-            <span v-if="section.counter" class="ms-1 me-2">{{
-              transformInThousands(section.counter)
-            }}</span>
-          </template>
-        </template>
+        <LikeSection
+          v-model:comment="commentForVmodel"
+          :edit-right="editRight"
+          :podcast="podcast"
+        />
         <button
-          v-if="!comment.answerTo"
+          v-if="!comment.answerTo && canPostComment"
           class="btn btn-transparent"
           @click="answerComment"
         >
@@ -52,7 +40,7 @@
         </button>
       </div>
       <CommentInput
-        v-if="isAnsweringComment"
+        v-if="isAnsweringComment && canPostComment"
         class="ms-4"
         :focus="focus"
         :podcast="podcast"
@@ -98,16 +86,12 @@
 <script lang="ts">
 import selenium from "../../../mixins/selenium";
 import displayMethods from "../../../mixins/displayMethods";
-import {
-  CommentFeelings,
-  CommentPodcast,
-} from "@/stores/class/general/comment";
+import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "../../../../stores/class/general/podcast";
 import CommentBasicView from "./CommentBasicView.vue";
 import { useCommentStore } from "@/stores/CommentStore";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
-import octopusApi from "@saooti/octopus-api";
 import {
   CommentMessage,
   CommentsConfig,
@@ -117,11 +101,8 @@ const CommentInput = defineAsyncComponent(() => import("../CommentInput.vue"));
 const CommentParentInfo = defineAsyncComponent(
   () => import("../CommentParentInfo.vue"),
 );
-const CheckIdentityModal = defineAsyncComponent(
-  () => import("../modal/CheckIdentityModal.vue"),
-);
-const CommentLikeButton = defineAsyncComponent(
-  () => import("../button/CommentLikeButton.vue"),
+const LikeSection = defineAsyncComponent(
+  () => import("../like/LikeSection.vue"),
 );
 const CommentMoreActions = defineAsyncComponent(
   () => import("./CommentMoreActions.vue"),
@@ -135,8 +116,7 @@ export default defineComponent({
     CommentList,
     CommentParentInfo,
     CommentBasicView,
-    CheckIdentityModal,
-    CommentLikeButton,
+    LikeSection,
     CommentMoreActions,
   },
 
@@ -157,28 +137,12 @@ export default defineComponent({
       isAnsweringComment: false as boolean,
       showAnswers: false as boolean,
       focus: false as boolean,
-      isCheckIdentityActions: undefined as string | undefined,
-      userFeeling: undefined as string | undefined,
       showParentComment: false as boolean,
       eventToHandle: undefined as CommentMessage | undefined,
     };
   },
   computed: {
     ...mapState(useCommentStore, ["commentUser"]),
-    feelingSection() {
-      return [
-        {
-          name: "like",
-          counter: this.comment.likes,
-          condition: this.config?.commentLikes.likeEnabled ?? false,
-        },
-        {
-          name: "dislike",
-          counter: this.editRight ? this.comment.dislikes : 0,
-          condition: this.config?.commentLikes.dislikeEnabled ?? false,
-        },
-      ];
-    },
     commentForVmodel: {
       get(): CommentPodcast {
         return this.comment;
@@ -206,42 +170,22 @@ export default defineComponent({
     isValidComment() {
       return "VALIDATED" === this.comment.state;
     },
+    authenticated(): boolean {
+      return state.generalParameters.authenticated as boolean;
+    },
+    canPostComment(): boolean {
+      return this.getCanPostComment(
+        this.config,
+        this.podcast,
+        this.authenticated,
+      );
+    },
     eventActive(): boolean {
       return undefined !== this.podcast?.conferenceId;
     },
   },
   methods: {
-    transformInThousands(nb: number) {
-      if (nb >= 1000) {
-        return Math.round(nb / 100) / 10 + "k";
-      }
-      return nb.toString();
-    },
-    async initiateLikeActions(actionName: string) {
-      if (!this.commentUser?.name) {
-        this.isCheckIdentityActions = actionName;
-        return;
-      }
-      this.likeActions(actionName);
-    },
-    async likeActions(actionName: string) {
-      const data = await octopusApi.putDataPublic<{
-        [key: number]: CommentFeelings;
-      }>(2, "comment/" + actionName, {
-        ids: [this.comment.commentId],
-        name: this.commentUser?.name,
-        uuid: this.commentUser?.uuid,
-      });
-      this.$emit("update:comment", {
-        ...this.comment,
-        ...{
-          likes: data[this.comment.commentId].likesCount,
-          dislikes: data[this.comment.commentId].dislikesCount,
-        },
-      });
-      this.userFeeling = this.userFeeling ? undefined : actionName;
-      this.isCheckIdentityActions = undefined;
-    },
+    ...mapActions(useCommentStore, ["getCanPostComment"]),
     answerComment(): void {
       this.isAnsweringComment = true;
       this.focus = !this.focus;

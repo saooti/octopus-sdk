@@ -113,6 +113,7 @@
             </div>
             <ErrorMessage v-if="'' !== errorMessage" :message="errorMessage" />
           </div>
+          <LikeSection :edit-right="editRight" :podcast="podcast" />
         </div>
       </div>
     </div>
@@ -173,6 +174,9 @@ const PodcastPlayBar = defineAsyncComponent(
 const SubscribeButtons = defineAsyncComponent(
   () => import("../sharing/SubscribeButtons.vue"),
 );
+const LikeSection = defineAsyncComponent(
+  () => import("../comments/like/LikeSection.vue"),
+);
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 import resizePhone from "../../mixins/resizePhone";
@@ -188,6 +192,7 @@ export default defineComponent({
     RecordingItemButton,
     SubscribeButtons,
     Countdown,
+    LikeSection,
   },
 
   mixins: [displayMethods, orgaComputed, resizePhone],

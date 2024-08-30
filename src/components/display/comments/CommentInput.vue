@@ -160,7 +160,7 @@ export default defineComponent({
       };
       try {
         var commentReceived;
-        if (this.authenticated) {
+        if (!this.authenticated) {
           commentReceived = await octopusApi.postDataPublic<CommentPodcast>(
             2,
             "comment/",

@@ -72,6 +72,7 @@ import { AxiosError } from "axios";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { useFilterStore } from "@/stores/FilterStore";
 import { mapState } from "pinia";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const EmissionItem = defineAsyncComponent(() => import("./EmissionItem.vue"));
 const EmissionPlayerItem = defineAsyncComponent(
   () => import("./EmissionPlayerItem.vue"),
@@ -214,11 +215,9 @@ export default defineComponent({
         includeHidden: this.includeHidden,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<{
-          count: number;
-          result: Array<Emission>;
-          sort: string;
-        }>(0, "emission/search", param, true);
+        const data = await octopusApi.fetchDataWithParams<
+          ListClassicReturn<Emission>
+        >(0, "emission/search", param, true);
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403(error as AxiosError);

@@ -49,6 +49,7 @@ import {
   Organisation,
 } from "@/stores/class/general/organisation";
 import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   components: {
     ClassicMultiselect,
@@ -112,11 +113,9 @@ export default defineComponent({
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaData"]),
     async onSearchOrganisation(query?: string): Promise<void> {
-      const response = await octopusApi.fetchDataWithParams<{
-        count: number;
-        result: Array<Organisation>;
-        sort: string;
-      }>(0, "organisation/search", {
+      const response = await octopusApi.fetchDataWithParams<
+        ListClassicReturn<Organisation>
+      >(0, "organisation/search", {
         query: query,
         first: 0,
         size: this.maxElement,

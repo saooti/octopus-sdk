@@ -41,6 +41,7 @@ import { AxiosError } from "axios";
 import imageProxy from "../../mixins/imageProxy";
 import resizePhone from "../../mixins/resizePhone";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "EmissionInlineList",
 
@@ -85,11 +86,9 @@ export default defineComponent({
   methods: {
     async fetchNext(): Promise<void> {
       try {
-        const data = await octopusApi.fetchDataWithParams<{
-          count: number;
-          result: Array<Emission>;
-          sort: string;
-        }>(
+        const data = await octopusApi.fetchDataWithParams<
+          ListClassicReturn<Emission>
+        >(
           0,
           "emission/search",
           {

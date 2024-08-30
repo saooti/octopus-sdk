@@ -379,4 +379,9 @@ export default {
   "Confirm comment deletion text":
   "Are you sure you want to delete the comment from {name}?",
   "Update comment": "Update comment",
+  "Managing reported abuses":"Managing reported abuses",
+  "Sort by":"Sort by",
+  "Top comments":"Top comments",
+  "The most recent":"The most recent",
+  "Log in to access this service":"Log in to access this service",
 };

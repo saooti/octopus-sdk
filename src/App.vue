@@ -12,7 +12,6 @@
     </template>
   </div>
 </template>
-
 <script lang="ts">
 import TopBar from "@/components/misc/TopBar.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";

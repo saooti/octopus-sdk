@@ -2,9 +2,39 @@
   <div class="d-flex flex-column">
     <div
       v-if="isNotAnAnswerList && 0 !== totalCount"
-      class="text-secondary mb-2"
+      class="d-flex align-items-center mb-2"
     >
-      {{ $t("Number comments", { nb: totalCount }) }}
+      <div class="text-secondary me-3">
+        {{ $t("Number comments", { nb: totalCount }) }}
+      </div>
+      <button
+        id="sort-by-comments"
+        class="btn btn-transparent d-flex align-items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h4q.425 0 .713.288T9 17t-.288.713T8 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h10q.425 0 .713.288T15 12t-.288.713T14 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"
+          />
+        </svg>
+        <p class="ms-1">{{ $t("Sort by") }}</p>
+      </button>
+      <ClassicPopover target="sort-by-comments" :only-click="true">
+        <button
+          v-for="sortOption in sortChoice"
+          :key="sortOption"
+          class="me-3 octopus-dropdown-item"
+          :disabled="sortOption.value === sortType"
+          @mousedown="changeSort(sortOption.value)"
+        >
+          {{ sortOption.title }}
+        </button>
+      </ClassicPopover>
     </div>
     <div v-if="!loading && !error && 0 === totalCount" class="text-center">
       {{ $t("No comments") }}
@@ -49,15 +79,20 @@ import {
   CommentMessage,
   CommentsConfig,
 } from "@/stores/class/config/commentsConfig";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 /* eslint-disable */
 const CommentItem: any = defineAsyncComponent(() => import('./item/CommentItem.vue'));
 /* eslint-enable */
+const ClassicPopover = defineAsyncComponent(
+  () => import("../../misc/ClassicPopover.vue"),
+);
 export default defineComponent({
   name: "CommentsList",
 
   components: {
     ClassicLoading,
     CommentItem,
+    ClassicPopover,
   },
   mixins: [handle403],
 
@@ -77,13 +112,14 @@ export default defineComponent({
 
   data() {
     return {
-      loading: true as boolean,
+      loading: false as boolean,
       error: false as boolean,
       dfirst: 0 as number,
       dsize: this.size,
       totalCount: 0 as number,
       comments: [] as Array<CommentPodcast>,
       scrollableSection: undefined as HTMLElement | undefined,
+      sortType: "DATE_DESC" as string,
     };
   },
 
@@ -93,6 +129,12 @@ export default defineComponent({
     },
     isNotAnAnswerList(): boolean {
       return undefined === this.answerToComment;
+    },
+    sortChoice() {
+      return [
+        { title: this.$t("The most recent"), value: "DATE_DESC" },
+        { title: this.$t("Top comments"), value: "LIKE_DESC" },
+      ];
     },
   },
   watch: {
@@ -148,6 +190,10 @@ export default defineComponent({
     }
   },
   methods: {
+    changeSort(sortType: string) {
+      this.sortType = sortType;
+      this.fetchContent(true);
+    },
     handleScroll() {
       if (
         this.scrollableSection &&
@@ -183,6 +229,9 @@ export default defineComponent({
       }
     },
     async fetchContent(reset: boolean): Promise<void> {
+      if (this.loading) {
+        return;
+      }
       this.loading = true;
       if (reset) {
         this.dfirst = 0;
@@ -192,18 +241,16 @@ export default defineComponent({
         first: this.dfirst,
         size: this.dsize,
         podcastId: this.podcast?.podcastId,
-        sort: "DATE_DESC",
+        sort: this.sortType,
         answerTo: this.answerToComment,
         hideAnswers: !this.isFlatList,
         state: this.stateFilter.length ? this.stateFilter : undefined,
         organisationId: this.organisationId,
       };
       try {
-        const data = await octopusApi.fetchDataPublicWithParams<{
-          count: number;
-          result: Array<CommentPodcast>;
-          sort: string;
-        }>(2, "comment/list", param);
+        const data = await octopusApi.fetchDataPublicWithParams<
+          ListClassicReturn<CommentPodcast>
+        >(2, "comment/list", param);
         if (reset) {
           this.comments.length = 0;
         }

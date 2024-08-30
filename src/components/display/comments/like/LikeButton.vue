@@ -1,29 +1,37 @@
 <template>
-  <button
-    class="btn-like-comment"
-    :class="{
-      'is-active': isActive,
-      'is-dislike': !like,
-    }"
-    :title="titleButton"
-    @click="$emit('like-action', actionName)"
-  >
-    <ThumbIcon :is-up="like" :is-full="isActive" />
-  </button>
+  <div>
+    <button
+      class="btn-like-comment"
+      :class="{
+        'is-active': isActive,
+        'is-dislike': !like,
+      }"
+      :title="titleButton"
+      @click="clickButton"
+    >
+      <ThumbIcon :is-up="like" :is-full="isActive" />
+    </button>
+    <SnackBar ref="snackbar" position="bottom-left" />
+  </div>
 </template>
 
 <script lang="ts">
 import ThumbIcon from "./ThumbIcon.vue";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const SnackBar = defineAsyncComponent(
+  () => import("../../../misc/SnackBar.vue"),
+);
 export default defineComponent({
-  name: "CommentLikeButton",
+  name: "LikeButton",
 
   components: {
     ThumbIcon,
+    SnackBar,
   },
   props: {
     like: { default: true, type: Boolean },
     isActive: { default: false, type: Boolean },
+    canInteract: { default: false, type: Boolean },
   },
 
   emits: ["like-action"],
@@ -36,6 +44,17 @@ export default defineComponent({
     },
     titleButton(): string {
       return this.like ? this.$t("Like") : this.$t("Dislike");
+    },
+  },
+  methods: {
+    clickButton() {
+      if (this.canInteract) {
+        this.$emit("like-action", this.actionName);
+      } else {
+        (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
+          this.$t("Log in to access this service"),
+        );
+      }
     },
   },
 });

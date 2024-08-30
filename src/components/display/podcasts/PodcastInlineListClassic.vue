@@ -61,6 +61,7 @@ import { Podcast } from "@/stores/class/general/podcast";
 import imageProxy from "../../mixins/imageProxy";
 import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "PodcastInlineListClassic",
 
@@ -204,11 +205,9 @@ export default defineComponent({
       if (this.podcastId) {
         return this.fetchRecommendations();
       }
-      const data = await octopusApi.fetchDataWithParams<{
-        count: number;
-        result: Array<Podcast>;
-        sort: string;
-      }>(
+      const data = await octopusApi.fetchDataWithParams<
+        ListClassicReturn<Podcast>
+      >(
         0,
         "podcast/search",
         {

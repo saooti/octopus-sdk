@@ -58,6 +58,7 @@ import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { AxiosError } from "axios";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "PodcastList",
 
@@ -205,11 +206,9 @@ export default defineComponent({
         withVideo: this.withVideo,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<{
-          count: number;
-          result: Array<Podcast>;
-          sort: string;
-        }>(0, "podcast/search", param, true);
+        const data = await octopusApi.fetchDataWithParams<
+          ListClassicReturn<Podcast>
+        >(0, "podcast/search", param, true);
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403(error as AxiosError);

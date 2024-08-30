@@ -69,9 +69,10 @@ export default defineComponent({
       return this.canPostComment || this.nbComments > 0;
     },
     canPostComment(): boolean {
-      return (
-        this.getCanPostComment(this.configPodcast, this.podcast) &&
-        this.authenticated
+      return this.getCanPostComment(
+        this.configPodcast,
+        this.podcast,
+        this.authenticated,
       );
     },
     eventActive(): boolean {
@@ -93,14 +94,12 @@ export default defineComponent({
     },
   },
   created() {
-    this.initCommentUser();
     this.fetchPodcastCommentsConfig();
   },
   methods: {
     ...mapActions(useCommentStore, [
       "getCommentsConfig",
       "getCanPostComment",
-      "initCommentUser",
       "commentEventHandled",
       "initialize",
       "initComments",

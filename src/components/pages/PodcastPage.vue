@@ -91,6 +91,7 @@ import { Category } from "@/stores/class/general/category";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
+import { useCommentStore } from "@/stores/CommentStore";
 const ShareButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareButtons.vue"),
 );
@@ -223,6 +224,11 @@ export default defineComponent({
       immediate: true,
       async handler() {
         await this.getPodcastDetails();
+        if (!this.podcast || this.error) {
+          return;
+        }
+        this.getCommentsConfig(this.podcast);
+        this.initCommentUser();
         this.initConference();
       },
     },
@@ -233,6 +239,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
+    ...mapActions(useCommentStore, ["getCommentsConfig", "initCommentUser"]),
     async fetchConferencePublic() {
       const data = await octopusApi.fetchData<ConferencePublicInfo>(
         9,

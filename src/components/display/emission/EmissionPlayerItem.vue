@@ -109,6 +109,7 @@ import { usePlayerStore } from "@/stores/PlayerStore";
 import { useFilterStore } from "@/stores/FilterStore";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const PodcastPlayBar = defineAsyncComponent(
   () => import("../podcasts/PodcastPlayBar.vue"),
 );
@@ -176,11 +177,9 @@ export default defineComponent({
     },
     async loadPodcasts(): Promise<void> {
       const nb = this.nbPodcasts ? this.nbPodcasts : 2;
-      const data = await octopusApi.fetchDataWithParams<{
-        count: number;
-        result: Array<Podcast>;
-        sort: string;
-      }>(
+      const data = await octopusApi.fetchDataWithParams<
+        ListClassicReturn<Podcast>
+      >(
         0,
         "podcast/search",
         {

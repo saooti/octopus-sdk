@@ -176,7 +176,6 @@ export const playerLogic = defineComponent({
     reInitPlayer(): void {
       this.setDownloadId(null);
       this.listenError = false;
-      this.initComments();
       if (this.playerLive || this.playerRadio) {
         this.endingLive();
       }

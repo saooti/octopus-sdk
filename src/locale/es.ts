@@ -379,4 +379,9 @@ export default {
   "Confirm comment deletion text":
     "¿Seguro que quieres eliminar el comentario de {name}?",
   "Update comment": "Actualizar comentario",
+  "Managing reported abuses":"Gestión de denuncias de abusos",
+  "Sort by":"Ordenar por",
+  "Top comments":"Comentarios destacados",
+  "The most recent":"Los más recientes",
+  "Log in to access this service":"Inicie sesión para acceder a este servicio",
 }

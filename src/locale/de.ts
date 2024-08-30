@@ -378,4 +378,9 @@ export default {
   "Confirm comment deletion text":
   'Möchten Sie den Kommentar von "{name}" wirklich löschen?',
   "Update comment": "Kommentar aktualisieren",
+  "Managing reported abuses":"Umgang mit gemeldeten Missbräuchen",
+  "Sort by":"Sortieren nach",
+  "Top comments":"Top-Kommentare",
+  "The most recent":"Die aktuellsten",
+  "Log in to access this service":"Melden Sie sich an, um auf diesen Dienst zuzugreifen",
 }

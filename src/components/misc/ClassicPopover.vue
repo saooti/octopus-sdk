@@ -241,6 +241,9 @@ export default defineComponent({
       white-space: nowrap;
       background-color: transparent;
       border: 0;
+      &:disabled {
+        background: rgb(230, 230, 230);
+      }
       &:hover {
         background: rgb(243, 243, 243);
       }

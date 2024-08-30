@@ -60,6 +60,7 @@ import displayMethods from "../../mixins/displayMethods";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { defineComponent } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "ParticpantItem",
   mixins: [displayMethods, orgaComputed, imageProxy],
@@ -110,11 +111,9 @@ export default defineComponent({
   },
   methods: {
     async hasPodcast(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<{
-        count: number;
-        result: Array<Podcast>;
-        sort: string;
-      }>(
+      const data = await octopusApi.fetchDataWithParams<
+        ListClassicReturn<Podcast>
+      >(
         0,
         "podcast/search",
         {

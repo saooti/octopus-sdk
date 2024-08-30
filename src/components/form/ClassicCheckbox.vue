@@ -11,14 +11,7 @@
         @input="$emit('update:textInit', !textInit)"
         @click="emitClickAction"
       />
-      <span
-        v-if="isSwitch"
-        class="slider"
-        @click="
-          $emit('update:textInit', !textInit);
-          emitClickAction;
-        "
-      />
+      <span v-if="isSwitch" class="slider" @click="clickSlider" />
     </div>
     <label
       class="c-hand"
@@ -47,6 +40,12 @@ export default defineComponent({
   methods: {
     emitClickAction(): void {
       this.$emit("clickAction");
+    },
+    clickSlider() {
+      if (!this.isDisabled) {
+        this.$emit("update:textInit", !this.textInit);
+        this.emitClickAction();
+      }
     },
   },
 });
