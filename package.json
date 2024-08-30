@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "39.1.2-beta",
+  "version": "39.1.3-beta",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -37,7 +37,6 @@
     "hls.js": "^1.5.11",
     "humanize-duration": "^3.32.1",
     "jest": "^29.7.0",
-    "murmurhash3js": "^3.0.1",
     "pinia": "^2.1.7",
     "qrcode.vue": "^3.4.1",
     "sass": "^1.77.6",

@@ -10,7 +10,6 @@ import { CommentMessage, CommentsConfig } from "./class/config/commentsConfig";
 import { Podcast } from "./class/general/podcast";
 import CommentEngine from "../websocket/commentWebsocket";
 import { ListClassicReturn } from "./class/general/listReturn";
-import murmurHash3 from 'murmurhash3js';
 export interface CommentUser{
   name: string|null;
   uuid: string|null;
@@ -61,7 +60,15 @@ export const useCommentStore = defineStore("CommentStore", {
       }
       return this.commentsForPlayer[podcastId];
     },
-    initCommentUser(){
+    async digest(message: string) {
+      return Array.from(
+        new Uint8Array(
+          await crypto.subtle.digest("SHA-1", new TextEncoder().encode(message))
+        ),
+        (byte) => byte.toString(16).padStart(2, '0')
+      ).join('');
+    },
+    async initCommentUser(){
       if(this.commentUser){
         return;
       }
@@ -78,13 +85,11 @@ export const useCommentStore = defineStore("CommentStore", {
         uuid = uuidGenerator.uuidv4();
         cookies.methods.setCookie("comment-octopus-uuid", uuid);
       }
-      //1642d8b8-7af7-412a-bf50-c5f96b163bf3
-      //525d0736eb47d5482b60de5704635f4e
-      //TODO if not authenticated (+hash)
+      var hash = await this.digest(uuid);
       this.commentUser = {
         name:cookies.methods.getCookie("comment-octopus-name"),
         uuid:uuid,
-        uuidHash: murmurHash3.x64.hash128(uuid)
+        uuidHash: hash
       }; 
     },
     setCommentUser(name:string) {

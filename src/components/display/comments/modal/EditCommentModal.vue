@@ -14,9 +14,8 @@
           v-model:text-init="name"
           v-model:errorVariable="errorName"
           input-id="username-input"
-          :label="$t('Lastname')"
+          :label="$t('Your name')"
           :max-length="MAX_NAME"
-          :error-text="$t('Please provide a lastname')"
         />
         <ClassicInputText
           v-model:text-init="commentText"
