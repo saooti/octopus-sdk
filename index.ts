@@ -50,6 +50,9 @@ export const getCommentInput = () => import("./src/components/display/comments/C
 export const getPodcastPlaylistInlineList = () => import("./src/components/display/playlist/PodcastPlaylistInlineList.vue");
 export const getLiveList = () => import("./src/components/display/live/LiveList.vue");
 export const getEmissionPresentationList = () => import("./src/components/display/emission/EmissionPresentationList.vue");
+export const getPodcastPlayButton = () => import("./src/components/display/podcasts/PodcastPlayButton.vue");
+
+
 
 //Radio
 export const getRadioCurrently = () => import("./src/components/display/live/RadioCurrently.vue");
