@@ -102,12 +102,6 @@ export default defineComponent({
           url: this.getUrl("deezer"),
         },
         {
-          name: "googlePodcasts",
-          icon: "saooti-google-podcasts",
-          title: "Google Podcasts",
-          url: this.getUrl("googlePodcasts"),
-        },
-        {
           name: "spotify",
           icon: "saooti-spotify",
           title: "Spotify",
@@ -156,6 +150,12 @@ export default defineComponent({
           icon: "saooti-tunin",
           title: "TuneIn",
           url: this.getUrl("tunein"),
+        },
+         {
+          name: "youtube",
+          icon: "saooti-youtube",
+          title: "YouTube Music",
+          url: this.getUrl("youtube"),
         },
       ];
       return sub.filter((item) => item.url);
