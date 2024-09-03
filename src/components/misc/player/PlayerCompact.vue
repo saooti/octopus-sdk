@@ -28,7 +28,7 @@
       />
     </div>
     <!-- <AdsSkipButton/> -->
-    <PlayerSpeedButton />
+    <PlayerSpeedButton v-if="!radioUrl"/>
     <button
       :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
       class="btn play-button-box btn-transparent text-light saooti-up me-0"
