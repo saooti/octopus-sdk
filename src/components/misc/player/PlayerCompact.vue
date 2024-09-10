@@ -5,13 +5,12 @@
     <div class="text-light player-grow-content">
       <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
         <PlayerTitle
-          class="flex-grow-1"
           :player-error="playerError"
           :hls-ready="hlsReady"
         />
         <div
           v-if="!playerError && (!radioUrl || isAdPlaying)"
-          class="hide-phone"
+          class="hide-phone ps-2 flex-shrink-0"
         >
           {{ displayPlayTime }} / {{ displayTotalTime }}
         </div>

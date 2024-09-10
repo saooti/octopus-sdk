@@ -1,19 +1,17 @@
 <template>
-  <div class="d-flex">
-    <div v-if="playerError" class="text-warning mx-2">
-      {{ $t("Podcast play error") + " - " }}
-    </div>
-    <component
-      :is="linkAdvertising ? 'a' : 'div'"
-      class="flex-grow-1 text-truncate text-light"
-      :class="titleClass"
-      :href="linkAdvertising"
-      rel="noopener"
-      target="_blank"
-    >
-      {{ podcastTitle }}
-    </component>
+  <div v-if="playerError" class="text-warning mx-2">
+    {{ $t("Podcast play error") + " - " }}
   </div>
+  <component
+    :is="linkAdvertising ? 'a' : 'div'"
+    class="flex-grow-1 text-truncate text-light"
+    :class="titleClass"
+    :href="linkAdvertising"
+    rel="noopener"
+    target="_blank"
+  >
+    {{ podcastTitle }}
+  </component>
 </template>
 <script lang="ts">
 import { fetchRadioData } from "../../../mixins/radio/fetchRadioData";

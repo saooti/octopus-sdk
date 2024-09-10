@@ -147,7 +147,7 @@ export default defineComponent({
   .player-container {
     max-height: 94%;
     position: sticky;
-    overflow: hidden;
+    overflow: visible;
     z-index: 12;
     width: 100%;
     bottom: 0;
