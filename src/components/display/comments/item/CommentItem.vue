@@ -232,13 +232,4 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-.octopus-app {
-  .answers-section {
-    .btn.btn-primary {
-      align-self: start !important;
-      margin: 0.5rem 0 0 0 !important;
-    }
-  }
-}
-</style>
+
