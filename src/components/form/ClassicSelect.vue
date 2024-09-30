@@ -2,8 +2,7 @@
   <div class="classic-select" :class="{ 'form-margin': displayLabel }">
     <label
       :for="idSelect"
-      class="form-label"
-      :class="displayLabel ? '' : 'd-none'"
+      :class="{'form-label':classFormLabel, 'd-none': !displayLabel}"
       >{{ label }}</label
     >
     <select
@@ -46,6 +45,7 @@ export default defineComponent({
       }>,
     },
     textInit: { default: undefined, type: [String, Number] },
+    classFormLabel: { default: true, type: Boolean },
   },
   emits: ["update:textInit"],
   computed: {
