@@ -1,8 +1,9 @@
 <template>
   <div class="classic-select" :class="{ 'form-margin': displayLabel }">
     <label
+      v-show="displayLabel"
       :for="idSelect"
-      :class="{'form-label':classFormLabel, 'd-none': !displayLabel}"
+      :class="classLabel"
       >{{ label }}</label
     >
     <select
@@ -45,7 +46,7 @@ export default defineComponent({
       }>,
     },
     textInit: { default: undefined, type: [String, Number] },
-    classFormLabel: { default: true, type: Boolean },
+    classLabel: { default: "form-label", type: String },
   },
   emits: ["update:textInit"],
   computed: {
