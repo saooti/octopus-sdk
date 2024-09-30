@@ -1,21 +1,21 @@
 <template>
-  <div class="module-box">
+  <div v-if="podcast" class="module-box">
     <div class="mb-2 d-flex">
       <div class="w-100">
         <PodcastImage
           :class="[
             isLiveReadyToRecord &&
-            fetchConference &&
-            'null' !== fetchConference &&
-            fetchConference.status
-              ? fetchConference.status.toLowerCase() + '-shadow'
+            podcastConference &&
+            'null' !== podcastConference &&
+            podcastConference.status
+              ? podcastConference.status.toLowerCase() + '-shadow'
               : '',
           ]"
           class="me-3"
           :hide-play="isLiveReadyToRecord"
           :podcast="podcast"
           :playing-podcast="playingPodcast"
-          :fetch-conference="fetchConference"
+          :fetch-conference="podcastConference"
           :is-animator-live="isOctopusAndAnimator"
         />
         <div class="d-flex justify-content-between flex-wrap mb-2">
@@ -118,10 +118,10 @@
       </div>
     </div>
     <RecordingItemButton
-      v-if="!!fetchConference && isLiveReadyToRecord && isOctopusAndAnimator"
+      v-if="!!podcastConference && isLiveReadyToRecord && isOctopusAndAnimator"
       :podcast="podcast"
       :live="true"
-      :recording="fetchConference"
+      :recording="podcastConference"
       @delete-item="removeDeleted"
       @validate-podcast="$emit('updatePodcast', $event)"
     />
@@ -150,10 +150,8 @@
 import PodcastImage from "./PodcastImage.vue";
 import ParticipantDescription from "./ParticipantDescription.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import dayjs from "dayjs";
-// @ts-ignore
-import humanizeDuration from "humanize-duration";
 import displayMethods from "../../mixins/displayMethods";
+import podcastView from "../../mixins/podcast/podcastView";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
@@ -195,12 +193,12 @@ export default defineComponent({
     LikeSection,
   },
 
-  mixins: [displayMethods, orgaComputed, resizePhone],
+  mixins: [displayMethods, orgaComputed, resizePhone, podcastView],
 
   props: {
     playingPodcast: { default: undefined, type: Object as () => Podcast },
     podcast: { default: undefined, type: Object as () => Podcast },
-    fetchConference: { default: undefined, type: Object as () => Conference },
+    podcastConference: { default: undefined, type: Object as () => Conference },
   },
 
   emits: ["updatePodcast"],
@@ -213,19 +211,6 @@ export default defineComponent({
   },
 
   computed: {
-    isCounter(): boolean {
-      return (
-        this.isLiveReadyToRecord &&
-        undefined !== this.fetchConference &&
-        ("PLANNED" === this.fetchConference.status ||
-          "PENDING" === this.fetchConference.status)
-      );
-    },
-    timeRemaining(): string {
-      return !this.podcast
-        ? ""
-        : dayjs(this.podcast.pubDate).diff(dayjs(), "seconds").toString();
-    },
     errorMessage(): string {
       if (!this.podcast?.availability.visibility) {
         return this.$t("Podcast is not visible for listeners");
@@ -241,43 +226,11 @@ export default defineComponent({
     isProgressBar(): boolean {
       return state.emissionsPage.progressBar as boolean;
     },
-    date(): string {
-      if (!this.podcast || 1970 === dayjs(this.podcast.pubDate).year()) {
-        return "";
-      }
-      if (this.isLiveReadyToRecord) {
-        return dayjs(this.podcast.pubDate).format("D MMMM YYYY - HH:mm");
-      }
-      return dayjs(this.podcast.pubDate).format("D MMMM YYYY");
-    },
-    duration(): string {
-      if (!this.podcast || this.podcast.duration <= 1) return "";
-      if (this.podcast.duration > 600000) {
-        return humanizeDuration(this.podcast.duration, {
-          language: this.$i18n.locale,
-          largest: 1,
-          round: true,
-        });
-      }
-      return humanizeDuration(this.podcast.duration, {
-        language: this.$i18n.locale,
-        largest: 2,
-        round: true,
-      });
-    },
     editRight(): boolean {
       return (
         (true === this.authenticated &&
           this.myOrganisationId === this.podcast?.organisation.id) ||
         true === state.generalParameters.isAdmin
-      );
-    },
-    isLiveReadyToRecord(): boolean {
-      return (
-        undefined !== this.podcast &&
-        undefined !== this.podcast.conferenceId &&
-        0 !== this.podcast.conferenceId &&
-        "READY_TO_RECORD" === this.podcast.processingStatus
       );
     },
     isLiveReady(): boolean {
@@ -289,8 +242,8 @@ export default defineComponent({
     },
     isDebriefing(): boolean {
       return (
-        undefined !== this.fetchConference &&
-        "DEBRIEFING" === this.fetchConference.status
+        undefined !== this.podcastConference &&
+        "DEBRIEFING" === this.podcastConference.status
       );
     },
     isOctopusAndAnimator(): boolean {

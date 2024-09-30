@@ -1,0 +1,16 @@
+.octopus-app {
+  .video-responsive-wrapper {
+    position:relative;
+    padding-bottom:56.25%;
+    height:0;
+    width: 100%;
+    iframe, #video-element-hls {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100% !important;
+      height:100%;
+      margin:0 !important;
+    }
+  }
+}

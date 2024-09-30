@@ -25,6 +25,7 @@ const PlaylistsPage = () => import("@/components/pages/PlaylistsPage.vue");
 const error403Page = () => import("@/components/pages/Error403Page.vue");
 const PageNotFound = () => import("@/components/pages/PageNotFound.vue");
 const RadioPage = () => import("@/components/pages/RadioPage.vue");
+const VideoPage = () => import("@/components/pages/VideoPage.vue");
 
 const routes: Array<RouteRecordRaw> = [
   /*--------------------------------------------------------------------------
@@ -116,6 +117,15 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main/pub/podcast/:podcastId/:productor?",
     name: "podcast",
     component: PodcastPage,
+    props: (route: RouteLocationNormalized) => ({
+      podcastId: parseInt(route.params.podcastId.toString(), 10),
+      productor: route.params.productor,
+    }),
+  },
+  {
+    path: "/main/pub/video/:podcastId/:productor?",
+    name: "video",
+    component: VideoPage,
     props: (route: RouteLocationNormalized) => ({
       podcastId: parseInt(route.params.podcastId.toString(), 10),
       productor: route.params.productor,

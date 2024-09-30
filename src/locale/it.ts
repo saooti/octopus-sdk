@@ -378,4 +378,8 @@ export default{
   "Top comments":"Commenti principali",
   "The most recent":"I più recenti",
   "Log in to access this service":"Accedi per accedere a questo servizio",
+  "Episode page":"Pagina episodio",
+  "Comments":"Commenti",
+  "Information":"Informazioni",
+  "The episode does not have an associated video":"L'episodio non ha un video associato",
 };

@@ -3,7 +3,7 @@
     class="d-flex flex-column flex-grow-1 w-100 really-light-secondary-bg"
     :class="isAnAnswer && !isFlatList ? 'my-1 p-0' : 'my-3 p-2'"
   >
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-nowrap justify-content-between align-items-center">
       <CommentBasicView :comment="comment" :edit-right="editRight" />
       <CommentMoreActions
         v-model:comment="commentForVmodel"

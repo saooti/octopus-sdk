@@ -6,7 +6,7 @@
         @click="closePlayer"
       />
       <div class="video-wrapper">
-        <PlayerVideoDigiteka v-if="!playerLive" />
+        <PlayerVideoDigiteka v-if="!playerLive" :videoId="videoId" />
         <PlayerVideoHls v-else :hls-url="hlsUrl" />
       </div>
     </template>
@@ -34,12 +34,15 @@ export default defineComponent({
     return {};
   },
   computed: {
-    ...mapState(usePlayerStore, ["playerVideo", "playerLive"]),
+    ...mapState(usePlayerStore, ["playerVideo", "playerLive", "playerPodcast"]),
     hlsUrl(): string {
       if (!this.playerLive) {
         return "";
       }
       return `${state.podcastPage.hlsUri}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
+    },
+    videoId(): string | undefined {
+      return this.playerPodcast?.video?.videoId;
     },
   },
 

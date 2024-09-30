@@ -21,8 +21,8 @@
     />
     <div id="ad-container"></div>
     <template v-if="displayWithTimeout">
-      <PlayerVideo v-if="playerVideo" />
-      <template v-else>
+      <PlayerVideo v-if="playerVideo && isNotVideoPage" />
+      <template v-else-if="!playerVideo">
         <PlayerCompact
           v-if="!playerLargeVersion"
           :player-error="playerError"
@@ -100,6 +100,9 @@ export default defineComponent({
     display() {
       return "STOPPED" !== this.playerStatus;
     },
+    isNotVideoPage(){
+      return "video" !== this.$route.name;
+    }
   },
 
   watch: {

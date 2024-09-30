@@ -73,6 +73,9 @@ body{
 	.really-light-primary-bg{
 		background-color: $primaryColorReallyTransparent !important;
 	}
+  .blue-bg{
+    background-color: $blue-octopus;
+  }
   .width-fit-content{
     width: fit-content !important;
   }
@@ -81,7 +84,7 @@ body{
   }
   .page-box{
     background-color: $octopus-background;
-    padding: 1rem 5rem 5rem 5rem;
+    padding: 1rem 3rem 3rem 3rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;

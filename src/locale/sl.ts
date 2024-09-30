@@ -374,4 +374,8 @@ export default {
   "Top comments":"Top komentarji",
   "The most recent":"Najnovejša",
   "Log in to access this service":"Za dostop do te storitve se prijavite",
+  "Episode page":"Stran z epizodo",
+  "Comments":"Komentarji",
+  "Information":"Informacije",
+  "The episode does not have an associated video":"Epizoda nima povezanega videoposnetka",
 }

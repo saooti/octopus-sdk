@@ -13,7 +13,7 @@
         <PodcastModuleBox
           :playing-podcast="playingPodcast"
           :podcast="podcast"
-          :fetch-conference="fetchConference"
+          :podcast-conference="fetchConference"
           @update-podcast="updatePodcast"
         />
         <SharePlayer

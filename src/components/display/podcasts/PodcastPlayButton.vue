@@ -209,6 +209,10 @@ export default defineComponent({
         this.playerChangeStatus("PLAYING" === this.playerStatus);
         return;
       }
+      if(isVideo && state.player.isVideoPage){
+        this.$router.push('/main/pub/video/'+this.podcast.podcastId);
+        return;
+      }
       if (!this.recordingLive) {
         this.playerPlay(this.podcast, isVideo);
       } else {

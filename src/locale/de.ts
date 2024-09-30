@@ -383,4 +383,8 @@ export default {
   "Top comments":"Top-Kommentare",
   "The most recent":"Die aktuellsten",
   "Log in to access this service":"Melden Sie sich an, um auf diesen Dienst zuzugreifen",
+  "Episode page":"Episodenseite",
+  "Comments":"Kommentare",
+  "Information":"Information",
+  "The episode does not have an associated video":"Der Episode ist kein Video zugeordnet",
 }
