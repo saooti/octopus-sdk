@@ -9,7 +9,6 @@
     />
     <PlayerImage :image-width="200" />
     <PlayerTitle
-      class="w-100 px-2 mt-2 text-center"
       :player-error="playerError"
       :hls-ready="hlsReady"
       title-class="h3"

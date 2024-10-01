@@ -378,4 +378,7 @@ export default {
   "Comments":"Komentarji",
   "Information":"Informacije",
   "The episode does not have an associated video":"Epizoda nima povezanega videoposnetka",
+  "Change speed":"Spremenite hitrost",
+  "Hide transcript":"Skrij prepis",
+  "Transcript does not yet exist for this episode":"Prepis za to epizodo še ne obstaja",
 }

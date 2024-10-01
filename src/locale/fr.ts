@@ -395,4 +395,7 @@ export default {
   "Comments":"Commentaires",
   "Information":"Informations",
   "The episode does not have an associated video":"L'épisode n'a pas de vidéo associée",
+  "Change speed":"Changer la vitesse",
+  "Hide transcript":"Cacher la transcription",
+  "Transcript does not yet exist for this episode":"La transcription n'existe pas encore pour cet épisode",
 };

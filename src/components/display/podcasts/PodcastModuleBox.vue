@@ -117,6 +117,19 @@
         </div>
       </div>
     </div>
+    <TagList
+      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length && !isPhone"
+      :tag-list="podcast.tags"
+      :podcast-annotations="podcast.annotations"
+    />
+    <PodcastRawTranscript :podcast-id="podcast.podcastId" />
+    <SubscribeButtons
+      v-if="isPodcastmaker"
+      class="mt-4"
+      :emission="podcast.emission"
+      :window-width="1000"
+      :justify-center="false"
+    />
     <RecordingItemButton
       v-if="!!podcastConference && isLiveReadyToRecord && isOctopusAndAnimator"
       :podcast="podcast"
@@ -131,24 +144,13 @@
       :display-studio-access="isDebriefing"
       @validate-podcast="$emit('updatePodcast', $event)"
     />
-    <TagList
-      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length && !isPhone"
-      :tag-list="podcast.tags"
-      :podcast-annotations="podcast.annotations"
-    />
-    <SubscribeButtons
-      v-if="isPodcastmaker"
-      class="mt-4"
-      :emission="podcast.emission"
-      :window-width="1000"
-      :justify-center="false"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import PodcastImage from "./PodcastImage.vue";
 import ParticipantDescription from "./ParticipantDescription.vue";
+import PodcastRawTranscript from "./PodcastRawTranscript.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import displayMethods from "../../mixins/displayMethods";
 import podcastView from "../../mixins/podcast/podcastView";
@@ -191,6 +193,7 @@ export default defineComponent({
     SubscribeButtons,
     Countdown,
     LikeSection,
+    PodcastRawTranscript,
   },
 
   mixins: [displayMethods, orgaComputed, resizePhone, podcastView],

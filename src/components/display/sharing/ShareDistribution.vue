@@ -77,11 +77,6 @@ export default defineComponent({
           title: "Apple Podcast / iTunes",
         },
         { url: this.getUrl("deezer"), icon: "saooti-deezer", title: "Deezer" },
-        {
-          url: this.getUrl("googlePodcasts"),
-          icon: "saooti-google-podcasts",
-          title: "Google Podcasts",
-        },
         { url: this.getUrl("iHeart"), icon: "saooti-iheart", title: "iHeart" },
         {
           url: this.getUrl("PlayerFM"),
@@ -109,6 +104,11 @@ export default defineComponent({
           title: "Spotify",
         },
         { url: this.getUrl("tuneIn"), icon: "saooti-tunin", title: "TuneIn" },
+        {
+          url: this.getUrl("youtube"),
+          icon: "saooti-youtube",
+          title: "YouTube Music",
+        },
       ];
     },
   },

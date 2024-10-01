@@ -6,6 +6,7 @@
       target="_blank"
       :href="linkAdvertising"
       class="saooti-link player-image"
+      :class="imageWidth>50?'big-player-image':''"
       :title="$t('Advertising')"
     />
     <router-link v-else-if="isImage && podcastImage" :to="podcastShareUrl">
@@ -15,6 +16,7 @@
         :height="imageWidth"
         :alt="$t('Podcast image')"
         class="player-image"
+        :class="imageWidth>50?'big-player-image':''"
       />
     </router-link>
   </div>
@@ -84,6 +86,10 @@ export default defineComponent({
     @media (max-width: 450px) {
       height: 1.8rem;
       width: 1.8rem;
+    }
+    &.big-player-image{
+      height: 200px;
+      width: 200px;
     }
     &.saooti-link {
       display: flex;

@@ -5,13 +5,12 @@
     <div class="text-light player-grow-content">
       <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
         <PlayerTitle
-          class="flex-grow-1"
           :player-error="playerError"
           :hls-ready="hlsReady"
         />
         <div
           v-if="!playerError && (!radioUrl || isAdPlaying)"
-          class="hide-phone"
+          class="hide-phone ps-2 flex-shrink-0"
         >
           {{ displayPlayTime }} / {{ displayTotalTime }}
         </div>
@@ -26,6 +25,7 @@
       />
     </div>
     <!-- <AdsSkipButton/> -->
+    <PlayerSpeedButton v-if="!radioUrl"/>
     <button
       :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
       class="btn play-button-box btn-transparent text-light saooti-up me-0"
@@ -46,6 +46,7 @@ import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
 /* import AdsSkipButton from "./ads/AdsSkipButton.vue"; */
 import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
+import PlayerSpeedButton from "./elements/PlayerSpeedButton.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 const PlayerProgressBar = defineAsyncComponent(
   () => import("./progressbar/PlayerProgressBar.vue"),
@@ -59,6 +60,8 @@ export default defineComponent({
     PlayerImage,
     PlayerPlayButton,
     PlayerTitle,
+    PlayerSpeedButton,
+    /* AdsSkipButton */
   },
   mixins: [playerDisplayTime, imageProxy],
 

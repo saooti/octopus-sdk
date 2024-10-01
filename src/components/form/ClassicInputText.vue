@@ -18,7 +18,7 @@
           tabindex="0"
           :title="$t('Help')"
         />
-        <ClassicPopover :target="'popover' + inputId">
+        <ClassicPopover :target="'popover' + inputId" popover-class="popover-z-index">
           <!-- eslint-disable vue/no-v-html -->
           <div v-html="popover" />
           <!-- eslint-enable -->
