@@ -137,6 +137,7 @@ export default defineComponent({
     focus: { default: true, type: Boolean },
     isEmojiPicker: { default: false, type: Boolean },
     emojiRelativeClass: { default: undefined, type: String },
+    forceReload:{ default: false, type: Boolean },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {
@@ -182,6 +183,11 @@ export default defineComponent({
     },
   },
   watch: {
+    forceReload(){
+      if (this.textInit !== this.textValue) {
+        this.textValue = this.textInit;
+      }
+    },
     isError() {
       this.$emit("update:errorVariable", this.isError);
     },

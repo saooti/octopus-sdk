@@ -5,7 +5,6 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   computed:{
     isCounter(): boolean {
-      debugger;
       return (
         this.isLiveReadyToRecord &&
         undefined !== this.podcastConference &&
