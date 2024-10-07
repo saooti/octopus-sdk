@@ -14,6 +14,7 @@ export const getCategory = () => import("./src/components/pages/CategoryPage.vue
 export const getRubrique = () => import("./src/components/pages/RubriquePage.vue");
 export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
 export const getRadio = () => import("./src/components/pages/RadioPage.vue");
+export const getVideo = () => import("./src/components/pages/VideoPage.vue");
 
 //Misc
 export const getAccordion = () => import("./src/components/misc/ClassicAccordion.vue");

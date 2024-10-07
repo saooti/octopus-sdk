@@ -135,6 +135,8 @@ export default defineComponent({
     justify-content: center;
     .transcription-text {
       overflow-y: auto;
+      overflow-x: hidden;
+      text-align: justify;
     }
     &::before {
       content: "";
