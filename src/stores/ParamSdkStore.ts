@@ -70,7 +70,7 @@ const state: ParamStore = {
   player: {
     image: true,
     emissionName: false,
-    isVideoPage:true, //TODO
+    isVideoPage:false,
   },
   footer: {
     contactLink: undefined,

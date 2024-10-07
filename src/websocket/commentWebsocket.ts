@@ -1,5 +1,5 @@
 import { CommentMessage } from "@/stores/class/config/commentsConfig";
-import WssConnection from "@/websocket/wss";
+import WssConnection from "./wss";
 
 export default class CommentEngine {
   uri: string;
