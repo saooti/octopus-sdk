@@ -25,12 +25,14 @@
       :participants="podcast.guests"
       :is-guest="true"
     />
+    <PodcastRawTranscript class="mt-3" :podcast-id="podcast.podcastId" />
   </div>
 </template>
 
 <script lang="ts">
 import { Podcast } from "@/stores/class/general/podcast";
 import displayMethods from "../../mixins/displayMethods";
+import PodcastRawTranscript from "./PodcastRawTranscript.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 const ParticipantDescription = defineAsyncComponent(
   () => import("./ParticipantDescription.vue"),
@@ -39,6 +41,7 @@ export default defineComponent({
   name: "VideoModuleBox",
   components: {
     ParticipantDescription,
+    PodcastRawTranscript
   },
 
   mixins: [displayMethods],

@@ -8,22 +8,27 @@
       <div class="mouth" />
     </div>
     <div class="thought">
-      {{ $t("This live will start") }}
-      <span class="text-lowercase">
-        <template v-if="countdownTimer">
-          {{
-            $t("In days hours minutes seconds", {
-              days: pad(days),
-              hours: pad(hours),
-              minutes: pad(minutes),
-              seconds: pad(remainingSeconds),
-            })
-          }}
-        </template>
-        <template v-else>
-          {{ $t("In a moment") }}
-        </template>
-      </span>
+      <template v-if="!overrideText">
+        {{ $t("This live will start") }}
+        <span class="text-lowercase">
+          <template v-if="countdownTimer">
+            {{
+              $t("In days hours minutes seconds", {
+                days: pad(days),
+                hours: pad(hours),
+                minutes: pad(minutes),
+                seconds: pad(remainingSeconds),
+              })
+            }}
+          </template>
+          <template v-else>
+            {{ $t("In a moment") }}
+          </template>
+        </span>
+      </template>
+      <template v-else>
+        {{ overrideText }}
+      </template>
     </div>
   </div>
 </template>
@@ -36,6 +41,7 @@ export default defineComponent({
   name: "CountdownOctopus",
   props: {
     timeRemaining: { default: undefined, type: Number },
+    overrideText: { default: undefined, type: String },
   },
   mixins:[countdown],
   data() {
@@ -65,18 +71,18 @@ $octopus-position: 120px;
     position: absolute;
     top: $octopus-position;
     left: 0;
-    height: 117px;
-    width: 158px;
+    height: 88px;
+    width: 120px;
     background: $octopus-primary-color;
     border-radius: 50% 50% 20% 20%;
   }
   .eyes,
   .eyes::after {
     position: absolute;
-    top: calc(42px + $octopus-position);
-    left: 46px;
-    width: 17.5px;
-    height: 17.5px;
+    top: calc(31.5px + $octopus-position);
+    left: 34.5px;
+    width: 13px;
+    height: 13px;
     background: #1f1d1d;
     border-radius: 50%;
     animation: blinking 3s ease-in-out infinite alternate;
@@ -84,24 +90,24 @@ $octopus-position: 120px;
   .eyes::after {
     content: "";
     top: 0;
-    left: 55px;
+    left: 41.25px;
   }
   .blush {
     position: absolute;
-    top: calc(48px + $octopus-position);
-    left: 13px;
-    width: 27px;
-    height: 27px;
+    top: calc(36px + $octopus-position);
+    left: 9.7px;
+    width: 20px;
+    height: 20px;
     background: #7addab;
     border-radius: 50%;
-    box-shadow: 107x 0 0 0 #7addab;
+    box-shadow: 80px 0 0 0 #7addab;
   }
   .mouth {
     position: absolute;
-    top: calc(48px + $octopus-position);
-    left: 69px;
-    width: 27px;
-    height: 27px;
+    top: calc(36px + $octopus-position);
+    left: 51.7px;
+    width: 20px;
+    height: 20px;
     background: transparent;
     border-radius: 50%;
     box-shadow: 0 7px 0 #1f1d1d;
@@ -111,10 +117,10 @@ $octopus-position: 120px;
   .leg-1::before,
   .leg-1::after {
     position: absolute;
-    top: calc(48px + $octopus-position);
+    top: calc(36px + $octopus-position);
     left: 0;
-    height: 103px;
-    width: 35px;
+    height: 77px;
+    width: 26px;
     background: $octopus-primary-color;
     border-radius: 20% 20% 50% 50%;
     animation: move-left-small 1.5s ease-in-out infinite alternate;
@@ -122,25 +128,25 @@ $octopus-position: 120px;
   }
   .leg-1::after {
     content: "";
-    top: -13px;
-    left: 42px;
+    top: -9.7px;
+    left: 31.5px;
   }
   .leg-1::before {
     animation: move-left 1.5s ease-in-out infinite alternate;
     content: "";
-    top: -35px;
-    left: 117px;
-    box-shadow: -42px 0 0 0 $octopus-primary-color;
+    top: -26px;
+    left: 87.7px;
+    box-shadow: -31.5px 0 0 0 $octopus-primary-color;
     transform: rotate(-35deg);
   }
   @keyframes move-left {
     to {
-      transform: translateY(27.3px);
+      transform: translateY(20px);
     }
   }
   @keyframes move-left-small {
     to {
-      transform: translateY(13px);
+      transform: translateY(9.7px);
     }
   }
   @keyframes blinking {

@@ -1,6 +1,5 @@
 <template>
   <div class="page-box">
-   <!--  TODO live vidéo -->
     <template v-if="loaded && !error">
       <router-link
         :to="{
@@ -20,12 +19,11 @@
             :hls-url="hlsUrl"
             :responsive="true"
           />
-          <!-- TODO pb counter car il faut déjà afficher la vidéo quand c'est PENDING -->
           <div
-            v-else-if="isCounter"
+            v-if="isCounter || overrideText"
             class="d-flex flex-column align-items-center flex-grow-1 blue-bg p-3"
           >
-            <CountdownOctopus :timeRemaining="timeRemaining"/>
+            <CountdownOctopus :timeRemaining="timeRemaining" :overrideText="overrideText"/>
           </div>
         </template>
         <PlayerVideoDigiteka 
@@ -179,6 +177,11 @@ export default defineComponent({
       }
       return `${state.podcastPage.hlsUri}live/video_dev.${this.podcastConference.conferenceId}/index.m3u8`;
     },
+    overrideText(): string|undefined{
+      if("PUBLISHING" ===this.podcastConference?.status){
+        return this.$t('In the process of being published');
+      }
+    }
   },
   watch: {
     podcastId: {
