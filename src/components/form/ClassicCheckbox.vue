@@ -95,6 +95,10 @@ export default defineComponent({
     input:checked + .slider:before {
       transform: translateX(1rem);
     }
+    input:disabled + .slider{
+      cursor: default;
+      background-color: #ccc;
+    }
   }
 }
 </style>
