@@ -120,7 +120,6 @@ export {
     tagOfMixins,
     resizePhone,
     debounce,
-    TopBar,
     useVastStore,
     useSaveFetchStore,
     usePlayerStore,
