@@ -6,7 +6,7 @@
         @click="closePlayer"
       />
       <div class="video-wrapper">
-        <PlayerVideoDigiteka v-if="!playerLive" :videoId="videoId" />
+        <PlayerVideoDigiteka v-if="!playerLive" :video-id="videoId" />
         <PlayerVideoHls v-else :hls-url="hlsUrl" />
       </div>
     </template>
@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { state } from "../../../../stores/ParamSdkStore";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const PlayerVideoDigiteka = defineAsyncComponent(

@@ -15,7 +15,13 @@
       </div>
     </li>
   </ul>
-  <div :class="transparent ? 'd-flex flex-grow-1 classic-nav-tab-container' : 'octopus-tab-content'">
+  <div
+    :class="
+      transparent
+        ? 'd-flex flex-grow-1 classic-nav-tab-container'
+        : 'octopus-tab-content'
+    "
+  >
     <div
       v-for="index in tabNumber"
       v-show="hasSlot('tab' + (index - 1))"

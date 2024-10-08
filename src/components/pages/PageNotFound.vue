@@ -25,8 +25,8 @@
 
 <script lang="ts">
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { useFilterStore } from "@/stores/FilterStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useFilterStore } from "../../stores/FilterStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

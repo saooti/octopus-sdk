@@ -66,7 +66,7 @@ import displayMethods from "../../mixins/displayMethods";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
 import { defineComponent } from "vue";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { Emission } from "@/stores/class/general/emission";

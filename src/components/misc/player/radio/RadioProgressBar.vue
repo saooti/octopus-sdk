@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import dayjs from "dayjs";
 import { defineComponent } from "vue";

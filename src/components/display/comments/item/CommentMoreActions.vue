@@ -60,7 +60,7 @@ import CommentMoreActionsAdmin from "@/components/display/comments/item/CommentM
 import { useAuthStore } from "@/stores/AuthStore";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "@/stores/class/general/podcast";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../../stores/CommentStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";

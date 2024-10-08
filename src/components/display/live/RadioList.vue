@@ -21,7 +21,7 @@ import RadioItem from "./RadioItem.vue";
 import { handle403 } from "../../mixins/handle403";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import octopusApi from "@saooti/octopus-api";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { Canal } from "@/stores/class/radio/canal";
 import { defineComponent } from "vue";

@@ -37,7 +37,7 @@ import octopusApi from "@saooti/octopus-api";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import SwiperList from "../list/SwiperList.vue";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";

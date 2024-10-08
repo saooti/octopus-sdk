@@ -89,7 +89,7 @@ import displayMethods from "../../../mixins/displayMethods";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "../../../../stores/class/general/podcast";
 import CommentBasicView from "./CommentBasicView.vue";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../../stores/CommentStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import {
@@ -232,4 +232,3 @@ export default defineComponent({
   },
 });
 </script>
-

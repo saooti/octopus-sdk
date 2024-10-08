@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import ProgressBar from "../../ProgressBar.vue";
 import { defineComponent, defineAsyncComponent } from "vue";

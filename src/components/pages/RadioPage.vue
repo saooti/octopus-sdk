@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapActions } from "pinia";
 import octopusApi from "@saooti/octopus-api";
 import { state } from "../../stores/ParamSdkStore";

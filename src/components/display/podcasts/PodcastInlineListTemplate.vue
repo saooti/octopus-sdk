@@ -54,7 +54,7 @@
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent } from "vue";
 import { RouteLocationRaw } from "vue-router";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 export default defineComponent({

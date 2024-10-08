@@ -14,8 +14,8 @@
 </template>
 <script lang="ts">
 import { defineAsyncComponent, defineComponent } from "vue";
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { useVastStore } from "@/stores/VastStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
+import { useVastStore } from "../../../../stores/VastStore";
 import { mapState } from "pinia";
 const RadioProgressBar = defineAsyncComponent(
   () => import("../radio/RadioProgressBar.vue"),

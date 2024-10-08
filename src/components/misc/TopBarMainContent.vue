@@ -131,7 +131,7 @@
 import { state } from "../../stores/ParamSdkStore";
 import HomeDropdown from "./HomeDropdown.vue";
 import imageProxy from "../mixins/imageProxy";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import ClassicPopover from "../misc/ClassicPopover.vue";

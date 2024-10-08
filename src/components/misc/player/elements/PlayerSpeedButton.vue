@@ -6,30 +6,30 @@
   >
     {{ "×" + speedArray[speedIndex] }}
   </button>
-    <ClassicPopover
-      target="player-speed-button"
-      relative-class="player-container"
-      class="player-speed-dropdown"
-      :topPos="true"
-      :onlyClick="true"
+  <ClassicPopover
+    target="player-speed-button"
+    relative-class="player-container"
+    class="player-speed-dropdown"
+    :top-pos="true"
+    :only-click="true"
+  >
+    <button
+      v-for="(speed, index) in speedArray"
+      :key="speed"
+      class="octopus-dropdown-item speed-style"
+      @mousedown="changeSpeed(index)"
     >
-      <button
-        v-for="(speed, index) in speedArray"
-        :key="speed"
-        class="octopus-dropdown-item speed-style"
-        @mousedown="changeSpeed(index)"
-      >
-        {{ "×" + speed}}
-      </button>
-    </ClassicPopover>
+      {{ "×" + speed }}
+    </button>
+  </ClassicPopover>
 </template>
 <script lang="ts">
 import ClassicPopover from "../../ClassicPopover.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PlayerSpeedButton",
-  components:{
-    ClassicPopover
+  components: {
+    ClassicPopover,
   },
 
   data() {
@@ -44,7 +44,7 @@ export default defineComponent({
   },
   methods: {
     changeSpeed(index: number) {
-      this.speedIndex =index;
+      this.speedIndex = index;
       if (this.audioPlayer) {
         this.audioPlayer.playbackRate = this.speedArray[this.speedIndex];
       }
@@ -56,10 +56,10 @@ export default defineComponent({
 <style lang="scss">
 @import "@scss/_variables.scss";
 .octopus-app {
-  .speed-style{
+  .speed-style {
     font-size: 12px;
   }
-  .player-speed-dropdown{
+  .player-speed-dropdown {
     min-width: 100px;
   }
 }

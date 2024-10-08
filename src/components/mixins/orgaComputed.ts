@@ -1,5 +1,5 @@
 import { state } from "../../stores/ParamSdkStore";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export const orgaComputed = defineComponent({

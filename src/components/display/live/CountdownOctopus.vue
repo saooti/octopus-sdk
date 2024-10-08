@@ -39,11 +39,11 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "CountdownOctopus",
+  mixins: [countdown],
   props: {
     timeRemaining: { default: undefined, type: Number },
     overrideText: { default: undefined, type: String },
   },
-  mixins:[countdown],
   data() {
     return {
       seconds: 0 as number,
@@ -54,13 +54,12 @@ export default defineComponent({
       remainingSeconds: 0 as number,
     };
   },
-
 });
 </script>
 <style lang="scss">
 @import "@scss/_variables.scss";
 $octopus-position: 120px;
-.octopus-app .cute-octopus{
+.octopus-app .cute-octopus {
   position: relative;
   width: 230px;
   height: 300px;
@@ -209,4 +208,3 @@ $octopus-position: 120px;
   }
 }
 </style>
-

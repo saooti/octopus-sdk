@@ -51,7 +51,7 @@
 </template>
 <script lang="ts">
 import { playerLogic } from "../../mixins/player/playerLogic";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const PlayerVideo = defineAsyncComponent(
@@ -100,9 +100,9 @@ export default defineComponent({
     display() {
       return "STOPPED" !== this.playerStatus;
     },
-    isNotVideoPage(){
+    isNotVideoPage() {
       return "video" !== this.$route.name;
-    }
+    },
   },
 
   watch: {

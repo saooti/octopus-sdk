@@ -57,7 +57,7 @@ import { state } from "../../stores/ParamSdkStore";
 import orgaFilter from "../mixins/organisationFilter";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),

@@ -70,7 +70,7 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { AxiosError } from "axios";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const EmissionItem = defineAsyncComponent(() => import("./EmissionItem.vue"));

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { Organisation } from "@/stores/class/general/organisation";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

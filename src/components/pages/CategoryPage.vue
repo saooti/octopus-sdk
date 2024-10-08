@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import PodcastList from "../display/podcasts/PodcastList.vue";
-import { useFilterStore } from "@/stores/FilterStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useFilterStore } from "../../stores/FilterStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { Category } from "@/stores/class/general/category";

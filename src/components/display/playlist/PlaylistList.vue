@@ -45,7 +45,7 @@ import { handle403 } from "../../mixins/handle403";
 import octopusApi from "@saooti/octopus-api";
 import PlaylistItem from "./PlaylistItem.vue";
 import { Playlist, emptyPlaylistData } from "@/stores/class/general/playlist";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";

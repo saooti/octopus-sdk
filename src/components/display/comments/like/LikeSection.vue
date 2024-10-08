@@ -26,7 +26,7 @@
 import { state } from "../../../../stores/ParamSdkStore";
 import { defineComponent, defineAsyncComponent } from "vue";
 import octopusApi from "@saooti/octopus-api";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../../stores/CommentStore";
 import { mapActions, mapState } from "pinia";
 import {
   CommentFeelings,

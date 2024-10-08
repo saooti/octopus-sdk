@@ -88,10 +88,10 @@ import {
 import { handle403 } from "../mixins/handle403";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Category } from "@/stores/class/general/category";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../stores/CommentStore";
 const ShareButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareButtons.vue"),
 );

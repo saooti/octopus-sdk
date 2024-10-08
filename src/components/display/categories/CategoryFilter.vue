@@ -65,7 +65,7 @@
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { state } from "../../../stores/ParamSdkStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";

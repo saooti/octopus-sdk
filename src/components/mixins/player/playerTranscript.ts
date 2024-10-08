@@ -1,9 +1,9 @@
 import octopusApi from "@saooti/octopus-api";
 import { defineComponent } from "vue";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
-import { useVastStore } from "@/stores/VastStore";
+import { useVastStore } from "../../../stores/VastStore";
 export const playerTranscript = defineComponent({
   computed: {
     ...mapState(usePlayerStore, ["playerTranscript", "playerPodcast", "playerDelayStitching"]),

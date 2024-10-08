@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { useVastStore } from "@/stores/VastStore";
+import { useVastStore } from "../../../../stores/VastStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

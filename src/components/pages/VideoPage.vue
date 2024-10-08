@@ -9,67 +9,73 @@
         }"
         class="mt-3 mb-3 width-fit-content"
       >
-        <span class="saooti-left"/>{{ $t('Episode page') }}
+        <span class="saooti-left" />{{ $t("Episode page") }}
       </router-link>
-     <div v-if="videoId || isLiveReadyToRecord" class="d-flex video-page-container">
-      <div class="w-70-responsive">
-        <template v-if="isLiveReadyToRecord">
-          <PlayerVideoHls 
-            v-if="recordingLive"
-            :hls-url="hlsUrl"
-            :responsive="true"
-          />
-          <div
-            v-if="isCounter || overrideText"
-            class="d-flex flex-column align-items-center flex-grow-1 blue-bg p-3"
-          >
-            <CountdownOctopus :timeRemaining="timeRemaining" :overrideText="overrideText"/>
-          </div>
-        </template>
-        <PlayerVideoDigiteka 
-          v-else
-          :videoId="videoId"
-          :responsive="true"
-        />
-      </div>
-      <div class="w-30-responsive info-video-container">
-        <div class="d-flex flex-column flex-grow-1 w-100">
-          <ClassicNav
-            v-if="tabs.length"
-            v-model:activeTab="activeTab"
-            :tab-number="tabs.length"
-            :transparent="true"
-          >
-            <template v-for="(tab, index) in tabs" #[index]>
-              {{ tab }}
-            </template>
-            <template #tab0>
-              <VideoModuleBox 
+      <div
+        v-if="videoId || isLiveReadyToRecord"
+        class="d-flex video-page-container"
+      >
+        <div class="w-70-responsive">
+          <template v-if="isLiveReadyToRecord">
+            <PlayerVideoHls
+              v-if="recordingLive"
+              :hls-url="hlsUrl"
+              :responsive="true"
+            />
+            <div
+              v-if="isCounter || overrideText"
+              class="d-flex flex-column align-items-center flex-grow-1 blue-bg p-3"
+            >
+              <CountdownOctopus
+                :time-remaining="timeRemaining"
+                :override-text="overrideText"
+              />
+            </div>
+          </template>
+          <PlayerVideoDigiteka v-else :video-id="videoId" :responsive="true" />
+        </div>
+        <div class="w-30-responsive info-video-container">
+          <div class="d-flex flex-column flex-grow-1 w-100">
+            <ClassicNav
+              v-if="tabs.length"
+              v-model:activeTab="activeTab"
+              :tab-number="tabs.length"
+              :transparent="true"
+            >
+              <template v-for="(tab, index) in tabs" #[index]>
+                {{ tab }}
+              </template>
+              <template #tab0>
+                <VideoModuleBox
+                  :podcast="podcast"
+                  :date="date"
+                  :duration="duration"
+                />
+              </template>
+              <template #tab1>
+                <CommentSection
+                  :podcast="podcast"
+                  class="module-box-transparent"
+                />
+              </template>
+            </ClassicNav>
+            <VideoModuleBox
+              v-else
+              class="p-2 video-module-box"
               :podcast="podcast"
               :date="date"
-              :duration="duration"/>
-            </template>
-            <template #tab1>
-              <CommentSection 
-                :podcast="podcast"
-                class="module-box-transparent"
-              />
-            </template>
-          </ClassicNav>
-          <VideoModuleBox 
-            v-else
-            class="p-2 video-module-box"
-            :podcast="podcast"
-            :date="date"
-            :duration="duration"
-          />
+              :duration="duration"
+            />
+          </div>
         </div>
       </div>
-     </div>
     </template>
-    <div 
+    <div
       v-if="!error && !videoId && !isLiveReadyToRecord"
-      class="text-center text-danger h3">{{$t('The episode does not have an associated video')}}</div> 
+      class="text-center text-danger h3"
+    >
+      {{ $t("The episode does not have an associated video") }}
+    </div>
     <ClassicLoading
       :loading-text="!loaded ? $t('Loading content ...') : undefined"
       :error-text="
@@ -92,11 +98,14 @@ import { handle403 } from "../mixins/handle403";
 import podcastView from "../mixins/podcast/podcastView";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../stores/CommentStore";
 import { mapActions } from "pinia";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";
-import { Conference, ConferencePublicInfo } from "@/stores/class/conference/conference";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import {
+  Conference,
+  ConferencePublicInfo,
+} from "@/stores/class/conference/conference";
+import { usePlayerStore } from "../../stores/PlayerStore";
 const PlayerVideoDigiteka = defineAsyncComponent(
   () => import("../misc/player/video/PlayerVideoDigiteka.vue"),
 );
@@ -112,7 +121,6 @@ const VideoModuleBox = defineAsyncComponent(
 const CountdownOctopus = defineAsyncComponent(
   () => import("../display/live/CountdownOctopus.vue"),
 );
-const Countdown = defineAsyncComponent(() => import("../display/live/CountDown.vue"));
 export default defineComponent({
   name: "VideoPage",
   components: {
@@ -122,8 +130,7 @@ export default defineComponent({
     CommentSection,
     VideoModuleBox,
     PlayerVideoHls,
-    Countdown,
-    CountdownOctopus
+    CountdownOctopus,
   },
 
   mixins: [handle403, orgaComputed, podcastView],
@@ -140,15 +147,17 @@ export default defineComponent({
       activeTab: 0 as number,
       configPodcast: undefined as CommentsConfig | undefined,
       podcastConference: undefined as Conference | undefined,
-      intervalStatusConference: undefined as ReturnType<typeof setTimeout> | undefined,
+      intervalStatusConference: undefined as
+        | ReturnType<typeof setTimeout>
+        | undefined,
     };
   },
-  computed:{
+  computed: {
     videoId(): string | undefined {
       return this.podcast?.video?.videoId;
     },
     tabs(): Array<string> {
-      if(this.canPostComment){
+      if (this.canPostComment) {
         return [this.$t("Information"), this.$t("Comments")];
       }
       return [];
@@ -172,23 +181,26 @@ export default defineComponent({
       );
     },
     hlsUrl(): string {
-      if (!this.recordingLive ||!this.podcastConference ) {
+      if (!this.recordingLive || !this.podcastConference) {
         return "";
       }
       return `${state.podcastPage.hlsUri}live/video_dev.${this.podcastConference.conferenceId}/index.m3u8`;
     },
-    overrideText(): string|undefined{
-      if("PUBLISHING" ===this.podcastConference?.status){
-        return this.$t('In the process of being published');
+    overrideText(): string | undefined {
+      if ("PUBLISHING" !== this.podcastConference?.status) {
+        return;
       }
-    }
+      return this.$t("In the process of being published");
+    },
   },
   watch: {
     podcastId: {
       immediate: true,
       async handler() {
         await this.getPodcastDetails();
-        if(!this.podcast){return;}
+        if (!this.podcast) {
+          return;
+        }
         this.initCommentUser();
         this.configPodcast = await this.getCommentsConfig(this.podcast);
       },
@@ -209,19 +221,34 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        this.podcast = await octopusApi.fetchData<Podcast>(0,"podcast/" + this.podcastId,);
-        document.title =  this.podcast.title;
-        const orga= this.podcast.organisation;
-        const privateAccess="PUBLIC" !==orga.privacy &&this.filterOrgaId !==orga.id &&this.$route.query.productor !== orga.id;
-        const notValid=(!this.podcast.availability.visibility ||!["READY_TO_RECORD", "READY", "PROCESSING"].includes(this.podcast.processingStatus??"") || !this.podcast.valid) &&!this.editRight;
-        if (privateAccess ||notValid) {
+        this.podcast = await octopusApi.fetchData<Podcast>(
+          0,
+          "podcast/" + this.podcastId,
+        );
+        document.title = this.podcast.title;
+        const orga = this.podcast.organisation;
+        const privateAccess =
+          "PUBLIC" !== orga.privacy &&
+          this.filterOrgaId !== orga.id &&
+          this.$route.query.productor !== orga.id;
+        const notValid =
+          (!this.podcast.availability.visibility ||
+            !["READY_TO_RECORD", "READY", "PROCESSING"].includes(
+              this.podcast.processingStatus ?? "",
+            ) ||
+            !this.podcast.valid) &&
+          !this.editRight;
+        if (privateAccess || notValid) {
           this.error = true;
-        }else if(this.podcast.conferenceId){
+        } else if (this.podcast.conferenceId) {
           await this.fetchConferenceStatus();
           this.intervalStatusConference = setInterval(() => {
             this.fetchConferenceStatus();
           }, 3000);
-          this.playerPlay({...this.podcast,...{ conferenceId: this.podcast.conferenceId }},true);
+          this.playerPlay(
+            { ...this.podcast, ...{ conferenceId: this.podcast.conferenceId } },
+            true,
+          );
         }
       } catch (error) {
         this.handle403(error as AxiosError);
@@ -253,50 +280,52 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import "@scss/_variables.scss";
-.octopus-app .video-page-container{
+.octopus-app .video-page-container {
   align-items: stretch;
   flex-grow: 1;
   background: $primaryColorReallyTransparent;
-  border-radius:$octopus-borderradius;
+  border-radius: $octopus-borderradius;
   box-shadow: 0 0 10px 1px $primaryColorTransparent;
-  .info-video-container{
+  .info-video-container {
     display: flex;
     flex-direction: column;
-    .octopus-tab-pane, .video-module-box{
+    .octopus-tab-pane,
+    .video-module-box {
       height: 0;
       overflow-y: auto;
       @media (max-width: 960px) {
         height: inherit;
       }
     }
-    .classic-nav-tab-container{
+    .classic-nav-tab-container {
       flex-direction: column;
     }
   }
-  .module-box.module-box-transparent{
-    margin : 0;
+  .module-box.module-box-transparent {
+    margin: 0;
     background: transparent;
     border: 0;
-    padding:0;
+    padding: 0;
   }
-  .w-70-responsive{
+  .w-70-responsive {
     width: 70%;
     aspect-ratio: 16/9;
   }
-  .w-30-responsive{
+  .w-30-responsive {
     width: 30%;
   }
-  .w-70-responsive, .w-30-responsive{
+  .w-70-responsive,
+  .w-30-responsive {
     display: flex;
     align-items: stretch;
     flex-grow: 1;
     @media (max-width: 960px) {
-      width:100%;
+      width: 100%;
       padding: 0 !important;
     }
   }
-  .really-light-secondary-bg{
-    background:white;
+  .really-light-secondary-bg {
+    background: white;
   }
 }
 </style>

@@ -151,7 +151,7 @@ export default defineComponent({
           title: "TuneIn",
           url: this.getUrl("tunein"),
         },
-         {
+        {
           name: "youtube",
           icon: "saooti-youtube",
           title: "YouTube Music",

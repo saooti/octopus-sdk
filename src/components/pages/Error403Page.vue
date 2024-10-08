@@ -34,7 +34,7 @@
 <script lang="ts">
 import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

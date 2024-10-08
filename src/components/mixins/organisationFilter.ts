@@ -1,12 +1,12 @@
 import { handle403 } from "../mixins/handle403";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import octopusApi from "@saooti/octopus-api";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
 import { state } from "../../stores/ParamSdkStore";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../stores/SaveFetchStore";
 export default defineComponent({
   mixins: [handle403],
   methods: {

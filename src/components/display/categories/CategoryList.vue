@@ -43,8 +43,8 @@ import octopusApi from "@saooti/octopus-api";
 import { state } from "../../../stores/ParamSdkStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Category } from "@/stores/class/general/category";
-import { useFilterStore } from "@/stores/FilterStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useFilterStore } from "../../../stores/FilterStore";
+import { useGeneralStore } from "../../../stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

@@ -32,8 +32,8 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { useFilterStore } from "@/stores/FilterStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import imageProxy from "../../mixins/imageProxy";
 import { fetchRadioData } from "../../mixins/radio/fetchRadioData";

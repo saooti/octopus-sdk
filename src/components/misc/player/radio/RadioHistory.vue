@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState } from "pinia";
 import dayjs from "dayjs";
 import { fetchRadioData } from "../../../mixins/radio/fetchRadioData";

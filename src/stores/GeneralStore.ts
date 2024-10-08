@@ -13,7 +13,7 @@ interface GeneralState {
   storedCategoriesOrga: Array<Category>;
   isBeforeLive: boolean;
   consentTcf: string | null;
-  contentToDisplay: Podcast|Emission|Playlist|Canal|null;
+  contentToDisplay: Podcast | Emission | Playlist | Canal | null;
 }
 export const useGeneralStore = defineStore("GeneralStore", {
   state: (): GeneralState => ({
@@ -24,10 +24,12 @@ export const useGeneralStore = defineStore("GeneralStore", {
     storedCategoriesOrga: [],
     isBeforeLive: true,
     consentTcf: null,
-    contentToDisplay: null
+    contentToDisplay: null,
   }),
   actions: {
-    contentToDisplayUpdate(contentToDisplay:Podcast|Emission|Playlist|Canal|null) {
+    contentToDisplayUpdate(
+      contentToDisplay: Podcast | Emission | Playlist | Canal | null,
+    ) {
       this.contentToDisplay = contentToDisplay;
     },
     storedUpdateCategories(categories: Array<Category>) {

@@ -58,8 +58,8 @@ import { CommentCreate, CommentPodcast } from "@/stores/class/general/comment";
 import Constants from "../../../../public/config";
 import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
-import { useCommentStore } from "@/stores/CommentStore";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { useCommentStore } from "../../../stores/CommentStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 const CheckIdentityModal = defineAsyncComponent(
   () => import("./modal/CheckIdentityModal.vue"),
 );

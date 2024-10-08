@@ -49,7 +49,7 @@ import { state } from "../../stores/ParamSdkStore";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import ClassicModal from "../../modal/ClassicModal.vue";
 import { defineComponent } from "vue";

@@ -41,7 +41,7 @@
 <script lang="ts">
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { state } from "../../../stores/ParamSdkStore";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";

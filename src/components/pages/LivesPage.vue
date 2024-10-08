@@ -20,7 +20,7 @@
 import { state } from "../../stores/ParamSdkStore";
 import { Organisation } from "@/stores/class/general/organisation";
 import { defineComponent, defineAsyncComponent } from "vue";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 const LiveList = defineAsyncComponent(
   () => import("../display/live/LiveList.vue"),

@@ -55,7 +55,7 @@ import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 const RubriqueChooser = defineAsyncComponent(

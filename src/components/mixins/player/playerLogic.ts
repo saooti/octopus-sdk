@@ -6,11 +6,11 @@ import { playerTranscript } from "./playerTranscript";
 import { playerStitching } from "./playerStitching";
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/stores/AuthStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { useGeneralStore } from "../../../stores/GeneralStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { FetchParam } from "@/stores/class/general/fetchParam";
-import { useVastStore } from "@/stores/VastStore";
+import { useVastStore } from "../../../stores/VastStore";
 import dayjs from "dayjs";
 export const playerLogic = defineComponent({
   mixins: [cookies, playerLive, playerTranscript, playerStitching],

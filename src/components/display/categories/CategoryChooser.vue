@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../../stores/GeneralStore";
 import { mapState } from "pinia";
 import ClassicMultiselect from "../../form/ClassicMultiselect.vue";
 import { Category } from "@/stores/class/general/category";

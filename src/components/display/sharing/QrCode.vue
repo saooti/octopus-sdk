@@ -27,7 +27,7 @@ import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import SnackBar from "../../misc/SnackBar.vue";
 import QrcodeVue from "qrcode.vue";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";

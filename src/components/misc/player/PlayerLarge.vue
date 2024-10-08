@@ -69,7 +69,7 @@ import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { mapState, mapActions } from "pinia";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 const RadioHistory = defineAsyncComponent(
   () => import("./radio/RadioHistory.vue"),
 );

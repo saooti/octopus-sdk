@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { useVastStore } from "@/stores/VastStore";
+import { useVastStore } from "../../../../stores/VastStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

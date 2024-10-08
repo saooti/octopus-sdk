@@ -1,5 +1,5 @@
 
-import {debounce} from './debounce';
+import debounce from './debounce';
 import { defineComponent } from 'vue';
 export default defineComponent({
   data() {

@@ -19,7 +19,7 @@
 </template>
 <script lang="ts">
 import { ChapterPercent } from "@/stores/class/chaptering/chaptering";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 const ChapteringModal = defineAsyncComponent(

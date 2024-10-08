@@ -1,7 +1,7 @@
 import octopusApi from "@saooti/octopus-api";
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/stores/AuthStore";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState } from "pinia";
 export const playerLogicProgress = defineComponent({
   mixins: [],

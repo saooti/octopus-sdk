@@ -18,7 +18,10 @@
           tabindex="0"
           :title="$t('Help')"
         />
-        <ClassicPopover :target="'popover' + inputId" popover-class="popover-z-index">
+        <ClassicPopover
+          :target="'popover' + inputId"
+          popover-class="popover-z-index"
+        >
           <!-- eslint-disable vue/no-v-html -->
           <div v-html="popover" />
           <!-- eslint-enable -->
@@ -137,7 +140,7 @@ export default defineComponent({
     focus: { default: true, type: Boolean },
     isEmojiPicker: { default: false, type: Boolean },
     emojiRelativeClass: { default: undefined, type: String },
-    forceReload:{ default: false, type: Boolean },
+    forceReload: { default: false, type: Boolean },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {
@@ -183,7 +186,7 @@ export default defineComponent({
     },
   },
   watch: {
-    forceReload(){
+    forceReload() {
       if (this.textInit !== this.textValue) {
         this.textValue = this.textInit;
       }

@@ -1,5 +1,9 @@
 <template>
-  <div id="player-video-hls" class="video-player" :class="responsive? 'video-responsive-wrapper':''">
+  <div
+    id="player-video-hls"
+    class="video-player"
+    :class="responsive ? 'video-responsive-wrapper' : ''"
+  >
     <div v-if="errorPlay.length" class="video-live-error">{{ errorPlay }}</div>
     <video
       id="video-element-hls"
@@ -10,7 +14,7 @@
   </div>
 </template>
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapActions } from "pinia";
 import { playerLogicProgress } from "../../../mixins/player/playerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
@@ -25,7 +29,7 @@ export default defineComponent({
 
   props: {
     hlsUrl: { default: "", type: String },
-    responsive:{default: false, type: Boolean}
+    responsive: { default: false, type: Boolean },
   },
   emits: ["changeValid"],
   data() {

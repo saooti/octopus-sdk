@@ -50,14 +50,14 @@ import SwiperList from "../list/SwiperList.vue";
 import { handle403 } from "../../mixins/handle403";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import octopusApi from "@saooti/octopus-api";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapActions, mapState } from "pinia";
 import { state } from "../../../stores/ParamSdkStore";
 import { Conference } from "@/stores/class/conference/conference";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 export default defineComponent({
   name: "LiveList",
   components: {

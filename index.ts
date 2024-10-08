@@ -34,6 +34,7 @@ export const getClassicModal = () => import("./src/components/misc/modal/Classic
 export const getClassicLazy = () => import("./src/components/misc/ClassicLazy.vue");
 
 
+
 //Display
 export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
 export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");
@@ -91,10 +92,23 @@ import orgaFilter from "./src/components/mixins/organisationFilter.ts";
 import initSDK from "./src/components/mixins/init.ts";
 import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
 import resizePhone from "./src/components/mixins/resizePhone.ts";
-import commentWebsocket from "./src/websocket/commentWebsocket.ts";
+import debounce from "./src/components/mixins/debounce.ts";
 
 
-import TopBar from "./src/components/misc/TopBar.vue";
+//helper
+import domHelper from "./src/helper/dom.ts";
+import durationHelper from "./src/helper/duration.ts";
+import stringHelper from "./src/helper/string.ts";
+
+
+//stores
+import {useVastStore} from "./src/stores/VastStore.ts";
+import {useSaveFetchStore} from "./src/stores/SaveFetchStore.ts";
+import {usePlayerStore} from "./src/stores/PlayerStore.ts";
+import {useGeneralStore} from "./src/stores/GeneralStore.ts";
+import {useFilterStore} from "./src/stores/FilterStore.ts";
+import {useCommentStore} from "./src/stores/CommentStore.ts";
+
 
 export {
     selenium,
@@ -105,6 +119,15 @@ export {
     initSDK,
     tagOfMixins,
     resizePhone,
-    commentWebsocket,
-    TopBar
+    debounce,
+    TopBar,
+    useVastStore,
+    useSaveFetchStore,
+    usePlayerStore,
+    useGeneralStore,
+    useFilterStore,
+    useCommentStore,
+    domHelper,
+    durationHelper,
+    stringHelper
 };

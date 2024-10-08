@@ -22,8 +22,8 @@
 import ClassicSpinner from "../../ClassicSpinner.vue";
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { useVastStore } from "@/stores/VastStore";
+import { usePlayerStore } from "../../../../stores/PlayerStore";
+import { useVastStore } from "../../../../stores/VastStore";
 export default defineComponent({
   name: "PlayerPlayButton",
 

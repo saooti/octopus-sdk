@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Participant } from "@/stores/class/general/participant";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

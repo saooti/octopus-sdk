@@ -17,7 +17,7 @@
 <script lang="ts">
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import CategoryChooser from "../categories/CategoryChooser.vue";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

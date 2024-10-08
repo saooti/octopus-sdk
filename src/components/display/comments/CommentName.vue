@@ -42,7 +42,7 @@ import Constants from "../../../../public/config";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../stores/CommentStore";
 export default defineComponent({
   name: "CommentName",
   emits: [],

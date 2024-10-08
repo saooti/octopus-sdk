@@ -107,7 +107,7 @@ import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
 import { mapActions } from "pinia";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { Podcast } from "@/stores/class/general/podcast";
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),

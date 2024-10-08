@@ -39,7 +39,7 @@ import ClassicInputText from "../../../form/ClassicInputText.vue";
 import RecaptchaModal from "./RecaptchaModal.vue";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../../stores/CommentStore";
 import octopusApi from "@saooti/octopus-api";
 import {
   CommentAbuseInfo,

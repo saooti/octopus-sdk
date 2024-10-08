@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import imageProxy from "../../mixins/imageProxy";
 import RadioImage from "./RadioImage.vue";

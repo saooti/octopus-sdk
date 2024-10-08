@@ -2,7 +2,7 @@ import { state } from "../../../stores/ParamSdkStore";
 import uuidGenerator from "../../../helper/uuidGenerator";
 import dayjs from "dayjs";
 import { playerLogicProgress} from "./playerLogicProgress";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "@/stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 /* eslint-disable */

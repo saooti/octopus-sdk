@@ -102,7 +102,17 @@
         data-selenium="lineBreak"
         @click="editor.chain().focus().setHardBreak().run()"
       >
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6v6H7.83l2.58-2.59L9 8l-5 5l5 5l1.41-1.41L7.83 14H20V6h-2Z"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M18 6v6H7.83l2.58-2.59L9 8l-5 5l5 5l1.41-1.41L7.83 14H20V6h-2Z"
+          />
+        </svg>
       </button>
 
       <button
@@ -223,7 +233,7 @@ export default defineComponent({
         Link.configure({
           openOnClick: false,
         }),
-        HardBreak
+        HardBreak,
       ],
       content: "",
       editable: true !== this.isDisabled,

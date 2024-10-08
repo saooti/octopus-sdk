@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapActions } from "pinia";
 import { orgaComputed } from "../mixins/orgaComputed";
 import ClassicLoading from "../form/ClassicLoading.vue";

@@ -1,11 +1,8 @@
 <template>
   <div class="classic-select" :class="{ 'form-margin': displayLabel }">
-    <label
-      v-show="displayLabel"
-      :for="idSelect"
-      :class="classLabel"
-      >{{ label }}</label
-    >
+    <label v-show="displayLabel" :for="idSelect" :class="classLabel">{{
+      label
+    }}</label>
     <select
       :id="idSelect"
       :value="textInit"

@@ -20,7 +20,7 @@
 import ProgressBar from "../../misc/ProgressBar.vue";
 import DurationHelper from "../../../helper/duration";
 import displayMethods from "../../mixins/displayMethods";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

@@ -56,7 +56,7 @@ import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
 import resizePhone from "../../mixins/resizePhone";
 import { defineComponent } from "vue";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState } from "pinia";
 export default defineComponent({
   name: "ListPaginate",

@@ -21,9 +21,9 @@
 import countdown from "../../mixins/podcast/countdown";
 import { defineComponent } from "vue";
 export default defineComponent({
+  mixins: [countdown],
   props: {
     timeRemaining: { default: undefined, type: Number },
   },
-  mixins:[countdown]
 });
 </script>

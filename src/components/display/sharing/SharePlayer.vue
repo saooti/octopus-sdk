@@ -98,7 +98,7 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
 import { useAuthStore } from "@/stores/AuthStore";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const ShareModalPlayer = defineAsyncComponent(

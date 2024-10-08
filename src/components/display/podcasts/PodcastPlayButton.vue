@@ -68,7 +68,7 @@ import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import imageProxy from "../../mixins/imageProxy";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -209,8 +209,8 @@ export default defineComponent({
         this.playerChangeStatus("PLAYING" === this.playerStatus);
         return;
       }
-      if(isVideo && state.player.isVideoPage){
-        this.$router.push('/main/pub/video/'+this.podcast.podcastId);
+      if (isVideo && state.player.isVideoPage) {
+        this.$router.push("/main/pub/video/" + this.podcast.podcastId);
         return;
       }
       if (!this.recordingLive) {

@@ -1,8 +1,8 @@
 
 import { defineComponent } from "vue";
 import DurationHelper from "../../../helper/duration";
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { useVastStore } from "@/stores/VastStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
+import { useVastStore } from "../../../stores/VastStore";
 import { mapState } from "pinia";
 export const playerDisplayTime = defineComponent({
 

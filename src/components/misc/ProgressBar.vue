@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../stores/PlayerStore";
 import { mapState } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 const ClassicPopover = defineAsyncComponent(

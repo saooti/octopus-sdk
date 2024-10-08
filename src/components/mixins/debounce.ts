@@ -1,4 +1,4 @@
-export function debounce<Params extends any[]>(
+export default function debounce<Params extends any[]>(
   func: (...args: Params) => any,
   timeout: number,
 ): (...args: Params) => void {

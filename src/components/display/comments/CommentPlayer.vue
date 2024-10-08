@@ -35,10 +35,10 @@
 <script lang="ts">
 import { CommentPodcast } from "@/stores/class/general/comment";
 import selenium from "../../mixins/selenium";
-import { usePlayerStore } from "@/stores/PlayerStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../stores/CommentStore";
 export default defineComponent({
   name: "CommentPlayer",
   mixins: [selenium],

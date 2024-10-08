@@ -52,7 +52,7 @@ import PodcastItem from "./PodcastItem.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { useAuthStore } from "@/stores/AuthStore";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";

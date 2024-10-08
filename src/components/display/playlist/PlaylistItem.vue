@@ -53,7 +53,7 @@ import { Playlist } from "@/stores/class/general/playlist";
 import { state } from "../../../stores/ParamSdkStore";
 import imageProxy from "../../mixins/imageProxy";
 import displayMethods from "../../mixins/displayMethods";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({

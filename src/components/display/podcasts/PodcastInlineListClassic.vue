@@ -54,7 +54,7 @@ import domHelper from "../../../helper/dom";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 const PHONE_WIDTH = 960;
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";

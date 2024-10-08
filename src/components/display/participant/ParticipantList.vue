@@ -46,7 +46,7 @@ import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { handle403 } from "../../mixins/handle403";
 import octopusApi from "@saooti/octopus-api";
 import ParticipantItem from "./ParticipantItem.vue";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import {
   Participant,

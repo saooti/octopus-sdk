@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { debounce } from "../../mixins/debounce";
+import debounce from "../../mixins/debounce";
 import PodcastItemInfo from "./PodcastItemInfo.vue";
 import PodcastImage from "./PodcastImage.vue";
 import { state } from "../../../stores/ParamSdkStore";

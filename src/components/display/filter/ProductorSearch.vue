@@ -46,7 +46,7 @@ import ClassicSearch from "../../form/ClassicSearch.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import orgaFilter from "../../mixins/organisationFilter";
 import { Organisation } from "@/stores/class/general/organisation";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const OrganisationChooser = defineAsyncComponent(

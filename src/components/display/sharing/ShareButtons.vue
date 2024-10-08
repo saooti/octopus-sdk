@@ -130,7 +130,7 @@
 </template>
 
 <script lang="ts">
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapActions, mapState } from "pinia";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";

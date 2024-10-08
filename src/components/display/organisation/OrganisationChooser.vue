@@ -48,7 +48,7 @@ import {
   emptyOrgaData,
   Organisation,
 } from "@/stores/class/general/organisation";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
+import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   components: {

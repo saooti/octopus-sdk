@@ -4,10 +4,7 @@
     <PlayerPlayButton :player-error="playerError" />
     <div class="text-light player-grow-content">
       <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
-        <PlayerTitle
-          :player-error="playerError"
-          :hls-ready="hlsReady"
-        />
+        <PlayerTitle :player-error="playerError" :hls-ready="hlsReady" />
         <div
           v-if="!playerError && (!radioUrl || isAdPlaying)"
           class="hide-phone ps-2 flex-shrink-0"
@@ -25,7 +22,7 @@
       />
     </div>
     <!-- <AdsSkipButton/> -->
-    <PlayerSpeedButton v-if="!radioUrl"/>
+    <PlayerSpeedButton v-if="!radioUrl" />
     <button
       :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
       class="btn play-button-box btn-transparent text-light saooti-up me-0"

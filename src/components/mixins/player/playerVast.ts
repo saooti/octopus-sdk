@@ -1,7 +1,7 @@
 import { defineComponent } from "vue";
 import { loadScript } from "../loadScript";
-import { usePlayerStore } from "@/stores/PlayerStore";
-import { useVastStore } from "@/stores/VastStore";
+import { usePlayerStore } from "../../../stores/PlayerStore";
+import { useVastStore } from "../../../stores/VastStore";
 import { mapState, mapActions } from "pinia";
 
 let adsLoader: any;

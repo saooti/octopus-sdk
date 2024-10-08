@@ -27,7 +27,7 @@ import imageProxy from "../mixins/imageProxy";
 import TopBarMainContent from "./TopBarMainContent.vue";
 import { mapState } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
-import { useGeneralStore } from "@/stores/GeneralStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Emission } from "@/stores/class/general/emission";
 import resizePhone from "../mixins/resizePhone";

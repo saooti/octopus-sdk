@@ -45,7 +45,7 @@ import { orgaComputed } from "../mixins/orgaComputed";
 import EmissionList from "../display/emission/EmissionList.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import { state } from "../../stores/ParamSdkStore";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";

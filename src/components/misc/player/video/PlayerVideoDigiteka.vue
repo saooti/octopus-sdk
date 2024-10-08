@@ -1,5 +1,5 @@
 <template>
-  <div :class="responsive? 'video-responsive-wrapper':''">
+  <div :class="responsive ? 'video-responsive-wrapper' : ''">
     <iframe
       v-if="videoId"
       ref="iframeVideo"
@@ -28,7 +28,7 @@ export default defineComponent({
   },
   props: {
     videoId: { default: undefined, type: String },
-    responsive:{default: false, type: Boolean}
+    responsive: { default: false, type: Boolean },
   },
 
   computed: {

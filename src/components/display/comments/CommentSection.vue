@@ -30,7 +30,7 @@ import cookies from "../../mixins/cookies";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
-import { useCommentStore } from "@/stores/CommentStore";
+import { useCommentStore } from "../../../stores/CommentStore";
 import {
   CommentMessage,
   CommentsConfig,

@@ -16,10 +16,7 @@
       v-html="urlify(podcast.description)"
     />
     <!-- eslint-enable -->
-    <ParticipantDescription
-      class="mb-1"
-      :participants="podcast.animators"
-    />
+    <ParticipantDescription class="mb-1" :participants="podcast.animators" />
     <ParticipantDescription
       class="mb-1"
       :participants="podcast.guests"
@@ -41,22 +38,20 @@ export default defineComponent({
   name: "VideoModuleBox",
   components: {
     ParticipantDescription,
-    PodcastRawTranscript
+    PodcastRawTranscript,
   },
 
   mixins: [displayMethods],
 
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
-    date: { default: "", type: String},
-    duration: { default: "", type: String},
+    date: { default: "", type: String },
+    duration: { default: "", type: String },
   },
 
   data() {
-    return {
-    };
+    return {};
   },
-  computed:{
-  },
+  computed: {},
 });
 </script>
