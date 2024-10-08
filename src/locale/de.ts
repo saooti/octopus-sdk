@@ -390,4 +390,5 @@ export default {
   "Change speed":"Geschwindigkeit ändern",
   "Hide transcript":"Transkript ausblenden",
   "Transcript does not yet exist for this episode":"Für diese Episode existiert noch kein Transkript",
+  "Line break":"Zeilenumbruch",
 }

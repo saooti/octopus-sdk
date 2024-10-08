@@ -381,4 +381,5 @@ export default {
   "Change speed":"Spremenite hitrost",
   "Hide transcript":"Skrij prepis",
   "Transcript does not yet exist for this episode":"Prepis za to epizodo še ne obstaja",
+  "Line break":"Prelom vrstice",
 }

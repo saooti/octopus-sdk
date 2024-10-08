@@ -391,4 +391,5 @@ export default {
   "Change speed":"Change speed",
   "Hide transcript":"Hide transcript",
   "Transcript does not yet exist for this episode":"Transcript does not yet exist for this episode",
+  "Line break":"Line break",
 };

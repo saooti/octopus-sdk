@@ -385,4 +385,5 @@ export default{
   "Change speed":"Cambia velocità",
   "Hide transcript":"Nascondi trascrizione",
   "Transcript does not yet exist for this episode":"La trascrizione di questo episodio non esiste ancora",
+  "Line break":"Interruzione di riga",
 };

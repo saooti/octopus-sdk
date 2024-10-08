@@ -98,6 +98,14 @@
         H4
       </button>
       <button
+        :title="$t('Line break')"
+        data-selenium="lineBreak"
+        @click="editor.chain().focus().setHardBreak().run()"
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6v6H7.83l2.58-2.59L9 8l-5 5l5 5l1.41-1.41L7.83 14H20V6h-2Z"/></svg>
+      </button>
+
+      <button
         :title="$t('UnorderedList')"
         data-selenium="UnorderedList"
         class="saooti-ul"
@@ -170,6 +178,7 @@ import { EditorContent, Editor } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
+import HardBreak from "@tiptap/extension-hard-break";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ClassicWysiwyg",
@@ -214,6 +223,7 @@ export default defineComponent({
         Link.configure({
           openOnClick: false,
         }),
+        HardBreak
       ],
       content: "",
       editable: true !== this.isDisabled,
