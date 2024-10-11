@@ -51,5 +51,9 @@ export const useGeneralStore = defineStore("GeneralStore", {
         this.metaTitle = "RadioEducation.org";
       }
     },
+    metaTitleUpdate(title: string) {
+      this.metaTitle = title;
+    },
+
   },
 });

@@ -5,7 +5,7 @@
         :key="manualReload"
         :slides-per-view="numberItem"
         :space-between="0"
-        :loop="isLoop"
+        :loop="true"
         :slides-offset-before="offsetSwiper"
         :slides-offset-after="offsetSwiper"
         :navigation="true"
@@ -73,9 +73,9 @@ export default defineComponent({
         ? state.generalParameters.podcastItem
         : 13.5;
     },
-    isLoop(): boolean {
+    /* isLoop(): boolean {
       return this.listObject.length >= this.numberItem;
-    },
+    }, */
     itemRecalculizedSize(): number {
       return this.widthSwiperUsable / this.numberItem;
     },
@@ -146,6 +146,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
 }
+
 .swiper-button-next,
 .swiper-button-prev {
   color: $octopus-primary-color !important;
@@ -160,7 +161,7 @@ export default defineComponent({
   display: flex;
 }
 .swiper-slide {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }

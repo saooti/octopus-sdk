@@ -27,6 +27,7 @@
       :id="'comment-dropdown' + comment.commentId"
       class="btn share-btn saooti-more_vert"
       :title="$t('See more')"
+      :data-selenium="'comment-dropdown-' + seleniumFormat(comment.poster.userName)"
     />
     <ClassicPopover
       :target="'comment-dropdown' + comment.commentId"
@@ -53,6 +54,7 @@
 </template>
 
 <script lang="ts">
+import selenium from "../../../mixins/selenium";
 import { state } from "../../../../stores/ParamSdkStore";
 import octopusApi from "@saooti/octopus-api";
 import crudApi from "@/api/classicCrud";
@@ -95,7 +97,7 @@ export default defineComponent({
   },
 
   emits: ["update:comment", "deleteComment"],
-
+  mixins: [selenium],
   data() {
     return {
       isEdit: false as boolean,

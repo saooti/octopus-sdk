@@ -54,8 +54,6 @@ export const getLiveList = () => import("./src/components/display/live/LiveList.
 export const getEmissionPresentationList = () => import("./src/components/display/emission/EmissionPresentationList.vue");
 export const getPodcastPlayButton = () => import("./src/components/display/podcasts/PodcastPlayButton.vue");
 
-
-
 //Radio
 export const getRadioCurrently = () => import("./src/components/display/live/RadioCurrently.vue");
 export const getRadioPlanning = () => import("./src/components/display/live/RadioPlanning.vue");
@@ -81,6 +79,8 @@ export const getClassicMultiselect = () => import("./src/components/form/Classic
 export const getClassicInputText = () => import("./src/components/form/ClassicInputText.vue");
 export const getClassicEmojiPicker = () => import("./src/components/form/ClassicEmojiPicker.vue");
 export const getClassicContentEditable = () => import("./src/components/form/ClassicContentEditable.vue");
+export const getSwiperList = () => import("./src/components/display/list/SwiperList.vue");
+
 
 //mixins
 
