@@ -187,6 +187,7 @@
 import { EditorContent, Editor } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import TextStyle from '@tiptap/extension-text-style'
 import Link from "@tiptap/extension-link";
 import HardBreak from "@tiptap/extension-hard-break";
 import { defineComponent } from "vue";
@@ -230,6 +231,7 @@ export default defineComponent({
       extensions: [
         StarterKit,
         Underline,
+        TextStyle,
         Link.configure({
           openOnClick: false,
         }),
