@@ -23,8 +23,20 @@
         :alt="$t('Emission name image', { name: emission.name })"
       />
       <div class="emission-item-text">
-        <div class="d-flex align-items-center emission-name">
+        <div class="emission-name mb-2">
           {{ emission.name }}
+        </div>
+        <div
+          v-if="!isPhone && isDescription"
+          ref="descriptionEmissionContainer"
+          class="emission-description htms-wysiwyg-content"
+        >
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            ref="descriptionEmission"
+            v-html="urlify(emission.description || '')"
+          />
+          <!-- eslint-enable -->
         </div>
       </div>
     </router-link>
@@ -33,6 +45,7 @@
 
 <script lang="ts">
 import { orgaComputed } from "../../mixins/orgaComputed";
+import resizePhone from "../../mixins/resizePhone";
 import { Emission } from "@/stores/class/general/emission";
 import imageProxy from "../../mixins/imageProxy";
 import displayMethods from "../../mixins/displayMethods";
@@ -40,12 +53,40 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "EmissionItem",
 
-  mixins: [displayMethods, orgaComputed, imageProxy],
+  mixins: [displayMethods, orgaComputed, imageProxy, resizePhone],
 
   props: {
     emission: { default: () => ({}), type: Object as () => Emission },
     isVertical: { default: false, type: Boolean },
+    isDescription: { default: false, type: Boolean },
   },
+  data() {
+    return {
+      isPhone: false as boolean,
+    };
+  },
+  watch:{
+    isPhone: {
+      immediate: true,
+      handler() {
+        this.$nextTick(() => {
+          if(!this.isDescription || this.isPhone){
+            return;
+          }
+          const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
+          const emissionDescContainer = this.$refs
+            .descriptionEmissionContainer as HTMLElement;
+          if (
+            emissionDesc &&
+            emissionDescContainer &&
+            emissionDesc.clientHeight > emissionDescContainer.clientHeight
+          ) {
+            emissionDescContainer.classList.add("after-emission-description");
+          }
+        });
+      },
+    },
+  }
 });
 </script>
 <style lang="scss">
@@ -54,6 +95,11 @@ export default defineComponent({
     @media (max-width: 960px) {
       width: 250px !important;
       margin-right: 0.5rem;
+    }
+    .emission-description{
+      height: 0;
+      flex-grow: 1;
+      max-height: unset;
     }
   }
   .emission-item-container.emission-vertical-item {

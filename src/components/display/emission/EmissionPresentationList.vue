@@ -12,6 +12,7 @@
           :class="!isPhone ? 'me-3' : ''"
           :emission="allEmissions[0]"
           :is-vertical="!isPhone"
+          :isDescription="isDescription"
         />
         <div
           v-if="allEmissions.length > 1"
@@ -20,10 +21,12 @@
           <EmissionItemPresentation
             v-if="allEmissions[1]"
             :emission="allEmissions[1]"
+            :isDescription="isDescription"
           />
           <EmissionItemPresentation
             v-if="allEmissions[2]"
             :emission="allEmissions[2]"
+            :isDescription="isDescription"
           />
         </div>
         <div
@@ -33,10 +36,12 @@
           <EmissionItemPresentation
             v-if="allEmissions[3]"
             :emission="allEmissions[3]"
+            :isDescription="isDescription"
           />
           <EmissionItemPresentation
             v-if="allEmissions[4]"
             :emission="allEmissions[4]"
+            :isDescription="isDescription"
           />
         </div>
       </div>
@@ -77,6 +82,7 @@ export default defineComponent({
     title: { default: "", type: String },
     href: { default: undefined, type: String },
     buttonText: { default: undefined, type: String },
+    isDescription: { default: false, type: Boolean },
   },
   data() {
     return {
