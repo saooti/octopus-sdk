@@ -36,17 +36,8 @@
         </template>
       </ClassicLazy>
       <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
-        <PodcastInlineList
-          v-if="rubriqueDisplay.length < rubriqueMaxDisplay"
-          :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
-          :rubrique-id="rubriqueId"
-          :title="$t('Without rubric')"
-          :button-text="
-            $t('All podcast button', { name: $t('Without rubric') })
-          "
-        />
         <router-link
-          v-else
+          v-if="rubriqueDisplay.length >= rubriqueMaxDisplay"
           :to="{
             name: 'podcasts',
             query: {
@@ -59,6 +50,15 @@
         >
           {{ $t("See more") }}
         </router-link>
+        <PodcastInlineList
+          v-else-if="displayWithoutRubriques"
+          :no-rubriquage-id="[rubriqueDisplay[0].rubriquageId]"
+          :rubrique-id="rubriqueId"
+          :title="$t('Without rubric')"
+          :button-text="
+            $t('All podcast button', { name: $t('Without rubric') })
+          "
+        />
       </template>
     </template>
   </div>
@@ -83,6 +83,9 @@ export default defineComponent({
     ClassicLazy,
   },
   emits: ["categoriesLength"],
+  props: {
+    displayWithoutRubriques: { default: true, type: Boolean },
+  },
   data() {
     return {
       rubriqueId: [] as Array<number>,
