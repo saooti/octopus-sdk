@@ -8,7 +8,7 @@ import {
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
 import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../api/classicApi";
 interface Transcript {
   actual: number;
   actualText: string;
@@ -183,10 +183,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerPodcast = param;
         this.playerCurrentChange = param.podcastId;
         if (param.annotations?.chaptering) {
-          this.playerChaptering = await octopusApi.fetchDataPublic<Chaptering>(
-            4,
-            param.annotations.chaptering as string,
-          );
+          this.playerChaptering = await classicApi.fetchData<Chaptering>({
+            api:4,
+            path:param.annotations.chaptering as string,
+            isNotAuth:true
+          });
         }
         return;
       }

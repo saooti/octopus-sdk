@@ -110,7 +110,6 @@ export default defineComponent({
         this.videoOptions,
         () => {
           this.player.qualitySelectorHls({ displayCurrentQuality: true });
-          /*console.log(this.player.tech(true).vhs.playlistController_); */
           this.errorPlay = "";
           this.playing = true;
         },
@@ -210,9 +209,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "video.js";
-@import "@scss/_variables.scss";
-@import "../../../../assets/videoPlayer.scss";
+@use "video.js";
+@use '@scss/variables' as octopusVariables;
+@use "../../../../assets/videoPlayer";
 .octopus-app {
   .video-live-error {
     text-align: center;
@@ -223,7 +222,7 @@ export default defineComponent({
     color: white;
     position: absolute;
     top: 0;
-    background: $danger;
+    background: octopusVariables.$danger;
     z-index: 1;
   }
   .video-js {

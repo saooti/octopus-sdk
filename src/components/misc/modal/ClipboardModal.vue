@@ -16,7 +16,10 @@
           @click="onCopyCode(link, afterCopy)"
         />
       </p>
-      <RssSection v-if="emission && authenticated" :emission="emission" />
+      <RssSection
+        v-if="emission && undefined !== authOrgaId"
+        :emission="emission"
+      />
     </template>
   </ClassicModal>
 </template>
@@ -26,7 +29,8 @@ import ClassicModal from "../modal/ClassicModal.vue";
 import { Emission } from "@/stores/class/general/emission";
 import displayMethods from "../../mixins/displayMethods";
 import { defineComponent, defineAsyncComponent } from "vue";
-import { state } from "../../../stores/ParamSdkStore";
+import { useAuthStore } from "../../../stores/AuthStore";
+import { mapState } from "pinia";
 const RssSection = defineAsyncComponent(
   () => import("@/components/display/aggregator/RssSection.vue"),
 );
@@ -44,9 +48,7 @@ export default defineComponent({
   },
   emits: ["close", "copy"],
   computed: {
-    authenticated(): boolean {
-      return state.generalParameters.authenticated ?? false;
-    },
+    ...mapState(useAuthStore, ["authOrgaId"]),
   },
   methods: {
     closePopup(): void {

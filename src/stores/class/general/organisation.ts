@@ -18,6 +18,13 @@ export interface Organisation {
   privacy?: string;
 }
 
+export function emptyOrganisationData(): Organisation {
+  return {
+    imageUrl: "",
+    id: "",
+    name: "",
+  };
+}
 export function emptyOrgaData(defaultName: string): Organisation {
   return {
     imageUrl: "/img/emptypodcast.webp",

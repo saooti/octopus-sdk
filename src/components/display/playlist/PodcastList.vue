@@ -59,9 +59,8 @@
 import ListPaginate from "../list/ListPaginate.vue";
 import { handle403 } from "../../mixins/handle403";
 import { orgaComputed } from "../../mixins/orgaComputed";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
-import { state } from "../../../stores/ParamSdkStore";
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -118,11 +117,7 @@ export default defineComponent({
       );
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.playlist.organisation?.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.playlist.organisation?.id);
     },
   },
   watch: {
@@ -148,10 +143,10 @@ export default defineComponent({
         this.podcasts.length = 0;
         this.loading = true;
         try {
-          this.podcasts = await octopusApi.fetchData<Array<Podcast>>(
-            0,
-            "playlist/" + this.playlist.playlistId + "/content",
-          );
+          this.podcasts = await classicApi.fetchData<Array<Podcast>>({
+            api: 0,
+            path: "playlist/" + this.playlist.playlistId + "/content",
+          });
           if (!this.editRight) {
             this.podcasts = this.podcasts.filter((p: Podcast | null) => {
               return (

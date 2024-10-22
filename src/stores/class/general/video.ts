@@ -1,8 +1,9 @@
 export interface Video {
-  disposable: boolean;
+  disposable?: boolean;
   masterUrl: string;
-  provider: string;  // digiteka
-  status: string;  // UP_TO_DATE
+  provider: string; // digiteka
+  status: string; // UP_TO_DATE
   updateDate: string;
   videoId: string;
+  toDelete?: boolean;
 }

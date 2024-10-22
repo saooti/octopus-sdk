@@ -44,16 +44,17 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from "../../mixins/orgaComputed";
+import { useFilterStore } from "../../../stores/FilterStore";
 import resizePhone from "../../mixins/resizePhone";
 import { Emission } from "@/stores/class/general/emission";
 import imageProxy from "../../mixins/imageProxy";
 import displayMethods from "../../mixins/displayMethods";
 import { defineComponent } from "vue";
+import { mapState } from "pinia";
 export default defineComponent({
   name: "EmissionItem",
 
-  mixins: [displayMethods, orgaComputed, imageProxy, resizePhone],
+  mixins: [displayMethods, imageProxy, resizePhone],
 
   props: {
     emission: { default: () => ({}), type: Object as () => Emission },
@@ -65,12 +66,15 @@ export default defineComponent({
       isPhone: false as boolean,
     };
   },
-  watch:{
+  computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+  },
+  watch: {
     isPhone: {
       immediate: true,
       handler() {
         this.$nextTick(() => {
-          if(!this.isDescription || this.isPhone){
+          if (!this.isDescription || this.isPhone) {
             return;
           }
           const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
@@ -86,7 +90,7 @@ export default defineComponent({
         });
       },
     },
-  }
+  },
 });
 </script>
 <style lang="scss">
@@ -96,7 +100,7 @@ export default defineComponent({
       width: 250px !important;
       margin-right: 0.5rem;
     }
-    .emission-description{
+    .emission-description {
       height: 0;
       flex-grow: 1;
       max-height: unset;

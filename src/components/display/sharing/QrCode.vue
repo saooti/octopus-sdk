@@ -28,7 +28,7 @@ import { state } from "../../../stores/ParamSdkStore";
 import SnackBar from "../../misc/SnackBar.vue";
 import QrcodeVue from "qrcode.vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -51,7 +51,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useAuthStore, ["authOrganisation"]),
+    ...mapState(useAuthStore, ["authOrganisation", "authOrgaId"]),
   },
   watch: {
     isNotBlack() {
@@ -83,11 +83,8 @@ export default defineComponent({
         this.otherColor = state.generalParameters.podcastmakerColor;
         return;
       }
-      if (!state.generalParameters.authenticated) return;
-      const orgaId =
-        "" !== this.authOrganisation.id
-          ? this.authOrganisation.id
-          : state.generalParameters.organisationId;
+      if (undefined === this.authOrgaId) return;
+      const orgaId = this.authOrgaId;
       const attributes = await this.getOrgaAttributes(orgaId ?? "");
       if (Object.hasOwn(attributes, "COLOR")) {
         this.otherColor = attributes.COLOR as string;

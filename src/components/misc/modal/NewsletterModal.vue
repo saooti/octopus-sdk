@@ -67,7 +67,7 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
 import { defineComponent } from "vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
@@ -105,7 +105,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useAuthStore, ["authOrganisation"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
     newsletterInfo() {
       if (this.podcast) {
         return {
@@ -215,10 +215,7 @@ export default defineComponent({
       );
     },
     async initData(): Promise<void> {
-      const orgaId =
-        "" !== this.authOrganisation.id
-          ? this.authOrganisation.id
-          : state.generalParameters.organisationId;
+      const orgaId = this.authOrgaId;
       if (!orgaId?.length) {
         return;
       }

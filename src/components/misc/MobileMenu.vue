@@ -52,13 +52,14 @@
 </template>
 
 <script lang="ts">
-import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import orgaFilter from "../mixins/organisationFilter";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
+import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
+import classicApi from "../../api/classicApi";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
@@ -80,6 +81,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["authOrgaId"]),
     ...mapState(useFilterStore, [
       "filterLive",
       "filterOrgaId",
@@ -87,7 +89,7 @@ export default defineComponent({
       "filterRubrique",
     ]),
     isAuthenticatedWithOrga(): boolean {
-      return state.generalParameters.authenticated ?? false;
+      return undefined !== this.authOrgaId;
     },
     routerLinkArray() {
       return [
@@ -156,7 +158,11 @@ export default defineComponent({
   methods: {
     async logoutFunction() {
       try {
-        await crudApi.postData(4, "/logout", undefined);
+        await classicApi.postData({
+          api: 4,
+          path: "/logout",
+          dataToSend: undefined,
+        });
         await this.$router.push({ path: "/" });
         location.reload();
       } catch (error) {

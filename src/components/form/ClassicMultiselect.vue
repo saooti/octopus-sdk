@@ -180,7 +180,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "vue-select/dist/vue-select.css";
+@use "vue-select/dist/vue-select.css";
 :root {
   --vs-dropdown-z-index: 1405;
   --vs-border-radius: 0.2rem;

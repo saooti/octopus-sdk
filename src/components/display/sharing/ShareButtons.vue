@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading && (authenticated || !noSharing)" class="module-box">
+  <div v-if="!isLoading && (authOrgaId || !noSharing)" class="module-box">
     <div class="share-buttons-display">
       <div v-if="!isGarStudent && !noSharing" class="d-flex flex-column me-2">
         <div class="h2 mb-2">
@@ -131,15 +131,16 @@
 
 <script lang="ts">
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
+import { useApiStore } from "../../../stores/ApiStore";
 import { mapActions, mapState } from "pinia";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
+import { useAuthStore } from "../../../stores/AuthStore";
+import classicApi from "../../../api/classicApi";
 import displayMethods from "../../mixins/displayMethods";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { Playlist } from "@/stores/class/general/playlist";
-import { useAuthStore } from "@/stores/AuthStore";
 const ClipboardModal = defineAsyncComponent(
   () => import("../../misc/modal/ClipboardModal.vue"),
 );
@@ -177,16 +178,19 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useAuthStore, ["isGarStudent", "authOrganisation"]),
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
+    ...mapState(useAuthStore, [
+      "isGarStudent",
+      "authOrganisation",
+      "isRoleProduction",
+      "authOrgaId",
+    ]),
+    ...mapState(useApiStore, ["apiUrl"]),
     shareAiAuth(): boolean {
       return (
         !this.isPodcastmaker &&
-        this.authenticated &&
+        undefined !== this.authOrgaId &&
         undefined !== this.podcast &&
-        this.isProduction &&
+        this.isRoleProduction &&
         (this.authOrganisation.attributes?.["openAi.active"] as
           | string
           | undefined) === "true"
@@ -236,14 +240,11 @@ export default defineComponent({
     urlPage(): string {
       return window.location.href;
     },
-    isProduction(): boolean {
-      return state.generalParameters.isProduction as boolean;
-    },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
     },
     rssUrl(): string {
-      let api = state.generalParameters.ApiUri + "rss/";
+      let api = this.apiUrl + "rss/";
       if (
         (!this.isPodcastmaker && this.playlist) ||
         this.podcast ||
@@ -270,10 +271,11 @@ export default defineComponent({
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     async initShareButtons() {
       if (undefined !== this.participantId) {
-        this.displayRss = await octopusApi.fetchDataPublic<boolean>(
-          0,
-          `rss/participants/allowed/${this.organisationId}`,
-        );
+        this.displayRss = await classicApi.fetchData<boolean>({
+          api: 0,
+          path: `rss/participants/allowed/${this.organisationId}`,
+          isNotAuth: true,
+        });
       } else {
         this.displayRss = true;
       }

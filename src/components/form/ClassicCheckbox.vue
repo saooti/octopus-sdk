@@ -52,7 +52,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .octopus-form-switch {
     position: relative;
@@ -87,15 +87,15 @@ export default defineComponent({
       border-radius: 50%;
     }
     input:checked + .slider {
-      background-color: $octopus-primary-color;
+      background-color: octopusVariables.$octopus-primary-color;
     }
     input:focus + .slider {
-      box-shadow: 0 0 1px $octopus-primary-color;
+      box-shadow: 0 0 1px octopusVariables.$octopus-primary-color;
     }
     input:checked + .slider:before {
       transform: translateX(1rem);
     }
-    input:disabled + .slider{
+    input:disabled + .slider {
       cursor: default;
       background-color: #ccc;
     }

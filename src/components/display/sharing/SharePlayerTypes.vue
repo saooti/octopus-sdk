@@ -21,14 +21,15 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { CustomPlayer } from "@/stores/class/general/customPlayer";
 import { defineComponent } from "vue";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
 import { InterfacePageable } from "@/stores/class/general/interfacePageable";
+import { mapState } from "pinia";
 export default defineComponent({
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
@@ -47,6 +48,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["authOrgaId"]),
     isVideoPodcast(): boolean {
       return (
         undefined !== this.podcast && undefined !== this.podcast.video?.videoId
@@ -129,7 +131,7 @@ export default defineComponent({
         return;
       }
       if (this.isNumeric(val)) {
-        var customPlayer = this.customPlayersDisplay.find((p) => {
+        const customPlayer = this.customPlayersDisplay.find((p) => {
           return p.customId.toString() === val;
         });
         if (customPlayer) {
@@ -140,24 +142,28 @@ export default defineComponent({
       }
     },
     async fetchPlayerPaginate(type: string): Promise<CustomPlayer[]> {
-      let players = await octopusApi.fetchDataPublic<
-        InterfacePageable<CustomPlayer>
-      >(6, "customPlayer/type/" + this.organisationId + "/" + type);
+      let players = await classicApi.fetchData<InterfacePageable<CustomPlayer>>(
+        {
+          api: 6,
+          path: "customPlayer/type/" + this.organisationId + "/" + type,
+          isNotAuth: true,
+        },
+      );
       let playersContent = players.content;
       const totalCount = players.totalElements;
       let index = 1;
       while (totalCount > playersContent.length) {
-        players = await octopusApi.fetchDataPublic<
-          InterfacePageable<CustomPlayer>
-        >(
-          6,
-          "customPlayer/type/" +
+        players = await classicApi.fetchData<InterfacePageable<CustomPlayer>>({
+          api: 6,
+          path:
+            "customPlayer/type/" +
             this.organisationId +
             "/" +
             type +
             "?start=" +
             index,
-        );
+          isNotAuth: true,
+        });
         playersContent = playersContent.concat(players.content);
         ++index;
       }
@@ -184,7 +190,7 @@ export default defineComponent({
       return false;
     },
     async initCustomPlayers(): Promise<void> {
-      if (!state.generalParameters.authenticated) return;
+      if (undefined === this.authOrgaId) return;
       if (this.playlist) {
         this.fetchCustomPlayers("PLAYLIST");
       } else if (this.emission && !this.podcast) {

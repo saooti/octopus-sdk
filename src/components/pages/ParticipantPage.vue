@@ -1,8 +1,8 @@
 <template>
   <div class="page-box">
     <div v-if="loaded && !error">
-      <h1 v-if="!pageParameters.lightStyle">
-        {{ titleDisplay }}
+      <h1>
+        {{ $t("Animator") }}
       </h1>
       <div class="d-flex flex-column align-items-center mb-3">
         <img
@@ -37,20 +37,12 @@
       </div>
       <!-- productorId define to avoid overwrite #12817 -->
       <PodcastFilterList
-        v-if="!pageParameters.lightStyle"
         :participant-id="participantId"
         :name="name"
         :category-filter="true"
         :productor-id="['']"
         :reload="reload"
         :show-count="true"
-      />
-      <PodcastList
-        v-else
-        :first="0"
-        :size="15"
-        :participant-id="participantId"
-        :reload="reload"
       />
     </div>
     <ClassicLoading
@@ -61,8 +53,9 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
+import { useApiStore } from "../../stores/ApiStore";
 import displayMethods from "../mixins/displayMethods";
 import imageProxy from "../mixins/imageProxy";
 import { orgaComputed } from "../mixins/orgaComputed";
@@ -71,6 +64,7 @@ import { Participant } from "@/stores/class/general/participant";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
+import { mapState } from "pinia";
 const ShareButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareButtons.vue"),
 );
@@ -80,15 +74,11 @@ const PodcastFilterList = defineAsyncComponent(
 const EditBox = defineAsyncComponent(
   () => import("@/components/display/edit/EditBox.vue"),
 );
-const PodcastList = defineAsyncComponent(
-  () => import("../display/podcasts/PodcastList.vue"),
-);
 export default defineComponent({
   components: {
     ShareButtons,
     PodcastFilterList,
     EditBox,
-    PodcastList,
     ClassicLoading,
   },
   mixins: [displayMethods, handle403, orgaComputed, imageProxy],
@@ -105,18 +95,15 @@ export default defineComponent({
     };
   },
   computed: {
-    titleDisplay(): string {
-      return state.intervenantPage.titlePage ?? this.$t("Animator");
-    },
+    ...mapState(useApiStore, ["apiUrl"]),
     pageParameters() {
       return {
-        isEditBox: state.podcastPage.EditBox as boolean,
+        isEditBox: !state.generalParameters.podcastmaker as boolean,
         isShareButtons: state.podcastPage.ShareButtons as boolean,
-        lightStyle: state.intervenantPage.lightStyle as boolean,
       };
     },
     rssUrl(): string {
-      return `${state.generalParameters.ApiUri}rss/participant/${this.participantId}`;
+      return `${this.apiUrl}rss/participant/${this.participantId}`;
     },
     description(): string {
       return this.participant?.description ?? "";
@@ -127,11 +114,7 @@ export default defineComponent({
       }`.trim();
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.participant?.orga?.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.participant?.orga?.id);
     },
   },
   watch: {
@@ -156,10 +139,10 @@ export default defineComponent({
     async getParticipantDetails(): Promise<void> {
       this.loaded = false;
       try {
-        const data = await octopusApi.fetchData<Participant>(
-          0,
-          "participant/" + this.participantId,
-        );
+        const data = await classicApi.fetchData<Participant>({
+          api: 0,
+          path: "participant/" + this.participantId,
+        });
         if (
           "PUBLIC" !== data?.orga?.privacy &&
           this.filterOrgaId !== data?.orga?.id &&

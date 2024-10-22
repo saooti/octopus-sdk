@@ -79,7 +79,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .tag-list-component {
     .ouest-france-logo {
@@ -93,7 +93,7 @@ export default defineComponent({
       margin: 0.4rem;
       padding: 0.2rem;
       border: 1px solid #999;
-      border-radius: $octopus-borderradius;
+      border-radius: octopusVariables.$octopus-borderradius;
     }
     .main-of-tag {
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import SwiperList from "../list/SwiperList.vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { handle403 } from "../../mixins/handle403";
@@ -86,12 +86,10 @@ export default defineComponent({
   methods: {
     async fetchNext(): Promise<void> {
       try {
-        const data = await octopusApi.fetchDataWithParams<
-          ListClassicReturn<Emission>
-        >(
-          0,
-          "emission/search",
-          {
+        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+          api: 0,
+          path: "emission/search",
+          parameters: {
             first: 0,
             size: 10,
             organisationId: this.organisationId,
@@ -99,8 +97,8 @@ export default defineComponent({
             rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
             sort: "LAST_PODCAST_DESC",
           },
-          true,
-        );
+          specialTreatement: true,
+        });
         this.allEmissions = this.allEmissions.concat(
           data.result.filter((em: Emission | null) => null !== em),
         );
@@ -115,10 +113,10 @@ export default defineComponent({
       this.allEmissions.length = 0;
     },
     async fetchRubriques(): Promise<void> {
-      const data = await octopusApi.fetchData<Rubriquage>(
-        0,
-        "rubriquage/" + this.displayRubriquage,
-      );
+      const data = await classicApi.fetchData<Rubriquage>({
+        api: 0,
+        path: "rubriquage/" + this.displayRubriquage,
+      });
       this.rubriques = data.rubriques;
     },
     rubriquesId(emission: Emission): string | undefined {

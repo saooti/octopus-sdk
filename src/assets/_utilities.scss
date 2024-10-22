@@ -1,3 +1,7 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
 // Utilities
 $spacer: 1rem !default;
 $font-size-base: 1rem !default;
@@ -42,7 +46,7 @@ $theme-colors: (
 
 $utilities: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
-$utilities: map-merge(
+$utilities: map.merge(
   (
     "align": (
       property: vertical-align,
@@ -242,43 +246,43 @@ $utilities: map-merge(
       responsive: true,
       property: margin,
       class: m,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     "margin-x": (
       responsive: true,
       property: margin-right margin-left,
       class: mx,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     "margin-y": (
       responsive: true,
       property: margin-top margin-bottom,
       class: my,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     "margin-top": (
       responsive: true,
       property: margin-top,
       class: mt,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     "margin-end": (
       responsive: true,
       property: margin-right,
       class: me,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     "margin-bottom": (
       responsive: true,
       property: margin-bottom,
       class: mb,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     "margin-start": (
       responsive: true,
       property: margin-left,
       class: ms,
-      values: map-merge($spacers, (auto: auto))
+      values: map.merge($spacers, (auto: auto))
     ),
     // Padding utilities
     "padding": (
@@ -382,7 +386,7 @@ $utilities: map-merge(
     "background-color": (
       property: background-color,
       class: bg,
-      values: map-merge(
+      values: map.merge(
         $theme-colors,
         (
           "transparent": transparent
@@ -442,34 +446,34 @@ $utilities: map-merge(
   $utilities
 );
 @mixin generate-utility($utility, $infix, $is-rfs-media-query: false) {
-  $values: map-get($utility, values);
+  $values: map.get($utility, values);
   // If the values are a list or string, convert it into a map
-  @if type-of($values) == "string" or type-of(nth($values, 1)) != "list" {
-    $values: zip($values, $values);
+  @if meta.type-of($values) == "string" or meta.type-of(list.nth($values, 1)) != "list" {
+    $values: list.zip($values, $values);
   }
   @each $key, $value in $values {
-    $properties: map-get($utility, property);
+    $properties: map.get($utility, property);
     // Multiple properties are possible, for example with vertical or horizontal margins or paddings
-    @if type-of($properties) == "string" {
-      $properties: append((), $properties);
+    @if meta.type-of($properties) == "string" {
+      $properties: list.append((), $properties);
     }
 
     // Use custom class if present
-    $property-class: if(map-has-key($utility, class), map-get($utility, class), nth($properties, 1));
+    $property-class: if(map.has-key($utility, class), map.get($utility, class), list.nth($properties, 1));
     $property-class: if($property-class == null, "", $property-class);
 
     // Use custom CSS variable name if present, otherwise default to `class`
-    $css-variable-name: if(map-has-key($utility, css-variable-name), map-get($utility, css-variable-name), map-get($utility, class));
+    $css-variable-name: if(map.has-key($utility, css-variable-name), map.get($utility, css-variable-name), map.get($utility, class));
 
     // State params to generate pseudo-classes
-    $state: if(map-has-key($utility, state), map-get($utility, state), ());
+    $state: if(map.has-key($utility, state), map.get($utility, state), ());
 
-    $infix: if($property-class == "" and str-slice($infix, 1, 1) == "-", str-slice($infix, 2), $infix);
+    $infix: if($property-class == "" and string.slice($infix, 1, 1) == "-", string.slice($infix, 2), $infix);
 
     // Don't prefix if value key is null (eg. with shadow class)
     $property-class-modifier: if($key, if($property-class == "" and $infix == "", "", "-") + $key, "");
 
-    @if map-get($utility, rfs) {
+    @if map.get($utility, rfs) {
       // Inside the media query
       @if $is-rfs-media-query {
         $val: rfs-value($value);
@@ -482,8 +486,8 @@ $utilities: map-merge(
       }
     }
 
-    $is-css-var: map-get($utility, css-var);
-    $is-rtl: map-get($utility, rtl);
+    $is-css-var: map.get($utility, css-var);
+    $is-rtl: map.get($utility, rtl);
 
     @if $value != null {
       @if $is-rtl == false {
@@ -526,7 +530,7 @@ $utilities: map-merge(
 @each $key, $utility in $utilities {
   // The utility can be disabled with `false`, thus check if the utility is a map first
   // Then check if the utility needs print styles
-  @if type-of($utility) == "map" {
+  @if meta.type-of($utility) == "map" {
     @include generate-utility($utility, "");
   }
 }

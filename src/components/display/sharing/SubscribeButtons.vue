@@ -59,7 +59,8 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
+import { mapState } from "pinia";
+import { useApiStore } from "../../../stores/ApiStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { defineComponent } from "vue";
@@ -87,6 +88,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useApiStore, ["apiUrl"]),
     subscriptionsDisplay(): Array<Link> {
       const sub = [
         {
@@ -161,7 +163,7 @@ export default defineComponent({
       return sub.filter((item) => item.url);
     },
     rssUrl(): string | undefined {
-      let api = state.generalParameters.ApiUri + "rss/";
+      let api = this.apiUrl + "rss/";
       if (this.emission) {
         return api + "emission/" + this.emission?.emissionId + ".rss";
       }

@@ -149,7 +149,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@vuepic/vue-datepicker/dist/main.css";
+@use "@vuepic/vue-datepicker/dist/main.css";
 .dp__theme_light {
   --dp-primary-color: #1a8658;
   --dp-time-font-size: 1rem;

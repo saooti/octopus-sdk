@@ -1,6 +1,6 @@
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { defineComponent } from "vue";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState } from "pinia";
 export const playerLogicProgress = defineComponent({
@@ -34,11 +34,11 @@ export const playerLogicProgress = defineComponent({
         return;
       }
       this.lastSend = newVal;
-      await octopusApi.putDataPublic(
-        0,
-        "podcast/listen/" + this.downloadId + "?seconds=" + Math.round(newVal),
-        undefined,
-      );
+      await classicApi.putData({
+        api: 0,
+        path:"podcast/listen/" + this.downloadId + "?seconds=" + Math.round(newVal),
+        isNotAuth:true
+      });
     },
     playerSeekTime() {
       if (undefined===this.playerSeekTime) {
@@ -67,21 +67,22 @@ export const playerLogicProgress = defineComponent({
       }
       try {
         const mediaType = this.playerVideo ? "VIDEO":"AUDIO";
-        const downloadId = await octopusApi.putDataPublic<string | null>(
-          0,
-          "podcast/prepare/live/" + this.playerLive.podcastId+"?mediaType="+mediaType,
-          undefined,
-        );
+        const downloadId = await classicApi.putData<string | null>({
+          api: 0,
+          path:"podcast/prepare/live/" + this.playerLive.podcastId+"?mediaType="+mediaType,
+          isNotAuth:true
+        });
         //TODO check if we can do otherwise
-        await octopusApi.fetchDataPublicWithParams<string | null>(
-          0,
-          "podcast/download/live/" + this.playerLive.podcastId + ".m3u8",
-          {
+        await classicApi.fetchData<string | null>({
+          api:0,
+          path: "podcast/download/live/" + this.playerLive.podcastId + ".m3u8",
+          parameters:{
             downloadId: downloadId ?? undefined,
             origin: "octopus",
             distributorId: this.authOrgaId,
           },
-        );
+          isNotAuth:true
+        });
         this.setDownloadId(downloadId);
       } catch (error) {
         this.downloadId = null;
@@ -114,14 +115,14 @@ export const playerLogicProgress = defineComponent({
     async endListeningProgress(): Promise<void> {
       if (!this.downloadId) return;
       try {
-        await octopusApi.putDataPublic(
-          0,
-          "podcast/listen/" +
+        await classicApi.putData<string | null>({
+          api: 0,
+          path:"podcast/listen/" +
             this.downloadId +
             "?seconds=" +
             Math.round(this.listenTime),
-          undefined,
-        );
+          isNotAuth:true
+        });
       } catch {
         //Do nothing
       }

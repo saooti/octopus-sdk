@@ -217,11 +217,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-popover {
   background: white;
   border: 1px solid #ccc;
-  border-radius: $octopus-borderradius;
+  border-radius: octopusVariables.$octopus-borderradius;
   position: absolute;
   max-height: 80vh;
   overflow: auto;

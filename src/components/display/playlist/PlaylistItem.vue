@@ -79,9 +79,6 @@ export default defineComponent({
     name(): string {
       return this.playlist.title;
     },
-    organisationId(): string | undefined {
-      return state.generalParameters.organisationId;
-    },
     activePlaylist(): boolean {
       return 0 !== Object.keys(this.playlist.samplingViews ?? []).length;
     },

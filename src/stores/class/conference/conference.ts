@@ -7,11 +7,14 @@ export interface Conference {
   debriefingDate?: string;
   deletionAttempts?: number;
   directCode?: string;
+  externalRtmpUrl?: ExternalRtmpUrl;
   hostname?: string;
   jingleDuration?: number;
   jingleFilePath?: string;
   jingleId?: number;
   mediaId?: number;
+  maxEndOfDebriefing?: string;
+  maxStopRecordDate?: string;
   organisationId?: string;
   participants?: Array<{
     conferenceGuestId: number;
@@ -24,6 +27,10 @@ export interface Conference {
   podcastId?: number;
   prefix?: { [key: string]: string };
   queueCode?: string;
+  radioMapping?: {
+    canalId: number;
+    occurenceId: number;
+  };
   recordDate?: string;
   recordingPort?: number;
   status?: string;
@@ -33,10 +40,32 @@ export interface Conference {
   websocket?: string;
   interval?: ReturnType<typeof setTimeout>;
   duration?: number;
-  videoProfile?:string;
+  videoProfile?: string;
+  videoLayout?: string;
 }
 
+export function getEmptyConference(): Conference {
+  return {
+    title: "",
+    token: "",
+    hostname: "",
+    conferenceId: 0,
+    status: "PLANNED",
+    videoLayout: "overlaps",
+  };
+}
 export interface ConferencePublicInfo {
   status: string;
-  videoProfile:string;
+  videoProfile: string;
+}
+
+export interface ExternalRtmpUrl {
+  baseUrl: string | null;
+  key: string | null;
+}
+export function getEmptyExternalRtmpUrl(): ExternalRtmpUrl {
+  return {
+    baseUrl: "",
+    key: "",
+  };
 }

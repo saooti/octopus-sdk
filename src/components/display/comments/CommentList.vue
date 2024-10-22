@@ -70,7 +70,7 @@
 <script lang="ts">
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { handle403 } from "../../mixins/handle403";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
 import { CommentPodcast } from "@/stores/class/general/comment";
@@ -248,9 +248,13 @@ export default defineComponent({
         organisationId: this.organisationId,
       };
       try {
-        const data = await octopusApi.fetchDataPublicWithParams<
+        const data = await classicApi.fetchData<
           ListClassicReturn<CommentPodcast>
-        >(2, "comment/list", param);
+        >({
+          api: 2,
+          path: "comment/list",
+          parameters: param,
+        });
         if (reset) {
           this.comments.length = 0;
         }

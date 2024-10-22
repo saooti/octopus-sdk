@@ -20,7 +20,7 @@
           {{ $t("Filter") }}
         </div>
         <MonetizableFilter
-          v-if="sdkParameters.isMonetizableFilter && !isEducation"
+          v-if="!isPodcastmaker && !isEducation"
           :is-emission="isEmission"
           @update-monetization="updateMonetization"
         />
@@ -79,10 +79,11 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
 import { orgaComputed } from "../../mixins/orgaComputed";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
+import { mapState } from "pinia";
 const MonetizableFilter = defineAsyncComponent(
   () => import("./MonetizableFilter.vue"),
 );
@@ -138,22 +139,13 @@ export default defineComponent({
   },
 
   computed: {
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    sdkParameters() {
-      return {
-        isMonetizableFilter: state.podcastsPage.MonetizableFilter as boolean,
-        isProduction: state.generalParameters.isProduction as boolean,
-        isContribution: state.generalParameters.isContribution as boolean,
-      };
-    },
+    ...mapState(useAuthStore, [
+      "isRoleProduction",
+      "isRoleContribution",
+      "isRoleAdmin",
+    ]),
     organisationRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.organisationId) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.organisationId);
     },
     organisation(): string | undefined {
       return this.organisationId ?? this.filterOrgaId;
@@ -167,14 +159,14 @@ export default defineComponent({
       return (
         undefined !== this.organisation &&
         this.organisationRight &&
-        this.sdkParameters.isContribution &&
+        this.isRoleContribution &&
         !this.isPodcastmaker &&
         !this.isEmission &&
         this.isNotVisible
       );
     },
     textNotValidate(): string {
-      return this.sdkParameters.isProduction
+      return this.isRoleProduction
         ? this.$t("Display all podcasts to validate")
         : this.$t("Display my podcasts to validate");
     },

@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import CommentBasicView from "./item/CommentBasicView.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
@@ -42,10 +42,10 @@ export default defineComponent({
   methods: {
     async fetchComment(): Promise<void> {
       if (this.commentId) {
-        this.comment = await octopusApi.fetchData<CommentPodcast>(
-          2,
-          `comment/${this.commentId}`,
-        );
+        this.comment = await classicApi.fetchData<CommentPodcast>({
+          api: 2,
+          path: `comment/${this.commentId}`,
+        });
       }
       this.loading = false;
     },

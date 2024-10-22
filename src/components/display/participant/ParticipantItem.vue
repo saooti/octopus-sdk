@@ -52,9 +52,8 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { Participant } from "@/stores/class/general/participant";
-import { state } from "../../../stores/ParamSdkStore";
 import imageProxy from "../../mixins/imageProxy";
 import displayMethods from "../../mixins/displayMethods";
 import { orgaComputed } from "../../mixins/orgaComputed";
@@ -73,9 +72,6 @@ export default defineComponent({
     };
   },
   computed: {
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     name(): string {
       return `${this.participant.firstName ?? ""} ${
         this.participant.lastName ?? ""
@@ -85,11 +81,7 @@ export default defineComponent({
       if (!this.participant?.orga) {
         return false;
       }
-      return (
-        (this.authenticated &&
-          this.myOrganisationId === this.participant.orga.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.participant.orga.id);
     },
   },
 
@@ -111,19 +103,17 @@ export default defineComponent({
   },
   methods: {
     async hasPodcast(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<
-        ListClassicReturn<Podcast>
-      >(
-        0,
-        "podcast/search",
-        {
+      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+        api: 0,
+        path: "podcast/search",
+        parameters: {
           participantId: this.participant.participantId,
           first: 0,
           size: 0,
           includeStatus: ["READY", "PROCESSING"],
         },
-        true,
-      );
+        specialTreatement: true,
+      });
       if (0 === data.count) {
         this.activeParticipant = false;
       }
@@ -132,16 +122,16 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .participant-item-container {
     list-style: none;
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
     align-items: center;
-    width: $octopus-item-size;
+    width: octopusVariables.$octopus-item-size;
 
     .participant-description {
       overflow: hidden;

@@ -39,10 +39,9 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from "../../mixins/orgaComputed";
-import { state } from "../../../stores/ParamSdkStore";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useApiStore } from "../../../stores/ApiStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
@@ -61,7 +60,6 @@ export default defineComponent({
     SharePlayerColors,
     PlayerCommonParameters,
   },
-  mixins: [orgaComputed],
   props: {
     canal: { default: undefined, type: Object as () => Canal },
     organisationId: { default: undefined, type: String },
@@ -80,15 +78,13 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useAuthStore, ["authOrganisation"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
+    ...mapState(useApiStore, ["miniplayerUrl"]),
     displayInsertCode(): boolean {
-      return (
-        this.authenticated &&
-        this.canal?.organisationId === this.myOrganisationId
-      );
+      return this.canal?.organisationId === this.authOrgaId;
     },
     iFrameSrc(): string {
-      let url = `${state.podcastPage.MiniplayerUri}miniplayer/radio/${
+      let url = `${this.miniplayerUrl}miniplayer/radio/${
         this.canal?.id
       }?distributorId=${this.organisationId}&color=${this.color.substring(
         1,
@@ -108,11 +104,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     async initSharePlayer() {
-      const orgaId =
-        "" !== this.authOrganisation.id
-          ? this.authOrganisation.id
-          : state.generalParameters.organisationId;
-      this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
+      this.orgaAttributes = await this.getOrgaAttributes(this.authOrgaId ?? "");
       this.initColor();
     },
     initColor(): void {
@@ -131,6 +123,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
-@import "../../../assets/iframe.scss";
+@use "../../../assets/iframe";
 </style>

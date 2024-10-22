@@ -97,10 +97,10 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .chapter-selected {
-    border: $octopus-primary-color 3px solid;
+    border: octopusVariables.$octopus-primary-color 3px solid;
   }
 }
 </style>

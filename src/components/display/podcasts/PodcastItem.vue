@@ -1,23 +1,20 @@
 <template>
   <div
     class="podcast-item-container"
-    :class="[podcastBorderBottom ? 'border-bottom' : '']"
     :data-pubdate="displayDate"
     :data-count="podcast.downloadCount"
   >
     <PodcastImage
       :podcast="podcast"
-      :hide-play="
-        hoverDesc && 0 !== description.length && podcastItemDescription
-      "
-      :display-description="0 !== description.length && podcastItemDescription"
+      :hide-play="hoverDesc && 0 !== description.length"
+      :display-description="0 !== description.length"
       :arrow-direction="arrowDirection"
       :fetch-conference="fetchConference"
       @hide-description="hideDescription"
       @show-description="showDescription"
     />
     <div
-      v-if="podcastItemDescription && hoverDesc"
+      v-if="hoverDesc"
       ref="descriptionPodcastContainer"
       class="description-podcast-item html-wysiwyg-content"
       :class="[
@@ -51,7 +48,6 @@
 import debounce from "../../mixins/debounce";
 import PodcastItemInfo from "./PodcastItemInfo.vue";
 import PodcastImage from "./PodcastImage.vue";
-import { state } from "../../../stores/ParamSdkStore";
 import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
@@ -81,12 +77,6 @@ export default defineComponent({
   },
 
   computed: {
-    podcastBorderBottom(): boolean {
-      return state.podcastsPage.podcastBorderBottom as boolean;
-    },
-    podcastItemDescription(): boolean {
-      return state.podcastPage.podcastItemDescription as boolean;
-    },
     displayDate(): string {
       return dayjs(this.podcast.pubDate).format();
     },
@@ -116,9 +106,6 @@ export default defineComponent({
       this.firstDisplayDesc = true;
     },
     showDescription(): void {
-      if (!this.podcastItemDescription) {
-        return;
-      }
       this.arrowDirection = "down";
       this.hoverDesc = true;
       this.$nextTick(() => {
@@ -126,9 +113,6 @@ export default defineComponent({
       });
     },
     hideDescription(): void {
-      if (!this.podcastItemDescription) {
-        return;
-      }
       this.arrowDirection = "up";
       this.hoverDesc = false;
     },
@@ -137,13 +121,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .podcast-item-container {
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     list-style: none;
     position: relative;
-    width: $octopus-item-podcast-size;
+    width: octopusVariables.$octopus-item-podcast-size;
     height: 20.5rem;
     overflow: hidden;
     display: flex;
@@ -157,12 +141,12 @@ export default defineComponent({
       padding: 1rem;
       color: #333;
       background-color: rgba(255, 255, 255, 0.92);
-      height: $octopus-item-podcast-size;
+      height: octopusVariables.$octopus-item-podcast-size;
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 0.9em;
       position: absolute;
-      width: $octopus-item-podcast-size;
+      width: octopusVariables.$octopus-item-podcast-size;
       word-break: break-word;
       &:not(.mobile-description-podcast-item).after-podcast-description:after {
         content: "...";
@@ -188,11 +172,11 @@ export default defineComponent({
       margin: 0.5rem !important;
     }
     @media (max-width: 450px) {
-      width: $octopus-mobile-item-size;
+      width: octopusVariables.$octopus-mobile-item-size;
       height: 18.8rem;
       .description-podcast-item {
-        height: $octopus-mobile-item-size;
-        width: $octopus-mobile-item-size;
+        height: octopusVariables.$octopus-mobile-item-size;
+        width: octopusVariables.$octopus-mobile-item-size;
       }
     }
   }

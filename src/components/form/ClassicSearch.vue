@@ -35,12 +35,12 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .champs-searchPage {
     input {
       border: 2px solid #dee2e6;
-      border-radius: $octopus-borderradius;
+      border-radius: octopusVariables.$octopus-borderradius;
       margin: 0 !important;
       height: 48px;
     }

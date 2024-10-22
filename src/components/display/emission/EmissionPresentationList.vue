@@ -12,7 +12,7 @@
           :class="!isPhone ? 'me-3' : ''"
           :emission="allEmissions[0]"
           :is-vertical="!isPhone"
-          :isDescription="isDescription"
+          :is-description="isDescription"
         />
         <div
           v-if="allEmissions.length > 1"
@@ -21,12 +21,12 @@
           <EmissionItemPresentation
             v-if="allEmissions[1]"
             :emission="allEmissions[1]"
-            :isDescription="isDescription"
+            :is-description="isDescription"
           />
           <EmissionItemPresentation
             v-if="allEmissions[2]"
             :emission="allEmissions[2]"
-            :isDescription="isDescription"
+            :is-description="isDescription"
           />
         </div>
         <div
@@ -36,12 +36,12 @@
           <EmissionItemPresentation
             v-if="allEmissions[3]"
             :emission="allEmissions[3]"
-            :isDescription="isDescription"
+            :is-description="isDescription"
           />
           <EmissionItemPresentation
             v-if="allEmissions[4]"
             :emission="allEmissions[4]"
-            :isDescription="isDescription"
+            :is-description="isDescription"
           />
         </div>
       </div>
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { handle403 } from "../../mixins/handle403";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
@@ -65,6 +65,7 @@ import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
 import imageProxy from "../../mixins/imageProxy";
 import resizePhone from "../../mixins/resizePhone";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const EmissionItemPresentation = defineAsyncComponent(
   () => import("./EmissionPresentationItem.vue"),
 );
@@ -101,21 +102,17 @@ export default defineComponent({
     async fetchNext(): Promise<void> {
       this.loading = true;
       try {
-        const data = await octopusApi.fetchDataWithParams<{
-          count: number;
-          result: Array<Emission>;
-          sort: string;
-        }>(
-          0,
-          "emission/search",
-          {
+        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+          api: 0,
+          path: "emission/search",
+          parameters: {
             first: 0,
             size: 5,
             organisationId: this.organisationId,
             sort: "LAST_PODCAST_DESC",
           },
-          true,
-        );
+          specialTreatement: true,
+        });
         this.allEmissions = this.allEmissions.concat(
           data.result.filter((em: Emission | null) => null !== em),
         );

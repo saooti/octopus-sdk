@@ -142,7 +142,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
 .octopus-app {
   .live-image-status {
     text-align: center;

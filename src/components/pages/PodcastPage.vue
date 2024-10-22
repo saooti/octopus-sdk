@@ -17,12 +17,12 @@
           @update-podcast="updatePodcast"
         />
         <SharePlayer
-          v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
+          v-if="!isPodcastmaker && (undefined !== authOrgaId || notExclusive)"
           :podcast="podcast"
           :emission="podcast.emission"
           :exclusive="exclusive"
           :not-exclusive="notExclusive"
-          :organisation-id="myOrganisationId"
+          :organisation-id="authOrgaId"
           :is-education="isEducation"
         />
 
@@ -77,8 +77,7 @@ import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import PodcastModuleBox from "../display/podcasts/PodcastModuleBox.vue";
 import ClassicLazy from "../misc/ClassicLazy.vue";
 import ClassicLoading from "../form/ClassicLoading.vue";
-import octopusApi from "@saooti/octopus-api";
-import crudApi from "@/api/classicCrud";
+import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import {
@@ -88,6 +87,7 @@ import {
 import { handle403 } from "../mixins/handle403";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Category } from "@/stores/class/general/category";
+import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
@@ -140,6 +140,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAuthStore, ["isRoleLive"]),
     ...mapState(useGeneralStore, ["storedCategories"]),
     hideSuggestions(): boolean {
       return (
@@ -149,13 +150,9 @@ export default defineComponent({
           | undefined)
       );
     },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     pageParameters() {
       return {
         isShareButtons: state.podcastPage.ShareButtons as boolean,
-        isSharePlayer: state.podcastPage.SharePlayer as boolean,
       };
     },
     emissionMainCategory(): number {
@@ -188,11 +185,7 @@ export default defineComponent({
         });
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.podcast?.organisation.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.podcast?.organisation.id);
     },
     isLiveReadyToRecord(): boolean {
       return (
@@ -202,11 +195,7 @@ export default defineComponent({
       );
     },
     isOctopusAndAnimator(): boolean {
-      return (
-        !this.isPodcastmaker &&
-        this.editRight &&
-        (state.generalParameters.isRoleLive as boolean)
-      );
+      return !this.isPodcastmaker && this.editRight && this.isRoleLive;
     },
     titlePage(): string {
       return this.isLiveReadyToRecord
@@ -241,10 +230,10 @@ export default defineComponent({
     ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     ...mapActions(useCommentStore, ["getCommentsConfig", "initCommentUser"]),
     async fetchConferencePublic() {
-      const data = await octopusApi.fetchData<ConferencePublicInfo>(
-        9,
-        "conference/info/" + this.podcast?.conferenceId,
-      );
+      const data = await classicApi.fetchData<ConferencePublicInfo>({
+        api: 9,
+        path: "conference/info/" + this.podcast?.conferenceId,
+      });
       this.fetchConference = {
         ...data,
         ...{
@@ -257,10 +246,10 @@ export default defineComponent({
       if (!this.podcast || undefined == this.podcast.conferenceId) return;
       if (this.isOctopusAndAnimator) {
         try {
-          const data = await crudApi.fetchData<Conference>(
-            9,
-            "conference/" + this.podcast.conferenceId,
-          );
+          const data = await classicApi.fetchData<Conference>({
+            api: 9,
+            path: "conference/" + this.podcast.conferenceId,
+          });
           this.fetchConference = data ?? { conferenceId: -1, title: "" };
         } catch {
           await this.fetchConferencePublic();
@@ -291,8 +280,7 @@ export default defineComponent({
       if (this.podcast.emission.annotations?.exclusive) {
         this.exclusive = "true" === this.podcast.emission.annotations.exclusive;
         this.exclusive =
-          this.exclusive &&
-          this.myOrganisationId !== this.podcast.organisation.id;
+          this.exclusive && this.authOrgaId !== this.podcast.organisation.id;
       }
       if (this.podcast.emission.annotations?.notExclusive) {
         this.notExclusive =
@@ -303,10 +291,10 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        const data: Podcast = await octopusApi.fetchData<Podcast>(
-          0,
-          "podcast/" + this.podcastId,
-        );
+        const data = await classicApi.fetchData<Podcast>({
+          api: 0,
+          path: "podcast/" + this.podcastId,
+        });
         if (
           "PUBLIC" !== data.organisation.privacy &&
           this.filterOrgaId !== data.organisation.id &&

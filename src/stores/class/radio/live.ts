@@ -12,14 +12,13 @@ export interface TimeRangeAvailable {
   end: Date;
 }
 
-export interface PlanningLive extends Occurrence {
-}
+export interface PlanningLive extends Occurrence {}
 
 export function emptyCrudPlanningLive(): CrudPlanningLive {
-	return {
-		isLive: false,
+  return {
+    isLive: false,
     dateValid: false,
     canalId: 0,
-    occurrenceId:0,
-	};
+    occurrenceId: 0,
+  };
 }

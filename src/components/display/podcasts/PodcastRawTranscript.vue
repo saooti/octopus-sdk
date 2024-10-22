@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -65,10 +65,10 @@ export default defineComponent({
         return;
       }
       try {
-        this.transcript = await octopusApi.fetchData(
-          11,
-          `transcription/text/${this.podcastId}`,
-        );
+        this.transcript = await classicApi.fetchData({
+          api: 11,
+          path: `transcription/text/${this.podcastId}`,
+        });
       } catch {
         //Do nothing
       }
@@ -78,13 +78,13 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .btn-transcript {
     position: relative;
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     overflow: hidden;
-    background: $octopus-secondary-color;
+    background: octopusVariables.$octopus-secondary-color;
     transition: all 0.2s linear 0s;
 
     &:not(.open):before,
@@ -144,8 +144,8 @@ export default defineComponent({
       inset: 0;
       padding: 3px;
       background: repeating-conic-gradient(
-          $octopus-secondary-color 0 25%,
-          $octopus-primary-color 0 50%
+        octopusVariables.$octopus-secondary-color 0 25%,
+        octopusVariables.$octopus-primary-color 0 50%
         )
         0 0/30px 30px round;
       -webkit-mask:

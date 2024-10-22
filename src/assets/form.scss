@@ -1,3 +1,5 @@
+@use '@scss/variables' as octopusVariables;
+
 .octopus-app{
 	.octopus-form-item{
 		min-height: 1.44rem;
@@ -29,13 +31,13 @@
 		outline-color: transparent !important;
 		padding: 0.25rem 0.4rem;
 		border: 0.1rem solid #dee2e6;
-		border-radius: $octopus-borderradius;
+		border-radius: octopusVariables.$octopus-borderradius;
 		height: 2rem;
 		max-width: 85vw;
 		padding-right: 40px;
 	}
 	input[type="checkbox"], input[type="radio"]{
-		accent-color: $octopus-primary-color;
+		accent-color: octopusVariables.$octopus-primary-color;
 		cursor: pointer;
 		margin-right: 5px;
 	}
@@ -44,7 +46,7 @@
 		background: #fff;
 		background-image: none;
 		border: 0.1rem solid #dee2e6;
-		border-radius:$octopus-borderradius;
+		border-radius:octopusVariables.$octopus-borderradius;
 		color: #353535;
 		display: block;
 		font-size: 0.8rem;

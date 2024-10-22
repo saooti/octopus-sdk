@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import Constants from "../../../../public/config";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";

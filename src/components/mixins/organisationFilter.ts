@@ -1,6 +1,6 @@
 import { handle403 } from "../mixins/handle403";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import { useFilterStore } from "../../stores/FilterStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
@@ -15,15 +15,15 @@ export default defineComponent({
     async selectOrganisation(organisationId: string): Promise<void> {
       try {
         const response = await this.getOrgaData(organisationId);
-        const data = await octopusApi.fetchDataWithParams<Array<Rubriquage>>(
-          0,
-          "rubriquage/find/" + organisationId,
-          {
+        const data = await classicApi.fetchData<Array<Rubriquage>>({
+          api: 0,
+          path:"rubriquage/find/" + organisationId,
+          parameters:{
             sort: "HOMEPAGEORDER",
             homePageOrder: true,
           },
-          true,
-        );
+          specialTreatement:true
+        });
         const isLive = await this.getOrgaLiveEnabled(organisationId);
         this.filterUpdateOrga({
           orgaId: organisationId,

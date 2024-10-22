@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { state } from "../../../stores/ParamSdkStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Category } from "@/stores/class/general/category";
@@ -182,20 +182,17 @@ export default defineComponent({
       }
     },
     async fetchCategories(organisationId: string): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<Array<Category>>(
-        0,
-        `iab/list/${organisationId}`,
-        {
-          lang: this.$i18n.locale,
-        },
-      );
+      const data = await classicApi.fetchData<Array<Category>>({
+        api: 0,
+        path: `iab/list/${organisationId}`,
+        parameters: { lang: this.$i18n.locale },
+      });
       this.storedUpdateCategoriesOrga(data);
     },
   },
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
 .octopus-app {
   .category-list-container {
     display: inline-flex;

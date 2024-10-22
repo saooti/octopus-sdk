@@ -33,7 +33,7 @@
 <script lang="ts">
 import dayjs from "dayjs";
 import PodcastInlineListTemplate from "./PodcastInlineListTemplate.vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import SwiperList from "../list/SwiperList.vue";
@@ -108,12 +108,10 @@ export default defineComponent({
   },
   methods: {
     async fetchNext(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<
-        ListClassicReturn<Podcast>
-      >(
-        0,
-        "podcast/search",
-        {
+      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+        api: 0,
+        path: "podcast/search",
+        parameters: {
           first: 0,
           size: 10,
           organisationId: this.organisation,
@@ -134,8 +132,8 @@ export default defineComponent({
               ? dayjs().subtract(3, "months").toISOString()
               : undefined,
         },
-        true,
-      );
+        specialTreatement: true,
+      });
       this.loading = true;
       this.allPodcasts = data.result.filter(
         (pod: Podcast | null) => null !== pod,

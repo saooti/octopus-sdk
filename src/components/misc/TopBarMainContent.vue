@@ -262,7 +262,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .top-bar-grid {
     display: grid;
@@ -287,7 +287,7 @@ export default defineComponent({
       }
     }
     .client-logo {
-      border-radius: $octopus-borderradius;
+      border-radius: octopusVariables.$octopus-borderradius;
     }
     .top-bar-logo img {
       max-width: 140px !important;

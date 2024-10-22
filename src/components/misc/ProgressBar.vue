@@ -147,7 +147,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "../../assets/progressbar.scss";
+@use "../../assets/progressbar";
 .octopus-app .player-container {
   .octopus-small-popover {
     font-size: 0.7rem;

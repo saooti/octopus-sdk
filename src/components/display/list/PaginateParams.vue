@@ -51,7 +51,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
 .octopus-app .paginate {
   display: flex;
   justify-content: flex-end;

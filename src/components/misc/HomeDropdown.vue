@@ -7,7 +7,7 @@
       @click="goToAdministration"
     />
     <router-link
-      v-if="isAuthenticatedWithOrga && isContribution"
+      v-if="isAuthenticatedWithOrga && isRoleContribution"
       :title="$t('Upload')"
       to="/main/priv/upload"
       class="btn admin-button hide-small-screen m-1 saooti-download text-blue-octopus"
@@ -79,13 +79,13 @@
 </template>
 
 <script lang="ts">
-import crudApi from "@/api/classicCrud";
 import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { Organisation } from "@/stores/class/general/organisation";
+import classicApi from "../../api/classicApi";
 export default defineComponent({
   name: "HomeDropdown",
   components: {
@@ -97,7 +97,13 @@ export default defineComponent({
     scrolled: { default: false, type: Boolean },
   },
   computed: {
-    ...mapState(useAuthStore, ["authProfile", "isGarRole"]),
+    ...mapState(useAuthStore, [
+      "authOrgaId",
+      "authProfile",
+      "isGarRole",
+      "isRoleContribution",
+      "isRoleOrganisation",
+    ]),
     organisationsAvailable(): Array<Organisation> {
       return this.authProfile.organisations ?? [];
     },
@@ -125,7 +131,7 @@ export default defineComponent({
           title: this.$t("Upload"),
           class: "octopus-dropdown-item show-small-phone-flex",
           path: "/main/priv/upload",
-          condition: this.isAuthenticatedWithOrga && this.isContribution,
+          condition: this.isAuthenticatedWithOrga && this.isRoleContribution,
         },
         {
           title: this.$t("Edit my profile"),
@@ -139,8 +145,7 @@ export default defineComponent({
           path: "/main/priv/edit/organisation",
           condition:
             this.isAuthenticatedWithOrga &&
-            ((state.generalParameters.isOrganisation as boolean) ||
-              1 < this.organisationsAvailable.length),
+            (this.isRoleOrganisation || 1 < this.organisationsAvailable.length),
         },
       ];
     },
@@ -151,16 +156,17 @@ export default defineComponent({
       return undefined !== this.authProfile?.userId;
     },
     isAuthenticatedWithOrga(): boolean {
-      return state.generalParameters.authenticated ?? false;
-    },
-    isContribution(): boolean {
-      return state.generalParameters.isContribution ?? false;
+      return undefined !== this.authOrgaId;
     },
   },
   methods: {
     async logoutFunction() {
       try {
-        await crudApi.postData(4, "/logout", undefined);
+        await classicApi.postData({
+          api: 4,
+          path: "/logout",
+          dataToSend: undefined,
+        });
         await this.$router.push({ path: "/" });
         location.reload();
       } catch (error) {

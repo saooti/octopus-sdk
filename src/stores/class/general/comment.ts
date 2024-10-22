@@ -4,16 +4,16 @@ export interface CommentPodcast {
   commentId: number;
   content: string;
   date: string;
-  dislikes:number;
-  likes:number;
+  dislikes: number;
+  likes: number;
   podcastId: number;
   poster: {
     authenticated: boolean;
     userName: string;
-    uuid: string; 
+    uuid: string;
   };
-  responses:Array<number>;
-  state: string; //VALIDATED,NOT_VALID,PENDING,
+  responses: Array<number>;
+  state: string; //VALIDATED,NOT_VALID,PENDING
   timeline?: number;
 }
 export interface CommentCreate {
@@ -21,60 +21,50 @@ export interface CommentCreate {
   content: string;
   name: string;
   podcastId: number;
-  state?: string;
-  uuid:string;
+  state: string;
+  uuid: string;
   timeline?: number;
 }
-export interface CommentFeelings{
+export interface CommentFeelings {
   dislikesCount: number;
   feeling: string;
-  error?:string;
-  likesCount:  number;
+  likesCount: number;
 }
 export interface CommentAbuse {
   commentId: number;
   date: string;
   description: string;
   organisationId: string;
-  podcastId:number;
-  uuid:  string;
+  podcastId: number;
+  uuid: string;
 }
-
-export interface CommentAbuseInfo {
-  abuseCount: number;
-  commentId: number;
-  date: string;
-  uuid:  string;
-}
-
 export function emptyCommentAbuse(): CommentAbuse {
   return {
     commentId: 0,
     date: "",
-    description:"",
-    organisationId:"",
-    podcastId:0,
-    uuid:""
+    description: "",
+    organisationId: "",
+    podcastId: 0,
+    uuid: "",
   };
 }
 
 export function emptyComment(): CommentPodcast {
   return {
-    abuse:0,
-    likes:0,
-    dislikes:0,
-    date:"",
+    abuse: 0,
+    likes: 0,
+    dislikes: 0,
+    date: "",
     commentId: -1,
     content: "",
     podcastId: 0,
-    poster:{
+    poster: {
       authenticated: false,
       userName: "Fake",
-      uuid:""
+      uuid: "",
     },
     responses: [],
     state: "VALIDATED",
-    timeline:0,
+    timeline: 0,
   };
 }
-

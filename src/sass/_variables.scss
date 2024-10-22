@@ -1,21 +1,19 @@
 // Typography
-$font-family-sans-serif: sans-serif;
 $font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$primary: #1a8658 !default;
+$secondary: #636C73 !default;
+$danger: #E22C27 !default;
+
+
+//SDK Octopus style
+$blue-octopus: #08667E !default;
+$octopus-complementary-color: #813257;
 
 $octopus-item-size: 12.5rem !default;
 $octopus-item-podcast-size: 13.5rem !default;
 $octopus-mobile-item-size: 12.5rem !default;
 $octopus-borderradius: 0.2rem !default;
 
-// bootstrap color
-$primary: #1a8658 !default;
-$secondary: #636C73 !default;
-$danger: #E22C27 !default;
-
-$blue-octopus: #08667E !default;
-$octopus-complementary-color: #813257;
-//SDK Octopus style
 $octopus-background: white !default;
 $octopus-primary-color: #1a8658 !default;
 $octopus-secondary-color : #ddd !default;

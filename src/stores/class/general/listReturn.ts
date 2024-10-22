@@ -15,8 +15,7 @@ export interface ListReturn<T> {
   totalPages: number;
 }
 
-
-export interface ListClassicReturn<T>{
+export interface ListClassicReturn<T> {
   count: number;
   result: Array<T>;
   sort: string;

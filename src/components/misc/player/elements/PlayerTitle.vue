@@ -64,8 +64,6 @@ export default defineComponent({
         return this.displayTitle(this.playerRadio.metadata);
       }
       if (this.playerPodcast) {
-        if (this.isEmissionName)
-          return this.emissionName + " - " + this.playerPodcast.title;
         return this.playerPodcast.title;
       }
       if (this.playerMedia) return this.playerMedia.title;

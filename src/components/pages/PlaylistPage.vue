@@ -24,15 +24,12 @@
             <p class="html-wysiwyg-content" v-html="urlify(description)" />
             <!-- eslint-enable -->
           </div>
-          <EditBox
-            v-if="editRight && pageParameters.isEditBox"
-            :playlist="playlist"
-          />
+          <EditBox v-if="editRight && !isPodcastmaker" :playlist="playlist" />
         </div>
         <SharePlayer
-          v-if="pageParameters.isSharePlayer && authenticated"
+          v-if="!isPodcastmaker && undefined !== authOrgaId"
           :playlist="playlist"
-          :organisation-id="myOrganisationId"
+          :organisation-id="authOrgaId"
           :is-education="isEducation"
         />
         <ShareButtons
@@ -52,11 +49,12 @@
 
 <script lang="ts">
 import { useGeneralStore } from "../../stores/GeneralStore";
-import { mapActions } from "pinia";
+import { useAuthStore } from "../../stores/AuthStore";
+import { mapActions, mapState } from "pinia";
 import { orgaComputed } from "../mixins/orgaComputed";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import PodcastList from "../display/playlist/PodcastList.vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
 import displayMethods from "../mixins/displayMethods";
 import imageProxy from "../mixins/imageProxy";
@@ -101,11 +99,10 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["isRolePlaylists"]),
     pageParameters() {
       return {
-        isEditBox: state.podcastPage.EditBox as boolean,
         isShareButtons: state.podcastPage.ShareButtons as boolean,
-        isSharePlayer: state.podcastPage.SharePlayer as boolean,
       };
     },
     pageTitle(): string {
@@ -119,9 +116,6 @@ export default defineComponent({
         "AMBIANCE_PROGRAMMED" === this.playlist?.ambianceType
       );
     },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     name(): string {
       return this.playlist?.title ?? "";
     },
@@ -129,10 +123,9 @@ export default defineComponent({
       return this.playlist?.description ?? "";
     },
     editRight(): boolean {
-      return (
-        (true === state.generalParameters.isPlaylist &&
-          this.myOrganisationId === this.playlist?.organisation?.id) ||
-        true === state.generalParameters.isAdmin
+      return this.isEditRights(
+        this.playlist?.organisation?.id,
+        this.isRolePlaylists,
       );
     },
   },
@@ -158,10 +151,10 @@ export default defineComponent({
       try {
         this.loaded = false;
         this.error = false;
-        this.playlist = await octopusApi.fetchData<Playlist>(
-          0,
-          "playlist/" + this.playlistId,
-        );
+        this.playlist = await classicApi.fetchData<Playlist>({
+          api: 0,
+          path: "playlist/" + this.playlistId,
+        });
         if (
           (!this.editRight && this.playlistRadio) ||
           ("PUBLIC" !== this.playlist.organisation?.privacy &&

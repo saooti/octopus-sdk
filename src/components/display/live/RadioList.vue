@@ -19,8 +19,7 @@
 <script lang="ts">
 import RadioItem from "./RadioItem.vue";
 import { handle403 } from "../../mixins/handle403";
-import { orgaComputed } from "../../mixins/orgaComputed";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { Canal } from "@/stores/class/radio/canal";
@@ -32,7 +31,7 @@ export default defineComponent({
     RadioItem,
   },
 
-  mixins: [handle403, orgaComputed],
+  mixins: [handle403],
 
   props: {
     organisationId: { default: undefined, type: String },
@@ -64,10 +63,10 @@ export default defineComponent({
         return;
       }
       try {
-        this.radio = await octopusApi.fetchData<Array<Canal>>(
-          14,
-          "canal/orga/" + this.filterOrgaUsed + "/",
-        );
+        this.radio = await classicApi.fetchData<Array<Canal>>({
+          api: 14,
+          path: "canal/orga/" + this.filterOrgaUsed + "/",
+        });
       } catch (error) {
         this.handle403(error as AxiosError);
       }

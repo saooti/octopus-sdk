@@ -7,9 +7,8 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
-import crudApi from "@/api/classicCrud";
 import displayMethods from "../../mixins/displayMethods";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
@@ -51,17 +50,17 @@ export default defineComponent({
     async fetchPodcastData(): Promise<void> {
       if (!this.fetchConference?.podcastId) return;
       try {
-        this.live = await octopusApi.fetchData<Podcast>(
-          0,
-          "podcast/" + this.fetchConference.podcastId,
-        );
+        this.live = await classicApi.fetchData<Podcast>({
+          api: 0,
+          path: "podcast/" + this.fetchConference.podcastId,
+        });
       } catch {
         this.$emit("deleteItem");
         if (this.fetchConference.conferenceId) {
-          await crudApi.deleteData(
-            9,
-            "conference/" + this.fetchConference.conferenceId,
-          );
+          await classicApi.deleteData({
+            api: 9,
+            path: "conference/" + this.fetchConference.conferenceId,
+          });
         }
       }
     },
@@ -74,10 +73,10 @@ export default defineComponent({
       ) {
         return;
       }
-      const confInfo = await octopusApi.fetchData<ConferencePublicInfo>(
-        9,
-        "conference/info/" + this.fetchConference.conferenceId,
-      );
+      const confInfo = await classicApi.fetchData<ConferencePublicInfo>({
+        api: 9,
+        path: "conference/info/" + this.fetchConference.conferenceId,
+      });
       const newStatus = confInfo.status;
       if (newStatus !== this.fetchConference.status) {
         this.$emit("updateItem", {

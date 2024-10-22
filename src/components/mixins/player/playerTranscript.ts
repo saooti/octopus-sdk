@@ -1,4 +1,4 @@
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { defineComponent } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
@@ -20,7 +20,11 @@ export const playerTranscript = defineComponent({
       {
         return;
       }
-      let adserverConfig = await octopusApi.fetchDataPublic<AdserverOtherEmission>(0,`ad/test/podcast/${this.playerPodcast.podcastId}`);
+      let adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
+        api:0,
+        path:`ad/test/podcast/${this.playerPodcast.podcastId}`,
+        isNotAuth:true
+      });
       const doubletsLength = adserverConfig.config.doublets.length;
       if(1=== doubletsLength &&  "pre" === adserverConfig.config.doublets[0].timing.insertion){
         this.playerUpdateDelayStitching( audioPlayer.duration - (this.playerPodcast.duration / 1000));
@@ -36,10 +40,11 @@ export const playerTranscript = defineComponent({
         this.playerUpdateTranscript();
         return;
       }
-      const result = await octopusApi.fetchDataPublic<string>(
-        11,
-        `response/${this.playerPodcast.podcastId}`,
-      );
+      const result = await classicApi.fetchData<string>({
+        api:11,
+        path:`response/${this.playerPodcast.podcastId}`,
+        isNotAuth:true
+      });
 
       const arrayTranscript = this.parseSrt(result);
       const actualText =

@@ -118,7 +118,7 @@ import { mapState } from "pinia";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import imageProxy from "../../mixins/imageProxy";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { defineComponent } from "vue";
@@ -260,14 +260,18 @@ export default defineComponent({
         to: this.endOfDay,
       };
       let occurrences: Array<PlanningOccurrence | PlanningLive> =
-        await octopusApi.fetchDataWithParams<Array<PlanningOccurrence>>(
-          14,
-          "planning/occurrence/list",
-          params,
-        );
-      const lives = await octopusApi.fetchDataWithParams<
+        await classicApi.fetchData<Array<PlanningOccurrence>>({
+          api: 14,
+          path: "planning/occurrence/list",
+          parameters: params,
+        });
+      const lives: Array<PlanningOccurrence> = await classicApi.fetchData<
         Array<PlanningOccurrence>
-      >(14, "live/list", params);
+      >({
+        api: 14,
+        path: "live/list",
+        parameters: params,
+      });
       if (lives.length) {
         occurrences = occurrences.concat(lives);
         occurrences.sort((a, b) => {

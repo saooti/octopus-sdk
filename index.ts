@@ -99,6 +99,7 @@ import debounce from "./src/components/mixins/debounce.ts";
 import domHelper from "./src/helper/dom.ts";
 import durationHelper from "./src/helper/duration.ts";
 import stringHelper from "./src/helper/string.ts";
+import fetchHelper from "./src/helper/fetch.ts";
 
 
 //stores
@@ -108,7 +109,10 @@ import {usePlayerStore} from "./src/stores/PlayerStore.ts";
 import {useGeneralStore} from "./src/stores/GeneralStore.ts";
 import {useFilterStore} from "./src/stores/FilterStore.ts";
 import {useCommentStore} from "./src/stores/CommentStore.ts";
-
+import {useApiStore} from "./src/stores/ApiStore.ts";
+import {useAuthStore} from "./src/stores/AuthStore.ts";
+import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
+import classicApi from "./src/api/classicApi.ts";
 
 export {
     selenium,
@@ -128,5 +132,11 @@ export {
     useCommentStore,
     domHelper,
     durationHelper,
-    stringHelper
+    stringHelper,
+    fetchHelper,
+    useApiStore,
+    useAuthStore,
+    getApiUrl,
+    ModuleApi,
+    classicApi
 };

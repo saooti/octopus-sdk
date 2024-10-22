@@ -152,6 +152,7 @@ import PodcastImage from "./PodcastImage.vue";
 import ParticipantDescription from "./ParticipantDescription.vue";
 import PodcastRawTranscript from "./PodcastRawTranscript.vue";
 import { state } from "../../../stores/ParamSdkStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import displayMethods from "../../mixins/displayMethods";
 import podcastView from "../../mixins/podcast/podcastView";
 import { orgaComputed } from "../../mixins/orgaComputed";
@@ -180,6 +181,7 @@ const LikeSection = defineAsyncComponent(
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 import resizePhone from "../../mixins/resizePhone";
+import { mapState } from "pinia";
 export default defineComponent({
   name: "PodcastModuleBox",
   components: {
@@ -214,6 +216,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAuthStore, ["isRoleLive"]),
     errorMessage(): string {
       if (!this.podcast?.availability.visibility) {
         return this.$t("Podcast is not visible for listeners");
@@ -223,18 +226,11 @@ export default defineComponent({
       }
       return this.podcastNotValid ? this.$t("Podcast not validated") : "";
     },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     isProgressBar(): boolean {
       return state.emissionsPage.progressBar as boolean;
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.podcast?.organisation.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.podcast?.organisation.id);
     },
     isLiveReady(): boolean {
       return (
@@ -250,11 +246,7 @@ export default defineComponent({
       );
     },
     isOctopusAndAnimator(): boolean {
-      return (
-        !this.isPodcastmaker &&
-        this.editRight &&
-        (state.generalParameters.isRoleLive as boolean)
-      );
+      return !this.isPodcastmaker && this.editRight && this.isRoleLive;
     },
     podcastNotValid(): boolean {
       return (
@@ -272,7 +264,7 @@ export default defineComponent({
       return (this.podcast?.annotations?.authorCredit as string) ?? "";
     },
     isEditBox(): boolean {
-      return (state.podcastPage.EditBox as boolean) ?? false;
+      return !((state.generalParameters.podcastmaker as boolean) ?? false);
     },
   },
   methods: {

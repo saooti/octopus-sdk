@@ -24,9 +24,9 @@
         </div>
         <RadioPlanning :radio="radio" />
         <SharePlayerRadio
-          v-if="authenticated"
+          v-if="undefined !== authOrgaId"
           :canal="radio"
-          :organisation-id="myOrganisationId"
+          :organisation-id="authOrgaId"
         />
         <ShareButtons :organisation-id="radio.organisationId" />
       </div>
@@ -40,9 +40,8 @@
 
 <script lang="ts">
 import { useGeneralStore } from "../../stores/GeneralStore";
-import { mapActions } from "pinia";
-import octopusApi from "@saooti/octopus-api";
-import { state } from "../../stores/ParamSdkStore";
+import { mapActions, mapState } from "pinia";
+import classicApi from "../../api/classicApi";
 import displayMethods from "../mixins/displayMethods";
 import imageProxy from "../mixins/imageProxy";
 import { orgaComputed } from "../mixins/orgaComputed";
@@ -51,6 +50,7 @@ import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
 import { Canal } from "@/stores/class/radio/canal";
+import { useAuthStore } from "../../stores/AuthStore";
 const SharePlayerRadio = defineAsyncComponent(
   () => import("../display/sharing/SharePlayerRadio.vue"),
 );
@@ -98,16 +98,9 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useAuthStore, ["isRoleRadio"]),
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          true === state.generalParameters.isRadio &&
-          this.myOrganisationId === this.radio?.organisationId) ||
-        true === state.generalParameters.isAdmin
-      );
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
+      return this.isEditRights(this.radio?.organisationId, this.isRoleRadio);
     },
   },
   watch: {
@@ -127,10 +120,10 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        this.radio = await octopusApi.fetchData<Canal>(
-          14,
-          "canal/" + this.canalId,
-        );
+        this.radio = await classicApi.fetchData<Canal>({
+          api: 14,
+          path: "canal/" + this.canalId,
+        });
         this.contentToDisplayUpdate(this.radio);
         this.$emit("radioTitle", this.radio.name);
       } catch (error) {

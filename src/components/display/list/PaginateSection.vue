@@ -187,20 +187,20 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app .paginate-fixed {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
   position: sticky;
-  background: $octopus-background;
+  background: octopusVariables.$octopus-background;
   padding: 0.5rem 0;
   z-index: 10;
   .btn {
     border-radius: 0;
     &.active {
-      background: $primaryColorMoreTransparent;
+      background: octopusVariables.$primaryColorMoreTransparent;
     }
   }
 }

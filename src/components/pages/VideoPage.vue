@@ -88,18 +88,19 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../stores/ParamSdkStore";
-import { orgaComputed } from "../mixins/orgaComputed";
 import ClassicLoading from "../form/ClassicLoading.vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import { Podcast } from "@/stores/class/general/podcast";
 import ClassicNav from "../misc/ClassicNav.vue";
 import { handle403 } from "../mixins/handle403";
 import podcastView from "../mixins/podcast/podcastView";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
+import { useFilterStore } from "../../stores/FilterStore";
+import { useAuthStore } from "../../stores/AuthStore";
 import { useCommentStore } from "../../stores/CommentStore";
-import { mapActions } from "pinia";
+import { useApiStore } from "../../stores/ApiStore";
+import { mapActions, mapState } from "pinia";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";
 import {
   Conference,
@@ -133,7 +134,7 @@ export default defineComponent({
     CountdownOctopus,
   },
 
-  mixins: [handle403, orgaComputed, podcastView],
+  mixins: [handle403, podcastView],
 
   props: {
     podcastId: { default: 0, type: Number },
@@ -153,6 +154,9 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
+    ...mapState(useApiStore, ["hlsUrl"]),
     videoId(): string | undefined {
       return this.podcast?.video?.videoId;
     },
@@ -162,14 +166,11 @@ export default defineComponent({
       }
       return [];
     },
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
     canPostComment(): boolean {
       return this.getCanPostComment(
         this.configPodcast,
         this.podcast,
-        this.authenticated,
+        undefined !== this.authOrgaId,
       );
     },
     recordingLive(): boolean {
@@ -184,7 +185,7 @@ export default defineComponent({
       if (!this.recordingLive || !this.podcastConference) {
         return "";
       }
-      return `${state.podcastPage.hlsUri}live/video_dev.${this.podcastConference.conferenceId}/index.m3u8`;
+      return `${this.hlsUrl}live/video_dev.${this.podcastConference.conferenceId}/index.m3u8`;
     },
     overrideText(): string | undefined {
       if ("PUBLISHING" !== this.podcastConference?.status) {
@@ -221,10 +222,10 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        this.podcast = await octopusApi.fetchData<Podcast>(
-          0,
-          "podcast/" + this.podcastId,
-        );
+        this.podcast = await classicApi.fetchData<Podcast>({
+          api: 0,
+          path: "podcast/" + this.podcastId,
+        });
         document.title = this.podcast.title;
         const orga = this.podcast.organisation;
         const privateAccess =
@@ -260,10 +261,10 @@ export default defineComponent({
       if (!this.podcast?.conferenceId) {
         return;
       }
-      const data = await octopusApi.fetchData<ConferencePublicInfo>(
-        9,
-        "conference/info/" + this.podcast.conferenceId,
-      );
+      const data = await classicApi.fetchData<ConferencePublicInfo>({
+        api: 9,
+        path: "conference/info/" + this.podcast.conferenceId,
+      });
       this.podcastConference = {
         ...data,
         ...{
@@ -279,13 +280,13 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app .video-page-container {
   align-items: stretch;
   flex-grow: 1;
-  background: $primaryColorReallyTransparent;
-  border-radius: $octopus-borderradius;
-  box-shadow: 0 0 10px 1px $primaryColorTransparent;
+  background: octopusVariables.$primaryColorReallyTransparent;
+  border-radius: octopusVariables.$octopus-borderradius;
+  box-shadow: 0 0 10px 1px octopusVariables.$primaryColorTransparent;
   .info-video-container {
     display: flex;
     flex-direction: column;

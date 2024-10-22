@@ -16,11 +16,11 @@
 import TopBar from "@/components/misc/TopBar.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
 import ClassicLazy from "@/components/misc/ClassicLazy.vue";
-import { state } from "./stores/ParamSdkStore";
 import { Rubriquage } from "./stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "./stores/class/rubrique/rubriquageFilter";
 import { Rubrique } from "./stores/class/rubrique/rubrique";
 import initSDK from "./components/mixins/init";
+import { useAuthStore } from "./stores/AuthStore";
 import { useFilterStore } from "./stores/FilterStore";
 import { useGeneralStore } from "./stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
@@ -56,6 +56,7 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ["filterRubriquage", "filterOrgaId"]),
     ...mapState(useGeneralStore, ["storedCategories"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
   },
 
   watch: {
@@ -105,8 +106,8 @@ export default defineComponent({
         "string" === typeof this.$route.query.productor
       ) {
         orgaId = this.$route.query.productor;
-      } else if (state.generalParameters.organisationId) {
-        orgaId = state.generalParameters.organisationId;
+      } else if (this.authOrgaId) {
+        orgaId = this.authOrgaId;
       }
       if ("" === orgaId) {
         return;

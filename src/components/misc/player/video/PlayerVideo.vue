@@ -13,8 +13,8 @@
   </teleport>
 </template>
 <script lang="ts">
-import { state } from "../../../../stores/ParamSdkStore";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
+import { useApiStore } from "../../../../stores/ApiStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const PlayerVideoDigiteka = defineAsyncComponent(
@@ -34,12 +34,13 @@ export default defineComponent({
     return {};
   },
   computed: {
+    ...mapState(useApiStore, ["hlsUrl"]),
     ...mapState(usePlayerStore, ["playerVideo", "playerLive", "playerPodcast"]),
     hlsUrl(): string {
       if (!this.playerLive) {
         return "";
       }
-      return `${state.podcastPage.hlsUri}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
+      return `${this.hlsUrl}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
     },
     videoId(): string | undefined {
       return this.playerPodcast?.video?.videoId;

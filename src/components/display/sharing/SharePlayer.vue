@@ -92,12 +92,11 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from "../../mixins/orgaComputed";
-import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
+import { useApiStore } from "../../../stores/ApiStore";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
@@ -128,7 +127,6 @@ export default defineComponent({
     ClassicCheckbox,
     PlayerCommonParameters,
   },
-  mixins: [orgaComputed],
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
     emission: { default: undefined, type: Object as () => Emission },
@@ -162,7 +160,11 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useAuthStore, ["authOrganisation"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
+    ...mapState(useApiStore, ["miniplayerUrl"]),
+    authenticated(): boolean {
+      return undefined !== this.authOrgaId;
+    },
     displayWaveParam(): boolean {
       return "default" === this.iFrameModel || "emission" === this.iFrameModel;
     },
@@ -190,7 +192,7 @@ export default defineComponent({
       if (this.playlist) {
         orgaResourceId = this.playlist.organisation?.id ?? "";
       }
-      return this.authenticated && orgaResourceId === this.myOrganisationId;
+      return orgaResourceId === this.authOrgaId;
     },
     displayTranscriptParam(): boolean {
       return (
@@ -208,9 +210,6 @@ export default defineComponent({
     },
     displayChoiceAllEpisodes(): boolean {
       return !this.podcast || this.isTypeEmission;
-    },
-    baseUrl(): string {
-      return state.podcastPage.MiniplayerUri as string;
     },
     isDefault(): boolean {
       return "default" === this.iFrameModel;
@@ -269,7 +268,7 @@ export default defineComponent({
         this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
           ? "/0"
           : "/" + this.iFrameNumber;
-      url.push(`${this.baseUrl}miniplayer/`);
+      url.push(`${this.miniplayerUrl}miniplayer/`);
       if (!this.podcast && !this.playlist && this.emission) {
         url = this.constructEmissionUrl(url);
       } else if (this.playlist) {
@@ -334,11 +333,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     async initSharePlayer() {
-      const orgaId =
-        "" !== this.authOrganisation.id
-          ? this.authOrganisation.id
-          : state.generalParameters.organisationId;
-      this.orgaAttributes = await this.getOrgaAttributes(orgaId ?? "");
+      this.orgaAttributes = await this.getOrgaAttributes(this.authOrgaId ?? "");
       this.initColor();
       if (this.isLiveReadyToRecord) {
         this.iFrameModel = "large";
@@ -432,12 +427,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
-@import "../../../assets/iframe.scss";
+@use '@scss/variables' as octopusVariables;
+@use "../../../assets/iframe";
 .octopus-app {
   .sticker {
     align-self: center;
-    background: $octopus-primary-color;
+    background: octopusVariables.$octopus-primary-color;
     padding: 0.5rem;
     transition: all 0.5s ease;
     color: white;
@@ -449,7 +444,7 @@ export default defineComponent({
     &:hover {
       box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
       background: transparent;
-      color: $octopus-primary-color;
+      color: octopusVariables.$octopus-primary-color;
     }
   }
 }

@@ -44,7 +44,7 @@
 import ListPaginate from "../list/ListPaginate.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { handle403 } from "../../mixins/handle403";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import ParticipantItem from "./ParticipantItem.vue";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
@@ -132,18 +132,18 @@ export default defineComponent({
     async fetchContent(reset: boolean): Promise<void> {
       this.loading = true;
       try {
-        const data = await octopusApi.fetchDataWithParams<
-          ListClassicReturn<Participant>
-        >(
-          0,
-          "participant/search",
+        const data = await classicApi.fetchData<ListClassicReturn<Participant>>(
           {
-            first: this.dfirst,
-            size: this.dsize,
-            query: this.query,
-            organisationId: this.organisation,
+            api: 0,
+            path: "participant/search",
+            parameters: {
+              first: this.dfirst,
+              size: this.dsize,
+              query: this.query,
+              organisationId: this.organisation,
+            },
+            specialTreatement: true,
           },
-          true,
         );
         if (reset) {
           this.participants.length = 0;

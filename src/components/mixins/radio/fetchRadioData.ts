@@ -1,6 +1,6 @@
 import { defineComponent } from "vue";
 import { MediaRadio, MetadataRadio, NextAdvertising } from "@/stores/class/general/player";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
 export const fetchRadioData = defineComponent({
@@ -25,10 +25,10 @@ export const fetchRadioData = defineComponent({
         nextAdvertising: NextAdvertising
       ) => void,
     ): Promise<void> {
-      const metadata = await octopusApi.fetchData<MetadataRadio>(
-        14,
-        "player/playing/" + canalId,
-      );
+      const metadata = await classicApi.fetchData<MetadataRadio>({
+        api: 14,
+        path:  "player/playing/" + canalId,
+      });
       if(callbackAdvertising){
         callbackAdvertising(metadata.nextAdvertising);
       }
@@ -53,10 +53,10 @@ export const fetchRadioData = defineComponent({
         const historyIndex = index + 1 < len ? index + 1 : index;
         const history = arrayMetadata.slice(historyIndex, len);
         if (arrayMetadata[index].podcastId) {
-          const data: Podcast = await octopusApi.fetchData<Podcast>(
-            0,
-            "podcast/" + arrayMetadata[index].podcastId,
-          );
+          const data: Podcast = await classicApi.fetchData<Podcast>({
+            api: 0,
+            path: "podcast/" + arrayMetadata[index].podcastId,
+          });
           callbackMetadata(arrayMetadata[index], data, history);
         } else {
           callbackMetadata(arrayMetadata[index], undefined, history);

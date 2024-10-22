@@ -16,16 +16,16 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from "../mixins/orgaComputed";
+import { useFilterStore } from "../../stores/FilterStore";
 import ParticipantList from "../display/participant/ParticipantList.vue";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
 import { defineComponent } from "vue";
+import { mapState } from "pinia";
 export default defineComponent({
   components: {
     ProductorSearch,
     ParticipantList,
   },
-  mixins: [orgaComputed],
   props: {
     productor: { default: undefined, type: String },
   },
@@ -36,6 +36,9 @@ export default defineComponent({
       searchPattern: "" as string,
       organisationId: undefined as string | undefined,
     };
+  },
+  computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
   },
   created() {
     this.organisationId = this.productor ? this.productor : this.filterOrgaId;

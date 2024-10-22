@@ -1,0 +1,1 @@
+import{d as o,_ as t,o as n,c as s}from"./index.js";const c=o({methods:{updateComment(e){console.log(e)}}});function a(e,r,d,p,_,m){return n(),s("div")}const i=t(c,[["render",a]]);export{i as default};

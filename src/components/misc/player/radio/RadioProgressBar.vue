@@ -82,5 +82,5 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "../../../../assets/progressbar.scss";
+@use "../../../../assets/progressbar";
 </style>

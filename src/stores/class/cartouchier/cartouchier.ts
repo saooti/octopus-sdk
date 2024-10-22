@@ -5,5 +5,4 @@ export interface Cartouchier {
   title: string;
   organisationId: string;
   cartouches: { [key: string]: Cartouche };
-  cartoucheComplete?: { [key: string]: Cartouche };
 }

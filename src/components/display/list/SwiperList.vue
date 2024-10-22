@@ -138,7 +138,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 :root {
   --swiper-navigation-sides-offset: 0;
 }
@@ -149,13 +149,13 @@ export default defineComponent({
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: $octopus-primary-color !important;
+  color: octopusVariables.$octopus-primary-color !important;
   height: 100%;
   top: 0;
   bottom: 0;
   margin: 0;
   width: 40px;
-  background: $octopus-background;
+  background: octopusVariables.$octopus-background;
 }
 .swiper-button-lock {
   display: flex;

@@ -68,6 +68,7 @@ import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import imageProxy from "../../mixins/imageProxy";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
@@ -86,6 +87,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["authOrgaId"]),
     ...mapState(usePlayerStore, [
       "playerPodcast",
       "playerLive",
@@ -137,7 +139,7 @@ export default defineComponent({
         ("READY_TO_RECORD" === this.podcast.processingStatus ||
           "READY" === this.podcast.processingStatus ||
           ("PROCESSING" === this.podcast.processingStatus &&
-            !(state.generalParameters.authenticated as boolean)))
+            undefined === this.authOrgaId))
       );
     },
     iconName(): string {
@@ -189,9 +191,6 @@ export default defineComponent({
           "PENDING" === this.fetchConference.status)
       );
     },
-    clickPlayGoPage(): boolean {
-      return state.podcastPage.clickPlayGoPage as boolean;
-    },
     durationString(): string {
       return DurationHelper.formatDuration(
         Math.round(this.podcast.duration / 1000),
@@ -223,9 +222,6 @@ export default defineComponent({
           },
           isVideo,
         );
-      }
-      if (this.clickPlayGoPage) {
-        this.$router.push("/main/pub/podcast/" + this.podcast.podcastId);
       }
     },
   },

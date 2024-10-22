@@ -25,12 +25,12 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
 import cookies from "../../mixins/cookies";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
 import { useCommentStore } from "../../../stores/CommentStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import {
   CommentMessage,
   CommentsConfig,
@@ -62,9 +62,7 @@ export default defineComponent({
       "commentInitialized",
       "commentPodcastId",
     ]),
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
+    ...mapState(useAuthStore, ["authOrgaId"]),
     displayCommentSection(): boolean {
       return this.canPostComment || this.nbComments > 0;
     },
@@ -72,7 +70,7 @@ export default defineComponent({
       return this.getCanPostComment(
         this.configPodcast,
         this.podcast,
-        this.authenticated,
+        undefined !== this.authOrgaId,
       );
     },
     eventActive(): boolean {

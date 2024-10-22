@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
 import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
@@ -91,20 +91,18 @@ export default defineComponent({
       if (reset) {
         this.notEmpty = false;
       }
-      const data = await octopusApi.fetchDataWithParams<
-        ListClassicReturn<Podcast>
-      >(
-        0,
-        "podcast/search",
-        {
+      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+        api: 0,
+        path: "podcast/search",
+        parameters: {
           first: this.dfirst,
           size: this.dsize,
           emissionId: this.emissionId,
           sort: "DATE",
           includeStatus: "READY_TO_RECORD",
         },
-        true,
-      );
+        specialTreatement: true,
+      });
       this.afterFetching(reset, data);
     },
     afterFetching(

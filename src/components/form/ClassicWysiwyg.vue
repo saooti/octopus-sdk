@@ -187,7 +187,7 @@
 import { EditorContent, Editor } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
-import TextStyle from '@tiptap/extension-text-style'
+import TextStyle from "@tiptap/extension-text-style";
 import Link from "@tiptap/extension-link";
 import HardBreak from "@tiptap/extension-hard-break";
 import { defineComponent } from "vue";
@@ -294,7 +294,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .wysiwyg-editor {
     .form-input {
@@ -319,16 +319,16 @@ export default defineComponent({
       button {
         width: 40px;
         height: 40px;
-        background: $octopus-secondary-color;
+        background: octopusVariables.$octopus-secondary-color;
         border-width: 0;
-        border-radius: $octopus-borderradius;
+        border-radius: octopusVariables.$octopus-borderradius;
         margin: 0.2rem;
         padding: 0;
         font-size: 1.1rem;
         font-weight: 600;
         &:hover,
         &.is-active {
-          background: $primaryColorTransparent;
+          background: octopusVariables.$primaryColorTransparent;
         }
       }
       .html-button {

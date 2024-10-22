@@ -58,5 +58,5 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "../../../../assets/videoPlayer.scss";
+@use "../../../../assets/videoPlayer";
 </style>

@@ -1,10 +1,11 @@
+@use '@scss/variables' as octopusVariables;
 .octopus-app{
   .sticker-empty-ressource{
     position: absolute;
     top: 5px;
     right: 5px;
     align-self: center;
-    background: $blue-octopus;
+    background: octopusVariables.$blue-octopus;
     padding: 0.5rem;
     transition: all 0.5s ease;
     color: white;
@@ -17,7 +18,7 @@
     cursor: auto;
     &:hover {
       box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
-      background: $octopus-primary-color;
+      background: octopusVariables.$octopus-primary-color;
     }
   }
   .category-filter-no-filter {
@@ -72,7 +73,7 @@
 
   .vue-swatches__trigger{
     border: solid 1px black;
-    border-radius: $octopus-borderradius !important;
+    border-radius: octopusVariables.$octopus-borderradius !important;
   }
   .vue-swatches__fallback__input{
     padding-top: 0;
@@ -96,7 +97,7 @@
       margin: 1em 0 0;
       padding: 0;
       display: grid; /* 1 */
-      grid-template-columns: repeat(auto-fill, $octopus-item-podcast-size); /* 2 */
+      grid-template-columns: repeat(auto-fill, octopusVariables.$octopus-item-podcast-size); /* 2 */
       grid-gap: 1rem; /* 3 */
       justify-content: space-between; /* 4 */
       @media (max-width: 960px) {
@@ -107,7 +108,7 @@
         flex-wrap: wrap;
       }
       @media (max-width: 450px) {
-        grid-template-columns: repeat(auto-fill, $octopus-mobile-item-size); /* 2 */
+        grid-template-columns: repeat(auto-fill, octopusVariables.$octopus-mobile-item-size); /* 2 */
       }
   }
 
@@ -162,9 +163,6 @@
     &.two-emissions {
       grid-template-columns: repeat(auto-fill, 49%); /* 2 */
     }
-    &.three-emissions {
-      grid-template-columns: repeat(auto-fill, 32%); /* 2 */
-    }
     @media (max-width: 1100px) {
       grid-template-columns: auto !important;
       display: flex !important;
@@ -176,7 +174,7 @@
     position: relative;
     list-style: none;
     background: #fff;
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     display: flex;
     flex-grow: 1;
     border: 2px solid #eee;
@@ -239,7 +237,7 @@
   }
   .advanced-search-container {
     background: #fff;
-    border-radius:$octopus-borderradius;
+    border-radius:octopusVariables.$octopus-borderradius;
     display: flex;
     width: 100%;
     padding: 1rem 2rem;
@@ -279,8 +277,8 @@
       background: rgba(0, 0, 0, 0.09);
     }
     .multiple-play-buttons-container{
-      background-color:$primaryColorLessTransparent;
-      border-radius: $octopus-borderradius;
+      background-color:octopusVariables.$primaryColorLessTransparent;
+      border-radius: octopusVariables.$octopus-borderradius;
       color: white;
       padding: 0.3rem;
       width: fit-content;

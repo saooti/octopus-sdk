@@ -4,11 +4,11 @@ export interface Chaptering {
   chapters: Array<Chapter>;
 }
 
-export interface Chapter{
+export interface Chapter {
   startTime: number;
   title: string;
   img?: string;
-  url?:string
+  url?: string;
 }
 
 export interface ChapterPercent {
@@ -18,6 +18,5 @@ export interface ChapterPercent {
   endPercent: number;
   title: string;
 }
-
 
 export type ChapteringPercent = Array<ChapterPercent>;

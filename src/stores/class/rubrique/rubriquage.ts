@@ -7,4 +7,5 @@ export interface Rubriquage {
   title: string;
   homePageOrder?: number | null;
   organisationPrivacy?: string;
+  mandatory: boolean;
 }

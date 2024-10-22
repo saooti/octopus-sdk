@@ -5,45 +5,45 @@ export interface CommentMessage {
   type: string;
 }
 export interface CommentsConfig {
-  inherited: boolean|null,
+  inherited: boolean | null;
   abuse: {
-    authRequired: boolean
-  },
-  commentLikes:{
-    authRequired: boolean,
-    dislikeEnabled: boolean,
-    likeEnabled: boolean,
-  },
-  comments:{
-    authRequired: boolean,
-    commentAllowed: string, //NONE,LIVE_ONLY,LIVE_AND_REPLAY,ALL
-    defaultState: string, //VALIDATED,NOT_VALID,PENDING
-    depth: 2
-  },
-  podcastLikes:{
-    authRequired: boolean,
-    dislikeEnabled: boolean,
-    likeEnabled: boolean,
-  },
+    authRequired: boolean;
+  };
+  commentLikes: {
+    authRequired: boolean;
+    dislikeEnabled: boolean;
+    likeEnabled: boolean;
+  };
+  comments: {
+    authRequired: boolean;
+    commentAllowed: string; //NONE,LIVE_ONLY,LIVE_AND_REPLAY,ALL
+    defaultState: string; //VALIDATED,NOT_VALID,PENDING
+    depth: 2;
+  };
+  podcastLikes: {
+    authRequired: boolean;
+    dislikeEnabled: boolean;
+    likeEnabled: boolean;
+  };
 }
 export function defaultCommentsConfig(inherited: boolean): CommentsConfig {
   return {
     inherited: inherited,
     abuse: {
-      authRequired: true
+      authRequired: true,
     },
-    commentLikes:{
+    commentLikes: {
       authRequired: true,
       dislikeEnabled: true,
       likeEnabled: true,
     },
-    comments:{
+    comments: {
       authRequired: true,
       commentAllowed: "NONE",
       defaultState: "PENDING",
-      depth: 2
+      depth: 2,
     },
-    podcastLikes:{
+    podcastLikes: {
       authRequired: true,
       dislikeEnabled: true,
       likeEnabled: true,

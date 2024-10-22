@@ -49,11 +49,9 @@ import ClassicSelect from "../../form/ClassicSelect.vue";
 import SwiperList from "../list/SwiperList.vue";
 import { handle403 } from "../../mixins/handle403";
 import { orgaComputed } from "../../mixins/orgaComputed";
-import octopusApi from "@saooti/octopus-api";
-import { useFilterStore } from "../../../stores/FilterStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import classicApi from "../../../api/classicApi";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
-import { state } from "../../../stores/ParamSdkStore";
 import { Conference } from "@/stores/class/conference/conference";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
@@ -86,8 +84,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["authOrganisation"]),
+    ...mapState(useAuthStore, ["authOrganisation", "isRoleLive"]),
     displayLiveList(): boolean {
       return (
         (undefined !== this.filterOrgaId ||
@@ -99,20 +96,13 @@ export default defineComponent({
       return this.filterOrgaId ? this.filterOrgaId : this.organisationId;
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.filterOrgaUsed) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.filterOrgaUsed);
     },
     liveRight(): boolean {
       return (
-        (state.generalParameters.isRoleLive as boolean) &&
+        this.isRoleLive &&
         "true" === this.authOrganisation.attributes?.["live.active"]
       );
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
     },
     statusArraySelect(): Array<{ title: string; value: string }> {
       const statusArray = [{ title: this.$t("All lives"), value: "ALL" }];
@@ -189,15 +179,17 @@ export default defineComponent({
       this.loading = true;
       this.loaded = false;
       try {
-        const dataLives = await octopusApi.fetchDataWithParams<
-          Array<Conference>
-        >(9, "conference/list", {
-          organisationId: this.filterOrgaUsed,
-          withPodcastId: true,
-          status:
-            "ALL" === this.selectedStatus
-              ? this.statusFetched
-              : this.selectedStatus,
+        const dataLives = await classicApi.fetchData<Array<Conference>>({
+          api: 9,
+          path: "conference/list",
+          parameters: {
+            organisationId: this.filterOrgaUsed,
+            withPodcastId: true,
+            status:
+              "ALL" === this.selectedStatus
+                ? this.statusFetched
+                : this.selectedStatus,
+          },
         });
         this.lives = dataLives.filter((p: Conference | null) => {
           return null !== p;

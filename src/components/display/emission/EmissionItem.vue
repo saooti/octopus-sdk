@@ -56,8 +56,7 @@
 <script lang="ts">
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { Emission } from "@/stores/class/general/emission";
-import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import imageProxy from "../../mixins/imageProxy";
 import displayMethods from "../../mixins/displayMethods";
 import { defineComponent } from "vue";
@@ -79,18 +78,11 @@ export default defineComponent({
   },
 
   computed: {
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     organisation(): string {
       return this.emission?.publisher?.organisation?.name ?? "";
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.emission.orga.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.emission.orga.id);
     },
   },
 
@@ -112,19 +104,17 @@ export default defineComponent({
   },
   methods: {
     async hasPodcast(): Promise<void> {
-      const data = await octopusApi.fetchDataWithParams<
-        ListClassicReturn<Podcast>
-      >(
-        0,
-        "podcast/search",
-        {
+      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+        api: 0,
+        path: "podcast/search",
+        parameters: {
           emissionId: this.emission.emissionId,
           first: 0,
           size: 0,
           includeStatus: ["READY", "PROCESSING"],
         },
-        true,
-      );
+        specialTreatement: true,
+      });
       if (0 === data.count) {
         this.activeEmission = false;
       }

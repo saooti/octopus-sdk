@@ -1,11 +1,11 @@
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import cookies from "../cookies";
 import { playerLive } from "./playerLive";
 import { playerTranscript } from "./playerTranscript";
 import { playerStitching } from "./playerStitching";
 import { defineComponent } from "vue";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
@@ -65,10 +65,16 @@ export const playerLogic = defineComponent({
         this.audioUrlToPlay = this.audioUrl;
         return;
       }
-      const response = await octopusApi.fetchDataPublicWithParams<{
+      const response = await classicApi.fetchData<{
         location: string;
         downloadId: number;
-      }>(0, "podcast/download/register/"+this.playerPodcast.podcastId + ".mp3", this.getAudioUrlParameters(), {'X-Extra-UA':'Saooti Player'});
+      }>({
+        api:0,
+        path:"podcast/download/register/"+this.playerPodcast.podcastId + ".mp3",
+        parameters:this.getAudioUrlParameters(),
+        headers: {'X-Extra-UA':'Saooti Player'},
+        isNotAuth:true
+      });
       this.setDownloadId(response.downloadId.toString());
       this.audioUrlToPlay = response.location;
     },

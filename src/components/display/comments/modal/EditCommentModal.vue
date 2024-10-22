@@ -59,9 +59,8 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../../api/classicApi";
 import Constants from "../../../../../public/config";
-import crudApi from "@/api/classicCrud";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 const ClassicModal = defineAsyncComponent(
@@ -126,26 +125,17 @@ export default defineComponent({
       }
       this.inProcessing = true;
       try {
-        var commentUpdated;
-        const commentToUpdate = {
-          commentId: this.comment.commentId,
-          content: this.commentText,
-          name: this.name,
-          state: this.commentState,
-        };
-        if (this.editRight) {
-          commentUpdated = await crudApi.updateData(
-            2,
-            "comment/",
-            commentToUpdate,
-          );
-        } else {
-          commentUpdated = await octopusApi.putDataPublic(
-            2,
-            "comment/",
-            commentToUpdate,
-          );
-        }
+        const commentUpdated = await classicApi.putData({
+          api: 2,
+          path: "comment/",
+          dataToSend: {
+            commentId: this.comment.commentId,
+            content: this.commentText,
+            name: this.name,
+            state: this.commentState,
+          },
+          isNotAuth: !this.editRight,
+        });
         this.$emit("update:comment", commentUpdated);
         this.closePopup();
       } catch {

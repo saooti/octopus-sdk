@@ -49,10 +49,8 @@
 </template>
 
 <script lang="ts">
-import crudApi from "@/api/classicCrud";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import cookies from "../../mixins/cookies";
-import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { CommentCreate, CommentPodcast } from "@/stores/class/general/comment";
 import Constants from "../../../../public/config";
@@ -60,6 +58,7 @@ import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 const CheckIdentityModal = defineAsyncComponent(
   () => import("./modal/CheckIdentityModal.vue"),
 );
@@ -112,14 +111,12 @@ export default defineComponent({
       "playerTotal",
     ]),
     ...mapState(useCommentStore, ["commentUser"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
     commentTooLong(): boolean {
       return this.countComment <= this.maxComment;
     },
     countComment(): number {
       return this.newComment.length;
-    },
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
     },
     placeholder(): string {
       return this.inAnswerComment?.commentId
@@ -159,20 +156,12 @@ export default defineComponent({
         timeline: this.defineTimelineValue(),
       };
       try {
-        var commentReceived;
-        if (!this.authenticated) {
-          commentReceived = await octopusApi.postDataPublic<CommentPodcast>(
-            2,
-            "comment/",
-            comment,
-          );
-        } else {
-          commentReceived = await crudApi.postData<CommentPodcast>(
-            2,
-            "comment/",
-            comment,
-          );
-        }
+        const commentReceived = await classicApi.postData<CommentPodcast>({
+          api: 2,
+          path: "comment/",
+          dataToSend: comment,
+          isNotAuth: undefined === this.authOrgaId,
+        });
         this.$emit("newComment", commentReceived);
         this.newComment = "";
         this.isTextareaActive = false;
@@ -202,7 +191,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
 .octopus-app .comment-input-container {
   .comment-input {
     border-top: 0;

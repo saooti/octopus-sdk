@@ -76,18 +76,11 @@ export default defineComponent({
     isProgressBar(): boolean {
       return state.emissionsPage.progressBar as boolean;
     },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     date(): string {
       return dayjs(this.pubDate).format("D MMMM YYYY, HH[h]mm");
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.podcastOrganisationId) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.podcastOrganisationId);
     },
     orgaNameDisplay(): string {
       if (this.podcastOrganisationName.length > 30) {

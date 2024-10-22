@@ -90,13 +90,13 @@ import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "../../../../stores/class/general/podcast";
 import CommentBasicView from "./CommentBasicView.vue";
 import { useCommentStore } from "../../../../stores/CommentStore";
+import { useAuthStore } from "../../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 import {
   CommentMessage,
   CommentsConfig,
 } from "../../../../stores/class/config/commentsConfig";
-import { state } from "../../../../stores/ParamSdkStore";
 const CommentInput = defineAsyncComponent(() => import("../CommentInput.vue"));
 const CommentParentInfo = defineAsyncComponent(
   () => import("../CommentParentInfo.vue"),
@@ -142,6 +142,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["authOrgaId", "isRoleComments", "isRoleAdmin"]),
     ...mapState(useCommentStore, ["commentUser"]),
     commentForVmodel: {
       get(): CommentPodcast {
@@ -156,28 +157,22 @@ export default defineComponent({
     isAnAnswer() {
       return undefined !== this.comment.answerTo;
     },
-    myOrganisationId(): string | undefined {
-      return state.generalParameters.organisationId;
-    },
     editRight(): boolean {
       return (
-        (true === state.generalParameters.isCommments &&
-          (this.myOrganisationId === this.podcast?.organisation.id ||
-            this.myOrganisationId === this.organisationId)) ||
-        true === state.generalParameters.isAdmin
+        (true === this.isRoleComments &&
+          (this.authOrgaId === this.podcast?.organisation.id ||
+            this.authOrgaId === this.organisationId)) ||
+        true === this.isRoleAdmin
       );
     },
     isValidComment() {
       return "VALIDATED" === this.comment.state;
     },
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
     canPostComment(): boolean {
       return this.getCanPostComment(
         this.config,
         this.podcast,
-        this.authenticated,
+        undefined !== this.authOrgaId,
       );
     },
     eventActive(): boolean {
@@ -203,7 +198,7 @@ export default defineComponent({
         if (this.isAdd) {
           commentToEdit.responses.push(commentId);
         } else {
-          var index = commentToEdit.responses.indexOf(commentId);
+          const index = commentToEdit.responses.indexOf(commentId);
           if (index !== -1) {
             commentToEdit.responses.splice(index, 1);
           }

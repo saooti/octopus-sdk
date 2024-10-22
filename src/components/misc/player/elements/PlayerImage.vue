@@ -9,7 +9,7 @@
       :class="imageWidth > 50 ? 'big-player-image' : ''"
       :title="$t('Advertising')"
     />
-    <router-link v-else-if="isImage && podcastImage" :to="podcastShareUrl">
+    <router-link v-else-if="podcastImage" :to="podcastShareUrl">
       <img
         v-lazy="proxyImageUrl(podcastImage, imageWidth)"
         :width="imageWidth"
@@ -22,7 +22,6 @@
   </div>
 </template>
 <script lang="ts">
-import { state } from "../../../../stores/ParamSdkStore";
 import imageProxy from "../../../mixins/imageProxy";
 import { defineComponent } from "vue";
 import { RouteLocationRaw } from "vue-router";
@@ -47,9 +46,6 @@ export default defineComponent({
     ]),
     ...mapState(useVastStore, ["linkAdvertising"]),
     ...mapState(useFilterStore, ["filterOrgaId"]),
-    isImage(): boolean {
-      return state.player.image as boolean;
-    },
     podcastShareUrl(): RouteLocationRaw | string {
       if (this.playerRadio?.podcast?.podcastId) {
         return {
@@ -74,10 +70,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .player-image {
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     height: 2.4rem;
     width: 2.4rem;
     margin-right: 0.5rem;

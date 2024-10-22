@@ -1,3 +1,5 @@
+@use '@scss/variables' as octopusVariables;
+
 // Bootstrap styles overload
 *, *:before, *:after {
 	-webkit-box-sizing: border-box;
@@ -78,8 +80,8 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		user-select: none;
 		transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 		font-size:.7rem;
-		border-radius: $octopus-borderradius;
-		background: $octopus-secondary-color; 
+		border-radius: octopusVariables.$octopus-borderradius;
+		background: octopusVariables.$octopus-secondary-color; 
 		text-decoration: none !important;
 		white-space: nowrap;
 		border-width: 0;
@@ -94,7 +96,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			box-shadow: none;
 		}
 		&:hover{
-			background: $primaryColorMoreTransparent;
+			background: octopusVariables.$primaryColorMoreTransparent;
 		}
 		&:not(.btn-underline, .btn-primary, .btn-more, .btn-on-dark, .btn-transparent, .admin-button, .share-btn):disabled
 		{
@@ -109,6 +111,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 				margin: 0.5rem 2rem 1rem 0;
 				border-radius: 0;
 				font-size: 0.9rem;
+				position: relative;
 				@media (max-width: 600px) {
 					margin: 0 1rem 1rem 0;
 				}
@@ -120,8 +123,6 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					margin: 0 0.4rem 0.7rem 0;
 					font-size: 0.7rem;
 				}
-				
-				position: relative;
 				&:after {    
 						bottom: 0;
 						content: "";
@@ -129,7 +130,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 						height: 2px;
 						left: 50%;
 						position: absolute;
-						background: $octopus-primary-color;
+						background: octopusVariables.$octopus-primary-color;
 						transition: width 0.3s ease 0s, left 0.3s ease 0s;
 						width: 0;
 				}
@@ -146,9 +147,9 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					background: $octopus-primary-color;
-					border: 1px solid $octopus-primary-color;
-					border-radius: $octopus-borderradius !important;
+					background: octopusVariables.$octopus-primary-color;
+					border: 1px solid octopusVariables.$octopus-primary-color;
+					border-radius: octopusVariables.$octopus-borderradius !important;
 					color: white !important;
 					font-weight: 500;
 					&:not(.btn-on-dark):focus,
@@ -156,7 +157,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					&:not(.btn-on-dark):active,
 					&:not(.btn-on-dark).active {
 							background: transparent;
-							color: $octopus-primary-color !important;
+							color: octopusVariables.$octopus-primary-color !important;
 					}
 					&.btn-on-dark:focus,
 					&.btn-on-dark:hover,
@@ -178,8 +179,8 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			}
 
 			&.btn-more{
-					background: $octopus-primary-color;
-					color: $octopus-background;
+					background: octopusVariables.$octopus-primary-color;
+					color: octopusVariables.$octopus-background;
 					width: 2rem;
 					height: 2rem;
 					display: flex;
@@ -197,7 +198,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					display: inline-flex;
 					align-items: center;
 					justify-content: center;
-					color : $octopus-primary-color;
+					color : octopusVariables.$octopus-primary-color;
 					flex-shrink: 0;
 					font-weight: 500;
 					border-radius: 50% !important;
@@ -216,7 +217,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			color : $octopus-primary-color;
+			color : octopusVariables.$octopus-primary-color;
 			flex-shrink: 0;
 			border-radius: 50% !important;
 			@media (max-width: 960px) {
@@ -265,7 +266,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		background: #eee !important;
 	}
 	.bg-complementary{
-		background: $octopus-complementary-color !important;
+		background: octopusVariables.$octopus-complementary-color !important;
 	}
 	.w-50-responsive{
     display: flex;

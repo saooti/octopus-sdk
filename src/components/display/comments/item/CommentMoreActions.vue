@@ -27,7 +27,9 @@
       :id="'comment-dropdown' + comment.commentId"
       class="btn share-btn saooti-more_vert"
       :title="$t('See more')"
-      :data-selenium="'comment-dropdown-' + seleniumFormat(comment.poster.userName)"
+      :data-selenium="
+        'comment-dropdown-' + seleniumFormat(comment.poster.userName)
+      "
     />
     <ClassicPopover
       :target="'comment-dropdown' + comment.commentId"
@@ -55,11 +57,9 @@
 
 <script lang="ts">
 import selenium from "../../../mixins/selenium";
-import { state } from "../../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
-import crudApi from "@/api/classicCrud";
+import classicApi from "../../../../api/classicApi";
 import CommentMoreActionsAdmin from "@/components/display/comments/item/CommentMoreActionsAdmin.vue";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../../stores/AuthStore";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useCommentStore } from "../../../../stores/CommentStore";
@@ -88,6 +88,7 @@ export default defineComponent({
     EditCommentModal,
     MessageModal,
   },
+  mixins: [selenium],
 
   props: {
     comment: { default: () => ({}), type: Object as () => CommentPodcast },
@@ -97,7 +98,6 @@ export default defineComponent({
   },
 
   emits: ["update:comment", "deleteComment"],
-  mixins: [selenium],
   data() {
     return {
       isEdit: false as boolean,
@@ -110,7 +110,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useAuthStore, ["authProfile"]),
+    ...mapState(useAuthStore, ["authProfile", "authOrgaId"]),
     ...mapState(useCommentStore, ["commentUser"]),
     commentForVmodel: {
       get(): CommentPodcast {
@@ -124,9 +124,6 @@ export default defineComponent({
       const uuid = this.authProfile?.userId ?? this.commentUser?.uuidHash;
       return uuid === this.comment?.poster.uuid;
     },
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
     isAtLeastOneMoreAction() {
       return this.moreActions.some((el) => {
         return el.condition;
@@ -139,7 +136,10 @@ export default defineComponent({
           actionClick: () => {
             this.isReportAbuse = true;
           },
-          condition: this.getCanReportAbuse(this.config, this.authenticated),
+          condition: this.getCanReportAbuse(
+            this.config,
+            undefined !== this.authOrgaId,
+          ),
         },
         {
           title: this.$t("Managing reported abuses"),
@@ -242,22 +242,25 @@ export default defineComponent({
       this.isError = false;
       try {
         if ("delete" === this.actionName) {
-          if (this.editRight) {
-            await crudApi.deleteData(2, "comment/" + this.comment.commentId);
-          } else {
-            await octopusApi.deleteData(
-              2,
-              "comment/" + this.comment.commentId,
-              { uuid: this.commentUser?.uuid },
-            );
-          }
+          await classicApi.deleteData({
+            api: 2,
+            path: "comment/" + this.comment.commentId,
+            parameters: this.editRight
+              ? undefined
+              : { uuid: this.commentUser?.uuid },
+            isNotAuth: !this.editRight,
+          });
           this.$emit("deleteComment");
         } else {
-          var commentUpdated = await crudApi.updateData(2, "comment/", {
-            commentId: this.comment.commentId,
-            content: this.comment.content,
-            name: this.comment.poster.userName,
-            state: "validate" === this.actionName ? "VALIDATED" : "NOT_VALID",
+          const commentUpdated = await classicApi.putData({
+            api: 2,
+            path: "comment/",
+            dataToSend: {
+              commentId: this.comment.commentId,
+              content: this.comment.content,
+              name: this.comment.poster.userName,
+              state: "validate" === this.actionName ? "VALIDATED" : "NOT_VALID",
+            },
           });
           this.$emit("update:comment", commentUpdated);
         }

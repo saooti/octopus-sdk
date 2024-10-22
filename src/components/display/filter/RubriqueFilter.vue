@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
@@ -246,12 +246,11 @@ export default defineComponent({
         this.arrayFilter.length = 0;
       }
       if (!this.organisation) return;
-      const data = await octopusApi.fetchDataWithParams<Array<Rubriquage>>(
-        0,
-        "rubriquage/find/" + this.organisation,
-        {},
-        true,
-      );
+      const data = await classicApi.fetchData<Array<Rubriquage>>({
+        api: 0,
+        path: "rubriquage/find/" + this.organisation,
+        specialTreatement: true,
+      });
       this.rubriquageData = data.filter((element: Rubriquage) => {
         return element.rubriques.length;
       });

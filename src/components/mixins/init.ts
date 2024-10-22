@@ -1,36 +1,26 @@
 import { Category } from "@/stores/class/general/category";
 import orgaFilter from "../mixins/organisationFilter";
-import octopusApi from "@saooti/octopus-api";
-import { state } from "../../stores/ParamSdkStore";
+import classicApi from "../../api/classicApi";
+import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   mixins: [orgaFilter],
+  computed: {
+    ...mapState(useAuthStore, ["authOrgaId"]),
+  },
   methods: {
     ...mapActions(useGeneralStore, ["storedUpdateCategories"]),
     async initSdk() {
-      if (
-        0 === (state.generalParameters.allCategories as Array<Category>).length
-      ) {
-        octopusApi
-          .fetchDataWithParams<Array<Category>>(
-            0,
-            `iab/list${
-              state.octopusApi.organisationId
-                ? "/" + state.octopusApi.organisationId
-                : ""
-            }`,
-            { lang: this.$i18n.locale },
-          )
-          .then((data: Array<Category>) => {
-            this.storedUpdateCategories(data);
-          });
-      } else {
-        this.storedUpdateCategories(
-          state.generalParameters.allCategories as Array<Category>,
-        );
-      }
+      classicApi.fetchData<Array<Category>>({
+        api: 0,
+        path:`iab/list${this.authOrgaId ? "/" + this.authOrgaId : ""}`,
+        parameters:{ lang: this.$i18n.locale },
+      })
+      .then((data: Array<Category>) => {
+        this.storedUpdateCategories(data);
+      });
       const captcha = document.getElementsByClassName(
         "grecaptcha-badge",
       )[0] as HTMLElement;

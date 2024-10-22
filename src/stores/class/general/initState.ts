@@ -1,11 +1,12 @@
 export interface InitState {
   accessToken: string;
-  accessTokenUri: string;
+  accessKeycloakUri: string;
   apiUri: string;
   billingUri: string;
   authenticated: boolean;
   captchaDevelopmentProfil: boolean;
   clientId: string;
+  chapteringUri: string;
   commentsUri: string;
   expiration: string;
   frontendUri: string;
@@ -29,4 +30,6 @@ export interface InitState {
   rtmpUri: string;
   storageUri: string;
   studioUri: string;
+  statRadioUri: string;
+  openAiUri: string;
 }

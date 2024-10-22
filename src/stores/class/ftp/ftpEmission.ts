@@ -18,6 +18,8 @@ export interface FtpEmission {
   validePodcast?: number;
   tooLong?: number;
   spoilPodcast?: number;
+  id?: number;
+  importedPublishDate?: string;
 }
 export function emptyFtpEmission(): FtpEmission {
   return {
@@ -37,5 +39,6 @@ export function emptyFtpEmission(): FtpEmission {
     animators: [],
     tags: [],
     importType: "standard",
+    importedPublishDate: "true",
   };
 }

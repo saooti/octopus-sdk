@@ -36,13 +36,14 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
-import octopusApi from "@saooti/octopus-api";
+import { useApiStore } from "../../../stores/ApiStore";
+import classicApi from "../../../api/classicApi";
 import SnackBar from "../../misc/SnackBar.vue";
 import displayMethods from "../../mixins/displayMethods";
 import { Emission } from "@/stores/class/general/emission";
 
 import { defineComponent, defineAsyncComponent } from "vue";
+import { mapState } from "pinia";
 const RssSection = defineAsyncComponent(
   () => import("@/components/display/aggregator/RssSection.vue"),
 );
@@ -64,6 +65,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useApiStore, ["apiUrl"]),
     platformShare() {
       return [
         {
@@ -123,14 +125,14 @@ export default defineComponent({
       return `/main/priv/distribution/${platform}/${this.emissionId}`;
     },
     async getEmissionDetails(): Promise<void> {
-      this.emission = await octopusApi.fetchData<Emission>(
-        0,
-        "emission/" + this.emissionId,
-      );
+      this.emission = await classicApi.fetchData<Emission>({
+        api: 0,
+        path: "emission/" + this.emissionId,
+      });
     },
     getRSS(): void {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
-      this.rss = `${state.octopusApi.url}rss/emission/${this.emissionId}.rss`;
+      this.rss = `${this.apiUrl}rss/emission/${this.emissionId}.rss`;
     },
     afterCopy(): void {
       if (!this.lazyLoadingSnackbar) {
@@ -149,11 +151,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .sharing-distribution-container {
     border: 0.05rem solid #dee2e6;
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     padding: 0.4rem;
     margin: 0.2rem 1rem 0.2rem 0;
     display: flex;

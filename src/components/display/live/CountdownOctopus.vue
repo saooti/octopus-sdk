@@ -57,7 +57,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 $octopus-position: 120px;
 .octopus-app .cute-octopus {
   position: relative;
@@ -72,7 +72,7 @@ $octopus-position: 120px;
     left: 0;
     height: 88px;
     width: 120px;
-    background: $octopus-primary-color;
+    background: octopusVariables.$octopus-primary-color;
     border-radius: 50% 50% 20% 20%;
   }
   .eyes,
@@ -120,7 +120,7 @@ $octopus-position: 120px;
     left: 0;
     height: 77px;
     width: 26px;
-    background: $octopus-primary-color;
+    background: octopusVariables.$octopus-primary-color;
     border-radius: 20% 20% 50% 50%;
     animation: move-left-small 1.5s ease-in-out infinite alternate;
     transform: rotate(20deg);
@@ -135,7 +135,7 @@ $octopus-position: 120px;
     content: "";
     top: -26px;
     left: 87.7px;
-    box-shadow: -31.5px 0 0 0 $octopus-primary-color;
+    box-shadow: -31.5px 0 0 0 octopusVariables.$octopus-primary-color;
     transform: rotate(-35deg);
   }
   @keyframes move-left {

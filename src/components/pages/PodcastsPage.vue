@@ -45,7 +45,6 @@
 <script lang="ts">
 import { orgaComputed } from "../mixins/orgaComputed";
 import PodcastList from "../display/podcasts/PodcastList.vue";
-import { state } from "../../stores/ParamSdkStore";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
@@ -88,11 +87,7 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ["filterRubrique", "filterIab"]),
     organisationRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.organisationId) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.organisationId);
     },
     orgaArray(): Array<string> {
       return this.organisationId ? [this.organisationId] : [];

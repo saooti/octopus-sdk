@@ -42,15 +42,6 @@
         @selected="onOrganisationSelected"
       />
     </div>
-    <a
-      v-if="isPodcastmaker && isContactLink"
-      id="footer-contact"
-      class="link-hover"
-      :href="isContactLink"
-      rel="noopener"
-      target="_blank"
-      >{{ $t("Contact") }}</a
-    >
     <div class="d-flex align-items-center">
       <div class="hosted-by">
         {{ $t("Hosted by") }}<span class="ms-1 me-1 text-primary">Saooti</span>
@@ -76,12 +67,11 @@ import orgaFilter from "../mixins/organisationFilter";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
-import { orgaComputed } from "../mixins/orgaComputed";
 import { loadLocaleMessages } from "@/i18n";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { Category } from "@/stores/class/general/category";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
@@ -98,7 +88,7 @@ export default defineComponent({
     OrganisationChooserLight,
   },
 
-  mixins: [cookies, orgaComputed, orgaFilter],
+  mixins: [cookies, orgaFilter],
   data() {
     return {
       language: this.$i18n.locale,
@@ -113,7 +103,10 @@ export default defineComponent({
       "filterOrgaId",
       "filterIab",
     ]),
-    ...mapState(useAuthStore, ["isGarRole"]),
+    ...mapState(useAuthStore, ["isGarRole", "authOrgaId"]),
+    authenticated() {
+      return undefined !== this.authOrgaId;
+    },
     routerLinkSecondArray() {
       const links = [
         { title: this.$t("Contact"), routeName: "/main/pub/contact" },
@@ -130,9 +123,6 @@ export default defineComponent({
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
-    },
-    isContactLink(): string | undefined {
-      return state.footer.contactLink;
     },
     rubriqueQueryParam(): string | undefined {
       if (this.filterRubrique?.length) {
@@ -186,10 +176,12 @@ export default defineComponent({
         this.authenticated,
         this.platformEducation,
       );
-      octopusApi
-        .fetchDataWithParams<
-          Array<Category>
-        >(0, `iab/list${state.octopusApi.organisationId ? "/" + state.octopusApi.organisationId : ""}`, { lang: this.$i18n.locale })
+      classicApi
+        .fetchData<Array<Category>>({
+          api: 0,
+          path: `iab/list${this.authOrgaId ? "/" + this.authOrgaId : ""}`,
+          parameters: { lang: this.$i18n.locale },
+        })
         .then((data: Array<Category>) => {
           this.storedUpdateCategories(data);
           if (this.filterIab) {

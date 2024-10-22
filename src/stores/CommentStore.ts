@@ -8,13 +8,13 @@ import StringHelper from "../helper/string";
 import cookies from "../components/mixins/cookies";
 import WebSocketEngine from "../websocket/commentWebsocket";
 import { CommentPodcast } from "./class/general/comment";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "./AuthStore";
+import { useApiStore } from "./ApiStore";
 import uuidGenerator from "../helper/uuidGenerator";
 import { CommentMessage, CommentsConfig } from "./class/config/commentsConfig";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../api/classicApi";
 import { Podcast } from "./class/general/podcast";
 import { ListClassicReturn } from "./class/general/listReturn";
-import { state } from "./ParamSdkStore";
 
 export interface CommentUser {
   name: string | null;
@@ -49,15 +49,18 @@ export const useCommentStore = defineStore("CommentStore", {
         let first = 0;
         let keepFetching = true;
         while (keepFetching) {
-          const data = await octopusApi.fetchDataPublicWithParams<
-            ListClassicReturn<CommentPodcast>
-          >(2, "comment/list", {
-            first: first,
-            size: size,
-            podcastId: podcastId,
-            sort: "DATE_DESC",
-            hideAnswers: true,
-            state: "VALIDATED",
+          const data = await classicApi.fetchData<ListClassicReturn<CommentPodcast>>({
+            api:2,
+            path:"comment/list",
+            parameters:{
+              first: first,
+              size: size,
+              podcastId: podcastId,
+              sort: "DATE_DESC",
+              hideAnswers: true,
+              state: "VALIDATED",
+            },
+            isNotAuth:true
           });
           first += size;
           this.commentsForPlayer[podcastId] = this.commentsForPlayer[
@@ -117,17 +120,15 @@ export const useCommentStore = defineStore("CommentStore", {
         return this.podcastsCommentsConfig[podcast.podcastId];
       }
       try {
-        this.podcastsCommentsConfig[podcast.podcastId] =
-          await octopusApi.fetchData<CommentsConfig>(
-            2,
-            "config/podcast/" + podcast.podcastId,
-          );
+        this.podcastsCommentsConfig[podcast.podcastId] = await classicApi.fetchData<CommentsConfig>({
+          api: 2,
+          path:"config/podcast/" + podcast.podcastId,
+        });
       } catch {
-        this.podcastsCommentsConfig[podcast.podcastId] =
-          await octopusApi.fetchData<CommentsConfig>(
-            2,
-            "config/emission/" + podcast.emission.emissionId,
-          );
+        this.podcastsCommentsConfig[podcast.podcastId] = await classicApi.fetchData<CommentsConfig>({
+          api: 2,
+          path: "config/emission/" + podcast.emission.emissionId,
+        });
       }
       return this.podcastsCommentsConfig[podcast.podcastId];
     },
@@ -189,7 +190,8 @@ export const useCommentStore = defineStore("CommentStore", {
     |                                                                                                              |
     --------------------------------------------------------------------------------------------------------------*/
     async initialize() {
-      const commentUrl = state.octopusApi.commentsUrl?? "https://comments.dev2.saooti.org/";
+      const apiStore = useApiStore();
+      const commentUrl = apiStore.commentUrl?? "https://comments.dev2.saooti.org/";
       const url =  StringHelper.trimChar(commentUrl.replace("https://", ""),"/");
       const engine = new WebSocketEngine(url);
       await engine.initialize();

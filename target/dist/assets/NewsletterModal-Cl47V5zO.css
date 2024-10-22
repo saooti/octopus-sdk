@@ -1,0 +1,1 @@
+.octopus-app #newsletter-modal .octopus-modal-body{overflow-x:inherit}@media (max-width: 500px){.octopus-app #newsletter-modal .octopus-modal-body{overflow-x:auto}}.octopus-app #newsletter-modal .octopus-modal-dialog{max-width:80%;max-height:calc(100% - 3.5rem)!important}.octopus-app #newsletter-modal .octopus-modal-content{max-height:calc(100vh - 100px)!important}

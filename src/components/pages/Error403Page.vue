@@ -32,20 +32,18 @@
 </template>
 
 <script lang="ts">
-import crudApi from "@/api/classicCrud";
-import { state } from "../../stores/ParamSdkStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
+import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
+import classicApi from "../../api/classicApi";
 export default defineComponent({
   name: "Error403Page",
   computed: {
     ...mapState(useGeneralStore, ["metaTitle"]),
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
+    ...mapState(useAuthStore, ["authOrgaId"]),
     authText(): string {
-      return this.authenticated ? this.$t("Logout") : this.$t("Login");
+      return this.authOrgaId ? this.$t("Logout") : this.$t("Login");
     },
   },
   mounted() {
@@ -54,7 +52,11 @@ export default defineComponent({
   methods: {
     async logoutFunction() {
       try {
-        await crudApi.postData(4, "/logout", undefined);
+        await classicApi.postData({
+          api: 4,
+          path: "/logout",
+          dataToSend: undefined,
+        });
         await this.$router.push({ path: "/" });
         location.reload();
       } catch (error) {

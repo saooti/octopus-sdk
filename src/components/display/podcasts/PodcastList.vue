@@ -47,11 +47,10 @@
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import { handle403 } from "../../mixins/handle403";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
-import { state } from "../../../stores/ParamSdkStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
@@ -109,7 +108,7 @@ export default defineComponent({
 
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["authProfile"]),
+    ...mapState(useAuthStore, ["authProfile", "isRoleProduction"]),
     displayArray(): Array<Podcast> {
       if (this.isMobile || this.justSizeChosen) {
         return this.podcasts;
@@ -199,16 +198,19 @@ export default defineComponent({
         includeHidden: this.includeHidden,
         validity: undefined !== this.notValid ? !this.notValid : undefined,
         publisherId:
-          this.notValid && !(state.generalParameters.isProduction as boolean)
+          this.notValid && !this.isRoleProduction
             ? this.authProfile?.userId
             : undefined,
         includeStatus: ["READY", "PROCESSING"],
         withVideo: this.withVideo,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<
-          ListClassicReturn<Podcast>
-        >(0, "podcast/search", param, true);
+        const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+          api: 0,
+          path: "podcast/search",
+          parameters: param,
+          specialTreatement: true,
+        });
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403(error as AxiosError);

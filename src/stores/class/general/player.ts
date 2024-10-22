@@ -6,11 +6,11 @@ export interface Radio {
   url: string;
   metadata: MediaRadio;
   history: Array<MediaRadio>;
-  nextAdvertising:NextAdvertising;
+  nextAdvertising: NextAdvertising;
   isInit: boolean;
   podcast?: Podcast;
   sessionId?: string;
-  dateSessionId?:string;
+  dateSessionId?: string;
 }
 export interface MediaRadio {
   artist: string;
@@ -23,7 +23,7 @@ export interface MediaRadio {
 }
 export interface NextAdvertising {
   startDate?: string;
-  tag?: string
+  tag?: string;
 }
 
 export interface MetadataRadio {
@@ -48,5 +48,13 @@ export interface Player {
     actual: number;
     actualText: string;
     value: Array<{ endTime: number; startTime: number; text: string }>;
+  };
+}
+export interface CodeInsert {
+  headerInsert: string | null;
+}
+export function emptyCodeInsert(): CodeInsert {
+  return {
+    headerInsert: null,
   };
 }

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import { defineComponent } from "vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
@@ -33,10 +33,10 @@ export default defineComponent({
     rubriqueId: {
       immediate: true,
       async handler() {
-        const data = await octopusApi.fetchData<Rubrique>(
-          0,
-          "rubrique/" + this.rubriqueId,
-        );
+        const data = await classicApi.fetchData<Rubrique>({
+          api: 0,
+          path: "rubrique/" + this.rubriqueId,
+        });
         this.title = data.name;
       },
     },

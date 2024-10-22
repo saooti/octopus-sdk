@@ -3,7 +3,7 @@ import { Conference } from "./conference";
 export interface ConferenceParticipant {
   conference?: Conference;
   conferenceGuestId?: number;
-  fullName: string;
+  fullName?: string;
   keycloakId?: string;
   kind?: string;
   sipIdentifier?: string;
@@ -15,4 +15,5 @@ export interface ConferenceParticipant {
   callerName?: string;
   gain?: number;
   img?: string;
+  pin?: boolean;
 }

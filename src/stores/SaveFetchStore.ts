@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import octopusApi from "@saooti/octopus-api";
-import { useAuthStore } from "@/stores/AuthStore";
+import classicApi from "../api/classicApi";
+import { useAuthStore } from "./AuthStore";
 import { Organisation } from "./class/general/organisation";
 
 type SaveObject = { [key: string]: string | number | boolean | undefined };
@@ -30,9 +30,12 @@ export const useSaveFetchStore = defineStore("SaveFetchStore", {
         this.orgaPublicAttributes[orgaId] =
           authStore.authOrganisation.attributes;
       } else {
-        this.orgaPublicAttributes[orgaId] = await octopusApi.fetchData<{
+        this.orgaPublicAttributes[orgaId] = await classicApi.fetchData<{
           [key: string]: string;
-        }>(0, "organisation/attributes/" + orgaId);
+        }>({
+          api: 0,
+          path:  "organisation/attributes/" + orgaId,
+        });
       }
       return this.orgaPublicAttributes[orgaId];
     },
@@ -46,10 +49,10 @@ export const useSaveFetchStore = defineStore("SaveFetchStore", {
       if (this.orgaLiveEnabled[orgaId]) {
         return this.orgaLiveEnabled[orgaId];
       }
-      this.orgaLiveEnabled[orgaId] = await octopusApi.fetchData<boolean>(
-        0,
-        "organisation/liveEnabled/" + orgaId,
-      );
+      this.orgaLiveEnabled[orgaId] = await classicApi.fetchData<boolean>({
+        api: 0,
+        path:  "organisation/liveEnabled/" + orgaId,
+      });
       return this.orgaLiveEnabled[orgaId];
     },
     async getOrgaData(orgaId: string): Promise<Organisation> {
@@ -60,10 +63,10 @@ export const useSaveFetchStore = defineStore("SaveFetchStore", {
       if (orgaId === authStore.authOrganisation.id) {
         this.orgaData[orgaId] = authStore.authOrganisation;
       } else {
-        this.orgaData[orgaId] = await octopusApi.fetchData<Organisation>(
-          0,
-          "organisation/" + orgaId,
-        );
+        this.orgaData[orgaId] = await classicApi.fetchData<Organisation>({
+          api: 0,
+          path:  "organisation/" + orgaId,
+        });
       }
       return this.orgaData[orgaId];
     },

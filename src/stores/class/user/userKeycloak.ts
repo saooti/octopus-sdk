@@ -15,9 +15,11 @@ export interface UserKeycloak {
   telephone?: string;
   description?: string;
   project?: string;
-  realmRoles?: null | Array<UserRole>;
+  realmRoles?: null | Array<string>;
   attributes?: { [key: string]: Array<string | boolean> | undefined };
   password?: string;
   isTemporary?: boolean;
   getted?: boolean;
+  emailVerified?: boolean;
+  requiredActions?: Array<string>;
 }

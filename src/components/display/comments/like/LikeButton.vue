@@ -60,10 +60,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
+@use 'sass:color';
 .octopus-app .btn-like-comment {
   $neutral-color: #555555;
-  $background-color: $octopus-primary-color;
+  $background-color: octopusVariables.$octopus-primary-color;
   &.is-dislike {
     $background-color: black;
   }
@@ -86,7 +87,7 @@ export default defineComponent({
 
   &:hover {
     background: #dddddd;
-    color: darken($neutral-color, 10%);
+    color: color.scale($neutral-color, $lightness: -10%);
   }
 
   /* Animation */

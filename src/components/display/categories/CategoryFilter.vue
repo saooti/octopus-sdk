@@ -66,7 +66,6 @@ import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { state } from "../../../stores/ParamSdkStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
 const CategoryList = defineAsyncComponent(() => import("./CategoryList.vue"));
@@ -119,25 +118,18 @@ export default defineComponent({
       return this.filterOrgaId ? this.filterRubriquage : [];
     },
     titleDisplay(): string {
-      let title = "";
       switch (this.$route.name) {
         case "podcasts":
-          title = state.podcastsPage.titlePage ?? this.$t("All podcasts");
-          break;
+          return this.$t("All podcasts");
         case "emissions":
-          title = state.emissionsPage.titlePage ?? this.$t("All emissions");
-          break;
+          return this.$t("All emissions");
         case "participants":
-          title =
-            state.intervenantsPage.titlePage ?? this.$t("All participants");
-          break;
+          return this.$t("All participants");
         case "playlists":
-          title = this.$t("All playlists");
-          break;
+          return this.$t("All playlists");
         default:
-          break;
+          return "";
       }
-      return title;
     },
     backgroundDisplay(): string {
       let imgName = "home";

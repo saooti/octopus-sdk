@@ -42,7 +42,7 @@
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import ListPaginate from "../list/ListPaginate.vue";
 import { handle403 } from "../../mixins/handle403";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import PlaylistItem from "./PlaylistItem.vue";
 import { Playlist, emptyPlaylistData } from "@/stores/class/general/playlist";
 import { useFilterStore } from "../../../stores/FilterStore";
@@ -137,9 +137,12 @@ export default defineComponent({
         sort: this.sort,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<
-          ListClassicReturn<Playlist>
-        >(0, "playlist/search", param, true);
+        const data = await classicApi.fetchData<ListClassicReturn<Playlist>>({
+          api: 0,
+          path: "playlist/search",
+          parameters: param,
+          specialTreatement: true,
+        });
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403(error as AxiosError);

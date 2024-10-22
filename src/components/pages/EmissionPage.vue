@@ -46,7 +46,7 @@
             </div>
           </div>
           <EditBox
-            v-if="editRight && pageParameters.isEditBox"
+            v-if="editRight && !isPodcastmaker"
             :emission="emission"
             :rss-emission="rssEmission"
             :ftp-emission="ftpEmission"
@@ -54,14 +54,14 @@
           />
         </div>
         <SharePlayer
-          v-if="pageParameters.isSharePlayer && (authenticated || notExclusive)"
+          v-if="!isPodcastmaker && (undefined !== authOrgaId || notExclusive)"
           :emission="emission"
           :exclusive="exclusive"
           :not-exclusive="notExclusive"
-          :organisation-id="myOrganisationId"
+          :organisation-id="authOrgaId"
           :is-education="isEducation"
         />
-        <div v-if="pageParameters.isDisplayPodcasts" class="module-box">
+        <div class="module-box">
           <LiveHorizontalList
             v-if="!isPodcastmaker"
             class="mx-2"
@@ -83,7 +83,7 @@
           :organisation-id="emission.orga.id"
         />
         <ShareDistribution
-          v-if="editRight && pageParameters.isShareDistribution"
+          v-if="editRight && !isPodcastmaker"
           :emission-id="emissionId"
         />
       </div>
@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
 import displayMethods from "../mixins/displayMethods";
 import imageProxy from "../mixins/imageProxy";
@@ -106,8 +106,9 @@ import { Emission } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { useGeneralStore } from "../../stores/GeneralStore";
+import { useApiStore } from "../../stores/ApiStore";
 import { Podcast } from "@/stores/class/general/podcast";
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
@@ -172,20 +173,14 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useApiStore, ["apiUrl"]),
     pageParameters() {
       return {
-        isEditBox: state.podcastPage.EditBox as boolean,
         isShareButtons: state.podcastPage.ShareButtons as boolean,
-        isSharePlayer: state.podcastPage.SharePlayer as boolean,
-        isShareDistribution: state.podcastPage.ShareDistribution as boolean,
-        isDisplayPodcasts: state.emissionPage.isDisplayPodcasts as boolean,
       };
     },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
     rssUrl(): string {
-      return `${state.generalParameters.ApiUri}rss/emission/${this.emissionId}`;
+      return `${this.apiUrl}rss/emission/${this.emissionId}`;
     },
     name(): string {
       return this.emission?.name ?? "";
@@ -194,11 +189,7 @@ export default defineComponent({
       return this.emission?.description ?? "";
     },
     editRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.emission?.orga.id) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.emission?.orga.id);
     },
   },
   watch: {
@@ -226,7 +217,7 @@ export default defineComponent({
       if (this.emission.annotations.exclusive) {
         this.exclusive = "true" === this.emission.annotations.exclusive;
         this.exclusive =
-          this.exclusive && this.myOrganisationId !== this.emission.orga.id;
+          this.exclusive && this.authOrgaId !== this.emission.orga.id;
       }
       if (this.emission.annotations.notExclusive) {
         this.notExclusive = "true" === this.emission.annotations.notExclusive;
@@ -236,10 +227,10 @@ export default defineComponent({
       this.loaded = false;
       this.error = false;
       try {
-        this.emission = await octopusApi.fetchData<Emission>(
-          0,
-          "emission/" + this.emissionId,
-        );
+        this.emission = await classicApi.fetchData<Emission>({
+          api: 0,
+          path: "emission/" + this.emissionId,
+        });
         if (
           "PUBLIC" !== this.emission.orga.privacy &&
           this.filterOrgaId !== this.emission.orga.id &&

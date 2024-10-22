@@ -82,10 +82,10 @@ export default defineComponent({
     PodcastInlineList,
     ClassicLazy,
   },
-  emits: ["categoriesLength"],
   props: {
     displayWithoutRubriques: { default: true, type: Boolean },
   },
+  emits: ["categoriesLength"],
   data() {
     return {
       rubriqueId: [] as Array<number>,

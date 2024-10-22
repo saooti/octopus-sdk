@@ -1,9 +1,9 @@
-import { state } from "../../../stores/ParamSdkStore";
 import uuidGenerator from "../../../helper/uuidGenerator";
 import dayjs from "dayjs";
 import { playerLogicProgress} from "./playerLogicProgress";
 import { usePlayerStore } from "../../../stores/PlayerStore";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useApiStore } from "../../../stores/ApiStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 /* eslint-disable */
 let Hls:any = null;
@@ -26,6 +26,7 @@ export const playerLive = defineComponent({
   computed: {
     ...mapState(usePlayerStore, ["playerLive", "playerRadio", "playerVideo", "playerStatus"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
+    ...mapState(useApiStore, ["hlsUrl"]),
   },
   methods: {
     ...mapActions(usePlayerStore, ["playerChangeStatus"]),
@@ -46,7 +47,7 @@ export const playerLive = defineComponent({
     },
     playLive() {
       if (!this.playerLive) return;
-      const hlsStreamUrl = `${state.podcastPage.hlsUri}live/dev.${this.playerLive.conferenceId}/index.m3u8`;
+      const hlsStreamUrl = `${this.hlsUrl}live/dev.${this.playerLive.conferenceId}/index.m3u8`;
       this.playHls(hlsStreamUrl);
     },
     async playHls(hlsStreamUrl: string): Promise<void> {
@@ -84,7 +85,7 @@ export const playerLive = defineComponent({
       }
     },
     async initHls(hlsStreamUrl: string): Promise<void> {
-      return new Promise<void>(async (resolve, reject) => {
+      new Promise<void>(async (resolve, reject) => {
         if (null === Hls) {
           await import("hls.js").then((hlsLibrary) => {
             Hls = hlsLibrary.default;

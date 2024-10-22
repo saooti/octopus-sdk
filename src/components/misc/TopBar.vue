@@ -136,16 +136,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .top-bar-container {
     position: sticky;
     top: 0;
-    background: $octopus-primary-color;
+    background: octopusVariables.$octopus-primary-color;
     background: linear-gradient(
       90deg,
-      $octopus-primary-color 0%,
-      $blue-octopus 100%
+      octopusVariables.$octopus-primary-color 0%,
+      octopusVariables.$blue-octopus 100%
     );
     width: 100%;
     height: 5rem;

@@ -36,12 +36,11 @@
 </template>
 
 <script lang="ts">
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
 import imageProxy from "../../mixins/imageProxy";
 import selenium from "../../mixins/selenium";
-import { orgaComputed } from "../../mixins/orgaComputed";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import ClassicMultiselect from "../../form/ClassicMultiselect.vue";
 import { defineComponent } from "vue";
 import {
@@ -54,7 +53,7 @@ export default defineComponent({
   components: {
     ClassicMultiselect,
   },
-  mixins: [selenium, orgaComputed, imageProxy],
+  mixins: [selenium, imageProxy],
   props: {
     defaultanswer: { default: "", type: String },
     orgaIdSelected: { default: undefined, type: String },
@@ -74,7 +73,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useAuthStore, ["authOrganisation"]),
+    ...mapState(useAuthStore, ["authOrganisation", "authOrgaId"]),
     getDefaultOrganisation(): Organisation | undefined {
       if ("" === this.defaultanswer) {
         return undefined;
@@ -82,7 +81,7 @@ export default defineComponent({
       return emptyOrgaData(this.defaultanswer);
     },
     myOrganisation(): Organisation | undefined {
-      if (!this.authenticated) return undefined;
+      if (!this.authOrgaId) return undefined;
       return {
         ...this.authOrganisation,
         ...{
@@ -113,12 +112,16 @@ export default defineComponent({
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaData"]),
     async onSearchOrganisation(query?: string): Promise<void> {
-      const response = await octopusApi.fetchDataWithParams<
+      const response = await classicApi.fetchData<
         ListClassicReturn<Organisation>
-      >(0, "organisation/search", {
-        query: query,
-        first: 0,
-        size: this.maxElement,
+      >({
+        api: 0,
+        path: "organisation/search",
+        parameters: {
+          query: query,
+          first: 0,
+          size: this.maxElement,
+        },
       });
       let notNullOrga = response.result.filter((o: Organisation | null) => {
         return null !== o;
@@ -129,12 +132,12 @@ export default defineComponent({
       if (this.myOrganisation) {
         if (undefined === query) {
           notNullOrga = notNullOrga.filter((obj: Organisation) => {
-            return obj.id !== this.myOrganisationId;
+            return obj.id !== this.authOrgaId;
           });
           notNullOrga.splice(1, 0, this.myOrganisation);
         } else {
           const foundIndex = notNullOrga.findIndex(
-            (obj: Organisation) => obj.id === this.myOrganisationId,
+            (obj: Organisation) => obj.id === this.authOrgaId,
           );
           if (foundIndex) {
             notNullOrga[foundIndex] = this.myOrganisation;

@@ -61,11 +61,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-accordion {
   > button {
     min-height: 50px;
-    color: $octopus-primary-color;
+    color: octopusVariables.$octopus-primary-color;
     font-size: 0.9rem;
     border: 1px solid transparent;
     border-bottom-color: #b8b8b8;
@@ -81,10 +81,10 @@ export default defineComponent({
     background: white;
   }
   &.octopus-accordion-open {
-    border-radius: $octopus-borderradius;
+    border-radius: octopusVariables.$octopus-borderradius;
     border: 1px solid #e0e0e0;
     > button {
-      border-radius: $octopus-borderradius 0 0;
+      border-radius: octopusVariables.$octopus-borderradius 0 0;
       background: #e9e9e9;
       border-color: transparent;
       color: black;

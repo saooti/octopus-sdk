@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../stores/ParamSdkStore";
 import ClassicSearch from "../form/ClassicSearch.vue";
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import { defineComponent } from "vue";
@@ -40,25 +39,14 @@ export default defineComponent({
   },
   computed: {
     titlePage(): string {
-      if (!this.hideBar) {
-        return this.$t("Podcast search");
-      }
       const locale = !this.noResult ? "Search results" : "Search - no results";
       return this.$t(locale, { query: this.rawQuery });
     },
     query(): string {
       return this.rawQuery && this.rawQuery.length >= 3 ? this.rawQuery : "";
     },
-    hideBar(): boolean {
-      return state.searchPage.hideBar as boolean;
-    },
   },
   watch: {
-    rawQuery(): void {
-      if (this.hideBar) {
-        this.noResult = false;
-      }
-    },
     queryRoute: {
       immediate: true,
       handler() {

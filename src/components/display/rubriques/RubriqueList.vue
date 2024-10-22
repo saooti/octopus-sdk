@@ -228,7 +228,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .rubrique-list-container {
     display: flex;
@@ -240,7 +240,7 @@ export default defineComponent({
     padding: 0 4rem;
     select {
       width: auto;
-      border-radius: $octopus-borderradius;
+      border-radius: octopusVariables.$octopus-borderradius;
       margin: 0.25rem;
       font-size: 0.6rem;
       padding: 0.5rem;

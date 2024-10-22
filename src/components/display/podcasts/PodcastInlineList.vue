@@ -1,25 +1,5 @@
 <template>
-  <PodcastInlineListClassic
-    v-if="listTypeClassic"
-    :organisation-id="organisationId"
-    :emission-id="emissionId"
-    :iab-id="iabId"
-    :title="title"
-    :href="href"
-    :button-text="buttonText"
-    :is-arrow="isArrow"
-    :require-popular-sort="requirePopularSort"
-    :button-plus="buttonPlus"
-    :rubrique-id="rubriqueId"
-    :rubriquage-id="rubriquageId"
-    :no-rubriquage-id="noRubriquageId"
-    :query="query"
-    :podcast-id="podcastId"
-    :last-three-months="lastThreeMonths"
-    @update:is-arrow="$emit('update:isArrow', $event)"
-  />
   <PodcastSwiperList
-    v-else
     :organisation-id="organisationId"
     :emission-id="emissionId"
     :iab-id="iabId"
@@ -39,11 +19,7 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../stores/ParamSdkStore";
 import { defineAsyncComponent, defineComponent } from "vue";
-const PodcastInlineListClassic = defineAsyncComponent(
-  () => import("./PodcastInlineListClassic.vue"),
-);
 const PodcastSwiperList = defineAsyncComponent(
   () => import("./PodcastSwiperList.vue"),
 );
@@ -51,7 +27,6 @@ export default defineComponent({
   name: "PodcastInlineList",
 
   components: {
-    PodcastInlineListClassic,
     PodcastSwiperList,
   },
   props: {
@@ -72,11 +47,6 @@ export default defineComponent({
     lastThreeMonths: { default: false, type: Boolean },
   },
   emits: ["update:isArrow"],
-  computed: {
-    listTypeClassic(): boolean {
-      return state.podcastPage.listTypeClassic as boolean;
-    },
-  },
 });
 </script>
 <style lang="scss">

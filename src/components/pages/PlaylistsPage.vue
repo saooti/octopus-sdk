@@ -1,7 +1,7 @@
 <template>
   <div class="page-box">
     <router-link
-      v-if="editRight && !isPodcastmaker"
+      v-if="isRolePlaylists && !isPodcastmaker"
       to="/main/priv/edit/playlist"
       class="d-flex justify-content-center my-3"
     >
@@ -25,10 +25,12 @@
 </template>
 
 <script lang="ts">
-import { orgaComputed } from "../mixins/orgaComputed";
 import PlaylistList from "../display/playlist/PlaylistList.vue";
+import { useAuthStore } from "../../stores/AuthStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { state } from "../../stores/ParamSdkStore";
 import { defineComponent, defineAsyncComponent } from "vue";
+import { mapState } from "pinia";
 const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
@@ -37,7 +39,6 @@ export default defineComponent({
     ProductorSearch,
     PlaylistList,
   },
-  mixins: [orgaComputed],
   props: {
     productor: { default: undefined, type: String },
   },
@@ -52,11 +53,10 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    ...mapState(useAuthStore, ["isRolePlaylists"]),
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
-    },
-    editRight(): boolean {
-      return state.generalParameters.isPlaylist ?? false;
     },
   },
 

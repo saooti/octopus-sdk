@@ -15,11 +15,7 @@
     :player-responsive="true"
   >
     <template #list>
-      <div
-        v-if="!itemPlayer"
-        class="emission-list"
-        :class="smallItems ? 'three-emissions' : 'two-emissions'"
-      >
+      <div v-if="!itemPlayer" class="emission-list two-emissions">
         <ClassicLazy
           v-for="e in displayArray"
           :key="e.emissionId"
@@ -60,7 +56,7 @@
 
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { handle403 } from "../../mixins/handle403";
 import { state } from "../../../stores/ParamSdkStore";
@@ -130,9 +126,6 @@ export default defineComponent({
         this.dfirst,
         Math.min(this.dfirst + this.dsize, this.totalCount),
       );
-    },
-    smallItems(): boolean {
-      return state.emissionsPage.smallItems as boolean;
     },
     itemPlayer(): boolean {
       return state.emissionsPage.itemPlayer as boolean;
@@ -215,9 +208,12 @@ export default defineComponent({
         includeHidden: this.includeHidden,
       };
       try {
-        const data = await octopusApi.fetchDataWithParams<
-          ListClassicReturn<Emission>
-        >(0, "emission/search", param, true);
+        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+          api: 0,
+          path: "emission/search",
+          parameters: param,
+          specialTreatement: true,
+        });
         this.afterFetching(reset, data);
       } catch (error) {
         this.handle403(error as AxiosError);
@@ -256,10 +252,10 @@ export default defineComponent({
       this.loading = false;
     },
     async fetchRubriques(): Promise<void> {
-      const data = await octopusApi.fetchData<Rubriquage>(
-        0,
-        "rubriquage/" + this.displayRubriquage,
-      );
+      const data = await classicApi.fetchData<Rubriquage>({
+        api: 0,
+        path: "rubriquage/" + this.displayRubriquage,
+      });
       this.rubriques = data.rubriques;
     },
     mainRubriquage(emission: Emission): string {

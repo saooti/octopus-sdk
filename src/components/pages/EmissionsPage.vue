@@ -44,7 +44,6 @@
 import { orgaComputed } from "../mixins/orgaComputed";
 import EmissionList from "../display/emission/EmissionList.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
-import { state } from "../../stores/ParamSdkStore";
 import { useFilterStore } from "../../stores/FilterStore";
 import { mapState } from "pinia";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
@@ -86,11 +85,7 @@ export default defineComponent({
   computed: {
     ...mapState(useFilterStore, ["filterIab", "filterRubrique"]),
     organisationRight(): boolean {
-      return (
-        (true === this.authenticated &&
-          this.myOrganisationId === this.organisationId) ||
-        true === state.generalParameters.isAdmin
-      );
+      return this.isEditRights(this.organisationId);
     },
     organisation(): string | undefined {
       return this.organisationId ? this.organisationId : this.filterOrgaId;

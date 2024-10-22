@@ -1,5 +1,5 @@
 import { defineComponent } from "vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { playerVast } from "./playerVast";
 import { usePlayerStore } from "../../../stores/PlayerStore";
@@ -95,7 +95,11 @@ export const playerStitching = defineComponent({
       if(!this.playerCurrentChange || !this.playerPodcast ||(this.playerCurrentChange && this.adPositionsPodcasts[this.playerCurrentChange])){
         return;
       }
-      let adserverConfig = await octopusApi.fetchDataPublic<AdserverOtherEmission>(0,`ad/test/podcast/${this.playerCurrentChange}`);
+      let adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
+        api:0,
+        path: `ad/test/podcast/${this.playerCurrentChange}`,
+        isNotAuth:true
+      });
       if(!adserverConfig || "SOUNDCAST_VAST"!==adserverConfig.config?.server){
         this.updateAdPositionsPodcasts(this.playerCurrentChange, []);
         return;

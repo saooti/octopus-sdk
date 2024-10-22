@@ -1,4 +1,4 @@
-@import '@scss/_variables.scss';
+@use '@scss/variables' as octopusVariables;
 
 .octopus-app{
   .status-PENDING {
@@ -8,7 +8,7 @@
     background: #d40303;
   }
   .status-VALIDATED {
-    background: $octopus-primary-color;
+    background: octopusVariables.$octopus-primary-color;
   }
   .status-comment, .status-VALIDATED, .status-NOT_VALID, .status-PENDING {
     width: 14px;

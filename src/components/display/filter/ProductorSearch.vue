@@ -142,12 +142,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .filter-speech-bubble {
     position: absolute;
-    background: $octopus-primary-color;
-    border-radius: $octopus-borderradius;
+    background: octopusVariables.$octopus-primary-color;
+    border-radius: octopusVariables.$octopus-borderradius;
     width: 10rem;
     right: 4rem;
     padding: 5px;
@@ -165,7 +165,7 @@ export default defineComponent({
     width: 0;
     height: 0;
     border: 18px solid transparent;
-    border-left-color: $octopus-primary-color;
+    border-left-color: octopusVariables.$octopus-primary-color;
     border-right: 0;
     border-bottom: 0;
     margin-top: -9px;

@@ -1,9 +1,7 @@
 import { Media } from "../general/media";
 
 export interface Cartouche {
-  mediaId?: number;
   media?: Media;
-  title?: string;
   cartoucheId?: number;
   colorId?: string;
   level?: number;
@@ -12,4 +10,12 @@ export interface Cartouche {
   interval?: number;
   elapsed?: number;
   loop?: boolean;
+}
+
+export function emptyCartouche(): Cartouche {
+  return {
+    id: 0,
+    width: 0,
+    level: 100,
+  };
 }

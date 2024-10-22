@@ -1,6 +1,7 @@
 import { AdserverConfig } from "../adserver/adserverConfig";
 import { Organisation } from "./organisation";
 import { Person } from "../user/person";
+import { ItuneCategory } from "./ituneCategory";
 
 export interface Emission {
   imageUrl?: string;
@@ -16,9 +17,14 @@ export interface Emission {
   score?: number;
   publisher?: Person;
   copyright?: string;
-  optItunesCategories?: Array<string>;
+  optItunesCategories?: Array<ItuneCategory>;
   adConfigs?: { [key: string]: AdserverConfig };
   urlFeed?: string;
+  limits?: {
+    podcastMaxAge?: number;
+    podcastMaxCount?: number;
+  };
+  createdByUserId?: string;
 }
 
 export function emptyEmissionData(): Emission {
@@ -35,5 +41,6 @@ export function emptyEmissionData(): Emission {
     },
     rubriqueIds: [],
     monetisable: "UNDEFINED",
+    limits: {},
   };
 }

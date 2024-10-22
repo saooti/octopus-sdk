@@ -54,7 +54,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@scss/_variables.scss";
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
   .octopus-nav {
     display: flex;
@@ -93,12 +93,12 @@ export default defineComponent({
     border: 0.1rem solid transparent;
     &:hover {
       border-color: #dee2e6;
-      border-bottom-color: $octopus-primary-color;
-      color: $octopus-primary-color;
+      border-bottom-color: octopusVariables.$octopus-primary-color;
+      color: octopusVariables.$octopus-primary-color;
     }
     &.active {
-      border-color: $octopus-primary-color;
-      background: $octopus-primary-color;
+      border-color: octopusVariables.$octopus-primary-color;
+      background: octopusVariables.$octopus-primary-color;
       color: white;
     }
   }

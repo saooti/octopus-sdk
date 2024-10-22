@@ -18,6 +18,7 @@ export interface Podcast {
   comments?: string;
   conferenceId?: number;
   createdAt?: string;
+  createdByUserId?: string;
   valid?: boolean;
   description?: string;
   downloadCount?: number;
@@ -61,7 +62,6 @@ export function emptyPodcastData(): Podcast {
       date: undefined,
     },
     monetisable: "UNDEFINED",
-    comments: "inherit",
     organisation: {
       id: "",
       name: "",

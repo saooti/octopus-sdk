@@ -32,15 +32,13 @@
 </template>
 
 <script lang="ts">
-import crudApi from "@/api/classicCrud";
-import { state } from "../../../../stores/ParamSdkStore";
 import Constants from "../../../../../public/config";
 import ClassicInputText from "../../../form/ClassicInputText.vue";
 import RecaptchaModal from "./RecaptchaModal.vue";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useCommentStore } from "../../../../stores/CommentStore";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../../api/classicApi";
 import {
   CommentAbuseInfo,
   CommentPodcast,
@@ -71,9 +69,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useCommentStore, ["commentUser"]),
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
   },
   methods: {
     ...mapActions(useCommentStore, ["setCommentUser"]),
@@ -87,16 +82,11 @@ export default defineComponent({
           description: this.abuseDescription,
           uuid: this.commentUser?.uuid,
         };
-        var commentAbuseInfo: CommentAbuseInfo;
-        if (!this.authenticated) {
-          commentAbuseInfo = await octopusApi.postDataPublic(
-            2,
-            "abuse/",
-            abuseObject,
-          );
-        } else {
-          commentAbuseInfo = await crudApi.postData(2, "abuse/", abuseObject);
-        }
+        const commentAbuseInfo = await classicApi.postData<CommentAbuseInfo>({
+          api: 2,
+          path: "abuse/",
+          dataToSend: abuseObject,
+        });
         this.$emit("update:comment", {
           ...this.comment,
           ...{ abuse: commentAbuseInfo.abuseCount },

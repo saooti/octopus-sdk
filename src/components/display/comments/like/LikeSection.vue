@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts">
-import { state } from "../../../../stores/ParamSdkStore";
 import { defineComponent, defineAsyncComponent } from "vue";
-import octopusApi from "@saooti/octopus-api";
+import classicApi from "../../../../api/classicApi";
 import { useCommentStore } from "../../../../stores/CommentStore";
+import { useAuthStore } from "../../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
 import {
   CommentFeelings,
@@ -63,6 +63,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["authOrgaId"]),
     ...mapState(useCommentStore, ["commentUser"]),
     configToApply() {
       if (this.comment) {
@@ -89,13 +90,10 @@ export default defineComponent({
         },
       ];
     },
-    authenticated(): boolean {
-      return state.generalParameters.authenticated as boolean;
-    },
     canLikeOrDislike(): boolean {
       return (
         !this.configToApply?.authRequired ||
-        (this.configToApply.authRequired && this.authenticated)
+        (this.configToApply.authRequired && undefined !== this.authOrgaId)
       );
     },
   },
@@ -119,11 +117,16 @@ export default defineComponent({
       await this.fetchPodcastCounters();
     },
     async fetchPodcastCounters() {
-      const data = await octopusApi.fetchDataPublicWithParams<{
+      const data = await classicApi.fetchData<{
         [key: number]: CommentFeelings;
-      }>(2, "podcast/status", {
-        podcastId: [this.podcastId],
-        uuid: this.commentUser?.uuid,
+      }>({
+        api: 2,
+        path: "podcast/status",
+        parameters: {
+          podcastId: [this.podcastId],
+          uuid: this.commentUser?.uuid,
+        },
+        isNotAuth: true,
       });
       this.podcastFeeling = data[this.podcastId];
       if ("LIKED" === this.podcastFeeling.feeling) {
@@ -147,12 +150,17 @@ export default defineComponent({
     },
     async likeActions(actionName: string) {
       const prefix = this.comment ? "comment/" : "podcast/";
-      const data = await octopusApi.putDataPublic<{
+      const data = await classicApi.putData<{
         [key: number]: CommentFeelings;
-      }>(2, prefix + actionName, {
-        ids: [this.comment?.commentId ?? this.podcastId],
-        name: this.commentUser?.name,
-        uuid: this.commentUser?.uuid,
+      }>({
+        api: 2,
+        path: prefix + actionName,
+        dataToSend: {
+          ids: [this.comment?.commentId ?? this.podcastId],
+          name: this.commentUser?.name,
+          uuid: this.commentUser?.uuid,
+        },
+        isNotAuth: true,
       });
       if (this.comment) {
         this.$emit("update:comment", {
