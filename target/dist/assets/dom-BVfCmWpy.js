@@ -1,1 +1,0 @@
-const n={convertRemToPixels(e){return e*parseFloat(getComputedStyle(document.documentElement).fontSize)},createElementFromHTML(e){const t=document.createElement("div");return t.innerHTML=e.trim(),t.firstChild}};export{n as d};

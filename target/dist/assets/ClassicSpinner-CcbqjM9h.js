@@ -1,1 +1,0 @@
-import{d as e,_ as n,o as a,c as o,z as l}from"./index.js";const r=e({name:"ClassicSpinner",props:{small:{default:!1,type:Boolean}}});function c(s,p,t,i,m,f){return a(),o("div",{class:l(["octopus-spinner",s.small?"small":""])},null,2)}const d=n(r,[["render",c]]);export{d as C};

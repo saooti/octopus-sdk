@@ -1,1 +1,0 @@
-import{e as i}from"./emission-DCe5Xe3w.js";function t(){return{podcastId:0,audioUrl:"",audioStorageUrl:"",article:"",imageUrl:"",animators:[],guests:[],emission:i(),title:"",description:void 0,tags:[],availability:{visibility:!0,date:void 0},monetisable:"UNDEFINED",organisation:{id:"",name:"",imageUrl:""},pubDate:void 0,conferenceId:0,duration:0}}export{t as e};

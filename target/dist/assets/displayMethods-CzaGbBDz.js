@@ -1,1 +1,0 @@
-const a={methods:{urlify(e){const r=/[^">](https?:\/\/[^\s<]+)/g;return e?e.replace(r,t=>'<a href="'+t+'" target="_blank" rel="noopener">'+t+"</a>"):""},async onCopyCode(e,r){return await navigator.clipboard.writeText(e),r()}}};export{a as d};

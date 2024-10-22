@@ -12,7 +12,7 @@ export default {
     forceRefresh = false,
   ): Promise<{ [key:string]: string }> {
     const authStore = useAuthStore();
-    if(undefined===authStore.authName){
+    if(""===authStore.authName){
       return {};
     }
     const currentTime = dayjs();

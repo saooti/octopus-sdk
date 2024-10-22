@@ -1,1 +1,0 @@
-import o from"./fr-wOTHK2lw.js";import r from"./educationfr-OM_GJ14m.js";import m from"./educationen-C20NmV7a.js";import t from"./en-Bd2vU6b9.js";import f from"./it-CAOH9Zjy.js";import i from"./sl-CSzBd9K2.js";import e from"./es-DCr9sJNG.js";import p from"./de--L2oXBjx.js";const x={fr:o,en:t,it:f,sl:i,es:e,de:p,educationfr:r,educationen:m};export{x as default};
