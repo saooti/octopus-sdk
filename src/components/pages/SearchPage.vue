@@ -3,7 +3,7 @@
     <h1>{{ titlePage }}</h1>
     <ClassicSearch
       v-if="!hideBar"
-      v-model:textInit="rawQuery"
+      v-model:text-init="rawQuery"
       :autofocus="true"
       id-search="search-page-input"
       :label="$t('Please type at least three characters')"

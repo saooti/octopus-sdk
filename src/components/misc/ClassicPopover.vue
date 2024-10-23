@@ -217,7 +217,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-popover {
   background: white;
   border: 1px solid #ccc;

@@ -78,7 +78,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       return chapteringPercent;
     },
     playerHeight() {
-      if ("STOPPED" === this.playerStatus) return 0;
+      if ("STOPPED" === this.playerStatus) return '0px';
       if (this.playerVideo) return "0px" /* "281px" */;
       if (this.playerLargeVersion) return "27rem";
       if (window.innerWidth > 450) return "6rem";

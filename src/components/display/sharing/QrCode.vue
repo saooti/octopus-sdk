@@ -10,7 +10,7 @@
     />
     <ClassicCheckbox
       v-if="'#000000' !== otherColor"
-      v-model:textInit="isNotBlack"
+      v-model:text-init="isNotBlack"
       class="flex-shrink-0"
       id-checkbox="is-black-qr-code"
       :label="$t('Use organization color')"

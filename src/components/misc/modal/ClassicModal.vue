@@ -62,7 +62,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app {
   .octopus-modal {
     position: fixed;
@@ -119,7 +119,8 @@ export default defineComponent({
     align-items: center;
     justify-content: space-between;
     border: 0;
-    border-radius: octopusVariables.$octopus-borderradius octopusVariables.$octopus-borderradius 0 0;
+    border-radius: octopusVariables.$octopus-borderradius
+      octopusVariables.$octopus-borderradius 0 0;
     background: octopusVariables.$octopus-primary-color;
     color: white;
     padding: 1rem;

@@ -12,7 +12,7 @@
       <ClassicInputText
         v-if="!commentUser?.name"
         v-model:text-init="name"
-        v-model:errorVariable="errorName"
+        v-model:error-variable="errorName"
         input-id="comment-user-name"
         :label="$t('Let\'s get acquainted :')"
         :max-length="maxName"
@@ -20,7 +20,7 @@
       />
       <ClassicInputText
         v-model:text-init="abuseDescription"
-        v-model:errorVariable="abuseDescriptionError"
+        v-model:error-variable="abuseDescriptionError"
         :is-textarea="true"
         input-id="abuse-description"
         :label="$t('Describe the reason for the report')"

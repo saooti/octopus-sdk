@@ -40,7 +40,7 @@
           class="d-flex flex-column mt-3"
         >
           <ClassicCheckbox
-            v-model:textInit="isNotVisible"
+            v-model:text-init="isNotVisible"
             class="flex-shrink-0"
             id-checkbox="search-future-checkbox"
             :label="textNotVisible"
@@ -49,7 +49,7 @@
         </div>
         <div v-if="isCheckboxNotValidate" class="d-flex flex-column mt-3">
           <ClassicCheckbox
-            v-model:textInit="isNotValidate"
+            v-model:text-init="isNotValidate"
             class="flex-shrink-0"
             id-checkbox="search-not-validate-checkbox"
             :label="textNotValidate"

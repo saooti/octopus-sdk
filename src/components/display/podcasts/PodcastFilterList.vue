@@ -11,7 +11,7 @@
         />
       </div>
       <ClassicSearch
-        v-model:textInit="searchPattern"
+        v-model:text-init="searchPattern"
         class="w-50-responsive"
         id-search="podcast-filter-search"
         :label="$t('Search')"

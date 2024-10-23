@@ -1,6 +1,6 @@
 <template>
   <ClassicRadio
-    v-model:textInit="sort"
+    v-model:text-init="sort"
     id-radio="sort-radio"
     :options="optionsArray"
   />

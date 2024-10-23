@@ -210,7 +210,7 @@ export default defineComponent({
 
 <style lang="scss">
 @use "video.js";
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 @use "../../../../assets/videoPlayer";
 .octopus-app {
   .video-live-error {

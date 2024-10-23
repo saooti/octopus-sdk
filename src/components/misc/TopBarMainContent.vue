@@ -235,7 +235,7 @@ export default defineComponent({
       }
       return this.isPhone
         ? "/img/logo_octopus_bubble.svg"
-        : "/img/logo_octopus_white2.svg";
+        : "/img/logo_saooti_play_white.svg";
     },
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
@@ -262,7 +262,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app {
   .top-bar-grid {
     display: grid;

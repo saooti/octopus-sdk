@@ -14,7 +14,7 @@
       @new-comment="newComment"
     />
     <CommentList
-      v-model:nbComments="nbComments"
+      v-model:nb-comments="nbComments"
       class="mt-5"
       :podcast="podcast"
       :reload="reload"

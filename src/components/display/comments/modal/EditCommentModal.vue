@@ -12,14 +12,14 @@
       <template v-if="!inProcessing && !errorUpdate">
         <ClassicInputText
           v-model:text-init="name"
-          v-model:errorVariable="errorName"
+          v-model:error-variable="errorName"
           input-id="username-input"
           :label="$t('Your name')"
           :max-length="MAX_NAME"
         />
         <ClassicInputText
           v-model:text-init="commentText"
-          v-model:errorVariable="errorCommentText"
+          v-model:error-variable="errorCommentText"
           input-id="comment-textarea"
           :label="$t('Comment')"
           :max-length="MAX_DESCRIPTION"

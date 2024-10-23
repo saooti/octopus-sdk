@@ -19,7 +19,7 @@
         <div class="h4 mb-2 mt-3">{{ $t("player parameters") }}</div>
         <PlayerCommonParameters
           v-if="displayInsertCode"
-          v-model:insertCode="insertCode"
+          v-model:insert-code="insertCode"
         />
         <ShareModalPlayer
           v-if="isShareModal"

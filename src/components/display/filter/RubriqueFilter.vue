@@ -4,7 +4,7 @@
     class="d-flex mt-3 align-items-center"
   >
     <ClassicCheckbox
-      v-model:textInit="isRubriquage"
+      v-model:text-init="isRubriquage"
       class="flex-shrink-0"
       id-checkbox="search-rubriquage-checkbox"
       :label="$t('By topic')"

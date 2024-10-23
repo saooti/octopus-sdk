@@ -2,8 +2,8 @@
   <ListPaginate
     id="podcastListPaginate"
     v-model:first="dfirst"
-    v-model:rowsPerPage="dsize"
-    v-model:isMobile="isMobile"
+    v-model:rows-per-page="dsize"
+    v-model:is-mobile="isMobile"
     :text-count="
       showCount && podcasts.length > 1
         ? $t('Number podcasts', { nb: totalCount }) + sortText

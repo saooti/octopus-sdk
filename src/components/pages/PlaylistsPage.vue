@@ -10,7 +10,7 @@
       </div>
     </router-link>
     <ProductorSearch
-      v-model:organisationId="organisationId"
+      v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
       type="playlist"
     />

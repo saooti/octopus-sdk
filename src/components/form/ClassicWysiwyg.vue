@@ -294,7 +294,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app {
   .wysiwyg-editor {
     .form-input {

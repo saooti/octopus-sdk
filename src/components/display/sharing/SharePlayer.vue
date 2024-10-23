@@ -27,8 +27,8 @@
         />
         <div class="d-flex flex-column flex-grow-1">
           <SharePlayerTypes
-            v-model:iFrameModel="iFrameModel"
-            v-model:typeCustomPlayer="typeCustomPlayer"
+            v-model:i-frame-model="iFrameModel"
+            v-model:type-custom-player="typeCustomPlayer"
             :podcast="podcast"
             :emission="emission"
             :playlist="playlist"
@@ -42,7 +42,7 @@
           />
           <ClassicCheckbox
             v-if="isPodcastNotVisible || playlist"
-            v-model:textInit="isVisible"
+            v-model:text-init="isVisible"
             id-checkbox="is-visible-checkbox"
             :label="titleStillAvailable"
           />
@@ -64,7 +64,7 @@
           />
           <PlayerCommonParameters
             v-if="displayInsertCode"
-            v-model:insertCode="insertCode"
+            v-model:insert-code="insertCode"
           />
           <ShareModalPlayer
             v-if="isShareModal"
@@ -427,7 +427,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 @use "../../../assets/iframe";
 .octopus-app {
   .sticker {

@@ -9,7 +9,7 @@
     <template #form>
       <ClassicInputText
         v-model:text-init="name"
-        v-model:errorVariable="errorName"
+        v-model:error-variable="errorName"
         input-id="adserver-tag"
         :label="$t('Let\'s get acquainted :')"
         :max-length="maxName"

@@ -60,7 +60,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app {
   select option:checked,
   select option:hover {

@@ -78,7 +78,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app {
   .btn-transcript {
     position: relative;
@@ -144,8 +144,8 @@ export default defineComponent({
       inset: 0;
       padding: 3px;
       background: repeating-conic-gradient(
-        octopusVariables.$octopus-secondary-color 0 25%,
-        octopusVariables.$octopus-primary-color 0 50%
+          octopusVariables.$octopus-secondary-color 0 25%,
+          octopusVariables.$octopus-primary-color 0 50%
         )
         0 0/30px 30px round;
       -webkit-mask:

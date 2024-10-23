@@ -5,7 +5,7 @@
     </h2>
     <ClassicSearch
       v-if="!loading && notEmptyPlaylist"
-      v-model:textInit="searchPattern"
+      v-model:text-init="searchPattern"
       class="width-600 align-self-baseline mb-2"
       id-search="podcast-list-search"
       :label="$t('Search')"
@@ -13,8 +13,8 @@
     <ListPaginate
       id="podcastPlaylistListPaginate"
       v-model:first="first"
-      v-model:rowsPerPage="size"
-      v-model:isMobile="isMobile"
+      v-model:rows-per-page="size"
+      v-model:is-mobile="isMobile"
       :text-count="
         podcasts.length > 1
           ? `${$t('Number podcasts', { nb: podcasts.length })}`

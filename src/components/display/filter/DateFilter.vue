@@ -5,7 +5,7 @@
     </div>
     <div class="d-flex align-items-center">
       <ClassicCheckbox
-        v-model:textInit="isFrom"
+        v-model:text-init="isFrom"
         class="flex-shrink-0"
         id-checkbox="search-from-checkbox"
         :label="$t('From the :')"
@@ -21,7 +21,7 @@
     </div>
     <div class="d-flex align-items-center">
       <ClassicCheckbox
-        v-model:textInit="isTo"
+        v-model:text-init="isTo"
         class="flex-shrink-0"
         id-checkbox="search-to-checkbox"
         :label="$t('To the :')"

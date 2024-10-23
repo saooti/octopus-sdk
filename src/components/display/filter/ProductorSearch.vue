@@ -10,7 +10,7 @@
         @selected="onOrganisationSelected"
       />
       <ClassicCheckbox
-        v-model:textInit="keepOrganisation"
+        v-model:text-init="keepOrganisation"
         :class="!!organisationId ? '' : 'invisible'"
         class="m-3"
         :label="
@@ -142,7 +142,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app {
   .filter-speech-bubble {
     position: absolute;

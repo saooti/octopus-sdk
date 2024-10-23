@@ -60,8 +60,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
-@use 'sass:color';
+@use "@scss/variables" as octopusVariables;
+@use "sass:color";
 .octopus-app .btn-like-comment {
   $neutral-color: #555555;
   $background-color: octopusVariables.$octopus-primary-color;

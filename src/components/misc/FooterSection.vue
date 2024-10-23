@@ -17,7 +17,7 @@
         {{ link.title }}
       </router-link>
       <ClassicSelect
-        v-model:textInit="language"
+        v-model:text-init="language"
         :display-label="false"
         id-select="language-chooser-select"
         :label="$t('Change locale')"

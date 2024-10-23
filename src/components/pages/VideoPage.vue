@@ -38,7 +38,7 @@
           <div class="d-flex flex-column flex-grow-1 w-100">
             <ClassicNav
               v-if="tabs.length"
-              v-model:activeTab="activeTab"
+              v-model:active-tab="activeTab"
               :tab-number="tabs.length"
               :transparent="true"
             >
@@ -280,7 +280,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+@use "@scss/variables" as octopusVariables;
 .octopus-app .video-page-container {
   align-items: stretch;
   flex-grow: 1;

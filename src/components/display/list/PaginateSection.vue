@@ -187,20 +187,27 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
-.octopus-app .paginate-fixed {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  position: sticky;
-  background: octopusVariables.$octopus-background;
-  padding: 0.5rem 0;
-  z-index: 10;
-  .btn {
-    border-radius: 0;
-    &.active {
-      background: octopusVariables.$primaryColorMoreTransparent;
+@use "@scss/variables" as octopusVariables;
+.octopus-app {
+  .module-box .paginate-fixed,
+  .octopus-modal .paginate-fixed,
+  .octopus-accordion .paginate-fixed {
+    bottom: 0 !important;
+  }
+  .paginate-fixed {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    position: sticky;
+    background: octopusVariables.$octopus-background;
+    padding: 0.5rem 0;
+    z-index: 10;
+    .btn {
+      border-radius: 0;
+      &.active {
+        background: octopusVariables.$primaryColorMoreTransparent;
+      }
     }
   }
 }

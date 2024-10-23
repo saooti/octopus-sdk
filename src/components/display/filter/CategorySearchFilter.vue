@@ -1,13 +1,13 @@
 <template>
   <div class="d-flex mt-3 align-items-center">
     <ClassicCheckbox
-      v-model:textInit="isCategory"
+      v-model:text-init="isCategory"
       class="flex-shrink-0 me-2"
       id-checkbox="search-category-checkbox"
       :label="$t('By category')"
     />
     <CategoryChooser
-      v-model:categorySelected="iabId"
+      v-model:category-selected="iabId"
       width="100%"
       :defaultanswer="$t('No category filter')"
     />

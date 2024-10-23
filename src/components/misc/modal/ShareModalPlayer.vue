@@ -5,7 +5,7 @@
     @close="closePopup"
   >
     <template #body>
-      <ClassicNav v-model:activeTab="activeTab" :tab-number="tabs.length">
+      <ClassicNav v-model:active-tab="activeTab" :tab-number="tabs.length">
         <template v-for="(tab, index) in tabs" #[index]>
           {{ tab }}
         </template>

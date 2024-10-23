@@ -17,7 +17,7 @@
     </div>
     <ClassicSelect
       v-if="lives.length || 'ALL' !== selectedStatus"
-      v-model:textInit="selectedStatus"
+      v-model:text-init="selectedStatus"
       id-select="status-live-chooser-select"
       :label="$t('Selection by status')"
       :display-label="false"

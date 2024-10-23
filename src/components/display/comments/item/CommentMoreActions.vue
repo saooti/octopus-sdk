@@ -50,7 +50,7 @@
     <CommentMoreActionsAdmin
       v-if="editRight"
       v-model:comment="commentForVmodel"
-      v-model:actionsAdmin="actionsAdmin"
+      v-model:actions-admin="actionsAdmin"
     />
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="page-box">
     <slot name="new-emission" />
     <ProductorSearch
-      v-model:organisationId="organisationId"
+      v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
       type="emission"
     />
