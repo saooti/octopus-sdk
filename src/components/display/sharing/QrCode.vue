@@ -76,13 +76,6 @@ export default defineComponent({
       }
     },
     async initColor(): Promise<void> {
-      if (
-        state.generalParameters.podcastmaker &&
-        state.generalParameters.podcastmakerColor
-      ) {
-        this.otherColor = state.generalParameters.podcastmakerColor;
-        return;
-      }
       if (undefined === this.authOrgaId) return;
       const orgaId = this.authOrgaId;
       const attributes = await this.getOrgaAttributes(orgaId ?? "");

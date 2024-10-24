@@ -229,13 +229,6 @@ export default defineComponent({
           window.location.pathname +
           window.location.search;
       }
-      if (
-        state.generalParameters.podcastmaker &&
-        state.generalParameters.podcastmakerColor
-      ) {
-        this.arrayColors[0].color = state.generalParameters.podcastmakerColor;
-        return;
-      }
       if (Object.hasOwn(attributes, "COLOR")) {
         this.arrayColors[0].color = attributes.COLOR as string;
       }
