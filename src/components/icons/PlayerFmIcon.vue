@@ -7,7 +7,7 @@
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 32 32"
+      viewBox="-5 5 42 22"
       :fill="fillColor"
       :height="size"
       :width="size"

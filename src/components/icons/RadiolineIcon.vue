@@ -7,7 +7,7 @@
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 1050 1050"
+      viewBox="-100 -50 1250 1000"
       :fill="fillColor"
       style="transform: scale(1, -1)"
       :height="size"
