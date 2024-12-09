@@ -50,6 +50,7 @@ export default defineComponent({
       posY: 0 as number,
       targetElement: null as HTMLElement | null,
       overPopover: false as boolean,
+      isTabAction: false as boolean,
     };
   },
   computed: {
@@ -63,6 +64,11 @@ export default defineComponent({
   watch: {
     show() {
       this.$emit("updateVisibility", this.show);
+      if (this.show) {
+        window.addEventListener("keyup", this.addAccessibilityControl);
+      } else {
+        window.removeEventListener("keyup", this.addAccessibilityControl);
+      }
     },
   },
   mounted() {
@@ -72,6 +78,21 @@ export default defineComponent({
     this.removeListeners();
   },
   methods: {
+    addAccessibilityControl(event: KeyboardEvent): void {
+      if (!event || null === event) {
+        return;
+      }
+      if ("Tab" !== event.key) {
+        return;
+      }
+      const myElement = event.target as HTMLElement;
+      const parent = this.$refs.popover as HTMLElement;
+      if (parent?.contains(myElement)) {
+        this.isTabAction = true;
+      } else {
+        this.clearClick();
+      }
+    },
     init() {
       this.targetElement = document.getElementById(this.target);
       if (this.targetElement) {
@@ -165,6 +186,10 @@ export default defineComponent({
         yGap;
     },
     clearDataBlur(e: FocusEvent) {
+      if (this.isTabAction) {
+        this.isTabAction = false;
+        return;
+      }
       if (!e.relatedTarget) {
         return this.clearClick();
       }
@@ -245,7 +270,8 @@ export default defineComponent({
       &:disabled {
         background: rgb(230, 230, 230);
       }
-      &:hover {
+      &:hover,
+      &:focus {
         background: rgb(243, 243, 243);
       }
     }

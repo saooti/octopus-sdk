@@ -14,7 +14,7 @@
       <img
         v-if="!filterOrgaId || '' === imgUrl"
         :src="logoUrl"
-        role="presentation"
+        aria-hidden="true"
         width="140"
         height="50"
         :class="isEducation ? 'educationLogo' : 'octopusLogo'"
@@ -22,7 +22,7 @@
       <img
         v-else
         :src="proxyImageUrl(imgUrl, '', '80')"
-        role="presentation"
+        aria-hidden="true"
         class="client-logo"
         :class="isEducation ? 'educationLogo' : ''"
       />
@@ -88,7 +88,7 @@
           <div class="link-hover">
             {{ $t("More") }}
           </div>
-          <div class="ms-1 saooti-down" />
+          <ChevronDownIcon />
         </button>
         <ClassicPopover
           target="more-dropdown"
@@ -131,14 +131,18 @@
           :to="{
             name: 'podcasts',
           }"
-          class="btn admin-button m-1 saooti-search text-blue-octopus"
-        />
+          class="btn admin-button m-1 text-blue-octopus"
+        >
+          <MagnifyIcon :size="30" />
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
+import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
 import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
 import { state } from "../../stores/ParamSdkStore";
 import HomeDropdown from "./HomeDropdown.vue";
@@ -155,6 +159,8 @@ export default defineComponent({
     HomeDropdown,
     ClassicPopover,
     MobileMenu,
+    MagnifyIcon,
+    ChevronDownIcon,
   },
   mixins: [imageProxy, rubriquesFilterComputed],
   props: {

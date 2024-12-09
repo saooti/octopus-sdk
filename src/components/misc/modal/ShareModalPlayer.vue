@@ -11,26 +11,38 @@
         </template>
         <template #tab0>
           <p class="word-break-word">{{ embedLink }}</p>
-          <div class="saooti-copy" @click="onCopyCode(embedLink, afterCopy)" />
+          <button
+            class="btn-transparent"
+            :title="$t('Copy')"
+            @click="onCopyCode(embedLink, afterCopy)"
+          >
+            <ContentCopyIcon />
+          </button>
         </template>
         <template #tab1>
           <div class="d-flex flex-column flex-grow-1">
             <div class="d-flex justify-content-between align-items-center">
               <p class="word-break-word">{{ embedlyLink }}</p>
-              <div
-                class="saooti-copy"
+              <button
+                class="btn-transparent"
+                :title="$t('Copy')"
                 @click="onCopyCode(embedlyLink, afterCopy)"
-              />
+              >
+                <ContentCopyIcon />
+              </button>
             </div>
             <QrCode :url="embedlyLink" />
           </div>
         </template>
         <template v-if="directLink" #tab2>
           <p class="word-break-word">{{ directLink.audioUrl }}</p>
-          <div
-            class="saooti-copy"
+          <button
+            class="btn-transparent"
+            :title="$t('Copy')"
             @click="onCopyCode(directLink.audioUrl, snackbarRef)"
-          />
+          >
+            <ContentCopyIcon />
+          </button>
         </template>
       </ClassicNav>
     </template>
@@ -44,6 +56,7 @@
 </template>
 
 <script lang="ts">
+import ContentCopyIcon from "vue-material-design-icons/ContentCopy.vue";
 import SnackBar from "../SnackBar.vue";
 import displayMethods from "../../mixins/displayMethods";
 import ClassicModal from "../modal/ClassicModal.vue";
@@ -59,6 +72,7 @@ export default defineComponent({
     QrCode,
     ClassicModal,
     ClassicNav,
+    ContentCopyIcon,
   },
   mixins: [displayMethods],
   props: {
@@ -96,14 +110,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.octopus-app {
-  #share-modal {
-    .saooti-copy {
-      cursor: pointer;
-      align-self: center;
-    }
-  }
-}
-</style>

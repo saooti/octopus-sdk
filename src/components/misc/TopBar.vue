@@ -4,6 +4,7 @@
     :class="{ scrolled: scrolled, 'content-top-bar': isContentToDisplay }"
   >
     <TopBarMainContent
+      class="top-bar-z-index"
       :is-education="isEducation"
       :is-phone="isPhone"
       :scrolled="scrolled"
@@ -11,10 +12,13 @@
     />
     <template v-if="contentToDisplay">
       <div class="page-element-bg" :style="backgroundDisplay" />
-      <h1 v-if="!scrolled" class="text-truncate">{{ titleToDisplay }}</h1>
+      <h1 v-if="!scrolled" class="text-truncate top-bar-z-index">
+        {{ titleToDisplay }}
+      </h1>
       <SubscribeButtons
         v-if="!isGarRole"
         v-show="!scrolled"
+        class="top-bar-z-index"
         :emission="emissionObject"
         :playlist-id="contentToDisplay?.playlistId"
         :window-width="windowWidth"
@@ -145,8 +149,8 @@ export default defineComponent({
     *:focus-visible {
       box-shadow: 0 0 10px 1px white !important;
     }
-    position: sticky;
-    top: 0;
+    //position: sticky;
+    //top: 0;
     background: octopusVariables.$octopus-primary-color;
     background: linear-gradient(
       90deg,
@@ -173,9 +177,16 @@ export default defineComponent({
         height: 5rem;
       }
     }
-
+    &:not(.scrolled) {
+      position: relative;
+    }
     &.scrolled {
       z-index: 11;
+      position: sticky;
+      top: 0;
+    }
+    .top-bar-z-index {
+      z-index: 1;
     }
 
     h1 {
@@ -214,7 +225,6 @@ export default defineComponent({
       background-size: cover;
       width: 100%;
       position: absolute;
-      z-index: -1;
       transition: height 0.7s;
     }
 

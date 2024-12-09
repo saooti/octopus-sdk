@@ -25,17 +25,23 @@
     <PlayerSpeedButton v-if="!radioUrl" />
     <button
       :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
-      class="btn play-button-box btn-transparent text-light saooti-up me-0"
+      class="btn play-button-box btn-transparent text-light me-0"
       @click="changePlayerLargeVersion"
-    />
+    >
+      <ChevronUpIcon />
+    </button>
     <button
       :title="$t('Close')"
-      class="btn play-button-box btn-transparent text-light saooti-remove"
+      class="btn play-button-box btn-transparent text-light"
       @click="stopPlayer"
-    />
+    >
+      <WindowCloseIcon />
+    </button>
   </div>
 </template>
 <script lang="ts">
+import ChevronUpIcon from "vue-material-design-icons/ChevronUp.vue";
+import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
 import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
 import imageProxy from "../../mixins/imageProxy";
 import PlayerTitle from "./elements/PlayerTitle.vue";
@@ -58,6 +64,8 @@ export default defineComponent({
     PlayerPlayButton,
     PlayerTitle,
     PlayerSpeedButton,
+    WindowCloseIcon,
+    ChevronUpIcon,
     /* AdsSkipButton */
   },
   mixins: [playerDisplayTime, imageProxy],

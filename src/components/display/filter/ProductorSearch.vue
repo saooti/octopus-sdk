@@ -22,7 +22,7 @@
         id-checkbox="organisation-checkbox"
         @click-action="onKeepOrganisation"
       />
-      <div :class="showBubble ? '' : 'invisible'" class="filter-speech-bubble">
+      <div v-if="showBubble" class="filter-speech-bubble">
         {{
           $t(
             "check this box if you want to keep this filter for the rest of your visit",

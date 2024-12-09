@@ -21,7 +21,7 @@
         v-if="comment.abuse && editRight"
         class="d-flex align-items-center text-danger me-2"
       >
-        <span class="saooti-warning me-1" />
+        <AlertIcon :size="16" class="me-1" />
         {{ $t("abuse denounced", { nb: comment.abuse }) }}
       </div>
       <span v-if="editRight" :class="'status-' + comment.state" />
@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+import AlertIcon from "vue-material-design-icons/Alert.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
@@ -52,6 +53,7 @@ export default defineComponent({
 
   components: {
     ClassicPopover,
+    AlertIcon,
   },
 
   mixins: [displayMethods, selenium],

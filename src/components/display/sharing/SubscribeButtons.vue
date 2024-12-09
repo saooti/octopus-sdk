@@ -18,47 +18,63 @@
         :href="sub.url"
         :title="sub.title"
       >
-        <span :class="sub.icon" />
+        <component :is="sub.icon" :fill-color="sub?.color" />
       </a>
     </div>
     <a
       rel="noopener"
       target="_blank"
-      class="btn share-btn mx-2 saooti-rss"
+      class="btn share-btn mx-2"
       :href="rssUrl"
       :title="$t('Rss feed')"
-    />
+    >
+      <RssIcon />
+    </a>
     <button
       v-show="hiddenLinks.length"
       id="subscribe-buttons-dropdown"
-      class="btn share-btn mx-2 saooti-more"
+      class="btn share-btn mx-2"
       :title="$t('See more')"
-    />
-    <teleport to=".octopus-app">
-      <ClassicPopover
-        target="subscribe-buttons-dropdown"
-        popover-class="popover-z-index"
-        :only-click="true"
-        :is-fixed="true"
-        :left-pos="true"
+    >
+      <PlusIcon />
+    </button>
+    <ClassicPopover
+      target="subscribe-buttons-dropdown"
+      popover-class="popover-z-index"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
+    >
+      <a
+        v-for="link in hiddenLinks"
+        :key="link.name"
+        rel="noopener"
+        target="_blank"
+        class="octopus-dropdown-item justify-content-start d-flex align-items-center"
+        :href="link.url"
+        realLink="true"
       >
-        <a
-          v-for="link in hiddenLinks"
-          :key="link.name"
-          rel="noopener"
-          target="_blank"
-          class="octopus-dropdown-item justify-content-start"
-          :href="link.url"
-          realLink="true"
-        >
-          <span :class="link.icon" class="me-1" /> {{ link.title }}
-        </a>
-      </ClassicPopover>
-    </teleport>
+        <component :is="link.icon" :fill-color="link.color" class="me-1" />
+        {{ link.title }}
+      </a>
+    </ClassicPopover>
   </div>
 </template>
 
 <script lang="ts">
+import RadiolineIcon from "../../icons/RadiolineIcon.vue";
+import TuninIcon from "../../icons/TuninIcon.vue";
+import PodcastAddictIcon from "../../icons/PodcastAddictIcon.vue";
+import PocketCastIcon from "../../icons/PocketCastIcon.vue";
+import PlayerFmIcon from "../../icons/PlayerFmIcon.vue";
+import IHeartIcon from "../../icons/IHeartIcon.vue";
+import AmazonMusicIcon from "../../icons/AmazonMusicIcon.vue";
+import DeezerIcon from "../../icons/DeezerIcon.vue";
+import ApplePodcastIcon from "../../icons/ApplePodcastIcon.vue";
+import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
+import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
+import PlusIcon from "vue-material-design-icons/Plus.vue";
+import RssIcon from "vue-material-design-icons/Rss.vue";
 import { mapState } from "pinia";
 import { useApiStore } from "../../../stores/ApiStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
@@ -68,12 +84,26 @@ type Link = {
   name: string;
   icon: string;
   title: string;
+  color?: string;
   url: string | undefined;
 };
 export default defineComponent({
   name: "SubscribeButtons",
   components: {
     ClassicPopover,
+    RssIcon,
+    PlusIcon,
+    SpotifyIcon,
+    YoutubeIcon,
+    ApplePodcastIcon,
+    DeezerIcon,
+    AmazonMusicIcon,
+    IHeartIcon,
+    PlayerFmIcon,
+    PocketCastIcon,
+    PodcastAddictIcon,
+    TuninIcon,
+    RadiolineIcon,
   },
   props: {
     emission: { default: undefined, type: Object as () => Emission },
@@ -93,70 +123,72 @@ export default defineComponent({
       const sub = [
         {
           name: "applePodcast",
-          icon: "saooti-apple-podcast",
+          icon: "ApplePodcastIcon",
           title: "Apple Podcast | iTunes",
           url: this.getUrl("applePodcast"),
         },
         {
           name: "deezer",
-          icon: "saooti-deezer",
+          icon: "DeezerIcon",
           title: "Deezer",
           url: this.getUrl("deezer"),
         },
         {
           name: "spotify",
-          icon: "saooti-spotify",
+          icon: "SpotifyIcon",
           title: "Spotify",
+          color: "#1ed760",
           url: this.getUrl("spotify"),
         },
         {
           name: "amazon",
-          icon: "saooti-amazon-music",
+          icon: "AmazonMusicIcon",
           title: "Amazon Music",
           url: this.getUrl("amazon"),
         },
 
         {
           name: "iHeart",
-          icon: "saooti-iheart",
+          icon: "IHeartIcon",
           title: "iHeart",
           url: this.getUrl("iHeart"),
         },
         {
           name: "playerFm",
-          icon: "saooti-playerfm",
+          icon: "PlayerFmIcon",
           title: "PlayerFM",
           url: this.getUrl("playerFm"),
         },
         {
           name: "pocketCasts",
-          icon: "saooti-pocket-casts",
+          icon: "PocketCastIcon",
           title: "Pocket Casts",
           url: this.getUrl("pocketCasts"),
         },
         {
           name: "podcastAddict",
-          icon: "saooti-podcast-addict",
+          icon: "PodcastAddictIcon",
           title: "Podcast Addict",
           url: this.getUrl("podcastAddict"),
         },
         {
           name: "radioline",
-          icon: "saooti-radioline",
+          icon: "RadiolineIcon",
           title: "Radioline",
           url: this.getUrl("radioline"),
         },
 
         {
           name: "tunein",
-          icon: "saooti-tunin",
+          icon: "TuninIcon",
           title: "TuneIn",
           url: this.getUrl("tunein"),
         },
         {
           name: "youtube",
-          icon: "saooti-youtube",
+          icon: "YoutubeIcon",
           title: "YouTube Music",
+          color: "#fe0000",
           url: this.getUrl("youtube"),
         },
       ];

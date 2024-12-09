@@ -394,4 +394,5 @@ export default{
   "Live progress bar":"Barra di avanzamento in tempo reale",
   "Listening progress bar":"Barra di avanzamento dell'ascolto",
   "Contract preview": "Panoramica del contratto",
+  "Clear search":"Cancella ricerca",
 };

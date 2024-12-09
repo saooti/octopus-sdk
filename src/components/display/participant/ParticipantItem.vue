@@ -17,10 +17,11 @@
         class="img-box border"
       />
       <div class="d-flex align-items-center h4 justify-content-center mt-2">
-        <span
+        <AlertIcon
           v-if="!activeParticipant && !isPodcastmaker && editRight"
+          :size="16"
+          class="text-danger me-1"
           :title="$t('Participant have not podcasts')"
-          class="saooti-warning text-danger me-1"
         />
         {{ name }}
       </div>
@@ -50,6 +51,7 @@
 </template>
 
 <script lang="ts">
+import AlertIcon from "vue-material-design-icons/Alert.vue";
 import classicApi from "../../../api/classicApi";
 import { Participant } from "@/stores/class/general/participant";
 import imageProxy from "../../mixins/imageProxy";
@@ -60,6 +62,9 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "ParticpantItem",
+  components: {
+    AlertIcon,
+  },
   mixins: [displayMethods, orgaComputed, imageProxy],
   props: {
     participant: { default: () => ({}), type: Object as () => Participant },

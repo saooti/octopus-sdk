@@ -5,7 +5,7 @@ import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export const orgaComputed = defineComponent({
   computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]), //TODO check
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["isRoleAdmin", "authOrgaId"]),
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;

@@ -25,8 +25,8 @@
           width="32"
           height="32"
           class="me-2"
+          role="presentation"
           :title="$t('Organisation name image', { name: option.name })"
-          :alt="$t('Organisation name image', { name: option.name })"
         />
         <span>
           {{ option.name }}

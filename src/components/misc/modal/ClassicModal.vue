@@ -15,18 +15,21 @@
             <button
               v-if="canBeReduced"
               class="btn-transparent text-light"
-              :class="onlyHeader ? 'saooti-down' : 'saooti-up'"
               :title="onlyHeader ? $t('Enlarge') : $t('Reduce')"
               @click="onlyHeader = !onlyHeader"
-            />
+            >
+              <ChevronDownIcon :class="{ 'arrow-transform': !onlyHeader }" />
+            </button>
             <button
               v-if="closable"
               :ref="closable ? 'focusElement' : ''"
               type="button"
-              class="btn-transparent text-light saooti-remove"
+              class="btn-transparent text-light"
               :title="$t('Close')"
               @click="$emit('close')"
-            />
+            >
+              <WindowCloseIcon />
+            </button>
           </div>
         </div>
         <div v-show="!onlyHeader" class="octopus-modal-body">
@@ -41,9 +44,16 @@
 </template>
 
 <script lang="ts">
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
+import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
 import { defineComponent } from "vue";
+
 export default defineComponent({
   name: "ClassicModal",
+  components: {
+    WindowCloseIcon,
+    ChevronDownIcon,
+  },
   props: {
     idModal: { default: undefined, type: String },
     titleModal: { default: undefined, type: String },

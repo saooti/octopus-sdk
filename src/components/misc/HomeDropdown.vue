@@ -3,86 +3,90 @@
     <button
       v-if="isAuthenticatedWithOrga"
       :title="$t('My space')"
-      class="btn admin-button hide-small-screen m-1 saooti-admin-menu text-blue-octopus"
+      class="btn admin-button hide-small-screen m-1 text-blue-octopus"
       @click="goToAdministration"
-    />
+    >
+      <AppsIcon :size="30" />
+    </button>
     <router-link
       v-if="isAuthenticatedWithOrga && isRoleContribution"
       :title="$t('Upload')"
       to="/main/priv/upload"
-      class="btn admin-button hide-small-screen m-1 saooti-download text-blue-octopus"
-    />
+      class="btn admin-button hide-small-screen m-1 text-blue-octopus"
+    >
+      <DownloadIcon :size="30" />
+    </router-link>
     <button
       v-show="!mobileMenuDisplay || isAuthenticatedWithOrga"
       id="home-dropdown"
-      class="btn m-1 admin-button hide-small-screen saooti-user text-blue-octopus"
+      class="btn m-1 admin-button hide-small-screen text-blue-octopus"
       :title="$t('User menu')"
-    />
-    <teleport to=".octopus-app" :disabled="scrolled">
-      <ClassicPopover
-        target="home-dropdown"
-        popover-class="popover-z-index"
-        :only-click="true"
-        :is-fixed="true"
-        :left-pos="true"
-      >
-        <template v-if="!isAuthenticated">
-          <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
-            {{ $t("Login") }}
-          </a>
+    >
+      <AccountIcon :size="30" />
+    </button>
+    <ClassicPopover
+      target="home-dropdown"
+      popover-class="popover-z-index"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
+    >
+      <template v-if="!isAuthenticated">
+        <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
+          {{ $t("Login") }}
+        </a>
+        <router-link
+          v-if="!isPodcastmaker"
+          class="octopus-dropdown-item"
+          to="/main/pub/create"
+        >
+          {{ $t("Create an account") }}
+        </router-link>
+      </template>
+      <template v-else>
+        <template v-for="routerBack in routerBackoffice" :key="routerBack.path">
           <router-link
-            v-if="!isPodcastmaker"
-            class="octopus-dropdown-item"
-            to="/main/pub/create"
+            v-if="!isPodcastmaker && routerBack.condition"
+            :class="routerBack.class"
+            :to="routerBack.path"
           >
-            {{ $t("Create an account") }}
+            {{ routerBack.title }}
           </router-link>
         </template>
-        <template v-else>
-          <template
-            v-for="routerBack in routerBackoffice"
-            :key="routerBack.path"
-          >
-            <router-link
-              v-if="!isPodcastmaker && routerBack.condition"
-              :class="routerBack.class"
-              :to="routerBack.path"
-            >
-              {{ routerBack.title }}
-            </router-link>
-          </template>
-          <template v-if="helpLinks.length">
-            <hr />
-            <template v-for="helpLink in helpLinks" :key="helpLink.title">
-              <a
-                :href="helpLink.href"
-                class="octopus-dropdown-item"
-                rel="noopener"
-                target="_blank"
-                realLink="true"
-              >
-                {{ helpLink.title }}
-              </a>
-            </template>
-          </template>
+        <template v-if="helpLinks.length">
           <hr />
-          <a class="octopus-dropdown-item c-hand" href="/logout">
-            {{ $t("Logout") }}
-          </a>
+          <template v-for="helpLink in helpLinks" :key="helpLink.title">
+            <a
+              :href="helpLink.href"
+              class="octopus-dropdown-item"
+              rel="noopener"
+              target="_blank"
+              realLink="true"
+            >
+              {{ helpLink.title }}
+            </a>
+          </template>
         </template>
-        <router-link
-          v-if="!isGarRole"
-          class="octopus-dropdown-item"
-          to="/main/pub/contact"
-        >
-          {{ $t("Contact") }}
-        </router-link>
-      </ClassicPopover>
-    </teleport>
+        <hr />
+        <a class="octopus-dropdown-item c-hand" href="/logout">
+          {{ $t("Logout") }}
+        </a>
+      </template>
+      <router-link
+        v-if="!isGarRole"
+        class="octopus-dropdown-item"
+        to="/main/pub/contact"
+      >
+        {{ $t("Contact") }}
+      </router-link>
+    </ClassicPopover>
   </div>
 </template>
 
 <script lang="ts">
+import AppsIcon from "vue-material-design-icons/Apps.vue";
+import AccountIcon from "vue-material-design-icons/Account.vue";
+import DownloadIcon from "vue-material-design-icons/Download.vue";
 import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import { useAuthStore } from "../../stores/AuthStore";
@@ -93,6 +97,9 @@ export default defineComponent({
   name: "HomeDropdown",
   components: {
     ClassicPopover,
+    DownloadIcon,
+    AccountIcon,
+    AppsIcon,
   },
   props: {
     isEducation: { default: false, type: Boolean },

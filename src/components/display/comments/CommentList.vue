@@ -11,17 +11,7 @@
         id="sort-by-comments"
         class="btn btn-transparent d-flex align-items-center"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h4q.425 0 .713.288T9 17t-.288.713T8 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h10q.425 0 .713.288T15 12t-.288.713T14 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"
-          />
-        </svg>
+        <SortVariantIcon :size="30" />
         <p class="ms-1">{{ $t("Sort by") }}</p>
       </button>
       <ClassicPopover target="sort-by-comments" :only-click="true">
@@ -60,14 +50,18 @@
       />
       <button
         v-if="!isNotAnAnswerList && dfirst + dsize < totalCount"
-        class="btn share-btn mx-2 saooti-more"
+        class="btn share-btn mx-2"
         :title="$t('See more')"
-      />
+      >
+        <PlusIcon />
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import SortVariantIcon from "vue-material-design-icons/SortVariant.vue";
+import PlusIcon from "vue-material-design-icons/Plus.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { handle403 } from "../../mixins/handle403";
 import classicApi from "../../../api/classicApi";
@@ -93,6 +87,8 @@ export default defineComponent({
     ClassicLoading,
     CommentItem,
     ClassicPopover,
+    PlusIcon,
+    SortVariantIcon,
   },
   mixins: [handle403],
 

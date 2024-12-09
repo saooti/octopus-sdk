@@ -24,20 +24,22 @@
       :alt-position="customPosition"
       @update:model-value="updateValue($event)"
     >
-      <template v-if="time" #input-icon>
-        <div class="ms-2 saooti-clock" />
+      <template v-if="isTimePicker" #input-icon>
+        <ClockOutlineIcon :size="16" class="ms-2" />
       </template>
     </VueDatePicker>
   </div>
 </template>
 
 <script lang="ts">
+import ClockOutlineIcon from "vue-material-design-icons/ClockOutline.vue";
 import dayjs from "dayjs";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     VueDatePicker,
+    ClockOutlineIcon,
   },
   props: {
     time: {

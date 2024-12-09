@@ -27,6 +27,11 @@ body{
     outline: none;
     box-shadow: 0 0 10px 1px octopusVariables.$octopus-primary-color !important;
   }
+  span.material-design-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   a{
     word-break: break-word;
     text-decoration: none;

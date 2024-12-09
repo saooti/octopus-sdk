@@ -16,7 +16,8 @@
               v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
               width="250"
               height="250"
-              :alt="$t('Playlist name image', { name: name })"
+              role="presentation"
+              :title="$t('Playlist name image', { name: name })"
               class="img-box float-start me-3 mb-3"
             />
             <h2>{{ name }}</h2>

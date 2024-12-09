@@ -64,17 +64,19 @@
         </div>
       </template>
       <template #open-indicator="{ attributes }">
-        <span v-bind="attributes" class="saooti-down" />
+        <ChevronDownIcon v-bind="attributes" />
       </template>
     </vSelect>
   </div>
 </template>
 
 <script lang="ts">
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import vSelect from "vue-select";
 export default {
   components: {
     vSelect,
+    ChevronDownIcon,
   },
   props: {
     id: { default: "", type: String },

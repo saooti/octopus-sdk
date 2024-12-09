@@ -43,12 +43,13 @@
       <template v-if="buttonPlus">
         {{ $t("See more") }}
       </template>
-      <div :class="buttonPlus ? 'ms-1' : ''" class="saooti-more" />
+      <PlusIcon :size="16" :class="buttonPlus ? 'ms-1' : ''" />
     </button>
   </div>
 </template>
 
 <script lang="ts">
+import PlusIcon from "vue-material-design-icons/Plus.vue";
 import domHelper from "../../../helper/dom";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { state } from "../../../stores/ParamSdkStore";
@@ -65,6 +66,7 @@ export default defineComponent({
     PaginateSection,
     PaginateParams,
     ClassicLoading,
+    PlusIcon,
   },
   mixins: [resizePhone, routeParams],
   props: {

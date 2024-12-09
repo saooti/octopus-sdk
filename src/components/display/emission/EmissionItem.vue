@@ -18,10 +18,11 @@
       />
       <div class="emission-item-text">
         <div class="d-flex align-items-center emission-name">
-          <span
+          <AlertIcon
             v-if="!activeEmission && !isPodcastmaker && editRight"
+            :size="16"
+            class="text-danger me-1"
             :title="$t('Emission have not podcasts')"
-            class="saooti-warning text-danger me-1"
           />
           {{ emission.name }}
         </div>
@@ -52,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import AlertIcon from "vue-material-design-icons/Alert.vue";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { Emission } from "@/stores/class/general/emission";
 import classicApi from "../../../api/classicApi";
@@ -62,6 +64,9 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
   name: "EmissionItem",
+  components: {
+    AlertIcon,
+  },
 
   mixins: [displayMethods, orgaComputed, imageProxy],
 

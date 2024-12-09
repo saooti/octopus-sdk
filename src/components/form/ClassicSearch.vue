@@ -11,19 +11,28 @@
       @input="$emit('update:textInit', $event.target.value)"
     />
     <label :for="idSearch" :title="label" />
-    <div v-if="!textInit" class="saooti-search search-icon-container" />
-    <div
-      v-else
-      class="saooti-remove search-icon-container c-hand"
+    <button
+      class="btn-transparent search-icon-container"
+      :disabled="!textInit"
+      :title="!textInit ? $t('Search') : $t('Clear search')"
       @click="$emit('update:textInit', '')"
-    />
+    >
+      <MagnifyIcon v-if="!textInit" />
+      <WindowCloseIcon v-else />
+    </button>
   </div>
 </template>
 
 <script lang="ts">
+import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
+import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ClassicSearch",
+  components: {
+    MagnifyIcon,
+    WindowCloseIcon,
+  },
   props: {
     idSearch: { default: "", type: String },
     label: { default: "", type: String },
@@ -44,10 +53,6 @@ export default defineComponent({
       margin: 0 !important;
       height: 48px;
     }
-    .saooti-search,
-    .saooti-remove {
-      font-size: 1rem;
-    }
     .search-icon-container {
       position: absolute;
       top: 0;
@@ -55,7 +60,7 @@ export default defineComponent({
       right: 0;
       display: flex;
       align-items: center;
-      margin: 1rem;
+      margin: 10px;
     }
   }
 }

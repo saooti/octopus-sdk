@@ -5,10 +5,7 @@
       @click="clickShowFilters"
     >
       <div>{{ $t("Advanced filters") }}</div>
-      <div
-        class="saooti-down mx-1"
-        :class="{ 'arrow-transform': showFilters }"
-      />
+      <ChevronDownIcon :class="{ 'arrow-transform': showFilters }" />
     </button>
     <div
       v-if="firstLoaded"
@@ -77,6 +74,7 @@
 </template>
 
 <script lang="ts">
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import { orgaComputed } from "../../mixins/orgaComputed";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useFilterStore } from "../../../stores/FilterStore";
@@ -106,6 +104,7 @@ export default defineComponent({
     ClassicCheckbox,
     DateFilter,
     SearchOrder,
+    ChevronDownIcon,
   },
   mixins: [orgaComputed, rubriquesFilterParam],
   props: {

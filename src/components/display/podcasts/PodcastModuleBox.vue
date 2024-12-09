@@ -77,7 +77,6 @@
           <div v-if="'' !== authorCredit" class="mb-1">
             {{ $t("Author credits") + " : " + authorCredit }}
           </div>
-
           <a
             v-if="podcast.article && !isGarRole"
             class="btn d-flex align-items-center my-2 width-fit-content mb-1"
@@ -85,7 +84,7 @@
             rel="noopener"
             target="_blank"
           >
-            <span class="saooti-newspaper me-1" />
+            <NewspaperVariantOutlineIcon class="me-1" />
             <div>{{ $t("See associated article") }}</div>
           </a>
           <PodcastPlayBar
@@ -142,6 +141,7 @@
 </template>
 
 <script lang="ts">
+import NewspaperVariantOutlineIcon from "vue-material-design-icons/NewspaperVariantOutline.vue";
 import PodcastImage from "./PodcastImage.vue";
 import ParticipantDescription from "./ParticipantDescription.vue";
 import PodcastRawTranscript from "./PodcastRawTranscript.vue";
@@ -194,6 +194,7 @@ export default defineComponent({
     LikeSection,
     PodcastRawTranscript,
     DownloadPodcastButton,
+    NewspaperVariantOutlineIcon,
   },
 
   mixins: [displayMethods, orgaComputed, resizePhone, podcastView],

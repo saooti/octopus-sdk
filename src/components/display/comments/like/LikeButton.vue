@@ -9,15 +9,33 @@
       :title="titleButton"
       @click="clickButton"
     >
-      <ThumbIcon :is-up="like" :is-full="isActive" />
+      <template v-if="like">
+        <ThumbUpOutlineIcon v-if="!isActive" />
+        <ThumbUpIcon v-else />
+      </template>
+      <template v-else>
+        <ThumbDownOutlineIcon v-if="!isActive" />
+        <ThumbDownIcon v-else />
+      </template>
     </button>
     <SnackBar ref="snackbar" position="bottom-left" />
   </div>
 </template>
 
 <script lang="ts">
-import ThumbIcon from "./ThumbIcon.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
+const ThumbUpIcon = defineAsyncComponent(
+  () => import("vue-material-design-icons/ThumbUp.vue"),
+);
+const ThumbDownIcon = defineAsyncComponent(
+  () => import("vue-material-design-icons/ThumbDown.vue"),
+);
+const ThumbUpOutlineIcon = defineAsyncComponent(
+  () => import("vue-material-design-icons/ThumbUpOutline.vue"),
+);
+const ThumbDownOutlineIcon = defineAsyncComponent(
+  () => import("vue-material-design-icons/ThumbDownOutline.vue"),
+);
 const SnackBar = defineAsyncComponent(
   () => import("../../../misc/SnackBar.vue"),
 );
@@ -25,8 +43,11 @@ export default defineComponent({
   name: "LikeButton",
 
   components: {
-    ThumbIcon,
     SnackBar,
+    ThumbUpOutlineIcon,
+    ThumbDownOutlineIcon,
+    ThumbDownIcon,
+    ThumbUpIcon,
   },
   props: {
     like: { default: true, type: Boolean },

@@ -20,7 +20,11 @@
         :to="platform.url"
         class="text-dark"
       >
-        <span :class="platform.icon" />{{ platform.title }}
+        <component
+          :is="platform.icon"
+          :fill-color="platform?.color"
+          class="me-1"
+        />{{ platform.title }}
       </router-link>
     </div>
     <SnackBar
@@ -32,6 +36,17 @@
 </template>
 
 <script lang="ts">
+import RadiolineIcon from "../../icons/RadiolineIcon.vue";
+import TuninIcon from "../../icons/TuninIcon.vue";
+import PodcastAddictIcon from "../../icons/PodcastAddictIcon.vue";
+import PocketCastIcon from "../../icons/PocketCastIcon.vue";
+import PlayerFmIcon from "../../icons/PlayerFmIcon.vue";
+import IHeartIcon from "../../icons/IHeartIcon.vue";
+import AmazonMusicIcon from "../../icons/AmazonMusicIcon.vue";
+import DeezerIcon from "../../icons/DeezerIcon.vue";
+import ApplePodcastIcon from "../../icons/ApplePodcastIcon.vue";
+import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
+import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { useApiStore } from "../../../stores/ApiStore";
 import classicApi from "../../../api/classicApi";
 import SnackBar from "../../misc/SnackBar.vue";
@@ -47,6 +62,17 @@ export default defineComponent({
   components: {
     SnackBar,
     RssSection,
+    SpotifyIcon,
+    YoutubeIcon,
+    ApplePodcastIcon,
+    DeezerIcon,
+    AmazonMusicIcon,
+    IHeartIcon,
+    PlayerFmIcon,
+    PocketCastIcon,
+    PodcastAddictIcon,
+    TuninIcon,
+    RadiolineIcon,
   },
   mixins: [displayMethods],
   props: {
@@ -66,46 +92,48 @@ export default defineComponent({
       return [
         {
           url: this.getUrl("amazon"),
-          icon: "saooti-amazon-music",
+          icon: "AmazonMusicIcon",
           title: "Amazon Music",
         },
         {
           url: this.getUrl("apple"),
-          icon: "saooti-apple-podcast",
+          icon: "ApplePodcastIcon",
           title: "Apple Podcast / iTunes",
         },
-        { url: this.getUrl("deezer"), icon: "saooti-deezer", title: "Deezer" },
-        { url: this.getUrl("iHeart"), icon: "saooti-iheart", title: "iHeart" },
+        { url: this.getUrl("deezer"), icon: "DeezerIcon", title: "Deezer" },
+        { url: this.getUrl("iHeart"), icon: "IHeartIcon", title: "iHeart" },
         {
           url: this.getUrl("PlayerFM"),
-          icon: "saooti-playerfm",
+          icon: "PlayerFmIcon",
           title: "PlayerFM",
         },
         {
           url: this.getUrl("PocketCasts"),
-          icon: "saooti-pocket-casts",
+          icon: "PocketCastIcon",
           title: "Pocket Casts",
         },
         {
           url: this.getUrl("PodcastAddict"),
-          icon: "saooti-podcast-addict",
+          icon: "PodcastAddictIcon",
           title: "Podcast Addict",
         },
         {
           url: this.getUrl("radioline"),
-          icon: "saooti-radioline",
+          icon: "RadiolineIcon",
           title: "Radioline",
         },
         {
           url: this.getUrl("spotify"),
-          icon: "saooti-spotify",
+          icon: "SpotifyIcon",
           title: "Spotify",
+          color: "#1ed760",
         },
-        { url: this.getUrl("tuneIn"), icon: "saooti-tunin", title: "TuneIn" },
+        { url: this.getUrl("tuneIn"), icon: "TuninIcon", title: "TuneIn" },
         {
           url: this.getUrl("youtube"),
-          icon: "saooti-youtube",
+          icon: "YoutubeIcon",
           title: "YouTube Music",
+          color: "#fe0000",
         },
       ];
     },

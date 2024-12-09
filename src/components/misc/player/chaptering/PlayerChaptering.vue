@@ -7,7 +7,7 @@
       <div class="text-truncate">
         {{ actualIndex + 1 + " - " + actualChapter.title }}
       </div>
-      <span class="saooti-right small-text" />
+      <ChevronRightIcon :size="16" />
     </button>
     <ChapteringModal
       v-if="showChaptering"
@@ -18,6 +18,7 @@
   <div v-else-if="playerChapteringPercent" class="margin-chaptering"></div>
 </template>
 <script lang="ts">
+import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { ChapterPercent } from "@/stores/class/chaptering/chaptering";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState } from "pinia";
@@ -30,6 +31,7 @@ export default defineComponent({
 
   components: {
     ChapteringModal,
+    ChevronRightIcon,
   },
   data() {
     return {

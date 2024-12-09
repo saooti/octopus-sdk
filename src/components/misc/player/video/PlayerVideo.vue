@@ -1,10 +1,9 @@
 <template>
   <teleport to=".octopus-app">
     <template v-if="playerVideo">
-      <button
-        class="btn btn-transparent video-close saooti-remove"
-        @click="closePlayer"
-      />
+      <button class="btn btn-transparent video-close" @click="closePlayer">
+        <WindowCloseIcon />
+      </button>
       <div class="video-wrapper">
         <PlayerVideoDigiteka v-if="!playerLive" :video-id="videoId" />
         <PlayerVideoHls v-else :hls-url="hlsVideoUrl" />
@@ -13,6 +12,7 @@
   </teleport>
 </template>
 <script lang="ts">
+import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useApiStore } from "../../../../stores/ApiStore";
 import { mapState, mapActions } from "pinia";
@@ -29,6 +29,7 @@ export default defineComponent({
   components: {
     PlayerVideoDigiteka,
     PlayerVideoHls,
+    WindowCloseIcon,
   },
   data() {
     return {};

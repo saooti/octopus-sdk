@@ -18,11 +18,12 @@
       ]"
     >
       <template v-if="!isLiveToBeRecorded">
-        <div
+        <PlayIcon
           v-if="!playingPodcast || (playingPodcast && playerVideo)"
           :title="$t('Play')"
-          class="saooti-play me-1"
+          :size="isVideoPodcast && 'audio' === hoverType ? 50 : 40"
         />
+
         <div
           v-if="playingPodcast"
           :class="'PLAYING' === playerStatus ? 'play-animation' : ''"
@@ -35,26 +36,21 @@
         <button
           v-if="isVideoPodcast && !playerVideo"
           :title="$t('Video')"
-          class="btn-transparent d-flex align-items-center saooti-play-video"
+          class="btn-transparent d-flex align-items-center text-light"
           @mouseenter="hoverType = 'video'"
           @mouseleave="hoverType = 'audio'"
           @click.stop="play(true)"
-        />
-        <div
-          v-if="!classicPodcastPlay"
-          class="special-icon-play-button"
-          :class="iconName"
-        />
-        <div class="ms-2">
+        >
+          <PlayVideoIcon :size="'video' === hoverType ? 50 : 40" />
+        </button>
+        <div v-if="!classicPodcastPlay" class="special-icon-play-button">
+          <component :is="iconName" :size="16" />
+        </div>
+        <div>
           {{ durationString }}
         </div>
       </template>
-      <div
-        v-else
-        :title="textVisible"
-        class="big-icon-error"
-        :class="iconName"
-      />
+      <component :is="iconName" v-else :size="50" :title="textVisible" />
     </div>
     <div v-if="!classicPodcastPlay" class="live-image-status bg-dark">
       {{ textVisible }}
@@ -63,6 +59,14 @@
 </template>
 
 <script lang="ts">
+import PlayVideoIcon from "../../icons/PlayVideoIcon.vue";
+import PlayIcon from "vue-material-design-icons/Play.vue";
+import ClockOutlineIcon from "vue-material-design-icons/ClockOutline.vue";
+import CheckIcon from "vue-material-design-icons/Check.vue";
+import TimerSandEmptyIcon from "vue-material-design-icons/TimerSandEmpty.vue";
+import EyeOffOutlineIcon from "vue-material-design-icons/EyeOffOutline.vue";
+import CancelIcon from "vue-material-design-icons/Cancel.vue";
+import AlertIcon from "vue-material-design-icons/Alert.vue";
 import DurationHelper from "../../../helper/duration";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -74,6 +78,16 @@ import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PodcastPlayButton",
+  components: {
+    AlertIcon,
+    ClockOutlineIcon,
+    CheckIcon,
+    TimerSandEmptyIcon,
+    EyeOffOutlineIcon,
+    CancelIcon,
+    PlayIcon,
+    PlayVideoIcon,
+  },
   mixins: [imageProxy],
   props: {
     podcast: { default: () => ({}), type: Object as () => Podcast },
@@ -143,24 +157,23 @@ export default defineComponent({
       );
     },
     iconName(): string {
-      if (this.isLiveToBeRecorded) return "saooti-clock";
+      if (this.isLiveToBeRecorded) return "ClockOutlineIcon";
       if ("READY" === this.podcast.processingStatus || this.fetchConference) {
-        if (!this.podcast.valid) return "saooti-checkmark";
+        if (!this.podcast.valid) return "CheckIcon";
         if (
           !this.podcast.availability.visibility &&
           this.podcast.availability.date
         )
-          return "saooti-clock";
-        return "saooti-eye-blocked";
+          return "ClockOutlineIcon";
+        return "EyeOffOutlineIcon";
       }
       if (
         "PLANNED" === this.podcast.processingStatus ||
         "PROCESSING" === this.podcast.processingStatus
       )
-        return "saooti-hourglass";
-      if ("CANCELED" === this.podcast.processingStatus)
-        return "saooti-cancel-circle";
-      return "saooti-warning";
+        return "TimerSandEmptyIcon";
+      if ("CANCELED" === this.podcast.processingStatus) return "CancelIcon";
+      return "AlertIcon";
     },
     textVisible(): string {
       if (this.isLiveToBeRecorded)
@@ -248,9 +261,6 @@ export default defineComponent({
     background-color: #ffffff80;
   }
 
-  .big-icon-error {
-    font-size: 1.5rem;
-  }
   .special-icon-play-button {
     width: 30px;
     height: 30px;

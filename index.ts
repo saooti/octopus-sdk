@@ -117,6 +117,21 @@ import {useAuthStore} from "./src/stores/AuthStore.ts";
 import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
 import classicApi from "./src/api/classicApi.ts";
 
+//Icons
+export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
+export const getApplePodcastIcon = () => import("./src/components/icons/ApplePodcastIcon.vue");
+export const getDeezerIcon = () => import("./src/components/icons/DeezerIcon.vue");
+export const getEditFtpIcon = () => import("./src/components/icons/EditFtpIcon.vue");
+export const getIHeartIcon = () => import("./src/components/icons/IHeartIcon.vue");
+export const getPlayerFmIcon = () => import("./src/components/icons/PlayerFmIcon.vue");
+export const getPlayVideoIcon = () => import("./src/components/icons/PlayVideoIcon.vue");
+export const getPocketCastIcon = () => import("./src/components/icons/PocketCastIcon.vue");
+export const getPodcastAddictIcon = () => import("./src/components/icons/PodcastAddictIcon.vue");
+export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIcon.vue");
+export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
+export const getXIcon = () => import("./src/components/icons/XIcon.vue");
+
+
 export {
     selenium,
     cookies,

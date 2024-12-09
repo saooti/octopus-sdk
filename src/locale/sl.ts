@@ -390,4 +390,5 @@ export default {
   "Live progress bar":"Vrstica napredka v živo",
   "Listening progress bar":"Vrstica napredka poslušanja",
   "Contract preview": "Pregled pogodbe",
+  "Clear search":"Počisti iskanje",
 }

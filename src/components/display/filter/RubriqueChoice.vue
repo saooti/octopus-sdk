@@ -35,14 +35,17 @@
     </template>
     <button
       v-if="index"
-      class="btn admin-button ms-1 saooti-bin"
+      class="btn admin-button ms-1"
       title="delete"
       @click="deleteRubriquage"
-    />
+    >
+      <TrashCanIcon />
+    </button>
   </div>
 </template>
 
 <script lang="ts">
+import TrashCanIcon from "vue-material-design-icons/TrashCan.vue";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { defineComponent, defineAsyncComponent } from "vue";
@@ -52,6 +55,7 @@ const RubriqueChooser = defineAsyncComponent(
 export default defineComponent({
   components: {
     RubriqueChooser,
+    TrashCanIcon,
   },
   props: {
     rubriquageDisplay: {

@@ -6,10 +6,10 @@
           name: 'podcast',
           params: { podcastId: podcastId },
         }"
-        class="mt-3 mb-3 width-fit-content"
+        class="mt-3 mb-3 width-fit-content d-flex align-items-center"
         :title="$t('Episode name page', { name: podcast?.title })"
       >
-        <span class="saooti-left" />{{ $t("Episode page") }}
+        <ChevronLeftIcon />{{ $t("Episode page") }}
       </router-link>
       <div
         v-if="videoId || isLiveReadyToRecord"
@@ -88,6 +88,7 @@
 </template>
 
 <script lang="ts">
+import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import classicApi from "../../api/classicApi";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -133,6 +134,7 @@ export default defineComponent({
     VideoModuleBox,
     PlayerVideoHls,
     CountdownOctopus,
+    ChevronLeftIcon,
   },
 
   mixins: [handle403, podcastView, seoTitleUrl],
@@ -244,7 +246,10 @@ export default defineComponent({
           this.error = true;
         } else {
           this.updatePathParams(this.podcast.title);
-          if (this.podcast.conferenceId) {
+          if (
+            this.podcast.conferenceId &&
+            "READY" !== this.podcast.processingStatus
+          ) {
             await this.fetchConferenceStatus();
             this.intervalStatusConference = setInterval(() => {
               this.fetchConferenceStatus();

@@ -16,7 +16,7 @@
     />
     <button class="image-play-button" @click="playRadio">
       <div class="multiple-play-buttons-container">
-        <div v-if="!playingRadio" :title="$t('Play')" class="saooti-play" />
+        <PlayIcon v-if="!playingRadio" :title="$t('Play')" :size="40" />
         <div
           v-else
           class="bloc-paddle"
@@ -37,6 +37,7 @@
 </template>
 
 <script lang="ts">
+import PlayIcon from "vue-material-design-icons/Play.vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
@@ -46,7 +47,9 @@ import { Canal } from "@/stores/class/radio/canal";
 export default defineComponent({
   name: "RadioImage",
 
-  components: {},
+  components: {
+    PlayIcon,
+  },
 
   mixins: [imageProxy],
 

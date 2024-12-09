@@ -7,8 +7,9 @@
       v-lazy="proxyImageUrl(podcast.imageUrl, '270')"
       width="270"
       height="270"
+      role="presentation"
       class="img-box img-box-podcast"
-      :alt="$t('Episode name image', { name: podcast.title })"
+      :title="$t('Episode name image', { name: podcast.title })"
     />
     <div
       v-if="isPodcastmaker"
@@ -33,17 +34,19 @@
       :hide-play="hidePlay"
       :fetch-conference="fetchConference"
     />
-    <div
+    <button
       v-if="displayDescription && isMobile"
       class="background-icon bg-dark text-white"
-      :class="isDescription ? 'saooti-down' : 'saooti-up'"
       :title="isDescription ? $t('Hide description') : $t('Show description')"
       @click="showDescription"
-    />
+    >
+      <ChevronDownIcon :class="{ 'arrow-transform': !isDescription }" />
+    </button>
   </div>
 </template>
 
 <script lang="ts">
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import PodcastPlayButton from "./PodcastPlayButton.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -54,6 +57,7 @@ export default defineComponent({
   name: "PodcastImage",
   components: {
     PodcastPlayButton,
+    ChevronDownIcon,
   },
   mixins: [imageProxy],
   props: {
@@ -156,8 +160,8 @@ export default defineComponent({
 
   .background-icon {
     border-radius: 50%;
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 44px;
+    height: 44px;
     font-size: 0.7rem;
     right: 0;
     bottom: 0;

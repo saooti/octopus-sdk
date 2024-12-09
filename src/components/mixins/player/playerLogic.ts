@@ -218,7 +218,7 @@ export const playerLogic = defineComponent({
 
     onTimeUpdatePodcast(streamDuration: number, currentTime: number) {
       this.displayAlertBar = false;
-      this.percentLiveProgress = 100;
+      this.percentLiveProgress = 0;
       this.playerUpdateElapsed(currentTime / streamDuration, streamDuration);
       this.onTimeUpdateTranscript(currentTime);
     },

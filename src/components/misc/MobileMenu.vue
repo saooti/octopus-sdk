@@ -3,59 +3,60 @@
     <button
       v-show="show"
       id="mobile-menu-dropdown"
-      class="btn-transparent saooti-menu text-white c-hand m-2 h2"
+      class="btn-transparent text-white c-hand m-2 h2"
       :title="$t('open left Menu')"
       @click="handleMenuClick"
-    />
-    <teleport to=".octopus-app" :disabled="scrolled">
-      <ClassicPopover
-        v-if="firstLoaded"
-        target="mobile-menu-dropdown"
-        popover-class="popover-z-index"
-        :only-click="true"
-        :is-fixed="true"
-        :left-pos="true"
-      >
-        <template v-for="link in routerLinkArray" :key="link.routeName">
-          <router-link
-            v-if="link.condition"
-            :class="
-              'home' === link.routeName
-                ? 'octopus-dropdown-item show-phone-flex'
-                : 'octopus-dropdown-item'
-            "
-            :to="{
-              name: link.routeName,
-              query: getQueriesRouter(link.routeName),
-            }"
-          >
-            {{ link.title }}
-          </router-link>
-        </template>
-        <a
-          v-if="!isAuthenticatedWithOrga"
-          class="octopus-dropdown-item"
-          href="/sso/login"
-          realLink="true"
-        >
-          {{ $t("Login") }}
-        </a>
-        <a v-else class="octopus-dropdown-item c-hand" href="/logout">
-          {{ $t("Logout") }}
-        </a>
+    >
+      <MenuIcon :size="34" />
+    </button>
+    <ClassicPopover
+      v-if="firstLoaded"
+      target="mobile-menu-dropdown"
+      popover-class="popover-z-index"
+      :only-click="true"
+      :is-fixed="true"
+      :left-pos="true"
+    >
+      <template v-for="link in routerLinkArray" :key="link.routeName">
         <router-link
-          v-if="!isGarRole"
-          class="octopus-dropdown-item"
-          to="/main/pub/contact"
+          v-if="link.condition"
+          :class="
+            'home' === link.routeName
+              ? 'octopus-dropdown-item show-phone-flex'
+              : 'octopus-dropdown-item'
+          "
+          :to="{
+            name: link.routeName,
+            query: getQueriesRouter(link.routeName),
+          }"
         >
-          {{ $t("Contact") }}
+          {{ link.title }}
         </router-link>
-      </ClassicPopover>
-    </teleport>
+      </template>
+      <a
+        v-if="!isAuthenticatedWithOrga"
+        class="octopus-dropdown-item"
+        href="/sso/login"
+        realLink="true"
+      >
+        {{ $t("Login") }}
+      </a>
+      <a v-else class="octopus-dropdown-item c-hand" href="/logout">
+        {{ $t("Logout") }}
+      </a>
+      <router-link
+        v-if="!isGarRole"
+        class="octopus-dropdown-item"
+        to="/main/pub/contact"
+      >
+        {{ $t("Contact") }}
+      </router-link>
+    </ClassicPopover>
   </div>
 </template>
 
 <script lang="ts">
+import MenuIcon from "vue-material-design-icons/Menu.vue";
 import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
 import { state } from "../../stores/ParamSdkStore";
 import orgaFilter from "../mixins/organisationFilter";
@@ -70,6 +71,7 @@ export default defineComponent({
   name: "MobileMenu",
   components: {
     ClassicPopover,
+    MenuIcon,
   },
   mixins: [orgaFilter, rubriquesFilterComputed],
   props: {

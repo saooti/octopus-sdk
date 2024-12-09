@@ -14,20 +14,7 @@
           @click="goToChapter(index)"
         >
           <div class="d-flex align-items-center me-auto">
-            <svg
-              v-if="actualChapter === index"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-soundwave"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5m-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5m-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5m12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5"
-              />
-            </svg>
+            <WaveformIcon v-if="actualChapter === index" />
             <div v-else>{{ index + 1 }}</div>
             <div class="ms-2">{{ "- " + chapter.title }}</div>
           </div>
@@ -44,6 +31,7 @@
 </template>
 
 <script lang="ts">
+import WaveformIcon from "vue-material-design-icons/Waveform.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import ClassicModal from "../../modal/ClassicModal.vue";
@@ -52,6 +40,7 @@ export default defineComponent({
   name: "ChapteringModal",
   components: {
     ClassicModal,
+    WaveformIcon,
   },
   props: { actualChapter: { default: -1, type: Number } },
   emits: ["close"],

@@ -3,8 +3,6 @@
     v-if="!playerError"
     :title="$t('Play')"
     :class="{
-      'saooti-play': displayIsPaused,
-      'saooti-pause': displayIsPlaying,
       'p-0': !displayIsPaused && !displayIsPlaying,
       'play-button-box': !isBigButton,
       'play-big-button-box': isBigButton,
@@ -12,6 +10,8 @@
     class="btn text-light bg-primary"
     @click="switchPausePlay"
   >
+    <PlayIcon v-if="displayIsPaused" :size="isBigButton ? 60 : 30" />
+    <PauseIcon v-if="displayIsPlaying" :size="isBigButton ? 60 : 30" />
     <ClassicSpinner
       v-if="!displayIsPaused && !displayIsPlaying"
       :small="!isBigButton"
@@ -19,6 +19,8 @@
   </button>
 </template>
 <script lang="ts">
+import PlayIcon from "vue-material-design-icons/Play.vue";
+import PauseIcon from "vue-material-design-icons/Pause.vue";
 import ClassicSpinner from "../../ClassicSpinner.vue";
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
@@ -29,6 +31,8 @@ export default defineComponent({
 
   components: {
     ClassicSpinner,
+    PlayIcon,
+    PauseIcon,
   },
   props: {
     playerError: { default: false, type: Boolean },

@@ -5,9 +5,11 @@
     </div>
     <button
       v-if="indexStart !== 0"
-      class="btn btn-transparent text-light saooti-left"
+      class="btn btn-transparent text-light"
       @click="handleResize(0)"
-    />
+    >
+      <ChevronLeftIcon />
+    </button>
     <div ref="historyListContainer" class="history-list-container">
       <div
         v-for="(pastItem, index) in playerRadioHistory"
@@ -25,13 +27,17 @@
     </div>
     <button
       v-if="indexNotDisplay <= playerRadioHistory.length - 1"
-      class="btn btn-transparent text-light saooti-right"
+      class="btn btn-transparent text-light"
       @click="handleResize(indexNotDisplay)"
-    />
+    >
+      <ChevronRightIcon />
+    </button>
   </div>
 </template>
 
 <script lang="ts">
+import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
+import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState } from "pinia";
 import dayjs from "dayjs";
@@ -41,7 +47,10 @@ import { MediaRadio } from "@/stores/class/general/player";
 export default defineComponent({
   name: "RadioHistory",
 
-  components: {},
+  components: {
+    ChevronLeftIcon,
+    ChevronRightIcon,
+  },
 
   mixins: [fetchRadioData],
   emits: ["updateNotListenTime"],

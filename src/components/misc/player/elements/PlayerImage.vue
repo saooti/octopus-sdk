@@ -5,10 +5,12 @@
       rel="noopener"
       target="_blank"
       :href="linkAdvertising"
-      class="saooti-link player-image"
+      class="player-image link-image"
       :class="imageWidth > 50 ? 'big-player-image' : ''"
       :title="$t('Advertising')"
-    />
+    >
+      <LinkVariantIcon />
+    </a>
     <router-link
       v-else-if="podcastImage"
       :to="podcastShareUrl"
@@ -18,7 +20,8 @@
         v-lazy="proxyImageUrl(podcastImage, imageWidth)"
         :width="imageWidth"
         :height="imageWidth"
-        :alt="$t('Episode name image', { name: podcastDisplay?.title })"
+        role="presentation"
+        :title="$t('Episode name image', { name: podcastDisplay?.title })"
         class="player-image"
         :class="imageWidth > 50 ? 'big-player-image' : ''"
       />
@@ -26,6 +29,7 @@
   </div>
 </template>
 <script lang="ts">
+import LinkVariantIcon from "vue-material-design-icons/LinkVariant.vue";
 import imageProxy from "../../../mixins/imageProxy";
 import { defineComponent } from "vue";
 import { RouteLocationRaw } from "vue-router";
@@ -36,7 +40,7 @@ import { Podcast } from "@/stores/class/general/podcast";
 export default defineComponent({
   name: "PlayerImage",
 
-  components: {},
+  components: { LinkVariantIcon },
 
   mixins: [imageProxy],
   props: {
@@ -97,7 +101,7 @@ export default defineComponent({
       height: 200px;
       width: 200px;
     }
-    &.saooti-link {
+    &.link-image {
       display: flex;
       justify-content: center;
       align-items: center;

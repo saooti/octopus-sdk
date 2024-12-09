@@ -25,12 +25,14 @@
     />
     <button
       :id="'comment-dropdown' + comment.commentId"
-      class="btn share-btn saooti-more_vert"
+      class="btn share-btn"
       :title="$t('See more')"
       :data-selenium="
         'comment-dropdown-' + seleniumFormat(comment.poster.userName)
       "
-    />
+    >
+      <DotsVerticalIcon />
+    </button>
     <ClassicPopover
       :target="'comment-dropdown' + comment.commentId"
       popover-class="popover-z-index"
@@ -38,13 +40,13 @@
       :left-pos="true"
     >
       <template v-for="action in moreActions" :key="action">
-        <a
+        <button
           v-if="action.condition"
           class="octopus-dropdown-item c-hand"
           @click="action.actionClick"
         >
           {{ action.title }}
-        </a>
+        </button>
       </template>
     </ClassicPopover>
     <CommentMoreActionsAdmin
@@ -56,6 +58,7 @@
 </template>
 
 <script lang="ts">
+import DotsVerticalIcon from "vue-material-design-icons/DotsVertical.vue";
 import selenium from "../../../mixins/selenium";
 import classicApi from "../../../../api/classicApi";
 import CommentMoreActionsAdmin from "@/components/display/comments/item/CommentMoreActionsAdmin.vue";
@@ -87,6 +90,7 @@ export default defineComponent({
     CommentMoreActionsAdmin,
     EditCommentModal,
     MessageModal,
+    DotsVerticalIcon,
   },
   mixins: [selenium],
 

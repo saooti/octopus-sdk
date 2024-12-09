@@ -12,7 +12,7 @@
         class="w-100 py-2 text-start d-flex flex-nowrap align-items-center"
         @click="isOpen = !isOpen"
       >
-        <span v-if="icon" class="img-accordion text-primary" :class="icon" />
+        <AlertIcon v-if="isWarning" class="text-danger" />
         <img
           v-if="imageUrl"
           width="30"
@@ -22,7 +22,7 @@
           aria-hidden="true"
         />
         <span class="flex-grow-1">{{ title }}</span>
-        <span :class="isOpen ? 'saooti-up' : 'saooti-down'" />
+        <ChevronDownIcon :class="{ 'arrow-transform': isOpen }" />
       </button>
       <div v-show="isOpen" class="body p-2">
         <slot />
@@ -33,13 +33,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const AlertIcon = defineAsyncComponent(
+  () => import("vue-material-design-icons/Alert.vue"),
+);
+
 export default defineComponent({
   name: "ClassicAccordion",
+  components: {
+    ChevronDownIcon,
+    AlertIcon,
+  },
   props: {
     title: { default: "", type: String },
     idComposer: { default: "", type: String },
-    icon: { default: undefined, type: String },
+    isWarning: { default: false, type: Boolean },
     imageUrl: { default: undefined, type: String },
     displayAccordion: { default: true, type: Boolean },
     initOpen: { default: false, type: Boolean },

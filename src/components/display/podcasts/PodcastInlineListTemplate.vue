@@ -24,17 +24,21 @@
       </div>
       <div v-if="displayArrow" class="hide-phone">
         <button
-          class="btn admin-button m-1 saooti-left"
+          class="btn admin-button m-1"
           :class="{ disabled: !previousAvailable }"
           :title="$t('Display previous')"
           @click="displayPrevious()"
-        />
+        >
+          <ChevronLeftIcon :size="30" />
+        </button>
         <button
-          class="btn admin-button m-1 saooti-right"
+          class="btn admin-button m-1"
           :class="{ disabled: !nextAvailable }"
           :title="$t('Display next')"
           @click="displayNext()"
-        />
+        >
+          <ChevronRightIcon :size="30" />
+        </button>
       </div>
     </div>
     <slot name="list-inline" />
@@ -45,12 +49,15 @@
       @click="handleSeeMoreButton"
     >
       {{ buttonText }}
-      <div v-if="buttonPlus" class="ms-1 saooti-more" />
+      <PlusIcon v-if="buttonPlus" :size="16" class="ms-1" />
     </router-link>
   </div>
 </template>
 
 <script lang="ts">
+import PlusIcon from "vue-material-design-icons/Plus.vue";
+import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
+import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { rubriquesFilterComputed } from "../../mixins/routeParam/rubriquesFilterComputed";
 import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
@@ -61,6 +68,11 @@ import { mapState } from "pinia";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 export default defineComponent({
   name: "PodcastInlineListTemplate",
+  components: {
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    PlusIcon,
+  },
 
   mixins: [rubriquesFilterParam, rubriquesFilterComputed],
 

@@ -70,10 +70,10 @@
           class="play-button-box bg-secondary"
           @click="play(p)"
         >
-          <div class="text-light saooti-play" :title="$t('Play')" />
+          <PlayIcon class="text-light" :title="$t('Play')" />
         </button>
         <button v-else class="play-button-box bg-secondary" @click="pause(p)">
-          <div class="text-light saooti-pause" :title="$t('Pause')" />
+          <PauseIcon class="text-light" :title="$t('Pause')" />
         </button>
       </div>
     </div>
@@ -95,6 +95,8 @@
 </template>
 
 <script lang="ts">
+import PlayIcon from "vue-material-design-icons/Play.vue";
+import PauseIcon from "vue-material-design-icons/Pause.vue";
 import classicApi from "../../../api/classicApi";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -114,6 +116,8 @@ export default defineComponent({
 
   components: {
     PodcastPlayBar,
+    PlayIcon,
+    PauseIcon,
   },
   mixins: [displayMethods, imageProxy, orgaComputed],
   props: {

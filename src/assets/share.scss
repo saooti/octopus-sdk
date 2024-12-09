@@ -45,24 +45,6 @@
 			padding-bottom: 120px;
 		}
 	}
-  .saooti-help {
-		font-size: 1.2rem;
-		border-radius: 50%;
-		margin: 0 auto;
-		align-items: center;
-		width: 2rem;
-		height: 2rem;
-		vertical-align: middle;
-		cursor: pointer;
-		font-weight: bold;
-		background: transparent;
-		display: flex;
-		justify-self: center;
-		justify-content: center;
-		&:hover {
-			border: 0;
-		}
-	} 
   .page-element{
     margin-top: -6rem;
     position: relative;
@@ -286,26 +268,6 @@
       margin: 0.2rem;
       display: flex;
       align-items: center;
-      .saooti-play, .saooti-play-video{
-        font-size: 1.8rem;
-        color: white;
-      }
-      @media (min-width: 500px) {
-        &.hover-type-video{
-          &.has-video{
-            .saooti-play-video{
-              font-size: 2.5rem;
-            }
-          }
-        } 
-        &.hover-type-audio{
-          &.has-video{
-            .saooti-play{
-              font-size: 2.5rem;
-            }
-          }
-        }
-      }
     }
   }
 }

@@ -399,4 +399,5 @@ export default {
   "Live progress bar":"Live-Fortschrittsbalken",
   "Listening progress bar":"Fortschrittsbalken beim Zuhören",
   "Contract preview": "Vertragsübersicht",
+  "Clear search":"Suche löschen",
 }

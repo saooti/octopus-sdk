@@ -39,10 +39,10 @@
           <!-- eslint-enable -->
         </div>
         <button
-          class="btn flex-grow-1 mt-3 fw-bold"
+          class="btn d-flex justify-content-center align-items-center flex-grow-1 mt-3 fw-bold"
           @click="onCopyCode(newsletterHtml, afterCopy)"
         >
-          <span class="saooti-copy me-2" />
+          <ContentCopyIcon class="me-2" />
           {{ $t("Copy and embed the HTML code into your email tool") }}
         </button>
         <SnackBar ref="snackbar" position="bottom-left" />
@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts">
+import ContentCopyIcon from "vue-material-design-icons/ContentCopy.vue";
 import ClassicModal from "../modal/ClassicModal.vue";
 import SnackBar from "../../misc/SnackBar.vue";
 // @ts-ignore
@@ -77,6 +78,7 @@ export default defineComponent({
     SnackBar,
     VSwatches,
     ClassicModal,
+    ContentCopyIcon,
   },
 
   mixins: [displayMethods],

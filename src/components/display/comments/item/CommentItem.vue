@@ -33,10 +33,7 @@
           @click="showParentComment = !showParentComment"
         >
           {{ $t("In response to") }}
-          <div
-            class="saooti-down ms-1"
-            :class="{ 'arrow-transform': showParentComment }"
-          />
+          <ChevronDownIcon :class="{ 'arrow-transform': showParentComment }" />
         </button>
       </div>
       <CommentInput
@@ -56,10 +53,7 @@
           class="d-flex align-items-center btn-transparent text-primary"
           @click="showAnswers = !showAnswers"
         >
-          <div
-            class="saooti-down me-3"
-            :class="{ 'arrow-transform': showAnswers }"
-          />
+          <ChevronDownIcon :class="{ 'arrow-transform': showAnswers }" />
           {{ $t("nb answers", { nb: comment.responses.length }) }}
         </button>
         <CommentList
@@ -84,6 +78,7 @@
 </template>
 
 <script lang="ts">
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import selenium from "../../../mixins/selenium";
 import displayMethods from "../../../mixins/displayMethods";
 import { CommentPodcast } from "@/stores/class/general/comment";
@@ -118,6 +113,7 @@ export default defineComponent({
     CommentBasicView,
     LikeSection,
     CommentMoreActions,
+    ChevronDownIcon,
   },
 
   mixins: [displayMethods, selenium],

@@ -1,14 +1,16 @@
 <template>
   <div v-if="podcast" class="d-flex align-items-center mt-1">
     <button
-      class="btn btn-round-light saooti-download ms-2"
+      class="btn btn-round-light ms-2"
       :title="$t('Download')"
       @click="downloadPodcast"
-    />
+    >
+      <DownloadIcon />
+    </button>
     <!-- <template v-else>
       <button
         id="download-podcast-or-video"
-        class="btn btn-round-light saooti-download ms-2"
+        class="btn btn-round-light ms-2"
         :title="$t('Download')"
       />
       <ClassicPopover
@@ -35,16 +37,14 @@
 </template>
 
 <script lang="ts">
+import DownloadIcon from "vue-material-design-icons/Download.vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import download from "../../mixins/download";
 import { defineComponent } from "vue";
-/* const ClassicPopover = defineAsyncComponent(
-  () => import("../../misc/ClassicPopover.vue"),
-); */
 export default defineComponent({
   name: "DownloadPodcastButton",
   components: {
-    /* ClassicPopover, */
+    DownloadIcon,
   },
 
   mixins: [download],

@@ -17,7 +17,8 @@
                 v-lazy="proxyImageUrl(emission.imageUrl, '250')"
                 width="250"
                 height="250"
-                :alt="$t('Emission name image', { name: name })"
+                role="presentation"
+                :title="$t('Emission name image', { name: name })"
                 class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
               />
               <h2 class="mb-3">{{ name }}</h2>

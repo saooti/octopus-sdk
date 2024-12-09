@@ -28,12 +28,15 @@
     <button
       v-show="hidenRubriques.length"
       id="rubriques-dropdown"
-      class="btn btn-primary btn-on-dark m-1 saooti-more"
+      class="btn btn-primary btn-on-dark m-1"
       :title="$t('See more')"
-    />
+    >
+      <PlusIcon />
+    </button>
     <ClassicPopover
       ref="popoverRubrique"
       target="rubriques-dropdown"
+      class="popover-z-index"
       :only-click="true"
       :is-fixed="true"
       :left-pos="true"
@@ -50,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import PlusIcon from "vue-material-design-icons/Plus.vue";
 import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
@@ -66,6 +70,7 @@ export default defineComponent({
   components: {
     ClassicPopover,
     RubriqueChooser,
+    PlusIcon,
   },
 
   mixins: [rubriquesFilterParam],

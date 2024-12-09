@@ -11,13 +11,14 @@
         >{{ label }}</label
       >
       <template v-if="popover">
-        <span
+        <button
           :id="'popover' + inputId"
-          role="button"
-          class="saooti-help m-0"
-          tabindex="0"
           :title="$t('Help')"
-        />
+          class="btn-transparent"
+        >
+          <HelpCircleIcon :size="30" />
+        </button>
+
         <ClassicPopover
           :target="'popover' + inputId"
           popover-class="popover-z-index"
@@ -102,6 +103,7 @@
   </div>
 </template>
 <script lang="ts">
+import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
@@ -117,6 +119,7 @@ export default defineComponent({
     ClassicWysiwyg,
     ClassicPopover,
     ClassicEmojiPicker,
+    HelpCircleIcon,
   },
   props: {
     inputId: { default: "", type: String },

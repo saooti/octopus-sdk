@@ -17,14 +17,17 @@
     <button
       v-show="hidenCategories.length"
       id="categories-dropdown"
-      class="btn btn-primary btn-on-dark m-1 saooti-more"
+      class="btn btn-primary btn-on-dark m-1"
       :title="$t('See more')"
-    />
+    >
+      <PlusIcon />
+    </button>
     <ClassicPopover
       target="categories-dropdown"
       :only-click="true"
       :is-fixed="true"
       :left-pos="true"
+      class="popover-z-index"
     >
       <button
         v-for="category in hidenCategories"
@@ -39,6 +42,7 @@
 </template>
 
 <script lang="ts">
+import PlusIcon from "vue-material-design-icons/Plus.vue";
 import { routeParams } from "../../mixins/routeParam/routeParams";
 import classicApi from "../../../api/classicApi";
 import { state } from "../../../stores/ParamSdkStore";
@@ -52,6 +56,7 @@ export default defineComponent({
   name: "CategoryList",
   components: {
     ClassicPopover,
+    PlusIcon,
   },
   mixins: [routeParams],
 

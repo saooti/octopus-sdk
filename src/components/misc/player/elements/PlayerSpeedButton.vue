@@ -18,6 +18,7 @@
       :key="speed"
       class="octopus-dropdown-item speed-style"
       @mousedown="changeSpeed(index)"
+      @keydown.enter="changeSpeed(index)"
     >
       {{ "×" + speed }}
     </button>

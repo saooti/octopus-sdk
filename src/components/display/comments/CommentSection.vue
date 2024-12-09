@@ -4,9 +4,11 @@
       <h3 class="mb-0 me-2">{{ $t("Podcast's comments") }}</h3>
       <button
         :title="$t('Refresh')"
-        class="btn btn-transparent saooti-refresh"
+        class="btn btn-transparent"
         @click="reload = !reload"
-      />
+      >
+        <RefreshIcon />
+      </button>
     </div>
     <CommentInput
       v-if="canPostComment"
@@ -25,6 +27,7 @@
 </template>
 
 <script lang="ts">
+import RefreshIcon from "vue-material-design-icons/Refresh.vue";
 import cookies from "../../mixins/cookies";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineAsyncComponent, defineComponent } from "vue";
@@ -43,6 +46,7 @@ export default defineComponent({
   components: {
     CommentList,
     CommentInput,
+    RefreshIcon,
   },
   mixins: [cookies],
   props: {

@@ -4,9 +4,11 @@
   >
     <button
       :title="$t('Reduce')"
-      class="player-reduce-button btn bg-transparent text-light saooti-down"
+      class="player-reduce-button btn bg-transparent text-light"
       @click="changePlayerLargeVersion"
-    />
+    >
+      <ChevronDownIcon :size="40" />
+    </button>
     <PlayerImage :image-width="200" />
     <PlayerTitle
       :player-error="playerError"
@@ -45,22 +47,29 @@
     <div class="d-flex align-items-center flex-grow-1">
       <button
         title="-15''"
-        class="btn fs-1 bg-transparent text-light saooti-recule"
+        class="btn fs-1 bg-transparent text-light"
         :disabled="isAdPlaying"
         @click="seekClick(-15)"
-      />
+      >
+        <Rewind15Icon :size="44" />
+      </button>
       <PlayerPlayButton :player-error="playerError" :is-big-button="true" />
 
       <button
         title="+15''"
-        class="btn fs-1 bg-transparent text-light saooti-avance"
+        class="btn fs-1 bg-transparent text-light"
         :disabled="isAdPlaying"
         @click="seekClick(15)"
-      />
+      >
+        <FastForward15Icon :size="44" />
+      </button>
     </div>
   </div>
 </template>
 <script lang="ts">
+import Rewind15Icon from "vue-material-design-icons/Rewind15.vue";
+import FastForward15Icon from "vue-material-design-icons/FastForward15.vue";
+import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
 import imageProxy from "../../mixins/imageProxy";
 import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
@@ -86,6 +95,9 @@ export default defineComponent({
     PlayerImage,
     PlayerPlayButton,
     PlayerTitle,
+    ChevronDownIcon,
+    Rewind15Icon,
+    FastForward15Icon,
   },
   mixins: [playerDisplayTime, imageProxy],
 
@@ -150,10 +162,6 @@ export default defineComponent({
     }
   }
 
-  .saooti-recule,
-  .saooti-avance {
-    font-size: 2rem !important;
-  }
   .transcript-bg {
     background: #3e3e3e;
   }

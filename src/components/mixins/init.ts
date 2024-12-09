@@ -19,7 +19,9 @@ export default defineComponent({
         parameters:{ lang: this.$i18n.locale },
       })
       .then((data: Array<Category>) => {
-        this.storedUpdateCategories(data);
+        if(data.length){
+          this.storedUpdateCategories(data);
+        }
       });
       const captcha = document.getElementsByClassName(
         "grecaptcha-badge",

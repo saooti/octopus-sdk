@@ -400,4 +400,5 @@ export default {
   "Live progress bar":"Live progress bar",
   "Listening progress bar":"Listening progress bar",
   "Contract preview": "Contract preview",
+  "Clear search":"Clear search",
 };
