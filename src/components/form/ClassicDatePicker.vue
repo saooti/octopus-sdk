@@ -3,6 +3,7 @@
     <VueDatePicker
       :model-value="modelVal"
       :time-picker="isTimePicker"
+      :time-picker-inline="isTimePicker && timePickerInline"
       :input-class-name="templateClass"
       :clearable="false"
       :text-input="true"
@@ -70,6 +71,7 @@ export default defineComponent({
     monthPicker: { default: false, type: Boolean },
     customPosition: { default: null, type: Function },
     isInline: { default: false, type: Boolean },
+    timePickerInline: { default: false, type: Boolean },
   },
 
   emits: ["updateDate", "update:date"],

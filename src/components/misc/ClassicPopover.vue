@@ -190,6 +190,10 @@ export default defineComponent({
         this.isTabAction = false;
         return;
       }
+      //Exception timepicker in popover
+      if (e?.target?.classList?.contains("dp__time_display")) {
+        return;
+      }
       if (!e.relatedTarget) {
         return this.clearClick();
       }
