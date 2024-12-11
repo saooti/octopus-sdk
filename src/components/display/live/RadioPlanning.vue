@@ -325,7 +325,7 @@ export default defineComponent({
       this.fetchOccurrences();
     },
     dateDisplay(date: Date): string {
-      return dayjs(date).format("HH:mm:ss");
+      return dayjs(date).format("HH:mm");
     },
   },
 });

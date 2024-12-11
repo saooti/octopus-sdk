@@ -29,6 +29,7 @@
           style="min-height: 650px"
           :rubrique-id="rubriqueId.concat(r.rubriqueId)"
           :title="r.name"
+          :href="rubriqueMorePath? rubriqueMorePath+r.rubriqueId: undefined"
           :button-text="$t('All podcast button', { name: r.name })"
         />
         <template #preview>
@@ -84,6 +85,7 @@ export default defineComponent({
   mixins: [rubriquesFilterComputed],
   props: {
     displayWithoutRubriques: { default: true, type: Boolean },
+    rubriqueMorePath: { default: undefined, type: String },
   },
   emits: ["categoriesLength"],
   data() {

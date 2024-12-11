@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex-column align-items-center my-3">
+  <div id="productor-search" class="d-flex-column align-items-center my-3">
     <div
       v-if="!isPodcastmaker && !filterOrgaId"
       class="w-50-responsive pe-3 position-relative"

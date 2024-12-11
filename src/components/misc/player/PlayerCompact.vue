@@ -24,6 +24,7 @@
     <!-- <AdsSkipButton/> -->
     <PlayerSpeedButton v-if="!radioUrl" />
     <button
+      id="player-up-btn"
       :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
       class="btn play-button-box btn-transparent text-light me-0"
       @click="changePlayerLargeVersion"

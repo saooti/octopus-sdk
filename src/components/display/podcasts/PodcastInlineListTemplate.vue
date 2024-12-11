@@ -130,7 +130,7 @@ export default defineComponent({
       this.$emit("displayNext");
     },
     handleSeeMoreButton(event: { preventDefault: () => void }) {
-      if (
+      if (this.href ||
         !this.rubriqueId ||
         0 === this.rubriqueId.length ||
         this.noRubriquageId.length

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column justify-content-center align-items-center">
+  <div id="advanced-search" class="d-flex flex-column justify-content-center align-items-center">
     <button
       class="d-flex justify-content-center align-items-center mb-3 text-secondary btn-transparent"
       @click="clickShowFilters"
