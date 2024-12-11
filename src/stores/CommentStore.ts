@@ -106,6 +106,9 @@ export const useCommentStore = defineStore("CommentStore", {
         uuid: uuid,
         uuidHash: hash,
       };
+      if ("#miniplayer" === this.commentUser?.name) {
+        this.commentUser.name = null;
+      }
     },
     setCommentUser(name: string) {
       const authStore = useAuthStore();
