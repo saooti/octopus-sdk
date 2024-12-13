@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex flex-column p-3 list-participants">
+    <h2 class="mb-3">{{ title }}</h2>
     <ClassicLoading
       :loading-text="loading ? $t('Loading participants ...') : undefined"
     />
@@ -52,6 +53,7 @@ export default defineComponent({
     href: { default: undefined, type: String },
     buttonText: { default: undefined, type: String },
     itemSize: { default: undefined, type: Number },
+    title: { default: "", type: String },
   },
 
   data() {
@@ -94,3 +96,19 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app {
+  .list-participants{
+    .element-list-inline{
+        @media (max-width: 960px) {
+        > div{
+          margin: 0 0.5rem 0 0;
+        }
+      }
+    }
+    .participant-item-container{
+      margin:0;
+    }
+  }
+}
+</style>

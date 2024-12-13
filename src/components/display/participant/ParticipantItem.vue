@@ -156,7 +156,7 @@ export default defineComponent({
         background: linear-gradient(
           to bottom,
           rgba(255, 255, 255, 0),
-          white 40%
+          octopusVariables.$octopus-background 40%
         );
       }
     }
