@@ -12,6 +12,7 @@
     class="player-speed-dropdown"
     :top-pos="true"
     :only-click="true"
+     :is-fixed="true"
   >
     <button
       v-for="(speed, index) in speedArray"

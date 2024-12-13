@@ -339,6 +339,7 @@ export default defineComponent({
   .button-date {
     border: 1px solid #ddd;
     padding: 0.5rem 0;
+    color: black !important;
     &:hover {
       background: #ddd;
     }

@@ -74,7 +74,7 @@ export default defineComponent({
             first: 0,
             size: 10,
             organisationId: this.organisationId,
-            sort: "LAST_PODCAST_DESC",
+            order: "LAST_PODCAST_DESC",
           },
           specialTreatement: true,
         });

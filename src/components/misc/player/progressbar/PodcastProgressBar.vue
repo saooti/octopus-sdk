@@ -63,7 +63,7 @@ export default defineComponent({
       const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
-      if (percentPosition * 100 >= this.percentLiveProgress) return;
+      if (this.playerLive && percentPosition * 100 >= this.percentLiveProgress) return;
       const seekTime = this.playerTotal * percentPosition;
       this.isSeekTo(audioPlayer, seekTime);
     },
