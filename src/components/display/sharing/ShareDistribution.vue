@@ -94,33 +94,45 @@ export default defineComponent({
           url: this.getUrl("amazon"),
           icon: "AmazonMusicIcon",
           title: "Amazon Music",
+          color: "#0c6cb3",
         },
         {
           url: this.getUrl("apple"),
           icon: "ApplePodcastIcon",
           title: "Apple Podcast / iTunes",
+          color:"#aa1dd3"
         },
-        { url: this.getUrl("deezer"), icon: "DeezerIcon", title: "Deezer" },
-        { url: this.getUrl("iHeart"), icon: "IHeartIcon", title: "iHeart" },
+        { url: this.getUrl("deezer"), 
+          icon: "DeezerIcon", 
+          title: "Deezer",
+          color:"#a238ff" },
+        { url: this.getUrl("iHeart"), 
+          icon: "IHeartIcon",
+          title: "iHeart",
+          color:"#e11b22" },
         {
           url: this.getUrl("PlayerFM"),
           icon: "PlayerFmIcon",
           title: "PlayerFM",
+          color:"#bb202a"
         },
         {
           url: this.getUrl("PocketCasts"),
           icon: "PocketCastIcon",
           title: "Pocket Casts",
+          color:"#f43e37"
         },
         {
           url: this.getUrl("PodcastAddict"),
           icon: "PodcastAddictIcon",
           title: "Podcast Addict",
+          color:"#f4842d"
         },
         {
           url: this.getUrl("radioline"),
           icon: "RadiolineIcon",
           title: "Radioline",
+          color:"#1678bd"
         },
         {
           url: this.getUrl("spotify"),
@@ -128,7 +140,10 @@ export default defineComponent({
           title: "Spotify",
           color: "#1ed760",
         },
-        { url: this.getUrl("tuneIn"), icon: "TuninIcon", title: "TuneIn" },
+        { url: this.getUrl("tuneIn"), 
+        icon: "TuninIcon", 
+        title: "TuneIn",
+      color:"#36b4a7" },
         {
           url: this.getUrl("youtube"),
           icon: "YoutubeIcon",

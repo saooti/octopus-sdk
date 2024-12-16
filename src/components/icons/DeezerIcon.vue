@@ -26,7 +26,7 @@ export default defineComponent({
   props: {
     size: { default: 24, type: Number },
     title: { default: undefined, type: String },
-    fillColor: { default: "#a238ff", type: String },
+    fillColor: { default: "currentColor", type: String },
   },
 });
 </script>

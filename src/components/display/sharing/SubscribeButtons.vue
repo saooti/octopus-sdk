@@ -126,11 +126,13 @@ export default defineComponent({
           icon: "ApplePodcastIcon",
           title: "Apple Podcast | iTunes",
           url: this.getUrl("applePodcast"),
+          color:"#aa1dd3"
         },
         {
           name: "deezer",
           icon: "DeezerIcon",
           title: "Deezer",
+          color:"#a238ff",
           url: this.getUrl("deezer"),
         },
         {
@@ -144,6 +146,7 @@ export default defineComponent({
           name: "amazon",
           icon: "AmazonMusicIcon",
           title: "Amazon Music",
+          color: "#0c6cb3",
           url: this.getUrl("amazon"),
         },
 
@@ -152,30 +155,35 @@ export default defineComponent({
           icon: "IHeartIcon",
           title: "iHeart",
           url: this.getUrl("iHeart"),
+          color:"#e11b22"
         },
         {
           name: "playerFm",
           icon: "PlayerFmIcon",
           title: "PlayerFM",
           url: this.getUrl("playerFm"),
+          color:"#bb202a"
         },
         {
           name: "pocketCasts",
           icon: "PocketCastIcon",
           title: "Pocket Casts",
           url: this.getUrl("pocketCasts"),
+          color:"#f43e37"
         },
         {
           name: "podcastAddict",
           icon: "PodcastAddictIcon",
           title: "Podcast Addict",
           url: this.getUrl("podcastAddict"),
+          color:"#f4842d"
         },
         {
           name: "radioline",
           icon: "RadiolineIcon",
           title: "Radioline",
           url: this.getUrl("radioline"),
+          color:"#1678bd"
         },
 
         {
@@ -183,6 +191,7 @@ export default defineComponent({
           icon: "TuninIcon",
           title: "TuneIn",
           url: this.getUrl("tunein"),
+          color:"#36b4a7"
         },
         {
           name: "youtube",

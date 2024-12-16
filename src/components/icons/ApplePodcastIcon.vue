@@ -37,7 +37,7 @@ export default defineComponent({
   props: {
     size: { default: 24, type: Number },
     title: { default: undefined, type: String },
-    fillColor: { default: "#aa1dd3", type: String },
+    fillColor: { default: "currentColor", type: String },
   },
 });
 </script>
