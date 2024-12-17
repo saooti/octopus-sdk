@@ -4,9 +4,9 @@
       {{ $t("Program") }}
     </h2>
     <div class="py-3">
-      <div class="d-flex align-items-center w-100">
+      <div class="d-flex align-items-center w-100 mb-3">
         <button
-          v-for="day in arrayDays"
+          v-for="day in displayArrayDays"
           :key="day.date"
           class="d-flex flex-column align-items-center flex-grow-1 button-date"
           :class="day.date == daySelected ? 'bg-primary text-white' : ''"
@@ -16,6 +16,10 @@
           <span>{{ day.title }}</span>
         </button>
       </div>
+      <button class="btn btn-primary mb-3 mx-0" v-if="isPhone" @click="showAllDays = !showAllDays">
+        <template v-if="!showAllDays">{{ $t('Show more days') }}</template>
+        <template v-else>{{ $t('Show fewer days') }}</template>
+      </button>
       <div
         class="d-flex align-items-center justify-content-center border-bottom"
       >
@@ -64,7 +68,7 @@
                   {{ dateDisplay(planningItem.startDate) }}
                 </div>
                 <router-link
-                  class="d-flex align-items-center text-dark"
+                  class="d-flex align-items-center flex-nowrap text-dark"
                   :to="{
                     name: 'podcast',
                     params: { podcastId: planningItem.podcastId },
@@ -77,7 +81,7 @@
                     "
                     width="150"
                     height="150"
-                    class="m-2"
+                    class="m-2 program-item-img"
                     role="presentation"
                     :title="
                       $t('Episode name image', {
@@ -93,7 +97,7 @@
                       >
                         {{ $t("Live") }}
                       </div>
-                      <div class="flex-grow-1 text-truncate fw-bold">
+                      <div class="flex-grow-1 fw-bold">
                         {{ planningItem.podcastData.title }}
                       </div>
                     </div>
@@ -114,6 +118,7 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import classicApi from "../../../api/classicApi";
 import imageProxy from "../../mixins/imageProxy";
+import resizePhone from "../../mixins/resizePhone";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
@@ -126,7 +131,7 @@ export default defineComponent({
     ClassicLoading,
   },
 
-  mixins: [imageProxy],
+  mixins: [imageProxy,resizePhone],
 
   props: {
     radio: { default: undefined, type: Object as () => Canal },
@@ -150,6 +155,9 @@ export default defineComponent({
       }>,
       loading: true as boolean,
       error: false as boolean,
+      isPhone: false as boolean,
+      windowWidth: 0 as number,
+      showAllDays: false as boolean
     };
   },
 
@@ -187,6 +195,12 @@ export default defineComponent({
         },
       ];
     },
+    displayArrayDays(){
+      if(this.isPhone && !this.showAllDays){
+        return this.arrayDays.slice(6, 9);
+      }
+      return this.arrayDays;
+    },
   },
 
   mounted() {
@@ -217,7 +231,7 @@ export default defineComponent({
           this.planning[this.daySelected],
         ).reduce((r, c) => r.concat(c), []);
         let selectedOccurrence = arrayOccurrences[0];
-        for (let occ of arrayOccurrences) {
+        for (const occ of arrayOccurrences) {
           selectedOccurrence = occ;
           if (dayjs(occ.endDate).isAfter(now)) {
             break;
@@ -289,9 +303,9 @@ export default defineComponent({
       this.loading = true;
       this.error = false;
       try {
-        let occurrences = await this.fetchOccurrencesAndLives();
+        const occurrences = await this.fetchOccurrencesAndLives();
         let periodDayIndex = 0;
-        for (let occ of occurrences) {
+        for (const occ of occurrences) {
           if (!occ.podcastId) {
             continue;
           }
@@ -335,14 +349,30 @@ export default defineComponent({
   .program-item-date {
     width: 100px;
     font-size: 1.1rem;
+    @media (max-width: 960px) {
+			font-size: 0.8rem;
+		}
+  }
+  .program-item-img{
+    @media (max-width: 960px) {
+			width: 80px;
+      height: 80px;
+      margin: 0.5rem 0.5rem 0 0 !important;
+		}
   }
   .button-date {
     border: 1px solid #ddd;
-    padding: 0.5rem 0;
+    padding: 0.5rem;
     color: black !important;
+    &.text-white{
+      color: white !important;
+    }
     &:hover {
       background: #ddd;
     }
+    @media (max-width: 960px) {
+			width: 80px;
+		}
   }
 }
 </style>

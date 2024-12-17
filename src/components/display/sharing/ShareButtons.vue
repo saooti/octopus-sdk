@@ -258,7 +258,7 @@ export default defineComponent({
       return state.generalParameters.podcastmaker as boolean;
     },
     rssUrl(): string {
-      let api = this.apiUrl + "rss/";
+      const api = this.apiUrl + "rss/";
       if (
         (!this.isPodcastmaker && this.playlist) ||
         this.podcast ||

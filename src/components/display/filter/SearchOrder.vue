@@ -30,7 +30,7 @@ export default defineComponent({
   },
   computed: {
     optionsArray() {
-      let options = [
+      const options = [
         { title: this.$t("Sort score"), value: "SCORE" },
         {
           title: this.$t("Sort last"),

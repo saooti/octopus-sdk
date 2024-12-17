@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-// @ts-ignore
+// @ts-expect-error Bibliothèque non typée
 import humanizeDuration from "humanize-duration";
 import { defineComponent } from 'vue';
 export default defineComponent({

@@ -106,7 +106,7 @@ export default defineComponent({
     },
     statusArraySelect(): Array<{ title: string; value: string }> {
       const statusArray = [{ title: this.$t("All lives"), value: "ALL" }];
-      for (let status of this.statusFetched) {
+      for (const status of this.statusFetched) {
         let title = "";
         switch (status) {
           case "RECORDING":

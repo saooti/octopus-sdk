@@ -395,4 +395,6 @@ export default{
   "Listening progress bar":"Barra di avanzamento dell'ascolto",
   "Contract preview": "Panoramica del contratto",
   "Clear search":"Cancella ricerca",
+  "Show more days":"Mostra più giorni",
+  "Show fewer days":"Mostra meno giorni",
 };

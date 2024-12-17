@@ -204,7 +204,7 @@ export default defineComponent({
       return sub.filter((item) => item.url);
     },
     rssUrl(): string | undefined {
-      let api = this.apiUrl + "rss/";
+      const api = this.apiUrl + "rss/";
       if (this.emission) {
         return api + "emission/" + this.emission?.emissionId + ".rss";
       }

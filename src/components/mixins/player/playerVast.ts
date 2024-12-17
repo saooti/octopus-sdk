@@ -112,12 +112,12 @@ export const playerVast = defineComponent({
       adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR,this.onAdError);
       adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, this.onContentPauseRequested);
       adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, this.onContentResumeRequested);
-      let events = [
+      const events = [
         google.ima.AdEvent.Type.ALL_ADS_COMPLETED, google.ima.AdEvent.Type.AD_PROGRESS,
         google.ima.AdEvent.Type.COMPLETE, google.ima.AdEvent.Type.LOADED, 
         google.ima.AdEvent.Type.PAUSED, google.ima.AdEvent.Type.STARTED,
       ];
-      for (let index in events) {
+      for (const index in events) {
         adsManager.addEventListener(events[index], this.onAdEvent);
       }
       //adsManager.addEventListener(google.ima.AdEvent.Type.SKIPPED, this.onAdEvent);

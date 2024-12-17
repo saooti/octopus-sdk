@@ -177,7 +177,7 @@ export default defineComponent({
       type: string,
       selectIfPossible = true,
     ): Promise<boolean> {
-      let customPlayersForType = await this.fetchPlayerPaginate(type);
+      const customPlayersForType = await this.fetchPlayerPaginate(type);
       this.customPlayers = this.customPlayers.concat(customPlayersForType);
       if (
         "video" !== this.iFrameModel &&

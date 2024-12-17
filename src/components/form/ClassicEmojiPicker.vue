@@ -32,7 +32,7 @@ import ClassicPopover from "../misc/ClassicPopover.vue";
 import data from "emoji-mart-vue-fast/data/all.json";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import { Picker, EmojiIndex } from "emoji-mart-vue-fast/src";
-let emojiIndex = new EmojiIndex(data);
+const emojiIndex = new EmojiIndex(data);
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ClassicEmojiPicker",

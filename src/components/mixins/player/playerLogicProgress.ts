@@ -84,7 +84,7 @@ export const playerLogicProgress = defineComponent({
           isNotAuth:true
         });
         this.setDownloadId(downloadId);
-      } catch (error) {
+      } catch {
         this.downloadId = null;
         console.log("ERROR downloadId");
       }

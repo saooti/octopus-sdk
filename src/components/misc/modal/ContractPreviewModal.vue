@@ -28,7 +28,7 @@ import { mapState } from "pinia";
 import { useApiStore } from "../../../stores/ApiStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { Contract } from "../../../stores/class/contract/contract";
-// @ts-ignore
+// @ts-expect-error Problème de bibliothèque
 import { usePDF, VuePDF, PDFDocumentLoadingTask } from "@tato30/vue-pdf";
 import { defineComponent, defineAsyncComponent, ShallowRef } from "vue";
 const ClassicModal = defineAsyncComponent(() => import("./ClassicModal.vue"));

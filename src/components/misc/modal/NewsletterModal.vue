@@ -60,7 +60,6 @@
 import ContentCopyIcon from "vue-material-design-icons/ContentCopy.vue";
 import ClassicModal from "../modal/ClassicModal.vue";
 import SnackBar from "../../misc/SnackBar.vue";
-// @ts-ignore
 import { VSwatches } from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
 import displayMethods from "../../mixins/displayMethods";

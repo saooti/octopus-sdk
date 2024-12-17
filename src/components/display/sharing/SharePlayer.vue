@@ -261,7 +261,7 @@ export default defineComponent({
         );
       }
       let url = [""];
-      let iFrameNumber =
+      const iFrameNumber =
         this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
           ? "/0"
           : "/" + this.iFrameNumber;

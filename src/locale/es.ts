@@ -401,4 +401,6 @@ export default {
   "Listening progress bar":"Barra de progreso de escucha",
   "Contract preview": "Panoramica del contratto",
   "Clear search":"Borrar búsqueda",
+  "Show more days":"Mostrar más días",
+  "Show fewer days":"Mostrar menos días",
 }

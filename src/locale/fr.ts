@@ -408,4 +408,6 @@ export default {
   "Listening progress bar":"Barre de progression de l'écoute",
   "Contract preview": "Aperçu du document",
   "Clear search":"Effacer la recherche",
+  "Show more days":"Afficher plus de jours",
+  "Show fewer days":"Afficher moins de jours",
 };

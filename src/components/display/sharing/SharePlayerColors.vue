@@ -34,7 +34,6 @@
 </template>
 
 <script lang="ts">
-// @ts-ignore
 import { VSwatches } from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
 import { defineComponent } from "vue";

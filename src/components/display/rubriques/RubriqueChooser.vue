@@ -75,7 +75,7 @@ export default defineComponent({
       return { name: this.defaultanswer, rubriqueId: 0 };
     },
     rubriques(): Array<Rubrique> {
-      let rubriques = this.allRubriques;
+      const rubriques = this.allRubriques;
       if (!this.getDefaultRubrique) {
         return rubriques;
       }

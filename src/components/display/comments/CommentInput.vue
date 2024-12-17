@@ -165,7 +165,7 @@ export default defineComponent({
         this.$emit("newComment", commentReceived);
         this.newComment = "";
         this.isTextareaActive = false;
-      } catch (error) {
+      } catch {
         this.postError = true;
       }
       this.isCheckIdentity = false;

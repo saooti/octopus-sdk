@@ -14,7 +14,7 @@ export const seoTitleUrl = defineComponent({
       }
       const withoutSpecialChar = text.replaceAll(
         /[!"`'#%&,:;<>=\-_@{}~\$\.\(\)\*\+\/\\\?\[\]\^\|]+/gm, ' ');
-      let trimText = withoutSpecialChar.trim();
+      const trimText = withoutSpecialChar.trim();
       return "-"+trimText.replaceAll(/\s+/gm, '-');
     },
   },

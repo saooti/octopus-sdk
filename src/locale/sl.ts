@@ -391,4 +391,6 @@ export default {
   "Listening progress bar":"Vrstica napredka poslušanja",
   "Contract preview": "Pregled pogodbe",
   "Clear search":"Počisti iskanje",
+  "Show more days":"Prikaži več dni",
+  "Show fewer days":"Prikaži manj dni",
 }

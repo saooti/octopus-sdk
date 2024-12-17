@@ -20,7 +20,7 @@ export const playerTranscript = defineComponent({
       {
         return;
       }
-      let adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
+      const adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
         api:0,
         path:`ad/test/podcast/${this.playerPodcast.podcastId}`,
         isNotAuth:true

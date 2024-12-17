@@ -80,7 +80,7 @@ export const playerLive = defineComponent({
         } else {
           await this.initHls(hlsStreamUrl);
         }
-      } catch (error) {
+      } catch {
         this.onHlsError(hlsStreamUrl);
       }
     },

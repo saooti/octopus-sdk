@@ -144,7 +144,7 @@ export default {
   },
 
   adjustParameters(params:RequestParameters){
-    let parametersUpdated = params.parameters ?? {};
+    const parametersUpdated = params.parameters ?? {};
     if (params.path.includes('podcast/search')){
       if(!params.parameters?.includeHidden || params.isNotAuth){
         parametersUpdated.validity = true;

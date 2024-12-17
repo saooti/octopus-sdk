@@ -400,4 +400,6 @@ export default {
   "Listening progress bar":"Fortschrittsbalken beim Zuhören",
   "Contract preview": "Vertragsübersicht",
   "Clear search":"Suche löschen",
+  "Show more days":"Weitere Tage anzeigen",
+  "Show fewer days":"Weniger Tage anzeigen",
 }

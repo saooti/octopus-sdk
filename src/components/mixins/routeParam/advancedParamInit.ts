@@ -7,6 +7,7 @@ import { mapState } from "pinia";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import dayjs from "dayjs";
 export const advancedParamInit = defineComponent({
+  mixins: [orgaComputed, paginateParamInit, rubriquesFilterParam],
   props: {
     productor: { default: undefined, type: String },
     routeQuery: { default: "", type: String },
@@ -19,7 +20,6 @@ export const advancedParamInit = defineComponent({
     routeOrga: { default: undefined, type: String },
     routeRubriques: { default: "", type: String },
   },
-  mixins: [orgaComputed, paginateParamInit, rubriquesFilterParam],
   data() {
     return {
       isInit: false as boolean,

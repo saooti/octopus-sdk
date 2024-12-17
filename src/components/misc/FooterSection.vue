@@ -110,7 +110,7 @@ export default defineComponent({
       return undefined !== this.authOrgaId;
     },
     routerLinkSecondArray() {
-      let links = [];
+      const links = [];
       if (!this.isGarRole) {
         links.push(
           { title: this.$t("Contact"), routeName: "/main/pub/contact" },

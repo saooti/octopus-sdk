@@ -95,7 +95,7 @@ export const playerStitching = defineComponent({
       if(!this.playerCurrentChange || !this.playerPodcast ||(this.playerCurrentChange && this.adPositionsPodcasts[this.playerCurrentChange])){
         return;
       }
-      let adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
+      const adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
         api:0,
         path: `ad/test/podcast/${this.playerCurrentChange}`,
         isNotAuth:true
@@ -110,11 +110,11 @@ export const playerStitching = defineComponent({
       this.updateAdPositionsPodcasts(this.playerCurrentChange, selectedAdPositions);
     },
     generateAllAdPositions(doublets: Array<AdserverTiming>, podcastDuration: number): Array<AdPosition>{
-      let adPositions: Array<AdPosition> = [];
+      const adPositions: Array<AdPosition> = [];
       if(doublets.some((element: AdserverTiming)=>{return "TAG_NO_AD"===element.tag})){
         return [];
       }
-      for (let doublet of doublets) {
+      for (const doublet of doublets) {
         if(!doublet.tag){continue;}
         let seconds = 0;
         if("post"===doublet.timing.insertion){
@@ -143,16 +143,16 @@ export const playerStitching = defineComponent({
       });
     },
     async selectCorrectAdPositions(allAdPositions: Array<AdPosition>, podcastDuration: number, minIntervalDuration:number, minTailDuration:number): Promise<Array<AdPosition>>{
-      let adPositions: Array<AdPosition> = [];
+      const adPositions: Array<AdPosition> = [];
       let previousPosition = -1;
-      for(let adPosition of allAdPositions){
+      for(const adPosition of allAdPositions){
         switch (adPosition.policy) {
           case "pre":
             adPositions.push(await this.defineVastUrl(adPosition));
             previousPosition = 0;
             break;
           case "mid":
-            let position = adPosition.seconds;
+            const position = adPosition.seconds;
             if (position > podcastDuration - minTailDuration) {
               //Too close to end
               continue;
@@ -182,7 +182,7 @@ export const playerStitching = defineComponent({
       return adPosition;
     },
     async getVastUrl(tag: string, adCount: number): Promise<string>{
-      let baseUrl = "https://api.soundcast.io/v1/vast/"+tag;
+      const baseUrl = "https://api.soundcast.io/v1/vast/"+tag;
       let keywords: Array<string> = [];
       if(this.playerPodcast?.tags?.length){
         const attributes = await this.getOrgaAttributes(this.playerPodcast.organisation.id);

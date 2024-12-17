@@ -105,14 +105,14 @@ export default defineComponent({
     slidesUpdated() {
       //TODO CODE USELESS IF LIBRARY IS FIXED BUT FOR NOW IT IS IMPORTANT
       if (!this.$el) return;
-      let slides = this.$el.getElementsByClassName("swiper-slide");
-      for (let slide of slides) {
+      const slides = this.$el.getElementsByClassName("swiper-slide");
+      for (const slide of slides) {
         slide.style.width = this.itemRecalculizedSize + "px";
       }
     },
     slideChange() {
       if (!this.$el) return;
-      let wrapper = this.$el.getElementsByClassName("swiper-wrapper")[0];
+      const wrapper = this.$el.getElementsByClassName("swiper-wrapper")[0];
       if (wrapper.style.transform.includes("translate3d(40px")) {
         return;
       }

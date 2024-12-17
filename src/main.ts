@@ -99,7 +99,7 @@ router.isReady().then(() => {
     beforeCreate() {
       if (this.$options.watch) {
         Object.entries(this.$options.watch).forEach(([watcherKey, func]) => {
-          // @ts-ignore
+          // @ts-expect-error
           this.$options.watch[watcherKey] = new Proxy(func, {
             apply(target, thisArg) {
               let targetAny : any= target;
