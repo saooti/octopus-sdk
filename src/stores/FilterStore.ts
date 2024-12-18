@@ -32,7 +32,6 @@ export const useFilterStore = defineStore("FilterStore", {
       rubriquageArray?: Array<Rubriquage>;
       isLive?: boolean;
     }) {
-      this.filterOrgaId = filter.orgaId;
       if (filter.imgUrl || !filter.orgaId) {
         this.filterImgUrl = filter.imgUrl;
       }
@@ -44,6 +43,7 @@ export const useFilterStore = defineStore("FilterStore", {
       }
       this.filterLive = filter.isLive;
       this.filterIab = undefined;
+      this.filterOrgaId = filter.orgaId;
     },
     filterUpdateIab(iab?: Category) {
       this.filterIab = iab;
