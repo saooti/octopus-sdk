@@ -43,7 +43,7 @@
         <button
           v-if="action.condition"
           class="octopus-dropdown-item c-hand"
-          @click="action.actionClick"
+          @mousedown="action.actionClick"
         >
           {{ action.title }}
         </button>
