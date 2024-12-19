@@ -40,6 +40,9 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "",
     component: Home,
+    meta:{
+      title: "Home"
+    }
   },
   {
     path: "/main/pub/error",
@@ -50,11 +53,17 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main/pub/home",
     name: "home",
     component: Home,
+    meta:{
+      title: "Home",
+    }
   },
   {
     path: "/main/pub/map",
     name: "map",
     component: MapPage,
+    meta:{
+      title: "Site map",
+    }
   },
   {
     path: "/main/pub/search/:query?",
@@ -63,6 +72,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       queryRoute: route.params.query,
     }),
+    meta:{
+      title: "Search",
+    }
   },
   {
     path: "/main/pub/podcasts/",
@@ -83,6 +95,9 @@ const routes: Array<RouteRecordRaw> = [
       routeOrga:route.query.o,
       routeRubriques :route.query.r,
     }),
+    meta:{
+      title: "Podcasts",
+    }
   },
   {
     path: "/main/pub/emissions/",
@@ -101,6 +116,9 @@ const routes: Array<RouteRecordRaw> = [
       routeOrga:route.query.o,
       routeRubriques :route.query.r,
     }),
+    meta:{
+      title: "Emissions",
+    }
   },
   {
     path: "/main/pub/participants",
@@ -110,6 +128,9 @@ const routes: Array<RouteRecordRaw> = [
       pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
       ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
     }),
+    meta:{
+      title: "Speakers",
+    }
   },
   {
     path: "/main/pub/emission/:emissionId(\\d+):title([^?]*)?:productor?",
@@ -118,6 +139,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       emissionId: parseInt(route.params.emissionId.toString(), 10),
     }),
+    meta:{
+      title: ""
+    }
   },
   {
     path: "/main/pub/podcast/:podcastId(\\d+):title([^?]*)?:productor?",
@@ -126,6 +150,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       podcastId: parseInt(route.params.podcastId.toString(), 10)
     }),
+    meta:{
+      title: ""
+    }
   },
   {
     path: "/main/pub/video/:podcastId(\\d+):title([^?]*)?:productor?",
@@ -134,6 +161,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       podcastId: parseInt(route.params.podcastId.toString(), 10),
     }),
+    meta:{
+      title: ""
+    }
   },
   {
     path: "/main/pub/participant/:participantId(\\d+):title([^?]*)?:productor?",
@@ -142,6 +172,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       participantId: parseInt(route.params.participantId.toString(), 10),
     }),
+    meta:{
+      title: ""
+    }
   },
   {
     path: "/main/pub/category/:iabId/:productor?",
@@ -151,6 +184,9 @@ const routes: Array<RouteRecordRaw> = [
       iabId: parseInt(route.params.iabId.toString(), 10),
       productor: route.params.productor,
     }),
+    meta:{
+      title: "",
+    }
   },
   {
     path: "/main/pub/rubrique/:rubriqueId/:productor?",
@@ -166,6 +202,9 @@ const routes: Array<RouteRecordRaw> = [
       rubriqueId: parseInt(route.params.rubriqueId.toString(), 10),
       productor: route.params.productor,
     }),
+    meta:{
+      title: "",
+    }
   },
   {
     path: "/main/pub/lives/:productor?",
@@ -174,6 +213,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       productor: route.params.productor,
     }),
+    meta:{
+      title: "Radio & Live",
+    }
   },
   {
     path: "/main/pub/radio/:canalId(\\d+):title([^?]*)?:productor?",
@@ -182,6 +224,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       canalId: parseInt(route.params.canalId.toString(), 10),
     }),
+    meta:{
+      title: ""
+    }
   },
   {
     path: "/main/pub/playlists/",
@@ -191,6 +236,9 @@ const routes: Array<RouteRecordRaw> = [
       pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
       ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
     }),
+    meta:{
+      title: "Playlists"
+    }
   },
   {
     path: "/main/pub/playlist/:playlistId(\\d+):title([^?]*)?:productor?",
@@ -199,6 +247,9 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       playlistId: parseInt(route.params.playlistId.toString(), 10),
     }),
+    meta:{
+      title: ""
+    }
   },
   //Fake route to avoid errors
   {

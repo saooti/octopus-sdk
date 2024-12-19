@@ -98,6 +98,8 @@ import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
 import resizePhone from "./src/components/mixins/resizePhone.ts";
 import debounce from "./src/components/mixins/debounce.ts";
 import downloadMixins from "./src/components/mixins/download.ts";
+import metaTitle from "./src/components/mixins/metaTitle.ts";
+import metaTitleWatch from "./src/components/mixins/metaTitleWatch.ts";
 
 
 //helper
@@ -159,5 +161,7 @@ export {
     getApiUrl,
     ModuleApi,
     classicApi,
-    downloadMixins
+    downloadMixins,
+    metaTitle,
+    metaTitleWatch
 };

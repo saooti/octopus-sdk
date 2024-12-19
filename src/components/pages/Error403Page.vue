@@ -28,21 +28,16 @@
 </template>
 
 <script lang="ts">
-import { useGeneralStore } from "../../stores/GeneralStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "Error403Page",
   computed: {
-    ...mapState(useGeneralStore, ["metaTitle"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
     authText(): string {
       return this.authOrgaId ? this.$t("Logout") : this.$t("Login");
     },
-  },
-  mounted() {
-    document.title = this.metaTitle;
   },
 });
 </script>

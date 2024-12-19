@@ -1,61 +1,43 @@
 <template>
-  <button
-    v-if="!hidePlay || recordingLive"
-    class="image-play-button"
-    :class="[
-      classicPodcastPlay ? '' : 'transparent-background',
-      justButtons ? 'not-image' : '',
-    ]"
-    @mouseenter="hoverType = 'audio'"
-    @mouseleave="hoverType = ''"
-    @click="play(false)"
-  >
-    <div
-      class="multiple-play-buttons-container"
-      :class="[
-        hoverType ? 'hover-type-' + hoverType : '',
-        isVideoPodcast ? 'has-video' : '',
-      ]"
-    >
+  <div v-if="!hidePlay || recordingLive" :class="classicPodcastPlay ? '' : 'img-blur-background'">
+    <div v-if="!classicPodcastPlay" class="live-image-status bg-dark">
+      {{ textVisible }}
+    </div>
+    <div class="multi-buttons-play" :class="justButtons ? 'play-button-relative' : ''">
       <template v-if="!isLiveToBeRecorded">
-        <PlayIcon
-          v-if="!playingPodcast || (playingPodcast && playerVideo)"
-          :title="$t('Play')"
-          :size="isVideoPodcast && 'audio' === hoverType ? 50 : 40"
-        />
-
-        <div
-          v-if="playingPodcast"
-          :class="'PLAYING' === playerStatus ? 'play-animation' : ''"
-          class="bloc-paddle mx-1"
+        <button 
+          class="d-flex"
+          :title="playingPodcast? $t('Pause') : $t('Play')"
+          @mouseenter="hoverType = 'audio'"
+          @mouseleave="hoverType = ''" 
+          @click="play(false)"
         >
-          <span class="paddle1" />
-          <span class="paddle2" />
-          <span class="paddle3" />
-        </div>
-        <button
-          v-if="isVideoPodcast && !playerVideo"
-          :title="$t('Video')"
-          class="btn-transparent d-flex align-items-center text-light"
+          <PlayIcon
+            v-if="!playingPodcast || (playingPodcast && playerVideo)"
+            :size="'audio' === hoverType ? 50 : 40"
+          />
+          <PodcastIsPlaying v-if="playingPodcast && !playerVideo"/>
+          <span v-if="!isVideoPodcast" class="ms-1">{{ durationString }}</span>
+        </button>
+        <button 
+          v-if="isVideoPodcast"
+          :title="$t('Video')" 
+          :disabled="playerVideo"
+          @click="play(true)"
           @mouseenter="hoverType = 'video'"
-          @mouseleave="hoverType = 'audio'"
-          @click.stop="play(true)"
+          @mouseleave="hoverType = ''"
         >
-          <PlayVideoIcon :size="'video' === hoverType ? 50 : 40" />
+          <PlayVideoIcon v-if="!playerVideo" :size="'video' === hoverType ? 50 : 40" />
+          <PodcastIsPlaying v-if="playingPodcast && playerVideo"/>
+          <span class="ms-2">{{ durationString }}</span>
         </button>
         <div v-if="!classicPodcastPlay" class="special-icon-play-button">
           <component :is="iconName" :size="16" />
         </div>
-        <div>
-          {{ durationString }}
-        </div>
       </template>
       <component :is="iconName" v-else :size="50" :title="textVisible" />
     </div>
-    <div v-if="!classicPodcastPlay" class="live-image-status bg-dark">
-      {{ textVisible }}
-    </div>
-  </button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -75,7 +57,8 @@ import imageProxy from "../../mixins/imageProxy";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 export default defineComponent({
   name: "PodcastPlayButton",
   components: {
@@ -87,6 +70,7 @@ export default defineComponent({
     CancelIcon,
     PlayIcon,
     PlayVideoIcon,
+    PodcastIsPlaying
   },
   mixins: [imageProxy],
   props: {
@@ -242,10 +226,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@use '@scss/variables' as octopusVariables;
 .octopus-app {
-  .image-play-button.not-image {
-    position: relative;
-    width: auto;
+  .img-blur-background{
+    position: absolute;
+    inset: 0;
+    background-color: #ffffff80;
   }
   .live-image-status {
     text-align: center;
@@ -257,10 +243,6 @@ export default defineComponent({
     position: absolute;
     top: 0;
   }
-  .transparent-background {
-    background-color: #ffffff80;
-  }
-
   .special-icon-play-button {
     width: 30px;
     height: 30px;
@@ -268,16 +250,33 @@ export default defineComponent({
     color: black;
     border-radius: 50%;
     position: absolute;
-    left: 4.9rem;
-    bottom: 2.3rem;
+    right: -15px;
+    top: -20px;
     font-size: 0.9rem;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .has-video .special-icon-play-button {
-    left: 7.4rem;
+  .multi-buttons-play{
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    font-size: 1rem;
+    color: white;
+    background-color: octopusVariables.$primaryColorLessTransparent;
+    border-radius: octopusVariables.$octopus-borderradius;
+    button{
+      color: white;
+      background-color: transparent;
+      border: 0;
+      display: flex;
+      align-items: center;
+      padding:  0.2rem;
+    }
+  }
+  .play-button-relative.multi-buttons-play{
+    position: relative;
   }
 }
 </style>

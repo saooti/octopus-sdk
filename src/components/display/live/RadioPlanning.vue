@@ -16,7 +16,7 @@
           <span>{{ day.title }}</span>
         </button>
       </div>
-      <button class="btn btn-primary mb-3 mx-0" v-if="isPhone" @click="showAllDays = !showAllDays">
+      <button v-if="isPhone" class="btn btn-primary mb-3 mx-0" @click="showAllDays = !showAllDays">
         <template v-if="!showAllDays">{{ $t('Show more days') }}</template>
         <template v-else>{{ $t('Show fewer days') }}</template>
       </button>

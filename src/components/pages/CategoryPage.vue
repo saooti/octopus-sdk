@@ -26,7 +26,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useGeneralStore, ["storedCategories"]),
+    ...mapState(useGeneralStore, ["storedCategories", "metaTitle"]),
     ...mapState(useFilterStore, ["filterOrgaId"]),
     orgaArray(): Array<string> {
       return this.filterOrgaId ? [this.filterOrgaId] : [];
@@ -39,5 +39,13 @@ export default defineComponent({
       return matchCategories[0]["name"];
     },
   },
+  watch:{
+    title: {
+      immediate: true,
+      async handler() {
+        document.title = this.title + ' - ' + this.metaTitle;
+      },
+    },
+  }
 });
 </script>

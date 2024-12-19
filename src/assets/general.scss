@@ -201,8 +201,8 @@ body{
     }
   }
   .img-box-podcast{
-    height: octopusVariables.$octopus-item-podcast-size;
-    width: octopusVariables.$octopus-item-podcast-size;
+    height: calc(octopusVariables.$octopus-item-podcast-size - 4px);
+    width: calc(octopusVariables.$octopus-item-podcast-size - 4px);
   }
 
   .comma {

@@ -109,6 +109,7 @@ import {
   ConferencePublicInfo,
 } from "@/stores/class/conference/conference";
 import { usePlayerStore } from "../../stores/PlayerStore";
+import { useGeneralStore } from "../../stores/GeneralStore";
 const PlayerVideoDigiteka = defineAsyncComponent(
   () => import("../misc/player/video/PlayerVideoDigiteka.vue"),
 );
@@ -157,6 +158,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useGeneralStore, ["metaTitle"]),
     ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
     ...mapState(useApiStore, ["hlsUrl"]),
@@ -229,7 +231,7 @@ export default defineComponent({
           api: 0,
           path: "podcast/" + this.podcastId,
         });
-        document.title = this.podcast.title;
+        document.title = this.podcast.title + " - "+this.metaTitle;
         const orga = this.podcast.organisation;
         const privateAccess =
           "PUBLIC" !== orga.privacy &&

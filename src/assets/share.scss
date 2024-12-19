@@ -241,33 +241,4 @@
       }
     }
   }
-  .image-play-button{
-    position: absolute;
-    display: flex;
-    justify-content: flex-end;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    cursor: pointer;
-    flex-direction: column;
-    background: transparent;
-    border-width: 0;
-    width: 100%;  
-    padding: 0;
-    &:focus{
-      background: rgba(0, 0, 0, 0.308);
-    }
-    .multiple-play-buttons-container{
-      background-color:octopusVariables.$primaryColorLessTransparent;
-      border-radius: octopusVariables.$octopus-borderradius;
-      color: white;
-      padding: 0.3rem;
-      width: fit-content;
-      font-size: 1rem;
-      margin: 0.2rem;
-      display: flex;
-      align-items: center;
-    }
-  }
 }

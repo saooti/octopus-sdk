@@ -14,23 +14,11 @@
       class="img-box img-box-podcast"
       :title="$t('Canal name image', { name: radio.name })"
     />
-    <button class="image-play-button" @click="playRadio">
-      <div class="multiple-play-buttons-container">
-        <PlayIcon v-if="!playingRadio" :title="$t('Play')" :size="40" />
-        <div
-          v-else
-          class="bloc-paddle"
-          :class="
-            playingRadio && 'PLAYING' === playerStatus ? 'play-animation' : ''
-          "
-        >
-          <span class="paddle1" />
-          <span class="paddle2" />
-          <span class="paddle3" />
-        </div>
-        <div class="ms-2">
-          {{ playText }}
-        </div>
+    <button class="radio-play-button" @click="playRadio">
+      <PlayIcon v-if="!playingRadio" :title="$t('Play')" :size="40" />
+      <PodcastIsPlaying v-else/>
+      <div class="ms-2">
+        {{ playText }}
       </div>
     </button>
   </div>
@@ -42,13 +30,15 @@ import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
 import imageProxy from "../../mixins/imageProxy";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
+const PodcastIsPlaying = defineAsyncComponent(() => import("../podcasts/PodcastIsPlaying.vue"));
 export default defineComponent({
   name: "RadioImage",
 
   components: {
     PlayIcon,
+    PodcastIsPlaying
   },
 
   mixins: [imageProxy],
@@ -89,3 +79,20 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+@use '@scss/variables' as octopusVariables;
+.octopus-app {
+  .radio-play-button{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    font-size: 1rem;
+    color: white;
+    background-color: octopusVariables.$primaryColorLessTransparent;
+    border-radius: octopusVariables.$octopus-borderradius;
+    padding:  0.2rem;
+    border: 0;
+  }
+}
+</style>

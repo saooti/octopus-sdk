@@ -14,6 +14,8 @@ import classicApi from "../../api/classicApi";
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import { defineComponent } from "vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import { useGeneralStore } from "../../stores/GeneralStore";
+import { mapState } from "pinia";
 export default defineComponent({
   name: "RubriquePage",
   components: {
@@ -29,6 +31,9 @@ export default defineComponent({
       title: "" as string,
     };
   },
+  computed:{
+    ...mapState(useGeneralStore, ["metaTitle"]),
+  },
   watch: {
     rubriqueId: {
       immediate: true,
@@ -38,6 +43,7 @@ export default defineComponent({
           path: "rubrique/" + this.rubriqueId,
         });
         this.title = data.name;
+        document.title = this.title + ' - ' + this.metaTitle;
       },
     },
   },
