@@ -152,17 +152,16 @@ export const playerStitching = defineComponent({
             previousPosition = 0;
             break;
           case "mid":
-            const position = adPosition.seconds;
-            if (position > podcastDuration - minTailDuration) {
+            if (adPosition.seconds > podcastDuration - minTailDuration) {
               //Too close to end
               continue;
             }
-            if (previousPosition >= 0 && position < previousPosition + minIntervalDuration) {
+            if (previousPosition >= 0 && adPosition.seconds < previousPosition + minIntervalDuration) {
               //Too close to previous ad
               continue;
             }
             adPositions.push(await this.defineVastUrl(adPosition));
-            previousPosition = position;
+            previousPosition = adPosition.seconds;
             break;
           case "post":
             if (previousPosition >= 0 && previousPosition > podcastDuration - minIntervalDuration) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <h1>{{ titlePage }}</h1>
     <ClassicSearch
       v-if="!hideBar"
@@ -15,7 +15,7 @@
       :size="20"
       @empty-list="noResult = true"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

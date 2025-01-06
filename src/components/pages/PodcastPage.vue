@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
@@ -27,20 +27,21 @@
         />
 
         <CommentSection v-if="!isPodcastmaker" :podcast="podcast" />
-        <PodcastInlineList
-          class="module-box"
-          :emission-id="podcast.emission.emissionId"
-          :href="'/main/pub/emission/' + podcast.emission.emissionId"
-          :title="$t('More episodes of this emission')"
-          :button-text="$t('All podcast emission button')"
-          title-tag="h3"
-        />
+        <section class="module-box">
+          <PodcastInlineList
+            :emission-id="podcast.emission.emissionId"
+            :href="'/main/pub/emission/' + podcast.emission.emissionId"
+            :title="$t('More episodes of this emission')"
+            :button-text="$t('All podcast emission button')"
+            title-tag="h3"
+          />
+        </section>
         <ShareButtons
           v-if="pageParameters.isShareButtons"
           :podcast="podcast"
           :organisation-id="podcast.organisation.id"
         />
-        <template v-if="!hideSuggestions">
+        <section v-if="!hideSuggestions">
           <ClassicLazy :min-height="550">
             <PodcastInlineList
               class="mt-4"
@@ -59,7 +60,7 @@
               :button-text="$t('All podcast button', { name: c.name })"
             />
           </ClassicLazy>
-        </template>
+        </section>
       </div>
     </template>
     <ClassicLoading
@@ -70,7 +71,7 @@
           : undefined
       "
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

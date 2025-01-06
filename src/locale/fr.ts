@@ -410,4 +410,5 @@ export default {
   "Clear search":"Effacer la recherche",
   "Show more days":"Afficher plus de jours",
   "Show fewer days":"Afficher moins de jours",
+  "Site menu":"Menu du site",
 };

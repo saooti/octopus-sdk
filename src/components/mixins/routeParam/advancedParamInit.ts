@@ -54,13 +54,13 @@ export const advancedParamInit = defineComponent({
       const allRubriquageId: Array<number> = [];
       const noRubriquageId: Array<number> = [];
       const rubriqueId: Array<number> = [];
-      for (let index = 0; index < this.rubriqueFilter.length; index++) {
-        if (-1 === this.rubriqueFilter[index].rubriqueId) {
-          noRubriquageId.push(this.rubriqueFilter[index].rubriquageId);
-        } else if (0 === this.rubriqueFilter[index].rubriqueId) {
-          allRubriquageId.push(this.rubriqueFilter[index].rubriquageId);
+      for(const filter of this.rubriqueFilter){
+        if (-1 === filter.rubriqueId) {
+          noRubriquageId.push(filter.rubriquageId);
+        } else if (0 === filter.rubriqueId) {
+          allRubriquageId.push(filter.rubriquageId);
         } else {
-          rubriqueId.push(this.rubriqueFilter[index].rubriqueId);
+          rubriqueId.push(filter.rubriqueId);
         }
       }
       return {
@@ -169,8 +169,8 @@ export const advancedParamInit = defineComponent({
       const rubriqueFilterToUpdate = [];
       if(this.routeRubriques.trim().length){
         const arrayFilter = this.routeRubriques.split(",");
-        for (let index = 0; index < arrayFilter.length; index++) {
-          const rubriqueFilter = arrayFilter[index].split(":");
+        for(const filter of arrayFilter){
+          const rubriqueFilter = filter.split(":");
           rubriqueFilterToUpdate.push({
             rubriquageId:  parseInt(rubriqueFilter[0]),
             rubriqueId:  parseInt(rubriqueFilter[1]),

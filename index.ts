@@ -73,6 +73,7 @@ export const getSearchOrder = () => import("./src/components/display/filter/Sear
 export const getClassicSearch = () => import("./src/components/form/ClassicSearch.vue");
 export const getClassicCheckbox = () => import("./src/components/form/ClassicCheckbox.vue");
 export const getClassicRadio = () => import("./src/components/form/ClassicRadio.vue");
+export const getClassicRadioLabel = () => import("./src/components/form/ClassicRadioLabel.vue");
 export const getClassicLoading = () => import("./src/components/form/ClassicLoading.vue");
 export const getClassicSelect = () => import("./src/components/form/ClassicSelect.vue");
 export const getClassicDatePicker = () => import("./src/components/form/ClassicDatePicker.vue");

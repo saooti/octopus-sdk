@@ -203,11 +203,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
 
     playerChangeStatus(isPause: boolean) {
-      if (isPause) {
-        this.playerStatus = "PAUSED";
-      } else {
-        this.playerStatus = "PLAYING";
-      }
+      this.playerStatus = isPause? "PAUSED" : "PLAYING";
     },
 
     playerUpdateSeekTime(seekTime: number) {

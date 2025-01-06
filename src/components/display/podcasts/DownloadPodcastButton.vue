@@ -7,32 +7,6 @@
     >
       <DownloadIcon />
     </button>
-    <!-- <template v-else>
-      <button
-        id="download-podcast-or-video"
-        class="btn btn-round-light ms-2"
-        :title="$t('Download')"
-      />
-      <ClassicPopover
-        target="download-podcast-or-video"
-        relative-class="page-element"
-        :is-fixed="true"
-        :only-click="true"
-      >
-        <button
-          class="octopus-dropdown-item btn-transparent"
-          @mousedown="downloadPodcast"
-        >
-            {{ $t("Download audio") }}
-        </button>
-        <button
-          class="octopus-dropdown-item btn-transparent"
-          @mousedown="downloadVideo"
-        >
-            {{ $t("Download video") }}
-        </button>
-      </ClassicPopover>
-    </template> -->
   </div>
 </template>
 

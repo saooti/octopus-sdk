@@ -103,7 +103,6 @@ export default defineComponent({
 
   methods: {
     slidesUpdated() {
-      //TODO CODE USELESS IF LIBRARY IS FIXED BUT FOR NOW IT IS IMPORTANT
       if (!this.$el) return;
       const slides = this.$el.getElementsByClassName("swiper-slide");
       for (const slide of slides) {

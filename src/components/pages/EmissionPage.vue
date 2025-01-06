@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
@@ -10,7 +10,7 @@
         class="d-flex flex-column page-element"
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
-        <div class="module-box">
+        <section class="module-box">
           <div class="d-flex mb-2">
             <div class="w-100">
               <img
@@ -18,6 +18,7 @@
                 width="250"
                 height="250"
                 role="presentation"
+                alt=""
                 :title="$t('Emission name image', { name: name })"
                 class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
               />
@@ -53,7 +54,7 @@
             :ftp-emission="ftpEmission"
             @is-updated="getEmissionDetails"
           />
-        </div>
+        </section>
         <SharePlayer
           v-if="!isPodcastmaker && (undefined !== authOrgaId || notExclusive)"
           :emission="emission"
@@ -62,7 +63,7 @@
           :organisation-id="authOrgaId"
           :is-education="isEducation"
         />
-        <div class="module-box">
+        <section class="module-box">
           <LiveHorizontalList
             v-if="!isPodcastmaker"
             class="mx-2"
@@ -77,7 +78,7 @@
             :productor-id="[emission.orga.id]"
             @fetch="podcastsFetched"
           />
-        </div>
+        </section>
         <ShareButtons
           v-if="pageParameters.isShareButtons"
           :emission="emission"
@@ -93,7 +94,7 @@
       :loading-text="!loaded ? $t('Loading content ...') : undefined"
       :error-text="error ? $t(`Emission doesn't exist`) : undefined"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

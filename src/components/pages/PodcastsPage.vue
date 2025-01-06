@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <ProductorSearch
       v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
@@ -37,7 +37,7 @@
       :no-rubriquage-id="rubriquesFilterArrayIds.noRubriquageId"
       :with-video="withVideo"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

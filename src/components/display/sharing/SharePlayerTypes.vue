@@ -1,23 +1,24 @@
 <template>
-  <label for="iframe-select" title="select miniplayer" />
-  <select
-    id="iframe-select"
-    :value="iFrameModel"
-    @change="selectChange($event)"
-  >
-    <template v-for="option in optionsSelect" :key="option.value">
-      <option v-if="option.condition" :value="option.value">
-        {{ option.name }}
-      </option>
-    </template>
-    <option
-      v-for="player in customPlayersDisplay"
-      :key="player.customId"
-      :value="player.customId"
+  <label for="iframe-select" title="select miniplayer" >
+    <select
+      id="iframe-select"
+      :value="iFrameModel"
+      @change="selectChange($event)"
     >
-      {{ $t("Custom version") + " «" + player.name + "»" }}
-    </option>
-  </select>
+      <template v-for="option in optionsSelect" :key="option.value">
+        <option v-if="option.condition" :value="option.value">
+          {{ option.name }}
+        </option>
+      </template>
+      <option
+        v-for="player in customPlayersDisplay"
+        :key="player.customId"
+        :value="player.customId"
+      >
+        {{ $t("Custom version") + " «" + player.name + "»" }}
+      </option>
+    </select>
+  </label>
 </template>
 
 <script lang="ts">

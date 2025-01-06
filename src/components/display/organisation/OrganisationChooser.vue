@@ -4,7 +4,8 @@
     id="organisation-chooser"
     ref="selectOrganisation"
     option-label="name"
-    :label="$t('select productor')"
+    :label="label ??$t('select productor')"
+    :display-label="displayLabel"
     :max-element="maxElement"
     :width="width"
     :in-modal="inModal"
@@ -26,6 +27,7 @@
           height="32"
           class="me-2"
           role="presentation"
+          alt=""
           :title="$t('Organisation name image', { name: option.name })"
         />
         <span>
@@ -63,6 +65,8 @@ export default defineComponent({
     isImage: { default: true, type: Boolean },
     inModal: { default: false, type: Boolean },
     noDeselect: { default: true, type: Boolean },
+    label:{default: undefined, type: String },
+    displayLabel: { default: false, type: Boolean },
   },
   emits: ["selected"],
   data() {

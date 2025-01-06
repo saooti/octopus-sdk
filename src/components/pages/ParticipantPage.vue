@@ -1,15 +1,16 @@
 <template>
-  <div class="page-box">
-    <div v-if="loaded && !error">
+  <section class="page-box">
+    <template v-if="loaded && !error">
       <h1>
         {{ $t("Animator") }}
       </h1>
-      <div class="d-flex flex-column align-items-center mb-3">
+      <section class="d-flex flex-column align-items-center mb-3">
         <img
           v-lazy="proxyImageUrl(participant.imageUrl, '200')"
           width="200"
           height="200"
           role="presentation"
+          alt=""
           :title="$t('Animator image', { name: name })"
           class="img-box mb-3"
         />
@@ -34,7 +35,7 @@
           :participant-id="participantId"
           :organisation-id="participant.orga.id"
         />
-      </div>
+      </section>
       <!-- productorId define to avoid overwrite #12817 -->
       <PodcastFilterList
         :participant-id="participantId"
@@ -44,12 +45,12 @@
         :reload="reload"
         :show-count="true"
       />
-    </div>
+    </template>
     <ClassicLoading
       :loading-text="!loaded ? $t('Loading content ...') : undefined"
       :error-text="error ? $t(`Animator doesn't exist`) : undefined"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

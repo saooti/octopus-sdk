@@ -72,7 +72,6 @@ export const playerLogicProgress = defineComponent({
           path:"podcast/prepare/live/" + this.playerLive.podcastId+"?mediaType="+mediaType,
           isNotAuth:true
         });
-        //TODO check if we can do otherwise
         await classicApi.fetchData<string | null>({
           api:0,
           path: "podcast/download/live/" + this.playerLive.podcastId + ".m3u8",

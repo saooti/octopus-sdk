@@ -1,5 +1,5 @@
 <template>
-  <div v-if="podcast" class="d-flex flex-column flex-grow-1 mt-2">
+  <section v-if="podcast" class="d-flex flex-column flex-grow-1 mt-2">
     <div class="d-flex justify-content-between flex-wrap">
       <div v-if="0 !== date.length" class="me-2">
         {{ date }}
@@ -19,7 +19,7 @@
     <ParticipantDescription :participants="podcast.animators" />
     <ParticipantDescription :participants="podcast.guests" :is-guest="true" />
     <PodcastRawTranscript class="mt-3" :podcast-id="podcast.podcastId" />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

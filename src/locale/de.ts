@@ -402,4 +402,5 @@ export default {
   "Clear search":"Suche löschen",
   "Show more days":"Weitere Tage anzeigen",
   "Show fewer days":"Weniger Tage anzeigen",
+  "Site menu":"Site-Menü",
 }

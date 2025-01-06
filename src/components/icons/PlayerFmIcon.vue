@@ -3,7 +3,6 @@
     :aria-hidden="!title"
     class="material-design-icon"
     :title="title"
-    role="img"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

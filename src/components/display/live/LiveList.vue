@@ -1,5 +1,5 @@
 <template>
-  <div v-if="displayLiveList" class="d-flex flex-column align-items-start mt-3">
+  <section v-if="displayLiveList" class="d-flex flex-column align-items-start mt-3">
     <div
       class="d-flex justify-content-between flex-grow-1 mb-3 w-100 align-items-center"
     >
@@ -39,7 +39,7 @@
         </template>
       </SwiperList>
     </template>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="module-box overflow-visible">
+  <section class="module-box overflow-visible">
     <h2 class="mb-3">
       {{ $t("Embed") }}
     </h2>
@@ -35,7 +35,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

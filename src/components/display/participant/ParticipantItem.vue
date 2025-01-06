@@ -13,6 +13,7 @@
         width="200"
         height="200"
         role="presentation"
+        alt=""
         :title="$t('Animator image', { name: name })"
         class="img-box border"
       />

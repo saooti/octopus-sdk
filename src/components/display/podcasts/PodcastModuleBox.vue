@@ -1,5 +1,5 @@
 <template>
-  <div v-if="podcast" class="module-box">
+  <section v-if="podcast" class="module-box">
     <div class="mb-2 d-flex">
       <div class="w-100">
         <PodcastImage
@@ -137,7 +137,7 @@
       :display-studio-access="isDebriefing"
       @validate-podcast="$emit('updatePodcast', $event)"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -1,6 +1,6 @@
 import {getApiUrl, ModuleApi} from "./apiConnection";
 import fetchHelper from "../helper/fetch";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { state } from "../stores/ParamSdkStore";
 
@@ -77,7 +77,8 @@ export default {
       if(params.catchFunction){
         params.catchFunction();
       }else{
-        return Promise.reject(error);
+        const axiosError= error as AxiosError;
+        return Promise.reject(new Error(axiosError.message));
       }
     });
     return response?.data;

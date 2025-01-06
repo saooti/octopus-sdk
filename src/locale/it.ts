@@ -397,4 +397,5 @@ export default{
   "Clear search":"Cancella ricerca",
   "Show more days":"Mostra più giorni",
   "Show fewer days":"Mostra meno giorni",
+  "Site menu":"Menù del sito",
 };

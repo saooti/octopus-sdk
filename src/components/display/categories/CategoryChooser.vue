@@ -4,7 +4,9 @@
     ref="selectCategory"
     :option-chosen="model"
     option-label="name"
-    :label="$t('By category')"
+    :displayLabel="displayLabel"
+    :label="label ?? $t('By category')"
+    :textDanger="textDanger"
     :placeholder="$t('Type string to filter by categories')"
     :max-element="maxElement"
     :in-modal="inModal"
@@ -45,6 +47,9 @@ export default defineComponent({
     },
     inModal: { default: false, type: Boolean },
     noDeselect: { default: true, type: Boolean },
+    label:{default: undefined, type: String },
+    displayLabel: { default: false, type: Boolean },
+    textDanger :{ default: undefined, type: String },
   },
   emits: [
     "update:categorySelected",

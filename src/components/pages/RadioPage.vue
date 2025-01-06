@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
@@ -11,7 +11,7 @@
         class="d-flex flex-column page-element"
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
-        <div class="module-box">
+        <section class="module-box">
           <div class="mb-5 descriptionText">
             <RadioImage :radio="radio" />
             <h2>{{ radio.name }}</h2>
@@ -21,7 +21,7 @@
           </div>
           <RadioCurrently :radio="radio" />
           <EditBoxRadio v-if="editRight" :radio="radio" />
-        </div>
+        </section>
         <RadioPlanning :radio="radio" />
         <SharePlayerRadio
           v-if="undefined !== authOrgaId"
@@ -35,7 +35,7 @@
       :loading-text="!loaded ? $t('Loading content ...') : undefined"
       :error-text="error ? $t(`Emission doesn't exist`) : undefined"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

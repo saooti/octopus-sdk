@@ -27,6 +27,7 @@
       "
       :filter="fakeSearch"
       :selectable="() => !maxOptionsSelected"
+      :class="{ 'border border-danger': textDanger?.length }"
       @open="onSearch"
       @search="onSearch"
       @close="onClose"
@@ -67,6 +68,9 @@
         <ChevronDownIcon v-bind="attributes" />
       </template>
     </vSelect>
+    <div v-if="textDanger" class="text-danger">
+      {{ textDanger }}
+    </div>
   </div>
 </template>
 
@@ -96,6 +100,7 @@ export default {
     displayLabel: { default: false, type: Boolean },
     maxOptions: { default: null, type: Number },
     allowEmpty: { default: true, type: Boolean },
+    textDanger :{ default: undefined, type: String },
   },
 
   emits: ["onSearch", "selected", "onClose"],

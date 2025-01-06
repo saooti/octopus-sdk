@@ -2,13 +2,15 @@
   <div class="d-flex flex-column h-100 octopus-app">
     <template v-if="pageFullyLoad">
       <TopBar :is-education="false" />
-      <CategoryFilter v-if="firstDisplayCategoryFilter" />
-      <div v-else class="category-filter-no-filter" />
-      <router-view />
+      <main>
+        <CategoryFilter v-if="firstDisplayCategoryFilter" />
+        <div v-else class="category-filter-no-filter" />
+        <router-view />
+        <PlayerComponent />
+      </main>
       <ClassicLazy :min-height="123">
         <FooterOctopus />
       </ClassicLazy>
-      <PlayerComponent />
     </template>
   </div>
 </template>
@@ -78,6 +80,7 @@ export default defineComponent({
       },
     },
     "$i18n.locale"() {
+      this.updateMetaTitle();
       this.$forceUpdate();
       this.reload = !this.reload;
     },

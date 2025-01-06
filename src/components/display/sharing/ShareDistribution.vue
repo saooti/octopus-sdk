@@ -1,5 +1,5 @@
 <template>
-  <div class="module-box">
+  <section class="module-box">
     <h2 class="mb-3">
       {{ $t("Distribute") }}
     </h2>
@@ -32,7 +32,7 @@
       ref="snackbar"
       position="bottom-left"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

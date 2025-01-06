@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <h1>{{ title }}</h1>
     <PodcastList
       :first="0"
@@ -7,7 +7,7 @@
       :iab-id="iabId"
       :organisation-id="orgaArray"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

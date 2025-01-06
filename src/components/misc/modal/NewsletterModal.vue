@@ -237,23 +237,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.octopus-app {
-  #newsletter-modal {
-    .octopus-modal-body {
-      overflow-x: inherit;
-      @media (max-width: 500px) {
-        overflow-x: auto;
-      }
-    }
-    .octopus-modal-dialog {
-      max-width: 80%;
-      max-height: calc(100% - 3.5rem) !important;
-    }
-    .octopus-modal-content {
-      max-height: calc(100vh - 100px) !important;
-    }
-  }
-}
-</style>

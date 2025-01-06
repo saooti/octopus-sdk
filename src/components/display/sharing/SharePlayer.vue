@@ -1,5 +1,5 @@
 <template>
-  <div class="module-box overflow-visible">
+  <section class="module-box overflow-visible">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="mb-3">
         {{ $t("Embed") }}
@@ -83,7 +83,7 @@
     <div v-else-if="!authenticated">
       {{ $t("Only authenticated members can share the content") }}
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

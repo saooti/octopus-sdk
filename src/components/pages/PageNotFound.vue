@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     class="page-box page-box-absolute page-not-found"
     :style="backgroundStyle"
   >
@@ -19,7 +19,7 @@
         {{ $t("Back to home") }}
       </router-link>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading && (authOrgaId || !noSharing)" class="module-box">
+  <section v-if="!isLoading && (authOrgaId || !noSharing)" class="module-box">
     <div class="share-buttons-display">
       <div v-if="!isGarRole && !noSharing" class="d-flex flex-column me-2">
         <h3 class="mb-2">
@@ -122,7 +122,7 @@
         position="bottom-left"
       />
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

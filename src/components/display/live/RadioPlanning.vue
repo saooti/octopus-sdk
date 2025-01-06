@@ -1,5 +1,5 @@
 <template>
-  <div class="module-box">
+  <section class="module-box">
     <h2 class="mb-3">
       {{ $t("Program") }}
     </h2>
@@ -83,6 +83,7 @@
                     height="150"
                     class="m-2 program-item-img"
                     role="presentation"
+                    alt=""
                     :title="
                       $t('Episode name image', {
                         name: planningItem.podcastData.title,
@@ -109,7 +110,7 @@
         </template>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

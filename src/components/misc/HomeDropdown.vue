@@ -31,54 +31,66 @@
       :is-fixed="true"
       :left-pos="true"
     >
-      <template v-if="!isAuthenticated">
-        <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
-          {{ $t("Login") }}
-        </a>
-        <router-link
-          v-if="!isPodcastmaker"
-          class="octopus-dropdown-item"
-          to="/main/pub/create"
-        >
-          {{ $t("Create an account") }}
-        </router-link>
-      </template>
-      <template v-else>
-        <template v-for="routerBack in routerBackoffice" :key="routerBack.path">
-          <router-link
-            v-if="!isPodcastmaker && routerBack.condition"
-            :class="routerBack.class"
-            :to="routerBack.path"
-          >
-            {{ routerBack.title }}
-          </router-link>
-        </template>
-        <template v-if="helpLinks.length">
-          <hr />
-          <template v-for="helpLink in helpLinks" :key="helpLink.title">
-            <a
-              :href="helpLink.href"
-              class="octopus-dropdown-item"
-              rel="noopener"
-              target="_blank"
-              realLink="true"
-            >
-              {{ helpLink.title }}
-            </a>
+      <nav :aria-label="$t('User menu')">
+        <ul>
+          <template v-if="!isAuthenticated">
+            <li class="li-style-none">
+              <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
+                {{ $t("Login") }}
+              </a>
+            </li>
+            <li class="li-style-none">
+              <router-link
+                v-if="!isPodcastmaker"
+                class="octopus-dropdown-item"
+                to="/main/pub/create"
+              >
+                {{ $t("Create an account") }}
+              </router-link>
+            </li>
           </template>
-        </template>
-        <hr />
-        <a class="octopus-dropdown-item c-hand" href="/logout">
-          {{ $t("Logout") }}
-        </a>
-      </template>
-      <router-link
-        v-if="!isGarRole"
-        class="octopus-dropdown-item"
-        to="/main/pub/contact"
-      >
-        {{ $t("Contact") }}
-      </router-link>
+          <template v-else>
+            <li v-for="routerBack in routerBackoffice" :key="routerBack.path" class="li-style-none">
+              <router-link
+                v-if="!isPodcastmaker && routerBack.condition"
+                :class="routerBack.class"
+                :to="routerBack.path"
+              >
+                {{ routerBack.title }}
+              </router-link>
+            </li>
+            <template v-if="helpLinks.length">
+              <hr />
+              <li v-for="helpLink in helpLinks" :key="helpLink.title" class="li-style-none">
+                <a
+                  :href="helpLink.href"
+                  class="octopus-dropdown-item"
+                  rel="noopener"
+                  target="_blank"
+                  realLink="true"
+                >
+                  {{ helpLink.title }}
+                </a>
+              </li>
+            </template>
+            <hr />
+            <li class="li-style-none">
+              <a class="octopus-dropdown-item c-hand" href="/logout">
+                {{ $t("Logout") }}
+              </a>
+            </li>
+          </template>
+          <li class="li-style-none">
+            <router-link
+              v-if="!isGarRole"
+              class="octopus-dropdown-item"
+              to="/main/pub/contact"
+            >
+              {{ $t("Contact") }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
     </ClassicPopover>
   </div>
 </template>

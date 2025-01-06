@@ -1,5 +1,5 @@
 <template>
-  <div
+  <footer
     id="footer"
     ref="footer"
     class="d-flex align-items-center justify-content-between border-top mt-auto"
@@ -9,14 +9,22 @@
         &copy; Saooti 2024
       </div>
       <FooterGarSection v-if="isGarRole" :auth-orga-id="authOrgaId" />
-      <router-link
-        v-for="link in routerLinkSecondArray"
-        :key="link.routeName"
-        class="link-hover my-1 special-select-align-magic-trick"
-        :to="link.routeName"
-      >
-        {{ link.title }}
-      </router-link>
+      <nav :aria-label="$t('Site menu')">
+        <ul class="p-0 m-0">
+          <li 
+            v-for="link in routerLinkSecondArray"
+            :key="link.routeName"
+            class="li-style-none my-1"
+          >
+            <router-link
+              class="link-hover special-select-align-magic-trick"
+              :to="link.routeName"
+            >
+              {{ link.title }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
       <ClassicSelect
         v-model:text-init="language"
         :display-label="false"
@@ -60,7 +68,7 @@
         <AcpmImage />
       </a>
     </div>
-  </div>
+  </footer>
 </template>
 
 <script lang="ts">

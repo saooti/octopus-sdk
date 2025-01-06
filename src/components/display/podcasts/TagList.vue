@@ -12,21 +12,21 @@
       class="tag-list-element"
       :class="ouestFranceMainTag === tag ? 'main-of-tag' : ''"
     >
-      <div
+      <button
         :id="'tag-list-from-podcast-page' + index"
-        role="button"
-        class="d-flex align-items-center"
+        class="btn-transparent d-flex align-items-center"
       >
         <img
           v-if="isOuestFranceTag(tag)"
           width="20"
           height="20"
           class="ouest-france-logo"
-          aria-hidden="true"
-          src="/img/ouest_france_logo.svg"
+          role="presentation"
+          alt=""
+          src="/img/ouest_france_logo.svg" 
         />
         {{ formateOfTag(tag) }}
-      </div>
+      </button>
       <ClassicPopover
         v-if="isOuestFranceTag(tag)"
         :target="'tag-list-from-podcast-page' + index"

@@ -403,4 +403,5 @@ export default {
   "Clear search":"Clear search",
   "Show more days":"Show more days",
   "Show fewer days":"Show fewer days",
+  "Site menu":"Site menu",
 };

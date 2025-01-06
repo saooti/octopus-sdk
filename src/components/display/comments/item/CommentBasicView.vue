@@ -1,14 +1,11 @@
 <template>
   <div class="d-flex flex-column w-100">
     <div class="d-flex align-items-center h6 mb-2">
-      <strong
+      <button
         :id="'popover-comment' + comment.commentId"
-        role="button"
-        tabindex="-1"
         :class="isValidComment ? 'c-hand-auto' : 'text-danger'"
-        class="me-2"
-        >{{ username }}</strong
-      >
+        class="btn-transparent me-2"
+        >{{ username }}</button>
       <ClassicPopover
         :disable="isValidComment"
         :target="'popover-comment' + comment.commentId"

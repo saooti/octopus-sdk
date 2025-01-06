@@ -14,7 +14,8 @@
       <img
         v-if="!filterOrgaId || '' === imgUrl"
         :src="logoUrl"
-        aria-hidden="true"
+        role="presentation"
+        alt=""
         width="140"
         height="50"
         :class="isEducation ? 'educationLogo' : 'octopusLogo'"
@@ -22,7 +23,8 @@
       <img
         v-else
         :src="proxyImageUrl(imgUrl, '', '80')"
-        aria-hidden="true"
+        role="presentation"
+        alt=""
         class="client-logo"
         :class="isEducation ? 'educationLogo' : ''"
       />
@@ -42,7 +44,8 @@
         <img
           v-if="isGarRole"
           :src="logoUrl"
-          aria-hidden="true"
+          role="presentation"
+          alt=""
           width="100"
           height="29"
           class="ms-2"
@@ -57,7 +60,8 @@
         >
           <img
             :src="logoUrl"
-            aria-hidden="true"
+            role="presentation"
+            alt=""
             width="100"
             height="29"
             class="ms-2"
@@ -66,19 +70,23 @@
         </a>
       </template>
       <div class="d-flex align-items-center justify-content-end flex-grow-1">
-        <template v-for="link in routerLinkArray" :key="link.routeName">
-          <router-link
-            v-show="!isPhone"
-            v-if="link.condition"
-            :to="{
-              name: link.routeName,
-              query: getQueriesRouter(link.routeName),
-            }"
-            class="link-hover py-2 px-3"
-          >
-            {{ link.title }}
-          </router-link>
-        </template>
+        <nav :aria-label="$t('Site menu')">
+          <ul class="d-flex">
+          <li v-for="link in routerLinkArray" :key="link.routeName" class="li-style-none">
+            <router-link
+              v-show="!isPhone"
+              v-if="link.condition"
+              :to="{
+                name: link.routeName,
+                query: getQueriesRouter(link.routeName),
+              }"
+              class="link-hover py-2 px-3"
+            >
+              {{ link.title }}
+            </router-link>
+          </li>
+        </ul>
+        </nav>
         <button
           v-show="!isPhone && !inContentDisplayPage"
           id="more-dropdown"
@@ -96,23 +104,26 @@
           :is-fixed="true"
           :left-pos="true"
         >
-          <div class="d-flex flex-column">
-            <template
-              v-for="link in routerLinkInsideArray"
-              :key="link.routeName"
-            >
-              <router-link
-                v-if="link.condition"
-                :to="{
-                  name: link.routeName,
-                  query: getQueriesRouter(link.routeName),
-                }"
-                class="p-1 octopus-dropdown-item"
+          <nav class="d-flex flex-column" :aria-label="$t('Site menu')">
+            <ul>
+              <li
+                v-for="link in routerLinkInsideArray"
+                :key="link.routeName"
+                class="li-style-none"
               >
-                {{ link.title }}
-              </router-link>
-            </template>
-          </div>
+                <router-link
+                  v-if="link.condition"
+                  :to="{
+                    name: link.routeName,
+                    query: getQueriesRouter(link.routeName),
+                  }"
+                  class="p-1 octopus-dropdown-item"
+                >
+                  {{ link.title }}
+                </router-link>
+              </li>
+            </ul>
+          </nav>
         </ClassicPopover>
         <MobileMenu
           :is-education="isEducation"

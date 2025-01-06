@@ -190,12 +190,10 @@ export default defineComponent({
     },
     searchPattern(value: string): void {
       const search = value.trim();
-      const valSort =
-        search.length > 3
-          ? "SCORE"
-          : this.isEmission
-            ? "LAST_PODCAST_DESC"
-            : "DATE";
+      let valSort = "SCORE"
+      if(search.length <= 3){
+        valSort = this.isEmission? "LAST_PODCAST_DESC" : "DATE";
+      }
       if (valSort !== this.sort) {
         this.$emit("update:sort", valSort);
       }

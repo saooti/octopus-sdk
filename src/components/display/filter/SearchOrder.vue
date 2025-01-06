@@ -1,23 +1,20 @@
 <template>
-  <div class="d-flex flex-column">
-    <div class="text-primary mb-2">
-      {{ $t("Sort") }}
-    </div>
-    <ClassicRadio
-      :text-init="sort"
-      id-radio="sort-radio"
-      :options="optionsArray"
-      @update:text-init="$emit('update:sort', $event)"
-    />
-  </div>
+  <ClassicRadioLabel
+    :text-init="sort"
+    id-radio="sort-radio"
+    :options="optionsArray"
+    :radioLabel="$t('Sort')"
+    classLabel="text-primary mb-2"
+    @update:text-init="$emit('update:sort', $event)"
+  />
 </template>
 
 <script lang="ts">
-import ClassicRadio from "../../form/ClassicRadio.vue";
+import ClassicRadioLabel from "../../form/ClassicRadioLabel.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   components: {
-    ClassicRadio,
+    ClassicRadioLabel,
   },
   props: {
     isEmission: { default: false, type: Boolean },

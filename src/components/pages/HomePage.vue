@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="0 === rubriquageFilter.length">
       <ClassicLazy
         v-for="(c, index) in categories"
@@ -61,7 +61,7 @@
         />
       </template>
     </template>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

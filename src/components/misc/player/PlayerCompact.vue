@@ -21,7 +21,6 @@
         :listen-time="listenTime"
       />
     </div>
-    <!-- <AdsSkipButton/> -->
     <PlayerSpeedButton v-if="!radioUrl" />
     <button
       id="player-up-btn"
@@ -47,7 +46,6 @@ import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
 import imageProxy from "../../mixins/imageProxy";
 import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
-/* import AdsSkipButton from "./ads/AdsSkipButton.vue"; */
 import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import PlayerSpeedButton from "./elements/PlayerSpeedButton.vue";

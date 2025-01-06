@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <router-link
       v-if="isRolePlaylists && !isPodcastmaker"
       to="/main/priv/edit/playlist"
@@ -21,7 +21,7 @@
       :query="searchPattern"
       :organisation-id="organisationId"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -120,7 +120,6 @@ export const playerVast = defineComponent({
       for (const index in events) {
         adsManager.addEventListener(events[index], this.onAdEvent);
       }
-      //adsManager.addEventListener(google.ima.AdEvent.Type.SKIPPED, this.onAdEvent);
     },
     onAdError(adErrorEvent: any) {
       console.log(adErrorEvent.getError());
@@ -155,7 +154,7 @@ export const playerVast = defineComponent({
             adsManager.pause();
           }
           break;
-        case google.ima.AdEvent.Type.AD_PROGRESS:
+        case google.ima.AdEvent.Type.AD_PROGRESS:{
           this.isAdRequested = false;
           const adProgressData = adEvent.getAdData();
           this.updateProgressionData(adProgressData.duration,adProgressData.currentTime);
@@ -164,6 +163,7 @@ export const playerVast = defineComponent({
             adsManager.getAdSkippableState(),
             Math.ceil(this.currentAd.getSkipTimeOffset() - adProgressData.currentTime));
           break;
+        }
       }
     },
     onContentPauseRequested() {

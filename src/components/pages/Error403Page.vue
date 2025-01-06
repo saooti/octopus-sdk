@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box page-box-absolute bg-white justify-content-evenly">
+  <section class="page-box page-box-absolute bg-white justify-content-evenly">
     <div class="not-auth-content d-flex-column justify-content-between">
       <div class="d-flex flex-column justify-content-around">
         <img
@@ -7,7 +7,8 @@
           height="auto"
           class="logo-octopus"
           src="/img/logo_saooti_play_black.webp"
-          aria-hidden="true"
+          role="presentation"
+          alt=""
         />
         <h2>{{ $t("You do not have the right to access this page") }}</h2>
       </div>
@@ -16,7 +17,8 @@
         height="auto"
         class="stop-octopus-img"
         src="/img/403.webp"
-        aria-hidden="true"
+        role="presentation"
+        alt=""
       />
     </div>
 
@@ -24,7 +26,7 @@
       {{ authText }}
     </a>
     <a v-else class="btn btn-primary" href="/sso/login">{{ authText }}</a>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

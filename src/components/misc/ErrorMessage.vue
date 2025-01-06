@@ -1,5 +1,4 @@
 <template>
-  <!-- v-if="message && message.length" -->
   <div class="d-flex">
     <div class="d-flex align-items-center bg-error-message p-2 rounded my-1">
       <AlertIcon :title="$t('Warning')" class="me-1 text-danger" :size="16" />

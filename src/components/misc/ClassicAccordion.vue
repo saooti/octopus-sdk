@@ -19,7 +19,8 @@
           height="30"
           class="img-accordion"
           :src="imageUrl"
-          aria-hidden="true"
+          role="presentation"
+          alt=""
         />
         <span class="flex-grow-1">{{ title }}</span>
         <ChevronDownIcon :class="{ 'arrow-transform': isOpen }" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="loaded && !error">
       <router-link
         :to="{
@@ -53,10 +53,12 @@
                 />
               </template>
               <template #tab1>
-                <CommentSection
-                  :podcast="podcast"
-                  class="module-box-transparent"
-                />
+                <section>
+                  <CommentSection
+                    :podcast="podcast"
+                    class="module-box-transparent"
+                  />
+                </section>
               </template>
             </ClassicNav>
             <VideoModuleBox
@@ -84,7 +86,7 @@
           : undefined
       "
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <ProductorSearch
       v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
@@ -12,7 +12,7 @@
       :query="searchPattern"
       :organisation-id="organisationId"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

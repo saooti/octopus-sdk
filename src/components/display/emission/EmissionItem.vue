@@ -14,6 +14,7 @@
         height="250"
         class="img-box"
         role="presentation"
+        alt=""
         :title="$t('Emission name image', { name: emission.name })"
       />
       <div class="emission-item-text">

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     v-if="(filterOrgaId || organisationId) && radio.length"
     class="d-flex flex-column align-items-start mt-3"
   >
@@ -13,7 +13,7 @@
         :radio="radioItem"
       />
     </template>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

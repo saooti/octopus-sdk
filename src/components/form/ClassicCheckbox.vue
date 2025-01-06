@@ -12,10 +12,10 @@
         @input="$emit('update:textInit', !textInit)"
         @click="emitClickAction"
       />
-      <div
+      <button
         v-if="isSwitch"
-        class="slider"
-        tabindex="0"
+        class="slider btn-transparent"
+        :title="label"
         @click="clickSlider"
         @keydown.space.prevent="clickSlider"
       />

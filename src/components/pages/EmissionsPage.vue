@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <slot name="new-emission" />
     <ProductorSearch
       v-model:organisation-id="organisationId"
@@ -35,7 +35,7 @@
       :rubriquage-id="rubriquesFilterArrayIds.rubriquageId"
       :no-rubriquage-id="rubriquesFilterArrayIds.noRubriquageId"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

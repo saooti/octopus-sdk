@@ -1,5 +1,5 @@
 <template>
-  <div v-show="displayCommentSection" class="module-box">
+  <section v-show="displayCommentSection" class="module-box">
     <div class="d-flex align-items-center">
       <h3 class="mb-0 me-2">{{ $t("Podcast's comments") }}</h3>
       <button
@@ -23,7 +23,7 @@
       :config="configPodcast"
       :event-to-handle="eventToHandle"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="py-3">
+  <section class="py-3">
     <h3 class="mb-2">
       {{ titleFilter }}
     </h3>
@@ -31,7 +31,7 @@
       :display-sort-text="false"
       @fetch="fetch"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

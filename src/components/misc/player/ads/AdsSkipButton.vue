@@ -14,7 +14,7 @@ import { useVastStore } from "../../../../stores/VastStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
-  //TODO see if it has more solutions on https://groups.google.com/g/ima-sdk/c/ky-Q_pUXrIA/m/-P2TsMuABwAJ
+  // see if it has more solutions on https://groups.google.com/g/ima-sdk/c/ky-Q_pUXrIA/m/-P2TsMuABwAJ
   name: "AdsSkipButton",
   computed: {
     ...mapState(useVastStore, [

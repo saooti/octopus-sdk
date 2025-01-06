@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     id="octopus-player-component"
     class="player-container"
     :class="playerVideo ? 'player-video' : ''"
@@ -47,7 +47,7 @@
         />
       </template>
     </template>
-  </div>
+  </section>
 </template>
 <script lang="ts">
 import { playerLogic } from "../../mixins/player/playerLogic";

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <header
     class="top-bar-container"
     :class="{ scrolled: scrolled, 'content-top-bar': isContentToDisplay }"
   >
@@ -24,7 +24,7 @@
         :window-width="windowWidth"
       />
     </template>
-  </div>
+  </header>
 </template>
 
 <script lang="ts">
@@ -149,8 +149,6 @@ export default defineComponent({
     *:focus-visible {
       box-shadow: 0 0 10px 1px white !important;
     }
-    //position: sticky;
-    //top: 0;
     background: octopusVariables.$octopus-primary-color;
     background: linear-gradient(
       90deg,
@@ -191,7 +189,7 @@ export default defineComponent({
 
     h1 {
       color: white !important;
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin: 2rem 5rem;
     }
     @media (max-width: 650px) {

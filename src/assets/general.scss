@@ -250,6 +250,9 @@ body{
   .border{
 		border-radius: octopusVariables.$octopus-borderradius;
 	}
+  .li-style-none{
+    list-style: none;
+  }
 
   .html-wysiwyg-content{
     h3,h4{

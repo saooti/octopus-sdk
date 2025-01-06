@@ -1,7 +1,7 @@
 <template>
-  <div class="page-box map-page">
+  <section class="page-box map-page">
     <component :is="titleTag">{{ $t("Site map") }}</component>
-    <div class="d-flex flex-column align-items-center">
+    <nav :aria-label="$t('Site menu')" class="d-flex flex-column align-items-center">
       <ul class="my-1">
         <template v-for="linkItem in siteMap" :key="linkItem.id">
           <li v-if="linkItem.condition" :id="linkItem.id" class="my-1">
@@ -20,8 +20,8 @@
           </li>
         </template>
       </ul>
-    </div>
-  </div>
+    </nav>
+  </section>
 </template>
 
 <script lang="ts">

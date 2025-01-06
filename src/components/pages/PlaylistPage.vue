@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="loaded && !error">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
@@ -10,13 +10,14 @@
         class="d-flex flex-column page-element"
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
-        <div class="module-box">
+        <section class="module-box">
           <div class="mb-5 mt-3 descriptionText">
             <img
               v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
               width="250"
               height="250"
               role="presentation"
+              alt=""
               :title="$t('Playlist name image', { name: name })"
               class="img-box float-start me-3 mb-3"
             />
@@ -26,7 +27,7 @@
             <!-- eslint-enable -->
           </div>
           <EditBox v-if="editRight && !isPodcastmaker" :playlist="playlist" />
-        </div>
+        </section>
         <SharePlayer
           v-if="!isPodcastmaker && undefined !== authOrgaId"
           :playlist="playlist"
@@ -38,14 +39,16 @@
           :playlist="playlist"
           :organisation-id="playlist.organisation.id"
         />
-        <PodcastList class="module-box" :playlist="playlist" />
+        <section class="module-box">
+          <PodcastList :playlist="playlist" />
+        </section>
       </div>
     </template>
     <ClassicLoading
       :loading-text="!loaded ? $t('Loading content ...') : undefined"
       :error-text="error ? $t(`Playlist doesn't exist`) : undefined"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

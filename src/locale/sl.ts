@@ -393,4 +393,5 @@ export default {
   "Clear search":"Počisti iskanje",
   "Show more days":"Prikaži več dni",
   "Show fewer days":"Prikaži manj dni",
+  "Site menu":"Meni spletnega mesta",
 }

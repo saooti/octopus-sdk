@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <template v-if="!filterOrgaId && !organisationId && !isPodcastmaker">
       <div class="align-self-start fw-bold mb-2">
         {{ $t("Please chose a productor") }}
@@ -13,7 +13,7 @@
       <LiveList :organisation-id="organisationId" />
       <RadioList v-if="!notRadios" :organisation-id="organisationId" />
     </template>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     v-show="isHeaderDisplay"
     class="header-img flex-column justify-content-end"
     :style="backgroundDisplay"
@@ -62,8 +62,8 @@
         :rubriquages="rubriquageFilter"
       />
     </div>
-  </div>
-  <div v-if="!isDisplay" class="category-filter-no-filter" />
+  </section>
+  <section v-if="!isDisplay" class="category-filter-no-filter" />
 </template>
 
 <script lang="ts">

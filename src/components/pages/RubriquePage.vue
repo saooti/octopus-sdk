@@ -1,12 +1,12 @@
 <template>
-  <div class="page-box">
+  <section class="page-box">
     <h1>{{ title }}</h1>
     <PodcastList
       :first="firstRoute"
       :size="sizeRoute"
       :rubrique-id="rubriqueId"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
