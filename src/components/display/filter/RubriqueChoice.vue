@@ -22,7 +22,7 @@
         v-if="getRubriquesLength(rubriquageId)"
         class="ms-2"
         :multiple="false"
-        :rubriquage-id="rubriquageId"
+        :id="'rubrique-chooser'+rubriquageId"
         :rubrique-selected="
           0 !== rubriqueIdSelected ? rubriqueIdSelected : undefined
         "

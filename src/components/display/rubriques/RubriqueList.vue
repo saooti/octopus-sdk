@@ -44,7 +44,6 @@
       <RubriqueChooser
         v-if="hidenRubriques.length"
         class="rubrique-chooser-minwidth"
-        :rubriquage-id="rubriquage.rubriquageId"
         :all-rubriques="hidenRubriques"
         @selected="addFilterFromPopover($event)"
       />

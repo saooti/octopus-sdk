@@ -105,7 +105,7 @@
           :left-pos="true"
         >
           <nav class="d-flex flex-column" :aria-label="$t('Site menu')">
-            <ul>
+            <ul class="p-0 m-0">
               <li
                 v-for="link in routerLinkInsideArray"
                 :key="link.routeName"

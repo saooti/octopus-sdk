@@ -14,7 +14,6 @@
       :id="id"
       v-model="optionSelected"
       :label="optionLabel"
-      :append-to-body="inModal"
       :multiple="multiple"
       :options="options"
       :disabled="isDisabled"
@@ -223,6 +222,11 @@ export default {
     --vs-controls-color: white;
     .vs__actions path {
       fill: white;
+    }
+  }
+  .multiselect-in-modal{
+    .vs__dropdown-menu{
+      position: relative !important;
     }
   }
 }

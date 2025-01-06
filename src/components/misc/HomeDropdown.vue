@@ -32,7 +32,7 @@
       :left-pos="true"
     >
       <nav :aria-label="$t('User menu')">
-        <ul>
+        <ul class="p-0 m-0">
           <template v-if="!isAuthenticated">
             <li class="li-style-none">
               <a class="octopus-dropdown-item" href="/sso/login" realLink="true">

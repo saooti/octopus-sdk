@@ -41,7 +41,7 @@
             v-if="getRubriquesLength(filter.rubriquageId)"
             class="ms-2 multiselect-transparent multiselect-white"
             :multiple="false"
-            :rubriquage-id="filter.rubriquageId"
+            :id="'rubrique-chooser'+filter.rubriquageId"
             :rubrique-selected="filter.rubriqueId"
             :all-rubriques="getRubriques(filter.rubriquageId)"
             width="auto"

@@ -1,10 +1,12 @@
 <template>
   <ClassicMultiselect
-    :id="idClassicMultiselect"
+    :id="id"
     ref="selectRubrique"
     :option-chosen="model"
     option-label="name"
-    :label="$t('By rubric')"
+    :displayLabel="displayLabel"
+    :label="label ?? $t('By rubric')"
+    :textDanger="textDanger"
     :placeholder="$t('Type string to filter by categories')"
     :max-element="maxElement"
     :multiple="multiple"
@@ -39,11 +41,14 @@ export default defineComponent({
       default: undefined,
       type: Object as () => Array<number>,
     },
-    rubriquageId: { default: undefined, type: Number },
+    id: { default: "rubrique-chooser", type: String },
     withoutRubrique: { default: false, type: Boolean },
     isDisabled: { default: false, type: Boolean },
     noDeselect: { default: true, type: Boolean },
     inModal: { default: false, type: Boolean },
+    label:{default: undefined, type: String },
+    displayLabel: { default: false, type: Boolean },
+    textDanger :{ default: undefined, type: String },
   },
   emits: [
     "update:rubriqueSelected",
@@ -63,11 +68,6 @@ export default defineComponent({
     };
   },
   computed: {
-    idClassicMultiselect(): string {
-      return this.rubriquageId
-        ? "rubriqueChooser" + this.rubriquageId
-        : "rubriqueChooser";
-    },
     getDefaultRubrique(): Rubrique | undefined {
       if ("" === this.defaultanswer) {
         return undefined;
