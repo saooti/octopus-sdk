@@ -26,7 +26,7 @@
           :error-text="$t('Please provide a comment')"
           :is-textarea="true"
           :is-emoji-picker="true"
-          emoji-relative-class="octopus-modal-dialog"
+          emoji-relative-class="octopus-modal"
           :focus="true"
         />
         <ClassicSelect

@@ -20,9 +20,9 @@
       </div>
       <RubriqueChooser
         v-if="getRubriquesLength(rubriquageId)"
+        :id="'rubrique-chooser'+rubriquageId"
         class="ms-2"
         :multiple="false"
-        :id="'rubrique-chooser'+rubriquageId"
         :rubrique-selected="
           0 !== rubriqueIdSelected ? rubriqueIdSelected : undefined
         "

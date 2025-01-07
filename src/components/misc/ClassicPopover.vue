@@ -51,6 +51,7 @@ export default defineComponent({
       targetElement: null as HTMLElement | null,
       overPopover: false as boolean,
       isTabAction: false as boolean,
+      maxHeight: '80vh' as string
     };
   },
   computed: {
@@ -58,7 +59,7 @@ export default defineComponent({
       return "popover" + this.target;
     },
     positionInlineStyle(): string {
-      return `left: ${this.posX}px; top: ${this.posY}px;`;
+      return `left: ${this.posX}px; top: ${this.posY}px;max-height:${this.maxHeight}`;
     },
   },
   watch: {
@@ -147,6 +148,7 @@ export default defineComponent({
       let parentRight = 0;
       let parentTop = 0;
       let parentScrollTop = 0;
+      let parentBottom = 0;
       if (this.relativeClass) {
         const modalBody = document.getElementsByClassName(
           this.relativeClass,
@@ -162,6 +164,7 @@ export default defineComponent({
         parentRight = modalBodyRect.right;
         parentTop = modalBodyRect.top;
         parentScrollTop = modalBody.scrollTop;
+        parentBottom=modalBodyRect.bottom;
       }
       const rectElement = (e.target as HTMLElement).getBoundingClientRect();
       (this.$refs.popover as HTMLElement).style.display = "block";
@@ -184,6 +187,7 @@ export default defineComponent({
         parentTop +
         (this.isFixed ? 0 : window.scrollY) +
         yGap;
+      this.maxHeight = this.relativeClass ? (parentBottom- this.posY -parentTop) + "px":'80vh';
     },
     clearDataBlur(e: FocusEvent) {
       if (this.isTabAction) {
@@ -253,7 +257,6 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: octopusVariables.$octopus-borderradius;
   position: absolute;
-  max-height: 80vh;
   overflow: auto;
   &.popover-z-index {
     z-index: 9999;

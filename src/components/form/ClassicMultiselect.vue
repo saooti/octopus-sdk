@@ -11,8 +11,8 @@
       label
     }}</label>
     <vSelect
-      :id="id"
       v-model="optionSelected"
+      :input-id="id"
       :label="optionLabel"
       :multiple="multiple"
       :options="options"

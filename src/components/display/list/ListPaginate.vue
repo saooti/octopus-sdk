@@ -13,6 +13,7 @@
         </div>
         <PaginateParams
           v-if="!isPhone && !justSizeChosen && totalCount > 0"
+          :id="id"
           :rows-per-page="rowsPerPage"
           @update:rows-per-page="changeSize"
         />
@@ -21,6 +22,7 @@
     <slot name="list" />
     <PaginateSection
       v-if="!isPhone && !justSizeChosen && totalCount > 0"
+      :id="id"
       :style="playerResponsive ? 'bottom:' + playerHeight : ''"
       :first="first"
       :rows-per-page="rowsPerPage"

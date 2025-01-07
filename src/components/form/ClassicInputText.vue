@@ -5,10 +5,17 @@
   >
     <div class="d-flex align-items-center">
       <label
+        v-if="!isWysiwyg"
         class="form-label"
         :for="inputId"
         :class="displayLabel ? '' : 'd-none'"
         >{{ label }}</label
+      >
+      <div
+        v-else
+        class="form-label"
+        :class="displayLabel ? '' : 'd-none'"
+        >{{ label }}</div
       >
       <template v-if="popover">
         <button

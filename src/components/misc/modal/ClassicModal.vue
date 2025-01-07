@@ -77,6 +77,8 @@ export default defineComponent({
   &.octopus-only-header-modal::backdrop{
     opacity: 0.1;
   }
+  display: flex;
+  flex-direction: column;
   padding: 0;
   border: 0;
   border-radius: octopusVariables.$octopus-borderradius;
@@ -84,6 +86,8 @@ export default defineComponent({
   color: #353535 !important;
   margin-top: 2rem;
   width: 80vw;
+  max-height: 90vh;
+  overflow: hidden;
   @media (max-width: 500px) {
     width: 95vw;
   }

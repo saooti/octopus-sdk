@@ -3,8 +3,8 @@
     :text-init="sort"
     id-radio="sort-radio"
     :options="optionsArray"
-    :radioLabel="$t('Sort')"
-    classLabel="text-primary mb-2"
+    :radio-label="$t('Sort')"
+    class-label="text-primary mb-2"
     @update:text-init="$emit('update:sort', $event)"
   />
 </template>

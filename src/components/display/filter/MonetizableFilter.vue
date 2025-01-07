@@ -1,7 +1,8 @@
 <template>
   <div class="d-flex align-items-center">
-    <div>{{ $t("Advertising") + " :" }}</div>
+    <label for="monetizable-filter-select">{{ $t("Advertising") + " :" }}</label>
     <select
+      id="monetizable-filter-select"
       ref="select"
       v-model="monetisableForVmodel"
       :title="$t('Advertising')"

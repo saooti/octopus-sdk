@@ -1,6 +1,13 @@
 <template>
   <div ref="divContainer" tabindex="0">
+    
+    <label
+      v-if="label && !range"
+      class="form-label"
+      :for="'dp-input-'+id"
+      :class="displayLabel ? '' : 'd-none'">{{ label }}</label>
     <VueDatePicker
+      :uid="id"
       :model-value="modelVal"
       :time-picker="isTimePicker"
       :time-picker-inline="isTimePicker && timePickerInline"
@@ -43,6 +50,7 @@ export default defineComponent({
     ClockOutlineIcon,
   },
   props: {
+    id:{ default: undefined, type: String },
     time: {
       default: undefined,
       type: Object as () => { hours: number; minutes: number; seconds: number },
@@ -72,6 +80,8 @@ export default defineComponent({
     customPosition: { default: null, type: Function },
     isInline: { default: false, type: Boolean },
     timePickerInline: { default: false, type: Boolean },
+    label: { default: undefined, type: String },
+    displayLabel: { default: false, type: Boolean },
   },
 
   emits: ["updateDate", "update:date"],

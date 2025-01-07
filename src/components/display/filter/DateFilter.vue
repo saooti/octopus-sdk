@@ -11,6 +11,8 @@
         :label="1 === index ? $t('From the :') : $t('To the :')"
       />
       <ClassicDatePicker
+        :id="'date-filter-chooser'+index"
+        :label="1 === index ? $t('From the :') : $t('To the :')"
         :date="internDates[index - 1]"
         class="mx-2"
         @update-date="updateDate(index - 1, $event)"

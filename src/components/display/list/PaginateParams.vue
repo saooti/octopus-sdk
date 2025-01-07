@@ -1,9 +1,9 @@
 <template>
   <div class="paginate">
     <div class="d-flex align-items-center justify-content-center">
-      <label for="rows-per-page-select">{{ $t("Items per page :") }}</label>
+      <label :for="'rows-per-page-select'+ id">{{ $t("Items per page :") }}</label>
       <select
-        id="rows-per-page-select"
+        :id="'rows-per-page-select'+id"
         :value="rowsPerPage"
         class="c-hand p-1 mx-2"
         @change="$emit('update:rowsPerPage', parseInt($event.target.value, 10))"
@@ -26,6 +26,7 @@ export default defineComponent({
 
   props: {
     rowsPerPage: { default: 0, type: Number },
+    id: { default: "", type: String },
   },
 
   emits: ["update:rowsPerPage"],

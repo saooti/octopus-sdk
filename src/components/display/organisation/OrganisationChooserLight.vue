@@ -5,6 +5,7 @@
     :style="{ width: width }"
   >
     <select
+      id="organisation-chooser-footer"
       v-model="actual"
       :title="$t('select productor')"
       class="c-hand w-100 transparent"

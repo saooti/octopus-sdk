@@ -39,9 +39,9 @@
           <div class="mx-1">:</div>
           <RubriqueChooser
             v-if="getRubriquesLength(filter.rubriquageId)"
+            :id="'rubrique-chooser'+filter.rubriquageId"
             class="ms-2 multiselect-transparent multiselect-white"
             :multiple="false"
-            :id="'rubrique-chooser'+filter.rubriquageId"
             :rubrique-selected="filter.rubriqueId"
             :all-rubriques="getRubriques(filter.rubriquageId)"
             width="auto"
