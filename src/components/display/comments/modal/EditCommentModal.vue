@@ -11,13 +11,6 @@
       />
       <template v-if="!inProcessing && !errorUpdate">
         <ClassicInputText
-          v-model:text-init="name"
-          v-model:error-variable="errorName"
-          input-id="username-input"
-          :label="$t('Your name')"
-          :max-length="MAX_NAME"
-        />
-        <ClassicInputText
           v-model:text-init="commentText"
           v-model:error-variable="errorCommentText"
           input-id="comment-textarea"
@@ -26,7 +19,7 @@
           :error-text="$t('Please provide a comment')"
           :is-textarea="true"
           :is-emoji-picker="true"
-          emoji-relative-class="octopus-modal"
+          popover-relative-class="octopus-modal"
           :focus="true"
         />
         <ClassicSelect
@@ -49,7 +42,7 @@
       </button>
       <button
         class="btn btn-primary m-1"
-        :disabled="errorName || errorCommentText"
+        :disabled="errorCommentText"
         @click="onEditComment"
       >
         {{ $t("Yes") }}
@@ -97,10 +90,7 @@ export default defineComponent({
   data() {
     return {
       MAX_DESCRIPTION: Constants.MAX_COMMENT as number,
-      MAX_NAME: Constants.MAX_COMMENT_NAME as number,
-      name: undefined as string | undefined,
       commentText: undefined as string | undefined,
-      errorName: true as boolean,
       errorCommentText: true as boolean,
       commentState: "PENDING" as string,
       errorUpdate: false as boolean,
@@ -115,7 +105,6 @@ export default defineComponent({
       if (!this.comment) {
         return;
       }
-      this.name = this.comment.poster.userName;
       this.commentText = this.comment.content;
       this.commentState = this.comment.state;
     },
@@ -131,7 +120,6 @@ export default defineComponent({
           dataToSend: {
             commentId: this.comment.commentId,
             content: this.commentText,
-            name: this.name,
             state: this.commentState,
           },
           isNotAuth: !this.editRight,

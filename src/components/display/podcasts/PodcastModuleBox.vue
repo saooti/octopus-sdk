@@ -32,6 +32,7 @@
         <h2 class="mb-3">
           {{ podcast.title }}
         </h2>
+        <PodcastPlannedSpinner v-if="isPlannedInProcessor"/>
         <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
         <!-- eslint-disable vue/no-v-html -->
         <div
@@ -175,6 +176,9 @@ const LikeSection = defineAsyncComponent(
 const DownloadPodcastButton = defineAsyncComponent(
   () => import("./DownloadPodcastButton.vue"),
 );
+const PodcastPlannedSpinner = defineAsyncComponent(
+  () => import("./PodcastPlannedSpinner.vue"),
+);
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 import resizePhone from "../../mixins/resizePhone";
@@ -195,6 +199,7 @@ export default defineComponent({
     PodcastRawTranscript,
     DownloadPodcastButton,
     NewspaperVariantOutlineIcon,
+    PodcastPlannedSpinner
   },
 
   mixins: [displayMethods, orgaComputed, resizePhone, podcastView],

@@ -15,7 +15,6 @@
       v-model:not-valid="notValid"
       v-model:rubrique-filter="rubriqueFilter"
       :search-pattern="searchPattern"
-      :is-education="isEducation"
       :is-emission="false"
       :organisation-id="organisationId"
     />
@@ -55,7 +54,6 @@ export default defineComponent({
   },
   mixins: [advancedParamInit],
   props: {
-    isEducation: { default: false, type: Boolean },
     pr: { default: 0, type: Number },
     ps: { default: 30, type: Number },
     routeQuery: { default: "", type: String },

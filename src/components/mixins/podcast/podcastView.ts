@@ -17,6 +17,9 @@ export default defineComponent({
         ? 0
         : dayjs(this.podcast.pubDate).diff(dayjs(), "seconds");
     },
+    isPlannedInProcessor(): boolean {
+      return "PLANNED" === this.podcast?.processingStatus;
+    },
     isLiveReadyToRecord(): boolean {
       return (
         undefined !== this.podcast &&

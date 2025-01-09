@@ -17,7 +17,7 @@
           {{ $t("Filter") }}
         </div>
         <MonetizableFilter
-          v-if="!isPodcastmaker && !isEducation"
+          v-if="!isPodcastmaker && !platformEducation"
           :is-emission="isEmission"
           :monetisable="monetisable"
           @update:monetisable="updateMonetisable"
@@ -82,6 +82,7 @@ import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterPar
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { mapState } from "pinia";
+import { useGeneralStore } from "../../../stores/GeneralStore";
 const MonetizableFilter = defineAsyncComponent(
   () => import("./MonetizableFilter.vue"),
 );
@@ -110,7 +111,6 @@ export default defineComponent({
   props: {
     organisationId: { default: undefined, type: String },
     isEmission: { default: false, type: Boolean },
-    isEducation: { default: false, type: Boolean },
     includeHidden: { default: false, type: Boolean },
     sort: { default: "DATE", type: String },
     onlyVideo: { default: false, type: Boolean },
@@ -145,6 +145,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useGeneralStore, ["platformEducation"]),
     ...mapState(useFilterStore, ["filterIab", "filterRubrique"]),
     ...mapState(useAuthStore, [
       "isRoleProduction",

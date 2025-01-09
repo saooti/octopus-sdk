@@ -67,6 +67,7 @@
             right: 100 - chapter.endPercent + '%',
           }"
         />
+        <!-- If top layer widely available no need to teleport -->
         <Teleport to="#octopus-player-component">
           <ClassicPopover
             :target="'chapter-' + chapter.startPercent"
@@ -75,6 +76,7 @@
             :only-mouse="true"
             popover-class="octopus-small-popover popover-z-index"
             :content="chapter.title"
+            :is-top-layer="true"
           />
         </Teleport>
       </template>

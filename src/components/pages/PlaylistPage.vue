@@ -32,7 +32,6 @@
           v-if="!isPodcastmaker && undefined !== authOrgaId"
           :playlist="playlist"
           :organisation-id="authOrgaId"
-          :is-education="isEducation"
         />
         <ShareButtons
           v-if="pageParameters.isShareButtons"
@@ -92,7 +91,6 @@ export default defineComponent({
 
   props: {
     playlistId: { default: undefined, type: Number },
-    isEducation: { default: false, type: Boolean },
   },
   data() {
     return {

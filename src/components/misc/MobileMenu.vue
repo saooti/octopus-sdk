@@ -16,6 +16,7 @@
       :only-click="true"
       :is-fixed="true"
       :left-pos="true"
+      :is-top-layer="true"
     >
       <template v-for="link in routerLinkArray" :key="link.routeName">
         <router-link

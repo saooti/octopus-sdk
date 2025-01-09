@@ -403,4 +403,5 @@ export default {
   "Show more days":"Weitere Tage anzeigen",
   "Show fewer days":"Weniger Tage anzeigen",
   "Site menu":"Site-Menü",
+  "The episode is being processed":"Die Episode wird bearbeitet",
 }

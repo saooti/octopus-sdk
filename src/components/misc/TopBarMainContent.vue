@@ -18,7 +18,7 @@
         alt=""
         width="140"
         height="50"
-        :class="isEducation ? 'educationLogo' : 'octopusLogo'"
+        :class="platformEducation ? 'educationLogo' : 'octopusLogo'"
       />
       <img
         v-else
@@ -26,7 +26,7 @@
         role="presentation"
         alt=""
         class="client-logo"
-        :class="isEducation ? 'educationLogo' : ''"
+        :class="platformEducation ? 'educationLogo' : ''"
       />
     </router-link>
     <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
@@ -49,7 +49,7 @@
           width="100"
           height="29"
           class="ms-2"
-          :class="isEducation ? 'educationLogo' : 'octopusLogo'"
+          :class="platformEducation ? 'educationLogo' : 'octopusLogo'"
         />
         <a
           v-else
@@ -65,7 +65,7 @@
             width="100"
             height="29"
             class="ms-2"
-            :class="isEducation ? 'educationLogo' : 'octopusLogo'"
+            :class="platformEducation ? 'educationLogo' : 'octopusLogo'"
           />
         </a>
       </template>
@@ -103,6 +103,7 @@
           :only-click="true"
           :is-fixed="true"
           :left-pos="true"
+          :is-top-layer="true"
         >
           <nav class="d-flex flex-column" :aria-label="$t('Site menu')">
             <ul class="p-0 m-0">
@@ -126,13 +127,13 @@
           </nav>
         </ClassicPopover>
         <MobileMenu
-          :is-education="isEducation"
+          :is-education="platformEducation"
           :show="mobileMenuDisplay"
           :not-podcast-and-emission="inContentDisplayPage && !scrolled"
           :scrolled="scrolled"
         />
         <HomeDropdown
-          :is-education="isEducation"
+          :is-education="platformEducation"
           :mobile-menu-display="mobileMenuDisplay"
           :scrolled="scrolled"
         />
@@ -163,6 +164,7 @@ import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
+import { useGeneralStore } from "../../stores/GeneralStore";
 const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
 export default defineComponent({
   name: "TopBarMainContent",
@@ -175,7 +177,6 @@ export default defineComponent({
   },
   mixins: [imageProxy, rubriquesFilterComputed],
   props: {
-    isEducation: { default: false, type: Boolean },
     isPhone: { default: false, type: Boolean },
     titleDisplay: { default: "", type: String },
     scrolled: { default: false, type: Boolean },
@@ -184,6 +185,7 @@ export default defineComponent({
     return {};
   },
   computed: {
+    ...mapState(useGeneralStore, ["platformEducation"]),
     ...mapState(useFilterStore, [
       "filterLive",
       "filterOrgaId",
@@ -243,12 +245,12 @@ export default defineComponent({
           title: this.$t("Productors"),
           routeName: "productors",
           condition:
-            !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation),
+            !this.isPodcastmaker && (!this.filterOrgaId || this.platformEducation),
         },
       ];
     },
     logoUrl(): string {
-      if (this.isEducation) {
+      if (this.platformEducation) {
         return "/img/logo_education_white.svg";
       }
       return this.isPhone

@@ -36,9 +36,7 @@
     <ClassicPopover
       ref="popoverRubrique"
       target="rubriques-dropdown"
-      class="popover-z-index"
       :only-click="true"
-      :is-fixed="true"
       :left-pos="true"
     >
       <RubriqueChooser

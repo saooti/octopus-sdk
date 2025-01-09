@@ -1,12 +1,16 @@
 <template>
   <div
-    v-show="show && !disable"
+    v-show="displayPopover"
     :id="'popover' + target"
     ref="popover"
+    popover
     tabindex="0"
-    role="dialog"
     class="octopus-popover"
-    :class="[onlyClick ? 'octopus-dropdown' : '', popoverClass]"
+    :class="[
+      displayPopover ? 'd-block': '',
+      onlyClick ? 'octopus-dropdown' : '',
+      isFixed && isTopLayerPopover ? 'position-fixed':'position-absolute',
+      popoverClass]"
     :style="positionInlineStyle"
     @focusout="clearDataBlur"
     @mouseenter="overPopover = true"
@@ -40,6 +44,7 @@ export default defineComponent({
     leftPos: { type: Boolean, default: false },
     topPos: { type: Boolean, default: false },
     popoverClass: { type: String, default: undefined },
+    isTopLayer: { type: Boolean, default: false },
   },
   emits: ["updateVisibility"],
   data() {
@@ -51,7 +56,8 @@ export default defineComponent({
       targetElement: null as HTMLElement | null,
       overPopover: false as boolean,
       isTabAction: false as boolean,
-      maxHeight: '80vh' as string
+      maxHeight: '80vh' as string,
+      clearTimeout: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
   computed: {
@@ -61,8 +67,24 @@ export default defineComponent({
     positionInlineStyle(): string {
       return `left: ${this.posX}px; top: ${this.posY}px;max-height:${this.maxHeight}`;
     },
+    displayPopover(): boolean{
+      return this.show && !this.disable;
+    },
+    isTopLayerPopover(){
+      return (this.isTopLayer || "octopus-modal"===this.relativeClass) && HTMLElement.prototype.hasOwnProperty("popover");
+    },
   },
   watch: {
+    displayPopover(){
+      if(!this.isTopLayerPopover){
+        return;
+      }
+      if(this.displayPopover){
+        (this.$refs.popover as HTMLElement).showPopover();
+      }else{
+        (this.$refs.popover as HTMLElement).hidePopover();
+      }
+    },
     show() {
       this.$emit("updateVisibility", this.show);
       if (this.show) {
@@ -132,6 +154,7 @@ export default defineComponent({
       }
     },
     setPopoverData(e: MouseEvent | PointerEvent) {
+      clearInterval(this.clearTimeout as unknown as number);
       if (this.disable || !e || !e.target) {
         return;
       }
@@ -139,6 +162,11 @@ export default defineComponent({
         if (this.show && this.isClick) {
           this.isClick = false;
           this.clearData();
+          return;
+        }
+        if (this.show && this.isTopLayerPopover) {
+          (this.$refs.popover as HTMLElement).showPopover();
+          this.isClick = true;
           return;
         }
         this.isClick = true;
@@ -149,7 +177,7 @@ export default defineComponent({
       let parentTop = 0;
       let parentScrollTop = 0;
       let parentBottom = 0;
-      if (this.relativeClass) {
+      if (!this.isTopLayerPopover && this.relativeClass) {
         const modalBody = document.getElementsByClassName(
           this.relativeClass,
         )[0];
@@ -181,13 +209,21 @@ export default defineComponent({
       const yGap = this.topPos
         ? -5 - (this.$refs.popover as HTMLElement).clientHeight
         : 5;
+      
       this.posY =
         yPosParent +
         parentScrollTop -
         parentTop +
         (this.isFixed ? 0 : window.scrollY) +
         yGap;
-      this.maxHeight = this.relativeClass ? (parentBottom- this.posY -parentTop) + "px":'80vh';
+      if(this.isTopLayerPopover){
+        this.posY = Math.max(0, this.posY);
+        this.maxHeight = (window.innerHeight - this.posY) + "px";
+      }else if(this.relativeClass){
+        this.maxHeight = (parentBottom- this.posY -parentTop) + "px";
+      }else{
+        this.maxHeight = '80vh';
+      }
     },
     clearDataBlur(e: FocusEvent) {
       if (this.isTabAction) {
@@ -233,10 +269,11 @@ export default defineComponent({
       this.clearData();
     },
     clearDataTimeout() {
-      setTimeout(() => {
+      this.clearTimeout = setTimeout(() => {
         if (!this.overPopover) {
           this.clearData();
         }
+        this.clearTimeout=undefined;
       }, 500);
     },
     clearData() {
@@ -256,8 +293,9 @@ export default defineComponent({
   background: white;
   border: 1px solid #ccc;
   border-radius: octopusVariables.$octopus-borderradius;
-  position: absolute;
   overflow: auto;
+  margin: 0 !important;
+  z-index: 10;
   &.popover-z-index {
     z-index: 9999;
   }

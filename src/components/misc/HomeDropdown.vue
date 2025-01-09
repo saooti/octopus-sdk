@@ -30,6 +30,7 @@
       :only-click="true"
       :is-fixed="true"
       :left-pos="true"
+      :is-top-layer="true"
     >
       <nav :aria-label="$t('User menu')">
         <ul class="p-0 m-0">

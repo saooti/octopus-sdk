@@ -23,7 +23,6 @@
           :exclusive="exclusive"
           :not-exclusive="notExclusive"
           :organisation-id="authOrgaId"
-          :is-education="isEducation"
         />
 
         <CommentSection v-if="!isPodcastmaker" :podcast="podcast" />
@@ -128,10 +127,7 @@ export default defineComponent({
     updateStatus: { default: undefined, type: String },
     playingPodcast: { default: undefined, type: Object as () => Podcast },
     podcastId: { default: 0, type: Number },
-    isEducation: { default: false, type: Boolean },
   },
-
-  emits: ["initConferenceId"],
 
   data() {
     return {
@@ -141,6 +137,7 @@ export default defineComponent({
       exclusive: false as boolean,
       notExclusive: false as boolean,
       fetchConference: undefined as Conference | undefined,
+      infoReload: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
 
@@ -221,46 +218,32 @@ export default defineComponent({
         if (!this.podcast || this.error) {
           return;
         }
-        this.getCommentsConfig(this.podcast);
         this.initCommentUser();
-        this.initConference();
       },
     },
   },
   beforeUnmount() {
     this.contentToDisplayUpdate(null);
+    clearTimeout(this.infoReload);
   },
 
   methods: {
     ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
     ...mapActions(useCommentStore, ["getCommentsConfig", "initCommentUser"]),
-    async fetchConferencePublic() {
-      const data = await classicApi.fetchData<ConferencePublicInfo>({
-        api: 9,
-        path: "conference/info/" + this.podcast?.conferenceId,
-      });
-      this.fetchConference = {
-        ...data,
-        ...{
-          conferenceId: this.podcast?.conferenceId ?? 0,
-          title: "",
-        },
-      };
-    },
     async initConference() {
-      if (!this.podcast || undefined == this.podcast.conferenceId) return;
+      if (!this.podcast || undefined == this.podcast.conferenceId || "READY_TO_RECORD" !== this.podcast.processingStatus) return;
+      this.fetchConference = { conferenceId: this.podcast.conferenceId, title: "" };
       if (this.isOctopusAndAnimator) {
         try {
-          const data = await classicApi.fetchData<Conference>({
+          this.fetchConference = await classicApi.fetchData<Conference>({
             api: 9,
             path: "conference/" + this.podcast.conferenceId,
           });
-          this.fetchConference = data ?? { conferenceId: -1, title: "" };
         } catch {
-          await this.fetchConferencePublic();
+          await this.fetchConferenceStatus();
         }
       } else {
-        await this.fetchConferencePublic();
+        await this.fetchConferenceStatus();
       }
       if (
         this.fetchConference &&
@@ -268,7 +251,27 @@ export default defineComponent({
         "PUBLISHING" !== this.fetchConference.status &&
         "DEBRIEFING" !== this.fetchConference.status
       ) {
-        this.$emit("initConferenceId", this.podcast.conferenceId);
+        this.fetchConferenceStatusLoop();
+      }
+    },
+    async fetchConferenceStatusLoop() {
+      if("PUBLISHING" ===this.fetchConference?.status){
+        return;
+      }
+      this.infoReload = setTimeout(async () => {
+        await this.fetchConferenceStatus();
+        this.fetchConferenceStatusLoop();
+      }, 3000);
+    },
+    async fetchConferenceStatus() {
+      try {
+        const data = await classicApi.fetchData<ConferencePublicInfo>({
+          api: 9,
+          path: "conference/info/" + this.podcast?.conferenceId,
+        });
+        this.fetchConference.status = data.status;
+      } catch {
+        //Do nothing
       }
     },
     updatePodcast(podcastUpdated: Podcast): void {
@@ -320,15 +323,32 @@ export default defineComponent({
           !this.editRight
         ) {
           this.error = true;
-        } else {
-          this.updatePathParams(this.podcast.title);
+          this.loaded = true;
+          return;
         }
+       this.podcastInProcessing();
+        this.updatePathParams(this.podcast.title);
+        await this.getCommentsConfig(this.podcast);
         this.loaded = true;
       } catch (error) {
         this.handle403(error as AxiosError);
         this.initError();
       }
     },
+
+    podcastInProcessing(){
+      if("PLANNED" !== this.podcast?.processingStatus){
+        this.initConference();
+        return;
+      }
+      this.infoReload = setTimeout(async () => {
+        this.podcast = await classicApi.fetchData<Podcast>({
+          api: 0,
+          path: "podcast/" + this.podcastId,
+        });
+        this.podcastInProcessing();
+      }, 2000);
+    }
   },
 });
 </script>

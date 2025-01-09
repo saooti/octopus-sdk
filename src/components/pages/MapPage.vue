@@ -46,7 +46,6 @@ interface LinkMapSite {
 }
 export default defineComponent({
   props: {
-    isEducation: { default: false, type: Boolean },
     externLinks: { default: () => [], type: Array as () => Array<LinkMapSite> },
     titleTag: { default: "h1", type: String },
   },
@@ -145,7 +144,7 @@ export default defineComponent({
           id: "link-page-productors",
           href: "/main/pub/productors",
           condition:
-            !this.isPodcastmaker && (!this.filterOrgaId || this.isEducation),
+            !this.isPodcastmaker && (!this.filterOrgaId || this.platformEducation),
         },
       ];
     },

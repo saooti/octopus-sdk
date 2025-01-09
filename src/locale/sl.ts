@@ -394,4 +394,5 @@ export default {
   "Show more days":"Prikaži več dni",
   "Show fewer days":"Prikaži manj dni",
   "Site menu":"Meni spletnega mesta",
+  "The episode is being processed":"Epizoda je v obdelavi",
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column h-100 octopus-app">
     <template v-if="pageFullyLoad">
-      <TopBar :is-education="false" />
+      <TopBar/>
       <main>
         <CategoryFilter v-if="firstDisplayCategoryFilter" />
         <div v-else class="category-filter-no-filter" />

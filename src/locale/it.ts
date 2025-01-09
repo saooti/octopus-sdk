@@ -398,4 +398,5 @@ export default{
   "Show more days":"Mostra più giorni",
   "Show fewer days":"Mostra meno giorni",
   "Site menu":"Menù del sito",
+  "The episode is being processed":"L'episodio è in fase di elaborazione",
 };

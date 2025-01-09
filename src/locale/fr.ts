@@ -411,4 +411,5 @@ export default {
   "Show more days":"Afficher plus de jours",
   "Show fewer days":"Afficher moins de jours",
   "Site menu":"Menu du site",
+  "The episode is being processed":"L'épisode est en cours de traitement",
 };

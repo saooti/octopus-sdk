@@ -5,7 +5,6 @@
   >
     <TopBarMainContent
       class="top-bar-z-index"
-      :is-education="isEducation"
       :is-phone="isPhone"
       :scrolled="scrolled"
       :title-display="titleToDisplay"
@@ -50,10 +49,6 @@ export default defineComponent({
   },
 
   mixins: [imageProxy, resizePhone],
-
-  props: {
-    isEducation: { default: false, type: Boolean },
-  },
   data() {
     return {
       scrolled: false as boolean,

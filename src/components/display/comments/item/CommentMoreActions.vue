@@ -35,7 +35,6 @@
     </button>
     <ClassicPopover
       :target="'comment-dropdown' + comment.commentId"
-      popover-class="popover-z-index"
       :only-click="true"
       :left-pos="true"
     >
@@ -44,6 +43,7 @@
           v-if="action.condition"
           class="octopus-dropdown-item c-hand"
           @mousedown="action.actionClick"
+          @keydown.enter="action.actionClick"
         >
           {{ action.title }}
         </button>

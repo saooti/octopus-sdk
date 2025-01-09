@@ -21,6 +21,7 @@
           class="me-3 octopus-dropdown-item"
           :disabled="sortOption.value === sortType"
           @mousedown="changeSort(sortOption.value)"
+          @keydown.enter="changeSort(sortOption.value)"
         >
           {{ sortOption.title }}
         </button>

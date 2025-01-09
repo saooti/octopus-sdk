@@ -42,7 +42,6 @@
       target="subscribe-buttons-dropdown"
       popover-class="popover-z-index"
       :only-click="true"
-      :is-fixed="true"
       :left-pos="true"
     >
       <a

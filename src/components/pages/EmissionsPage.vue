@@ -15,7 +15,6 @@
       v-model:to-date="toDate"
       v-model:rubrique-filter="rubriqueFilter"
       :search-pattern="searchPattern"
-      :is-education="isEducation"
       :is-emission="true"
       :organisation-id="organisationId"
     />
@@ -54,7 +53,6 @@ export default defineComponent({
   },
   mixins: [advancedParamInit],
   props: {
-    isEducation: { default: false, type: Boolean },
     pr: { default: 0, type: Number },
     ps: { default: 30, type: Number },
     routeQuery: { default: "", type: String },
@@ -66,12 +64,6 @@ export default defineComponent({
     routeTo: { default: undefined, type: String },
     routeOrga: { default: undefined, type: String },
     routeRubriques: { default: "", type: String },
-  },
-
-  data() {
-    return {
-      isEmission: true as boolean,
-    };
   },
 });
 </script>

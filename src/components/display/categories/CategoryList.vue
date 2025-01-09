@@ -25,14 +25,13 @@
     <ClassicPopover
       target="categories-dropdown"
       :only-click="true"
-      :is-fixed="true"
       :left-pos="true"
-      class="popover-z-index"
     >
       <button
         v-for="category in hidenCategories"
         :key="category.id"
         class="me-3 octopus-dropdown-item"
+        @keydown.enter="checkIfFilter(category)"
         @mousedown="checkIfFilter(category)"
       >
         {{ category.name }}

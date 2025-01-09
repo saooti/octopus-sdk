@@ -1,6 +1,6 @@
 <template>
   <section class="page-box">
-    <template v-if="loaded && !error">
+    <template v-if="loaded && !error && emission">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
         :page-title="$t('Emission')"
@@ -50,8 +50,6 @@
           <EditBox
             v-if="editRight && !isPodcastmaker"
             :emission="emission"
-            :rss-emission="rssEmission"
-            :ftp-emission="ftpEmission"
             @is-updated="getEmissionDetails"
           />
         </section>
@@ -61,7 +59,6 @@
           :exclusive="exclusive"
           :not-exclusive="notExclusive"
           :organisation-id="authOrgaId"
-          :is-education="isEducation"
         />
         <section class="module-box">
           <LiveHorizontalList
@@ -157,7 +154,6 @@ export default defineComponent({
   mixins: [displayMethods, handle403, orgaComputed, imageProxy, seoTitleUrl],
   props: {
     emissionId: { default: undefined, type: Number },
-    isEducation: { default: false, type: Boolean },
   },
 
   data() {
@@ -166,8 +162,6 @@ export default defineComponent({
       title: "" as string,
       emission: undefined as Emission | undefined,
       error: false as boolean,
-      rssEmission: false as boolean,
-      ftpEmission: false as boolean,
       exclusive: false as boolean,
       notExclusive: false as boolean,
       fetchLive: true as boolean,
@@ -223,8 +217,6 @@ export default defineComponent({
     },
     handleAnnotations() {
       if (!this.emission?.annotations) return;
-      this.rssEmission = "RSS" === this.emission.annotations.SOURCE_KIND;
-      this.ftpEmission = "FTP" === this.emission.annotations.SOURCE_KIND;
       if (this.emission.annotations.exclusive) {
         this.exclusive = "true" === this.emission.annotations.exclusive;
         this.exclusive =

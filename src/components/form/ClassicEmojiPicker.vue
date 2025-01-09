@@ -1,7 +1,7 @@
 <template>
-  <div class="classic-emoji-picker">
+  <div v-if="!isPhone" class="classic-emoji-picker">
     <button
-      id="emoji-picker-dropdown"
+      :id="'emoji-picker-dropdown'+id"
       ref="emojiButton"
       class="btn btn-transparent d-flex align-items-center justify-content-center"
       :title="$t('Pick your emoji')"
@@ -9,12 +9,13 @@
       <EmoticonExcitedOutlineIcon :size="34" />
     </button>
     <ClassicPopover
-      target="emoji-picker-dropdown"
+      :target="'emoji-picker-dropdown'+id"
       :only-click="true"
       :is-fixed="true"
-      :top-pos="isReallyTopPosition"
+      :is-top-layer="isTopPosition"
+      :top-pos="isTopPosition"
       :relative-class="popoverRelativeClass"
-      popover-class="popover-z-index"
+      :popover-class="isTopPosition?'popover-z-index':''"
     >
       <Picker
         :data="emojiIndex"
@@ -27,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import resizePhone from "../mixins/resizePhone";
 import EmoticonExcitedOutlineIcon from "vue-material-design-icons/EmoticonExcitedOutline.vue";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import data from "emoji-mart-vue-fast/data/all.json";
@@ -41,31 +43,41 @@ export default defineComponent({
     ClassicPopover,
     EmoticonExcitedOutlineIcon,
   },
+  mixins:[resizePhone],
   props: {
     popoverRelativeClass: { default: undefined, type: String },
     isTopPosition: { default: false, type: Boolean },
+    id: { default: "", type: String },
   },
   emits: ["emojiSelected"],
 
   data() {
     return {
       emojiIndex: emojiIndex,
-      hasPlaceAboveButton: true as boolean,
+      /* hasPlaceAboveButton: false as boolean, */
+      isPhone: false as boolean,
     };
   },
-  computed: {
+  /* computed: {
     isReallyTopPosition(): boolean {
       return this.isTopPosition && this.hasPlaceAboveButton;
     },
-  },
-  mounted() {
-    if (this.$refs.emojiButton) {
-      this.hasPlaceAboveButton =
-        (this.$refs.emojiButton as HTMLButtonElement).getBoundingClientRect()
-          .top +
-          window.scrollY >
-        450;
-    }
-  },
+  }, */
+  /* watch:{
+    isPhone: {
+      immediate: true,
+      async handler() {
+        debugger;
+        if (!this.isPhone && this.isTopPosition && this.$refs.emojiButton) {
+          this.hasPlaceAboveButton =
+            (this.$refs.emojiButton as HTMLButtonElement).getBoundingClientRect()
+              .top +
+              window.scrollY >
+            450;
+        }
+      },
+    },
+  }, */
 });
 </script>
+

@@ -10,6 +10,7 @@
     />
     <div v-if="isTextareaActive" class="d-flex justify-content-between mt-1">
       <ClassicEmojiPicker
+        :id="uniqueId"
         popover-relative-class="page-element"
         @emoji-selected="addEmojiSelected"
       />
@@ -123,6 +124,9 @@ export default defineComponent({
         ? this.$t("Answer a comment")
         : this.$t("Write a comment");
     },
+    uniqueId(){
+      return "-comment"+(this.inAnswerComment?.commentId??"-parent");
+    }
   },
   watch: {
     focus(): void {

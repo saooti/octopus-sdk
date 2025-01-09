@@ -5,7 +5,7 @@
         {{ $t("Embed") }}
       </h3>
       <div
-        v-if="noAd && !isEducation"
+        v-if="noAd && !platformEducation"
         class="sticker"
         :title="$t('You cannot insert advertising')"
       >
@@ -95,6 +95,7 @@ import { useApiStore } from "../../../stores/ApiStore";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
+import { useGeneralStore } from "../../../stores/GeneralStore";
 const ShareModalPlayer = defineAsyncComponent(
   () => import("../../misc/modal/ShareModalPlayer.vue"),
 );
@@ -123,7 +124,6 @@ export default defineComponent({
     emission: { default: undefined, type: Object as () => Emission },
     playlist: { default: undefined, type: Object as () => Playlist },
     organisationId: { default: undefined, type: String },
-    isEducation: { default: false, type: Boolean },
     exclusive: { default: false, type: Boolean },
     notExclusive: { default: true, type: Boolean },
   },
@@ -151,6 +151,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useGeneralStore, ["platformEducation"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
     ...mapState(useApiStore, ["miniplayerUrl"]),
     authenticated(): boolean {
