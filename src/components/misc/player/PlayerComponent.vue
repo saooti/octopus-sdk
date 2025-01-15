@@ -153,21 +153,24 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     transition: height 1s;
-    background: #282828 !important;
+    background: var(--octopus-player-color) !important;
     font-size: 1rem;
+
     .medium-text {
       font-size: 0.65rem;
     }
+
     .small-text {
       font-size: 0.5rem;
     }
 
-    @media (max-width: 960px) {
+    @media (width <= 960px) {
       .d-flex {
         flex-wrap: nowrap !important;
       }
     }
   }
+
   #ad-container {
     display: none;
   }

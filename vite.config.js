@@ -34,7 +34,6 @@ const defaultConfig = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@scss': path.resolve(__dirname, './src/sass'),
       vue: __dirname+`/node_modules/vue`,
       "hls.js":__dirname+`/node_modules/hls.js`
 

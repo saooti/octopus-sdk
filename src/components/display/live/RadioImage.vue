@@ -81,7 +81,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+
+
 .octopus-app {
   .radio-play-button{
     display: flex;
@@ -90,8 +91,8 @@ export default defineComponent({
     bottom: 0;
     font-size: 1rem;
     color: white;
-    background-color: octopusVariables.$primaryColorLessTransparent;
-    border-radius: octopusVariables.$octopus-borderradius;
+    background-color: var(--octopus-primary-less-transparent);
+    border-radius: var(--octopus-border-radius);
     padding:  0.2rem;
     border: 0;
   }

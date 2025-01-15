@@ -153,9 +153,10 @@ export default defineComponent({
     width: 0;
     position: relative;
   }
+
   .hour-past-item {
     font-size: 0.8rem;
-    color: #dbdbdb;
+    color: oklch(89% 0 0deg);
   }
 }
 </style>

@@ -42,7 +42,7 @@ export default defineComponent({
 .octopus-app .page-not-found {
   background-size: cover;
   background-position: center;
-  background-color: #ebebeb;
+  background-color: var(--octopus-background);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -187,47 +187,58 @@ export default {
 </script>
 <style lang="scss">
 @use "vue-select/dist/vue-select.css";
+/* stylelint-disable */
 :root {
   --vs-dropdown-z-index: 1405;
   --vs-border-radius: 0.2rem;
-  --vs-dropdown-option--active-bg: #ddd;
+  --vs-dropdown-option--active-bg: var(--octopus-secondary);
   --vs-dropdown-option--active-color: black;
   --vs-font-size: 0.8rem;
   --vs-border-width: 2px;
-  --vs-border-color: #dee2e6;
+  --vs-border-color: var(--octopus-border-default);
 }
+
 .octopus-app {
   .vs__dropdown-option {
     white-space: initial;
   }
+
   .vs--searchable .vs__dropdown-toggle {
     cursor: pointer;
   }
+
   .vs__dropdown-toggle {
     padding: 0;
   }
+
   .vs__search:focus {
     min-width: 150px;
   }
+
   .multiselect-no-deselect .vs__clear {
     display: none;
   }
+
   .multiselect-transparent {
     --vs-border-color: transparent;
   }
+
   .multiselect-white {
     --vs-selected-color: white;
     --vs-selected-bg: transparent;
     --vs-dropdown-bg: black;
     --vs-controls-color: white;
+
     .vs__actions path {
       fill: white;
     }
   }
+
   .multiselect-in-modal{
     .vs__dropdown-menu{
       position: relative !important;
     }
   }
 }
+/* stylelint-enable */
 </style>

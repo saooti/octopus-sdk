@@ -2,7 +2,7 @@
   <img
     width="44"
     height="44"
-    class="acpm_image"
+    class="acpm-image"
     src="/img/ACPM.webp"
     :title="$t('Octopus is ACPM Podcast accredited')"
     :alt="$t('Octopus is ACPM Podcast accredited')"
@@ -18,7 +18,7 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app {
-  .acpm_image {
+  .acpm-image {
     width: 44px;
     height: 44px;
   }

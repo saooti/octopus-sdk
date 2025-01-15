@@ -12,7 +12,7 @@
     <!-- eslint-disable vue/no-v-html -->
     <div
       v-if="podcast.description"
-      class="descriptionText html-wysiwyg-content mb-3"
+      class="description-text html-wysiwyg-content mb-3"
       v-html="urlify(podcast.description)"
     />
     <!-- eslint-enable -->

@@ -129,33 +129,46 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   .overflow-phone-auto {
-    @media (max-width: 960px) {
+    @media (width <= 960px) {
       overflow-y: auto;
+      scroll-snap-type: x mandatory;
+
+      .emission-item-container{
+        scroll-snap-align: center;
+      }
     }
   }
+
   .emission-column {
     flex-shrink: 0;
     width: calc((100% - 420px) / 2);
-    @media (max-width: 1550px) {
+
+    @media (width <= 1550px) {
       width: calc((100% - 420px));
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       width: auto;
       flex-direction: row !important;
     }
   }
+
   .emission-column-margin {
     margin-right: 1rem;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       margin-right: 0;
     }
   }
+
   .show-emission-column {
     display: flex;
-    @media (max-width: 1550px) {
+
+    @media (width <= 1550px) {
       display: none !important;
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       display: flex !important;
     }
   }

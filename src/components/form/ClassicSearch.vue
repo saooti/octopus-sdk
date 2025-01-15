@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative champs-searchPage static-height">
+  <div class="position-relative input-search-page static-height">
     <input
       :id="idSearch"
       ref="search"
@@ -44,15 +44,17 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
-  .champs-searchPage {
+  .input-search-page {
     input {
-      border: 2px solid #dee2e6;
-      border-radius: octopusVariables.$octopus-borderradius;
+      border: 2px solid var(--octopus-border-default);
+      border-radius: var(--octopus-border-radius);
       margin: 0 !important;
       height: 48px;
     }
+
     .search-icon-container {
       position: absolute;
       top: 0;

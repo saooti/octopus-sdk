@@ -67,15 +67,18 @@ export default defineComponent({
     right: 0;
     z-index: 10;
   }
+
   .video-close {
     position: fixed;
     bottom: 16.5rem;
     right: 1rem;
   }
-  @media (max-width: 500px) {
+
+  @media (width <= 500px) {
     .video-close {
       bottom: 10.5rem;
     }
+
     .video-wrapper iframe {
       width: 100%;
       max-height: 150px;

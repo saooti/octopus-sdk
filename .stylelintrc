@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "stylelint-gamut"
+  ],
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-standard-vue",
+    "stylelint-config-standard-vue/scss",
+    "stylelint-config-recommended-vue",
+    "stylelint-config-recommended-vue/scss"
+  ],
+  "rules": {
+    "gamut/color-no-out-gamut-range": true,
+    "function-disallowed-list": ["rgba", "hsla", "rgb", "hsl"],
+    "color-function-notation": "modern",
+    "color-no-hex": true
+  }
+}

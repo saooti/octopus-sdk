@@ -163,7 +163,7 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   .snack-bar-wrap {
-    bottom: 0px;
+    bottom: 0;
   }
 }
 </style>

@@ -147,13 +147,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "../../assets/progressbar";
+@use "../../style/progressbar";
+
 .octopus-app .player-container {
   .octopus-small-popover {
     font-size: 0.7rem;
-    background: #282828;
+    background: var(--octopus-player-color);
     color: white;
     border: 0;
+
     .p-2 {
       padding: 0.2rem !important;
     }

@@ -1,113 +1,135 @@
-@use '@scss/variables' as octopusVariables;
+
 
 // Bootstrap styles overload
-*, *:before, *:after {
-	-webkit-box-sizing: border-box;
+*, *::before, *::after {
 	box-sizing: border-box;
 }
+
 input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs__"]), optgroup, textarea, pre {
 	margin: 0;
 	font-family: inherit;
 	font-size: inherit;
 	line-height: inherit;
 }
+
 .octopus-app{
 	button {
 		cursor: pointer;
+
 		&:disabled{
 			cursor: default !important;
 		}
 	}
+
 	p{
 		margin: 0;
 	}
-	h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{
-		&:not(.text-uppercase){
-      letter-spacing: -0.03em;
-    }
-		margin-top: 0;
-		margin-bottom:0;
-		font-weight: 600;
-		line-height: 1.2;
-	}
+
 	h1,.h1{
 		font-size: 1.8rem;
 		text-align: center;
-    color: #666;
-    margin-bottom: 1rem;
-		@media (max-width: 500px){
+		color: var(--octopus-gray-text);
+		margin-bottom: 1rem;
+
+		@media (width <= 500px){
       font-size: 1.2rem;
       margin: 0.5rem 0 1rem;
     }
 	}
+
 	h2,.h2{
 		font-size: 1.17rem;
-		@media (max-width: 500px){
+
+		@media (width <= 500px){
       font-size: 1rem;
     }
 	}
+
 	.big-h2{
 		font-size: 1.5rem;
-		@media (max-width: 500px){
+
+		@media (width <= 500px){
       font-size: 1.1rem;
     }
 	}
+
 	h3,.h3{
 		font-size: 1.125rem;
 	}
+
 	h4,.h4{
 		font-size: 0.99rem;
 	}
+
 	h5,.h5{
 		font-size: .81rem;
 	}
+
 	h6,.h6{
 		font-size: .63rem;
 		display: flex;
     align-items: center;
 		font-weight: normal;
 	}
+
+
+	h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{
+		&:not(.text-uppercase){
+      letter-spacing: -0.03em;
+    }
+
+		margin-top: 0;
+		margin-bottom:0;
+		font-weight: 600;
+		line-height: 1.2;
+	}
+
+	
 	.text-truncate{
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
+
 	.btn{
+
 		display: inline-block;
 		padding: 0.4rem;
 		line-height: 1.5;
-		color: #212529;
 		text-align: center;
 		vertical-align: middle;
 		cursor: pointer;
 		user-select: none;
 		transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 		font-size:.7rem;
-		border-radius: octopusVariables.$octopus-borderradius;
-		background: octopusVariables.$octopus-secondary-color; 
+		border-radius: var(--octopus-border-radius);
+		background: var(--octopus-secondary); 
 		text-decoration: none !important;
 		white-space: nowrap;
 		border-width: 0;
-		//min-width: 24px; Problème avec flex-shrink
-		@media (max-width: 960px) {
+
+		@media (width <= 960px) {
 				white-space: normal;
 		}
+
 		&:hover,
 		&:focus,
 		&:active,
 		&.active {
 			box-shadow: none;
 		}
+
 		&:hover{
-			background: octopusVariables.$primaryColorMoreTransparent;
+			background: var(--octopus-primary-more-transparent);
 		}
+
 		&:not(.btn-underline, .btn-primary, .btn-more, .btn-on-dark, .btn-transparent, .admin-button, .share-btn):disabled
 		{
-			background-color: #dddddd;
-			cursor: default;
-			color: #616161 !important;
+      cursor: default;
+			background-color: var(--octopus-secondary-lighter) !important;
+			color:  var(--octopus-text-disabled) !important;
 		}
-		//Button disable halo after click
+
 		&.btn-underline{
 				background: none;
 				padding: 0;
@@ -115,33 +137,39 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 				border-radius: 0;
 				font-size: 0.9rem;
 				position: relative;
-				@media (max-width: 600px) {
+
+				@media (width <= 600px) {
 					margin: 0 1rem 1rem 0;
 				}
-				@media (max-width: 500px) {
+
+				@media (width <= 500px) {
 					margin: 0 0.6rem 1rem 0;
 					font-size: 0.8rem;
 				}
-				@media (max-width: 380px) {
+
+				@media (width <= 380px) {
 					margin: 0 0.4rem 0.7rem 0;
 					font-size: 0.7rem;
 				}
-				&:after {    
+
+				&::after {    
 						bottom: 0;
 						content: "";
 						display: block;
 						height: 2px;
 						left: 50%;
 						position: absolute;
-						background: octopusVariables.$octopus-primary-color;
+						background: var(--octopus-primary);
 						transition: width 0.3s ease 0s, left 0.3s ease 0s;
 						width: 0;
 				}
-				&:hover:after,&.active:after { 
+
+				&:hover::after,&.active::after { 
 						width: 100%; 
 						left: 0; 
 				}
 		}
+
 		&.btn-min-width{
 			min-width: 24px;
 		}
@@ -150,40 +178,44 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					background: octopusVariables.$octopus-primary-color;
-					border: 1px solid octopusVariables.$octopus-primary-color;
-					border-radius: octopusVariables.$octopus-borderradius !important;
-					color: white !important;
+					background: var(--octopus-primary);
+					border: 1px solid var(--octopus-primary);
+					border-radius: var(--octopus-border-radius) !important;
+					color: var(--octopus-color-on-primary) !important;
 					font-weight: 500;
+
 					&:not(.btn-on-dark):focus,
 					&:not(.btn-on-dark):hover,
 					&:not(.btn-on-dark):active,
 					&:not(.btn-on-dark).active {
 							background: transparent;
-							color: octopusVariables.$octopus-primary-color !important;
+							color: var(--octopus-primary) !important;
 					}
+
 					&.btn-on-dark:focus,
 					&.btn-on-dark:hover,
 					&.btn-on-dark:active,
 					&.btn-on-dark.active {
 							background: transparent;
-							border-color: white !important;
+							border-color: var(--octopus-color-on-primary) !important;
 					}
+
 					&:not(.btn-on-dark):disabled,
 					&.btn-on-dark:disabled{
-							background-color: #cccccc;
+							background-color: var(--octopus-secondary-darker);
 							border: 1px solid black;
 							cursor: default;
-							color: gray !important;
+							color: var(--octopus-text-disabled) !important;
 					}
-					@media (max-width: 500px){
+
+					@media (width <= 500px){
 						margin: 0.3rem;
 					}
 			}
 
 			&.btn-more{
-					background: octopusVariables.$octopus-primary-color;
-					color: octopusVariables.$octopus-background;
+					background: var(--octopus-primary);
+					color: var(--octopus-background);
 					width: 2rem;
 					height: 2rem;
 					display: flex;
@@ -201,17 +233,19 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 					display: inline-flex;
 					align-items: center;
 					justify-content: center;
-					color : octopusVariables.$octopus-primary-color;
+					color : var(--octopus-primary);
 					flex-shrink: 0;
 					font-weight: 500;
 					border-radius: 50% !important;
 			}
 	
 	}
+
 	.btn-transparent{
 		background: transparent;
 		border: 0;
 	}
+
 	.share-btn {
 			font-size: 1rem;
 			width: 2.5rem !important;
@@ -220,15 +254,17 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			color : octopusVariables.$octopus-primary-color;
+			color : var(--octopus-primary);
 			flex-shrink: 0;
 			border-radius: 50% !important;
-			@media (max-width: 960px) {
+
+			@media (width <= 960px) {
 				font-size: 1rem;
 				width: 2.2rem !important;
 				height: 2.2rem !important;
       }
 	}
+
 	.btn-round-light {
 		font-size: 1.2rem;
 		width: 2.2rem;
@@ -236,66 +272,79 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		color : #555555;
 		flex-shrink: 0;
 		border-radius: 50% !important;
 		background: transparent;
+
 		&:hover {
-			background: #dddddd;
+			background: var(--octopus-secondary);
 		}
 	}
 
 	.btn-rss {
-			background: #ddd !important;
+			background: var(--octopus-secondary) !important;
+
 			&:hover {
 					border: 0;
-					background: #ccc !important;
-			}
-	}
-	.btn-facebook {
-			background: #d8dfea !important;
-			color: #3b5998 !important;
-			&:hover {
-					background: #afbdd4 !important;
-			}
-	}
-	.btn-twitter {
-			background: #d2ecfc !important;
-			&:hover {
-					background: #bbe3fb !important;
-			}
-	}
-	.btn-linkedin {
-			background: #0077b550 !important;
-			color: #0077b5 !important;
-			&:hover {
-					background: #00a0dc !important;
-			}
-	}
-	.btn-whatsapp {
-			background: #25d36645 !important;
-			color: #25D366 !important;
-			&:hover {
-					background: #25d36563 !important;
+					background: var(--octopus-secondary-darker) !important;
 			}
 	}
 
-	.bg-secondary{
-		background: #eee !important;
+	.btn-facebook {
+		background: oklch(89.49% 0.05 255.2deg) !important;
+		color: oklch(47% 0.1083 263deg) !important;
+
+		&:hover {
+		background: oklch(90% 0.024 263deg) !important;
+		}
 	}
+
+	.btn-twitter {
+			background: oklch(90% 0.035 234deg) !important;
+
+			&:hover {
+					background: oklch(90% 0.024 234deg) !important;
+			}
+	}
+
+	.btn-linkedin {
+			background: oklch(90% 0.035 242deg) !important;
+			color: oklch(55% 0.130 242deg) !important;
+
+			&:hover {
+					background: oklch(90% 0.024 242deg) !important;
+			}
+	}
+
+	.btn-whatsapp {
+			background: oklch(89.25% 0.19 150deg) !important;
+			color: oklch(76% 0.2015 150deg) !important;
+
+			&:hover {
+				background: oklch(90% 0.024 150deg) !important;
+			}
+	}
+
+	.bg-secondary-light{
+		background: var(--octopus-secondary-lighter) !important;
+	}
+
 	.bg-complementary{
-		background: octopusVariables.$octopus-complementary-color !important;
+		background: var(--octopus-complementary-color) !important;
 	}
+
 	.w-50-responsive{
     display: flex;
     align-items: center;
     flex-grow: 1;
     width: 50%;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       width:100%;
 			padding: 0 !important;
     }
   }
+
 	.font-italic{
 		font-style: italic;
 	}

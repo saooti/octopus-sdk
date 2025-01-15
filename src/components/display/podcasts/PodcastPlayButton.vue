@@ -226,13 +226,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use '@scss/variables' as octopusVariables;
+
+
 .octopus-app {
   .img-blur-background{
     position: absolute;
     inset: 0;
-    background-color: #ffffff80;
+    background-color:var(--octopus-background-transparent);
   }
+
   .live-image-status {
     text-align: center;
     width: 100%;
@@ -243,10 +245,11 @@ export default defineComponent({
     position: absolute;
     top: 0;
   }
+
   .special-icon-play-button {
     width: 30px;
     height: 30px;
-    background-color: #ffd663;
+    background-color: oklch(88.97% 0.1399 89.64deg);
     color: black;
     border-radius: 50%;
     position: absolute;
@@ -258,14 +261,16 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
   }
+
   .multi-buttons-play{
     display: flex;
     position: absolute;
     bottom: 0;
     font-size: 1rem;
     color: white;
-    background-color: octopusVariables.$primaryColorLessTransparent;
-    border-radius: octopusVariables.$octopus-borderradius;
+    background-color: var(--octopus-primary-less-transparent);
+    border-radius: var(--octopus-border-radius);
+
     button{
       color: white;
       background-color: transparent;
@@ -275,6 +280,7 @@ export default defineComponent({
       padding:  0.2rem;
     }
   }
+
   .play-button-relative.multi-buttons-play{
     position: relative;
   }

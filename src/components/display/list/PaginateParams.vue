@@ -55,6 +55,7 @@ export default defineComponent({
 .octopus-app .paginate {
   display: flex;
   justify-content: flex-end;
+
   select {
     border-top: 0;
     border-right: 0;

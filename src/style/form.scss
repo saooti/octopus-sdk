@@ -1,13 +1,15 @@
-@use '@scss/variables' as octopusVariables;
+
 
 .octopus-app{
 	.octopus-form-item{
 		min-height: 1.44rem;
     padding: 0.4rem 0;
-		@media (max-width: 960px) {
+
+		@media (width <= 960px) {
 			padding: 0;
 		}
 	}
+
 	.form-label {
 		display: block;
 		line-height: 1.2rem;
@@ -17,46 +19,50 @@
 		font-size: 0.9rem;
 		margin-bottom: 0.5rem;
 	}
+
 	.form-margin{
 		margin-bottom: 1rem;
 	}
+
 	.counter-align-right{
 		flex-grow: 1;
 		text-align: right;
 		font-size: 0.7em;
 		margin-bottom: 0;
 	}	
-	select {
-		background: white !important;
-		outline-color: transparent !important;
-		padding: 0.25rem 0.4rem;
-		border: 0.1rem solid #dee2e6;
-		border-radius: octopusVariables.$octopus-borderradius;
+
+	select,.form-input, .v3-input-emoji-picker .v3-input-picker-root .v3-emoji-picker-textarea{
+		background: var(--octopus-background) !important;
+		border: 0.1rem solid var(--octopus-secondary);
+		border-radius: var(--octopus-border-radius);
 		height: 2rem;
+		padding: 0.25rem 0.4rem;
+	}
+
+	select {
+		outline-color: transparent !important;
 		padding-right: 40px;
 	}
+
 	input[type="checkbox"], input[type="radio"]{
-		accent-color: octopusVariables.$octopus-primary-color;
+		accent-color: var(--octopus-primary);
 		cursor: pointer;
 		margin-right: 5px;
 	}
+
 	.form-input, .v3-input-emoji-picker .v3-input-picker-root .v3-emoji-picker-textarea{
 		appearance: none;
-		background: #fff;
 		background-image: none;
-		border: 0.1rem solid #dee2e6;
-		border-radius:octopusVariables.$octopus-borderradius;
-		color: #353535;
+		color: var(--octopus-color-text);
 		display: block;
 		font-size: 0.8rem;
-		height: 2rem;
 		line-height: 1.2rem;
 		max-width: 100%;
-		padding: 0.25rem 0.4rem;
 		position: relative;
 		width: 100%;
+
 		&:disabled, &.disabled{
-			background: #eee;
+			background: var(--octopus-secondary-lighter);
 		}
 	}
 }

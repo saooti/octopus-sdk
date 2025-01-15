@@ -104,12 +104,11 @@ export default defineComponent({
     -webkit-box-orient: vertical;
     min-height: 3rem;
     line-height: 1rem;
-    word-break: break-word;
   }
 
   .producer-podcast-item {
     font-size: 0.55rem;
-    color: #666;
+    color: var(--octopus-gray-text);
     flex-shrink: 0;
   }
 }

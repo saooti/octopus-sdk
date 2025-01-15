@@ -24,5 +24,5 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "../../../../assets/progressbar";
+@use "../../../../style/progressbar";
 </style>

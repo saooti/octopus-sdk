@@ -164,8 +164,10 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @use "@vuepic/vue-datepicker/dist/main.css";
+
+/* stylelint-disable-next-line */
 .dp__theme_light {
-  --dp-primary-color: #1a8658;
+  --dp-primary-color: var(--octopus-primary);
   --dp-time-font-size: 1rem;
 }
 </style>

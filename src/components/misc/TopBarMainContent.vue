@@ -18,7 +18,7 @@
         alt=""
         width="140"
         height="50"
-        :class="platformEducation ? 'educationLogo' : 'octopusLogo'"
+        :class="platformEducation ? 'education-logo' : 'octopus-logo'"
       />
       <img
         v-else
@@ -26,7 +26,7 @@
         role="presentation"
         alt=""
         class="client-logo"
-        :class="platformEducation ? 'educationLogo' : ''"
+        :class="platformEducation ? 'education-logo' : ''"
       />
     </router-link>
     <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
@@ -49,7 +49,7 @@
           width="100"
           height="29"
           class="ms-2"
-          :class="platformEducation ? 'educationLogo' : 'octopusLogo'"
+          :class="platformEducation ? 'education-logo' : 'octopus-logo'"
         />
         <a
           v-else
@@ -65,7 +65,7 @@
             width="100"
             height="29"
             class="ms-2"
-            :class="platformEducation ? 'educationLogo' : 'octopusLogo'"
+            :class="platformEducation ? 'education-logo' : 'octopus-logo'"
           />
         </a>
       </template>
@@ -282,17 +282,20 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .top-bar-grid {
     display: grid;
     grid-template-columns: 1fr 5fr;
     margin-top: 0.5rem;
     padding: 0 1rem;
+
     &.scrolled {
       grid-template-columns: 1fr 2fr 1fr;
     }
-    @media (max-width: 450px) {
+
+    @media (width <= 450px) {
       padding: 0 0.5rem;
     }
 
@@ -300,6 +303,7 @@ export default defineComponent({
       color: white;
       font-weight: bold;
       font-size: 0.93rem;
+
       &.link-hover:hover,
       &.link-hover.router-link-exact-active.router-link-active {
         color: white;
@@ -307,22 +311,27 @@ export default defineComponent({
         text-underline-offset: 8px;
       }
     }
+
     .client-logo {
-      border-radius: octopusVariables.$octopus-borderradius;
+      border-radius: var(--octopus-border-radius);
     }
+
     .top-bar-logo img {
       max-width: 140px !important;
       max-height: 4rem;
       height: 4rem;
-      &.educationLogo {
+
+      &.education-logo {
         height: auto;
       }
-      @media (max-width: 650px) {
+
+      @media (width <= 650px) {
         max-height: 2rem;
       }
     }
-    .octopusLogo {
-      @media (max-width: 960px) {
+
+    .octopus-logo {
+      @media (width <= 960px) {
         max-width: 30px !important;
       }
     }

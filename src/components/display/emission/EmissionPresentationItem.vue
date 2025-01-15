@@ -96,21 +96,24 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   .emission-presentation-container {
-    @media (max-width: 960px) {
+    @media (width <= 960px) {
       width: 250px !important;
       margin-right: 0.5rem;
     }
+
     .emission-description {
       height: 0;
       flex-grow: 1;
       max-height: unset;
     }
   }
+
   .emission-item-container.emission-vertical-item {
     flex-grow: 0;
     width: 400px;
     flex-shrink: 0;
   }
+
   .img-box-bigger {
     width: 400px;
     height: 400px;

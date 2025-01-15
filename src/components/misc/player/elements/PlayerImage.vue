@@ -85,28 +85,32 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .player-image {
-    border-radius: octopusVariables.$octopus-borderradius;
+    border-radius: var(--octopus-border-radius);
     height: 2.4rem;
     width: 2.4rem;
     margin-right: 0.5rem;
     cursor: pointer;
-    /** PHONES*/
-    @media (max-width: 450px) {
+
+    /** PHONES */
+    @media (width <= 450px) {
       height: 1.8rem;
       width: 1.8rem;
     }
+
     &.big-player-image {
       height: 200px;
       width: 200px;
     }
+
     &.link-image {
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #ddd;
+      background: var(--octopus-secondary);
       color: black;
     }
   }

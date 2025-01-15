@@ -12,7 +12,7 @@
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
         <section class="module-box">
-          <div class="mb-5 descriptionText">
+          <div class="mb-5 description-text">
             <RadioImage :radio="radio" />
             <h2>{{ radio.name }}</h2>
             <div v-if="radio.description">

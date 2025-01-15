@@ -68,19 +68,19 @@
             playerPodcast !== p ||
             (playerPodcast === p && 'PAUSED' === playerStatus)
           "
-          class="play-button-box bg-secondary"
+          class="play-button-box bg-secondary-light"
           @click="play(p)"
         >
           <PlayIcon class="text-light" :title="$t('Play')" />
         </button>
-        <button v-else class="play-button-box bg-secondary" @click="pause(p)">
+        <button v-else class="play-button-box bg-secondary-light" @click="pause(p)">
           <PauseIcon class="text-light" :title="$t('Pause')" />
         </button>
       </div>
     </div>
     <div
       v-if="buttonMore && podcasts.length === nbPodcasts"
-      class="border-top emission-item-border-color p-2 secondary-bg d-flex justify-content-center"
+      class="border-top emission-item-border-color p-2 octopus-bg d-flex justify-content-center"
     >
       <router-link
         :to="{
@@ -184,31 +184,36 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .emission-player-container {
   list-style: none;
-  background: #fff;
+  background: var(--octopus-background);
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: octopusVariables.$octopus-item-size;
+  max-width: var(--octopus-image-size);
   height: min-content;
-  border: 2px solid #eee;
-  border-radius: octopusVariables.$octopus-borderradius;
+  border: 2px solid var(--octopus-border-default);
+  border-radius: var(--octopus-border-radius);
   overflow: hidden;
+
   .emission-item-border-color {
-    border-color: #ddd;
+    border-color: var(--octopus-secondary);
   }
+
   .define-width {
     width: 9rem;
   }
-  @media (max-width: 960px) {
+
+  @media (width <= 960px) {
     .d-flex:not(.flex-column) {
       flex-wrap: nowrap;
     }
   }
-  @media (max-width: 450px) {
-    max-width: octopusVariables.$octopus-mobile-item-size;
+  
+  @media (width <= 450px) {
+    max-width: var(--octopus-image-size);
   }
 }
 </style>

@@ -1,35 +1,36 @@
-@use '@scss/variables' as octopusVariables;
+
+
 .octopus-app{
   .sticker-empty-ressource{
     position: absolute;
     top: 5px;
     right: 5px;
     align-self: center;
-    background: octopusVariables.$blue-octopus;
+    background: var(--octopus-tertiary);
     padding: 0.5rem;
     transition: all 0.5s ease;
-    color: white;
+    color: var(--octopus-color-on-primary);
     font-size: 0.6rem;
     font-weight: bold;
     letter-spacing: 1px;
-    box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
+    box-shadow: 10px 10px 34px -15px var(--octopus-shadow);
     border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-    border: solid 2px #41403e;
+    border: solid 2px var(--octopus-color-text);
     cursor: auto;
+
     &:hover {
-      box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
-      background: octopusVariables.$octopus-primary-color;
+      box-shadow: 2px 8px 4px -6px var(--octopus-shadow);
+      background: var(--octopus-primary);
     }
   }
+
   .category-filter-no-filter {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
+    inset: 0;
     background: white;
     z-index: -1;
   }
+
   .page-box-absolute{
 		position: absolute;
 		top: 0;
@@ -40,29 +41,35 @@
 		z-index: 11;
 		display: flex;
 		flex-direction: column;
+
 		&.page-box-player{
       position: relative;
 			padding-bottom: 120px;
 		}
 	}
+
   .page-element{
     margin-top: -6rem;
     position: relative;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       margin-top: -5rem;
     }
   }
 
+  /* stylelint-disable */
   .vue-swatches__trigger{
     border: solid 1px black;
-    border-radius: octopusVariables.$octopus-borderradius !important;
+    border-radius: var(--octopus-border-radius) !important;
   }
+
   .vue-swatches__fallback__input{
     padding-top: 0;
     padding-bottom: 0;
     position:relative;
     cursor: pointer;
-    &:after{
+
+    &::after{
       content: "+";
       position: absolute;
       top: 1px;
@@ -70,27 +77,31 @@
       color: white;
       font-weight: bold;
       font-size: 1rem;
-      text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      text-shadow:-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
     }
   }
+  /* stylelint-enable */
+
   .podcast-list {
       align-self: stretch;
       flex-grow: 1;
       margin: 1em 0 0;
       padding: 0;
       display: grid; /* 1 */
-      grid-template-columns: repeat(auto-fill, octopusVariables.$octopus-item-podcast-size); /* 2 */
+      grid-template-columns: repeat(auto-fill, var(--octopus-podcast-size)); /* 2 */
       grid-gap: 1rem; /* 3 */
       justify-content: space-between; /* 4 */
-      @media (max-width: 960px) {
+
+      @media (width <= 960px) {
         align-self: auto;
         justify-items: center;
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
       }
-      @media (max-width: 450px) {
-        grid-template-columns: repeat(auto-fill, octopusVariables.$octopus-mobile-item-size); /* 2 */
+
+      @media (width <= 450px) {
+        grid-template-columns: repeat(auto-fill, var(--octopus-image-size)); /* 2 */
       }
   }
 
@@ -100,37 +111,26 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
       padding-bottom: 1rem;
       width: 100%;
+
       .item-phone-margin {
         margin: 0 0.5rem !important;
       }
-      > div{
+
+      .element-list-item{
         margin: auto;
       }
     }
-  }
-  .element-list-inline.overflowScroll {
-    display: flex;
-    flex-wrap: wrap;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    padding-bottom: 1rem;
-    width: 100%;
-    height: 80vh;
-    overflow-y: auto;
-    grid-gap: inherit;
-    @media (max-width: 960px) {
-      overflow-x: hidden;
-      flex-direction: column;
-      flex-wrap: nowrap;
-    }
-    .item-phone-margin {
-      margin: 1rem 0.5rem !important;
+
+    .element-list-item{
+      scroll-snap-align: center;
     }
   }
 
@@ -145,7 +145,8 @@
     &.two-emissions {
       grid-template-columns: repeat(auto-fill, 49%); /* 2 */
     }
-    @media (max-width: 1100px) {
+
+    @media (width <= 1100px) {
       grid-template-columns: auto !important;
       display: flex !important;
       flex-direction: column;
@@ -155,18 +156,21 @@
   .emission-item-container{
     position: relative;
     list-style: none;
-    background: #fff;
-    border-radius: octopusVariables.$octopus-borderradius;
+    background: var(--octopus-background);
+    border-radius: var(--octopus-border-radius);
     display: flex;
     flex-grow: 1;
-    border: 2px solid #eee;
+    border: 2px solid var(--octopus-border-default);
+
     .img-box {
-      @media (max-width: 680px) {
+      @media (width <= 680px) {
         margin: 1rem auto auto !important;
       }
     }
-    @media (max-width: 680px) {
+
+    @media (width <= 680px) {
       justify-content: center;
+
       &>a{
         flex-direction: column;
       }
@@ -179,6 +183,7 @@
     flex-direction: column;
     max-height: 16.5rem;
     flex-grow: 1;
+
     .emission-name {
       font-size: 1.2rem;
       font-weight: 400;
@@ -188,13 +193,15 @@
       -webkit-box-orient: vertical;
       word-break: break-word;
     }
+
     .emission-description {
       overflow: hidden;
       margin-top: 0.5em;
       word-break: break-word;
       max-height: 7rem;
       position: relative;
-      &.after-emission-description:after {
+
+      &.after-emission-description::after {
         content: '...';
         position: absolute;
         padding-left: 1rem;
@@ -204,37 +211,45 @@
         font-size: 1rem;
         font-weight: bolder;
         text-align: center;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 40%);
+        background: linear-gradient(to bottom, var(--octopus-background), var(--octopus-background-transparent));
       }
     }
   }
+
   .logo-octopus{
     width: 250px;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       width: 200px;
     }
-    @media (max-width: 200px) {
+
+    @media (width <= 200px) {
       width: 90%;
     }
   }
+
   .advanced-search-container {
-    background: #fff;
-    border-radius:octopusVariables.$octopus-borderradius;
+    background: var(--octopus-background);
+    border-radius:var(--octopus-border-radius);
     display: flex;
     width: 100%;
     padding: 1rem 2rem;
     margin-bottom: 1rem;
     justify-content: space-around;
-    @media (max-width: 720px) {
+
+    @media (width <= 720px) {
       flex-wrap: wrap;
       justify-content: flex-start;
     }
-    @media (max-width: 450px) {
+
+    @media (width <= 450px) {
       flex-direction: column;
       padding: 1rem;
+
       .vdatetime, label {
         padding: 0.5rem 0 !important;
         width: 100%;
+
         input {
           width: 100%;
         }

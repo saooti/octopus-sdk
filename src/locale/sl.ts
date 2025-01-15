@@ -395,4 +395,5 @@ export default {
   "Show fewer days":"Prikaži manj dni",
   "Site menu":"Meni spletnega mesta",
   "The episode is being processed":"Epizoda je v obdelavi",
+  Rubrics: "Rubrike",
 }

@@ -78,17 +78,18 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .btn-transcript {
     position: relative;
-    border-radius: octopusVariables.$octopus-borderradius;
+    border-radius: var(--octopus-border-radius);
     overflow: hidden;
-    background: octopusVariables.$octopus-secondary-color;
+    background: var(--octopus-secondary);
     transition: all 0.2s linear 0s;
 
-    &:not(.open):before,
-    &.open:after {
+    &:not(.open)::before,
+    &.open::after {
       content: "➤";
       display: flex;
       align-items: center;
@@ -98,35 +99,43 @@ export default defineComponent({
       height: 100%;
       width: 30px;
       border-radius: 0 50% 50% 0;
-      background-color: rgba(#fff, 0.4);
+      background-color: var(--octopus-background-transparent);
       transform: scale(0, 1);
       transition: all 0.2s linear 0s;
     }
-    &:not(.open):before {
-      left: 0px;
+
+    &:not(.open)::before {
+      left: 0;
       transform-origin: left center;
     }
-    &.open:after {
+
+    &.open::after {
       right: -30px;
       transform-origin: center left;
     }
+
     &.open {
       direction: rtl;
     }
+
     &:hover {
       text-indent: 30px;
     }
-    &:not(.open):hover:before,
-    &.open:hover:after {
+
+    &:not(.open):hover::before,
+    &.open:hover::after {
       text-indent: 0;
     }
-    &:not(.open):hover:before {
+
+    &:not(.open):hover::before {
       transform: scale(1, 1);
     }
-    &.open:hover:after {
+
+    &.open:hover::after {
       transform: scale(-1, 1);
     }
   }
+
   .transcription-body {
     position: relative;
     padding: 1rem;
@@ -134,25 +143,23 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     white-space: pre-wrap;
+
     .transcription-text {
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden auto;
       text-align: justify;
     }
+
     &::before {
       content: "";
       position: absolute;
       inset: 0;
       padding: 3px;
       background: repeating-conic-gradient(
-          octopusVariables.$octopus-secondary-color 0 25%,
-          octopusVariables.$octopus-primary-color 0 50%
+          var(--octopus-secondary) 0 25%,
+          var(--octopus-primary) 0 50%
         )
         0 0/30px 30px round;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
+      mask:linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
       mask-composite: exclude;
       pointer-events: none;
     }

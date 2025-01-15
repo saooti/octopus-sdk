@@ -238,17 +238,20 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .wysiwyg-editor {
     .form-input {
       height: 200px;
       display: flex;
     }
+
     pre {
-      background: #ddd;
+      background: var(--octopus-secondary);
       margin: 0;
     }
+
     code {
       display: block;
       white-space: pre-wrap;
@@ -256,33 +259,39 @@ export default defineComponent({
       flex-grow: 1;
       overflow: auto;
     }
+
     .editor-menubar {
       display: flex;
       padding: 0.2rem;
       flex-wrap: wrap;
+
       button {
         width: 40px;
         height: 40px;
-        background: octopusVariables.$octopus-secondary-color;
+        background: var(--octopus-secondary);
         border-width: 0;
-        border-radius: octopusVariables.$octopus-borderradius;
+        border-radius: var(--octopus-border-radius);
         margin: 0.2rem;
         padding: 0;
         font-size: 1.1rem;
         font-weight: 600;
+
         &:hover,
         &.is-active {
-          background: octopusVariables.$primaryColorTransparent;
+          background: var(--octopus-primary-transparent);
         }
       }
+
       .html-button {
         font-size: 12px;
       }
+
       svg {
         width: 40px;
         height: 40px;
       }
     }
+    /* stylelint-disable-next-line */
     .ProseMirror {
       width: 0;
       flex-grow: 1;

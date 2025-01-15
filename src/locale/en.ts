@@ -405,4 +405,5 @@ export default {
   "Show fewer days":"Show fewer days",
   "Site menu":"Site menu",
   "The episode is being processed":"The episode is being processed",
+  Rubrics: "Rubrics",
 };

@@ -1,0 +1,34 @@
+:root {
+    // Colors
+    --octopus-background: oklch(100% 0 0deg);
+    --octopus-primary: oklch(55% 0.118 159.16deg);
+    --octopus-secondary: oklch(90% 0 0deg);
+    --octopus-tertiary: oklch(45.74% 0.0822 222.06deg);
+    --octopus-danger: oklab(50% 0.18 0.105);
+    --octopus-warning:oklch(55% 0.1647 42.35deg);
+    --octopus-gray-text: oklch(44.75% 0.0121 229.13deg);
+    --octopus-color-text: oklch(30% 0 0deg);
+    --octopus-color-on-primary: oklch(100% 0 0deg);
+    --octopus-border-default: oklch(91% 0.007 248deg);
+    --octopus-shadow: oklch(0% 0 0deg / 40%); 
+    --octopus-player-color:oklch(27% 0 0deg);
+    --octopus-gray: oklch(50% 0 0);
+
+    // Relative colors
+    --octopus-primary-darker: oklch(from var(--octopus-primary) calc(l - 0.03) c h);
+    --octopus-primary-really-transparent: oklch(from var(--octopus-primary) l c h / 30%);
+    --octopus-primary-more-transparent: oklch(from var(--octopus-primary) l c h / 35%);
+    --octopus-primary-transparent: oklch(from var(--octopus-primary) l c h / 60%);
+    --octopus-primary-less-transparent: oklch(from var(--octopus-primary) l c h / 90%);
+    --octopus-complementary-color:  oklch(from var(--octopus-primary) l c calc(h + 180));
+    --octopus-secondary-darker: oklch(from var(--octopus-secondary) calc(l - 0.1) c h);
+    --octopus-secondary-lighter: oklch(from var(--octopus-secondary) calc(l * 1.05) c h);
+    --octopus-text-disabled: oklch(from var(--octopus-secondary) calc(l * 0.60) c h);
+    --octopus-background-transparent: oklch(from var(--octopus-background) l c h / 40%);
+    --octopus-tertiary-really-transparent: oklch(from var(--octopus-tertiary) l c h / 30%);
+
+    // Size
+    --octopus-image-size: 12.5rem;
+    --octopus-podcast-size: 13.5rem;
+    --octopus-border-radius: 0.2rem;
+}

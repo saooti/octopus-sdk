@@ -276,31 +276,38 @@ export default defineComponent({
     min-height: 10rem;
     background-size: cover;
     background-position: center;
+
     h1 {
-      margin: auto 1rem auto;
+      margin: auto 1rem;
       font-size: 2rem;
       color: white;
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       min-height: 6rem;
     }
   }
+
   .octopus-breadcrumb {
     padding: 1rem;
     align-items: center;
+
     .octopus-breadcrumb-li {
       list-style: none;
       color: white !important;
+
       a {
         color: white !important;
         font-weight: bold;
       }
-      &:after {
+
+      &::after {
         content: "-";
         margin: 0 0.5rem;
       }
+
       &:last-child {
-        &:after {
+        &::after {
           content: "";
         }
       }

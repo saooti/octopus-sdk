@@ -1,39 +1,40 @@
 <template>
   <div
     v-if="undefined !== tagList && 0 !== tagList.length"
-    class="tag-list-component d-flex align-items-center flex-wrap"
+    class="tag-list-component d-flex align-items-center flex-wrap comma mb-3"
   >
-    <div>
+    <div class="me-3">
       {{ $t("Podcast tags") + ": " }}
     </div>
     <div
       v-for="(tag, index) in tagList"
       :key="tag"
-      class="tag-list-element"
+      class="d-flex align-items-center comma-element"
       :class="ouestFranceMainTag === tag ? 'main-of-tag' : ''"
     >
-      <button
-        :id="'tag-list-from-podcast-page' + index"
-        class="btn-transparent d-flex align-items-center"
-      >
-        <img
-          v-if="isOuestFranceTag(tag)"
-          width="20"
-          height="20"
-          class="ouest-france-logo"
-          role="presentation"
-          alt=""
-          src="/img/ouest_france_logo.svg" 
+      <template v-if="!isOuestFranceTag(tag)">{{ tag }}</template>
+      <template v-else>
+        <button
+          :id="'tag-list-from-podcast-page' + index"
+          class="btn-transparent d-flex align-items-center"
+        >
+          <img
+            width="20"
+            height="20"
+            class="ouest-france-logo"
+            role="presentation"
+            alt=""
+            src="/img/ouest_france_logo.svg" 
+          />
+          {{ formateOfTag(tag) }}
+        </button>
+        <ClassicPopover
+          :target="'tag-list-from-podcast-page' + index"
+          :content="tag.substring(4, tag.length)"
+          relative-class="page-element"
+          :is-fixed="true"
         />
-        {{ formateOfTag(tag) }}
-      </button>
-      <ClassicPopover
-        v-if="isOuestFranceTag(tag)"
-        :target="'tag-list-from-podcast-page' + index"
-        :content="tag.substring(4, tag.length)"
-        relative-class="page-element"
-        :is-fixed="true"
-      />
+      </template>
     </div>
   </div>
 </template>
@@ -79,7 +80,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .tag-list-component {
     .ouest-france-logo {
@@ -87,16 +89,8 @@ export default defineComponent({
       height: 20px;
       margin-right: 5px;
     }
-    .tag-list-element {
-      display: flex;
-      align-items: center;
-      margin: 0.4rem;
-      padding: 0.2rem;
-      border: 1px solid #999;
-      border-radius: octopusVariables.$octopus-borderradius;
-    }
     .main-of-tag {
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      box-shadow: var(--octopus-shadow) 0 5px 15px;
       font-size: 0.9rem;
     }
   }

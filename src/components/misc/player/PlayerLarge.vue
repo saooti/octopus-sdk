@@ -149,21 +149,24 @@ export default defineComponent({
     width: 10rem;
     height: 10rem;
   }
+
   .player-reduce-button {
     position: absolute;
     right: 0;
     font-size: 1.2rem !important;
   }
+
   .player-grow-large-content {
     width: 100%;
     padding: 1rem 2rem;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       padding: 0.5rem;
     }
   }
 
   .transcript-bg {
-    background: #3e3e3e;
+    background: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
   }
 }
 </style>

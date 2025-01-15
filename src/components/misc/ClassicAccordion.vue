@@ -71,35 +71,42 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-accordion {
   > button {
     min-height: 50px;
-    color: octopusVariables.$octopus-primary-color;
+    color: var(--octopus-primary);
     font-size: 0.9rem;
     border: 1px solid transparent;
-    border-bottom-color: #b8b8b8;
+    border-bottom-color: var(--octopus-secondary-darker);
     font-weight: bold;
+
     &:hover {
-      border-bottom-color: #535353;
+      border-bottom-color: var(--octopus-color-text);
     }
   }
+
   &:not(.octopus-accordion-open) > button {
     background: transparent;
   }
+
   .body {
-    background: white;
+    background: var(--octopus-background);
   }
+
   &.octopus-accordion-open {
-    border-radius: octopusVariables.$octopus-borderradius;
-    border: 1px solid #e0e0e0;
+    border-radius: var(--octopus-border-radius);
+    border: 1px solid var(--octopus-border-default);
+
     > button {
-      border-radius: octopusVariables.$octopus-borderradius 0 0;
-      background: #e9e9e9;
+      border-radius: var(--octopus-border-radius) 0 0;
+      background: var(--octopus-border-default);
       border-color: transparent;
-      color: black;
+      color: var(--octopus-color-text);
     }
   }
+
   .img-accordion {
     width: 30px;
     height: 30px;

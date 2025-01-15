@@ -36,7 +36,7 @@
         <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
         <!-- eslint-disable vue/no-v-html -->
         <div
-          class="descriptionText html-wysiwyg-content"
+          class="description-text html-wysiwyg-content"
           v-html="urlify(podcast.description)"
         />
         <!-- eslint-enable -->
@@ -112,9 +112,14 @@
       </div>
     </div>
     <TagList
-      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length && !isPhone"
+      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
       :tag-list="podcast.tags"
       :podcast-annotations="podcast.annotations"
+    />
+    <PodcastRubriqueList
+      v-if="podcast.rubriqueIds?.length"
+      :orga-id="podcast.organisation.id"
+      :rubrique-ids="podcast.rubriqueIds"
     />
     <PodcastRawTranscript :podcast-id="podcast.podcastId" />
     <SubscribeButtons
@@ -181,7 +186,7 @@ const PodcastPlannedSpinner = defineAsyncComponent(
 );
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
-import resizePhone from "../../mixins/resizePhone";
+const PodcastRubriqueList = defineAsyncComponent(() => import("./PodcastRubriqueList.vue"));
 import { mapState } from "pinia";
 export default defineComponent({
   name: "PodcastModuleBox",
@@ -199,10 +204,11 @@ export default defineComponent({
     PodcastRawTranscript,
     DownloadPodcastButton,
     NewspaperVariantOutlineIcon,
-    PodcastPlannedSpinner
+    PodcastPlannedSpinner,
+    PodcastRubriqueList
   },
 
-  mixins: [displayMethods, orgaComputed, resizePhone, podcastView],
+  mixins: [displayMethods, orgaComputed, podcastView],
 
   props: {
     playingPodcast: { default: undefined, type: Object as () => Podcast },
@@ -214,8 +220,6 @@ export default defineComponent({
 
   data() {
     return {
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
     };
   },
 

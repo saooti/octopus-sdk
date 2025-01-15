@@ -220,7 +220,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .rubrique-list-container {
     display: flex;
@@ -230,20 +231,24 @@ export default defineComponent({
     flex-grow: 1;
     width: 0;
     padding: 0 4rem;
+
     select {
       width: auto;
-      border-radius: octopusVariables.$octopus-borderradius;
+      border-radius: var(--octopus-border-radius);
       margin: 0.25rem;
       font-size: 0.6rem;
       padding: 0.5rem;
     }
   }
+
   #popoverrubriques-dropdown {
     overflow: initial !important;
   }
+
   .rubrique-chooser-minwidth {
     min-width: 400px;
-    @media (max-width: 500px) {
+
+    @media (width <= 500px) {
       min-width: 90vw;
     }
   }

@@ -1,131 +1,158 @@
-@use '@scss/variables' as octopusVariables;
+
 
 html{
   font-size: 20px;
   height: 100%;
 }
+
 body{
   margin: 0;
-  color: #353535;
-  font-family: "Montserrat",sans-serif,Helvetica Neue;
+  color: var(--octopus-color-text);
+  font-family: Montserrat,sans-serif,"Helvetica Neue";
   font-size: 0.8rem;
   overflow-x: hidden;
-  background: #ebebeb;
+  background: var(--octopus-secondary-lighter);
   min-height: 100%;
   overscroll-behavior-y: contain;
   display: flex;
   flex-direction: column;
 }
+
 main, #app{
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
+
 .octopus-app{
   flex-grow: 1;
+
   *:focus-visible{
     outline: none;
-    box-shadow: 0 0 10px 1px octopusVariables.$octopus-primary-color !important;
+    box-shadow: 0 0 10px 1px var(--octopus-primary) !important;
   }
+
   span.material-design-icon{
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
   a{
     word-break: break-word;
     text-decoration: none;
-    color: octopusVariables.$octopus-primary-color;
+    color: var(--octopus-primary);
+
     &.link-hover{
       color: black;
       font-weight: 500;
       word-break: normal;
     }
+
     &.link-hover:hover, &.link-hover.router-link-exact-active.router-link-active{
-      color: octopusVariables.$octopus-primary-color;
+      color: var(--octopus-primary);
     }
+
     &.btn, &.btn:hover{
-      color: #383838;
+      color: var(--octopus-color-text);
     }
   }
+
   hr{
     height: 0.01rem;
-    color: #999;
+    color: var(--octopus-text-disabled);
   }
+
   .d-flex-low-importance{
 		display: flex;
 	}
+
   .d-flex-column{
 		display: flex;
 		flex-direction: row;
-		@media (max-width: 960px) {
+
+		@media (width <= 960px) {
 			flex-direction: column;
 		}
 	}
+
   .d-flex-row{
 		display: flex;
 		flex-direction: column;
-		@media (max-width: 960px) {
-			flex-direction: row;
-      flex-wrap: wrap;
+
+		@media (width <= 960px) {
+			flex-flow: row wrap;
 		}
 	}
-  .secondary-bg{
-    background: octopusVariables.$octopus-background;
+
+  .octopus-bg{
+    background: var(--octopus-background);
   }
+
   .really-light-secondary-bg{
-    background: #f7f7f7;
+    background: var(--octopus-secondary-lighter);
   }
+
   .light-primary-bg{
-		background-color: octopusVariables.$primaryColorTransparent !important;
+		background-color: var(--octopus-primary-transparent) !important;
 	}
+
 	.really-light-primary-bg{
-		background-color: octopusVariables.$primaryColorReallyTransparent !important;
+		background-color: var(--octopus-primary-really-transparent) !important;
 	}
+
   .blue-bg{
-    background-color: octopusVariables.$blue-octopus;
+    background-color: var(--octopus-tertiary);
   }
+
   .width-fit-content{
     width: fit-content !important;
   }
+
   .text-blue-octopus{
-    color: octopusVariables.$blue-octopus !important
+    color: var(--octopus-tertiary) !important
   }
+
   .page-box{
-    background-color: octopusVariables.$octopus-background;
-    padding: 1rem 3rem 3rem 3rem;
+    background-color: var(--octopus-background);
+    padding: 1rem 3rem 3rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    @media (max-width: 1400px) {
+
+    @media (width <= 1400px) {
       padding: 2rem;
     }
-    @media (max-width: 1200px) {
+
+    @media (width <= 1200px) {
       padding: 1rem;
     }
-    @media (max-width: 450px) {
+
+    @media (width <= 450px) {
       padding: 1rem 0.5rem;
     }
   }
 
   .module-box{
-    background-color: white;
+    background-color: var(--octopus-background);
     padding: 1.3rem;
-    margin: 1.5rem 0.5rem 0 0.5rem;
-    border-radius: octopusVariables.$octopus-borderradius;
+    margin: 1.5rem 0.5rem 0;
+    border-radius: var(--octopus-border-radius);
     flex-grow: 1;
     overflow: auto;
-    border: 2px solid #eee;
-    @media (max-width: 500px){
+    border: 2px solid var(--octopus-secondary-lighter);
+
+    @media (width <= 500px){
       margin: 0.3rem;
       padding: 0.8rem;
     }
   }
   
-  .descriptionText{
+  .description-text{
     word-wrap: break-word;
     font-size: 0.7rem;
-    @media (max-width: 450px) {
+
+    @media (width <= 450px) {
       margin: 1rem 0;
     }
   }
@@ -133,76 +160,94 @@ main, #app{
   .flex-super-grow{
     flex-grow: 2;
   }
+
   .flex-small-grow {
     flex-grow: 0.3;
   }
+
   .flex-grow-mobile {
-    @media (max-width: 960px) {
+    @media (width <= 960px) {
         flex-grow: 1;
     }
   }
+
   .text-center-mobile{
     text-align: inherit;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       text-align: center;
     }
   }
+
   .hide-phone{
-    @media (max-width: 960px) {
+    @media (width <= 960px) {
       display: none !important;
     }
   }
+
   .hide-small-screen{
-		@media (max-width: 500px) {
+		@media (width <= 500px) {
 			display: none !important;
 		}
 	}
+
   .show-phone{
     display: none;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       display: block !important;
     }
   }
+
   .show-phone-flex{
     display: none !important;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       display: flex !important;
     }
   }
+
   .show-small-phone-flex{
     display: none !important;
-    @media (max-width: 380px) {
+
+    @media (width <= 380px) {
       display: flex !important;
     }
   }
+
   .hid{
     display: none !important;
   }
+
   .d-contents{
     display: contents;
   }
+
   .img-box{
-    height: octopusVariables.$octopus-item-size;
-    width: octopusVariables.$octopus-item-size;
+    height: var(--octopus-image-size);
+    width: var(--octopus-image-size);
     background-size: cover;
-    border-radius: octopusVariables.$octopus-borderradius !important;
+    border-radius: var(--octopus-border-radius) !important;
     overflow: hidden;
     flex-shrink: 0;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       flex-grow: 0;
     }
-    @media (max-width: 550px) {
+
+    @media (width <= 550px) {
       margin-left: auto !important;
       margin-right: auto !important;
       float: inherit !important;
       display: flex;
-      width: octopusVariables.$octopus-mobile-item-size !important;
-      height: octopusVariables.$octopus-mobile-item-size !important;
+      width: var(--octopus-image-size) !important;
+      height: var(--octopus-image-size) !important;
     }
   }
+
   .img-box-podcast{
-    height: calc(octopusVariables.$octopus-item-podcast-size - 4px);
-    width: calc(octopusVariables.$octopus-item-podcast-size - 4px);
+    height: calc(var(--octopus-podcast-size) - 4px);
+    width: calc(var(--octopus-podcast-size) - 4px);
   }
 
   .comma {
@@ -210,25 +255,32 @@ main, #app{
     flex-wrap: wrap;
     align-items: center;
     margin: 0.5rem 0;
-    > a {
+
+    > a{
       text-transform: capitalize;
-      &:after {
+    }
+    > a, .comma-element {
+      &::after {
         content: ", ";
         margin-right: 0.2rem;
       }
+
       &:last-child {
-        &:after {
+        &::after {
           content: "";
         }
       }
     }
   }
+
   .c-hand{
     cursor: pointer;
   }
+
   .c-hand-auto {
     cursor: auto;
   }
+
   .two-line-clamp{
     overflow: hidden;
     display: -webkit-box;
@@ -244,33 +296,40 @@ main, #app{
     -webkit-box-orient: vertical;
     word-break: break-word;
   }
+
   .word-break-word{
     word-break: break-word;
   }
+
   .border{
-		border-radius: octopusVariables.$octopus-borderradius;
+		border-radius: var(--octopus-border-radius);
 	}
+
   .li-style-none{
     list-style: none;
   }
 
   .html-wysiwyg-content{
     h3,h4{
-      margin: 0 0 0.5em 0 !important;
+      margin: 0 0 0.5em !important;
     }
+
     h3{
       font-size: 1rem;
       text-align: center;
-      color: #666;
+      color: var(--octopus-gray-text);
     }
+
     h4{
       font-size: 0.9rem;
     }
+
     p, ol, ul{
       margin-bottom: 0.2rem;
     }
   }
-  @media (max-width: 960px) {
+
+  @media (width <= 960px) {
     .d-flex:not(.flex-column){
       flex-wrap: wrap;
     }

@@ -190,11 +190,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .sharing-distribution-container {
-    border: 0.05rem solid #dee2e6;
-    border-radius: octopusVariables.$octopus-borderradius;
+    border: 0.05rem solid var(--octopus-border-default);
+    border-radius: var(--octopus-border-radius);
     padding: 0.4rem;
     margin: 0.2rem 1rem 0.2rem 0;
     display: flex;
@@ -202,16 +203,19 @@ export default defineComponent({
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+
     a {
       display: flex;
       align-items: center;
       margin: 5px;
     }
+
     span {
       font-size: 1.4rem;
       margin: 0 0.3em 0 0;
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       flex-wrap: wrap;
       margin: 0.2rem 0.5rem;
     }

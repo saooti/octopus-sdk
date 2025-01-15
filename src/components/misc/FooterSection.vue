@@ -216,11 +216,13 @@ export default defineComponent({
     z-index: 10;
     background: white;
     padding: 0 2rem;
+
     a,
     .link-hover.btn-transparent {
       font-weight: 500;
-      color: #666 !important;
+      color: var(--octopus-gray-text) !important;
     }
+
     .special-select-align-magic-trick {
       margin-left: 0.16rem;
     }

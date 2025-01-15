@@ -123,5 +123,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "../../../assets/iframe";
+@use "../../../style/iframe";
 </style>

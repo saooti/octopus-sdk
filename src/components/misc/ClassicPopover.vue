@@ -19,7 +19,7 @@
       clearData();
     "
   >
-    <div v-if="title" class="bg-secondary p-2">
+    <div v-if="title" class="bg-secondary-light p-2">
       {{ title }}
     </div>
     <div class="p-2">
@@ -288,23 +288,27 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-popover {
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: octopusVariables.$octopus-borderradius;
+  background: var(--octopus-background);
+  border: 1px solid var(--octopus-border-default);
+  border-radius: var(--octopus-border-radius);
   overflow: auto;
   margin: 0 !important;
   z-index: 10;
+
   &.popover-z-index {
     z-index: 9999;
   }
+
   &.octopus-dropdown {
     min-width: 200px;
+
     .octopus-dropdown-item {
       display: flex;
       justify-content: center;
-      color: rgb(29, 29, 29);
+      color: var(--octopus-color-text);
       width: 100%;
       padding: 0.25rem 1rem;
       font-weight: 400;
@@ -312,18 +316,21 @@ export default defineComponent({
       white-space: nowrap;
       background-color: transparent;
       border: 0;
+
       &:disabled {
-        background: rgb(230, 230, 230);
+        background: var(--octopus-secondary-darker);
       }
+
       &:hover,
       &:focus {
-        background: rgb(243, 243, 243);
+        background: var(--octopus-secondary-lighter);
       }
     }
+
     hr {
       margin: 0.5rem 0;
       overflow: hidden;
-      border-top: 1px solid #ccc;
+      border-top: 1px solid var(--octopus-border-default);
       opacity: 1;
     }
   }

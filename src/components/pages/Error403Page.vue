@@ -45,16 +45,19 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .octopus-app .not-auth-content {
-  @media (max-width: 960px) {
+  @media (width <= 960px) {
     align-items: center;
   }
+
   .stop-octopus-img {
     width: 600px;
     height: auto;
-    @media (max-width: 1400px) {
+
+    @media (width <= 1400px) {
       width: 400px;
     }
-    @media (max-width: 450px) {
+
+    @media (width <= 450px) {
       width: 80%;
     }
   }

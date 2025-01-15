@@ -327,15 +327,18 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       flex-direction: column;
       align-items: baseline;
     }
+
     > .d-flex-column {
       align-items: flex-start !important;
     }
   }
-  @media (min-width: 960px) {
+
+  @media (width >= 960px) {
     .share-left-not-phone {
       align-items: center;
       justify-content: center;

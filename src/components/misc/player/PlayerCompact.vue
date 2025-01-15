@@ -96,7 +96,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .player-grow-content {
     display: flex;

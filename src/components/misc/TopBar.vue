@@ -138,46 +138,65 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .top-bar-container {
     *:focus-visible {
       box-shadow: 0 0 10px 1px white !important;
     }
-    background: octopusVariables.$octopus-primary-color;
+
+    background: var(--octopus-primary);
     background: linear-gradient(
       90deg,
-      octopusVariables.$octopus-primary-color 0%,
-      octopusVariables.$blue-octopus 100%
+      var(--octopus-primary) 0%,
+      var(--octopus-tertiary) 100%
     );
     width: 100%;
     height: 5rem;
     display: flex;
     flex-direction: column;
     transition: height 0.7s;
-    box-shadow: 0px 2px 15px 5px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 2px 15px 5px var(--octopus-shadow) !important;
+
+    .page-element-bg {
+      opacity: 0.5;
+      filter: blur(8px);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 100%;
+      position: absolute;
+      transition: height 0.7s;
+    }
 
     &.content-top-bar {
       height: 22rem;
       background: black;
+
       .page-element-bg {
         height: 22rem;
       }
     }
+
     &.content-top-bar.scrolled {
       height: 5rem;
+
       .page-element-bg {
         height: 5rem;
       }
     }
+
     &:not(.scrolled) {
       position: relative;
     }
+
     &.scrolled {
       z-index: 11;
       position: sticky;
       top: 0;
     }
+
     .top-bar-z-index {
       z-index: 1;
     }
@@ -187,39 +206,35 @@ export default defineComponent({
       font-size: 1.8rem;
       margin: 2rem 5rem;
     }
-    @media (max-width: 650px) {
+
+    @media (width <= 650px) {
       height: 3.5rem;
+
       &.content-top-bar.scrolled {
         height: 3.5rem;
+
         .page-element-bg {
           height: 3.5rem;
         }
       }
     }
 
-    @media (max-width: 550px) {
+    @media (width <= 550px) {
       h1 {
         font-size: 1rem;
-        margin: 1rem 0.5rem 0.5rem 0.5rem;
+        margin: 1rem 0.5rem 0.5rem;
       }
+
       &.content-top-bar {
         height: 13rem;
+
         .page-element-bg {
           height: 13rem;
         }
       }
     }
-    .page-element-bg {
-      opacity: 0.5;
-      filter: blur(8px);
-      -webkit-filter: blur(8px);
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      width: 100%;
-      position: absolute;
-      transition: height 0.7s;
-    }
+
+
 
     .admin-button:hover,
     .share-btn:hover {

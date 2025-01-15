@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex">
-    <div class="d-flex align-items-center bg-error-message p-2 rounded my-1">
+    <div class="d-flex align-items-center bg-warning p-2 rounded my-1">
       <AlertIcon :title="$t('Warning')" class="me-1 text-danger" :size="16" />
-      <div class="alert-text">
+      <div class="text-danger">
         {{ message }}
       </div>
     </div>
@@ -21,13 +21,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-.octopus-app {
-  .bg-error-message {
-    background-color: #ffd84a9c;
-  }
-  .alert-text {
-    color: darkred;
-  }
-}
-</style>

@@ -100,12 +100,13 @@ export default defineComponent({
 .octopus-app {
   .list-participants{
     .element-list-inline{
-        @media (max-width: 960px) {
+        @media (width <= 960px) {
         > div{
           margin: 0 0.5rem 0 0;
         }
       }
     }
+
     .participant-item-container{
       margin:0;
     }

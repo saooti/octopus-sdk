@@ -1,10 +1,23 @@
-@use '@scss/variables' as octopusVariables;
+
+
 .octopus-app{
+  .ambiance-progress {
+    background-color: var(--octopus-secondary);
+
+    .octopus-progress-bar {
+      background-color: var(--octopus-text-disabled);
+    }
+
+    .no-transition {
+      transition: none !important;
+    }
+  }
+
   .octopus-progress{
     display: flex;
     overflow: hidden;
-    background-color:#e9ecef;
-    border-radius: octopusVariables.$octopus-borderradius;
+    background-color:var(--octopus-secondary-lighter);
+    border-radius: var(--octopus-border-radius);
     position: relative;
     cursor: pointer;
 
@@ -14,40 +27,47 @@
       flex-direction: column;
       justify-content: center;
       overflow: hidden;
-      color: white;
+      color: var(--octopus-color-on-primary);
       text-align: center;
       white-space: nowrap;
-      background-color: octopusVariables.$octopus-primary-color;
+      background-color: var(--octopus-primary);
       transition: width 0.6s ease;
     }
+
     .octopus-chapter{
       position: absolute;
       background: transparent;
       background-clip: content-box;
       padding: 0 5px;
-      box-shadow: inset -2px 1px 0px 0px rgb(0 0 0),
-                  inset 2px 1px 0px 0px rgb(0 0 0);
+      box-shadow: inset -2px 1px 0 0 black,
+                  inset 2px 1px 0 0 black;
 
       &:hover{
-        background: rgba(255, 255, 255, 0.4);
-        box-shadow: -4px 1px 0px 0px rgb(0 0 0);
+        background: var(--octopus-background-transparent);
+        box-shadow: -4px 1px 0 0 black;
       }
     }
+
     &,.octopus-progress-bar{
       height: 4px;
-      @media (max-width: 960px) {
+
+      @media (width <= 960px) {
         height: 8px;
       }
     }
+
     &.large,&.large .octopus-progress-bar{
       height: 15px;
     }
+
     &.medium,&.medium .octopus-progress-bar{
       height: 6px;
     }
+
     .octopus-progress-bar-duration {
       width: 10px;
     }
+
     .octopus-progress-bar-cursor{
       width: 10px;
       height: 10px;
@@ -56,17 +76,10 @@
       align-self: center;
       position: absolute;
     }
+
     .end-0{
       right: 0;
     }
   }
-  .ambiance-progress {
-    background-color: #d1d1d1;
-    .octopus-progress-bar {
-      background-color: #747474;
-    }
-    .no-transition {
-      transition: none !important;
-    }
-  }
+
 }

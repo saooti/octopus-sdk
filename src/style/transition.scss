@@ -2,27 +2,30 @@
     .arrow-transform {
       transform: rotate(180deg);
     }
+
     .bloc-paddle{
       align-items: flex-end;
       display: flex;
       width: 1.4rem;
       height: 1.8rem;
-      justify-content: space-around;
-      align-content: flex-start;
+      place-content: flex-start space-around;
       border-radius: 50%;
       background: transparent !important;
       
       > span {
           width: 0.2rem;
           margin: 0.05rem;
-          background: #fff;
+          background: var(--octopus-background);
       }
+
       .paddle1 {
         height: 50%;
       }
+
       .paddle2 {
         height: 25%;
       }
+
       .paddle3 {
         height: 80%;
       }
@@ -49,10 +52,12 @@
             animation-direction: alternate;
         }
       }
+
       @keyframes slidein {
         0% {
         height: 0;
         }
+
         100% {
         height: 1rem;
         }
@@ -62,6 +67,7 @@
           0% {
           height: 0.3rem;
           }
+
           100% {
           height: 1.2rem;
           }
@@ -71,12 +77,14 @@
           0% {
           height: 1.2rem;
           }
+
           100% {
           height: 0;
           }
       }
       
     }
+
     .out-left-enter-active,
     .out-left-leave-active,
     .out-right-enter-active,
@@ -100,6 +108,7 @@
     .out-right-leave-to {
       position: absolute;
     }
+
     .out-right-leave-to {
       right: 5rem;
       z-index: -1;

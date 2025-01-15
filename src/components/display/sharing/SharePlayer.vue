@@ -418,24 +418,26 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
-@use "../../../assets/iframe";
+
+@use "../../../style/iframe";
+
 .octopus-app {
   .sticker {
     align-self: center;
-    background: octopusVariables.$octopus-primary-color;
+    background: var(--octopus-primary);
     padding: 0.5rem;
     transition: all 0.5s ease;
     color: white;
     font-weight: bold;
     letter-spacing: 1px;
-    box-shadow: 10px 10px 34px -15px hsla(0, 0%, 0%, 0.4);
+    box-shadow: 10px 10px 34px -15px var(--octopus-shadow);
     border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-    border: solid 2px #41403e;
+    border: solid 2px var(--octopus-gray-text);
+
     &:hover {
-      box-shadow: 2px 8px 4px -6px hsla(0, 0%, 0%, 0.3);
+      box-shadow: 2px 8px 4px -6px var(--octopus-shadow);
       background: transparent;
-      color: octopusVariables.$octopus-primary-color;
+      color: var(--octopus-primary);
     }
   }
 }

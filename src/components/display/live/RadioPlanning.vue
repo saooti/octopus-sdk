@@ -350,28 +350,34 @@ export default defineComponent({
   .program-item-date {
     width: 100px;
     font-size: 1.1rem;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
 			font-size: 0.8rem;
 		}
   }
+
   .program-item-img{
-    @media (max-width: 960px) {
+    @media (width <= 960px) {
 			width: 80px;
       height: 80px;
       margin: 0.5rem 0.5rem 0 0 !important;
 		}
   }
+
   .button-date {
-    border: 1px solid #ddd;
+    border: 1px solid var(--octopus-border-default);
     padding: 0.5rem;
     color: black !important;
+
     &.text-white{
       color: white !important;
     }
+
     &:hover {
-      background: #ddd;
+      background: var(--octopus-secondary);
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
 			width: 80px;
 		}
   }

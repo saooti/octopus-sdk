@@ -86,22 +86,26 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "../../../assets/comments";
+@use "../../../style/comments";
+
 .octopus-app {
   .comment-player-container {
     position: relative;
     width: 100%;
     height: 60px;
     display: flex;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       display: none;
     }
+
     .comment-border {
       width: auto;
       position: absolute;
-      border-left: solid 1px #ffffff;
+      border-left: solid 1px white;
       height: 10px;
     }
+
     .status-comment {
       margin-top: 10px;
       position: absolute;

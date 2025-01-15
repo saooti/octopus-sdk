@@ -11,7 +11,7 @@
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
         <section class="module-box">
-          <div class="mb-5 mt-3 descriptionText">
+          <div class="mb-5 mt-3 description-text">
             <img
               v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
               width="250"

@@ -81,11 +81,12 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
 @use "sass:color";
+
 .octopus-app .btn-like-comment {
-  $neutral-color: #555555;
-  $background-color: octopusVariables.$octopus-primary-color;
+  $background-color: var(--octopus-primary);
+
   &.is-dislike {
     $background-color: black;
   }
@@ -95,7 +96,7 @@ export default defineComponent({
   border: none;
   outline: none;
   z-index: 1;
-  color: $neutral-color;
+  color: var(--octopus-color-text);
   font-size: 1.2rem;
   width: 2.2rem;
   height: 2.2rem;
@@ -107,8 +108,8 @@ export default defineComponent({
   justify-content: center;
 
   &:hover {
-    background: #dddddd;
-    color: color.scale($neutral-color, $lightness: -10%);
+    background: var(--octopus-secondary);
+    color: oklch(from var(--octopus-color-text) calc(l + 0.1) c h);
   }
 
   /* Animation */
@@ -118,8 +119,8 @@ export default defineComponent({
     background: $background-color;
     animation: 0.8s;
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: "";
       position: absolute;
       top: 50%;
@@ -130,7 +131,7 @@ export default defineComponent({
       height: 6px;
       border-radius: 100%;
       transform: scale(0);
-      color: $neutral-color;
+      color: var(--octopus-color-text);;
       border: 1px solid transparent;
       box-shadow:
         -0.8em 0 0 -2px,
@@ -143,37 +144,42 @@ export default defineComponent({
         0.6em 0.6em 0 -2px;
     }
 
-    &:before {
+    &::before {
       animation: effect-01-animation 0.8s
         cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    &:after {
+
+    &::after {
       animation: effect-02-animation 0.6s
         cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
   }
 
   @keyframes effect-01-animation {
-    from {
+    0% {
       transform: rotate(-15deg) scale(0);
     }
+
     40% {
       opacity: 1;
     }
-    to {
+
+    100% {
       transform: rotate(-30deg) scale(2.5);
       opacity: 0;
     }
   }
 
   @keyframes effect-02-animation {
-    from {
+    0% {
       transform: rotate(10deg) scale(0);
     }
+
     40% {
       opacity: 1;
     }
-    to {
+
+    100% {
       transform: rotate(30deg) scale(2);
       opacity: 0;
     }

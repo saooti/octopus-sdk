@@ -83,8 +83,6 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   .organisation-chooser-light select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
   }
 }

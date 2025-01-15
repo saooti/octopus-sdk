@@ -303,13 +303,15 @@ export default defineComponent({
     display: inline-flex;
     width: 100%;
     justify-content: center;
+
     & > div {
       display: inline-flex;
       justify-content: flex-start;
       overflow: hidden;
       width: fit-content;
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       margin-top: 0.8rem;
     }
   }

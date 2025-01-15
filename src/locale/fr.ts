@@ -412,4 +412,5 @@ export default {
   "Show fewer days":"Afficher moins de jours",
   "Site menu":"Menu du site",
   "The episode is being processed":"L'épisode est en cours de traitement",
+  Rubrics: "Rubriques",
 };

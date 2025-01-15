@@ -171,7 +171,8 @@ export default defineComponent({
 .octopus-app {
   .width-600 {
     width: 600px;
-    @media (max-width: 600px) {
+
+    @media (width <= 600px) {
       width: 100%;
     }
   }

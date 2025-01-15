@@ -144,22 +144,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .filter-speech-bubble {
     position: absolute;
-    background: octopusVariables.$octopus-primary-color;
-    border-radius: octopusVariables.$octopus-borderradius;
+    background: var(--octopus-primary);
+    border-radius: var(--octopus-border-radius);
     width: 10rem;
     right: 4rem;
     padding: 5px;
-    -webkit-animation: fadein 1s;
-    -moz-animation: fadein 1s;
     animation: fadein 1s;
     color: white;
   }
 
-  .filter-speech-bubble:after {
+  .filter-speech-bubble::after {
     content: "";
     position: absolute;
     right: 0;
@@ -167,35 +166,39 @@ export default defineComponent({
     width: 0;
     height: 0;
     border: 18px solid transparent;
-    border-left-color: octopusVariables.$octopus-primary-color;
+    border-left-color: var(--octopus-primary);
     border-right: 0;
     border-bottom: 0;
     margin-top: -9px;
     margin-right: -18px;
-    -webkit-animation: fadein 1s;
-    -moz-animation: fadein 1s;
     animation: fadein 1s;
   }
+
   @keyframes fadein {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
   }
-  @-moz-keyframes fadein {
+
+  @keyframes fadein {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
   }
-  @-webkit-keyframes fadein {
+
+  @keyframes fadein {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }

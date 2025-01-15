@@ -68,50 +68,57 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
 .octopus-app .octopus-modal{
   &::backdrop {
     opacity: 0.5;
     background-color: black;
   }
+
   &.octopus-only-header-modal::backdrop{
     opacity: 0.1;
   }
+
   display: flex;
   flex-direction: column;
   padding: 0;
   border: 0;
-  border-radius: octopusVariables.$octopus-borderradius;
-  box-shadow: 0 0.2rem 0.5rem rgba(40, 40, 40, 0.3);
-  color: #353535 !important;
+  border-radius: var(--octopus-border-radius);
+  box-shadow: 0 0.2rem 0.5rem var(--octopus-shadow);
+  color: var(--octopus-color-text) !important;
   margin-top: 2rem;
   width: 80vw;
   max-height: 90vh;
   overflow: hidden;
-  @media (max-width: 500px) {
+
+  @media (width <= 500px) {
     width: 95vw;
   }
+
  .octopus-modal-body {
     flex: 1 1 auto;
     padding: 1rem;
     overflow-x: auto;
+
     .scroller-vertical {
       min-height: 200px;
       height: 200px;
     }
   }
+
   .octopus-modal-header {
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
     border: 0;
-    border-radius: octopusVariables.$octopus-borderradius
-      octopusVariables.$octopus-borderradius 0 0;
-    background: octopusVariables.$octopus-primary-color;
+    border-radius: var(--octopus-border-radius)
+      var(--octopus-border-radius) 0 0;
+    background: var(--octopus-primary);
     color: white;
     padding: 1rem;
   }
+
   .octopus-modal-footer {
     display: flex;
     flex-shrink: 0;
@@ -120,6 +127,7 @@ export default defineComponent({
     align-items: center;
     justify-content: flex-end;
     padding: 1rem;
+
     button {
       margin: 0.1rem;
     }

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import classicApi from "../api/classicApi";
 import { useAuthStore } from "./AuthStore";
 import { Organisation } from "./class/general/organisation";
+import { Rubriquage } from "./class/rubrique/rubriquage";
 
 type SaveObject = { [key: string]: string | number | boolean | undefined };
 
@@ -9,12 +10,14 @@ interface SaveFetchState {
   orgaPublicAttributes: { [key: string]: SaveObject };
   orgaLiveEnabled: { [key: string]: boolean };
   orgaData: { [key: string]: Organisation };
+  orgaRubriques: { [key: string]: Array<Rubriquage> };
 }
 export const useSaveFetchStore = defineStore("SaveFetchStore", {
   state: (): SaveFetchState => ({
     orgaPublicAttributes: {},
     orgaLiveEnabled: {},
     orgaData: {},
+    orgaRubriques:{},
   }),
   actions: {
     async getOrgaAttributes(orgaId: string): Promise<SaveObject> {
@@ -72,6 +75,19 @@ export const useSaveFetchStore = defineStore("SaveFetchStore", {
     },
     forceUpdateData(orgaId: string, data: Organisation) {
       this.orgaData[orgaId] = data;
+    },
+    async getOrgaRubriques(orgaId: string): Promise<Array<Rubriquage>> {
+      if (this.orgaRubriques[orgaId]) {
+        return this.orgaRubriques[orgaId];
+      }
+      this.orgaRubriques[orgaId] = await classicApi.fetchData<Array<Rubriquage>>({
+        api: 0,
+        path:  "rubriquage/find/" + orgaId,
+      });
+      return this.orgaRubriques[orgaId];
+    },
+    forceUpdateRubriques(orgaId: string) {
+      delete this.orgaRubriques[orgaId];
     },
   },
 });

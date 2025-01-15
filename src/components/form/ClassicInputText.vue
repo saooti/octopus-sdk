@@ -237,8 +237,9 @@ export default defineComponent({
   .text-indic {
     font-style: italic;
     font-size: 0.7rem;
-    color: #666;
+    color: var(--octopus-gray-text);
   }
+
   textarea {
     height: auto;
     min-height: 120px;

@@ -174,7 +174,8 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  @media (max-width: 450px) {
+
+  @media (width <= 450px) {
     padding: 1rem 0;
   }
 }

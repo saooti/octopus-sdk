@@ -121,34 +121,34 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .podcast-item-container {
-    border-radius: octopusVariables.$octopus-borderradius;
+    border-radius: var(--octopus-border-radius);
     list-style: none;
     position: relative;
-    width: octopusVariables.$octopus-item-podcast-size;
+    width: var(--octopus-podcast-size);
     height: 20.5rem;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     text-align: left;
-    background: #fff;
+    background: var(--octopus-background);
     flex-shrink: 0;
-    border: 2px solid #eee;
+    border: 2px solid var(--octopus-border-default);
 
     .description-podcast-item {
       padding: 1rem;
-      color: #333;
-      background-color: rgba(255, 255, 255, 0.92);
-      height: octopusVariables.$octopus-item-podcast-size;
+      background-color: oklch(from var(--octopus-background) l c h / 90%);
+      height: var(--octopus-podcast-size);
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 0.9em;
       position: absolute;
-      width: octopusVariables.$octopus-item-podcast-size;
-      word-break: break-word;
-      &:not(.mobile-description-podcast-item).after-podcast-description:after {
+      width: var(--octopus-podcast-size);
+
+      &:not(.mobile-description-podcast-item).after-podcast-description::after {
         content: "...";
         position: absolute;
         padding-left: 1rem;
@@ -160,23 +160,26 @@ export default defineComponent({
         text-align: center;
         background: linear-gradient(
           to bottom,
-          rgba(255, 255, 255, 0),
-          #fff 40%
+          var(--octopus-background), var(--octopus-background-transparent)
         );
       }
+
       &.mobile-description-podcast-item {
         overflow: auto;
       }
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       margin: 0.5rem !important;
     }
-    @media (max-width: 450px) {
-      width: octopusVariables.$octopus-mobile-item-size;
+
+    @media (width <= 450px) {
+      width: var(--octopus-image-size);
       height: 18.8rem;
+
       .description-podcast-item {
-        height: octopusVariables.$octopus-mobile-item-size;
-        width: octopusVariables.$octopus-mobile-item-size;
+        height: var(--octopus-image-size);
+        width: var(--octopus-image-size);
       }
     }
   }

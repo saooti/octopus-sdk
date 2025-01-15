@@ -296,51 +296,62 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app .video-page-container {
   align-items: stretch;
   flex-grow: 1;
-  background: octopusVariables.$primaryColorReallyTransparent;
-  border-radius: octopusVariables.$octopus-borderradius;
-  box-shadow: 0 0 10px 1px octopusVariables.$primaryColorTransparent;
+  background: var(--octopus-primary-really-transparent);
+  border-radius: var(--octopus-border-radius);
+  box-shadow: 0 0 10px 1px var(--octopus-primary-transparent);
+
   .info-video-container {
     display: flex;
     flex-direction: column;
+
     .octopus-tab-pane,
     .video-module-box {
       height: 0;
       overflow-y: auto;
-      @media (max-width: 960px) {
+
+      @media (width <= 960px) {
         height: inherit;
       }
     }
+
     .classic-nav-tab-container {
       flex-direction: column;
     }
   }
+
   .module-box.module-box-transparent {
     margin: 0;
     background: transparent;
     border: 0;
     padding: 0;
   }
+
   .w-70-responsive {
     width: 70%;
     aspect-ratio: 16/9;
   }
+
   .w-30-responsive {
     width: 30%;
   }
+
   .w-70-responsive,
   .w-30-responsive {
     display: flex;
     align-items: stretch;
     flex-grow: 1;
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       width: 100%;
       padding: 0 !important;
     }
   }
+
   .really-light-secondary-bg {
     background: white;
   }

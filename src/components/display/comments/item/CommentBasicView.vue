@@ -106,5 +106,5 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "../../../../assets/comments";
+@use "../../../../style/comments";
 </style>

@@ -19,7 +19,7 @@
       </swiper>
     </template>
     <div v-else class="element-list-inline">
-      <div v-for="(obj, index) in listObject" :key="obj">
+      <div v-for="(obj, index) in listObject" :key="obj" class="element-list-item">
         <slot name="octopusSlide" :option="obj" :index="index" />
       </div>
     </div>
@@ -137,10 +137,12 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 :root {
   --swiper-navigation-sides-offset: 0;
 }
+
 .swiper {
   width: 100%;
   height: 100%;
@@ -148,17 +150,19 @@ export default defineComponent({
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: octopusVariables.$octopus-primary-color !important;
+  color: var(--octopus-primary) !important;
   height: 100%;
   top: 0;
   bottom: 0;
   margin: 0;
   width: 40px;
-  background: octopusVariables.$octopus-background;
+  background: var(--octopus-background);
 }
+
 .swiper-button-lock {
   display: flex;
 }
+
 .swiper-slide {
   display: flex !important;
   align-items: center;

@@ -54,7 +54,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .octopus-nav {
     display: flex;
@@ -63,15 +64,17 @@ export default defineComponent({
     margin-bottom: 0;
     margin-top: 0;
     list-style: none;
-    border-bottom: 0.05rem solid #ddd;
+    border-bottom: 0.05rem solid var(--octopus-border-default);
+
     &.light {
       border: 0;
     }
   }
+
   .octopus-nav-item {
-    border-right: solid 1px rgb(222, 226, 230);
-    border-left: solid 1px rgb(222, 226, 230);
-    border-top: solid 1px rgb(222, 226, 230);
+    border-right: solid 1px var(--octopus-border-default);
+    border-left: solid 1px var(--octopus-border-default);
+    border-top: solid 1px var(--octopus-border-default);
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
     cursor: pointer;
@@ -79,10 +82,12 @@ export default defineComponent({
     flex-grow: 1;
     text-align: center;
   }
+
   .octopus-nav.light .octopus-nav-item {
     border: 0;
     flex-grow: 0;
   }
+
   .octopus-nav-link {
     display: block;
     background: transparent;
@@ -94,31 +99,37 @@ export default defineComponent({
       background-color 0.15s ease-in-out,
       border-color 0.15s ease-in-out;
     border: 0.1rem solid transparent;
+
     &:hover {
-      border-color: #dee2e6;
-      border-bottom-color: octopusVariables.$octopus-primary-color;
-      color: octopusVariables.$octopus-primary-color;
+      border-color: var(--octopus-border-default);
+      border-bottom-color: var(--octopus-primary);
+      color: var(--octopus-primary);
     }
+
     &.active {
-      border-color: octopusVariables.$octopus-primary-color;
-      background: octopusVariables.$octopus-primary-color;
+      border-color: var(--octopus-primary);
+      background: var(--octopus-primary);
       color: white;
     }
   }
+
   .octopus-nav.light .octopus-nav-link {
     border-top: 0 !important;
     border-right: 0 !important;
     border-left: 0 !important;
     font-weight: bold;
   }
+
   .octopus-tab-content {
-    border-right: solid 1px rgb(222, 226, 230);
-    border-left: solid 1px rgb(222, 226, 230);
-    border-bottom: solid 1px rgb(222, 226, 230);
-    background-color: #f8fafc;
+    border-right: solid 1px var(--octopus-border-default);
+    border-left: solid 1px var(--octopus-border-default);
+    border-bottom: solid 1px var(--octopus-border-default);
+    background-color: var(--octopus-background);
   }
+
   .octopus-tab-pane {
     display: none;
+
     &.active {
       display: flex;
       justify-content: space-between;

@@ -2,9 +2,10 @@
 @use "sass:map";
 @use "sass:meta";
 @use "sass:string";
+
 // Utilities
 $spacer: 1rem !default;
-$font-size-base: 1rem !default;
+$font-size-base: 0.9rem !default;
 $spacers: (
   0: 0,
   1: $spacer * .25,
@@ -21,16 +22,17 @@ $font-sizes: (
   5: $font-size-base * 1.25,
   6: $font-size-base,
 ) !default;
-$white:    #fff !default;
-$black:    #000 !default;
-$primary:       #0d6efd !default;
-$secondary:     #6c757d !default;
-$success:       #198754 !default;
-$info:          #0dcaf0 !default;
-$warning:       #ff924f94 !default;
-$danger:        #dc3545 !default;
-$light:         #f8f9fa !default;
-$dark:          #212529 !default;
+$white: oklch(100% 0 0deg) !default;
+$black: oklch(0% 0 0deg) !default;
+$primary: oklch(55.03% 0.118 159.16deg) !default;
+$secondary: oklch(44.75% 0.0121 229.13deg) !default;
+$success: oklch(55.2% 0.1234 157.01deg) !default;
+$info: oklch(77.49% 0.138 218.05deg) !default;
+$warning: oklch(76.45% 0.1545 50.19deg / 58.04%) !default;
+$danger: oklch(54.96% 0.2235 28.33deg) !default;
+$light: oklch(98.16% 0.0017 247.84deg) !default;
+$dark: oklch(26.21% 0.0095 248.19deg) !default;
+$border-default: oklch(91.09% 0.007 247.9deg) !default;
 $theme-colors: (
   "primary":    $primary,
   "secondary":  $secondary,
@@ -43,7 +45,6 @@ $theme-colors: (
   "black":      $black,
   "white":      $white,
 ) !default;
-
 $utilities: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $utilities: map.merge(
@@ -90,14 +91,14 @@ $utilities: map.merge(
     "border": (
       property: border,
       values: (
-        null: 1px solid #dee2e6,
+        null: 1px solid $border-default,
         0: 0,
       )
     ),
     "border-top": (
       property: border-top,
       values: (
-        null: 1px solid #dee2e6,
+        null: 1px solid $border-default,
         0: 0,
       )
     ),
@@ -105,14 +106,14 @@ $utilities: map.merge(
       property: border-right,
       class: border-end,
       values: (
-        null: 1px solid #dee2e6,
+        null: 1px solid $border-default,
         0: 0,
       )
     ),
     "border-bottom": (
       property: border-bottom,
       values: (
-        null: 1px solid #dee2e6,
+        null: 1px solid $border-default,
         0: 0,
       )
     ),
@@ -120,7 +121,7 @@ $utilities: map.merge(
       property: border-left,
       class: border-start,
       values: (
-        null: 1px solid #dee2e6,
+        null: 1px solid $border-default,
         0: 0,
       )
     ),
@@ -394,11 +395,6 @@ $utilities: map.merge(
       )
     ),
     // scss-docs-end utils-bg-color
-    "gradient": (
-      property: background-image,
-      class: bg,
-      values: (gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0)))
-    ),
     "rounded": (
       property: border-radius,
       class: rounded,
@@ -445,14 +441,18 @@ $utilities: map.merge(
   ),
   $utilities
 );
+
 @mixin generate-utility($utility, $infix, $is-rfs-media-query: false) {
   $values: map.get($utility, values);
+
   // If the values are a list or string, convert it into a map
   @if meta.type-of($values) == "string" or meta.type-of(list.nth($values, 1)) != "list" {
     $values: list.zip($values, $values);
   }
+
   @each $key, $value in $values {
     $properties: map.get($utility, property);
+
     // Multiple properties are possible, for example with vertical or horizontal margins or paddings
     @if meta.type-of($properties) == "string" {
       $properties: list.append((), $properties);
@@ -467,7 +467,6 @@ $utilities: map.merge(
 
     // State params to generate pseudo-classes
     $state: if(map.has-key($utility, state), map.get($utility, state), ());
-
     $infix: if($property-class == "" and string.slice($infix, 1, 1) == "-", string.slice($infix, 2), $infix);
 
     // Don't prefix if value key is null (eg. with shadow class)
@@ -480,8 +479,7 @@ $utilities: map.merge(
 
         // Do not render anything if fluid and non fluid values are the same
         $value: if($val == rfs-fluid-value($value), null, $val);
-      }
-      @else {
+      } @else {
         $value: rfs-fluid-value($value);
       }
     }
@@ -489,7 +487,7 @@ $utilities: map.merge(
     $is-css-var: map.get($utility, css-var);
     $is-rtl: map.get($utility, rtl);
 
-    @if $value != null {
+    @if $value {
       @if $is-rtl == false {
         /* rtl:begin:remove */
       }

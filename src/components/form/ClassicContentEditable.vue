@@ -46,11 +46,12 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app .classic-content-editable {
   &[placeholder]:empty::before {
     content: attr(placeholder);
-    color: octopusVariables.$octopus-primary-color;
+    color: var(--octopus-primary);
   }
 
   &[placeholder]:empty:focus::before {

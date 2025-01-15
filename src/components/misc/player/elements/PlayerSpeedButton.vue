@@ -56,11 +56,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .speed-style {
     font-size: 12px;
   }
+
   .player-speed-dropdown {
     min-width: 100px;
   }

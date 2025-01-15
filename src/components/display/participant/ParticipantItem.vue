@@ -126,25 +126,26 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   .participant-item-container {
     list-style: none;
-    border-radius: octopusVariables.$octopus-borderradius;
+    border-radius: var(--octopus-border-radius);
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
     align-items: center;
-    width: octopusVariables.$octopus-item-size;
+    width: var(--octopus-image-size);
 
     .participant-description {
       overflow: hidden;
       margin-top: 0.5em;
-      word-break: break-word;
       max-height: 3rem;
       position: relative;
       text-align: center;
-      &.after-participant-description:after {
+
+      &.after-participant-description::after {
         content: "...";
         position: absolute;
         padding-left: 1rem;
@@ -156,8 +157,7 @@ export default defineComponent({
         text-align: center;
         background: linear-gradient(
           to bottom,
-          rgba(255, 255, 255, 0),
-          octopusVariables.$octopus-background 40%
+          var(--octopus-background), var(--octopus-background-transparent)
         );
       }
     }
@@ -167,10 +167,12 @@ export default defineComponent({
       font-size: 0.6rem;
       margin-top: 0.5rem;
     }
-    @media (max-width: 960px) {
+
+    @media (width <= 960px) {
       margin: 0;
     }
-    @media (max-width: 450px) {
+
+    @media (width <= 450px) {
       margin: 1rem 0 0;
     }
   }

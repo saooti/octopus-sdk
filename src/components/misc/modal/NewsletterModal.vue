@@ -28,7 +28,7 @@
               />
               <div class="d-flex flex-column">
                 <div class="fw-bold">{{ colors.mainText }}</div>
-                <div v-if="colors.secondText" class="descriptionText">
+                <div v-if="colors.secondText" class="description-text">
                   {{ colors.secondText }}
                 </div>
               </div>

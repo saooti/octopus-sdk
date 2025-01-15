@@ -25,7 +25,7 @@
               <h2 class="mb-3">{{ name }}</h2>
               <!-- eslint-disable vue/no-v-html -->
               <p
-                class="html-wysiwyg-content descriptionText"
+                class="html-wysiwyg-content description-text"
                 v-html="urlify(description)"
               />
               <!-- eslint-enable -->

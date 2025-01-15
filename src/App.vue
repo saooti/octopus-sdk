@@ -116,4 +116,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" src="@/assets/octopus-library.scss"></style>
+<style lang="scss" src="@/style/octopus-library.scss"></style>

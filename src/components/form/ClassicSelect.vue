@@ -60,23 +60,25 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
+
+
 .octopus-app {
   select option:checked,
   select option:hover {
-    box-shadow: 0 0 10px 100px #dddddd inset;
+    box-shadow: 0 0 10px 100px var(--octopus-secondary) inset;
   }
+
   select:focus > option:checked {
-    background: #dddddd !important;
+    background: var(--octopus-secondary) !important;
   }
+
   select.transparent {
     background: transparent !important;
     outline-color: transparent !important;
     padding: 0;
     border: 0;
     height: unset;
-    -webkit-appearance: auto !important;
-    -moz-appearance: auto !important;
+    appearance: auto !important;
   }
 }
 </style>

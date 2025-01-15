@@ -46,6 +46,7 @@ export default defineComponent({
     max-width: 140px;
     text-wrap: wrap;
     text-wrap: balance;
+
     &:hover {
       background: white;
     }
