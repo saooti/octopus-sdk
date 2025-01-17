@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="undefined !== tagList && 0 !== tagList.length"
-    class="tag-list-component d-flex align-items-center flex-wrap comma mb-3"
+    class="tag-list-component d-flex align-items-center flex-wrap comma mb-3 small-text"
   >
-    <div class="me-3">
-      {{ $t("Podcast tags") + ": " }}
+    <div class="fw-bold me-3">
+      {{ $t("Podcast tags") + " : " }}
     </div>
     <div
       v-for="(tag, index) in tagList"

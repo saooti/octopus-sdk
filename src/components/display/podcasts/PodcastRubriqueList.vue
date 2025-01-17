@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="rubriqueIds.length && init"
-    class="rubrique-list-component d-flex align-items-center flex-wrap mb-3"
+    class="rubrique-list-component d-flex align-items-center flex-wrap mb-3 small-text"
   >
-    <div class="me-3">
-      {{ $t("Rubrics") + ": " }}
+    <div class="fw-bold me-3">
+      {{ $t("Rubrics") + " : " }}
     </div>
     <router-link
       v-for="rubriqueId in rubriqueIds"

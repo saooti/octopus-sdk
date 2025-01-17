@@ -284,7 +284,7 @@ export default {
   "Download started": "Lädt herunter",
   "From RSS": "Aus RSS-Feed",
   "User menu": "Benutzermenü",
-  "Podcast tags": "Podcast-Tags",
+  "Podcast tags": "Schlüsselwörter",
   Enlarge: "Vergrößern",
   Reduce: "Reduzieren",
   "Use organization color": "Verwenden Sie die Organisationsfarbe",

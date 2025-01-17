@@ -15,6 +15,31 @@ import { CommentMessage, CommentsConfig } from "./class/config/commentsConfig";
 import classicApi from "../api/classicApi";
 import { Podcast } from "./class/general/podcast";
 import { ListClassicReturn } from "./class/general/listReturn";
+function errorCommentsConfig(): CommentsConfig {
+  return {
+    inherited: false,
+    abuse: {
+      authRequired: true,
+    },
+    commentLikes: {
+      authRequired: true,
+      dislikeEnabled: false,
+      likeEnabled: false,
+    },
+    comments: {
+      authRequired: true,
+      commentAllowed: "NONE",
+      defaultState: "PENDING",
+      depth: 2,
+    },
+    podcastLikes: {
+      authRequired: true,
+      dislikeEnabled: false,
+      likeEnabled: false,
+    },
+  };
+}
+
 
 export interface CommentUser {
   name: string | null;
@@ -128,10 +153,14 @@ export const useCommentStore = defineStore("CommentStore", {
           path:"config/podcast/" + podcast.podcastId,
         });
       } catch {
-        this.podcastsCommentsConfig[podcast.podcastId] = await classicApi.fetchData<CommentsConfig>({
-          api: 2,
-          path: "config/emission/" + podcast.emission.emissionId,
-        });
+        try {
+          this.podcastsCommentsConfig[podcast.podcastId] = await classicApi.fetchData<CommentsConfig>({
+            api: 2,
+            path: "config/emission/" + podcast.emission.emissionId,
+          });
+        } catch (error) {
+          this.podcastsCommentsConfig[podcast.podcastId] = errorCommentsConfig(); 
+        }
       }
       return this.podcastsCommentsConfig[podcast.podcastId];
     },

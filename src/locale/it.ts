@@ -279,7 +279,7 @@ export default{
     "Download started": 'Il download è iniziato', 
     'From RSS': "Da un RSS Feed ",
     "User menu":"Menu utente", 
-    'Podcast tags': 'Tag podcast', 
+    'Podcast tags': 'Parole chiave', 
     "Term of use":"Termini d'uso",
     'More episodes of this category : ': "Altri episodi su questo tema : {name}",
     "Enlarge":"Ingrandire",

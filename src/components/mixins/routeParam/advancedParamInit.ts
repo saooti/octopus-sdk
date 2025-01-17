@@ -76,6 +76,7 @@ export const advancedParamInit = defineComponent({
       if (!this.isInit) {
         return;
       }
+      // TODO si oldValue !=null
       this.rubriqueFilter = [];
     },
     routeQuery(){

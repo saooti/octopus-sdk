@@ -25,6 +25,7 @@
     --octopus-secondary-lighter: oklch(from var(--octopus-secondary) calc(l * 1.05) c h);
     --octopus-text-disabled: oklch(from var(--octopus-secondary) calc(l * 0.60) c h);
     --octopus-background-transparent: oklch(from var(--octopus-background) l c h / 40%);
+    --octopus-background-full-transparent: oklch(from var(--octopus-background) l c h / 0%);
     --octopus-tertiary-really-transparent: oklch(from var(--octopus-tertiary) l c h / 30%);
 
     // Size

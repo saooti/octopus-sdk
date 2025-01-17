@@ -8,7 +8,7 @@
       :title="$t('Series name page', { name: emission.name })"
       class="d-flex flex-column text-dark"
     >
-      <div v-if="rubriqueName" class="emissionPlayerItem-info">
+      <div v-if="rubriqueName" class="emission-player-item-info">
         {{ rubriqueName }}
       </div>
       <div class="img-box rounded-0">

@@ -275,7 +275,7 @@ export default {
   "Download started": "Prenos se je začel",
   "From RSS": "Z vira RSS",
   "User menu": "Uporabniški meni",
-  "Podcast tags": "Oznake podkastov",
+  "Podcast tags": "Ključne besede",
   Enlarge: "Povečaj",
   Reduce: "Zmanjšaj",
   "Use organization color": "Uporabite barvo organizacije",

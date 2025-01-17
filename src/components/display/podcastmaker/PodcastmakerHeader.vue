@@ -57,8 +57,8 @@ export default defineComponent({
       inset: 0;
       z-index: 2;
       display: flex;
-      flex-direction: column;
       justify-content: center;
+      align-items: center;
 
       h1 {
         color: white !important;

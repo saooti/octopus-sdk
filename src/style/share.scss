@@ -211,7 +211,9 @@
         font-size: 1rem;
         font-weight: bolder;
         text-align: center;
-        background: linear-gradient(to bottom, var(--octopus-background), var(--octopus-background-transparent));
+        background: linear-gradient(to bottom, 
+        var(--octopus-background-full-transparent),
+        var(--octopus-background-transparent));
       }
     }
   }

@@ -157,7 +157,8 @@ export default defineComponent({
         text-align: center;
         background: linear-gradient(
           to bottom,
-          var(--octopus-background), var(--octopus-background-transparent)
+          var(--octopus-background-full-transparent),
+          var(--octopus-background-transparent)
         );
       }
     }
