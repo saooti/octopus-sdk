@@ -54,30 +54,9 @@ export default defineComponent({
   data() {
     return {
       emojiIndex: emojiIndex,
-      /* hasPlaceAboveButton: false as boolean, */
       isPhone: false as boolean,
     };
   },
-  /* computed: {
-    isReallyTopPosition(): boolean {
-      return this.isTopPosition && this.hasPlaceAboveButton;
-    },
-  }, */
-  /* watch:{
-    isPhone: {
-      immediate: true,
-      async handler() {
-        debugger;
-        if (!this.isPhone && this.isTopPosition && this.$refs.emojiButton) {
-          this.hasPlaceAboveButton =
-            (this.$refs.emojiButton as HTMLButtonElement).getBoundingClientRect()
-              .top +
-              window.scrollY >
-            450;
-        }
-      },
-    },
-  }, */
 });
 </script>
 

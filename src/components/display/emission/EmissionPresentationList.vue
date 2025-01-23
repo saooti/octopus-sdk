@@ -84,6 +84,7 @@ export default defineComponent({
     href: { default: undefined, type: String },
     buttonText: { default: undefined, type: String },
     isDescription: { default: false, type: Boolean },
+    rubriquesId: { default: [], type: Array<number> },
   },
   data() {
     return {
@@ -110,6 +111,7 @@ export default defineComponent({
             size: 5,
             organisationId: this.organisationId,
             sort: "LAST_PODCAST_DESC",
+            rubriqueId: this.rubriquesId
           },
           specialTreatement: true,
         });

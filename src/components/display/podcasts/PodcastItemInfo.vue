@@ -76,7 +76,7 @@ export default defineComponent({
       return state.emissionsPage.progressBar as boolean;
     },
     date(): string {
-      return dayjs(this.pubDate).format("D MMMM YYYY, HH[h]mm");
+      return dayjs(this.pubDate).format("D MMMM YYYY");
     },
     editRight(): boolean {
       return this.isEditRights(this.podcastOrganisationId);

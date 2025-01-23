@@ -177,6 +177,7 @@ export default defineComponent({
       let parentTop = 0;
       let parentScrollTop = 0;
       let parentBottom = 0;
+      let parentWidth=0;
       if (!this.isTopLayerPopover && this.relativeClass) {
         const modalBody = document.getElementsByClassName(
           this.relativeClass,
@@ -193,16 +194,31 @@ export default defineComponent({
         parentTop = modalBodyRect.top;
         parentScrollTop = modalBody.scrollTop;
         parentBottom=modalBodyRect.bottom;
+        parentWidth = modalBodyRect.width;
       }
       const rectElement = (e.target as HTMLElement).getBoundingClientRect();
       (this.$refs.popover as HTMLElement).style.display = "block";
+      const sizePopover = (this.$refs.popover as HTMLElement).clientWidth;
+      const sizeAvailable = window.innerWidth -parentWidth;
       if (this.leftPos) {
-        this.posX =
+        const elementRightRelative = rectElement.right - parentLeft;
+        const hasPlaceRightButton = (sizeAvailable - (sizeAvailable - elementRightRelative)) > sizePopover;
+        if(hasPlaceRightButton){
+          this.posX =
           rectElement.right -
-          parentRight -
-          (this.$refs.popover as HTMLElement).clientWidth;
+          parentLeft -
+          sizePopover;
+        }else{
+          this.posX =parentLeft;
+        }
       } else {
-        this.posX = rectElement.left - parentLeft;
+        const elementLeftRelative = rectElement.left - parentLeft;
+        const hasPlaceRightButton = (sizeAvailable - elementLeftRelative) > sizePopover;
+        if(hasPlaceRightButton){
+          this.posX = elementLeftRelative;
+        }else{
+          this.posX = sizeAvailable - sizePopover + parentLeft;
+        }
       }
       this.posX = Math.max(0, this.posX);
       const yPosParent = this.topPos ? rectElement.top : rectElement.bottom;

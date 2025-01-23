@@ -12,7 +12,7 @@ export default {
   },
   formatDuration(
     totalSeconds: number | null,
-    separator = "'",
+    separator = ":",
     isLast = true,
   ): string {
     if (null === totalSeconds) {

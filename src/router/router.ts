@@ -354,7 +354,7 @@ router.beforeEach(async (to, from) => {
   if("/logout" === to.path && "/logout" !== from.path){
     setTimeout(() => {
       window.location.reload(true);
-    }, 10);
+    }, 200);
   }
 });
 export default router;
