@@ -31,6 +31,7 @@ const error403Page = () => import("@/components/pages/Error403Page.vue");
 const PageNotFound = () => import("@/components/pages/PageNotFound.vue");
 const RadioPage = () => import("@/components/pages/RadioPage.vue");
 const VideoPage = () => import("@/components/pages/VideoPage.vue");
+const PageLogout = () => import("@/components/pages/PageLogout.vue");
 
 const routes: Array<RouteRecordRaw> = [
   /*--------------------------------------------------------------------------
@@ -299,6 +300,8 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main/priv/distribution/:distrib/:id",
     component: Home,
   },
+  { path: "/logout", component: PageLogout },
+  { path: "/sso/logout", component: PageLogout },
   { path: "/:pathMatch(.*)*", component: PageNotFound },
 ];
 const router = createRouter({
@@ -354,7 +357,7 @@ router.beforeEach(async (to, from) => {
   if("/logout" === to.path && "/logout" !== from.path){
     setTimeout(() => {
       window.location.reload(true);
-    }, 200);
+    }, 1000);
   }
 });
 export default router;
