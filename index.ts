@@ -17,6 +17,7 @@ export const getRadio = () => import("./src/components/pages/RadioPage.vue");
 export const getVideo = () => import("./src/components/pages/VideoPage.vue");
 export const getMapPage= () => import("./src/components/pages/MapPage.vue");
 export const getPageNotFound= () => import("./src/components/pages/PageNotFound.vue");
+export const getPageLogout= () => import("./src/components/pages/PageLogout.vue");
 
 //Misc
 export const getAccordion = () => import("./src/components/misc/ClassicAccordion.vue");
