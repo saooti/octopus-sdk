@@ -43,7 +43,6 @@ export const playerTranscript = defineComponent({
       const result = await classicApi.fetchData<string>({
         api:11,
         path:`response/${this.playerPodcast.podcastId}`,
-        isNotAuth:true
       });
 
       const arrayTranscript = this.parseSrt(result);
