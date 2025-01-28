@@ -9,12 +9,12 @@
           <template v-for="button in arrayShareButtons" :key="button.title">
             <a
               v-if="button.condition"
-              rel="noopener"
+              rel="noreferrer noopener"
               target="_blank"
               :href="button.url"
               :class="getClass(button.className)"
               class="me-2"
-              :title="button.title"
+              :title="$t('New window', {text: button.title})"
             >
               <component :is="button.icon" :size="34" />
             </a>
@@ -65,11 +65,11 @@
           </h3>
           <div class="d-flex align-items-center justify-content-center">
             <a
-              rel="noopener"
+              rel="noreferrer noopener"
               target="_blank"
               :class="getClass()"
               :href="rssUrl"
-              :title="titleRssButton"
+              :title="$t('New window', {text: titleRssButton})"
               @click.prevent="openPopup()"
             >
               <RssIcon />

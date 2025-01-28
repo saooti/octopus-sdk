@@ -2,12 +2,12 @@
   <div>
     <a
       v-if="linkAdvertising"
-      rel="noopener"
+      rel="noreferrer noopener"
       target="_blank"
       :href="linkAdvertising"
       class="player-image link-image"
       :class="imageWidth > 50 ? 'big-player-image' : ''"
-      :title="$t('Advertising')"
+      :title="$t('New window', {text: $t('Advertising')})"
     >
       <LinkVariantIcon />
     </a>

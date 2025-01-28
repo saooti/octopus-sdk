@@ -36,7 +36,7 @@ export const getPopover = () => import("./src/components/misc/ClassicPopover.vue
 export const getClassicModal = () => import("./src/components/misc/modal/ClassicModal.vue");
 export const getClassicLazy = () => import("./src/components/misc/ClassicLazy.vue");
 export const getContractPreviewModal = () => import("./src/components/misc/modal/ContractPreviewModal.vue");
-
+export const getClassicModalInBody = () => import("./src/components/misc/modal/ClassicModalInBody.vue");
 
 
 //Display

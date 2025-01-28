@@ -11,9 +11,9 @@
         :target="'popover-comment' + comment.commentId"
         :content="$t('Comment waiting')"
       />
-      <div class="me-2">
+      <time :datetime="comment.date" class="me-2">
         {{ date }}
-      </div>
+      </time>
       <div
         v-if="comment.abuse && editRight"
         class="d-flex align-items-center text-danger me-2"

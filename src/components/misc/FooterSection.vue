@@ -6,7 +6,7 @@
   >
     <div v-if="!isPodcastmaker" class="d-flex flex-column px-1">
       <div class="text-dark my-1 special-select-align-magic-trick">
-        &copy; Saooti 2024
+        &copy; Saooti 2025
       </div>
       <FooterGarSection v-if="isGarRole" :auth-orga-id="authOrgaId" />
       <nav :aria-label="$t('Site menu')">
@@ -61,9 +61,9 @@
       <a
         v-else
         href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts"
-        rel="noopener"
+        rel="noreferrer noopener"
         target="_blank"
-        :title="$t('Octopus is ACPM Podcast accredited')"
+        :title="$t('New window', {text: $t('Octopus is ACPM Podcast accredited')})"
       >
         <AcpmImage />
       </a>

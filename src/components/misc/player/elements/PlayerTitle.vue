@@ -7,8 +7,9 @@
     class="flex-grow-1 text-truncate text-light"
     :class="titleClass"
     :href="linkAdvertising"
-    rel="noopener"
+    rel="noreferrer noopener"
     target="_blank"
+    :title="$t('New window', {text: podcastTitle})"
   >
     {{ podcastTitle }}
   </component>

@@ -8,7 +8,7 @@
         v-for="(sub, index) in subscriptionsDisplay"
         :key="sub.name"
         :ref="'subLink' + sub.name"
-        rel="noopener"
+        rel="noreferrer noopener"
         target="_blank"
         :class="[
           0 === index ? 'first' : '',
@@ -16,17 +16,17 @@
         ]"
         class="btn share-btn mx-2"
         :href="sub.url"
-        :title="sub.title"
+        :title="$t('New window', {text: sub.title})"
       >
         <component :is="sub.icon" :fill-color="sub?.color" />
       </a>
     </div>
     <a
-      rel="noopener"
+      rel="noreferrer noopener"
       target="_blank"
       class="btn share-btn mx-2"
       :href="rssUrl"
-      :title="$t('Rss feed')"
+      :title="$t('New window', {text: $t('Rss feed')})"
     >
       <RssIcon />
     </a>
@@ -47,11 +47,12 @@
       <a
         v-for="link in hiddenLinks"
         :key="link.name"
-        rel="noopener"
+        rel="noreferrer noopener"
         target="_blank"
         class="octopus-dropdown-item justify-content-start d-flex align-items-center"
         :href="link.url"
         realLink="true"
+        :title="$t('New window', {text: link.title})"
       >
         <component :is="link.icon" :fill-color="link.color" class="me-1" />
         {{ link.title }}

@@ -1,29 +1,26 @@
 <template>
-  <div class="d-flex align-items-center">
-    <label for="monetizable-filter-select">{{ $t("Advertising") + " :" }}</label>
-    <select
-      id="monetizable-filter-select"
-      ref="select"
-      v-model="monetisableForVmodel"
-      :title="$t('Advertising')"
-      class="ms-2 mb-0 c-hand"
-    >
-      <option value="UNDEFINED">
-        {{ allString }}
-      </option>
-      <option value="YES">
-        {{ $t("Authorized advertising") }}
-      </option>
-      <option value="NO">
-        {{ $t("Prohibited advertising") }}
-      </option>
-    </select>
-  </div>
+  <ClassicSelect
+    v-model:text-init="monetisableForVmodel"
+    id-select="monetizable-filter-select"
+    :label="$t('Advertising') + ' :'"
+    :display-label="true"
+    class-label="flex-shrink-0 me-1"
+    class="d-flex align-items-center"
+    :options="[
+      { title: allString, value: 'UNDEFINED' },
+      { title: $t('Authorized advertising'), value: 'YES' },
+      { title: $t('Prohibited advertising'), value: 'NO' },
+    ]"
+  />
 </template>
 
 <script lang="ts">
+import ClassicSelect from "../../form/ClassicSelect.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
+  components:{
+    ClassicSelect
+  },
   props: {
     isEmission: { default: false, type: Boolean },
     monetisable: { default: "UNDEFINED", type: String },

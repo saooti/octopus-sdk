@@ -158,7 +158,7 @@ export const useCommentStore = defineStore("CommentStore", {
             api: 2,
             path: "config/emission/" + podcast.emission.emissionId,
           });
-        } catch (error) {
+        } catch {
           this.podcastsCommentsConfig[podcast.podcastId] = errorCommentsConfig(); 
         }
       }

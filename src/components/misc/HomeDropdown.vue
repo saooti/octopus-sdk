@@ -66,11 +66,13 @@
                 <a
                   :href="helpLink.href"
                   class="octopus-dropdown-item"
-                  rel="noopener"
+                  rel="noreferrer noopener"
                   target="_blank"
                   realLink="true"
+                  :title="$t('New window', {text: helpLink.title})"
                 >
                   {{ helpLink.title }}
+                  <OpenInNewIcon class="ms-1" :size="15"/>
                 </a>
               </li>
             </template>
@@ -97,6 +99,7 @@
 </template>
 
 <script lang="ts">
+import OpenInNewIcon from "vue-material-design-icons/OpenInNew.vue";
 import AppsIcon from "vue-material-design-icons/Apps.vue";
 import AccountIcon from "vue-material-design-icons/Account.vue";
 import DownloadIcon from "vue-material-design-icons/Download.vue";
@@ -113,6 +116,7 @@ export default defineComponent({
     DownloadIcon,
     AccountIcon,
     AppsIcon,
+    OpenInNewIcon
   },
   props: {
     isEducation: { default: false, type: Boolean },

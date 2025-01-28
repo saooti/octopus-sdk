@@ -55,8 +55,8 @@
           v-else
           href="https://www.saooti.com/"
           target="_blank"
-          rel="noopener"
-          title="Saooti"
+          rel="noreferrer noopener"
+          :title="$t('New window', {text: 'Saooti'})"
         >
           <img
             :src="logoUrl"

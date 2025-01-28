@@ -1,32 +1,27 @@
 <template>
-  <div class="d-flex align-items-center">
-    <select
-      v-model="rubriquageId"
-      class="ms-2 mb-0 c-hand"
-      :title="$t('Topics')"
-      @change="onRubriquageSelected"
-    >
-      <option
-        v-for="rubriquage in rubriquageDisplay"
-        :key="rubriquage.rubriquageId"
-        :value="rubriquage.rubriquageId"
-      >
-        {{ rubriquage.title }}
-      </option>
-    </select>
-    <template v-if="rubriquageId">
+  <div class="d-flex align-items-center mb-2">
+    <ClassicSelect
+      :text-init="rubriquageIdSelected"
+      id-select="rubrique-choice-select"
+      :label="$t('Topics')"
+      :display-label="false"
+      class="flex-shrink-0"
+      :options="rubriquageDisplayForSelect"
+      @update:text-init="onRubriquageSelected(parseInt($event, 10))"
+    />
+    <template v-if="rubriquageIdSelected">
       <div class="ms-3 flex-shrink-0">
         {{ $t("By rubric") }}
       </div>
       <RubriqueChooser
-        v-if="getRubriquesLength(rubriquageId)"
-        :id="'rubrique-chooser'+rubriquageId"
+        v-if="getRubriquesLength(rubriquageIdSelected)"
+        :id="'rubrique-chooser'+rubriquageIdSelected"
         class="ms-2"
         :multiple="false"
         :rubrique-selected="
           0 !== rubriqueIdSelected ? rubriqueIdSelected : undefined
         "
-        :all-rubriques="getRubriques(rubriquageId)"
+        :all-rubriques="getRubriques(rubriquageIdSelected)"
         :defaultanswer="$t('No rubric filter')"
         :reset="reset"
         :without-rubrique="true"
@@ -45,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import ClassicSelect from "../../form/ClassicSelect.vue";
 import TrashCanIcon from "vue-material-design-icons/TrashCan.vue";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
@@ -56,6 +52,7 @@ export default defineComponent({
   components: {
     RubriqueChooser,
     TrashCanIcon,
+    ClassicSelect
   },
   props: {
     rubriquageDisplay: {
@@ -70,28 +67,19 @@ export default defineComponent({
 
   data() {
     return {
-      rubriquageId: undefined as number | undefined,
-      rubriqueId: undefined as number | undefined,
       reset: false as boolean,
     };
   },
-  watch: {
-    rubriquageIdSelected() {
-      this.initRubriquage();
-    },
-    rubriqueIdSelected() {
-      this.initRubriquage();
-    },
+  computed:{
+    rubriquageDisplayForSelect(){
+      return this.rubriquageDisplay.map((rubriquage) => {
+        return { title: rubriquage.title, value: rubriquage.rubriquageId };
+      });
+    }
   },
 
-  created() {
-    this.initRubriquage();
-  },
 
   methods: {
-    initRubriquage() {
-      this.rubriquageId = this.rubriquageIdSelected;
-    },
     deleteRubriquage() {
       this.$emit("deleteRubriqueChoice");
     },
@@ -107,18 +95,17 @@ export default defineComponent({
         : [];
     },
     onRubriqueSelected(rubrique: Rubrique): void {
-      if (rubrique.rubriqueId === this.rubriqueId) return;
-      this.rubriqueId = rubrique.rubriqueId;
+      if (rubrique.rubriqueId === this.rubriqueIdSelected) return;
       this.$emit("updateRubrique", {
         rubriqueId: rubrique.rubriqueId,
         index: this.index,
       });
     },
-    onRubriquageSelected(): void {
+    onRubriquageSelected(newRubriquage: number): void {
       this.reset = !this.reset;
-      this.rubriqueId = 0;
       this.$emit("updateRubriquage", {
-        rubriquageId: this.rubriquageId,
+        rubriquageId: newRubriquage,
+        rubriqueId:0,
         index: this.index,
       });
     },

@@ -396,4 +396,5 @@ export default {
   "Site menu":"Meni spletnega mesta",
   "The episode is being processed":"Epizoda je v obdelavi",
   Rubrics: "Rubrike",
+  "New window":"{text} - Novo okno",
 }

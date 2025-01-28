@@ -1,73 +1,66 @@
 <template>
-  <div
-    v-if="(!value || init) && organisation"
-    class="default-multiselect-width organisation-chooser-light mb-1 ms-1"
-    :style="{ width: width }"
-  >
-    <select
-      id="organisation-chooser-footer"
-      v-model="actual"
-      :title="$t('select productor')"
-      class="c-hand w-100 transparent"
-      @change="onOrganisationSelected"
-    >
-      <option :value="organisation.id">
-        {{ organisation.name }}
-      </option>
-      <option :value="-1">
-        {{ $t("No organisation filter") }}
-      </option>
-    </select>
-  </div>
+   <ClassicSelect
+      v-if="(!value || init) && organisation"
+      v-model:text-init="actual"
+      :display-label="false"
+      id-select="organisation-chooser-footer"
+      :label="$t('select productor')"
+      :transparent="true"
+      :options="[
+        { title: organisation.name, value: organisation.id },
+        { title: $t('No organisation filter'), value: 'NONE' },
+      ]"
+      class="my-1"
+    />
 </template>
 
 <script lang="ts">
+import ClassicSelect from "../../form/ClassicSelect.vue";
 import { Organisation } from "@/stores/class/general/organisation";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
+  components:{
+    ClassicSelect
+  },
   props: {
-    width: { default: "100%", type: String },
     value: { default: undefined, type: String },
     reset: { default: false, type: Boolean },
-    page: { default: "", type: String },
   },
   emits: ["selected"],
 
   data() {
     return {
-      actual: -1 as number | string,
+      actual: "NONE" as string,
       organisation: undefined as Organisation | undefined,
       init: false as boolean,
     };
   },
 
   watch: {
-    value(): void {
-      if (!this.init || this.value) {
-        this.fetchOrganisation();
-      }
+    value: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if (!this.init || this.value) {
+          this.fetchOrganisation();
+        }
+      },
     },
     reset(): void {
-      this.actual = -1;
+      this.actual = "NONE";
     },
-  },
-
-  created() {
-    if (this.value) {
-      this.fetchOrganisation();
+    actual(){
+      this.$emit(
+        "selected",
+        "NONE" === this.actual ? undefined : this.organisation,
+      );
     }
   },
 
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaData"]),
-    onOrganisationSelected(): void {
-      this.$emit(
-        "selected",
-        -1 === this.actual ? undefined : this.organisation,
-      );
-    },
     async fetchOrganisation(): Promise<void> {
       if (!this.value) {
         return;
@@ -79,11 +72,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss">
-.octopus-app {
-  .organisation-chooser-light select {
-    appearance: none;
-  }
-}
-</style>

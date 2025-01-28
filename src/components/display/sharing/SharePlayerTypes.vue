@@ -5,18 +5,24 @@
       :value="iFrameModel"
       @change="selectChange($event)"
     >
-      <template v-for="option in optionsSelect" :key="option.value">
-        <option v-if="option.condition" :value="option.value">
-          {{ option.name }}
+      <optgroup v-show="isCustomPlayer" id="player-default-opt-group" :label="$t('Default version')"></optgroup>
+      <Teleport defer :disabled="!isCustomPlayer" to="#player-default-opt-group">
+        <template v-for="option in optionsSelect" :key="option.value">
+          <option v-if="option.condition" :value="option.value">
+            {{ option.name }}
+          </option>
+        </template>
+      </Teleport>
+      
+      <optgroup v-if="isCustomPlayer" :label="$t('Custom version')">
+        <option
+          v-for="player in customPlayersDisplay"
+          :key="player.customId"
+          :value="player.customId"
+        >
+          {{ $t("Custom version") + " «" + player.name + "»" }}
         </option>
-      </template>
-      <option
-        v-for="player in customPlayersDisplay"
-        :key="player.customId"
-        :value="player.customId"
-      >
-        {{ $t("Custom version") + " «" + player.name + "»" }}
-      </option>
+      </optgroup>
     </select>
   </label>
 </template>
@@ -50,6 +56,9 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useAuthStore, ["authOrgaId"]),
+    isCustomPlayer(){
+      return 1<=this.customPlayersDisplay.length;
+    },
     isVideoPodcast(): boolean {
       return (
         undefined !== this.podcast && undefined !== this.podcast.video?.videoId
@@ -110,7 +119,7 @@ export default defineComponent({
             !this.podcast) ||
           ("PLAYLIST" === player.typePlayer && this.playlist)
         );
-      });
+      }).sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     },
   },
   created() {

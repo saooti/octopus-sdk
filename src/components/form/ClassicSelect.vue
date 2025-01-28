@@ -14,7 +14,7 @@
       @change="$emit('update:textInit', $event.target.value)"
     >
       <option
-        v-for="option in options"
+        v-for="option in optionsOrder"
         :key="option.title"
         :value="option.value"
         :style="option.fontFamily ? 'font-family:' + option.fontFamily : ''"
@@ -44,6 +44,7 @@ export default defineComponent({
     },
     textInit: { default: undefined, type: [String, Number] },
     classLabel: { default: "form-label", type: String },
+    orderOptions: { default: true, type: Boolean},
   },
   emits: ["update:textInit"],
   computed: {
@@ -56,6 +57,13 @@ export default defineComponent({
       }
       return "";
     },
+    optionsOrder(){
+      if(this.orderOptions){
+        const optionsOrdered = Array.from(this.options);
+        return optionsOrdered.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
+      }
+      return this.options; 
+    }
   },
 });
 </script>

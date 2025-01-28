@@ -1,12 +1,12 @@
 <template>
   <section v-if="podcast" class="d-flex flex-column flex-grow-1 mt-2">
     <div class="d-flex justify-content-between flex-wrap">
-      <div v-if="0 !== date.length" class="me-2">
+      <time v-if="0 !== date.length" class="me-2" :datetime="podcast.pubDate">
         {{ date }}
-      </div>
-      <div>
+      </time>
+      <time :datetime="durationIso">
         {{ duration }}
-      </div>
+      </time>
     </div>
     <div class="my-3 h3">{{ podcast.title }}</div>
     <!-- eslint-disable vue/no-v-html -->
@@ -43,6 +43,7 @@ export default defineComponent({
     podcast: { default: undefined, type: Object as () => Podcast },
     date: { default: "", type: String },
     duration: { default: "", type: String },
+    durationIso: { default: "", type: String },
   },
 
   data() {

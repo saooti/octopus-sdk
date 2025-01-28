@@ -405,4 +405,5 @@ export default {
   "Site menu":"Site-Menü",
   "The episode is being processed":"Die Episode wird bearbeitet",
   Rubrics: "Rubriken",
+  "New window":"{text} - Neues Fenster",
 }

@@ -400,4 +400,5 @@ export default{
   "Site menu":"Menù del sito",
   "The episode is being processed":"L'episodio è in fase di elaborazione",
   Rubrics: "Rubriche",
+  "New window":"{text} - Nuova finestra",
 };

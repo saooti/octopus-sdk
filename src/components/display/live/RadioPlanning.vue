@@ -12,8 +12,8 @@
           :class="day.date == daySelected ? 'bg-primary text-white' : ''"
           @click="changeDate(day.date)"
         >
-          <span class="text-capitalize">{{ day.dayOfWeek }}</span>
-          <span>{{ day.title }}</span>
+          <span class="text-capitalize" >{{ day.dayOfWeek }}</span>
+          <time :datetime="day.iso">{{ day.title }}</time>
         </button>
       </div>
       <button v-if="isPhone" class="btn btn-primary mb-3 mx-0" @click="showAllDays = !showAllDays">
@@ -64,9 +64,9 @@
                 :key="planningItem.occurrenceId + '' + planningItem.liveId"
                 class="d-flex align-items-center mb-3"
               >
-                <div class="program-item-date fw-bold flex-shrink-0">
+                <time :datetime="planningItem.startDate" class="program-item-date fw-bold flex-shrink-0">
                   {{ dateDisplay(planningItem.startDate) }}
-                </div>
+                </time>
                 <router-link
                   class="d-flex align-items-center flex-nowrap text-dark"
                   :to="{
@@ -153,6 +153,7 @@ export default defineComponent({
         title: string;
         date: number;
         dayOfWeek: string;
+        iso: string;
       }>,
       loading: true as boolean,
       error: false as boolean,
@@ -256,6 +257,7 @@ export default defineComponent({
           title: dayToAdd.format("D/MM"),
           dayOfWeek: dayToAdd.format("dddd"),
           date: dayToAdd.valueOf(),
+          iso: dayToAdd.format("MM-DD"),
         });
       }
     },

@@ -18,9 +18,9 @@
         class="d-flex flex-shrink-0"
       >
         <div class="d-flex flex-shrink-0 align-items-end">
-          <span class="me-2 hour-past-item">{{
+          <time :datetime="pastItem.startDate" class="me-2 hour-past-item">{{
             displayTimeItem(pastItem)
-          }}</span>
+          }}</time>
           <span class="me-3">{{ displayPreviousItem(pastItem) }}</span>
         </div>
       </div>

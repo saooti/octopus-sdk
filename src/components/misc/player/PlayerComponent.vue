@@ -2,7 +2,10 @@
   <section
     id="octopus-player-component"
     class="player-container"
-    :class="playerVideo ? 'player-video' : ''"
+    :class="{ 
+      'player-video': playerVideo,
+      'overflow-hidden': !display
+     }"
     :style="{ height: playerHeight }"
     @transitionend="onHidden"
   >

@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
+
 // @ts-expect-error Bibliothèque non typée
 import humanizeDuration from "humanize-duration";
 import { defineComponent } from 'vue';
@@ -51,6 +54,10 @@ export default defineComponent({
         largest: 2,
         round: true,
       });
+    },
+    durationIso(): string {
+      if (!this.podcast || this.podcast.duration <= 1) return "";
+      return dayjs.duration({ milliseconds: this.podcast.duration }).toISOString();
     },
   }
 });

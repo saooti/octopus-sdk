@@ -19,12 +19,14 @@
           :is-animator-live="isOctopusAndAnimator"
         />
         <div class="d-flex justify-content-between flex-wrap mb-2">
-          <div v-if="0 !== date.length" :class="!isLiveReady ? 'me-5' : ''">
+          <time 
+            v-if="0 !== date.length" :class="!isLiveReady ? 'me-5' : ''"
+            :datetime="podcast.pubDate">
             {{ date }}
-          </div>
-          <div>
+          </time>
+          <time :datetime="durationIso">
             {{ duration }}
-          </div>
+          </time>
           <div v-if="isLiveReady" class="text-danger">
             {{ $t("Episode record in live") }}
           </div>
@@ -82,8 +84,9 @@
             v-if="podcast.article && !isGarRole"
             class="btn d-flex align-items-center my-2 width-fit-content mb-1"
             :href="podcast.article"
-            rel="noopener"
+            rel="noreferrer noopener"
             target="_blank"
+            :title="$t('New window', {text : $t('See associated article')})"
           >
             <NewspaperVariantOutlineIcon class="me-1" />
             <div>{{ $t("See associated article") }}</div>

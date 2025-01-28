@@ -9,12 +9,11 @@
       id-checkbox="search-rubriquage-checkbox"
       :label="$t('By topic')"
     />
-    <div v-if="isRubriquage" class="d-flex ms-1 flex-column mb-2 flex-grow-1">
+    <div v-if="isRubriquage" class="d-flex ms-1 flex-column flex-grow-1">
       <RubriqueChoice
         v-for="(filter, index) in internRubriqueFilter"
         :key="index"
         :index="index"
-        class="mb-2"
         :rubriquage-display="getRubriquage(index)"
         :rubrique-id-selected="filter.rubriqueId"
         :rubriquage-id-selected="filter.rubriquageId"
@@ -130,7 +129,7 @@ export default defineComponent({
       }
     },
     addFilter(): void {
-      if (this.availableRubriquage[0].rubriquageId) {
+      if (this.availableRubriquage?.[0].rubriquageId) {
         this.internRubriqueFilter.push({
           rubriquageId: this.availableRubriquage[0].rubriquageId,
           rubriqueId: 0,

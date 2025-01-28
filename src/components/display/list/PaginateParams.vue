@@ -1,28 +1,25 @@
 <template>
   <div class="paginate">
-    <div class="d-flex align-items-center justify-content-center">
-      <label :for="'rows-per-page-select'+ id">{{ $t("Items per page :") }}</label>
-      <select
-        :id="'rows-per-page-select'+id"
-        :value="rowsPerPage"
-        class="c-hand p-1 mx-2"
-        @change="$emit('update:rowsPerPage', parseInt($event.target.value, 10))"
-      >
-        <option
-          v-for="option in optionsRowsPerPage"
-          :key="option"
-          :value="option"
-        >
-          {{ option }}
-        </option>
-      </select>
-    </div>
+    <ClassicSelect
+      :text-init="rowsPerPage"
+      :id-select="'rows-per-page-select'+id"
+      :label="$t('Items per page :')"
+      :display-label="true"
+      class-label="flex-shrink-0 me-1"
+      class="d-flex align-items-center mb-0"
+      :options="optionRowsPerPage"
+      @update:text-init="$emit('update:rowsPerPage', parseInt($event, 10))"
+    />
   </div>
 </template>
 <script lang="ts">
+import ClassicSelect from "../../form/ClassicSelect.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PaginateParams",
+  components:{
+    ClassicSelect
+  },
 
   props: {
     rowsPerPage: { default: 0, type: Number },
@@ -34,6 +31,14 @@ export default defineComponent({
   data() {
     return {
       optionsRowsPerPage: [10, 20, 30, 40, 50, 60] as Array<number>,
+      optionRowsPerPage: [
+        {title:"10", value: 10},
+        {title:"20", value: 20},
+        {title:"30", value: 30},
+        {title:"40", value: 40},
+        {title:"50", value: 50},
+        {title:"60", value: 60},
+      ],
     };
   },
   created() {
@@ -61,6 +66,7 @@ export default defineComponent({
     border-right: 0;
     border-left: 0;
     background: transparent !important;
+    padding-right: 0.4rem;
   }
 }
 </style>

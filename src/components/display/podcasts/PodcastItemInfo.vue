@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="text-secondary h6 ms-2">
+    <time 
+      :datetime="pubDate"
+      class="text-secondary h6 ms-2">
       {{ date }}
-    </div>
+    </time>
     <router-link
       :to="{
         name: 'podcast',

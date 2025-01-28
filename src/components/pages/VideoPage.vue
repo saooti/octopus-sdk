@@ -67,6 +67,7 @@
               :podcast="podcast"
               :date="date"
               :duration="duration"
+              :duration-iso="durationIso"
             />
           </div>
         </div>

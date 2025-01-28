@@ -104,7 +104,8 @@ export default defineComponent({
           return !rubriquageIdToNotShow.includes(element.rubriquageId);
         });
       }
-      return this.rubriquages;
+      const rubriquagesOrdered = Array.from(this.rubriquages);
+      return rubriquagesOrdered.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
     },
   },
   watch: {
