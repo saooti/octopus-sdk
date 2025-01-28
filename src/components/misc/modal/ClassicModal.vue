@@ -2,7 +2,7 @@
   <dialog
     :id="idModal"
     ref="modal"
-    class="octopus-modal"
+    class="octopus-modal octopus-modal-top-layer"
     :class="onlyHeader ? 'octopus-only-header-modal' : ''"
   >
     <div class="octopus-modal-header">
@@ -69,7 +69,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 
-.octopus-app .octopus-modal{
+.octopus-app .octopus-modal.octopus-modal-top-layer{
   &::backdrop {
     opacity: 0.5;
     background-color: black;

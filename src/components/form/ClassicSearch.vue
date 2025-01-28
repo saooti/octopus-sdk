@@ -4,7 +4,7 @@
       :id="idSearch"
       ref="search"
       :value="textInit"
-      type="text"
+      type="search"
       class="search-input w-100 p-2"
       :placeholder="label"
       :autofocus="autofocus"

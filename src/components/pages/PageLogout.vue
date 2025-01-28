@@ -45,10 +45,11 @@ export default defineComponent({
     background:
     repeating-linear-gradient(135deg,
     oklch(from var(--octopus-primary) calc(l * 1.09) c h) 0 10px,
-    oklch(from var(--octopus-tertiary) calc(l * 1.09) c h) 0 20px) 0/0%   no-repeat,
-    repeating-linear-gradient(135deg,#ddd    0 10px,#eee    0 20px) 0/100%;
+    oklch(from var(--octopus-tertiary) calc(l * 1.09) c h) 0 20px) 0 / 0%   no-repeat,
+    repeating-linear-gradient(135deg,var(--octopus-secondary)    0 10px,var(--octopus-secondary-darker)    0 20px) 0 / 100%;
     animation: l3 2s infinite;
   }
+
   @keyframes l3 {
       100% {background-size:100%}
   }

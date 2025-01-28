@@ -89,6 +89,7 @@ export default defineComponent({
       height: 20px;
       margin-right: 5px;
     }
+
     .main-of-tag {
       box-shadow: var(--octopus-shadow) 0 5px 15px;
       font-size: 0.9rem;

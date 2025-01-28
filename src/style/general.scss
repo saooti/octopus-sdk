@@ -147,6 +147,7 @@ main, #app{
       padding: 0.8rem;
     }
   }
+
   .small-text{
     font-size: 0.7rem;
   }
@@ -263,6 +264,7 @@ main, #app{
     > a{
       text-transform: capitalize;
     }
+
     > a, .comma-element {
       &::after {
         content: ", ";

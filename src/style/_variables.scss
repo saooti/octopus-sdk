@@ -12,7 +12,7 @@
     --octopus-border-default: oklch(91% 0.007 248deg);
     --octopus-shadow: oklch(0% 0 0deg / 40%); 
     --octopus-player-color:oklch(27% 0 0deg);
-    --octopus-gray: oklch(50% 0 0);
+    --octopus-gray: oklch(50% 0 0deg);
 
     // Relative colors
     --octopus-primary-darker: oklch(from var(--octopus-primary) calc(l - 0.03) c h);

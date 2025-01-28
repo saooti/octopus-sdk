@@ -42,7 +42,7 @@
       :id="inputId"
       ref="focusElement"
       v-model="textValue"
-      type="text"
+      :type="typeInput"
       class="form-input"
       :placeholder="placeholder"
       :data-selenium="dataSelenium"
@@ -152,6 +152,7 @@ export default defineComponent({
     isEmojiPicker: { default: false, type: Boolean },
     popoverRelativeClass: { default: undefined, type: String },
     forceReload: { default: false, type: Boolean },
+    typeInput: { default: "text", type: String },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {

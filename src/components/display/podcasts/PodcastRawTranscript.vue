@@ -146,7 +146,6 @@ export default defineComponent({
 
     .transcription-text {
       overflow: hidden auto;
-      text-align: justify;
     }
 
     &::before {

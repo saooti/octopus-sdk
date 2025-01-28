@@ -13,10 +13,12 @@
       :aria-label="label"
       @change="$emit('update:textInit', $event.target.value)"
     >
+      <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
       <option
         v-for="option in optionsOrder"
         :key="option.title"
         :value="option.value"
+        :data-selenium="'select-option-' + option.value"
         :style="option.fontFamily ? 'font-family:' + option.fontFamily : ''"
       >
         {{ option.title }}
@@ -42,9 +44,16 @@ export default defineComponent({
         fontFamily?: string;
       }>,
     },
+    topOption: { default: undefined,type: Object as () => {
+      title: string;
+      value: number | string | undefined;
+      fontFamily?: string;
+    },
+    },
     textInit: { default: undefined, type: [String, Number] },
     classLabel: { default: "form-label", type: String },
     orderOptions: { default: true, type: Boolean},
+    placeholder: { default: undefined, type: String},
   },
   emits: ["update:textInit"],
   computed: {
@@ -58,11 +67,14 @@ export default defineComponent({
       return "";
     },
     optionsOrder(){
+      const optionsOrdered = Array.from(this.options);
       if(this.orderOptions){
-        const optionsOrdered = Array.from(this.options);
-        return optionsOrdered.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
+        optionsOrdered.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
       }
-      return this.options; 
+      if(this.topOption){
+        optionsOrdered.unshift(this.topOption);
+      }
+      return optionsOrdered;
     }
   },
 });

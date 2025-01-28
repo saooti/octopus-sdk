@@ -1,7 +1,7 @@
 <template>
   <div
     :id="idModal"
-    class="octopus-modal"
+    class="octopus-modal octopus-modal-in-body"
     :class="onlyHeader ? 'octopus-only-header-modal' : ''"
   >
     <div class="octopus-modal-backdrop" />
@@ -72,20 +72,17 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@use "@scss/variables" as octopusVariables;
-.octopus-app {
-  .octopus-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: block;
-    z-index: 1400;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    outline: 0;
-  }
+.octopus-app .octopus-modal.octopus-modal-in-body{
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  z-index: 1400;
+  width: 100%;
+  height: 100%;
+  overflow: hidden auto;
+  outline: 0;
+
   .octopus-modal-backdrop {
     opacity: 0.5;
     z-index: 0;
@@ -96,7 +93,8 @@ export default defineComponent({
     height: 100vh;
     background-color: black;
   }
-  .octopus-modal.octopus-only-header-modal .octopus-modal-backdrop {
+
+  &.octopus-only-header-modal .octopus-modal-backdrop {
     opacity: 0.1;
   }
 
@@ -104,42 +102,41 @@ export default defineComponent({
     position: relative;
     pointer-events: none;
     margin: 1.75rem auto;
-    max-width: 800px;
+    max-width: 80vw;
     max-height: 90vh;
     width: 100%;
     display: flex;
-    color: #353535 !important;
-    @media (max-width: 500px) {
+    color: var(--octopus-color-text) !important;
+
+    @media (width <= 500px) {
       width: 95%;
       margin: 2.5% !important;
     }
   }
+
   .octopus-modal-body {
     flex: 1 1 auto;
     padding: 1rem;
     overflow-x: auto;
+
     .scroller-vertical {
       min-height: 200px;
       height: 200px;
     }
   }
+
   .octopus-modal-header {
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
     border: 0;
-    border-radius: octopusVariables.$octopus-borderradius
-      octopusVariables.$octopus-borderradius 0 0;
-    background: octopusVariables.$octopus-primary-color;
+    border-radius: var(--octopus-border-radius) var(--octopus-border-radius) 0 0;
+    background: var(--octopus-primary);
     color: white;
     padding: 1rem;
   }
 
-  .octopus-modal:not(.octopus-only-header-modal) .octopus-modal-dialog,
-  .octopus-modal:not(.octopus-only-header-modal) .octopus-modal-content {
-    min-height: 300px;
-  }
   .octopus-modal-content {
     display: flex;
     flex-direction: column;
@@ -151,9 +148,16 @@ export default defineComponent({
     outline: 0;
     height: auto !important;
     max-height: initial !important;
-    border-radius: octopusVariables.$octopus-borderradius;
-    box-shadow: 0 0.2rem 0.5rem rgba(40, 40, 40, 0.3);
+    border-radius: var(--octopus-border-radius);
+    box-shadow: 0 0.2rem 0.5rem var(--octopus-shadow);
   }
+
+  &:not(.octopus-only-header-modal) .octopus-modal-dialog,
+  &:not(.octopus-only-header-modal) .octopus-modal-content {
+    min-height: 300px;
+  }
+
+
   .octopus-modal-footer {
     display: flex;
     flex-shrink: 0;
@@ -162,6 +166,7 @@ export default defineComponent({
     align-items: center;
     justify-content: flex-end;
     padding: 1rem;
+
     button {
       margin: 0.1rem;
     }
