@@ -32,7 +32,7 @@
       :left-pos="true"
       :is-top-layer="true"
     >
-      <nav :aria-label="$t('User menu')">
+      <nav role="navigation" :aria-label="$t('User menu')">
         <ul class="p-0 m-0">
           <template v-if="!isAuthenticated">
             <li class="li-style-none">

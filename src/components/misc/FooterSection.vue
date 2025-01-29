@@ -2,6 +2,7 @@
   <footer
     id="footer"
     ref="footer"
+    role="contentinfo"
     class="d-flex align-items-center justify-content-between border-top mt-auto"
   >
     <div v-if="!isPodcastmaker" class="d-flex flex-column px-1">
@@ -9,7 +10,7 @@
         &copy; Saooti 2025
       </div>
       <FooterGarSection v-if="isGarRole" :auth-orga-id="authOrgaId" />
-      <nav :aria-label="$t('Site menu')">
+      <nav role="navigation" :aria-label="$t('Site menu')">
         <ul class="p-0 m-0">
           <li 
             v-for="link in routerLinkSecondArray"
@@ -211,7 +212,7 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   #footer {
-    font-size: 0.6rem;
+    font-size: max(0.6rem, 12px);
     bottom: 0;
     z-index: 10;
     background: white;

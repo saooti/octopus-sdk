@@ -22,7 +22,7 @@
           <path fill-rule="evenodd" :d="paginateButton.path" />
         </svg>
       </button>
-      <div v-for="pageNumber in pagination" :key="pageNumber">
+      <template v-for="pageNumber in pagination" :key="pageNumber">
         <span v-if="null === pageNumber" class="btn btn-min-width"> ... </span>
         <button
           v-else
@@ -32,7 +32,7 @@
         >
           {{ pageNumber }}
         </button>
-      </div>
+      </template>
       <button
         v-for="paginateButton in buttonsRight"
         :key="paginateButton.title"

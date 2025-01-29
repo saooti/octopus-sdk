@@ -1,5 +1,5 @@
 <template>
-  <div
+  <article
     class="podcast-item-container"
     :data-pubdate="displayDate"
     :data-count="podcast.downloadCount"
@@ -41,7 +41,7 @@
         :animators="podcast.animators"
       />
     </div>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

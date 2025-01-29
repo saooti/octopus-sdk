@@ -1,5 +1,5 @@
 <template>
-  <div class="emission-item-container">
+  <article class="emission-item-container">
     <router-link
       :to="{
         name: 'playlist',
@@ -44,7 +44,7 @@
         class="img-box"
       />
     </router-link>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="participant" class="participant-item-container">
+  <article v-if="participant" class="participant-item-container">
     <router-link
       :to="{
         name: 'participant',
@@ -48,7 +48,7 @@
     >
       © {{ participant.orga.name }}
     </router-link>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

@@ -397,4 +397,5 @@ export default {
   "The episode is being processed":"Epizoda je v obdelavi",
   Rubrics: "Rubrike",
   "New window":"{text} - Novo okno",
+  "Mandatory input":"Obvezen vnos",
 }

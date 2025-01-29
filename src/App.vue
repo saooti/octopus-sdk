@@ -2,7 +2,7 @@
   <div class="d-flex flex-column h-100 octopus-app">
     <template v-if="pageFullyLoad">
       <TopBar/>
-      <main>
+      <main role="main">
         <CategoryFilter v-if="firstDisplayCategoryFilter" />
         <div v-else class="category-filter-no-filter" />
         <router-view />

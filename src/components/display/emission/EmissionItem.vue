@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-3 emission-item-container">
+  <article class="mt-3 emission-item-container">
     <router-link
       :to="{
         name: 'emission',
@@ -50,7 +50,7 @@
         </router-link>
       </div>
     </router-link>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

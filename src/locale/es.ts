@@ -407,4 +407,5 @@ export default {
   "The episode is being processed":"El episodio está siendo procesado",
   Rubrics: "Secciones",
   "New window":"{text} - Nueva ventana",
+  "Mandatory input":"Entrada obligatoria",
 }

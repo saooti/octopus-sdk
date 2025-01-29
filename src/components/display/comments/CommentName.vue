@@ -1,5 +1,6 @@
 <template>
-  <div class="d-flex align-items-center mb-2">
+  <div 
+    class="d-flex align-items-center mb-2">
     <component
       :is="canEditName ? 'button' : 'div'"
       v-if="!isEditing"
@@ -9,27 +10,20 @@
       >{{ commentUser.name }}</component
     >
     <template v-else>
-      <div class="d-flex flex-column">
-        <input
-          v-model="temporaryName"
-          :title="$t('Your name')"
-          class="h6"
-          type="text"
-          :class="{ 'border border-danger': nameNotValid }"
-        />
-        <p
-          class="d-flex justify-content-end h6 mb-0"
-          :class="{ 'text-danger': !validName }"
-        >
-          {{ countName + " / " + maxName }}
-        </p>
-      </div>
+      <ClassicInputText
+        v-model:text-init="temporaryName"
+        v-model:error-variable="errorName"
+        input-id="comment-name-input"
+        :label="$t('Your name')"
+        :max-length="maxName"
+        class="me-3"
+      />
       <button class="btn m-1" @click="isEditing = false">
         {{ $t("Cancel") }}
       </button>
       <button
         class="btn btn-primary m-1"
-        :disabled="nameNotValid"
+        :disabled="errorName"
         @click="validEdit"
       >
         {{ $t("Yes") }}
@@ -39,6 +33,7 @@
 </template>
 
 <script lang="ts">
+import ClassicInputText from "../../form/ClassicInputText.vue";
 import Constants from "../../../../public/config";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
@@ -46,11 +41,15 @@ import { defineComponent } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
 export default defineComponent({
   name: "CommentName",
+  components:{
+    ClassicInputText
+  },
   emits: [],
   data() {
     return {
       isEditing: false as boolean,
       temporaryName: "" as string,
+      errorName: true as boolean,
       maxName: Constants.MAX_COMMENT_NAME as number,
     };
   },
@@ -60,15 +59,6 @@ export default defineComponent({
     ...mapState(useAuthStore, ["authProfile"]),
     canEditName(): boolean {
       return undefined !== this.authProfile;
-    },
-    nameNotValid(): boolean {
-      return 0 === this.countName || !this.validName;
-    },
-    validName(): boolean {
-      return this.countName <= this.maxName;
-    },
-    countName(): number {
-      return this.temporaryName.length;
     },
   },
   methods: {

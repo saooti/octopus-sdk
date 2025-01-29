@@ -2,7 +2,8 @@
   <div class="classic-select" :class="{ 'form-margin': displayLabel }">
     <label v-show="displayLabel" :for="idSelect" :class="classLabel">{{
       label
-    }}</label>
+    }}
+    <AsteriskIcon v-if="displayRequired" size="15" class="ms-1 mb-1" :title="$t('Mandatory input')"/></label>
     <select
       :id="idSelect"
       :value="textInit"
@@ -12,6 +13,7 @@
       :style="getFontFamily"
       :aria-label="label"
       @change="$emit('update:textInit', $event.target.value)"
+      :required="displayRequired"
     >
       <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
       <option
@@ -27,9 +29,13 @@
   </div>
 </template>
 <script lang="ts">
+import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ClassicSelect",
+  components:{
+    AsteriskIcon
+  },
   props: {
     idSelect: { default: "", type: String },
     label: { default: "", type: String },
@@ -54,6 +60,7 @@ export default defineComponent({
     classLabel: { default: "form-label", type: String },
     orderOptions: { default: true, type: Boolean},
     placeholder: { default: undefined, type: String},
+    displayRequired: { default: false, type: Boolean },
   },
   emits: ["update:textInit"],
   computed: {

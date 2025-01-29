@@ -17,7 +17,7 @@
             :size="'audio' === hoverType ? 50 : 40"
           />
           <PodcastIsPlaying v-if="playingPodcast && !playerVideo"/>
-          <span v-if="!isVideoPodcast" class="ms-1">{{ durationString }}</span>
+          <time v-if="!isVideoPodcast" class="ms-1" :datetime="durationIso">{{ durationString }}</time>
         </button>
         <button 
           v-if="isVideoPodcast"
@@ -29,7 +29,7 @@
         >
           <PlayVideoIcon v-if="!playerVideo" :size="'video' === hoverType ? 50 : 40" />
           <PodcastIsPlaying v-if="playingPodcast && playerVideo"/>
-          <span class="ms-2">{{ durationString }}</span>
+          <time class="ms-2" :datetime="durationIso">{{ durationString }}</time>
         </button>
         <div v-if="!classicPodcastPlay" class="special-icon-play-button">
           <component :is="iconName" :size="16" />
@@ -58,6 +58,9 @@ import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 export default defineComponent({
   name: "PodcastPlayButton",
@@ -192,6 +195,10 @@ export default defineComponent({
       return DurationHelper.formatDuration(
         Math.round(this.podcast.duration / 1000),
       );
+    },
+    durationIso(): string {
+      if (!this.podcast || this.podcast.duration <= 1) return "";
+      return dayjs.duration({ milliseconds: this.podcast.duration }).toISOString();
     },
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <article
     class="emission-item-container emission-presentation-container mt-3"
     :class="isVertical ? 'emission-vertical-item' : ''"
   >
@@ -40,7 +40,7 @@
         </div>
       </div>
     </router-link>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

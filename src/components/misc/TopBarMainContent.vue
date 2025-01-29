@@ -70,22 +70,23 @@
         </a>
       </template>
       <div class="d-flex align-items-center justify-content-end flex-grow-1">
-        <nav :aria-label="$t('Site menu')">
+        <nav role="navigation" :aria-label="$t('Site menu')">
           <ul class="d-flex">
-          <li v-for="link in routerLinkArray" :key="link.routeName" class="li-style-none">
-            <router-link
-              v-show="!isPhone"
-              v-if="link.condition"
-              :to="{
-                name: link.routeName,
-                query: getQueriesRouter(link.routeName),
-              }"
-              class="link-hover py-2 px-3"
-            >
-              {{ link.title }}
-            </router-link>
-          </li>
-        </ul>
+            <template v-for="link in routerLinkArray" :key="link.routeName">
+              <li v-if="link.condition" class="li-style-none">
+                <router-link
+                  v-show="!isPhone"
+                  :to="{
+                    name: link.routeName,
+                    query: getQueriesRouter(link.routeName),
+                  }"
+                  class="link-hover py-2 px-3"
+                >
+                  {{ link.title }}
+                </router-link>
+              </li>
+            </template>
+          </ul>
         </nav>
         <button
           v-show="!isPhone && !inContentDisplayPage"
@@ -105,24 +106,24 @@
           :left-pos="true"
           :is-top-layer="true"
         >
-          <nav class="d-flex flex-column" :aria-label="$t('Site menu')">
+          <nav role="navigation" class="d-flex flex-column" :aria-label="$t('Site menu')">
             <ul class="p-0 m-0">
-              <li
-                v-for="link in routerLinkInsideArray"
-                :key="link.routeName"
-                class="li-style-none"
-              >
-                <router-link
+              <template v-for="link in routerLinkInsideArray" :key="link.routeName">
+                <li
                   v-if="link.condition"
-                  :to="{
-                    name: link.routeName,
-                    query: getQueriesRouter(link.routeName),
-                  }"
-                  class="p-1 octopus-dropdown-item"
+                  class="li-style-none"
                 >
-                  {{ link.title }}
-                </router-link>
-              </li>
+                  <router-link
+                    :to="{
+                      name: link.routeName,
+                      query: getQueriesRouter(link.routeName),
+                    }"
+                    class="p-1 octopus-dropdown-item"
+                  >
+                    {{ link.title }}
+                  </router-link>
+                </li>
+            </template>
             </ul>
           </nav>
         </ClassicPopover>

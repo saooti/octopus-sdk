@@ -4,19 +4,15 @@
     :class="{ 'form-margin': displayLabel }"
   >
     <div class="d-flex align-items-center">
-      <label
+      <component
+        :is="isWysiwyg? 'div': 'label'"
         v-if="!isWysiwyg"
         class="form-label"
-        :for="inputId"
+        :for="isWysiwyg ? '': inputId"
         :class="displayLabel ? '' : 'd-none'"
-        >{{ label }}</label
-      >
-      <div
-        v-else
-        class="form-label"
-        :class="displayLabel ? '' : 'd-none'"
-        >{{ label }}</div
-      >
+        >{{ label }}
+        <AsteriskIcon v-if="displayRequired" size="15" class="ms-1 mb-1" :title="$t('Mandatory input')"/>
+      </component>
       <template v-if="popover">
         <button
           :id="'popover' + inputId"
@@ -54,6 +50,7 @@
           forceError || (isError && (undefined !== textValue || canBeNull)),
       }"
       :disabled="isDisable"
+      :required="!canBeNull"
     />
     <textarea
       v-else-if="isTextarea"
@@ -69,6 +66,7 @@
           forceError || (isError && (undefined !== textValue || canBeNull)),
       }"
       :disabled="isDisable"
+      :required="!canBeNull"
     />
     <ClassicWysiwyg
       v-else
@@ -110,6 +108,7 @@
   </div>
 </template>
 <script lang="ts">
+import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 const ClassicPopover = defineAsyncComponent(
@@ -127,6 +126,7 @@ export default defineComponent({
     ClassicPopover,
     ClassicEmojiPicker,
     HelpCircleIcon,
+    AsteriskIcon
   },
   props: {
     inputId: { default: "", type: String },
@@ -153,6 +153,7 @@ export default defineComponent({
     popoverRelativeClass: { default: undefined, type: String },
     forceReload: { default: false, type: Boolean },
     typeInput: { default: "text", type: String },
+    displayRequired: { default: false, type: Boolean },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {

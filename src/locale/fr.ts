@@ -414,4 +414,5 @@ export default {
   "The episode is being processed":"L'épisode est en cours de traitement",
   Rubrics: "Rubriques",
   "New window":"{text} - Nouvelle fenêtre",
+  "Mandatory input":"Saisie obligatoire",
 };
