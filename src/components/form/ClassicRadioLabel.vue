@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <div v-if="radioLabel" :class="classLabel">{{ radioLabel }}</div>
+  <component :is="typeTag" class="d-flex flex-column">
+    <component :is="'fieldset'===typeTag ? 'legend': 'div'" v-if="radioLabel" :class="classLabel">{{ radioLabel }}</component>
     <ClassicRadio
       :id-radio="idRadio"
       :is-disabled="isDisabled"
@@ -9,7 +9,7 @@
       :is-column="isColumn"
       @update:text-init="$emit('update:textInit', $event)"
     />
-  </div>
+  </component>
 </template>
 
 <script lang="ts">
@@ -32,6 +32,7 @@ export default defineComponent({
     isColumn: { default: true, type: Boolean },
     radioLabel: { default: undefined, type: String },
     classLabel: { default: "form-label", type: String },
+    typeTag: { default: "div", type: String },
   },
   emits: ["update:textInit"]
 });

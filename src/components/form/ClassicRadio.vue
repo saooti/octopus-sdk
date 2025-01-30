@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex" :class="isColumn ? 'flex-column' : ''">
+  <div role="radiogroup" class="d-flex" :class="isColumn ? 'flex-column' : ''">
     <div
       v-for="option in options"
       :key="option.title"

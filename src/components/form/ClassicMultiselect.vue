@@ -9,7 +9,9 @@
   >
     <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
       label
-    }}</label>
+    }}
+    <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="$t('Mandatory input')"/>
+  </label>
     <vSelect
       v-model="optionSelected"
       :input-id="id"
@@ -74,12 +76,14 @@
 </template>
 
 <script lang="ts">
+import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import vSelect from "vue-select";
 export default {
   components: {
     vSelect,
     ChevronDownIcon,
+    AsteriskIcon
   },
   props: {
     id: { default: "", type: String },
@@ -100,6 +104,7 @@ export default {
     maxOptions: { default: null, type: Number },
     allowEmpty: { default: true, type: Boolean },
     textDanger :{ default: undefined, type: String },
+    displayRequired: { default: false, type: Boolean },
   },
 
   emits: ["onSearch", "selected", "onClose"],

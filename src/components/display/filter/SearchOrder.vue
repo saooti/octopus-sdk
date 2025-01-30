@@ -5,10 +5,11 @@
     :options="optionsArray"
     :radio-label="$t('Sort')"
     class-label="text-primary mb-2"
+    :type-tag="typeTag"
+    class="flex-grow-1"
     @update:text-init="$emit('update:sort', $event)"
   />
 </template>
-
 <script lang="ts">
 import ClassicRadioLabel from "../../form/ClassicRadioLabel.vue";
 import { defineComponent } from "vue";
@@ -19,6 +20,7 @@ export default defineComponent({
   props: {
     isEmission: { default: false, type: Boolean },
     sort: { default: "DATE", type: String },
+    typeTag: { default: "fieldset", type: String },
   },
 
   emits: ["update:sort"],

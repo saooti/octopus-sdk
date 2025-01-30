@@ -15,6 +15,7 @@
     :width="width"
     :is-disabled="isDisabled"
     :no-deselect="noDeselect"
+    :display-required="displayRequired"
     @on-search="onSearchCategory"
     @selected="onCategorySelected"
   />
@@ -50,6 +51,7 @@ export default defineComponent({
     label:{default: undefined, type: String },
     displayLabel: { default: false, type: Boolean },
     textDanger :{ default: undefined, type: String },
+    displayRequired: { default: false, type: Boolean },
   },
   emits: [
     "update:categorySelected",

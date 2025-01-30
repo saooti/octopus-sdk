@@ -12,10 +12,10 @@
       v-show="showFilters"
       class="advanced-search-container"
     >
-      <div class="d-flex flex-column">
-        <div class="text-primary mb-2">
+      <fieldset class="d-flex flex-column flex-grow-3">
+        <legend class="text-primary mb-2">
           {{ $t("Filter") }}
-        </div>
+        </legend>
         <MonetizableFilter
           v-if="!isPodcastmaker && !platformEducation"
           :is-emission="isEmission"
@@ -63,7 +63,7 @@
           :label="$t('Show only episodes with video')"
           @update:text-init="updateOnlyVideo"
         />
-      </div>
+      </fieldset>
       <SearchOrder
         :is-emission="isEmission"
         :sort="sort"

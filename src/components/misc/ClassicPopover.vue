@@ -173,7 +173,6 @@ export default defineComponent({
       }
       this.show = true;
       let parentLeft = 0;
-      let parentRight = 0;
       let parentTop = 0;
       let parentScrollTop = 0;
       let parentBottom = 0;
@@ -190,7 +189,6 @@ export default defineComponent({
         }
         const modalBodyRect = modalBody.getBoundingClientRect();
         parentLeft = modalBodyRect.left;
-        parentRight = modalBodyRect.right;
         parentTop = modalBodyRect.top;
         parentScrollTop = modalBody.scrollTop;
         parentBottom=modalBodyRect.bottom;

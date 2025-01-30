@@ -6,12 +6,10 @@
     <div class="d-flex align-items-center">
       <component
         :is="isWysiwyg? 'div': 'label'"
-        v-if="!isWysiwyg"
-        class="form-label"
+        :class="[classLabel, displayLabel ? '' : 'd-none']"
         :for="isWysiwyg ? '': inputId"
-        :class="displayLabel ? '' : 'd-none'"
         >{{ label }}
-        <AsteriskIcon v-if="displayRequired" size="15" class="ms-1 mb-1" :title="$t('Mandatory input')"/>
+        <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="$t('Mandatory input')"/>
       </component>
       <template v-if="popover">
         <button
@@ -154,6 +152,7 @@ export default defineComponent({
     forceReload: { default: false, type: Boolean },
     typeInput: { default: "text", type: String },
     displayRequired: { default: false, type: Boolean },
+    classLabel: { default: "form-label", type: String },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {

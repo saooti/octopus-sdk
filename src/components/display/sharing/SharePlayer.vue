@@ -47,6 +47,8 @@
             v-model:proceed-reading="proceedReading"
             v-model:is-visible="isVisible"
             v-model:player-auto-play="playerAutoPlay"
+            v-model:episodes-number="episodesNumber"
+            v-model:insert-code="insertCode"
             :display-is-visible="displayIsVisible"
             :is-podcast-not-visible="isPodcastNotVisible"
             :chose-number-episode="choseNumberEpisodes"
@@ -54,13 +56,10 @@
             :display-transcript-param="displayTranscriptParam"
             :display-article-param="displayArticleParam"
             :display-wave-param="displayWaveParam"
-            @i-frame-number="iFrameNumber = $event"
-            @episode-numbers="episodeNumbers = $event"
+            :display-insert-code="displayInsertCode"
+            @episode-choice-display="episodeChoiceDisplay = $event"
           />
-          <PlayerCommonParameters
-            v-if="displayInsertCode"
-            v-model:insert-code="insertCode"
-          />
+
           <ShareModalPlayer
             v-if="isShareModal"
             :embed-link="iFrame"
@@ -102,9 +101,6 @@ const ShareModalPlayer = defineAsyncComponent(
 const PlayerParameters = defineAsyncComponent(
   () => import("./PlayerParameters.vue"),
 );
-const PlayerCommonParameters = defineAsyncComponent(
-  () => import("./PlayerCommonParameters.vue"),
-);
 const SharePlayerTypes = defineAsyncComponent(
   () => import("./SharePlayerTypes.vue"),
 );
@@ -117,7 +113,6 @@ export default defineComponent({
     SharePlayerColors,
     PlayerParameters,
     SharePlayerTypes,
-    PlayerCommonParameters,
   },
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
@@ -136,8 +131,8 @@ export default defineComponent({
       color: "#40a372" as string,
       theme: "#000000" as string,
       proceedReading: true as boolean,
-      episodeNumbers: "number" as string,
-      iFrameNumber: "3" as string,
+      episodeChoiceDisplay: "number" as string,
+      episodesNumber: 3 as number,
       isVisible: false as boolean,
       displayArticle: true as boolean,
       displayTranscript: true as boolean,
@@ -263,9 +258,9 @@ export default defineComponent({
       }
       let url = [""];
       const iFrameNumber =
-        this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
+        this.displayChoiceAllEpisodes && "all" === this.episodeChoiceDisplay
           ? "/0"
-          : "/" + this.iFrameNumber;
+          : "/" + this.episodesNumber;
       url.push(`${this.miniplayerUrl}miniplayer/`);
       if (!this.podcast && !this.playlist && this.emission) {
         url = this.constructEmissionUrl(url);
@@ -334,9 +329,9 @@ export default defineComponent({
       }
     },
     getIframeNumber(): string {
-      return this.displayChoiceAllEpisodes && "all" === this.episodeNumbers
+      return this.displayChoiceAllEpisodes && "all" === this.episodeChoiceDisplay
         ? "/0"
-        : "/" + this.iFrameNumber;
+        : "/" + this.episodesNumber;
     },
     constructEmissionUrl(url: Array<string>) {
       if (!this.emission) {

@@ -3,7 +3,7 @@
     <label v-show="displayLabel" :for="idSelect" :class="classLabel">{{
       label
     }}
-    <AsteriskIcon v-if="displayRequired" size="15" class="ms-1 mb-1" :title="$t('Mandatory input')"/></label>
+    <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="$t('Mandatory input')"/></label>
     <select
       :id="idSelect"
       :value="textInit"
@@ -12,8 +12,8 @@
       :class="transparent ? 'transparent' : ''"
       :style="getFontFamily"
       :aria-label="label"
-      @change="$emit('update:textInit', $event.target.value)"
       :required="displayRequired"
+      @change="$emit('update:textInit', $event.target.value)"
     >
       <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
       <option
