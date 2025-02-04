@@ -259,8 +259,10 @@ export default {
   "Recaptcha not active": "The captcha google is deactivated",
   "Comment waiting":
     "The comment will not be visible to other users until it has been validated",
-  "Display all podcasts to validate": "Display all podcasts to validate",
-  "Display my podcasts to validate": "Display my podcasts to validate",
+  "Episodes to validate":"Episodes to validate",
+  "Display only episodes to validate": "Display only episodes to validate",
+  "Display episodes to validate": "Display episodes to validate",
+  "Do not display episodes to validate": "Do not display episodes to validate",
   "Podcast not validated": "Podcast not validated",
   "Podcast to validate": "Podcast to validate",
   "Change locale": "Change the language",

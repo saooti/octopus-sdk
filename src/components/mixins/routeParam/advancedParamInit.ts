@@ -4,8 +4,9 @@ import { paginateParamInit } from "./paginateParamInit";
 import { rubriquesFilterParam } from "./rubriquesFilterParam";
 import { defineComponent } from 'vue';
 import { mapState } from "pinia";
-import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
+import { RubriquageFilter } from "../../../stores/class/rubrique/rubriquageFilter";
 import dayjs from "dayjs";
+import { useAuthStore } from "../../../stores/AuthStore";
 export const advancedParamInit = defineComponent({
   mixins: [orgaComputed, paginateParamInit, rubriquesFilterParam],
   props: {
@@ -19,6 +20,7 @@ export const advancedParamInit = defineComponent({
     routeTo: { default: undefined, type: String },
     routeOrga: { default: undefined, type: String },
     routeRubriques: { default: "", type: String },
+    routeValidity: { default: "", type: String },
   },
   data() {
     return {
@@ -30,7 +32,7 @@ export const advancedParamInit = defineComponent({
       toDate: undefined as string | undefined,
       includeHidden: false as boolean,
       sort: "DATE" as string, // SCORE, DATE, POPULARITY, NAME, LAST_PODCAST_DESC
-      notValid: false as boolean,
+      validity: 'true' as string,
       iabId: undefined as number | undefined,
       noRubriquageId: [] as Array<number>,
       rubriquageId: [] as Array<number>,
@@ -40,6 +42,7 @@ export const advancedParamInit = defineComponent({
     };
   },
   computed:{
+    ...mapState(useAuthStore, ["isRoleContribution",]),
     ...mapState(useFilterStore, ["filterRubrique", "filterIab"]),
     organisationRight(): boolean {
       return this.isEditRights(this.organisationId);
@@ -91,6 +94,9 @@ export const advancedParamInit = defineComponent({
     routeIncludeHidden(){
       this.initIncludeHidden();
     },
+    routeValidity(){
+      this.initValidity();
+    },
     routeFrom(){
       this.initFromDate();
     },
@@ -118,6 +124,7 @@ export const advancedParamInit = defineComponent({
       this.iabId = this.filterIab?.id ?? this.routeIab;
       this.initRubriquageFilter();
       this.initIncludeHidden();
+      this.initValidity();
       this.initMonetisable();
       this.initSort();
       this.initFromDate();
@@ -162,6 +169,14 @@ export const advancedParamInit = defineComponent({
     },
     initIncludeHidden(){
       this.includeHidden = undefined !== this.organisation && this.organisationRight && "false"!==this.routeIncludeHidden;
+    },
+    initValidity(){
+      const cantDisplay = this.isPodcastmaker || this.isEmission || !this.includeHidden || !this.isRoleContribution || !this.organisationRight;
+      if(cantDisplay){
+        this.validity = "true";
+      }else{
+        this.validity = this.routeValidity;
+      }
     },
     initRubriquageFilter(){
       if(this.routeRubriques === this.stringifyRubriquesFilter(this.rubriqueFilter)){

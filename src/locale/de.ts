@@ -264,10 +264,10 @@ export default {
   "Recaptcha not active": "Google CAPTCHA ist deaktiviert",
   "Comment waiting":
     "Der Kommentar ist für andere Besucher erst sichtbar, nachdem er validiert wurde.",
-  "Display all podcasts to validate":
-    "Alle noch nicht validierten Podcasts anzeigen",
-  "Display my podcasts to validate":
-    "Meine noch nicht validierten Podcasts anzeigen",
+  "Episodes to validate":"Episoden zur Validierung",
+  "Display only episodes to validate": "Nur Episoden zur Validierung anzeigen",
+  "Display episodes to validate": "Zeigen Sie Episoden zur Validierung an",
+  "Do not display episodes to validate": "Episoden zur Validierung nicht anzeigen",
   "Podcast not validated": "Nicht validierter Podcast",
   "Podcast to validate": "Podcast noch nicht validiert",
   "Change locale": "Ändere die Sprache",

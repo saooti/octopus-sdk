@@ -266,8 +266,10 @@ export default {
   "Recaptcha not active": "Attention le captcha google est désactivé",
   "Comment waiting":
     "Le commentaire ne sera pas visible par les autres utilisateurs tant qu'il n'aura pas été validé.",
-  "Display all podcasts to validate": "Afficher tous les épisodes à valider",
-  "Display my podcasts to validate": "Afficher mes épisodes à valider",
+  "Episodes to validate":"Épisodes à valider",
+  "Display only episodes to validate": "Afficher uniquement les épisodes à valider",
+  "Display episodes to validate": "Afficher les épisodes à valider",
+  "Do not display episodes to validate": "Ne pas afficher les épisodes à valider",
   "Podcast not validated": "L'épisode n'est pas validé",
   "Podcast to validate": "Épisode à valider",
   "Change locale": "Changer la langue",

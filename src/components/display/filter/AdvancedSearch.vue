@@ -42,19 +42,25 @@
             class="flex-shrink-0"
             id-checkbox="search-future-checkbox"
             :label="textNotVisible"
-            :is-disabled="isCheckboxNotValidate && notValid"
+            :is-disabled="isSelectValidity && 'true'!==validity"
             @update:text-init="updateIncludeHidden"
           />
         </div>
-        <div v-if="isCheckboxNotValidate" class="d-flex flex-column mt-3">
-          <ClassicCheckbox
-            :text-init="notValid"
-            class="flex-shrink-0"
-            id-checkbox="search-not-validate-checkbox"
-            :label="textNotValidate"
-            @update:text-init="updateNotValid"
-          />
-        </div>
+        <ClassicSelect
+          v-if="isSelectValidity"
+          :text-init="validity"
+          @update:text-init="updateValidity"
+          id-select="valid-episodes-select"
+          :label="$t('Episodes to validate')+' :'"
+          :display-label="true"
+          classLabel="flex-shrink-0 me-1"
+          class="d-flex align-items-center mt-3 mb-0"
+          :options="[
+            { title: $t('Display only episodes to validate'), value: 'false' },
+            { title: $t('Display episodes to validate'), value: '' },
+            { title: $t('Do not display episodes to validate'), value: 'true' },
+          ]"
+        />
         <ClassicCheckbox
           v-if="!isEmission"
           :text-init="onlyVideo"
@@ -92,6 +98,9 @@ const CategorySearchFilter = defineAsyncComponent(
 const RubriqueFilter = defineAsyncComponent(
   () => import("./RubriqueFilter.vue"),
 );
+const ClassicSelect = defineAsyncComponent(
+  () => import("../../form/ClassicSelect.vue"),
+);
 const ClassicCheckbox = defineAsyncComponent(
   () => import("../../form/ClassicCheckbox.vue"),
 );
@@ -106,6 +115,7 @@ export default defineComponent({
     DateFilter,
     SearchOrder,
     ChevronDownIcon,
+    ClassicSelect
   },
   mixins: [orgaComputed, rubriquesFilterParam],
   props: {
@@ -119,7 +129,7 @@ export default defineComponent({
     searchPattern: { default: "", type: String },
     fromDate: { default: undefined, type: String },
     toDate: { default: undefined, type: String },
-    notValid: { default: false, type: Boolean },
+    validity: { default: 'true', type: String },
     rubriqueFilter: {
       default: () => [],
       type: Array as () => Array<RubriquageFilter>,
@@ -133,7 +143,7 @@ export default defineComponent({
     "update:iabId",
     "update:sort",
     "update:includeHidden",
-    "update:notValid",
+    "update:validity",
     "update:rubriqueFilter",
     "update:onlyVideo",
   ],
@@ -163,7 +173,7 @@ export default defineComponent({
         ? this.$t("Consider podcasts no visible")
         : this.$t("See podcasts no visible");
     },
-    isCheckboxNotValidate(): boolean {
+    isSelectValidity(): boolean {
       return (
         undefined !== this.organisation &&
         this.organisationRight &&
@@ -172,11 +182,6 @@ export default defineComponent({
         !this.isEmission &&
         this.includeHidden
       );
-    },
-    textNotValidate(): string {
-      return this.isRoleProduction
-        ? this.$t("Display all podcasts to validate")
-        : this.$t("Display my podcasts to validate");
     },
   },
   watch: {
@@ -228,9 +233,9 @@ export default defineComponent({
       this.$emit("update:includeHidden", value);
       this.updateRouteParam({ h: value.toString() });
     },
-    updateNotValid(value: boolean) {
-      this.$emit("update:notValid", value);
-      this.updateRouteParam({ nv: value.toString() });
+    updateValidity(value: boolean) {
+      this.$emit("update:validity", value);
+      this.updateRouteParam({ vl: value.toString() });
     },
     updateOnlyVideo(value: boolean) {
       this.$emit("update:onlyVideo", value);

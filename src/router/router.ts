@@ -91,7 +91,7 @@ const routes: Array<RouteRecordRaw> = [
       routeIncludeHidden: route.query.h ?? "",
       routeFrom: route.query.from,
       routeTo: route.query.to,
-      routeNotValid:route.query.nv ?? "",
+      routeValidity:route.query.vl ?? "",
       routeOnlyVideo:route.query.v ?? "",
       routeOrga:route.query.o,
       routeRubriques :route.query.r,

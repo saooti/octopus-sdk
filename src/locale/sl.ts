@@ -256,9 +256,10 @@ export default {
   "Recaptcha error": "Google Recaptcha meni, da niste človek",
   "Recaptcha not active": "Captcha google je deaktiviran",
   "Comment waiting": "Komentar je do potrditve skrit za druge uporabnike",
-  "Display all podcasts to validate":
-    "Prikaži vse podkaste, ki jih je treba potrditi",
-  "Display my podcasts to validate": "Prikaži moje podkaste za potrditev",
+  "Episodes to validate":"Epizode za potrditev",
+  "Display only episodes to validate": "Pokaži samo epizode za potrditev",
+  "Display episodes to validate": "Prikaži epizode za potrditev",
+  "Do not display episodes to validate": "Ne prikazuj epizod za preverjanje",
   "Podcast not validated": "Podkasti niso potrjeni",
   "Podcast to validate": "Podkasti, ki jih je treba potrditi",
   "Change locale": "Spremenite jezik",

@@ -12,7 +12,7 @@
       v-model:include-hidden="includeHidden"
       v-model:from-date="fromDate"
       v-model:to-date="toDate"
-      v-model:not-valid="notValid"
+      v-model:validity="validity"
       v-model:rubrique-filter="rubriqueFilter"
       :search-pattern="searchPattern"
       :is-emission="false"
@@ -29,12 +29,12 @@
       :after="fromDate"
       :sort-criteria="sort"
       :include-hidden="includeHidden"
-      :not-valid="notValid"
       :iab-id="iabId"
       :rubrique-id="rubriquesFilterArrayIds.rubriqueId"
       :rubriquage-id="rubriquesFilterArrayIds.rubriquageId"
       :no-rubriquage-id="rubriquesFilterArrayIds.noRubriquageId"
       :with-video="withVideo"
+      :validity="validity"
     />
   </section>
 </template>
@@ -63,14 +63,13 @@ export default defineComponent({
     routeIncludeHidden: { default: "", type: String },
     routeFrom: { default: undefined, type: String },
     routeTo: { default: undefined, type: String },
-    routeNotValid: { default: "", type: String },
+    routeValidity: { default: "", type: String },
     routeOnlyVideo: { default: "", type: String },
     routeOrga: { default: undefined, type: String },
     routeRubriques: { default: "", type: String },
   },
   data() {
     return {
-      notValid: false as boolean,
       onlyVideo: false as boolean,
     };
   },
@@ -83,15 +82,6 @@ export default defineComponent({
     },
   },
   watch: {
-    routeNotValid: {
-      immediate: true,
-      handler() {
-        this.notValid =
-          undefined !== this.organisation &&
-          this.organisationRight &&
-          "true" === this.routeNotValid;
-      },
-    },
     routeOnlyVideo: {
       immediate: true,
       handler() {

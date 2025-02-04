@@ -87,7 +87,7 @@ export default defineComponent({
     showCount: { default: false, type: Boolean },
     displaySortText: { default: true, type: Boolean },
     sortCriteria: { default: undefined, type: String },
-    notValid: { default: undefined, type: Boolean },
+    validity: { default: 'true', type: String },
     rubriqueId: { default: () => [], type: Array as () => Array<number> },
     rubriquageId: { default: () => [], type: Array as () => Array<number> },
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
@@ -125,7 +125,7 @@ export default defineComponent({
     changed(): string {
       return `${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetisable}|${this.popularSort}|
-      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.notValid}|
+      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.validity}|
       ${this.withVideo}`;
     },
     organisation(): Array<string> {
@@ -204,11 +204,11 @@ export default defineComponent({
         rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
         rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
         includeHidden: this.includeHidden,
-        validity: undefined !== this.notValid ? !this.notValid : undefined,
-        publisherId:
-          this.notValid && !this.isRoleProduction
+        validity: this.validity,
+        /* publisherId:
+          !this.onlyValid && !this.isRoleProduction
             ? this.authProfile?.userId
-            : undefined,
+            : undefined, */
         includeStatus: ["READY", "PROCESSING"],
         withVideo: this.withVideo,
       };
