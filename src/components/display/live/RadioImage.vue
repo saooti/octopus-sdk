@@ -81,20 +81,16 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-
-
-.octopus-app {
-  .radio-play-button{
-    display: flex;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    font-size: 1rem;
-    color: white;
-    background-color: var(--octopus-primary-less-transparent);
-    border-radius: var(--octopus-border-radius);
-    padding:  0.2rem;
-    border: 0;
-  }
+.octopus-app .radio-play-button{
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  font-size: 1rem;
+  color: var(--octopus-color-on-primary);
+  background-color: var(--octopus-primary-less-transparent);
+  border-radius: var(--octopus-border-radius);
+  padding:  0.2rem;
+  border: 0;
 }
 </style>

@@ -6,13 +6,13 @@
         name: 'radio',
         params: { canalId: radio.id },
       }"
-      class="text-dark emission-item-text"
+      class="text-dark classic-element-text"
       :title="$t('Radio name page', { name: radio.name })"
     >
-      <div class="emission-name mb-2">
+      <div class="element-name mb-2 basic-line-clamp">
         {{ radio.name }}
       </div>
-      <div v-if="radio.description" class="ten-line-clamp">
+      <div v-if="radio.description" class="basic-line-clamp ten-line">
         {{ radio.description }}
       </div>
       <RadioCurrently :radio="radio" />

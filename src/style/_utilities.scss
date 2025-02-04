@@ -21,6 +21,7 @@ $font-sizes: (
   4: $font-size-base * 1.5,
   5: $font-size-base * 1.25,
   6: $font-size-base,
+  7: $font-size-base * 0.8,
 ) !default;
 $white: oklch(100% 0 0deg) !default;
 $black: oklch(0% 0 0deg) !default;
@@ -49,28 +50,12 @@ $utilities: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $utilities: map.merge(
   (
-    "align": (
-      property: vertical-align,
-      class: align,
-      values: baseline top middle bottom text-bottom text-top
-    ),
     "float": (
       responsive: true,
       property: float,
       values: (
         start: left,
         end: right,
-        none: none,
-      )
-    ),
-    "opacity": (
-      property: opacity,
-      values: (
-        0: 0,
-        25: .25,
-        50: .5,
-        75: .75,
-        100: 1,
       )
     ),
     "overflow": (
@@ -82,11 +67,11 @@ $utilities: map.merge(
       print: true,
       property: display,
       class: d,
-      values: inline inline-block block grid table table-row table-cell flex inline-flex none
+      values: inline-block block grid flex inline-flex none
     ),
     "position": (
       property: position,
-      values: static relative absolute fixed sticky
+      values: relative absolute fixed
     ),
     "border": (
       property: border,
@@ -117,14 +102,6 @@ $utilities: map.merge(
         0: 0,
       )
     ),
-    "border-start": (
-      property: border-left,
-      class: border-start,
-      values: (
-        null: 1px solid $border-default,
-        0: 0,
-      )
-    ),
     "border-color": (
       property: border-color,
       class: border,
@@ -147,30 +124,23 @@ $utilities: map.merge(
         60: 60%,
         75: 75%,
         100: 100%,
-        auto: auto
+        auto: auto,
+        fit-content: fit-content
       )
     ),
     "height": (
       property: height,
       class: h,
       values: (
-        25: 25%,
-        50: 50%,
-        75: 75%,
         100: 100%,
         auto: auto
       )
-    ),
-    "flex": (
-      responsive: true,
-      property: flex,
-      values: (fill: 1 1 auto)
     ),
     "flex-direction": (
       responsive: true,
       property: flex-direction,
       class: flex,
-      values: row column row-reverse column-reverse
+      values: row column row-reverse
     ),
     "flex-grow": (
       responsive: true,
@@ -196,7 +166,7 @@ $utilities: map.merge(
       responsive: true,
       property: flex-wrap,
       class: flex,
-      values: wrap nowrap wrap-reverse
+      values: wrap nowrap
     ),
     "justify-content": (
       responsive: true,
@@ -217,19 +187,6 @@ $utilities: map.merge(
         start: flex-start,
         end: flex-end,
         center: center,
-        baseline: baseline,
-        stretch: stretch,
-      )
-    ),
-    "align-content": (
-      responsive: true,
-      property: align-content,
-      values: (
-        start: flex-start,
-        end: flex-end,
-        center: center,
-        between: space-between,
-        around: space-around,
         stretch: stretch,
       )
     ),
@@ -237,7 +194,6 @@ $utilities: map.merge(
       responsive: true,
       property: align-self,
       values: (
-        auto: auto,
         start: flex-start,
         end: flex-end,
         center: center,
@@ -330,22 +286,12 @@ $utilities: map.merge(
       class: ps,
       values: $spacers
     ),
-    "font-size": (
-      rfs: true,
-      property: font-size,
-      class: fs,
-      values: $font-sizes
-    ),
     "font-weight": (
       property: font-weight,
       class: fw,
       values: (
-        light: 300,
-        lighter:lighter,
         normal: 400,
         bold: 700,
-        semibold: 600,
-        bolder:bolder
       )
     ),
     "text-align": (
@@ -360,7 +306,7 @@ $utilities: map.merge(
     ),
     "text-decoration": (
       property: text-decoration,
-      values: none underline line-through
+      values: line-through
     ),
     "text-transform": (
       property: text-transform,
@@ -372,14 +318,12 @@ $utilities: map.merge(
       class: text,
       values: (
         wrap: normal,
-        nowrap: nowrap,
       )
     ),
     "word-wrap": (
       property: word-wrap word-break,
       class: text,
       values: (break: break-word),
-      rtl: false
     ),
     "color": (
       property: color,
@@ -396,42 +340,6 @@ $utilities: map.merge(
         )
       )
     ),
-    // scss-docs-end utils-bg-color
-    "rounded": (
-      property: border-radius,
-      class: rounded,
-      values: (
-        null: .375rem,
-        0: 0,
-        1: .25rem,
-        2: .375rem,
-        3: .5rem,
-        4: 1rem,
-        5:2rem,
-        circle: 50%,
-        pill: 50rem
-      )
-    ),
-    "rounded-top": (
-      property: border-top-left-radius border-top-right-radius,
-      class: rounded-top,
-      values: (null: .375rem)
-    ),
-    "rounded-end": (
-      property: border-top-right-radius border-bottom-right-radius,
-      class: rounded-end,
-      values: (null: .375rem)
-    ),
-    "rounded-bottom": (
-      property: border-bottom-right-radius border-bottom-left-radius,
-      class: rounded-bottom,
-      values: (null: .375rem)
-    ),
-    "rounded-start": (
-      property: border-bottom-left-radius border-top-left-radius,
-      class: rounded-start,
-      values: (null: .375rem)
-    ),
     "visibility": (
       property: visibility,
       class: null,
@@ -444,7 +352,7 @@ $utilities: map.merge(
   $utilities
 );
 
-@mixin generate-utility($utility, $infix, $is-rfs-media-query: false) {
+@mixin generate-utility($utility, $infix) {
   $values: map.get($utility, values);
 
   // If the values are a list or string, convert it into a map
@@ -473,19 +381,6 @@ $utilities: map.merge(
 
     // Don't prefix if value key is null (eg. with shadow class)
     $property-class-modifier: if($key, if($property-class == "" and $infix == "", "", "-") + $key, "");
-
-    @if map.get($utility, rfs) {
-      // Inside the media query
-      @if $is-rfs-media-query {
-        $val: rfs-value($value);
-
-        // Do not render anything if fluid and non fluid values are the same
-        $value: if($val == rfs-fluid-value($value), null, $val);
-      } @else {
-        $value: rfs-fluid-value($value);
-      }
-    }
-
     $is-css-var: map.get($utility, css-var);
     $is-rtl: map.get($utility, rtl);
 

@@ -10,7 +10,7 @@
         name: 'podcast',
         params: { podcastId: podcastId },
       }"
-      class="text-dark flex-grow-1 title-podcast-item"
+      class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
       :title="$t('Episode name page', { name: title })"
     >
       {{ title }}
@@ -98,12 +98,8 @@ export default defineComponent({
   .title-podcast-item {
     font-weight: 700;
     margin: 0.25rem 0.5rem 0.5rem;
-    overflow: hidden;
-    display: -webkit-box;
     flex-grow: 1;
     font-size: 0.9rem;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
     min-height: 3rem;
     line-height: 1rem;
   }

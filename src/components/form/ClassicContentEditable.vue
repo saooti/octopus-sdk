@@ -47,7 +47,6 @@ export default defineComponent({
 </script>
 <style lang="scss">
 
-
 .octopus-app .classic-content-editable {
   &[placeholder]:empty::before {
     content: attr(placeholder);

@@ -13,7 +13,7 @@
       :player-responsive="true"
     >
       <template #list>
-        <div class="podcast-list">
+        <div class="octopus-element-list">
           <template v-for="p in displayArray" :key="p.podcastId">
             <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
           </template>

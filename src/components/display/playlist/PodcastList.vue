@@ -6,7 +6,7 @@
     <ClassicSearch
       v-if="!loading && notEmptyPlaylist"
       v-model:text-init="searchPattern"
-      class="width-600 align-self-baseline mb-2"
+      class="align-self-baseline mb-2"
       id-search="podcast-list-search"
       :label="$t('Search')"
     />
@@ -31,7 +31,7 @@
       :player-responsive="true"
     >
       <template #list>
-        <div class="podcast-list">
+        <div class="octopus-element-list">
           <ClassicLazy
             v-for="p in podcastsDisplay"
             :key="p.podcastId"
@@ -167,14 +167,3 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.octopus-app {
-  .width-600 {
-    width: 600px;
-
-    @media (width <= 600px) {
-      width: 100%;
-    }
-  }
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <article
-    class="emission-item-container emission-presentation-container mt-3"
+    class="classic-element-container emission-presentation-container mt-3"
     :class="isVertical ? 'emission-vertical-item' : ''"
   >
     <router-link
@@ -22,14 +22,14 @@
         alt=""
         :title="$t('Emission name image', { name: emission.name })"
       />
-      <div class="emission-item-text">
-        <div class="emission-name mb-2">
+      <div class="classic-element-text">
+        <div class="element-name mb-2 basic-line-clamp">
           {{ emission.name }}
         </div>
         <div
           v-if="!isPhone && isDescription"
           ref="descriptionEmissionContainer"
-          class="emission-description htms-wysiwyg-content"
+          class="element-description htms-wysiwyg-content"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div
@@ -85,7 +85,7 @@ export default defineComponent({
             emissionDescContainer &&
             emissionDesc.clientHeight > emissionDescContainer.clientHeight
           ) {
-            emissionDescContainer.classList.add("after-emission-description");
+            emissionDescContainer.classList.add("after-element-description");
           }
         });
       },
@@ -101,14 +101,14 @@ export default defineComponent({
       margin-right: 0.5rem;
     }
 
-    .emission-description {
+    .element-description {
       height: 0;
       flex-grow: 1;
       max-height: unset;
     }
   }
 
-  .emission-item-container.emission-vertical-item {
+  .classic-element-container.emission-vertical-item {
     flex-grow: 0;
     width: 400px;
     flex-shrink: 0;

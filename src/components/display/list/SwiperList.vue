@@ -138,7 +138,6 @@ export default defineComponent({
 </script>
 <style lang="scss">
 
-
 :root {
   --swiper-navigation-sides-offset: 0;
 }
@@ -152,8 +151,7 @@ export default defineComponent({
 .swiper-button-prev {
   color: var(--octopus-primary) !important;
   height: 100%;
-  top: 0;
-  bottom: 0;
+  inset-block:0;
   margin: 0;
   width: 40px;
   background: var(--octopus-background);

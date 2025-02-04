@@ -80,8 +80,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-
 .octopus-app {
   .tag-list-component {
     .ouest-france-logo {

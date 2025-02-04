@@ -90,8 +90,7 @@ export default defineComponent({
 
 
 .octopus-app {
-  select option:checked,
-  select option:hover {
+  select option:is(:checked, :hover){
     box-shadow: 0 0 10px 100px var(--octopus-secondary) inset;
   }
 

@@ -201,18 +201,23 @@ export default defineComponent({
       }
     },
     updateHtml(): void {
-      if (this.editor) {
-        this.html = this.editor.getHTML().trim();
-        if (
-          this.html.startsWith("<p>") &&
-          this.html.endsWith("</p>") &&
-          1 === (this.html.match(/<p>/g) || []).length
-        ) {
-          this.html = this.html.substring(3, this.html.length - 4);
-        }
-        this.html = this.html.replaceAll("&nbsp;", " ");
-        this.$emit("update:content", this.html);
+      if (!this.editor) {return}
+      const plainText= this.editor.getText();
+      const regexHtml = /<(a|b|h3|h4|em|i|li|ol|p|strong|ul|u|br).*?<\/\1>/i
+      if(regexHtml.test(plainText)){
+        this.editor.commands.setContent(plainText);
       }
+      this.html = this.editor.getHTML().trim();
+      const htmlHeart = this.html.substring(3, this.html.length - 4);
+      if (
+        this.html.startsWith("<p>") &&
+        this.html.endsWith("</p>") &&
+        !regexHtml.test(htmlHeart)
+      ) {
+        this.html = htmlHeart;
+      }
+      this.html = this.html.replaceAll("&nbsp;", " ");
+      this.$emit("update:content", this.html);
     },
     setLink() {
       if (!this.editor) {

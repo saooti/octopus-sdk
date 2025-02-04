@@ -96,17 +96,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-
-.octopus-app {
-  .player-grow-content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    flex-shrink: 1;
-    overflow: hidden;
-    font-size: 0.8rem;
-    padding: 0 0.5rem;
-  }
+.octopus-app .player-grow-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
+  font-size: 0.8rem;
+  padding: 0 0.5rem;
 }
 </style>

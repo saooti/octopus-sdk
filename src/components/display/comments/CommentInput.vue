@@ -197,13 +197,8 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app .comment-input-container {
   .comment-input {
-    border-top: 0;
-    border-right: 0;
-    border-left: 0;
-    border-bottom: 0.1rem solid var(--octopus-border-default) !important;
-    overflow: hidden !important;
-    box-shadow: unset !important;
-    background: transparent !important;
+    border-bottom: 0.1rem solid var(--octopus-border-default);
+    overflow: hidden;
     min-height: 36px;
     resize: none;
   }

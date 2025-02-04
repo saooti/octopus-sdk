@@ -83,6 +83,14 @@ export default defineComponent({
     text-align: center;
   }
 
+  .octopus-tab-content {
+    border-right: solid 1px var(--octopus-border-default);
+    border-left: solid 1px var(--octopus-border-default);
+    border-bottom: solid 1px var(--octopus-border-default);
+    background-color: var(--octopus-background);
+  }
+
+
   .octopus-nav.light .octopus-nav-item {
     border: 0;
     flex-grow: 0;
@@ -120,12 +128,6 @@ export default defineComponent({
     font-weight: bold;
   }
 
-  .octopus-tab-content {
-    border-right: solid 1px var(--octopus-border-default);
-    border-left: solid 1px var(--octopus-border-default);
-    border-bottom: solid 1px var(--octopus-border-default);
-    background-color: var(--octopus-background);
-  }
 
   .octopus-tab-pane {
     display: none;

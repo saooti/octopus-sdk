@@ -57,7 +57,6 @@ export default defineComponent({
 
 <style lang="scss">
 
-
 .octopus-app {
   .speed-style {
     font-size: 12px;

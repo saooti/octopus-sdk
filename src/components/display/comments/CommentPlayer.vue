@@ -98,7 +98,7 @@ export default defineComponent({
     @media (width <= 960px) {
       display: none;
     }
-
+    
     .comment-border {
       width: auto;
       position: absolute;

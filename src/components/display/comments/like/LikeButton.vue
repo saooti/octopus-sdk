@@ -81,7 +81,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-
 @use "sass:color";
 
 .octopus-app .btn-like-comment {

@@ -145,7 +145,6 @@ export default defineComponent({
 
 <style lang="scss">
 
-
 .octopus-app {
   .filter-speech-bubble {
     position: absolute;

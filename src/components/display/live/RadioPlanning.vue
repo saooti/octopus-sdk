@@ -8,8 +8,8 @@
         <button
           v-for="day in displayArrayDays"
           :key="day.date"
-          class="d-flex flex-column align-items-center flex-grow-1 button-date"
-          :class="day.date == daySelected ? 'bg-primary text-white' : ''"
+          class="button-date border"
+          :class="day.date == daySelected ? 'bg-primary' : ''"
           @click="changeDate(day.date)"
         >
           <span class="text-capitalize" >{{ day.dayOfWeek }}</span>
@@ -367,12 +367,14 @@ export default defineComponent({
   }
 
   .button-date {
-    border: 1px solid var(--octopus-border-default);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
     padding: 0.5rem;
-    color: black !important;
 
-    &.text-white{
-      color: white !important;
+    &.bg-primary{
+      color: var(--octopus-color-on-primary) !important;
     }
 
     &:hover {

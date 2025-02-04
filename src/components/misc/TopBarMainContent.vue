@@ -145,6 +145,7 @@
             name: 'podcasts',
           }"
           class="btn admin-button m-1 text-blue-octopus"
+          role="search"
         >
           <MagnifyIcon :size="30" />
         </router-link>

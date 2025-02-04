@@ -82,7 +82,7 @@
           </div>
           <a
             v-if="podcast.article && !isGarRole"
-            class="btn d-flex align-items-center my-2 width-fit-content mb-1"
+            class="btn d-flex align-items-center my-2 w-fit-content mb-1"
             :href="podcast.article"
             rel="noreferrer noopener"
             target="_blank"

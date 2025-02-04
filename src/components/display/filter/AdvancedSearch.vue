@@ -268,3 +268,18 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app {
+  .advanced-search-container {
+    background: var(--octopus-background);
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+    justify-content: space-around;
+
+    @media (width <= 720px) {
+      flex-wrap: wrap;
+    }
+  }
+}
+</style>

@@ -6,7 +6,7 @@
           name: 'podcast',
           params: { podcastId: podcastId },
         }"
-        class="mt-3 mb-3 width-fit-content d-flex align-items-center"
+        class="mt-3 mb-3 w-fit-content d-flex align-items-center"
         :title="$t('Episode name page', { name: podcast?.title })"
       >
         <ChevronLeftIcon />{{ $t("Episode page") }}

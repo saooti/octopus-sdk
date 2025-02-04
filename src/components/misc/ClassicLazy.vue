@@ -1,5 +1,5 @@
 <template>
-  <div ref="targetEl" :style="`min-height:${minHeight}px`">
+  <div ref="targetEl" :style="`min-height:${minHeight}px;`">
     <slot v-if="shouldRender" />
     <slot v-else name="preview" />
   </div>

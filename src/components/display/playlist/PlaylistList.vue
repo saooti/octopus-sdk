@@ -15,11 +15,12 @@
     :player-responsive="true"
   >
     <template #list>
-      <div class="emission-list two-emissions">
+      <div class="octopus-element-list two-items-list">
         <ClassicLazy
           v-for="p in displayArray"
           :key="p.playlistId"
           :min-height="250"
+          class="d-flex flex-column flex-grow-1"
         >
           <PlaylistItem v-if="0 !== p.playlistId" :playlist="p" />
           <template #preview>

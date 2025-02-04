@@ -17,7 +17,7 @@
     :player-responsive="true"
   >
     <template #list>
-      <div class="podcast-list">
+      <div class="octopus-element-list">
         <ClassicLazy
           v-for="p in displayArray"
           :key="p.participantId"

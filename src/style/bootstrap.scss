@@ -1,5 +1,3 @@
-
-
 // Bootstrap styles overload
 *, *::before, *::after {
 	box-sizing: border-box;
@@ -21,10 +19,6 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		}
 	}
 
-	p{
-		margin: 0;
-	}
-
 	h1,.h1{
 		font-size: 1.8rem;
 		text-align: center;
@@ -32,25 +26,25 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		margin-bottom: 1rem;
 
 		@media (width <= 500px){
-      font-size: 1.2rem;
-      margin: 0.5rem 0 1rem;
-    }
+			font-size: 1.2rem;
+			margin: 0.5rem 0 1rem;
+		}
 	}
 
 	h2,.h2{
 		font-size: 1.17rem;
 
 		@media (width <= 500px){
-      font-size: 1rem;
-    }
+			font-size: 1rem;
+		}
 	}
 
 	.big-h2{
 		font-size: 1.5rem;
 
 		@media (width <= 500px){
-      font-size: 1.1rem;
-    }
+			font-size: 1.1rem;
+		}
 	}
 
 	h3,.h3{
@@ -68,15 +62,15 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 	h6,.h6{
 		font-size: .63rem;
 		display: flex;
-    align-items: center;
+    	align-items: center;
 		font-weight: normal;
 	}
 
 
 	h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{
 		&:not(.text-uppercase){
-      letter-spacing: -0.03em;
-    }
+			letter-spacing: -0.03em;
+		}
 
 		margin-top: 0;
 		margin-bottom:0;
@@ -108,13 +102,11 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		border-width: 0;
 
 		@media (width <= 960px) {
-				white-space: normal;
+			white-space: normal;
 		}
 
-		&:hover,
-		&:focus,
-		&:active,
-		&.active {
+
+		&:is(:hover, :focus, :active, .active) {
 			box-shadow: none;
 		}
 
@@ -122,122 +114,94 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			background: var(--octopus-primary-more-transparent);
 		}
 
-		&:not(.btn-underline, .btn-primary, .btn-more, .btn-on-dark, .btn-transparent, .admin-button, .share-btn):disabled
-		{
-      cursor: default;
+		&:not(.btn-underline, .btn-primary, .btn-on-dark, .btn-transparent, .admin-button, .share-btn):disabled{
+      		cursor: default;
 			background-color: var(--octopus-secondary-lighter) !important;
 			color:  var(--octopus-text-disabled) !important;
 		}
 
 		&.btn-underline{
-				background: none;
-				padding: 0;
-				margin: 0.5rem 2rem 1rem 0;
-				border-radius: 0;
-				font-size: 0.9rem;
-				position: relative;
+			background: none;
+			padding: 0;
+			margin: 0.5rem 2rem 1rem 0;
+			border-radius: 0;
+			font-size: 0.9rem;
+			position: relative;
 
-				@media (width <= 600px) {
-					margin: 0 1rem 1rem 0;
-				}
+			@media (width <= 960px) {
+				margin: 0 0.4rem 0.7rem 0;
+				font-size: 0.7rem;
+			}
 
-				@media (width <= 500px) {
-					margin: 0 0.6rem 1rem 0;
-					font-size: 0.8rem;
-				}
+			&::after {    
+				bottom: 0;
+				content: "";
+				display: block;
+				height: 2px;
+				left: 50%;
+				position: absolute;
+				background: var(--octopus-primary);
+				transition: width 0.3s ease 0s, left 0.3s ease 0s;
+				width: 0;
+			}
 
-				@media (width <= 380px) {
-					margin: 0 0.4rem 0.7rem 0;
-					font-size: 0.7rem;
-				}
-
-				&::after {    
-						bottom: 0;
-						content: "";
-						display: block;
-						height: 2px;
-						left: 50%;
-						position: absolute;
-						background: var(--octopus-primary);
-						transition: width 0.3s ease 0s, left 0.3s ease 0s;
-						width: 0;
-				}
-
-				&:hover::after,&.active::after { 
-						width: 100%; 
-						left: 0; 
-				}
+			&:is(:hover, .active)::after{ 
+				width: 100%; 
+				left: 0; 
+			}
 		}
 
 		&.btn-min-width{
 			min-width: 24px;
 		}
-	
-			&.btn-primary {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					background: var(--octopus-primary);
-					border: 1px solid var(--octopus-primary);
-					border-radius: var(--octopus-border-radius) !important;
-					color: var(--octopus-color-on-primary) !important;
-					font-weight: 500;
+		
+		&.btn-primary {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--octopus-primary);
+			border: 1px solid var(--octopus-primary);
+			border-radius: var(--octopus-border-radius) !important;
+			color: var(--octopus-color-on-primary) !important;
+			font-weight: 500;
 
-					&:not(.btn-on-dark):focus,
-					&:not(.btn-on-dark):hover,
-					&:not(.btn-on-dark):active,
-					&:not(.btn-on-dark).active {
-							background: transparent;
-							color: var(--octopus-primary) !important;
-					}
-
-					&.btn-on-dark:focus,
-					&.btn-on-dark:hover,
-					&.btn-on-dark:active,
-					&.btn-on-dark.active {
-							background: transparent;
-							border-color: var(--octopus-color-on-primary) !important;
-					}
-
-					&:not(.btn-on-dark):disabled,
-					&.btn-on-dark:disabled{
-							background-color: var(--octopus-secondary-darker);
-							border: 1px solid black;
-							cursor: default;
-							color: var(--octopus-text-disabled) !important;
-					}
-
-					@media (width <= 500px){
-						margin: 0.3rem;
-					}
+			&:not(.btn-on-dark):is(:focus, :hover, :active, .active){
+				background: transparent;
+				color: var(--octopus-primary) !important;
 			}
 
-			&.btn-more{
-					background: var(--octopus-primary);
-					color: var(--octopus-background);
-					width: 2rem;
-					height: 2rem;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					border-radius: 50px;
-					margin: 1rem;
+			&.btn-on-dark:is(:focus, :hover, :active, .active){
+				background: transparent;
+				border-color: var(--octopus-color-on-primary) !important;
 			}
-	
-			&.admin-button{
-					padding: 0.3rem;
-					height: 2.2rem !important;
-					width: 2.2rem !important;
-					font-size: 1.1rem;
-					display: inline-flex;
-					align-items: center;
-					justify-content: center;
-					color : var(--octopus-primary);
-					flex-shrink: 0;
-					font-weight: 500;
-					border-radius: 50% !important;
+
+			&:not(.btn-on-dark):disabled,
+			&.btn-on-dark:disabled{
+				background-color: var(--octopus-secondary-darker);
+				border: 1px solid black;
+				cursor: default;
+				color: var(--octopus-text-disabled) !important;
 			}
-	
+
+			@media (width <= 500px){
+				margin: 0.3rem;
+			}
+		}
+		
+		&.admin-button{
+			padding: 0.3rem;
+			height: 2.2rem !important;
+			width: 2.2rem !important;
+			font-size: 1.1rem;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color : var(--octopus-primary);
+			flex-shrink: 0;
+			font-weight: 500;
+			border-radius: 50% !important;
+		}
+		
 	}
 
 	.btn-transparent{
@@ -246,28 +210,28 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 	}
 
 	.share-btn {
-			font-size: 1rem;
-			width: 2.5rem !important;
-			height: 2.5rem !important;
-			padding: 0.5rem;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			color : var(--octopus-primary);
-			flex-shrink: 0;
-			border-radius: 50% !important;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1rem;
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+		padding: 0.5rem;
+		color : var(--octopus-primary);
+		flex-shrink: 0;
+		border-radius: 50% !important;
 
-			@media (width <= 960px) {
-				font-size: 1rem;
-				width: 2.2rem !important;
-				height: 2.2rem !important;
-      }
+		@media (width <= 960px) {
+			font-size: 1rem;
+			width: 2.2rem !important;
+			height: 2.2rem !important;
+      	}
 	}
 
 	.btn-round-light {
 		font-size: 1.2rem;
 		width: 2.2rem;
-  	height: 2.2rem;
+  		height: 2.2rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -281,12 +245,12 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 	}
 
 	.btn-rss {
-			background: var(--octopus-secondary) !important;
+		background: var(--octopus-secondary) !important;
 
-			&:hover {
-					border: 0;
-					background: var(--octopus-secondary-darker) !important;
-			}
+		&:hover {
+			border: 0;
+			background: var(--octopus-secondary-darker) !important;
+		}
 	}
 
 	.btn-facebook {
@@ -294,58 +258,47 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		color: oklch(47% 0.1083 263deg) !important;
 
 		&:hover {
-		background: oklch(90% 0.024 263deg) !important;
+			background: oklch(90% 0.024 263deg) !important;
 		}
 	}
 
 	.btn-twitter {
-			background: oklch(90% 0.035 234deg) !important;
+		background: oklch(90% 0.035 234deg) !important;
 
-			&:hover {
-					background: oklch(90% 0.024 234deg) !important;
-			}
+		&:hover {
+			background: oklch(90% 0.024 234deg) !important;
+		}
 	}
 
 	.btn-linkedin {
-			background: oklch(90% 0.035 242deg) !important;
-			color: oklch(55% 0.130 242deg) !important;
+		background: oklch(90% 0.035 242deg) !important;
+		color: oklch(55% 0.130 242deg) !important;
 
-			&:hover {
-					background: oklch(90% 0.024 242deg) !important;
-			}
+		&:hover {
+			background: oklch(90% 0.024 242deg) !important;
+		}
 	}
 
 	.btn-whatsapp {
-			background: oklch(89.25% 0.19 150deg) !important;
-			color: oklch(76% 0.2015 150deg) !important;
+		background: oklch(89.25% 0.19 150deg) !important;
+		color: oklch(76% 0.2015 150deg) !important;
 
-			&:hover {
-				background: oklch(90% 0.024 150deg) !important;
-			}
+		&:hover {
+			background: oklch(90% 0.024 150deg) !important;
+		}
 	}
 
-	.bg-secondary-light{
-		background: var(--octopus-secondary-lighter) !important;
-	}
-
-	.bg-complementary{
-		background: var(--octopus-complementary-color) !important;
-	}
-
+	
 	.w-50-responsive{
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    width: 50%;
+		display: flex;
+		align-items: center;
+		flex-grow: 1;
+		width: 50%;
 
-    @media (width <= 960px) {
-      width:100%;
-			padding: 0 !important;
-    }
-  }
-
-	.font-italic{
-		font-style: italic;
+		@media (width <= 960px) {
+		width:100%;
+				padding: 0 !important;
+		}
 	}
 }
 

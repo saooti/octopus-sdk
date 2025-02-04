@@ -1,5 +1,5 @@
 <template>
-  <article class="emission-item-container">
+  <article class="classic-element-container">
     <router-link
       :to="{
         name: 'playlist',
@@ -8,16 +8,16 @@
       :title="$t('Playlist name page', { name: name })"
       class="d-flex flex-grow-1 text-dark"
     >
-      <div class="emission-item-text">
+      <div class="classic-element-text">
         <div v-if="!activePlaylist" class="sticker-empty-ressource">
           {{ $t("Empty playlist") }}
         </div>
-        <div class="d-flex align-items-center emission-name">
+        <div class="d-flex align-items-center element-name basic-line-clamp">
           {{ name }}
         </div>
         <div
           ref="descriptionPlaylistContainer"
-          class="emission-description html-wysiwyg-content"
+          class="element-description html-wysiwyg-content"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div ref="descriptionPlaylist" v-html="urlify(description)" />
@@ -84,8 +84,33 @@ export default defineComponent({
     const playlistDescContainer = this.$refs
       .descriptionPlaylistContainer as HTMLElement;
     if (playlistDesc?.clientHeight > playlistDescContainer?.clientHeight) {
-      playlistDescContainer.classList.add("after-emission-description");
+      playlistDescContainer.classList.add("after-element-description");
     }
   },
 });
 </script>
+<style lang="scss">
+.octopus-app .sticker-empty-ressource{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  align-self: center;
+  background: var(--octopus-tertiary);
+  padding: 0.5rem;
+  transition: all 0.5s ease;
+  color: var(--octopus-color-on-primary);
+  font-size: 0.6rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 34px -15px var(--octopus-shadow);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: solid 2px var(--octopus-color-text);
+  cursor: auto;
+
+  &:hover {
+    box-shadow: 2px 8px 4px -6px var(--octopus-shadow);
+    background: var(--octopus-primary);
+  }
+}
+</style>
+

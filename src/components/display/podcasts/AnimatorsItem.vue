@@ -36,11 +36,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.octopus-app {
-  .podcast-item-animator {
-    font-size: 0.55rem;
-    font-weight: 300;
-    text-transform: capitalize;
-  }
+.octopus-app .podcast-item-animator {
+  font-size: 0.55rem;
+  font-weight: 300;
+  text-transform: capitalize;
 }
 </style>

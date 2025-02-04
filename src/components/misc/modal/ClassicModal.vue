@@ -88,7 +88,7 @@ export default defineComponent({
   color: var(--octopus-color-text) !important;
   margin-top: 2rem;
   width: 80vw;
-  max-height: 90vh;
+  max-height: 90dvh;
   overflow: hidden;
 
   @media (width <= 500px) {

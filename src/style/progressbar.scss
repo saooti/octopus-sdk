@@ -1,18 +1,4 @@
-
-
 .octopus-app{
-  .ambiance-progress {
-    background-color: var(--octopus-secondary);
-
-    .octopus-progress-bar {
-      background-color: var(--octopus-text-disabled);
-    }
-
-    .no-transition {
-      transition: none !important;
-    }
-  }
-
   .octopus-progress{
     display: flex;
     overflow: hidden;
@@ -79,6 +65,12 @@
 
     .end-0{
       right: 0;
+    }
+  }
+    
+  .octopus-progress.ambiance-progress {
+    .octopus-progress-bar {
+      background-color: var(--octopus-text-disabled);
     }
   }
 

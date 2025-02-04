@@ -5,7 +5,6 @@
   >
     <div
       class="octopus-progress-bar"
-      :class="isBack ? 'no-transition' : ''"
       role="progressbar"
       aria-valuenow="0"
       aria-valuemin="0"
@@ -29,7 +28,6 @@ export default defineComponent({
   data() {
     return {
       percentInterval: undefined as ReturnType<typeof setTimeout> | undefined,
-      isBack: false as boolean,
     };
   },
 
@@ -73,7 +71,6 @@ export default defineComponent({
       const percentPlayed =
         actualMilliSecondsPlayed /
         (this.playerRadio?.metadata.playDuration * 1000);
-      this.isBack = percentPlayed < this.playerElapsed;
       this.playerUpdateElapsed(
         percentPlayed,
         this.playerRadio?.metadata.playDuration,

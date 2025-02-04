@@ -68,7 +68,7 @@
             @close="isShareModal = false"
           />
           <button
-            class="btn btn-primary width-fit-content mt-3"
+            class="btn btn-primary w-fit-content mt-3"
             @click="isShareModal = true"
           >
             {{ $t("Share the player") }}

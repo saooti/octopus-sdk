@@ -28,7 +28,7 @@
       </div>
       <div
         ref="descriptionParticipantContainer"
-        class="participant-description html-wysiwyg-content"
+        class="element-description small-description html-wysiwyg-content"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
@@ -44,7 +44,7 @@
         name: 'productor',
         params: { productorId: participant.orga.id },
       }"
-      class="participant-producer"
+      class="small-text mt-1"
     >
       © {{ participant.orga.name }}
     </router-link>
@@ -102,7 +102,7 @@ export default defineComponent({
       null !== participantDescContainer &&
       participantDesc.clientHeight > participantDescContainer.clientHeight
     ) {
-      participantDescContainer.classList.add("after-participant-description");
+      participantDescContainer.classList.add("after-element-description");
     }
   },
   methods: {
@@ -126,56 +126,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-
-
-.octopus-app {
-  .participant-item-container {
-    list-style: none;
-    border-radius: var(--octopus-border-radius);
-    display: flex;
-    flex-direction: column;
-    margin: 1rem 0;
-    align-items: center;
-    width: var(--octopus-image-size);
-
-    .participant-description {
-      overflow: hidden;
-      margin-top: 0.5em;
-      max-height: 3rem;
-      position: relative;
-      text-align: center;
-
-      &.after-participant-description::after {
-        content: "...";
-        position: absolute;
-        padding-left: 1rem;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        font-size: 1rem;
-        font-weight: bolder;
-        text-align: center;
-        background: linear-gradient(
-          to bottom,
-          var(--octopus-background-transparent),
-          var(--octopus-background),
-        );
-      }
-    }
-
-    .participant-producer {
-      font-weight: 300;
-      font-size: 0.6rem;
-      margin-top: 0.5rem;
-    }
-
-    @media (width <= 960px) {
-      margin: 0;
-    }
-
-    @media (width <= 450px) {
-      margin: 1rem 0 0;
-    }
-  }
+.octopus-app .participant-item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--octopus-border-radius);
+  width: var(--octopus-image-size);
 }
 </style>

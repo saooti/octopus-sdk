@@ -107,14 +107,12 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-.octopus-app {
-  .small-img-box {
-    height: 80px;
-    width: 80px;
-    border-radius: 0.2rem;
-    overflow: hidden;
-    flex-shrink: 0;
-    margin: 0.5rem;
-  }
+.octopus-app .small-img-box {
+  height: 80px;
+  width: 80px;
+  border-radius: var(--octopus-border-radius);
+  overflow: hidden;
+  flex-shrink: 0;
+  margin: 0.5rem;
 }
 </style>

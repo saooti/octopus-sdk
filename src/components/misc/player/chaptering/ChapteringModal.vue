@@ -87,10 +87,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 
-
-.octopus-app {
-  .chapter-selected {
-    border: var(--octopus-primary) 3px solid;
-  }
+.octopus-app .chapter-selected {
+  border: var(--octopus-primary) 3px solid;
 }
 </style>

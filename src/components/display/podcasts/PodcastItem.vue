@@ -1,6 +1,6 @@
 <template>
   <article
-    class="podcast-item-container"
+    class="podcast-item-container border"
     :data-pubdate="displayDate"
     :data-count="podcast.downloadCount"
   >
@@ -16,11 +16,10 @@
     <div
       v-if="hoverDesc"
       ref="descriptionPodcastContainer"
-      class="description-podcast-item html-wysiwyg-content"
+      class="element-description description-podcast-item html-wysiwyg-content"
       :class="[
-        isMobile ? 'mobile-description-podcast-item' : '',
         hoverDesc && '' !== description ? 'visible' : 'invisible',
-        isDescriptionBig ? 'after-podcast-description' : '',
+        !isMobile && isDescriptionBig ? 'after-element-description' : 'mobile-description-podcast-item',
       ]"
     >
       <!-- eslint-disable vue/no-v-html -->
@@ -122,61 +121,37 @@ export default defineComponent({
 
 <style lang="scss">
 
-
 .octopus-app {
   .podcast-item-container {
+    display: flex;
+    flex-direction: column;
     border-radius: var(--octopus-border-radius);
-    list-style: none;
     position: relative;
     width: var(--octopus-podcast-size);
     height: 20.5rem;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
     text-align: left;
     background: var(--octopus-background);
     flex-shrink: 0;
-    border: 2px solid var(--octopus-border-default);
 
     .description-podcast-item {
+      --octopus-max-height-description: var(--octopus-podcast-size);
+
       padding: 1rem;
       background-color: oklch(from var(--octopus-background) l c h / 90%);
-      height: var(--octopus-podcast-size);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 0.9em;
       position: absolute;
       width: var(--octopus-podcast-size);
-
-      &:not(.mobile-description-podcast-item).after-podcast-description::after {
-        content: "...";
-        position: absolute;
-        padding-left: 1rem;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        font-size: 1rem;
-        font-weight: bolder;
-        text-align: center;
-        background: linear-gradient(
-          to bottom,
-          var(--octopus-background-transparent),
-          var(--octopus-background)
-        );
-      }
+      height: var(--octopus-podcast-size);
+      margin-top:0;
 
       &.mobile-description-podcast-item {
         overflow: auto;
       }
     }
 
-    @media (width <= 960px) {
-      margin: 0.5rem !important;
-    }
-
     @media (width <= 450px) {
       width: var(--octopus-image-size);
-      height: 18.8rem;
+      height: 19rem;
 
       .description-podcast-item {
         height: var(--octopus-image-size);

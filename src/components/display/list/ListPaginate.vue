@@ -33,12 +33,7 @@
     <button
       v-show="first + rowsPerPage < totalCount && (isPhone || justSizeChosen)"
       :disabled="loading"
-      class="btn"
-      :class="
-        buttonPlus
-          ? 'btn-primary align-self-center width-fit-content m-4'
-          : 'btn-more'
-      "
+      class="btn btn-primary align-self-center w-fit-content m-4"
       :title="$t('See more')"
       @click="fetchMore"
     >

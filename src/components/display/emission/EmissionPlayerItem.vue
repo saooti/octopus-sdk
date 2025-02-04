@@ -11,7 +11,7 @@
       <div v-if="rubriqueName" class="emission-player-item-info">
         {{ rubriqueName }}
       </div>
-      <div class="img-box rounded-0">
+      <div class="img-box">
         <img
           v-lazy="proxyImageUrl(emission.imageUrl, '330')"
           width="330"
@@ -19,7 +19,7 @@
           role="presentation"
           alt=""
           :title="$t('Emission name image', { name: emission.name })"
-          class="img-box rounded-0"
+          class="img-box"
         />
       </div>
       <div class="fw-bold text-uppercase text-truncate p-2">
@@ -38,7 +38,7 @@
           params: { podcastId: p.podcastId },
         }"
         :title="$t('Episode name page', { name: p.title })"
-        class="text-dark fw-bold two-line-clamp"
+        class="text-dark fw-bold basic-line-clamp"
       >
         {{ p.title }}
       </router-link>

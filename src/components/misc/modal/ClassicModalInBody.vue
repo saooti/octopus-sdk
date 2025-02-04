@@ -90,7 +90,7 @@ export default defineComponent({
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     background-color: black;
   }
 
@@ -103,7 +103,7 @@ export default defineComponent({
     pointer-events: none;
     margin: 1.75rem auto;
     max-width: 80vw;
-    max-height: 90vh;
+    max-height: 90dvh;
     width: 100%;
     display: flex;
     color: var(--octopus-color-text) !important;

@@ -87,9 +87,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-.octopus-app {
-  .margin-chaptering {
-    height: 23px;
-  }
+.octopus-app .margin-chaptering {
+  height: 23px;
 }
 </style>

@@ -47,7 +47,7 @@
     <div class="d-flex align-items-center flex-grow-1">
       <button
         title="-15''"
-        class="btn fs-1 bg-transparent text-light"
+        class="btn bg-transparent text-light"
         :disabled="isAdPlaying"
         @click="seekClick(-15)"
       >
@@ -57,7 +57,7 @@
 
       <button
         title="+15''"
-        class="btn fs-1 bg-transparent text-light"
+        class="btn bg-transparent text-light"
         :disabled="isAdPlaying"
         @click="seekClick(15)"
       >

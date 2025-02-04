@@ -233,8 +233,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-
 .octopus-app {
   .img-blur-background{
     position: absolute;

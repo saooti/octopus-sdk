@@ -20,7 +20,7 @@
     </SwiperList>
     <router-link
       :to="href"
-      class="btn btn-primary align-self-center width-fit-content m-4"
+      class="btn btn-primary align-self-center w-fit-content m-4"
     >
       {{ buttonText }}
     </router-link>

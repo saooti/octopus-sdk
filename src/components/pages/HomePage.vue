@@ -1,5 +1,12 @@
 <template>
   <section class="page-box">
+    <ClassicInputText
+      text-init="test"
+      input-id="comment-name-input"
+      :label="$t('Your name')"
+      :is-wysiwyg="true"
+      class="me-3"
+    />
     <template v-if="0 === rubriquageFilter.length">
       <ClassicLazy
         v-for="(c, index) in categories"
@@ -46,7 +53,7 @@
               rubriquesId: rubriqueQueryParam,
             },
           }"
-          class="btn btn-primary align-self-center width-fit-content mt-5 m-auto"
+          class="btn btn-primary align-self-center w-fit-content mt-5 m-auto"
         >
           {{ $t("See more") }}
         </router-link>
@@ -65,6 +72,7 @@
 </template>
 
 <script lang="ts">
+import ClassicInputText from "../form/ClassicInputText.vue";
 import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import ClassicLazy from "../misc/ClassicLazy.vue";
@@ -81,6 +89,7 @@ export default defineComponent({
   components: {
     PodcastInlineList,
     ClassicLazy,
+    ClassicInputText
   },
   mixins: [rubriquesFilterComputed],
   props: {

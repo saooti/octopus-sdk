@@ -3,7 +3,7 @@
     class="my-4"
     :class="[
       displayAccordion ? 'octopus-accordion' : '',
-      isOpen ? 'octopus-accordion-open' : '',
+      isOpen ? 'octopus-accordion-open border' : '',
     ]"
   >
     <template v-if="displayAccordion">
@@ -97,7 +97,6 @@ export default defineComponent({
 
   &.octopus-accordion-open {
     border-radius: var(--octopus-border-radius);
-    border: 1px solid var(--octopus-border-default);
 
     > button {
       border-radius: var(--octopus-border-radius) 0 0;

@@ -48,7 +48,7 @@
       <router-link
         v-if="buttonText && href"
         :to="href"
-        class="btn btn-primary align-self-center width-fit-content m-4"
+        class="btn btn-primary align-self-center w-fit-content m-4"
       >
         {{ buttonText }}
       </router-link>
@@ -135,7 +135,7 @@ export default defineComponent({
       overflow-y: auto;
       scroll-snap-type: x mandatory;
 
-      .emission-item-container{
+      .classic-element-container{
         scroll-snap-align: center;
       }
     }
@@ -166,12 +166,8 @@ export default defineComponent({
   .show-emission-column {
     display: flex;
 
-    @media (width <= 1550px) {
-      display: none !important;
-    }
-
-    @media (width <= 960px) {
-      display: flex !important;
+    @media (width <= 1550px) and (width > 960px) {
+      display: none;
     }
   }
 }

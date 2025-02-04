@@ -7,7 +7,7 @@
       type="number"
       min="1"
       max="50"
-      class="input-share-player text-center m-2"
+      class="input-share-player border text-center m-2"
       :title="$t('Number of player podcasts')"
     />
     <span class="flex-shrink-0">{{ $t("Last podcasts") }}</span>
@@ -51,7 +51,6 @@ export default defineComponent({
 <style lang="scss">
 .octopus-app {
   .input-share-player {
-    border: 1px solid var(--octopus-border-default);
     border-radius: 50px;
     width: 60px;
   }

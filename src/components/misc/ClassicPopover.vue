@@ -5,7 +5,7 @@
     ref="popover"
     popover
     tabindex="0"
-    class="octopus-popover"
+    class="octopus-popover border"
     :class="[
       displayPopover ? 'd-block': '',
       onlyClick ? 'octopus-dropdown' : '',
@@ -56,7 +56,7 @@ export default defineComponent({
       targetElement: null as HTMLElement | null,
       overPopover: false as boolean,
       isTabAction: false as boolean,
-      maxHeight: '80vh' as string,
+      maxHeight: '80dvh' as string,
       clearTimeout: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
@@ -197,7 +197,7 @@ export default defineComponent({
       const rectElement = (e.target as HTMLElement).getBoundingClientRect();
       (this.$refs.popover as HTMLElement).style.display = "block";
       const sizePopover = (this.$refs.popover as HTMLElement).clientWidth;
-      const sizeAvailable = window.innerWidth -parentWidth;
+      const sizeAvailable = parentWidth? parentWidth : window.innerWidth;
       if (this.leftPos) {
         const elementRightRelative = rectElement.right - parentLeft;
         const hasPlaceRightButton = (sizeAvailable - (sizeAvailable - elementRightRelative)) > sizePopover;
@@ -236,7 +236,7 @@ export default defineComponent({
       }else if(this.relativeClass){
         this.maxHeight = (parentBottom- this.posY -parentTop) + "px";
       }else{
-        this.maxHeight = '80vh';
+        this.maxHeight = '80dvh';
       }
     },
     clearDataBlur(e: FocusEvent) {
@@ -306,7 +306,6 @@ export default defineComponent({
 
 .octopus-popover {
   background: var(--octopus-background);
-  border: 1px solid var(--octopus-border-default);
   border-radius: var(--octopus-border-radius);
   overflow: auto;
   margin: 0 !important;
@@ -335,8 +334,7 @@ export default defineComponent({
         background: var(--octopus-secondary-darker);
       }
 
-      &:hover,
-      &:focus {
+      &:is(:hover, :focus){
         background: var(--octopus-secondary-lighter);
       }
     }

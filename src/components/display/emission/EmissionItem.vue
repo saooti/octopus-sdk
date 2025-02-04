@@ -1,5 +1,5 @@
 <template>
-  <article class="mt-3 emission-item-container">
+  <article class="classic-element-container">
     <router-link
       :to="{
         name: 'emission',
@@ -17,8 +17,8 @@
         alt=""
         :title="$t('Emission name image', { name: emission.name })"
       />
-      <div class="emission-item-text">
-        <div class="d-flex align-items-center emission-name">
+      <div class="classic-element-text">
+        <div class="d-flex align-items-center element-name basic-line-clamp">
           <AlertIcon
             v-if="!activeEmission && !isPodcastmaker && editRight"
             :size="16"
@@ -29,7 +29,7 @@
         </div>
         <div
           ref="descriptionEmissionContainer"
-          class="emission-description htms-wysiwyg-content"
+          class="element-description htms-wysiwyg-content"
         >
           <!-- eslint-disable vue/no-v-html -->
           <div
@@ -103,7 +103,7 @@ export default defineComponent({
       null !== emissionDescContainer &&
       emissionDesc.clientHeight > emissionDescContainer.clientHeight
     ) {
-      emissionDescContainer.classList.add("after-emission-description");
+      emissionDescContainer.classList.add("after-element-description");
     }
   },
   methods: {
