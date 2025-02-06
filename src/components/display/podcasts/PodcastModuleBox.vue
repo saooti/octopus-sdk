@@ -120,9 +120,9 @@
       :podcast-annotations="podcast.annotations"
     />
     <PodcastRubriqueList
-      v-if="podcast.rubriqueIds?.length"
+      v-if="podcastRubriques?.length"
       :orga-id="podcast.organisation.id"
-      :rubrique-ids="podcast.rubriqueIds"
+      :rubrique-ids="podcastRubriques"
     />
     <PodcastRawTranscript :podcast-id="podcast.podcastId" />
     <SubscribeButtons
@@ -228,6 +228,13 @@ export default defineComponent({
 
   computed: {
     ...mapState(useAuthStore, ["isRoleLive", "isGarRole"]),
+    podcastRubriques(){
+      let rubriques = this.podcast?.rubriqueIds ?? [];
+      if(this.podcast?.emission?.rubriqueIds){
+        rubriques = [...new Set(rubriques.concat(this.podcast?.emission?.rubriqueIds))];
+      }
+      return rubriques;
+    },
     errorMessage(): string {
       if (!this.podcast?.availability.visibility) {
         return this.$t("Podcast is not visible for listeners");
