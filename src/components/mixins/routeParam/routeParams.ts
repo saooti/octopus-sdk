@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 export const routeParams = defineComponent({
   methods: {
     checkPage(): boolean{
-      return ['podcasts', 'emissions', 'participants', 'playlists', 'productors'].includes(this.$route.name?.toString()??"");
+      return ['podcasts', 'emissions', 'participants', 'playlists', 'productors', 'rubrique'].includes(this.$route.name?.toString()??"");
     },
     checkPageAdvanced(): boolean{
       return ['podcasts', 'emissions'].includes(this.$route.name?.toString()??"");
@@ -12,12 +12,12 @@ export const routeParams = defineComponent({
         this.$router.push({query: {...this.$route.query, ...{ps:ps, pr:1}}});
       }
     },
-    updatePaginateRank(pr:number){
+    updateRouteParam(update: {[key:string]: string|undefined}){
       if(this.checkPage()){
-        this.$router.push({query: {...this.$route.query, ...{pr:pr}}});
+        this.$router.push({query: {...this.$route.query, ...update}});
       }
     },
-    updateRouteParam(update: {[key:string]: string|undefined}){
+    updateRouteParamAdvanced(update: {[key:string]: string|undefined}){
       if(this.checkPageAdvanced()){
         this.$router.push({query: {...this.$route.query, ...update}});
       }

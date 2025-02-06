@@ -49,17 +49,17 @@
         <ClassicSelect
           v-if="isSelectValidity"
           :text-init="validity"
-          @update:text-init="updateValidity"
           id-select="valid-episodes-select"
           :label="$t('Episodes to validate')+' :'"
           :display-label="true"
-          classLabel="flex-shrink-0 me-1"
+          class-label="flex-shrink-0 me-1"
           class="d-flex align-items-center mt-3 mb-0"
           :options="[
             { title: $t('Display only episodes to validate'), value: 'false' },
             { title: $t('Display episodes to validate'), value: '' },
             { title: $t('Do not display episodes to validate'), value: 'true' },
           ]"
+          @update:text-init="updateValidity"
         />
         <ClassicCheckbox
           v-if="!isEmission"
@@ -203,7 +203,7 @@ export default defineComponent({
       if (valSort !== this.sort) {
         this.$emit("update:sort", valSort);
       }
-      this.updateRouteParam({
+      this.updateRouteParamAdvanced({
         q: search.length ? search : undefined,
         s: valSort,
       });
@@ -212,7 +212,7 @@ export default defineComponent({
   methods: {
     updateMonetisable(value: string): void {
       this.$emit("update:monetisable", value);
-      this.updateRouteParam({ m: "UNDEFINED" !== value ? value : undefined });
+      this.updateRouteParamAdvanced({ m: "UNDEFINED" !== value ? value : undefined });
     },
     updateIab(value: number | undefined) {
       this.$emit("update:iabId", 0 !== value ? value : undefined);
@@ -220,26 +220,26 @@ export default defineComponent({
       if (this.filterIab && this.filterIab.id !== value) {
         filterIab = { iabId: undefined };
       }
-      this.updateRouteParam({
+      this.updateRouteParamAdvanced({
         ...{ i: value ? value.toString() : undefined },
         ...filterIab,
       });
     },
     updateSort(value: string) {
       this.$emit("update:sort", value);
-      this.updateRouteParam({ s: value });
+      this.updateRouteParamAdvanced({ s: value });
     },
     updateIncludeHidden(value: boolean) {
       this.$emit("update:includeHidden", value);
-      this.updateRouteParam({ h: value.toString() });
+      this.updateRouteParamAdvanced({ h: value.toString() });
     },
     updateValidity(value: boolean) {
       this.$emit("update:validity", value);
-      this.updateRouteParam({ vl: value.toString() });
+      this.updateRouteParamAdvanced({ vl: value.toString() });
     },
     updateOnlyVideo(value: boolean) {
       this.$emit("update:onlyVideo", value);
-      this.updateRouteParam({ v: value ? "true" : undefined });
+      this.updateRouteParamAdvanced({ v: value ? "true" : undefined });
     },
     updateDates(value: {
       from: string | undefined;
@@ -247,7 +247,7 @@ export default defineComponent({
     }): void {
       this.$emit("update:fromDate", value.from);
       this.$emit("update:toDate", value.to);
-      this.updateRouteParam({ from: value.from, to: value.to });
+      this.updateRouteParamAdvanced({ from: value.from, to: value.to });
     },
     updateRubriquageFilter(value: Array<RubriquageFilter>) {
       this.$emit("update:rubriqueFilter", value);
@@ -259,7 +259,7 @@ export default defineComponent({
       ) {
         filterRubriques = { rubriquesId: undefined };
       }
-      this.updateRouteParam({
+      this.updateRouteParamAdvanced({
         ...{ r: valueString.length ? valueString : undefined },
         ...filterRubriques,
       });

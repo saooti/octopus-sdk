@@ -18,7 +18,7 @@
       :show-count="true"
       :first="paginateFirst"
       :size="ps"
-      :query="searchPattern"
+      :query="searchMinSize"
       :organisation-id="organisationId"
     />
   </section>
@@ -28,7 +28,6 @@
 import { paginateParamInit } from "../mixins/routeParam/paginateParamInit";
 import PlaylistList from "../display/playlist/PlaylistList.vue";
 import { useAuthStore } from "../../stores/AuthStore";
-import { useFilterStore } from "../../stores/FilterStore";
 import { state } from "../../stores/ParamSdkStore";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { mapState } from "pinia";
@@ -42,9 +41,10 @@ export default defineComponent({
   },
   mixins: [paginateParamInit],
   props: {
-    productor: { default: undefined, type: String },
     pr: { default: 0, type: Number },
     ps: { default: 30, type: Number },
+    routeOrga: { default: undefined, type: String },
+    routeQuery: { default: "", type: String },
   },
 
   data() {
@@ -55,15 +55,10 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["isRolePlaylists"]),
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
     },
-  },
-
-  created() {
-    this.organisationId = this.productor ? this.productor : this.filterOrgaId;
   },
 });
 </script>

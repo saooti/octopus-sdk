@@ -12,7 +12,8 @@
       class="d-flex align-items-center border p-1 m-1 text-dark"
       :to="{
         name: 'rubrique',
-        params: { rubriqueId: rubriqueId },
+        params: { rubriqueId: rubriqueId},
+        query: organisationQuery
       }"
     >
       {{ rubriquagesOrga[rubriqueId]?.name ?? rubriqueId}}
@@ -21,10 +22,11 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import {defineComponent } from "vue";
-import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import { Rubrique } from "../../../stores/class/rubrique/rubrique";
+import { useFilterStore } from "../../../stores/FilterStore";
 export default defineComponent({
   name: "TagList",
   components: {
@@ -41,6 +43,15 @@ export default defineComponent({
   },
   created() {
     this.fetchRubriquages();
+  },
+  computed:{
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    organisationQuery(){
+      if(this.filterOrgaId){
+        return undefined;
+      }
+      return { o: this.orgaId};
+    }
   },
   methods:{
     ...mapActions(useSaveFetchStore, ["getOrgaRubriques"]),

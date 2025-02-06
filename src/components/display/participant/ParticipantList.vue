@@ -104,6 +104,9 @@ export default defineComponent({
     changePaginate(): string {
       return `${this.first}|${this.size}`;
     },
+    sort(): string {
+      return !this.query ? "NAME" : "SCORE";
+    },
   },
   watch: {
     changePaginate() {
@@ -149,6 +152,7 @@ export default defineComponent({
               size: this.dsize,
               query: this.query,
               organisationId: this.organisation,
+              sort: this.sort
             },
             specialTreatement: true,
           },

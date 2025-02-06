@@ -128,6 +128,8 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
       ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      routeOrga:route.query.o,
+      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "Speakers",
@@ -190,18 +192,15 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/main/pub/rubrique/:rubriqueId/:productor?",
+    path: "/main/pub/rubrique/:rubriqueId(\\d+):title([^?]*)?:productor?",
     name: "rubrique",
     component: RubriquePage,
     props: (route: RouteLocationNormalized) => ({
-      firstRoute: route.query.first
-        ? parseInt(route.query.first.toString(), 10)
-        : 0,
-      sizeRoute: route.query.size
-        ? parseInt(route.query.size.toString(), 10)
-        : 12,
+      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
       rubriqueId: parseInt(route.params.rubriqueId.toString(), 10),
-      productor: route.params.productor,
+      routeOrga:route.query.o,
+      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "",
@@ -236,6 +235,8 @@ const routes: Array<RouteRecordRaw> = [
     props: (route: RouteLocationNormalized) => ({
       pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
       ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      routeOrga:route.query.o,
+      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "Playlists"

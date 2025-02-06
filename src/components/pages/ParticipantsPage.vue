@@ -9,7 +9,7 @@
       :show-count="true"
       :first="paginateFirst"
       :size="ps"
-      :query="searchPattern"
+      :query="searchMinSize"
       :organisation-id="organisationId"
     />
   </section>
@@ -17,11 +17,9 @@
 
 <script lang="ts">
 import { paginateParamInit } from "../mixins/routeParam/paginateParamInit";
-import { useFilterStore } from "../../stores/FilterStore";
 import ParticipantList from "../display/participant/ParticipantList.vue";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
 import { defineComponent } from "vue";
-import { mapState } from "pinia";
 export default defineComponent({
   components: {
     ProductorSearch,
@@ -29,21 +27,16 @@ export default defineComponent({
   },
   mixins: [paginateParamInit],
   props: {
-    productor: { default: undefined, type: String },
     pr: { default: 0, type: Number },
     ps: { default: 30, type: Number },
+    routeOrga: { default: undefined, type: String },
+    routeQuery: { default: "", type: String },
   },
   data() {
     return {
       searchPattern: "" as string,
       organisationId: undefined as string | undefined,
     };
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-  },
-  created() {
-    this.organisationId = this.productor ? this.productor : this.filterOrgaId;
   },
 });
 </script>

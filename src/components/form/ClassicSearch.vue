@@ -55,6 +55,10 @@ export default defineComponent({
       height: 48px;
     }
 
+    input[type="search"]::-webkit-search-cancel-button {
+      display: none;
+    }
+    
     .search-icon-container {
       position: absolute;
       inset-block:0;

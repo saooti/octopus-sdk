@@ -112,7 +112,7 @@ export default defineComponent({
         this.internSizeChange = false;
         return;
       }
-      this.updatePaginateRank(Math.floor(this.first / this.rowsPerPage) + 1);
+      this.updateRouteParam({pr:(Math.floor(this.first / this.rowsPerPage) + 1).toString()});
     },
   },
   methods: {
