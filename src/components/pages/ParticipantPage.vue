@@ -6,7 +6,7 @@
       </h1>
       <section class="d-flex flex-column align-items-center mb-3">
         <img
-          v-lazy="proxyImageUrl(participant.imageUrl, '200')"
+          v-lazy="useProxyImageUrl(participant.imageUrl, '200')"
           width="200"
           height="200"
           role="presentation"
@@ -57,11 +57,12 @@
 import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
 import { useApiStore } from "../../stores/ApiStore";
-import displayMethods from "../mixins/displayMethods";
-import { seoTitleUrl } from "../mixins/seoTitleUrl";
-import imageProxy from "../mixins/imageProxy";
-import { orgaComputed } from "../mixins/orgaComputed";
-import { handle403 } from "../mixins/handle403";
+import { useFilterStore } from "../../stores/FilterStore";
+import displayHelper from "../../helper/displayHelper";
+import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
+import {useImageProxy} from "../composable/useImageProxy";
+import {useOrgaComputed} from "../composable/useOrgaComputed";
+import {useErrorHandler} from "../composable/useErrorHandler";
 import { Participant } from "@/stores/class/general/participant";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
@@ -83,9 +84,15 @@ export default defineComponent({
     EditBox,
     ClassicLoading,
   },
-  mixins: [displayMethods, handle403, orgaComputed, imageProxy, seoTitleUrl],
   props: {
     participantId: { default: undefined, type: Number },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const {  isEditRights } = useOrgaComputed();
+    const { updatePathParams } = useSeoTitleUrl();
+    const {handle403} = useErrorHandler();
+    return { useProxyImageUrl, isEditRights, updatePathParams, handle403 }
   },
   data() {
     return {
@@ -96,6 +103,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useApiStore, ["apiUrl"]),
     pageParameters() {
       return {
@@ -133,6 +141,9 @@ export default defineComponent({
     },
   },
   methods: {
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     initError(): void {
       this.error = true;
       this.loaded = true;

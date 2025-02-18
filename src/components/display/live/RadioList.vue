@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import RadioItem from "./RadioItem.vue";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
@@ -31,10 +31,12 @@ export default defineComponent({
     RadioItem,
   },
 
-  mixins: [handle403],
-
   props: {
     organisationId: { default: undefined, type: String },
+  },
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
   },
   data() {
     return {

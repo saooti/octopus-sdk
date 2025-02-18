@@ -79,8 +79,6 @@
 
 <script lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
-import selenium from "../../../mixins/selenium";
-import displayMethods from "../../../mixins/displayMethods";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "../../../../stores/class/general/podcast";
 import CommentBasicView from "./CommentBasicView.vue";
@@ -115,8 +113,6 @@ export default defineComponent({
     CommentMoreActions,
     ChevronDownIcon,
   },
-
-  mixins: [displayMethods, selenium],
 
   props: {
     comment: { default: () => ({}), type: Object as () => CommentPodcast },

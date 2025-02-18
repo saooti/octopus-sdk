@@ -74,21 +74,21 @@
 </template>
 
 <script lang="ts">
-import imageProxy from "../mixins/imageProxy";
-import { orgaComputed } from "../mixins/orgaComputed";
+import {useOrgaComputed} from "../composable/useOrgaComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import PodcastModuleBox from "../display/podcasts/PodcastModuleBox.vue";
 import ClassicLazy from "../misc/ClassicLazy.vue";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import {
   Conference,
   ConferencePublicInfo,
 } from "@/stores/class/conference/conference";
-import { handle403 } from "../mixins/handle403";
-import { seoTitleUrl } from "../mixins/seoTitleUrl";
+import {useErrorHandler} from "../composable/useErrorHandler";
+import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { Category } from "@/stores/class/general/category";
 import { useAuthStore } from "../../stores/AuthStore";
@@ -121,12 +121,17 @@ export default defineComponent({
     PodcastmakerHeader,
   },
 
-  mixins: [handle403, orgaComputed, imageProxy, seoTitleUrl],
-
   props: {
     updateStatus: { default: undefined, type: String },
     playingPodcast: { default: undefined, type: Object as () => Podcast },
     podcastId: { default: 0, type: Number },
+  },
+
+  setup(){
+    const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
+    const { updatePathParams } = useSeoTitleUrl();
+    const {handle403} = useErrorHandler();
+    return { isPodcastmaker, isEditRights, authOrgaId, updatePathParams, handle403 }
   },
 
   data() {
@@ -142,6 +147,7 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["isRoleLive"]),
     ...mapState(useGeneralStore, ["storedCategories"]),
     hideSuggestions(): boolean {

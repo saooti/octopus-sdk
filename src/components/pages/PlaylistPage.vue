@@ -13,7 +13,7 @@
         <section class="module-box">
           <div class="mb-5 mt-3 description-text">
             <img
-              v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
+              v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
               width="250"
               height="250"
               role="presentation"
@@ -54,15 +54,16 @@
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
-import { orgaComputed } from "../mixins/orgaComputed";
-import { seoTitleUrl } from "../mixins/seoTitleUrl";
+import {useOrgaComputed} from "../composable/useOrgaComputed";
+import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import PodcastList from "../display/playlist/PodcastList.vue";
 import classicApi from "../../api/classicApi";
+import { useFilterStore } from "../../stores/FilterStore";
 import { state } from "../../stores/ParamSdkStore";
-import displayMethods from "../mixins/displayMethods";
-import imageProxy from "../mixins/imageProxy";
-import { handle403 } from "../mixins/handle403";
+import displayHelper from "../../helper/displayHelper";
+import {useImageProxy} from "../composable/useImageProxy";
+import {useErrorHandler} from "../composable/useErrorHandler";
 import { Playlist } from "@/stores/class/general/playlist";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
@@ -87,10 +88,16 @@ export default defineComponent({
     ClassicLoading,
     PodcastmakerHeader,
   },
-  mixins: [displayMethods, handle403, orgaComputed, imageProxy, seoTitleUrl],
 
   props: {
     playlistId: { default: undefined, type: Number },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
+    const { updatePathParams } = useSeoTitleUrl();
+    const {handle403} = useErrorHandler();
+    return { useProxyImageUrl, isPodcastmaker, isEditRights, authOrgaId, updatePathParams, handle403 }
   },
   data() {
     return {
@@ -100,6 +107,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["isRolePlaylists"]),
     pageParameters() {
       return {
@@ -144,6 +152,9 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     initError(): void {
       this.error = true;
       this.loaded = true;

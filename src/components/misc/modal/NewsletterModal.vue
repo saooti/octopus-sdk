@@ -62,7 +62,7 @@ import ClassicModal from "../modal/ClassicModal.vue";
 import SnackBar from "../../misc/SnackBar.vue";
 import { VSwatches } from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
-import displayMethods from "../../mixins/displayMethods";
+import displayHelper from "../../../helper/displayHelper";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
@@ -79,8 +79,6 @@ export default defineComponent({
     ClassicModal,
     ContentCopyIcon,
   },
-
-  mixins: [displayMethods],
 
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
@@ -207,6 +205,9 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
+    onCopyCode(link: string, callback: () => void){
+      displayHelper.onCopyCode(link, callback);
+    },
     closePopup(): void {
       this.$emit("close");
     },

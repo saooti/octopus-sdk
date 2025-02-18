@@ -28,7 +28,6 @@
 
 <script lang="ts">
 import RefreshIcon from "vue-material-design-icons/Refresh.vue";
-import cookies from "../../mixins/cookies";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
@@ -48,7 +47,6 @@ export default defineComponent({
     CommentInput,
     RefreshIcon,
   },
-  mixins: [cookies],
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
   },

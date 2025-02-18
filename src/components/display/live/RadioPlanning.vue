@@ -77,7 +77,7 @@
                 >
                   <img
                     v-lazy="
-                      proxyImageUrl(planningItem.podcastData.imageUrl, '150')
+                      useProxyImageUrl(planningItem.podcastData.imageUrl, '150')
                     "
                     width="150"
                     height="150"
@@ -118,8 +118,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import classicApi from "../../../api/classicApi";
-import imageProxy from "../../mixins/imageProxy";
-import resizePhone from "../../mixins/resizePhone";
+import {useImageProxy} from "../../composable/useImageProxy";
+import {useResizePhone} from "../../composable/useResizePhone";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
@@ -132,10 +132,15 @@ export default defineComponent({
     ClassicLoading,
   },
 
-  mixins: [imageProxy,resizePhone],
-
   props: {
     radio: { default: undefined, type: Object as () => Canal },
+  },
+
+
+  setup(){
+    const { isPhone } = useResizePhone();
+    const { useProxyImageUrl } = useImageProxy();
+    return { isPhone, useProxyImageUrl }
   },
 
   data() {
@@ -157,8 +162,6 @@ export default defineComponent({
       }>,
       loading: true as boolean,
       error: false as boolean,
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
       showAllDays: false as boolean
     };
   },

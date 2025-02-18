@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
+import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import ClassicLazy from "../misc/ClassicLazy.vue";
 import { state } from "../../stores/ParamSdkStore";
@@ -82,12 +82,15 @@ export default defineComponent({
     PodcastInlineList,
     ClassicLazy,
   },
-  mixins: [rubriquesFilterComputed],
   props: {
     displayWithoutRubriques: { default: true, type: Boolean },
     rubriqueMorePath: { default: undefined, type: String },
   },
   emits: ["categoriesLength"],
+  setup(){
+    const { rubriqueQueryParam } = useRubriquesFilterComputed();
+    return { rubriqueQueryParam }
+  },
   data() {
     return {
       rubriqueId: [] as Array<number>,

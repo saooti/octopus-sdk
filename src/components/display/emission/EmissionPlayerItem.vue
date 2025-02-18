@@ -13,7 +13,7 @@
       </div>
       <div class="img-box">
         <img
-          v-lazy="proxyImageUrl(emission.imageUrl, '330')"
+          v-lazy="useProxyImageUrl(emission.imageUrl, '330')"
           width="330"
           height="330"
           role="presentation"
@@ -102,9 +102,8 @@ import classicApi from "../../../api/classicApi";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
-import imageProxy from "../../mixins/imageProxy";
-import { orgaComputed } from "../../mixins/orgaComputed";
-import displayMethods from "../../mixins/displayMethods";
+import {useImageProxy} from "../../composable/useImageProxy";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
@@ -120,11 +119,15 @@ export default defineComponent({
     PlayIcon,
     PauseIcon,
   },
-  mixins: [displayMethods, imageProxy, orgaComputed],
   props: {
     emission: { default: () => ({}), type: Object as () => Emission },
     nbPodcasts: { default: undefined, type: Number },
     rubriqueName: { default: undefined, type: String },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const { isEditRights } = useOrgaComputed();
+    return { useProxyImageUrl, isEditRights }
   },
 
   data() {

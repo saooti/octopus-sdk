@@ -67,8 +67,8 @@
 </template>
 
 <script lang="ts">
-import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
-import { routeParams } from "../../mixins/routeParam/routeParams";
+import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
+import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
@@ -91,7 +91,11 @@ export default defineComponent({
     RubriqueList,
     RubriqueChooser,
   },
-  mixins: [routeParams, rubriquesFilterParam],
+  setup(){
+    const { updateFiltersParam } = useRouteUpdateParams();
+    const { modifyRubriquesFilter } = useRubriquesFilterParam();
+    return {updateFiltersParam, modifyRubriquesFilter }
+  },
   data() {
     return {
       isCategories: false as boolean,

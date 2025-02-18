@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { Podcast } from "@/stores/class/general/podcast";
-import displayMethods from "../../mixins/displayMethods";
+import displayHelper from "../../../helper/displayHelper";
 import PodcastRawTranscript from "./PodcastRawTranscript.vue";
 import { defineAsyncComponent, defineComponent } from "vue";
 const ParticipantDescription = defineAsyncComponent(
@@ -37,8 +37,6 @@ export default defineComponent({
     PodcastRawTranscript,
   },
 
-  mixins: [displayMethods],
-
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
     date: { default: "", type: String },
@@ -50,5 +48,10 @@ export default defineComponent({
     return {};
   },
   computed: {},
+  methods: {
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
+  }
 });
 </script>

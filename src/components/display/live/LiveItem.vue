@@ -9,7 +9,6 @@
 <script lang="ts">
 import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
-import displayMethods from "../../mixins/displayMethods";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
 import {
@@ -22,7 +21,6 @@ export default defineComponent({
   components: {
     PodcastItem,
   },
-  mixins: [displayMethods],
   props: {
     fetchConference: { default: undefined, type: Object as () => Conference },
   },

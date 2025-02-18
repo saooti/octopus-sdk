@@ -22,7 +22,7 @@
         :data-selenium="'organisation-chooser-' + seleniumFormat(option.name)"
       >
         <img
-          v-lazy="proxyImageUrl(option.imageUrl, '32')"
+          v-lazy="useProxyImageUrl(option.imageUrl, '32')"
           width="32"
           height="32"
           class="me-2"
@@ -41,8 +41,8 @@
 <script lang="ts">
 import { useAuthStore } from "../../../stores/AuthStore";
 import { mapActions, mapState } from "pinia";
-import imageProxy from "../../mixins/imageProxy";
-import selenium from "../../mixins/selenium";
+import {useImageProxy} from "../../composable/useImageProxy";
+import {useSelenium} from "../../composable/useSelenium";
 import classicApi from "../../../api/classicApi";
 import ClassicMultiselect from "../../form/ClassicMultiselect.vue";
 import { defineComponent } from "vue";
@@ -56,7 +56,6 @@ export default defineComponent({
   components: {
     ClassicMultiselect,
   },
-  mixins: [selenium, imageProxy],
   props: {
     defaultanswer: { default: "", type: String },
     orgaIdSelected: { default: undefined, type: String },
@@ -69,6 +68,11 @@ export default defineComponent({
     displayLabel: { default: false, type: Boolean },
   },
   emits: ["selected"],
+  setup(){
+    const { seleniumFormat } = useSelenium();
+    const { useProxyImageUrl } = useImageProxy();
+    return { seleniumFormat, useProxyImageUrl }
+  },
   data() {
     return {
       maxElement: 50 as number,

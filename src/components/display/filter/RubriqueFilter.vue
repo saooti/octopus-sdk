@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
+import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import classicApi from "../../../api/classicApi";
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
@@ -50,7 +50,6 @@ export default defineComponent({
     RubriqueChoice,
     ClassicCheckbox,
   },
-  mixins: [rubriquesFilterParam],
   props: {
     organisationId: { default: undefined, type: String },
     rubriqueFilter: {
@@ -59,6 +58,11 @@ export default defineComponent({
     },
   },
   emits: ["update:rubriqueFilter", "warning"],
+
+  setup(){
+    const { stringifyRubriquesFilter } = useRubriquesFilterParam();
+    return { stringifyRubriquesFilter }
+  },
 
   data() {
     return {

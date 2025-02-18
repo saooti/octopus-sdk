@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import imageProxy from "../../mixins/imageProxy";
+
 import RadioImage from "./RadioImage.vue";
 import RadioCurrently from "./RadioCurrently.vue";
 import { defineComponent } from "vue";
@@ -33,7 +33,6 @@ export default defineComponent({
     RadioCurrently,
     RadioImage,
   },
-  mixins: [imageProxy],
 
   props: {
     radio: { default: undefined, type: Object as () => Canal },

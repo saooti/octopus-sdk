@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
-import { routeParams } from "../../mixins/routeParam/routeParams";
+import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import classicApi from "../../../api/classicApi";
 import { state } from "../../../stores/ParamSdkStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
@@ -57,13 +57,16 @@ export default defineComponent({
     ClassicPopover,
     PlusIcon,
   },
-  mixins: [routeParams],
 
   props: {
     isFilter: { default: false, type: Boolean },
     isDisplay: { default: false, type: Boolean },
   },
   emits: ["categoriesLength"],
+  setup(){
+    const { updateFiltersParam } = useRouteUpdateParams();
+    return {updateFiltersParam }
+  },
 
   data() {
     return {

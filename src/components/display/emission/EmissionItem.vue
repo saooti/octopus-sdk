@@ -9,7 +9,7 @@
       class="d-flex flex-grow-1 text-dark"
     >
       <img
-        v-lazy="proxyImageUrl(emission.imageUrl, '250')"
+        v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
         width="250"
         height="250"
         class="img-box"
@@ -55,11 +55,11 @@
 
 <script lang="ts">
 import AlertIcon from "vue-material-design-icons/Alert.vue";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { Emission } from "@/stores/class/general/emission";
 import classicApi from "../../../api/classicApi";
-import imageProxy from "../../mixins/imageProxy";
-import displayMethods from "../../mixins/displayMethods";
+import {useImageProxy} from "../../composable/useImageProxy";
+import displayHelper from "../../../helper/displayHelper";
 import { defineComponent } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
@@ -69,10 +69,14 @@ export default defineComponent({
     AlertIcon,
   },
 
-  mixins: [displayMethods, orgaComputed, imageProxy],
-
   props: {
     emission: { default: () => ({}), type: Object as () => Emission },
+  },
+
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const { isPodcastmaker, isEditRights } = useOrgaComputed();
+    return { useProxyImageUrl, isPodcastmaker, isEditRights }
   },
 
   data() {
@@ -107,6 +111,9 @@ export default defineComponent({
     }
   },
   methods: {
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     async hasPodcast(): Promise<void> {
       const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
         api: 0,

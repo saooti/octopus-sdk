@@ -17,7 +17,7 @@
       :title="$t('Episode name page', { name: podcastDisplay?.title })"
     >
       <img
-        v-lazy="proxyImageUrl(podcastImage, imageWidth)"
+        v-lazy="useProxyImageUrl(podcastImage, imageWidth)"
         :width="imageWidth"
         :height="imageWidth"
         role="presentation"
@@ -31,7 +31,7 @@
 </template>
 <script lang="ts">
 import LinkVariantIcon from "vue-material-design-icons/LinkVariant.vue";
-import imageProxy from "../../../mixins/imageProxy";
+import {useImageProxy} from "../../../composable/useImageProxy";
 import { defineComponent } from "vue";
 import { RouteLocationRaw } from "vue-router";
 import { mapState } from "pinia";
@@ -43,9 +43,12 @@ export default defineComponent({
 
   components: { LinkVariantIcon },
 
-  mixins: [imageProxy],
   props: {
     imageWidth: { default: 48, type: Number },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    return { useProxyImageUrl }
   },
   computed: {
     ...mapState(usePlayerStore, [

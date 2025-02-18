@@ -8,21 +8,24 @@
 </template>
 
 <script lang="ts">
-import imageProxy from "../../mixins/imageProxy";
+import {useImageProxy} from "../../composable/useImageProxy";
 import { defineComponent } from "vue";
 export default defineComponent({
-  mixins: [imageProxy],
 
   props: {
     pageTitle: { default: undefined, type: String },
     imgUrl: { default: undefined, type: String },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    return { useProxyImageUrl }
   },
   computed: {
     backgroundDisplay(): string {
       if (!this.imgUrl) {
         return "";
       }
-      return `background-image: url('${this.proxyImageUrl(
+      return `background-image: url('${this.useProxyImageUrl(
         this.imgUrl,
         "250",
       )}');`;

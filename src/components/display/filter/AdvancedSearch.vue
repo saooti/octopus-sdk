@@ -81,10 +81,10 @@
 
 <script lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
+import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { mapState } from "pinia";
@@ -117,7 +117,6 @@ export default defineComponent({
     ChevronDownIcon,
     ClassicSelect
   },
-  mixins: [orgaComputed, rubriquesFilterParam],
   props: {
     organisationId: { default: undefined, type: String },
     isEmission: { default: false, type: Boolean },
@@ -147,6 +146,11 @@ export default defineComponent({
     "update:rubriqueFilter",
     "update:onlyVideo",
   ],
+  setup(){
+    const { isPodcastmaker, isEditRights } = useOrgaComputed();
+    const { stringifyRubriquesFilter,updateRouteParamAdvanced } = useRubriquesFilterParam();
+    return { isPodcastmaker, isEditRights, stringifyRubriquesFilter,updateRouteParamAdvanced  }
+  },
   data() {
     return {
       showFilters: false as boolean,
@@ -156,11 +160,10 @@ export default defineComponent({
 
   computed: {
     ...mapState(useGeneralStore, ["platformEducation"]),
-    ...mapState(useFilterStore, ["filterIab", "filterRubrique"]),
+    ...mapState(useFilterStore, ["filterOrgaId","filterIab", "filterRubrique"]),
     ...mapState(useAuthStore, [
       "isRoleProduction",
-      "isRoleContribution",
-      "isRoleAdmin",
+      "isRoleContribution"
     ]),
     organisationRight(): boolean {
       return this.isEditRights(this.organisationId);

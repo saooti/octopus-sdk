@@ -156,13 +156,12 @@ import ParticipantDescription from "./ParticipantDescription.vue";
 import PodcastRawTranscript from "./PodcastRawTranscript.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { useAuthStore } from "../../../stores/AuthStore";
-import displayMethods from "../../mixins/displayMethods";
-import podcastView from "../../mixins/podcast/podcastView";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import displayHelper from "../../../helper/displayHelper";
+import {usePodcastView} from "../../composable/podcasts/usePodcastView";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineComponent, defineAsyncComponent, toRefs } from "vue";
 const ErrorMessage = defineAsyncComponent(
   () => import("../../misc/ErrorMessage.vue"),
 );
@@ -211,8 +210,6 @@ export default defineComponent({
     PodcastRubriqueList
   },
 
-  mixins: [displayMethods, orgaComputed, podcastView],
-
   props: {
     playingPodcast: { default: undefined, type: Object as () => Podcast },
     podcast: { default: undefined, type: Object as () => Podcast },
@@ -220,6 +217,22 @@ export default defineComponent({
   },
 
   emits: ["updatePodcast"],
+
+  setup(props){
+    const propsRef = toRefs(props);
+    const { 
+      isLiveReadyToRecord,
+      isCounter,
+      timeRemaining,
+      isPlannedInProcessor,
+      date,
+      duration,
+      durationIso,
+      isPodcastmaker,
+      editRight
+    } = usePodcastView(propsRef.podcast, propsRef.podcastConference);
+    return { isPodcastmaker, editRight, isLiveReadyToRecord, isCounter, timeRemaining, isPlannedInProcessor, date, duration, durationIso }
+  },
 
   data() {
     return {
@@ -246,9 +259,6 @@ export default defineComponent({
     },
     isProgressBar(): boolean {
       return state.emissionsPage.progressBar as boolean;
-    },
-    editRight(): boolean {
-      return this.isEditRights(this.podcast?.organisation.id);
     },
     isLiveReady(): boolean {
       return (
@@ -289,6 +299,9 @@ export default defineComponent({
     },
   },
   methods: {
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     removeDeleted(): void {
       if (this.isLiveReadyToRecord) {
         this.$router.push("/main/pub/lives");

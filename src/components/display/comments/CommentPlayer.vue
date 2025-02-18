@@ -34,14 +34,17 @@
 
 <script lang="ts">
 import { CommentPodcast } from "@/stores/class/general/comment";
-import selenium from "../../mixins/selenium";
+import {useSelenium} from "../../composable/useSelenium";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
 export default defineComponent({
   name: "CommentPlayer",
-  mixins: [selenium],
+  setup(){
+    const { seleniumFormat } = useSelenium();
+    return { seleniumFormat }
+  },
   data() {
     return {
       displayContent: undefined as CommentPodcast | undefined,

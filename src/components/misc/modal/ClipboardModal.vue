@@ -23,7 +23,7 @@
 <script lang="ts">
 import ClassicModal from "../modal/ClassicModal.vue";
 import { Emission } from "@/stores/class/general/emission";
-import displayMethods from "../../mixins/displayMethods";
+import displayHelper from "../../../helper/displayHelper";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState } from "pinia";
@@ -36,8 +36,6 @@ export default defineComponent({
     RssSection,
     ClassicModal,
   },
-  mixins: [displayMethods],
-
   props: {
     link: { default: "", type: String },
     emission: { default: undefined, type: Object as () => Emission },
@@ -47,6 +45,9 @@ export default defineComponent({
     ...mapState(useAuthStore, ["authOrgaId"]),
   },
   methods: {
+    onCopyCode(link: string, callback: () => void){
+      displayHelper.onCopyCode(link, callback);
+    },
     closePopup(): void {
       this.$emit("close");
     },

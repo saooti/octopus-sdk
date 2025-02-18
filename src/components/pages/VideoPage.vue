@@ -90,22 +90,21 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import classicApi from "../../api/classicApi";
 import { Podcast } from "@/stores/class/general/podcast";
 import ClassicNav from "../misc/ClassicNav.vue";
-import { handle403 } from "../mixins/handle403";
-import { seoTitleUrl } from "../mixins/seoTitleUrl";
-import podcastView from "../mixins/podcast/podcastView";
-import { defineAsyncComponent, defineComponent } from "vue";
+import {useErrorHandler} from "../composable/useErrorHandler";
+import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
+import {usePodcastView} from "../composable/podcasts/usePodcastView";
+import { computed, defineAsyncComponent, onBeforeUnmount, Ref, ref, watch } from "vue";
 import { AxiosError } from "axios";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useCommentStore } from "../../stores/CommentStore";
 import { useApiStore } from "../../stores/ApiStore";
-import { mapActions, mapState } from "pinia";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";
 import {
   Conference,
@@ -113,6 +112,8 @@ import {
 } from "@/stores/class/conference/conference";
 import { usePlayerStore } from "../../stores/PlayerStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 const PlayerVideoDigiteka = defineAsyncComponent(
   () => import("../misc/player/video/PlayerVideoDigiteka.vue"),
 );
@@ -128,173 +129,158 @@ const VideoModuleBox = defineAsyncComponent(
 const CountdownOctopus = defineAsyncComponent(
   () => import("../display/live/CountdownOctopus.vue"),
 );
-export default defineComponent({
-  name: "VideoPage",
-  components: {
-    ClassicLoading,
-    PlayerVideoDigiteka,
-    ClassicNav,
-    CommentSection,
-    VideoModuleBox,
-    PlayerVideoHls,
-    CountdownOctopus,
-    ChevronLeftIcon,
-  },
 
-  mixins: [handle403, podcastView, seoTitleUrl],
+const props = defineProps({
+  podcastId:{ default: 0, type: Number },
+})
 
-  props: {
-    podcastId: { default: 0, type: Number },
-  },
+const loaded = ref(false);
+const podcast: Ref<Podcast | undefined> = ref(undefined);
+const error = ref(false);
+const activeTab = ref(0);
+const configPodcast: Ref<CommentsConfig | undefined> = ref(undefined);
+const podcastConference: Ref<Conference | undefined> = ref(undefined);
+const intervalStatusConference: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
-  data() {
-    return {
-      loaded: false as boolean,
-      podcast: undefined as Podcast | undefined,
-      error: false as boolean,
-      activeTab: 0 as number,
-      configPodcast: undefined as CommentsConfig | undefined,
-      podcastConference: undefined as Conference | undefined,
-      intervalStatusConference: undefined as
-        | ReturnType<typeof setTimeout>
-        | undefined,
-    };
-  },
-  computed: {
-    ...mapState(useGeneralStore, ["metaTitle"]),
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    ...mapState(useApiStore, ["hlsUrl"]),
-    videoId(): string | undefined {
-      return this.podcast?.video?.videoId;
-    },
-    tabs(): Array<string> {
-      if (this.canPostComment) {
-        return [this.$t("Information"), this.$t("Comments")];
-      }
-      return [];
-    },
-    canPostComment(): boolean {
-      return this.getCanPostComment(
-        this.configPodcast,
-        this.podcast,
-        undefined !== this.authOrgaId,
-      );
-    },
-    recordingLive(): boolean {
-      return (
-        undefined !== this.podcastConference &&
-        -1 !== this.podcastConference.conferenceId &&
-        ("RECORDING" === this.podcastConference.status ||
-          "PENDING" === this.podcastConference.status)
-      );
-    },
-    hlsVideoUrl(): string {
-      if (!this.recordingLive || !this.podcastConference) {
-        return "";
-      }
-      return `${this.hlsUrl}live/video_dev.${this.podcastConference.conferenceId}/index.m3u8`;
-    },
-    overrideText(): string | undefined {
-      if ("PUBLISHING" !== this.podcastConference?.status) {
-        return;
-      }
-      return this.$t("In the process of being published");
-    },
-  },
-  watch: {
-    podcastId: {
-      immediate: true,
-      async handler() {
-        await this.getPodcastDetails();
-        if (!this.podcast) {
-          return;
-        }
-        this.initCommentUser();
-        this.configPodcast = await this.getCommentsConfig(this.podcast);
-      },
-    },
-  },
-  unmounted() {
-    clearInterval(this.intervalStatusConference as unknown as number);
-  },
+const { 
+  isLiveReadyToRecord,
+  isCounter,
+  timeRemaining,
+  date,
+  duration,
+  durationIso,
+  editRight
+} = usePodcastView(podcast, podcastConference);
 
-  methods: {
-    ...mapActions(usePlayerStore, ["playerPlay"]),
-    ...mapActions(useCommentStore, [
-      "getCommentsConfig",
-      "getCanPostComment",
-      "initCommentUser",
-    ]),
-    async getPodcastDetails(): Promise<void> {
-      this.loaded = false;
-      this.error = false;
-      try {
-        this.podcast = await classicApi.fetchData<Podcast>({
-          api: 0,
-          path: "podcast/" + this.podcastId,
-        });
-        document.title = this.podcast.title + " - "+this.metaTitle;
-        const orga = this.podcast.organisation;
-        const privateAccess =
-          "PUBLIC" !== orga.privacy &&
-          this.filterOrgaId !== orga.id &&
-          this.$route.query.productor !== orga.id;
-        const notValid =
-          (!this.podcast.availability.visibility ||
-            !["READY_TO_RECORD", "READY", "PROCESSING"].includes(
-              this.podcast.processingStatus ?? "",
-            ) ||
-            !this.podcast.valid) &&
-          !this.editRight;
-        if (privateAccess || notValid) {
-          this.error = true;
-        } else {
-          this.updatePathParams(this.podcast.title);
-          if (
-            this.podcast.conferenceId &&
-            "READY" !== this.podcast.processingStatus
-          ) {
-            await this.fetchConferenceStatus();
-            this.intervalStatusConference = setInterval(() => {
-              this.fetchConferenceStatus();
-            }, 3000);
-            this.playerPlay(
-              {
-                ...this.podcast,
-                ...{ conferenceId: this.podcast.conferenceId },
-              },
-              true,
-            );
-          }
-        }
-      } catch (error) {
-        this.handle403(error as AxiosError);
-        this.error = true;
-      }
-      this.loaded = true;
-    },
-    async fetchConferenceStatus() {
-      if (!this.podcast?.conferenceId) {
-        return;
-      }
-      const data = await classicApi.fetchData<ConferencePublicInfo>({
-        api: 9,
-        path: "conference/info/" + this.podcast.conferenceId,
-      });
-      this.podcastConference = {
-        ...data,
-        ...{
-          conferenceId: this.podcast.conferenceId,
-          title: "",
-        },
-      };
-      if ("DEBRIEFING" === data.status) {
-        clearInterval(this.intervalStatusConference as unknown as number);
-      }
-    },
-  },
+const { updatePathParams } = useSeoTitleUrl();
+const {handle403} = useErrorHandler();
+
+const authStore = useAuthStore();
+const apiStore = useApiStore();
+const generalStore = useGeneralStore();
+const playerStore = usePlayerStore();
+const filterStore = useFilterStore();
+const commentStore = useCommentStore();
+
+const {t} = useI18n();
+const route = useRoute();
+
+const videoId = computed(() => podcast.value?.video?.videoId);
+const canPostComment = computed(() => {
+  return commentStore.getCanPostComment(
+    configPodcast.value,
+    podcast.value,
+    undefined !== authStore.authOrgaId,
+  );
 });
+const tabs = computed(() => {
+  if (canPostComment.value) {
+    return [t("Information"), t("Comments")];
+  }
+  return [];
+});
+const recordingLive = computed(() => {
+  return (
+        undefined !== podcastConference.value &&
+        -1 !== podcastConference.value.conferenceId &&
+        ("RECORDING" === podcastConference.value.status ||
+          "PENDING" === podcastConference.value.status)
+      );
+});
+const hlsVideoUrl = computed(() => {
+  if (!recordingLive.value || !podcastConference.value) {
+    return "";
+  }
+  return `${apiStore.hlsUrl}live/video_dev.${podcastConference.value.conferenceId}/index.m3u8`;
+});
+const overrideText = computed(() => {
+  if ("PUBLISHING" !== podcastConference.value?.status) {
+    return;
+  }
+  return t("In the process of being published");
+});
+
+
+watch(()=>props.podcastId, async () => {
+  await getPodcastDetails();
+  if (!podcast.value) {
+    return;
+  }
+  commentStore.initCommentUser();
+  configPodcast.value = await commentStore.getCommentsConfig(podcast.value);
+}, {immediate: true});
+
+
+onBeforeUnmount(() => {
+  clearInterval(intervalStatusConference.value as unknown as number);
+})
+
+async function getPodcastDetails(): Promise<void> {
+  loaded.value = false;
+  error.value = false;
+  try {
+    podcast.value = await classicApi.fetchData<Podcast>({
+      api: 0,
+      path: "podcast/" + props.podcastId,
+    });
+    document.title = podcast.value.title + " - "+generalStore.metaTitle;
+    const orga = podcast.value.organisation;
+    const privateAccess =
+      "PUBLIC" !== orga.privacy &&
+      filterStore.filterOrgaId !== orga.id &&
+      route.query.productor !== orga.id;
+    const notValid =
+      (!podcast.value.availability.visibility ||
+        !["READY_TO_RECORD", "READY", "PROCESSING"].includes(
+          podcast.value.processingStatus ?? "",
+        ) ||
+        !podcast.value.valid) &&
+      !editRight.value;
+    if (privateAccess || notValid) {
+      error.value = true;
+    } else {
+      updatePathParams(podcast.value.title);
+      if (
+        podcast.value.conferenceId &&
+        "READY" !== podcast.value.processingStatus
+      ) {
+        await fetchConferenceStatus();
+        intervalStatusConference.value = setInterval(() => { fetchConferenceStatus(); }, 3000);
+        playerStore.playerPlay(
+          {
+            ...podcast.value,
+            ...{ conferenceId: podcast.value.conferenceId },
+          },
+          true,
+        );
+      }
+    }
+  } catch (errorCatched) {
+    this.handle403(errorCatched as AxiosError);
+    error.value = true;
+  }
+  loaded.value = true;
+}
+
+async function fetchConferenceStatus() {
+  if (!podcast.value?.conferenceId) {
+    return;
+  }
+  const data = await classicApi.fetchData<ConferencePublicInfo>({
+    api: 9,
+    path: "conference/info/" + podcast.value.conferenceId,
+  });
+  podcastConference.value = {
+    ...data,
+    ...{
+      conferenceId: podcast.value.conferenceId,
+      title: "",
+    },
+  };
+  if ("DEBRIEFING" === data.status) {
+    clearInterval(intervalStatusConference.value as unknown as number);
+  }
+}
 </script>
 <style lang="scss">
 

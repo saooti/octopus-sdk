@@ -4,7 +4,7 @@
     class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
   >
     <img
-      v-lazy="proxyImageUrl(podcast.imageUrl, '270')"
+      v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
       width="270"
       height="270"
       role="presentation"
@@ -52,7 +52,7 @@ import PodcastPlayButton from "./PodcastPlayButton.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
-import imageProxy from "../../mixins/imageProxy";
+import {useImageProxy} from "../../composable/useImageProxy";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PodcastImage",
@@ -60,7 +60,6 @@ export default defineComponent({
     PodcastPlayButton,
     ChevronDownIcon,
   },
-  mixins: [imageProxy],
   props: {
     podcast: { default: () => ({}), type: Object as () => Podcast },
     hidePlay: { default: false, type: Boolean },
@@ -70,6 +69,10 @@ export default defineComponent({
     fetchConference: { default: undefined, type: Object as () => Conference },
   },
   emits: ["hideDescription", "showDescription"],
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    return { useProxyImageUrl }
+  },
   data() {
     return {
       isDescription: false as boolean,

@@ -58,9 +58,8 @@
 
 <script lang="ts">
 import MenuIcon from "vue-material-design-icons/Menu.vue";
-import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
+import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import { state } from "../../stores/ParamSdkStore";
-import orgaFilter from "../mixins/organisationFilter";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
@@ -74,12 +73,15 @@ export default defineComponent({
     ClassicPopover,
     MenuIcon,
   },
-  mixins: [orgaFilter, rubriquesFilterComputed],
   props: {
     isEducation: { default: false, type: Boolean },
     show: { default: false, type: Boolean },
     notPodcastAndEmission: { default: false, type: Boolean },
     scrolled: { default: false, type: Boolean },
+  },
+  setup(){
+    const { rubriqueQueryParam } = useRubriquesFilterComputed();
+    return { rubriqueQueryParam }
   },
   data() {
     return {

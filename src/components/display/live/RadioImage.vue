@@ -5,7 +5,7 @@
     <img
       v-lazy="
         radio.imageUrl
-          ? proxyImageUrl(radio.imageUrl, '270')
+          ? useProxyImageUrl(radio.imageUrl, '270')
           : '/img/emptyradio.webp'
       "
       width="270"
@@ -30,7 +30,7 @@ import PlayIcon from "vue-material-design-icons/Play.vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
-import imageProxy from "../../mixins/imageProxy";
+import {useImageProxy} from "../../composable/useImageProxy";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 const PodcastIsPlaying = defineAsyncComponent(() => import("../podcasts/PodcastIsPlaying.vue"));
@@ -42,10 +42,12 @@ export default defineComponent({
     PodcastIsPlaying
   },
 
-  mixins: [imageProxy],
-
   props: {
     radio: { default: undefined, type: Object as () => Canal },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    return { useProxyImageUrl }
   },
 
   computed: {

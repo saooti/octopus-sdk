@@ -143,7 +143,7 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import classicApi from "../../../api/classicApi";
-import displayMethods from "../../mixins/displayMethods";
+import displayHelper from "../../../helper/displayHelper";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { Playlist } from "@/stores/class/general/playlist";
 const ClipboardModal = defineAsyncComponent(
@@ -172,7 +172,6 @@ export default defineComponent({
     XIcon,
     CreationIcon,
   },
-  mixins: [displayMethods],
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
     emission: { default: undefined, type: Object as () => Emission },
@@ -283,6 +282,9 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
+    onCopyCode(link: string, callback: () => void){
+      displayHelper.onCopyCode(link, callback);
+    },
     async initShareButtons() {
       if (undefined !== this.participantId) {
         this.displayRss = await classicApi.fetchData<boolean>({

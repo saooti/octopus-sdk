@@ -47,13 +47,13 @@
 
 <script lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
-import domHelper from "../../../helper/dom";
+import domHelper from "../../../helper/domHelper";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
-import resizePhone from "../../mixins/resizePhone";
-import { routeParams } from "../../mixins/routeParam/routeParams";
+import {useResizePhone} from "../../composable/useResizePhone";
+import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import { defineComponent } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState } from "pinia";
@@ -65,7 +65,6 @@ export default defineComponent({
     ClassicLoading,
     PlusIcon,
   },
-  mixins: [resizePhone, routeParams],
   props: {
     first: { default: 0, type: Number },
     rowsPerPage: { default: 30, type: Number },
@@ -81,10 +80,14 @@ export default defineComponent({
   },
 
   emits: ["update:first", "update:rowsPerPage", "update:isMobile"],
+
+  setup(){
+    const { isPhone, windowWidth } = useResizePhone();
+    const { updateRouteParam, updatePaginateSize } = useRouteUpdateParams();
+    return { isPhone, windowWidth, updateRouteParam, updatePaginateSize }
+  },
   data() {
     return {
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
       internSizeChange: false as boolean,
     };
   },

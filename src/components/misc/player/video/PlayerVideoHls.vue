@@ -16,7 +16,7 @@
 <script lang="ts">
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapActions } from "pinia";
-import { playerLogicProgress } from "../../../mixins/player/playerLogicProgress";
+import {usePlayerLogicProgress} from "../../../composable/player/usePlayerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
 import qualitySelectorHls from "videojs-quality-selector-hls";
 if (undefined === videojs.getPlugin("qualitySelectorHls")) {
@@ -25,13 +25,17 @@ if (undefined === videojs.getPlugin("qualitySelectorHls")) {
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PlayerVideoHls",
-  mixins: [playerLogicProgress],
 
   props: {
     hlsUrl: { default: "", type: String },
     responsive: { default: false, type: Boolean },
   },
   emits: ["changeValid"],
+
+  setup(){
+    const { downloadId, initLiveDownloadId, onTimeUpdateProgress} = usePlayerLogicProgress();
+    return { downloadId, initLiveDownloadId, onTimeUpdateProgress }
+  },
   data() {
     return {
       errorPlay: "" as string,
@@ -40,11 +44,6 @@ export default defineComponent({
       playing: false as boolean,
       isPaused: false as boolean,
       stalledTimout: undefined as ReturnType<typeof setTimeout> | undefined,
-      //playerLive mixins
-      downloadId: null as string | null,
-      listenTime: 0 as number,
-      notListenTime: 0 as number,
-      lastSend: 0 as number,
     };
   },
   computed: {

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import resizePhone from "../mixins/resizePhone";
+import {useResizePhone} from "../composable/useResizePhone";
 import EmoticonExcitedOutlineIcon from "vue-material-design-icons/EmoticonExcitedOutline.vue";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import data from "emoji-mart-vue-fast/data/all.json";
@@ -43,18 +43,20 @@ export default defineComponent({
     ClassicPopover,
     EmoticonExcitedOutlineIcon,
   },
-  mixins:[resizePhone],
   props: {
     popoverRelativeClass: { default: undefined, type: String },
     isTopPosition: { default: false, type: Boolean },
     id: { default: "", type: String },
   },
   emits: ["emojiSelected"],
+  setup(){
+    const { isPhone } = useResizePhone();
+    return { isPhone }
+  },
 
   data() {
     return {
       emojiIndex: emojiIndex,
-      isPhone: false as boolean,
     };
   },
 });

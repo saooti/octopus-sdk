@@ -16,63 +16,52 @@
   </section>
 </template>
 
-<script lang="ts">
-import { paginateParamInit } from "../mixins/routeParam/paginateParamInit";
-import { seoTitleUrl } from "../mixins/seoTitleUrl";
+<script setup lang="ts">
+import { useSimplePageParam } from "../composable/route/useSimplePageParam";
+import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import classicApi from "../../api/classicApi";
 import PodcastList from "../display/podcasts/PodcastList.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
-import { useGeneralStore } from "../../stores/GeneralStore";
-import { mapState } from "pinia";
 const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
-export default defineComponent({
-  name: "RubriquePage",
-  components: {
-    PodcastList,
-    ProductorSearch
-  },
-  mixins: [paginateParamInit, seoTitleUrl],
-  props: {
-    pr: { default: 0, type: Number },
-    ps: { default: 30, type: Number },
-    rubriqueId: { default: undefined, type: Number },
-    routeOrga: { default: undefined, type: String },
-    routeQuery: { default: "", type: String },
-  },
-  data() {
-    return {
-      title: "" as string,
-      organisationId: undefined as string | undefined,
-      searchPattern: "" as string,
-    };
-  },
-  computed:{
-    ...mapState(useGeneralStore, ["metaTitle"]),
-    orgaArray(): Array<string> {
-      return this.organisationId ? [this.organisationId] : [];
-    },
-    sortOrder(){
-      if(this.searchMinSize.length){
-        return "SCORE";
-      }
-      return undefined;
-    }
-  },
-  watch: {
-    rubriqueId: {
-      immediate: true,
-      async handler() {
-        const data = await classicApi.fetchData<Rubrique>({
-          api: 0,
-          path: "rubrique/" + this.rubriqueId,
-        });
-        this.updatePathParams(data.name);
-        this.title = data.name;
-      },
-    },
-  },
+
+const props = defineProps({
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  rubriqueId: { default: undefined, type: Number },
+  routeOrga: { default: undefined, type: String },
+  routeQuery: { default: "", type: String },
 });
+
+const {
+  searchPattern,
+  organisationId,
+  searchMinSize,
+  paginateFirst,
+} = useSimplePageParam(props);
+
+const { updatePathParams } = useSeoTitleUrl();
+
+const title = ref("");
+
+const orgaArray = computed(() =>organisationId.value ? [organisationId.value] : []);
+const sortOrder = computed(() =>{
+  if(searchMinSize.value.length){
+    return "SCORE";
+  }
+  return undefined;
+});
+
+
+watch(()=>props.rubriqueId, async () => {
+  const data = await classicApi.fetchData<Rubrique>({
+    api: 0,
+    path: "rubrique/" + props.rubriqueId,
+  });
+  updatePathParams(data.name);
+  title.value = data.name;
+}, {immediate: true});
+
 </script>

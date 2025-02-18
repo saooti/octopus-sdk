@@ -37,33 +37,41 @@
   </section>
 </template>
 
-<script lang="ts">
-import { advancedParamInit } from "../mixins/routeParam/advancedParamInit";
+<script setup lang="ts">
 import EmissionList from "../display/emission/EmissionList.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
-import { defineComponent, defineAsyncComponent } from "vue";
+import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
+import { defineAsyncComponent } from "vue";
 const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
-export default defineComponent({
-  components: {
-    ProductorSearch,
-    EmissionList,
-    AdvancedSearch,
-  },
-  mixins: [advancedParamInit],
-  props: {
-    pr: { default: 0, type: Number },
-    ps: { default: 30, type: Number },
-    routeQuery: { default: "", type: String },
-    routeMonetisable: { default: "UNDEFINED", type: String },
-    routeIab: { default: undefined, type: Number },
-    routeSort: { default: "LAST_PODCAST_DESC", type: String },
-    routeIncludeHidden: { default: "", type: String },
-    routeFrom: { default: undefined, type: String },
-    routeTo: { default: undefined, type: String },
-    routeOrga: { default: undefined, type: String },
-    routeRubriques: { default: "", type: String },
-  },
+
+const props = defineProps({
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  routeQuery: { default: "", type: String },
+  routeMonetisable: { default: "UNDEFINED", type: String },
+  routeIab: { default: undefined, type: Number },
+  routeSort: { default: "LAST_PODCAST_DESC", type: String },
+  routeIncludeHidden: { default: "", type: String },
+  routeFrom: { default: undefined, type: String },
+  routeTo: { default: undefined, type: String },
+  routeOrga: { default: undefined, type: String },
+  routeRubriques: { default: "", type: String },
 });
+
+const {
+  organisationId,
+  searchPattern,
+  monetisable,
+  iabId,
+  sort,
+  includeHidden,
+  fromDate,
+  toDate,
+  rubriqueFilter,
+  searchMinSize,
+  paginateFirst,
+  rubriquesFilterArrayIds
+} = useAdvancedParamInit(props, true);
 </script>

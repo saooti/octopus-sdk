@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import imageProxy from "../mixins/imageProxy";
+import {useImageProxy} from "../composable/useImageProxy";
 import TopBarMainContent from "./TopBarMainContent.vue";
 import { mapState } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
@@ -35,7 +35,7 @@ import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Emission } from "@/stores/class/general/emission";
-import resizePhone from "../mixins/resizePhone";
+import {useResizePhone} from "../composable/useResizePhone";
 import { Playlist } from "@/stores/class/general/playlist";
 import { Canal } from "@/stores/class/radio/canal";
 const SubscribeButtons = defineAsyncComponent(
@@ -47,15 +47,17 @@ export default defineComponent({
     TopBarMainContent,
     SubscribeButtons,
   },
+  setup(){
+    const { isPhone, windowWidth } = useResizePhone();
+    const { useProxyImageUrl } = useImageProxy();
+    return { isPhone, windowWidth, useProxyImageUrl }
+  },
 
-  mixins: [imageProxy, resizePhone],
   data() {
     return {
       scrolled: false as boolean,
       oldScrollY: 0 as number,
       minScroll: 0 as number,
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
     };
   },
   computed: {
@@ -73,7 +75,7 @@ export default defineComponent({
       if (!this.contentToDisplay) {
         return "";
       }
-      return `background-image: url('${this.proxyImageUrl(
+      return `background-image: url('${this.useProxyImageUrl(
         this.contentToDisplay.imageUrl,
         "270",
       )}');`;

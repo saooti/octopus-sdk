@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts">
-import selenium from "../../mixins/selenium";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import ClassicMultiselect from "../../form/ClassicMultiselect.vue";
 import { defineComponent } from "vue";
@@ -29,7 +28,6 @@ export default defineComponent({
   components: {
     ClassicMultiselect,
   },
-  mixins: [selenium],
   props: {
     defaultanswer: { default: "", type: String },
     width: { default: "100%", type: String },

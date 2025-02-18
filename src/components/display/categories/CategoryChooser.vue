@@ -75,7 +75,7 @@ export default defineComponent({
       return this.storedCategories;
     },
     categoriesOrdered(): Array<Category> {
-      let allCategoriesOrdered = [...this.categoriesChosen].sort(
+      let allCategoriesOrdered = this.categoriesChosen.toSorted(
         (a: Category, b: Category) => (a.name > b.name ? 1 : -1),
       );
       if (!this.displayAllCategories) {

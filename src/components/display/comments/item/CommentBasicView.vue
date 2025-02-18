@@ -40,8 +40,7 @@ import AlertIcon from "vue-material-design-icons/Alert.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
-import selenium from "../../../mixins/selenium";
-import displayMethods from "../../../mixins/displayMethods";
+import displayHelper from "../../../../helper/displayHelper";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import ClassicPopover from "../../../misc/ClassicPopover.vue";
 import { defineComponent } from "vue";
@@ -52,8 +51,6 @@ export default defineComponent({
     ClassicPopover,
     AlertIcon,
   },
-
-  mixins: [displayMethods, selenium],
 
   props: {
     comment: { default: () => ({}), type: Object as () => CommentPodcast },
@@ -96,6 +93,9 @@ export default defineComponent({
     clearInterval(this.dateInterval as unknown as number);
   },
   methods: {
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     defineDateFromNow() {
       if (!this.comment.date) {
         this.date = "";

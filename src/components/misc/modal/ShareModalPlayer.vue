@@ -58,7 +58,7 @@
 <script lang="ts">
 import ContentCopyIcon from "vue-material-design-icons/ContentCopy.vue";
 import SnackBar from "../SnackBar.vue";
-import displayMethods from "../../mixins/displayMethods";
+import displayHelper from "../../../helper/displayHelper";
 import ClassicModal from "../modal/ClassicModal.vue";
 import ClassicNav from "../ClassicNav.vue";
 import QrCode from "../../display/sharing/QrCode.vue";
@@ -74,7 +74,6 @@ export default defineComponent({
     ClassicNav,
     ContentCopyIcon,
   },
-  mixins: [displayMethods],
   props: {
     embedLink: { default: undefined, type: String },
     embedlyLink: { default: undefined, type: String },
@@ -99,6 +98,9 @@ export default defineComponent({
     },
   },
   methods: {
+    onCopyCode(link: string, callback: () => void){
+      displayHelper.onCopyCode(link, callback);
+    },
     closePopup(): void {
       this.$emit("close");
     },

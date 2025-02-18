@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts">
-import { routeParams } from "../../mixins/routeParam/routeParams";
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
 import CategoryChooser from "../categories/CategoryChooser.vue";
 import { defineComponent } from "vue";
@@ -25,7 +24,6 @@ export default defineComponent({
     CategoryChooser,
     ClassicCheckbox,
   },
-  mixins: [routeParams],
   props: {
     iabId: { default: undefined, type: Number },
   },

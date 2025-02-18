@@ -1,4 +1,4 @@
-import DurationHelper from "../helper/duration";
+import DurationHelper from "../helper/durationHelper";
 import { Media } from "@/stores/class/general/media";
 import {
   MediaRadio,

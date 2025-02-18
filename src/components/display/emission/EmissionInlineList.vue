@@ -32,14 +32,12 @@ import SwiperList from "../list/SwiperList.vue";
 import classicApi from "../../../api/classicApi";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
-import imageProxy from "../../mixins/imageProxy";
-import resizePhone from "../../mixins/resizePhone";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 export default defineComponent({
@@ -50,9 +48,6 @@ export default defineComponent({
     ClassicLoading,
     SwiperList,
   },
-
-  mixins: [handle403, imageProxy, resizePhone],
-
   props: {
     organisationId: { default: undefined, type: String },
     href: { default: undefined, type: String },
@@ -61,6 +56,11 @@ export default defineComponent({
     rubriquageId: { default: undefined, type: Number },
     nbPodcasts: { default: undefined, type: Number },
     itemSize: { default: undefined, type: Number },
+  },
+
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
   },
 
   data() {

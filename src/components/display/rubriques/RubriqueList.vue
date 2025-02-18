@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
-import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
+import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
@@ -70,10 +70,13 @@ export default defineComponent({
     PlusIcon,
   },
 
-  mixins: [rubriquesFilterParam],
-
   props: {
     rubriquages: { default: () => [], type: Array as () => Array<Rubriquage> },
+  },
+
+  setup(){
+    const { modifyRubriquesFilter } = useRubriquesFilterParam();
+    return { modifyRubriquesFilter }
   },
 
   data() {
@@ -104,8 +107,7 @@ export default defineComponent({
           return !rubriquageIdToNotShow.includes(element.rubriquageId);
         });
       }
-      const rubriquagesOrdered = Array.from(this.rubriquages);
-      return rubriquagesOrdered.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
+      return Array.from(this.rubriquages).toSorted((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
     },
   },
   watch: {

@@ -27,13 +27,13 @@
 </template>
 
 <script lang="ts">
-import domHelper from "../../../helper/dom";
+import domHelper from "../../../helper/domHelper";
 import { state } from "../../../stores/ParamSdkStore";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import resizePhone from "../../mixins/resizePhone";
+import {useResizePhone} from "../../composable/useResizePhone";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "SwiperList",
@@ -42,11 +42,14 @@ export default defineComponent({
     Swiper,
     SwiperSlide,
   },
-  mixins: [resizePhone],
 
   props: {
     listObject: { default: () => [], type: Array as () => Array<unknown> },
     sizeItemOverload: { default: undefined, type: Number },
+  },
+  setup(){
+    const { isPhone, windowWidth } = useResizePhone();
+    return { isPhone, windowWidth }
   },
 
   data() {
@@ -54,8 +57,6 @@ export default defineComponent({
       manualReload: 0 as number,
       modules: [Navigation],
       numberItem: 5 as number,
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
       offsetSwiper: 40 as number,
       widthSwiperUsable: 0 as number,
       itemSizeWithoutRecalculed: 0 as number,

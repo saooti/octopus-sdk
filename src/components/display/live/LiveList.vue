@@ -47,10 +47,11 @@ import ClassicLoading from "../../form/ClassicLoading.vue";
 import LiveItem from "./LiveItem.vue";
 import ClassicSelect from "../../form/ClassicSelect.vue";
 import SwiperList from "../list/SwiperList.vue";
-import { handle403 } from "../../mixins/handle403";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import {useErrorHandler} from "../../composable/useErrorHandler";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import classicApi from "../../../api/classicApi";
 import { useAuthStore } from "../../../stores/AuthStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapActions, mapState } from "pinia";
 import { Conference } from "@/stores/class/conference/conference";
 import { defineComponent } from "vue";
@@ -65,11 +66,14 @@ export default defineComponent({
     ClassicSelect,
   },
 
-  mixins: [handle403, orgaComputed],
-
   props: {
     organisationId: { default: undefined, type: String },
     hideIfEmpty: { default: false, type: Boolean },
+  },
+  setup(){
+    const { isPodcastmaker, isEditRights } = useOrgaComputed();
+    const {handle403} = useErrorHandler();
+    return { isPodcastmaker, isEditRights, handle403 }
   },
   data() {
     return {
@@ -85,6 +89,7 @@ export default defineComponent({
 
   computed: {
     ...mapState(useAuthStore, ["authOrganisation", "isRoleLive"]),
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     displayLiveList(): boolean {
       return (
         (undefined !== this.filterOrgaId ||

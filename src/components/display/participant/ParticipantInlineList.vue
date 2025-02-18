@@ -29,12 +29,10 @@
 import ParticipantItem from "./ParticipantItem.vue";
 import SwiperList from "../list/SwiperList.vue";
 import classicApi from "../../../api/classicApi";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { defineComponent } from "vue";
 import { AxiosError } from "axios";
-import imageProxy from "../../mixins/imageProxy";
-import resizePhone from "../../mixins/resizePhone";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 import { Participant } from "@/stores/class/general/participant";
 export default defineComponent({
@@ -46,14 +44,16 @@ export default defineComponent({
     SwiperList,
   },
 
-  mixins: [handle403, imageProxy, resizePhone],
-
   props: {
     organisationId: { default: undefined, type: String },
     href: { default: undefined, type: String },
     buttonText: { default: undefined, type: String },
     itemSize: { default: undefined, type: Number },
     title: { default: "", type: String },
+  },
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
   },
 
   data() {

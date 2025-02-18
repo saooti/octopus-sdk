@@ -18,8 +18,7 @@
 
 <script lang="ts">
 import ProgressBar from "../../misc/ProgressBar.vue";
-import DurationHelper from "../../../helper/duration";
-import displayMethods from "../../mixins/displayMethods";
+import DurationHelper from "../../../helper/durationHelper";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
 import { defineComponent } from "vue";
@@ -28,7 +27,6 @@ export default defineComponent({
   components: {
     ProgressBar,
   },
-  mixins: [displayMethods],
   props: {
     podcastId: { default: undefined, type: Number },
     duration: { default: 0, type: Number },

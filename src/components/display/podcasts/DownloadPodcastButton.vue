@@ -13,15 +13,13 @@
 <script lang="ts">
 import DownloadIcon from "vue-material-design-icons/Download.vue";
 import { Podcast } from "@/stores/class/general/podcast";
-import download from "../../mixins/download";
+import downloadHelper from "../../../helper/downloadHelper";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "DownloadPodcastButton",
   components: {
     DownloadIcon,
   },
-
-  mixins: [download],
 
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
@@ -34,7 +32,7 @@ export default defineComponent({
 
   methods: {
     downloadPodcast() {
-      this.onDownload(
+      downloadHelper.onDownload(
         "/download/podcast/" + this.podcast?.podcastId,
         this.podcast?.title + ".mp3",
         false,

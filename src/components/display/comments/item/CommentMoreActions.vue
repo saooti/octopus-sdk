@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import DotsVerticalIcon from "vue-material-design-icons/DotsVertical.vue";
-import selenium from "../../../mixins/selenium";
+import {useSelenium} from "../../../composable/useSelenium";
 import classicApi from "../../../../api/classicApi";
 import CommentMoreActionsAdmin from "@/components/display/comments/item/CommentMoreActionsAdmin.vue";
 import { useAuthStore } from "../../../../stores/AuthStore";
@@ -92,7 +92,6 @@ export default defineComponent({
     MessageModal,
     DotsVerticalIcon,
   },
-  mixins: [selenium],
 
   props: {
     comment: { default: () => ({}), type: Object as () => CommentPodcast },
@@ -102,6 +101,11 @@ export default defineComponent({
   },
 
   emits: ["update:comment", "deleteComment"],
+
+  setup(){
+    const { seleniumFormat } = useSelenium();
+    return { seleniumFormat }
+  },
   data() {
     return {
       isEdit: false as boolean,

@@ -13,7 +13,7 @@
       :class="isVertical ? 'flex-column' : ''"
     >
       <img
-        v-lazy="proxyImageUrl(emission.imageUrl, isVertical ? '400' : '250')"
+        v-lazy="useProxyImageUrl(emission.imageUrl, isVertical ? '400' : '250')"
         :width="isVertical ? '400' : '250'"
         :height="isVertical ? '400' : '250'"
         :class="isVertical ? 'img-box-bigger' : ''"
@@ -45,25 +45,29 @@
 
 <script lang="ts">
 import { useFilterStore } from "../../../stores/FilterStore";
-import resizePhone from "../../mixins/resizePhone";
+import {useResizePhone} from "../../composable/useResizePhone";
 import { Emission } from "@/stores/class/general/emission";
-import imageProxy from "../../mixins/imageProxy";
-import displayMethods from "../../mixins/displayMethods";
+import {useImageProxy} from "../../composable/useImageProxy";
+import displayHelper from "../../../helper/displayHelper";
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
 export default defineComponent({
   name: "EmissionItem",
-
-  mixins: [displayMethods, imageProxy, resizePhone],
 
   props: {
     emission: { default: () => ({}), type: Object as () => Emission },
     isVertical: { default: false, type: Boolean },
     isDescription: { default: false, type: Boolean },
   },
+  setup(){
+    const { isPhone } = useResizePhone();
+    const { useProxyImageUrl } = useImageProxy();
+    return { isPhone, useProxyImageUrl }
+  },
+
+
   data() {
     return {
-      isPhone: false as boolean,
     };
   },
   computed: {
@@ -91,6 +95,11 @@ export default defineComponent({
       },
     },
   },
+  methods:{
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
+  }
 });
 </script>
 <style lang="scss">

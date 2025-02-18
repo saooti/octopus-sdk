@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import download from "../mixins/download";
+import downloadHelper from "../../helper/downloadHelper";
 import classicApi from "../../api/classicApi";
 import { Contract } from "../../stores/class/contract/contract";
 import { defineAsyncComponent, defineComponent } from "vue";
@@ -32,7 +32,6 @@ export default defineComponent({
   components: {
     ContractPreviewModal,
   },
-  mixins: [download],
   props: {
     authOrgaId: { default: undefined, type: String },
   },
@@ -62,7 +61,7 @@ export default defineComponent({
     downloadContract(contract: Contract) {
       if (contract) {
         const url = this.keycloakUrl + "contract/" + contract.id;
-        this.onDownload(url, "download" + contract.name + ".pdf");
+        downloadHelper.onDownload(url, "download" + contract.name + ".pdf");
       }
     },
   },

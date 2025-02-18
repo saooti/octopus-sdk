@@ -50,7 +50,7 @@ import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { useApiStore } from "../../../stores/ApiStore";
 import classicApi from "../../../api/classicApi";
 import SnackBar from "../../misc/SnackBar.vue";
-import displayMethods from "../../mixins/displayMethods";
+import displayHelper from "../../../helper/displayHelper";
 import { Emission } from "@/stores/class/general/emission";
 
 import { defineComponent, defineAsyncComponent } from "vue";
@@ -74,7 +74,6 @@ export default defineComponent({
     TuninIcon,
     RadiolineIcon,
   },
-  mixins: [displayMethods],
   props: {
     emissionId: { default: undefined, type: Number },
   },
@@ -160,6 +159,9 @@ export default defineComponent({
   },
 
   methods: {
+    onCopyCode(link: string, callback: () => void){
+      displayHelper.onCopyCode(link, callback);
+    },
     getUrl(platform: string): string {
       return `/main/priv/distribution/${platform}/${this.emissionId}`;
     },

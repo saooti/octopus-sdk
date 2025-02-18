@@ -15,28 +15,23 @@
   </section>
 </template>
 
-<script lang="ts">
-import { paginateParamInit } from "../mixins/routeParam/paginateParamInit";
+<script setup lang="ts">
+import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 import ParticipantList from "../display/participant/ParticipantList.vue";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  components: {
-    ProductorSearch,
-    ParticipantList,
-  },
-  mixins: [paginateParamInit],
-  props: {
-    pr: { default: 0, type: Number },
-    ps: { default: 30, type: Number },
-    routeOrga: { default: undefined, type: String },
-    routeQuery: { default: "", type: String },
-  },
-  data() {
-    return {
-      searchPattern: "" as string,
-      organisationId: undefined as string | undefined,
-    };
-  },
+
+const props = defineProps({
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  routeOrga: { default: undefined, type: String },
+  routeQuery: { default: "", type: String },
 });
+
+const {
+  searchPattern,
+  organisationId,
+  searchMinSize,
+  paginateFirst,
+} = useSimplePageParam(props);
+
 </script>

@@ -89,28 +89,27 @@ export const getClassicContentEditable = () => import("./src/components/form/Cla
 export const getSwiperList = () => import("./src/components/display/list/SwiperList.vue");
 
 
-//mixins
+//Composable
+import {useResizePhone} from "./src/components/composable/useResizePhone";
+import {useTagOf} from "./src/components/composable/useTagOf.ts";
+import {useSelenium} from "./src/components/composable/useSelenium.ts";
+import {useImageProxy} from "./src/components/composable/useImageProxy.ts";
+import {useMetaTitle} from "./src/components/composable/useMetaTitle.ts";
+import {useMetaTitleWatch} from "./src/components/composable/useMetaTitleWatch.ts";
+import {useOrganisationFilter} from "./src/components/composable/useOrganisationFilter.ts";
+import {useInit} from "./src/components/composable/useInit.ts";
 
-import selenium from "./src/components/mixins/selenium.ts";
-import cookies from "./src/components/mixins/cookies.ts";
-import displayMethods from "./src/components/mixins/displayMethods.ts";
-import imageProxy from "./src/components/mixins/imageProxy.ts";
-import orgaFilter from "./src/components/mixins/organisationFilter.ts";
-import initSDK from "./src/components/mixins/init.ts";
-import tagOfMixins from "./src/components/mixins/tagOfMixins.ts";
-import resizePhone from "./src/components/mixins/resizePhone.ts";
-import debounce from "./src/components/mixins/debounce.ts";
-import downloadMixins from "./src/components/mixins/download.ts";
-import metaTitle from "./src/components/mixins/metaTitle.ts";
-import metaTitleWatch from "./src/components/mixins/metaTitleWatch.ts";
 
 
 //helper
-import domHelper from "./src/helper/dom.ts";
-import durationHelper from "./src/helper/duration.ts";
-import stringHelper from "./src/helper/string.ts";
-import fetchHelper from "./src/helper/fetch.ts";
-
+import domHelper from "./src/helper/domHelper.ts";
+import durationHelper from "./src/helper/durationHelper.ts";
+import stringHelper from "./src/helper/stringHelper.ts";
+import fetchHelper from "./src/helper/fetchHelper.ts";
+import cookiesHelper from "./src/helper/cookiesHelper.ts";
+import downloadHelper from "./src/helper/downloadHelper.ts";
+import displayHelper from "./src/helper/displayHelper.ts";
+import debounce from "./src/helper/debounceHelper.ts";
 
 //stores
 import {useVastStore} from "./src/stores/VastStore.ts";
@@ -138,16 +137,15 @@ export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIc
 export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 
-
 export {
-    selenium,
-    cookies,
-    displayMethods,
-    imageProxy,
-    orgaFilter,
-    initSDK,
-    tagOfMixins,
-    resizePhone,
+    useResizePhone,
+    useTagOf,
+    useSelenium,
+    useImageProxy,
+    useMetaTitle,
+    useMetaTitleWatch,
+    useOrganisationFilter,
+    useInit,
     debounce,
     useVastStore,
     useSaveFetchStore,
@@ -164,7 +162,7 @@ export {
     getApiUrl,
     ModuleApi,
     classicApi,
-    downloadMixins,
-    metaTitle,
-    metaTitleWatch
+    cookiesHelper,
+    downloadHelper,
+    displayHelper
 };

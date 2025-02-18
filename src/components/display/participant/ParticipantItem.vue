@@ -9,7 +9,7 @@
       :title="$t('Participant name page', { name: name })"
     >
       <img
-        v-lazy="proxyImageUrl(participant.imageUrl, '200')"
+        v-lazy="useProxyImageUrl(participant.imageUrl, '200')"
         width="200"
         height="200"
         role="presentation"
@@ -55,9 +55,9 @@
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import classicApi from "../../../api/classicApi";
 import { Participant } from "@/stores/class/general/participant";
-import imageProxy from "../../mixins/imageProxy";
-import displayMethods from "../../mixins/displayMethods";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import {useImageProxy} from "../../composable/useImageProxy";
+import displayHelper from "../../../helper/displayHelper";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { defineComponent } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
@@ -66,10 +66,15 @@ export default defineComponent({
   components: {
     AlertIcon,
   },
-  mixins: [displayMethods, orgaComputed, imageProxy],
   props: {
     participant: { default: () => ({}), type: Object as () => Participant },
   },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const { isPodcastmaker, isEditRights } = useOrgaComputed();
+    return { useProxyImageUrl, isPodcastmaker, isEditRights }
+  },
+
   data() {
     return {
       activeParticipant: true as boolean,
@@ -106,6 +111,9 @@ export default defineComponent({
     }
   },
   methods: {
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     async hasPodcast(): Promise<void> {
       const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
         api: 0,

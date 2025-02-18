@@ -44,13 +44,12 @@ import { defineAsyncComponent, defineComponent } from "vue";
 const ClassicPopover = defineAsyncComponent(
   () => import("../../misc/ClassicPopover.vue"),
 );
-import tagOfMixins from "../../mixins/tagOfMixins";
+import {useTagOf} from "../../composable/useTagOf";
 export default defineComponent({
   name: "TagList",
   components: {
     ClassicPopover,
   },
-  mixins: [tagOfMixins],
   props: {
     tagList: { default: () => [], type: Array as () => Array<string> },
     podcastAnnotations: {
@@ -59,6 +58,10 @@ export default defineComponent({
         [key: string]: string | number | boolean | undefined;
       },
     },
+  },
+  setup(){
+    const { isOuestFranceTag, formateOfTag } = useTagOf();
+    return { isOuestFranceTag, formateOfTag }
   },
   computed: {
     ouestFranceMainTag(): string | undefined {

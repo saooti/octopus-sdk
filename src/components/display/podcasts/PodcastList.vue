@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
@@ -67,8 +67,6 @@ export default defineComponent({
     ListPaginate,
     ClassicLazy,
   },
-
-  mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number },
@@ -95,6 +93,11 @@ export default defineComponent({
     withVideo: { default: undefined, type: Boolean },
   },
   emits: ["fetch", "emptyList"],
+
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
+  },
 
   data() {
     return {

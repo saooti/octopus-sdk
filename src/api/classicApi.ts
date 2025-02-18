@@ -1,5 +1,5 @@
 import {getApiUrl, ModuleApi} from "./apiConnection";
-import fetchHelper from "../helper/fetch";
+import fetchHelper from "../helper/fetchHelper";
 import axios, { AxiosError } from 'axios';
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { state } from "../stores/ParamSdkStore";

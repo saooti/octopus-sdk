@@ -35,7 +35,7 @@
         </router-link>
       </div>
       <img
-        v-lazy="proxyImageUrl(playlist.imageUrl, '250')"
+        v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
         width="250"
         height="250"
         role="presentation"
@@ -50,16 +50,18 @@
 <script lang="ts">
 import { Playlist } from "@/stores/class/general/playlist";
 import { state } from "../../../stores/ParamSdkStore";
-import imageProxy from "../../mixins/imageProxy";
-import displayMethods from "../../mixins/displayMethods";
+import {useImageProxy} from "../../composable/useImageProxy";
+import displayHelper from "../../../helper/displayHelper";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "PlaylistItem",
 
-  mixins: [displayMethods, imageProxy],
-
   props: {
     playlist: { default: () => ({}), type: Object as () => Playlist },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    return { useProxyImageUrl }
   },
 
   computed: {
@@ -87,6 +89,11 @@ export default defineComponent({
       playlistDescContainer.classList.add("after-element-description");
     }
   },
+  methods:{
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
+  }
 });
 </script>
 <style lang="scss">

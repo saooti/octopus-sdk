@@ -41,9 +41,7 @@ export default defineComponent({
       init: false as boolean,
     };
   },
-  created() {
-    this.fetchRubriquages();
-  },
+
   computed:{
     ...mapState(useFilterStore, ["filterOrgaId"]),
     organisationQuery(){
@@ -52,6 +50,9 @@ export default defineComponent({
       }
       return { o: this.orgaId};
     }
+  },
+  created() {
+    this.fetchRubriquages();
   },
   methods:{
     ...mapActions(useSaveFetchStore, ["getOrgaRubriques"]),

@@ -51,7 +51,6 @@
 
 <script lang="ts">
 import classicApi from "../../../api/classicApi";
-import cookies from "../../mixins/cookies";
 import { Podcast } from "@/stores/class/general/podcast";
 import { CommentCreate, CommentPodcast } from "@/stores/class/general/comment";
 import Constants from "../../../../public/config";
@@ -82,8 +81,6 @@ export default defineComponent({
     ClassicContentEditable,
     CommentName,
   },
-  mixins: [cookies],
-
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
     focus: { default: false, type: Boolean },

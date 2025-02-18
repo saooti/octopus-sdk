@@ -58,13 +58,12 @@
 
 <script lang="ts">
 import classicApi from "../../../api/classicApi";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
-import imageProxy from "../../mixins/imageProxy";
-import resizePhone from "../../mixins/resizePhone";
+import {useResizePhone} from "../../composable/useResizePhone";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const EmissionItemPresentation = defineAsyncComponent(
   () => import("./EmissionPresentationItem.vue"),
@@ -76,8 +75,6 @@ export default defineComponent({
     EmissionItemPresentation,
   },
 
-  mixins: [handle403, imageProxy, resizePhone],
-
   props: {
     organisationId: { default: undefined, type: String },
     title: { default: "", type: String },
@@ -86,13 +83,18 @@ export default defineComponent({
     isDescription: { default: false, type: Boolean },
     rubriquesId: { default: [], type: Array<number> },
   },
+
+  setup(){
+    const { isPhone } = useResizePhone();
+    const {handle403} = useErrorHandler();
+    return { isPhone, handle403 }
+  },
+
   data() {
     return {
       loading: true as boolean,
       error: false as boolean,
       allEmissions: [] as Array<Emission>,
-      isPhone: false as boolean,
-      windowWidth: 0 as number,
     };
   },
 

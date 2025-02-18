@@ -11,7 +11,7 @@
         :to="{
           name: 'home',
           query: {
-            iabId: filterIab?.id,
+            iabId: filterStore.filterIab?.id,
             rubriquesId: rubriqueQueryParam,
           },
         }"
@@ -22,21 +22,17 @@
   </section>
 </template>
 
-<script lang="ts">
-import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
+<script setup lang="ts">
+import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import { useFilterStore } from "../../stores/FilterStore";
-import { mapState } from "pinia";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PageNotFound",
-  mixins: [rubriquesFilterComputed],
-  computed: {
-    ...mapState(useFilterStore, ["filterIab"]),
-    backgroundStyle(): string {
-      return "background-image: url('/img/404.svg');";
-    },
-  },
-});
+import { computed } from "vue";
+
+const { rubriqueQueryParam } = useRubriquesFilterComputed();
+
+const filterStore = useFilterStore();
+
+const backgroundStyle = computed(() => "background-image: url('/img/404.svg');");
+
 </script>
 <style lang="scss">
 .octopus-app .page-not-found {

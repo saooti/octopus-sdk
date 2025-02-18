@@ -183,8 +183,7 @@ export const useAuthStore = defineStore("AuthStore", {
           api: 0,
           path:"user/me/organisations",
         });
-        const array = availablesOrganisations ?? [];
-        array.sort(function (a: Organisation, b: Organisation) {
+        const array = (availablesOrganisations ?? []).toSorted(function (a: Organisation, b: Organisation) {
           if (a.name.toLowerCase() < b.name.toLowerCase()) {
             return -1;
           }

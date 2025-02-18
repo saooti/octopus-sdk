@@ -3,15 +3,15 @@
     id="octopus-player-component"
     class="player-container"
     :class="{ 
-      'player-video': playerVideo,
+      'player-video': playerStore.playerVideo,
       'overflow-hidden': !display
      }"
-    :style="{ height: playerHeight }"
+    :style="{ height: playerStore.playerHeight }"
     @transitionend="onHidden"
   >
     <audio
       id="audio-player"
-      :src="!playerLive && !playerRadio ? audioUrlToPlay : undefined"
+      :src="!playerStore.playerLive && !playerStore.playerRadio ? audioUrlToPlay : undefined"
       autoplay
       @timeupdate="onTimeUpdate"
       @ended="onFinished"
@@ -24,10 +24,10 @@
     />
     <div id="ad-container"></div>
     <template v-if="displayWithTimeout">
-      <PlayerVideo v-if="playerVideo && isNotVideoPage" />
-      <template v-else-if="!playerVideo">
+      <PlayerVideo v-if="playerStore.playerVideo && isNotVideoPage" />
+      <template v-else-if="!playerStore.playerVideo">
         <PlayerCompact
-          v-if="!playerLargeVersion"
+          v-if="!playerStore.playerLargeVersion"
           :player-error="playerError"
           :display-alert-bar="displayAlertBar"
           :percent-live-progress="percentLiveProgress"
@@ -35,7 +35,7 @@
           :listen-time="listenTime"
           :hls-ready="hlsReady"
           @stop-player="stopPlayer"
-          @change-player-large-version="playerUpdateLargeVersion(true)"
+          @change-player-large-version="playerStore.playerUpdateLargeVersion(true)"
         />
         <PlayerLarge
           v-else
@@ -46,17 +46,19 @@
           :listen-time="listenTime"
           :hls-ready="hlsReady"
           @stop-player="stopPlayer"
-          @change-player-large-version="playerUpdateLargeVersion(false)"
+          @change-player-large-version="playerStore.playerUpdateLargeVersion(false)"
         />
       </template>
     </template>
   </section>
 </template>
-<script lang="ts">
-import { playerLogic } from "../../mixins/player/playerLogic";
+<script setup lang="ts">
+import {usePlayerLogic} from "../../composable/player/usePlayerLogic";
 import { usePlayerStore } from "../../../stores/PlayerStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, computed, watch } from "vue";
+import { useRoute } from "vue-router";
+
+//Components
 const PlayerVideo = defineAsyncComponent(
   () => import("./video/PlayerVideo.vue"),
 );
@@ -66,82 +68,65 @@ const PlayerCompact = defineAsyncComponent(
 const PlayerLarge = defineAsyncComponent(
   () => import("../player/PlayerLarge.vue"),
 );
-export default defineComponent({
-  name: "PlayerComponent",
+// Define stores
+const playerStore = usePlayerStore();
+const route = useRoute();
 
-  components: {
-    PlayerCompact,
-    PlayerLarge,
-    PlayerVideo,
-  },
-  mixins: [playerLogic],
-  emits: ["hide"],
-  data() {
-    return {
-      forceHide: false as boolean,
-      listenTime: 0 as number,
-      notListenTime: 0 as number,
-      lastSend: 0 as number,
-      downloadId: null as string | null,
-      playerError: false as boolean,
-      listenError: false as boolean,
-      percentLiveProgress: 0 as number,
-      durationLivePosition: 0 as number,
-      displayAlertBar: false as boolean,
-      audioUrlToPlay: "" as string,
-      hlsReady: false as boolean,
-      displayWithTimeout: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, [
-      "playerStatus",
-      "playerHeight",
-      "playerLargeVersion",
-      "playerVideo",
-    ]),
-    display() {
-      return "STOPPED" !== this.playerStatus;
-    },
-    isNotVideoPage() {
-      return "video" !== this.$route.name;
-    },
-  },
+// Variables
+const displayWithTimeout= ref(false);
+const forceHide= ref(false);
 
-  watch: {
-    playerHeight(): void {
-      this.$emit("hide", 0 === this.playerHeight);
-    },
-    display(): void {
-      if (this.display) {
-        this.displayWithTimeout = this.display;
-      } else {
-        setTimeout(() => {
-          this.displayWithTimeout = this.display;
-        }, 3000);
-      }
-    },
-  },
+//Composable
+const {
+  audioUrlToPlay,
+  listenTime,
+  playerError,
+  percentLiveProgress, 
+  durationLivePosition,
+  displayAlertBar,
+  hlsReady, 
+  checkDelaytWithStitching, 
+  stopPlayer, 
+  onError, 
+  onTimeUpdate, 
+  onSeeked, 
+  onFinished, 
+  onPlay
+} = usePlayerLogic(forceHide);
 
-  methods: {
-    ...mapActions(usePlayerStore, [
-      "playerPlay",
-      "playerUpdateLargeVersion",
-      "playerChangeStatus",
-    ]),
-    onHidden(): void {
-      if (this.forceHide) {
-        this.playerPlay();
-        this.forceHide = false;
-      }
-    },
-    onPause() {
-      if ("PLAYING" === this.playerStatus) {
-        this.playerChangeStatus(true);
-      }
-    },
-  },
+// Emits
+const emit = defineEmits(['hide']);
+
+// Computed
+const display = computed(() => { return "STOPPED" !== playerStore.playerStatus;});
+const isNotVideoPage = computed(() => { return "video" !== route.name});
+
+// Watch
+watch(()=>playerStore.playerHeight, async () => {
+  emit("hide", 0 === playerStore.playerHeight);
 });
+watch(display, async () => {
+  if (display.value) {
+    displayWithTimeout.value = display.value;
+  } else {
+    setTimeout(() => {
+      displayWithTimeout.value = display.value;
+    }, 3000);
+  }
+});
+
+// Functions
+function onHidden(): void {
+  if (forceHide.value) {
+    playerStore.playerPlay();
+    forceHide.value = false;
+  }
+}
+function onPause() {
+  if ("PLAYING" === playerStore.playerStatus) {
+    playerStore.playerChangeStatus(true);
+  }
+}
 </script>
 
 <style lang="scss">

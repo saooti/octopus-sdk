@@ -73,9 +73,9 @@
 </template>
 
 <script lang="ts">
-import cookies from "../mixins/cookies";
-import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
-import orgaFilter from "../mixins/organisationFilter";
+import cookiesHelper from "../../helper/cookiesHelper";
+import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
+import { useOrganisationFilter } from "../composable/useOrganisationFilter";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
@@ -103,7 +103,11 @@ export default defineComponent({
     FooterGarSection,
   },
 
-  mixins: [cookies, orgaFilter, rubriquesFilterComputed],
+  setup(){
+    const { rubriqueQueryParam } = useRubriquesFilterComputed();
+    const {selectOrganisation, removeSelectedOrga} = useOrganisationFilter();
+    return { rubriqueQueryParam , selectOrganisation, removeSelectedOrga}
+  },
   data() {
     return {
       language: this.$i18n.locale,
@@ -170,7 +174,7 @@ export default defineComponent({
       };
     },
     changeLanguage(): void {
-      this.setCookie("octopus-language", this.language);
+      cookiesHelper.setCookie("octopus-language", this.language);
       loadLocaleMessages(
         this.$i18n,
         this.language,

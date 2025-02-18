@@ -41,7 +41,7 @@ import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { mapState } from "pinia";
 import dayjs from "dayjs";
-import { fetchRadioData } from "../../../mixins/radio/fetchRadioData";
+import radioHelper from "../../../../helper/radio/radioHelper";
 import { defineComponent } from "vue";
 import { MediaRadio } from "@/stores/class/general/player";
 export default defineComponent({
@@ -51,8 +51,6 @@ export default defineComponent({
     ChevronLeftIcon,
     ChevronRightIcon,
   },
-
-  mixins: [fetchRadioData],
   emits: ["updateNotListenTime"],
   data() {
     return {
@@ -138,7 +136,7 @@ export default defineComponent({
       if (item.podcastId) {
         return item.title;
       }
-      return this.displayTitle(item);
+      return radioHelper.displayTitle(item);
     },
   },
 });

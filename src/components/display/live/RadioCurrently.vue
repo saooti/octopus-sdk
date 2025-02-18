@@ -16,7 +16,7 @@
       :title="$t('Episode name page', { name: podcastRadio.title })"
     >
       <img
-        v-lazy="proxyImageUrl(podcastRadio.imageUrl, '80')"
+        v-lazy="useProxyImageUrl(podcastRadio.imageUrl, '80')"
         width="80"
         height="80"
         class="small-img-box"
@@ -33,10 +33,10 @@
 </template>
 
 <script lang="ts">
+import {useFetchRadio} from "../../composable/radio/usefetchRadioData";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState } from "pinia";
-import imageProxy from "../../mixins/imageProxy";
-import { fetchRadioData } from "../../mixins/radio/fetchRadioData";
+import {useImageProxy} from "../../composable/useImageProxy";
 import { defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 import { MediaRadio } from "@/stores/class/general/player";
@@ -46,11 +46,15 @@ export default defineComponent({
 
   components: {},
 
-  mixins: [imageProxy, fetchRadioData],
-
   props: {
     radio: { default: undefined, type: Object as () => Canal },
   },
+  setup(){
+    const { fetchRadioMetadata, displayTitle } = useFetchRadio();
+    const { useProxyImageUrl } = useImageProxy();
+    return { fetchRadioMetadata, displayTitle, useProxyImageUrl };
+  },
+
 
   data() {
     return {

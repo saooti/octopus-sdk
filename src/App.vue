@@ -18,8 +18,9 @@
 import TopBar from "@/components/misc/TopBar.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
 import ClassicLazy from "@/components/misc/ClassicLazy.vue";
-import initSDK from "./components/mixins/init";
-import metaTitle from "./components/mixins/metaTitle";
+import {useInit} from "./components/composable/useInit";
+import {useMetaTitle} from "./components/composable/useMetaTitle";
+import {useOrganisationFilter} from "./components/composable/useOrganisationFilter";
 import { useAuthStore } from "./stores/AuthStore";
 import { useFilterStore } from "./stores/FilterStore";
 import { useGeneralStore } from "./stores/GeneralStore";
@@ -42,7 +43,12 @@ export default defineComponent({
     ClassicLazy,
   },
 
-  mixins: [initSDK, metaTitle],
+  setup(){
+    const { updateMetaTitle } = useMetaTitle();
+    const {initSdk} = useInit();
+    const {selectOrganisation} = useOrganisationFilter();
+    return { updateMetaTitle, initSdk, selectOrganisation }
+  },
 
   data() {
     return {

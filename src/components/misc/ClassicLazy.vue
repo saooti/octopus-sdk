@@ -45,7 +45,7 @@ export default {
     setTimeout(() => {
       waitBeforeInit.value = false;
     }, props.initRenderDelay);
-    const { isActive, pause, resume } = useIntersectionObserver(
+    const { pause, resume } = useIntersectionObserver(
       targetEl,
       ([{ isIntersecting }]) => {
         if (waitBeforeInit.value) {
@@ -91,7 +91,7 @@ export default {
     }
     watch(
       () => props.unrender,
-      (newValue, _) => {
+      (newValue) => {
         if (newValue) {
           clearTimeout(renderTimer);
           unrenderTimer = setTimeout(() => {

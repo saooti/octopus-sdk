@@ -60,7 +60,7 @@
 import ListPaginate from "../list/ListPaginate.vue";
 import classicApi from "../../../api/classicApi";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import { state } from "../../../stores/ParamSdkStore";
 import { Emission, emptyEmissionData } from "@/stores/class/general/emission";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
@@ -85,7 +85,6 @@ export default defineComponent({
     ClassicLazy,
   },
 
-  mixins: [handle403],
 
   props: {
     first: { default: 0, type: Number },
@@ -103,6 +102,10 @@ export default defineComponent({
     rubriquageId: { default: () => [], type: Array as () => Array<number> },
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
     nbPodcasts: { default: undefined, type: Number },
+  },
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
   },
 
   data() {

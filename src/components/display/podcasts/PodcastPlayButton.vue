@@ -49,11 +49,10 @@ import TimerSandEmptyIcon from "vue-material-design-icons/TimerSandEmpty.vue";
 import EyeOffOutlineIcon from "vue-material-design-icons/EyeOffOutline.vue";
 import CancelIcon from "vue-material-design-icons/Cancel.vue";
 import AlertIcon from "vue-material-design-icons/Alert.vue";
-import DurationHelper from "../../../helper/duration";
+import DurationHelper from "../../../helper/durationHelper";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
-import imageProxy from "../../mixins/imageProxy";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
@@ -75,7 +74,6 @@ export default defineComponent({
     PlayVideoIcon,
     PodcastIsPlaying
   },
-  mixins: [imageProxy],
   props: {
     podcast: { default: () => ({}), type: Object as () => Podcast },
     hidePlay: { default: false, type: Boolean },

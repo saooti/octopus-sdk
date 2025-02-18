@@ -3,12 +3,7 @@
     <div>{{ $t("This live will start") }}</div>
     <div v-if="countdownTimer">
       {{
-        $t("In days hours minutes seconds", {
-          days: pad(days),
-          hours: pad(hours),
-          minutes: pad(minutes),
-          seconds: pad(remainingSeconds),
-        })
+        $t("In days hours minutes seconds",countdownValues)
       }}
     </div>
     <div v-else>
@@ -17,13 +12,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import countdown from "../../mixins/podcast/countdown";
-import { defineComponent } from "vue";
-export default defineComponent({
-  mixins: [countdown],
-  props: {
-    timeRemaining: { default: undefined, type: Number },
-  },
-});
+<script lang="ts" setup>
+  import {useCountdown} from "../../composable/podcasts/useCountdown";
+  const props = defineProps({
+    timeRemaining:{ default: undefined, type: Number },
+  })
+  const { countdownValues, countdownTimer } = useCountdown(props.timeRemaining);
 </script>

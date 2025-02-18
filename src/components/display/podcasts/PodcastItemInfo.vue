@@ -46,7 +46,7 @@
 <script lang="ts">
 import AnimatorsItem from "./AnimatorsItem.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import dayjs from "dayjs";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { Participant } from "@/stores/class/general/participant";
@@ -61,8 +61,6 @@ export default defineComponent({
     PodcastPlayBar,
   },
 
-  mixins: [orgaComputed],
-
   props: {
     podcastId: { default: undefined, type: Number },
     title: { default: "", type: String },
@@ -71,6 +69,11 @@ export default defineComponent({
     podcastOrganisationName: { default: "", type: String },
     duration: { default: 0, type: Number },
     animators: { default: undefined, type: Object as () => Array<Participant> },
+  },
+
+  setup(){
+    const { isPodcastmaker, isEditRights } = useOrgaComputed();
+    return { isPodcastmaker, isEditRights }
   },
 
   computed: {

@@ -15,7 +15,7 @@
   </component>
 </template>
 <script lang="ts">
-import { fetchRadioData } from "../../../mixins/radio/fetchRadioData";
+import {useFetchRadio} from "../../../composable/radio/usefetchRadioData";
 import { state } from "../../../../stores/ParamSdkStore";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useVastStore } from "../../../../stores/VastStore";
@@ -25,12 +25,16 @@ import { MediaRadio, NextAdvertising } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 export default defineComponent({
   name: "PlayerTitle",
-  mixins: [fetchRadioData],
 
   props: {
     playerError: { default: false, type: Boolean },
     hlsReady: { default: false, type: Boolean },
     titleClass: { default: "", type: String },
+  },
+
+  setup(){
+    const { fetchRadioMetadata, displayTitle } = useFetchRadio();
+    return { fetchRadioMetadata, displayTitle };
   },
 
   data() {

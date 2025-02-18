@@ -58,8 +58,8 @@
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
-import { rubriquesFilterComputed } from "../../mixins/routeParam/rubriquesFilterComputed";
-import { rubriquesFilterParam } from "../../mixins/routeParam/rubriquesFilterParam";
+import { useRubriquesFilterComputed } from "../../composable/route/useRubriquesFilterComputed";
+import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineComponent } from "vue";
 import { RouteLocationRaw } from "vue-router";
@@ -73,8 +73,6 @@ export default defineComponent({
     ChevronRightIcon,
     PlusIcon,
   },
-
-  mixins: [rubriquesFilterParam, rubriquesFilterComputed],
 
   props: {
     displayArrow: { default: true, type: Boolean },
@@ -92,6 +90,11 @@ export default defineComponent({
     titleTag: { default: "h2", type: String },
   },
   emits: ["sortChrono", "sortPopular", "displayPrevious", "displayNext"],
+  setup(){
+    const { modifyRubriquesFilter } = useRubriquesFilterParam();
+    const { rubriqueQueryParam } = useRubriquesFilterComputed();
+    return { modifyRubriquesFilter, rubriqueQueryParam }
+  },
   data() {
     return {};
   },

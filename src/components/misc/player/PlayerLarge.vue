@@ -66,18 +66,17 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+
+<script setup lang="ts">
 import Rewind15Icon from "vue-material-design-icons/Rewind15.vue";
 import FastForward15Icon from "vue-material-design-icons/FastForward15.vue";
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
-import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
-import imageProxy from "../../mixins/imageProxy";
+import {usePlayerDisplayTime} from "../../composable/player/usePlayerDisplayTime";
 import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
 import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
-import { mapState, mapActions } from "pinia";
+import { defineAsyncComponent } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 const RadioHistory = defineAsyncComponent(
   () => import("./radio/RadioHistory.vue"),
@@ -85,62 +84,48 @@ const RadioHistory = defineAsyncComponent(
 const PlayerProgressBar = defineAsyncComponent(
   () => import("./progressbar/PlayerProgressBar.vue"),
 );
-export default defineComponent({
-  name: "PlayerLarge",
 
-  components: {
-    PlayerProgressBar,
-    RadioHistory,
-    PlayerChaptering,
-    PlayerImage,
-    PlayerPlayButton,
-    PlayerTitle,
-    ChevronDownIcon,
-    Rewind15Icon,
-    FastForward15Icon,
-  },
-  mixins: [playerDisplayTime, imageProxy],
-
-  props: {
-    playerError: { default: false, type: Boolean },
-    displayAlertBar: { default: false, type: Boolean },
-    percentLiveProgress: { default: 0, type: Number },
-    durationLivePosition: { default: 0, type: Number },
-    listenTime: { default: 0, type: Number },
-    hlsReady: { default: false, type: Boolean },
-  },
-
-  emits: ["stopPlayer", "changePlayerLargeVersion"],
-  data() {
-    return {
-      showTimeline: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, ["playerPodcast", "playerLive"]),
-  },
-  methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
-    stopPlayer() {
-      this.$emit("stopPlayer");
-    },
-    changePlayerLargeVersion() {
-      this.$emit("changePlayerLargeVersion");
-    },
-    seekClick(addTime: number): void {
-      const audioPlayer: HTMLAudioElement | null =
-        document.querySelector("#audio-player");
-      if (!audioPlayer) {
-        return;
-      }
-      const seekTo = audioPlayer.currentTime + addTime;
-      if (this.playerPodcast || this.playerLive) {
-        this.playerUpdateSeekTime(seekTo > 0 ? seekTo : 0);
-      }
-      audioPlayer.currentTime = seekTo > 0 ? seekTo : 0;
-    },
-  },
+//Props
+defineProps( {
+  playerError: { default: false, type: Boolean },
+  displayAlertBar: { default: false, type: Boolean },
+  percentLiveProgress: { default: 0, type: Number },
+  durationLivePosition: { default: 0, type: Number },
+  listenTime: { default: 0, type: Number },
+  hlsReady: { default: false, type: Boolean },
 });
+
+//Emits
+const emit = defineEmits(['changePlayerLargeVersion']);
+
+const playerStore = usePlayerStore();
+
+//Composables
+const { 
+  transcriptText,
+  radioUrl,
+  isAdPlaying,
+  displayPlayTime,
+  displayTotalTime,
+ } = usePlayerDisplayTime();
+
+  function changePlayerLargeVersion() {
+    emit("changePlayerLargeVersion");
+  }
+
+
+ function seekClick(addTime: number): void {
+  const audioPlayer: HTMLAudioElement | null =
+    document.querySelector("#audio-player");
+  if (!audioPlayer) {
+    return;
+  }
+  const seekTo = audioPlayer.currentTime + addTime;
+  if (playerStore.playerPodcast || playerStore.playerLive) {
+    playerStore.playerUpdateSeekTime(seekTo > 0 ? seekTo : 0);
+  }
+  audioPlayer.currentTime = seekTo > 0 ? seekTo : 0;
+}
 </script>
 
 <style lang="scss">

@@ -38,56 +38,54 @@
     />
   </section>
 </template>
-
-<script lang="ts">
-import { advancedParamInit } from "../mixins/routeParam/advancedParamInit";
+<script setup lang="ts">
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PodcastsPage",
-  components: {
-    PodcastList,
-    ProductorSearch,
-    AdvancedSearch,
-  },
-  mixins: [advancedParamInit],
-  props: {
-    pr: { default: 0, type: Number },
-    ps: { default: 30, type: Number },
-    routeQuery: { default: "", type: String },
-    routeMonetisable: { default: "UNDEFINED", type: String },
-    routeIab: { default: undefined, type: Number },
-    routeSort: { default: "DATE", type: String },
-    routeIncludeHidden: { default: "", type: String },
-    routeFrom: { default: undefined, type: String },
-    routeTo: { default: undefined, type: String },
-    routeValidity: { default: "", type: String },
-    routeOnlyVideo: { default: "", type: String },
-    routeOrga: { default: undefined, type: String },
-    routeRubriques: { default: "", type: String },
-  },
-  data() {
-    return {
-      onlyVideo: false as boolean,
-    };
-  },
-  computed: {
-    orgaArray(): Array<string> {
-      return this.organisationId ? [this.organisationId] : [];
-    },
-    withVideo(): boolean | undefined {
-      return false === this.onlyVideo ? undefined : true;
-    },
-  },
-  watch: {
-    routeOnlyVideo: {
-      immediate: true,
-      handler() {
-        this.onlyVideo = "true" === this.routeOnlyVideo;
-      },
-    },
-  },
+import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
+import { computed, ref, watch } from "vue";
+
+const props = defineProps({
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  routeQuery: { default: "", type: String },
+  routeMonetisable: { default: "UNDEFINED", type: String },
+  routeIab: { default: undefined, type: Number },
+  routeSort: { default: "DATE", type: String },
+  routeIncludeHidden: { default: "", type: String },
+  routeFrom: { default: undefined, type: String },
+  routeTo: { default: undefined, type: String },
+  routeValidity: { default: "", type: String },
+  routeOnlyVideo: { default: "", type: String },
+  routeOrga: { default: undefined, type: String },
+  routeRubriques: { default: "", type: String },
 });
+
+const {
+  organisationId,
+  searchPattern,
+  monetisable,
+  iabId,
+  sort,
+  includeHidden,
+  fromDate,
+  toDate,
+  rubriqueFilter,
+  searchMinSize,
+  paginateFirst,
+  validity,
+  rubriquesFilterArrayIds
+} = useAdvancedParamInit(props, false);
+
+const onlyVideo = ref(false);
+
+
+const orgaArray = computed(() => organisationId.value ? [organisationId.value] : []);
+const withVideo = computed(() => false === onlyVideo.value ? undefined : true);
+
+
+watch(() => props.routeOnlyVideo, () =>{
+  onlyVideo.value = "true" === props.routeOnlyVideo;
+}, {immediate: true});
+
 </script>

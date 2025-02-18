@@ -4,13 +4,13 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 import { defineStore } from "pinia";
-import StringHelper from "../helper/string";
-import cookies from "../components/mixins/cookies";
+import StringHelper from "../helper/stringHelper";
+import cookiesHelper from "../helper/cookiesHelper";
 import WebSocketEngine from "../websocket/commentWebsocket";
 import { CommentPodcast } from "./class/general/comment";
 import { useAuthStore } from "./AuthStore";
 import { useApiStore } from "./ApiStore";
-import uuidGenerator from "../helper/uuidGenerator";
+import stringHelper from "../helper/stringHelper";
 import { CommentMessage, CommentsConfig } from "./class/config/commentsConfig";
 import classicApi from "../api/classicApi";
 import { Podcast } from "./class/general/podcast";
@@ -120,14 +120,14 @@ export const useCommentStore = defineStore("CommentStore", {
         };
         return;
       }
-      let uuid = cookies.methods.getCookie("comment-octopus-uuid");
+      let uuid = cookiesHelper.getCookie("comment-octopus-uuid");
       if (null === uuid) {
-        uuid = uuidGenerator.uuidv4();
-        cookies.methods.setCookie("comment-octopus-uuid", uuid);
+        uuid = stringHelper.uuidv4();
+        cookiesHelper.setCookie("comment-octopus-uuid", uuid);
       }
       const hash = await this.digest(uuid);
       this.commentUser = {
-        name: cookies.methods.getCookie("comment-octopus-name"),
+        name: cookiesHelper.getCookie("comment-octopus-name"),
         uuid: uuid,
         uuidHash: hash,
       };
@@ -140,7 +140,7 @@ export const useCommentStore = defineStore("CommentStore", {
       if (authStore.authProfile || !this.commentUser) {
         return;
       }
-      cookies.methods.setCookie("comment-octopus-name", name);
+      cookiesHelper.setCookie("comment-octopus-name", name);
       this.commentUser.name = name;
     },
     async getCommentsConfig(podcast: Podcast): Promise<CommentsConfig> {

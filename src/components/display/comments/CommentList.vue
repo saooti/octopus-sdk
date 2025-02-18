@@ -64,7 +64,7 @@
 import SortVariantIcon from "vue-material-design-icons/SortVariant.vue";
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { AxiosError } from "axios";
@@ -91,7 +91,6 @@ export default defineComponent({
     PlusIcon,
     SortVariantIcon,
   },
-  mixins: [handle403],
 
   props: {
     size: { default: 10, type: Number },
@@ -106,6 +105,11 @@ export default defineComponent({
     eventToHandle: { default: undefined, type: Object as () => CommentMessage },
   },
   emits: ["update:nbComments", "commentDeleted"],
+
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
+  },
 
   data() {
     return {

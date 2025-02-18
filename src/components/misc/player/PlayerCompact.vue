@@ -39,60 +39,49 @@
     </button>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import ChevronUpIcon from "vue-material-design-icons/ChevronUp.vue";
 import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
-import { playerDisplayTime } from "../../mixins/player/playerDisplayTime";
-import imageProxy from "../../mixins/imageProxy";
+import {usePlayerDisplayTime} from "../../composable/player/usePlayerDisplayTime";
 import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
 import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import PlayerSpeedButton from "./elements/PlayerSpeedButton.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent} from "vue";
 const PlayerProgressBar = defineAsyncComponent(
   () => import("./progressbar/PlayerProgressBar.vue"),
 );
-export default defineComponent({
-  name: "PlayerCompact",
-
-  components: {
-    PlayerProgressBar,
-    PlayerChaptering,
-    PlayerImage,
-    PlayerPlayButton,
-    PlayerTitle,
-    PlayerSpeedButton,
-    WindowCloseIcon,
-    ChevronUpIcon,
-    /* AdsSkipButton */
-  },
-  mixins: [playerDisplayTime, imageProxy],
-
-  props: {
-    playerError: { default: false, type: Boolean },
-    displayAlertBar: { default: false, type: Boolean },
-    percentLiveProgress: { default: 0, type: Number },
-    durationLivePosition: { default: 0, type: Number },
-    listenTime: { default: 0, type: Number },
-    hlsReady: { default: false, type: Boolean },
-  },
-
-  emits: ["stopPlayer", "changePlayerLargeVersion"],
-  data() {
-    return {
-      showTimeline: false as boolean,
-    };
-  },
-  methods: {
-    stopPlayer() {
-      this.$emit("stopPlayer");
-    },
-    changePlayerLargeVersion() {
-      this.$emit("changePlayerLargeVersion");
-    },
-  },
+//Props
+defineProps( {
+  playerError: { default: false, type: Boolean },
+  displayAlertBar: { default: false, type: Boolean },
+  percentLiveProgress: { default: 0, type: Number },
+  durationLivePosition: { default: 0, type: Number },
+  listenTime: { default: 0, type: Number },
+  hlsReady: { default: false, type: Boolean },
 });
+
+//Emits
+const emit = defineEmits(['stopPlayer', 'changePlayerLargeVersion']);
+
+//Composables
+const { 
+  transcriptText,
+  radioUrl,
+  isAdPlaying,
+  displayPlayTime,
+  displayTotalTime,
+ } = usePlayerDisplayTime();
+
+function stopPlayer() {
+  emit("stopPlayer");
+}
+function changePlayerLargeVersion() {
+  emit("changePlayerLargeVersion");
+}
+
+
 </script>
 
 <style lang="scss">

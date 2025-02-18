@@ -8,17 +8,12 @@
       <div class="mouth" />
     </div>
     <div class="thought">
-      <template v-if="!overrideText">
+      <template v-if="!props.overrideText">
         {{ $t("This live will start") }}
         <span class="text-lowercase">
           <template v-if="countdownTimer">
             {{
-              $t("In days hours minutes seconds", {
-                days: pad(days),
-                hours: pad(hours),
-                minutes: pad(minutes),
-                seconds: pad(remainingSeconds),
-              })
+              $t("In days hours minutes seconds", countdownValues)
             }}
           </template>
           <template v-else>
@@ -27,35 +22,20 @@
         </span>
       </template>
       <template v-else>
-        {{ overrideText }}
+        {{ props.overrideText }}
       </template>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import countdown from "../../mixins/podcast/countdown";
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "CountdownOctopus",
-  mixins: [countdown],
-  props: {
-    timeRemaining: { default: undefined, type: Number },
+<script lang="ts" setup>
+  import {useCountdown} from "../../composable/podcasts/useCountdown";
+  const props = defineProps({
+    timeRemaining:{ default: undefined, type: Number },
     overrideText: { default: undefined, type: String },
-  },
-  data() {
-    return {
-      seconds: 0 as number,
-      countdownTimer: undefined as ReturnType<typeof setTimeout> | undefined,
-      days: 0 as number,
-      hours: 0 as number,
-      minutes: 0 as number,
-      remainingSeconds: 0 as number,
-    };
-  },
-});
+  })
+  const { countdownValues, countdownTimer } = useCountdown(props.timeRemaining);
 </script>
+
 <style lang="scss">
 
 .octopus-app .cute-octopus {

@@ -14,7 +14,7 @@
           <div class="d-flex mb-2">
             <div class="w-100">
               <img
-                v-lazy="proxyImageUrl(emission.imageUrl, '250')"
+                v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
                 width="250"
                 height="250"
                 role="presentation"
@@ -97,11 +97,11 @@
 <script lang="ts">
 import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
-import displayMethods from "../mixins/displayMethods";
-import imageProxy from "../mixins/imageProxy";
-import { orgaComputed } from "../mixins/orgaComputed";
-import { seoTitleUrl } from "../mixins/seoTitleUrl";
-import { handle403 } from "../mixins/handle403";
+import displayHelper from "../../helper/displayHelper";
+import {useImageProxy} from "../composable/useImageProxy";
+import {useOrgaComputed} from "../composable/useOrgaComputed";
+import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
+import {useErrorHandler} from "../composable/useErrorHandler";
 import { Emission } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
@@ -109,6 +109,7 @@ import { AxiosError } from "axios";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
+import { useFilterStore } from "../../stores/FilterStore";
 import { useApiStore } from "../../stores/ApiStore";
 import { Podcast } from "@/stores/class/general/podcast";
 const PodcastFilterList = defineAsyncComponent(
@@ -151,9 +152,16 @@ export default defineComponent({
     PodcastPlayButton,
     PodcastmakerHeader,
   },
-  mixins: [displayMethods, handle403, orgaComputed, imageProxy, seoTitleUrl],
   props: {
     emissionId: { default: undefined, type: Number },
+  },
+
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
+    const { updatePathParams } = useSeoTitleUrl();
+    const {handle403} = useErrorHandler();
+    return { useProxyImageUrl, isPodcastmaker, isEditRights, authOrgaId, updatePathParams, handle403 }
   },
 
   data() {
@@ -172,6 +180,7 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["isGarRole"]),
     ...mapState(useApiStore, ["apiUrl"]),
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     pageParameters() {
       return {
         isShareButtons: state.podcastPage.ShareButtons as boolean,
@@ -211,6 +220,9 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
+    urlify(text:string|undefined){
+      return displayHelper.urlify(text);
+    },
     initError(): void {
       this.error = true;
       this.loaded = true;

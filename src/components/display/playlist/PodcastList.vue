@@ -58,8 +58,8 @@
 
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
-import { handle403 } from "../../mixins/handle403";
-import { orgaComputed } from "../../mixins/orgaComputed";
+import {useErrorHandler} from "../../composable/useErrorHandler";
+import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
 import ClassicSearch from "../../form/ClassicSearch.vue";
@@ -78,10 +78,14 @@ export default defineComponent({
     ClassicLazy,
   },
 
-  mixins: [handle403, orgaComputed],
-
   props: {
     playlist: { default: () => ({}), type: Object as () => Playlist },
+  },
+
+  setup(){
+    const {handle403} = useErrorHandler();
+    const { isEditRights } = useOrgaComputed();
+    return { handle403, isEditRights }
   },
 
   data() {

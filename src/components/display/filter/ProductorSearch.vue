@@ -42,10 +42,10 @@
 </template>
 
 <script lang="ts">
-import { routeParams } from "../../mixins/routeParam/routeParams";
+import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import orgaFilter from "../../mixins/organisationFilter";
+import { useOrganisationFilter } from "../../composable/useOrganisationFilter";
 import { Organisation } from "@/stores/class/general/organisation";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState, mapActions } from "pinia";
@@ -62,7 +62,6 @@ export default defineComponent({
     ClassicSearch,
     ClassicCheckbox,
   },
-  mixins: [orgaFilter, routeParams],
 
   props: {
     organisationId: { default: undefined, type: String },
@@ -70,6 +69,12 @@ export default defineComponent({
     type: { default: "podcast", type: String },
   },
   emits: ["update:organisationId", "update:searchPattern"],
+
+  setup(){
+    const { updateRouteParam } = useRouteUpdateParams();
+    const {selectOrganisation, removeSelectedOrga} = useOrganisationFilter();
+    return {updateRouteParam , selectOrganisation, removeSelectedOrga}
+  },
 
   data() {
     return {

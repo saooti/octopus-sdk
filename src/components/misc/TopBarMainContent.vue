@@ -22,7 +22,7 @@
       />
       <img
         v-else
-        :src="proxyImageUrl(imgUrl, '', '80')"
+        :src="useProxyImageUrl(imgUrl, '', '80')"
         role="presentation"
         alt=""
         class="client-logo"
@@ -157,10 +157,10 @@
 <script lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
-import { rubriquesFilterComputed } from "../mixins/routeParam/rubriquesFilterComputed";
+import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import { state } from "../../stores/ParamSdkStore";
 import HomeDropdown from "./HomeDropdown.vue";
-import imageProxy from "../mixins/imageProxy";
+import {useImageProxy} from "../composable/useImageProxy";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
@@ -177,11 +177,15 @@ export default defineComponent({
     MagnifyIcon,
     ChevronDownIcon,
   },
-  mixins: [imageProxy, rubriquesFilterComputed],
   props: {
     isPhone: { default: false, type: Boolean },
     titleDisplay: { default: "", type: String },
     scrolled: { default: false, type: Boolean },
+  },
+  setup(){
+    const { useProxyImageUrl } = useImageProxy();
+    const { rubriqueQueryParam } = useRubriquesFilterComputed();
+    return { useProxyImageUrl, rubriqueQueryParam }
   },
   data() {
     return {};

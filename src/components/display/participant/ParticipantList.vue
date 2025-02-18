@@ -44,7 +44,7 @@
 <script lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
-import { handle403 } from "../../mixins/handle403";
+import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import ParticipantItem from "./ParticipantItem.vue";
 import { useFilterStore } from "../../../stores/FilterStore";
@@ -65,14 +65,17 @@ export default defineComponent({
     ClassicLazy,
   },
 
-  mixins: [handle403],
-
   props: {
     first: { default: 0, type: Number },
     size: { default: 30, type: Number },
     query: { default: undefined, type: String },
     organisationId: { default: undefined, type: String },
     showCount: { default: false, type: Boolean },
+  },
+
+  setup(){
+    const {handle403} = useErrorHandler();
+    return { handle403 }
   },
 
   data() {
