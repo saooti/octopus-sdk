@@ -1,7 +1,7 @@
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { onMounted, Ref, ref, watch} from 'vue';
-import classicApi from "@/api/classicApi";
+import classicApi from "../../../api/classicApi";
 
 export const usePlayerLogicProgress = ()=>{
   const listenTime= ref(0);

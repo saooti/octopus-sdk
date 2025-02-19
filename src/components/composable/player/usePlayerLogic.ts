@@ -7,7 +7,7 @@ import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useVastStore } from "../../../stores/VastStore";
-import classicApi from "@/api/classicApi";
+import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{

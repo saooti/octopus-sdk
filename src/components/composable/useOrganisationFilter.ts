@@ -2,7 +2,7 @@ import {useErrorHandler} from "./useErrorHandler";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useSaveFetchStore } from "../../stores/SaveFetchStore";
 import { state } from "../../stores/ParamSdkStore";
-import classicApi from "@/api/classicApi";
+import classicApi from "../../api/classicApi";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { useRoute, useRouter } from "vue-router";
 import { AxiosError } from "axios";

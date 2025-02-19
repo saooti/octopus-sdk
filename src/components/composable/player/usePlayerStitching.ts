@@ -7,7 +7,7 @@ import fetchHelper from "../../../helper/fetchHelper";
 import {computed, onMounted, Ref, ref, watch} from 'vue';
 import { useRoute } from "vue-router";
 import dayjs from "dayjs";
-import classicApi from "@/api/classicApi";
+import classicApi from "../../../api/classicApi";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
 import { AdPosition } from "@/stores/class/adserver/adPosition";
 import { AdserverTiming } from "@/stores/class/adserver/adserverTiming";

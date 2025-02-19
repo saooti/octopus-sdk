@@ -1,5 +1,5 @@
 
-import classicApi from "@/api/classicApi";
+import classicApi from "../../api/classicApi";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { Category } from "@/stores/class/general/category";

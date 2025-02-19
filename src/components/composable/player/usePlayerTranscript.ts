@@ -1,6 +1,6 @@
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useVastStore } from "../../../stores/VastStore";
-import classicApi from "@/api/classicApi";
+import classicApi from "../../../api/classicApi";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
 export const usePlayerTranscript = ()=>{
 
