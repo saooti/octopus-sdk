@@ -1,12 +1,22 @@
 <template>
   <div>
-    <button
-      class="btn btn-transcript"
-      :class="{ open: isOpen }"
-      @click="isOpen = !isOpen"
-    >
-      {{ buttonText }}
-    </button>
+    <AccessibilityModal
+      v-if="isAccessibilityModal"
+      @save="saveAccessibility"
+      @close="isAccessibilityModal = false"
+    />
+    <div class="transcription-section-buttons">
+      <button v-if="isOpen" class="btn btn-primary m-0" @click="isAccessibilityModal = true">
+        <EyeOutlineIcon class="me-1"/> {{ $t('Transcript Accessibility') }}
+      </button>
+      <button
+        class="btn btn-transcript"
+        :class="{ open: isOpen }"
+        @click="isOpen = !isOpen"
+      >
+        {{ buttonText }}
+      </button>
+    </div>
     <div v-if="isOpen" class="transcription-body">
       <ClassicLoading
         :loading-text="!firstLoaded ? $t('Loading content ...') : undefined"
@@ -24,14 +34,21 @@
 </template>
 
 <script lang="ts">
+import cookiesHelper from "../../../helper/cookiesHelper";
+import EyeOutlineIcon from "vue-material-design-icons/EyeOutline.vue";
 import classicApi from "../../../api/classicApi";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
+const AccessibilityModal = defineAsyncComponent(
+  () => import("../accessibility/AccessibilityModal.vue"),
+);
 export default defineComponent({
   name: "PodcastRawTranscript",
 
   components: {
     ClassicLoading,
+    EyeOutlineIcon,
+    AccessibilityModal
   },
 
   props: {
@@ -42,6 +59,7 @@ export default defineComponent({
       isOpen: false as boolean,
       firstLoaded: false as boolean,
       transcript: undefined as string | undefined,
+      isAccessibilityModal : false as boolean,
     };
   },
 
@@ -56,10 +74,37 @@ export default defineComponent({
     async isOpen() {
       if (this.isOpen && !this.firstLoaded) {
         this.fetchTranscript();
+        this.getAccessibility();
       }
     },
   },
   methods: {
+    getAccessibility(){
+      let fontSize = cookiesHelper.getCookie("octopus-font-size");
+      if (null !== fontSize) {
+        this.setCssProperty('--octopus-accessibility-font-size', fontSize);
+      }
+      let background = cookiesHelper.getCookie("octopus-background");
+      if (null !== background) {
+        this.setCssProperty('--octopus-accessibility-background', background);
+      }
+      let color = cookiesHelper.getCookie("octopus-color");
+      if (null !== color) {
+        this.setCssProperty('--octopus-accessibility-color', color);
+      }
+    },
+    setCssProperty(name: string, value: string){
+      document.documentElement.style.setProperty(name,value);
+    },
+    saveAccessibility(accessibility: {fontSize: number,background: string,color: string}){
+      this.setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
+      cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
+      this.setCssProperty('--octopus-accessibility-background', accessibility.background);
+      cookiesHelper.setCookie("octopus-background",accessibility.background);
+      this.setCssProperty('--octopus-accessibility-color', accessibility.color);
+      cookiesHelper.setCookie("octopus-color",accessibility.color);
+      this.isAccessibilityModal = false;
+    },
     async fetchTranscript() {
       if (!this.podcastId) {
         return;
@@ -78,15 +123,36 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-
-
+:root {
+  --octopus-accessibility-font-size: 16px;
+  --octopus-accessibility-background: var(--octopus-background);
+  --octopus-accessibility-color: var(--octopus-color-text);
+}
 .octopus-app {
+  .transcription-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    @media (width <= 625px) {
+      flex-direction: column;
+    }
+  }
   .btn-transcript {
     position: relative;
     border-radius: var(--octopus-border-radius);
     overflow: hidden;
     background: var(--octopus-secondary);
     transition: all 0.2s linear 0s;
+    
+    &.open{
+      margin-left:auto;
+      @media (width <= 625px) {
+        margin-top: 0.5rem;
+      }
+    }
+    &:not(.open){
+      margin-right: auto;
+    }
 
     &:not(.open)::before,
     &.open::after {
@@ -137,12 +203,15 @@ export default defineComponent({
   }
 
   .transcription-body {
+    font-size: var(--octopus-accessibility-font-size);
     position: relative;
     padding: 1rem;
     max-height: 250px;
     display: flex;
     justify-content: center;
     white-space: pre-wrap;
+    background: var(--octopus-accessibility-background);
+    color: var(--octopus-accessibility-color);
 
     .transcription-text {
       overflow: hidden auto;

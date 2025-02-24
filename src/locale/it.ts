@@ -404,4 +404,8 @@ export default{
   Rubrics: "Rubriche",
   "New window":"{text} - Nuova finestra",
   "Mandatory input":"Ingresso obbligatorio",
+  "Transcript Accessibility":"Accessibilità della trascrizione",
+  "Font size":"Dimensione del carattere",
+  "Preview":"Anteprima",
+  "Save":"Salva",
 };

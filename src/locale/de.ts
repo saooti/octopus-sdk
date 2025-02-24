@@ -407,4 +407,8 @@ export default {
   Rubrics: "Rubriken",
   "New window":"{text} - Neues Fenster",
   "Mandatory input":"Pflichteingabe",
+  "Transcript Accessibility":"Barrierefreiheit von Transkripten",
+  "Font size":"Schriftgröße",
+  "Preview":"Vorschau",
+  "Save":"Speichern",
 }

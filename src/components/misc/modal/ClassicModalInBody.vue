@@ -89,8 +89,8 @@ export default defineComponent({
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
     background-color: black;
   }
 
@@ -110,7 +110,6 @@ export default defineComponent({
 
     @media (width <= 500px) {
       width: 95%;
-      margin: 2.5% !important;
     }
   }
 

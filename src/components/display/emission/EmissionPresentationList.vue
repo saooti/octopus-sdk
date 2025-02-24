@@ -17,6 +17,7 @@
         <div
           v-if="allEmissions.length > 1"
           class="emission-column emission-column-margin d-flex-row flex-nowrap"
+          :class="allEmissions.length <= 3 ? 'flex-grow-1' : ''"
         >
           <EmissionItemPresentation
             v-if="allEmissions[1]"

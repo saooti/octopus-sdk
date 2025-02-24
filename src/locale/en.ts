@@ -410,4 +410,8 @@ export default {
   Rubrics: "Rubrics",
   "New window":"{text} - New window",
   "Mandatory input":"Mandatory input",
+  "Transcript Accessibility":"Transcript Accessibility",
+  "Font size":"Font size",
+  "Preview":"Preview",
+  "Save":"Save",
 };

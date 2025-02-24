@@ -417,4 +417,8 @@ export default {
   Rubrics: "Rubriques",
   "New window":"{text} - Nouvelle fenêtre",
   "Mandatory input":"Saisie obligatoire",
+  "Transcript Accessibility":"Accessibilité de la transcription",
+  "Font size":"Taille de la police",
+  "Preview":"Aperçu",
+  "Save":"Sauvegarder",
 };

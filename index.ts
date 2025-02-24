@@ -98,6 +98,7 @@ import {useMetaTitle} from "./src/components/composable/useMetaTitle.ts";
 import {useMetaTitleWatch} from "./src/components/composable/useMetaTitleWatch.ts";
 import {useOrganisationFilter} from "./src/components/composable/useOrganisationFilter.ts";
 import {useInit} from "./src/components/composable/useInit.ts";
+import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 
 
 
@@ -146,6 +147,7 @@ export {
     useMetaTitleWatch,
     useOrganisationFilter,
     useInit,
+    useErrorHandler,
     debounce,
     useVastStore,
     useSaveFetchStore,

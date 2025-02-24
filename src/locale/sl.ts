@@ -399,4 +399,8 @@ export default {
   Rubrics: "Rubrike",
   "New window":"{text} - Novo okno",
   "Mandatory input":"Obvezen vnos",
+  "Transcript Accessibility":"Dostopnost prepisa",
+  "Font size":"Velikost pisave",
+  "Preview":"Predogled",
+  "Save":"Shrani",
 }

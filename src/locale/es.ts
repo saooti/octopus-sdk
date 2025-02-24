@@ -408,4 +408,8 @@ export default {
   Rubrics: "Secciones",
   "New window":"{text} - Nueva ventana",
   "Mandatory input":"Entrada obligatoria",
+  "Transcript Accessibility":"Accesibilidad de transcripción",
+  "Font size":"Tamaño de fuente",
+  "Preview":"Avance",
+  "Save":"Ahorrar",
 }
