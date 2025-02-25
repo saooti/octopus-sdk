@@ -203,7 +203,7 @@ export default defineComponent({
     updateHtml(): void {
       if (!this.editor) {return}
       const plainText= this.editor.getText();
-      const regexHtml = /<(a|b|h3|h4|em|i|li|ol|p|strong|ul|u|br).*?<\/\1>/i
+      const regexHtml = /<(a|b|h3|h4|em|i|li|ol|p|strong|ul|u|br|span).*?/i
       if(regexHtml.test(plainText)){
         this.editor.commands.setContent(plainText);
       }
