@@ -137,6 +137,9 @@ export default defineComponent({
       justify-content: space-between;
       padding: 0.5rem;
       flex-grow: 1;
+      @media (width <= 550px) {
+        padding:0;
+      }
     }
   }
 }

@@ -53,6 +53,7 @@ export const getEmissionInlineList = () => import("./src/components/display/emis
 export const getRubriqueChooser = () => import("./src/components/display/rubriques/RubriqueChooser.vue");
 export const getCommentList = () => import("./src/components/display/comments/CommentList.vue");
 export const getCommentInput = () => import("./src/components/display/comments/CommentInput.vue");
+export const getCommentSection = () => import("./src/components/display/comments/CommentSection.vue");
 export const getPodcastPlaylistInlineList = () => import("./src/components/display/playlist/PodcastPlaylistInlineList.vue");
 export const getLiveList = () => import("./src/components/display/live/LiveList.vue");
 export const getEmissionPresentationList = () => import("./src/components/display/emission/EmissionPresentationList.vue");

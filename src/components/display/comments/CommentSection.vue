@@ -1,7 +1,9 @@
 <template>
   <section v-show="displayCommentSection" class="module-box">
     <div class="d-flex align-items-center">
-      <h3 class="mb-0 me-2">{{ $t("Podcast's comments") }}</h3>
+      <component 
+        :is="inStudio? 'div':'h3'" 
+        :class="inStudio? 'm-1 fw-bold':'mb-0 me-2'">{{ $t("Podcast's comments") }}</component>
       <button
         :title="$t('Refresh')"
         class="btn btn-transparent"
@@ -17,11 +19,13 @@
     />
     <CommentList
       v-model:nb-comments="nbComments"
-      class="mt-5"
+      :class="inStudio? 'mt-2':'mt-5'"
       :podcast="podcast"
+      :isFlatList="inStudio"
       :reload="reload"
       :config="configPodcast"
       :event-to-handle="eventToHandle"
+      :state-filter="stateFilter"
     />
   </section>
 </template>
@@ -49,7 +53,10 @@ export default defineComponent({
   },
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
+    inStudio: { default: false, type: Boolean },
+    stateFilter: { default: "", type: String },
   },
+  emits:['commentReceived'],
   data() {
     return {
       reload: false as boolean,
@@ -86,10 +93,12 @@ export default defineComponent({
         if (
           !this.commentEventToHandle.length ||
           this.commentPodcastId !== this.podcast?.podcastId
-        )
+        ){
           return;
+        }
         this.eventToHandle = this.commentEventToHandle[0];
         this.commentEventHandled();
+        this.$emit('commentReceived');
       },
     },
   },
