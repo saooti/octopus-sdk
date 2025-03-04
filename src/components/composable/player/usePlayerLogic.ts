@@ -101,7 +101,7 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
       audioPlayer.pause();
     } else if ("PLAYING" === playerStore.playerStatus && playerStore.playerRadio) {
       if (playerStore.playerRadio.isInit) {
-        if(!vastStore.resetSessionId){
+        if(vastStore.isAdPlaying && !vastStore.resetSessionId){
           playerStore.playerRadio.dateSessionId = dayjs().toISOString();
         }
         playRadio();
