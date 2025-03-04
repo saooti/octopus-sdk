@@ -11,6 +11,7 @@ interface VastState {
   timeTillSkipInSeconds: number;
   currentTimeAd: number;
   currentDurationAd: number;
+  resetSessionId: boolean;
 
   useVastPlayerPodcast: boolean;
   adPositionIndex: number;
@@ -28,6 +29,7 @@ function emptyVastState(): VastState {
     timeTillSkipInSeconds: 0,
     currentTimeAd: 0,
     currentDurationAd: 0,
+    resetSessionId: false,
 
     useVastPlayerPodcast: false,
     adPositionIndex: 0,
@@ -67,6 +69,9 @@ export const useVastStore = defineStore("VastStore", {
     },
     updateAdPositionIndex(index: number) {
       this.adPositionIndex = index;
+    },
+    updateResetSessionId(value: boolean) {
+      this.resetSessionId = value;
     },
     updateAdPositionsPodcasts(
       podcastId: number,

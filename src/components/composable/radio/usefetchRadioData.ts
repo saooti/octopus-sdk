@@ -24,6 +24,11 @@ export const useFetchRadio = ()=>{
       api: 14,
       path:  "player/playing/" + canalId,
     });
+    /* metadata.nextAdvertising={
+      "adCount": 1,
+      "startDate": "2025-03-04T13:12:00Z",
+      "tag": "5e385e1b51c86"
+  }; */
     if(callbackAdvertising){
       callbackAdvertising(metadata.nextAdvertising);
     }

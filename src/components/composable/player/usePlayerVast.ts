@@ -1,7 +1,8 @@
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useVastStore } from "../../../stores/VastStore";
 import { loadScript } from "../../../helper/loadScript";
-import {Ref, ref, watch} from 'vue';
+import {nextTick, Ref, ref, watch} from 'vue';
+import dayjs from "dayjs";
 let adsLoader: any;
 let adsManager:any;
 let adDisplayContainer:any;
@@ -12,6 +13,7 @@ export const usePlayerVast = ()=>{
   const audioContainer : Ref<HTMLAudioElement|null>= ref(null);
   const isAdRequested = ref(false);
   const statusPlayerWhenLoaded = ref("");
+  const dateForSessionId: Ref<string|undefined> = ref(undefined);
 
   const playerStore = usePlayerStore();
   const vastStore = useVastStore();
@@ -169,10 +171,13 @@ export const usePlayerVast = ()=>{
   }
 
   function onContentResumeRequested() {
-    vastStore.updateIsAdPlaying(false);
     if (!isContentFinished.value) {
       playerStore.playerChangeStatus(false);
     }
+    nextTick(() => {
+      vastStore.updateIsAdPlaying(false);
+      vastStore.updateResetSessionId(false);
+    });
   }
 
   function contentEndedAdsLoader():void{
@@ -185,8 +190,12 @@ export const usePlayerVast = ()=>{
     if(!adsManager){return;}
     if(vastStore.isAdPaused){
       adsManager.pause();
+      dateForSessionId.value = dayjs().toISOString();
     }else{
       adsManager.resume();
+      if(!vastStore.resetSessionId &&dayjs().diff(dayjs(dateForSessionId.value), 'm')>1){
+        vastStore.updateResetSessionId(true);
+      }
     }
   }
 

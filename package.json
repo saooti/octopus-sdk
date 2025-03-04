@@ -12,7 +12,6 @@
     "proxy_non_authentifié": "node proxy.ts false",
     "lint": "eslint --fix src",
     "stylelint": "stylelint **/*.{scss,vue} --fix",
-    "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js",
     "sonar": "node sonarqube-scanner.js"
   },
   "dependencies": {
