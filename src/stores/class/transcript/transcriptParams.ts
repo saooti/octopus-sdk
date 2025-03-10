@@ -1,23 +1,50 @@
 export interface TranscriptParams {
-  automation: string;
-  wordsNumber: number;
-  modifyDescription: string;
-  isWordsNumber: boolean;
-  openAiBehavior: string; //no, keywords, description, descriptionAndKeywords
-  ttsParams: { [key: string]: string | number | undefined };
+  automation: string; // super, {date}, false 
+  ttsParams: TtsParams;
+  modifyPodcast: ModifyPodcastConfig
+}
+export interface TtsParams {
+  super: string;
+  style: string;
+  pitch: number;
+  speed: number;
+  voice: string;
+  language: string;
 }
 
-export function defaultTranscriptParams(
-  automation: string,
-  modifyDescription?: string,
-): TranscriptParams {
+export interface ModifyPodcastConfig {
+  modifyChaptering: ModifyPodcastEnum;
+  modifyKeywords: ModifyPodcastEnum;
+  modifyDescription: ModifyPodcastEnum;
+  createDescriptionUsingAi: boolean;
+  wordsNumber: number;
+}
+
+export enum ModifyPodcastEnum {
+  SUPER = "SUPER",
+  NO = "NO",
+  IF_EMPTY = "IF_EMPTY",
+  OVERWRITE="OVERWRITE"
+}
+
+export function defaultTtsParams(): TtsParams {
   return {
-    automation: automation,
+    super: "true",
+    style: "neutral",
+    pitch: 0,
+    speed: 1,
+    voice: "",
+    language: ""
+  };
+}
+
+export function defaultModifyPodcastConfig(): ModifyPodcastConfig {
+  return {
+    modifyChaptering: ModifyPodcastEnum.NO,
+    modifyKeywords:ModifyPodcastEnum.NO,
+    modifyDescription:ModifyPodcastEnum.NO,
+    createDescriptionUsingAi: false,
     wordsNumber: 100,
-    modifyDescription: modifyDescription ?? "NO",
-    isWordsNumber: true,
-    openAiBehavior: "no",
-    ttsParams: {},
   };
 }
 
@@ -29,4 +56,10 @@ export interface Voice {
   audioExample?: string;
   styles?: [];
   provider: string;
+}
+export interface ProviderTts {
+  name: string;
+  fullName: string;
+  logoPath: string;
+  description: string;
 }

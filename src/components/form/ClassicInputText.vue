@@ -4,6 +4,7 @@
     :class="{ 'form-margin': displayLabel }"
   >
     <div class="d-flex align-items-center">
+      <slot name="complementLabel"/>
       <component
         :is="isWysiwyg? 'div': 'label'"
         :class="[classLabel, displayLabel ? '' : 'd-none']"
@@ -33,6 +34,7 @@
     </div>
     <input
       v-if="!isWysiwyg && !isTextarea"
+      v-show="showField"
       :id="inputId"
       ref="focusElement"
       v-model="textValue"
@@ -52,6 +54,7 @@
     />
     <textarea
       v-else-if="isTextarea"
+      v-show="showField"
       :id="inputId"
       ref="focusElement"
       v-model="textValue"
@@ -68,6 +71,7 @@
     />
     <ClassicWysiwyg
       v-else
+      v-show="showField"
       v-model:content="textValue"
       :error-description="
         forceError || (isError && (undefined !== textValue || canBeNull))
@@ -153,6 +157,7 @@ export default defineComponent({
     typeInput: { default: "text", type: String },
     displayRequired: { default: false, type: Boolean },
     classLabel: { default: "form-label", type: String },
+    showField: { default: true, type: Boolean },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {
