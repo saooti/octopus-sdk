@@ -1,7 +1,7 @@
 <template>
   <section class="page-box tag-page">
     <h1>
-      {{ $t("Search for keyword", {tag:tagDisplay})}}
+      {{ $t("Search for keyword", {tag:titleDisplay})}}
       <img
         v-if="isOf"
         width="30"
@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+import { useSeoTitleUrl } from "../composable/route/useSeoTitleUrl";
 import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 import { useTagOf } from "../composable/useTagOf";
 import PodcastList from "../display/podcasts/PodcastList.vue";
@@ -53,20 +55,28 @@ const {
 
 const { isOuestFranceTag, formateOfTag } = useTagOf();
 
+const { updatePathParams } = useSeoTitleUrl();
+
+const titleDisplay = ref("");
+const isOf = ref(false);
+const {t} = useI18n();
+
 const orgaArray = computed(() =>organisationId.value ? [organisationId.value] : []);
-const tagDisplay = computed(() => {
-  const tagString = props.tag?? "";
-  return isOf.value ?  formateOfTag(tagString) :tagString;
-});
-const isOf = computed(() => {
-  return isOuestFranceTag(props.tag?? "");
-});
 const sortOrder = computed(() =>{
   if(searchMinSize.value.length){
     return "SCORE";
   }
   return undefined;
 });
+
+
+watch(()=>props.tag, async () => {
+  const tagString = props.tag?? "";
+  isOf.value = isOuestFranceTag(tagString);
+  titleDisplay.value= isOf.value ?  formateOfTag(tagString) :tagString;
+  updatePathParams(t("Search for keyword", {tag:titleDisplay.value}));
+}, {immediate: true});
+
 
 </script>
 <style lang="scss">

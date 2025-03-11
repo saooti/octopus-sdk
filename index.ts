@@ -12,6 +12,7 @@ export const getSearch = () => import("./src/components/pages/SearchPage.vue");
 export const getHome = () => import("./src/components/pages/HomePage.vue");
 export const getCategory = () => import("./src/components/pages/CategoryPage.vue");
 export const getRubrique = () => import("./src/components/pages/RubriquePage.vue");
+export const getTag = () => import("./src/components/pages/TagPage.vue");
 export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
 export const getRadio = () => import("./src/components/pages/RadioPage.vue");
 export const getVideo = () => import("./src/components/pages/VideoPage.vue");
