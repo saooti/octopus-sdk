@@ -412,4 +412,5 @@ export default {
   "Font size":"Tamaño de fuente",
   "Preview":"Avance",
   "Save":"Ahorrar",
+  "Search for keyword": "Buscar palabra clave: {etiqueta}",
 }

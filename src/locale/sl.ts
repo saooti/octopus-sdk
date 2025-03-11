@@ -403,4 +403,5 @@ export default {
   "Font size":"Velikost pisave",
   "Preview":"Predogled",
   "Save":"Shrani",
+  "Search for keyword": "Iskanje ključne besede: {tag}",
 }

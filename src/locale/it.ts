@@ -408,4 +408,5 @@ export default{
   "Font size":"Dimensione del carattere",
   "Preview":"Anteprima",
   "Save":"Salva",
+  "Search for keyword": "Cerca parola chiave: {tag}",
 };

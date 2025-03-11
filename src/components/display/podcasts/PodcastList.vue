@@ -91,6 +91,7 @@ export default defineComponent({
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
     justSizeChosen: { default: false, type: Boolean },
     withVideo: { default: undefined, type: Boolean },
+    includeTag:{ default: () => [], type: Array as () => Array<string> },
   },
   emits: ["fetch", "emptyList"],
 
@@ -129,7 +130,7 @@ export default defineComponent({
       return `${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetisable}|${this.popularSort}|
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.validity}|
-      ${this.withVideo}`;
+      ${this.withVideo}|${this.includeTag}`;
     },
     organisation(): Array<string> {
       if (this.organisationId) {
@@ -214,6 +215,7 @@ export default defineComponent({
             : undefined, */
         includeStatus: ["READY", "PROCESSING"],
         withVideo: this.withVideo,
+        includeTag: this.includeTag.length ? this.includeTag : undefined,
       };
       try {
         const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({

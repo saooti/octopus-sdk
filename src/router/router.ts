@@ -24,6 +24,7 @@ const ParticipantPage = () => import("@/components/pages/ParticipantPage.vue");
 const SearchPage = () => import("@/components/pages/SearchPage.vue");
 const CategoryPage = () => import("@/components/pages/CategoryPage.vue");
 const RubriquePage = () => import("@/components/pages/RubriquePage.vue");
+const TagPage = () => import("@/components/pages/TagPage.vue");
 const LivesPage = () => import("@/components/pages/LivesPage.vue");
 const PlaylistPage = () => import("@/components/pages/PlaylistPage.vue");
 const PlaylistsPage = () => import("@/components/pages/PlaylistsPage.vue");
@@ -199,6 +200,21 @@ const routes: Array<RouteRecordRaw> = [
       pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
       ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
       rubriqueId: parseInt(route.params.rubriqueId.toString(), 10),
+      routeOrga:route.query.o,
+      routeQuery: route.query.q ?? "",
+    }),
+    meta:{
+      title: "",
+    }
+  },
+  {
+    path: "/main/pub/tag/:tag([^?]*)?:productor?",
+    name: "tag",
+    component: TagPage,
+    props: (route: RouteLocationNormalized) => ({
+      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      tag: route.params.tag,
       routeOrga:route.query.o,
       routeQuery: route.query.q ?? "",
     }),

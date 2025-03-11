@@ -414,4 +414,5 @@ export default {
   "Font size":"Font size",
   "Preview":"Preview",
   "Save":"Save",
+  "Search for keyword": "Search for keyword: {tag}",
 };

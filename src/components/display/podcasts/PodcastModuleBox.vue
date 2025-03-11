@@ -117,6 +117,7 @@
     <TagList
       v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
       :tag-list="podcast.tags"
+      :orga-id="podcast.organisation.id"
       :podcast-annotations="podcast.annotations"
     />
     <PodcastRubriqueList

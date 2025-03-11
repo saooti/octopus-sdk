@@ -1,16 +1,20 @@
 <template>
   <div
     v-if="undefined !== tagList && 0 !== tagList.length"
-    class="tag-list-component d-flex align-items-center flex-wrap comma mb-3 small-text"
+    class="tag-list-component d-flex align-items-center flex-wrap mb-3 small-text"
   >
     <div class="fw-bold me-3">
       {{ $t("Podcast tags") + " : " }}
     </div>
-    <div
+    <router-link
       v-for="(tag, index) in tagList"
       :key="tag"
-      class="d-flex align-items-center comma-element"
-      :class="ouestFranceMainTag === tag ? 'main-of-tag' : ''"
+      class="d-flex align-items-center border p-1 m-1 text-dark"
+      :to="{
+        name: 'tag',
+        params: { tag: tag},
+        query: organisationQuery
+      }"
     >
       <template v-if="!isOuestFranceTag(tag)">{{ tag }}</template>
       <template v-else>
@@ -35,7 +39,7 @@
           :is-fixed="true"
         />
       </template>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -45,6 +49,8 @@ const ClassicPopover = defineAsyncComponent(
   () => import("../../misc/ClassicPopover.vue"),
 );
 import {useTagOf} from "../../composable/useTagOf";
+import { useFilterStore } from "@/stores/FilterStore";
+import { mapState } from "pinia";
 export default defineComponent({
   name: "TagList",
   components: {
@@ -58,12 +64,20 @@ export default defineComponent({
         [key: string]: string | number | boolean | undefined;
       },
     },
+    orgaId: {default: "", type: String,},
   },
   setup(){
     const { isOuestFranceTag, formateOfTag } = useTagOf();
     return { isOuestFranceTag, formateOfTag }
   },
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
+    organisationQuery(){
+      if(this.filterOrgaId){
+        return undefined;
+      }
+      return { o: this.orgaId};
+    },
     ouestFranceMainTag(): string | undefined {
       if (this.podcastAnnotations?.["mainOfTag"]) {
         for (const key in this.podcastAnnotations) {

@@ -44,3 +44,31 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app{
+  /** Comma list style */
+  .comma {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0.5rem 0;
+
+    > a{
+      text-transform: capitalize;
+    }
+
+    > a, .comma-element {
+      &::after {
+        content: ", ";
+        margin-right: 0.2rem;
+      }
+
+      &:last-child {
+        &::after {
+          content: "";
+        }
+      }
+    }
+  }
+}
+</style>

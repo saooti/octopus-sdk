@@ -411,4 +411,5 @@ export default {
   "Font size":"Schriftgröße",
   "Preview":"Vorschau",
   "Save":"Speichern",
+  "Search for keyword": "Suche nach Schlüsselwort: {tag}",
 }

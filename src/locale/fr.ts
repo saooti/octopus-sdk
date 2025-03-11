@@ -421,4 +421,5 @@ export default {
   "Font size":"Taille de la police",
   "Preview":"Aperçu",
   "Save":"Sauvegarder",
+  "Search for keyword": "Recherche pour le mot-clé: {tag}",
 };
