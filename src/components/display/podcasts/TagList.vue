@@ -49,7 +49,7 @@ const ClassicPopover = defineAsyncComponent(
   () => import("../../misc/ClassicPopover.vue"),
 );
 import {useTagOf} from "../../composable/useTagOf";
-import { useFilterStore } from "@/stores/FilterStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 export default defineComponent({
   name: "TagList",
