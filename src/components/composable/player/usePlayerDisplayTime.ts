@@ -20,13 +20,15 @@ export const usePlayerDisplayTime = ()=>{
     }
     return playerStore.totalTime;
   });
-
+  const transcriptText = computed(() => { 
+    return playerStore.transcriptText;
+  });
 
 
 	return {
     displayPlayTime,
     displayTotalTime,
-    transcriptText: playerStore.transcriptText,
+    transcriptText,
     radioUrl: playerStore.radioUrl,
     isAdPlaying: vastStore.isAdPlaying,
 	}
