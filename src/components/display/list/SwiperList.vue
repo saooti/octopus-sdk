@@ -14,11 +14,11 @@
         @slide-change="slideChange"
       >
         <swiper-slide v-for="(obj, index) in listObject" :key="obj">
-          <slot name="octopusSlide" :option="obj" :index="index" />
+          <slot name="octopusSlide" :option="obj" :index="index" v-if="composableInit" />
         </swiper-slide>
       </swiper>
     </template>
-    <div v-else class="element-list-inline">
+    <div v-else-if="composableInit" class="element-list-inline">
       <div v-for="(obj, index) in listObject" :key="obj" class="element-list-item">
         <slot name="octopusSlide" :option="obj" :index="index" />
       </div>
@@ -60,6 +60,7 @@ export default defineComponent({
       offsetSwiper: 40 as number,
       widthSwiperUsable: 0 as number,
       itemSizeWithoutRecalculed: 0 as number,
+      composableInit: false as boolean,
     };
   },
   computed: {
@@ -100,6 +101,11 @@ export default defineComponent({
         this.manualReload += 1;
       },
     },
+  },
+  mounted(){
+    this.$nextTick(() => {
+      this.composableInit = true;
+    });
   },
 
   methods: {

@@ -92,6 +92,10 @@ export default defineComponent({
       this.fetchCurrentlyPlaying();
     }, 10000);
   },
+  unmounted(){
+    clearInterval(this.radioInterval as unknown as number);
+    this.radioInterval= undefined;
+  },
   methods: {
     async fetchCurrentlyPlaying(): Promise<void> {
       if (!this.radio || this.playingRadio) {

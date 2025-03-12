@@ -100,6 +100,10 @@ export default defineComponent({
       },
     },
   },
+  unmounted(){
+    clearInterval(this.radioInterval as unknown as number);
+    this.radioInterval= undefined;
+  },
   methods: {
     ...mapActions(usePlayerStore, [
       "playerMetadata",

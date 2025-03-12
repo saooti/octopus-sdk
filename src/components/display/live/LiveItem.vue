@@ -29,13 +29,12 @@ export default defineComponent({
   data() {
     return {
       live: undefined as Podcast | undefined,
-      watchInterval: undefined as ReturnType<typeof setTimeout> | undefined,
+      watchInterval: undefined as ReturnType<typeof setInterval> | undefined,
     };
   },
 
   created() {
-    this.fetchPodcastData();
-    this.watchStatus();
+    this.initLiveItem();
   },
   unmounted() {
     this.clearWatchStatus();
@@ -44,6 +43,12 @@ export default defineComponent({
     clearWatchStatus() {
       clearInterval(this.watchInterval as unknown as number);
       this.watchInterval = undefined;
+    },
+    async initLiveItem(){
+      await this.fetchPodcastData();
+      this.watchInterval = setInterval(() => {
+        this.fetchStatus();
+      }, 5000);
     },
     async fetchPodcastData(): Promise<void> {
       if (!this.fetchConference?.podcastId) return;
@@ -62,13 +67,14 @@ export default defineComponent({
         }
       }
     },
-    async watchStatus(): Promise<void> {
+    async fetchStatus(): Promise<void> {
       if (
         !this.fetchConference ||
         ("PLANNED" !== this.fetchConference.status &&
           "PENDING" !== this.fetchConference.status &&
           "RECORDING" !== this.fetchConference.status)
       ) {
+        this.clearWatchStatus();
         return;
       }
       const confInfo = await classicApi.fetchData<ConferencePublicInfo>({
@@ -81,11 +87,6 @@ export default defineComponent({
           ...this.fetchConference,
           ...{ status: newStatus },
         });
-      } else {
-        this.clearWatchStatus();
-        this.watchInterval = setTimeout(() => {
-          this.watchStatus();
-        }, 5000);
       }
     },
   },
