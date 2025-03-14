@@ -11,10 +11,9 @@ import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
+  const hlsReady= ref(false);
 
-  const { 
-    listenTime,
-    onPlay, setDownloadId, onTimeUpdateProgress, playLive, endingLive, playRadio} = usePlayerLive();
+  const { listenTime, onPlay, setDownloadId, onTimeUpdateProgress, playLive, endingLive, playRadio} = usePlayerLive(hlsReady);
   const { contentEndedAdsLoader } = usePlayerStitching();
   const { getTranscription, onTimeUpdateTranscript, onSeekedTranscript, checkDelaytWithStitching } = usePlayerTranscript();
 
@@ -23,7 +22,6 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
   const percentLiveProgress= ref(0);
   const durationLivePosition= ref(0);
   const displayAlertBar= ref(false);
-  const hlsReady= ref(false);
   const audioUrlToPlay= ref("");
 
 

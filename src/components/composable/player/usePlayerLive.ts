@@ -8,11 +8,10 @@ import dayjs from "dayjs";
 let Hls:any = null;
 /* eslint-enable*/
 const maxMinutesSessionId = 1;
-export const usePlayerLive = ()=>{
+export const usePlayerLive = (hlsReady: Ref<Boolean>)=>{
 
   const { listenTime, initLiveDownloadId, setDownloadId, onTimeUpdateProgress } = usePlayerLogicProgress();
 
-  const hlsReady= ref(false);
   const audioElement: Ref<HTMLAudioElement | null>= ref(null);
   const hls: Ref<any>= ref(null);
   const hlsRetryTimeout: Ref<ReturnType<typeof setTimeout> | undefined>= ref(undefined);
