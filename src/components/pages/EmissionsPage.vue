@@ -1,5 +1,5 @@
 <template>
-  <section class="page-box">
+  <section v-if="isInit" class="page-box">
     <slot name="new-emission" />
     <ProductorSearch
       v-model:organisation-id="organisationId"
@@ -72,6 +72,7 @@ const {
   rubriqueFilter,
   searchMinSize,
   paginateFirst,
-  rubriquesFilterArrayIds
+  rubriquesFilterArrayIds,
+  isInit
 } = useAdvancedParamInit(props, true);
 </script>

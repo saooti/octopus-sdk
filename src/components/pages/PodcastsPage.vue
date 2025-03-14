@@ -1,5 +1,5 @@
 <template>
-  <section class="page-box">
+  <section v-if="isInit" class="page-box">
     <ProductorSearch
       v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
@@ -74,7 +74,8 @@ const {
   searchMinSize,
   paginateFirst,
   validity,
-  rubriquesFilterArrayIds
+  rubriquesFilterArrayIds,
+  isInit
 } = useAdvancedParamInit(props, false);
 
 const onlyVideo = ref(false);

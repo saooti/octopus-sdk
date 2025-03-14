@@ -244,51 +244,6 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		}
 	}
 
-	.btn-rss {
-		background: var(--octopus-secondary) !important;
-
-		&:hover {
-			border: 0;
-			background: var(--octopus-secondary-darker) !important;
-		}
-	}
-
-	.btn-facebook {
-		background: oklch(89.49% 0.05 255.2deg) !important;
-		color: oklch(47% 0.1083 263deg) !important;
-
-		&:hover {
-			background: oklch(90% 0.024 263deg) !important;
-		}
-	}
-
-	.btn-twitter {
-		background: oklch(90% 0.035 234deg) !important;
-
-		&:hover {
-			background: oklch(90% 0.024 234deg) !important;
-		}
-	}
-
-	.btn-linkedin {
-		background: oklch(90% 0.035 242deg) !important;
-		color: oklch(55% 0.130 242deg) !important;
-
-		&:hover {
-			background: oklch(90% 0.024 242deg) !important;
-		}
-	}
-
-	.btn-whatsapp {
-		background: oklch(89.25% 0.19 150deg) !important;
-		color: oklch(76% 0.2015 150deg) !important;
-
-		&:hover {
-			background: oklch(90% 0.024 150deg) !important;
-		}
-	}
-
-	
 	.w-50-responsive{
 		display: flex;
 		align-items: center;

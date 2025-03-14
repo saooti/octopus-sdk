@@ -8,7 +8,7 @@ export const useSimplePageParam = (props: any)=>{
 
   const filterStore  = useFilterStore();
 
-
+  const isInit = ref(false);
   const searchPattern = ref("");
   const organisationId: Ref<string|undefined> = ref(undefined);
 
@@ -29,6 +29,7 @@ export const useSimplePageParam = (props: any)=>{
   onMounted(() => {
     initOrga();
     initSearchPattern();
+    isInit.value = true;
   })
 
   function initSearchPattern(){
@@ -45,6 +46,7 @@ export const useSimplePageParam = (props: any)=>{
     searchMinSize,
     paginateFirst,
     initSearchPattern,
-    initOrga
+    initOrga,
+    isInit
 	}
 }

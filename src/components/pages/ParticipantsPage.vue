@@ -1,5 +1,5 @@
 <template>
-  <section class="page-box">
+  <section v-if="isInit" class="page-box">
     <ProductorSearch
       v-model:organisation-id="organisationId"
       v-model:search-pattern="searchPattern"
@@ -32,6 +32,7 @@ const {
   organisationId,
   searchMinSize,
   paginateFirst,
+  isInit
 } = useSimplePageParam(props);
 
 </script>

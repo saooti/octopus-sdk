@@ -1,5 +1,5 @@
 <template>
-  <section class="page-box tag-page">
+  <section v-if="isInit" class="page-box tag-page">
     <h1>
       {{ $t("Search for keyword", {tag:titleDisplay})}}
       <img
@@ -51,6 +51,7 @@ const {
   organisationId,
   searchMinSize,
   paginateFirst,
+  isInit
 } = useSimplePageParam(props);
 
 const { isOuestFranceTag, formateOfTag } = useTagOf();

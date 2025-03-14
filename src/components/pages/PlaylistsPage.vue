@@ -1,5 +1,5 @@
 <template>
-  <section class="page-box">
+  <section v-if="isInit" class="page-box">
     <router-link
       v-if="isRolePlaylists && !isPodcastmaker"
       to="/main/priv/edit/playlist"
@@ -45,6 +45,7 @@ const {
   organisationId,
   searchMinSize,
   paginateFirst,
+  isInit
 } = useSimplePageParam(props);
 
 const authStore = useAuthStore();

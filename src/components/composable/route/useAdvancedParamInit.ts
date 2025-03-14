@@ -160,6 +160,7 @@ export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
     searchMinSize,
     paginateFirst,
     validity,
-    rubriquesFilterArrayIds
+    rubriquesFilterArrayIds,
+    isInit
 	}
 }

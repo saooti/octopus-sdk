@@ -1,5 +1,5 @@
 <template>
-  <section class="page-box">
+  <section v-if="isInit" class="page-box">
     <h1>{{ title }}</h1>
     <ProductorSearch
       v-model:organisation-id="organisationId"
@@ -40,6 +40,7 @@ const {
   organisationId,
   searchMinSize,
   paginateFirst,
+  isInit
 } = useSimplePageParam(props);
 
 const { updatePathParams } = useSeoTitleUrl();

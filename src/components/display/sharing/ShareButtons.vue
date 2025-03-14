@@ -12,15 +12,14 @@
               rel="noreferrer noopener"
               target="_blank"
               :href="button.url"
-              :class="getClass(button.className)"
-              class="me-2"
+              class="btn share-btn mb-2 text-dark me-2"
               :title="$t('New window', {text: button.title})"
             >
               <component :is="button.icon" :size="34" />
             </a>
           </template>
           <button
-            :class="getClass()"
+            class="btn share-btn mb-2 text-dark"
             :title="$t('Copy this page URL')"
             @click="onCopyCode(urlPage, afterCopy)"
           >
@@ -37,7 +36,7 @@
             {{ $t("Newsletter") }}
           </h3>
           <button
-            :class="getClass()"
+            class="btn share-btn mb-2 text-dark"
             :title="$t('Share newsletter')"
             @click="newsletter = true"
           >
@@ -49,7 +48,7 @@
             {{ $t("QR Code") }}
           </h3>
           <button
-            :class="getClass()"
+            class="btn share-btn mb-2 text-dark"
             :title="$t('Share QR Code')"
             @click="qrCode = true"
           >
@@ -67,7 +66,7 @@
             <a
               rel="noreferrer noopener"
               target="_blank"
-              :class="getClass()"
+              class="btn share-btn mb-2 text-dark"
               :href="rssUrl"
               :title="$t('New window', {text: titleRssButton})"
               @click.prevent="openPopup()"
@@ -82,7 +81,7 @@
           </h3>
           <div class="d-flex align-items-center justify-content-center">
             <router-link
-              :class="getClass()"
+              class="btn share-btn mb-2 text-dark"
               :title="$t('Generate a social media post (with AI)')"
               :to="{
                 name: 'advancedShare',
@@ -127,6 +126,7 @@
 
 <script lang="ts">
 import XIcon from "../../icons/XIcon.vue";
+import BlueSkyIcon from "../../icons/BlueSkyIcon.vue";
 import CreationIcon from "vue-material-design-icons/Creation.vue";
 import RssIcon from "vue-material-design-icons/Rss.vue";
 import WhatsappIcon from "vue-material-design-icons/Whatsapp.vue";
@@ -171,6 +171,7 @@ export default defineComponent({
     RssIcon,
     XIcon,
     CreationIcon,
+    BlueSkyIcon
   },
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
@@ -223,28 +224,30 @@ export default defineComponent({
         {
           title: "Facebook",
           icon: "FacebookIcon",
-          className: "btn-facebook",
           url: `https://www.facebook.com/sharer/sharer.php?u=${this.urlPage}`,
           condition: true,
         },
         {
           title: "X",
           icon: "XIcon",
-          className: "btn-twitter",
           url: `https://twitter.com/intent/tweet?text=${this.urlPage}`,
           condition: true,
         },
         {
           title: "Linkedin",
           icon: "LinkedinIcon",
-          className: "btn-linkedin",
           url: `https://www.linkedin.com/sharing/share-offsite/?url=${this.urlPage}`,
+          condition: true,
+        },
+        {
+          title: "Bluesky",
+          icon: "BlueSkyIcon",
+          url: `https://bsky.app/intent/compose?text=${this.urlPage}`,
           condition: true,
         },
         {
           title: "Whatsapp",
           icon: "WhatsappIcon",
-          className: "btn-whatsapp",
           url: `whatsapp://send?text=${this.urlPage}`,
           condition: window.matchMedia("(hover: none)").matches,
         },
@@ -301,9 +304,6 @@ export default defineComponent({
       const attributes = await this.getOrgaAttributes(this.organisationId);
       this.noSharing = "true" === attributes.noSharing;
       this.isLoading = false;
-    },
-    getClass(className = "btn-rss"): string {
-      return `btn ${className} share-btn mb-2 text-dark`;
     },
     openPopup(): void {
       this.dataRSSSave = !this.dataRSSSave;
