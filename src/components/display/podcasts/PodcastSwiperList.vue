@@ -115,7 +115,7 @@ export default defineComponent({
         path: "podcast/search",
         parameters: {
           first: 0,
-          size: 10,
+          size: 12,
           organisationId: this.organisation,
           emissionId: this.emissionId,
           iabId: this.iabId,

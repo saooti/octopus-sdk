@@ -1,5 +1,5 @@
 <template>
-  <section v-if="!isLoading && (authOrgaId || !noSharing)" class="module-box">
+  <section id="share-buttons-podcast-section" v-if="!isLoading && (authOrgaId || !noSharing)" class="module-box">
     <div class="share-buttons-display">
       <div v-if="!isGarRole && !noSharing" class="d-flex flex-column me-2">
         <h3 class="mb-2">

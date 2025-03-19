@@ -4,7 +4,7 @@
       {{ titleFilter }}
     </h3>
     <div class="d-flex align-items-center flex-wrap mb-2">
-      <div class="w-50-responsive pe-3">
+      <div id="podcast-filter-list-category-chooser" class="w-50-responsive pe-3">
         <CategoryChooser
           :defaultanswer="$t('No category filter')"
           @selected="onCategorySelected"

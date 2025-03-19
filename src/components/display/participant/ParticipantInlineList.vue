@@ -74,7 +74,7 @@ export default defineComponent({
           path: "participant/search",
           parameters: {
             first: 0,
-            size: 10,
+            size: 12,
             organisationId: this.organisationId,
             order: "LAST_PODCAST_DESC",
           },

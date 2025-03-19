@@ -91,7 +91,7 @@ export default defineComponent({
           path: "emission/search",
           parameters: {
             first: 0,
-            size: 10,
+            size: 12,
             organisationId: this.organisationId,
             rubriqueId: this.rubriqueId ? [this.rubriqueId] : [],
             rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],

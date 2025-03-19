@@ -22,6 +22,7 @@
       </a>
     </div>
     <a
+      id="rss-suscribe-button"
       rel="noreferrer noopener"
       target="_blank"
       class="btn share-btn mx-2"
