@@ -245,7 +245,8 @@ export default defineComponent({
         return;
       }
       //Exception timepicker in popover
-      if (e?.target?.classList?.contains("dp__time_display")) {
+      var result = Array.from(e?.target?.classList ?? []).findIndex((val) => { return val.startsWith("dp__");});
+      if (-1!==result) {
         return;
       }
       if (!e.relatedTarget) {
