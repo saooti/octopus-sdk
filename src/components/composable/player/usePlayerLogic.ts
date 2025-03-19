@@ -85,9 +85,9 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
       document.querySelector("#audio-player");
     if (!audioPlayer) return;
     if (playerStore.playerLive && !hlsReady.value) {
-      audioPlayer.pause();
+      /* audioPlayer.pause();
       percentLiveProgress.value = 0;
-      durationLivePosition.value = 0;
+      durationLivePosition.value = 0; */
       return;
     }
     if ("PAUSED" === playerStore.playerStatus && playerStore.playerRadio) {
