@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="podcast-item-info">
     <time 
       :datetime="podcast.pubDate"
       class="text-secondary h6 ms-2">
@@ -10,7 +10,7 @@
         name: 'podcast',
         params: { podcastId: podcast.podcastId },
       }"
-      class="text-dark flex-grow-1 podcast.title-podcast-item basic-line-clamp three-line"
+      class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
       :podcast.title="$t('Episode name page', { name: podcast.title })"
     >
       {{ podcast.title }}
@@ -49,6 +49,7 @@ import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import dayjs from "dayjs";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
+import { state } from "../../../stores/ParamSdkStore";
 const PodcastPlayBar = defineAsyncComponent(
   () => import("./PodcastPlayBar.vue"),
 );
@@ -91,7 +92,7 @@ export default defineComponent({
 
 <style lang="scss">
 .octopus-app {
-  .podcast.title-podcast-item {
+  .title-podcast-item {
     font-weight: 700;
     margin: 0.25rem 0.5rem 0.5rem;
     flex-grow: 1;

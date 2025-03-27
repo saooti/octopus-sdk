@@ -95,7 +95,7 @@ import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const PodcastPlayBar = defineAsyncComponent(
   () => import("../podcasts/PodcastPlayBar.vue"),
 );
-const PodcastPlayBasicButton = defineAsyncComponent(() => import("./PodcastPlayBasicButton.vue"));
+const PodcastPlayBasicButton = defineAsyncComponent(() => import("../podcasts/PodcastPlayBasicButton.vue"));
 export default defineComponent({
   name: "EmissionPlayerItem",
 
