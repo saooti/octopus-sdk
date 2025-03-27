@@ -1,18 +1,6 @@
 <template>
   <div class="d-flex align-items-center">
-    <button
-      v-if="
-        playerPodcast !== podcast ||
-        (playerPodcast === podcast && 'PAUSED' === playerStatus)
-      "
-      class="btn play-button-box bg-primary"
-      @click="play(podcast)"
-    >
-      <PlayIcon class="text-light" :title="$t('Play')" />
-    </button>
-    <button v-else class="btn play-button-box bg-primary" @click="pause()">
-      <PauseIcon class="text-light" :title="$t('Pause')" />
-    </button>
+    <PodcastPlayBasicButton v-if="displayButonPlay" :podcast="podcast"/>
     <div class="d-flex align-items-center podcast-play-bar flex-grow-1">
       <div class="me-2">
         {{ playedTime }}
@@ -32,20 +20,18 @@
 </template>
 
 <script lang="ts">
-import PlayIcon from "vue-material-design-icons/Play.vue";
-import PauseIcon from "vue-material-design-icons/Pause.vue";
 import ProgressBar from "../../misc/ProgressBar.vue";
 import DurationHelper from "../../../helper/durationHelper";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
+import { defineAsyncComponent, defineComponent } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
+const PodcastPlayBasicButton = defineAsyncComponent(() => import("./PodcastPlayBasicButton.vue"));
 export default defineComponent({
   name: "PodcastPlayBar",
   components: {
     ProgressBar,
-    PlayIcon,
-    PauseIcon
+    PodcastPlayBasicButton
   },
   props: {
     podcast: { default: () => ({}), type: Object as () => Podcast },
@@ -84,18 +70,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerPlay", "playerChangeStatus"]),
     ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
-    play(podcast: Podcast): void {
-      if (podcast === this.playerPodcast) {
-        this.playerChangeStatus(false);
-      } else {
-        this.playerPlay(podcast);
-      }
-    },
-    pause(): void {
-      this.playerChangeStatus(true);
-    },
     seekTo(event: MouseEvent): void {
       if (
         !this.playerPodcast ||
@@ -107,12 +82,8 @@ export default defineComponent({
       const barWidth = (event.currentTarget as Element).clientWidth;
       const x = event.clientX - rect.left;
       const percentPosition = x / barWidth;
-      if (percentPosition * 100 >= this.percentLiveProgress) return;
       this.playerUpdateSeekTime(this.playerTotal * percentPosition);
     },
   },
 });
 </script>
-<style lang="scss">
-@use "../../../style/playButton";
-</style>

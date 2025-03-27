@@ -17,7 +17,7 @@
     </router-link>
     <PodcastPlayBar
       v-if="isProgressBar"
-      :display-btn="true"
+      :display-buton-play="true"
       :podcast="podcast"
       class="me-2"
     />

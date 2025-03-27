@@ -59,22 +59,11 @@
           </router-link>
           <PodcastPlayBar
             v-else
+            :displayButonPlay="true"
             :podcast="p"
           />
         </div>
-        <button
-          v-if="
-            playerPodcast !== p ||
-            (playerPodcast === p && 'PAUSED' === playerStatus)
-          "
-          class="play-button-box bg-secondary-light"
-          @click="play(p)"
-        >
-          <PlayIcon class="text-light" :title="$t('Play')" />
-        </button>
-        <button v-else class="play-button-box bg-secondary-light" @click="pause()">
-          <PauseIcon class="text-light" :title="$t('Pause')" />
-        </button>
+        <PodcastPlayBasicButton v-if="!isProgressBar"/>
       </div>
     </div>
     <div
@@ -95,28 +84,24 @@
 </template>
 
 <script lang="ts">
-import PlayIcon from "vue-material-design-icons/Play.vue";
-import PauseIcon from "vue-material-design-icons/Pause.vue";
 import classicApi from "../../../api/classicApi";
 import { Emission } from "@/stores/class/general/emission";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
 import {useImageProxy} from "../../composable/useImageProxy";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
-import { usePlayerStore } from "../../../stores/PlayerStore";
-import { mapState, mapActions } from "pinia";
 import { defineAsyncComponent, defineComponent } from "vue";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 const PodcastPlayBar = defineAsyncComponent(
   () => import("../podcasts/PodcastPlayBar.vue"),
 );
+const PodcastPlayBasicButton = defineAsyncComponent(() => import("./PodcastPlayBasicButton.vue"));
 export default defineComponent({
   name: "EmissionPlayerItem",
 
   components: {
     PodcastPlayBar,
-    PlayIcon,
-    PauseIcon,
+    PodcastPlayBasicButton
   },
   props: {
     emission: { default: () => ({}), type: Object as () => Emission },
@@ -137,7 +122,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(usePlayerStore, ["playerPodcast", "playerStatus"]),
     isProgressBar(): boolean {
       return state.emissionsPage.progressBar as boolean;
     },
@@ -153,17 +137,6 @@ export default defineComponent({
     this.loadPodcasts();
   },
   methods: {
-    ...mapActions(usePlayerStore, ["playerPlay", "playerChangeStatus"]),
-    play(podcast: Podcast): void {
-      if (podcast === this.playerPodcast) {
-        this.playerChangeStatus(false);
-      } else {
-        this.playerPlay(podcast);
-      }
-    },
-    pause(): void {
-      this.playerChangeStatus(true);
-    },
     async loadPodcasts(): Promise<void> {
       const nb = this.nbPodcasts ? this.nbPodcasts : 2;
       const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
