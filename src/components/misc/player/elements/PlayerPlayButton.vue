@@ -119,23 +119,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@use "../../../../style/playButton";
 .octopus-app {
-  .play-button-box {
-    height: 2.2rem;
-    width: 2.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.5rem;
-    border-radius: 50% !important;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-
   .play-button-box:not(.small-font) {
     font-size: 1rem !important;
   }
-
   .play-big-button-box {
     height: 5rem;
     width: 5rem;

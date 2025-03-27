@@ -59,8 +59,7 @@
           </router-link>
           <PodcastPlayBar
             v-else
-            :podcast-id="p.podcastId"
-            :duration="p.duration"
+            :podcast="p"
           />
         </div>
         <button
@@ -73,7 +72,7 @@
         >
           <PlayIcon class="text-light" :title="$t('Play')" />
         </button>
-        <button v-else class="play-button-box bg-secondary-light" @click="pause(p)">
+        <button v-else class="play-button-box bg-secondary-light" @click="pause()">
           <PauseIcon class="text-light" :title="$t('Pause')" />
         </button>
       </div>

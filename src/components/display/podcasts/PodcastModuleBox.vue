@@ -93,8 +93,7 @@
           </a>
           <PodcastPlayBar
             v-if="isProgressBar"
-            :podcast-id="podcast.podcastId"
-            :duration="podcast.duration"
+            :podcast="podcast"
           />
           <div v-if="editRight && !isPodcastmaker">
             <div
