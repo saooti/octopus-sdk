@@ -1,6 +1,6 @@
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
-import { onMounted, Ref, ref, watch} from 'vue';
+import { computed, onMounted, Ref, ref, watch} from 'vue';
 import classicApi from "../../../api/classicApi";
 
 export const usePlayerLogicProgress = ()=>{
@@ -12,13 +12,21 @@ export const usePlayerLogicProgress = ()=>{
   const playerStore = usePlayerStore();
   const authStore = useAuthStore();
 
-
+  const intervalToSend = computed(() => { 
+    if(lastSend.value<180){
+      return 10;
+    }
+    if(lastSend.value<1800){
+      return 30;
+    }
+    return 60;
+  });
 
   watch(listenTime, async (newVal) => {
     if (
       (playerStore.playerRadio && !playerStore.playerPodcast && !playerStore.playerLive) ||
       !downloadId.value ||
-      newVal - lastSend.value < 10
+      newVal - lastSend.value < intervalToSend.value
     ) {
       return;
     }
