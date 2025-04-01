@@ -22,7 +22,7 @@
     </div>
     <label
       class="c-hand"
-      :class="displayLabel ? '' : 'd-none'"
+      :class="[classLabel, displayLabel ? '' : 'd-none']"
       :for="idCheckbox"
       >{{ label }}</label
     >
@@ -41,6 +41,7 @@ export default defineComponent({
     textInit: { default: false, type: Boolean },
     isSwitch: { default: false, type: Boolean },
     displayLabel: { default: true, type: Boolean },
+    classLabel: { default: "", type: String },
     selenium: { default: "", type: String },
   },
   emits: ["update:textInit", "clickAction"],
