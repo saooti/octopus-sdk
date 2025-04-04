@@ -75,7 +75,6 @@
 <script lang="ts">
 import cookiesHelper from "../../helper/cookiesHelper";
 import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
-import { useOrganisationFilter } from "../composable/useOrganisationFilter";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
@@ -105,8 +104,7 @@ export default defineComponent({
 
   setup(){
     const { rubriqueQueryParam } = useRubriquesFilterComputed();
-    const {selectOrganisation, removeSelectedOrga} = useOrganisationFilter();
-    return { rubriqueQueryParam , selectOrganisation, removeSelectedOrga}
+    return { rubriqueQueryParam }
   },
   data() {
     return {
@@ -203,11 +201,15 @@ export default defineComponent({
       organisation: Organisation | undefined,
     ): Promise<void> {
       if (organisation?.id) {
-        await this.selectOrganisation(organisation.id);
-        return;
+        this.$router.push({
+          query: { ...this.$route.query, ...{ productor: organisation.id, o:undefined } },
+        });
+      }else{
+        this.organisationId = undefined;
+        this.$router.push({
+          query: { ...this.$route.query, ...{ productor: undefined } },
+        });
       }
-      this.organisationId = undefined;
-      this.removeSelectedOrga();
     },
   },
 });

@@ -9,26 +9,28 @@
         :orga-id-selected="organisationId"
         @selected="onOrganisationSelected"
       />
-      <ClassicCheckbox
-        v-model:text-init="keepOrganisation"
-        :class="!!organisationId ? '' : 'invisible'"
-        class="m-3"
-        :label="
-          $t(
-            'check this box if you want to keep this filter for the rest of your visit',
-          )
-        "
-        :display-label="false"
-        id-checkbox="organisation-checkbox"
-        @click-action="onKeepOrganisation"
-      />
-      <div v-if="showBubble" class="filter-speech-bubble">
-        {{
-          $t(
-            "check this box if you want to keep this filter for the rest of your visit",
-          )
-        }}
-      </div>
+      <template  v-if="!authOrgaId ||authOrgaId ===organisationId">
+        <ClassicCheckbox
+          v-model:text-init="keepOrganisation"
+          :class="!!organisationId ? '' : 'invisible'"
+          class="m-3"
+          :label="
+            $t(
+              'check this box if you want to keep this filter for the rest of your visit',
+            )
+          "
+          :display-label="false"
+          id-checkbox="organisation-checkbox"
+          @click-action="onKeepOrganisation"
+        />
+        <div v-if="showBubble" class="filter-speech-bubble">
+          {{
+            $t(
+              "check this box if you want to keep this filter for the rest of your visit",
+            )
+          }}
+        </div>
+      </template>
     </div>
     <ClassicSearch
       :text-init="searchPattern"
@@ -45,11 +47,11 @@
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import { useOrganisationFilter } from "../../composable/useOrganisationFilter";
 import { Organisation } from "@/stores/class/general/organisation";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState, mapActions } from "pinia";
+import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
+import { useAuthStore } from "@/stores/AuthStore";
 const OrganisationChooser = defineAsyncComponent(
   () => import("../organisation/OrganisationChooser.vue"),
 );
@@ -72,8 +74,7 @@ export default defineComponent({
 
   setup(){
     const { updateRouteParam } = useRouteUpdateParams();
-    const {selectOrganisation, removeSelectedOrga} = useOrganisationFilter();
-    return {updateRouteParam , selectOrganisation, removeSelectedOrga}
+    return {updateRouteParam}
   },
 
   data() {
@@ -84,6 +85,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
+    ...mapState(useAuthStore, ["authOrgaId"]),
     isPodcastmaker(): boolean {
       return state.generalParameters.podcastmaker as boolean;
     },
@@ -100,6 +102,8 @@ export default defineComponent({
       this.keepOrganisation = undefined !== this.filterOrgaId;
       if (this.filterOrgaId) {
         this.$emit("update:organisationId", this.filterOrgaId);
+      }else{
+        this.updateRouteParam({ o: this.organisationId, productor:undefined});
       }
     },
   },
@@ -110,39 +114,33 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(useFilterStore, ["filterUpdateOrga"]),
     updateSearchPattern(newSearch: string) {
       this.$emit("update:searchPattern", newSearch);
     },
     onOrganisationSelected(organisation: Organisation): void {
       this.updateRouteParam({ o: organisation.id, productor: undefined });
-      this.filterUpdateOrga({ orgaId: undefined });
       this.keepOrganisation = false;
-      if (organisation?.id) {
-        this.$emit("update:organisationId", organisation.id);
-        if ("PUBLIC" !== organisation.privacy) {
-          this.$nextTick(() => {
-            this.onKeepOrganisation();
-          });
-        } else {
-          this.showBubble = true;
-          setTimeout(() => {
-            this.showBubble = false;
-          }, 6000);
-        }
-      } else {
+      if (!organisation?.id) {
         this.$emit("update:organisationId", undefined);
       }
+      this.$emit("update:organisationId", organisation.id);
+      if (undefined===this.authOrgaId && "PUBLIC" !== organisation.privacy) {
+        this.onKeepOrganisation(organisation.id);
+      } else {
+        this.showBubble = true;
+        setTimeout(() => {
+          this.showBubble = false;
+        }, 6000);
+      }
     },
-    async onKeepOrganisation(): Promise<void> {
-      if (!this.organisationId) {
+    async onKeepOrganisation(orgaId: string|undefined = undefined): Promise<void> {
+      const orgaToApply= orgaId ?? this.organisationId;
+      if (!orgaToApply) {
         return;
       }
-      if (!this.keepOrganisation) {
-        await this.selectOrganisation(this.organisationId);
-        return;
-      }
-      this.removeSelectedOrga();
+      this.$router.push({
+        query: { ...this.$route.query, ...{ productor: orgaToApply, o:undefined }},
+      });
     },
   },
 });

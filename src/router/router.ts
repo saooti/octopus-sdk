@@ -8,6 +8,8 @@ import { useFilterStore } from "../stores/FilterStore";
 import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import classicApi from "@/api/classicApi";
+import { useAuthStore } from "@/stores/AuthStore";
+import fetchHelper from "@/helper/fetchHelper";
 
 /*--------------------------------------------------------------------------
 Composants publics
@@ -328,39 +330,77 @@ const router = createRouter({
     return { left: 0, top: 0 };
   },
 });
+
 //Do in frontoffice but not podcastmakers
+async function getMyOrgaActive(authStore: any): Promise<string>{
+  const orgaActive = await classicApi.fetchData<string>({
+    api: 3,
+    path: "user/active"
+  });
+  //Si je suis authentifié mais pas dans mon organisation active, je réinitialise mon profil
+  if(authStore.authOrgaId !== orgaActive){
+    await authStore.fetchProfile();
+    fetchHelper.createAuthenticatedFetchHeader(true);
+  }
+  return orgaActive;
+}
+async function changeOrgaFilter(orgaFilter: string, filterStore: any){
+  const saveStore = useSaveFetchStore();
+  const response = await saveStore.getOrgaData(orgaFilter);
+  const data = await classicApi.fetchData<Array<Rubriquage>>({
+    api: 0,
+    path: "rubriquage/find/" + orgaFilter,
+    parameters: {
+      sort: "HOMEPAGEORDER",
+      homePageOrder: true,
+    },
+    specialTreatement: true,
+  });
+  const isLive = await saveStore.getOrgaLiveEnabled(orgaFilter);
+  filterStore.filterUpdateOrga({
+    orgaId: orgaFilter,
+    imgUrl: response.imageUrl,
+    name: response.name,
+    rubriquageArray: data.filter((element: Rubriquage) => {
+      return element.rubriques.length;
+    }),
+    isLive: isLive,
+  });
+}
+var fetchMyOrgaActive = false;
+router.beforeResolve(async () =>{
+  fetchMyOrgaActive = false;
+});
 router.beforeEach(async (to, from) => {
+  if ("/logout" === to.path && "/logout" !== from.path) {
+    setTimeout(() => {
+      window.location.reload(true);
+    }, 500);
+  }
+  const authStore = useAuthStore();
   const filterStore = useFilterStore();
-  if(to.path===from.path && to.query.productor !== from.query.productor){
-    if(undefined===to.query.productor){
-      filterStore.filterUpdateOrga({ orgaId: undefined });
-    }else if(filterStore.filterOrgaId !== to.query.productor){
-      const saveStore = useSaveFetchStore();
-      const response = await saveStore.getOrgaData(to.query.productor);
-      const data = await classicApi.fetchData<Array<Rubriquage>>({
-        api: 0,
-        path:"rubriquage/find/" + to.query.productor,
-        parameters:{
-          sort: "HOMEPAGEORDER",
-          homePageOrder: true,
-        },
-        specialTreatement:true
-      });
-      const isLive = await saveStore.getOrgaLiveEnabled(to.query.productor);
-      filterStore.filterUpdateOrga({ 
-        orgaId: to.query.productor,
-        imgUrl: response.imageUrl,
-        name: response.name,
-        rubriquageArray: data.filter((element: Rubriquage) => {
-          return element.rubriques.length;
-        }),
-        isLive: isLive,
-      });
+  
+  var isSamePath = to.matched[0]?.path === from.matched[0]?.path && to.path.includes(from.path);
+  var orgaToFocus = isSamePath ? (to.query.productor?.toString() ?? undefined) : undefined;
+
+  if(authStore.authProfile){
+    if(!isSamePath && !fetchMyOrgaActive){
+      await getMyOrgaActive(authStore);
+      fetchMyOrgaActive = true;
     }
-    return;
+    if(undefined!==orgaToFocus){
+      orgaToFocus = authStore.authOrgaId;
+    }
+  }
+  if (isSamePath && orgaToFocus !== from.query.productor) {
+    if (undefined === orgaToFocus) {
+      filterStore.filterUpdateOrga({ orgaId: undefined });
+    } else if (filterStore.filterOrgaId !== orgaToFocus) {
+      await changeOrgaFilter(orgaToFocus, filterStore);
+    }
   }
   if (
-    "/logout" !== to.path && 
+    "/logout" !== to.path &&
     filterStore.filterOrgaId !== to.query.productor &&
     undefined !== filterStore.filterOrgaId
   ) {
@@ -370,11 +410,6 @@ router.beforeEach(async (to, from) => {
       params: to.params,
       name: to.name,
     };
-  }
-  if("/logout" === to.path && "/logout" !== from.path){
-    setTimeout(() => {
-      window.location.reload(true);
-    }, 1000);
   }
 });
 export default router;
