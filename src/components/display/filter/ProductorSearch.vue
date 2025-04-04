@@ -51,7 +51,7 @@ import { Organisation } from "@/stores/class/general/organisation";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { mapState } from "pinia";
 import { defineComponent, defineAsyncComponent } from "vue";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../../stores/AuthStore";
 const OrganisationChooser = defineAsyncComponent(
   () => import("../organisation/OrganisationChooser.vue"),
 );

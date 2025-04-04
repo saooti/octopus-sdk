@@ -8,7 +8,7 @@ import { useFilterStore } from "../stores/FilterStore";
 import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import classicApi from "@/api/classicApi";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../stores/AuthStore";
 import fetchHelper from "@/helper/fetchHelper";
 
 /*--------------------------------------------------------------------------
