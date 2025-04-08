@@ -1,15 +1,16 @@
 <template>
   <ClassicModal
-    id-modal="newsletter-modal"
-    :title-modal="modalTitle"
-    :closable="false"
+    id-modal="player-anonymous-modal"
+    :title-modal="$t('Share the player')"
     @close="closePopup"
   >
     <template #body>
-      <ShareNewsletter
+      <SharePlayer
         :podcast="podcast"
         :emission="emission"
-        :playlist="playlist"
+        :exclusive="exclusive"
+        :not-exclusive="notExclusive"
+        :organisation-id="authOrgaId"
       />
     </template>
     <template #footer>
@@ -21,37 +22,28 @@
 </template>
 
 <script lang="ts">
-import ClassicModal from "../modal/ClassicModal.vue";
-import ShareNewsletter from "../../display/sharing/ShareNewsletter.vue";
 import { Podcast } from "@/stores/class/general/podcast";
+import ClassicModal from "../../misc/modal/ClassicModal.vue";
+import SharePlayer from "./SharePlayer.vue";
+import { useAuthStore } from "../../../stores/AuthStore";
 import { defineComponent } from "vue";
 import { Emission } from "@/stores/class/general/emission";
-import { Playlist } from "@/stores/class/general/playlist";
+import { mapState } from "pinia";
 export default defineComponent({
-  name: "NewsletterModal",
-
+  name: "PlayerAnonymousModal",
   components: {
-    ShareNewsletter,
-    ClassicModal
+    ClassicModal,
+    SharePlayer
   },
-
   props: {
     podcast: { default: undefined, type: Object as () => Podcast },
     emission: { default: undefined, type: Object as () => Emission },
-    playlist: { default: undefined, type: Object as () => Playlist },
+    exclusive: { default: false, type: Boolean },
+    notExclusive: { default: true, type: Boolean },
   },
-
   emits: ["close"],
   computed:{
-    modalTitle() {
-      if (this.podcast) {
-        return this.$t("Share the episode in your newsletter");
-      }
-      if (this.emission) {
-        return this.$t("Share the series in your newsletter");
-      }
-      return this.$t("Share the playlist in your newsletter");
-    },
+    ...mapState(useAuthStore, ["authOrgaId"]),
   },
   methods: {
     closePopup(): void {

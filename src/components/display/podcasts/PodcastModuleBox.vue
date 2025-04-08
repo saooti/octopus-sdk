@@ -1,115 +1,130 @@
 <template>
   <section v-if="podcast" class="module-box">
-    <div class="mb-2 d-flex">
-      <div class="w-100">
-        <PodcastImage
-          :class="[
-            isLiveReadyToRecord &&
-            podcastConference &&
-            'null' !== podcastConference &&
-            podcastConference.status
-              ? podcastConference.status.toLowerCase() + '-shadow'
-              : '',
-          ]"
-          class="me-3"
-          :hide-play="isLiveReadyToRecord"
-          :podcast="podcast"
-          :playing-podcast="playingPodcast"
-          :fetch-conference="podcastConference"
-          :is-animator-live="isOctopusAndAnimator"
-        />
-        <div class="d-flex justify-content-between flex-wrap mb-2">
-          <time 
-            v-if="0 !== date.length" :class="!isLiveReady ? 'me-5' : ''"
-            :datetime="podcast.pubDate">
-            {{ date }}
-          </time>
+    <RecordingItemButton
+      v-if="!!podcastConference && isLiveReadyToRecord && isOctopusAndAnimator"
+      :podcast="podcast"
+      :live="true"
+      :recording="podcastConference"
+      @delete-item="removeDeleted"
+      @validate-podcast="$emit('updatePodcast', $event)"
+    />
+    <EditBox
+      v-else-if="editRight && isEditBox"
+      :podcast="podcast"
+      :display-studio-access="isDebriefing"
+      @validate-podcast="$emit('updatePodcast', $event)"
+    />
+    <div class="mb-2 w-100">
+      <PodcastImage
+        :class="[
+          isLiveReadyToRecord &&
+          podcastConference &&
+          'null' !== podcastConference &&
+          podcastConference.status
+            ? podcastConference.status.toLowerCase() + '-shadow'
+            : '',
+        ]"
+        class="me-3"
+        :hide-play="isLiveReadyToRecord"
+        :podcast="podcast"
+        :playing-podcast="playingPodcast"
+        :fetch-conference="podcastConference"
+        :is-animator-live="isOctopusAndAnimator"
+      />
+      <div class="d-flex justify-content-between flex-wrap mb-2">
+        <time 
+          v-if="0 !== date.length" :class="!isLiveReady ? 'me-5' : ''"
+          :datetime="podcast.pubDate">
+          {{ date }}
+        </time>
+        <div v-if="isLiveReady" class="text-danger">
+          {{ $t("Episode record in live") }}
+        </div>
+        <div class="d-flex flex-column align-items-end flex-grow-1">
           <time :datetime="durationIso">
             {{ duration }}
           </time>
-          <div v-if="isLiveReady" class="text-danger">
-            {{ $t("Episode record in live") }}
-          </div>
+          <ShareAnonymous v-if="!editRight" :podcast="podcast" :organisation-id="podcast.organisation.id"/>
         </div>
-        <h2 class="mb-3">
-          {{ podcast.title }}
-        </h2>
-        <PodcastPlannedSpinner v-if="isPlannedInProcessor"/>
-        <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
-        <!-- eslint-disable vue/no-v-html -->
-        <div
-          class="description-text html-wysiwyg-content"
-          v-html="urlify(podcast.description)"
-        />
-        <!-- eslint-enable -->
-        <div class="my-3">
-          <div class="mb-1">
-            {{ $t("Emission") + " : " }}
-            <router-link
-              :to="{
-                name: 'emission',
-                params: { emissionId: podcast.emission.emissionId },
-              }"
-              :title="$t('Series name page', { name: podcast.emission.name })"
-            >
-              {{ podcast.emission.name }}
-            </router-link>
-          </div>
-          <ParticipantDescription :participants="podcast.animators" />
-          <ParticipantDescription
-            :participants="podcast.guests"
-            :is-guest="true"
-          />
-          <div v-if="!isPodcastmaker" class="mb-1">
-            {{ $t("Producted by : ") }}
-            <router-link
-              :to="{
-                name: 'productor',
-                params: { productorId: podcast.organisation.id },
-              }"
-            >
-              {{ podcast.organisation.name }}
-            </router-link>
-          </div>
-          <div v-if="'' !== photoCredit" class="mb-1">
-            {{ $t("Photo credits") + " : " + photoCredit }}
-          </div>
-          <div v-if="'' !== audioCredit" class="mb-1">
-            {{ $t("Audio credits") + " : " + audioCredit }}
-          </div>
-          <div v-if="'' !== authorCredit" class="mb-1">
-            {{ $t("Author credits") + " : " + authorCredit }}
-          </div>
-          <a
-            v-if="podcast.article && !isGarRole"
-            class="btn d-flex align-items-center my-2 w-fit-content mb-1"
-            :href="podcast.article"
-            rel="noreferrer noopener"
-            target="_blank"
-            :title="$t('New window', {text : $t('See associated article')})"
+      </div>
+      <h2 class="mb-3">
+        {{ podcast.title }}
+      </h2>
+      <PodcastPlannedSpinner v-if="isPlannedInProcessor"/>
+      <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
+      <!-- eslint-disable vue/no-v-html -->
+      <div
+        class="description-text html-wysiwyg-content"
+        v-html="urlify(podcast.description)"
+      />
+      <!-- eslint-enable -->
+      <div class="my-3">
+        <div class="mb-1">
+          {{ $t("Emission") + " : " }}
+          <router-link
+            :to="{
+              name: 'emission',
+              params: { emissionId: podcast.emission.emissionId },
+            }"
+            :title="$t('Series name page', { name: podcast.emission.name })"
           >
-            <NewspaperVariantOutlineIcon class="me-1" />
-            <div>{{ $t("See associated article") }}</div>
-          </a>
-          <PodcastPlayBar
-            v-if="isProgressBar"
-            :podcast="podcast"
-          />
-          <div v-if="editRight && !isPodcastmaker">
-            <div
-              v-if="
-                podcast.annotations && 'RSS' === podcast.annotations.SOURCE_KIND
-              "
-              class="me-5 text-secondary"
-            >
-              {{ $t("From RSS") }}
-            </div>
-            <ErrorMessage v-if="'' !== errorMessage" :message="errorMessage" />
+            {{ podcast.emission.name }}
+          </router-link>
+        </div>
+        <ParticipantDescription :participants="podcast.animators" />
+        <ParticipantDescription
+          :participants="podcast.guests"
+          :is-guest="true"
+        />
+        <div v-if="!isPodcastmaker" class="mb-1">
+          {{ $t("Producted by : ") }}
+          <router-link
+            :to="{
+              name: 'productor',
+              params: { productorId: podcast.organisation.id },
+            }"
+          >
+            {{ podcast.organisation.name }}
+          </router-link>
+        </div>
+        <div v-if="'' !== photoCredit" class="mb-1">
+          {{ $t("Photo credits") + " : " + photoCredit }}
+        </div>
+        <div v-if="'' !== audioCredit" class="mb-1">
+          {{ $t("Audio credits") + " : " + audioCredit }}
+        </div>
+        <div v-if="'' !== authorCredit" class="mb-1">
+          {{ $t("Author credits") + " : " + authorCredit }}
+        </div>
+        <a
+          v-if="podcast.article && !isGarRole"
+          class="btn d-flex align-items-center my-2 w-fit-content mb-1"
+          :href="podcast.article"
+          rel="noreferrer noopener"
+          target="_blank"
+          :title="$t('New window', {text : $t('See associated article')})"
+        >
+          <NewspaperVariantOutlineIcon class="me-1" />
+          <div>{{ $t("See associated article") }}</div>
+        </a>
+        <PodcastPlayBar
+          v-if="isProgressBar"
+          :podcast="podcast"
+        />
+        <div v-if="editRight && !isPodcastmaker">
+          <div
+            v-if="
+              podcast.annotations && 'RSS' === podcast.annotations.SOURCE_KIND
+            "
+            class="me-5 text-secondary"
+          >
+            {{ $t("From RSS") }}
           </div>
-          <div class="d-flex align-items-center flex-wrap">
-            <LikeSection :edit-right="editRight" :podcast="podcast" />
-            <DownloadPodcastButton v-if="isDownloadButton" :podcast="podcast" />
-          </div>
+          <ErrorMessage v-if="'' !== errorMessage" :message="errorMessage" />
+        </div>
+        <div class="d-flex align-items-center flex-wrap">
+          <LikeSection :edit-right="editRight" :podcast="podcast" />
+          <DownloadPodcastButton v-if="isDownloadButton" :podcast="podcast" />
         </div>
       </div>
     </div>
@@ -131,20 +146,6 @@
       :emission="podcast.emission"
       :window-width="1000"
       :justify-center="false"
-    />
-    <RecordingItemButton
-      v-if="!!podcastConference && isLiveReadyToRecord && isOctopusAndAnimator"
-      :podcast="podcast"
-      :live="true"
-      :recording="podcastConference"
-      @delete-item="removeDeleted"
-      @validate-podcast="$emit('updatePodcast', $event)"
-    />
-    <EditBox
-      v-else-if="editRight && isEditBox"
-      :podcast="podcast"
-      :display-studio-access="isDebriefing"
-      @validate-podcast="$emit('updatePodcast', $event)"
     />
   </section>
 </template>
@@ -188,6 +189,7 @@ const PodcastPlannedSpinner = defineAsyncComponent(
 );
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
+const ShareAnonymous = defineAsyncComponent(() => import("../sharing/ShareAnonymous.vue"));
 const PodcastRubriqueList = defineAsyncComponent(() => import("./PodcastRubriqueList.vue"));
 import { mapState } from "pinia";
 export default defineComponent({
@@ -207,7 +209,8 @@ export default defineComponent({
     DownloadPodcastButton,
     NewspaperVariantOutlineIcon,
     PodcastPlannedSpinner,
-    PodcastRubriqueList
+    PodcastRubriqueList,
+    ShareAnonymous
   },
 
   props: {

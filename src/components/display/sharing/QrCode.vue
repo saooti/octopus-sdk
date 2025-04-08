@@ -1,5 +1,20 @@
 <template>
   <div class="d-flex flex-column align-items-center">
+    <div class="d-flex align-items-center mb-3">
+      <div class="form-label me-3">
+        {{ $t("Choose color") }}
+      </div>
+      <VSwatches
+        v-model:model-value="color"
+        class="c-hand"
+        show-fallback
+        fallback-input-type="color"
+        colors="text-advanced"
+        popover-to="right"
+        popover-y="bottom"
+        :data-color="color"
+      />
+    </div>
     <qrcode-vue
       :value="url"
       :size="size"
@@ -8,14 +23,7 @@
       class="myQrCode"
       :margin="2"
     />
-    <ClassicCheckbox
-      v-if="'#000000' !== otherColor"
-      v-model:text-init="isNotBlack"
-      class="flex-shrink-0"
-      id-checkbox="is-black-qr-code"
-      :label="$t('Use organization color')"
-    />
-    <button class="btn m-3" @click="download">
+    <button class="btn btn-primary my-3" @click="download">
       {{ $t("Download") }}
     </button>
     <SnackBar ref="snackbar" position="bottom-left" />
@@ -23,12 +31,12 @@
 </template>
 
 <script lang="ts">
-import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
+import { VSwatches } from "vue3-swatches";
+import "vue3-swatches/dist/style.css";
 import SnackBar from "../../misc/SnackBar.vue";
 import QrcodeVue from "qrcode.vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import { useAuthStore } from "../../../stores/AuthStore";
-import { mapState, mapActions } from "pinia";
+import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "QrCode",
@@ -36,29 +44,20 @@ export default defineComponent({
   components: {
     SnackBar,
     QrcodeVue,
-    ClassicCheckbox,
+    VSwatches,
   },
   props: {
     url: { default: "", type: String },
+    orgaForColor: { default: undefined, type: String },
   },
   data() {
     return {
       size: 200 as number,
       color: "#000000" as string,
-      otherColor: "#000000" as string,
-      isNotBlack: false as boolean,
     };
   },
-  computed: {
-    ...mapState(useAuthStore, ["authOrganisation", "authOrgaId"]),
-  },
-  watch: {
-    isNotBlack() {
-      this.color = this.isNotBlack ? this.otherColor : "#000000";
-    },
-  },
   created() {
-    this.initColor();
+    this.initDefaultColor();
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
@@ -74,12 +73,11 @@ export default defineComponent({
         );
       }
     },
-    async initColor(): Promise<void> {
-      if (undefined === this.authOrgaId) return;
-      const orgaId = this.authOrgaId;
-      const attributes = await this.getOrgaAttributes(orgaId ?? "");
+    async initDefaultColor(): Promise<void> {
+      if (undefined === this.orgaForColor) return;
+      const attributes = await this.getOrgaAttributes(this.orgaForColor);
       if (Object.hasOwn(attributes, "COLOR")) {
-        this.otherColor = attributes.COLOR as string;
+        this.color = attributes.COLOR as string;
       }
     },
   },

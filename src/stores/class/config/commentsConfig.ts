@@ -34,8 +34,8 @@ export function defaultCommentsConfig(inherited: boolean): CommentsConfig {
     },
     commentLikes: {
       authRequired: true,
-      dislikeEnabled: true,
-      likeEnabled: true,
+      dislikeEnabled: false,
+      likeEnabled: false,
     },
     comments: {
       authRequired: true,

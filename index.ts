@@ -49,7 +49,13 @@ export const getOrganisationChooser = () => import("./src/components/display/org
 export const getPodcastFilterList = () => import("./src/components/display/podcasts/PodcastFilterList.vue");
 export const getPodcastInlineList = () => import("./src/components/display/podcasts/PodcastInlineList.vue");
 export const getPodcastList = () => import("./src/components/display/podcasts/PodcastList.vue");
-export const getShareButtons = () => import("./src/components/display/sharing/ShareButtons.vue");
+export const getShareButtons = () => import("./src/components/display/sharing/ShareSocialsButtons.vue");
+export const getShareAnonymous = () => import("./src/components/display/sharing/ShareAnonymous.vue");
+export const getShareNewsletter = () => import("./src/components/display/sharing/ShareNewsletter.vue");
+export const getQrCode = () => import("./src/components/display/sharing/QrCode.vue");
+
+
+
 export const getEmissionInlineList = () => import("./src/components/display/emission/EmissionInlineList.vue");
 export const getRubriqueChooser = () => import("./src/components/display/rubriques/RubriqueChooser.vue");
 export const getCommentList = () => import("./src/components/display/comments/CommentList.vue");

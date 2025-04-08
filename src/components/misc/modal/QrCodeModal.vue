@@ -5,7 +5,7 @@
     @close="closePopup"
   >
     <template #body>
-      <QrCode :url="urlPage" />
+      <QrCode :url="urlPage" :orga-for-color="orgaForColor" />
     </template>
     <template #footer>
       <button class="btn btn-primary m-1" @click="closePopup">
@@ -27,6 +27,7 @@ export default defineComponent({
   },
   props: {
     urlPage: { default: undefined, type: String },
+    orgaForColor: { default: undefined, type: String },
   },
   emits: ["close"],
   methods: {

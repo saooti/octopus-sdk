@@ -16,29 +16,23 @@
           :podcast-conference="fetchConference"
           @update-podcast="updatePodcast"
         />
+        <ShareSocialsButtons
+          v-if="pageParameters.isShareButtons"
+          :organisation-id="podcast.organisation.id"
+        />
         <SharePlayer
-          v-if="!isPodcastmaker && (undefined !== authOrgaId || notExclusive)"
+          v-if="!isPodcastmaker && editRight"
           :podcast="podcast"
-          :emission="podcast.emission"
-          :exclusive="exclusive"
-          :not-exclusive="notExclusive"
+          :emission="podcast?.emission"
           :organisation-id="authOrgaId"
         />
-
         <CommentSection v-if="!isPodcastmaker" :podcast="podcast" />
-        <section class="module-box">
-          <PodcastInlineList
-            :emission-id="podcast.emission.emissionId"
-            :href="'/main/pub/emission/' + podcast.emission.emissionId"
-            :title="$t('More episodes of this emission')"
-            :button-text="$t('All podcast emission button')"
-            title-tag="h3"
-          />
-        </section>
-        <ShareButtons
-          v-if="pageParameters.isShareButtons"
-          :podcast="podcast"
-          :organisation-id="podcast.organisation.id"
+        <PodcastInlineList
+          :emission-id="podcast.emission.emissionId"
+          :href="'/main/pub/emission/' + podcast.emission.emissionId"
+          :title="$t('More episodes of this emission')"
+          :button-text="$t('All podcast emission button')"
+          title-tag="h3"
         />
         <section v-if="!hideSuggestions">
           <ClassicLazy :min-height="550">
@@ -96,8 +90,8 @@ import { useGeneralStore } from "../../stores/GeneralStore";
 import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
 import { useCommentStore } from "../../stores/CommentStore";
-const ShareButtons = defineAsyncComponent(
-  () => import("../display/sharing/ShareButtons.vue"),
+const ShareSocialsButtons = defineAsyncComponent(
+  () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
 const SharePlayer = defineAsyncComponent(
   () => import("../display/sharing/SharePlayer.vue"),
@@ -112,7 +106,7 @@ export default defineComponent({
   name: "PodcastPage",
   components: {
     PodcastInlineList,
-    ShareButtons,
+    ShareSocialsButtons,
     SharePlayer,
     CommentSection,
     PodcastModuleBox,
@@ -139,8 +133,6 @@ export default defineComponent({
       loaded: false as boolean,
       podcast: undefined as Podcast | undefined,
       error: false as boolean,
-      exclusive: false as boolean,
-      notExclusive: false as boolean,
       fetchConference: undefined as Conference | undefined,
       infoReload: undefined as ReturnType<typeof setTimeout> | undefined,
     };
@@ -287,20 +279,6 @@ export default defineComponent({
       this.error = true;
       this.loaded = true;
     },
-    handleAnnotations() {
-      if (!this.podcast) {
-        return;
-      }
-      if (this.podcast.emission.annotations?.exclusive) {
-        this.exclusive = "true" === this.podcast.emission.annotations.exclusive;
-        this.exclusive =
-          this.exclusive && this.authOrgaId !== this.podcast.organisation.id;
-      }
-      if (this.podcast.emission.annotations?.notExclusive) {
-        this.notExclusive =
-          "true" === this.podcast.emission.annotations.notExclusive;
-      }
-    },
     async getPodcastDetails(): Promise<void> {
       this.loaded = false;
       this.error = false;
@@ -319,7 +297,6 @@ export default defineComponent({
         }
         this.podcast = data;
         this.contentToDisplayUpdate(data);
-        this.handleAnnotations();
         if (
           (!this.podcast.availability.visibility ||
             ("READY_TO_RECORD" !== this.podcast.processingStatus &&

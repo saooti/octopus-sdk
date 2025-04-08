@@ -195,7 +195,6 @@ export default {
   "select productor": "Izberi producenta",
   "Share newsletter": "Deli glasilo",
   "Configure your Newsletter tile": "Konfigurirajte svojo ploščico Newsletter",
-  "Copy and embed the HTML code into your email tool": "Kopirajte in vdelajte kodo HTML v svoje e-poštno orodje",
   "Listen this episode": "Poslušajte to epizodo",
   "Choose main color": "Izberite barvo elementov modula newsletter",
   "Octopus is ACPM Podcast accredited":
@@ -266,7 +265,7 @@ export default {
   Refresh: "Osveži",
   "See associated article": "Preberi članek",
   "Display associated article": "Prikaži povezan vir",
-  "Copy this page URL": "Kopiraj povezavo",
+  "Copy this page URL": "Kopiraj URL strani",
   "Custom version": "Prilagojena različica",
   All: "Vse",
   "By category": "Po kategoriji IAB",
@@ -404,4 +403,5 @@ export default {
   "Preview":"Predogled",
   "Save":"Shrani",
   "Search for keyword": "Iskanje ključne besede: {tag}",
+  "And paste it in your newsletter":"In ga prilepite v svoje glasilo 😉",
 }

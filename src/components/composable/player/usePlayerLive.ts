@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 let Hls:any = null;
 /* eslint-enable*/
 const maxMinutesSessionId = 1;
-export const usePlayerLive = (hlsReady: Ref<Boolean>)=>{
+export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
 
   const { listenTime, initLiveDownloadId, setDownloadId, onTimeUpdateProgress } = usePlayerLogicProgress();
 

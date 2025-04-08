@@ -153,8 +153,6 @@ const {
 } = usePodcastView(podcast, podcastConference);
 
 const { updatePathParams } = useSeoTitleUrl();
-const {handle403} = useErrorHandler();
-
 const authStore = useAuthStore();
 const apiStore = useApiStore();
 const generalStore = useGeneralStore();

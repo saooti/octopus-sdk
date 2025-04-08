@@ -89,6 +89,9 @@ export default defineComponent({
     border-bottom: solid 1px var(--octopus-border-default);
     background-color: var(--octopus-background);
   }
+  .octopus-nav.light  .octopus-tab-content{
+    border-top: solid 1px var(--octopus-border-default);
+  }
 
 
   .octopus-nav.light .octopus-nav-item {
@@ -122,10 +125,13 @@ export default defineComponent({
   }
 
   .octopus-nav.light .octopus-nav-link {
-    border-top: 0 !important;
-    border-right: 0 !important;
-    border-left: 0 !important;
     font-weight: bold;
+    background:var(--octopus-border-default);
+    &.active{
+      border-bottom-color: var(--octopus-primary);
+      background: transparent;
+      color: var(--octopus-primary);
+    }
   }
 
 

@@ -116,6 +116,8 @@ export default defineComponent({
     return {
       hiddenLinks: [] as Array<Link>,
       lastWindowWidth: 420 as number,
+      exclusive: false as boolean,
+      notExclusive: false as boolean,
     };
   },
   computed: {

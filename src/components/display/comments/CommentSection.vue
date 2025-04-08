@@ -21,7 +21,7 @@
       v-model:nb-comments="nbComments"
       :class="inStudio? 'mt-2':'mt-5'"
       :podcast="podcast"
-      :isFlatList="inStudio"
+      :is-flat-list="inStudio"
       :reload="reload"
       :config="configPodcast"
       :event-to-handle="eventToHandle"

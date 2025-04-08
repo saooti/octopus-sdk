@@ -1,6 +1,6 @@
 <template>
   <section class="page-box">
-    <template v-if="loaded && !error">
+    <template v-if="loaded && !error && playlist">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
         :page-title="pageTitle"
@@ -11,6 +11,7 @@
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
         <section class="module-box">
+          <EditBox v-if="editRight && !isPodcastmaker" :playlist="playlist" />
           <div class="mb-5 mt-3 description-text">
             <img
               v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
@@ -21,21 +22,22 @@
               :title="$t('Playlist name image', { name: name })"
               class="img-box float-start me-3 mb-3"
             />
-            <h2>{{ name }}</h2>
+            <div class="d-flex align-items-center justify-content-between">
+              <h2>{{ name }}</h2>
+              <ShareAnonymous v-if="!editRight" class="d-flex justify-content-end flex-grow-1" :playlist="playlist" :organisation-id="playlist.organisation?.id"/>
+            </div>
             <!-- eslint-disable vue/no-v-html -->
             <p class="html-wysiwyg-content" v-html="urlify(description)" />
             <!-- eslint-enable -->
           </div>
-          <EditBox v-if="editRight && !isPodcastmaker" :playlist="playlist" />
         </section>
         <SharePlayer
-          v-if="!isPodcastmaker && undefined !== authOrgaId"
+          v-if="!isPodcastmaker && editRight"
           :playlist="playlist"
           :organisation-id="authOrgaId"
         />
-        <ShareButtons
+        <ShareSocialsButtons
           v-if="pageParameters.isShareButtons"
-          :playlist="playlist"
           :organisation-id="playlist.organisation.id"
         />
         <section class="module-box">
@@ -67,8 +69,8 @@ import {useErrorHandler} from "../composable/useErrorHandler";
 import { Playlist } from "@/stores/class/general/playlist";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
-const ShareButtons = defineAsyncComponent(
-  () => import("../display/sharing/ShareButtons.vue"),
+const ShareSocialsButtons = defineAsyncComponent(
+  () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
 const EditBox = defineAsyncComponent(
   () => import("@/components/display/edit/EditBox.vue"),
@@ -79,14 +81,16 @@ const SharePlayer = defineAsyncComponent(
 const PodcastmakerHeader = defineAsyncComponent(
   () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
+const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 export default defineComponent({
   components: {
-    ShareButtons,
+    ShareSocialsButtons,
     EditBox,
     PodcastList,
     SharePlayer,
     ClassicLoading,
     PodcastmakerHeader,
+    ShareAnonymous
   },
 
   props: {

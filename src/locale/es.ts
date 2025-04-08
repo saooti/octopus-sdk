@@ -200,7 +200,6 @@ export default {
   "select productor": "Seleccionar productor",
   "Share newsletter": "Compartir newsletter",
   "Configure your Newsletter tile": "Configure el mosaico de su boletín",
-  "Copy and embed the HTML code into your email tool": "Copie e incruste el código HTML en su herramienta de correo electrónico",
   "Listen this episode": "Escuchar este episodio",
   "Choose main color": "Elija el color de los elementos del módulo de newsletter",
   "Octopus is ACPM Podcast accredited":
@@ -274,7 +273,7 @@ export default {
   Refresh: "Volver a cargar",
   "See associated article": "Leer el artículo",
   "Display associated article": "Mostrar el artículo asociado",
-  "Copy this page URL": "Copiar link",
+  "Copy this page URL": "Copiar URL de la página",
   "Custom version": "Versión personalizada",
   All: "Todos",
   "By category": "Por categoría IAB",
@@ -413,4 +412,5 @@ export default {
   "Preview":"Avance",
   "Save":"Ahorrar",
   "Search for keyword": "Buscar palabra clave: {etiqueta}",
+  "And paste it in your newsletter":"Y pégalo en tu boletín informativo 😉",
 }

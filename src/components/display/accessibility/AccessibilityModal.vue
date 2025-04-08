@@ -75,6 +75,13 @@ export default defineComponent({
   },
 
   emits: ["close", "save"],
+  data() {
+    return {
+      fontSize :16 as number,
+      background: "white" as string,
+      color: "black" as string,
+    };
+  },
   computed:{
     isMaxSize(){
       return this.fontSize>=30;
@@ -85,13 +92,6 @@ export default defineComponent({
     stylePreview(){
       return 'font-size:'+this.fontSize+'px; background:'+this.background+'; color:'+this.color;
     }
-  },
-  data() {
-    return {
-      fontSize :16 as number,
-      background: "white" as string,
-      color: "black" as string,
-    };
   },
   created(){
     this.initAccessibility();

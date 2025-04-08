@@ -59,7 +59,7 @@
           </router-link>
           <PodcastPlayBar
             v-else
-            :displayButonPlay="true"
+            :display-buton-play="true"
             :podcast="p"
           />
         </div>

@@ -303,11 +303,6 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
   },
   {
-    path: "/main/priv/share",
-    name: "advancedShare",
-    component: Home,
-  },
-  {
     path: "/main/pub/cgu",
     component: Home,
   },
@@ -367,7 +362,7 @@ async function changeOrgaFilter(orgaFilter: string, filterStore: any){
     isLive: isLive,
   });
 }
-var fetchMyOrgaActive = false;
+let fetchMyOrgaActive = false;
 router.beforeResolve(async () =>{
   fetchMyOrgaActive = false;
 });
@@ -380,8 +375,8 @@ router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
   const filterStore = useFilterStore();
   
-  var isSamePath = to.matched[0]?.path === from.matched[0]?.path && to.path.includes(from.path);
-  var orgaToFocus = isSamePath ? (to.query.productor?.toString() ?? undefined) : undefined;
+  const isSamePath = to.matched[0]?.path === from.matched[0]?.path && to.path.includes(from.path);
+  let orgaToFocus = isSamePath ? (to.query.productor?.toString() ?? undefined) : undefined;
 
   if(authStore.authProfile){
     if(!isSamePath && !fetchMyOrgaActive){

@@ -80,15 +80,15 @@ export default defineComponent({
   },
   methods: {
     getAccessibility(){
-      let fontSize = cookiesHelper.getCookie("octopus-font-size");
+      const fontSize = cookiesHelper.getCookie("octopus-font-size");
       if (null !== fontSize) {
         this.setCssProperty('--octopus-accessibility-font-size', fontSize);
       }
-      let background = cookiesHelper.getCookie("octopus-background");
+      const background = cookiesHelper.getCookie("octopus-background");
       if (null !== background) {
         this.setCssProperty('--octopus-accessibility-background', background);
       }
-      let color = cookiesHelper.getCookie("octopus-color");
+      const color = cookiesHelper.getCookie("octopus-color");
       if (null !== color) {
         this.setCssProperty('--octopus-accessibility-color', color);
       }
@@ -212,24 +212,11 @@ export default defineComponent({
     white-space: pre-wrap;
     background: var(--octopus-accessibility-background);
     color: var(--octopus-accessibility-color);
+    border: 2px solid var(--octopus-border-default);
+    border-radius: var(--octopus-border-radius);
 
     .transcription-text {
       overflow: hidden auto;
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      padding: 3px;
-      background: repeating-conic-gradient(
-          var(--octopus-secondary) 0 25%,
-          var(--octopus-primary) 0 50%
-        )
-        0 0/30px 30px round;
-      mask:linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
-      mask-composite: exclude;
-      pointer-events: none;
     }
   }
 }

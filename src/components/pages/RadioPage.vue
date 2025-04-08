@@ -1,6 +1,6 @@
 <template>
   <section class="page-box">
-    <template v-if="loaded && !error">
+    <template v-if="loaded && !error && radio">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
         :page-title="$t('Radio')"
@@ -14,7 +14,10 @@
         <section class="module-box">
           <div class="mb-5 description-text">
             <RadioImage :radio="radio" />
-            <h2>{{ radio.name }}</h2>
+            <div class="d-flex align-items-center justify-content-between">
+              <h2>{{ radio.name }}</h2>
+              <ShareAnonymous class="d-flex justify-content-end flex-grow-1" :organisation-id="radio.organisationId"/>
+            </div>
             <div v-if="radio.description">
               {{ radio.description }}
             </div>
@@ -22,13 +25,13 @@
           <RadioCurrently :radio="radio" />
           <EditBoxRadio v-if="editRight" :radio="radio" />
         </section>
+        <ShareSocialsButtons :organisation-id="radio.organisationId" />
         <RadioPlanning :radio="radio" />
         <SharePlayerRadio
-          v-if="undefined !== authOrgaId"
+          v-if="editRight"
           :canal="radio"
           :organisation-id="authOrgaId"
         />
-        <ShareButtons :organisation-id="radio.organisationId" />
       </div>
     </template>
     <ClassicLoading
@@ -53,8 +56,8 @@ import { useAuthStore } from "../../stores/AuthStore";
 const SharePlayerRadio = defineAsyncComponent(
   () => import("../display/sharing/SharePlayerRadio.vue"),
 );
-const ShareButtons = defineAsyncComponent(
-  () => import("../display/sharing/ShareButtons.vue"),
+const ShareSocialsButtons = defineAsyncComponent(
+  () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
 const EditBoxRadio = defineAsyncComponent(
   () => import("@/components/display/edit/EditBoxRadio.vue"),
@@ -71,16 +74,18 @@ const RadioPlanning = defineAsyncComponent(
 const PodcastmakerHeader = defineAsyncComponent(
   () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
+const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 export default defineComponent({
   components: {
     SharePlayerRadio,
-    ShareButtons,
+    ShareSocialsButtons,
     EditBoxRadio,
     ClassicLoading,
     RadioCurrently,
     RadioImage,
     RadioPlanning,
     PodcastmakerHeader,
+    ShareAnonymous
   },
   props: {
     canalId: { default: undefined, type: Number },

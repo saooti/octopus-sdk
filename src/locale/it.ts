@@ -198,7 +198,6 @@ export default{
     'select productor': 'Seleziona producer',
     'Share newsletter': "Condividi newsletter",
     "Configure your Newsletter tile": 'Configura il riquadro Newsletter',
-    "Copy and embed the HTML code into your email tool": 'Copia e incorpora il codice HTML nel tuo strumento di posta elettronica',
     'Listen this episode': 'Ascolta questo episodio',
     'Choose main color': 'Scegli il colore degli elementi del modulo newsletter',
     'Octopus is ACPM Podcast accredited': 'Saooti Play è accreditata ACPM Podcast',
@@ -271,7 +270,7 @@ export default{
     'Refresh': 'Aggiorna', 
     'See associated article':"Leggi l'articolo", 
     "Display associated article":"Mostra articolo associato",
-    "Copy this page URL":"Copia link", 
+    "Copy this page URL":"Copia l'URL della pagina", 
     "Custom version":"Versione customizzata",
     "All":"Tutto", 
     'By category': 'Per categoria',
@@ -409,4 +408,5 @@ export default{
   "Preview":"Anteprima",
   "Save":"Salva",
   "Search for keyword": "Cerca parola chiave: {tag}",
+  "And paste it in your newsletter":"E incollalo nella tua newsletter 😉",
 };

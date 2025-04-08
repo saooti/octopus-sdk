@@ -11,7 +11,7 @@
         params: { podcastId: podcast.podcastId },
       }"
       class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
-      :podcast.title="$t('Episode name page', { name: podcast.title })"
+      :title="$t('Episode name page', { name: podcast.title })"
     >
       {{ podcast.title }}
     </router-link>

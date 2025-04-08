@@ -11,53 +11,56 @@
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
         <section class="module-box">
-          <div class="d-flex mb-2">
-            <div class="w-100">
-              <img
-                v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
-                width="250"
-                height="250"
-                role="presentation"
-                alt=""
-                :title="$t('Emission name image', { name: name })"
-                class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
-              />
-              <h2 class="mb-3">{{ name }}</h2>
-              <!-- eslint-disable vue/no-v-html -->
-              <p
-                class="html-wysiwyg-content description-text"
-                v-html="urlify(description)"
-              />
-              <!-- eslint-enable -->
-              <div v-if="lastPodcast" class="d-flex align-items-center mt-3">
-                <PodcastPlayButton
-                  :podcast="lastPodcast"
-                  :just-buttons="true"
-                />
-                <div class="ms-2 fw-bold">
-                  {{ $t("Listen to the latest episode") }}
-                </div>
-              </div>
-              <SubscribeButtons
-                v-if="isPodcastmaker"
-                class="mt-4"
-                :emission="emission"
-                :window-width="1000"
-                :justify-center="false"
-              />
-            </div>
-          </div>
           <EditBox
             v-if="editRight && !isPodcastmaker"
             :emission="emission"
             @is-updated="getEmissionDetails"
           />
+          <div class="w-100 mb-2">
+            <img
+              v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
+              width="250"
+              height="250"
+              role="presentation"
+              alt=""
+              :title="$t('Emission name image', { name: name })"
+              class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
+            />
+            <div class="d-flex align-items-center justify-content-between">
+              <h2>{{ name }}</h2>
+              <ShareAnonymous v-if="!editRight" class="d-flex justify-content-end flex-grow-1" :emission="emission" :organisation-id="emission.orga.id"/>
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <p
+              class="html-wysiwyg-content description-text"
+              v-html="urlify(description)"
+            />
+            <!-- eslint-enable -->
+            <div v-if="lastPodcast" class="d-flex align-items-center mt-3">
+              <PodcastPlayButton
+                :podcast="lastPodcast"
+                :just-buttons="true"
+              />
+              <div class="ms-2 fw-bold">
+                {{ $t("Listen to the latest episode") }}
+              </div>
+            </div>
+            <SubscribeButtons
+              v-if="isPodcastmaker"
+              class="mt-4"
+              :emission="emission"
+              :window-width="1000"
+              :justify-center="false"
+            />
+          </div>
         </section>
+        <ShareSocialsButtons
+          v-if="pageParameters.isShareButtons"
+          :organisation-id="emission.orga.id"
+        />
         <SharePlayer
-          v-if="!isPodcastmaker && (undefined !== authOrgaId || notExclusive)"
+          v-if="!isPodcastmaker && editRight"
           :emission="emission"
-          :exclusive="exclusive"
-          :not-exclusive="notExclusive"
           :organisation-id="authOrgaId"
         />
         <section class="module-box">
@@ -76,11 +79,6 @@
             @fetch="podcastsFetched"
           />
         </section>
-        <ShareButtons
-          v-if="pageParameters.isShareButtons"
-          :emission="emission"
-          :organisation-id="emission.orga.id"
-        />
         <ShareDistribution
           v-if="editRight && !isPodcastmaker && securityRight && !isGarRole"
           :emission-id="emissionId"
@@ -112,14 +110,15 @@ import { useGeneralStore } from "../../stores/GeneralStore";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useApiStore } from "../../stores/ApiStore";
 import { Podcast } from "@/stores/class/general/podcast";
+const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
 );
 const SharePlayer = defineAsyncComponent(
   () => import("../display/sharing/SharePlayer.vue"),
 );
-const ShareButtons = defineAsyncComponent(
-  () => import("../display/sharing/ShareButtons.vue"),
+const ShareSocialsButtons = defineAsyncComponent(
+  () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
 const ShareDistribution = defineAsyncComponent(
   () => import("../display/sharing/ShareDistribution.vue"),
@@ -143,7 +142,7 @@ export default defineComponent({
   components: {
     PodcastFilterList,
     SharePlayer,
-    ShareButtons,
+    ShareSocialsButtons,
     ShareDistribution,
     EditBox,
     SubscribeButtons,
@@ -151,6 +150,7 @@ export default defineComponent({
     ClassicLoading,
     PodcastPlayButton,
     PodcastmakerHeader,
+    ShareAnonymous
   },
   props: {
     emissionId: { default: undefined, type: Number },
@@ -170,8 +170,6 @@ export default defineComponent({
       title: "" as string,
       emission: undefined as Emission | undefined,
       error: false as boolean,
-      exclusive: false as boolean,
-      notExclusive: false as boolean,
       fetchLive: true as boolean,
       lastPodcast: undefined as Podcast | undefined,
     };
@@ -227,17 +225,6 @@ export default defineComponent({
       this.error = true;
       this.loaded = true;
     },
-    handleAnnotations() {
-      if (!this.emission?.annotations) return;
-      if (this.emission.annotations.exclusive) {
-        this.exclusive = "true" === this.emission.annotations.exclusive;
-        this.exclusive =
-          this.exclusive && this.authOrgaId !== this.emission.orga.id;
-      }
-      if (this.emission.annotations.notExclusive) {
-        this.notExclusive = "true" === this.emission.annotations.notExclusive;
-      }
-    },
     async getEmissionDetails(): Promise<void> {
       this.loaded = false;
       this.error = false;
@@ -257,7 +244,6 @@ export default defineComponent({
         this.contentToDisplayUpdate(this.emission);
         this.updatePathParams(this.name);
         this.loaded = true;
-        this.handleAnnotations();
       } catch (error) {
         this.handle403(error as AxiosError);
         this.initError();

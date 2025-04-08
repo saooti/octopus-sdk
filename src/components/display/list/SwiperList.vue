@@ -14,7 +14,7 @@
         @slide-change="slideChange"
       >
         <swiper-slide v-for="(obj, index) in listObject" :key="obj">
-          <slot name="octopusSlide" :option="obj" :index="index" v-if="composableInit" />
+          <slot v-if="composableInit" name="octopusSlide" :option="obj" :index="index" />
         </swiper-slide>
       </swiper>
     </template>

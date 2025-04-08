@@ -1,6 +1,6 @@
 <template>
   <section class="page-box">
-    <template v-if="loaded && !error">
+    <template v-if="loaded && !error && participant">
       <h1>
         {{ $t("Animator") }}
       </h1>
@@ -29,12 +29,20 @@
           class="w-100 justify-content-center"
           @participant-update="updateParticipant"
         />
-        <ShareButtons
+        <ShareSocialsButtons
           v-if="pageParameters.isShareButtons"
           class="w-100"
-          :participant-id="participantId"
           :organisation-id="participant.orga.id"
-        />
+        >
+        <template #additional-buttons>
+          <ShareAnonymous 
+            :participant-id="participant.participantId" 
+            :organisation-id="participant.orga.id"
+            relative-class=""
+            btn-class="btn share-btn mb-2 text-dark me-2"
+          />
+        </template>
+        </ShareSocialsButtons>
       </section>
       <!-- productorId define to avoid overwrite #12817 -->
       <PodcastFilterList
@@ -68,8 +76,8 @@ import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { AxiosError } from "axios";
 import { mapState } from "pinia";
-const ShareButtons = defineAsyncComponent(
-  () => import("../display/sharing/ShareButtons.vue"),
+const ShareSocialsButtons = defineAsyncComponent(
+  () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
@@ -77,12 +85,14 @@ const PodcastFilterList = defineAsyncComponent(
 const EditBox = defineAsyncComponent(
   () => import("@/components/display/edit/EditBox.vue"),
 );
+const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 export default defineComponent({
   components: {
-    ShareButtons,
+    ShareSocialsButtons,
     PodcastFilterList,
     EditBox,
     ClassicLoading,
+    ShareAnonymous
   },
   props: {
     participantId: { default: undefined, type: Number },
