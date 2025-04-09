@@ -8,9 +8,12 @@
       <p class="d-flex justify-content-between align-items-center">
         {{ $t("Rss feed:") }}
         <span id="LINK">{{ link }}</span>
-        <button class="btn btn-primary" @click="onCopyCode(link, afterCopy)">
-          {{ $t("Copy") }}
-        </button>
+        <ClassicCopyButton
+          :text="$t('Copy')"
+          :text-after-copy="$t('Copied!')"
+          :data-to-copy="link"
+          :snackbar-text="$t('Link in clipboard')"
+        />
       </p>
       <RssSection
         v-if="emission && undefined !== authOrgaId"
@@ -21,9 +24,9 @@
 </template>
 
 <script lang="ts">
+import ClassicCopyButton from "../../form/ClassicCopyButton.vue";
 import ClassicModal from "../modal/ClassicModal.vue";
 import { Emission } from "@/stores/class/general/emission";
-import displayHelper from "../../../helper/displayHelper";
 import { defineComponent, defineAsyncComponent } from "vue";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState } from "pinia";
@@ -35,24 +38,19 @@ export default defineComponent({
   components: {
     RssSection,
     ClassicModal,
+    ClassicCopyButton
   },
   props: {
     link: { default: "", type: String },
     emission: { default: undefined, type: Object as () => Emission },
   },
-  emits: ["close", "copy"],
+  emits: ["close"],
   computed: {
     ...mapState(useAuthStore, ["authOrgaId"]),
   },
   methods: {
-    onCopyCode(link: string, callback: () => void){
-      displayHelper.onCopyCode(link, callback);
-    },
     closePopup(): void {
       this.$emit("close");
-    },
-    afterCopy(): void {
-      this.$emit("copy");
     },
   },
 });

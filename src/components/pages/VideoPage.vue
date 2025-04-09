@@ -96,7 +96,6 @@ import ClassicLoading from "../form/ClassicLoading.vue";
 import classicApi from "../../api/classicApi";
 import { Podcast } from "@/stores/class/general/podcast";
 import ClassicNav from "../misc/ClassicNav.vue";
-import {useErrorHandler} from "../composable/useErrorHandler";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import {usePodcastView} from "../composable/podcasts/usePodcastView";
 import { computed, defineAsyncComponent, onBeforeUnmount, Ref, ref, watch } from "vue";

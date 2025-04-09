@@ -422,4 +422,6 @@ export default {
   "Save":"Sauvegarder",
   "Search for keyword": "Recherche pour le mot-clé: {tag}",
   "And paste it in your newsletter":"Et collez-le dans votre newsletter 😉",
+  "Code copied!":"Code copié !",
+  "Copied!":"Copié !",
 };

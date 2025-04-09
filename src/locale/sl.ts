@@ -404,4 +404,6 @@ export default {
   "Save":"Shrani",
   "Search for keyword": "Iskanje ključne besede: {tag}",
   "And paste it in your newsletter":"In ga prilepite v svoje glasilo 😉",
+  "Code copied!":"Koda kopirana!",
+  "Copied!":"Kopirano!",
 }

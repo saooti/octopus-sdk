@@ -58,7 +58,6 @@
       v-if="isRssModal"
       :link="rssUrl"
       @close="isRssModal = false"
-      @copy="afterCopy"
     />
     <SnackBar
       v-if="lazyLoadingSnackbar"

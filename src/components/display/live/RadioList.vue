@@ -3,7 +3,7 @@
     v-if="(filterOrgaId || organisationId) && radio.length"
     class="d-flex flex-column align-items-start mt-3"
   >
-    <h2 class="mb-0 big-h2 mb-3">
+    <h2 class="mb-0 mb-3">
       {{ $t("Radio") }}
     </h2>
     <template v-if="radio.length">

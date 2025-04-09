@@ -3,7 +3,7 @@
     <div
       class="d-flex justify-content-between flex-grow-1 mb-3 w-100 align-items-center"
     >
-      <h2 class="mb-0 big-h2">
+      <h2 class="mb-0">
         {{ $t("Live") }}
       </h2>
       <router-link

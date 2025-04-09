@@ -413,4 +413,6 @@ export default {
   "Save":"Ahorrar",
   "Search for keyword": "Buscar palabra clave: {etiqueta}",
   "And paste it in your newsletter":"Y pégalo en tu boletín informativo 😉",
+  "Code copied!":"¡Código copiado!",
+  "Copied!":"¡Copiado!",
 }

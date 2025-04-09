@@ -412,4 +412,6 @@ export default {
   "Save":"Speichern",
   "Search for keyword": "Suche nach Schlüsselwort: {tag}",
   "And paste it in your newsletter":"Und fügen Sie es in Ihren Newsletter ein 😉",
+  "Code copied!":"Code kopiert!",
+  "Copied!":"Kopiert!",
 }

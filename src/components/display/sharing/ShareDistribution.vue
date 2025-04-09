@@ -8,9 +8,12 @@
       <div class="text-primary hide-small-screen text-break">
         {{ rss }}
       </div>
-      <button class="btn btn-primary" @click="onCopyCode(rss, afterCopy)">
-        {{ $t("Copy") }}
-      </button>
+      <ClassicCopyButton
+        :text="$t('Copy')"
+        :text-after-copy="$t('Copied!')"
+        :data-to-copy="rss"
+        :snackbar-text="$t('Link in clipboard')"
+      />
     </div>
     <RssSection v-if="emission" :emission="emission" />
     <div class="sharing-distribution-container">
@@ -27,15 +30,11 @@
         />{{ platform.title }}
       </router-link>
     </div>
-    <SnackBar
-      v-if="lazyLoadingSnackbar"
-      ref="snackbar"
-      position="bottom-left"
-    />
   </section>
 </template>
 
 <script lang="ts">
+import ClassicCopyButton from "../../form/ClassicCopyButton.vue";
 import RadiolineIcon from "../../icons/RadiolineIcon.vue";
 import TuninIcon from "../../icons/TuninIcon.vue";
 import PodcastAddictIcon from "../../icons/PodcastAddictIcon.vue";
@@ -49,8 +48,6 @@ import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { useApiStore } from "../../../stores/ApiStore";
 import classicApi from "../../../api/classicApi";
-import SnackBar from "../../misc/SnackBar.vue";
-import displayHelper from "../../../helper/displayHelper";
 import { Emission } from "@/stores/class/general/emission";
 
 import { defineComponent, defineAsyncComponent } from "vue";
@@ -60,7 +57,6 @@ const RssSection = defineAsyncComponent(
 );
 export default defineComponent({
   components: {
-    SnackBar,
     RssSection,
     SpotifyIcon,
     YoutubeIcon,
@@ -73,6 +69,7 @@ export default defineComponent({
     PodcastAddictIcon,
     TuninIcon,
     RadiolineIcon,
+    ClassicCopyButton
   },
   props: {
     emissionId: { default: undefined, type: Number },
@@ -82,7 +79,6 @@ export default defineComponent({
     return {
       emission: undefined as Emission | undefined,
       rss: "" as string,
-      lazyLoadingSnackbar: false as boolean,
     };
   },
   computed: {
@@ -159,9 +155,6 @@ export default defineComponent({
   },
 
   methods: {
-    onCopyCode(link: string, callback: () => void){
-      displayHelper.onCopyCode(link, callback);
-    },
     getUrl(platform: string): string {
       return `/main/priv/distribution/${platform}/${this.emissionId}`;
     },
@@ -174,18 +167,6 @@ export default defineComponent({
     getRSS(): void {
       if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
       this.rss = `${this.apiUrl}rss/emission/${this.emissionId}.rss`;
-    },
-    afterCopy(): void {
-      if (!this.lazyLoadingSnackbar) {
-        this.lazyLoadingSnackbar = true;
-        setTimeout(() => {
-          this.afterCopy();
-        }, 500);
-      } else {
-        (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-          this.$t("Link in clipboard"),
-        );
-      }
     },
   },
 });

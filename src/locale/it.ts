@@ -409,4 +409,6 @@ export default{
   "Save":"Salva",
   "Search for keyword": "Cerca parola chiave: {tag}",
   "And paste it in your newsletter":"E incollalo nella tua newsletter 😉",
+  "Code copied!":"Codice copiato!",
+  "Copied!":"Copiato!",
 };

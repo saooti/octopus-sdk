@@ -20,7 +20,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 	}
 
 	h1,.h1{
-		font-size: 1.8rem;
+		font-size: 1.5rem;
 		text-align: center;
 		color: var(--octopus-gray-text);
 		margin-bottom: 1rem;
@@ -32,35 +32,27 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 	}
 
 	h2,.h2{
-		font-size: 1.17rem;
+		font-size: 1.1rem;
 
 		@media (width <= 500px){
 			font-size: 1rem;
 		}
 	}
 
-	.big-h2{
-		font-size: 1.5rem;
-
-		@media (width <= 500px){
-			font-size: 1.1rem;
-		}
-	}
-
 	h3,.h3{
-		font-size: 1.125rem;
+		font-size: 1.05rem;
 	}
 
 	h4,.h4{
-		font-size: 0.99rem;
+		font-size: 1rem;
 	}
 
 	h5,.h5{
-		font-size: .81rem;
+		font-size: .80rem;
 	}
 
 	h6,.h6{
-		font-size: .63rem;
+		font-size: .60rem;
 		display: flex;
     	align-items: center;
 		font-weight: normal;

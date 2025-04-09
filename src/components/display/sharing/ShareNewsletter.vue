@@ -31,22 +31,19 @@
       <div class="border p-3" v-html="newsletterHtml" />
       <!-- eslint-enable -->
     </div>
-    <button
-      class="btn btn-primary w-fit-content my-3"
-      @click="onCopyCode(newsletterHtml, afterCopy)"
-    >
-      {{ $t("Copy code") }}
-    </button>
+    <ClassicCopyButton
+      :text="$t('Copy code')"
+      :text-after-copy="$t('Code copied!')"
+      :data-to-copy="newsletterHtml"
+    />
     <div>{{ $t("And paste it in your newsletter") }}</div>
-    <SnackBar ref="snackbar" position="bottom-left" />
   </div>
 </template>
 
 <script lang="ts">
-import SnackBar from "../../misc/SnackBar.vue";
+import ClassicCopyButton from "../../form/ClassicCopyButton.vue";
 import { VSwatches } from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
-import displayHelper from "../../../helper/displayHelper";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
@@ -58,7 +55,7 @@ export default defineComponent({
   name: "SahreNewsletter",
 
   components: {
-    SnackBar,
+    ClassicCopyButton,
     VSwatches,
   },
 
@@ -98,10 +95,10 @@ export default defineComponent({
           shareText: this.$t("Listen this episode"),
           emissionHtml: `<tr><td style="padding:5px 0;">
           <div style="display:flex; margin-top:5px;">
-          <div style="font-size:20px; color:${
+          <div style="font-size:16px; color:${
             this.arrayColors[1].color
           }; margin-right:5px;text-wrap: nowrap;">${this.$t("Emission")} :</div>
-          <a href="${this.shareUrl}" style="font-size: 18px;color: ${
+          <a href="${this.shareUrl}" style="font-size: 16px;color: ${
             this.arrayColors[0].color
           };overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">${
             this.podcast.emission.name
@@ -154,7 +151,7 @@ export default defineComponent({
 <td valign="top" width="30%" rowspan="7" style="padding-right:5px;"><img width="100%" src="${
         this.newsletterInfo.imageUrl
       }" style="border-radius: 4px;"></td>
-<td valign="top" width="70%" style="padding:5px 0;"><div style="margin-top:5px;font-size: 24px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;font-weight:bold;${
+<td valign="top" width="70%" style="padding:5px 0;"><div style="margin-top:5px;font-size: 20px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;font-weight:bold;${
         this.newsletterInfo.colorTitle
       }">${this.newsletterInfo.title}</div></td>
 </tr>${this.newsletterInfo.emissionHtml}
@@ -184,14 +181,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
-    onCopyCode(link: string, callback: () => void){
-      displayHelper.onCopyCode(link, callback);
-    },
-    afterCopy(): void {
-      (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-        this.$t("Data in clipboard"),
-      );
-    },
     async initData(): Promise<void> {
       const orgaId = this.authOrgaId;
       if (!orgaId?.length) {

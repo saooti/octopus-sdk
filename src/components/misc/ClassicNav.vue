@@ -96,7 +96,6 @@ export default defineComponent({
 
   .octopus-nav.light .octopus-nav-item {
     border: 0;
-    flex-grow: 0;
   }
 
   .octopus-nav-link {
