@@ -15,7 +15,7 @@
         :data-color="color"
       />
     </div>
-    <qrcode-vue
+    <qrcode-svg
       :value="url"
       :size="size"
       level="H"
@@ -34,7 +34,7 @@
 import { VSwatches } from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
 import SnackBar from "../../misc/SnackBar.vue";
-import QrcodeVue from "qrcode.vue";
+import { QrcodeSvg } from "qrcode.vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
@@ -43,7 +43,7 @@ export default defineComponent({
 
   components: {
     SnackBar,
-    QrcodeVue,
+    QrcodeSvg,
     VSwatches,
   },
   props: {
@@ -62,12 +62,15 @@ export default defineComponent({
   methods: {
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     download(): void {
-      const link = document.createElement("a");
-      link.download = "qrcode.png";
       const canvas = document.getElementsByClassName("myQrCode");
       if (canvas && canvas.length > 0 && canvas[0]) {
-        link.href = (canvas[0] as HTMLCanvasElement).toDataURL();
-        link.click();
+        var svgData = canvas[0].outerHTML;
+        var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = "qrcode.svg";
+        downloadLink.click();
         (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
           this.$t("Download started"),
         );
