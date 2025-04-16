@@ -406,4 +406,5 @@ export default {
   "And paste it in your newsletter":"In ga prilepite v svoje glasilo 😉",
   "Code copied!":"Koda kopirana!",
   "Copied!":"Kopirano!",
+  "Color of the QR Code": "Barva kode QR",
 }

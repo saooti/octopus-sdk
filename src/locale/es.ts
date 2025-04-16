@@ -415,4 +415,5 @@ export default {
   "And paste it in your newsletter":"Y pégalo en tu boletín informativo 😉",
   "Code copied!":"¡Código copiado!",
   "Copied!":"¡Copiado!",
+  "Color of the QR Code": "Color del código QR",
 }

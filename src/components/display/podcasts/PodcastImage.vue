@@ -3,15 +3,23 @@
     v-if="podcast"
     class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
   >
-    <img
-      v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
-      width="270"
-      height="270"
-      role="presentation"
-      alt=""
-      class="img-box img-box-podcast"
-      :title="$t('Episode name image', { name: podcast.title })"
-    />
+    <router-link
+      :to="{
+        name: 'podcast',
+        params: { podcastId: podcast.podcastId },
+      }"
+      :title="$t('Episode name page', { name: podcast.title })"
+    >
+      <img
+        v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
+        width="270"
+        height="270"
+        role="presentation"
+        alt=""
+        class="img-box img-box-podcast"
+        :title="$t('Episode name image', { name: podcast.title })"
+      />
+    </router-link>
     <div
       v-if="isPodcastmaker"
       :class="mainRubrique ? 'mainRubrique' : 'notMainRubrique'"

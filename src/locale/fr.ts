@@ -424,4 +424,5 @@ export default {
   "And paste it in your newsletter":"Et collez-le dans votre newsletter 😉",
   "Code copied!":"Code copié !",
   "Copied!":"Copié !",
+  "Color of the QR Code": "Couleur du Qr Code",
 };

@@ -2,7 +2,7 @@
   <div class="d-flex flex-column align-items-center">
     <div class="d-flex align-items-center mb-3">
       <div class="form-label me-3">
-        {{ $t("Choose color") }}
+        {{ $t("Color of the QR Code") }}
       </div>
       <VSwatches
         v-model:model-value="color"
