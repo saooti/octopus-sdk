@@ -123,13 +123,15 @@ export default defineComponent({
     },
   },
   created() {
-    if (this.isVideoPodcast) {
-      this.$emit("update:iFrameModel", "video");
-    }
     if (this.isLive) {
       return;
     }
     this.initCustomPlayers();
+  },
+  mounted(){
+    if (this.isVideoPodcast) {
+      this.$emit("update:iFrameModel", "video");
+    }
   },
   methods: {
     isNumeric(value: string): boolean {
@@ -190,7 +192,7 @@ export default defineComponent({
       const customPlayersForType = await this.fetchPlayerPaginate(type);
       this.customPlayers = this.customPlayers.concat(customPlayersForType);
       if (
-        "video" !== this.iFrameModel &&
+        !this.isVideoPodcast &&
         selectIfPossible &&
         customPlayersForType?.[0]?.selected
       ) {
