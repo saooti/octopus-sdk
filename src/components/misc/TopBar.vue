@@ -1,29 +1,31 @@
 <template>
   <header
-    class="top-bar-container"
-    :class="{ scrolled: scrolled, 'content-top-bar': isContentToDisplay }"
+    class="header-saooti-play"
+    :style="headerBackgroundImage"
+    :class="[contentToDisplay ? 'header-img-bg':'header-color-bg', scrolled? 'scrolled':'', needToBlur ? 'header-force-blur':'']"
   >
     <TopBarMainContent
-      class="top-bar-z-index"
       :is-phone="isPhone"
       :scrolled="scrolled"
       :title-display="titleToDisplay"
+      style="height: var(--header-size);"
+      :class="headerBackgroundImage.length ? 'header-opacity':''"
     />
-    <template v-if="contentToDisplay">
-      <div class="page-element-bg" :style="backgroundDisplay" />
-      <h1 v-if="!scrolled" class="text-truncate top-bar-z-index">
+  </header>
+  <div v-if="contentToDisplay" class="header-content-bg" :style="headerBackgroundImage" :class="{ scrolled: scrolled, 'header-force-blur':needToBlur }" >
+    <div class="header-additional-content header-content">
+      <h1 v-if="!scrolled" class="text-truncate">
         {{ titleToDisplay }}
       </h1>
       <SubscribeButtons
         v-if="!isGarRole"
         v-show="!scrolled"
-        class="top-bar-z-index"
         :emission="emissionObject"
         :playlist-id="contentToDisplay?.playlistId"
         :window-width="windowWidth"
       />
-    </template>
-  </header>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -38,6 +40,7 @@ import { Emission } from "@/stores/class/general/emission";
 import {useResizePhone} from "../composable/useResizePhone";
 import { Playlist } from "@/stores/class/general/playlist";
 import { Canal } from "@/stores/class/radio/canal";
+import axios from "axios";
 const SubscribeButtons = defineAsyncComponent(
   () => import("../display/sharing/SubscribeButtons.vue"),
 );
@@ -58,6 +61,8 @@ export default defineComponent({
       scrolled: false as boolean,
       oldScrollY: 0 as number,
       minScroll: 0 as number,
+      headerBackgroundImage: "" as string,
+      needToBlur: false as boolean,
     };
   },
   computed: {
@@ -70,15 +75,6 @@ export default defineComponent({
         "playlist" === this.$route.name ||
         "radio" === this.$route.name
       );
-    },
-    backgroundDisplay(): string {
-      if (!this.contentToDisplay) {
-        return "";
-      }
-      return `background-image: url('${this.useProxyImageUrl(
-        this.contentToDisplay.imageUrl,
-        "270",
-      )}');`;
     },
     titleToDisplay(): string {
       if ((this.contentToDisplay as Podcast)?.podcastId) {
@@ -103,6 +99,32 @@ export default defineComponent({
         return this.contentToDisplay as Emission;
       }
       return null;
+    },
+  },
+  watch:{
+    contentToDisplay: {
+      deep: true,
+      immediate: true,
+      async handler() {
+        if(!this.contentToDisplay){
+          this.headerBackgroundImage = "";
+          this.needToBlur = false;
+          return;
+        }
+        const proxyUrl = this.useProxyImageUrl(this.contentToDisplay.imageUrl,"270", undefined, true);
+        try {
+          const result = await axios.get(proxyUrl);
+          this.headerBackgroundImage = `background-image: url('${result.data}');`;
+          if(result.data !== this.contentToDisplay.imageUrl){
+            this.needToBlur = false;
+          }else{
+            this.needToBlur = true;
+          }
+        } catch {
+          this.headerBackgroundImage = this.contentToDisplay.imageUrl ? `background-image: url('${this.contentToDisplay.imageUrl}');` : "";
+          this.needToBlur = true;
+        }
+      },
     },
   },
   mounted() {
@@ -140,104 +162,72 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-
 .octopus-app {
-  .top-bar-container {
+  --header-size: 5rem;
+  --header-additional-content-size: 22rem;
+  @media (width <= 650px) {
+    --header-size: 3.5rem;
+  }
+  @media (width <= 550px) {
+    --header-additional-content-size: 13rem;
+  }
+  .header-saooti-play{
+    z-index: 11;
+    position: sticky;
+    top: 0;
+    &.header-img-bg{
+      background-position: center -20vw;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    &.header-color-bg{
+      background: var(--octopus-primary);
+      background: linear-gradient(
+        90deg,
+        var(--octopus-primary) 0%,
+        var(--octopus-tertiary) 100%
+      );
+    }
+    &.header-color-bg, &.scrolled{
+      box-shadow: 0 2px 15px 5px var(--octopus-shadow) !important; 
+    }
+  }
+  .header-content-bg{
+    background-position: center calc(calc(var(--header-size) * -1) - 20vw);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    display: flex;
+    transition: height 0.7s;
+    height: calc(var(--header-additional-content-size) - var(--header-size));
+    &.scrolled {
+      height: 0rem;
+    }
+  }
+  .header-additional-content{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .header-additional-content, .header-opacity{
+    background: oklch(0 0 0 / 0.5);
+  }
+  .header-force-blur .header-additional-content, .header-force-blur .header-opacity{
+    backdrop-filter: blur(8px);
+  }
+  .header-content{
     *:focus-visible {
       box-shadow: 0 0 10px 1px white !important;
     }
-
-    background: var(--octopus-primary);
-    background: linear-gradient(
-      90deg,
-      var(--octopus-primary) 0%,
-      var(--octopus-tertiary) 100%
-    );
-    width: 100%;
-    height: 5rem;
-    display: flex;
-    flex-direction: column;
-    transition: height 0.7s;
-    box-shadow: 0 2px 15px 5px var(--octopus-shadow) !important;
-
-    .page-element-bg {
-      opacity: 0.5;
-      filter: blur(8px);
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      width: 100%;
-      position: absolute;
-      transition: height 0.7s;
-    }
-
-    &.content-top-bar {
-      height: 22rem;
-      background: black;
-
-      .page-element-bg {
-        height: 22rem;
-      }
-    }
-
-    &.content-top-bar.scrolled {
-      height: 5rem;
-
-      .page-element-bg {
-        height: 5rem;
-      }
-    }
-
-    &:not(.scrolled) {
-      position: relative;
-    }
-
-    &.scrolled {
-      z-index: 11;
-      position: sticky;
-      top: 0;
-    }
-
-    .top-bar-z-index {
-      z-index: 1;
-    }
-
     h1 {
       color: white !important;
       font-size: 1.8rem;
       margin: 2rem 5rem;
-    }
-
-    @media (width <= 650px) {
-      height: 3.5rem;
-
-      &.content-top-bar.scrolled {
-        height: 3.5rem;
-
-        .page-element-bg {
-          height: 3.5rem;
-        }
-      }
-    }
-
-    @media (width <= 550px) {
-      h1 {
+      @media (width <= 550px) {
         font-size: 1rem;
         margin: 1rem 0.5rem 0.5rem;
       }
-
-      &.content-top-bar {
-        height: 13rem;
-
-        .page-element-bg {
-          height: 13rem;
-        }
-      }
     }
-
-
-
     .admin-button:hover,
     .share-btn:hover {
       background: white;

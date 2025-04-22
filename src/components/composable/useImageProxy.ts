@@ -3,7 +3,7 @@ export const useImageProxy = ()=>{
 
   const apiStore = useApiStore();
 
-  function useProxyImageUrl(url: string|undefined, width: string, height?: string): string {
+  function useProxyImageUrl(url: string|undefined, width: string, height?: string, blur=false): string {
     if (!url) {
       return "";
     }
@@ -13,10 +13,12 @@ export const useImageProxy = ()=>{
       return (
         apiStore.imageUrl +
         "image/" +
+        (blur ? "noRedirect/":"")+
         encode +
         "?" +
         size +
-        "&useWebp=true"
+        "&useWebp=true"+
+        (blur ? "&blur=true":"")
       );
     }
     return url;

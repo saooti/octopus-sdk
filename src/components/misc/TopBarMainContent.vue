@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar-grid" :class="{ scrolled: titleIsDisplayed }">
+  <div class="top-bar-grid header-content" :class="{ scrolled: titleIsDisplayed }">
     <router-link
       class="top-bar-logo d-flex align-items-center"
       :to="{
@@ -294,8 +294,7 @@ export default defineComponent({
   .top-bar-grid {
     display: grid;
     grid-template-columns: 1fr 5fr;
-    margin-top: 0.5rem;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem 0 1rem;
 
     &.scrolled {
       grid-template-columns: 1fr 2fr 1fr;
