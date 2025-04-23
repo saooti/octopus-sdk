@@ -213,6 +213,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    width: 100%;
   }
   .header-additional-content, .header-opacity{
     background: oklch(0 0 0 / 0.5);

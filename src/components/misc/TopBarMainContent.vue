@@ -29,7 +29,7 @@
         :class="platformEducation ? 'education-logo' : ''"
       />
     </router-link>
-    <h1 v-if="titleIsDisplayed" class="text-fadein text-truncate m-0 align-self-center">
+    <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
       {{ titleDisplay }}
     </h1>
     <div
@@ -73,7 +73,6 @@
         <nav role="navigation" :aria-label="$t('Site menu')">
           <ul class="d-flex">
             <template v-for="link in routerLinkArray" :key="link.routeName">
-              <transition name="fade">
               <li v-if="link.condition" class="li-style-none">
                 <router-link
                   v-show="!isPhone"
@@ -86,7 +85,6 @@
                   {{ link.title }}
                 </router-link>
               </li>
-            </transition>
             </template>
           </ul>
         </nav>
@@ -341,18 +339,6 @@ export default defineComponent({
       @media (width <= 960px) {
         max-width: 30px !important;
       }
-    }
-    .text-fadein{
-      animation: fadein 0.3s ease-in-out;
-    }
-    .fade-enter-active, .fade-leave-active {
-      transition: opacity 0.3s;
-      @starting-style {
-        opacity: 0;
-      }
-    }
-    .fade-enter, .fade-leave-to {
-      opacity: 0;
     }
   }
 }
