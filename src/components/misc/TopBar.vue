@@ -175,6 +175,7 @@ export default defineComponent({
     z-index: 11;
     position: sticky;
     top: 0;
+    background-color: black;
     &.header-img-bg{
       background-position: center -20vw;
       background-repeat: no-repeat;
@@ -198,8 +199,12 @@ export default defineComponent({
     background-size: cover;
     width: 100%;
     display: flex;
+    background-color: black;
     transition: height 0.7s;
     height: calc(var(--header-additional-content-size) - var(--header-size));
+    @starting-style {
+      height: 0rem;
+    }
     &.scrolled {
       height: 0rem;
     }
