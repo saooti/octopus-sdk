@@ -47,6 +47,7 @@ import "vue3-swatches/dist/style.css";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineComponent } from "vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
+import { useFilterStore } from "../../../stores/FilterStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { mapState, mapActions } from "pinia";
 import { Emission } from "@/stores/class/general/emission";
@@ -78,11 +79,25 @@ export default defineComponent({
         { color: "#000000", mainText: this.$t("Choose text color") },
         { color: "#FFFFFF", mainText: this.$t("Choose background color") },
       ],
-      shareUrl: window.location.href,
+      shareUrl: window.location.origin,
     };
   },
   computed: {
+    ...mapState(useFilterStore, ["filterOrgaId"]),
     ...mapState(useAuthStore, ["authOrgaId"]),
+    pathShare(){
+      const orga = this.filterOrgaId ? "?productor="+this.filterOrgaId : "";
+      if(this.podcast){
+        return "/main/pub/podcast/"+ this.podcast.podcastId + orga
+      }
+      if(this.emission){
+        return "/main/pub/emission/"+ this.emission.emissionId + orga
+      }
+      if(this.playlist){
+        return "/main/pub/playlist/"+ this.playlist.playlistId + orga
+      }
+      return "";
+    },
     newsletterInfo() {
       if (this.podcast) {
         return {
@@ -98,7 +113,7 @@ export default defineComponent({
           <div style="font-size:16px; color:${
             this.arrayColors[1].color
           }; margin-right:5px;text-wrap: nowrap;">${this.$t("Emission")} :</div>
-          <a href="${this.shareUrl}" style="font-size: 16px;color: ${
+          <a href="${this.shareUrl+this.pathShare}" style="font-size: 16px;color: ${
             this.arrayColors[0].color
           };overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">${
             this.podcast.emission.name
@@ -159,13 +174,13 @@ export default defineComponent({
         this.newsletterInfo.description
       }</div></td></tr>
 <tr><td valign="top" style="padding:5px 0;"><a href="${
-        this.shareUrl
+        this.shareUrl+this.pathShare
       }" style="color: ${this.arrayColors[0].color};">${this.$t(
         "See more",
       )}</a></td></tr>
 <tr>${this.newsletterInfo.articleHtml}
 <td width="1" style="padding:5px 0;"><a href="${
-        this.shareUrl
+        this.shareUrl+this.pathShare
       }" style="font-size: 18px;color: ${
         this.arrayColors[0].color
       };text-decoration: none; display:flex;"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path fill="currentColor" d="m9.5 16.5l7-4.5l-7-4.5zM12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg><div style="margin-top: 15px; color:${
@@ -191,10 +206,7 @@ export default defineComponent({
         Object.hasOwn(attributes, "podcastmakerUrl") &&
         (attributes.podcastmakerUrl as string | undefined | null)?.length
       ) {
-        this.shareUrl =
-          attributes.podcastmakerUrl +
-          window.location.pathname +
-          window.location.search;
+        this.shareUrl = attributes.podcastmakerUrl?.toString() ?? window.location.origin;
       }
       if (Object.hasOwn(attributes, "COLOR")) {
         this.arrayColors[0].color = attributes.COLOR as string;
