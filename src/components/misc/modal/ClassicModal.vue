@@ -63,7 +63,12 @@ export default defineComponent({
     };
   },
   mounted(){
-    (this.$refs.modal as HTMLDialogElement).showModal();
+    const dialog = (this.$refs.modal as HTMLDialogElement);
+    dialog.showModal();
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      this.$emit("close");
+    });
   }
 });
 </script>
