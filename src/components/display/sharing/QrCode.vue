@@ -15,7 +15,8 @@
         :data-color="color"
       />
     </div>
-    <qrcode-svg
+    <qrcode-vue
+      :render-as="renderQrCode"
       :value="url"
       :size="size"
       level="H"
@@ -23,9 +24,12 @@
       class="myQrCode"
       :margin="2"
     />
-    <button class="btn btn-primary my-3" @click="download">
-      {{ $t("Download") }}
-    </button>
+    <div class="d-flex align-items-center my-3">
+      <FormatSwitch class="me-3" v-model:isSvg="isSvg"/>
+      <button class="btn btn-primary" @click="download">
+        {{ $t("Download") }}
+      </button>
+    </div>
     <SnackBar ref="snackbar" position="bottom-left" />
   </div>
 </template>
@@ -34,7 +38,8 @@
 import { VSwatches } from "vue3-swatches";
 import "vue3-swatches/dist/style.css";
 import SnackBar from "../../misc/SnackBar.vue";
-import { QrcodeSvg } from "qrcode.vue";
+import QrcodeVue from "qrcode.vue";
+import FormatSwitch from "./FormatSwitch.vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
@@ -43,8 +48,9 @@ export default defineComponent({
 
   components: {
     SnackBar,
-    QrcodeSvg,
     VSwatches,
+    QrcodeVue,
+    FormatSwitch
   },
   props: {
     url: { default: "", type: String },
@@ -52,9 +58,15 @@ export default defineComponent({
   },
   data() {
     return {
-      size: 200 as number,
+      size: 1000 as number,
       color: "#000000" as string,
+      isSvg: true as boolean
     };
+  },
+  computed:{
+    renderQrCode(){
+      return this.isSvg ? 'svg' : 'canvas';
+    }
   },
   created() {
     this.initDefaultColor();
@@ -63,18 +75,28 @@ export default defineComponent({
     ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
     download(): void {
       const canvas = document.getElementsByClassName("myQrCode");
-      if (canvas && canvas.length > 0 && canvas[0]) {
+      if (!canvas || canvas.length <=0 || !canvas[0]) {
+        return;
+      }
+      var downloadLink = document.createElement("a");
+      if (this.isSvg) {
         var svgData = canvas[0].outerHTML;
         var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
         var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
         downloadLink.href = svgUrl;
         downloadLink.download = "qrcode.svg";
         downloadLink.click();
         (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
           this.$t("Download started"),
         );
+      }else{
+        downloadLink.download = "qrcode.png";
+        downloadLink.href = (canvas[0] as HTMLCanvasElement).toDataURL();
       }
+      downloadLink.click();
+      (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
+        this.$t("Download started"),
+      );
     },
     async initDefaultColor(): Promise<void> {
       if (undefined === this.orgaForColor) return;
@@ -86,3 +108,11 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.octopus-app {
+  .myQrCode{
+    height: 200px !important;
+    width: 200px !important;
+  }
+}
+</style>
