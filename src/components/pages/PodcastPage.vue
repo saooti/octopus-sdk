@@ -26,7 +26,7 @@
           :emission="podcast?.emission"
           :organisation-id="authOrgaId"
         />
-        <CommentSection v-if="!isPodcastmaker" :podcast="podcast" />
+        <CommentSection :podcast="podcast" />
         <PodcastInlineList
           :emission-id="podcast.emission.emissionId"
           :href="'/main/pub/emission/' + podcast.emission.emissionId"
