@@ -4,11 +4,6 @@ html{
   font-size: 20px;
   height: 100%;
   scrollbar-gutter: stable;
-  /* scroll-snap-type: y proximity;
-  scroll-padding-top: 5rem;
-  @media (width <= 650px) {
-    scroll-padding-top: 3.5rem;
-  } */
 }
 
 body{
@@ -29,14 +24,6 @@ main, #app{
   flex-direction: column;
   flex-grow: 1;
 }
-
-/* header, section:not(.page-box), .podcast-inline-container {
-  scroll-snap-align: start;
-}
-.page-element > section:first-child {
-  scroll-snap-align: none;
-}
- */
 
 
 /** Octopus style */

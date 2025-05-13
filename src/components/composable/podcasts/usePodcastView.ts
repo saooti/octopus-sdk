@@ -20,8 +20,7 @@ export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConferen
   });
   const isLiveReadyToRecord = computed(() => { 
     return (
-      undefined !== podcast.value &&
-      undefined !== podcast.value.conferenceId &&
+      undefined !== podcast.value?.conferenceId &&
       0 !== podcast.value.conferenceId &&
       "READY_TO_RECORD" === podcast.value.processingStatus
     );
@@ -52,24 +51,24 @@ export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConferen
   });
 
   const duration = computed(() => { 
-    if (!podcast.value || podcast.value.duration <= 1) return "";
-      if (podcast.value.duration > 600000) {
-        return humanizeDuration(podcast.value.duration, {
-          language: i18n.locale.value,
-          largest: 1,
-          round: true,
-        });
-      }
+    if (!podcast.value || podcast.value.duration <= 1){return ""};
+    if (podcast.value.duration > 600000) {
       return humanizeDuration(podcast.value.duration, {
         language: i18n.locale.value,
-        largest: 2,
+        largest: 1,
         round: true,
       });
+    }
+    return humanizeDuration(podcast.value.duration, {
+      language: i18n.locale.value,
+      largest: 2,
+      round: true,
+    });
   });
 
   const durationIso = computed(() => { 
-    if (!podcast.value || podcast.value.duration <= 1) return "";
-      return dayjs.duration({ milliseconds: podcast.value.duration }).toISOString();
+    if (!podcast.value || podcast.value.duration <= 1){return "";}
+    return dayjs.duration({ milliseconds: podcast.value.duration }).toISOString();
   });
 	return {
     isLiveReadyToRecord,

@@ -7,7 +7,6 @@
     <div
       v-if="secondaryProgress"
       class="octopus-progress-bar bg-warning"
-      role="progressbar"
       aria-valuenow="0"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -28,7 +27,6 @@
     </template>
     <div
       class="octopus-progress-bar bg-primary"
-      role="progressbar"
       aria-valuenow="0"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -147,9 +145,75 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@use "../../style/progressbar";
+.octopus-app{
+  .octopus-progress{
+    display: flex;
+    overflow: hidden;
+    background-color:var(--octopus-secondary-lighter);
+    border-radius: var(--octopus-border-radius);
+    position: relative;
+    cursor: pointer;
+    .octopus-progress-bar{
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      color: var(--octopus-color-on-primary);
+      text-align: center;
+      white-space: nowrap;
+      background-color: var(--octopus-primary);
+      transition: width 0.6s ease;
+    }
 
-.octopus-app .player-container {
+    .octopus-chapter{
+      position: absolute;
+      background: transparent;
+      background-clip: content-box;
+      padding: 0 5px;
+      box-shadow: inset -2px 1px 0 0 black,
+                  inset 2px 1px 0 0 black;
+
+      &:hover{
+        background: var(--octopus-background-transparent);
+        box-shadow: -4px 1px 0 0 black;
+      }
+    }
+
+    &,.octopus-progress-bar{
+      height: 4px;
+      @media (width <= 960px) {
+        height: 8px;
+      }
+    }
+
+    &.large,&.large .octopus-progress-bar{
+      height: 15px;
+    }
+
+    &.medium,&.medium .octopus-progress-bar{
+      height: 6px;
+    }
+
+    .octopus-progress-bar-duration {
+      width: 10px;
+    }
+
+    .octopus-progress-bar-cursor{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: black;
+      align-self: center;
+      position: absolute;
+    }
+
+    .end-0{
+      right: 0;
+    }
+  }
+
+  .player-container {
   .octopus-small-popover {
     font-size: 0.7rem;
     background: var(--octopus-player-color);
@@ -160,5 +224,6 @@ export default defineComponent({
       padding: 0.2rem !important;
     }
   }
+}
 }
 </style>

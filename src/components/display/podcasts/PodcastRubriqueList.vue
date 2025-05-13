@@ -59,7 +59,7 @@ export default defineComponent({
     async fetchRubriquages(){
       const rubriquagesOrga = await this.getOrgaRubriques(this.orgaId);
       const rubriquesArray= rubriquagesOrga.flatMap((rub) =>rub.rubriques);
-      this.rubriquagesOrga= rubriquesArray.reduce((results, u)=> (results[u.rubriqueId??0] = u, results), {} as {[key:number]:Rubrique});
+      this.rubriquagesOrga= rubriquesArray.reduce((results, u)=> {results[u.rubriqueId??0] = u; return results}, {} as {[key:number]:Rubrique});
       this.init = true;
     },
   }

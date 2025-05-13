@@ -119,7 +119,12 @@ export default defineComponent({
             !this.podcast) ||
           ("PLAYLIST" === player.typePlayer && this.playlist)
         );
-      }).sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+      }).sort((a,b) => {
+        if(a.name > b.name){
+          return 1;
+        }
+        return (b.name > a.name) ? -1 : 0;
+      });
     },
   },
   created() {

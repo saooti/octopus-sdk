@@ -1,18 +1,12 @@
 <template>
-  <div
-    class="octopus-progress c-hand-auto mt-1"
+  <progress
+    class="c-hand-auto mt-1"
+    min="0"
+    max="100"
+    :value="percentProgress"
+    :aria-label="$t('Radio')"
     :class="isAmbiance ? 'ambiance-progress' : ''"
-  >
-    <div
-      class="octopus-progress-bar"
-      role="progressbar"
-      aria-valuenow="0"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      :aria-label="$t('Radio')"
-      :style="'width: ' + percentProgress + '%'"
-    />
-  </div>
+  />
 </template>
 
 <script lang="ts">
@@ -51,12 +45,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(usePlayerStore, ["playerUpdateElapsed"]),
-    handlePercentInterval(/* clear: boolean */): void {
-      /*  if(clear){
-        clearInterval((this.percentInterval as unknown as number));
-        this.percentInterval = undefined;
-        return;
-      } */
+    handlePercentInterval(): void {
       this.percentInterval = setInterval(() => {
         this.calculatePercent();
       }, 1000);
@@ -79,6 +68,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-@use "../../../../style/progressbar";
-</style>

@@ -4,7 +4,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 import { defineStore } from "pinia";
-import StringHelper from "../helper/stringHelper";
 import cookiesHelper from "../helper/cookiesHelper";
 import WebSocketEngine from "../websocket/commentWebsocket";
 import { CommentPodcast } from "./class/general/comment";
@@ -224,7 +223,7 @@ export const useCommentStore = defineStore("CommentStore", {
     async initialize() {
       const apiStore = useApiStore();
       const commentUrl = apiStore.commentUrl?? "https://comments.dev2.saooti.org/";
-      const url =  StringHelper.trimChar(commentUrl.replace("https://", ""),"/");
+      const url =  stringHelper.trimChar(commentUrl.replace("https://", ""),"/");
       const engine = new WebSocketEngine(url);
       await engine.initialize();
       this.commentWebsocketengine = engine;

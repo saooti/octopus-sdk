@@ -197,5 +197,39 @@
     text-align: center;
   }
 
+  progress{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--octopus-color-on-primary);
+    text-align: center;
+    white-space: nowrap;
+    background-color:var(--octopus-secondary-lighter);
+    border-radius: var(--octopus-border-radius);
+    cursor: pointer;
+    height: 4px;
+    flex-grow: 1;
+    width:100%;
+    @media (width <= 960px) {
+      height: 8px;
+    }
+    &::-webkit-progress-bar{
+      background-color: var(--octopus-secondary-lighter);
+    }
+    &:not(.ambiance-progress)::-webkit-progress-value {
+      background-color: var(--octopus-primary);
+    }
+    &.ambiance-progress::-webkit-progress-value {
+      background-color: var(--octopus-text-disabled);
+    }
+    &.large{
+      height: 15px;
+    }
+
+    &.medium{
+      height: 6px;
+    }
+  }
 
 }

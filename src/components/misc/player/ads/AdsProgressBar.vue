@@ -1,15 +1,11 @@
 <template>
-  <div class="octopus-progress ambiance-progress c-hand-auto mt-1">
-    <div
-      class="octopus-progress-bar"
-      role="progressbar"
-      aria-valuenow="0"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      :aria-label="$t('Advertising')"
-      :style="'width: ' + adPercentProgress + '%'"
-    />
-  </div>
+  <progress
+    class="ambiance-progress c-hand-auto mt-1"
+    min="0"
+    max="100"
+    :value="adPercentProgress"
+    :aria-label="$t('Advertising')"
+  />
 </template>
 
 <script lang="ts">
@@ -23,6 +19,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-@use "../../../../style/progressbar";
-</style>

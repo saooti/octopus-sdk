@@ -107,7 +107,12 @@ export default defineComponent({
           return !rubriquageIdToNotShow.includes(element.rubriquageId);
         });
       }
-      return Array.from(this.rubriquages).toSorted((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
+      return Array.from(this.rubriquages).toSorted((a,b) => {
+        if(a.title > b.title){
+          return 1;
+        }
+        return (b.title > a.title) ? -1 : 0;
+      });
     },
   },
   watch: {

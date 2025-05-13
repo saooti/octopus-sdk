@@ -78,11 +78,11 @@ export default defineComponent({
       if (!canvas || canvas.length <=0 || !canvas[0]) {
         return;
       }
-      var downloadLink = document.createElement("a");
+      const downloadLink = document.createElement("a");
       if (this.isSvg) {
-        var svgData = canvas[0].outerHTML;
-        var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
-        var svgUrl = URL.createObjectURL(svgBlob);
+        const svgData = canvas[0].outerHTML;
+        const svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+        const svgUrl = URL.createObjectURL(svgBlob);
         downloadLink.href = svgUrl;
         downloadLink.download = "qrcode.svg";
         downloadLink.click();

@@ -7,6 +7,7 @@ import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useVastStore } from "../../../stores/VastStore";
+import fetchHelper from "../../../helper/fetchHelper";
 import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { FetchParam } from "@/stores/class/general/fetchParam";
@@ -98,18 +99,25 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
     } else if ("PAUSED" === playerStore.playerStatus) {
       audioPlayer.pause();
     } else if ("PLAYING" === playerStore.playerStatus && playerStore.playerRadio) {
-      if (playerStore.playerRadio.isInit) {
-        if(vastStore.isAdPlaying && !vastStore.resetSessionId){
-          playerStore.playerRadio.dateSessionId = dayjs().toISOString();
-        }
-        playRadio();
-      } else {
-        playerStore.playerRadio.isInit = true;
-      }
+      handlePlayRadio();
     } else if ("PLAYING" === playerStore.playerStatus) {
       audioPlayer.play();
     }
   });
+
+  function handlePlayRadio(){
+    if(!playerStore.playerRadio){
+      return;
+    }
+    if (playerStore.playerRadio.isInit) {
+      if(vastStore.isAdPlaying && !vastStore.resetSessionId){
+        playerStore.playerRadio.dateSessionId = dayjs().toISOString();
+      }
+      playRadio();
+    } else {
+      playerStore.playerRadio.isInit = true;
+    }
+  }
 
   function getAudioUrlParameters(): FetchParam {
     if (!playerStore.playerPodcast) return {};
@@ -143,7 +151,7 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
     )
       return playerStore.playerPodcast.audioStorageUrl;
     if (listenError.value) return playerStore.playerPodcast.audioStorageUrl;
-    return playerStore.playerPodcast.podcastId + ".mp3?"+getAudioUrlParameters().toString();
+    return playerStore.playerPodcast.podcastId + ".mp3?"+fetchHelper.getUriSearchParams(getAudioUrlParameters());
   }
 
   function reInitPlayer(): void {

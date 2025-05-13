@@ -76,7 +76,12 @@ export default defineComponent({
     optionsOrder(){
       const optionsOrdered = Array.from(this.options);
       if(this.orderOptions){
-        optionsOrdered.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
+        optionsOrdered.sort((a,b) => {
+          if(a.title > b.title){
+            return 1;
+          }
+          return (b.title > a.title) ? -1 : 0
+      }); 
       }
       if(this.topOption){
         optionsOrdered.unshift(this.topOption);

@@ -64,7 +64,6 @@ export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
     if (!isInit.value) {
       return;
     }
-    // TODO si oldValue !=null
     rubriqueFilter.value = [];
   });
 

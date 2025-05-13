@@ -146,6 +146,7 @@ export default defineComponent({
     
     &.open{
       margin-left:auto;
+      direction: rtl;
       @media (width <= 625px) {
         margin-top: 0.5rem;
       }
@@ -179,11 +180,6 @@ export default defineComponent({
       right: -30px;
       transform-origin: center left;
     }
-
-    &.open {
-      direction: rtl;
-    }
-
     &:hover {
       text-indent: 30px;
     }

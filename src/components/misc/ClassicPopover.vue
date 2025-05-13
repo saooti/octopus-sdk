@@ -153,23 +153,48 @@ export default defineComponent({
         this.targetElement.removeEventListener("focusout", this.clearDataBlur);
       }
     },
+    handleClickEvent(){
+      if (this.show && this.isClick) {
+        this.isClick = false;
+        this.clearData();
+        return -1;
+      }
+      if (this.show && this.isTopLayerPopover) {
+        (this.$refs.popover as HTMLElement).showPopover();
+        this.isClick = true;
+        return -1;
+      }
+      this.isClick = true;
+      return 0;
+    },
+    handleLeftPos(rectElement: DOMRect, parentLeft: number, sizeAvailable: number, sizePopover: number){
+      const elementRightRelative = rectElement.right - parentLeft;
+      const hasPlaceRightButton = (sizeAvailable - (sizeAvailable - elementRightRelative)) > sizePopover;
+      if(hasPlaceRightButton){
+        this.posX =
+        rectElement.right -
+        parentLeft -
+        sizePopover;
+      }else{
+        this.posX =parentLeft;
+      }
+    },
+    handleRightPos(rectElement: DOMRect, parentLeft: number, sizeAvailable: number, sizePopover: number){
+      const elementLeftRelative = rectElement.left - parentLeft;
+      const hasPlaceRightButton = (sizeAvailable - elementLeftRelative) > sizePopover;
+      if(hasPlaceRightButton){
+        this.posX = elementLeftRelative;
+      }else{
+        this.posX = sizeAvailable - sizePopover + parentLeft;
+      }
+    },
     setPopoverData(e: MouseEvent | PointerEvent) {
       clearInterval(this.clearTimeout as unknown as number);
       if (this.disable || !e || !e.target) {
         return;
       }
-      if ("click" === e.type) {
-        if (this.show && this.isClick) {
-          this.isClick = false;
-          this.clearData();
-          return;
-        }
-        if (this.show && this.isTopLayerPopover) {
-          (this.$refs.popover as HTMLElement).showPopover();
-          this.isClick = true;
-          return;
-        }
-        this.isClick = true;
+      if ("click" === e.type && -1 === this.handleClickEvent()) {
+        return;
       }
       this.show = true;
       let parentLeft = 0;
@@ -197,26 +222,11 @@ export default defineComponent({
       const rectElement = (e.target as HTMLElement).getBoundingClientRect();
       (this.$refs.popover as HTMLElement).style.display = "block";
       const sizePopover = (this.$refs.popover as HTMLElement).clientWidth;
-      const sizeAvailable = parentWidth? parentWidth : window.innerWidth;
+      const sizeAvailable = parentWidth || window.innerWidth;
       if (this.leftPos) {
-        const elementRightRelative = rectElement.right - parentLeft;
-        const hasPlaceRightButton = (sizeAvailable - (sizeAvailable - elementRightRelative)) > sizePopover;
-        if(hasPlaceRightButton){
-          this.posX =
-          rectElement.right -
-          parentLeft -
-          sizePopover;
-        }else{
-          this.posX =parentLeft;
-        }
+        this.handleLeftPos(rectElement, parentLeft, sizeAvailable, sizePopover);
       } else {
-        const elementLeftRelative = rectElement.left - parentLeft;
-        const hasPlaceRightButton = (sizeAvailable - elementLeftRelative) > sizePopover;
-        if(hasPlaceRightButton){
-          this.posX = elementLeftRelative;
-        }else{
-          this.posX = sizeAvailable - sizePopover + parentLeft;
-        }
+        this.handleRightPos(rectElement, parentLeft, sizeAvailable, sizePopover);
       }
       this.posX = Math.max(0, this.posX);
       const yPosParent = this.topPos ? rectElement.top : rectElement.bottom;

@@ -1,6 +1,5 @@
 <template>
   <div ref="divContainer" tabindex="0">
-    
     <label
       v-if="label && !range"
       class="form-label"
