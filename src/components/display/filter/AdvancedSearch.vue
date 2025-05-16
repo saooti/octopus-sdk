@@ -7,6 +7,7 @@
       <div>{{ $t("Advanced filters") }}</div>
       <ChevronDownIcon :class="{ 'arrow-transform': showFilters }" />
     </button>
+    <Transition name="advanced-search">
     <div
       v-if="firstLoaded"
       v-show="showFilters"
@@ -76,6 +77,7 @@
         @update:sort="updateSort"
       />
     </div>
+  </Transition>
   </div>
 </template>
 
@@ -282,12 +284,28 @@ export default defineComponent({
     background: var(--octopus-background);
     display: flex;
     width: 100%;
-    margin-bottom: 1rem;
+    padding-bottom: 1rem;
     justify-content: space-around;
 
     @media (width <= 720px) {
       flex-wrap: wrap;
     }
+  }
+
+  .advanced-search-enter-active,
+  .advanced-search-leave-active {
+    transition: 0.3s all;
+    opacity: 1;
+    max-height: 900px;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .advanced-search-enter-from,
+  .advanced-search-leave-to {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
   }
 }
 </style>

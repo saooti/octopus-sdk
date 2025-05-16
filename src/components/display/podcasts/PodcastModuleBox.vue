@@ -40,7 +40,7 @@
         <div v-if="isLiveReady" class="text-danger">
           {{ $t("Episode record in live") }}
         </div>
-        <div class="d-flex flex-column align-items-end flex-grow-1">
+        <div class="d-flex flex-column align-items-end">
           <time :datetime="durationIso">
             {{ duration }}
           </time>

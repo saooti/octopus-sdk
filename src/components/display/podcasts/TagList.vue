@@ -1,13 +1,13 @@
 <template>
   <div
-    v-if="undefined !== tagList && 0 !== tagList.length"
+    v-if="undefined !== tagListFiltered && 0 !== tagListFiltered.length"
     class="tag-list-component d-flex align-items-center flex-wrap mb-3 small-text"
   >
     <div class="fw-bold me-3">
       {{ $t("Podcast tags") + " : " }}
     </div>
     <router-link
-      v-for="(tag, index) in tagList"
+      v-for="(tag, index) in tagListFiltered"
       :key="tag"
       class="d-flex align-items-center border p-1 m-1 text-dark"
       :to="{
@@ -72,6 +72,11 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useFilterStore, ["filterOrgaId"]),
+    tagListFiltered(): Array<string>{
+      return this.tagList.filter((tag: string) => {
+        return !tag.match(/^\[\[.*\]\]$/);
+      });
+    },
     organisationQuery(){
       if(this.filterOrgaId){
         return undefined;

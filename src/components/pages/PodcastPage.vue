@@ -21,7 +21,7 @@
           :organisation-id="podcast.organisation.id"
         />
         <SharePlayer
-          v-if="!isPodcastmaker && editRight"
+          v-if="!isPodcastmaker && editRight && !youtubeId"
           :podcast="podcast"
           :emission="podcast?.emission"
           :organisation-id="authOrgaId"
@@ -68,6 +68,7 @@
 </template>
 
 <script lang="ts">
+import youtubeVideoHelper from "../../helper/youtubeVideoHelper";
 import {useOrgaComputed} from "../composable/useOrgaComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
 import PodcastModuleBox from "../display/podcasts/PodcastModuleBox.vue";
@@ -135,6 +136,7 @@ export default defineComponent({
       error: false as boolean,
       fetchConference: undefined as Conference | undefined,
       infoReload: undefined as ReturnType<typeof setTimeout> | undefined,
+      youtubeId: undefined as string|undefined,
     };
   },
 
@@ -312,6 +314,9 @@ export default defineComponent({
        this.podcastInProcessing();
         this.updatePathParams(this.podcast.title);
         await this.getCommentsConfig(this.podcast);
+        if((this.fetchConference?.videoProfile?.includes("video_") && "READY_TO_RECORD" === this.podcast.processingStatus) || undefined !== this.podcast.video?.videoId){
+          this.youtubeId = youtubeVideoHelper.getYoutubeId(this.podcast?.tags ?? []);
+        }
         this.loaded = true;
       } catch (error) {
         this.handle403(error as AxiosError);

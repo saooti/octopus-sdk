@@ -40,7 +40,7 @@ export default defineComponent({
     CategoryFilter,
     FooterOctopus,
     PlayerComponent,
-    ClassicLazy,
+    ClassicLazy
   },
 
   setup(){

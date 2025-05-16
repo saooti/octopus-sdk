@@ -5,13 +5,15 @@
         <WindowCloseIcon />
       </button>
       <div class="video-wrapper">
-        <PlayerVideoDigiteka v-if="!playerLive" :video-id="videoId" />
+        <PlayerYoutubeEmbed v-if="youtubeId" :youtube-id="youtubeId" />
+        <PlayerVideoDigiteka v-else-if="!playerLive" :video-id="playerPodcast?.video?.videoId" />
         <PlayerVideoHls v-else :hls-url="hlsVideoUrl" />
       </div>
     </template>
   </teleport>
 </template>
 <script lang="ts">
+import youtubeVideoHelper from "../../../../helper/youtubeVideoHelper";
 import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useApiStore } from "../../../../stores/ApiStore";
@@ -23,16 +25,22 @@ const PlayerVideoDigiteka = defineAsyncComponent(
 const PlayerVideoHls = defineAsyncComponent(
   () => import("../video/PlayerVideoHls.vue"),
 );
+const PlayerYoutubeEmbed = defineAsyncComponent(
+  () => import("../video/PlayerYoutubeEmbed.vue"),
+);
 export default defineComponent({
   name: "PlayerVideo",
 
   components: {
     PlayerVideoDigiteka,
     PlayerVideoHls,
+    PlayerYoutubeEmbed,
     WindowCloseIcon,
   },
   data() {
-    return {};
+    return {
+      youtubeId: undefined as string|undefined,
+    };
   },
   computed: {
     ...mapState(useApiStore, ["hlsUrl"]),
@@ -43,9 +51,9 @@ export default defineComponent({
       }
       return `${this.hlsUrl}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
     },
-    videoId(): string | undefined {
-      return this.playerPodcast?.video?.videoId;
-    },
+  },
+  created(){
+    this.youtubeId = youtubeVideoHelper.getYoutubeId((this.playerPodcast ?? this.playerLive )?.tags ?? []);
   },
 
   methods: {

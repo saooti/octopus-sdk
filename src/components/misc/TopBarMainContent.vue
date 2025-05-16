@@ -308,12 +308,15 @@ export default defineComponent({
       color: white;
       font-weight: bold;
       font-size: 0.93rem;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      transition: text-decoration-color 250ms;
+      text-underline-offset: 8px;
 
       &.link-hover:hover,
       &.link-hover.router-link-exact-active.router-link-active {
         color: white;
-        text-decoration: underline;
-        text-underline-offset: 8px;
+        text-decoration-color: white;
       }
     }
 

@@ -4,7 +4,7 @@
     class="d-flex align-items-center justify-content-center"
   >
     <ClassicSpinner class="me-3" />
-    <div class="h3 mt-2">
+    <div class="h3">
       {{ loadingText }}
     </div>
   </div>

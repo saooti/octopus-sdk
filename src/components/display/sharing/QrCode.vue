@@ -25,7 +25,7 @@
       :margin="2"
     />
     <div class="d-flex align-items-center my-3">
-      <FormatSwitch class="me-3" v-model:isSvg="isSvg"/>
+      <FormatSwitch v-model:is-svg="isSvg" class="me-3"/>
       <button class="btn btn-primary" @click="download">
         {{ $t("Download") }}
       </button>
