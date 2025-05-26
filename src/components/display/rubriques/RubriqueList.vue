@@ -133,10 +133,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useFilterStore, ["filterUpdateRubriqueDisplay"]),
     initRubriques(): void {
-      if (!this.rubriquage) {
-        return;
-      }
-      this.filterUpdateRubriqueDisplay(this.rubriquage.rubriques);
+      this.filterUpdateRubriqueDisplay(this.rubriquage?.rubriques ?? []);
       window.addEventListener("resize", this.resizeWindow);
       this.$nextTick(() => {
         this.resizeWindow();

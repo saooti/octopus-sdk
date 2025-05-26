@@ -97,7 +97,7 @@ const routes: Array<RouteRecordRaw> = [
       routeValidity:route.query.vl ?? "",
       routeOnlyVideo:route.query.v ?? "",
       routeOrga:route.query.o,
-      routeRubriques :route.query.r,
+      routeRubriques :route.query.r ?? route.query.rubriquesId,
     }),
     meta:{
       title: "Podcasts",
@@ -118,7 +118,7 @@ const routes: Array<RouteRecordRaw> = [
       routeFrom: route.query.from,
       routeTo: route.query.to,
       routeOrga:route.query.o,
-      routeRubriques :route.query.r,
+      routeRubriques :route.query.r ?? route.query.rubriquesId,
     }),
     meta:{
       title: "Emissions",

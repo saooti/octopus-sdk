@@ -91,16 +91,16 @@ export default defineComponent({
   },
   emits: ["sortChrono", "sortPopular", "displayPrevious", "displayNext"],
   setup(){
-    const { modifyRubriquesFilter } = useRubriquesFilterParam();
+    const { returnRubriquesFilter } = useRubriquesFilterParam();
     const { rubriqueQueryParam } = useRubriquesFilterComputed();
-    return { modifyRubriquesFilter, rubriqueQueryParam }
+    return { returnRubriquesFilter, rubriqueQueryParam }
   },
   data() {
     return {};
   },
 
   computed: {
-    ...mapState(useFilterStore, ["filterIab", "filterRubriquage"]),
+    ...mapState(useFilterStore, ["filterIab", "filterRubriquage", "filterOrgaId"]),
     refTo(): string | RouteLocationRaw {
       if (this.href) return this.href;
       if (this.iabId) {
@@ -114,6 +114,7 @@ export default defineComponent({
         query: {
           iabId: this.filterIab?.id,
           rubriquesId: this.rubriqueQueryParam,
+          productor: this.filterOrgaId
         },
       };
     },
@@ -142,12 +143,7 @@ export default defineComponent({
       }
       event.preventDefault();
       const rubriqueChosenId = this.rubriqueId.at(-1);
-      let filterToAdd: RubriquageFilter = {
-        rubriquageId: 0,
-        rubriqueId: rubriqueChosenId,
-        nameRubriquage: "",
-        nameRubrique: "",
-      };
+      let filterToAdd: RubriquageFilter|undefined;
       if (this.filterRubriquage.length) {
         for (let i = 0, len = this.filterRubriquage.length; i < len; i++) {
           const rubriqueChosen = this.filterRubriquage[i].rubriques.find(
@@ -164,9 +160,19 @@ export default defineComponent({
           }
         }
       }
-      this.modifyRubriquesFilter((a) => {
-        a.push(filterToAdd);
+      if(!filterToAdd){return;}
+      const queries = this.returnRubriquesFilter((a) => {
+        let indexRubriquage = a.findIndex(filter => filter.rubriquageId === filterToAdd.rubriquageId);
+        if (indexRubriquage === -1) {
+          a.push(filterToAdd);
+        } else {
+          a[indexRubriquage] = filterToAdd;
+        }
         return a;
+      })
+      this.$router.push({
+        name: "podcasts",
+        query: {...this.$route.query, ...queries}
       });
     },
   },

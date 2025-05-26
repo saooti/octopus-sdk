@@ -44,6 +44,7 @@
             query: {
               iabId: filterIab?.id,
               rubriquesId: rubriqueQueryParam,
+              productor: filterOrgaId
             },
           }"
           class="btn btn-primary align-self-center w-fit-content mt-5 m-auto"

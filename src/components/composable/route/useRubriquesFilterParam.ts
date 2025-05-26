@@ -16,17 +16,25 @@ export const useRubriquesFilterParam = ()=>{
       .map((value) => value.rubriquageId + ":" + value.rubriqueId)
       .join();
   }
-
-  function modifyRubriquesFilter(modifyFunction: (a: Array<RubriquageFilter>)=> Array<RubriquageFilter>){
+  function returnValToUpdate(modifyFunction: (a: Array<RubriquageFilter>)=> Array<RubriquageFilter>){
     const newFilter = modifyFunction( Array.from(filterStore.filterRubrique));
     const queryString = stringifyRubriquesFilter(newFilter);
-    const valToUpdate = "" !== queryString ? queryString : undefined;
+    return "" !== queryString ? queryString : undefined;
+  }
+  function modifyRubriquesFilter(modifyFunction: (a: Array<RubriquageFilter>)=> Array<RubriquageFilter>){
+    const valToUpdate = returnValToUpdate(modifyFunction);
     updateFiltersParam({ rubriquesId: valToUpdate }, {r: valToUpdate});
+  }
+
+  function returnRubriquesFilter(modifyFunction: (a: Array<RubriquageFilter>)=> Array<RubriquageFilter>){
+    const valToUpdate = returnValToUpdate(modifyFunction);
+    return { rubriquesId: valToUpdate, r: valToUpdate };
   }
 
 	return {
     stringifyRubriquesFilter,
     modifyRubriquesFilter,
-    updateRouteParamAdvanced
+    updateRouteParamAdvanced,
+    returnRubriquesFilter
 	}
 }

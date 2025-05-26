@@ -4,10 +4,7 @@
       class="top-bar-logo d-flex align-items-center"
       :to="{
         name: 'home',
-        query: {
-          iabId: filterIab?.id,
-          rubriquesId: rubriqueQueryParam,
-        },
+        query: getQueriesRouter('home'),
       }"
       :title="$t('Home')"
     >
@@ -274,7 +271,7 @@ export default defineComponent({
   },
   methods: {
     getQueriesRouter(routeName: string) {
-      if ("podcasts" !== routeName && "emissions" !== routeName) {
+      if ("podcasts" !== routeName && "emissions" !== routeName  && "home" !== routeName) {
         return { productor: this.filterOrgaId };
       }
       return {

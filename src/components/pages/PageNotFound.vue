@@ -13,6 +13,7 @@
           query: {
             iabId: filterStore.filterIab?.id,
             rubriquesId: rubriqueQueryParam,
+            productor: filterStore.filterOrgaId
           },
         }"
       >
