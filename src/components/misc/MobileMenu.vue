@@ -37,7 +37,7 @@
       <a
         v-if="!isAuthenticatedWithOrga"
         class="octopus-dropdown-item"
-        href="/sso/login"
+        :href="pathLogin"
         realLink="true"
       >
         {{ $t("Login") }}
@@ -64,6 +64,7 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
+import { useApiStore } from "../../stores/ApiStore";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
@@ -91,8 +92,12 @@ export default defineComponent({
   computed: {
     ...mapState(useAuthStore, ["authOrgaId", "isGarRole"]),
     ...mapState(useFilterStore, ["filterLive", "filterOrgaId", "filterIab"]),
+    ...mapState(useApiStore, ["frontendUrl"]),
     isAuthenticatedWithOrga(): boolean {
       return undefined !== this.authOrgaId;
+    },
+    pathLogin(){
+      return "/sso/login?redirect_url="+encodeURI(this.frontendUrl + this.$route.fullPath);
     },
     routerLinkArray() {
       return [

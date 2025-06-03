@@ -51,7 +51,7 @@
             v-model:insert-code="insertCode"
             :display-is-visible="displayIsVisible"
             :is-podcast-not-visible="isPodcastNotVisible"
-            :chose-number-episode="choseNumberEpisodes"
+            :chose-number-episode="displayChoiceAllEpisodes"
             :display-choice-all-episodes="displayChoiceAllEpisodes"
             :display-transcript-param="displayTranscriptParam"
             :display-article-param="displayArticleParam"
@@ -155,18 +155,14 @@ export default defineComponent({
     displayWaveParam(): boolean {
       return "default" === this.iFrameModel || "emission" === this.iFrameModel;
     },
-    choseNumberEpisodes(): boolean {
-      return this.displayChoiceAllEpisodes || this.isTypeSuggestion;
-    },
     displayIsVisible(): boolean {
-      return this.choseNumberEpisodes || this.isPodcastNotVisible;
+      return this.displayChoiceAllEpisodes || this.isPodcastNotVisible;
     },
     isPodcastNotVisible(): boolean {
       return (
         undefined !== this.podcast &&
         !this.podcast.availability.visibility &&
-        !this.isTypeEmission &&
-        !this.isTypeSuggestion
+        !this.isTypeEmission
       );
     },
     displayArticleParam(): boolean {
@@ -218,12 +214,6 @@ export default defineComponent({
     isLargeEmission(): boolean {
       return "emissionLarge" === this.iFrameModel;
     },
-    isTypeSuggestion(): boolean {
-      return (
-        "largeSuggestion" === this.iFrameModel ||
-        "SUGGESTION" === this.typeCustomPlayer
-      );
-    },
     isTypeEmission(): boolean {
       return (
         this.isEmission ||
@@ -272,8 +262,6 @@ export default defineComponent({
           url.push(
             `${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`,
           );
-        } else if (this.isTypeSuggestion) {
-          url.push(`${this.podcast.podcastId}${iFrameNumber}`);
         } else {
           url.push(`${this.podcast.podcastId}`);
         }
@@ -290,10 +278,9 @@ export default defineComponent({
         case "largeMore":
           return "210px";
         case "emissionLarge":
-        case "largeSuggestion":
           return "350px";
         case "emission":
-          return "520px";
+          return "540px";
         case "videoLive":
           return "450px";
         default:

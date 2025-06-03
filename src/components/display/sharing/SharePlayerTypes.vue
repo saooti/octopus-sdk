@@ -85,10 +85,10 @@ export default defineComponent({
           condition: this.isVideoPodcast,
         },
         { name: this.$t("Default version"), value: "default", condition: true },
-        { name: this.$t("Large version"), value: "large", condition: true },
+        { name: this.$t("Large version"), value: "largeMore", condition: this.podcast?.podcastId, },
         {
-          name: this.$t("Full Large version"),
-          value: "largeMore",
+          name: this.$t("Minimalist length version"),
+          value: "large",
           condition: this.podcast?.podcastId,
         },
         {
@@ -101,18 +101,12 @@ export default defineComponent({
           value: "emissionLarge",
           condition: this.podcast?.podcastId,
         },
-        {
-          name: this.$t("Large suggestion version"),
-          value: "largeSuggestion",
-          condition: this.podcast?.podcastId,
-        },
       ];
     },
     customPlayersDisplay(): Array<CustomPlayer> {
       return this.customPlayers.filter((player: CustomPlayer) => {
         return (
-          (("EPISODE" === player.typePlayer ||
-            "SUGGESTION" === player.typePlayer) &&
+          (("EPISODE" === player.typePlayer) &&
             this.podcast?.podcastId) ||
           ("EMISSION" === player.typePlayer &&
             this.emission &&
@@ -214,13 +208,9 @@ export default defineComponent({
         this.fetchCustomPlayers("EMISSION");
       } else {
         const episodeSelected = await this.fetchCustomPlayers("EPISODE");
-        const emissionSelected = await this.fetchCustomPlayers(
+        await this.fetchCustomPlayers(
           "EMISSION",
           !episodeSelected,
-        );
-        await this.fetchCustomPlayers(
-          "SUGGESTION",
-          !episodeSelected && !emissionSelected,
         );
       }
     },

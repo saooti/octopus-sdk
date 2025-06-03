@@ -36,7 +36,7 @@
         <ul class="p-0 m-0">
           <template v-if="!isAuthenticated">
             <li class="li-style-none">
-              <a class="octopus-dropdown-item" href="/sso/login" realLink="true">
+              <a class="octopus-dropdown-item" :href="pathLogin" realLink="true">
                 {{ $t("Login") }}
               </a>
             </li>
@@ -109,6 +109,7 @@ import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { Organisation } from "@/stores/class/general/organisation";
+import { useApiStore } from "../../stores/ApiStore";
 export default defineComponent({
   name: "HomeDropdown",
   components: {
@@ -131,6 +132,10 @@ export default defineComponent({
       "isRoleContribution",
       "isRoleOrganisation",
     ]),
+    ...mapState(useApiStore, ["frontendUrl"]),
+    pathLogin(){
+      return "/sso/login?redirect_url="+encodeURI(this.frontendUrl + this.$route.fullPath);
+    },
     organisationsAvailable(): Array<Organisation> {
       return this.authProfile.organisations ?? [];
     },

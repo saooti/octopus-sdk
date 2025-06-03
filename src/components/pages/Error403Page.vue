@@ -25,11 +25,12 @@
     <a v-if="authOrgaId" class="btn btn-primary" href="/logout">
       {{ authText }}
     </a>
-    <a v-else class="btn btn-primary" href="/sso/login">{{ authText }}</a>
+    <a v-else class="btn btn-primary" :href="pathLogin">{{ authText }}</a>
   </section>
 </template>
 
 <script lang="ts">
+import { useApiStore } from "../../stores/ApiStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
@@ -37,8 +38,12 @@ export default defineComponent({
   name: "Error403Page",
   computed: {
     ...mapState(useAuthStore, ["authOrgaId"]),
+    ...mapState(useApiStore, ["frontendUrl"]),
     authText(): string {
       return this.authOrgaId ? this.$t("Logout") : this.$t("Login");
+    },
+    pathLogin(){
+      return "/sso/login?redirect_url="+encodeURI(this.frontendUrl + this.$route.fullPath);
     },
   },
 });
