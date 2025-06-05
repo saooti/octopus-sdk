@@ -30,7 +30,7 @@ export default defineComponent({
   props: {
     hlsUrl: { default: "", type: String },
     responsive: { default: false, type: Boolean },
-    isSecured: { default: true, type: Boolean }, //TODO
+    isSecured: { default: true, type: Boolean },
   },
   emits: ["changeValid"],
 
@@ -177,9 +177,11 @@ export default defineComponent({
       this.videoElement.onseeking = async () => {
         this.playerUpdateSeekTime(this.videoElement.currentTime);
       };
-      /* if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
-      } */
-     //TODO
+      if (this.isSecured && this.authParam.accessToken) {
+        this.videoElement.src = this.hlsUrl + "access_token="+this.authParam.accessToken;
+      }else{
+        this.videoElement.src = this.hlsUrl;
+      }
       this.videoElement.src = this.hlsUrl;
     },
     videoClean(): void {
