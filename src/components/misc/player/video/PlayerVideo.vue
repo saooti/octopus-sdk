@@ -7,7 +7,7 @@
       <div class="video-wrapper">
         <PlayerYoutubeEmbed v-if="youtubeId" :youtube-id="youtubeId" />
         <PlayerVideoDigiteka v-else-if="!playerLive" :video-id="playerPodcast?.video?.videoId" />
-        <PlayerVideoHls v-else :hls-url="hlsVideoUrl" />
+        <PlayerVideoHls v-else :hls-url="hlsVideoUrl" :is-secured="isSecured"/>
       </div>
     </template>
   </teleport>
@@ -45,6 +45,9 @@ export default defineComponent({
   computed: {
     ...mapState(useApiStore, ["hlsUrl"]),
     ...mapState(usePlayerStore, ["playerVideo", "playerLive", "playerPodcast"]),
+    isSecured(): boolean{
+      return "SECURED" === this.playerLive?.organisation?.privacy;
+    },
     hlsVideoUrl(): string {
       if (!this.playerLive) {
         return "";

@@ -15,7 +15,7 @@
 </template>
 <script lang="ts">
 import { usePlayerStore } from "../../../../stores/PlayerStore";
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import {usePlayerLogicProgress} from "../../../composable/player/usePlayerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
 import qualitySelectorHls from "videojs-quality-selector-hls";
@@ -23,18 +23,20 @@ if (undefined === videojs.getPlugin("qualitySelectorHls")) {
   videojs.registerPlugin("qualitySelectorHls", qualitySelectorHls);
 }
 import { defineComponent } from "vue";
+import { useAuthStore } from "../../../../stores/AuthStore";
 export default defineComponent({
   name: "PlayerVideoHls",
 
   props: {
     hlsUrl: { default: "", type: String },
     responsive: { default: false, type: Boolean },
+    isSecured: { default: true, type: Boolean }, //TODO
   },
   emits: ["changeValid"],
 
   setup(){
-    const { downloadId, initLiveDownloadId, onTimeUpdateProgress} = usePlayerLogicProgress();
-    return { downloadId, initLiveDownloadId, onTimeUpdateProgress }
+    const { downloadId, initLiveDownloadId, onTimeUpdateProgress, endListeningProgress} = usePlayerLogicProgress();
+    return { downloadId, initLiveDownloadId, onTimeUpdateProgress, endListeningProgress }
   },
   data() {
     return {
@@ -47,6 +49,7 @@ export default defineComponent({
     };
   },
   computed: {
+    ...mapState(useAuthStore, ["authParam"]),
     videoElement(): HTMLVideoElement {
       return this.$refs.videoelement as HTMLVideoElement;
     },
@@ -103,6 +106,15 @@ export default defineComponent({
       if (this.useVideoSrc) {
         this.playLiveIos();
         return;
+      }
+      if (this.isSecured && this.authParam.accessToken) {
+        const globalXhrRequestHook = (options: any) => {
+          options.beforeSend = (xhr: XMLHttpRequest) => {
+            xhr.setRequestHeader("Authorization", "Bearer "+this.authParam.accessToken);
+          };
+          return options;
+        };
+        videojs.Vhs.xhr.onRequest(globalXhrRequestHook);
       }
       this.player = videojs(
         document.getElementById("video-element-hls") as Element,
@@ -165,6 +177,9 @@ export default defineComponent({
       this.videoElement.onseeking = async () => {
         this.playerUpdateSeekTime(this.videoElement.currentTime);
       };
+      /* if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
+      } */
+     //TODO
       this.videoElement.src = this.hlsUrl;
     },
     videoClean(): void {

@@ -4,6 +4,7 @@ import { Ref, ref } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useApiStore } from "../../../stores/ApiStore";
 import dayjs from "dayjs";
+import { useAuthStore } from "../../../stores/AuthStore";
 /* eslint-disable*/
 let Hls:any = null;
 /* eslint-enable*/
@@ -21,6 +22,8 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
 
   const playerStore = usePlayerStore();
   const apiStore = useApiStore();
+  const authStore = useAuthStore();
+
 
   function onPlay(): void {
     playerStore.playerChangeStatus("PAUSED"===playerStore.playerStatus);
@@ -65,7 +68,11 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         audioElement.value.canPlayType("application/vnd.apple.mpegurl") &&
         !isAndroid
       ) {
-        audioElement.value.src = hlsStreamUrl;
+        if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
+          audioElement.value.src = hlsStreamUrl+"?access_token="+authStore.authParam.accessToken;
+        }else{
+          audioElement.value.src = hlsStreamUrl;
+        }
         await initLiveDownloadId();
         hlsReady.value = true;
         await audioElement.value.play();
@@ -97,7 +104,13 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
     if (!Hls.isSupported()) {
       throw new Error("Hls is not supported ! ");
     }
-    hls.value = new Hls();
+    hls.value = new Hls({
+      xhrSetup: (xhr: XMLHttpRequest) => {
+        if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
+          xhr.setRequestHeader("Authorization", "Bearer " +authStore.authParam.accessToken);
+        }
+      }
+    });
     hls.value.on(Hls.Events.MANIFEST_PARSED, async () => {
       await initLiveDownloadId();
       hlsReady.value = true;

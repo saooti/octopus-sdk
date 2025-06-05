@@ -68,18 +68,20 @@ export const usePlayerLogicProgress = ()=>{
       const downloadId = await classicApi.putData<string | null>({
         api: 0,
         path:"podcast/prepare/live/" + playerStore.playerLive.podcastId+"?mediaType="+mediaType,
-        isNotAuth:true
       });
-      await classicApi.fetchData<string | null>({
-        api:0,
-        path: "podcast/download/live/" + playerStore.playerLive.podcastId + ".m3u8",
-        parameters:{
-          downloadId: downloadId ?? undefined,
-          origin: "octopus",
-          distributorId: authStore.authOrgaId,
-        },
-        isNotAuth:true
-      });
+      try {
+        await classicApi.fetchData<string | null>({
+          api:0,
+          path: "podcast/download/live/" + playerStore.playerLive.podcastId + ".m3u8",
+          parameters:{
+            downloadId: downloadId ?? undefined,
+            origin: "octopus",
+            distributorId: authStore.authOrgaId,
+          },
+        });
+      } catch {
+        // Remove try/catch when back will no longer redirect with a 403 in a secured context #13594
+      }
       setDownloadId(downloadId);
     } catch {
       downloadId.value = null;
@@ -138,6 +140,7 @@ export const usePlayerLogicProgress = ()=>{
     downloadId,
     initLiveDownloadId,
     setDownloadId,
-    onTimeUpdateProgress
+    onTimeUpdateProgress,
+    endListeningProgress
 	}
 }

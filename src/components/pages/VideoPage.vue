@@ -20,6 +20,7 @@
             <PlayerVideoHls
               v-if="recordingLive"
               :hls-url="hlsVideoUrl"
+              :is-secured="isSecured"
               :responsive="true"
             />
             <div
@@ -189,6 +190,9 @@ const hlsVideoUrl = computed(() => {
     return "";
   }
   return `${apiStore.hlsUrl}live/video_dev.${podcastConference.value.conferenceId}/index.m3u8`;
+});
+const isSecured = computed(() => {
+  return "SECURED" === podcast.value?.organisation?.privacy;
 });
 const overrideText = computed(() => {
   if ("PUBLISHING" !== podcastConference.value?.status) {
