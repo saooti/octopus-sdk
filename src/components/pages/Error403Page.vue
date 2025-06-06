@@ -8,6 +8,7 @@
           class="logo-octopus"
           src="/img/logo_saooti_play_black.webp"
           role="presentation"
+          title="Saooti"
           alt=""
         />
         <h2>{{ $t("You do not have the right to access this page") }}</h2>
@@ -19,6 +20,7 @@
         src="/img/403.webp"
         role="presentation"
         alt=""
+        title="403"
       />
     </div>
 

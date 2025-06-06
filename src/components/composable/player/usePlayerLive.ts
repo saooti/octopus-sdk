@@ -32,7 +32,8 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   function playRadio() {
     if (!playerStore.playerRadio) return;
     handleSessionIdRadio();
-    playHls(playerStore.playerRadio.url+"?origin=octopus&sessionId="+playerStore.playerRadio.sessionId);
+    playerStore.playerUpdatePlayerHlsUrl(playerStore.playerRadio.url+"?origin=octopus&sessionId="+playerStore.playerRadio.sessionId);
+    playHls();
   }
 
   function handleSessionIdRadio(){
@@ -45,20 +46,20 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
 
   function playLive() {
     if (!playerStore.playerLive) return;
-    const hlsStreamUrl = `${apiStore.hlsUrl}live/dev.${playerStore.playerLive.conferenceId}/index.m3u8`;
-    playHls(hlsStreamUrl);
+    playerStore.playerUpdatePlayerHlsUrl(`${apiStore.hlsUrl}live/dev.${playerStore.playerLive.conferenceId}/index.m3u8`);
+    playHls();
   }
 
-  async function playHls(hlsStreamUrl: string): Promise<void> {
+  async function playHls(): Promise<void> {
     try {
       if(null===audioElement.value){
         audioElement.value = document.getElementById(
           "audio-player",
         ) as HTMLAudioElement;
       }
-      if (null === audioElement.value) {
+      if (null === audioElement.value || !playerStore.playerHlsUrl) {
         setTimeout(() => {
-          playHls(hlsStreamUrl);
+          playHls();
         }, 1000);
         return;
       }
@@ -69,33 +70,33 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         !isAndroid
       ) {
         if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
-          audioElement.value.src = hlsStreamUrl+"?access_token="+authStore.authParam.accessToken;
+          audioElement.value.src = playerStore.playerHlsUrl+"?access_token="+authStore.authParam.accessToken;
         }else{
-          audioElement.value.src = hlsStreamUrl;
+          audioElement.value.src = playerStore.playerHlsUrl;
         }
         await initLiveDownloadId();
         hlsReady.value = true;
         await audioElement.value.play();
         onPlay();
       } else {
-        await initHls(hlsStreamUrl);
+        await initHls();
       }
     } catch {
-      onHlsError(hlsStreamUrl);
+      onHlsError();
     }
   }
 
-  function onHlsError(hlsStreamUrl:string){
+  function onHlsError(){
     if("STOPPED"!==playerStore.playerStatus && undefined===hlsRetryTimeout.value){
       hlsRetryTimeout.value = setTimeout(() => {
         errorHls.value = false;
-        playHls(hlsStreamUrl);
+        playHls();
         hlsRetryTimeout.value = undefined;
       }, 5000);
     }
   }
 
-  async function initHls(hlsStreamUrl: string) {
+  async function initHls() {
     if (null === Hls) {
       await import("hls.js").then((hlsLibrary) => {
         Hls = hlsLibrary.default;
@@ -122,17 +123,17 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         playPromise.value = undefined;
         onPlay();
       }).catch(()=>{
-        onHlsError(hlsStreamUrl);
+        onHlsError();
         playPromise.value = undefined;
       })
     });
     hls.value.on(Hls.Events.ERROR, async (e, data:any) => {
       errorHls.value = true;
       if(undefined===playPromise.value && data.fatal){
-        onHlsError(hlsStreamUrl);
+        onHlsError();
       }
     });
-    hls.value.loadSource(hlsStreamUrl);
+    hls.value.loadSource(playerStore.playerHlsUrl);
     hls.value.attachMedia(audioElement.value as HTMLAudioElement);
   }
 

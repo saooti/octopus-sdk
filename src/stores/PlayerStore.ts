@@ -31,6 +31,7 @@ interface PlayerState {
   playerVideo: boolean;
   playerChaptering?: Chaptering;
   playerDelayStitching: number;
+  playerHlsUrl?: string;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -247,6 +248,9 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
     playerUpdateDelayStitching(delay: number) {
       this.playerDelayStitching = delay;
+    },
+    playerUpdatePlayerHlsUrl(hlsUrl: string|undefined) {
+      this.playerHlsUrl = hlsUrl;
     },
   },
 });

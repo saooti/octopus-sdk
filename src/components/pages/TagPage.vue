@@ -9,6 +9,7 @@
         class="ouest-france-logo-tag-page"
         role="presentation"
         alt=""
+        title="Ouest France"
         src="/img/ouest_france_logo.svg" 
       />
     </h1>

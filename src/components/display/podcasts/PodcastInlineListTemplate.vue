@@ -162,7 +162,7 @@ export default defineComponent({
       }
       if(!filterToAdd){return;}
       const queries = this.returnRubriquesFilter((a) => {
-        let indexRubriquage = a.findIndex(filter => filter.rubriquageId === filterToAdd.rubriquageId);
+        const indexRubriquage = a.findIndex(filter => filter.rubriquageId === filterToAdd.rubriquageId);
         if (indexRubriquage === -1) {
           a.push(filterToAdd);
         } else {

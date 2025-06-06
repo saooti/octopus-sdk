@@ -15,6 +15,7 @@
         alt=""
         width="140"
         height="50"
+        title="Logo"
         :class="platformEducation ? 'education-logo' : 'octopus-logo'"
       />
       <img
@@ -23,6 +24,7 @@
         role="presentation"
         alt=""
         class="client-logo"
+        title="Logo"
         :class="platformEducation ? 'education-logo' : ''"
       />
     </router-link>
@@ -46,6 +48,7 @@
           width="100"
           height="29"
           class="ms-2"
+          title="Logo"
           :class="platformEducation ? 'education-logo' : 'octopus-logo'"
         />
         <a
@@ -59,6 +62,7 @@
             :src="logoUrl"
             role="presentation"
             alt=""
+            title="Saooti"
             width="100"
             height="29"
             class="ms-2"
@@ -91,9 +95,9 @@
           :title="$t('More')"
           class="d-flex-column flex-nowrap align-items-center btn-transparent py-2 px-3 text-white"
         >
-          <div class="link-hover">
+          <span class="link-hover">
             {{ $t("More") }}
-          </div>
+          </span>
           <ChevronDownIcon />
         </button>
         <ClassicPopover

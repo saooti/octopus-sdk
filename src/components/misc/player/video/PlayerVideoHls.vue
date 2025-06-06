@@ -75,6 +75,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.playerUpdatePlayerHlsUrl(this.hlsUrl);
     this.useVideoSrc =
       "" !== this.videoElement.canPlayType("application/vnd.apple.mpegurl") &&
       !navigator.userAgent.includes("Android");
@@ -88,7 +89,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateSeekTime"]),
+    ...mapActions(usePlayerStore, ["playerUpdateSeekTime", "playerUpdatePlayerHlsUrl"]),
     definedStalledTimeout() {
       this.isPaused = false;
       this.stalledTimout = setTimeout(() => {

@@ -28,7 +28,7 @@
           @keydown.enter="clickButton(button.emitName)"
         >
           <component :is="button.icon" />
-          <div class="ms-1">{{ button.title }}</div>
+          <span class="ms-1">{{ button.title }}</span>
         </button>
       </div>
     </ClassicPopover>

@@ -8,6 +8,7 @@ export const usePlayerLogicProgress = ()=>{
   const notListenTime= ref(0);
   const lastSend= ref(0);
   const downloadId: Ref<string | null>= ref(null);
+  const urlLiveSent= ref(false);
 
   const playerStore = usePlayerStore();
   const authStore = useAuthStore();
@@ -31,11 +32,7 @@ export const usePlayerLogicProgress = ()=>{
       return;
     }
     lastSend.value = newVal;
-    await classicApi.putData({
-      api: 0,
-      path:"podcast/listen/" + downloadId.value + "?seconds=" + Math.round(newVal),
-      isNotAuth:true
-    });
+    await sendListeningProgress(newVal);
   });
 
   watch(()=>playerStore.playerSeekTime, async () => {
@@ -65,24 +62,16 @@ export const usePlayerLogicProgress = ()=>{
     }
     try {
       const mediaType = playerStore.playerVideo ? "VIDEO":"AUDIO";
-      const downloadId = await classicApi.putData<string | null>({
-        api: 0,
-        path:"podcast/prepare/live/" + playerStore.playerLive.podcastId+"?mediaType="+mediaType,
+      const downloadIdFetched = await classicApi.fetchData<string | null>({
+        api:0,
+        path: "podcast/download/live2/" + playerStore.playerLive.podcastId,
+        parameters:{
+          mediaType: mediaType,
+          origin: "octopus",
+          distributorId: authStore.authOrgaId,
+        },
       });
-      try {
-        await classicApi.fetchData<string | null>({
-          api:0,
-          path: "podcast/download/live/" + playerStore.playerLive.podcastId + ".m3u8",
-          parameters:{
-            downloadId: downloadId ?? undefined,
-            origin: "octopus",
-            distributorId: authStore.authOrgaId,
-          },
-        });
-      } catch {
-        // Remove try/catch when back will no longer redirect with a 403 in a secured context #13594
-      }
-      setDownloadId(downloadId);
+      setDownloadId(downloadIdFetched);
     } catch {
       downloadId.value = null;
       console.log("ERROR downloadId");
@@ -116,22 +105,30 @@ export const usePlayerLogicProgress = ()=>{
 
   async function endListeningProgress(): Promise<void> {
     if (!downloadId.value) return;
+    await sendListeningProgress(listenTime.value);
+    downloadId.value = null;
+    notListenTime.value = 0;
+    lastSend.value = 0;
+    listenTime.value = 0;
+    urlLiveSent.value = false;
+    playerStore.playerUpdatePlayerHlsUrl(undefined);
+  }
+
+  async function sendListeningProgress(listenTime:number){
+    let paramUrlLive= "";
+    if(!urlLiveSent.value && playerStore.playerHlsUrl){
+      paramUrlLive="&url="+encodeURI(playerStore.playerHlsUrl);
+      urlLiveSent.value = true;
+    }
     try {
       await classicApi.putData<string | null>({
         api: 0,
-        path:"podcast/listen/" +
-        downloadId.value +
-          "?seconds=" +
-          Math.round(listenTime.value),
+        path:"podcast/listen/" +downloadId.value +"?seconds=" +Math.round(listenTime)+paramUrlLive,
         isNotAuth:true
       });
     } catch {
       //Do nothing
     }
-    downloadId.value = null;
-    notListenTime.value = 0;
-    lastSend.value = 0;
-    listenTime.value = 0;
   }
 
 
