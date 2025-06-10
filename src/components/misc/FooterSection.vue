@@ -10,7 +10,7 @@
         &copy; Saooti 2025
       </div>
       <FooterGarSection v-if="isGarRole" :auth-orga-id="authOrgaId" />
-      <nav role="navigation" :aria-label="$t('Site menu')">
+      <nav :aria-label="$t('Site menu')">
         <ul class="p-0 m-0">
           <li 
             v-for="link in routerLinkSecondArray"

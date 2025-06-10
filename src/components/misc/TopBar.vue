@@ -1,5 +1,6 @@
 <template>
   <header
+    role="banner"
     class="header-saooti-play"
     :style="headerBackgroundImage"
     :class="[contentToDisplay ? 'header-img-bg':'header-color-bg', scrolled? 'scrolled':'', needToBlur ? 'header-force-blur':'']"

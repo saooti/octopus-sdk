@@ -70,8 +70,8 @@
           />
         </a>
       </template>
-      <div class="d-flex align-items-center justify-content-end flex-grow-1">
-        <nav role="navigation" :aria-label="$t('Site menu')">
+      <div role="navigation" class="d-flex align-items-center justify-content-end flex-grow-1">
+        <nav :aria-label="$t('Site menu')">
           <ul class="d-flex">
             <template v-for="link in routerLinkArray" :key="link.routeName">
               <li v-if="link.condition" class="li-style-none">
@@ -107,7 +107,7 @@
           :left-pos="true"
           :is-top-layer="true"
         >
-          <nav role="navigation" class="d-flex flex-column" :aria-label="$t('Site menu')">
+          <nav class="d-flex flex-column" :aria-label="$t('Site menu')">
             <ul class="p-0 m-0">
               <template v-for="link in routerLinkInsideArray" :key="link.routeName">
                 <li
