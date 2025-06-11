@@ -15,7 +15,7 @@ import DownloadIcon from "vue-material-design-icons/Download.vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import downloadHelper from "../../../helper/downloadHelper";
 import { defineComponent } from "vue";
-import classicApi from "@/api/classicApi";
+import classicApi from "../../../api/classicApi";
 export default defineComponent({
   name: "DownloadPodcastButton",
   components: {
