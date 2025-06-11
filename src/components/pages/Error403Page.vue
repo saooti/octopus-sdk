@@ -6,7 +6,7 @@
           width="250"
           height="auto"
           class="logo-octopus"
-          src="/img/logo_saooti_play_black.webp"
+          src="/img/logo_saooti_play_black.svg"
           role="presentation"
           title="Saooti"
           alt=""

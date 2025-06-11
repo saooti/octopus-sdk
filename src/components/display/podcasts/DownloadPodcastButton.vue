@@ -15,6 +15,7 @@ import DownloadIcon from "vue-material-design-icons/Download.vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import downloadHelper from "../../../helper/downloadHelper";
 import { defineComponent } from "vue";
+import classicApi from "@/api/classicApi";
 export default defineComponent({
   name: "DownloadPodcastButton",
   components: {
@@ -31,12 +32,15 @@ export default defineComponent({
   },
 
   methods: {
-    downloadPodcast() {
-      downloadHelper.onDownload(
-        "/download/podcast/" + this.podcast?.podcastId,
-        this.podcast?.title + ".mp3",
-        false,
-      );
+    async downloadPodcast() {
+      const data = await classicApi.fetchData<{
+        location: string;
+        downloadId: string;
+      }>({
+        api: 0,
+        path:"podcast/download/register/"+ this.podcast?.podcastId+".mp3?origin=saooti_play_download",
+      });
+      downloadHelper.onDownload("/download/url?param="+encodeURIComponent(data.location), this.podcast?.title + ".mp3");
     },
   },
 });

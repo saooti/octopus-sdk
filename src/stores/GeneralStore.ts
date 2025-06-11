@@ -19,7 +19,7 @@ export const useGeneralStore = defineStore("GeneralStore", {
   state: (): GeneralState => ({
     metaTitle: "Saooti Play",
     platformEducation: false,
-    generalLogoUrl: "/img/logo_saooti_play_black.webp",
+    generalLogoUrl: "/img/logo_saooti_play_black.svg",
     storedCategories: [],
     storedCategoriesOrga: [],
     isBeforeLive: true,

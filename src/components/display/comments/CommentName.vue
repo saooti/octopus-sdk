@@ -16,6 +16,7 @@
         input-id="comment-name-input"
         :label="$t('Your name')"
         :max-length="maxName"
+        autocomplete="name"
         class="me-3"
       />
       <button class="btn m-1" @click="isEditing = false">

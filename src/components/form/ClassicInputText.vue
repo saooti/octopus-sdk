@@ -51,6 +51,7 @@
       }"
       :disabled="isDisable"
       :required="!canBeNull"
+      :autocomplete="autocomplete"
     />
     <textarea
       v-else-if="isTextarea"
@@ -158,6 +159,7 @@ export default defineComponent({
     displayRequired: { default: false, type: Boolean },
     classLabel: { default: "form-label", type: String },
     showField: { default: true, type: Boolean },
+    autocomplete: { default: "off", type: String },
   },
   emits: ["update:textInit", "update:errorVariable"],
   data() {

@@ -17,6 +17,7 @@
         :label="$t('Let\'s get acquainted :')"
         :max-length="maxName"
         :placeholder="$t('Your name')"
+        autocomplete="name"
       />
       <ClassicInputText
         v-model:text-init="abuseDescription"
