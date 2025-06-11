@@ -50,9 +50,8 @@
         :key="link.name"
         rel="noreferrer noopener"
         target="_blank"
-        class="octopus-dropdown-item justify-content-start d-flex align-items-center"
+        class="octopus-dropdown-item justify-content-start d-flex align-items-center realLink"
         :href="link.url"
-        realLink="true"
         :title="$t('New window', {text: link.title})"
       >
         <component :is="link.icon" :fill-color="link.color" class="me-1" />

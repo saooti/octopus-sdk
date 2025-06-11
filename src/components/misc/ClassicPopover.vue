@@ -279,7 +279,7 @@ export default defineComponent({
       if (!(myElement as HTMLAnchorElement).href) {
         return this.clearClick();
       }
-      if ("true" === myElement.getAttribute("reallink")) {
+      if (myElement.classList.contains("reallink")) {
         myElement.click();
       } else {
         this.$router.push((myElement as HTMLAnchorElement).pathname);

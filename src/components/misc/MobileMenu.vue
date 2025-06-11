@@ -36,9 +36,8 @@
       </template>
       <a
         v-if="!isAuthenticatedWithOrga"
-        class="octopus-dropdown-item"
+        class="octopus-dropdown-item realLink"
         :href="pathLogin"
-        realLink="true"
       >
         {{ $t("Login") }}
       </a>

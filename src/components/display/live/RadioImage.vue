@@ -11,7 +11,7 @@
       width="270"
       height="270"
       role="presentation"
-      alt=""
+      
       class="img-box img-box-podcast"
       :title="$t('Canal name image', { name: radio.name })"
     />

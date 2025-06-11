@@ -9,7 +9,7 @@
           src="/img/logo_saooti_play_black.svg"
           role="presentation"
           title="Saooti"
-          alt=""
+          
         />
         <h2>{{ $t("You do not have the right to access this page") }}</h2>
       </div>
@@ -19,7 +19,7 @@
         class="stop-octopus-img"
         src="/img/403.webp"
         role="presentation"
-        alt=""
+        
         title="403"
       />
     </div>

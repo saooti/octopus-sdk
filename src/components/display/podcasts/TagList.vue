@@ -28,7 +28,7 @@
             class="ouest-france-logo"
             role="presentation"
             title="Ouest France"
-            alt=""
+            
             src="/img/ouest_france_logo.svg" 
           />
           {{ formateOfTag(tag) }}

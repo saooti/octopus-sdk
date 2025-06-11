@@ -21,7 +21,7 @@
         :width="imageWidth"
         :height="imageWidth"
         role="presentation"
-        alt=""
+        
         :title="$t('Episode name image', { name: podcastDisplay?.title })"
         class="player-image"
         :class="imageWidth > 50 ? 'big-player-image' : ''"

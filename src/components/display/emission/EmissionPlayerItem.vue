@@ -17,7 +17,7 @@
           width="330"
           height="330"
           role="presentation"
-          alt=""
+          
           :title="$t('Emission name image', { name: emission.name })"
           class="img-box"
         />

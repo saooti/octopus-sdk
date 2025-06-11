@@ -22,7 +22,7 @@
               width="250"
               height="250"
               role="presentation"
-              alt=""
+              
               :title="$t('Emission name image', { name: name })"
               class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
             />

@@ -12,7 +12,7 @@
         v-if="!filterOrgaId || '' === imgUrl"
         :src="logoUrl"
         role="presentation"
-        alt=""
+        
         width="140"
         height="50"
         title="Logo"
@@ -22,7 +22,7 @@
         v-else
         :src="useProxyImageUrl(imgUrl, '', '80')"
         role="presentation"
-        alt=""
+        
         class="client-logo"
         title="Logo"
         :class="platformEducation ? 'education-logo' : ''"
@@ -44,7 +44,7 @@
           v-if="isGarRole"
           :src="logoUrl"
           role="presentation"
-          alt=""
+          
           width="100"
           height="29"
           class="ms-2"
@@ -61,7 +61,7 @@
           <img
             :src="logoUrl"
             role="presentation"
-            alt=""
+            
             title="Saooti"
             width="100"
             height="29"

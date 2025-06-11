@@ -39,7 +39,7 @@
         width="250"
         height="250"
         role="presentation"
-        alt=""
+        
         :title="$t('Playlist name image', { name: name })"
         class="img-box"
       />

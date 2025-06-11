@@ -27,7 +27,7 @@
           height="32"
           class="me-2"
           role="presentation"
-          alt=""
+          
           :title="$t('Organisation name image', { name: option.name })"
         />
         <span>

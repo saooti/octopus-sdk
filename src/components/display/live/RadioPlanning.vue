@@ -83,7 +83,7 @@
                     height="150"
                     class="m-2 program-item-img"
                     role="presentation"
-                    alt=""
+                    
                     :title="
                       $t('Episode name image', {
                         name: planningItem.podcastData.title,

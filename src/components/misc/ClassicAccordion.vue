@@ -20,7 +20,7 @@
           class="img-accordion"
           :src="imageUrl"
           role="presentation"
-          alt=""
+          
         />
         <span class="flex-grow-1">{{ title }}</span>
         <ChevronDownIcon :class="{ 'arrow-transform': isOpen }" />

@@ -21,7 +21,7 @@
         height="80"
         class="small-img-box"
         role="presentation"
-        alt=""
+        
         :title="$t('Episode name image', { name: podcastRadio.title })"
       />
       <div>{{ podcastRadio.title }}</div>

@@ -252,7 +252,7 @@ export default defineComponent({
               condition: this.isRoleEditor,
             },
             {
-              title: this.$t("Rubrics and topics"),
+              title: this.$t("Topics and rubrics"),
               href: "/main/priv/edit/rubrics",
               id: "link-page-rubrics",
               condition: this.isRoleEditor,

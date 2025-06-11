@@ -36,7 +36,7 @@
         <ul class="p-0 m-0">
           <template v-if="!isAuthenticated">
             <li class="li-style-none">
-              <a class="octopus-dropdown-item" :href="pathLogin" realLink="true">
+              <a class="octopus-dropdown-item realLink" :href="pathLogin">
                 {{ $t("Login") }}
               </a>
             </li>
@@ -65,10 +65,9 @@
               <li v-for="helpLink in helpLinks" :key="helpLink.title" class="li-style-none">
                 <a
                   :href="helpLink.href"
-                  class="octopus-dropdown-item"
+                  class="octopus-dropdown-item realLink"
                   rel="noreferrer noopener"
                   target="_blank"
-                  realLink="true"
                   :title="$t('New window', {text: helpLink.title})"
                 >
                   {{ helpLink.title }}
