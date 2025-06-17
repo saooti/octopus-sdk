@@ -4,20 +4,20 @@
     :style="backgroundStyle"
   >
     <div class="position-absolute module-box">
-      <h1>{{ $t("Oops") }}</h1>
-      <h2>{{ $t("The page you are looking for cannot be found") }}</h2>
+      <h1>{{ t("Oops") }}</h1>
+      <h2>{{ t("The page you are looking for cannot be found") }}</h2>
       <router-link
         class="btn btn-primary"
         :to="{
           name: 'home',
           query: {
             iabId: filterStore.filterIab?.id,
-            rubriquesId: rubriqueQueryParam,
+            rubriquesId: rubriqueQueryParam.value,
             productor: filterStore.filterOrgaId
           },
         }"
       >
-        {{ $t("Back to home") }}
+        {{ t("Back to home") }}
       </router-link>
     </div>
   </section>
@@ -27,11 +27,15 @@
 import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import { useFilterStore } from "../../stores/FilterStore";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
+//Composables
 const { rubriqueQueryParam } = useRubriquesFilterComputed();
-
 const filterStore = useFilterStore();
+const { t } = useI18n();
 
+
+//Computed
 const backgroundStyle = computed(() => "background-image: url('/img/404.svg');");
 
 </script>

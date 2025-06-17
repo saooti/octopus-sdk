@@ -7,74 +7,64 @@
       class="h6 fw-bold"
       :class="canEditName ? 'btn btn-transparent p-1' : ''"
       @click="startEditingName"
-      >{{ commentUser.name }}</component
+      >{{ commentStore.commentUser?.name }}</component
     >
     <template v-else>
       <ClassicInputText
         v-model:text-init="temporaryName"
         v-model:error-variable="errorName"
         input-id="comment-name-input"
-        :label="$t('Your name')"
-        :max-length="maxName"
-        autocomplete="name"
+        :label="t('Your name')"
+        :max-length="Constants.MAX_COMMENT_NAME"
+        autocomplete-type="name"
         class="me-3"
       />
       <button class="btn m-1" @click="isEditing = false">
-        {{ $t("Cancel") }}
+        {{ t("Cancel") }}
       </button>
       <button
         class="btn btn-primary m-1"
         :disabled="errorName"
         @click="validEdit"
       >
-        {{ $t("Yes") }}
+        {{ t("Yes") }}
       </button>
     </template>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicInputText from "../../form/ClassicInputText.vue";
 import Constants from "../../../../public/config";
 import { useAuthStore } from "../../../stores/AuthStore";
-import { mapActions, mapState } from "pinia";
-import { defineComponent } from "vue";
+import { computed, ref } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
-export default defineComponent({
-  name: "CommentName",
-  components:{
-    ClassicInputText
-  },
-  emits: [],
-  data() {
-    return {
-      isEditing: false as boolean,
-      temporaryName: "" as string,
-      errorName: true as boolean,
-      maxName: Constants.MAX_COMMENT_NAME as number,
-    };
-  },
+import { useI18n } from "vue-i18n";
 
-  computed: {
-    ...mapState(useCommentStore, ["commentUser"]),
-    ...mapState(useAuthStore, ["authProfile"]),
-    canEditName(): boolean {
-      return undefined !== this.authProfile;
-    },
-  },
-  methods: {
-    ...mapActions(useCommentStore, ["setCommentUser"]),
-    startEditingName(): void {
-      if (!this.canEditName) {
-        return;
-      }
-      this.temporaryName = this.commentUser?.name ?? "";
-      this.isEditing = true;
-    },
-    validEdit(): void {
-      this.setCommentUser(this.temporaryName);
-      this.isEditing = false;
-    },
-  },
-});
+//Data 
+const isEditing = ref(false);
+const temporaryName = ref("");
+const errorName = ref(true);
+
+//Composables
+const { t } = useI18n();
+const commentStore = useCommentStore();
+const authStore = useAuthStore();
+
+
+//Computed
+const canEditName = computed(() => undefined !== authStore.authProfile);
+
+//Methods
+function startEditingName(): void {
+  if (!canEditName.value) {
+    return;
+  }
+  temporaryName.value = commentStore.commentUser?.name ?? "";
+  isEditing.value = true;
+}
+function validEdit(): void {
+  commentStore.setCommentUser(temporaryName.value);
+  isEditing.value = false;
+}
 </script>

@@ -4,7 +4,7 @@ export default {
     if (!text) return "";
     return text.replace(urlRegex, (url: string) => {
       return (
-        '<a href="' + url + '" target="_blank" rel="noreferrer noopener" :title="$t(\'New window\', {text: '+url+'})">' + url + "</a>"
+        '<a href="' + url + '" target="_blank" rel="noreferrer noopener" :title="t(\'New window\', {text: '+url+'})">' + url + "</a>"
       );
     });
   },

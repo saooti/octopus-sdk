@@ -8,7 +8,7 @@
         name: 'participant',
         params: { participantId: animator.participantId },
       }"
-      :title="$t('Participant name page', { name: animatorName })"
+      :title="t('Participant name page', { name: animatorName })"
       class="podcast-item-animator text-truncate"
     >
       {{ animatorName }}
@@ -16,23 +16,22 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Participant } from "@/stores/class/general/participant";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "AnimatorsItem",
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-  props: {
-    animator: { default: undefined, type: Object as () => Participant },
-  },
-  computed: {
-    animatorName(): string {
-      return `${this.animator?.firstName ?? ""} ${
-        this.animator?.lastName ?? ""
-      }`.trim();
-    },
-  },
-});
+//Props 
+const props = defineProps({
+  animator: { default: undefined, type: Object as () => Participant },
+})
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const animatorName = computed(() => `${props.animator?.firstName ?? ""} ${ props.animator?.lastName ?? ""}`.trim());
+
 </script>
 
 <style lang="scss">

@@ -19,7 +19,8 @@
           height="30"
           class="img-accordion"
           :src="imageUrl"
-          role="presentation"
+          aria-hidden="true"
+        alt=""
           
         />
         <span class="flex-grow-1">{{ title }}</span>
@@ -33,42 +34,36 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent, onMounted, ref, watch } from "vue";
 const AlertIcon = defineAsyncComponent(
   () => import("vue-material-design-icons/Alert.vue"),
 );
 
-export default defineComponent({
-  name: "ClassicAccordion",
-  components: {
-    ChevronDownIcon,
-    AlertIcon,
-  },
-  props: {
-    title: { default: "", type: String },
-    idComposer: { default: "", type: String },
-    isWarning: { default: false, type: Boolean },
-    imageUrl: { default: undefined, type: String },
-    displayAccordion: { default: true, type: Boolean },
-    initOpen: { default: false, type: Boolean },
-  },
-  emits: ["open"],
-  data() {
-    return {
-      isOpen: false as boolean,
-    };
-  },
-  watch: {
-    isOpen() {
-      this.$emit("open");
-    },
-  },
-  created() {
-    this.isOpen = this.initOpen;
-  },
+//Props
+const props = defineProps({
+  title: { default: "", type: String },
+  idComposer: { default: "", type: String },
+  isWarning: { default: false, type: Boolean },
+  imageUrl: { default: undefined, type: String },
+  displayAccordion: { default: true, type: Boolean },
+  initOpen: { default: false, type: Boolean },
 });
+
+//Emits
+const emit = defineEmits(["open"]);
+
+//Data
+const isOpen = ref(false);
+
+//Watch
+watch(isOpen, () => emit("open"));
+
+onMounted(()=>{
+  isOpen.value = props.initOpen;
+})
+
 </script>
 <style lang="scss">
 

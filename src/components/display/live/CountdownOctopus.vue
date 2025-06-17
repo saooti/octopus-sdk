@@ -9,15 +9,15 @@
     </div>
     <div class="thought">
       <template v-if="!props.overrideText">
-        {{ $t("This live will start") }}
+        {{ t("This live will start") }}
         <span class="text-lowercase">
           <template v-if="countdownTimer">
             {{
-              $t("In days hours minutes seconds", countdownValues)
+              t("In days hours minutes seconds", countdownValues)
             }}
           </template>
           <template v-else>
-            {{ $t("In a moment") }}
+            {{ t("In a moment") }}
           </template>
         </span>
       </template>
@@ -27,13 +27,19 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-  import {useCountdown} from "../../composable/podcasts/useCountdown";
-  const props = defineProps({
-    timeRemaining:{ default: undefined, type: Number },
-    overrideText: { default: undefined, type: String },
-  })
-  const { countdownValues, countdownTimer } = useCountdown(props.timeRemaining);
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+import {useCountdown} from "../../composable/podcasts/useCountdown";
+
+//Props 
+const props = defineProps({
+  timeRemaining:{ default: undefined, type: Number },
+  overrideText: { default: undefined, type: String },
+})
+
+//Composables
+const { t } = useI18n();
+const { countdownValues, countdownTimer } = useCountdown(props.timeRemaining);
 </script>
 
 <style lang="scss">

@@ -5,7 +5,7 @@
         name: 'emission',
         params: { emissionId: emission.emissionId },
       }"
-      :title="$t('Series name page', { name: emission.name })"
+      :title="t('Series name page', { name: emission.name })"
       class="d-flex flex-grow-1 text-dark"
     >
       <img
@@ -13,8 +13,9 @@
         width="250"
         height="250"
         class="img-box"
-        role="presentation"
-        :title="$t('Emission name image', { name: emission.name })"
+        aria-hidden="true"
+        alt=""
+        :title="t('Emission name image', { name: emission.name })"
       />
       <div class="classic-element-text">
         <div class="d-flex align-items-center element-name basic-line-clamp">
@@ -22,7 +23,7 @@
             v-if="!activeEmission && !isPodcastmaker && editRight"
             :size="16"
             class="text-danger me-1"
-            :title="$t('Emission have not podcasts')"
+            :title="t('Emission have not podcasts')"
           />
           {{ emission.name }}
         </div>
@@ -52,83 +53,70 @@
   </article>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { Emission } from "@/stores/class/general/emission";
 import classicApi from "../../../api/classicApi";
 import {useImageProxy} from "../../composable/useImageProxy";
 import displayHelper from "../../../helper/displayHelper";
-import { defineComponent } from "vue";
+import { computed, onBeforeMount, onMounted, ref, useTemplateRef } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
-export default defineComponent({
-  name: "EmissionItem",
-  components: {
-    AlertIcon,
-  },
+import { useI18n } from "vue-i18n";
 
-  props: {
-    emission: { default: () => ({}), type: Object as () => Emission },
-  },
+//Props 
+const props = defineProps({
+  emission: { default: () => ({}), type: Object as () => Emission },
+})
 
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    const { isPodcastmaker, isEditRights } = useOrgaComputed();
-    return { useProxyImageUrl, isPodcastmaker, isEditRights }
-  },
+//Data 
+const activeEmission = ref(true);
 
-  data() {
-    return {
-      activeEmission: true as boolean,
-    };
-  },
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const { isPodcastmaker, isEditRights } = useOrgaComputed();
 
-  computed: {
-    organisation(): string {
-      return this.emission?.publisher?.organisation?.name ?? "";
+//Computed
+const editRight = computed(() => isEditRights(props.emission.orga.id));
+
+
+onBeforeMount(()=>{
+  if (!editRight.value) return;
+  hasPodcast();
+})
+
+onMounted(()=>{
+  const emissionDesc = useTemplateRef('descriptionEmission')?.value as HTMLElement;
+  const emissionDescContainer = useTemplateRef('descriptionEmissionContainer')?.value as HTMLElement;
+  if (
+    null !== emissionDesc &&
+    null !== emissionDescContainer &&
+    emissionDesc.clientHeight > emissionDescContainer.clientHeight
+  ) {
+    emissionDescContainer.classList.add("after-element-description");
+  }
+})
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
+async function hasPodcast(): Promise<void> {
+  const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+    api: 0,
+    path: "podcast/search",
+    parameters: {
+      emissionId: props.emission.emissionId,
+      first: 0,
+      size: 0,
+      includeStatus: ["READY", "PROCESSING"],
     },
-    editRight(): boolean {
-      return this.isEditRights(this.emission.orga.id);
-    },
-  },
-
-  created() {
-    if (!this.editRight) return;
-    this.hasPodcast();
-  },
-  mounted() {
-    const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
-    const emissionDescContainer = this.$refs
-      .descriptionEmissionContainer as HTMLElement;
-    if (
-      null !== emissionDesc &&
-      null !== emissionDescContainer &&
-      emissionDesc.clientHeight > emissionDescContainer.clientHeight
-    ) {
-      emissionDescContainer.classList.add("after-element-description");
-    }
-  },
-  methods: {
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-    async hasPodcast(): Promise<void> {
-      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
-        api: 0,
-        path: "podcast/search",
-        parameters: {
-          emissionId: this.emission.emissionId,
-          first: 0,
-          size: 0,
-          includeStatus: ["READY", "PROCESSING"],
-        },
-        specialTreatement: true,
-      });
-      if (0 === data.count) {
-        this.activeEmission = false;
-      }
-    },
-  },
-});
+    specialTreatement: true,
+  });
+  if (0 === data.count) {
+    activeEmission.value = false;
+  }
+}
 </script>

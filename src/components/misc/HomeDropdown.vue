@@ -2,15 +2,15 @@
   <div class="d-flex align-items-center">
     <button
       v-if="isAuthenticatedWithOrga"
-      :title="$t('My space')"
+      :title="t('My space')"
       class="btn admin-button hide-small-screen m-1 text-blue-octopus"
       @click="goToAdministration"
     >
       <AppsIcon :size="30" />
     </button>
     <router-link
-      v-if="isAuthenticatedWithOrga && isRoleContribution"
-      :title="$t('Upload')"
+      v-if="isAuthenticatedWithOrga && authStore.isRoleContribution"
+      :title="t('Upload')"
       to="/main/priv/upload"
       class="btn admin-button hide-small-screen m-1 text-blue-octopus"
     >
@@ -20,7 +20,7 @@
       v-show="!mobileMenuDisplay || isAuthenticatedWithOrga"
       id="home-dropdown"
       class="btn m-1 admin-button hide-small-screen text-blue-octopus"
-      :title="$t('User menu')"
+      :title="t('User menu')"
     >
       <AccountIcon :size="30" />
     </button>
@@ -32,28 +32,28 @@
       :left-pos="true"
       :is-top-layer="true"
     >
-      <nav :aria-label="$t('User menu')">
+      <nav :aria-label="t('User menu')">
         <ul class="p-0 m-0">
           <template v-if="!isAuthenticated">
             <li class="li-style-none">
               <a class="octopus-dropdown-item realLink" :href="pathLogin">
-                {{ $t("Login") }}
+                {{ t("Login") }}
               </a>
             </li>
             <li class="li-style-none">
               <router-link
-                v-if="!isPodcastmaker"
+                v-if="!state.generalParameters.podcastmaker"
                 class="octopus-dropdown-item"
                 to="/main/pub/create"
               >
-                {{ $t("Create an account") }}
+                {{ t("Create an account") }}
               </router-link>
             </li>
           </template>
           <template v-else>
             <li v-for="routerBack in routerBackoffice" :key="routerBack.path" class="li-style-none">
               <router-link
-                v-if="!isPodcastmaker && routerBack.condition"
+                v-if="!state.generalParameters.podcastmaker && routerBack.condition"
                 :class="routerBack.class"
                 :to="routerBack.path"
               >
@@ -68,7 +68,7 @@
                   class="octopus-dropdown-item realLink"
                   rel="noreferrer noopener"
                   target="_blank"
-                  :title="$t('New window', {text: helpLink.title})"
+                  :title="t('New window', {text: helpLink.title})"
                 >
                   {{ helpLink.title }}
                   <OpenInNewIcon class="ms-1" :size="15"/>
@@ -78,17 +78,17 @@
             <hr />
             <li class="li-style-none">
               <a class="octopus-dropdown-item c-hand" href="/logout">
-                {{ $t("Logout") }}
+                {{ t("Logout") }}
               </a>
             </li>
           </template>
           <li class="li-style-none">
             <router-link
-              v-if="!isGarRole"
+              v-if="!authStore.isGarRole"
               class="octopus-dropdown-item"
               to="/main/pub/contact"
             >
-              {{ $t("Contact") }}
+              {{ t("Contact") }}
             </router-link>
           </li>
         </ul>
@@ -97,7 +97,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import OpenInNewIcon from "vue-material-design-icons/OpenInNew.vue";
 import AppsIcon from "vue-material-design-icons/Apps.vue";
 import AccountIcon from "vue-material-design-icons/Account.vue";
@@ -105,101 +105,79 @@ import DownloadIcon from "vue-material-design-icons/Download.vue";
 import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import { useAuthStore } from "../../stores/AuthStore";
-import { mapState } from "pinia";
-import { defineComponent } from "vue";
-import { Organisation } from "@/stores/class/general/organisation";
+import { computed } from "vue";
 import { useApiStore } from "../../stores/ApiStore";
-export default defineComponent({
-  name: "HomeDropdown",
-  components: {
-    ClassicPopover,
-    DownloadIcon,
-    AccountIcon,
-    AppsIcon,
-    OpenInNewIcon
-  },
-  props: {
-    isEducation: { default: false, type: Boolean },
-    mobileMenuDisplay: { default: false, type: Boolean },
-    scrolled: { default: false, type: Boolean },
-  },
-  computed: {
-    ...mapState(useAuthStore, [
-      "authOrgaId",
-      "authProfile",
-      "isGarRole",
-      "isRoleContribution",
-      "isRoleOrganisation",
-    ]),
-    ...mapState(useApiStore, ["frontendUrl"]),
-    pathLogin(){
-      return "/sso/login?redirect_url="+encodeURI(this.frontendUrl + this.$route.fullPath);
-    },
-    organisationsAvailable(): Array<Organisation> {
-      return this.authProfile.organisations ?? [];
-    },
-    helpLinks() {
-      if (this.isGarRole || this.isEducation) {
-        return [];
-      }
-      return [
-        {
-          title: this.$t("Help"),
-          href: "https://help.octopus.saooti.com/Aide/",
-        },
-        { title: this.$t("TutoMag"), href: "https://help.octopus.saooti.com/" },
-      ];
-    },
-    routerBackoffice() {
-      return [
-        {
-          title: this.$t("My space"),
-          class: "octopus-dropdown-item show-small-phone-flex",
-          path: "/main/priv/backoffice",
-          condition: this.isAuthenticatedWithOrga,
-        },
-        {
-          title: this.$t("Upload"),
-          class: "octopus-dropdown-item show-small-phone-flex",
-          path: "/main/priv/upload",
-          condition: this.isAuthenticatedWithOrga && this.isRoleContribution,
-        },
-        {
-          title: this.$t("Edit my profile"),
-          class: "octopus-dropdown-item",
-          path: "/main/priv/edit/profile",
-          condition: true,
-        },
-        {
-          title: this.$t("Edit my organisation"),
-          class: "octopus-dropdown-item",
-          path: "/main/priv/edit/organisation",
-          condition:
-            this.isAuthenticatedWithOrga &&
-            (this.isRoleOrganisation || 1 < this.organisationsAvailable.length),
-        },
-      ];
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    isAuthenticated(): boolean {
-      return undefined !== this.authProfile?.userId;
-    },
-    isAuthenticatedWithOrga(): boolean {
-      return undefined !== this.authOrgaId;
-    },
-  },
-  methods: {
-    goToAdministration() {
-      if ("backoffice" !== this.$route.name) {
-        this.$router.push("/main/priv/backoffice");
-      } else if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push("/");
-      }
-    },
-  },
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
+
+//Props 
+const props = defineProps({
+  isEducation: { default: false, type: Boolean },
+  mobileMenuDisplay: { default: false, type: Boolean },
+  scrolled: { default: false, type: Boolean },
+})
+
+//Composables
+const { t } = useI18n();
+const authStore = useAuthStore();
+const apiStore = useApiStore();
+const route = useRoute();
+const router = useRouter();
+
+//Computed
+const isAuthenticated = computed(() => undefined !== authStore.authProfile?.userId);
+const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
+const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
+const organisationsAvailable = computed(() =>  authStore.authProfile?.organisations ?? []);
+const helpLinks = computed(() => {
+  if (authStore.isGarRole || props.isEducation) {
+    return [];
+  }
+  return [
+    { title:t("Help"), href: "https://help.octopus.saooti.com/Aide/"},
+    { title: t("TutoMag"), href: "https://help.octopus.saooti.com/" },
+  ];
 });
+const routerBackoffice = computed(() => {
+  return [
+    {
+      title: t("My space"),
+      class: "octopus-dropdown-item show-small-phone-flex",
+      path: "/main/priv/backoffice",
+      condition: isAuthenticatedWithOrga.value,
+    },
+    {
+      title: t("Upload"),
+      class: "octopus-dropdown-item show-small-phone-flex",
+      path: "/main/priv/upload",
+      condition: isAuthenticatedWithOrga.value && authStore.isRoleContribution,
+    },
+    {
+      title: t("Edit my profile"),
+      class: "octopus-dropdown-item",
+      path: "/main/priv/edit/profile",
+      condition: true,
+    },
+    {
+      title: t("Edit my organisation"),
+      class: "octopus-dropdown-item",
+      path: "/main/priv/edit/organisation",
+      condition:
+      isAuthenticatedWithOrga.value &&
+        (authStore.isRoleOrganisation || 1 < organisationsAvailable.value.length),
+    },
+  ];
+});
+
+
+//Methods
+function goToAdministration() {
+  if ("backoffice" !== route.name) {
+    router.push("/main/priv/backoffice");
+  } else if (window.history.length > 1) {
+    router.go(-1);
+  } else {
+    router.push("/");
+  }
+}
 </script>

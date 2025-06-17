@@ -9,7 +9,7 @@
       <ClassicPopover
         :disable="isValidComment"
         :target="'popover-comment' + comment.commentId"
-        :content="$t('Comment waiting')"
+        :content="t('Comment waiting')"
       />
       <time :datetime="comment.date" class="me-2">
         {{ date }}
@@ -19,7 +19,7 @@
         class="d-flex align-items-center text-danger me-2"
       >
         <AlertIcon :size="16" class="me-1" />
-        {{ $t("abuse denounced", { nb: comment.abuse }) }}
+        {{ t("abuse denounced", { nb: comment.abuse }) }}
       </div>
       <span v-if="editRight" :class="'status-' + comment.state" />
     </div>
@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -43,67 +43,54 @@ dayjs.extend(relativeTime);
 import displayHelper from "../../../../helper/displayHelper";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import ClassicPopover from "../../../misc/ClassicPopover.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "CommentBasicView",
+import { computed, onMounted, onUnmounted, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-  components: {
-    ClassicPopover,
-    AlertIcon,
-  },
+//Props 
+const props = defineProps({
+  comment: { default: () => ({}), type: Object as () => CommentPodcast },
+  editRight: { default: false, type: Boolean },
+})
 
-  props: {
-    comment: { default: () => ({}), type: Object as () => CommentPodcast },
-    editRight: { default: false, type: Boolean },
-  },
-  data() {
-    return {
-      displayPreview: true as boolean,
-      dateInterval: undefined as ReturnType<typeof setTimeout> | undefined,
-      date: "" as string,
-    };
-  },
-  computed: {
-    commentTooLong() {
-      return this.comment.content.length > 300;
-    },
-    username(): string {
-      return this.comment.poster.userName;
-    },
-    isValidComment() {
-      return "VALIDATED" === this.comment.state;
-    },
-    readMore(): string {
-      return this.displayPreview ? this.$t("Read more") : this.$t("Read less");
-    },
-    contentDisplay(): string {
-      if (!this.displayPreview || !this.commentTooLong) {
-        return this.comment.content;
-      }
-      return this.comment.content.substring(0, 300) + "...";
-    },
-  },
-  mounted() {
-    this.defineDateFromNow();
-    this.dateInterval = setInterval(() => {
-      this.defineDateFromNow();
-    }, 60000);
-  },
-  unmounted() {
-    clearInterval(this.dateInterval as unknown as number);
-  },
-  methods: {
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-    defineDateFromNow() {
-      if (!this.comment.date) {
-        this.date = "";
-      }
-      this.date = dayjs(this.comment.date).fromNow();
-    },
-  },
+//Data 
+const displayPreview = ref(true);
+const date = ref("");
+const dateInterval: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
+
+ //Composables
+const { t } = useI18n();
+
+//Computed
+const commentTooLong = computed(() => props.comment.content.length > 300);
+const username = computed(() => props.comment.poster.userName);
+const isValidComment = computed(() => "VALIDATED" === props.comment.state);
+const readMore = computed(() => displayPreview.value ? t("Read more") : t("Read less"));
+const contentDisplay = computed(() => {
+  if (!displayPreview.value || !commentTooLong.value) {
+    return props.comment.content;
+  }
+  return props.comment.content.substring(0, 300) + "...";
 });
+
+onMounted(()=>{
+  defineDateFromNow();
+  dateInterval.value = setInterval(() => {
+    defineDateFromNow();
+  }, 60000);
+})
+ 
+onUnmounted(()=>clearInterval(dateInterval.value as unknown as number))
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
+function defineDateFromNow() {
+  if (!props.comment.date) {
+    date.value = "";
+  }
+  date.value = dayjs(props.comment.date).fromNow();
+}
 </script>
 <style lang="scss">
 @use "../../../../style/comments";

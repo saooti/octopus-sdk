@@ -1,7 +1,7 @@
 <template>
   <div v-if="notEmpty">
     <h3 class="mb-0 mt-3">
-      {{ $t("All live emission button") }}
+      {{ t("All live emission button") }}
     </h3>
     <ListPaginate
       id="liveListPaginate"
@@ -23,117 +23,109 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
 import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
-import { defineComponent } from "vue";
+import { computed, onBeforeMount, Ref, ref, watch } from "vue";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
-export default defineComponent({
-  name: "LiveHorizontalList",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    PodcastItem,
-    ListPaginate,
-  },
 
-  props: {
-    first: { default: 0, type: Number },
-    size: { default: 30, type: Number },
-    emissionId: { default: undefined, type: Number },
-  },
+//Props 
+const props = defineProps({
+  first: { default: 0, type: Number },
+  size: { default: 30, type: Number },
+  emissionId: { default: undefined, type: Number },
+})
 
-  data() {
-    return {
-      dfirst: this.first,
-      dsize: this.size,
-      totalCount: 0 as number,
-      lives: [] as Array<Podcast>,
-      notEmpty: false as boolean,
-      inFetching: false as boolean,
-      isMobile: false as boolean,
-    };
-  },
+//Data 
+const dfirst = ref(props.first);
+const dsize = ref(props.size);
+const totalCount = ref(0);
+const lives: Ref<Array<Podcast>> = ref([]);
+const notEmpty = ref(false);
+const inFetching = ref(false);
+const isMobile = ref(false);
 
-  computed: {
-    displayArray(): Array<Podcast> {
-      if (this.isMobile) {
-        return this.lives;
-      }
-      return this.lives.slice(
-        this.dfirst,
-        Math.min(this.dfirst + this.dsize, this.totalCount),
-      );
-    },
-  },
-  watch: {
-    dsize(): void {
-      this.reloadList();
-    },
-    dfirst(): void {
-      if (!this.lives[this.dfirst] || 0 === this.lives[this.dfirst].podcastId) {
-        this.fetchContent(false);
-      }
-    },
-  },
+//Composables
+const { t } = useI18n();
 
-  created() {
-    this.fetchContent(true);
-  },
-  methods: {
-    reloadList() {
-      this.dfirst = 0;
-      this.fetchContent(true);
-    },
-    async fetchContent(reset: boolean): Promise<void> {
-      this.inFetching = true;
-      if (reset) {
-        this.notEmpty = false;
-      }
-      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
-        api: 0,
-        path: "podcast/search",
-        parameters: {
-          first: this.dfirst,
-          size: this.dsize,
-          emissionId: this.emissionId,
-          sort: "DATE",
-          includeStatus: "READY_TO_RECORD",
-        },
-        specialTreatement: true,
-      });
-      this.afterFetching(reset, data);
-    },
-    afterFetching(
-      reset: boolean,
-      data: { count: number; result: Array<Podcast>; sort: string },
-    ): void {
-      if (reset) {
-        this.lives.length = 0;
-      }
-      if (this.dfirst > this.lives.length) {
-        for (
-          let i = this.lives.length - 1, len = this.dfirst + this.dsize;
-          i < len;
-          i++
-        ) {
-          this.lives.push(emptyPodcastData());
-        }
-      }
-      const responseLives = data.result.filter((l: Podcast | null) => {
-        return null !== l;
-      });
-      this.lives = this.lives
-        .slice(0, this.dfirst)
-        .concat(responseLives)
-        .concat(this.lives.slice(this.dfirst + this.dsize, this.lives.length));
-      this.totalCount = data.count;
-      if (0 !== this.lives.length) {
-        this.notEmpty = true;
-      }
-      this.inFetching = false;
-    },
-  },
+//Computed
+const displayArray = computed(() => {
+  if (isMobile.value) {
+    return lives.value;
+  }
+  return lives.value.slice(
+    dfirst.value,
+    Math.min(dfirst.value + dsize.value, totalCount.value),
+  );
 });
+
+
+//Watch
+watch(dsize, () => reloadList());
+watch(dfirst, () => {
+  if (!lives.value[dfirst.value] || 0 === lives.value[dfirst.value].podcastId) {
+    fetchContent(false);
+  }
+});
+
+onBeforeMount(()=>fetchContent(true))
+
+
+//Methods
+function reloadList() {
+  dfirst.value = 0;
+  fetchContent(true);
+}
+async function fetchContent(reset: boolean): Promise<void> {
+  inFetching.value = true;
+  if (reset) {
+    notEmpty.value = false;
+  }
+  const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+    api: 0,
+    path: "podcast/search",
+    parameters: {
+      first: dfirst.value,
+      size: dsize.value,
+      emissionId: props.emissionId,
+      sort: "DATE",
+      includeStatus: "READY_TO_RECORD",
+    },
+    specialTreatement: true,
+  });
+  afterFetching(reset, data);
+}
+function afterFetching(
+  reset: boolean,
+  data: { count: number; result: Array<Podcast>; sort: string },
+): void {
+  if (reset) {
+    lives.value.length = 0;
+  }
+  if (dfirst.value > lives.value.length) {
+    for (
+      let i = lives.value.length - 1, len = dfirst.value + dsize.value;
+      i < len;
+      i++
+    ) {
+      lives.value.push(emptyPodcastData());
+    }
+  }
+  const responseLives = data.result.filter((l: Podcast | null) => {
+    return null !== l;
+  });
+  lives.value = lives.value
+    .slice(0, dfirst.value)
+    .concat(responseLives)
+    .concat(lives.value.slice(dfirst.value + dsize.value, lives.value.length));
+  totalCount.value = data.count;
+  if (0 !== lives.value.length) {
+    notEmpty.value = true;
+  }
+  inFetching.value = false;
+}
 </script>

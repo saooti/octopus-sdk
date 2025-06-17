@@ -1,18 +1,18 @@
 <template>
   <section class="module-box">
     <h2 class="mb-3">
-      {{ $t("Distribute") }}
+      {{ t("Distribute") }}
     </h2>
     <div class="sharing-distribution-container">
-      {{ $t("Rss feed:") }}
+      {{ t("Rss feed:") }}
       <div class="text-primary hide-small-screen text-break">
         {{ rss }}
       </div>
       <ClassicCopyButton
-        :text="$t('Copy')"
-        :text-after-copy="$t('Copied!')"
+        :text="t('Copy')"
+        :text-after-copy="t('Copied!')"
         :data-to-copy="rss"
-        :snackbar-text="$t('Link in clipboard')"
+        :snackbar-text="t('Link in clipboard')"
       />
     </div>
     <RssSection v-if="emission" :emission="emission" />
@@ -33,7 +33,7 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicCopyButton from "../../form/ClassicCopyButton.vue";
 import RadiolineIcon from "../../icons/RadiolineIcon.vue";
 import TuninIcon from "../../icons/TuninIcon.vue";
@@ -50,126 +50,112 @@ import { useApiStore } from "../../../stores/ApiStore";
 import classicApi from "../../../api/classicApi";
 import { Emission } from "@/stores/class/general/emission";
 
-import { defineComponent, defineAsyncComponent } from "vue";
-import { mapState } from "pinia";
+import {  defineAsyncComponent, ref, Ref, computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 const RssSection = defineAsyncComponent(
   () => import("@/components/display/aggregator/RssSection.vue"),
 );
-export default defineComponent({
-  components: {
-    RssSection,
-    SpotifyIcon,
-    YoutubeIcon,
-    ApplePodcastIcon,
-    DeezerIcon,
-    AmazonMusicIcon,
-    IHeartIcon,
-    PlayerFmIcon,
-    PocketCastIcon,
-    PodcastAddictIcon,
-    TuninIcon,
-    RadiolineIcon,
-    ClassicCopyButton
-  },
-  props: {
-    emissionId: { default: undefined, type: Number },
-  },
 
-  data() {
-    return {
-      emission: undefined as Emission | undefined,
-      rss: "" as string,
-    };
-  },
-  computed: {
-    ...mapState(useApiStore, ["apiUrl"]),
-    platformShare() {
-      return [
-        {
-          url: this.getUrl("amazon"),
-          icon: "AmazonMusicIcon",
-          title: "Amazon Music",
-          color: "#0c6cb3",
-        },
-        {
-          url: this.getUrl("apple"),
-          icon: "ApplePodcastIcon",
-          title: "Apple Podcast / iTunes",
-          color:"#aa1dd3"
-        },
-        { url: this.getUrl("deezer"), 
-          icon: "DeezerIcon", 
-          title: "Deezer",
-          color:"#a238ff" },
-        { url: this.getUrl("iHeart"), 
-          icon: "IHeartIcon",
-          title: "iHeart",
-          color:"#e11b22" },
-        {
-          url: this.getUrl("PlayerFM"),
-          icon: "PlayerFmIcon",
-          title: "PlayerFM",
-          color:"#bb202a"
-        },
-        {
-          url: this.getUrl("PocketCasts"),
-          icon: "PocketCastIcon",
-          title: "Pocket Casts",
-          color:"#f43e37"
-        },
-        {
-          url: this.getUrl("PodcastAddict"),
-          icon: "PodcastAddictIcon",
-          title: "Podcast Addict",
-          color:"#f4842d"
-        },
-        {
-          url: this.getUrl("radioline"),
-          icon: "RadiolineIcon",
-          title: "Radioline",
-          color:"#1678bd"
-        },
-        {
-          url: this.getUrl("spotify"),
-          icon: "SpotifyIcon",
-          title: "Spotify",
-          color: "#1ed760",
-        },
-        { url: this.getUrl("tuneIn"), 
-        icon: "TuninIcon", 
-        title: "TuneIn",
-      color:"#36b4a7" },
-        {
-          url: this.getUrl("youtube"),
-          icon: "YoutubeIcon",
-          title: "YouTube Music",
-          color: "#fe0000",
-        },
-      ];
-    },
-  },
+//Props 
+const props = defineProps({
+  emissionId: { default: undefined, type: Number },
+})
 
-  mounted() {
-    this.getEmissionDetails();
-    this.getRSS();
-  },
+//Data 
+const rss = ref("");
+const emission : Ref<Emission | undefined>= ref(undefined);
 
-  methods: {
-    getUrl(platform: string): string {
-      return `/main/priv/distribution/${platform}/${this.emissionId}`;
+//Composables
+const { t } = useI18n();
+const apiStore = useApiStore();
+
+//Computed
+const platformShare = computed(() => {
+  return [
+    {
+      url: getUrl("amazon"),
+      icon: AmazonMusicIcon,
+      title: "Amazon Music",
+      color: "#0c6cb3",
     },
-    async getEmissionDetails(): Promise<void> {
-      this.emission = await classicApi.fetchData<Emission>({
-        api: 0,
-        path: "emission/" + this.emissionId,
-      });
+    {
+      url: getUrl("apple"),
+      icon: ApplePodcastIcon,
+      title: "Apple Podcast / iTunes",
+      color:"#aa1dd3"
     },
-    getRSS(): void {
-      if (!this.$props.emissionId || this.$props.emissionId <= 0) return;
-      this.rss = `${this.apiUrl}rss/emission/${this.emissionId}.rss`;
+    { url: getUrl("deezer"), 
+      icon: DeezerIcon, 
+      title: "Deezer",
+      color:"#a238ff" },
+    { url: getUrl("iHeart"), 
+      icon: IHeartIcon,
+      title: "iHeart",
+      color:"#e11b22" },
+    {
+      url: getUrl("PlayerFM"),
+      icon: PlayerFmIcon,
+      title: "PlayerFM",
+      color:"#bb202a"
     },
-  },
+    {
+      url: getUrl("PocketCasts"),
+      icon: PocketCastIcon,
+      title: "Pocket Casts",
+      color:"#f43e37"
+    },
+    {
+      url: getUrl("PodcastAddict"),
+      icon: PodcastAddictIcon,
+      title: "Podcast Addict",
+      color:"#f4842d"
+    },
+    {
+      url: getUrl("radioline"),
+      icon: RadiolineIcon,
+      title: "Radioline",
+      color:"#1678bd"
+    },
+    {
+      url: getUrl("spotify"),
+      icon: SpotifyIcon,
+      title: "Spotify",
+      color: "#1ed760",
+    },
+    { url: getUrl("tuneIn"), 
+    icon: TuninIcon, 
+    title: "TuneIn",
+    color:"#36b4a7" },
+    {
+      url: getUrl("youtube"),
+      icon: YoutubeIcon,
+      title: "YouTube Music",
+      color: "#fe0000",
+    },
+  ];
 });
+
+
+onMounted(()=>{
+  getEmissionDetails();
+  getRSS();
+})
+
+
+//Methods
+function getUrl(platform: string): string {
+  return `/main/priv/distribution/${platform}/${props.emissionId}`;
+}
+async function getEmissionDetails(): Promise<void> {
+  emission.value = await classicApi.fetchData<Emission>({
+    api: 0,
+    path: "emission/" + props.emissionId,
+  });
+}
+function getRSS(): void {
+  if (!props.emissionId || props.emissionId <= 0) return;
+  rss.value = `${apiStore.apiUrl}rss/emission/${props.emissionId}.rss`;
+}
 </script>
 
 <style lang="scss">

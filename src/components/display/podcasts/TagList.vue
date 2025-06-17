@@ -4,7 +4,7 @@
     class="tag-list-component d-flex align-items-center flex-wrap mb-3 small-text"
   >
     <div class="fw-bold me-3">
-      {{ $t("Podcast tags") + " : " }}
+      {{ t("Podcast tags") + " : " }}
     </div>
     <router-link
       v-for="(tag, index) in tagListFiltered"
@@ -26,7 +26,8 @@
             width="20"
             height="20"
             class="ouest-france-logo"
-            role="presentation"
+            aria-hidden="true"
+        alt=""
             title="Ouest France"
             
             src="/img/ouest_france_logo.svg" 
@@ -44,62 +45,59 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineAsyncComponent, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, defineAsyncComponent } from "vue";
 const ClassicPopover = defineAsyncComponent(
   () => import("../../misc/ClassicPopover.vue"),
 );
 import {useTagOf} from "../../composable/useTagOf";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
-export default defineComponent({
-  name: "TagList",
-  components: {
-    ClassicPopover,
-  },
-  props: {
-    tagList: { default: () => [], type: Array as () => Array<string> },
-    podcastAnnotations: {
-      default: () => {},
-      type: Object as () => {
-        [key: string]: string | number | boolean | undefined;
-      },
-    },
-    orgaId: {default: "", type: String,},
-  },
-  setup(){
-    const { isOuestFranceTag, formateOfTag } = useTagOf();
-    return { isOuestFranceTag, formateOfTag }
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    tagListFiltered(): Array<string>{
-      return this.tagList.filter((tag: string) => {
-        return !tag.match(/^\[\[.*\]\]$/);
-      });
-    },
-    organisationQuery(){
-      if(this.filterOrgaId){
-        return undefined;
-      }
-      return { o: this.orgaId};
-    },
-    ouestFranceMainTag(): string | undefined {
-      if (this.podcastAnnotations?.["mainOfTag"]) {
-        for (const key in this.podcastAnnotations) {
-          if (
-            this.podcastAnnotations[key] ===
-              this.podcastAnnotations["mainOfTag"] &&
-            key !== "mainOfTag"
-          ) {
-            return "[of]" + key;
-          }
-        }
-      }
-      return undefined;
+import { useI18n } from "vue-i18n";
+
+//Props 
+const props = defineProps({
+  tagList: { default: () => [], type: Array as () => Array<string> },
+  podcastAnnotations: {
+    default: () => {},
+    type: Object as () => {
+      [key: string]: string | number | boolean | undefined;
     },
   },
+  orgaId: {default: "", type: String,},
+})
+
+
+//Composables
+const { t } = useI18n()
+const { isOuestFranceTag, formateOfTag } = useTagOf();
+const filterStore = useFilterStore();
+
+//Computed
+const tagListFiltered = computed(() => {
+  return props.tagList.filter((tag: string) => {
+    return !tag.match(/^\[\[.*\]\]$/);
+  });
 });
+const organisationQuery = computed(() => {
+  if(filterStore.filterOrgaId){
+    return undefined;
+  }
+  return { o: props.orgaId};
+});
+/* const ouestFranceMainTag = computed(() => {
+  if (props.podcastAnnotations?.["mainOfTag"]) {
+    for (const key in props.podcastAnnotations) {
+      if (
+        props.podcastAnnotations[key] ===
+        props.podcastAnnotations["mainOfTag"] &&
+        key !== "mainOfTag"
+      ) {
+        return "[of]" + key;
+      }
+    }
+  }
+  return undefined;
+}); */
 </script>
 
 <style lang="scss">

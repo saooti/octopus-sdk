@@ -20,6 +20,7 @@ import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 import ParticipantList from "../display/participant/ParticipantList.vue";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
 
+//Props
 const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
@@ -27,6 +28,8 @@ const props = defineProps({
   routeQuery: { default: "", type: String },
 });
 
+
+//Composables
 const {
   searchPattern,
   organisationId,

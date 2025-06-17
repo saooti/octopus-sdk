@@ -9,7 +9,7 @@
         :title="displayLabel ? '' : label"
         :data-selenium="selenium"
         :tabindex="isSwitch ? '-1' : '0'"
-        @input="$emit('update:textInit', !textInit)"
+        @input="emit('update:textInit', !textInit)"
         @click="emitClickAction"
       />
       <button
@@ -29,39 +29,35 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicCheckbox",
+<script setup lang="ts">
+//Props 
+const props = defineProps({
+  idCheckbox: { default: "", type: String },
+  label: { default: "", type: String },
+  isDisabled: { default: false, type: Boolean },
+  textInit: { default: false, type: Boolean },
+  isSwitch: { default: false, type: Boolean },
+  displayLabel: { default: true, type: Boolean },
+  classLabel: { default: "", type: String },
+  selenium: { default: "", type: String },
+})
 
-  props: {
-    idCheckbox: { default: "", type: String },
-    label: { default: "", type: String },
-    isDisabled: { default: false, type: Boolean },
-    textInit: { default: false, type: Boolean },
-    isSwitch: { default: false, type: Boolean },
-    displayLabel: { default: true, type: Boolean },
-    classLabel: { default: "", type: String },
-    selenium: { default: "", type: String },
-  },
-  emits: ["update:textInit", "clickAction"],
-  methods: {
-    emitClickAction(): void {
-      this.$emit("clickAction");
-    },
-    clickSlider() {
-      if (!this.isDisabled) {
-        this.$emit("update:textInit", !this.textInit);
-        this.emitClickAction();
-      }
-    },
-  },
-});
+//Emits
+const emit = defineEmits(["update:textInit", "clickAction"]);
+
+//Methods
+function emitClickAction(): void {
+  emit("clickAction");
+}
+function clickSlider() {
+  if (!props.isDisabled) {
+    emit("update:textInit", !props.textInit);
+    emitClickAction();
+  }
+}
 </script>
 
 <style lang="scss">
-
-
 .octopus-app {
   .octopus-form-switch {
     position: relative;

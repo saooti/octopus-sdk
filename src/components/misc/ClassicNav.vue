@@ -2,14 +2,14 @@
   <ul class="octopus-nav" :class="light ? 'light' : ''">
     <li
       v-for="index in tabNumber"
-      v-show="hasSlot(index - 1)"
+      v-show="$slots[index - 1]"
       :key="index - 1"
       class="octopus-nav-item"
     >
       <button
         class="octopus-nav-link"
         :class="activeTab === index - 1 ? 'active' : ''"
-        @click="$emit('update:activeTab', index - 1)"
+        @click="emit('update:activeTab', index - 1)"
       >
         <slot :name="index - 1" />
       </button>
@@ -24,7 +24,7 @@
   >
     <div
       v-for="index in tabNumber"
-      v-show="hasSlot('tab' + (index - 1))"
+      v-show="$slots['tab' + (index - 1)]"
       :key="index - 1"
       class="octopus-tab-pane"
       :class="activeTab === index - 1 ? 'active' : ''"
@@ -34,23 +34,19 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicNav",
-  props: {
-    tabNumber: { default: 0, type: Number },
-    activeTab: { default: 0, type: Number },
-    transparent: { default: false, type: Boolean },
-    light: { default: false, type: Boolean },
-  },
-  emits: ["update:activeTab"],
-  methods: {
-    hasSlot(name = "default") {
-      return !!this.$slots[name];
-    },
-  },
-});
+<script setup lang="ts">
+
+//Props 
+defineProps({
+  tabNumber: { default: 0, type: Number },
+  activeTab: { default: 0, type: Number },
+  transparent: { default: false, type: Boolean },
+  light: { default: false, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["update:activeTab"]);
+
 </script>
 
 <style lang="scss">

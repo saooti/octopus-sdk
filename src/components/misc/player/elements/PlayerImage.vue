@@ -1,90 +1,84 @@
 <template>
   <div>
     <a
-      v-if="linkAdvertising"
+      v-if="vastStore.linkAdvertising"
       rel="noreferrer noopener"
       target="_blank"
-      :href="linkAdvertising"
+      :href="vastStore.linkAdvertising"
       class="player-image link-image"
       :class="imageWidth > 50 ? 'big-player-image' : ''"
-      :title="$t('New window', {text: $t('Advertising')})"
+      :title="t('New window', {text: t('Advertising')})"
     >
       <LinkVariantIcon />
     </a>
     <router-link
-      v-else-if="podcastImage"
+      v-else-if="playerStore.podcastImage"
       :to="podcastShareUrl"
-      :title="$t('Episode name page', { name: podcastDisplay?.title })"
+      :title="t('Episode name page', { name: podcastDisplay?.title })"
     >
       <img
-        v-lazy="useProxyImageUrl(podcastImage, imageWidth)"
+        v-lazy="useProxyImageUrl(playerStore.podcastImage, imageWidth)"
         :width="imageWidth"
         :height="imageWidth"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
-        :title="$t('Episode name image', { name: podcastDisplay?.title })"
+        :title="t('Episode name image', { name: podcastDisplay?.title })"
         class="player-image"
         :class="imageWidth > 50 ? 'big-player-image' : ''"
       />
     </router-link>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import LinkVariantIcon from "vue-material-design-icons/LinkVariant.vue";
 import {useImageProxy} from "../../../composable/useImageProxy";
-import { defineComponent } from "vue";
-import { RouteLocationRaw } from "vue-router";
-import { mapState } from "pinia";
+import { computed } from "vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useVastStore } from "../../../../stores/VastStore";
-import { Podcast } from "@/stores/class/general/podcast";
-export default defineComponent({
-  name: "PlayerImage",
+import { useI18n } from "vue-i18n";
 
-  components: { LinkVariantIcon },
 
-  props: {
-    imageWidth: { default: 48, type: Number },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    return { useProxyImageUrl }
-  },
-  computed: {
-    ...mapState(usePlayerStore, [
-      "playerPodcast",
-      "playerRadio",
-      "podcastImage",
-    ]),
-    ...mapState(useVastStore, ["linkAdvertising"]),
-    podcastDisplay(): Podcast | undefined {
-      if (this.playerRadio?.podcast) {
-        return this.playerRadio?.podcast;
-      }
-      if (this.playerPodcast) {
-        return this.playerPodcast;
-      }
-      return undefined;
-    },
-    podcastShareUrl(): RouteLocationRaw | string {
-      if (this.playerRadio?.podcast?.podcastId) {
-        return {
-          name: "podcast",
-          params: {
-            podcastId: this.playerRadio?.podcast?.podcastId.toString(),
-          },
-        };
-      }
-      if (this.playerPodcast) {
-        return {
-          name: "podcast",
-          params: { podcastId: this.playerPodcast.podcastId.toString() },
-        };
-      }
-      return "";
-    },
-  },
+//Props 
+defineProps({
+  imageWidth: { default: 48, type: Number },
+})
+
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const playerStore = usePlayerStore();
+const vastStore = useVastStore();
+
+
+//Computed
+const podcastDisplay = computed(() => {
+  if (playerStore.playerRadio?.podcast) {
+    return playerStore.playerRadio?.podcast;
+  }
+  if (playerStore.playerPodcast) {
+    return playerStore.playerPodcast;
+  }
+  return undefined;
 });
+const podcastShareUrl = computed(() => {
+  if (playerStore.playerRadio?.podcast?.podcastId) {
+    return {
+      name: "podcast",
+      params: {
+        podcastId: playerStore.playerRadio?.podcast?.podcastId.toString(),
+      },
+    };
+  }
+  if (playerStore.playerPodcast) {
+    return {
+      name: "podcast",
+      params: { podcastId: playerStore.playerPodcast.podcastId.toString() },
+    };
+  }
+  return "";
+});
+
 </script>
 
 <style lang="scss">

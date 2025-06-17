@@ -6,7 +6,7 @@
       class="d-flex justify-content-center my-3"
     >
       <div class="btn btn-primary">
-        {{ $t("Create playlist") }}
+        {{ t("Create playlist") }}
       </div>
     </router-link>
     <ProductorSearch
@@ -30,9 +30,12 @@ import PlaylistList from "../display/playlist/PlaylistList.vue";
 import { useAuthStore } from "../../stores/AuthStore";
 import { state } from "../../stores/ParamSdkStore";
 import {  computed, defineAsyncComponent } from "vue";
+import { useI18n } from "vue-i18n";
 const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
+
+//Props
 const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
@@ -40,6 +43,9 @@ const props = defineProps({
   routeQuery: { default: "", type: String },
 });
 
+
+//Composables
+const { t } = useI18n();
 const {
   searchPattern,
   organisationId,
@@ -47,9 +53,10 @@ const {
   paginateFirst,
   isInit
 } = useSimplePageParam(props);
-
 const authStore = useAuthStore();
 
+
+//Computed
 const isPodcastmaker = computed(() =>state.generalParameters.podcastmaker as boolean);
 const isRolePlaylists = computed(() =>authStore.isRolePlaylists);
 

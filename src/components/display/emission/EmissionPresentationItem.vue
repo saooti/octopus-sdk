@@ -8,7 +8,7 @@
         name: 'emission',
         params: { emissionId: emission.emissionId },
       }"
-      :title="$t('Series name page', { name: emission.name })"
+      :title="t('Series name page', { name: emission.name })"
       class="d-flex-column flex-grow-1 text-dark"
       :class="isVertical ? 'flex-column' : ''"
     >
@@ -18,9 +18,10 @@
         :height="isVertical ? '400' : '250'"
         :class="isVertical ? 'img-box-bigger' : ''"
         class="img-box"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
-        :title="$t('Emission name image', { name: emission.name })"
+        :title="t('Emission name image', { name: emission.name })"
       />
       <div class="classic-element-text">
         <div class="element-name mb-2 basic-line-clamp">
@@ -43,64 +44,53 @@
   </article>
 </template>
 
-<script lang="ts">
-import { useFilterStore } from "../../../stores/FilterStore";
+<script setup lang="ts">
 import {useResizePhone} from "../../composable/useResizePhone";
 import { Emission } from "@/stores/class/general/emission";
 import {useImageProxy} from "../../composable/useImageProxy";
 import displayHelper from "../../../helper/displayHelper";
-import { defineComponent } from "vue";
-import { mapState } from "pinia";
-export default defineComponent({
-  name: "EmissionItem",
+import { nextTick, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-  props: {
-    emission: { default: () => ({}), type: Object as () => Emission },
-    isVertical: { default: false, type: Boolean },
-    isDescription: { default: false, type: Boolean },
-  },
-  setup(){
-    const { isPhone } = useResizePhone();
-    const { useProxyImageUrl } = useImageProxy();
-    return { isPhone, useProxyImageUrl }
-  },
+//Props 
+const props = defineProps({
+  emission: { default: () => ({}), type: Object as () => Emission },
+  isVertical: { default: false, type: Boolean },
+  isDescription: { default: false, type: Boolean },
+})
+
+//Data
+const descriptionEmissionRef = useTemplateRef('descriptionEmission');
+const descriptionEmissionContainerRef = useTemplateRef('descriptionEmissionContainer');
 
 
-  data() {
-    return {
-    };
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-  },
-  watch: {
-    isPhone: {
-      immediate: true,
-      handler() {
-        this.$nextTick(() => {
-          if (!this.isDescription || this.isPhone) {
-            return;
-          }
-          const emissionDesc = this.$refs.descriptionEmission as HTMLElement;
-          const emissionDescContainer = this.$refs
-            .descriptionEmissionContainer as HTMLElement;
-          if (
-            emissionDesc &&
-            emissionDescContainer &&
-            emissionDesc.clientHeight > emissionDescContainer.clientHeight
-          ) {
-            emissionDescContainer.classList.add("after-element-description");
-          }
-        });
-      },
-    },
-  },
-  methods:{
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-  }
-});
+//Composables
+const { t } = useI18n();
+const { isPhone } = useResizePhone();
+const { useProxyImageUrl } = useImageProxy();
+
+//Watch
+watch(isPhone, async () => {
+  nextTick(() => {
+    if (!props.isDescription || isPhone.value) {
+      return;
+    }
+    const emissionDesc = descriptionEmissionRef?.value as HTMLElement;
+    const emissionDescContainer = descriptionEmissionContainerRef?.value as HTMLElement;
+    if (
+      emissionDesc &&
+      emissionDescContainer &&
+      emissionDesc.clientHeight > emissionDescContainer.clientHeight
+    ) {
+      emissionDescContainer.classList.add("after-element-description");
+    }
+  });
+}, {immediate: true});
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
 </script>
 <style lang="scss">
 .octopus-app {

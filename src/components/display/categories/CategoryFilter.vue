@@ -5,30 +5,30 @@
     :style="backgroundDisplay"
   >
     <h1 v-if="isHeaderDisplay" v-show="titleDisplay">
-      {{ titleDisplay ?? $t("Home") }}
+      {{ titleDisplay ?? t("Home") }}
     </h1>
     <div
       v-show="isDisplay"
       class="d-flex-low-importance flex-column justify-content-end"
     >
       <ol
-        v-if="filterIab || filterRubrique.length"
+        v-if="filterStore.filterIab || filterStore.filterRubrique.length"
         class="octopus-breadcrumb"
       >
         <li class="octopus-breadcrumb-li">
-          <a href="#" @click="removeFilter(-1, $event)">{{ $t("All") }}</a>
+          <a href="#" @click="removeFilter(-1, $event)">{{ t("All") }}</a>
         </li>
-        <li v-if="filterIab" class="octopus-breadcrumb-li">
-          {{ filterIab.name }}
+        <li v-if="filterStore.filterIab" class="octopus-breadcrumb-li">
+          {{ filterStore.filterIab.name }}
         </li>
         <li
-          v-for="(filter, index) in filterRubrique"
+          v-for="(filter, index) in filterStore.filterRubrique"
           :key="filter.rubriqueId"
           class="octopus-breadcrumb-li"
-          :class="filterRubrique.length - 1 === index ? 'active' : ''"
+          :class="filterStore.filterRubrique.length - 1 === index ? 'active' : ''"
         >
           <a
-            v-if="filterRubrique.length - 1 !== index"
+            v-if="filterStore.filterRubrique.length - 1 !== index"
             href="#"
             @click="removeFilter(index, $event)"
             >{{ filter.nameRubriquage }}</a
@@ -50,14 +50,14 @@
         </li>
       </ol>
       <CategoryList
-        v-if="!filterIab && !rubriquageFilter.length"
+        v-if="!filterStore.filterIab && !rubriquageFilter.length"
         :is-filter="true"
         :is-display="isDisplay"
         @categories-length="checkIfCategories"
       />
       <RubriqueList
         v-else-if="
-          isDisplay && rubriquageFilter.length !== filterRubrique.length
+          isDisplay && rubriquageFilter.length !== filterStore.filterRubrique.length
         "
         :rubriquages="rubriquageFilter"
       />
@@ -66,7 +66,8 @@
   <section v-if="!isDisplay" class="category-filter-no-filter" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
@@ -74,9 +75,9 @@ import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { useGeneralStore } from "../../../stores/GeneralStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, computed, watch } from "vue";
 import { Category } from "@/stores/class/general/category";
+import { useRoute } from "vue-router";
 const CategoryList = defineAsyncComponent(() => import("./CategoryList.vue"));
 const RubriqueList = defineAsyncComponent(
   () => import("./../rubriques/RubriqueList.vue"),
@@ -84,194 +85,167 @@ const RubriqueList = defineAsyncComponent(
 const RubriqueChooser = defineAsyncComponent(
   () => import("../rubriques/RubriqueChooser.vue"),
 );
-export default defineComponent({
-  name: "CategoryFilter",
-  components: {
-    CategoryList,
-    RubriqueList,
-    RubriqueChooser,
-  },
-  setup(){
-    const { updateFiltersParam } = useRouteUpdateParams();
-    const { modifyRubriquesFilter } = useRubriquesFilterParam();
-    return {updateFiltersParam, modifyRubriquesFilter }
-  },
-  data() {
-    return {
-      isCategories: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useGeneralStore, ["storedCategories"]),
-    ...mapState(useFilterStore, [
-      "filterIab",
-      "filterRubrique",
-      "filterRubriquage",
-      "filterOrgaId",
-    ]),
-    isDisplay(): boolean {
-      return (
-        ("homePriv" === this.$route.name ||
-          "home" === this.$route.name ||
-          "podcasts" === this.$route.name ||
-          "emissions" === this.$route.name) &&
-        (this.isCategories ||
-          undefined !== this.filterIab ||
-          0 !== this.filterRubrique.length ||
-          0 !== this.rubriquageFilter.length)
-      );
-    },
-    isHeaderDisplay() {
-      return (
-        this.isDisplay ||
-        "participants" === this.$route.name ||
-        "playlists" === this.$route.name
-      );
-    },
-    rubriquageFilter(): Array<Rubriquage> {
-      return this.filterOrgaId ? this.filterRubriquage : [];
-    },
-    titleDisplay(): string | undefined {
-      switch (this.$route.name) {
-        case "podcasts":
-          return this.$t("All podcasts");
-        case "emissions":
-          return this.$t("All emissions");
-        case "participants":
-          return this.$t("All participants");
-        case "playlists":
-          return this.$t("All playlists");
-        default:
-          return undefined;
-      }
-    },
-    backgroundDisplay(): string {
-      let imgName = "home";
-      switch (this.$route.name) {
-        case "podcasts":
-          imgName = "podcasts";
-          break;
-        case "emissions":
-          imgName = "emissions";
-          break;
-        case "participants":
-          imgName = "intervenants";
-          break;
-        case "playlists":
-          imgName = "playlists";
-          break;
-        default:
-          break;
-      }
-      return `background-image: url('/img/header-${imgName}.webp');`;
-    },
-    routeFilterIab() {
-      return this.$route.query.iabId;
-    },
-    routeRubriques() {
-      return this.$route.query.rubriquesId;
-    },
-  },
-  watch: {
-    routeFilterIab: {
-      deep: true,
-      immediate: true,
-      async handler() {
-        if (this.routeFilterIab && "string" === typeof this.routeFilterIab) {
-          const iabId = parseInt(this.routeFilterIab, 10);
-          const category = this.storedCategories.filter((c: Category) => {
-            return c.id === iabId;
-          });
-          if (category.length) {
-            this.filterUpdateIab(category[0]);
-          }
-        } else {
-          this.filterUpdateIab();
-        }
-      },
-    },
-    routeRubriques: {
-      deep: true,
-      immediate: true,
-      async handler() {
-        if (0 === this.filterRubriquage.length) {
-          return;
-        }
-        const rubriquesFilter: Array<RubriquageFilter> = [];
-        if (
-          this.$route.query.rubriquesId &&
-          "string" === typeof this.$route.query.rubriquesId
-        ) {
-          const arrayFilter = this.$route.query.rubriquesId.split(",");
-          const filterLength = arrayFilter.length;
-          for (let index = 0; index < filterLength; index++) {
-            const rubriqueFilter = arrayFilter[index].split(":");
-            const rubriquage = this.filterRubriquage.find((x: Rubriquage) => {
-              return x.rubriquageId === parseInt(rubriqueFilter[0]);
-            });
-            if (rubriquage) {
-              const rubrique = rubriquage.rubriques.find((x: Rubrique) => {
-                return x.rubriqueId === parseInt(rubriqueFilter[1]);
-              });
-              rubriquesFilter.push({
-                rubriquageId: rubriquage.rubriquageId,
-                rubriqueId: rubrique.rubriqueId,
-                nameRubriquage: rubriquage.title,
-                nameRubrique: rubrique.name,
-              });
-            }
-          }
-        }
-        this.filterUpdateRubrique(rubriquesFilter);
-      },
-    },
-  },
-  methods: {
-    ...mapActions(useFilterStore, ["filterUpdateIab", "filterUpdateRubrique"]),
-    checkIfCategories(length: number): void {
-      this.isCategories = 0 !== length;
-    },
-    onRubriqueSelected(index: number, rubrique: Rubrique): void {
-      if (
-        !rubrique ||
-        this.filterRubrique[index].rubriqueId === rubrique.rubriqueId
-      ) {
-        return;
-      }
-      this.modifyRubriquesFilter((a) => {
-        a[index].rubriqueId = rubrique.rubriqueId ?? 0;
-        return a;
+
+//Data 
+const isCategories = ref(false);
+
+//Composables
+const { t } = useI18n();
+const { updateFiltersParam } = useRouteUpdateParams();
+const { modifyRubriquesFilter } = useRubriquesFilterParam();
+const generalStore = useGeneralStore();
+const filterStore = useFilterStore();
+const route = useRoute();
+
+//Computed
+const isDisplay = computed(() => {
+  return (
+    ("homePriv" === route.name ||
+      "home" === route.name ||
+      "podcasts" === route.name ||
+      "emissions" === route.name) &&
+    (isCategories.value ||
+      undefined !== filterStore.filterIab ||
+      0 !== filterStore.filterRubrique.length ||
+      0 !== rubriquageFilter.value.length)
+  );
+});
+const isHeaderDisplay = computed(() => {
+  return (
+    isDisplay.value ||
+    "participants" === route.name ||
+    "playlists" === route.name
+  );
+});
+const rubriquageFilter = computed(() => filterStore.filterOrgaId ? filterStore.filterRubriquage : []);
+const titleDisplay = computed(() => {
+  switch (route.name) {
+    case "podcasts":
+      return t("All podcasts");
+    case "emissions":
+      return t("All emissions");
+    case "participants":
+      return t("All participants");
+    case "playlists":
+      return t("All playlists");
+    default:
+      return undefined;
+  }
+});
+const backgroundDisplay = computed(() => {
+  let imgName = "home";
+    switch (route.name) {
+      case "podcasts":
+        imgName = "podcasts";
+        break;
+      case "emissions":
+        imgName = "emissions";
+        break;
+      case "participants":
+        imgName = "intervenants";
+        break;
+      case "playlists":
+        imgName = "playlists";
+        break;
+      default:
+        break;
+    }
+    return `background-image: url('/img/header-${imgName}.webp');`;
+});
+const routeFilterIab = computed(() => route.query.iabId);
+const routeRubriques = computed(() => route.query.rubriquesId);
+
+
+//Watch
+watch(routeFilterIab, () => {
+  if (routeFilterIab.value && "string" === typeof routeFilterIab.value) {
+    const iabId = parseInt(routeFilterIab.value, 10);
+    const category = generalStore.storedCategories.filter((c: Category) => {
+      return c.id === iabId;
+    });
+    if (category.length) {
+      filterStore.filterUpdateIab(category[0]);
+    }
+  } else {
+    filterStore.filterUpdateIab();
+  }
+}, {deep: true, immediate: true});
+watch(routeRubriques, () => {
+  if (0 === filterStore.filterRubriquage.length) {
+    return;
+  }
+  const rubriquesFilter: Array<RubriquageFilter> = [];
+  if (
+    route.query.rubriquesId &&
+    "string" === typeof route.query.rubriquesId
+  ) {
+    const arrayFilter = route.query.rubriquesId.split(",");
+    const filterLength = arrayFilter.length;
+    for (let index = 0; index < filterLength; index++) {
+      const rubriqueFilter = arrayFilter[index].split(":");
+      const rubriquage = filterStore.filterRubriquage.find((x: Rubriquage) => {
+        return x.rubriquageId === parseInt(rubriqueFilter[0]);
       });
-    },
-    getRubriques(rubriquageId: number): Array<Rubrique> {
-      const rubriquage = this.filterRubriquage.find((x: Rubriquage) => {
-        return x.rubriquageId === rubriquageId;
-      });
-      return rubriquage ? rubriquage.rubriques : [];
-    },
-    getRubriquesLength(rubriquageId: number): number {
-      const rubriquage = this.filterRubriquage.find((x: Rubriquage) => {
-        return x.rubriquageId === rubriquageId;
-      });
-      return rubriquage ? rubriquage.rubriques.length : 0;
-    },
-    removeFilter(index: number, event?: { preventDefault: () => void }): void {
-      if (this.filterIab) {
-        if (this.$route.query.iabId) {
-          this.updateFiltersParam({ iabId: undefined }, { i: undefined });
-        }
-      } else {
-        this.modifyRubriquesFilter((a) => {
-          a.splice(index + 1);
-          return a;
+      if (rubriquage) {
+        const rubrique = rubriquage.rubriques.find((x: Rubrique) => {
+          return x.rubriqueId === parseInt(rubriqueFilter[1]);
+        });
+        rubriquesFilter.push({
+          rubriquageId: rubriquage.rubriquageId,
+          rubriqueId: rubrique?.rubriqueId,
+          nameRubriquage: rubriquage.title,
+          nameRubrique: rubrique?.name,
         });
       }
-      if (event) {
-        event.preventDefault();
-      }
-    },
-  },
-});
+    }
+  }
+  filterStore.filterUpdateRubrique(rubriquesFilter);
+}, {deep: true, immediate: true});
+
+
+//Methods
+function checkIfCategories(length: number): void {
+  isCategories.value = 0 !== length;
+}
+function onRubriqueSelected(index: number, rubrique: Rubrique): void {
+  if (
+    !rubrique ||
+    filterStore.filterRubrique[index].rubriqueId === rubrique.rubriqueId
+  ) {
+    return;
+  }
+  modifyRubriquesFilter((a) => {
+    a[index].rubriqueId = rubrique.rubriqueId ?? 0;
+    return a;
+  });
+}
+function getRubriques(rubriquageId: number): Array<Rubrique> {
+  const rubriquage = filterStore.filterRubriquage.find((x: Rubriquage) => {
+    return x.rubriquageId === rubriquageId;
+  });
+  return rubriquage ? rubriquage.rubriques : [];
+}
+function getRubriquesLength(rubriquageId: number): number {
+  const rubriquage = filterStore.filterRubriquage.find((x: Rubriquage) => {
+    return x.rubriquageId === rubriquageId;
+  });
+  return rubriquage ? rubriquage.rubriques.length : 0;
+}
+function removeFilter(index: number, event?: { preventDefault: () => void }): void {
+  if (filterStore.filterIab) {
+    if (route.query.iabId) {
+      updateFiltersParam({ iabId: undefined }, { i: undefined });
+    }
+  } else {
+    modifyRubriquesFilter((a) => {
+      a.splice(index + 1);
+      return a;
+    });
+  }
+  if (event) {
+    event.preventDefault();
+  }
+}
 </script>
 <style lang="scss">
 .octopus-app {

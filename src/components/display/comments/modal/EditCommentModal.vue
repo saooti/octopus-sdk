@@ -1,22 +1,22 @@
 <template>
   <ClassicModal
     id-modal="edit-comment-modal"
-    :title-modal="$t('Edit comment')"
+    :title-modal="t('Edit comment')"
     @close="closePopup"
   >
     <template #body>
       <ClassicLoading
-        :loading-text="inProcessing ? $t('Send in progress') : undefined"
-        :error-text="errorUpdate ? $t(`An error occurred`) : undefined"
+        :loading-text="inProcessing ? t('Send in progress') : undefined"
+        :error-text="errorUpdate ? t(`An error occurred`) : undefined"
       />
       <template v-if="!inProcessing && !errorUpdate">
         <ClassicInputText
           v-model:text-init="commentText"
           v-model:error-variable="errorCommentText"
           input-id="comment-textarea"
-          :label="$t('Comment')"
-          :max-length="MAX_DESCRIPTION"
-          :error-text="$t('Please provide a comment')"
+          :label="t('Comment')"
+          :max-length="Constants.MAX_COMMENT"
+          :error-text="t('Please provide a comment')"
           :is-textarea="true"
           :is-emoji-picker="true"
           popover-relative-class="octopus-modal"
@@ -26,36 +26,37 @@
           v-if="editRight"
           v-model:text-init="commentState"
           id-select="comment-state-select"
-          :label="$t('Status')"
+          :label="t('Status')"
           :display-label="true"
           :options="[
-            { title: $t('pending'), value: 'PENDING' },
-            { title: $t('Validated'), value: 'VALIDATED' },
-            { title: $t('Invalid'), value: 'NOT_VALID' },
+            { title: t('pending'), value: 'PENDING' },
+            { title: t('Validated'), value: 'VALIDATED' },
+            { title: t('Invalid'), value: 'NOT_VALID' },
           ]"
         />
       </template>
     </template>
     <template #footer>
       <button class="btn m-1" @click="closePopup">
-        {{ $t("No") }}
+        {{ t("No") }}
       </button>
       <button
         class="btn btn-primary m-1"
         :disabled="errorCommentText"
         @click="onEditComment"
       >
-        {{ $t("Yes") }}
+        {{ t("Yes") }}
       </button>
     </template>
   </ClassicModal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import classicApi from "../../../../api/classicApi";
 import Constants from "../../../../../public/config";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent, onBeforeMount, Ref, ref } from "vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
+import { useI18n } from "vue-i18n";
 const ClassicModal = defineAsyncComponent(
   () => import("../../../misc/modal/ClassicModal.vue"),
 );
@@ -68,72 +69,65 @@ const ClassicInputText = defineAsyncComponent(
 const ClassicSelect = defineAsyncComponent(
   () => import("../../../form/ClassicSelect.vue"),
 );
-export default defineComponent({
-  name: "EditCommentModal",
 
-  components: {
-    ClassicModal,
-    ClassicLoading,
-    ClassicInputText,
-    ClassicSelect,
+//Props 
+const props = defineProps({
+  comment: {
+    default: undefined,
+    type: Object as () => CommentPodcast,
   },
+  editRight: { default: false, type: Boolean },
+})
+ 
+//Emits
+const emit = defineEmits(["close", "update:comment"]);
 
-  props: {
-    comment: {
-      default: undefined,
-      type: Object as () => CommentPodcast,
-    },
-    editRight: { default: false, type: Boolean },
-  },
 
-  emits: ["close", "update:comment"],
-  data() {
-    return {
-      MAX_DESCRIPTION: Constants.MAX_COMMENT as number,
-      commentText: undefined as string | undefined,
-      errorCommentText: true as boolean,
-      commentState: "PENDING" as string,
-      errorUpdate: false as boolean,
-      inProcessing: false as boolean,
-    };
-  },
-  created() {
-    this.initComment();
-  },
-  methods: {
-    initComment() {
-      if (!this.comment) {
-        return;
-      }
-      this.commentText = this.comment.content;
-      this.commentState = this.comment.state;
-    },
-    async onEditComment() {
-      if (!this.comment) {
-        return;
-      }
-      this.inProcessing = true;
-      try {
-        const commentUpdated = await classicApi.putData({
-          api: 2,
-          path: "comment/",
-          dataToSend: {
-            commentId: this.comment.commentId,
-            content: this.commentText,
-            state: this.commentState,
-          },
-          isNotAuth: !this.editRight,
-        });
-        this.$emit("update:comment", commentUpdated);
-        this.closePopup();
-      } catch {
-        this.errorUpdate = true;
-      }
-      this.inProcessing = false;
-    },
-    closePopup() {
-      this.$emit("close");
-    },
-  },
-});
+//Data 
+const commentText: Ref<string | undefined> = ref(undefined);
+const errorCommentText = ref(true);
+const commentState = ref("PENDING");
+const errorUpdate = ref(false);
+const inProcessing = ref(false);
+
+//Composables
+const { t } = useI18n();
+  
+onBeforeMount(()=>initComment())
+
+
+//Methods
+function initComment() {
+  if (!props.comment) {
+    return;
+  }
+  commentText.value = props.comment.content;
+  commentState.value = props.comment.state;
+}
+async function onEditComment() {
+  if (!props.comment) {
+    return;
+  }
+  inProcessing.value = true;
+  try {
+    const commentUpdated = await classicApi.putData({
+      api: 2,
+      path: "comment/",
+      dataToSend: {
+        commentId: props.comment.commentId,
+        content: commentText.value,
+        state: commentState.value,
+      },
+      isNotAuth: !props.editRight,
+    });
+    emit("update:comment", commentUpdated);
+    closePopup();
+  } catch {
+    errorUpdate.value = true;
+  }
+  inProcessing.value = false;
+}
+function closePopup() {
+  emit("close");
+}
 </script>

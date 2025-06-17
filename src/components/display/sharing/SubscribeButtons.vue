@@ -6,8 +6,8 @@
     <div ref="subscribeButtonsContainer">
       <a
         v-for="(sub, index) in subscriptionsDisplay"
+        :id="'subLink' + sub.name"
         :key="sub.name"
-        :ref="'subLink' + sub.name"
         rel="noreferrer noopener"
         target="_blank"
         :class="[
@@ -16,7 +16,7 @@
         ]"
         class="btn share-btn mx-2"
         :href="sub.url"
-        :title="$t('New window', {text: sub.title})"
+        :title="t('New window', {text: sub.title})"
       >
         <component :is="sub.icon" :fill-color="sub?.color" />
       </a>
@@ -27,7 +27,7 @@
       target="_blank"
       class="btn share-btn mx-2"
       :href="rssUrl"
-      :title="$t('New window', {text: $t('Rss feed')})"
+      :title="t('New window', {text: t('Rss feed')})"
     >
       <RssIcon />
     </a>
@@ -35,7 +35,7 @@
       v-show="hiddenLinks.length"
       id="subscribe-buttons-dropdown"
       class="btn share-btn mx-2"
-      :title="$t('See more')"
+      :title="t('See more')"
     >
       <PlusIcon />
     </button>
@@ -52,7 +52,7 @@
         target="_blank"
         class="octopus-dropdown-item justify-content-start d-flex align-items-center realLink"
         :href="link.url"
-        :title="$t('New window', {text: link.title})"
+        :title="t('New window', {text: link.title})"
       >
         <component :is="link.icon" :fill-color="link.color" class="me-1" />
         {{ link.title }}
@@ -61,7 +61,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import RadiolineIcon from "../../icons/RadiolineIcon.vue";
 import TuninIcon from "../../icons/TuninIcon.vue";
 import PodcastAddictIcon from "../../icons/PodcastAddictIcon.vue";
@@ -75,11 +75,11 @@ import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import RssIcon from "vue-material-design-icons/Rss.vue";
-import { mapState } from "pinia";
 import { useApiStore } from "../../../stores/ApiStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
-import { defineComponent } from "vue";
+import { computed, Ref, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 type Link = {
   name: string;
   icon: string;
@@ -87,216 +87,193 @@ type Link = {
   color?: string;
   url: string | undefined;
 };
-export default defineComponent({
-  name: "SubscribeButtons",
-  components: {
-    ClassicPopover,
-    RssIcon,
-    PlusIcon,
-    SpotifyIcon,
-    YoutubeIcon,
-    ApplePodcastIcon,
-    DeezerIcon,
-    AmazonMusicIcon,
-    IHeartIcon,
-    PlayerFmIcon,
-    PocketCastIcon,
-    PodcastAddictIcon,
-    TuninIcon,
-    RadiolineIcon,
-  },
-  props: {
-    emission: { default: undefined, type: Object as () => Emission },
-    playlistId: { default: undefined, type: Number },
-    windowWidth: { default: 0, type: Number },
-    justifyCenter: { default: true, type: Boolean },
-  },
-  data() {
-    return {
-      hiddenLinks: [] as Array<Link>,
-      lastWindowWidth: 420 as number,
-      exclusive: false as boolean,
-      notExclusive: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useApiStore, ["apiUrl"]),
-    subscriptionsDisplay(): Array<Link> {
-      const sub = [
-        {
-          name: "applePodcast",
-          icon: "ApplePodcastIcon",
-          title: "Apple Podcast | iTunes",
-          url: this.getUrl("applePodcast"),
-          color:"#aa1dd3"
-        },
-        {
-          name: "deezer",
-          icon: "DeezerIcon",
-          title: "Deezer",
-          color:"#a238ff",
-          url: this.getUrl("deezer"),
-        },
-        {
-          name: "spotify",
-          icon: "SpotifyIcon",
-          title: "Spotify",
-          color: "#1ed760",
-          url: this.getUrl("spotify"),
-        },
-        {
-          name: "amazon",
-          icon: "AmazonMusicIcon",
-          title: "Amazon Music",
-          color: "#0c6cb3",
-          url: this.getUrl("amazon"),
-        },
 
-        {
-          name: "iHeart",
-          icon: "IHeartIcon",
-          title: "iHeart",
-          url: this.getUrl("iHeart"),
-          color:"#e11b22"
-        },
-        {
-          name: "playerFm",
-          icon: "PlayerFmIcon",
-          title: "PlayerFM",
-          url: this.getUrl("playerFm"),
-          color:"#bb202a"
-        },
-        {
-          name: "pocketCasts",
-          icon: "PocketCastIcon",
-          title: "Pocket Casts",
-          url: this.getUrl("pocketCasts"),
-          color:"#f43e37"
-        },
-        {
-          name: "podcastAddict",
-          icon: "PodcastAddictIcon",
-          title: "Podcast Addict",
-          url: this.getUrl("podcastAddict"),
-          color:"#f4842d"
-        },
-        {
-          name: "radioline",
-          icon: "RadiolineIcon",
-          title: "Radioline",
-          url: this.getUrl("radioline"),
-          color:"#1678bd"
-        },
+//Props 
+const props = defineProps({
+  emission: { default: undefined, type: Object as () => Emission },
+  playlistId: { default: undefined, type: Number },
+  windowWidth: { default: 0, type: Number },
+  justifyCenter: { default: true, type: Boolean },
+})
 
-        {
-          name: "tunein",
-          icon: "TuninIcon",
-          title: "TuneIn",
-          url: this.getUrl("tunein"),
-          color:"#36b4a7"
-        },
-        {
-          name: "youtube",
-          icon: "YoutubeIcon",
-          title: "YouTube Music",
-          color: "#fe0000",
-          url: this.getUrl("youtube"),
-        },
-      ];
-      return sub.filter((item) => item.url);
+//Data 
+const lastWindowWidth = ref(420);
+const hiddenLinks: Ref<Array<Link>> = ref([]);
+const subscribeButtonsContainerRef = useTemplateRef('subscribeButtonsContainer');
+
+
+//Composables
+const { t } = useI18n();
+const apiStore = useApiStore();
+
+//Computed
+const subscriptionsDisplay = computed(() => {
+  const sub = [
+    {
+      name: "applePodcast",
+      icon: ApplePodcastIcon,
+      title: "Apple Podcast | iTunes",
+      url: getUrl("applePodcast"),
+      color:"#aa1dd3"
     },
-    rssUrl(): string | undefined {
-      const api = this.apiUrl + "rss/";
-      if (this.emission) {
-        return api + "emission/" + this.emission?.emissionId + ".rss";
-      }
-      if (this.playlistId) {
-        return api + "playlist/" + this.playlistId + ".rss";
-      }
-      return undefined;
+    {
+      name: "deezer",
+      icon: DeezerIcon,
+      title: "Deezer",
+      color:"#a238ff",
+      url: getUrl("deezer"),
     },
-  },
-  watch: {
-    windowWidth() {
-      this.resizeWindow();
+    {
+      name: "spotify",
+      icon: SpotifyIcon,
+      title: "Spotify",
+      color: "#1ed760",
+      url: getUrl("spotify"),
     },
-  },
-  mounted() {
-    this.resizeWindow();
-  },
-  methods: {
-    getUrl(sub: string): string | undefined {
-      return this.externaliseLinks(
-        this.emission?.annotations?.[sub] as string | undefined,
-      );
+    {
+      name: "amazon",
+      icon: AmazonMusicIcon,
+      title: "Amazon Music",
+      color: "#0c6cb3",
+      url: getUrl("amazon"),
     },
-    externaliseLinks(link?: string): string | undefined {
-      if (!link) return link;
-      link = link.trim();
-      return !link.startsWith("http") && !link.startsWith("//")
-        ? "//" + link
-        : link;
+
+    {
+      name: "iHeart",
+      icon: IHeartIcon,
+      title: "iHeart",
+      url: getUrl("iHeart"),
+      color:"#e11b22"
     },
-    showAllElements() {
-      this.subscriptionsDisplay.forEach((element: Link) => {
-        const el = (
-          this.$refs["subLink" + element.name] as Array<HTMLElement>
-        )[0];
-        if (!el) return;
-        if (el.classList.contains("hid")) {
-          el.classList.remove("hid");
-        }
-      });
+    {
+      name: "playerFm",
+      icon: PlayerFmIcon,
+      title: "PlayerFM",
+      url: getUrl("playerFm"),
+      color:"#bb202a"
     },
-    hideOnlyNecessaryElements() {
-      let parentWidth = 0;
-      this.subscriptionsDisplay.forEach((element: Link) => {
-        const el = (
-          this.$refs["subLink" + element.name] as Array<HTMLElement>
-        )[0];
-        if (!el) return;
-        if (!parentWidth) {
-          const buttonMoreWidth = el.clientWidth + 20;
-          parentWidth =
-            (el.parentElement?.clientWidth ?? 0) +
-            (el.parentElement?.offsetLeft ?? 0) -
-            buttonMoreWidth;
-        }
-        if (el.offsetLeft + el.clientWidth + 20 < parentWidth) {
-          return;
-        }
-        this.hiddenLinks.push(element);
-        if (!el.classList.contains("hid")) {
-          el.className += " hid";
-        }
-      });
+    {
+      name: "pocketCasts",
+      icon: PocketCastIcon,
+      title: "Pocket Casts",
+      url: getUrl("pocketCasts"),
+      color:"#f43e37"
     },
-    resizeWindow() {
-      if (this.windowWidth > 420 && this.lastWindowWidth > 420) {
-        this.lastWindowWidth = this.windowWidth;
-        return;
-      }
-      const subscribeList = this.$refs.subscribeButtonsContainer as HTMLElement;
-      if (
-        null === subscribeList ||
-        !subscribeList ||
-        "none" === subscribeList?.parentElement?.style.display
-      ) {
-        return;
-      }
-      this.lastWindowWidth = this.windowWidth;
-      subscribeList.style.justifyContent = "flex-start";
-      subscribeList.style.flexGrow = "1";
-      this.hiddenLinks.length = 0;
-      this.showAllElements();
-      this.hideOnlyNecessaryElements();
-      if (!this.hiddenLinks.length && this.justifyCenter) {
-        subscribeList.style.justifyContent = "center";
-      }
-      subscribeList.style.flexGrow = "0";
+    {
+      name: "podcastAddict",
+      icon: PodcastAddictIcon,
+      title: "Podcast Addict",
+      url: getUrl("podcastAddict"),
+      color:"#f4842d"
     },
-  },
+    {
+      name: "radioline",
+      icon: RadiolineIcon,
+      title: "Radioline",
+      url: getUrl("radioline"),
+      color:"#1678bd"
+    },
+
+    {
+      name: "tunein",
+      icon: TuninIcon,
+      title: "TuneIn",
+      url: getUrl("tunein"),
+      color:"#36b4a7"
+    },
+    {
+      name: "youtube",
+      icon: YoutubeIcon,
+      title: "YouTube Music",
+      color: "#fe0000",
+      url: getUrl("youtube"),
+    },
+  ];
+  return sub.filter((item) => item.url);
 });
+const rssUrl = computed(() => {
+  const api = apiStore.apiUrl + "rss/";
+  if (props.emission) {
+    return api + "emission/" + props.emission?.emissionId + ".rss";
+  }
+  if (props.playlistId) {
+    return api + "playlist/" + props.playlistId + ".rss";
+  }
+  return undefined;
+});
+
+
+//Watch
+watch(()=>props.windowWidth, () =>resizeWindow(), {immediate: true});
+
+
+//Methods
+function getUrl(sub: string): string | undefined {
+  return externaliseLinks(
+    props.emission?.annotations?.[sub] as string | undefined,
+  );
+}
+function externaliseLinks(link?: string): string | undefined {
+  if (!link) return link;
+  link = link.trim();
+  return !link.startsWith("http") && !link.startsWith("//")
+    ? "//" + link
+    : link;
+}
+function showAllElements() {
+  subscriptionsDisplay.value.forEach((element: Link) => {
+    const el = subscribeButtonsContainerRef?.value?.querySelector('#subLink' + element.name);
+    if (!el) return;
+    if (el.classList.contains("hid")) {
+      el.classList.remove("hid");
+    }
+  });
+}
+function hideOnlyNecessaryElements() {
+  let parentWidth = 0;
+  subscriptionsDisplay.value.forEach((element: Link) => {
+    const el = subscribeButtonsContainerRef?.value?.querySelector('#subLink' + element.name);
+    if (!el) return;
+    if (!parentWidth) {
+      const buttonMoreWidth = el.clientWidth + 20;
+      parentWidth =
+        (el.parentElement?.clientWidth ?? 0) +
+        (el.parentElement?.offsetLeft ?? 0) -
+        buttonMoreWidth;
+    }
+    if (el.offsetLeft + el.clientWidth + 20 < parentWidth) {
+      return;
+    }
+    hiddenLinks.value.push(element);
+    if (!el.classList.contains("hid")) {
+      el.className += " hid";
+    }
+  });
+}
+function resizeWindow() {
+  if (props.windowWidth > 420 && lastWindowWidth.value > 420) {
+    lastWindowWidth.value = props.windowWidth;
+    return;
+  }
+  const subscribeList = subscribeButtonsContainerRef?.value as HTMLElement;
+  if (
+    null === subscribeList ||
+    !subscribeList ||
+    "none" === subscribeList?.parentElement?.style.display
+  ) {
+    return;
+  }
+  lastWindowWidth.value = props.windowWidth;
+  subscribeList.style.justifyContent = "flex-start";
+  subscribeList.style.flexGrow = "1";
+  hiddenLinks.value.length = 0;
+  showAllElements();
+  hideOnlyNecessaryElements();
+  if (!hiddenLinks.value.length && props.justifyCenter) {
+    subscribeList.style.justifyContent = "center";
+  }
+  subscribeList.style.flexGrow = "0";
+}
 </script>
 <style lang="scss">
 .octopus-app {

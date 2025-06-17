@@ -2,14 +2,14 @@
   <section class="module-box overflow-visible">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="mb-3">
-        {{ $t("Embed") }}
+        {{ t("Embed") }}
       </h3>
       <div
-        v-if="noAd && !platformEducation"
+        v-if="noAd && !generalStore.platformEducation"
         class="sticker"
-        :title="$t('You cannot insert advertising')"
+        :title="t('You cannot insert advertising')"
       >
-        {{ $t("No advertising") }}
+        {{ t("No advertising") }}
       </div>
     </div>
     <template v-if="!exclusive && (authenticated || notExclusive)">
@@ -71,30 +71,30 @@
             class="btn btn-primary w-fit-content mt-3"
             @click="isShareModal = true"
           >
-            {{ $t("Share the player") }}
+            {{ t("Share the player") }}
           </button>
         </div>
       </div>
     </template>
     <div v-else-if="exclusive && authenticated">
-      {{ $t("Only organisation members can share the content") }}
+      {{ t("Only organisation members can share the content") }}
     </div>
     <div v-else-if="!authenticated">
-      {{ $t("Only authenticated members can share the content") }}
+      {{ t("Only authenticated members can share the content") }}
     </div>
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Podcast } from "@/stores/class/general/podcast";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useApiStore } from "../../../stores/ApiStore";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, onBeforeMount } from "vue";
 import { useGeneralStore } from "../../../stores/GeneralStore";
+import { useI18n } from "vue-i18n";
 const ShareModalPlayer = defineAsyncComponent(
   () => import("../../misc/modal/ShareModalPlayer.vue"),
 );
@@ -107,296 +107,274 @@ const SharePlayerTypes = defineAsyncComponent(
 const SharePlayerColors = defineAsyncComponent(
   () => import("./SharePlayerColors.vue"),
 );
-export default defineComponent({
-  components: {
-    ShareModalPlayer,
-    SharePlayerColors,
-    PlayerParameters,
-    SharePlayerTypes,
-  },
-  props: {
-    podcast: { default: undefined, type: Object as () => Podcast },
-    emission: { default: undefined, type: Object as () => Emission },
-    playlist: { default: undefined, type: Object as () => Playlist },
-    organisationId: { default: undefined, type: String },
-    exclusive: { default: false, type: Boolean },
-    notExclusive: { default: true, type: Boolean },
-  },
 
-  data() {
-    return {
-      typeCustomPlayer: "",
-      iFrameModel: "default" as string,
-      isShareModal: false as boolean,
-      color: "#40a372" as string,
-      theme: "#000000" as string,
-      proceedReading: true as boolean,
-      episodeChoiceDisplay: "number" as string,
-      episodesNumber: 3 as number,
-      isVisible: false as boolean,
-      displayArticle: true as boolean,
-      displayTranscript: true as boolean,
-      displayWave: false as boolean,
-      playerAutoPlay: false as boolean,
-      orgaAttributes: undefined as
-        | { [key: string]: string | number | boolean | undefined }
-        | undefined,
-      insertCode: false as boolean,
-    };
-  },
 
-  computed: {
-    ...mapState(useGeneralStore, ["platformEducation"]),
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    ...mapState(useApiStore, ["miniplayerUrl"]),
-    authenticated(): boolean {
-      return undefined !== this.authOrgaId;
-    },
-    displayWaveParam(): boolean {
-      return "default" === this.iFrameModel || "emission" === this.iFrameModel;
-    },
-    displayIsVisible(): boolean {
-      return this.displayChoiceAllEpisodes || this.isPodcastNotVisible;
-    },
-    isPodcastNotVisible(): boolean {
-      return (
-        undefined !== this.podcast &&
-        !this.podcast.availability.visibility &&
-        !this.isTypeEmission
-      );
-    },
-    displayArticleParam(): boolean {
-      return (
-        undefined !== this.podcast &&
-        undefined !== this.podcast.article &&
-        0 !== this.podcast.article.length &&
-        ("default" === this.iFrameModel ||
-          "large" === this.iFrameModel ||
-          "largeMore" === this.iFrameModel)
-      );
-    },
-    displayInsertCode(): boolean {
-      let orgaResourceId = "";
-      if (this.podcast) {
-        orgaResourceId = this.podcast.organisation.id;
-      }
-      if (this.emission) {
-        orgaResourceId = this.emission.orga.id;
-      }
-      if (this.playlist) {
-        orgaResourceId = this.playlist.organisation?.id ?? "";
-      }
-      return orgaResourceId === this.authOrgaId;
-    },
-    displayTranscriptParam(): boolean {
-      return (
-        this.isTranscriptionAuthorize && (this.isDefault || this.isEmission)
-      );
-    },
-    isTranscriptionAuthorize(): boolean {
-      if (!this.orgaAttributes) {
-        return false;
-      }
-      return this.orgaAttributes &&
-        Object.hasOwn(this.orgaAttributes, "speechtotext.active")
-        ? (this.orgaAttributes["speechtotext.active"] as boolean)
-        : false;
-    },
-    displayChoiceAllEpisodes(): boolean {
-      return !this.podcast || this.isTypeEmission;
-    },
-    isDefault(): boolean {
-      return "default" === this.iFrameModel;
-    },
-    isEmission(): boolean {
-      return "emission" === this.iFrameModel;
-    },
-    isLargeEmission(): boolean {
-      return "emissionLarge" === this.iFrameModel;
-    },
-    isTypeEmission(): boolean {
-      return (
-        this.isEmission ||
-        this.isLargeEmission ||
-        "EMISSION" === this.typeCustomPlayer
-      );
-    },
-    isLiveReadyToRecord(): boolean {
-      if (this.podcast)
-        return (
-          undefined !== this.podcast.conferenceId &&
-          0 !== this.podcast.conferenceId &&
-          this.podcast.processingStatus === "READY_TO_RECORD"
-        );
-      return false;
-    },
-    noAd(): boolean {
-      return (
-        (this.podcast?.organisation.id !== this.organisationId &&
-          "NO" === this.podcast?.monetisable) ||
-        ("UNDEFINED" === this.podcast?.monetisable &&
-          "NO" === this.podcast?.emission.monetisable)
-      );
-    },
-    iFrameSrc(): string {
-      if ("video" === this.iFrameModel) {
-        return (
-          "https://www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
-          this.podcast?.video?.videoId +
-          "/sound/true"
-        );
-      }
-      let url = [""];
-      const iFrameNumber =
-        this.displayChoiceAllEpisodes && "all" === this.episodeChoiceDisplay
-          ? "/0"
-          : "/" + this.episodesNumber;
-      url.push(`${this.miniplayerUrl}miniplayer/`);
-      if (!this.podcast && !this.playlist && this.emission) {
-        url = this.constructEmissionUrl(url);
-      } else if (this.playlist) {
-        url = this.constructPlaylistUrl(url);
-      } else if (this.emission && this.podcast) {
-        url.push(`${this.iFrameModel}/`);
-        if (this.isTypeEmission) {
-          url.push(
-            `${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`,
-          );
-        } else {
-          url.push(`${this.podcast.podcastId}`);
-        }
-      }
-      return this.addUrlParameters(url).join("");
-    },
-    iFrameHeight(): string {
-      switch (this.iFrameModel) {
-        case "video":
-          return "281px";
-        case "large":
-          if (this.podcast) return "140px";
-          return "350px";
-        case "largeMore":
-          return "210px";
-        case "emissionLarge":
-          return "350px";
-        case "emission":
-          return "540px";
-        case "videoLive":
-          return "450px";
-        default:
-          return "530px";
-      }
-    },
-    iFrame(): string {
-      const specialDigiteka = this.podcast?.video?.videoId
-        ? 'allowfullscreen="true" referrerpolicy="no-referrer-when-downgrade"'
-        : "";
-      return `<iframe src="${this.iFrameSrc}" width="100%" height="${this.iFrameHeight}" scrolling="no" frameborder="0" ${specialDigiteka} allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
-    },
-    dataTitle(): number {
-      if (this.podcast) return this.podcast.podcastId;
-      if (this.emission) return this.emission.emissionId;
-      if (this.playlist) return this.playlist.playlistId;
-      return 0;
-    },
-  },
-  created() {
-    this.initSharePlayer();
-  },
-  methods: {
-    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
-    async initSharePlayer() {
-      this.orgaAttributes = await this.getOrgaAttributes(this.authOrgaId ?? "");
-      this.initColor();
-      if (this.isLiveReadyToRecord) {
-        this.iFrameModel = "large";
-      }
-      if ("true" === this.podcast?.annotations?.["fromTTS"]) {
-        this.displayTranscript = false;
-      }
-    },
-    getIframeNumber(): string {
-      return this.displayChoiceAllEpisodes && "all" === this.episodeChoiceDisplay
-        ? "/0"
-        : "/" + this.episodesNumber;
-    },
-    constructEmissionUrl(url: Array<string>) {
-      if (!this.emission) {
-        return [];
-      }
-      switch (this.iFrameModel) {
-        case "default":
-          url.push("emission");
-          break;
-        case "large":
-          url.push("emissionLarge");
-          break;
-        default:
-          url.push(`${this.iFrameModel}`);
-          break;
-      }
-      url.push(`/${this.emission.emissionId}${this.getIframeNumber()}`);
-      return url;
-    },
-    constructPlaylistUrl(url: Array<string>) {
-      if (!this.playlist) {
-        return [];
-      }
-      switch (this.iFrameModel) {
-        case "default":
-          url.push("playlist");
-          break;
-        case "large":
-          url.push("playlistLarge");
-          break;
-        default:
-          url.push(`${this.iFrameModel}`);
-          break;
-      }
-      url.push(`/${this.playlist.playlistId}`);
-      return url;
-    },
-    addUrlParameters(url: Array<string>) {
-      url.push("?distributorId=" + this.organisationId);
-      url.push(
-        `&color=${this.color.substring(1)}&theme=${this.theme.substring(1)}`,
-      );
-      if (!this.proceedReading) {
-        url.push("&proceed=false");
-      }
-      if (!this.displayArticle && this.displayArticleParam) {
-        url.push("&article=false");
-      }
-      if (!this.displayTranscript) {
-        url.push("&transcript=false");
-      }
-      if (!this.displayWave) {
-        url.push("&wave=false");
-      }
-      if (this.playerAutoPlay) {
-        url.push("&autoplay=true");
-      }
-      if (this.isVisible) {
-        url.push("&key=" + window.btoa(this.dataTitle.toString()));
-      }
-      if (this.insertCode) {
-        url.push("&insertCode=true");
-      }
-      return url;
-    },
-    initColor(): void {
-      if (!this.orgaAttributes) {
-        return;
-      }
-      this.color = Object.hasOwn(this.orgaAttributes, "COLOR")
-        ? (this.orgaAttributes.COLOR as string)
-        : "#40a372";
-      this.theme = Object.hasOwn(this.orgaAttributes, "THEME")
-        ? (this.orgaAttributes.THEME as string)
-        : "#000000";
-    },
-  },
+//Props 
+const props = defineProps({
+  podcast: { default: undefined, type: Object as () => Podcast },
+  emission: { default: undefined, type: Object as () => Emission },
+  playlist: { default: undefined, type: Object as () => Playlist },
+  organisationId: { default: undefined, type: String },
+  exclusive: { default: false, type: Boolean },
+  notExclusive: { default: true, type: Boolean },
+})
+
+//Data 
+const typeCustomPlayer = ref("");
+const iFrameModel = ref("default");
+const isShareModal = ref(false);
+const color = ref("#40a372");
+const theme = ref("#000000");
+const proceedReading = ref(true);
+const episodeChoiceDisplay = ref("number");
+const episodesNumber = ref(3);
+const isVisible = ref(false);
+const displayArticle = ref(true);
+const displayTranscript = ref(true);
+const displayWave = ref(false);
+const playerAutoPlay = ref(false);
+const insertCode = ref(false);
+const orgaAttributes : Ref<{ [key: string]: string | number | boolean | undefined }| undefined>= ref(undefined);
+
+
+//Composables
+const { t } = useI18n();
+const authStore = useAuthStore();
+const apiStore = useApiStore();
+const generalStore = useGeneralStore();
+const saveFetchStore = useSaveFetchStore();
+
+
+//Computed
+const authenticated = computed(() => undefined !== authStore.authOrgaId);
+const displayWaveParam = computed(() => "default" === iFrameModel.value || "emission" === iFrameModel.value);
+const displayIsVisible = computed(() => displayChoiceAllEpisodes.value || isPodcastNotVisible.value);
+const isPodcastNotVisible = computed(() => {
+  return (
+    undefined !== props.podcast &&
+    !props.podcast.availability.visibility &&
+    !isTypeEmission.value
+  );
 });
+const displayArticleParam = computed(() => {
+  return (
+    undefined !== props.podcast &&
+    undefined !== props.podcast.article &&
+    0 !== props.podcast.article.length &&
+    ("default" === iFrameModel.value ||
+      "large" === iFrameModel.value ||
+      "largeMore" === iFrameModel.value)
+  );
+});
+const displayInsertCode = computed(() => {
+  let orgaResourceId = "";
+  if (props.podcast) {
+    orgaResourceId = props.podcast.organisation.id;
+  }
+  if (props.emission) {
+    orgaResourceId = props.emission.orga.id;
+  }
+  if (props.playlist) {
+    orgaResourceId = props.playlist.organisation?.id ?? "";
+  }
+  return orgaResourceId === authStore.authOrgaId;
+});
+const displayTranscriptParam = computed(() => isTranscriptionAuthorize.value && (isDefault.value || isEmission.value));
+const isTranscriptionAuthorize = computed(() => {
+  if (!orgaAttributes.value) {
+    return false;
+  }
+  return orgaAttributes.value &&
+    Object.hasOwn(orgaAttributes.value, "speechtotext.active")
+    ? (orgaAttributes.value["speechtotext.active"] as boolean)
+    : false;
+});
+const displayChoiceAllEpisodes = computed(() => !props.podcast || isTypeEmission.value);
+const isDefault = computed(() => "default" === iFrameModel.value);
+const isEmission = computed(() => "emission" === iFrameModel.value);
+const isLargeEmission = computed(() => "emissionLarge" === iFrameModel.value);
+const isTypeEmission = computed(() => {
+  return (
+    isEmission.value ||
+    isLargeEmission.value ||
+    "EMISSION" === typeCustomPlayer.value
+  );
+});
+const isLiveReadyToRecord = computed(() => {
+  if (props.podcast)
+    return (
+      undefined !== props.podcast.conferenceId &&
+      0 !== props.podcast.conferenceId &&
+      props.podcast.processingStatus === "READY_TO_RECORD"
+    );
+  return false;
+});
+
+const noAd = computed(() => {
+  return (
+    (props.podcast?.organisation.id !== props.organisationId &&
+      "NO" === props.podcast?.monetisable) ||
+    ("UNDEFINED" === props.podcast?.monetisable &&
+      "NO" === props.podcast?.emission.monetisable)
+  );
+});
+const iFrameSrc = computed(() => {
+  if ("video" === iFrameModel.value) {
+    return (
+      "https://www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
+      props.podcast?.video?.videoId +
+      "/sound/true"
+    );
+  }
+  let url = [""];
+  const iFrameNumber =
+    displayChoiceAllEpisodes.value && "all" === episodeChoiceDisplay.value
+      ? "/0"
+      : "/" + episodesNumber.value;
+  url.push(`${apiStore.miniplayerUrl}miniplayer/`);
+  if (!props.podcast && !props.playlist && props.emission) {
+    url = constructEmissionUrl(url);
+  } else if (props.playlist) {
+    url = constructPlaylistUrl(url);
+  } else if (props.emission && props.podcast) {
+    url.push(`${iFrameModel.value}/`);
+    if (isTypeEmission.value) {
+      url.push(
+        `${props.emission.emissionId}${iFrameNumber}/${props.podcast.podcastId}`,
+      );
+    } else {
+      url.push(`${props.podcast.podcastId}`);
+    }
+  }
+  return addUrlParameters(url).join("");
+});
+const iFrameHeight = computed(() => {
+  switch (iFrameModel.value) {
+    case "video":
+      return "281px";
+    case "large":
+      if (props.podcast) return "140px";
+      return "350px";
+    case "largeMore":
+      return "210px";
+    case "emissionLarge":
+      return "350px";
+    case "emission":
+      return "540px";
+    case "videoLive":
+      return "450px";
+    default:
+      return "530px";
+  }
+});
+const iFrame = computed(() => {
+  const specialDigiteka = props.podcast?.video?.videoId
+    ? 'allowfullscreen="true" referrerpolicy="no-referrer-when-downgrade"'
+    : "";
+  return `<iframe src="${iFrameSrc.value}" width="100%" height="${iFrameHeight.value}" scrolling="no" ${specialDigiteka} allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
+});
+const dataTitle = computed(() => {
+  if (props.podcast) return props.podcast.podcastId;
+  if (props.emission) return props.emission.emissionId;
+  if (props.playlist) return props.playlist.playlistId;
+  return 0;
+});
+
+
+onBeforeMount(()=>initSharePlayer())
+
+
+//Methods
+async function initSharePlayer() {
+  orgaAttributes.value = await saveFetchStore.getOrgaAttributes(authStore.authOrgaId ?? "");
+  initColor();
+  if (isLiveReadyToRecord.value) {
+    iFrameModel.value = "large";
+  }
+  if ("true" === props.podcast?.annotations?.["fromTTS"]) {
+    displayTranscript.value = false;
+  }
+}
+function getIframeNumber(): string {
+  return displayChoiceAllEpisodes.value && "all" === episodeChoiceDisplay.value
+    ? "/0"
+    : "/" + episodesNumber.value;
+}
+function constructEmissionUrl(url: Array<string>) {
+  if (!props.emission) {
+    return [];
+  }
+  switch (iFrameModel.value) {
+    case "default":
+      url.push("emission");
+      break;
+    case "large":
+      url.push("emissionLarge");
+      break;
+    default:
+      url.push(`${iFrameModel.value}`);
+      break;
+  }
+  url.push(`/${props.emission.emissionId}${getIframeNumber()}`);
+  return url;
+}
+function constructPlaylistUrl(url: Array<string>) {
+  if (!props.playlist) {
+    return [];
+  }
+  switch (iFrameModel.value) {
+    case "default":
+      url.push("playlist");
+      break;
+    case "large":
+      url.push("playlistLarge");
+      break;
+    default:
+      url.push(`${iFrameModel.value}`);
+      break;
+  }
+  url.push(`/${props.playlist.playlistId}`);
+  return url;
+}
+function addUrlParameters(url: Array<string>) {
+  url.push("?distributorId=" + props.organisationId);
+  url.push(
+    `&color=${color.value.substring(1)}&theme=${theme.value.substring(1)}`,
+  );
+  if (!proceedReading.value) {
+    url.push("&proceed=false");
+  }
+  if (!displayArticle.value && displayArticleParam.value) {
+    url.push("&article=false");
+  }
+  if (!displayTranscript.value) {
+    url.push("&transcript=false");
+  }
+  if (!displayWave.value) {
+    url.push("&wave=false");
+  }
+  if (playerAutoPlay.value) {
+    url.push("&autoplay=true");
+  }
+  if (isVisible.value) {
+    url.push("&key=" + window.btoa(dataTitle.value.toString()));
+  }
+  if (insertCode.value) {
+    url.push("&insertCode=true");
+  }
+  return url;
+}
+function initColor(): void {
+  if (!orgaAttributes.value) {
+    return;
+  }
+  color.value = Object.hasOwn(orgaAttributes.value, "COLOR")
+    ? (orgaAttributes.value.COLOR as string)
+    : "#40a372";
+  theme.value = Object.hasOwn(orgaAttributes.value, "THEME")
+    ? (orgaAttributes.value.THEME as string)
+    : "#000000";
+}
 </script>
 
 <style lang="scss">

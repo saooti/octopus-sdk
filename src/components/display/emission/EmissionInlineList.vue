@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column p-3 list-episode">
     <ClassicLoading
-      :loading-text="loading ? $t('Loading emissions ...') : undefined"
+      :loading-text="loading ? t('Loading emissions ...') : undefined"
     />
     <SwiperList
       v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)"
@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SwiperList from "../list/SwiperList.vue";
 import classicApi from "../../../api/classicApi";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
@@ -36,116 +36,101 @@ import {useErrorHandler} from "../../composable/useErrorHandler";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
-import { defineComponent } from "vue";
+import { computed, onMounted, Ref, ref } from "vue";
 import { AxiosError } from "axios";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
-export default defineComponent({
-  name: "EmissionInlineList",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    EmissionPlayerItem,
-    ClassicLoading,
-    SwiperList,
-  },
-  props: {
-    organisationId: { default: undefined, type: String },
+//Props 
+const props = defineProps({
+  organisationId: { default: undefined, type: String },
     href: { default: undefined, type: String },
     buttonText: { default: undefined, type: String },
     rubriqueId: { default: undefined, type: Number },
     rubriquageId: { default: undefined, type: Number },
     nbPodcasts: { default: undefined, type: Number },
     itemSize: { default: undefined, type: Number },
-  },
+})
 
-  setup(){
-    const {handle403} = useErrorHandler();
-    return { handle403 }
-  },
 
-  data() {
-    return {
-      loading: true as boolean,
-      allEmissions: [] as Array<Emission>,
-      rubriques: undefined as Array<Rubrique> | undefined,
-    };
-  },
+//Data 
+const loading = ref(true);
+const allEmissions: Ref<Array<Emission>> = ref([]);
+const rubriques: Ref<Array<Rubrique> | undefined> = ref(undefined);
 
-  computed: {
-    displayRubriquage(): number | undefined {
-      return state.emissionsPage.rubriquage;
-    },
-  },
 
-  mounted() {
-    this.fetchNext();
-    if (this.displayRubriquage) {
-      this.fetchRubriques();
-    }
-  },
-  methods: {
-    async fetchNext(): Promise<void> {
-      try {
-        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
-          api: 0,
-          path: "emission/search",
-          parameters: {
-            first: 0,
-            size: 12,
-            organisationId: this.organisationId,
-            rubriqueId: this.rubriqueId ? [this.rubriqueId] : [],
-            rubriquageId: this.rubriquageId ? [this.rubriquageId] : [],
-            sort: "LAST_PODCAST_DESC",
-          },
-          specialTreatement: true,
-        });
-        this.allEmissions = this.allEmissions.concat(
-          data.result.filter((em: Emission | null) => null !== em),
-        );
-        this.loading = false;
-      } catch (error) {
-        this.handle403(error as AxiosError);
-      }
-    },
+//Composables
+const { t } = useI18n();
+const {handle403} = useErrorHandler();
 
-    reset(): void {
-      this.loading = true;
-      this.allEmissions.length = 0;
-    },
-    async fetchRubriques(): Promise<void> {
-      const data = await classicApi.fetchData<Rubriquage>({
-        api: 0,
-        path: "rubriquage/" + this.displayRubriquage,
-      });
-      this.rubriques = data.rubriques;
-    },
-    rubriquesId(emission: Emission): string | undefined {
-      if (
-        !this.displayRubriquage ||
-        !emission.rubriqueIds ||
-        0 === emission.rubriqueIds.length ||
-        !this.rubriques ||
-        !this.rubriques.length
-      )
-        return undefined;
-      const rubrique = this.rubriques.find(
-        (element: Rubrique) =>
-          element.rubriqueId &&
-          emission.rubriqueIds.includes(element.rubriqueId) &&
-          element.rubriquageId === this.displayRubriquage,
-      );
-      if (rubrique) {
-        return rubrique.name;
-      }
-    },
-    mainRubriquage(emission: Emission): string {
-      return state.emissionsPage.mainRubrique &&
-        emission.rubriqueIds?.includes(state.emissionsPage.mainRubrique)
-        ? "partenaireRubrique"
-        : "";
-    },
-  },
-});
+
+//Computed
+const displayRubriquage = computed(() => state.emissionsPage.rubriquage);
+ 
+onMounted(()=>{
+  fetchNext();
+  if (displayRubriquage.value) {
+    fetchRubriques();
+  }
+})
+
+//Methods
+async function fetchNext(): Promise<void> {
+  try {
+    const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+      api: 0,
+      path: "emission/search",
+      parameters: {
+        first: 0,
+        size: 12,
+        organisationId: props.organisationId,
+        rubriqueId: props.rubriqueId ? [props.rubriqueId] : [],
+        rubriquageId: props.rubriquageId ? [props.rubriquageId] : [],
+        sort: "LAST_PODCAST_DESC",
+      },
+      specialTreatement: true,
+    });
+    allEmissions.value = allEmissions.value.concat(
+      data.result.filter((em: Emission | null) => null !== em),
+    );
+    loading.value = false;
+  } catch (error) {
+    handle403(error as AxiosError);
+  }
+}
+async function fetchRubriques(): Promise<void> {
+  const data = await classicApi.fetchData<Rubriquage>({
+    api: 0,
+    path: "rubriquage/" + displayRubriquage.value,
+  });
+  rubriques.value = data.rubriques;
+}
+function rubriquesId(emission: Emission): string | undefined {
+  if (
+    !displayRubriquage.value ||
+    !emission.rubriqueIds ||
+    0 === emission.rubriqueIds.length ||
+    !rubriques.value ||
+    !rubriques.value.length
+  )
+    return undefined;
+  const rubrique = rubriques.value.find(
+    (element: Rubrique) =>
+      element.rubriqueId &&
+      emission.rubriqueIds.includes(element.rubriqueId) &&
+      element.rubriquageId === displayRubriquage.value,
+  );
+  if (rubrique) {
+    return rubrique.name;
+  }
+}
+function mainRubriquage(emission: Emission): string {
+  return state.emissionsPage.mainRubrique &&
+    emission.rubriqueIds?.includes(state.emissionsPage.mainRubrique)
+    ? "partenaireRubrique"
+    : "";
+}
 </script>
 
 <style lang="scss">

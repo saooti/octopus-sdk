@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "40.2.19",
+  "version": "41.0.0-SNAPSHOT",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -12,7 +12,7 @@
     "proxy_non_authentifié": "node proxy.ts false",
     "lint": "eslint --fix src",
     "stylelint": "stylelint **/*.{scss,vue} --fix",
-    "sonar": "node sonarqube-scanner.js"
+    "sonar": "sonar -Dsonar.host.url=http://localhost:9000"
   },
   "dependencies": {
     "@multiformats/murmur3": "^2.1.8",
@@ -41,7 +41,6 @@
     "qrcode.vue": "^3.6.0",
     "sass": "^1.89.2",
     "sockjs-client": "^1.6.1",
-    "sonarqube-scanner": "^3.3.0",
     "stylelint": "^16.20.0",
     "stylelint-config-recommended-scss": "^15.0.1",
     "stylelint-config-recommended-vue": "^1.6.0",

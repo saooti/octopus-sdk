@@ -5,23 +5,28 @@
         :checked="isSvg"
         class="format-switch-checkbox" 
         type="checkbox" 
-        @input="$emit('update:isSvg', !isSvg)"/>
+        @input="changeIsSvg"/>
       <label class="format-switch-label" for="format-switch-checkbox">
         <span class="format-switch-label-span">SVG</span>
       </label>
     </div>
   </template>
   
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  export default defineComponent({
-    name: "FormatSwitch",
-    props:{
-      isSvg: { default: true, type: Boolean },
-    },
-    emits: ['update:isSvg'],
-  });
-  </script>
+<script setup lang="ts">
+
+//Props 
+const props = defineProps({
+  isSvg: { default: true, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(['update:isSvg']);
+
+//Methods
+function changeIsSvg(){
+  emit('update:isSvg', !props.isSvg)
+}
+</script>
   <style lang="scss">
   .octopus-app {
 

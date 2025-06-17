@@ -2,48 +2,45 @@
   <ClassicSelect
     v-model:text-init="monetisableForVmodel"
     id-select="monetizable-filter-select"
-    :label="$t('Advertising') + ' :'"
+    :label="t('Advertising') + ' :'"
     :display-label="true"
     class-label="flex-shrink-0 me-1"
     class="d-flex align-items-center"
     :options="[
       { title: allString, value: 'UNDEFINED' },
-      { title: $t('Authorized advertising'), value: 'YES' },
-      { title: $t('Prohibited advertising'), value: 'NO' },
+      { title: t('Authorized advertising'), value: 'YES' },
+      { title: t('Prohibited advertising'), value: 'NO' },
     ]"
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import ClassicSelect from "../../form/ClassicSelect.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  components:{
-    ClassicSelect
-  },
-  props: {
-    isEmission: { default: false, type: Boolean },
-    monetisable: { default: "UNDEFINED", type: String },
-  },
-  emits: ["update:monetisable"],
+import { computed } from "vue";
 
-  data() {
-    return {};
+
+//Props 
+const props = defineProps({
+  isEmission: { default: false, type: Boolean },
+  monetisable: { default: "UNDEFINED", type: String },
+})
+
+//Emits
+const emit = defineEmits(["update:monetisable"]);
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const allString = computed(() => props.isEmission? t("All emissions"): t("All podcasts"));
+const monetisableForVmodel = computed({
+  get(): string {
+    return props.monetisable;
   },
-  computed: {
-    allString(): string {
-      return this.isEmission
-        ? this.$t("All emissions")
-        : this.$t("All podcasts");
-    },
-    monetisableForVmodel: {
-      get(): string {
-        return this.monetisable;
-      },
-      set(value: string) {
-        this.$emit("update:monetisable", value);
-      },
-    },
+  set(value: string) {
+    emit("update:monetisable", value);
   },
 });
+
 </script>

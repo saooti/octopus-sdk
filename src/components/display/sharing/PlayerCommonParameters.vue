@@ -2,21 +2,28 @@
   <ClassicCheckbox
     :text-init="insertCode"
     id-checkbox="insert-code-checkbox"
-    :label="$t('Insert custom code')"
-    @update:text-init="$emit('update:insertCode', $event)"
+    :label="t('Insert custom code')"
+    @update:text-init="updateInsertCode($event)"
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import ClassicCheckbox from "../../form/ClassicCheckbox.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  components: {
-    ClassicCheckbox,
-  },
-  props: {
-    insertCode: { default: false, type: Boolean },
-  },
-  emits: ["update:insertCode"],
-});
+
+//Props 
+defineProps({
+  insertCode: { default: false, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["update:insertCode"]);
+
+//Composables
+const { t } = useI18n();
+
+//Methods
+function updateInsertCode(value:boolean){
+  emit('update:insertCode', value)
+}
 </script>

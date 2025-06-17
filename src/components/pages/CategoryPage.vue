@@ -10,42 +10,37 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
-import { mapState } from "pinia";
-import { defineComponent } from "vue";
+import { computed, watch } from "vue";
 import { Category } from "@/stores/class/general/category";
-export default defineComponent({
-  components: {
-    PodcastList,
-  },
-  props: {
-    iabId: { default: undefined, type: Number },
-  },
 
-  computed: {
-    ...mapState(useGeneralStore, ["storedCategories", "metaTitle"]),
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    orgaArray(): Array<string> {
-      return this.filterOrgaId ? [this.filterOrgaId] : [];
-    },
-    title(): string {
-      const matchCategories = this.storedCategories.filter(
-        (c: Category) => c.id === this.iabId,
-      );
-      if (1 !== matchCategories.length) return "";
-      return matchCategories[0]["name"];
-    },
-  },
-  watch:{
-    title: {
-      immediate: true,
-      async handler() {
-        document.title = this.title + ' - ' + this.metaTitle;
-      },
-    },
-  }
+
+//Props 
+const props = defineProps({
+  iabId: { default: undefined, type: Number },
+})
+
+//Composables
+const generalStore = useGeneralStore();
+const filterStore = useFilterStore();
+
+//Computed
+const orgaArray = computed(() => filterStore.filterOrgaId ? [filterStore.filterOrgaId] : []);
+const title = computed(() => {
+  const matchCategories = generalStore.storedCategories.filter(
+    (c: Category) => c.id === props.iabId,
+  );
+  if (1 !== matchCategories.length) return "";
+  return matchCategories[0]["name"];
 });
+
+
+//Watch
+watch(title, () => {
+  document.title = title.value + ' - ' + generalStore.metaTitle
+}, {immediate: true});
+
 </script>

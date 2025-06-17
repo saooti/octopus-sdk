@@ -3,58 +3,54 @@
     <ClassicSelect
       :text-init="rowsPerPage"
       :id-select="'rows-per-page-select'+id"
-      :label="$t('Items per page :')"
+      :label="t('Items per page :')"
       :display-label="true"
       class-label="flex-shrink-0 me-1"
       class="d-flex align-items-center mb-0"
       :options="optionRowsPerPage"
-      @update:text-init="$emit('update:rowsPerPage', parseInt($event, 10))"
+      @update:text-init="emit('update:rowsPerPage', parseInt($event, 10))"
     />
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import ClassicSelect from "../../form/ClassicSelect.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PaginateParams",
-  components:{
-    ClassicSelect
-  },
+import { onBeforeMount, ref } from "vue";
 
-  props: {
-    rowsPerPage: { default: 0, type: Number },
-    id: { default: "", type: String },
-  },
+//Props 
+const props = defineProps({
+  rowsPerPage: { default: 0, type: Number },
+  id: { default: "", type: String },
+})
 
-  emits: ["update:rowsPerPage"],
+//Emits
+const emit = defineEmits(["update:rowsPerPage"]);
 
-  data() {
-    return {
-      optionsRowsPerPage: [10, 20, 30, 40, 50, 60] as Array<number>,
-      optionRowsPerPage: [
-        {title:"10", value: 10},
-        {title:"20", value: 20},
-        {title:"30", value: 30},
-        {title:"40", value: 40},
-        {title:"50", value: 50},
-        {title:"60", value: 60},
-      ],
-    };
-  },
-  created() {
-    this.initRowsPerPage();
-  },
+//Data 
+const optionsRowsPerPage = ref([10, 20, 30, 40, 50, 60]);
+const optionRowsPerPage = ref([
+  {title:"10", value: 10},
+  {title:"20", value: 20},
+  {title:"30", value: 30},
+  {title:"40", value: 40},
+  {title:"50", value: 50},
+  {title:"60", value: 60},
+]);
 
-  methods: {
-    initRowsPerPage() {
-      if (this.optionsRowsPerPage.includes(this.rowsPerPage)) {
-        return;
-      }
-      this.optionsRowsPerPage.push(this.rowsPerPage);
-      this.optionsRowsPerPage.sort((a, b) => a - b);
-    },
-  },
-});
+//Composables
+const { t } = useI18n();
+
+
+onBeforeMount(()=>initRowsPerPage())
+
+//Methods
+function initRowsPerPage() {
+  if (optionsRowsPerPage.value.includes(props.rowsPerPage)) {
+    return;
+  }
+  optionsRowsPerPage.value.push(props.rowsPerPage);
+  optionsRowsPerPage.value.sort((a, b) => a - b);
+}
 </script>
 <style lang="scss">
 .octopus-app .paginate {

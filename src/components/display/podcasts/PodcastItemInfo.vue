@@ -11,12 +11,12 @@
         params: { podcastId: podcast.podcastId },
       }"
       class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
-      :title="$t('Episode name page', { name: podcast.title })"
+      :title="t('Episode name page', { name: podcast.title })"
     >
       {{ podcast.title }}
     </router-link>
     <PodcastPlayBar
-      v-if="isProgressBar"
+      v-if="state.emissionsPage.progressBar"
       :display-buton-play="true"
       :podcast="podcast"
       class="me-2"
@@ -43,50 +43,34 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import AnimatorsItem from "./AnimatorsItem.vue";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import dayjs from "dayjs";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
+import { useI18n } from "vue-i18n";
 const PodcastPlayBar = defineAsyncComponent(
   () => import("./PodcastPlayBar.vue"),
 );
-export default defineComponent({
-  name: "PodcastItemInfo",
 
-  components: {
-    AnimatorsItem,
-    PodcastPlayBar,
-  },
+//Props 
+const props = defineProps({
+  podcast: { default: () => ({}), type: Object as () => Podcast },
+})
 
-  props: {
-    podcast: { default: () => ({}), type: Object as () => Podcast },
-  },
+//Composables
+const { t } = useI18n();
+const { isPodcastmaker } = useOrgaComputed();
 
-  setup(){
-    const { isPodcastmaker, isEditRights } = useOrgaComputed();
-    return { isPodcastmaker, isEditRights }
-  },
-
-  computed: {
-    isProgressBar(): boolean {
-      return state.emissionsPage.progressBar as boolean;
-    },
-    date(): string {
-      return dayjs(this.podcast.pubDate).format("D MMMM YYYY");
-    },
-    editRight(): boolean {
-      return this.isEditRights(this.podcast.organisation.id);
-    },
-    orgaNameDisplay(): string {
-      if (this.podcast.organisation.name.length > 30) {
-        return this.podcast.organisation.name.substring(0, 30) + "...";
-      }
-      return this.podcast.organisation.name;
-    },
-  },
+//Computed
+const date = computed(() => dayjs(props.podcast.pubDate).format("D MMMM YYYY"));
+const orgaNameDisplay = computed(() =>{
+  if (props.podcast.organisation.name.length > 30) {
+    return props.podcast.organisation.name.substring(0, 30) + "...";
+  }
+  return props.podcast.organisation.name;
 });
 </script>
 

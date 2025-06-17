@@ -15,76 +15,64 @@
       @close="showChaptering = false"
     />
   </div>
-  <div v-else-if="playerChapteringPercent" class="margin-chaptering"></div>
+  <div v-else-if="playerStore.playerChapteringPercent" class="margin-chaptering"></div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { ChapterPercent } from "@/stores/class/chaptering/chaptering";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
-import { mapState } from "pinia";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent, Ref, ref, watch } from "vue";
 const ChapteringModal = defineAsyncComponent(
   () => import("./ChapteringModal.vue"),
 );
-export default defineComponent({
-  name: "PlayerChaptering",
 
-  components: {
-    ChapteringModal,
-    ChevronRightIcon,
-  },
-  data() {
-    return {
-      actualChapter: undefined as ChapterPercent | undefined,
-      actualIndex: -1 as number,
-      showChaptering: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, ["playerChapteringPercent", "playerElapsed"]),
-  },
-  watch: {
-    playerElapsed: {
-      immediate: true,
-      handler() {
-        if (!this.playerChapteringPercent) {
-          this.actualChapter = undefined;
-          return;
-        }
-        const progressPercent = (this.playerElapsed ?? 0) * 100;
-        if (
-          this.actualChapter &&
-          this.isInChapter(progressPercent, this.actualChapter)
-        ) {
-          return;
-        }
-        for (
-          let i = 0, len = this.playerChapteringPercent.length;
-          i < len;
-          i++
-        ) {
-          if (
-            this.isInChapter(progressPercent, this.playerChapteringPercent[i])
-          ) {
-            this.actualChapter = this.playerChapteringPercent[i];
-            this.actualIndex = i;
-            return;
-          }
-        }
-        this.actualChapter = undefined;
-        this.actualIndex = -1;
-      },
-    },
-  },
-  methods: {
-    isInChapter(val: number, chapter: ChapterPercent) {
-      return (
-        Math.floor(chapter.startPercent) <= val &&
-        val < Math.floor(chapter.endPercent)
-      );
-    },
-  },
-});
+//Data 
+const actualChapter : Ref<ChapterPercent | undefined>= ref(undefined);
+const actualIndex = ref(-1);
+const showChaptering = ref(false);
+
+
+//Composables
+const playerStore = usePlayerStore();
+
+//Watch
+watch(()=>playerStore.playerElapsed, () => {
+  if (!playerStore.playerChapteringPercent) {
+    actualChapter.value = undefined;
+    return;
+  }
+  const progressPercent = (playerStore.playerElapsed ?? 0) * 100;
+  if (
+    actualChapter.value &&
+    isInChapter(progressPercent, actualChapter.value)
+  ) {
+    return;
+  }
+  for (
+    let i = 0, len = playerStore.playerChapteringPercent.length;
+    i < len;
+    i++
+  ) {
+    if (
+      isInChapter(progressPercent, playerStore.playerChapteringPercent[i])
+    ) {
+      actualChapter.value = playerStore.playerChapteringPercent[i];
+      actualIndex.value = i;
+      return;
+    }
+  }
+  actualChapter.value = undefined;
+  actualIndex.value = -1;
+}, {immediate: true});
+
+
+//Methods
+function isInChapter(val: number, chapter: ChapterPercent) {
+  return (
+    Math.floor(chapter.startPercent) <= val &&
+    val < Math.floor(chapter.endPercent)
+  );
+}
 </script>
 <style lang="scss">
 .octopus-app .margin-chaptering {

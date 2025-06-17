@@ -10,40 +10,44 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicContentEditable",
-  props: {
-    tag: { default: "span", type: String },
-    modelValue: { default: "", type: String },
-    placeholder: { default: "", type: String },
-  },
-  emits: ["update:modelValue"],
-  watch: {
-    modelValue() {
-      if ((this.$refs.element as HTMLElement).innerText !== this.modelValue) {
-        this.updateContent(this.modelValue);
-      }
-    },
-  },
-  mounted() {
-    this.updateContent(this.modelValue);
-  },
-  methods: {
-    updateContent(newcontent: string) {
-      (this.$refs.element as HTMLElement).innerText = newcontent;
-    },
-    emitUpdate() {
-      if (null !== (this.$refs.element as HTMLElement)) {
-        this.$emit(
-          "update:modelValue",
-          (this.$refs.element as HTMLElement).innerText,
-        );
-      }
-    },
-  },
+<script setup lang="ts">
+import { onMounted, useTemplateRef, watch } from 'vue';
+
+
+//Props 
+const props = defineProps({
+  tag: { default: "span", type: String },
+  modelValue: { default: "", type: String },
+  placeholder: { default: "", type: String },
+})
+
+//Emits
+const emit = defineEmits(["update:modelValue"]);
+
+//Data
+const elementRef = useTemplateRef('element');
+
+//Watch
+watch(()=>props.modelValue, () => {
+  const element = elementRef?.value as HTMLElement;
+  if (element.innerText !== props.modelValue) {
+    updateContent(props.modelValue);
+  }
 });
+
+onMounted(()=>updateContent(props.modelValue))
+
+//Methods
+function updateContent(newcontent: string) {
+  const element = elementRef?.value as HTMLElement;
+  element.innerText = newcontent;
+}
+function emitUpdate() {
+  const element = elementRef?.value as HTMLElement;
+  if (null !== element) {
+    emit( "update:modelValue",element.innerText);
+  }
+}
 </script>
 <style lang="scss">
 

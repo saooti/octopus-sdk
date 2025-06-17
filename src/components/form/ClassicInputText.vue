@@ -10,12 +10,12 @@
         :class="[classLabel, displayLabel ? '' : 'd-none']"
         :for="isWysiwyg ? '': inputId"
         >{{ label }}
-        <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="$t('Mandatory input')"/>
+        <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
       </component>
       <template v-if="popover">
         <button
           :id="'popover' + inputId"
-          :title="$t('Help')"
+          :title="t('Help')"
           class="btn-transparent"
         >
           <HelpCircleIcon :size="30" />
@@ -51,7 +51,7 @@
       }"
       :disabled="isDisable"
       :required="!canBeNull"
-      :autocomplete="autocomplete"
+      :autocomplete="autocompleteType"
     />
     <textarea
       v-else-if="isTextarea"
@@ -87,7 +87,7 @@
         @emoji-selected="addEmojiSelected"
       />
       <div v-if="isWysiwyg" class="h6">
-        {{ $t("Characters number calculated over HTML code") }}
+        {{ t("Characters number calculated over HTML code") }}
       </div>
       <div v-else-if="'' !== indicText" class="text-indic">
         {{ indicText }}
@@ -110,10 +110,11 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
@@ -123,122 +124,117 @@ const ClassicWysiwyg = defineAsyncComponent(
 const ClassicEmojiPicker = defineAsyncComponent(
   () => import("./ClassicEmojiPicker.vue"),
 );
-export default defineComponent({
-  components: {
-    ClassicWysiwyg,
-    ClassicPopover,
-    ClassicEmojiPicker,
-    HelpCircleIcon,
-    AsteriskIcon
-  },
-  props: {
-    inputId: { default: "", type: String },
-    label: { default: "", type: String },
-    textInit: { default: undefined, type: String },
-    maxLength: { default: 0, type: Number },
-    errorText: { default: "", type: String },
-    isTextarea: { default: false, type: Boolean },
-    isWysiwyg: { default: false, type: Boolean },
-    regex: { default: undefined, type: RegExp },
-    canBeNull: { default: false, type: Boolean },
-    inputMaxLengthField: { default: undefined, type: Number },
-    errorVariable: { default: true, type: Boolean },
-    isDisable: { default: false, type: Boolean },
-    indicText: { default: "", type: String },
-    dataSelenium: { default: "", type: String },
-    placeholder: { default: "", type: String },
-    popover: { default: undefined, type: String },
-    readonly: { default: false, type: Boolean },
-    forceError: { default: false, type: Boolean },
-    displayLabel: { default: true, type: Boolean },
-    focus: { default: true, type: Boolean },
-    isEmojiPicker: { default: false, type: Boolean },
-    popoverRelativeClass: { default: undefined, type: String },
-    forceReload: { default: false, type: Boolean },
-    typeInput: { default: "text", type: String },
-    displayRequired: { default: false, type: Boolean },
-    classLabel: { default: "form-label", type: String },
-    showField: { default: true, type: Boolean },
-    autocomplete: { default: "off", type: String },
-  },
-  emits: ["update:textInit", "update:errorVariable"],
-  data() {
-    return {
-      textValue: undefined as string | undefined,
-    };
-  },
-  computed: {
-    isError(): boolean {
-      return (
-        !this.valueTrimValid || !this.valueLengthValid || !this.valueRegexValid
-      );
-    },
-    countValue(): number {
-      if (this.textValue) {
-        return this.textValue.length;
-      }
-      return 0;
-    },
-    valueTrimValid(): boolean {
-      if (!this.canBeNull) {
-        if (!this.textValue) {
-          return false;
-        }
-        return 0 !== this.textValue.trim().length;
-      }
-      return true;
-    },
-    valueLengthValid(): boolean {
-      if (0 === this.maxLength) {
-        return true;
-      }
-      return this.maxLength >= this.countValue;
-    },
-    valueRegexValid(): boolean {
-      if (this.regex === undefined) {
-        return true;
-      }
-      if (!this.textValue || "" === this.textValue) {
-        return this.canBeNull;
-      }
-      return this.textValue.match(this.regex) !== null;
-    },
-  },
-  watch: {
-    forceReload() {
-      if (this.textInit !== this.textValue) {
-        this.textValue = this.textInit;
-      }
-    },
-    isError() {
-      this.$emit("update:errorVariable", this.isError);
-    },
-    textValue() {
-      if (this.textInit !== this.textValue) {
-        this.$emit("update:textInit", this.textValue);
-      }
-    },
-    textInit() {
-      if (this.textInit !== this.textValue) {
-        this.textValue = this.textInit;
-      }
-    },
-  },
-  mounted() {
-    if (this.focus) {
-      (this.$refs.focusElement as HTMLElement)?.focus();
-    }
-    this.textValue = this.textInit;
-    if (this.errorVariable !== this.isError) {
-      this.$emit("update:errorVariable", this.isError);
-    }
-  },
-  methods: {
-    addEmojiSelected(emoji: string) {
-      this.textValue = (this.textValue ?? "") + emoji;
-    },
-  },
+
+//Props 
+const props = defineProps({
+  inputId: { default: "", type: String },
+  label: { default: "", type: String },
+  textInit: { default: undefined, type: String },
+  maxLength: { default: 0, type: Number },
+  errorText: { default: "", type: String },
+  isTextarea: { default: false, type: Boolean },
+  isWysiwyg: { default: false, type: Boolean },
+  regex: { default: undefined, type: RegExp },
+  canBeNull: { default: false, type: Boolean },
+  inputMaxLengthField: { default: undefined, type: Number },
+  errorVariable: { default: true, type: Boolean },
+  isDisable: { default: false, type: Boolean },
+  indicText: { default: "", type: String },
+  dataSelenium: { default: "", type: String },
+  placeholder: { default: "", type: String },
+  popover: { default: undefined, type: String },
+  readonly: { default: false, type: Boolean },
+  forceError: { default: false, type: Boolean },
+  displayLabel: { default: true, type: Boolean },
+  focus: { default: true, type: Boolean },
+  isEmojiPicker: { default: false, type: Boolean },
+  popoverRelativeClass: { default: undefined, type: String },
+  forceReload: { default: false, type: Boolean },
+  typeInput: { default: "text", type: String },
+  displayRequired: { default: false, type: Boolean },
+  classLabel: { default: "form-label", type: String },
+  showField: { default: true, type: Boolean },
+  autocompleteType: { default: "off", type: String },
+})
+
+//Emits
+const emit = defineEmits(["update:textInit", "update:errorVariable"]);
+
+//Data 
+const textValue : Ref<string | undefined>= ref(undefined);
+const focusElementRef = useTemplateRef('focusElement');
+
+//Composables 
+const { t } = useI18n();
+
+//Computed
+const isError = computed(() => !valueTrimValid.value || !valueLengthValid.value || !valueRegexValid.value);
+const countValue = computed(() => {
+  if (textValue.value) {
+    return textValue.value.length;
+  }
+  return 0;
 });
+const valueTrimValid = computed(() => {
+  if (!props.canBeNull) {
+    if (!textValue.value) {
+      return false;
+    }
+    return 0 !== textValue.value.trim().length;
+  }
+  return true;
+});
+const valueLengthValid = computed(() => {
+  if (0 === props.maxLength) {
+    return true;
+  }
+  return props.maxLength >= countValue.value;
+});
+const valueRegexValid = computed(() => {
+  if (props.regex === undefined) {
+    return true;
+  }
+  if (!textValue.value || "" === textValue.value) {
+    return props.canBeNull;
+  }
+  return textValue.value.match(props.regex) !== null;
+});
+  
+//Watch
+watch(()=>props.forceReload, () => {
+  if (props.textInit !== textValue.value) {
+    textValue.value = props.textInit;
+  }
+});
+watch(isError, () => {
+  emit("update:errorVariable", isError.value);
+});
+watch(textValue, () => {
+  if (props.textInit !== textValue.value) {
+    emit("update:textInit", textValue.value);
+  }
+});
+watch(()=>props.textInit, () => {
+  if (props.textInit !== textValue.value) {
+    emit("update:textInit", textValue.value);
+  }
+});
+
+
+onMounted(()=>{
+  if (props.focus) {
+    (focusElementRef?.value as HTMLElement)?.focus();
+  }
+  textValue.value = props.textInit;
+  if (props.errorVariable !== isError.value) {
+    emit("update:errorVariable", isError.value);
+  }
+})
+ 
+//Methods
+function addEmojiSelected(emoji: string) {
+  textValue.value = (textValue.value ?? "") + emoji;
+}
 </script>
 <style lang="scss">
 .octopus-app .classic-input-text {

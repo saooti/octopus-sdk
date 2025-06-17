@@ -1,7 +1,7 @@
 <template>
   <button
     id="player-speed-button"
-    :title="$t('Change speed')"
+    :title="t('Change speed')"
     class="btn play-button-box small-font btn-transparent text-light me-0"
   >
     {{ "×" + speedArray[speedIndex] }}
@@ -25,34 +25,30 @@
     </button>
   </ClassicPopover>
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import ClassicPopover from "../../ClassicPopover.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PlayerSpeedButton",
-  components: {
-    ClassicPopover,
-  },
+import { onMounted, Ref, ref } from "vue";
 
-  data() {
-    return {
-      audioPlayer: null as HTMLAudioElement | null,
-      speedIndex: 2 as number,
-      speedArray: [0.5, 0.75, 1, 1.25, 1.5, 1.75],
-    };
-  },
-  mounted() {
-    this.audioPlayer = document.querySelector("#audio-player");
-  },
-  methods: {
-    changeSpeed(index: number) {
-      this.speedIndex = index;
-      if (this.audioPlayer) {
-        this.audioPlayer.playbackRate = this.speedArray[this.speedIndex];
-      }
-    },
-  },
-});
+//Data 
+const speedIndex = ref(2);
+const speedArray = ref([0.5, 0.75, 1, 1.25, 1.5, 1.75]);
+const audioPlayer: Ref<HTMLAudioElement | null> = ref(null);
+
+//Composables
+const { t } = useI18n();
+
+onMounted(()=>{
+  audioPlayer.value = document.querySelector("#audio-player");
+})
+
+//Methods
+function changeSpeed(index: number) {
+  speedIndex.value = index;
+  if (audioPlayer.value) {
+    audioPlayer.value.playbackRate = speedArray.value[speedIndex.value];
+  }
+}
 </script>
 
 <style lang="scss">

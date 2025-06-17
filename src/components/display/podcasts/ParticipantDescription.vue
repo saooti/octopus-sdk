@@ -5,7 +5,7 @@
     <router-link
       v-for="participant in participants"
       :key="participant.participantId"
-      :title="$t('Participant name page', { name: getName(participant) })"
+      :title="t('Participant name page', { name: getName(participant) })"
       :to="{
         name: 'participant',
         params: { participantId: participant.participantId },
@@ -16,33 +16,31 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Participant } from "@/stores/class/general/participant";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ParticipantDescription",
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-  components: {},
+//Props 
+const props = defineProps({
+  participants: {
+    default: () => [],
+    type: Array as () => Array<Participant>,
+  },
+  isGuest: { default: false, type: Boolean },
+})
 
-  props: {
-    participants: {
-      default: () => [],
-      type: Array as () => Array<Participant>,
-    },
-    isGuest: { default: false, type: Boolean },
-  },
+//Composables
+const { t } = useI18n();
 
-  computed: {
-    title(): string {
-      return this.isGuest ? this.$t("Guests") : this.$t("Animated by");
-    },
-  },
-  methods: {
-    getName(person: Participant): string {
-      return `${person.firstName ?? ""} ${person.lastName ?? ""}`.trim();
-    },
-  },
-});
+//Computed
+const title = computed(() => props.isGuest ? t("Guests") : t("Animated by"));
+
+
+//Methods
+function getName(person: Participant): string {
+  return `${person.firstName ?? ""} ${person.lastName ?? ""}`.trim();
+}
 </script>
 <style lang="scss">
 .octopus-app{

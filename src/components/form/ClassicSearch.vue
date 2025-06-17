@@ -8,14 +8,14 @@
       class="search-input w-100 p-2"
       :placeholder="label"
       :autofocus="autofocus"
-      @input="$emit('update:textInit', $event.target.value)"
+      @input="onChange($event.target.value)"
     />
     <label :for="idSearch" :title="label" />
     <button
       class="btn-transparent search-icon-container"
       :disabled="!textInit"
-      :title="!textInit ? $t('Search') : $t('Clear search')"
-      @click="$emit('update:textInit', '')"
+      :title="!textInit ? t('Search') : t('Clear search')"
+      @click="onChange('')"
     >
       <MagnifyIcon v-if="!textInit" />
       <WindowCloseIcon v-else />
@@ -23,25 +23,30 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
 import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicSearch",
-  components: {
-    MagnifyIcon,
-    WindowCloseIcon,
-  },
-  props: {
-    idSearch: { default: "", type: String },
-    label: { default: "", type: String },
-    textInit: { default: "", type: String },
-    autofocus: { default: false, type: Boolean },
-  },
+import { useI18n } from "vue-i18n";
 
-  emits: ["update:textInit"],
-});
+//Props 
+defineProps({
+  idSearch: { default: "", type: String },
+  label: { default: "", type: String },
+  textInit: { default: "", type: String },
+  autofocus: { default: false, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["update:textInit"]);
+
+//Composables
+const { t } = useI18n();
+
+//Methods
+function onChange(value:string){
+  emit('update:textInit', value)
+}
+
 </script>
 <style lang="scss">
 

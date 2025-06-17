@@ -13,17 +13,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicSpinner from "../misc/ClassicSpinner.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicLoading",
-  components: {
-    ClassicSpinner,
-  },
-  props: {
-    loadingText: { default: undefined, type: String },
-    errorText: { default: undefined, type: String },
-  },
-});
+
+//Props 
+defineProps({
+  loadingText: { default: undefined, type: String },
+  errorText: { default: undefined, type: String },
+})
 </script>

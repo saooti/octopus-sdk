@@ -3,7 +3,7 @@
     class="d-flex flex-column align-items-center my-2 flex-grow-1 text-light position-relative overflow-y-auto"
   >
     <button
-      :title="$t('Reduce')"
+      :title="t('Reduce')"
       class="player-reduce-button btn bg-transparent text-light"
       @click="changePlayerLargeVersion"
     >
@@ -78,6 +78,7 @@ import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import { defineAsyncComponent } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
+import { useI18n } from "vue-i18n";
 const RadioHistory = defineAsyncComponent(
   () => import("./radio/RadioHistory.vue"),
 );
@@ -98,7 +99,6 @@ defineProps( {
 //Emits
 const emit = defineEmits(['changePlayerLargeVersion']);
 
-const playerStore = usePlayerStore();
 
 //Composables
 const { 
@@ -108,13 +108,14 @@ const {
   displayPlayTime,
   displayTotalTime,
  } = usePlayerDisplayTime();
+const { t } = useI18n();
+const playerStore = usePlayerStore();
 
-  function changePlayerLargeVersion() {
-    emit("changePlayerLargeVersion");
-  }
-
-
- function seekClick(addTime: number): void {
+//Methods
+function changePlayerLargeVersion() {
+  emit("changePlayerLargeVersion");
+}
+function seekClick(addTime: number): void {
   const audioPlayer: HTMLAudioElement | null =
     document.querySelector("#audio-player");
   if (!audioPlayer) {

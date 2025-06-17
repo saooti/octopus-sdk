@@ -27,6 +27,7 @@ const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
 
+//Props 
 const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
@@ -35,6 +36,10 @@ const props = defineProps({
   routeQuery: { default: "", type: String },
 });
 
+//Data 
+const title = ref("");
+
+//Composables
 const {
   searchPattern,
   organisationId,
@@ -42,11 +47,10 @@ const {
   paginateFirst,
   isInit
 } = useSimplePageParam(props);
-
 const { updatePathParams } = useSeoTitleUrl();
 
-const title = ref("");
 
+//Computed
 const orgaArray = computed(() =>organisationId.value ? [organisationId.value] : []);
 const sortOrder = computed(() =>{
   if(searchMinSize.value.length){
@@ -55,7 +59,7 @@ const sortOrder = computed(() =>{
   return undefined;
 });
 
-
+//Watch
 watch(()=>props.rubriqueId, async () => {
   const data = await classicApi.fetchData<Rubrique>({
     api: 0,

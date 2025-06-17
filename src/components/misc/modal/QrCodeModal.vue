@@ -1,7 +1,7 @@
 <template>
   <ClassicModal
     id-modal="qrcode-modal"
-    :title-modal="$t('Share QR Code')"
+    :title-modal="t('Share QR Code')"
     @close="closePopup"
   >
     <template #body>
@@ -9,31 +9,31 @@
     </template>
     <template #footer>
       <button class="btn btn-primary m-1" @click="closePopup">
-        {{ $t("Close") }}
+        {{ t("Close") }}
       </button>
     </template>
   </ClassicModal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicModal from "../modal/ClassicModal.vue";
 import QrCode from "../../display/sharing/QrCode.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "QrCodeModal",
-  components: {
-    QrCode,
-    ClassicModal,
-  },
-  props: {
-    urlPage: { default: undefined, type: String },
-    orgaForColor: { default: undefined, type: String },
-  },
-  emits: ["close"],
-  methods: {
-    closePopup(): void {
-      this.$emit("close");
-    },
-  },
-});
+import { useI18n } from "vue-i18n";
+
+//Props 
+defineProps({
+  urlPage: { default: undefined, type: String },
+  orgaForColor: { default: undefined, type: String },
+})
+
+//Emits
+const emit = defineEmits(["close"]);
+ 
+//Composables
+const { t } = useI18n();
+
+//Methods
+function closePopup(): void {
+  emit("close");
+}
 </script>

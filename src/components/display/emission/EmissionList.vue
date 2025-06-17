@@ -6,16 +6,16 @@
     v-model:is-mobile="isMobile"
     :text-count="
       showCount && emissions.length > 1
-        ? $t('Number emissions', { nb: displayCount }) + sortText
+        ? t('Number emissions', { nb: displayCount }) + sortText
         : undefined
     "
     :total-count="totalCount"
     :loading="loading"
-    :loading-text="loading ? $t('Loading emissions ...') : undefined"
+    :loading-text="loading ? t('Loading emissions ...') : undefined"
     :player-responsive="true"
   >
     <template #list>
-      <div v-if="!itemPlayer" class="octopus-element-list two-items-list">
+      <div v-if="!state.emissionsPage.itemPlayer" class="octopus-element-list two-items-list">
         <ClassicLazy
           v-for="e in displayArray"
           :key="e.emissionId"
@@ -29,7 +29,7 @@
                 name: 'emission',
                 params: { emissionId: e.emissionId },
               }"
-              :title="$t('Series name page', { name: e.name })"
+              :title="t('Series name page', { name: e.name })"
             >
               {{ e.name }}
             </router-link>
@@ -56,7 +56,7 @@
   </ListPaginate>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import classicApi from "../../../api/classicApi";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
@@ -64,234 +64,208 @@ import {useErrorHandler} from "../../composable/useErrorHandler";
 import { state } from "../../../stores/ParamSdkStore";
 import { Emission, emptyEmissionData } from "@/stores/class/general/emission";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, watch, onMounted } from "vue";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { AxiosError } from "axios";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import { useI18n } from "vue-i18n";
 const EmissionItem = defineAsyncComponent(() => import("./EmissionItem.vue"));
 const EmissionPlayerItem = defineAsyncComponent(
   () => import("./EmissionPlayerItem.vue"),
 );
-export default defineComponent({
-  name: "EmissionList",
 
-  components: {
-    EmissionItem,
-    EmissionPlayerItem,
-    ListPaginate,
-    ClassicLazy,
-  },
+//Props 
+const props = defineProps({
+  first: { default: 0, type: Number },
+  size: { default: 30, type: Number },
+  query: { default: undefined, type: String },
+  iabId: { default: undefined, type: Number },
+  organisationId: { default: undefined, type: String },
+  monetisable: { default: "UNDEFINED", type: String },
+  before: { default: undefined, type: String },
+  after: { default: undefined, type: String },
+  sort: { default: "DATE", type: String },
+  showCount: { default: false, type: Boolean },
+  includeHidden: { default: false, type: Boolean },
+  rubriqueId: { default: () => [], type: Array as () => Array<number> },
+  rubriquageId: { default: () => [], type: Array as () => Array<number> },
+  noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+  nbPodcasts: { default: undefined, type: Number },
+})
 
+//Data 
+const loading = ref(true);
+const dfirst = ref(props.first);
+const dsize = ref(props.size);
+const totalCount = ref(0);
+const displayCount = ref(0);
+const isMobile = ref(false);
+const emissions: Ref<Array<Emission>> = ref([]);
+const rubriques: Ref<Array<Rubrique> | undefined> = ref(undefined);
+  
+//Composables
+const { t } = useI18n();
+const {handle403} = useErrorHandler();
+const filterStore = useFilterStore();
 
-  props: {
-    first: { default: 0, type: Number },
-    size: { default: 30, type: Number },
-    query: { default: undefined, type: String },
-    iabId: { default: undefined, type: Number },
-    organisationId: { default: undefined, type: String },
-    monetisable: { default: "UNDEFINED", type: String },
-    before: { default: undefined, type: String },
-    after: { default: undefined, type: String },
-    sort: { default: "DATE", type: String },
-    showCount: { default: false, type: Boolean },
-    includeHidden: { default: false, type: Boolean },
-    rubriqueId: { default: () => [], type: Array as () => Array<number> },
-    rubriquageId: { default: () => [], type: Array as () => Array<number> },
-    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
-    nbPodcasts: { default: undefined, type: Number },
-  },
-  setup(){
-    const {handle403} = useErrorHandler();
-    return { handle403 }
-  },
-
-  data() {
-    return {
-      loading: true as boolean,
-      dfirst: this.first,
-      dsize: this.size,
-      totalCount: 0 as number,
-      displayCount: 0 as number,
-      emissions: [] as Array<Emission>,
-      rubriques: undefined as Array<Rubrique> | undefined,
-      isMobile: false as boolean,
-    };
-  },
-
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    displayArray(): Array<Emission> {
-      if (this.isMobile) {
-        return this.emissions;
-      }
-      return this.emissions.slice(
-        this.dfirst,
-        Math.min(this.dfirst + this.dsize, this.totalCount),
-      );
-    },
-    itemPlayer(): boolean {
-      return state.emissionsPage.itemPlayer as boolean;
-    },
-    displayRubriquage(): number | undefined {
-      return state.emissionsPage.rubriquage;
-    },
-    changePaginate(): string {
-      return `${this.first}|${this.size}`;
-    },
-    changed(): string {
-      return `${this.organisationId}|${this.query}|${this.monetisable}|${this.includeHidden}
-      ${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.sort}|${this.noRubriquageId}`;
-    },
-    sortText(): string {
-      let textSort = "";
-      switch (this.sort) {
-        case "SCORE":
-          textSort = " " + this.$t("sort by score");
-          break;
-        case "LAST_PODCAST_DESC":
-          textSort = " " + this.$t("sort by date");
-          break;
-        case "NAME":
-          textSort = " " + this.$t("sort by alphabetical");
-          break;
-        default:
-          textSort = " " + this.$t("sort by date");
-          break;
-      }
-
-      return textSort.replace("triés", "triées");
-    },
-    organisation(): string | undefined {
-      return this.organisationId ? this.organisationId : this.filterOrgaId;
-    },
-  },
-  watch: {
-    changePaginate() {
-      this.dfirst = this.first;
-      this.dsize = this.size;
-    },
-    changed(): void {
-      this.reloadList();
-    },
-    dsize(): void {
-      this.reloadList();
-    },
-    dfirst(): void {
-      if (
-        !this.emissions[this.dfirst] ||
-        0 === this.emissions[this.dfirst].emissionId
-      ) {
-        this.fetchContent(false);
-      }
-    },
-  },
-
-  mounted() {
-    this.fetchContent(true);
-    if (this.displayRubriquage) {
-      this.fetchRubriques();
-    }
-  },
-  methods: {
-    reloadList() {
-      this.dfirst = 0;
-      this.fetchContent(true);
-    },
-    async fetchContent(reset: boolean): Promise<void> {
-      this.loading = true;
-      const param: FetchParam = {
-        first: this.dfirst,
-        size: this.dsize,
-        query: this.query,
-        organisationId: this.organisation,
-        monetisable: this.monetisable,
-        iabId: this.iabId,
-        before: this.before,
-        after: this.after,
-        sort: this.sort,
-        noRubriquageId: this.noRubriquageId.length
-          ? this.noRubriquageId
-          : undefined,
-        rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
-        rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
-        includeHidden: this.includeHidden,
-      };
-      try {
-        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
-          api: 0,
-          path: "emission/search",
-          parameters: param,
-          specialTreatement: true,
-        });
-        this.afterFetching(reset, data);
-      } catch (error) {
-        this.handle403(error as AxiosError);
-      }
-    },
-    afterFetching(
-      reset: boolean,
-      data: { count: number; result: Array<Emission>; sort: string },
-    ): void {
-      if (reset) {
-        this.emissions.length = 0;
-      }
-      if (this.dfirst > this.emissions.length) {
-        for (
-          let i = this.emissions.length - 1, len = this.dfirst + this.dsize;
-          i < len;
-          i++
-        ) {
-          this.emissions.push(emptyEmissionData());
-        }
-      }
-      this.displayCount = data.count;
-      const responseEmissions = data.result.filter((e: Emission | null) => {
-        if (null === e) {
-          this.displayCount--;
-        }
-        return null !== e;
-      });
-      this.emissions = this.emissions
-        .slice(0, this.dfirst)
-        .concat(responseEmissions)
-        .concat(
-          this.emissions.slice(this.dfirst + this.dsize, this.emissions.length),
-        );
-      this.totalCount = data.count;
-      this.loading = false;
-    },
-    async fetchRubriques(): Promise<void> {
-      const data = await classicApi.fetchData<Rubriquage>({
-        api: 0,
-        path: "rubriquage/" + this.displayRubriquage,
-      });
-      this.rubriques = data.rubriques;
-    },
-    mainRubriquage(emission: Emission): string {
-      return emission.rubriqueIds?.[0] === state.emissionsPage.mainRubrique
-        ? "partenaireRubrique"
-        : "";
-    },
-    rubriquesId(emission: Emission): string | undefined {
-      if (
-        !this.displayRubriquage ||
-        !emission.rubriqueIds ||
-        0 === emission.rubriqueIds.length ||
-        !this.rubriques ||
-        !this.rubriques.length
-      )
-        return undefined;
-      const rubrique = this.rubriques.find(
-        (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0],
-      );
-      if (!rubrique) {
-        return undefined;
-      }
-      return rubrique.name;
-    },
-  },
+//Computed
+const displayArray = computed(() => {
+  if (isMobile.value) {
+    return emissions.value;
+  }
+  return emissions.value.slice(
+    dfirst.value,
+    Math.min(dfirst.value + dsize.value, totalCount.value),
+  );
 });
+const displayRubriquage = computed(() => state.emissionsPage.rubriquage);
+const changePaginate = computed(() => `${props.first}|${props.size}`);
+const changed = computed(() => {
+  return `${props.organisationId}|${props.query}|${props.monetisable}|${props.includeHidden}
+  ${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.sort}|${props.noRubriquageId}`;
+});
+const sortText = computed(() => {
+  let textSort = "";
+  switch (props.sort) {
+    case "SCORE":
+      textSort = " " + t("sort by score");
+      break;
+    case "LAST_PODCAST_DESC":
+      textSort = " " + t("sort by date");
+      break;
+    case "NAME":
+      textSort = " " + t("sort by alphabetical");
+      break;
+    default:
+      textSort = " " + t("sort by date");
+      break;
+  }
+    return textSort.replace("triés", "triées");
+});
+const organisation = computed(() => props.organisationId ? props.organisationId : filterStore.filterOrgaId);
+
+
+//Watch
+watch(changePaginate, () => {
+  dfirst.value = props.first;
+  dsize.value = props.size;
+});
+watch(changed, () =>reloadList());
+watch(dsize, () =>reloadList());
+watch(dfirst, () =>{
+  if (
+    !emissions.value[dfirst.value] ||
+    0 === emissions.value[dfirst.value].emissionId
+  ) {
+    fetchContent(false);
+  }
+});
+
+
+onMounted(()=>{
+  fetchContent(true);
+  if (displayRubriquage.value) {
+    fetchRubriques();
+  }
+})
+
+//Methods
+function reloadList() {
+  dfirst.value = 0;
+  fetchContent(true);
+}
+async function fetchContent(reset: boolean): Promise<void> {
+  loading.value = true;
+  const param: FetchParam = {
+    first: dfirst.value,
+    size: dsize.value,
+    query: props.query,
+    organisationId: organisation.value,
+    monetisable: props.monetisable,
+    iabId: props.iabId,
+    before: props.before,
+    after: props.after,
+    sort: props.sort,
+    noRubriquageId: props.noRubriquageId.length
+      ? props.noRubriquageId
+      : undefined,
+    rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
+    rubriquageId: props.rubriquageId.length ? props.rubriquageId : undefined,
+    includeHidden: props.includeHidden,
+  };
+  try {
+    const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+      api: 0,
+      path: "emission/search",
+      parameters: param,
+      specialTreatement: true,
+    });
+    afterFetching(reset, data);
+  } catch (error) {
+    handle403(error as AxiosError);
+  }
+}
+function afterFetching(
+  reset: boolean,
+  data: { count: number; result: Array<Emission>; sort: string },
+): void {
+  if (reset) {
+    emissions.value.length = 0;
+  }
+  if (dfirst.value > emissions.value.length) {
+    for (
+      let i = emissions.value.length - 1, len = dfirst.value + dsize.value;
+      i < len;
+      i++
+    ) {
+      emissions.value.push(emptyEmissionData());
+    }
+  }
+  displayCount.value = data.count;
+  const responseEmissions = data.result.filter((e: Emission | null) => {
+    if (null === e) {
+      displayCount.value--;
+    }
+    return null !== e;
+  });
+  emissions.value = emissions.value
+    .slice(0, dfirst.value)
+    .concat(responseEmissions)
+    .concat(
+      emissions.value.slice(dfirst.value + dsize.value, emissions.value.length),
+    );
+  totalCount.value = data.count;
+  loading.value = false;
+}
+async function fetchRubriques(): Promise<void> {
+  const data = await classicApi.fetchData<Rubriquage>({
+    api: 0,
+    path: "rubriquage/" + displayRubriquage.value,
+  });
+  rubriques.value = data.rubriques;
+}
+function mainRubriquage(emission: Emission): string {
+  return emission.rubriqueIds?.[0] === state.emissionsPage.mainRubrique
+    ? "partenaireRubrique"
+    : "";
+}
+function rubriquesId(emission: Emission): string | undefined {
+  if (
+    !displayRubriquage.value ||
+    !emission.rubriqueIds ||
+    0 === emission.rubriqueIds.length ||
+    !rubriques.value ||
+    !rubriques.value.length
+  )
+    return undefined;
+  const rubrique = rubriques.value.find(
+    (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0],
+  );
+  if (!rubrique) {
+    return undefined;
+  }
+  return rubrique.name;
+}
 </script>

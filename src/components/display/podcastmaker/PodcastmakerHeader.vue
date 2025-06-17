@@ -7,31 +7,30 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from "vue";
 import {useImageProxy} from "../../composable/useImageProxy";
-import { defineComponent } from "vue";
-export default defineComponent({
 
-  props: {
-    pageTitle: { default: undefined, type: String },
-    imgUrl: { default: undefined, type: String },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    return { useProxyImageUrl }
-  },
-  computed: {
-    backgroundDisplay(): string {
-      if (!this.imgUrl) {
-        return "";
-      }
-      return `background-image: url('${this.useProxyImageUrl(
-        this.imgUrl,
-        "250",
-      )}');`;
-    },
-  },
+//Props 
+const props = defineProps({
+  pageTitle: { default: undefined, type: String },
+  imgUrl: { default: undefined, type: String },
+})
+
+//Composables
+const { useProxyImageUrl } = useImageProxy();
+
+//Computed
+const backgroundDisplay = computed(() => {
+  if (!props.imgUrl) {
+    return "";
+  }
+  return `background-image: url('${useProxyImageUrl(
+    props.imgUrl,
+    "250",
+  )}');`;
 });
+
 </script>
 <style lang="scss">
 .octopus-app {

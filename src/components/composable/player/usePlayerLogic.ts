@@ -62,21 +62,21 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
     getTranscription();
   }, {deep:true});
 
-  watch(()=>playerStore.playerLive, async () => {
+  watch(()=>playerStore.playerLive, async (_, oldLive) => {
     if(playerStore.playerVideo){
       return;
     }
     nextTick(async () => {
       hlsReady.value = false;
-      reInitPlayer();
+      reInitPlayer(oldLive!==undefined);
       playLive();
     });
   }, {deep:true});
 
-  watch(()=>playerStore.playerRadio, async () => {
+  watch(()=>playerStore.playerRadio, async (_, oldRadio) => {
     nextTick(async () => {
       hlsReady.value = false;
-      reInitPlayer();
+      reInitPlayer(oldRadio !== undefined);
       playRadio();
     });
   });
@@ -154,10 +154,10 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
     return playerStore.playerPodcast.podcastId + ".mp3?"+fetchHelper.getUriSearchParams(getAudioUrlParameters());
   }
 
-  function reInitPlayer(): void {
+  function reInitPlayer(force=false): void {
     setDownloadId(null);
     listenError.value = false;
-    if (playerStore.playerLive || playerStore.playerRadio) {
+    if (force || playerStore.playerLive || playerStore.playerRadio) {
       endingLive();
     }
   }

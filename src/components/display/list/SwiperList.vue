@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative w-100">
+  <div ref="root" class="position-relative w-100">
     <template v-if="!isPhone">
       <swiper
         :key="manualReload"
@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import domHelper from "../../../helper/domHelper";
 import { state } from "../../../stores/ParamSdkStore";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -34,114 +34,102 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import {useResizePhone} from "../../composable/useResizePhone";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "SwiperList",
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
+//Props 
+const props = defineProps({
+  listObject: { default: () => [], type: Array as () => Array<unknown> },
+  sizeItemOverload: { default: undefined, type: Number },
+})
+ 
+//Data 
+const manualReload = ref(0);
+const modules = ref([Navigation]);
+const numberItem = ref(5);
+const offsetSwiper = ref(40);
+const widthSwiperUsable = ref(0);
+const itemSizeWithoutRecalculed = ref(0);
+const composableInit = ref(false);
+const rootRef = useTemplateRef('root');
 
-  props: {
-    listObject: { default: () => [], type: Array as () => Array<unknown> },
-    sizeItemOverload: { default: undefined, type: Number },
-  },
-  setup(){
-    const { isPhone, windowWidth } = useResizePhone();
-    return { isPhone, windowWidth }
-  },
 
-  data() {
-    return {
-      manualReload: 0 as number,
-      modules: [Navigation],
-      numberItem: 5 as number,
-      offsetSwiper: 40 as number,
-      widthSwiperUsable: 0 as number,
-      itemSizeWithoutRecalculed: 0 as number,
-      composableInit: false as boolean,
-    };
-  },
-  computed: {
-    sizeItem(): number {
-      if (this.sizeItemOverload) {
-        return this.sizeItemOverload;
-      }
-      if (this.windowWidth <= 450) {
-        return 12.5;
-      }
-      return state.generalParameters.podcastItem
-        ? state.generalParameters.podcastItem
-        : 13.5;
-    },
-    /* isLoop(): boolean {
-      return this.listObject.length >= this.numberItem;
-    }, */
-    itemRecalculizedSize(): number {
-      return this.widthSwiperUsable / this.numberItem;
-    },
-  },
-  watch: {
-    windowWidth() {
-      if (!this.$el) return;
-      this.widthSwiperUsable =
-        (this.$el as HTMLElement).offsetWidth - this.offsetSwiper * 2;
-      const sixteen = domHelper.convertRemToPixels(this.sizeItem + 0.5);
-      this.numberItem = Math.max(
-        1,
-        Math.floor(this.widthSwiperUsable / sixteen),
-      );
-      this.itemSizeWithoutRecalculed =
-        (this.$el as HTMLElement).offsetWidth / this.numberItem;
-    },
-    listObject: {
-      deep: true,
-      handler() {
-        this.manualReload += 1;
-      },
-    },
-  },
-  mounted(){
-    this.$nextTick(() => {
-      this.composableInit = true;
-    });
-  },
+//Composables
+const { isPhone, windowWidth } = useResizePhone();
 
-  methods: {
-    slidesUpdated() {
-      if (!this.$el) return;
-      const slides = this.$el.getElementsByClassName("swiper-slide");
-      for (const slide of slides) {
-        slide.style.width = this.itemRecalculizedSize + "px";
-      }
-    },
-    slideChange() {
-      if (!this.$el) return;
-      const wrapper = this.$el.getElementsByClassName("swiper-wrapper")[0];
-      if (wrapper.style.transform.includes("translate3d(40px")) {
-        return;
-      }
-      const matches = /^^translate3d\((-*\d+\.*\d*)px/.exec(
-        wrapper.style.transform,
-      );
-      if (!matches || matches.length <= 1) {
-        return;
-      }
-      const transformPixel = parseFloat(matches[1]) - this.offsetSwiper;
-      const nbTransformItems = Math.round(
-        transformPixel / this.itemSizeWithoutRecalculed,
-      );
-      wrapper.style.transform =
-        "translate3d(" +
-        (nbTransformItems * this.itemRecalculizedSize + this.offsetSwiper) +
-        "px, 0px, 0px)";
-    },
-    slidePrevButton() {
-      this.$el.querySelector(".swiper").swiper.slidePrev();
-    },
-  },
+
+//Computed
+const sizeItem = computed(() => {
+  if (props.sizeItemOverload) {
+    return props.sizeItemOverload;
+  }
+  if (windowWidth.value <= 450) {
+    return 12.5;
+  }
+  return state.generalParameters.podcastItem
+    ? state.generalParameters.podcastItem
+    : 13.5;
 });
+const itemRecalculizedSize = computed(() => widthSwiperUsable.value / numberItem.value);
+
+
+//Watch
+watch(windowWidth, () => onWindowResize());
+watch(()=>props.listObject, () => {
+  manualReload.value += 1;
+}, {deep:true});
+
+
+onMounted(()=>{
+  nextTick(() => {
+    onWindowResize();
+    composableInit.value = true;
+  });
+})
+
+
+//Methods
+function onWindowResize(){
+  const el = rootRef?.value as HTMLElement;
+  if (!el) return;
+  widthSwiperUsable.value =el.offsetWidth - offsetSwiper.value * 2;
+  const sixteen = domHelper.convertRemToPixels(sizeItem.value + 0.5);
+  numberItem.value = Math.max(
+    1,
+    Math.floor(widthSwiperUsable.value / sixteen),
+  );
+  itemSizeWithoutRecalculed.value =el.offsetWidth / numberItem.value;
+}
+function slidesUpdated() {
+  const el = rootRef?.value as HTMLElement;
+  if (!el) return;
+  const slides = el.getElementsByClassName("swiper-slide") as Array<HTMLElement>;
+  for (const slide of slides) {
+    slide.style.width = itemRecalculizedSize.value + "px";
+  }
+}
+function slideChange() {
+  const el = rootRef?.value as HTMLElement;
+  if (!el) return;
+  const wrapper = el.getElementsByClassName("swiper-wrapper")[0] as HTMLElement;
+  if (wrapper.style.transform.includes("translate3d(40px")) {
+    return;
+  }
+  const matches = /^^translate3d\((-*\d+\.*\d*)px/.exec(
+    wrapper.style.transform,
+  );
+  if (!matches || matches.length <= 1) {
+    return;
+  }
+  const transformPixel = parseFloat(matches[1]) - offsetSwiper.value;
+  const nbTransformItems = Math.round(
+    transformPixel / itemSizeWithoutRecalculed.value,
+  );
+  wrapper.style.transform =
+    "translate3d(" +
+    (nbTransformItems * itemRecalculizedSize.value + offsetSwiper.value) +
+    "px, 0px, 0px)";
+}
+
 </script>
 <style lang="scss">
 

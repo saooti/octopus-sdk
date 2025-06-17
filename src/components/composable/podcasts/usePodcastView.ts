@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n';
 import {useOrgaComputed} from "../useOrgaComputed"
 export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConference: Ref<Conference|undefined>)=>{
 
-  const i18n = useI18n();
+  const {locale} = useI18n();
 
   const {isEditRights, isPodcastmaker} = useOrgaComputed();
 
@@ -54,13 +54,13 @@ export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConferen
     if (!podcast.value || podcast.value.duration <= 1){return ""};
     if (podcast.value.duration > 600000) {
       return humanizeDuration(podcast.value.duration, {
-        language: i18n.locale.value,
+        language: locale.value,
         largest: 1,
         round: true,
       });
     }
     return humanizeDuration(podcast.value.duration, {
-      language: i18n.locale.value,
+      language: locale.value,
       largest: 2,
       round: true,
     });

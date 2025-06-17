@@ -26,7 +26,7 @@
     <button
       :id="'comment-dropdown' + comment.commentId"
       class="btn share-btn"
-      :title="$t('See more')"
+      :title="t('See more')"
       :data-selenium="
         'comment-dropdown-' + seleniumFormat(comment.poster.userName)
       "
@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import DotsVerticalIcon from "vue-material-design-icons/DotsVertical.vue";
 import {useSelenium} from "../../../composable/useSelenium";
 import classicApi from "../../../../api/classicApi";
@@ -66,9 +66,9 @@ import { useAuthStore } from "../../../../stores/AuthStore";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useCommentStore } from "../../../../stores/CommentStore";
-import { mapActions, mapState } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed } from "vue";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";
+import { useI18n } from "vue-i18n";
 const ClassicPopover = defineAsyncComponent(
   () => import("../../../misc/ClassicPopover.vue"),
 );
@@ -81,204 +81,189 @@ const EditCommentModal = defineAsyncComponent(
 const MessageModal = defineAsyncComponent(
   () => import("../../../misc/modal/MessageModal.vue"),
 );
-export default defineComponent({
-  name: "CommentMoreActions",
 
-  components: {
-    ClassicPopover,
-    ReportAbuseModal,
-    CommentMoreActionsAdmin,
-    EditCommentModal,
-    MessageModal,
-    DotsVerticalIcon,
-  },
+//Props 
+const props = defineProps({
+  comment: { default: () => ({}), type: Object as () => CommentPodcast },
+  podcast: { default: undefined, type: Object as () => Podcast },
+  config: { default: undefined, type: Object as () => CommentsConfig },
+  editRight: { default: false, type: Boolean },
+})
 
-  props: {
-    comment: { default: () => ({}), type: Object as () => CommentPodcast },
-    podcast: { default: undefined, type: Object as () => Podcast },
-    config: { default: undefined, type: Object as () => CommentsConfig },
-    editRight: { default: false, type: Boolean },
-  },
+//Emits
+const emit = defineEmits(["update:comment", "deleteComment"]);
 
-  emits: ["update:comment", "deleteComment"],
+//Data 
+const isEdit = ref(false);
+const isReportAbuse = ref(false);
+const actionName: Ref<string | undefined> = ref(undefined);
+const actionsAdmin: Ref<string | undefined> = ref(undefined);
+const confirmModal = ref(false);
+const actionInProgress = ref(false);
+const isError = ref(false);
 
-  setup(){
-    const { seleniumFormat } = useSelenium();
-    return { seleniumFormat }
+//Composables
+const { t } = useI18n();
+const { seleniumFormat } = useSelenium();
+const authStore = useAuthStore();
+const commentStore = useCommentStore();
+
+//Computed
+const commentForVmodel = computed({
+  get(): CommentPodcast {
+    return props.comment;
   },
-  data() {
-    return {
-      isEdit: false as boolean,
-      isReportAbuse: false as boolean,
-      actionName: undefined as string | undefined,
-      actionsAdmin: undefined as string | undefined,
-      confirmModal: false as boolean,
-      actionInProgress: false as boolean,
-      isError: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useAuthStore, ["authProfile", "authOrgaId"]),
-    ...mapState(useCommentStore, ["commentUser"]),
-    commentForVmodel: {
-      get(): CommentPodcast {
-        return this.comment;
-      },
-      set(value: CommentPodcast) {
-        this.$emit("update:comment", value);
-      },
-    },
-    isMyComment() {
-      const uuid = this.authProfile?.userId ?? this.commentUser?.uuidHash;
-      return uuid === this.comment?.poster.uuid;
-    },
-    isAtLeastOneMoreAction() {
-      return this.moreActions.some((el) => {
-        return el.condition;
-      });
-    },
-    moreActions() {
-      return [
-        {
-          title: this.$t("Report abuse"),
-          actionClick: () => {
-            this.isReportAbuse = true;
-          },
-          condition:
-            this.getCanReportAbuse(
-              this.config,
-              undefined !== this.authOrgaId,
-            ) && !this.isMyComment,
-        },
-        {
-          title: this.$t("Managing reported abuses"),
-          actionClick: () => {
-            this.actionsAdmin = "abuse";
-          },
-          condition: this.editRight && this.comment.abuse,
-        },
-        {
-          title: this.$t("Edit comment"),
-          actionClick: () => {
-            this.isEdit = true;
-          },
-          condition: this.editRight || this.isMyComment,
-        },
-        {
-          title: this.$t("Comment information"),
-          actionClick: () => {
-            this.actionsAdmin = "info";
-          },
-          condition: this.editRight && !this.podcast,
-        },
-        {
-          title: this.$t("Validate"),
-          actionClick: () => {
-            this.actionName = "validate";
-            this.isError = false;
-            this.confirmModal = true;
-          },
-          condition:
-            this.editRight &&
-            ("PENDING" === this.comment.state ||
-              "NOT_VALID" === this.comment.state),
-        },
-        {
-          title: this.$t("Invalidate"),
-          actionClick: () => {
-            this.actionName = "invalidate";
-            this.isError = false;
-            this.confirmModal = true;
-          },
-          condition:
-            this.editRight &&
-            ("PENDING" === this.comment.state ||
-              "VALIDATED" === this.comment.state),
-        },
-        {
-          title: this.$t("Delete comment"),
-          actionClick: () => {
-            this.actionName = "delete";
-            this.isError = false;
-            this.confirmModal = true;
-          },
-          condition: this.editRight || this.isMyComment,
-        },
-      ];
-    },
-    validateText(): string | undefined {
-      if (this.isError) {
-        return this.$t("Close");
-      }
-      return this.actionInProgress ? undefined : this.$t("Yes");
-    },
-    canceltext(): string | undefined {
-      return this.isError ? undefined : this.$t("No");
-    },
-    modalMessage(): string {
-      if (this.actionInProgress) {
-        return this.$t("Saving");
-      }
-      if (this.isError) {
-        return this.$t("An error occurred");
-      }
-      const name = { name: this.comment.poster.userName };
-      switch (this.actionName) {
-        case "delete":
-          return this.$t("Confirm comment deletion text", name);
-        case "validate":
-          return this.$t("Confirm comment valid text", name);
-        case "invalidate":
-          return this.$t("Confirm comment invalid text", name);
-        default:
-          return "";
-      }
-    },
-    modalTitle(): string {
-      if ("delete" === this.actionName) {
-        return this.$t("Delete comment");
-      }
-      return this.$t("Update comment");
-    },
-  },
-  methods: {
-    ...mapActions(useCommentStore, ["getCanReportAbuse"]),
-    async actionComment() {
-      if (!this.comment) {
-        return;
-      }
-      this.actionInProgress = true;
-      this.isError = false;
-      try {
-        if ("delete" === this.actionName) {
-          await classicApi.deleteData({
-            api: 2,
-            path: "comment/" + this.comment.commentId,
-            parameters: this.editRight
-              ? undefined
-              : { uuid: this.commentUser?.uuid },
-            isNotAuth: !this.editRight,
-          });
-          this.$emit("deleteComment");
-        } else {
-          const commentUpdated = await classicApi.putData({
-            api: 2,
-            path: "comment/",
-            dataToSend: {
-              commentId: this.comment.commentId,
-              content: this.comment.content,
-              name: this.comment.poster.userName,
-              state: "validate" === this.actionName ? "VALIDATED" : "NOT_VALID",
-            },
-          });
-          this.$emit("update:comment", commentUpdated);
-        }
-        this.confirmModal = false;
-      } catch {
-        this.isError = true;
-      }
-      this.actionInProgress = false;
-    },
+  set(value: CommentPodcast) {
+    emit("update:comment", value);
   },
 });
+const isMyComment = computed(() => {
+  const uuid = authStore.authProfile?.userId ?? commentStore.commentUser?.uuidHash;
+  return uuid === props.comment?.poster.uuid;
+});
+const isAtLeastOneMoreAction = computed(() => {
+  return moreActions.value.some((el) => {
+    return el.condition;
+  });
+});
+const moreActions = computed(() => {
+  return [
+    {
+      title: t("Report abuse"),
+      actionClick: () => {
+        isReportAbuse.value = true;
+      },
+      condition:
+        commentStore.getCanReportAbuse(
+          props.config,
+          undefined !== authStore.authOrgaId,
+        ) && !isMyComment.value,
+    },
+    {
+      title: t("Managing reported abuses"),
+      actionClick: () => {
+        actionsAdmin.value = "abuse";
+      },
+      condition: props.editRight && props.comment.abuse,
+    },
+    {
+      title: t("Edit comment"),
+      actionClick: () => {
+        isEdit.value = true;
+      },
+      condition: props.editRight || isMyComment.value,
+    },
+    {
+      title: t("Comment information"),
+      actionClick: () => {
+        actionsAdmin.value = "info";
+      },
+      condition: props.editRight && !props.podcast,
+    },
+    {
+      title: t("Validate"),
+      actionClick: () => {
+        actionName.value = "validate";
+        isError.value = false;
+        confirmModal.value = true;
+      },
+      condition:
+        props.editRight &&
+        ("PENDING" === props.comment.state ||
+          "NOT_VALID" === props.comment.state),
+    },
+    {
+      title: t("Invalidate"),
+      actionClick: () => {
+        actionName.value = "invalidate";
+        isError.value = false;
+        confirmModal.value = true;
+      },
+      condition:
+        props.editRight &&
+        ("PENDING" === props.comment.state ||
+          "VALIDATED" === props.comment.state),
+    },
+    {
+      title: t("Delete comment"),
+      actionClick: () => {
+        actionName.value = "delete";
+        isError.value = false;
+        confirmModal.value = true;
+      },
+      condition: props.editRight || isMyComment.value,
+    },
+  ];
+});
+const validateText = computed(() => {
+  if (isError.value) {
+    return t("Close");
+  }
+  return actionInProgress.value ? undefined : t("Yes");
+});
+const canceltext = computed(() => isError.value ? undefined : t("No"));
+const modalMessage = computed(() => {
+  if (actionInProgress.value) {
+    return t("Saving");
+  }
+  if (isError.value) {
+    return t("An error occurred");
+  }
+  const name = { name: props.comment.poster.userName };
+  switch (actionName.value) {
+    case "delete":
+      return t("Confirm comment deletion text", name);
+    case "validate":
+      return t("Confirm comment valid text", name);
+    case "invalidate":
+      return t("Confirm comment invalid text", name);
+    default:
+      return "";
+  }
+});
+const modalTitle = computed(() => {
+  if ("delete" === actionName.value) {
+    return t("Delete comment");
+  }
+  return t("Update comment");
+});  
+ 
+
+//Methods
+async function actionComment() {
+  if (!props.comment) {
+    return;
+  }
+  actionInProgress.value = true;
+  isError.value = false;
+  try {
+    if ("delete" === actionName.value) {
+      await classicApi.deleteData({
+        api: 2,
+        path: "comment/" + props.comment.commentId,
+        parameters: props.editRight
+          ? undefined
+          : { uuid: commentStore.commentUser?.uuid },
+        isNotAuth: !props.editRight,
+      });
+      emit("deleteComment");
+    } else {
+      const commentUpdated = await classicApi.putData({
+        api: 2,
+        path: "comment/",
+        dataToSend: {
+          commentId: props.comment.commentId,
+          content: props.comment.content,
+          name: props.comment.poster.userName,
+          state: "validate" === actionName.value ? "VALIDATED" : "NOT_VALID",
+        },
+      });
+      emit("update:comment", commentUpdated);
+    }
+    confirmModal.value = false;
+  } catch {
+    isError.value = true;
+  }
+  actionInProgress.value = false;
+}
 </script>

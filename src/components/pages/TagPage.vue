@@ -1,13 +1,14 @@
 <template>
   <section v-if="isInit" class="page-box tag-page">
     <h1>
-      {{ $t("Search for keyword", {tag:titleDisplay})}}
+      {{ t("Search for keyword", {tag:titleDisplay})}}
       <img
         v-if="isOf"
         width="30"
         height="30"
         class="ouest-france-logo-tag-page"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
         title="Ouest France"
         src="/img/ouest_france_logo.svg" 
@@ -39,6 +40,7 @@ const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
 
+//Props 
 const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
@@ -47,6 +49,11 @@ const props = defineProps({
   routeQuery: { default: "", type: String },
 });
 
+//Data 
+const titleDisplay = ref("");
+const isOf = ref(false);
+
+//Composables
 const {
   searchPattern,
   organisationId,
@@ -54,15 +61,11 @@ const {
   paginateFirst,
   isInit
 } = useSimplePageParam(props);
-
 const { isOuestFranceTag, formateOfTag } = useTagOf();
-
 const { updatePathParams } = useSeoTitleUrl();
-
-const titleDisplay = ref("");
-const isOf = ref(false);
 const {t} = useI18n();
 
+//Computed
 const orgaArray = computed(() =>organisationId.value ? [organisationId.value] : []);
 const sortOrder = computed(() =>{
   if(searchMinSize.value.length){
@@ -71,14 +74,13 @@ const sortOrder = computed(() =>{
   return undefined;
 });
 
-
+//Watch
 watch(()=>props.tag, async () => {
   const tagString = props.tag?? "";
   isOf.value = isOuestFranceTag(tagString);
   titleDisplay.value= isOf.value ?  formateOfTag(tagString) :tagString;
   updatePathParams(t("Search for keyword", {tag:titleDisplay.value}));
 }, {immediate: true});
-
 
 </script>
 <style lang="scss">

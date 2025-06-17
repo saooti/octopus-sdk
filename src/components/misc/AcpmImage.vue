@@ -4,16 +4,15 @@
     height="44"
     class="acpm-image"
     src="/img/ACPM.webp"
-    :title="$t('Octopus is ACPM Podcast accredited')"
-    :alt="$t('Octopus is ACPM Podcast accredited')"
+    :title="t('Octopus is ACPM Podcast accredited')"
+    :alt="t('Octopus is ACPM Podcast accredited')"
   />
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "AcpmImage",
-});
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+//Composables
+const { t } = useI18n();
 </script>
 
 <style lang="scss">

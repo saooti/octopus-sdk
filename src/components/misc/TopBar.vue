@@ -3,7 +3,7 @@
     role="banner"
     class="header-saooti-play"
     :style="headerBackgroundImage"
-    :class="[contentToDisplay ? 'header-img-bg':'header-color-bg', scrolled? 'scrolled':'', needToBlur ? 'header-force-blur':'']"
+    :class="[generalStore.contentToDisplay ? 'header-img-bg':'header-color-bg', scrolled? 'scrolled':'', needToBlur ? 'header-force-blur':'']"
   >
     <TopBarMainContent
       :is-phone="isPhone"
@@ -13,27 +13,26 @@
       :class="headerBackgroundImage.length ? 'header-opacity':''"
     />
   </header>
-  <div v-if="contentToDisplay" class="header-content-bg" :style="headerBackgroundImage" :class="{ scrolled: scrolled, 'header-force-blur':needToBlur }" >
+  <div v-if="generalStore.contentToDisplay" class="header-content-bg" :style="headerBackgroundImage" :class="{ scrolled: scrolled, 'header-force-blur':needToBlur }" >
     <div class="header-additional-content header-content">
       <h1 v-if="!scrolled" class="text-truncate">
         {{ titleToDisplay }}
       </h1>
       <SubscribeButtons
-        v-if="!isGarRole"
+        v-if="!authStore.isGarRole"
         v-show="!scrolled"
         :emission="emissionObject"
-        :playlist-id="contentToDisplay?.playlistId"
+        :playlist-id="generalStore.contentToDisplay?.playlistId"
         :window-width="windowWidth"
       />
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {useImageProxy} from "../composable/useImageProxy";
 import TopBarMainContent from "./TopBarMainContent.vue";
-import { mapState } from "pinia";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -45,121 +44,99 @@ import axios from "axios";
 const SubscribeButtons = defineAsyncComponent(
   () => import("../display/sharing/SubscribeButtons.vue"),
 );
-export default defineComponent({
-  name: "TopBar",
-  components: {
-    TopBarMainContent,
-    SubscribeButtons,
-  },
-  setup(){
-    const { isPhone, windowWidth } = useResizePhone();
-    const { useProxyImageUrl } = useImageProxy();
-    return { isPhone, windowWidth, useProxyImageUrl }
-  },
 
-  data() {
-    return {
-      scrolled: false as boolean,
-      oldScrollY: 0 as number,
-      minScroll: 0 as number,
-      headerBackgroundImage: "" as string,
-      needToBlur: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useAuthStore, ["isGarRole"]),
-    ...mapState(useGeneralStore, ["contentToDisplay"]),
-    isContentToDisplay(): boolean {
-      return (
-        "podcast" === this.$route.name ||
-        "emission" === this.$route.name ||
-        "playlist" === this.$route.name ||
-        "radio" === this.$route.name
-      );
-    },
-    titleToDisplay(): string {
-      if ((this.contentToDisplay as Podcast)?.podcastId) {
-        return (this.contentToDisplay as Podcast).emission.name;
-      }
-      if ((this.contentToDisplay as Playlist)?.playlistId) {
-        return (this.contentToDisplay as Playlist).title;
-      }
-      if ((this.contentToDisplay as Emission)?.emissionId) {
-        return (this.contentToDisplay as Emission).name;
-      }
-      if ((this.contentToDisplay as Canal)?.id) {
-        return (this.contentToDisplay as Canal).name;
-      }
-      return "";
-    },
-    emissionObject(): Emission | null {
-      if ((this.contentToDisplay as Podcast)?.podcastId) {
-        return (this.contentToDisplay as Podcast).emission;
-      }
-      if ((this.contentToDisplay as Emission)?.emissionId) {
-        return this.contentToDisplay as Emission;
-      }
-      return null;
-    },
-  },
-  watch:{
-    contentToDisplay: {
-      deep: true,
-      immediate: true,
-      async handler() {
-        if(!this.contentToDisplay){
-          this.headerBackgroundImage = "";
-          this.needToBlur = false;
-          return;
-        }
-        const proxyUrl = this.useProxyImageUrl(this.contentToDisplay.imageUrl,"270", undefined, true);
-        try {
-          const result = await axios.get(proxyUrl);
-          this.headerBackgroundImage = `background-image: url('${result.data}');`;
-          if(result.data !== this.contentToDisplay.imageUrl){
-            this.needToBlur = false;
-          }else{
-            this.needToBlur = true;
-          }
-        } catch {
-          this.headerBackgroundImage = this.contentToDisplay.imageUrl ? `background-image: url('${this.contentToDisplay.imageUrl}');` : "";
-          this.needToBlur = true;
-        }
-      },
-    },
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
-  methods: {
-    handleScroll(): void {
-      if (
-        window.scrollY - this.oldScrollY > 0 &&
-        window.scrollY > 1 &&
-        document.body.offsetHeight - window.innerHeight > 40
-      ) {
-        if (!this.scrolled) {
-          this.scrolled = true;
-          this.minScroll = 0;
-        }
-      } else if (
-        window.scrollY - this.oldScrollY < 0 &&
-        window.scrollY < 1 &&
-        this.minScroll > 20
-      ) {
-        this.scrolled = false;
-        this.minScroll = 0;
-      }
-      this.oldScrollY = window.scrollY;
-      if (this.minScroll < window.scrollY) {
-        this.minScroll = window.scrollY;
-      }
-    },
-  },
+
+//Data 
+const scrolled = ref(false);
+const oldScrollY = ref(0);
+const minScroll = ref(0);
+const headerBackgroundImage = ref("");
+const needToBlur = ref(false);
+
+
+//Composables
+const { isPhone, windowWidth } = useResizePhone();
+const { useProxyImageUrl } = useImageProxy();
+const authStore = useAuthStore();
+const generalStore = useGeneralStore();
+
+//Computed
+const titleToDisplay = computed(() => {
+  if ((generalStore.contentToDisplay as Podcast)?.podcastId) {
+    return (generalStore.contentToDisplay as Podcast).emission.name;
+  }
+  if ((generalStore.contentToDisplay as Playlist)?.playlistId) {
+    return (generalStore.contentToDisplay as Playlist).title;
+  }
+  if ((generalStore.contentToDisplay as Emission)?.emissionId) {
+    return (generalStore.contentToDisplay as Emission).name;
+  }
+  if ((generalStore.contentToDisplay as Canal)?.id) {
+    return (generalStore.contentToDisplay as Canal).name;
+  }
+  return "";
 });
+const emissionObject = computed(() => {
+  if ((generalStore.contentToDisplay as Podcast)?.podcastId) {
+    return (generalStore.contentToDisplay as Podcast).emission;
+  }
+  if ((generalStore.contentToDisplay as Emission)?.emissionId) {
+    return generalStore.contentToDisplay as Emission;
+  }
+  return null;
+});
+
+//Watch
+watch(()=>generalStore.contentToDisplay, async () => {
+  if(!generalStore.contentToDisplay){
+    headerBackgroundImage.value = "";
+    needToBlur.value = false;
+    return;
+  }
+  const proxyUrl = useProxyImageUrl(generalStore.contentToDisplay.imageUrl,"270", undefined, true);
+  try {
+    const result = await axios.get(proxyUrl);
+    headerBackgroundImage.value = `background-image: url('${result.data}');`;
+    needToBlur.value = result.data === generalStore.contentToDisplay.imageUrl;
+  } catch {
+    headerBackgroundImage.value = generalStore.contentToDisplay.imageUrl ? `background-image: url('${generalStore.contentToDisplay.imageUrl}');` : "";
+    needToBlur.value = true;
+  }
+}, {deep: true, immediate: true});
+
+
+onMounted(()=>{
+  window.addEventListener("scroll", handleScroll);
+})
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", handleScroll);
+})
+
+
+//Methods
+function handleScroll(): void {
+  if (
+    window.scrollY - oldScrollY.value > 0 &&
+    window.scrollY > 1 &&
+    document.body.offsetHeight - window.innerHeight > 40
+  ) {
+    if (!scrolled.value) {
+      scrolled.value = true;
+      minScroll.value = 0;
+    }
+  } else if (
+    window.scrollY - oldScrollY.value  < 0 &&
+    window.scrollY < 1 &&
+    minScroll.value > 20
+  ) {
+    scrolled.value = false;
+    minScroll.value = 0;
+  }
+  oldScrollY.value  = window.scrollY;
+  if (minScroll.value < window.scrollY) {
+    minScroll.value = window.scrollY;
+  }
+}
 </script>
 
 <style lang="scss">

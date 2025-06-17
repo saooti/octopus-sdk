@@ -25,14 +25,14 @@
           class="btn btn-transparent"
           @click="answerComment"
         >
-          {{ $t("To answer") }}
+          {{ t("To answer") }}
         </button>
         <button
           v-if="isFlatList && comment.answerTo"
           class="btn btn-transparent d-flex align-items-center"
           @click="showParentComment = !showParentComment"
         >
-          {{ $t("In response to") }}
+          {{ t("In response to") }}
           <ChevronDownIcon :class="{ 'arrow-transform': showParentComment }" />
         </button>
       </div>
@@ -54,7 +54,7 @@
           @click="showAnswers = !showAnswers"
         >
           <ChevronDownIcon :class="{ 'arrow-transform': showAnswers }" />
-          {{ $t("nb answers", { nb: comment.responses.length }) }}
+          {{ t("nb answers", { nb: comment.responses.length }) }}
         </button>
         <CommentList
           v-if="showAnswers"
@@ -77,19 +77,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "../../../../stores/class/general/podcast";
 import CommentBasicView from "./CommentBasicView.vue";
 import { useCommentStore } from "../../../../stores/CommentStore";
 import { useAuthStore } from "../../../../stores/AuthStore";
-import { mapActions, mapState } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed } from "vue";
 import {
   CommentMessage,
   CommentsConfig,
 } from "../../../../stores/class/config/commentsConfig";
+import { useI18n } from "vue-i18n";
 const CommentInput = defineAsyncComponent(() => import("../CommentInput.vue"));
 const CommentParentInfo = defineAsyncComponent(
   () => import("../CommentParentInfo.vue"),
@@ -101,121 +101,106 @@ const CommentMoreActions = defineAsyncComponent(
   () => import("./CommentMoreActions.vue"),
 );
 const CommentList = defineAsyncComponent(() => import("../CommentList.vue"));
-export default defineComponent({
-  name: "CommentItem",
 
-  components: {
-    CommentInput,
-    CommentList,
-    CommentParentInfo,
-    CommentBasicView,
-    LikeSection,
-    CommentMoreActions,
-    ChevronDownIcon,
-  },
 
-  props: {
-    comment: { default: () => ({}), type: Object as () => CommentPodcast },
-    podcast: { default: undefined, type: Object as () => Podcast },
-    isFlatList: { default: false, type: Boolean },
-    config: { default: undefined, type: Object as () => CommentsConfig },
-    organisationId: { default: undefined, type: String },
-  },
+//Props 
+const props = defineProps({
+  comment: { default: () => ({}), type: Object as () => CommentPodcast },
+  podcast: { default: undefined, type: Object as () => Podcast },
+  isFlatList: { default: false, type: Boolean },
+  config: { default: undefined, type: Object as () => CommentsConfig },
+  organisationId: { default: undefined, type: String },
+})
 
-  emits: ["deleteComment", "update:comment"],
+//Emits
+const emit = defineEmits(["deleteComment", "update:comment"]);
 
-  data() {
-    return {
-      isAnsweringComment: false as boolean,
-      showAnswers: false as boolean,
-      focus: false as boolean,
-      showParentComment: false as boolean,
-      eventToHandle: undefined as CommentMessage | undefined,
-    };
+//Data 
+const isAnsweringComment = ref(false);
+const showAnswers = ref(false);
+const focus = ref(false);
+const showParentComment = ref(false);
+const eventToHandle : Ref<CommentMessage | undefined>= ref(undefined);
+
+//Composables
+const { t } = useI18n();
+const authStore = useAuthStore();
+const commentStore = useCommentStore();
+
+
+//Computed
+const commentForVmodel = computed({
+  get(): CommentPodcast {
+    return props.comment;
   },
-  computed: {
-    ...mapState(useAuthStore, ["authOrgaId", "isRoleComments", "isRoleAdmin"]),
-    ...mapState(useCommentStore, ["commentUser"]),
-    commentForVmodel: {
-      get(): CommentPodcast {
-        return this.comment;
-      },
-      set(value: CommentPodcast) {
-        if (!this.eventActive) {
-          this.$emit("update:comment", value);
-        }
-      },
-    },
-    isAnAnswer() {
-      return undefined !== this.comment.answerTo;
-    },
-    editRight(): boolean {
-      return (
-        (true === this.isRoleComments &&
-          (this.authOrgaId === this.podcast?.organisation.id ||
-            this.authOrgaId === this.organisationId)) ||
-        true === this.isRoleAdmin
-      );
-    },
-    isValidComment() {
-      return "VALIDATED" === this.comment.state;
-    },
-    canPostComment(): boolean {
-      return this.getCanPostComment(
-        this.config,
-        this.podcast,
-        undefined !== this.authOrgaId,
-      );
-    },
-    eventActive(): boolean {
-      return undefined !== this.podcast?.conferenceId;
-    },
-  },
-  methods: {
-    ...mapActions(useCommentStore, ["getCanPostComment"]),
-    answerComment(): void {
-      this.isAnsweringComment = true;
-      this.focus = !this.focus;
-    },
-    newComment(comment: CommentPodcast): void {
-      this.modifyAnswerNumber(comment.commentId);
-      if (!this.eventActive) {
-        this.eventToHandle = { type: "CREATE", comment: comment };
-      }
-      this.isAnsweringComment = false;
-    },
-    modifyAnswerNumber(commentId: number, isAdd = true) {
-      const commentToEdit = this.comment;
-      if (commentToEdit.responses) {
-        if (this.isAdd) {
-          commentToEdit.responses.push(commentId);
-        } else {
-          const index = commentToEdit.responses.indexOf(commentId);
-          if (index !== -1) {
-            commentToEdit.responses.splice(index, 1);
-          }
-        }
-      } else if (isAdd) {
-        commentToEdit.responses = [commentId];
-      }
-      this.$emit("update:comment", commentToEdit);
-    },
-    emitDeleteComment() {
-      if (!this.eventActive) {
-        this.$emit("deleteComment");
-      }
-    },
-    receiveEvent(event: CommentMessage) {
-      if ("CREATE" === event.type) {
-        this.modifyAnswerNumber(event.comment.commentId);
-      } else if ("DELETE" === event.type) {
-        this.modifyAnswerNumber(event.comment.commentId, false);
-      }
-      this.eventToHandle = event;
-    },
-    updateForAnswerDeleted(commentId: number) {
-      this.modifyAnswerNumber(commentId, false);
-    },
+  set(value: CommentPodcast) {
+    if (!eventActive.value) {
+      emit("update:comment", value);
+    }
   },
 });
+const isAnAnswer = computed(() => undefined !== props.comment.answerTo);
+const editRight = computed(() => {
+  return (
+    (true === authStore.isRoleComments &&
+      (authStore.authOrgaId === props.podcast?.organisation.id ||
+      authStore.authOrgaId === props.organisationId)) ||
+    true === authStore.isRoleAdmin
+  );
+});
+const isValidComment = computed(() => "VALIDATED" === props.comment.state);
+const canPostComment = computed(() => {
+  return commentStore.getCanPostComment(
+    props.config,
+    props.podcast,
+    undefined !== authStore.authOrgaId,
+  );
+});
+const eventActive = computed(() => undefined !== props.podcast?.conferenceId);
+
+ 
+//Methods
+function answerComment(): void {
+  isAnsweringComment.value = true;
+  focus.value = !focus.value;
+}
+function newComment(comment: CommentPodcast): void {
+  modifyAnswerNumber(comment.commentId);
+  if (!eventActive.value) {
+    eventToHandle.value = { type: "CREATE", comment: comment };
+  }
+  isAnsweringComment.value = false;
+}
+function modifyAnswerNumber(commentId: number, isAdd = true) {
+  const commentToEdit = props.comment;
+  if (commentToEdit.responses) {
+    if (isAdd) {
+      commentToEdit.responses.push(commentId);
+    } else {
+      const index = commentToEdit.responses.indexOf(commentId);
+      if (index !== -1) {
+        commentToEdit.responses.splice(index, 1);
+      }
+    }
+  } else if (isAdd) {
+    commentToEdit.responses = [commentId];
+  }
+  emit("update:comment", commentToEdit);
+}
+function emitDeleteComment() {
+  if (!eventActive.value) {
+    emit("deleteComment");
+  }
+}
+function receiveEvent(event: CommentMessage) {
+  if ("CREATE" === event.type) {
+    modifyAnswerNumber(event.comment.commentId);
+  } else if ("DELETE" === event.type) {
+    modifyAnswerNumber(event.comment.commentId, false);
+  }
+  eventToHandle.value = event;
+}
+function updateForAnswerDeleted(commentId: number) {
+  modifyAnswerNumber(commentId, false);
+}
 </script>

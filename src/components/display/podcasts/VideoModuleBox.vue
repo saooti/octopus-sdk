@@ -22,36 +22,25 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Podcast } from "@/stores/class/general/podcast";
 import displayHelper from "../../../helper/displayHelper";
 import PodcastRawTranscript from "./PodcastRawTranscript.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent } from "vue";
 const ParticipantDescription = defineAsyncComponent(
   () => import("./ParticipantDescription.vue"),
 );
-export default defineComponent({
-  name: "VideoModuleBox",
-  components: {
-    ParticipantDescription,
-    PodcastRawTranscript,
-  },
 
-  props: {
-    podcast: { default: undefined, type: Object as () => Podcast },
-    date: { default: "", type: String },
-    duration: { default: "", type: String },
-    durationIso: { default: "", type: String },
-  },
+//Props 
+defineProps({
+  podcast: { default: undefined, type: Object as () => Podcast },
+  date: { default: "", type: String },
+  duration: { default: "", type: String },
+  durationIso: { default: "", type: String },
+})
 
-  data() {
-    return {};
-  },
-  computed: {},
-  methods: {
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-  }
-});
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
 </script>

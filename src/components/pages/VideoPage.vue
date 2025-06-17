@@ -7,9 +7,9 @@
           params: { podcastId: podcastId },
         }"
         class="mt-3 mb-3 w-fit-content d-flex align-items-center"
-        :title="$t('Episode name page', { name: podcast?.title })"
+        :title="t('Episode name page', { name: podcast?.title })"
       >
-        <ChevronLeftIcon />{{ $t("Episode page") }}
+        <ChevronLeftIcon />{{ t("Episode page") }}
       </router-link>
       <div
         v-if="videoId || isLiveReadyToRecord"
@@ -78,13 +78,13 @@
       v-if="!error && !videoId && !isLiveReadyToRecord"
       class="text-center text-danger h3"
     >
-      {{ $t("The episode does not have an associated video") }}
+      {{ t("The episode does not have an associated video") }}
     </div>
     <ClassicLoading
-      :loading-text="!loaded ? $t('Loading content ...') : undefined"
+      :loading-text="!loaded ? t('Loading content ...') : undefined"
       :error-text="
         error
-          ? $t(`This episode is not available for (re)listening`)
+          ? t(`This episode is not available for (re)listening`)
           : undefined
       "
     />
@@ -114,6 +114,7 @@ import { usePlayerStore } from "../../stores/PlayerStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useErrorHandler } from "../composable/useErrorHandler";
 const PlayerVideoDigiteka = defineAsyncComponent(
   () => import("../misc/player/video/PlayerVideoDigiteka.vue"),
 );
@@ -130,10 +131,12 @@ const CountdownOctopus = defineAsyncComponent(
   () => import("../display/live/CountdownOctopus.vue"),
 );
 
+//Props 
 const props = defineProps({
   podcastId:{ default: 0, type: Number },
 })
 
+//Data 
 const loaded = ref(false);
 const podcast: Ref<Podcast | undefined> = ref(undefined);
 const error = ref(false);
@@ -142,6 +145,7 @@ const configPodcast: Ref<CommentsConfig | undefined> = ref(undefined);
 const podcastConference: Ref<Conference | undefined> = ref(undefined);
 const intervalStatusConference: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
+//Composables
 const { 
   isLiveReadyToRecord,
   isCounter,
@@ -151,7 +155,7 @@ const {
   durationIso,
   editRight
 } = usePodcastView(podcast, podcastConference);
-
+const {handle403} = useErrorHandler();
 const { updatePathParams } = useSeoTitleUrl();
 const authStore = useAuthStore();
 const apiStore = useApiStore();
@@ -159,10 +163,10 @@ const generalStore = useGeneralStore();
 const playerStore = usePlayerStore();
 const filterStore = useFilterStore();
 const commentStore = useCommentStore();
-
 const {t} = useI18n();
 const route = useRoute();
 
+//Computed
 const videoId = computed(() => podcast.value?.video?.videoId);
 const canPostComment = computed(() => {
   return commentStore.getCanPostComment(
@@ -201,7 +205,7 @@ const overrideText = computed(() => {
   return t("In the process of being published");
 });
 
-
+//Watch
 watch(()=>props.podcastId, async () => {
   await getPodcastDetails();
   if (!podcast.value) {
@@ -216,6 +220,7 @@ onBeforeUnmount(() => {
   clearInterval(intervalStatusConference.value as unknown as number);
 })
 
+//Methods
 async function getPodcastDetails(): Promise<void> {
   loaded.value = false;
   error.value = false;
@@ -257,7 +262,7 @@ async function getPodcastDetails(): Promise<void> {
       }
     }
   } catch (errorCatched) {
-    this.handle403(errorCatched as AxiosError);
+    handle403(errorCatched as AxiosError);
     error.value = true;
   }
   loaded.value = true;
@@ -284,8 +289,6 @@ async function fetchConferenceStatus() {
 }
 </script>
 <style lang="scss">
-
-
 .octopus-app .video-page-container {
   align-items: stretch;
   flex-grow: 1;

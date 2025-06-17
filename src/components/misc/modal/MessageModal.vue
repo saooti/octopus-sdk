@@ -11,8 +11,8 @@
       <!-- eslint-enable -->
       <ClassicLoading
         v-if="save || error"
-        :loading-text="save && !error ? $t('Loading content ...') : undefined"
-        :error-text="error ? $t('An error occurred') : undefined"
+        :loading-text="save && !error ? t('Loading content ...') : undefined"
+        :error-text="error ? t('An error occurred') : undefined"
       />
     </template>
     <template #footer>
@@ -40,52 +40,55 @@
   </ClassicModal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicModal from "../modal/ClassicModal.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "MessageModal",
-  components: {
-    ClassicModal,
-    ClassicLoading,
-  },
-  props: {
-    title: { default: undefined, type: String },
-    closable: { default: true, type: Boolean },
-    message: { default: undefined, type: String },
-    validatetext: { default: undefined, type: String },
-    canceltext: { default: undefined, type: String },
-    thirdText: { default: undefined, type: String },
-    focus: { default: true, type: Boolean },
-  },
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+//Props 
+const props = defineProps({
+  title: { default: undefined, type: String },
+  closable: { default: true, type: Boolean },
+  message: { default: undefined, type: String },
+  validatetext: { default: undefined, type: String },
+  canceltext: { default: undefined, type: String },
+  thirdText: { default: undefined, type: String },
+  focus: { default: true, type: Boolean },
+})
 
-  emits: ["close", "validate", "cancel", "thirdEvent"],
-  data() {
-    return {
-      save: false as boolean,
-      error: false as boolean,
-    };
-  },
-  mounted() {
-    if (this.focus) {
-      (this.$refs.focusElement as HTMLElement)?.focus();
-    }
-  },
-  methods: {
-    closePopup(): void {
-      this.$emit("close");
-    },
-    onValid(): void {
-      this.save = true;
-      this.$emit("validate");
-    },
-    onCancel(): void {
-      this.$emit("cancel");
-    },
-    onThirdAction(): void {
-      this.$emit("thirdEvent");
-    },
-  },
-});
+
+//Emits
+const emit = defineEmits(["close","validate", "cancel", "thirdEvent"]);
+
+//Data 
+const save = ref(false);
+const error = ref(false);
+const focusElementRef = useTemplateRef('focusElement');
+
+
+
+//Composables
+const { t } = useI18n();
+
+
+onMounted(()=>{
+  if (props.focus) {
+    (focusElementRef?.value as HTMLElement)?.focus();
+  }
+})
+
+//Mehods
+function closePopup(): void {
+  emit("close");
+}
+function onValid(): void {
+  save.value = true;
+  emit("validate");
+}
+function onCancel(): void {
+  emit("cancel");
+}
+function onThirdAction(): void {
+  emit("thirdEvent");
+}
 </script>

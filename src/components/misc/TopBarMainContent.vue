@@ -6,26 +6,28 @@
         name: 'home',
         query: getQueriesRouter('home'),
       }"
-      :title="$t('Home')"
+      :title="t('Home')"
     >
       <img
-        v-if="!filterOrgaId || '' === imgUrl"
+        v-if="!filterStore.filterOrgaId || '' === imgUrl"
         :src="logoUrl"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
         width="140"
         height="50"
         title="Logo"
-        :class="platformEducation ? 'education-logo' : 'octopus-logo'"
+        :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
       />
       <img
         v-else
         :src="useProxyImageUrl(imgUrl, '', '80')"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
         class="client-logo"
         title="Logo"
-        :class="platformEducation ? 'education-logo' : ''"
+        :class="generalStore.platformEducation ? 'education-logo' : ''"
       />
     </router-link>
     <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
@@ -39,39 +41,41 @@
           : 'flex-column align-items-end',
       ]"
     >
-      <template v-if="filterOrgaId && '' !== imgUrl">
+      <template v-if="filterStore.filterOrgaId && '' !== imgUrl">
         <img
-          v-if="isGarRole"
+          v-if="authStore.isGarRole"
           :src="logoUrl"
-          role="presentation"
+          aria-hidden="true"
+        alt=""
           
           width="100"
           height="29"
           class="ms-2"
           title="Logo"
-          :class="platformEducation ? 'education-logo' : 'octopus-logo'"
+          :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
         />
         <a
           v-else
           href="https://www.saooti.com/"
           target="_blank"
           rel="noreferrer noopener"
-          :title="$t('New window', {text: 'Saooti'})"
+          :title="t('New window', {text: 'Saooti'})"
         >
           <img
             :src="logoUrl"
-            role="presentation"
+            aria-hidden="true"
+        alt=""
             
             title="Saooti"
             width="100"
             height="29"
             class="ms-2"
-            :class="platformEducation ? 'education-logo' : 'octopus-logo'"
+            :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
           />
         </a>
       </template>
       <div role="navigation" class="d-flex align-items-center justify-content-end flex-grow-1">
-        <nav :aria-label="$t('Site menu')">
+        <nav :aria-label="t('Site menu')">
           <ul class="d-flex">
             <template v-for="link in routerLinkArray" :key="link.routeName">
               <li v-if="link.condition" class="li-style-none">
@@ -92,11 +96,11 @@
         <button
           v-show="!isPhone && !inContentDisplayPage"
           id="more-dropdown"
-          :title="$t('More')"
+          :title="t('More')"
           class="d-flex-column flex-nowrap align-items-center btn-transparent py-2 px-3 text-white"
         >
           <span class="link-hover">
-            {{ $t("More") }}
+            {{ t("More") }}
           </span>
           <ChevronDownIcon />
         </button>
@@ -107,7 +111,7 @@
           :left-pos="true"
           :is-top-layer="true"
         >
-          <nav class="d-flex flex-column" :aria-label="$t('Site menu')">
+          <nav class="d-flex flex-column" :aria-label="t('Site menu')">
             <ul class="p-0 m-0">
               <template v-for="link in routerLinkInsideArray" :key="link.routeName">
                 <li
@@ -129,19 +133,19 @@
           </nav>
         </ClassicPopover>
         <MobileMenu
-          :is-education="platformEducation"
+          :is-education="generalStore.platformEducation"
           :show="mobileMenuDisplay"
           :not-podcast-and-emission="inContentDisplayPage && !scrolled"
           :scrolled="scrolled"
         />
         <HomeDropdown
-          :is-education="platformEducation"
+          :is-education="generalStore.platformEducation"
           :mobile-menu-display="mobileMenuDisplay"
           :scrolled="scrolled"
         />
         <router-link
           v-show="!isPhone && !inContentDisplayPage"
-          :title="$t('Search')"
+          :title="t('Search')"
           :to="{
             name: 'podcasts',
           }"
@@ -155,7 +159,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
 import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
@@ -164,128 +168,105 @@ import HomeDropdown from "./HomeDropdown.vue";
 import {useImageProxy} from "../composable/useImageProxy";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
-import { mapState } from "pinia";
 import ClassicPopover from "../misc/ClassicPopover.vue";
-import { defineComponent, defineAsyncComponent } from "vue";
+import {  defineAsyncComponent, computed } from "vue";
 import { useGeneralStore } from "../../stores/GeneralStore";
+import { useI18n } from "vue-i18n";
 const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
-export default defineComponent({
-  name: "TopBarMainContent",
-  components: {
-    HomeDropdown,
-    ClassicPopover,
-    MobileMenu,
-    MagnifyIcon,
-    ChevronDownIcon,
-  },
-  props: {
-    isPhone: { default: false, type: Boolean },
-    titleDisplay: { default: "", type: String },
-    scrolled: { default: false, type: Boolean },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    const { rubriqueQueryParam } = useRubriquesFilterComputed();
-    return { useProxyImageUrl, rubriqueQueryParam }
-  },
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapState(useGeneralStore, ["platformEducation"]),
-    ...mapState(useFilterStore, [
-      "filterLive",
-      "filterOrgaId",
-      "filterImgUrl",
-      "filterIab",
-      "filterName",
-    ]),
-    ...mapState(useAuthStore, ["isGarRole"]),
-    mobileMenuDisplay(): boolean {
-      return this.isPhone || this.inContentDisplayPage;
+
+
+//Props 
+const props = defineProps({
+  isPhone: { default: false, type: Boolean },
+  titleDisplay: { default: "", type: String },
+  scrolled: { default: false, type: Boolean },
+})
+
+
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const { rubriqueQueryParam } = useRubriquesFilterComputed();
+const authStore = useAuthStore();
+const generalStore = useGeneralStore();
+const filterStore = useFilterStore();
+
+//Computed
+const mobileMenuDisplay = computed(() => props.isPhone || inContentDisplayPage.value);
+const titleIsDisplayed = computed(() => inContentDisplayPage.value && props.scrolled && !props.isPhone);
+const inContentDisplayPage = computed(() => 0 !== props.titleDisplay.length);
+const routerLinkArray = computed(() =>{
+  return [
+    {
+      title: t("Radio & Live"),
+      routeName: "lives",
+      condition:
+        !inContentDisplayPage.value &&
+        (state.generalParameters.isLiveTab as boolean) &&
+        ((filterStore.filterOrgaId && filterStore.filterLive) || !filterStore.filterOrgaId),
     },
-    titleIsDisplayed(): boolean {
-      return this.inContentDisplayPage && this.scrolled && !this.isPhone;
+    {
+      title: t("Podcasts"),
+      routeName: "podcasts",
+      condition:
+        !inContentDisplayPage.value ||
+        (inContentDisplayPage.value && !props.scrolled),
     },
-    inContentDisplayPage(): boolean {
-      return 0 !== this.titleDisplay.length;
+    {
+      title: t("Emissions"),
+      routeName: "emissions",
+      condition:
+        !inContentDisplayPage.value ||
+        (inContentDisplayPage.value && !props.scrolled),
     },
-    routerLinkArray() {
-      return [
-        {
-          title: this.$t("Radio & Live"),
-          routeName: "lives",
-          condition:
-            !this.inContentDisplayPage &&
-            (state.generalParameters.isLiveTab as boolean) &&
-            ((this.filterOrgaId && this.filterLive) || !this.filterOrgaId),
-        },
-        {
-          title: this.$t("Podcasts"),
-          routeName: "podcasts",
-          condition:
-            !this.inContentDisplayPage ||
-            (this.inContentDisplayPage && !this.scrolled),
-        },
-        {
-          title: this.$t("Emissions"),
-          routeName: "emissions",
-          condition:
-            !this.inContentDisplayPage ||
-            (this.inContentDisplayPage && !this.scrolled),
-        },
-      ];
-    },
-    routerLinkInsideArray() {
-      return [
-        {
-          title: this.$t("Speakers"),
-          routeName: "participants",
-          condition: true,
-        },
-        {
-          title: this.$t("Playlists"),
-          routeName: "playlists",
-          condition: true,
-        },
-        {
-          title: this.$t("Productors"),
-          routeName: "productors",
-          condition:
-            !this.isPodcastmaker && (!this.filterOrgaId || this.platformEducation),
-        },
-      ];
-    },
-    logoUrl(): string {
-      if (this.platformEducation) {
-        return "/img/logo_education_white.svg";
-      }
-      return this.isPhone
-        ? "/img/logo_octopus_bubble.svg"
-        : "/img/logo_saooti_play_white.svg";
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    imgUrl(): string {
-      if (!this.filterImgUrl?.includes("emptypodcast"))
-        return `${this.filterImgUrl}`;
-      return "";
-    },
-  },
-  methods: {
-    getQueriesRouter(routeName: string) {
-      if ("podcasts" !== routeName && "emissions" !== routeName  && "home" !== routeName) {
-        return { productor: this.filterOrgaId };
-      }
-      return {
-        productor: this.filterOrgaId,
-        iabId: this.filterIab?.id,
-        rubriquesId: this.rubriqueQueryParam,
-      };
-    },
-  },
+  ];
 });
+const routerLinkInsideArray = computed(() =>{
+  return [
+    {
+      title: t("Speakers"),
+      routeName: "participants",
+      condition: true,
+    },
+    {
+      title: t("Playlists"),
+      routeName: "playlists",
+      condition: true,
+    },
+    {
+      title: t("Productors"),
+      routeName: "productors",
+      condition:
+        !state.generalParameters.podcastmaker && (!filterStore.filterOrgaId || generalStore.platformEducation),
+    },
+  ];
+});
+const logoUrl = computed(() =>{
+  if (generalStore.platformEducation) {
+    return "/img/logo_education_white.svg";
+  }
+  return props.isPhone
+    ? "/img/logo_octopus_bubble.svg"
+    : "/img/logo_saooti_play_white.svg";
+});
+const imgUrl = computed(() =>{
+  if (!filterStore.filterImgUrl?.includes("emptypodcast")){
+    return `${filterStore.filterImgUrl}`;
+  }
+  return "";
+});
+ 
+//Methods
+function getQueriesRouter(routeName: string) {
+  if ("podcasts" !== routeName && "emissions" !== routeName  && "home" !== routeName) {
+    return { productor: filterStore.filterOrgaId };
+  }
+  return {
+    productor: filterStore.filterOrgaId,
+    iabId: filterStore.filterIab?.id,
+    rubriquesId: rubriqueQueryParam.value,
+  };
+}
 </script>
 
 <style lang="scss">

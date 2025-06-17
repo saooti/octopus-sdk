@@ -23,7 +23,7 @@
     <PaginateSection
       v-if="!isPhone && !justSizeChosen && totalCount > 0"
       :id="id"
-      :style="playerResponsive ? 'bottom:' + playerHeight : ''"
+      :style="playerResponsive ? 'bottom:' + playerStore.playerHeight : ''"
       :first="first"
       :rows-per-page="rowsPerPage"
       :total-count="totalCount"
@@ -34,18 +34,18 @@
       v-show="first + rowsPerPage < totalCount && (isPhone || justSizeChosen)"
       :disabled="loading"
       class="btn btn-primary align-self-center w-fit-content m-4"
-      :title="$t('See more')"
+      :title="t('See more')"
       @click="fetchMore"
     >
       <template v-if="buttonPlus">
-        {{ $t("See more") }}
+        {{ t("See more") }}
       </template>
       <PlusIcon :size="16" :class="buttonPlus ? 'ms-1' : ''" />
     </button>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import domHelper from "../../../helper/domHelper";
 import ClassicLoading from "../../form/ClassicLoading.vue";
@@ -54,97 +54,84 @@ import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
-import { defineComponent } from "vue";
+import { computed, ref, watch } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
-import { mapState } from "pinia";
-export default defineComponent({
-  name: "ListPaginate",
-  components: {
-    PaginateSection,
-    PaginateParams,
-    ClassicLoading,
-    PlusIcon,
-  },
-  props: {
-    first: { default: 0, type: Number },
-    rowsPerPage: { default: 30, type: Number },
-    totalCount: { default: 0, type: Number },
-    textCount: { default: undefined, type: String },
-    id: { default: "", type: String },
-    loadingText: { default: undefined, type: String },
-    errorText: { default: undefined, type: String },
-    loading: { default: false, type: Boolean },
-    isMobile: { default: false, type: Boolean },
-    justSizeChosen: { default: false, type: Boolean },
-    playerResponsive: { default: false, type: Boolean },
-  },
+import { useI18n } from "vue-i18n";
 
-  emits: ["update:first", "update:rowsPerPage", "update:isMobile"],
 
-  setup(){
-    const { isPhone, windowWidth } = useResizePhone();
-    const { updateRouteParam, updatePaginateSize } = useRouteUpdateParams();
-    return { isPhone, windowWidth, updateRouteParam, updatePaginateSize }
-  },
-  data() {
-    return {
-      internSizeChange: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, ["playerHeight"]),
-    buttonPlus(): boolean {
-      return state.generalParameters.buttonPlus as boolean;
-    },
-    rangeSize() {
-      if (this.windowWidth > 1600) {
-        return 3;
-      }
-      return this.windowWidth > 1530 ? 2 : 1;
-    },
-  },
-  watch: {
-    isPhone: {
-      immediate: true,
-      handler() {
-        this.$emit("update:isMobile", this.isPhone);
-      },
-    },
-    first() {
-      if (this.internSizeChange) {
-        this.internSizeChange = false;
-        return;
-      }
-      this.updateRouteParam({pr:(Math.floor(this.first / this.rowsPerPage) + 1).toString()});
-    },
-  },
-  methods: {
-    fetchMore() {
-      this.$emit("update:first", this.first + this.rowsPerPage);
-    },
-    changeFirst(firstValue: number) {
-      this.scrollToTop();
-      this.$emit("update:first", firstValue);
-    },
-    changeSize(sizeValue: number) {
-      this.scrollToTop();
-      if (0 !== this.first) {
-        this.internSizeChange = true;
-      }
-      this.$emit("update:rowsPerPage", sizeValue);
-      this.updatePaginateSize(sizeValue);
-    },
-    scrollToTop() {
-      const element = document.getElementById(this.id);
-      if (!element || element.getBoundingClientRect().top > 0) {
-        return;
-      }
-      const y =
-        element.getBoundingClientRect().top +
-        window.scrollY -
-        domHelper.convertRemToPixels(3.5);
-      window.scrollTo({ top: y, behavior: "smooth" });
-    },
-  },
+//Props 
+const props = defineProps({
+  first: { default: 0, type: Number },
+  rowsPerPage: { default: 30, type: Number },
+  totalCount: { default: 0, type: Number },
+  textCount: { default: undefined, type: String },
+  id: { default: "", type: String },
+  loadingText: { default: undefined, type: String },
+  errorText: { default: undefined, type: String },
+  loading: { default: false, type: Boolean },
+  isMobile: { default: false, type: Boolean },
+  justSizeChosen: { default: false, type: Boolean },
+  playerResponsive: { default: false, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["update:first", "update:rowsPerPage", "update:isMobile"]);
+
+//Data 
+const internSizeChange = ref(false);
+  
+//Composables
+const { t } = useI18n();
+const { isPhone, windowWidth } = useResizePhone();
+const { updateRouteParam, updatePaginateSize } = useRouteUpdateParams();
+const playerStore = usePlayerStore();
+
+
+//Computed
+const buttonPlus = computed(() => state.generalParameters.buttonPlus);
+const rangeSize = computed(() => {
+  if (windowWidth.value > 1600) {
+    return 3;
+  }
+  return windowWidth.value > 1530 ? 2 : 1;
 });
+
+
+//Watch
+watch(isPhone, () => {emit("update:isMobile", isPhone.value);}, {immediate: true});
+watch(()=>props.first,  () => {
+  if (internSizeChange.value) {
+    internSizeChange.value = false;
+    return;
+  }
+  updateRouteParam({pr:(Math.floor(props.first / props.rowsPerPage) + 1).toString()});
+});
+
+//Methods
+function fetchMore() {
+  emit("update:first", props.first + props.rowsPerPage);
+}
+function changeFirst(firstValue: number) {
+  scrollToTop();
+  emit("update:first", firstValue);
+}
+function changeSize(sizeValue: number) {
+  scrollToTop();
+  if (0 !== props.first) {
+    internSizeChange.value = true;
+  }
+  emit("update:rowsPerPage", sizeValue);
+  updatePaginateSize(sizeValue);
+}
+function scrollToTop() {
+  const element = document.getElementById(props.id);
+  if (!element || element.getBoundingClientRect().top > 0) {
+    return;
+  }
+  const y =
+    element.getBoundingClientRect().top +
+    window.scrollY -
+    domHelper.convertRemToPixels(3.5);
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
 </script>

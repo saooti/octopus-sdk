@@ -6,7 +6,7 @@
     <div ref="categoryListContainer" class="category-list-container">
       <button
         v-for="category in categories"
-        :ref="'category' + category.id"
+        :id="'category' + category.id"
         :key="category.id"
         class="btn btn-primary btn-on-dark m-1"
         @click="checkIfFilter(category)"
@@ -18,7 +18,7 @@
       v-show="hidenCategories.length"
       id="categories-dropdown"
       class="btn btn-primary btn-on-dark m-1"
-      :title="$t('See more')"
+      :title="t('See more')"
     >
       <PlusIcon />
     </button>
@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import classicApi from "../../../api/classicApi";
@@ -49,155 +49,130 @@ import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Category } from "@/stores/class/general/category";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { useGeneralStore } from "../../../stores/GeneralStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "CategoryList",
-  components: {
-    ClassicPopover,
-    PlusIcon,
-  },
+import { computed, nextTick, onMounted, onUnmounted, Ref, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 
-  props: {
-    isFilter: { default: false, type: Boolean },
-    isDisplay: { default: false, type: Boolean },
-  },
-  emits: ["categoriesLength"],
-  setup(){
-    const { updateFiltersParam } = useRouteUpdateParams();
-    return {updateFiltersParam }
-  },
+//Props 
+const props = defineProps({
+  isFilter: { default: false, type: Boolean },
+  isDisplay: { default: false, type: Boolean },
+})
 
-  data() {
-    return {
-      hidenCategories: [] as Array<Category>,
-    };
-  },
+//Emits
+const emit = defineEmits(["categoriesLength"]);
 
-  computed: {
-    ...mapState(useGeneralStore, ["storedCategories", "storedCategoriesOrga"]),
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    categories(): Array<Category> {
-      let arrayCategories: Array<Category> = [];
-      if (this.filterOrgaId) {
-        arrayCategories = this.storedCategoriesOrga.filter((c: Category) => {
-          return c.podcastOrganisationCount;
-        });
-      } else {
-        arrayCategories = this.storedCategories.filter((c: Category) => {
-          if (this.isPodcastmaker) return c.podcastOrganisationCount;
-          return c.podcastCount;
-        });
-      }
-      this.$emit("categoriesLength", arrayCategories.length);
-      return arrayCategories;
-    },
-    watchVariable(): string {
-      return `${this.isDisplay}|${this.categories}`;
-    },
-    reloadVariable(): string {
-      return `${this.filterOrgaId}|${this.storedCategories}`;
-    },
-  },
-  watch: {
-    watchVariable: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.$nextTick(() => {
-          this.resizeWindow();
-        });
-      },
-    },
-    reloadVariable: {
-      deep: true,
-      immediate: true,
-      handler() {
-        if (this.filterOrgaId) {
-          this.fetchCategories(this.filterOrgaId);
-        }
-      },
-    },
-  },
-  mounted() {
-    window.addEventListener("resize", this.resizeWindow);
-  },
-  beforeUnmount(): void {
-    window.removeEventListener("resize", this.resizeWindow);
-  },
+//Data 
+const hidenCategories: Ref<Array<Category>> = ref([]);
+const categoryListRef = useTemplateRef('categoryListContainer');
 
-  methods: {
-    ...mapActions(useGeneralStore, ["storedUpdateCategoriesOrga"]),
-    checkIfFilter(category: Category): void {
-      if (!this.isFilter) {
-        this.$router.push({
-          name: "category",
-          params: { iabId: category.id.toString() },
-        });
-        return;
-      }
-      const queries = this.$route.query;
-      if (
-        !queries.iabId ||
-        ("string" === typeof queries.iabId &&
-          parseInt(queries.iabId, 10) !== category.id)
-      ) {
-        this.updateFiltersParam(
-          { iabId: category.id.toString() },
-          { i: category.id.toString() },
-        );
-      }
-    },
-    resizeWindow(): void {
-      const categoryList = this.$refs.categoryListContainer as HTMLElement;
-      if (null === categoryList || !categoryList) {
-        return;
-      }
-      categoryList.style.justifyContent = "flex-start";
-      this.hidenCategories.length = 0;
-      this.categories.forEach((element: Category) => {
-        const el = (
-          this.$refs["category" + element.id] as Array<HTMLElement>
-        )[0];
-        if (!el) return;
-        if (el.classList.contains("hid")) {
-          el.classList.remove("hid");
-        }
-      });
-      this.categories.forEach((element: Category) => {
-        const el = (
-          this.$refs["category" + element.id] as Array<HTMLElement>
-        )[0];
-        if (!el) return;
-        const parent = el.parentElement;
-        if (
-          parent &&
-          el.offsetLeft + el.clientWidth <= parent.clientWidth - 20
-        ) {
-          return;
-        }
-        this.hidenCategories.push(element);
-        if (!el.classList.contains("hid")) {
-          el.className += " hid";
-        }
-      });
-      if (!this.hidenCategories.length) {
-        categoryList.style.justifyContent = "center";
-      }
-    },
-    async fetchCategories(organisationId: string): Promise<void> {
-      const data = await classicApi.fetchData<Array<Category>>({
-        api: 0,
-        path: `iab/list/${organisationId}`,
-        parameters: { lang: this.$i18n.locale },
-      });
-      this.storedUpdateCategoriesOrga(data);
-    },
-  },
+//Composables
+const { t, locale } = useI18n();
+const { updateFiltersParam } = useRouteUpdateParams();
+const generalStore = useGeneralStore();
+const filterStore = useFilterStore();
+const router = useRouter();
+const route = useRoute();
+
+//Computed
+const categories = computed(() => {
+  let arrayCategories: Array<Category> = [];
+  if (filterStore.filterOrgaId) {
+    arrayCategories = generalStore.storedCategoriesOrga.filter((c: Category) => {
+      return c.podcastOrganisationCount;
+    });
+  } else {
+    arrayCategories = generalStore.storedCategories.filter((c: Category) => {
+      if (state.generalParameters.podcastmaker) return c.podcastOrganisationCount;
+      return c.podcastCount;
+    });
+  }
+  emit("categoriesLength", arrayCategories.length);
+  return arrayCategories;
 });
+const watchVariable = computed(() => `${props.isDisplay}|${categories.value}`);
+const reloadVariable = computed(() => `${filterStore.filterOrgaId}|${generalStore.storedCategories}`);
+
+
+//Watch
+watch(watchVariable, () => {
+  nextTick(() => {
+    resizeWindow();
+  });
+}, {deep: true, immediate: true});
+watch(reloadVariable, () => {
+  if (filterStore.filterOrgaId) {
+    fetchCategories(filterStore.filterOrgaId);
+  }
+}, {deep: true, immediate: true});
+
+
+onMounted(()=>window.addEventListener("resize", resizeWindow))
+onUnmounted(()=>window.removeEventListener("resize", resizeWindow))
+
+
+//Methods
+function checkIfFilter(category: Category): void {
+  if (!props.isFilter) {
+    router.push({
+      name: "category",
+      params: { iabId: category.id.toString() },
+    });
+    return;
+  }
+  const queries = route.query;
+  if (
+    !queries.iabId ||
+    ("string" === typeof queries.iabId &&
+      parseInt(queries.iabId, 10) !== category.id)
+  ) {
+    updateFiltersParam(
+      { iabId: category.id.toString() },
+      { i: category.id.toString() },
+    );
+  }
+}
+function resizeWindow(): void {
+  const categoryList = categoryListRef?.value as HTMLElement;
+  if (null === categoryList || !categoryList) {
+    return;
+  }
+  categoryList.style.justifyContent = "flex-start";
+  hidenCategories.value.length = 0;
+  categories.value.forEach((element: Category) => {
+    const el = categoryList.querySelector('#category' + element.id);
+    if (!el) return;
+    if (el.classList.contains("hid")) {
+      el.classList.remove("hid");
+    }
+  });
+  categories.value.forEach((element: Category) => {
+    const el = categoryList.querySelector('#category' + element.id);
+    if (!el) return;
+    const parent = el.parentElement;
+    if (
+      parent &&
+      el.offsetLeft + el.clientWidth <= parent.clientWidth - 20
+    ) {
+      return;
+    }
+    hidenCategories.value.push(element);
+    if (!el.classList.contains("hid")) {
+      el.className += " hid";
+    }
+  });
+  if (!hidenCategories.value.length) {
+    categoryList.style.justifyContent = "center";
+  }
+}
+async function fetchCategories(organisationId: string): Promise<void> {
+  const data = await classicApi.fetchData<Array<Category>>({
+    api: 0,
+    path: `iab/list/${organisationId}`,
+    parameters: { lang: locale.value },
+  });
+  generalStore.storedUpdateCategoriesOrga(data);
+}
 </script>
 <style lang="scss">
 .octopus-app {

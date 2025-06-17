@@ -46,6 +46,7 @@ const ProductorSearch = defineAsyncComponent(
   () => import("../display/filter/ProductorSearch.vue"),
 );
 
+//Props
 const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
@@ -60,6 +61,7 @@ const props = defineProps({
   routeRubriques: { default: "", type: String },
 });
 
+//Composables
 const {
   organisationId,
   searchPattern,

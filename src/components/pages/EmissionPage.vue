@@ -3,7 +3,7 @@
     <template v-if="loaded && !error && emission">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :page-title="$t('Emission')"
+        :page-title="t('Emission')"
         :img-url="emission.imageUrl"
       />
       <div
@@ -21,9 +21,9 @@
               v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
               width="250"
               height="250"
-              role="presentation"
-              
-              :title="$t('Emission name image', { name: name })"
+              aria-hidden="true"
+              alt=""
+              :title="t('Emission name image', { name: name })"
               class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
             />
             <div class="d-flex align-items-center justify-content-between">
@@ -42,7 +42,7 @@
                 :just-buttons="true"
               />
               <div class="ms-2 fw-bold">
-                {{ $t("Listen to the latest episode") }}
+                {{ t("Listen to the latest episode") }}
               </div>
             </div>
             <SubscribeButtons
@@ -55,7 +55,7 @@
           </div>
         </section>
         <ShareSocialsButtons
-          v-if="pageParameters.isShareButtons"
+          v-if="state.podcastPage.ShareButtons"
           :organisation-id="emission.orga.id"
         />
         <SharePlayer
@@ -80,19 +80,19 @@
           />
         </section>
         <ShareDistribution
-          v-if="editRight && !isPodcastmaker && securityRight && !isGarRole"
+          v-if="editRight && !isPodcastmaker && securityRight && !authStore.isGarRole"
           :emission-id="emissionId"
         />
       </div>
     </template>
     <ClassicLoading
-      :loading-text="!loaded ? $t('Loading content ...') : undefined"
-      :error-text="error ? $t(`Emission doesn't exist`) : undefined"
+      :loading-text="!loaded ? t('Loading content ...') : undefined"
+      :error-text="error ? t(`Emission doesn't exist`) : undefined"
     />
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
 import displayHelper from "../../helper/displayHelper";
@@ -102,14 +102,14 @@ import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import {useErrorHandler} from "../composable/useErrorHandler";
 import { Emission } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, watch, onBeforeUnmount } from "vue";
 import { AxiosError } from "axios";
-import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useFilterStore } from "../../stores/FilterStore";
-import { useApiStore } from "../../stores/ApiStore";
 import { Podcast } from "@/stores/class/general/podcast";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
@@ -138,128 +138,95 @@ const PodcastPlayButton = defineAsyncComponent(
 const PodcastmakerHeader = defineAsyncComponent(
   () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
-export default defineComponent({
-  components: {
-    PodcastFilterList,
-    SharePlayer,
-    ShareSocialsButtons,
-    ShareDistribution,
-    EditBox,
-    SubscribeButtons,
-    LiveHorizontalList,
-    ClassicLoading,
-    PodcastPlayButton,
-    PodcastmakerHeader,
-    ShareAnonymous
-  },
-  props: {
-    emissionId: { default: undefined, type: Number },
-  },
 
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
-    const { updatePathParams } = useSeoTitleUrl();
-    const {handle403} = useErrorHandler();
-    return { useProxyImageUrl, isPodcastmaker, isEditRights, authOrgaId, updatePathParams, handle403 }
-  },
 
-  data() {
-    return {
-      loaded: false as boolean,
-      title: "" as string,
-      emission: undefined as Emission | undefined,
-      error: false as boolean,
-      fetchLive: true as boolean,
-      lastPodcast: undefined as Podcast | undefined,
-    };
-  },
+//Props 
+const props = defineProps({
+  emissionId: { default: undefined, type: Number },
+})
 
-  computed: {
-    ...mapState(useAuthStore, ["isGarRole"]),
-    ...mapState(useApiStore, ["apiUrl"]),
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    pageParameters() {
-      return {
-        isShareButtons: state.podcastPage.ShareButtons as boolean,
-      };
-    },
-    rssUrl(): string {
-      return `${this.apiUrl}rss/emission/${this.emissionId}`;
-    },
-    name(): string {
-      return this.emission?.name ?? "";
-    },
-    description(): string {
-      return this.emission?.description ?? "";
-    },
-    editRight(): boolean {
-      return this.isEditRights(this.emission?.orga.id);
-    },
-    securityRight() {
-      return (
-        "PUBLIC" === this.emission?.orga?.privacy ||
-        ("PRIVATE" === this.emission?.orga?.privacy &&
-          ![null, undefined, "PRIVATE"].includes(this.emission?.privateRssType))
-      );
-    },
-  },
-  watch: {
-    emissionId: {
-      immediate: true,
-      handler() {
-        this.getEmissionDetails();
-      },
-    },
-  },
-  beforeUnmount() {
-    this.contentToDisplayUpdate(null);
-  },
 
-  methods: {
-    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-    initError(): void {
-      this.error = true;
-      this.loaded = true;
-    },
-    async getEmissionDetails(): Promise<void> {
-      this.loaded = false;
-      this.error = false;
-      try {
-        this.emission = await classicApi.fetchData<Emission>({
-          api: 0,
-          path: "emission/" + this.emissionId,
-        });
-        if (
-          "PUBLIC" !== this.emission.orga.privacy &&
-          this.filterOrgaId !== this.emission.orga.id &&
-          this.$route.query.productor !== this.emission.orga.id
-        ) {
-          this.initError();
-          return;
-        }
-        this.contentToDisplayUpdate(this.emission);
-        this.updatePathParams(this.name);
-        this.loaded = true;
-      } catch (error) {
-        this.handle403(error as AxiosError);
-        this.initError();
-      }
-    },
-    podcastsFetched(podcasts: Array<Podcast>) {
-      for (const podcast of podcasts) {
-        if (
-          "READY" === podcast.processingStatus &&
-          podcast.availability.visibility
-        ) {
-          this.lastPodcast = podcast;
-          return;
-        }
-      }
-    },
-  },
+//Data 
+const loaded = ref(false);
+const error = ref(false);
+const emission: Ref<Emission | undefined> = ref(undefined);
+const lastPodcast: Ref<Podcast | undefined> = ref(undefined);
+
+
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
+const { updatePathParams } = useSeoTitleUrl();
+const {handle403} = useErrorHandler();
+const authStore = useAuthStore();
+const filterStore = useFilterStore();
+const generalStore= useGeneralStore();
+const route= useRoute();
+
+
+//Computed
+const name = computed(() => emission.value?.name ?? "");
+const description = computed(() => emission.value?.description ?? "");
+const editRight = computed(() => isEditRights(emission.value?.orga.id));
+const securityRight = computed(() =>{
+  return (
+    "PUBLIC" === emission.value?.orga?.privacy ||
+    ("PRIVATE" === emission.value?.orga?.privacy &&
+      ![null, undefined, "PRIVATE"].includes(emission.value?.privateRssType))
+  );
 });
+
+
+//Watch
+watch(()=>props.emissionId, () => {getEmissionDetails()}, {immediate: true});
+
+
+onBeforeUnmount(() => {
+  generalStore.contentToDisplayUpdate(null);
+})
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
+function initError(): void {
+  error.value = true;
+  loaded.value = true;
+}
+async function getEmissionDetails(): Promise<void> {
+  loaded.value = false;
+  error.value = false;
+  try {
+    emission.value = await classicApi.fetchData<Emission>({
+      api: 0,
+      path: "emission/" + props.emissionId,
+    });
+    if (
+      "PUBLIC" !== emission.value.orga.privacy &&
+      filterStore.filterOrgaId !== emission.value.orga.id &&
+      route.query.productor !== emission.value.orga.id
+    ) {
+      initError();
+      return;
+    }
+    generalStore.contentToDisplayUpdate(emission.value);
+    updatePathParams(name.value);
+    loaded.value = true;
+  } catch (error) {
+    handle403(error as AxiosError);
+    initError();
+  }
+}
+function podcastsFetched(podcasts: Array<Podcast>) {
+  for (const podcast of podcasts) {
+    if (
+      "READY" === podcast.processingStatus &&
+      podcast.availability.visibility
+    ) {
+      lastPodcast.value = podcast;
+      return;
+    }
+  }
+}
 </script>

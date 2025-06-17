@@ -32,60 +32,48 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { CommentPodcast } from "@/stores/class/general/comment";
 import {useSelenium} from "../../composable/useSelenium";
 import { usePlayerStore } from "../../../stores/PlayerStore";
-import { mapActions, mapState } from "pinia";
-import { defineComponent } from "vue";
+import { computed, Ref, ref, watch } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
-export default defineComponent({
-  name: "CommentPlayer",
-  setup(){
-    const { seleniumFormat } = useSelenium();
-    return { seleniumFormat }
-  },
-  data() {
-    return {
-      displayContent: undefined as CommentPodcast | undefined,
-      commentsToDisplay: [] as Array<CommentPodcast>,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, ["playerPodcast", "playerTotal"]),
-    podcastId() {
-      return this.playerPodcast?.podcastId;
-    },
-  },
-  watch: {
-    podcastId: {
-      immediate: true,
-      handler() {
-        this.initComments();
-      },
-    },
-  },
-  methods: {
-    ...mapActions(useCommentStore, ["fetchCommentsForPlayer"]),
-    async initComments() {
-      if (this.playerPodcast?.podcastId) {
-        this.commentsToDisplay = await this.fetchCommentsForPlayer(
-          this.playerPodcast.podcastId,
-        );
-      }
-    },
-    percentPosition(time: number): number {
-      let realDuration = this.playerTotal;
-      if (this.playerPodcast?.duration) {
-        realDuration = Math.round(this.playerPodcast.duration / 1000);
-      }
-      if (realDuration < this.playerTotal) {
-        time = time + (this.playerTotal - realDuration);
-      }
-      return Math.round((time * 100) / this.playerTotal);
-    },
-  },
-});
+
+//Data 
+const displayContent: Ref<CommentPodcast | undefined> = ref(undefined);
+const commentsToDisplay: Ref<Array<CommentPodcast>> = ref([]);
+
+//Composables
+const { seleniumFormat } = useSelenium();
+const playerStore = usePlayerStore();
+const commentStore = useCommentStore();
+
+//Computed
+const podcastId = computed(() => playerStore.playerPodcast?.podcastId);
+
+
+//Watch
+watch(podcastId, () => {initComments()}, {immediate: true});
+
+
+//Methods
+async function initComments() {
+  if (playerStore.playerPodcast?.podcastId) {
+    commentsToDisplay.value = await commentStore.fetchCommentsForPlayer(
+      playerStore.playerPodcast.podcastId,
+    );
+  }
+}
+function percentPosition(time: number): number {
+  let realDuration = playerStore.playerTotal;
+  if (playerStore.playerPodcast?.duration) {
+    realDuration = Math.round(playerStore.playerPodcast.duration / 1000);
+  }
+  if (realDuration < playerStore.playerTotal) {
+    time = time + (playerStore.playerTotal - realDuration);
+  }
+  return Math.round((time * 100) / playerStore.playerTotal);
+}
 </script>
 
 <style lang="scss">

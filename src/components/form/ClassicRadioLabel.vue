@@ -7,33 +7,34 @@
       :options="options"
       :text-init="textInit"
       :is-column="isColumn"
-      @update:text-init="$emit('update:textInit', $event)"
+      @update:text-init="onChange($event)"
     />
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import ClassicRadio from "./ClassicRadio.vue";
-export default defineComponent({
-  name: "ClassicRadioLabel",
-  components:{
-    ClassicRadio
-  },
 
-  props: {
-    idRadio: { default: "", type: String },
-    isDisabled: { default: false, type: Boolean },
-    options: {
-      default: () => [],
-      type: Array as () => Array<{ title: string; value: string | undefined }>,
-    },
-    textInit: { default: undefined, type: String },
-    isColumn: { default: true, type: Boolean },
-    radioLabel: { default: undefined, type: String },
-    classLabel: { default: "form-label", type: String },
-    typeTag: { default: "div", type: String },
+//Props 
+defineProps({
+  idRadio: { default: "", type: String },
+  isDisabled: { default: false, type: Boolean },
+  options: {
+    default: () => [],
+    type: Array as () => Array<{ title: string; value: string | undefined }>,
   },
-  emits: ["update:textInit"]
-});
+  textInit: { default: undefined, type: String },
+  isColumn: { default: true, type: Boolean },
+  radioLabel: { default: undefined, type: String },
+  classLabel: { default: "form-label", type: String },
+  typeTag: { default: "div", type: String },
+})
+
+//Emits
+const emit = defineEmits(["update:textInit"]);
+
+//Methods
+function onChange(value:string){
+  emit('update:textInit', value)
+}
 </script>

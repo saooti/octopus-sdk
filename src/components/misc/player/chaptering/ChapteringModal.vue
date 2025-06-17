@@ -1,13 +1,13 @@
 <template>
   <ClassicModal
     id-modal="chaptering-modal"
-    :title-modal="$t('Chaptering')"
+    :title-modal="t('Chaptering')"
     @close="closePopup"
   >
     <template #body>
       <div class="d-flex flex-column">
         <button
-          v-for="(chapter, index) in playerChapteringPercent"
+          v-for="(chapter, index) in playerStore.playerChapteringPercent"
           :key="chapter"
           class="btn d-flex flex-nowrap align-items-center p-2 mt-1 c-hand text-truncate mb-1"
           :class="actualChapter === index ? 'chapter-selected' : 'border'"
@@ -24,66 +24,56 @@
     </template>
     <template #footer>
       <button class="btn m-1" @click="closePopup">
-        {{ $t("Close") }}
+        {{ t("Close") }}
       </button>
     </template>
   </ClassicModal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import WaveformIcon from "vue-material-design-icons/Waveform.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
-import { mapState, mapActions } from "pinia";
 import ClassicModal from "../../modal/ClassicModal.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ChapteringModal",
-  components: {
-    ClassicModal,
-    WaveformIcon,
-  },
-  props: { actualChapter: { default: -1, type: Number } },
-  emits: ["close"],
-  data() {
-    return {
-      audioPlayer: null as HTMLAudioElement | null,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, [
-      "playerPodcast",
-      "playerLive",
-      "playerChapteringPercent",
-      "playerTotal",
-      "playerElapsed",
-    ]),
-  },
-  created() {
-    this.audioPlayer = document.querySelector("#audio-player");
-  },
-  methods: {
-    ...mapActions(usePlayerStore, [
-      "playerUpdateSeekTime",
-      "playerUpdateElapsed",
-    ]),
-    closePopup(): void {
-      this.$emit("close");
-    },
-    goToChapter(index: number) {
-      if (!this.playerChapteringPercent || !this.audioPlayer) {
-        return;
-      }
-      const seekTime =
-        this.playerTotal *
-        (this.playerChapteringPercent[index].startPercent / 100);
-      this.playerUpdateSeekTime(seekTime);
-      if (0 === seekTime) {
-        this.playerUpdateElapsed(0);
-      }
-      this.audioPlayer.currentTime = seekTime;
-    },
-  },
-});
+import { onMounted, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+//Props 
+defineProps({
+  actualChapter: { default: -1, type: Number }
+})
+
+//Emits
+const emit = defineEmits(["close"]);
+
+//Data 
+const audioPlayer : Ref<HTMLAudioElement | null>= ref(null);
+
+//Composables
+const { t } = useI18n();
+const playerStore = usePlayerStore();
+
+
+onMounted(()=>{
+  audioPlayer.value = document.querySelector("#audio-player");
+})
+
+//Methods
+function closePopup(): void {
+  emit("close");
+}
+function goToChapter(index: number) {
+  if (!playerStore.playerChapteringPercent || !audioPlayer.value) {
+    return;
+  }
+  const seekTime =
+  playerStore.playerTotal *
+    (playerStore.playerChapteringPercent[index].startPercent / 100);
+  playerStore.playerUpdateSeekTime(seekTime);
+  if (0 === seekTime) {
+    playerStore.playerUpdateElapsed(0);
+  }
+  audioPlayer.value.currentTime = seekTime;
+}
 </script>
 <style lang="scss">
 

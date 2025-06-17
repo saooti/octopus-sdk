@@ -8,7 +8,7 @@
       v-model:text-init="searchPattern"
       class="align-self-baseline mb-2"
       id-search="podcast-list-search"
-      :label="$t('Search')"
+      :label="t('Search')"
     />
     <ListPaginate
       id="podcastPlaylistListPaginate"
@@ -17,15 +17,15 @@
       v-model:is-mobile="isMobile"
       :text-count="
         podcasts.length > 1
-          ? `${$t('Number podcasts', { nb: podcasts.length })}`
+          ? `${t('Number podcasts', { nb: podcasts.length })}`
           : undefined
       "
       :total-count="podcasts.length"
       :loading="loading"
-      :loading-text="loading ? $t('Loading podcasts ...') : undefined"
+      :loading-text="loading ? t('Loading podcasts ...') : undefined"
       :error-text="
         !loading && !podcasts.length && notEmptyPlaylist
-          ? $t(`No podcast match your query`)
+          ? t(`No podcast match your query`)
           : undefined
       "
       :player-responsive="true"
@@ -44,7 +44,7 @@
                   name: 'podcast',
                   params: { podcastId: p.podcastId },
                 }"
-                :title="$t('Episode name page', { name: p.title })"
+                :title="t('Episode name page', { name: p.title })"
               >
                 {{ p.title }}
               </router-link>
@@ -56,7 +56,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import {useErrorHandler} from "../../composable/useErrorHandler";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
@@ -66,108 +66,86 @@ import ClassicSearch from "../../form/ClassicSearch.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Playlist } from "@/stores/class/general/playlist";
-import { defineComponent } from "vue";
+import { computed, onBeforeMount, Ref, ref, watch } from "vue";
 import { AxiosError } from "axios";
-export default defineComponent({
-  name: "PodcastList",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    PodcastItem,
-    ClassicSearch,
-    ListPaginate,
-    ClassicLazy,
-  },
+//Props 
+const props = defineProps({
+  playlist: { default: () => ({}), type: Object as () => Playlist },
+})
 
-  props: {
-    playlist: { default: () => ({}), type: Object as () => Playlist },
-  },
+//Data 
+const loading = ref(true);
+const podcasts: Ref<Array<Podcast>> = ref([]);
+const podcastsQuery: Ref<Array<Podcast>> = ref([]);
+const size = ref(30);
+const first = ref(0);
+const searchPattern = ref("");
+const isMobile = ref(false);
 
-  setup(){
-    const {handle403} = useErrorHandler();
-    const { isEditRights } = useOrgaComputed();
-    return { handle403, isEditRights }
-  },
+//Composables
+const { t } = useI18n();
+const {handle403} = useErrorHandler();
+const { isEditRights } = useOrgaComputed();
 
-  data() {
-    return {
-      loading: true as boolean,
-      podcasts: [] as Array<Podcast>,
-      podcastsQuery: [] as Array<Podcast>,
-      size: 30 as number,
-      first: 0 as number,
-      searchPattern: "" as string,
-      isMobile: false as boolean,
-    };
-  },
-
-  computed: {
-    titleList(): string {
-      return this.notEmptyPlaylist
-        ? this.$t("Podcasts in the playlist")
-        : this.$t("No podcasts in the playlist");
-    },
-    notEmptyPlaylist(): boolean {
-      return 0 !== Object.keys(this.playlist.samplingViews ?? []).length;
-    },
-    podcastsDisplay(): Array<Podcast> {
-      if (this.isMobile) {
-        return this.podcastsQuery.slice(
-          0,
-          Math.min(this.first + this.size, this.podcasts.length),
-        );
-      }
-      return this.podcastsQuery.slice(
-        this.first,
-        Math.min(this.first + this.size, this.podcasts.length),
-      );
-    },
-    editRight(): boolean {
-      return this.isEditRights(this.playlist.organisation?.id);
-    },
-  },
-  watch: {
-    searchPattern(): void {
-      if ("" !== this.searchPattern) {
-        this.podcastsQuery = this.podcasts.filter((el: Podcast) => {
-          return el.title
-            .toLowerCase()
-            .includes(this.searchPattern.toLowerCase());
-        });
-      } else {
-        this.podcastsQuery = this.podcasts;
-      }
-    },
-  },
-
-  created() {
-    this.fetchContent();
-  },
-  methods: {
-    async fetchContent(): Promise<void> {
-      if (this.notEmptyPlaylist) {
-        this.podcasts.length = 0;
-        this.loading = true;
-        try {
-          this.podcasts = await classicApi.fetchData<Array<Podcast>>({
-            api: 0,
-            path: "playlist/" + this.playlist.playlistId + "/content",
-          });
-          if (!this.editRight) {
-            this.podcasts = this.podcasts.filter((p: Podcast | null) => {
-              return (
-                null !== p &&
-                (!p.availability || true === p.availability.visibility)
-              );
-            });
-          }
-          this.podcastsQuery = this.podcasts;
-        } catch (error) {
-          this.handle403(error as AxiosError);
-        }
-      }
-      this.loading = false;
-    },
-  },
+//Computed
+const titleList = computed(() => notEmptyPlaylist.value? t("Podcasts in the playlist"): t("No podcasts in the playlist"));
+const notEmptyPlaylist = computed(() => 0 !== Object.keys(props.playlist.samplingViews ?? []).length);
+const podcastsDisplay = computed(() => {
+  if (isMobile.value) {
+    return podcastsQuery.value.slice(
+      0,
+      Math.min(first.value + size.value, podcasts.value.length),
+    );
+  }
+  return podcastsQuery.value.slice(
+    first.value,
+    Math.min(first.value + size.value, podcasts.value.length),
+  );
 });
+const editRight = computed(() =>isEditRights(props.playlist.organisation?.id));
+
+//Watch
+watch(searchPattern,() => {
+  if ("" !== searchPattern.value) {
+    podcastsQuery.value = podcasts.value.filter((el: Podcast) => {
+      return el.title
+        .toLowerCase()
+        .includes(searchPattern.value.toLowerCase());
+    });
+  } else {
+    podcastsQuery.value = podcasts.value;
+  }
+});
+
+onBeforeMount(()=>fetchContent());
+
+
+//Methods
+async function fetchContent(): Promise<void> {
+  if (notEmptyPlaylist.value) {
+    podcasts.value.length = 0;
+    loading.value = true;
+    try {
+      podcasts.value = await classicApi.fetchData<Array<Podcast>>({
+        api: 0,
+        path: "playlist/" + props.playlist.playlistId + "/content",
+      });
+      if (!editRight.value) {
+        podcasts.value = podcasts.value.filter((p: Podcast | null) => {
+          return (
+            null !== p &&
+            (!p.availability || true === p.availability.visibility)
+          );
+        });
+      }
+      podcastsQuery.value = podcasts.value;
+    } catch (error) {
+      handle403(error as AxiosError);
+    }
+  }
+  loading.value = false;
+}
 </script>
 

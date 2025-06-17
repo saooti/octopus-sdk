@@ -14,49 +14,48 @@
     </template>
     <template #footer>
       <button class="btn btn-primary m-1" @click="closePopup">
-        {{ $t("Close") }}
+        {{ t("Close") }}
       </button>
     </template>
   </ClassicModal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicModal from "../modal/ClassicModal.vue";
 import ShareNewsletter from "../../display/sharing/ShareNewsletter.vue";
 import { Podcast } from "@/stores/class/general/podcast";
-import { defineComponent } from "vue";
+import { computed } from "vue";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
-export default defineComponent({
-  name: "NewsletterModal",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    ShareNewsletter,
-    ClassicModal
-  },
 
-  props: {
-    podcast: { default: undefined, type: Object as () => Podcast },
-    emission: { default: undefined, type: Object as () => Emission },
-    playlist: { default: undefined, type: Object as () => Playlist },
-  },
+//Props 
+const props = defineProps({
+  podcast: { default: undefined, type: Object as () => Podcast },
+  emission: { default: undefined, type: Object as () => Emission },
+  playlist: { default: undefined, type: Object as () => Playlist },
+})
 
-  emits: ["close"],
-  computed:{
-    modalTitle() {
-      if (this.podcast) {
-        return this.$t("Share the episode in your newsletter");
-      }
-      if (this.emission) {
-        return this.$t("Share the series in your newsletter");
-      }
-      return this.$t("Share the playlist in your newsletter");
-    },
-  },
-  methods: {
-    closePopup(): void {
-      this.$emit("close");
-    },
-  },
+//Emits
+const emit = defineEmits(["close"]);
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const modalTitle = computed(() => {
+  if (props.podcast) {
+    return t("Share the episode in your newsletter");
+  }
+  if (props.emission) {
+    return t("Share the series in your newsletter");
+  }
+  return t("Share the playlist in your newsletter");
 });
+
+//Methods
+function closePopup(): void {
+  emit("close");
+}
 </script>

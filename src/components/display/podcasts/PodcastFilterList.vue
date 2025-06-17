@@ -6,7 +6,7 @@
     <div class="d-flex align-items-center flex-wrap mb-2">
       <div id="podcast-filter-list-category-chooser" class="w-50-responsive pe-3">
         <CategoryChooser
-          :defaultanswer="$t('No category filter')"
+          :defaultanswer="t('No category filter')"
           @selected="onCategorySelected"
         />
       </div>
@@ -14,7 +14,7 @@
         v-model:text-init="searchPattern"
         class="w-50-responsive"
         id-search="podcast-filter-search"
-        :label="$t('Search')"
+        :label="t('Search')"
       />
     </div>
     <PodcastList
@@ -34,65 +34,60 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import PodcastList from "./PodcastList.vue";
 import { Category } from "@/stores/class/general/category";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, watch } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
+import { useI18n } from "vue-i18n";
 const CategoryChooser = defineAsyncComponent(
   () => import("../categories/CategoryChooser.vue"),
 );
-export default defineComponent({
-  components: {
-    CategoryChooser,
-    PodcastList,
-    ClassicSearch,
-  },
-  props: {
-    participantId: { default: undefined, type: Number },
-    name: { default: undefined, type: String },
-    emissionId: { default: undefined, type: Number },
-    categoryFilter: { default: false, type: Boolean },
-    reload: { default: false, type: Boolean },
-    editRight: { default: false, type: Boolean },
-    productorId: { default: () => [], type: Array as () => Array<string> },
-    showCount: { default: false, type: Boolean },
-  },
-  emits: ["fetch"],
 
-  data() {
-    return {
-      first: 0 as number,
-      size: 30 as number,
-      searchPattern: "" as string,
-      iabId: undefined as number | undefined,
-      reloadList: false as boolean,
-    };
-  },
+//Props 
+const props = defineProps({
+  participantId: { default: undefined, type: Number },
+  name: { default: undefined, type: String },
+  emissionId: { default: undefined, type: Number },
+  categoryFilter: { default: false, type: Boolean },
+  reload: { default: false, type: Boolean },
+  editRight: { default: false, type: Boolean },
+  productorId: { default: () => [], type: Array as () => Array<string> },
+  showCount: { default: false, type: Boolean },
+})
 
-  computed: {
-    titleFilter(): string {
-      return this.name
-        ? this.$t("All podcast button", { name: this.name })
-        : this.$t("All podcast emission button");
-    },
-    query(): string {
-      return this.searchPattern.length >= 3 ? this.searchPattern : "";
-    },
-  },
-  watch: {
-    reload(): void {
-      this.reloadList = !this.reloadList;
-    },
-  },
-  methods: {
-    onCategorySelected(category: Category | undefined): void {
-      this.iabId = category?.id ? category.id : undefined;
-    },
-    fetch(podcasts: Array<Podcast>): void {
-      this.$emit("fetch", podcasts);
-    },
-  },
+//Emits
+const emit = defineEmits(["fetch"]);
+
+//Data 
+const first = ref(0);
+const size = ref(30);
+const searchPattern = ref("");
+const reloadList = ref(false);
+const iabId : Ref<number | undefined>= ref(undefined);
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const titleFilter = computed(() => {
+  return props.name
+    ? t("All podcast button", { name: props.name })
+    : t("All podcast emission button");
 });
+const query = computed(() => searchPattern.value.length >= 3 ? searchPattern.value : "");
+
+//Watch
+watch(()=>props.reload, () => {
+  reloadList.value = !reloadList.value;
+});
+
+//Methods
+function onCategorySelected(category: Category | undefined): void {
+  iabId.value = category?.id ? category.id : undefined;
+}
+function fetch(podcasts: Array<Podcast>): void {
+  emit("fetch", podcasts);
+}
 </script>

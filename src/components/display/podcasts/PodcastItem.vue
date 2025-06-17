@@ -37,80 +37,65 @@
   </article>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import debounce from '../../../helper/debounceHelper';
 import PodcastItemInfo from "./PodcastItemInfo.vue";
 import PodcastImage from "./PodcastImage.vue";
 import dayjs from "dayjs";
 import { Podcast } from "@/stores/class/general/podcast";
-import { defineComponent } from "vue";
+import { computed, nextTick, onBeforeMount, ref, Ref, useTemplateRef } from "vue";
 import { Conference } from "@/stores/class/conference/conference";
-export default defineComponent({
-  name: "PodcastItem",
 
-  components: {
-    PodcastItemInfo,
-    PodcastImage,
-  },
+//Props 
+const props = defineProps({
+  podcast: { default: () => ({}), type: Object as () => Podcast },
+  fetchConference: { default: undefined, type: Object as () => Conference },
+})
 
-  props: {
-    podcast: { default: () => ({}), type: Object as () => Podcast },
-    fetchConference: { default: undefined, type: Object as () => Conference },
-  },
+//Data 
+const isMobile = ref(false);
+const firstDisplayDesc = ref(false);
+const hoverDesc = ref(false);
+const arrowDirection = ref("up");
+const isDescriptionBig = ref(false);
+const debounceShowDescriptionEvent: Ref< undefined | (() => void)> = ref(undefined);
+const debounceHideDescriptionEvent: Ref< undefined | (() => void)> = ref(undefined);
+const descriptionPodcastRef = useTemplateRef('descriptionPodcast');
+const descriptionPodcastContainerRef = useTemplateRef('descriptionPodcastContainer');
 
-  data() {
-    return {
-      firstDisplayDesc: false as boolean,
-      hoverDesc: false as boolean,
-      arrowDirection: "up" as string,
-      isDescriptionBig: false as boolean,
-      debounceShowDescriptionEvent: undefined as undefined | (() => void),
-      debounceHideDescriptionEvent: undefined as undefined | (() => void),
-    };
-  },
+//Computed
+const displayDate = computed(() => dayjs(props.podcast.pubDate).format());
+const description = computed(() => props.podcast.description ?? "");
 
-  computed: {
-    displayDate(): string {
-      return dayjs(this.podcast.pubDate).format();
-    },
-    description(): string {
-      return this.podcast.description ?? "";
-    },
-    isMobile(): boolean {
-      return window.matchMedia("(hover: none)").matches;
-    },
-  },
-  created() {
-    this.debounceShowDescriptionEvent = debounce(this.showDescription, 100);
-    this.debounceHideDescriptionEvent = debounce(this.hideDescription, 100);
-  },
+onBeforeMount(()=>{
+  isMobile.value = window.matchMedia("(hover: none)").matches;
+  debounceShowDescriptionEvent.value = debounce(showDescription, 100);
+  debounceHideDescriptionEvent.value = debounce(hideDescription, 100);
+})
 
-  methods: {
-    initDescription(): void {
-      if (this.firstDisplayDesc /* || this.isMobile */) {
-        return;
-      }
-      const podcastDesc = this.$refs.descriptionPodcast as HTMLElement;
-      const podcastDescContainer = this.$refs
-        .descriptionPodcastContainer as HTMLElement;
-      if (podcastDesc?.clientHeight > podcastDescContainer?.clientHeight) {
-        this.isDescriptionBig = true;
-      }
-      this.firstDisplayDesc = true;
-    },
-    showDescription(): void {
-      this.arrowDirection = "down";
-      this.hoverDesc = true;
-      this.$nextTick(() => {
-        this.initDescription();
-      });
-    },
-    hideDescription(): void {
-      this.arrowDirection = "up";
-      this.hoverDesc = false;
-    },
-  },
-});
+//Methods
+function initDescription(): void {
+  if (firstDisplayDesc.value) {
+    return;
+  }
+  const podcastDesc = descriptionPodcastRef?.value as HTMLElement;
+  const podcastDescContainer = descriptionPodcastContainerRef?.value as HTMLElement;
+  if (podcastDesc?.clientHeight > podcastDescContainer?.clientHeight) {
+    isDescriptionBig.value = true;
+  }
+  firstDisplayDesc.value = true;
+}
+function showDescription(): void {
+  arrowDirection.value = "down";
+  hoverDesc.value = true;
+  nextTick(() => {
+    initDescription();
+  });
+}
+function hideDescription(): void {
+  arrowDirection.value = "up";
+  hoverDesc.value = false;
+}
 </script>
 
 <style lang="scss">

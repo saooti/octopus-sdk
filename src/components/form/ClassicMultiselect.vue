@@ -10,7 +10,7 @@
     <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
       label
     }}
-    <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="$t('Mandatory input')"/>
+    <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
   </label>
     <vSelect
       v-model="optionSelected"
@@ -46,14 +46,14 @@
       </template>
       <template #no-options="{ searching }">
         <span v-if="searching">{{
-          $t("No elements found. Consider changing the search query.")
+          t("No elements found. Consider changing the search query.")
         }}</span>
-        <span v-else>{{ $t("List is empty") }}</span>
+        <span v-else>{{ t("List is empty") }}</span>
       </template>
       <template #list-footer>
         <div v-if="remainingElements" class="vs__dropdown-option">
           {{
-            $t(
+            t(
               "Count more elements matched your query, please make a more specific search.",
               { count: remainingElements },
             )
@@ -62,7 +62,7 @@
       </template>
       <template #list-header>
         <div v-if="maxOptionsSelected" class="vs__dropdown-option">
-          {{ $t("Multiselect max options", { max: maxOptions }) }}
+          {{ t("Multiselect max options", { max: maxOptions }) }}
         </div>
       </template>
       <template #open-indicator="{ attributes }">
@@ -75,120 +75,110 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed, ref, Ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import vSelect from "vue-select";
-export default {
-  components: {
-    vSelect,
-    ChevronDownIcon,
-    AsteriskIcon
-  },
-  props: {
-    id: { default: "", type: String },
-    label: { default: "", type: String },
-    placeholder: { default: "", type: String },
-    optionLabel: { default: "", type: String },
-    inModal: { default: false, type: Boolean },
-    multiple: { default: false, type: Boolean },
-    isDisabled: { default: false, type: Boolean },
-    width: { default: "100%", type: String },
-    maxElement: { default: 50, type: Number },
-    minSearchLength: { default: 3, type: Number },
-    optionChosen: { default: undefined, type: Object as () => unknown },
-    noDeselect: { default: true, type: Boolean },
-    optionCustomTemplating: { default: "", type: String },
-    optionSelectedCustomTemplating: { default: "", type: String },
-    displayLabel: { default: false, type: Boolean },
-    maxOptions: { default: null, type: Number },
-    allowEmpty: { default: true, type: Boolean },
-    textDanger :{ default: undefined, type: String },
-    displayRequired: { default: false, type: Boolean },
-  },
 
-  emits: ["onSearch", "selected", "onClose"],
 
-  data() {
-    return {
-      optionSelected: undefined as unknown,
-      options: [] as Array<unknown>,
-      remainingElements: 0 as number,
-      isLoading: false as boolean,
-      nbOptionsSelected: 0 as number,
-      searchInput: "" as string,
-    };
-  },
-  computed: {
-    maxOptionsSelected(): boolean {
-      if (this.maxOptions !== null && this.multiple) {
-        return (
-          (this.optionSelected as Array<unknown>).length >= this.maxOptions
-        );
-      }
-      return false;
-    },
-  },
+//Props 
+const props = defineProps({
+  id: { default: "", type: String },
+  label: { default: "", type: String },
+  placeholder: { default: "", type: String },
+  optionLabel: { default: "", type: String },
+  inModal: { default: false, type: Boolean },
+  multiple: { default: false, type: Boolean },
+  isDisabled: { default: false, type: Boolean },
+  width: { default: "100%", type: String },
+  maxElement: { default: 50, type: Number },
+  minSearchLength: { default: 3, type: Number },
+  optionChosen: { default: undefined, type: Object as () => unknown },
+  noDeselect: { default: true, type: Boolean },
+  optionCustomTemplating: { default: "", type: String },
+  optionSelectedCustomTemplating: { default: "", type: String },
+  displayLabel: { default: false, type: Boolean },
+  maxOptions: { default: null, type: Number },
+  allowEmpty: { default: true, type: Boolean },
+  textDanger :{ default: undefined, type: String },
+  displayRequired: { default: false, type: Boolean },
+})
 
-  watch: {
-    optionChosen: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.optionSelected = this.optionChosen;
-      },
-    },
-    optionSelected: {
-      deep: true,
-      handler() {
-        if (this.noDeselect || null !== this.optionSelected) {
-          return;
-        }
-        this.$emit("selected", undefined);
-      },
-    },
-  },
+//Emits
+const emit = defineEmits(["onSearch", "selected", "onClose"]);
 
-  methods: {
-    fakeSearch(): Array<unknown> {
-      return this.options;
-    },
-    onSearch(search?: string): void {
-      if (search && search.length < this.minSearchLength) {
-        return;
-      } else if (search) {
-        this.searchInput = search;
-      }
-      this.isLoading = true;
-      this.$emit("onSearch", search);
-    },
-    onClose() {
-      this.$emit("onClose", this.searchInput);
-      this.searchInput = "";
-    },
-    afterSearch(optionsFetched: Array<unknown>, count: number): void {
-      this.options = optionsFetched;
-      this.remainingElements = Math.max(0, count - this.maxElement);
-      this.isLoading = false;
-    },
-    onOptionSelected(optionSelected: unknown): void {
-      this.$emit("selected", optionSelected);
-    },
-    onOptionDeselect(event: unknown): void {
-      if (!this.multiple) {
-        return;
-      }
-      if (
-        !this.allowEmpty &&
-        0 === (this.optionSelected as Array<unknown>).length
-      ) {
-        (this.optionSelected as Array<unknown>).push(event);
-        return;
-      }
-      this.$emit("selected", this.optionSelected);
-    },
-  },
-};
+//Data 
+const optionSelected : Ref<unknown>= ref(undefined);
+const options : Ref<Array<unknown>>= ref([]);
+const remainingElements = ref(0);
+const isLoading = ref(false);
+const searchInput = ref("");
+
+//Composables
+const { t } = useI18n();
+
+
+//Computed
+const maxOptionsSelected = computed(() => {
+  if (props.maxOptions !== null && props.multiple) {
+    return (
+      (optionSelected.value as Array<unknown>).length >= props.maxOptions
+    );
+  }
+  return false;
+});
+
+//Watch
+watch(()=>props.optionChosen, () => {
+  optionSelected.value = props.optionChosen;
+}, {deep: true, immediate: true});
+watch(optionSelected, () => {
+  if (props.noDeselect || null !== optionSelected.value) {
+    return;
+  }
+  emit("selected", undefined);
+}, {deep: true});
+
+//Methods
+function fakeSearch(): Array<unknown> {
+  return options.value;
+}
+function onSearch(search?: string): void {
+  if (search && search.length < props.minSearchLength) {
+    return;
+  } else if (search) {
+    searchInput.value = search;
+  }
+  isLoading.value = true;
+  emit("onSearch", search);
+}
+function onClose() {
+  emit("onClose", searchInput.value);
+  searchInput.value = "";
+}
+function afterSearch(optionsFetched: Array<unknown>, count: number): void {
+  options.value = optionsFetched;
+  remainingElements.value = Math.max(0, count - props.maxElement);
+  isLoading.value = false;
+}
+function onOptionSelected(optionSelected: unknown): void {
+  emit("selected", optionSelected);
+}
+function onOptionDeselect(event: unknown): void {
+  if (!props.multiple) {
+    return;
+  }
+  if (
+    !props.allowEmpty &&
+    0 === (optionSelected.value as Array<unknown>).length
+  ) {
+    (optionSelected.value as Array<unknown>).push(event);
+    return;
+  }
+  emit("selected", optionSelected.value);
+}
 </script>
 <style lang="scss">
 @use "vue-select/dist/vue-select.css";

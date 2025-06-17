@@ -1,24 +1,23 @@
 <template>
   <teleport to=".octopus-app">
-    <template v-if="playerVideo">
+    <template v-if="playerStore.playerVideo">
       <button class="btn btn-transparent video-close" @click="closePlayer">
         <WindowCloseIcon />
       </button>
       <div class="video-wrapper">
         <PlayerYoutubeEmbed v-if="youtubeId" :youtube-id="youtubeId" />
-        <PlayerVideoDigiteka v-else-if="!playerLive" :video-id="playerPodcast?.video?.videoId" />
+        <PlayerVideoDigiteka v-else-if="!playerStore.playerLive" :video-id="playerStore.playerPodcast?.video?.videoId" />
         <PlayerVideoHls v-else :hls-url="hlsVideoUrl" :is-secured="isSecured"/>
       </div>
     </template>
   </teleport>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import youtubeVideoHelper from "../../../../helper/youtubeVideoHelper";
 import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useApiStore } from "../../../../stores/ApiStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, onMounted } from "vue";
 const PlayerVideoDigiteka = defineAsyncComponent(
   () => import("../video/PlayerVideoDigiteka.vue"),
 );
@@ -28,44 +27,32 @@ const PlayerVideoHls = defineAsyncComponent(
 const PlayerYoutubeEmbed = defineAsyncComponent(
   () => import("../video/PlayerYoutubeEmbed.vue"),
 );
-export default defineComponent({
-  name: "PlayerVideo",
 
-  components: {
-    PlayerVideoDigiteka,
-    PlayerVideoHls,
-    PlayerYoutubeEmbed,
-    WindowCloseIcon,
-  },
-  data() {
-    return {
-      youtubeId: undefined as string|undefined,
-    };
-  },
-  computed: {
-    ...mapState(useApiStore, ["hlsUrl"]),
-    ...mapState(usePlayerStore, ["playerVideo", "playerLive", "playerPodcast"]),
-    isSecured(): boolean{
-      return "SECURED" === this.playerLive?.organisation?.privacy;
-    },
-    hlsVideoUrl(): string {
-      if (!this.playerLive) {
-        return "";
-      }
-      return `${this.hlsUrl}live/video_dev.${this.playerLive.conferenceId}/index.m3u8`;
-    },
-  },
-  created(){
-    this.youtubeId = youtubeVideoHelper.getYoutubeId((this.playerPodcast ?? this.playerLive )?.tags ?? []);
-  },
+//Data 
+const youtubeId: Ref<string|undefined> = ref(undefined);
 
-  methods: {
-    ...mapActions(usePlayerStore, ["playerPlay"]),
-    closePlayer() {
-      this.playerPlay();
-    },
-  },
+//Composables
+const apiStore = useApiStore();
+const playerStore = usePlayerStore();
+
+
+//Computed
+const isSecured = computed(() => "SECURED" === playerStore.playerLive?.organisation?.privacy);
+const hlsVideoUrl = computed(() => {
+  if (!playerStore.playerLive) {
+    return "";
+  }
+  return `${apiStore.hlsUrl}live/video_dev.${playerStore.playerLive.conferenceId}/index.m3u8`;
 });
+
+onMounted(()=>{
+  youtubeId.value = youtubeVideoHelper.getYoutubeId((playerStore.playerPodcast ?? playerStore.playerLive )?.tags ?? []);
+})
+
+//Methods
+function closePlayer() {
+  playerStore.playerPlay();
+}
 </script>
 
 <style lang="scss">

@@ -1,21 +1,21 @@
 <template>
   <div id="productor-search" class="d-flex-column align-items-center my-3">
     <div
-      v-if="!isPodcastmaker && !filterOrgaId"
+      v-if="!state.generalParameters.podcastmaker && !filterStore.filterOrgaId"
       class="w-50-responsive pe-3 position-relative"
     >
       <OrganisationChooser
-        :defaultanswer="$t('No organisation filter')"
+        :defaultanswer="t('No organisation filter')"
         :orga-id-selected="organisationId"
         @selected="onOrganisationSelected"
       />
-      <template  v-if="!authOrgaId ||authOrgaId ===organisationId">
+      <template  v-if="!authStore.authOrgaId ||authStore.authOrgaId ===organisationId">
         <ClassicCheckbox
           v-model:text-init="keepOrganisation"
           :class="!!organisationId ? '' : 'invisible'"
           class="m-3"
           :label="
-            $t(
+            t(
               'check this box if you want to keep this filter for the rest of your visit',
             )
           "
@@ -25,7 +25,7 @@
         />
         <div v-if="showBubble" class="filter-speech-bubble">
           {{
-            $t(
+            t(
               "check this box if you want to keep this filter for the rest of your visit",
             )
           }}
@@ -43,107 +43,104 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { Organisation } from "@/stores/class/general/organisation";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref, computed, watch, onBeforeMount } from "vue";
 import { useAuthStore } from "../../../stores/AuthStore";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 const OrganisationChooser = defineAsyncComponent(
   () => import("../organisation/OrganisationChooser.vue"),
 );
 const ClassicCheckbox = defineAsyncComponent(
   () => import("../../form/ClassicCheckbox.vue"),
 );
-export default defineComponent({
-  components: {
-    OrganisationChooser,
-    ClassicSearch,
-    ClassicCheckbox,
-  },
 
-  props: {
-    organisationId: { default: undefined, type: String },
-    searchPattern: { default: "", type: String },
-    type: { default: "podcast", type: String },
-  },
-  emits: ["update:organisationId", "update:searchPattern"],
+//Props 
+const props = defineProps({
+  organisationId: { default: undefined, type: String },
+  searchPattern: { default: "", type: String },
+  type: { default: "podcast", type: String },
+})
 
-  setup(){
-    const { updateRouteParam } = useRouteUpdateParams();
-    return {updateRouteParam}
-  },
+//Emits
+const emit = defineEmits(["update:organisationId", "update:searchPattern"]);
 
-  data() {
-    return {
-      keepOrganisation: false as boolean,
-      showBubble: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    searchText(): string {
-      if ("emission" === this.type) return this.$t("Look for emission name");
-      if ("participant" === this.type)
-        return this.$t("Look for participant name");
-      if ("playlist" === this.type) return this.$t("Look for playlist name");
-      return this.$t("Look for podcast name");
-    },
-  },
-  watch: {
-    filterOrgaId(): void {
-      this.keepOrganisation = undefined !== this.filterOrgaId;
-      if (this.filterOrgaId) {
-        this.$emit("update:organisationId", this.filterOrgaId);
-      }else{
-        this.updateRouteParam({ o: this.organisationId, productor:undefined});
-      }
-    },
-  },
-  created() {
-    if (!this.organisationId) return;
-    if (this.filterOrgaId === this.organisationId) {
-      this.keepOrganisation = true;
-    }
-  },
-  methods: {
-    updateSearchPattern(newSearch: string) {
-      this.$emit("update:searchPattern", newSearch);
-    },
-    onOrganisationSelected(organisation: Organisation): void {
-      this.updateRouteParam({ o: organisation.id, productor: undefined });
-      this.keepOrganisation = false;
-      if (!organisation?.id) {
-        this.$emit("update:organisationId", undefined);
-      }
-      this.$emit("update:organisationId", organisation.id);
-      if (undefined===this.authOrgaId && "PUBLIC" !== organisation.privacy) {
-        this.onKeepOrganisation(organisation.id);
-      } else {
-        this.showBubble = true;
-        setTimeout(() => {
-          this.showBubble = false;
-        }, 6000);
-      }
-    },
-    async onKeepOrganisation(orgaId: string|undefined = undefined): Promise<void> {
-      const orgaToApply= orgaId ?? this.organisationId;
-      if (!orgaToApply) {
-        return;
-      }
-      this.$router.push({
-        query: { ...this.$route.query, ...{ productor: orgaToApply, o:undefined }},
-      });
-    },
-  },
+//Data 
+const keepOrganisation = ref(false);
+const showBubble = ref(false);
+
+//Composables
+const { t } = useI18n();
+const { updateRouteParam } = useRouteUpdateParams();
+const filterStore = useFilterStore();
+const authStore = useAuthStore();
+const router = useRouter();
+const route = useRoute();
+
+
+//Computed
+const searchText = computed(() => {
+  if ("emission" === props.type) return t("Look for emission name");
+  if ("participant" === props.type)
+    return t("Look for participant name");
+  if ("playlist" === props.type) return t("Look for playlist name");
+  return t("Look for podcast name");
 });
+
+
+//Watch
+watch(()=>filterStore.filterOrgaId, async () => {
+  keepOrganisation.value = undefined !== filterStore.filterOrgaId;
+  if (filterStore.filterOrgaId) {
+    emit("update:organisationId", filterStore.filterOrgaId);
+  }else{
+    updateRouteParam({ o: props.organisationId, productor:undefined});
+  }
+});
+ 
+
+onBeforeMount(()=>{
+  if (!props.organisationId) return;
+  if (filterStore.filterOrgaId === props.organisationId) {
+    keepOrganisation.value = true;
+  }
+})
+
+
+//Methods
+function updateSearchPattern(newSearch: string) {
+  emit("update:searchPattern", newSearch);
+}
+function onOrganisationSelected(organisation: Organisation): void {
+  updateRouteParam({ o: organisation.id, productor: undefined });
+  keepOrganisation.value = false;
+  if (!organisation?.id) {
+    emit("update:organisationId", undefined);
+  }
+  emit("update:organisationId", organisation.id);
+  if (undefined===authStore.authOrgaId && "PUBLIC" !== organisation.privacy) {
+    onKeepOrganisation(organisation.id);
+  } else {
+    showBubble.value = true;
+    setTimeout(() => {
+      showBubble.value = false;
+    }, 6000);
+  }
+}
+async function onKeepOrganisation(orgaId: string|undefined = undefined): Promise<void> {
+  const orgaToApply= orgaId ?? props.organisationId;
+  if (!orgaToApply) {
+    return;
+  }
+  router.push({
+    query: { ...route.query, ...{ productor: orgaToApply, o:undefined }},
+  });
+}
 </script>
 
 <style lang="scss">

@@ -7,7 +7,7 @@
         params: { canalId: radio.id },
       }"
       class="text-dark classic-element-text"
-      :title="$t('Radio name page', { name: radio.name })"
+      :title="t('Radio name page', { name: radio.name })"
     >
       <div class="element-name mb-2 basic-line-clamp">
         {{ radio.name }}
@@ -20,22 +20,17 @@
   </div>
 </template>
 
-<script lang="ts">
-
+<script setup lang="ts">
 import RadioImage from "./RadioImage.vue";
 import RadioCurrently from "./RadioCurrently.vue";
-import { defineComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
-export default defineComponent({
-  name: "RadioItem",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    RadioCurrently,
-    RadioImage,
-  },
+//Props 
+defineProps({
+  radio: { default: undefined, type: Object as () => Canal },
+})
 
-  props: {
-    radio: { default: undefined, type: Object as () => Canal },
-  },
-});
+//Composables
+const { t } = useI18n();
 </script>

@@ -28,289 +28,273 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicPopover",
-  props: {
-    content: { type: String, default: "" },
-    title: { type: String, default: "" },
-    target: { type: String, required: true },
-    disable: { type: Boolean, default: false },
-    onlyClick: { type: Boolean, default: false },
-    onlyMouse: { type: Boolean, default: false },
-    isFixed: { type: Boolean, default: false },
-    relativeClass: { type: String, default: undefined },
-    leftPos: { type: Boolean, default: false },
-    topPos: { type: Boolean, default: false },
-    popoverClass: { type: String, default: undefined },
-    isTopLayer: { type: Boolean, default: false },
-  },
-  emits: ["updateVisibility"],
-  data() {
-    return {
-      show: false as boolean,
-      isClick: false as boolean,
-      posX: 0 as number,
-      posY: 0 as number,
-      targetElement: null as HTMLElement | null,
-      overPopover: false as boolean,
-      isTabAction: false as boolean,
-      maxHeight: '80dvh' as string,
-      clearTimeout: undefined as ReturnType<typeof setTimeout> | undefined,
-    };
-  },
-  computed: {
-    popoverId(): string {
-      return "popover" + this.target;
-    },
-    positionInlineStyle(): string {
-      return `left: ${this.posX}px; top: ${this.posY}px;max-height:${this.maxHeight}`;
-    },
-    displayPopover(): boolean{
-      return this.show && !this.disable;
-    },
-    isTopLayerPopover(){
-      return (this.isTopLayer || "octopus-modal"===this.relativeClass) && HTMLElement.prototype.hasOwnProperty("popover");
-    },
-  },
-  watch: {
-    displayPopover(){
-      if(!this.isTopLayerPopover){
-        return;
-      }
-      if(this.displayPopover){
-        (this.$refs.popover as HTMLElement).showPopover();
-      }else{
-        (this.$refs.popover as HTMLElement).hidePopover();
-      }
-    },
-    show() {
-      this.$emit("updateVisibility", this.show);
-      if (this.show) {
-        window.addEventListener("keyup", this.addAccessibilityControl);
-      } else {
-        window.removeEventListener("keyup", this.addAccessibilityControl);
-      }
-    },
-  },
-  mounted() {
-    this.init();
-  },
-  unmounted() {
-    this.removeListeners();
-  },
-  methods: {
-    addAccessibilityControl(event: KeyboardEvent): void {
-      if (!event || null === event) {
-        return;
-      }
-      if ("Tab" !== event.key) {
-        return;
-      }
-      const myElement = event.target as HTMLElement;
-      const parent = this.$refs.popover as HTMLElement;
-      if (parent?.contains(myElement)) {
-        this.isTabAction = true;
-      } else {
-        this.clearClick();
-      }
-    },
-    init() {
-      this.targetElement = document.getElementById(this.target);
-      if (this.targetElement) {
-        if (!this.onlyClick) {
-          this.targetElement.addEventListener(
-            "mouseenter",
-            this.setPopoverData,
-          );
-          this.targetElement.addEventListener(
-            "mouseleave",
-            this.clearDataTimeout,
-          );
-        }
-        if (!this.onlyMouse) {
-          this.targetElement.addEventListener("click", this.setPopoverData);
-        }
-        this.targetElement.addEventListener("focusout", this.clearDataBlur);
-      }
-    },
-    removeListeners() {
-      if (this.targetElement) {
-        if (!this.onlyClick) {
-          this.targetElement.removeEventListener(
-            "mouseenter",
-            this.setPopoverData,
-          );
-          this.targetElement.removeEventListener(
-            "mouseleave",
-            this.clearDataTimeout,
-          );
-        }
-        if (!this.onlyMouse) {
-          this.targetElement.removeEventListener("click", this.setPopoverData);
-        }
-        this.targetElement.removeEventListener("focusout", this.clearDataBlur);
-      }
-    },
-    handleClickEvent(){
-      if (this.show && this.isClick) {
-        this.isClick = false;
-        this.clearData();
-        return -1;
-      }
-      if (this.show && this.isTopLayerPopover) {
-        (this.$refs.popover as HTMLElement).showPopover();
-        this.isClick = true;
-        return -1;
-      }
-      this.isClick = true;
-      return 0;
-    },
-    handleLeftPos(rectElement: DOMRect, parentLeft: number, sizeAvailable: number, sizePopover: number){
-      const elementRightRelative = rectElement.right - parentLeft;
-      const hasPlaceRightButton = (sizeAvailable - (sizeAvailable - elementRightRelative)) > sizePopover;
-      if(hasPlaceRightButton){
-        this.posX =
-        rectElement.right -
-        parentLeft -
-        sizePopover;
-      }else{
-        this.posX =parentLeft;
-      }
-    },
-    handleRightPos(rectElement: DOMRect, parentLeft: number, sizeAvailable: number, sizePopover: number){
-      const elementLeftRelative = rectElement.left - parentLeft;
-      const hasPlaceRightButton = (sizeAvailable - elementLeftRelative) > sizePopover;
-      if(hasPlaceRightButton){
-        this.posX = elementLeftRelative;
-      }else{
-        this.posX = sizeAvailable - sizePopover + parentLeft;
-      }
-    },
-    setPopoverData(e: MouseEvent | PointerEvent) {
-      clearInterval(this.clearTimeout as unknown as number);
-      if (this.disable || !e || !e.target) {
-        return;
-      }
-      if ("click" === e.type && -1 === this.handleClickEvent()) {
-        return;
-      }
-      this.show = true;
-      let parentLeft = 0;
-      let parentTop = 0;
-      let parentScrollTop = 0;
-      let parentBottom = 0;
-      let parentWidth=0;
-      if (!this.isTopLayerPopover && this.relativeClass) {
-        const modalBody = document.getElementsByClassName(
-          this.relativeClass,
-        )[0];
-        if (undefined === modalBody) {
-          (this.$refs.popover as HTMLElement).style.display = "block";
-          this.posX = 0;
-          this.posY = 0;
-          return;
-        }
-        const modalBodyRect = modalBody.getBoundingClientRect();
-        parentLeft = modalBodyRect.left;
-        parentTop = modalBodyRect.top;
-        parentScrollTop = modalBody.scrollTop;
-        parentBottom=modalBodyRect.bottom;
-        parentWidth = modalBodyRect.width;
-      }
-      const rectElement = (e.target as HTMLElement).getBoundingClientRect();
-      (this.$refs.popover as HTMLElement).style.display = "block";
-      const sizePopover = (this.$refs.popover as HTMLElement).clientWidth;
-      const sizeAvailable = parentWidth || window.innerWidth;
-      if (this.leftPos) {
-        this.handleLeftPos(rectElement, parentLeft, sizeAvailable, sizePopover);
-      } else {
-        this.handleRightPos(rectElement, parentLeft, sizeAvailable, sizePopover);
-      }
-      this.posX = Math.max(0, this.posX);
-      const yPosParent = this.topPos ? rectElement.top : rectElement.bottom;
-      const yGap = this.topPos
-        ? -5 - (this.$refs.popover as HTMLElement).clientHeight
-        : 5;
-      
-      this.posY =
-        yPosParent +
-        parentScrollTop -
-        parentTop +
-        (this.isFixed ? 0 : window.scrollY) +
-        yGap;
-      if(this.isTopLayerPopover){
-        this.posY = Math.max(0, this.posY);
-        this.maxHeight = (window.innerHeight - this.posY) + "px";
-      }else if(this.relativeClass){
-        this.maxHeight = (parentBottom- this.posY -parentTop) + "px";
-      }else{
-        this.maxHeight = '80dvh';
-      }
-    },
-    clearDataBlur(e: FocusEvent) {
-      if (this.isTabAction) {
-        this.isTabAction = false;
-        return;
-      }
-      //Exception timepicker in popover
-      const result = Array.from(e?.target?.classList ?? []).findIndex((val) => { return val.startsWith("dp__");});
-      if (-1!==result) {
-        return;
-      }
-      if (!e.relatedTarget) {
-        return this.clearClick();
-      }
-      const myElement = e.relatedTarget as HTMLElement;
-      if (this.popoverId === myElement.id) {
-        return;
-      }
-      const parent = this.$refs.popover as HTMLElement;
-      if (null === parent || !parent.contains(myElement)) {
-        return this.clearClick();
-      }
-      if (
-        null === myElement.classList ||
-        !myElement.classList.contains("octopus-dropdown-item")
-      ) {
-        return;
-      }
-      if (!(myElement as HTMLAnchorElement).href) {
-        return this.clearClick();
-      }
-      if (myElement.classList.contains("reallink")) {
-        myElement.click();
-      } else {
-        this.$router.push((myElement as HTMLAnchorElement).pathname);
-      }
-      this.$nextTick(() => {
-        this.isClick = false;
-        this.clearData();
-      });
-    },
-    clearClick() {
-      this.isClick = false;
-      this.clearData();
-    },
-    clearDataTimeout() {
-      this.clearTimeout = setTimeout(() => {
-        if (!this.overPopover) {
-          this.clearData();
-        }
-        this.clearTimeout=undefined;
-      }, 500);
-    },
-    clearData() {
-      if (this.isClick) {
-        return;
-      }
-      this.show = false;
-      this.posX = 0;
-      this.posY = 0;
-    },
-  },
+<script setup lang="ts">
+import { computed, nextTick, onMounted, onUnmounted, Ref, ref, useTemplateRef, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+//Props 
+const props = defineProps({
+  content: { type: String, default: "" },
+  title: { type: String, default: "" },
+  target: { type: String, required: true },
+  disable: { type: Boolean, default: false },
+  onlyClick: { type: Boolean, default: false },
+  onlyMouse: { type: Boolean, default: false },
+  isFixed: { type: Boolean, default: false },
+  relativeClass: { type: String, default: undefined },
+  leftPos: { type: Boolean, default: false },
+  topPos: { type: Boolean, default: false },
+  popoverClass: { type: String, default: undefined },
+  isTopLayer: { type: Boolean, default: false },
+})
+
+//Emits
+const emit = defineEmits(["updateVisibility"]);
+
+
+//Data 
+const show = ref(false);
+const isClick = ref(false);
+const posX = ref(0);
+const posY = ref(0);
+const targetElement: Ref<HTMLElement | null> = ref(null);
+const overPopover = ref(false);
+const isTabAction = ref(false);
+const maxHeight = ref('80dvh');
+const clearTimeout: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
+const popoverRef = useTemplateRef('popover');
+
+
+//Composables
+const router= useRouter();
+
+//Computed
+const popoverId = computed(() => "popover" + props.target);
+const positionInlineStyle = computed(() => `left: ${posX.value}px; top: ${posY.value}px;max-height:${maxHeight.value}`);
+const displayPopover = computed(() => show.value && !props.disable);
+const isTopLayerPopover = computed(() => (props.isTopLayer || "octopus-modal"===props.relativeClass) && HTMLElement.prototype.hasOwnProperty("popover"));
+
+
+//Watch
+watch(displayPopover, async () => {
+  if(!isTopLayerPopover.value){return;}
+  if(displayPopover.value){
+    (popoverRef.value as HTMLElement).showPopover();
+  }else{
+    (popoverRef.value as HTMLElement).hidePopover();
+  }
 });
+watch(show, async () => {
+  emit("updateVisibility", show.value);
+  if (show.value) {
+    window.addEventListener("keyup", addAccessibilityControl);
+  } else {
+    window.removeEventListener("keyup", addAccessibilityControl);
+  }
+});
+
+onMounted(()=>init())
+
+onUnmounted(()=>removeListeners())
+
+
+//Methods
+function addAccessibilityControl(event: KeyboardEvent): void {
+  if (!event || null === event) {
+    return;
+  }
+  if ("Tab" !== event.key) {
+    return;
+  }
+  const myElement = event.target as HTMLElement;
+  const parent = popoverRef?.value as HTMLElement;
+  if (parent?.contains(myElement)) {
+    isTabAction.value = true;
+  } else {
+    clearClick();
+  }
+}
+function init() {
+  targetElement.value = document.getElementById(props.target);
+  if (targetElement.value) {
+    if (!props.onlyClick) {
+      targetElement.value.addEventListener( "mouseenter",setPopoverData);
+      targetElement.value.addEventListener("mouseleave",clearDataTimeout);
+    }
+    if (!props.onlyMouse) {
+      targetElement.value.addEventListener("click", setPopoverData);
+    }
+    targetElement.value.addEventListener("focusout", clearDataBlur);
+  }
+}
+function removeListeners() {
+  if (targetElement.value) {
+    if (!props.onlyClick) {
+      targetElement.value.removeEventListener("mouseenter",setPopoverData,);
+      targetElement.value.removeEventListener("mouseleave",clearDataTimeout,);
+    }
+    if (!props.onlyMouse) {
+      targetElement.value.removeEventListener("click", setPopoverData);
+    }
+    targetElement.value.removeEventListener("focusout", clearDataBlur);
+  }
+}
+function handleClickEvent(){
+  if (show.value && isClick.value) {
+    isClick.value = false;
+    clearData();
+    return -1;
+  }
+  if (show.value && isTopLayerPopover.value) {
+    const popover = popoverRef?.value as HTMLElement;
+    popover.showPopover();
+    isClick.value = true;
+    return -1;
+  }
+  isClick.value = true;
+  return 0;
+}
+function handleLeftPos(rectElement: DOMRect, parentLeft: number, sizeAvailable: number, sizePopover: number){
+  const elementRightRelative = rectElement.right - parentLeft;
+  const hasPlaceRightButton = (sizeAvailable - (sizeAvailable - elementRightRelative)) > sizePopover;
+  if(hasPlaceRightButton){
+    posX.value =
+    rectElement.right -
+    parentLeft -
+    sizePopover;
+  }else{
+    posX.value =parentLeft;
+  }
+}
+function handleRightPos(rectElement: DOMRect, parentLeft: number, sizeAvailable: number, sizePopover: number){
+  const elementLeftRelative = rectElement.left - parentLeft;
+  const hasPlaceRightButton = (sizeAvailable - elementLeftRelative) > sizePopover;
+  if(hasPlaceRightButton){
+    posX.value = elementLeftRelative;
+  }else{
+    posX.value = sizeAvailable - sizePopover + parentLeft;
+  }
+}
+function setPopoverData(e: MouseEvent | PointerEvent) {
+  clearInterval(clearTimeout.value as unknown as number);
+  if (props.disable || !e || !e.target) {
+    return;
+  }
+  if ("click" === e.type && -1 === handleClickEvent()) {
+    return;
+  }
+  show.value = true;
+  let parentLeft = 0;
+  let parentTop = 0;
+  let parentScrollTop = 0;
+  let parentBottom = 0;
+  let parentWidth=0;
+  const popover = popoverRef?.value as HTMLElement;
+  if (!isTopLayerPopover.value && props.relativeClass) {
+    const modalBody = document.getElementsByClassName(props.relativeClass,)[0];
+    if (undefined === modalBody) {
+      popover.style.display = "block";
+      posX.value = 0;
+      posY.value = 0;
+      return;
+    }
+    const modalBodyRect = modalBody.getBoundingClientRect();
+    parentLeft = modalBodyRect.left;
+    parentTop = modalBodyRect.top;
+    parentScrollTop = modalBody.scrollTop;
+    parentBottom=modalBodyRect.bottom;
+    parentWidth = modalBodyRect.width;
+  }
+  const rectElement = (e.target as HTMLElement).getBoundingClientRect();
+  popover.style.display = "block";
+  const sizePopover = popover.clientWidth;
+  const sizeAvailable = parentWidth || window.innerWidth;
+  if (props.leftPos) {
+    handleLeftPos(rectElement, parentLeft, sizeAvailable, sizePopover);
+  } else {
+    handleRightPos(rectElement, parentLeft, sizeAvailable, sizePopover);
+  }
+  posX.value = Math.max(0, posX.value);
+  const yPosParent = props.topPos ? rectElement.top : rectElement.bottom;
+  const yGap = props.topPos
+    ? -5 - popover.clientHeight
+    : 5;
+  
+  posY.value =
+    yPosParent +
+    parentScrollTop -
+    parentTop +
+    (props.isFixed ? 0 : window.scrollY) +
+    yGap;
+  if(isTopLayerPopover.value){
+    posY.value = Math.max(0, posY.value);
+    maxHeight.value = (window.innerHeight - posY.value) + "px";
+  }else if(props.relativeClass){
+    maxHeight.value = (parentBottom- posY.value -parentTop) + "px";
+  }else{
+    maxHeight.value = '80dvh';
+  }
+}
+function clearDataBlur(e: FocusEvent) {
+  if (isTabAction.value) {
+    isTabAction.value = false;
+    return;
+  }
+  //Exception timepicker in popover
+  const result = Array.from(e?.target?.classList ?? []).findIndex((val) => { return val.startsWith("dp__");});
+  if (-1!==result) {
+    return;
+  }
+  if (!e.relatedTarget) {
+    return clearClick();
+  }
+  const myElement = e.relatedTarget as HTMLElement;
+  if (popoverId.value === myElement.id) {
+    return;
+  }
+  const parent =popoverRef?.value as HTMLElement;
+  if (null === parent || !parent.contains(myElement)) {
+    return clearClick();
+  }
+  if (
+    null === myElement.classList ||
+    !myElement.classList.contains("octopus-dropdown-item")
+  ) {
+    return;
+  }
+  if (!(myElement as HTMLAnchorElement).href) {
+    return clearClick();
+  }
+  if (myElement.classList.contains("reallink")) {
+    myElement.click();
+  } else {
+    router.push((myElement as HTMLAnchorElement).pathname);
+  }
+  nextTick(() => {
+    isClick.value = false;
+    clearData();
+  });
+}
+function clearClick() {
+  isClick.value = false;
+  clearData();
+}
+function clearDataTimeout() {
+  clearTimeout.value = setTimeout(() => {
+    if (!overPopover.value) {
+      clearData();
+    }
+    clearTimeout.value=undefined;
+  }, 500);
+}
+function clearData() {
+  if (isClick.value) {
+    return;
+  }
+  show.value = false;
+  posX.value = 0;
+  posY.value = 0;
+}
 </script>
 <style lang="scss">
 

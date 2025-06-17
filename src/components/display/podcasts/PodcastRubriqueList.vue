@@ -4,7 +4,7 @@
     class="rubrique-list-component d-flex align-items-center flex-wrap mb-3 small-text"
   >
     <div class="fw-bold me-3">
-      {{ $t("Rubrics") + " : " }}
+      {{ t("Rubrics") + " : " }}
     </div>
     <router-link
       v-for="rubriqueId in rubriqueIds"
@@ -21,47 +21,44 @@
   </div>
 </template>
 
-<script lang="ts">
-import { mapActions, mapState } from "pinia";
+<script setup lang="ts">
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import {defineComponent } from "vue";
 import { Rubrique } from "../../../stores/class/rubrique/rubrique";
 import { useFilterStore } from "../../../stores/FilterStore";
-export default defineComponent({
-  name: "TagList",
-  components: {
-  },
-  props: {
-    rubriqueIds: { default: () => [], type: Array as () => Array<number> },
-    orgaId: {default: "", type: String,},
-  },
-  data() {
-    return {
-      rubriquagesOrga: {} as {[key:number]:Rubrique},
-      init: false as boolean,
-    };
-  },
+import { useI18n } from "vue-i18n";
+import { computed, onBeforeMount, Ref, ref } from "vue";
 
-  computed:{
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    organisationQuery(){
-      if(this.filterOrgaId){
-        return undefined;
-      }
-      return { o: this.orgaId};
-    }
-  },
-  created() {
-    this.fetchRubriquages();
-  },
-  methods:{
-    ...mapActions(useSaveFetchStore, ["getOrgaRubriques"]),
-    async fetchRubriquages(){
-      const rubriquagesOrga = await this.getOrgaRubriques(this.orgaId);
-      const rubriquesArray= rubriquagesOrga.flatMap((rub) =>rub.rubriques);
-      this.rubriquagesOrga= rubriquesArray.reduce((results, u)=> {results[u.rubriqueId??0] = u; return results}, {} as {[key:number]:Rubrique});
-      this.init = true;
-    },
+//Props 
+const props = defineProps({
+  rubriqueIds: { default: () => [], type: Array as () => Array<number> },
+  orgaId: {default: "", type: String,},
+})
+
+//Data 
+const init = ref(false);
+const rubriquagesOrga: Ref<{[key:number]:Rubrique}> = ref({});
+
+//Composables
+const { t } = useI18n();
+const filterStore = useFilterStore();
+const SaveFetchStore = useSaveFetchStore();
+
+//Computed
+const organisationQuery = computed(() => {
+  if(filterStore.filterOrgaId){
+    return undefined;
   }
+  return { o: props.orgaId};
 });
+
+onBeforeMount(()=>fetchRubriquages())
+
+
+//Methods
+async function fetchRubriquages(){
+  const tempRubriquagesOrga = await SaveFetchStore.getOrgaRubriques(props.orgaId);
+  const rubriquesArray= tempRubriquagesOrga.flatMap((rub) =>rub.rubriques);
+  rubriquagesOrga.value= rubriquesArray.reduce((results, u)=> {results[u.rubriqueId??0] = u; return results}, {} as {[key:number]:Rubrique});
+  init.value = true;
+}
 </script>

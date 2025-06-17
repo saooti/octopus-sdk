@@ -22,8 +22,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineAsyncComponent, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, defineAsyncComponent, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 const ThumbUpIcon = defineAsyncComponent(
   () => import("vue-material-design-icons/ThumbUp.vue"),
 );
@@ -39,46 +40,40 @@ const ThumbDownOutlineIcon = defineAsyncComponent(
 const SnackBar = defineAsyncComponent(
   () => import("../../../misc/SnackBar.vue"),
 );
-export default defineComponent({
-  name: "LikeButton",
 
-  components: {
-    SnackBar,
-    ThumbUpOutlineIcon,
-    ThumbDownOutlineIcon,
-    ThumbDownIcon,
-    ThumbUpIcon,
-  },
-  props: {
-    like: { default: true, type: Boolean },
-    isActive: { default: false, type: Boolean },
-    canInteract: { default: false, type: Boolean },
-  },
+//Props 
+const props = defineProps({
+  like: { default: true, type: Boolean },
+  isActive: { default: false, type: Boolean },
+  canInteract: { default: false, type: Boolean },
+})
 
-  emits: ["like-action"],
-  computed: {
-    actionName(): string {
-      if (this.like) {
-        return this.isActive ? "dislike" : "like";
-      }
-      return this.isActive ? "like" : "dislike";
-    },
-    titleButton(): string {
-      return this.like ? this.$t("Like") : this.$t("Dislike");
-    },
-  },
-  methods: {
-    clickButton() {
-      if (this.canInteract) {
-        this.$emit("like-action", this.actionName);
-      } else {
-        (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-          this.$t("Log in to access this service"),
-        );
-      }
-    },
-  },
+//Emits
+const emit = defineEmits(["like-action"]);
+
+//Data 
+const snackBarRef = useTemplateRef('snackbar');
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const actionName = computed(() => {
+  if (props.like) {
+    return props.isActive ? "dislike" : "like";
+  }
+  return props.isActive ? "like" : "dislike";
 });
+const titleButton = computed(() => props.like ? t("Like") : t("Dislike"));
+
+//Methods
+function clickButton() {
+  if (props.canInteract) {
+    emit("like-action", actionName.value);
+  } else {
+    (snackBarRef?.value as InstanceType<typeof SnackBar>).open(t("Log in to access this service"));
+  }
+}
 </script>
 <style lang="scss">
 @use "sass:color";

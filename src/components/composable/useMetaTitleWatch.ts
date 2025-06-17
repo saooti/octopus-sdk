@@ -7,8 +7,8 @@ export const useMetaTitleWatch = ()=>{
   const { updateMetaTitle } = useMetaTitle();
 
   const route = useRoute();
-  const i18n = useI18n();
+  const {locale} = useI18n();
 
   watch(route, () => updateMetaTitle(), {immediate:true});
-  watch(()=>i18n.locale, () => updateMetaTitle());
+  watch(locale, () => updateMetaTitle());
 }

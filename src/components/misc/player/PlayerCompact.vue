@@ -24,14 +24,14 @@
     <PlayerSpeedButton v-if="!radioUrl" />
     <button
       id="player-up-btn"
-      :title="'' != transcriptText ? $t('View transcript') : $t('Enlarge')"
+      :title="'' != transcriptText ? t('View transcript') : t('Enlarge')"
       class="btn play-button-box btn-transparent text-light me-0"
       @click="changePlayerLargeVersion"
     >
       <ChevronUpIcon />
     </button>
     <button
-      :title="$t('Close')"
+      :title="t('Close')"
       class="btn play-button-box btn-transparent text-light"
       @click="stopPlayer"
     >
@@ -49,6 +49,7 @@ import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
 import PlayerSpeedButton from "./elements/PlayerSpeedButton.vue";
 import { defineAsyncComponent} from "vue";
+import { useI18n } from "vue-i18n";
 const PlayerProgressBar = defineAsyncComponent(
   () => import("./progressbar/PlayerProgressBar.vue"),
 );
@@ -73,15 +74,16 @@ const {
   displayPlayTime,
   displayTotalTime,
  } = usePlayerDisplayTime();
+const { t } = useI18n();
 
+
+//Methods
 function stopPlayer() {
   emit("stopPlayer");
 }
 function changePlayerLargeVersion() {
   emit("changePlayerLargeVersion");
 }
-
-
 </script>
 
 <style lang="scss">

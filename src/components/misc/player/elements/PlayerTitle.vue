@@ -1,134 +1,108 @@
 <template>
   <div v-if="playerError" class="text-warning mx-2">
-    {{ $t("Podcast play error") + " - " }}
+    {{ t("Podcast play error") + " - " }}
   </div>
   <component
-    :is="linkAdvertising ? 'a' : 'div'"
+    :is="vastStore.linkAdvertising ? 'a' : 'div'"
     class="flex-grow-1 text-truncate text-light"
     :class="titleClass"
-    :href="linkAdvertising"
+    :href="vastStore.linkAdvertising"
     rel="noreferrer noopener"
     target="_blank"
-    :title="$t('New window', {text: podcastTitle})"
+    :title="t('New window', {text: podcastTitle})"
   >
     {{ podcastTitle }}
   </component>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import {useFetchRadio} from "../../../composable/radio/usefetchRadioData";
-import { state } from "../../../../stores/ParamSdkStore";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useVastStore } from "../../../../stores/VastStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent } from "vue";
+import { computed, onUnmounted, Ref, ref, watch } from "vue";
 import { MediaRadio, NextAdvertising } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
-export default defineComponent({
-  name: "PlayerTitle",
+import { useI18n } from "vue-i18n";
 
-  props: {
-    playerError: { default: false, type: Boolean },
-    hlsReady: { default: false, type: Boolean },
-    titleClass: { default: "", type: String },
-  },
+//Props 
+const props = defineProps({
+  playerError: { default: false, type: Boolean },
+  hlsReady: { default: false, type: Boolean },
+  titleClass: { default: "", type: String },
+})
 
-  setup(){
-    const { fetchRadioMetadata, displayTitle } = useFetchRadio();
-    return { fetchRadioMetadata, displayTitle };
-  },
+//Data 
+const radioInterval: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
-  data() {
-    return {
-      radioInterval: undefined as ReturnType<typeof setTimeout> | undefined,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, [
-      "playerPodcast",
-      "playerRadio",
-      "playerLive",
-      "playerMedia",
-      "emissionName",
-    ]),
-    ...mapState(useVastStore, [
-      "isAdPlaying",
-      "titleAdvertising",
-      "linkAdvertising",
-    ]),
-    isEmissionName(): boolean {
-      return state.player.emissionName as boolean;
-    },
-    podcastTitle(): string {
-      if (this.isAdPlaying) {
-        return this.$t("Advertising") + this.titleAdvertising;
-      }
-      if (this.playerRadio) {
-        if (this.playerRadio.podcast) {
-          return this.playerRadio.podcast.title;
-        }
-        return this.displayTitle(this.playerRadio.metadata);
-      }
-      if (this.playerPodcast) {
-        return this.playerPodcast.title;
-      }
-      if (this.playerMedia) return this.playerMedia.title;
-      if (this.playerLive) {
-        if (!this.hlsReady)
-          return (
-            this.playerLive.title + " (" + this.$t("Start in a while") + ")"
-          );
-        return this.playerLive.title;
-      }
-      return "";
-    },
-  },
-  watch: {
-    playerRadio: {
-      deep: true,
-      immediate: true,
-      handler(newValue, oldValue) {
-        if (oldValue && newValue && newValue.canalId === oldValue.canalId) {
-          return;
-        }
-        clearInterval(this.radioInterval as unknown as number);
-        if (this.playerRadio) {
-          this.fetchCurrentlyPlaying();
-          this.radioInterval = setInterval(() => {
-            this.fetchCurrentlyPlaying();
-          }, 10000);
-        }
-      },
-    },
-  },
-  unmounted(){
-    clearInterval(this.radioInterval as unknown as number);
-    this.radioInterval= undefined;
-  },
-  methods: {
-    ...mapActions(usePlayerStore, [
-      "playerMetadata",
-      "playerRadioPodcast",
-      "playerRadioUpdateNextAdvertising",
-    ]),
-    async fetchCurrentlyPlaying(): Promise<void> {
-      this.fetchRadioMetadata(
-        this.playerRadio?.canalId ?? 0,
-        this.playerRadio?.metadata.title ?? "",
-        this.updateMetadata,
-        this.updateAdvertising,
+//Composables
+const { t } = useI18n();
+const { fetchRadioMetadata, displayTitle } = useFetchRadio();
+const playerStore = usePlayerStore();
+const vastStore = useVastStore();
+
+
+//Computed
+const podcastTitle = computed(() => {
+  if (vastStore.isAdPlaying) {
+    return t("Advertising") + vastStore.titleAdvertising;
+  }
+  if (playerStore.playerRadio) {
+    if (playerStore.playerRadio.podcast) {
+      return playerStore.playerRadio.podcast.title;
+    }
+    return displayTitle(playerStore.playerRadio.metadata);
+  }
+  if (playerStore.playerPodcast) {
+    return playerStore.playerPodcast.title;
+  }
+  if (playerStore.playerMedia) return playerStore.playerMedia.title;
+  if (playerStore.playerLive) {
+    if (!props.hlsReady)
+      return (
+        playerStore.playerLive.title + " (" + t("Start in a while") + ")"
       );
-    },
-    updateAdvertising(nextAdvertising: NextAdvertising): void {
-      this.playerRadioUpdateNextAdvertising(nextAdvertising);
-    },
-    updateMetadata(
-      metadata: MediaRadio,
-      podcast: Podcast | undefined,
-      history: Array<MediaRadio>,
-    ): void {
-      this.playerMetadata(metadata, history);
-      this.playerRadioPodcast(podcast);
-    },
-  },
+    return playerStore.playerLive.title;
+  }
+  return "";
 });
+
+//Watch
+watch(()=>playerStore.playerRadio, (newValue, oldValue) => {
+  if (oldValue && newValue && newValue.canalId === oldValue.canalId) {
+    return;
+  }
+  clearInterval(radioInterval.value as unknown as number);
+  if (playerStore.playerRadio) {
+    fetchCurrentlyPlaying();
+    radioInterval.value = setInterval(() => {
+      fetchCurrentlyPlaying();
+    }, 10000);
+  }
+}, {deep: true,immediate: true});
+
+onUnmounted(()=>{
+  clearInterval(radioInterval.value as unknown as number);
+  radioInterval.value= undefined;
+})
+
+
+//Methods
+async function fetchCurrentlyPlaying(): Promise<void> {
+  fetchRadioMetadata(
+    playerStore.playerRadio?.canalId ?? 0,
+    playerStore.playerRadio?.metadata.title ?? "",
+    updateMetadata,
+    updateAdvertising,
+  );
+}
+function updateAdvertising(nextAdvertising: NextAdvertising): void {
+  playerStore.playerRadioUpdateNextAdvertising(nextAdvertising);
+}
+function updateMetadata(
+  metadata: MediaRadio,
+  podcast: Podcast | undefined,
+  history: Array<MediaRadio>,
+): void {
+  playerStore.playerMetadata(metadata, history);
+  playerStore.playerRadioPodcast(podcast);
+}
 </script>

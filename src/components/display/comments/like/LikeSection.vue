@@ -2,7 +2,7 @@
   <div class="d-flex align-items-center mt-1">
     <CheckIdentityModal
       v-if="isCheckIdentityActions"
-      :title="$t('Welcome, thanks for your interaction')"
+      :title="t('Welcome, thanks for your interaction')"
       @validate="likeActions(isCheckIdentityActions)"
       @close="isCheckIdentityActions = undefined"
     />
@@ -22,160 +22,152 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, defineAsyncComponent } from "vue";
+<script setup lang="ts">
+import { defineAsyncComponent, Ref, ref, computed, onBeforeMount } from "vue";
 import classicApi from "../../../../api/classicApi";
 import { useCommentStore } from "../../../../stores/CommentStore";
 import { useAuthStore } from "../../../../stores/AuthStore";
-import { mapActions, mapState } from "pinia";
 import {
   CommentFeelings,
   CommentPodcast,
 } from "@/stores/class/general/comment";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";
 import { Podcast } from "@/stores/class/general/podcast";
+import { useI18n } from "vue-i18n";
 const CheckIdentityModal = defineAsyncComponent(
   () => import("../modal/CheckIdentityModal.vue"),
 );
 const LikeButton = defineAsyncComponent(() => import("./LikeButton.vue"));
-export default defineComponent({
-  name: "LikeSection",
 
-  components: {
-    CheckIdentityModal,
-    LikeButton,
-  },
+//Props 
+const props = defineProps({
+  comment: { default: () => undefined, type: Object as () => CommentPodcast },
+  editRight: { default: false, type: Boolean },
+  podcast: { default: undefined, type: Object as () => Podcast },
+})
 
-  props: {
-    comment: { default: () => undefined, type: Object as () => CommentPodcast },
-    editRight: { default: false, type: Boolean },
-    podcast: { default: undefined, type: Object as () => Podcast },
-  },
+//Emits
+const emit = defineEmits(["deleteComment", "update:comment"]);
 
-  emits: ["deleteComment", "update:comment"],
+//Data 
+const isCheckIdentityActions: Ref<string | undefined> = ref(undefined);
+const userFeeling: Ref<string | undefined> = ref(undefined);
+const config: Ref<CommentsConfig | undefined> = ref(undefined);
+const podcastFeeling: Ref<CommentFeelings | undefined> = ref(undefined);
 
-  data() {
-    return {
-      isCheckIdentityActions: undefined as string | undefined,
-      userFeeling: undefined as string | undefined,
-      config: undefined as CommentsConfig | undefined,
-      podcastFeeling: undefined as CommentFeelings | undefined,
-    };
-  },
-  computed: {
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    ...mapState(useCommentStore, ["commentUser"]),
-    configToApply() {
-      if (this.comment) {
-        return this.config?.commentLikes;
-      }
-      return this.config?.podcastLikes;
-    },
-    podcastId(): number {
-      return this.podcast?.podcastId ?? 0;
-    },
-    feelingSection() {
-      return [
-        {
-          name: "like",
-          counter: this.comment?.likes ?? this.podcastFeeling?.likesCount,
-          condition: this.configToApply?.likeEnabled ?? false,
-        },
-        {
-          name: "dislike",
-          counter: this.editRight
-            ? (this.comment?.dislikes ?? this.podcastFeeling?.dislikesCount)
-            : 0,
-          condition: this.configToApply?.dislikeEnabled ?? false,
-        },
-      ];
-    },
-    canLikeOrDislike(): boolean {
-      return (
-        !this.configToApply?.authRequired ||
-        (this.configToApply.authRequired && undefined !== this.authOrgaId)
-      );
-    },
-  },
-  created() {
-    this.initLikeConfig();
-  },
-  methods: {
-    ...mapActions(useCommentStore, ["getCommentsConfig"]),
-    async initLikeConfig() {
-      if (!this.podcast) {
-        return;
-      }
-      this.config = await this.getCommentsConfig(this.podcast);
-      if (
-        this.comment ||
-        (!this.config.podcastLikes.likeEnabled &&
-          !this.config.podcastLikes.dislikeEnabled)
-      ) {
-        return;
-      }
-      await this.fetchPodcastCounters();
-    },
-    async fetchPodcastCounters() {
-      const data = await classicApi.fetchData<{
-        [key: number]: CommentFeelings;
-      }>({
-        api: 2,
-        path: "podcast/status",
-        parameters: {
-          podcastId: [this.podcastId],
-          uuid: this.commentUser?.uuid,
-        },
-        isNotAuth: true,
-      });
-      this.podcastFeeling = data[this.podcastId];
-      if ("LIKED" === this.podcastFeeling.feeling) {
-        this.userFeeling = "like";
-      } else if ("DISLIKED" === this.podcastFeeling.feeling) {
-        this.userFeeling = "dislike";
-      }
-    },
-    transformInThousands(nb: number) {
-      if (nb >= 1000) {
-        return Math.round(nb / 100) / 10 + "k";
-      }
-      return nb.toString();
-    },
-    async initiateLikeActions(actionName: string) {
-      if (!this.commentUser?.name) {
-        this.isCheckIdentityActions = actionName;
-        return;
-      }
-      this.likeActions(actionName);
-    },
-    async likeActions(actionName: string) {
-      const prefix = this.comment ? "comment/" : "podcast/";
-      const data = await classicApi.putData<{
-        [key: number]: CommentFeelings;
-      }>({
-        api: 2,
-        path: prefix + actionName,
-        dataToSend: {
-          ids: [this.comment?.commentId ?? this.podcastId],
-          name: this.commentUser?.name,
-          uuid: this.commentUser?.uuid,
-        },
-        isNotAuth: true,
-      });
-      if (this.comment) {
-        this.$emit("update:comment", {
-          ...this.comment,
-          ...{
-            likes: data[this.comment.commentId].likesCount,
-            dislikes: data[this.comment.commentId].dislikesCount,
-          },
-        });
-      } else {
-        this.podcastFeeling = data[this.podcastId];
-      }
-      this.userFeeling = this.userFeeling ? undefined : actionName;
-      this.isCheckIdentityActions = undefined;
-    },
-  },
+
+//Composables
+const { t } = useI18n();
+const authStore = useAuthStore();
+const commentStore = useCommentStore();
+
+//Computed
+const configToApply = computed(() => {
+  if (props.comment) {
+    return config.value?.commentLikes;
+  }
+  return config.value?.podcastLikes;
 });
+const podcastId = computed(() =>  props.podcast?.podcastId ?? 0);
+const feelingSection = computed(() => {
+  return [
+    {
+      name: "like",
+      counter: props.comment?.likes ?? podcastFeeling.value?.likesCount,
+      condition: configToApply.value?.likeEnabled ?? false,
+    },
+    {
+      name: "dislike",
+      counter: props.editRight
+        ? (props.comment?.dislikes ?? podcastFeeling.value?.dislikesCount)
+        : 0,
+      condition: configToApply.value?.dislikeEnabled ?? false,
+    },
+  ];
+});
+const canLikeOrDislike = computed(() => {
+  return (
+    !configToApply.value?.authRequired ||
+    (configToApply.value.authRequired && undefined !== authStore.authOrgaId)
+  );
+});
+
+onBeforeMount(()=>initLikeConfig())
+
+
+//Methods
+async function initLikeConfig() {
+  if (!props.podcast) {
+    return;
+  }
+  config.value = await commentStore.getCommentsConfig(props.podcast);
+  if (
+    props.comment ||
+    (!config.value.podcastLikes.likeEnabled &&
+      !config.value.podcastLikes.dislikeEnabled)
+  ) {
+    return;
+  }
+  await fetchPodcastCounters();
+}
+async function fetchPodcastCounters() {
+  const data = await classicApi.fetchData<{
+    [key: number]: CommentFeelings;
+  }>({
+    api: 2,
+    path: "podcast/status",
+    parameters: {
+      podcastId: [podcastId.value],
+      uuid: commentStore.commentUser?.uuid,
+    },
+    isNotAuth: true,
+  });
+  podcastFeeling.value = data[podcastId.value];
+  if ("LIKED" === podcastFeeling.value.feeling) {
+    userFeeling.value = "like";
+  } else if ("DISLIKED" === podcastFeeling.value.feeling) {
+    userFeeling.value = "dislike";
+  }
+}
+function transformInThousands(nb: number) {
+  if (nb >= 1000) {
+    return Math.round(nb / 100) / 10 + "k";
+  }
+  return nb.toString();
+}
+async function initiateLikeActions(actionName: string) {
+  if (!commentStore.commentUser?.name) {
+    isCheckIdentityActions.value = actionName;
+    return;
+  }
+  likeActions(actionName);
+}
+async function likeActions(actionName: string) {
+  const prefix = props.comment ? "comment/" : "podcast/";
+  const data = await classicApi.putData<{
+    [key: number]: CommentFeelings;
+  }>({
+    api: 2,
+    path: prefix + actionName,
+    dataToSend: {
+      ids: [props.comment?.commentId ?? podcastId.value],
+      name: commentStore.commentUser?.name,
+      uuid: commentStore.commentUser?.uuid,
+    },
+    isNotAuth: true,
+  });
+  if (props.comment) {
+    emit("update:comment", {
+      ...props.comment,
+      ...{
+        likes: data[props.comment.commentId].likesCount,
+        dislikes: data[props.comment.commentId].dislikesCount,
+      },
+    });
+  } else {
+    podcastFeeling.value = data[podcastId.value];
+  }
+  userFeeling.value = userFeeling.value ? undefined : actionName;
+  isCheckIdentityActions.value = undefined;
+}
 </script>

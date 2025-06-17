@@ -4,71 +4,63 @@
       v-model:text-init="actual"
       :display-label="false"
       id-select="organisation-chooser-footer"
-      :label="$t('select productor')"
+      :label="t('select productor')"
       :transparent="true"
       :options="[
         { title: organisation.name, value: organisation.id },
-        { title: $t('No organisation filter'), value: 'NONE' },
+        { title: t('No organisation filter'), value: 'NONE' },
       ]"
       class="my-1"
     />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassicSelect from "../../form/ClassicSelect.vue";
 import { Organisation } from "@/stores/class/general/organisation";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
-import { mapActions } from "pinia";
-import { defineComponent } from "vue";
-export default defineComponent({
-  components:{
-    ClassicSelect
-  },
-  props: {
-    value: { default: undefined, type: String },
-    reset: { default: false, type: Boolean },
-  },
-  emits: ["selected"],
+import { Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-  data() {
-    return {
-      actual: "NONE" as string,
-      organisation: undefined as Organisation | undefined,
-      init: false as boolean,
-    };
-  },
 
-  watch: {
-    value: {
-      deep: true,
-      immediate: true,
-      async handler() {
-        if (!this.init || this.value) {
-          this.fetchOrganisation();
-        }
-      },
-    },
-    reset(): void {
-      this.actual = "NONE";
-    },
-    actual(){
-      this.$emit(
-        "selected",
-        "NONE" === this.actual ? undefined : this.organisation,
-      );
-    }
-  },
+//Props 
+const props = defineProps({
+  value: { default: undefined, type: String },
+  reset: { default: false, type: Boolean },
+})
 
-  methods: {
-    ...mapActions(useSaveFetchStore, ["getOrgaData"]),
-    async fetchOrganisation(): Promise<void> {
-      if (!this.value) {
-        return;
-      }
-      this.organisation = await this.getOrgaData(this.value);
-      this.actual = this.organisation.id;
-      this.init = true;
-    },
-  },
+//Emits
+const emit = defineEmits(["selected"]);
+
+//Data 
+const actual = ref("NONE");
+const organisation: Ref<Organisation | undefined> = ref(undefined);
+const init = ref(false);
+
+//Composables
+const { t } = useI18n();
+const SaveFetchStore = useSaveFetchStore();
+
+
+//Watch
+watch(()=>props.value, async () => {
+  if (!init.value || props.value) {
+    fetchOrganisation();
+  }
+}, {deep: true, immediate: true});
+watch(()=>props.reset, async () => {
+  actual.value = "NONE";
 });
+watch(actual, async () => {
+  emit("selected","NONE" === actual.value ? undefined : organisation.value);
+});
+ 
+//Methods
+async function fetchOrganisation(): Promise<void> {
+  if (!props.value) {
+    return;
+  }
+  organisation.value = await SaveFetchStore.getOrgaData(props.value);
+  actual.value = organisation.value.id;
+  init.value = true;
+}
 </script>

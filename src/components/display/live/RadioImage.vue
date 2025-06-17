@@ -10,13 +10,14 @@
       "
       width="270"
       height="270"
-      role="presentation"
+      aria-hidden="true"
+        alt=""
       
       class="img-box img-box-podcast"
-      :title="$t('Canal name image', { name: radio.name })"
+      :title="t('Canal name image', { name: radio.name })"
     />
     <button class="radio-play-button" @click="playRadio">
-      <PlayIcon v-if="!playingRadio" :title="$t('Play')" :size="40" />
+      <PlayIcon v-if="!playingRadio" :title="t('Play')" :size="40" />
       <PodcastIsPlaying v-else/>
       <div class="ms-2">
         {{ playText }}
@@ -25,62 +26,50 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PlayIcon from "vue-material-design-icons/Play.vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
-import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState, mapActions } from "pinia";
+import { useAuthStore } from "../../../stores/AuthStore";
 import {useImageProxy} from "../../composable/useImageProxy";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
+import { useI18n } from "vue-i18n";
 const PodcastIsPlaying = defineAsyncComponent(() => import("../podcasts/PodcastIsPlaying.vue"));
-export default defineComponent({
-  name: "RadioImage",
 
-  components: {
-    PlayIcon,
-    PodcastIsPlaying
-  },
+//Props 
+const props = defineProps({
+  radio: { default: undefined, type: Object as () => Canal },
+})
 
-  props: {
-    radio: { default: undefined, type: Object as () => Canal },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    return { useProxyImageUrl }
-  },
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const authStore = useAuthStore();
+const playerStore = usePlayerStore();
 
-  computed: {
-    ...mapState(usePlayerStore, ["playerRadio", "playerStatus"]),
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    playingRadio() {
-      return this.playerRadio && this.playerRadio.canalId === this.radio?.id;
-    },
-    playText(): string {
-      return this.playingRadio && "PLAYING" === this.playerStatus
-        ? this.$t("Pause")
-        : this.$t("Play");
-    },
-  },
-
-  methods: {
-    ...mapActions(usePlayerStore, ["playerPlay", "playerChangeStatus"]),
-    playRadio(): void {
-      if (!this.radio) {
-        return;
-      }
-      if (this.playingRadio) {
-        this.playerChangeStatus("PLAYING" === this.playerStatus);
-      } else {
-        this.playerPlay({
-          canalId: this.radio.id,
-          url: "https://" + this.radio.url + "/live.m3u8",
-          metadata: "",
-        });
-      }
-    },
-  },
+//Computed
+const playingRadio = computed(() => playerStore.playerRadio && playerStore.playerRadio.canalId === props.radio?.id);
+const playText = computed(() => {
+  return playingRadio.value && "PLAYING" === playerStore.playerStatus? t("Pause") : t("Play");
 });
+
+
+//Methods
+function playRadio(): void {
+  if (!props.radio) {
+    return;
+  }
+  if (playingRadio.value) {
+    playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
+  } else {
+    playerStore.playerPlay({
+      canalId: props.radio.id,
+      url: "https://" + props.radio.url + "/live.m3u8",
+      metadata: "",
+      secured: props.radio.organisationId === authStore.authOrganisation?.id && "SECURED"===authStore.authOrganisation?.privacy
+    });
+  }
+}
 </script>
 <style lang="scss">
 .octopus-app .radio-play-button{

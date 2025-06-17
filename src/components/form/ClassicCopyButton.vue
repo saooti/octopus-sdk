@@ -14,52 +14,48 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SnackBar from "../misc/SnackBar.vue";
 import displayHelper from "../../helper/displayHelper";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicCopyButton",
+import { computed, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
-  components: {
-    SnackBar,
-  },
 
-  props: {
-    text: { default: undefined, type: String },
-    textAfterCopy: { default: undefined, type: String },
-    dataToCopy: { default: undefined, type: String },
-    snackbarText: { default: undefined, type: String },
-    classBtn: { default: "btn btn-primary w-fit-content my-3", type: String },
-  },
-  data() {
-    return {
-      hasBeenCopied: false as boolean,
-      lazyLoadingSnackbar: false as boolean,
-    };
-  },
-  computed:{
-    textDisplayed(){
-      return this.hasBeenCopied ? this.textAfterCopy : this.text;
-    }
-  },
-  methods: {
-    onCopyCode(callback: () => void){
-      displayHelper.onCopyCode(this.dataToCopy??"", callback);
-    },
-    afterCopy(): void {
-      this.hasBeenCopied = true;
-      if (!this.lazyLoadingSnackbar) {
-        this.lazyLoadingSnackbar = true;
-        setTimeout(() => {
-          this.afterCopy();
-        }, 500);
-      } else {
-        (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-          this.snackbarText ?? this.$t("Data in clipboard"),
-        );
-      }
-    },
-  },
-});
+//Props 
+const props = defineProps({
+  text: { default: undefined, type: String },
+  textAfterCopy: { default: undefined, type: String },
+  dataToCopy: { default: undefined, type: String },
+  snackbarText: { default: undefined, type: String },
+  classBtn: { default: "btn btn-primary w-fit-content my-3", type: String },
+})
+
+//Data 
+const hasBeenCopied = ref(false);
+const lazyLoadingSnackbar = ref(false);
+const snackBarRef = useTemplateRef('snackbar');
+
+
+//Composables
+const { t } = useI18n();
+
+
+//Computed
+const textDisplayed = computed(() => hasBeenCopied.value ? props.textAfterCopy : props.text);
+
+//Methods
+function onCopyCode(callback: () => void){
+  displayHelper.onCopyCode(props.dataToCopy??"", callback);
+}
+function afterCopy(): void {
+  hasBeenCopied.value = true;
+  if (!lazyLoadingSnackbar.value) {
+    lazyLoadingSnackbar.value = true;
+    setTimeout(() => {
+      afterCopy();
+    }, 500);
+  } else {
+    (snackBarRef?.value as InstanceType<typeof SnackBar>).open(props.snackbarText ?? t("Data in clipboard"));
+  }
+}
 </script>

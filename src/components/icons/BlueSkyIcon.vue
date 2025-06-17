@@ -18,15 +18,12 @@
     </span>
   </template>
   
-  <script lang="ts">
-  import { defineComponent } from "vue";
-  export default defineComponent({
-    name: "BlueSkyIcon",
-    props: {
-      size: { default: 24, type: Number },
-      title: { default: undefined, type: String },
-      fillColor: { default: "currentColor", type: String },
-    },
-  });
-  </script>
+<script setup lang="ts">
+//Props 
+defineProps({
+  size: { default: 24, type: Number },
+  title: { default: undefined, type: String },
+  fillColor: { default: "currentColor", type: String },
+})
+</script>
   

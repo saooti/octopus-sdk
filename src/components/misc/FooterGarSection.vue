@@ -17,53 +17,45 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import downloadHelper from "../../helper/downloadHelper";
 import classicApi from "../../api/classicApi";
 import { Contract } from "../../stores/class/contract/contract";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent, onMounted, ref, Ref } from "vue";
 import { useApiStore } from "../../stores/ApiStore";
-import { mapState } from "pinia";
 const ContractPreviewModal = defineAsyncComponent(
   () => import("./modal/ContractPreviewModal.vue"),
 );
-export default defineComponent({
-  name: "FooterGarSection",
-  components: {
-    ContractPreviewModal,
-  },
-  props: {
-    authOrgaId: { default: undefined, type: String },
-  },
 
-  data() {
-    return {
-      contracts: [] as Array<Contract>,
-      contractToDisplay: undefined as Contract | undefined,
-    };
-  },
-  computed: {
-    ...mapState(useApiStore, ["keycloakUrl"]),
-  },
-  created() {
-    this.fetchContracts();
-  },
-  methods: {
-    async fetchContracts() {
-      if (!this.authOrgaId) {
-        return;
-      }
-      this.contracts = await classicApi.fetchData({
-        api: 3,
-        path: `contract/query/organisation/${this.authOrgaId}?signedStatus=SIGNED`,
-      });
-    },
-    downloadContract(contract: Contract) {
-      if (contract) {
-        const url = this.keycloakUrl + "contract/" + contract.id;
-        downloadHelper.onDownload(url, "download" + contract.name + ".pdf");
-      }
-    },
-  },
-});
+//Props 
+const props = defineProps({
+  authOrgaId: { default: undefined, type: String },
+})
+
+
+//Data 
+const contractToDisplay: Ref<Contract | undefined> = ref(undefined);
+const contracts: Ref<Array<Contract>> = ref([]);
+
+//Composables
+const apiStore = useApiStore();
+
+onMounted(()=>fetchContracts())
+
+//Methods
+async function fetchContracts() {
+  if (!props.authOrgaId) {
+    return;
+  }
+  contracts.value = await classicApi.fetchData({
+    api: 3,
+    path: `contract/query/organisation/${props.authOrgaId}?signedStatus=SIGNED`,
+  });
+}
+function downloadContract(contract: Contract) {
+  if (contract) {
+    const url = apiStore.keycloakUrl + "contract/" + contract.id;
+    downloadHelper.onDownload(url, "download" + contract.name + ".pdf");
+  }
+}
 </script>

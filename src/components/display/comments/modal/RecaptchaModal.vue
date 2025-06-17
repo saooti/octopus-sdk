@@ -12,7 +12,7 @@
         v-else
         :loading-text="
           isInTreatment && !errorText && !successText
-            ? $t('Loading content ...')
+            ? t('Loading content ...')
             : undefined
         "
         :error-text="errorText"
@@ -21,7 +21,7 @@
     </template>
     <template #footer>
       <button class="btn m-1" @click="closePopup">
-        {{ $t("Close") }}
+        {{ t("Close") }}
       </button>
       <vue-recaptcha
         v-if="!isVerify"
@@ -38,78 +38,73 @@
         :disabled="disableValidate || isInTreatment"
         @click="submit"
       >
-        {{ $t("Yes") }}
+        {{ t("Yes") }}
       </button>
     </template>
   </ClassicModal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { state } from "../../../../stores/ParamSdkStore";
 import ClassicLoading from "../../../form/ClassicLoading.vue";
 import ClassicModal from "../../../misc/modal/ClassicModal.vue";
 import api from "@/api/initialize";
 import { VueRecaptcha } from "vue-recaptcha";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "RecaptchaModal",
-  components: {
-    VueRecaptcha,
-    ClassicModal,
-    ClassicLoading,
-  },
-  props: {
-    idModal: { default: undefined, type: String },
-    titleModal: { default: undefined, type: String },
-    disableValidate: { default: false, type: Boolean },
-    errorText: { default: undefined, type: String },
-    successText: { default: undefined, type: String },
-  },
+import { computed, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
-  emits: ["close", "validate"],
+//Props 
+defineProps({
+  idModal: { default: undefined, type: String },
+  titleModal: { default: undefined, type: String },
+  disableValidate: { default: false, type: Boolean },
+  errorText: { default: undefined, type: String },
+  successText: { default: undefined, type: String },
+})
 
-  data() {
-    return {
-      sendError: false as boolean,
-      isVerify: false as boolean,
-      isInTreatment: false as boolean,
-    };
-  },
-  computed: {
-    errorRecaptchaText(): string {
-      if (this.isCaptchaTest) {
-        return this.$t("Recaptcha not active");
-      }
-      return this.sendError ? this.$t("Recaptcha error") : "";
-    },
-    isCaptchaTest(): boolean {
-      return state.generalParameters.isCaptchaTest as boolean;
-    },
-  },
-  methods: {
-    async handleSuccess(token: string) {
-      this.isVerify = await api.checkToken(token);
-      this.sendAction();
-    },
-    handleError() {
-      this.isVerify = false;
-      this.sendError = true;
-    },
-    async submit(): Promise<void> {
-      this.isInTreatment = true;
-      if (!this.isVerify && !this.isCaptchaTest) {
-        return (
-          this.$refs.invisibleRecaptcha as InstanceType<typeof VueRecaptcha>
-        ).execute();
-      }
-      this.sendAction();
-    },
-    closePopup(): void {
-      this.$emit("close");
-    },
-    sendAction(): void {
-      this.$emit("validate");
-    },
-  },
+//Emits
+const emit = defineEmits(["close", "validate"]);
+
+//Data 
+const sendError = ref(false);
+const isVerify = ref(false);
+const isInTreatment = ref(false);
+const captchRef = useTemplateRef('invisibleRecaptcha');
+
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const errorRecaptchaText = computed(() =>{
+  if (isCaptchaTest.value) {
+    return t("Recaptcha not active");
+  }
+  return sendError.value ? t("Recaptcha error") : "";
 });
+const isCaptchaTest = computed(() => state.generalParameters.isCaptchaTest as boolean);
+
+
+//Methods
+async function handleSuccess(token: string) {
+  isVerify.value = await api.checkToken(token);
+  sendAction();
+}
+function handleError() {
+  isVerify.value = false;
+  sendError.value = true;
+}
+async function submit(): Promise<void> {
+  isInTreatment.value = true;
+  if (!isVerify.value && !isCaptchaTest.value) {
+    (captchRef?.value as InstanceType<typeof VueRecaptcha>).execute();
+  }
+  sendAction();
+}
+function closePopup(): void {
+  emit("close");
+}
+function sendAction(): void {
+  emit("validate");
+}
 </script>

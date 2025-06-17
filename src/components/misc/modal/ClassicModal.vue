@@ -13,7 +13,7 @@
         <button
           v-if="canBeReduced"
           class="btn-transparent text-light"
-          :title="onlyHeader ? $t('Enlarge') : $t('Reduce')"
+          :title="onlyHeader ? t('Enlarge') : t('Reduce')"
           @click="onlyHeader = !onlyHeader"
         >
           <ChevronDownIcon :class="{ 'arrow-transform': !onlyHeader }" />
@@ -23,8 +23,8 @@
           autofocus
           type="button"
           class="btn-transparent text-light"
-          :title="$t('Close')"
-          @click="$emit('close')"
+          :title="t('Close')"
+          @click="closePopup"
         >
           <WindowCloseIcon />
         </button>
@@ -39,38 +39,45 @@
   </dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";
-import { defineComponent } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-  name: "ClassicModal",
-  components: {
-    WindowCloseIcon,
-    ChevronDownIcon,
-  },
-  props: {
-    idModal: { default: undefined, type: String },
-    titleModal: { default: undefined, type: String },
-    closable: { default: true, type: Boolean },
-    canBeReduced: { default: false, type: Boolean },
-  },
-  emits: ["close"],
-  data() {
-    return {
-      onlyHeader: false as boolean,
-    };
-  },
-  mounted(){
-    const dialog = (this.$refs.modal as HTMLDialogElement);
-    dialog.showModal();
-    dialog.addEventListener('cancel', (event) => {
-      event.preventDefault();
-      this.$emit("close");
-    });
-  }
-});
+//Props 
+defineProps({
+  idModal: { default: undefined, type: String },
+  titleModal: { default: undefined, type: String },
+  closable: { default: true, type: Boolean },
+  canBeReduced: { default: false, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["close"]);
+
+//Data 
+const onlyHeader = ref(false);
+const modalRef = useTemplateRef('modal');
+
+
+//Composables
+const { t } = useI18n();
+
+
+onMounted(()=>{
+  const dialog = modalRef?.value as HTMLDialogElement;
+  dialog.showModal();
+  dialog.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    emit("close");
+  });
+})
+
+//Methods
+function closePopup(): void {
+  emit("close");
+}
 </script>
 <style lang="scss">
 

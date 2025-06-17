@@ -13,7 +13,7 @@
         :name="idRadio"
         :value="option.value"
         :disabled="isDisabled"
-        @input="$emit('update:textInit', $event.target.value)"
+        @input="onChange($event.target.value)"
       />
       <label class="c-hand" :for="idRadio + option.value">{{
         option.title
@@ -22,21 +22,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicRadio",
+<script setup lang="ts">
 
-  props: {
-    idRadio: { default: "", type: String },
-    isDisabled: { default: false, type: Boolean },
-    options: {
-      default: () => [],
-      type: Array as () => Array<{ title: string; value: string | undefined }>,
-    },
-    textInit: { default: undefined, type: String },
-    isColumn: { default: true, type: Boolean },
+//Props 
+defineProps({
+  idRadio: { default: "", type: String },
+  isDisabled: { default: false, type: Boolean },
+  options: {
+    default: () => [],
+    type: Array as () => Array<{ title: string; value: string | undefined }>,
   },
-  emits: ["update:textInit"],
-});
+  textInit: { default: undefined, type: String },
+  isColumn: { default: true, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["update:textInit"]);
+
+//Methods
+function onChange(value:string){
+  emit('update:textInit', value)
+}
+
 </script>

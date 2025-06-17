@@ -1,7 +1,7 @@
 <template>
   <ClassicModal
     id-modal="share-modal"
-    :title-modal="$t('Share the player')"
+    :title-modal="t('Share the player')"
     @close="closePopup"
   >
     <template #body>
@@ -13,7 +13,7 @@
           <p class="word-break-word">{{ embedLink }}</p>
           <button
             class="btn-transparent"
-            :title="$t('Copy')"
+            :title="t('Copy')"
             @click="onCopyCode(embedLink, afterCopy)"
           >
             <ContentCopyIcon />
@@ -25,7 +25,7 @@
               <p class="word-break-word">{{ embedlyLink }}</p>
               <button
                 class="btn-transparent"
-                :title="$t('Copy')"
+                :title="t('Copy')"
                 @click="onCopyCode(embedlyLink, afterCopy)"
               >
                 <ContentCopyIcon />
@@ -38,7 +38,7 @@
           <p class="word-break-word">{{ directLink.audioUrl }}</p>
           <button
             class="btn-transparent"
-            :title="$t('Copy')"
+            :title="t('Copy')"
             @click="onCopyCode(directLink.audioUrl, snackbarRef)"
           >
             <ContentCopyIcon />
@@ -48,67 +48,58 @@
     </template>
     <template #footer>
       <button class="btn btn-primary m-1" @click="closePopup">
-        {{ $t("Close") }}
+        {{ t("Close") }}
       </button>
     </template>
   </ClassicModal>
   <SnackBar ref="snackbar" position="bottom-left" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ContentCopyIcon from "vue-material-design-icons/ContentCopy.vue";
 import SnackBar from "../SnackBar.vue";
 import displayHelper from "../../../helper/displayHelper";
 import ClassicModal from "../modal/ClassicModal.vue";
 import ClassicNav from "../ClassicNav.vue";
 import QrCode from "../../display/sharing/QrCode.vue";
-import { defineComponent } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
-export default defineComponent({
-  name: "ShareModalPlayer",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    SnackBar,
-    QrCode,
-    ClassicModal,
-    ClassicNav,
-    ContentCopyIcon,
-  },
-  props: {
-    embedLink: { default: undefined, type: String },
-    embedlyLink: { default: undefined, type: String },
-    directLink: { default: undefined, type: Object as () => Podcast },
-  },
-  emits: ["close"],
-  data() {
-    return {
-      activeTab: 0 as number,
-    };
-  },
-  computed: {
-    tabs(): Array<string> {
-      if (this.directLink) {
-        return [
-          this.$t("Embed link"),
-          this.$t("Embedly link"),
-          this.$t("Direct link"),
-        ];
-      }
-      return [this.$t("Embed link"), this.$t("Embedly link")];
-    },
-  },
-  methods: {
-    onCopyCode(link: string, callback: () => void){
-      displayHelper.onCopyCode(link, callback);
-    },
-    closePopup(): void {
-      this.$emit("close");
-    },
-    afterCopy(): void {
-      (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-        this.$t("Data in clipboard"),
-      );
-    },
-  },
+//Props 
+const props = defineProps({
+  embedLink: { default: undefined, type: String },
+  embedlyLink: { default: undefined, type: String },
+  directLink: { default: undefined, type: Object as () => Podcast },
+})
+
+//Emits
+const emit = defineEmits(["close"]);
+
+//Data 
+const activeTab = ref(0);
+const snackBarRef = useTemplateRef('snackbar');
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const tabs = computed(() => {
+  if (props.directLink) {
+    return [t("Embed link"),t("Embedly link"),t("Direct link"),];
+  }
+  return [t("Embed link"), t("Embedly link")];
 });
+
+
+//Methods
+function onCopyCode(link: string, callback: () => void){
+  displayHelper.onCopyCode(link, callback);
+}
+function closePopup(): void {
+  emit("close");
+}
+function afterCopy(): void {
+  (snackBarRef?.value as InstanceType<typeof SnackBar>).open(t("Data in clipboard"),);
+}
 </script>

@@ -7,48 +7,49 @@
           height="auto"
           class="logo-octopus"
           src="/img/logo_saooti_play_black.svg"
-          role="presentation"
+          aria-hidden="true"
+        alt=""
           title="Saooti"
           
         />
-        <h2>{{ $t("You do not have the right to access this page") }}</h2>
+        <h2>{{ t("You do not have the right to access this page") }}</h2>
       </div>
       <img
         width="600"
         height="auto"
         class="stop-octopus-img"
         src="/img/403.webp"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
         title="403"
       />
     </div>
 
-    <a v-if="authOrgaId" class="btn btn-primary" href="/logout">
+    <a v-if="authStore.authOrgaId" class="btn btn-primary" href="/logout">
       {{ authText }}
     </a>
     <a v-else class="btn btn-primary" :href="pathLogin">{{ authText }}</a>
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { useApiStore } from "../../stores/ApiStore";
 import { useAuthStore } from "../../stores/AuthStore";
-import { mapState } from "pinia";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "Error403Page",
-  computed: {
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    ...mapState(useApiStore, ["frontendUrl"]),
-    authText(): string {
-      return this.authOrgaId ? this.$t("Logout") : this.$t("Login");
-    },
-    pathLogin(){
-      return "/sso/login?redirect_url="+encodeURI(this.frontendUrl + this.$route.fullPath);
-    },
-  },
-});
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+//Composables
+const { t } = useI18n();
+const authStore= useAuthStore();
+const apiStore= useApiStore();
+const route = useRoute()
+
+//Computed
+const authText = computed(() => authStore.authOrgaId ? t("Logout") : t("Login"));
+const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
+
 </script>
 <style lang="scss">
 .octopus-app .not-auth-content {

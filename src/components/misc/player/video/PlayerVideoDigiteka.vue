@@ -4,7 +4,7 @@
       v-if="videoId"
       ref="iframeVideo"
       :src="srcVideo"
-      :title="$t('Video')"
+      :title="t('Video')"
       width="500"
       height="281"
       style="z-index: 1"
@@ -18,44 +18,39 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import SnackBar from "../../SnackBar.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PlayerVideo",
-  components: {
-    SnackBar,
-  },
-  props: {
-    videoId: { default: undefined, type: String },
-    responsive: { default: false, type: Boolean },
-  },
+import { computed, onMounted, useTemplateRef } from "vue";
 
-  computed: {
-    srcVideo(): string {
-      return (
-        "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
-        this.videoId +
-        "/sound/yes/autoplay/1"
-      );
-    },
-  },
-  mounted() {
-    if (undefined === this.videoId) {
-      (this.$refs.snackbar as InstanceType<typeof SnackBar>).open(
-        this.$t("Podcast play error"),
-      );
-    }
-  },
-  methods: {
-    goFullScreen() {
-      if ("" === this.srcVideo) {
-        return;
-      }
-      (this.$refs.iframeVideo as Element).requestFullscreen();
-    },
-  },
+//Props 
+const props = defineProps({
+  videoId: { default: undefined, type: String },
+  responsive: { default: false, type: Boolean },
+})
+
+//Data
+const snackBarRef = useTemplateRef('snackbar');
+
+//Composables
+const { t } = useI18n();
+
+
+//Computed
+const srcVideo = computed(() => {
+  return (
+    "//www.ultimedia.com/deliver/generic/iframe/mdtk/01009833/zone/1/showtitle/1/src/" +
+    props.videoId +
+    "/sound/yes/autoplay/1"
+  );
 });
+
+onMounted(()=>{
+  if (undefined === props.videoId) {
+    (snackBarRef?.value as InstanceType<typeof SnackBar>).open(t("Podcast play error"));
+  }
+})
+
 </script>
 <style lang="scss">
 @use "../../../../style/videoPlayer";

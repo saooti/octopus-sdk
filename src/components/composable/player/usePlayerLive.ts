@@ -1,6 +1,6 @@
 import stringHelper from "../../../helper/stringHelper";
 import { usePlayerLogicProgress } from "./usePlayerLogicProgress";
-import { Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useApiStore } from "../../../stores/ApiStore";
 import dayjs from "dayjs";
@@ -23,6 +23,12 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   const playerStore = usePlayerStore();
   const apiStore = useApiStore();
   const authStore = useAuthStore();
+
+  const needToAddToken = computed(() => { 
+    return authStore.authParam.accessToken && ("SECURED" === playerStore.playerLive?.organisation?.privacy || playerStore.playerRadio?.secured);
+  });
+
+  
 
 
   function onPlay(): void {
@@ -69,7 +75,7 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         audioElement.value.canPlayType("application/vnd.apple.mpegurl") &&
         !isAndroid
       ) {
-        if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
+        if(needToAddToken.value) {
           audioElement.value.src = playerStore.playerHlsUrl+"?access_token="+authStore.authParam.accessToken;
         }else{
           audioElement.value.src = playerStore.playerHlsUrl;
@@ -107,7 +113,7 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
     }
     hls.value = new Hls({
       xhrSetup: (xhr: XMLHttpRequest) => {
-        if ("SECURED" === playerStore.playerLive?.organisation?.privacy && authStore.authParam.accessToken) {
+        if (needToAddToken.value) {
           xhr.setRequestHeader("Authorization", "Bearer " +authStore.authParam.accessToken);
         }
       }
@@ -140,6 +146,9 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   async function endingLive(): Promise<void> {
     clearTimeout(hlsRetryTimeout.value);
     hlsRetryTimeout.value = undefined;
+    if(null===audioElement.value){
+      return;
+    }
     audioElement.value = null;
     const audio: HTMLElement | null = document.getElementById("audio-player");
     if (audio && hls.value) {

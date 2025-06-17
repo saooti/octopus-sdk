@@ -2,8 +2,8 @@
   <div class="d-flex flex-column p-3">
     <h2 class="mb-3">{{ title }}</h2>
     <ClassicLoading
-      :loading-text="loading ? $t('Loading emissions ...') : undefined"
-      :error-text="error ? $t(`Error`) : undefined"
+      :loading-text="loading ? t('Loading emissions ...') : undefined"
+      :error-text="error ? t(`Error`) : undefined"
     />
     <template v-if="!loading && !error">
       <div class="d-flex flex-nowrap align-items-stretch overflow-phone-auto">
@@ -57,79 +57,69 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import classicApi from "../../../api/classicApi";
 import {useErrorHandler} from "../../composable/useErrorHandler";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent, onMounted, Ref, ref } from "vue";
 import { AxiosError } from "axios";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import { useI18n } from "vue-i18n";
 const EmissionItemPresentation = defineAsyncComponent(
   () => import("./EmissionPresentationItem.vue"),
 );
-export default defineComponent({
-  name: "EmissionPresentationList",
-  components: {
-    ClassicLoading,
-    EmissionItemPresentation,
-  },
 
-  props: {
-    organisationId: { default: undefined, type: String },
-    title: { default: "", type: String },
-    href: { default: undefined, type: String },
-    buttonText: { default: undefined, type: String },
-    isDescription: { default: false, type: Boolean },
-    rubriquesId: { default: [], type: Array<number> },
-  },
+//Props 
+const props = defineProps({
+  organisationId: { default: undefined, type: String },
+  title: { default: "", type: String },
+  href: { default: undefined, type: String },
+  buttonText: { default: undefined, type: String },
+  isDescription: { default: false, type: Boolean },
+  rubriquesId: { default: [], type: Array<number> },
+})
 
-  setup(){
-    const { isPhone } = useResizePhone();
-    const {handle403} = useErrorHandler();
-    return { isPhone, handle403 }
-  },
+//Data 
+const loading = ref(true);
+const error = ref(false);
+const allEmissions: Ref<Array<Emission>> = ref([]);
+  
+//Composables
+const { t } = useI18n();
+const { isPhone } = useResizePhone();
+const {handle403} = useErrorHandler();
 
-  data() {
-    return {
-      loading: true as boolean,
-      error: false as boolean,
-      allEmissions: [] as Array<Emission>,
-    };
-  },
+onMounted(()=>fetchNext())
 
-  mounted() {
-    this.fetchNext();
-  },
-  methods: {
-    async fetchNext(): Promise<void> {
-      this.loading = true;
-      try {
-        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
-          api: 0,
-          path: "emission/search",
-          parameters: {
-            first: 0,
-            size: 5,
-            organisationId: this.organisationId,
-            sort: "LAST_PODCAST_DESC",
-            rubriqueId: this.rubriquesId
-          },
-          specialTreatement: true,
-        });
-        this.allEmissions = this.allEmissions.concat(
-          data.result.filter((em: Emission | null) => null !== em),
-        );
-        this.loading = false;
-      } catch (error) {
-        this.handle403(error as AxiosError);
-        this.error = true;
-      }
-      this.loading = false;
-    },
-  },
-});
+
+//Methods
+async function fetchNext(): Promise<void> {
+  loading.value = true;
+  try {
+    const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+      api: 0,
+      path: "emission/search",
+      parameters: {
+        first: 0,
+        size: 5,
+        organisationId: props.organisationId,
+        sort: "LAST_PODCAST_DESC",
+        rubriqueId: props.rubriquesId
+      },
+      specialTreatement: true,
+    });
+    allEmissions.value = allEmissions.value.concat(
+      data.result.filter((em: Emission | null) => null !== em),
+    );
+    loading.value = false;
+  } catch (errorWs) {
+    handle403(errorWs as AxiosError);
+    error.value = true;
+  }
+  loading.value = false;
+}
 </script>
 <style lang="scss">
 .octopus-app {

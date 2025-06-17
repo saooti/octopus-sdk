@@ -17,9 +17,10 @@
               v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
               width="250"
               height="250"
-              role="presentation"
+              aria-hidden="true"
+        alt=""
               
-              :title="$t('Playlist name image', { name: name })"
+              :title="t('Playlist name image', { name: name })"
               class="img-box float-start me-3 mb-3"
             />
             <div class="d-flex align-items-center justify-content-between">
@@ -37,7 +38,7 @@
           :organisation-id="authOrgaId"
         />
         <ShareSocialsButtons
-          v-if="pageParameters.isShareButtons"
+          v-if="state.podcastPage.ShareButtons"
           :organisation-id="playlist.organisation.id"
         />
         <section class="module-box">
@@ -46,16 +47,15 @@
       </div>
     </template>
     <ClassicLoading
-      :loading-text="!loaded ? $t('Loading content ...') : undefined"
-      :error-text="error ? $t(`Playlist doesn't exist`) : undefined"
+      :loading-text="!loaded ? t('Loading content ...') : undefined"
+      :error-text="error ? t(`Playlist doesn't exist`) : undefined"
     />
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useAuthStore } from "../../stores/AuthStore";
-import { mapActions, mapState } from "pinia";
 import {useOrgaComputed} from "../composable/useOrgaComputed";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import ClassicLoading from "../form/ClassicLoading.vue";
@@ -67,8 +67,10 @@ import displayHelper from "../../helper/displayHelper";
 import {useImageProxy} from "../composable/useImageProxy";
 import {useErrorHandler} from "../composable/useErrorHandler";
 import { Playlist } from "@/stores/class/general/playlist";
-import { defineComponent, defineAsyncComponent } from "vue";
+import {defineAsyncComponent, ref, Ref, computed, watch, onBeforeUnmount } from "vue";
 import { AxiosError } from "axios";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -82,112 +84,92 @@ const PodcastmakerHeader = defineAsyncComponent(
   () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
-export default defineComponent({
-  components: {
-    ShareSocialsButtons,
-    EditBox,
-    PodcastList,
-    SharePlayer,
-    ClassicLoading,
-    PodcastmakerHeader,
-    ShareAnonymous
-  },
 
-  props: {
-    playlistId: { default: undefined, type: Number },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
-    const { updatePathParams } = useSeoTitleUrl();
-    const {handle403} = useErrorHandler();
-    return { useProxyImageUrl, isPodcastmaker, isEditRights, authOrgaId, updatePathParams, handle403 }
-  },
-  data() {
-    return {
-      loaded: false as boolean,
-      playlist: undefined as Playlist | undefined,
-      error: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["isRolePlaylists"]),
-    pageParameters() {
-      return {
-        isShareButtons: state.podcastPage.ShareButtons as boolean,
-      };
-    },
-    pageTitle(): string {
-      return this.playlistRadio
-        ? this.$t("Mix of episodes")
-        : this.$t("Playlist");
-    },
-    playlistRadio(): boolean {
-      return (
-        "AMBIANCE" === this.playlist?.ambianceType ||
-        "AMBIANCE_PROGRAMMED" === this.playlist?.ambianceType
-      );
-    },
-    name(): string {
-      return this.playlist?.title ?? "";
-    },
-    description(): string {
-      return this.playlist?.description ?? "";
-    },
-    editRight(): boolean {
-      return this.isEditRights(
-        this.playlist?.organisation?.id,
-        this.isRolePlaylists,
-      );
-    },
-  },
-  watch: {
-    playlistId: {
-      immediate: true,
-      handler() {
-        this.getPlaylistDetails();
-      },
-    },
-  },
-  beforeUnmount() {
-    this.contentToDisplayUpdate(null);
-  },
 
-  methods: {
-    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-    initError(): void {
-      this.error = true;
-      this.loaded = true;
-    },
-    async getPlaylistDetails(): Promise<void> {
-      try {
-        this.loaded = false;
-        this.error = false;
-        this.playlist = await classicApi.fetchData<Playlist>({
-          api: 0,
-          path: "playlist/" + this.playlistId,
-        });
-        if (
-          (!this.editRight && this.playlistRadio) ||
-          ("PUBLIC" !== this.playlist.organisation?.privacy &&
-            this.filterOrgaId !== this.playlist.organisation?.id &&
-            this.$route.query.productor !== this.playlist.organisation?.id)
-        ) {
-          this.initError();
-          return;
-        }
-        this.contentToDisplayUpdate(this.playlist);
-        this.updatePathParams(this.playlist.title);
-      } catch (error) {
-        this.handle403(error as AxiosError);
-        this.initError();
-      }
-      this.loaded = true;
-    },
-  },
+//Props
+const props = defineProps({
+  playlistId: { default: undefined, type: Number },
 });
+
+
+//Data 
+const loaded = ref(false);
+const error = ref(false);
+const playlist : Ref<Playlist | undefined> = ref(undefined);
+
+
+//Composables
+const route = useRoute();
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
+const { updatePathParams } = useSeoTitleUrl();
+const {handle403} = useErrorHandler();
+const authStore = useAuthStore();
+const filterStore = useFilterStore();
+const generalStore = useGeneralStore();
+
+
+
+//Computed
+const playlistRadio = computed(() =>{
+  return (
+    "AMBIANCE" === playlist.value?.ambianceType ||
+    "AMBIANCE_PROGRAMMED" === playlist.value?.ambianceType
+  );
+});
+const pageTitle = computed(() =>playlistRadio.value? t("Mix of episodes"): t("Playlist"));
+const name = computed(() =>playlist.value?.title ?? "");
+const description = computed(() =>playlist.value?.description ?? "");
+const editRight = computed(() =>{
+  return isEditRights(
+    playlist.value?.organisation?.id,
+    authStore.isRolePlaylists,
+  );
+});
+
+
+//Watch
+watch(()=>props.playlistId, () => {getPlaylistDetails()}, {immediate: true});
+
+
+onBeforeUnmount(() => {
+  generalStore.contentToDisplayUpdate(null);
+});
+
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
+function initError(): void {
+  error.value = true;
+  loaded.value = true;
+}
+async function getPlaylistDetails(): Promise<void> {
+  try {
+    loaded.value = false;
+    error.value = false;
+    playlist.value = await classicApi.fetchData<Playlist>({
+      api: 0,
+      path: "playlist/" + props.playlistId,
+    });
+    if (
+      (!editRight.value && playlistRadio.value) ||
+      ("PUBLIC" !== playlist.value.organisation?.privacy &&
+      filterStore.filterOrgaId !== playlist.value.organisation?.id &&
+      route.query.productor !== playlist.value.organisation?.id)
+    ) {
+      initError();
+      return;
+    }
+    generalStore.contentToDisplayUpdate(playlist.value);
+    updatePathParams(playlist.value.title);
+  } catch (error) {
+    handle403(error as AxiosError);
+    initError();
+  }
+  loaded.value = true;
+}
+
 </script>

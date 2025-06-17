@@ -2,7 +2,7 @@
   <div class="wysiwyg-editor">
     <div v-if="editor" class="editor-menubar">
       <button
-        :title="$t('Bold')"
+        :title="t('Bold')"
         data-selenium="Bold"
         :class="{ 'is-active': editor.isActive('bold') }"
         @click="editor.chain().focus().toggleBold().run()"
@@ -10,7 +10,7 @@
         <FormatBoldIcon />
       </button>
       <button
-        :title="$t('Italic')"
+        :title="t('Italic')"
         data-selenium="Italic"
         :class="{ 'is-active': editor.isActive('italic') }"
         @click="editor.chain().focus().toggleItalic().run()"
@@ -18,7 +18,7 @@
         <FormatItalicIcon />
       </button>
       <button
-        :title="$t('Underline')"
+        :title="t('Underline')"
         data-selenium="Underline"
         :class="{ 'is-active': editor.isActive('underline') }"
         @click="editor.chain().focus().toggleUnderline().run()"
@@ -26,7 +26,7 @@
         <FormatUnderlineIcon />
       </button>
       <button
-        :title="$t('Link')"
+        :title="t('Link')"
         data-selenium="link"
         :class="{ 'is-active': editor.isActive('link') }"
         @click="setLink"
@@ -34,7 +34,7 @@
         <LinkVariantIcon />
       </button>
       <button
-        :title="$t('Delete link')"
+        :title="t('Delete link')"
         data-selenium="unlink"
         :disabled="!editor.isActive('link')"
         @click="editor.chain().focus().unsetLink().run()"
@@ -42,7 +42,7 @@
         <LinkVariantOffIcon />
       </button>
       <button
-        :title="$t('Heading3')"
+        :title="t('Heading3')"
         data-selenium="Heading3"
         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
@@ -50,7 +50,7 @@
         H3
       </button>
       <button
-        :title="$t('Heading4')"
+        :title="t('Heading4')"
         data-selenium="Heading4"
         :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
@@ -58,7 +58,7 @@
         H4
       </button>
       <button
-        :title="$t('Line break')"
+        :title="t('Line break')"
         data-selenium="lineBreak"
         @click="editor.chain().focus().setHardBreak().run()"
       >
@@ -66,7 +66,7 @@
       </button>
 
       <button
-        :title="$t('UnorderedList')"
+        :title="t('UnorderedList')"
         data-selenium="UnorderedList"
         :class="{ 'is-active': editor.isActive('bulletList') }"
         @click="editor.chain().focus().toggleBulletList().run()"
@@ -74,7 +74,7 @@
         <FormatListBulletedIcon />
       </button>
       <button
-        :title="$t('List')"
+        :title="t('List')"
         data-selenium="List"
         :class="{ 'is-active': editor.isActive('orderedList') }"
         @click="editor.chain().focus().toggleOrderedList().run()"
@@ -82,7 +82,7 @@
         <FormatListNumberedIcon />
       </button>
       <button
-        :title="$t('Display HTML')"
+        :title="t('Display HTML')"
         data-selenium="Display-HTML"
         class="html-button"
         :class="{ 'is-active': isHtmlDisplay }"
@@ -111,7 +111,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import FormatBoldIcon from "vue-material-design-icons/FormatBold.vue";
 import FormatItalicIcon from "vue-material-design-icons/FormatItalic.vue";
 import FormatUnderlineIcon from "vue-material-design-icons/FormatUnderline.vue";
@@ -126,121 +126,114 @@ import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import Link from "@tiptap/extension-link";
 import HardBreak from "@tiptap/extension-hard-break";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicWysiwyg",
-  components: {
-    EditorContent,
-    FormatBoldIcon,
-    FormatItalicIcon,
-    FormatUnderlineIcon,
-    LinkVariantIcon,
-    LinkVariantOffIcon,
-    KeyboardReturnIcon,
-    FormatListBulletedIcon,
-    FormatListNumberedIcon,
-  },
+import { onMounted, onUnmounted, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-  props: {
-    content: { default: undefined, type: String },
-    errorDescription: { default: false, type: Boolean },
-    isDisabled: { default: false, type: Boolean },
-  },
-  emits: ["update:content"],
-  data() {
-    return {
-      isHtmlDisplay: false as boolean,
-      html: this.content as string,
-      editor: null as Editor | null,
-    };
-  },
-  watch: {
-    content(): void {
-      if (this.content === this.html) {
-        return;
-      }
-      this.initContent();
-    },
-    isDisabled(): void {
-      if (this.editor) {
-        this.editor.setOptions({
-          editable: true !== this.isDisabled,
-        });
-      }
-    },
-  },
+//Props 
+const props = defineProps({
+  content: { default: undefined, type: String },
+  errorDescription: { default: false, type: Boolean },
+  isDisabled: { default: false, type: Boolean },
+})
 
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        StarterKit,
-        Underline,
-        TextStyle,
-        Link.configure({
-          openOnClick: false,
-        }),
-        HardBreak,
-      ],
-      content: "",
-      editable: true !== this.isDisabled,
-      onUpdate: this.updateHtml,
-    });
-    this.initContent();
-  },
-  beforeUnmount() {
-    if (this.editor) {
-      this.editor.destroy();
-    }
-  },
+//Emits
+const emit = defineEmits(["update:content"]);
 
-  methods: {
-    initContent(): void {
-      if (undefined !== this.content && this.editor && !this.editor.isFocused) {
-        this.editor.commands.setContent(this.content);
-        this.html = this.editor.getHTML();
-      }
-    },
-    updateHtml(): void {
-      if (!this.editor) {return}
-      const plainText= this.editor.getText();
-      const regexHtml = /<(a|b|h3|h4|em|i|li|ol|p|strong|ul|u|br|span).*?/i
-      if(regexHtml.test(plainText)){
-        this.editor.commands.setContent(plainText);
-      }
-      this.html = this.editor.getHTML().trim();
-      const htmlHeart = this.html.substring(3, this.html.length - 4);
-      if (
-        this.html.startsWith("<p>") &&
-        this.html.endsWith("</p>") &&
-        !regexHtml.test(htmlHeart)
-      ) {
-        this.html = htmlHeart;
-      }
-      this.html = this.html.replaceAll("&nbsp;", " ");
-      this.$emit("update:content", this.html);
-    },
-    setLink() {
-      if (!this.editor) {
-        return;
-      }
-      const previousUrl = this.editor.getAttributes("link").href;
-      const url = window.prompt("URL", previousUrl);
-      if (!url) {
-        return;
-      }
-      if ("" === url) {
-        this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
-        return;
-      }
-      this.editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url })
-        .run();
-    },
-  },
+//Data 
+const isHtmlDisplay = ref(false);
+const html = ref(props.content);
+const editor: Ref<Editor | null> = ref(null);
+
+//Composables
+const { t } = useI18n();
+
+
+//Watch
+watch(()=>props.content,() => {
+  if (props.content === html.value) {
+    return;
+  }
+  initContent();
 });
+watch(()=>props.isDisabled,() => {
+  if (editor.value) {
+    editor.value.setOptions({
+      editable: true !== props.isDisabled,
+    });
+  }
+});
+
+
+onMounted(()=>{
+  editor.value = new Editor({
+    extensions: [
+      StarterKit,
+      Underline,
+      TextStyle,
+      Link.configure({
+        openOnClick: false,
+      }),
+      HardBreak,
+    ],
+    content: "",
+    editable: true !== props.isDisabled,
+    onUpdate: updateHtml,
+  });
+  initContent();
+})
+
+onUnmounted(()=>{
+  if (editor.value) {
+    editor.value.destroy();
+  }
+})
+
+//Methods
+function initContent(): void {
+  if (undefined !== props.content && editor.value && !editor.value.isFocused) {
+    editor.value.commands.setContent(props.content);
+    html.value = editor.value.getHTML();
+  }
+}
+function updateHtml(): void {
+  if (!editor.value) {return}
+  const plainText= editor.value.getText();
+  const regexHtml = /<(a|b|h3|h4|em|i|li|ol|p|strong|ul|u|br|span).*?/i
+  if(regexHtml.test(plainText)){
+    editor.value.commands.setContent(plainText);
+  }
+  html.value = editor.value.getHTML().trim();
+  const htmlHeart = html.value.substring(3, html.value.length - 4);
+  if (
+    html.value.startsWith("<p>") &&
+    html.value.endsWith("</p>") &&
+    !regexHtml.test(htmlHeart)
+  ) {
+    html.value = htmlHeart;
+  }
+  html.value = html.value.replaceAll("&nbsp;", " ");
+  emit("update:content", html.value);
+}
+function setLink() {
+  if (!editor.value) {
+    return;
+  }
+  const previousUrl = editor.value.getAttributes("link").href;
+  const url = window.prompt("URL", previousUrl);
+  if (!url) {
+    return;
+  }
+  if ("" === url) {
+    editor.value.chain().focus().extendMarkRange("link").unsetLink().run();
+    return;
+  }
+  editor.value
+    .chain()
+    .focus()
+    .extendMarkRange("link")
+    .setLink({ href: url })
+    .run();
+}
 </script>
 <style lang="scss">
 

@@ -1,10 +1,10 @@
 <template>
   <section
-    v-if="(filterOrgaId || organisationId) && radio.length"
+    v-if="(filterStore.filterOrgaId || organisationId) && radio.length"
     class="d-flex flex-column align-items-start mt-3"
   >
     <h2 class="mb-0 mb-3">
-      {{ $t("Radio") }}
+      {{ t("Radio") }}
     </h2>
     <template v-if="radio.length">
       <RadioItem
@@ -16,63 +16,49 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import RadioItem from "./RadioItem.vue";
 import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
 import { Canal } from "@/stores/class/radio/canal";
-import { defineComponent } from "vue";
+import { computed, Ref, ref, watch } from "vue";
 import { AxiosError } from "axios";
-export default defineComponent({
-  name: "Ecbd98d979bd4312Ad5eFc7c1c4a191c",
-  components: {
-    RadioItem,
-  },
+import { useI18n } from "vue-i18n";
 
-  props: {
-    organisationId: { default: undefined, type: String },
-  },
-  setup(){
-    const {handle403} = useErrorHandler();
-    return { handle403 }
-  },
-  data() {
-    return {
-      radio: [] as Array<Canal>,
-    };
-  },
 
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    filterOrgaUsed(): string | undefined {
-      return this.filterOrgaId ? this.filterOrgaId : this.organisationId;
-    },
-  },
-  watch: {
-    filterOrgaUsed: {
-      async handler(): Promise<void> {
-        this.fetchContent();
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    async fetchContent(): Promise<void> {
-      this.radio.length = 0;
-      if (!this.filterOrgaUsed) {
-        return;
-      }
-      try {
-        this.radio = await classicApi.fetchData<Array<Canal>>({
-          api: 14,
-          path: "canal/orga/" + this.filterOrgaUsed + "/",
-        });
-      } catch (error) {
-        this.handle403(error as AxiosError);
-      }
-    },
-  },
-});
+//Props 
+const props = defineProps({
+  organisationId: { default: undefined, type: String },
+})
+
+//Data 
+const radio: Ref<Array<Canal>> = ref([]);
+
+//Composables
+const { t } = useI18n();
+const {handle403} = useErrorHandler();
+const filterStore = useFilterStore();
+
+//Computed
+const filterOrgaUsed = computed(() => filterStore.filterOrgaId ? filterStore.filterOrgaId : props.organisationId);
+
+//Watch
+watch(filterOrgaUsed, () =>fetchContent(), {immediate: true});
+
+//Methods
+async function fetchContent(): Promise<void> {
+  radio.value.length = 0;
+  if (!filterOrgaUsed.value) {
+    return;
+  }
+  try {
+    radio.value = await classicApi.fetchData<Array<Canal>>({
+      api: 14,
+      path: "canal/orga/" + filterOrgaUsed.value + "/",
+    });
+  } catch (error) {
+    handle403(error as AxiosError);
+  }
+}
 </script>

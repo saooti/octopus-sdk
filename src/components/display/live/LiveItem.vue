@@ -6,89 +6,81 @@
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import classicApi from "../../../api/classicApi";
 import PodcastItem from "../podcasts/PodcastItem.vue";
 import { Podcast } from "@/stores/class/general/podcast";
-import { defineComponent } from "vue";
+import {onBeforeMount, onUnmounted, ref, Ref } from "vue";
 import {
   Conference,
   ConferencePublicInfo,
 } from "@/stores/class/conference/conference";
-export default defineComponent({
-  name: "LiveItem",
 
-  components: {
-    PodcastItem,
-  },
-  props: {
-    fetchConference: { default: undefined, type: Object as () => Conference },
-  },
-  emits: ["deleteItem", "updateItem"],
+//Props 
+const props = defineProps({
+  fetchConference: { default: undefined, type: Object as () => Conference },
+})
+ 
+//Emits
+const emit = defineEmits(["deleteItem", "updateItem"]);
 
-  data() {
-    return {
-      live: undefined as Podcast | undefined,
-      watchInterval: undefined as ReturnType<typeof setInterval> | undefined,
-    };
-  },
+//Data 
+const live: Ref<Podcast | undefined> = ref(undefined);
+const watchInterval: Ref<ReturnType<typeof setInterval> | undefined> = ref(undefined);
 
-  created() {
-    this.initLiveItem();
-  },
-  unmounted() {
-    this.clearWatchStatus();
-  },
-  methods: {
-    clearWatchStatus() {
-      clearInterval(this.watchInterval as unknown as number);
-      this.watchInterval = undefined;
-    },
-    async initLiveItem(){
-      await this.fetchPodcastData();
-      this.watchInterval = setInterval(() => {
-        this.fetchStatus();
-      }, 5000);
-    },
-    async fetchPodcastData(): Promise<void> {
-      if (!this.fetchConference?.podcastId) return;
-      try {
-        this.live = await classicApi.fetchData<Podcast>({
-          api: 0,
-          path: "podcast/" + this.fetchConference.podcastId,
-        });
-      } catch {
-        this.$emit("deleteItem");
-        if (this.fetchConference.conferenceId) {
-          await classicApi.deleteData({
-            api: 9,
-            path: "conference/" + this.fetchConference.conferenceId,
-          });
-        }
-      }
-    },
-    async fetchStatus(): Promise<void> {
-      if (
-        !this.fetchConference ||
-        ("PLANNED" !== this.fetchConference.status &&
-          "PENDING" !== this.fetchConference.status &&
-          "RECORDING" !== this.fetchConference.status)
-      ) {
-        this.clearWatchStatus();
-        return;
-      }
-      const confInfo = await classicApi.fetchData<ConferencePublicInfo>({
+
+onBeforeMount(()=>initLiveItem());
+onUnmounted(()=>clearWatchStatus())
+
+
+//Methods
+function clearWatchStatus() {
+  clearInterval(watchInterval.value as unknown as number);
+  watchInterval.value = undefined;
+}
+async function initLiveItem(){
+  await fetchPodcastData();
+  watchInterval.value = setInterval(() => {
+    fetchStatus();
+  }, 5000);
+}
+async function fetchPodcastData(): Promise<void> {
+  if (!props.fetchConference?.podcastId) return;
+  try {
+    live.value = await classicApi.fetchData<Podcast>({
+      api: 0,
+      path: "podcast/" + props.fetchConference.podcastId,
+    });
+  } catch {
+    emit("deleteItem");
+    if (props.fetchConference.conferenceId) {
+      await classicApi.deleteData({
         api: 9,
-        path: "conference/info/" + this.fetchConference.conferenceId,
+        path: "conference/" + props.fetchConference.conferenceId,
       });
-      const newStatus = confInfo.status;
-      if (newStatus !== this.fetchConference.status) {
-        this.$emit("updateItem", {
-          ...this.fetchConference,
-          ...{ status: newStatus },
-        });
-      }
-    },
-  },
-});
+    }
+  }
+}
+async function fetchStatus(): Promise<void> {
+  if (
+    !props.fetchConference ||
+    ("PLANNED" !== props.fetchConference.status &&
+      "PENDING" !== props.fetchConference.status &&
+      "RECORDING" !== props.fetchConference.status)
+  ) {
+    clearWatchStatus();
+    return;
+  }
+  const confInfo = await classicApi.fetchData<ConferencePublicInfo>({
+    api: 9,
+    path: "conference/info/" + props.fetchConference.conferenceId,
+  });
+  const newStatus = confInfo.status;
+  if (newStatus !== props.fetchConference.status) {
+    emit("updateItem", {
+      ...props.fetchConference,
+      ...{ status: newStatus },
+    });
+  }
+}
 </script>

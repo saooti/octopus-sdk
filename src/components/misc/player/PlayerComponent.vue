@@ -57,8 +57,6 @@ import {usePlayerLogic} from "../../composable/player/usePlayerLogic";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { defineAsyncComponent, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
-
-//Components
 const PlayerVideo = defineAsyncComponent(
   () => import("./video/PlayerVideo.vue"),
 );
@@ -68,11 +66,11 @@ const PlayerCompact = defineAsyncComponent(
 const PlayerLarge = defineAsyncComponent(
   () => import("../player/PlayerLarge.vue"),
 );
-// Define stores
-const playerStore = usePlayerStore();
-const route = useRoute();
 
-// Variables
+//Emits
+const emit = defineEmits(['hide']);
+
+//Data
 const displayWithTimeout= ref(false);
 const forceHide= ref(false);
 
@@ -93,9 +91,10 @@ const {
   onFinished, 
   onPlay
 } = usePlayerLogic(forceHide);
+const playerStore = usePlayerStore();
+const route = useRoute();
 
-// Emits
-const emit = defineEmits(['hide']);
+
 
 // Computed
 const display = computed(() => { return "STOPPED" !== playerStore.playerStatus;});
@@ -115,7 +114,7 @@ watch(display, async () => {
   }
 });
 
-// Functions
+//Methods
 function onHidden(): void {
   if (forceHide.value) {
     playerStore.playerPlay();

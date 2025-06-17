@@ -7,28 +7,28 @@
       <template v-if="!isLiveToBeRecorded">
         <button 
           class="d-flex"
-          :title="playingPodcast? $t('Pause') : $t('Play')"
+          :title="playingPodcast? t('Pause') : t('Play')"
           @mouseenter="hoverType = 'audio'"
           @mouseleave="hoverType = ''" 
           @click="play(false)"
         >
           <PlayIcon
-            v-if="!playingPodcast || (playingPodcast && playerVideo)"
+            v-if="!playingPodcast || (playingPodcast && playerStore.playerVideo)"
             :size="'audio' === hoverType ? 50 : 40"
           />
-          <PodcastIsPlaying v-if="playingPodcast && !playerVideo"/>
+          <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo"/>
           <time v-if="!isVideoPodcast" class="ms-1" :datetime="durationIso">{{ durationString }}</time>
         </button>
         <button 
           v-if="isVideoPodcast"
-          :title="$t('Video')" 
-          :disabled="playerVideo"
+          :title="t('Video')" 
+          :disabled="playerStore.playerVideo"
           @click="play(true)"
           @mouseenter="hoverType = 'video'"
           @mouseleave="hoverType = ''"
         >
-          <PlayVideoIcon v-if="!playerVideo" :size="'video' === hoverType ? 50 : 40" />
-          <PodcastIsPlaying v-if="playingPodcast && playerVideo"/>
+          <PlayVideoIcon v-if="!playerStore.playerVideo" :size="'video' === hoverType ? 50 : 40" />
+          <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo"/>
           <time class="ms-2" :datetime="durationIso">{{ durationString }}</time>
         </button>
         <div v-if="!classicPodcastPlay" class="special-icon-play-button">
@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PlayVideoIcon from "../../icons/PlayVideoIcon.vue";
 import PlayIcon from "vue-material-design-icons/Play.vue";
 import ClockOutlineIcon from "vue-material-design-icons/ClockOutline.vue";
@@ -55,179 +55,168 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
-import { mapState, mapActions } from "pinia";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
-export default defineComponent({
-  name: "PodcastPlayButton",
-  components: {
-    AlertIcon,
-    ClockOutlineIcon,
-    CheckIcon,
-    TimerSandEmptyIcon,
-    EyeOffOutlineIcon,
-    CancelIcon,
-    PlayIcon,
-    PlayVideoIcon,
-    PodcastIsPlaying
-  },
-  props: {
-    podcast: { default: () => ({}), type: Object as () => Podcast },
-    hidePlay: { default: false, type: Boolean },
-    fetchConference: { default: undefined, type: Object as () => Conference },
-    justButtons: { default: false, type: Boolean },
-  },
-  data() {
-    return {
-      hoverType: "" as string,
-    };
-  },
-  computed: {
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    ...mapState(usePlayerStore, [
-      "playerPodcast",
-      "playerLive",
-      "playerStatus",
-      "playerVideo",
-    ]),
-    isVideoPodcast(): boolean {
-      return (
-        (this.fetchConference?.videoProfile?.includes("video_") &&
-          "READY_TO_RECORD" === this.podcast.processingStatus) ||
-        undefined !== this.podcast.video?.videoId
-      );
-    },
-    playingLive(): boolean {
-      return (
-        undefined !== this.fetchConference &&
-        "null" !== this.fetchConference.toString() &&
-        this.playerLive?.conferenceId === this.fetchConference.conferenceId
-      );
-    },
-    playingPodcast() {
-      return (
-        this.playerPodcast?.podcastId === this.podcast.podcastId ||
-        this.playingLive
-      );
-    },
-    isLiveToBeRecorded(): boolean {
-      return undefined === this.fetchConference && this.isLiveReadyToRecord;
-    },
-    isLiveReadyToRecord(): boolean {
-      return (
-        undefined !== this.podcast?.conferenceId &&
-        0 !== this.podcast.conferenceId &&
-        "READY_TO_RECORD" === this.podcast.processingStatus
-      );
-    },
-    isLiveValidAndVisible(): boolean {
-      return (
-        undefined !== this.podcast &&
-        false !== this.podcast.valid &&
-        undefined !== this.podcast.availability.visibility &&
-        this.podcast.availability.visibility
-      );
-    },
-    classicPodcastPlay(): boolean {
-      return (
-        this.isLiveValidAndVisible &&
-        !this.isLiveToBeRecorded &&
-        ("READY_TO_RECORD" === this.podcast.processingStatus ||
-          "READY" === this.podcast.processingStatus ||
-          ("PROCESSING" === this.podcast.processingStatus &&
-            undefined === this.authOrgaId))
-      );
-    },
-    iconName(): string {
-      if (this.isLiveToBeRecorded) return "ClockOutlineIcon";
-      if ("READY" === this.podcast.processingStatus || this.fetchConference) {
-        if (!this.podcast.valid) return "CheckIcon";
-        if (
-          !this.podcast.availability.visibility &&
-          this.podcast.availability.date
-        )
-          return "ClockOutlineIcon";
-        return "EyeOffOutlineIcon";
-      }
-      if (
-        "PLANNED" === this.podcast.processingStatus ||
-        "PROCESSING" === this.podcast.processingStatus
-      )
-        return "TimerSandEmptyIcon";
-      if ("CANCELED" === this.podcast.processingStatus) return "CancelIcon";
-      return "AlertIcon";
-    },
-    textVisible(): string {
-      if (this.isLiveToBeRecorded)
-        return this.$t("Podcast linked to waiting live");
-      if ("READY" === this.podcast.processingStatus || this.fetchConference) {
-        if (!this.podcast.valid) return this.$t("Podcast to validate");
-        if (
-          !this.podcast.availability.visibility &&
-          this.podcast.availability.date
-        )
-          return this.$t("Podcast publish in future");
-        return this.$t("Podcast no visible");
-      }
-      if (
-        "PLANNED" === this.podcast.processingStatus ||
-        "PROCESSING" === this.podcast.processingStatus
-      )
-        return this.$t("Podcast in process");
-      if ("CANCELED" === this.podcast.processingStatus)
-        return this.$t("Podcast in cancelled status");
-      return this.$t("Podcast in error");
-    },
-    recordingLive(): boolean {
-      return (
-        undefined !== this.fetchConference &&
-        -1 !== this.fetchConference.conferenceId &&
-        ("RECORDING" === this.fetchConference.status ||
-          "PENDING" === this.fetchConference.status)
-      );
-    },
-    durationString(): string {
-      return DurationHelper.formatDuration(
-        Math.round(this.podcast.duration / 1000),
-      );
-    },
-    durationIso(): string {
-      if (!this.podcast || this.podcast.duration <= 1) return "";
-      return dayjs.duration({ milliseconds: this.podcast.duration }).toISOString();
-    },
-  },
 
-  methods: {
-    ...mapActions(usePlayerStore, ["playerChangeStatus", "playerPlay"]),
-    play(isVideo: boolean): void {
-      if (this.isLiveToBeRecorded) {
-        return;
-      }
-      if (this.playingPodcast && isVideo === this.playerVideo) {
-        this.playerChangeStatus("PLAYING" === this.playerStatus);
-        return;
-      }
-      if (isVideo && state.player.isVideoPage) {
-        this.$router.push("/main/pub/video/" + this.podcast.podcastId);
-        return;
-      }
-      if (!this.recordingLive) {
-        this.playerPlay(this.podcast, isVideo);
-      } else {
-        this.playerPlay(
-          {
-            ...this.podcast,
-            ...{ conferenceId: this.fetchConference?.conferenceId },
-          },
-          isVideo,
-        );
-      }
-    },
-  },
+
+//Props 
+const props = defineProps({
+  podcast: { default: () => ({}), type: Object as () => Podcast },
+  hidePlay: { default: false, type: Boolean },
+  fetchConference: { default: undefined, type: Object as () => Conference },
+  justButtons: { default: false, type: Boolean },
+})
+
+
+//Data 
+const hoverType = ref("");
+
+//Composables
+const { t } = useI18n();
+const authStore = useAuthStore();
+const playerStore = usePlayerStore();
+const router = useRouter();
+
+//Computed
+const isVideoPodcast = computed(() => {
+  return (
+    (props.fetchConference?.videoProfile?.includes("video_") &&
+      "READY_TO_RECORD" === props.podcast.processingStatus) ||
+    undefined !== props.podcast.video?.videoId
+  );
 });
+const playingLive = computed(() => {
+  return (
+    undefined !== props.fetchConference &&
+    "null" !== props.fetchConference.toString() &&
+    playerStore.playerLive?.conferenceId === props.fetchConference.conferenceId
+  );
+});
+const playingPodcast = computed(() => {
+  return (
+    playerStore.playerPodcast?.podcastId === props.podcast.podcastId ||
+    playingLive.value
+  );
+});
+const isLiveToBeRecorded = computed(() => undefined === props.fetchConference && isLiveReadyToRecord.value);
+const isLiveReadyToRecord = computed(() => {
+  return (
+    undefined !== props.podcast?.conferenceId &&
+    0 !== props.podcast.conferenceId &&
+    "READY_TO_RECORD" === props.podcast.processingStatus
+  );
+});
+const isLiveValidAndVisible = computed(() => {
+  return (
+    undefined !== props.podcast &&
+    false !== props.podcast.valid &&
+    undefined !== props.podcast.availability.visibility &&
+    props.podcast.availability.visibility
+  );
+});
+const classicPodcastPlay = computed(() => {
+  return (
+    isLiveValidAndVisible.value &&
+    !isLiveToBeRecorded.value &&
+    ("READY_TO_RECORD" === props.podcast.processingStatus ||
+      "READY" === props.podcast.processingStatus ||
+      ("PROCESSING" === props.podcast.processingStatus &&
+        undefined === authStore.authOrgaId))
+  );
+});
+const iconName = computed(() => {
+  if (isLiveToBeRecorded.value) return ClockOutlineIcon;
+  if ("READY" === props.podcast.processingStatus || props.fetchConference) {
+    if (!props.podcast.valid) return CheckIcon;
+    if (
+      !props.podcast.availability.visibility &&
+      props.podcast.availability.date
+    )
+      return ClockOutlineIcon;
+    return EyeOffOutlineIcon;
+  }
+  if (
+    "PLANNED" === props.podcast.processingStatus ||
+    "PROCESSING" === props.podcast.processingStatus
+  )
+    return TimerSandEmptyIcon;
+  if ("CANCELED" === props.podcast.processingStatus) return CancelIcon;
+  return AlertIcon;
+});
+const textVisible = computed(() => {
+  if (isLiveToBeRecorded.value){
+    return t("Podcast linked to waiting live");
+  }
+    
+  if ("READY" === props.podcast.processingStatus || props.fetchConference) {
+    if (!props.podcast.valid) return t("Podcast to validate");
+    if (
+      !props.podcast.availability.visibility &&
+      props.podcast.availability.date
+    ){
+      return t("Podcast publish in future");
+    }
+    return t("Podcast no visible");
+  }
+  if (
+    "PLANNED" === props.podcast.processingStatus ||
+    "PROCESSING" === props.podcast.processingStatus
+  ){
+    return t("Podcast in process");
+  }
+  if ("CANCELED" === props.podcast.processingStatus){
+    return t("Podcast in cancelled status");
+  }
+  return t("Podcast in error");
+});
+const recordingLive = computed(() => {
+  return (
+    undefined !== props.fetchConference &&
+    -1 !== props.fetchConference.conferenceId &&
+    ("RECORDING" === props.fetchConference.status ||
+      "PENDING" === props.fetchConference.status)
+  );
+});
+const durationString = computed(() => {
+  return DurationHelper.formatDuration(
+    Math.round(props.podcast.duration / 1000),
+  );
+});
+const durationIso = computed(() => {
+  if (!props.podcast || props.podcast.duration <= 1) return "";
+  return dayjs.duration({ milliseconds: props.podcast.duration }).toISOString();
+});
+
+//Methods
+function play(isVideo: boolean): void {
+  if (isLiveToBeRecorded.value) {
+    return;
+  }
+  if (playingPodcast.value && isVideo === playerStore.playerVideo) {
+    playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
+    return;
+  }
+  if (isVideo && state.player.isVideoPage) {
+    router.push("/main/pub/video/" + props.podcast.podcastId);
+    return;
+  }
+  if (!recordingLive.value) {
+    playerStore.playerPlay(props.podcast, isVideo);
+  } else {
+    playerStore.playerPlay(
+      {
+        ...props.podcast,
+        ...{ conferenceId: props.fetchConference?.conferenceId },
+      },
+      isVideo,
+    );
+  }
+}
 </script>
 
 <style lang="scss">

@@ -1,7 +1,7 @@
 <template>
   <section class="module-box overflow-visible">
     <h2 class="mb-3">
-      {{ $t("Embed") }}
+      {{ t("Embed") }}
     </h2>
     <div class="d-flex">
       <iframe
@@ -16,7 +16,7 @@
       />
       <div class="d-flex flex-column">
         <SharePlayerColors v-model:color="color" v-model:theme="theme" />
-        <div class="h4 mb-2 mt-3">{{ $t("player parameters") }}</div>
+        <div class="h4 mb-2 mt-3">{{ t("player parameters") }}</div>
         <PlayerCommonParameters
           v-if="displayInsertCode"
           v-model:insert-code="insertCode"
@@ -31,20 +31,20 @@
           class="btn btn-primary w-fit-content mt-3"
           @click="isShareModal = true"
         >
-          {{ $t("Share the player") }}
+          {{ t("Share the player") }}
         </button>
       </div>
     </div>
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { useApiStore } from "../../../stores/ApiStore";
 import { useAuthStore } from "../../../stores/AuthStore";
-import { mapState, mapActions } from "pinia";
-import { defineComponent, defineAsyncComponent } from "vue";
+import {  defineAsyncComponent, ref, Ref, computed, onBeforeMount } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
+import { useI18n } from "vue-i18n";
 const ShareModalPlayer = defineAsyncComponent(
   () => import("../../misc/modal/ShareModalPlayer.vue"),
 );
@@ -54,72 +54,64 @@ const SharePlayerColors = defineAsyncComponent(
 const PlayerCommonParameters = defineAsyncComponent(
   () => import("./PlayerCommonParameters.vue"),
 );
-export default defineComponent({
-  components: {
-    ShareModalPlayer,
-    SharePlayerColors,
-    PlayerCommonParameters,
-  },
-  props: {
-    canal: { default: undefined, type: Object as () => Canal },
-    organisationId: { default: undefined, type: String },
-  },
 
-  data() {
-    return {
-      isShareModal: false as boolean,
-      color: "#40a372" as string,
-      theme: "#000000" as string,
-      orgaAttributes: undefined as
-        | { [key: string]: string | number | boolean | undefined }
-        | undefined,
-      insertCode: false as boolean,
-    };
-  },
+//Props 
+const props = defineProps({
+  canal: { default: undefined, type: Object as () => Canal },
+  organisationId: { default: undefined, type: String },
+})
 
-  computed: {
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    ...mapState(useApiStore, ["miniplayerUrl"]),
-    displayInsertCode(): boolean {
-      return this.canal?.organisationId === this.authOrgaId;
-    },
-    iFrameSrc(): string {
-      let url = `${this.miniplayerUrl}miniplayer/radio/${
-        this.canal?.id
-      }?distributorId=${this.organisationId}&color=${this.color.substring(
-        1,
-      )}&theme=${this.theme.substring(1)}`;
-      if (this.insertCode) {
-        url += "&insertCode=true";
-      }
-      return url;
-    },
-    iFrame(): string {
-      return `<iframe src="${this.iFrameSrc}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay" frameborder="0"></iframe>`;
-    },
-  },
-  created() {
-    this.initSharePlayer();
-  },
-  methods: {
-    ...mapActions(useSaveFetchStore, ["getOrgaAttributes"]),
-    async initSharePlayer() {
-      this.orgaAttributes = await this.getOrgaAttributes(this.authOrgaId ?? "");
-      this.initColor();
-    },
-    initColor(): void {
-      if (!this.orgaAttributes) {
-        return;
-      }
-      this.color = Object.hasOwn(this.orgaAttributes, "COLOR")
-        ? (this.orgaAttributes.COLOR as string)
-        : "#40a372";
-      this.theme = Object.hasOwn(this.orgaAttributes, "THEME")
-        ? (this.orgaAttributes.THEME as string)
-        : "#000000";
-    },
-  },
+//Data 
+const isShareModal = ref(false);
+const color = ref("#40a372");
+const theme = ref("#000000");
+const insertCode = ref(false);
+const orgaAttributes: Ref<{[key: string]: string | number | boolean | undefined }| undefined> = ref(undefined);
+  
+
+//Composables
+const { t } = useI18n();
+const authStore = useAuthStore();
+const apiStore = useApiStore();
+const saveFetchStore = useSaveFetchStore();
+
+
+//Computed
+const displayInsertCode = computed(() => props.canal?.organisationId === authStore.authOrgaId);
+const iFrameSrc = computed(() => {
+  let url = `${apiStore.miniplayerUrl}miniplayer/radio/${
+    props.canal?.id
+  }?distributorId=${props.organisationId}&color=${color.value.substring(
+    1,
+  )}&theme=${theme.value.substring(1)}`;
+  if (insertCode.value) {
+    url += "&insertCode=true";
+  }
+  return url;
 });
+const iFrame = computed(() => {
+  return `<iframe src="${iFrameSrc.value}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
+});
+
+
+onBeforeMount(()=>initSharePlayer())
+
+//Methods
+async function initSharePlayer() {
+  orgaAttributes.value = await saveFetchStore.getOrgaAttributes(authStore.authOrgaId ?? "");
+  initColor();
+}
+function initColor(): void {
+  if (!orgaAttributes.value) {
+    return;
+  }
+  color.value = Object.hasOwn(orgaAttributes.value, "COLOR")
+    ? (orgaAttributes.value.COLOR as string)
+    : "#40a372";
+  theme.value = Object.hasOwn(orgaAttributes.value, "THEME")
+    ? (orgaAttributes.value.THEME as string)
+    : "#000000";
+}
 </script>
 
 <style lang="scss">

@@ -4,7 +4,7 @@
       class="d-flex justify-content-center align-items-center mb-3 text-secondary btn-transparent"
       @click="clickShowFilters"
     >
-      <div>{{ $t("Advanced filters") }}</div>
+      <div>{{ t("Advanced filters") }}</div>
       <ChevronDownIcon :class="{ 'arrow-transform': showFilters }" />
     </button>
     <Transition name="advanced-search">
@@ -15,10 +15,10 @@
     >
       <fieldset class="d-flex flex-column flex-grow-3">
         <legend class="text-primary mb-2">
-          {{ $t("Filter") }}
+          {{ t("Filter") }}
         </legend>
         <MonetizableFilter
-          v-if="!isPodcastmaker && !platformEducation"
+          v-if="!isPodcastmaker && !generalStore.platformEducation"
           :is-emission="isEmission"
           :monetisable="monetisable"
           @update:monetisable="updateMonetisable"
@@ -51,14 +51,14 @@
           v-if="isSelectValidity"
           :text-init="validity"
           id-select="valid-episodes-select"
-          :label="$t('Episodes to validate')+' :'"
+          :label="t('Episodes to validate')+' :'"
           :display-label="true"
           class-label="flex-shrink-0 me-1"
           class="d-flex align-items-center mt-3 mb-0"
           :options="[
-            { title: $t('Display only episodes to validate'), value: 'false' },
-            { title: $t('Display episodes to validate'), value: '' },
-            { title: $t('Do not display episodes to validate'), value: 'true' },
+            { title: t('Display only episodes to validate'), value: 'false' },
+            { title: t('Display episodes to validate'), value: '' },
+            { title: t('Do not display episodes to validate'), value: 'true' },
           ]"
           @update:text-init="updateValidity"
         />
@@ -67,7 +67,7 @@
           :text-init="onlyVideo"
           class="flex-shrink-0 mt-3"
           id-checkbox="only-video-checkbox"
-          :label="$t('Show only episodes with video')"
+          :label="t('Show only episodes with video')"
           @update:text-init="updateOnlyVideo"
         />
       </fieldset>
@@ -81,16 +81,16 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { defineComponent, defineAsyncComponent } from "vue";
-import { mapState } from "pinia";
+import { defineAsyncComponent, ref, computed, watch } from "vue";
 import { useGeneralStore } from "../../../stores/GeneralStore";
+import { useI18n } from "vue-i18n";
 const MonetizableFilter = defineAsyncComponent(
   () => import("./MonetizableFilter.vue"),
 );
@@ -108,175 +108,153 @@ const ClassicCheckbox = defineAsyncComponent(
 );
 const DateFilter = defineAsyncComponent(() => import("./DateFilter.vue"));
 const SearchOrder = defineAsyncComponent(() => import("./SearchOrder.vue"));
-export default defineComponent({
-  components: {
-    MonetizableFilter,
-    CategorySearchFilter,
-    RubriqueFilter,
-    ClassicCheckbox,
-    DateFilter,
-    SearchOrder,
-    ChevronDownIcon,
-    ClassicSelect
-  },
-  props: {
-    organisationId: { default: undefined, type: String },
-    isEmission: { default: false, type: Boolean },
-    includeHidden: { default: false, type: Boolean },
-    sort: { default: "DATE", type: String },
-    onlyVideo: { default: false, type: Boolean },
-    monetisable: { default: "UNDEFINED", type: String },
-    iabId: { default: undefined, type: Number },
-    searchPattern: { default: "", type: String },
-    fromDate: { default: undefined, type: String },
-    toDate: { default: undefined, type: String },
-    validity: { default: 'true', type: String },
-    rubriqueFilter: {
-      default: () => [],
-      type: Array as () => Array<RubriquageFilter>,
-    },
-  },
 
-  emits: [
-    "update:toDate",
-    "update:fromDate",
-    "update:monetisable",
-    "update:iabId",
-    "update:sort",
-    "update:includeHidden",
-    "update:validity",
-    "update:rubriqueFilter",
-    "update:onlyVideo",
-  ],
-  setup(){
-    const { isPodcastmaker, isEditRights } = useOrgaComputed();
-    const { stringifyRubriquesFilter,updateRouteParamAdvanced } = useRubriquesFilterParam();
-    return { isPodcastmaker, isEditRights, stringifyRubriquesFilter,updateRouteParamAdvanced  }
+//Props 
+const props = defineProps({
+  organisationId: { default: undefined, type: String },
+  isEmission: { default: false, type: Boolean },
+  includeHidden: { default: false, type: Boolean },
+  sort: { default: "DATE", type: String },
+  onlyVideo: { default: false, type: Boolean },
+  monetisable: { default: "UNDEFINED", type: String },
+  iabId: { default: undefined, type: Number },
+  searchPattern: { default: "", type: String },
+  fromDate: { default: undefined, type: String },
+  toDate: { default: undefined, type: String },
+  validity: { default: 'true', type: String },
+  rubriqueFilter: {
+    default: () => [],
+    type: Array as () => Array<RubriquageFilter>,
   },
-  data() {
-    return {
-      showFilters: false as boolean,
-      firstLoaded: false as boolean,
-    };
-  },
+})
 
-  computed: {
-    ...mapState(useGeneralStore, ["platformEducation"]),
-    ...mapState(useFilterStore, ["filterOrgaId","filterIab", "filterRubrique"]),
-    ...mapState(useAuthStore, [
-      "isRoleProduction",
-      "isRoleContribution"
-    ]),
-    organisationRight(): boolean {
-      return this.isEditRights(this.organisationId);
-    },
-    organisation(): string | undefined {
-      return this.organisationId ?? this.filterOrgaId;
-    },
-    textNotVisible(): string {
-      return this.isEmission
-        ? this.$t("Consider podcasts no visible")
-        : this.$t("See podcasts no visible");
-    },
-    isSelectValidity(): boolean {
-      return (
-        undefined !== this.organisation &&
-        this.organisationRight &&
-        this.isRoleContribution &&
-        !this.isPodcastmaker &&
-        !this.isEmission &&
-        this.includeHidden
-      );
-    },
-  },
-  watch: {
-    organisation(): void {
-      const hidden =
-        undefined !== this.organisation &&
-        this.organisationRight &&
-        !this.isEmission;
-      if (hidden !== this.includeHidden) {
-        this.updateIncludeHidden(hidden);
-      }
-    },
-    searchPattern(value: string): void {
-      const search = value.trim();
-      let valSort = "SCORE"
-      if(search.length <= 3){
-        valSort = this.isEmission? "LAST_PODCAST_DESC" : "DATE";
-      }
-      if (valSort !== this.sort) {
-        this.$emit("update:sort", valSort);
-      }
-      this.updateRouteParamAdvanced({
-        q: search.length ? search : undefined,
-        s: valSort,
-      });
-    },
-  },
-  methods: {
-    updateMonetisable(value: string): void {
-      this.$emit("update:monetisable", value);
-      this.updateRouteParamAdvanced({ m: "UNDEFINED" !== value ? value : undefined });
-    },
-    updateIab(value: number | undefined) {
-      this.$emit("update:iabId", 0 !== value ? value : undefined);
-      let filterIab = {};
-      if (this.filterIab && this.filterIab.id !== value) {
-        filterIab = { iabId: undefined };
-      }
-      this.updateRouteParamAdvanced({
-        ...{ i: value ? value.toString() : undefined },
-        ...filterIab,
-      });
-    },
-    updateSort(value: string) {
-      this.$emit("update:sort", value);
-      this.updateRouteParamAdvanced({ s: value });
-    },
-    updateIncludeHidden(value: boolean) {
-      this.$emit("update:includeHidden", value);
-      this.updateRouteParamAdvanced({ h: value.toString() });
-    },
-    updateValidity(value: boolean) {
-      this.$emit("update:validity", value);
-      this.updateRouteParamAdvanced({ vl: value.toString() });
-    },
-    updateOnlyVideo(value: boolean) {
-      this.$emit("update:onlyVideo", value);
-      this.updateRouteParamAdvanced({ v: value ? "true" : undefined });
-    },
-    updateDates(value: {
-      from: string | undefined;
-      to: string | undefined;
-    }): void {
-      this.$emit("update:fromDate", value.from);
-      this.$emit("update:toDate", value.to);
-      this.updateRouteParamAdvanced({ from: value.from, to: value.to });
-    },
-    updateRubriquageFilter(value: Array<RubriquageFilter>) {
-      this.$emit("update:rubriqueFilter", value);
-      let filterRubriques = {};
-      const valueString = this.stringifyRubriquesFilter(value);
-      if (
-        this.filterRubrique.length &&
-        this.stringifyRubriquesFilter(this.filterRubrique) !== valueString
-      ) {
-        filterRubriques = { rubriquesId: undefined };
-      }
-      this.updateRouteParamAdvanced({
-        ...{ r: valueString.length ? valueString : undefined },
-        ...filterRubriques,
-      });
-    },
-    clickShowFilters(): void {
-      if (!this.firstLoaded) {
-        this.firstLoaded = true;
-      }
-      this.showFilters = !this.showFilters;
-    },
-  },
+//Emits
+const emit = defineEmits([
+  "update:toDate",
+  "update:fromDate",
+  "update:monetisable",
+  "update:iabId",
+  "update:sort",
+  "update:includeHidden",
+  "update:validity",
+  "update:rubriqueFilter",
+  "update:onlyVideo",
+]);
+
+//Data 
+const showFilters = ref(false);
+const firstLoaded = ref(false);
+
+
+//Composables
+const { t } = useI18n();
+const { isPodcastmaker, isEditRights } = useOrgaComputed();
+const { stringifyRubriquesFilter,updateRouteParamAdvanced } = useRubriquesFilterParam();
+const generalStore = useGeneralStore();
+const filterStore = useFilterStore();
+const authStore = useAuthStore();
+
+
+//Computed
+const organisationRight = computed(() => isEditRights(props.organisationId));
+const organisation = computed(() => props.organisationId ?? filterStore.filterOrgaId);
+const textNotVisible = computed(() => props.isEmission ? t("Consider podcasts no visible"): t("See podcasts no visible"));
+const isSelectValidity = computed(() => {
+  return (
+    undefined !== organisation.value &&
+    organisationRight.value &&
+    authStore.isRoleContribution &&
+    !isPodcastmaker &&
+    !props.isEmission &&
+    props.includeHidden
+  );
 });
+
+
+//Watch
+watch(organisation, async () => {
+  const hidden =undefined !== organisation.value && organisationRight.value &&!props.isEmission;
+  if (hidden !== props.includeHidden) {
+    updateIncludeHidden(hidden);
+  }
+});
+watch(()=>props.searchPattern, (value: string) => {
+  const search = value.trim();
+  let valSort = "SCORE"
+  if(search.length <= 3){
+    valSort = props.isEmission? "LAST_PODCAST_DESC" : "DATE";
+  }
+  if (valSort !== props.sort) {
+    emit("update:sort", valSort);
+  }
+  updateRouteParamAdvanced({
+    q: search.length ? search : undefined,
+    s: valSort,
+  });
+});
+
+
+//Methods
+function updateMonetisable(value: string): void {
+  emit("update:monetisable", value);
+  updateRouteParamAdvanced({ m: "UNDEFINED" !== value ? value : undefined });
+}
+function updateIab(value: number | undefined) {
+  emit("update:iabId", 0 !== value ? value : undefined);
+  let filterIab = {};
+  if (filterStore.filterIab && filterStore.filterIab.id !== value) {
+    filterIab = { iabId: undefined };
+  }
+  updateRouteParamAdvanced({
+    ...{ i: value ? value.toString() : undefined },
+    ...filterIab,
+  });
+}
+function updateSort(value: string) {
+  emit("update:sort", value);
+  updateRouteParamAdvanced({ s: value });
+}
+function updateIncludeHidden(value: boolean) {
+  emit("update:includeHidden", value);
+  updateRouteParamAdvanced({ h: value.toString() });
+}
+function updateValidity(value: boolean) {
+  emit("update:validity", value);
+  updateRouteParamAdvanced({ vl: value.toString() });
+}
+function updateOnlyVideo(value: boolean) {
+  emit("update:onlyVideo", value);
+  updateRouteParamAdvanced({ v: value ? "true" : undefined });
+}
+function updateDates(value: {
+  from: string | undefined;
+  to: string | undefined;
+}): void {
+  emit("update:fromDate", value.from);
+  emit("update:toDate", value.to);
+  updateRouteParamAdvanced({ from: value.from, to: value.to });
+}
+function updateRubriquageFilter(value: Array<RubriquageFilter>) {
+  emit("update:rubriqueFilter", value);
+  let filterRubriques = {};
+  const valueString = stringifyRubriquesFilter(value);
+  if (
+    filterStore.filterRubrique.length &&
+    stringifyRubriquesFilter(filterStore.filterRubrique) !== valueString
+  ) {
+    filterRubriques = { rubriquesId: undefined };
+  }
+  updateRouteParamAdvanced({
+    ...{ r: valueString.length ? valueString : undefined },
+    ...filterRubriques,
+  });
+}
+function clickShowFilters(): void {
+  if (!firstLoaded.value) {
+    firstLoaded.value = true;
+  }
+  showFilters.value = !showFilters.value;
+}
 </script>
 <style lang="scss">
 .octopus-app {

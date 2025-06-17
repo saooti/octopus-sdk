@@ -7,7 +7,7 @@
     />
     <div class="transcription-section-buttons">
       <button v-if="isOpen" class="btn btn-primary m-0" @click="isAccessibilityModal = true">
-        <EyeOutlineIcon class="me-1"/> {{ $t('Transcript Accessibility') }}
+        <EyeOutlineIcon class="me-1"/> {{ t('Transcript Accessibility') }}
       </button>
       <button
         class="btn btn-transcript"
@@ -19,108 +19,97 @@
     </div>
     <div v-if="isOpen" class="transcription-body">
       <ClassicLoading
-        :loading-text="!firstLoaded ? $t('Loading content ...') : undefined"
+        :loading-text="!firstLoaded ? t('Loading content ...') : undefined"
       />
       <div class="transcription-text">
         <template v-if="firstLoaded && transcript?.length">{{
           transcript
         }}</template>
         <template v-if="firstLoaded && !transcript?.length">{{
-          $t("Transcript does not yet exist for this episode")
+          t("Transcript does not yet exist for this episode")
         }}</template>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import cookiesHelper from "../../../helper/cookiesHelper";
 import EyeOutlineIcon from "vue-material-design-icons/EyeOutline.vue";
 import classicApi from "../../../api/classicApi";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 const AccessibilityModal = defineAsyncComponent(
   () => import("../accessibility/AccessibilityModal.vue"),
 );
-export default defineComponent({
-  name: "PodcastRawTranscript",
 
-  components: {
-    ClassicLoading,
-    EyeOutlineIcon,
-    AccessibilityModal
-  },
+//Props 
+const props = defineProps({
+  podcastId: { default: undefined, type: Number },
+})
 
-  props: {
-    podcastId: { default: undefined, type: Number },
-  },
-  data() {
-    return {
-      isOpen: false as boolean,
-      firstLoaded: false as boolean,
-      transcript: undefined as string | undefined,
-      isAccessibilityModal : false as boolean,
-    };
-  },
+//Data 
+const isOpen = ref(false);
+const firstLoaded = ref(false);
+const isAccessibilityModal = ref(false);
+const transcript: Ref<string | undefined> = ref(undefined);
 
-  computed: {
-    buttonText() {
-      return this.isOpen
-        ? this.$t("Hide transcript")
-        : this.$t("View transcript");
-    },
-  },
-  watch: {
-    async isOpen() {
-      if (this.isOpen && !this.firstLoaded) {
-        this.fetchTranscript();
-        this.getAccessibility();
-      }
-    },
-  },
-  methods: {
-    getAccessibility(){
-      const fontSize = cookiesHelper.getCookie("octopus-font-size");
-      if (null !== fontSize) {
-        this.setCssProperty('--octopus-accessibility-font-size', fontSize);
-      }
-      const background = cookiesHelper.getCookie("octopus-background");
-      if (null !== background) {
-        this.setCssProperty('--octopus-accessibility-background', background);
-      }
-      const color = cookiesHelper.getCookie("octopus-color");
-      if (null !== color) {
-        this.setCssProperty('--octopus-accessibility-color', color);
-      }
-    },
-    setCssProperty(name: string, value: string){
-      document.documentElement.style.setProperty(name,value);
-    },
-    saveAccessibility(accessibility: {fontSize: number,background: string,color: string}){
-      this.setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
-      cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
-      this.setCssProperty('--octopus-accessibility-background', accessibility.background);
-      cookiesHelper.setCookie("octopus-background",accessibility.background);
-      this.setCssProperty('--octopus-accessibility-color', accessibility.color);
-      cookiesHelper.setCookie("octopus-color",accessibility.color);
-      this.isAccessibilityModal = false;
-    },
-    async fetchTranscript() {
-      if (!this.podcastId) {
-        return;
-      }
-      try {
-        this.transcript = await classicApi.fetchData({
-          api: 11,
-          path: `transcription/text/${this.podcastId}`,
-        });
-      } catch {
-        //Do nothing
-      }
-      this.firstLoaded = true;
-    },
-  },
+//Composables
+const { t } = useI18n();
+
+//Computed
+const buttonText = computed(() =>  isOpen.value? t("Hide transcript"): t("View transcript"));
+
+//Watch
+watch(isOpen, () => {
+  if (isOpen.value && !firstLoaded.value) {
+    fetchTranscript();
+    getAccessibility();
+  }
 });
+
+//Methods
+function getAccessibility(){
+  const fontSize = cookiesHelper.getCookie("octopus-font-size");
+  if (null !== fontSize) {
+    setCssProperty('--octopus-accessibility-font-size', fontSize);
+  }
+  const background = cookiesHelper.getCookie("octopus-background");
+  if (null !== background) {
+    setCssProperty('--octopus-accessibility-background', background);
+  }
+  const color = cookiesHelper.getCookie("octopus-color");
+  if (null !== color) {
+    setCssProperty('--octopus-accessibility-color', color);
+  }
+}
+function setCssProperty(name: string, value: string){
+  document.documentElement.style.setProperty(name,value);
+}
+function saveAccessibility(accessibility: {fontSize: number,background: string,color: string}){
+  setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
+  cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
+  setCssProperty('--octopus-accessibility-background', accessibility.background);
+  cookiesHelper.setCookie("octopus-background",accessibility.background);
+  setCssProperty('--octopus-accessibility-color', accessibility.color);
+  cookiesHelper.setCookie("octopus-color",accessibility.color);
+  isAccessibilityModal.value = false;
+}
+async function fetchTranscript() {
+  if (!props.podcastId) {
+    return;
+  }
+  try {
+    transcript.value = await classicApi.fetchData({
+      api: 11,
+      path: `transcription/text/${props.podcastId}`,
+    });
+  } catch {
+    //Do nothing
+  }
+  firstLoaded.value = true;
+}
 </script>
 <style lang="scss">
 :root {

@@ -3,48 +3,48 @@
     :text-init="sort"
     id-radio="sort-radio"
     :options="optionsArray"
-    :radio-label="$t('Sort')"
+    :radio-label="t('Sort')"
     class-label="text-primary mb-2"
     :type-tag="typeTag"
     class="flex-grow-1"
-    @update:text-init="$emit('update:sort', $event)"
+    @update:text-init="emit('update:sort', $event)"
   />
 </template>
-<script lang="ts">
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import ClassicRadioLabel from "../../form/ClassicRadioLabel.vue";
-import { defineComponent } from "vue";
-export default defineComponent({
-  components: {
-    ClassicRadioLabel,
-  },
-  props: {
-    isEmission: { default: false, type: Boolean },
-    sort: { default: "DATE", type: String },
-    typeTag: { default: "fieldset", type: String },
-  },
+import { computed } from "vue";
 
-  emits: ["update:sort"],
-  data() {
-    return {};
-  },
-  computed: {
-    optionsArray() {
-      const options = [
-        { title: this.$t("Sort score"), value: "SCORE" },
-        {
-          title: this.$t("Sort last"),
-          value: this.isEmission ? "LAST_PODCAST_DESC" : "DATE",
-        },
-        { title: this.$t("Sort name"), value: "NAME" },
-      ];
-      if (!this.isEmission) {
-        options.splice(2, 0, {
-          title: this.$t("Chronological"),
-          value: "DATE_ASC",
-        });
-      }
-      return options;
+//Props 
+const props = defineProps({
+  isEmission: { default: false, type: Boolean },
+  sort: { default: "DATE", type: String },
+  typeTag: { default: "fieldset", type: String },
+})
+
+//Emits
+const emit = defineEmits(["update:sort"]);
+
+//Composables
+const { t } = useI18n();
+
+//Computed
+const optionsArray = computed(() => {
+  const options = [
+    { title: t("Sort score"), value: "SCORE" },
+    {
+      title: t("Sort last"),
+      value: props.isEmission ? "LAST_PODCAST_DESC" : "DATE",
     },
-  },
+    { title: t("Sort name"), value: "NAME" },
+  ];
+  if (!props.isEmission) {
+    options.splice(2, 0, {
+      title: t("Chronological"),
+      value: "DATE_ASC",
+    });
+  }
+  return options;
 });
+
 </script>

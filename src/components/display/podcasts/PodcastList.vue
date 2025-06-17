@@ -6,15 +6,15 @@
     v-model:is-mobile="isMobile"
     :text-count="
       showCount && podcasts.length > 1
-        ? $t('Number podcasts', { nb: totalCount }) + sortText
+        ? t('Number podcasts', { nb: totalCount }) + sortText
         : undefined
     "
     :total-count="totalCount"
     :loading="loading"
-    :loading-text="loading ? $t('Loading podcasts ...') : undefined"
+    :loading-text="loading ? t('Loading podcasts ...') : undefined"
     :error-text="
       !loading && !podcasts.length
-        ? $t(`No podcast match your query`)
+        ? t(`No podcast match your query`)
         : undefined
     "
     :just-size-chosen="justSizeChosen"
@@ -34,7 +34,7 @@
                 name: 'podcast',
                 params: { podcastId: p.podcastId },
               }"
-              :title="$t('Episode name page', { name: p.title })"
+              :title="t('Episode name page', { name: p.title })"
             >
               {{ p.title }}
             </router-link>
@@ -45,222 +45,199 @@
   </ListPaginate>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
-import { useAuthStore } from "../../../stores/AuthStore";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
 import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
-import { defineComponent } from "vue";
+import { computed, onBeforeMount, Ref, ref, watch } from "vue";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { AxiosError } from "axios";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
-export default defineComponent({
-  name: "PodcastList",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    PodcastItem,
-    ListPaginate,
-    ClassicLazy,
-  },
 
-  props: {
-    first: { default: 0, type: Number },
-    size: { default: 30, type: Number },
-    organisationId: { default: () => [], type: Array as () => Array<string> },
-    emissionId: { default: undefined, type: Number },
-    iabId: { default: undefined, type: Number },
-    participantId: { default: undefined, type: Number },
-    query: { default: undefined, type: String },
-    monetisable: { default: undefined, type: String },
-    popularSort: { default: false, type: Boolean },
-    reload: { default: false, type: Boolean },
-    before: { default: undefined, type: String },
-    after: { default: undefined, type: String },
-    includeHidden: { default: false, type: Boolean },
-    showCount: { default: false, type: Boolean },
-    displaySortText: { default: true, type: Boolean },
-    sortCriteria: { default: undefined, type: String },
-    validity: { default: 'true', type: String },
-    rubriqueId: { default: () => [], type: Array as () => Array<number> },
-    rubriquageId: { default: () => [], type: Array as () => Array<number> },
-    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
-    justSizeChosen: { default: false, type: Boolean },
-    withVideo: { default: undefined, type: Boolean },
-    includeTag:{ default: () => [], type: Array as () => Array<string> },
-  },
-  emits: ["fetch", "emptyList"],
+//Props 
+const props = defineProps({
+  first: { default: 0, type: Number },
+  size: { default: 30, type: Number },
+  organisationId: { default: () => [], type: Array as () => Array<string> },
+  emissionId: { default: undefined, type: Number },
+  iabId: { default: undefined, type: Number },
+  participantId: { default: undefined, type: Number },
+  query: { default: undefined, type: String },
+  monetisable: { default: undefined, type: String },
+  popularSort: { default: false, type: Boolean },
+  reload: { default: false, type: Boolean },
+  before: { default: undefined, type: String },
+  after: { default: undefined, type: String },
+  includeHidden: { default: false, type: Boolean },
+  showCount: { default: false, type: Boolean },
+  displaySortText: { default: true, type: Boolean },
+  sortCriteria: { default: undefined, type: String },
+  validity: { default: 'true', type: String },
+  rubriqueId: { default: () => [], type: Array as () => Array<number> },
+  rubriquageId: { default: () => [], type: Array as () => Array<number> },
+  noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+  justSizeChosen: { default: false, type: Boolean },
+  withVideo: { default: undefined, type: Boolean },
+  includeTag:{ default: () => [], type: Array as () => Array<string> },
+})
 
-  setup(){
-    const {handle403} = useErrorHandler();
-    return { handle403 }
-  },
+//Emits
+const emit = defineEmits(["fetch", "emptyList"]);
 
-  data() {
-    return {
-      loading: true as boolean,
-      dfirst: this.first,
-      dsize: this.size,
-      totalCount: 0 as number,
-      podcasts: [] as Array<Podcast>,
-      isMobile: false as boolean,
-    };
-  },
+//Data 
+const loading = ref(true);
+const dfirst = ref(props.first);
+const dsize = ref(props.size);
+const totalCount = ref(0);
+const isMobile = ref(false);
+const podcasts: Ref<Array<Podcast>> = ref([]);
 
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["authProfile", "isRoleProduction"]),
-    displayArray(): Array<Podcast> {
-      if (this.isMobile || this.justSizeChosen) {
-        return this.podcasts;
-      }
-      return this.podcasts.slice(
-        this.dfirst,
-        Math.min(this.dfirst + this.dsize, this.totalCount),
-      );
-    },
-    changePaginate(): string {
-      return `${this.first}|${this.size}`;
-    },
-    changed(): string {
-      return `${this.organisation}|${this.emissionId}|${this.sortCriteria}|${this.sort}
-      ${this.iabId}|${this.participantId}|${this.query}|${this.monetisable}|${this.popularSort}|
-      ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubriquageId}|${this.validity}|
-      ${this.withVideo}|${this.includeTag}`;
-    },
-    organisation(): Array<string> {
-      if (this.organisationId) {
-        return this.organisationId;
-      }
-      return this.filterOrgaId ? [this.filterOrgaId] : [];
-    },
-    sort(): string {
-      return this.popularSort ? "POPULARITY" : (this.sortCriteria ?? "DATE");
-    },
-    sortText(): string {
-      if (!this.displaySortText) {
-        return "";
-      }
-      switch (this.sortCriteria) {
-        case "SCORE":
-          return " " + this.$t("sort by score");
-        case "DATE":
-          return " " + this.$t("sort by date");
-        case "NAME":
-          return " " + this.$t("sort by alphabetical");
-        default:
-          return " " + this.$t("sort by date");
-      }
-    },
-  },
-  watch: {
-    changePaginate() {
-      this.dfirst = this.first;
-      this.dsize = this.size;
-    },
-    changed(): void {
-      this.reloadList();
-    },
-    reload(): void {
-      this.reloadList();
-    },
-    dsize(): void {
-      this.reloadList();
-    },
-    dfirst(): void {
-      if (
-        !this.podcasts[this.dfirst] ||
-        0 === this.podcasts[this.dfirst].podcastId
-      ) {
-        this.fetchContent(false);
-      }
-    },
-  },
-  created() {
-    this.fetchContent(true);
-  },
-  methods: {
-    reloadList() {
-      this.dfirst = 0;
-      this.fetchContent(true);
-    },
-    async fetchContent(reset: boolean): Promise<void> {
-      this.loading = true;
-      const param: FetchParam = {
-        first: this.dfirst,
-        size: this.dsize,
-        organisationId: this.organisation,
-        emissionId: this.emissionId,
-        iabId: this.iabId,
-        participantId: this.participantId,
-        query: this.query,
-        monetisable: this.monetisable,
-        sort: this.sort,
-        before: this.before,
-        after: this.after,
-        noRubriquageId: this.noRubriquageId.length
-          ? this.noRubriquageId
-          : undefined,
-        rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
-        rubriquageId: this.rubriquageId.length ? this.rubriquageId : undefined,
-        includeHidden: this.includeHidden,
-        validity: this.validity,
-        /* publisherId:
-          !this.onlyValid && !this.isRoleProduction
-            ? this.authProfile?.userId
-            : undefined, */
-        includeStatus: ["READY", "PROCESSING"],
-        withVideo: this.withVideo,
-        includeTag: this.includeTag.length ? this.includeTag : undefined,
-      };
-      try {
-        const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
-          api: 0,
-          path: "podcast/search",
-          parameters: param,
-          specialTreatement: true,
-        });
-        this.afterFetching(reset, data);
-      } catch (error) {
-        this.handle403(error as AxiosError);
-      }
-    },
-    afterFetching(
-      reset: boolean,
-      data: { count: number; result: Array<Podcast>; sort: string },
-    ): void {
-      if (reset) {
-        this.podcasts.length = 0;
-      }
-      if (this.dfirst > this.podcasts.length) {
-        for (
-          let i = this.podcasts.length - 1, len = this.dfirst + this.dsize;
-          i < len;
-          i++
-        ) {
-          this.podcasts.push(emptyPodcastData());
-        }
-      }
-      const responsePodcasts = data.result.filter((p: Podcast | null) => {
-        return null !== p;
-      });
-      this.podcasts = this.podcasts
-        .slice(0, this.dfirst)
-        .concat(responsePodcasts)
-        .concat(
-          this.podcasts.slice(this.dfirst + this.dsize, this.podcasts.length),
-        );
-      this.$emit("fetch", this.podcasts);
-      this.totalCount = this.justSizeChosen ? this.size : data.count;
-      if (0 === this.podcasts.length) {
-        this.$emit("emptyList");
-      }
-      this.loading = false;
-    },
-  },
+//Composables
+const { t } = useI18n();
+const {handle403} = useErrorHandler();
+const filterStore = useFilterStore();
+
+//Computed
+const displayArray = computed(() => {
+  if (isMobile.value || props.justSizeChosen) {
+    return podcasts.value;
+  }
+  return podcasts.value.slice(
+    dfirst.value,
+    Math.min(dfirst.value + dsize.value, totalCount.value),
+  );
 });
+const changePaginate = computed(() => `${props.first}|${props.size}`);
+const changed = computed(() => {
+  return `${organisation.value}|${props.emissionId}|${props.sortCriteria}|${sort.value}
+    ${props.iabId}|${props.participantId}|${props.query}|${props.monetisable}|${props.popularSort}|
+    ${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.includeHidden}|${props.noRubriquageId}|${props.validity}|
+    ${props.withVideo}|${props.includeTag}`;
+});
+const organisation = computed(() => {
+  if (props.organisationId) {
+    return props.organisationId;
+  }
+  return filterStore.filterOrgaId ? [filterStore.filterOrgaId] : [];
+});
+const sort = computed(() => props.popularSort ? "POPULARITY" : (props.sortCriteria ?? "DATE"));
+const sortText = computed(() => {
+  if (!props.displaySortText) {
+    return "";
+  }
+  switch (props.sortCriteria) {
+    case "SCORE":
+      return " " + t("sort by score");
+    case "DATE":
+      return " " + t("sort by date");
+    case "NAME":
+      return " " + t("sort by alphabetical");
+    default:
+      return " " + t("sort by date");
+  }
+});
+
+//Watch
+watch(changePaginate, () => {
+  dfirst.value = props.first;
+  dsize.value = props.size;
+});
+watch(changed, () => reloadList());
+watch(()=>props.reload, () => reloadList());
+watch(dsize, () => reloadList());
+watch(dfirst, () => {
+  if (
+    !podcasts.value[dfirst.value] ||
+    0 === podcasts.value[dfirst.value].podcastId
+  ) {
+    fetchContent(false);
+  }
+});
+
+onBeforeMount(()=>fetchContent(true))
+
+//Methods
+function reloadList() {
+  dfirst.value = 0;
+  fetchContent(true);
+}
+async function fetchContent(reset: boolean): Promise<void> {
+  loading.value = true;
+  const param: FetchParam = {
+    first: dfirst.value,
+    size: dsize.value,
+    organisationId: organisation.value,
+    emissionId: props.emissionId,
+    iabId: props.iabId,
+    participantId: props.participantId,
+    query: props.query,
+    monetisable: props.monetisable,
+    sort: sort.value,
+    before: props.before,
+    after: props.after,
+    noRubriquageId: props.noRubriquageId.length
+      ? props.noRubriquageId
+      : undefined,
+    rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
+    rubriquageId: props.rubriquageId.length ? props.rubriquageId : undefined,
+    includeHidden: props.includeHidden,
+    validity: props.validity,
+    /* publisherId:
+      !this.onlyValid && !authStore.isRoleProduction
+        ? authStore.authProfile?.userId
+        : undefined, */
+    includeStatus: ["READY", "PROCESSING"],
+    withVideo: props.withVideo,
+    includeTag: props.includeTag.length ? props.includeTag : undefined,
+  };
+  try {
+    const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+      api: 0,
+      path: "podcast/search",
+      parameters: param,
+      specialTreatement: true,
+    });
+    afterFetching(reset, data);
+  } catch (error) {
+    handle403(error as AxiosError);
+  }
+}
+function afterFetching(
+  reset: boolean,
+  data: { count: number; result: Array<Podcast>; sort: string },
+): void {
+  if (reset) {
+    podcasts.value.length = 0;
+  }
+  if (dfirst.value > podcasts.value.length) {
+    for (
+      let i = podcasts.value.length - 1, len = dfirst.value + dsize.value;
+      i < len;
+      i++
+    ) {
+      podcasts.value.push(emptyPodcastData());
+    }
+  }
+  const responsePodcasts = data.result.filter((p: Podcast | null) => {
+    return null !== p;
+  });
+  podcasts.value = podcasts.value
+    .slice(0, dfirst.value)
+    .concat(responsePodcasts)
+    .concat(
+      podcasts.value.slice(dfirst.value + dsize.value, podcasts.value.length),
+    );
+  emit("fetch", podcasts.value);
+  totalCount.value = props.justSizeChosen ? props.size : data.count;
+  if (0 === podcasts.value.length) {
+    emit("emptyList");
+  }
+  loading.value = false;
+}
 </script>

@@ -3,7 +3,7 @@
     <div ref="rubriqueListContainer" class="rubrique-list-container">
       <select
         v-model="rubriquage"
-        :title="$t('By topic')"
+        :title="t('By topic')"
         class="c-hand"
         @change="onRubriquageSelected"
       >
@@ -17,7 +17,7 @@
       </select>
       <button
         v-for="rubrique in rubriqueDisplay"
-        :ref="'rubrique' + rubrique.rubriqueId"
+        :id="'rubrique' + rubrique.rubriqueId"
         :key="rubrique.rubriqueId"
         class="btn btn-primary btn-on-dark m-1"
         @click="addFilter(rubrique)"
@@ -29,7 +29,7 @@
       v-show="hidenRubriques.length"
       id="rubriques-dropdown"
       class="btn btn-primary btn-on-dark m-1"
-      :title="$t('See more')"
+      :title="t('See more')"
     >
       <PlusIcon />
     </button>
@@ -49,184 +49,164 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState, mapActions } from "pinia";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 const RubriqueChooser = defineAsyncComponent(
   () => import("../rubriques/RubriqueChooser.vue"),
 );
-export default defineComponent({
-  name: "RubriqueList",
 
-  components: {
-    ClassicPopover,
-    RubriqueChooser,
-    PlusIcon,
-  },
+//Props 
+const props = defineProps({
+  rubriquages: { default: () => [], type: Array as () => Array<Rubriquage> },
+})
 
-  props: {
-    rubriquages: { default: () => [], type: Array as () => Array<Rubriquage> },
-  },
+//Data 
+const hidenRubriques: Ref<Array<Rubrique>> = ref([]);
+const rubriquage: Ref<Rubriquage | undefined> = ref(undefined);
+const popoverRubriqueRef = useTemplateRef('popoverRubrique');
+const rubriqueListContainerRef = useTemplateRef('rubriqueListContainer');
 
-  setup(){
-    const { modifyRubriquesFilter } = useRubriquesFilterParam();
-    return { modifyRubriquesFilter }
-  },
 
-  data() {
-    return {
-      hidenRubriques: [] as Array<Rubrique>,
-      rubriques: [] as Array<Rubrique>,
-      rubriquage: undefined as Rubriquage | undefined,
-    };
-  },
+//Composables
+const { t } = useI18n();
+const { modifyRubriquesFilter } = useRubriquesFilterParam();
+const filterStore = useFilterStore();
 
-  computed: {
-    ...mapState(useFilterStore, ["filterRubrique", "filterRubriqueDisplay"]),
-    rubriqueDisplay(): Array<Rubrique> {
-      return this.filterRubriqueDisplay.filter(
-        (rubrique: Rubrique) => 0 !== rubrique.podcastCount,
-      );
-    },
-    rubriquageDisplay(): Array<Rubriquage> {
-      const elementToNotShow = Array.from(this.filterRubrique);
-      if (elementToNotShow.length) {
-        const rubriquageIdToNotShow = elementToNotShow.map(
-          (a) => a.rubriquageId,
-        );
-        return this.rubriquages.filter((element) => {
-          if (!element.rubriquageId) {
-            return;
-          }
-          return !rubriquageIdToNotShow.includes(element.rubriquageId);
-        });
-      }
-      return Array.from(this.rubriquages).toSorted((a,b) => {
-        if(a.title > b.title){
-          return 1;
-        }
-        return (b.title > a.title) ? -1 : 0;
-      });
-    },
-  },
-  watch: {
-    filterRubrique: {
-      deep: true,
-      handler() {
-        this.selectNewRubriquage();
-      },
-    },
-  },
 
-  mounted() {
-    this.selectNewRubriquage();
-  },
-  beforeUnmount(): void {
-    window.removeEventListener("resize", this.resizeWindow);
-  },
-  methods: {
-    ...mapActions(useFilterStore, ["filterUpdateRubriqueDisplay"]),
-    initRubriques(): void {
-      this.filterUpdateRubriqueDisplay(this.rubriquage?.rubriques ?? []);
-      window.addEventListener("resize", this.resizeWindow);
-      this.$nextTick(() => {
-        this.resizeWindow();
-      });
-    },
-    addFilterFromPopover(rubrique: Rubrique): void {
-      (this.$refs.popoverRubrique as InstanceType<typeof Popover>).clearClick();
-      this.addFilter(rubrique);
-    },
-    addFilter(rubrique: Rubrique): void {
-      if (!this.rubriquage) {
-        return;
-      }
-      const filterToAdd = {
-        rubriquageId: this.rubriquage.rubriquageId ?? 0,
-        rubriqueId: rubrique.rubriqueId ?? 0,
-        nameRubriquage: this.rubriquage.title,
-        nameRubrique: rubrique.name,
-      };
-      this.modifyRubriquesFilter((a) => {
-        a.push(filterToAdd);
-        return a;
-      });
-      this.selectNewRubriquage();
-    },
-    selectNewRubriquage() {
-      const rubriquageLength = this.rubriquages.length;
-      if (rubriquageLength === this.filterRubrique.length) {
-        return;
-      }
-      let index = 0;
-      const rubriquageAlreadyFilter = this.filterRubrique.map(
-        (a) => a.rubriquageId,
-      );
-      for (index; index < rubriquageLength; index++) {
-        const rubriquageIdIndex = this.rubriquages[index].rubriquageId;
-        if (
-          rubriquageIdIndex &&
-          !rubriquageAlreadyFilter.includes(rubriquageIdIndex)
-        ) {
-          break;
-        }
-      }
-      this.rubriquage = this.rubriquages[index];
-      this.initRubriques();
-    },
-    resizeWindow(): void {
-      const rubriqueList = this.$refs.rubriqueListContainer as HTMLElement;
-      if (null === rubriqueList) {
-        return;
-      }
-      rubriqueList.style.justifyContent = "flex-start";
-      this.hidenRubriques.length = 0;
-      this.rubriqueDisplay.forEach((element: Rubrique) => {
-        const el = (
-          this.$refs["rubrique" + element.rubriqueId] as Array<HTMLElement>
-        )[0];
-        if (!el) return;
-        if (el.classList.contains("hid")) {
-          el.classList.remove("hid");
-        }
-      });
-      this.rubriqueDisplay.forEach((element: Rubrique) => {
-        const el = (
-          this.$refs["rubrique" + element.rubriqueId] as Array<HTMLElement>
-        )[0];
-        if (!el) return;
-        const parent = el.parentElement;
-        if (
-          null !== parent &&
-          el.offsetLeft + el.clientWidth <= parent.clientWidth - 20
-        ) {
-          return;
-        }
-        this.hidenRubriques.push(element);
-        if (!el.classList.contains("hid")) {
-          el.className += " hid";
-        }
-      });
-      if (!this.hidenRubriques.length) {
-        rubriqueList.style.justifyContent = "center";
-      }
-    },
-    onRubriquageSelected() {
-      this.initRubriques();
-    },
-  },
+//Computed
+const rubriqueDisplay = computed(() => {
+  return filterStore.filterRubriqueDisplay.filter(
+    (rubrique: Rubrique) => 0 !== rubrique.podcastCount,
+  );
 });
+const rubriquageDisplay = computed(() => {
+  const elementToNotShow = Array.from(filterStore.filterRubrique);
+  if (elementToNotShow.length) {
+    const rubriquageIdToNotShow = elementToNotShow.map(
+      (a) => a.rubriquageId,
+    );
+    return props.rubriquages.filter((element) => {
+      if (!element.rubriquageId) {
+        return;
+      }
+      return !rubriquageIdToNotShow.includes(element.rubriquageId);
+    });
+  }
+  return Array.from(props.rubriquages).toSorted((a,b) => {
+    if(a.title > b.title){
+      return 1;
+    }
+    return (b.title > a.title) ? -1 : 0;
+  });
+});
+
+
+//Watch
+watch(()=>filterStore.filterRubrique, () => {
+  selectNewRubriquage()
+}, {deep: true});
+
+onMounted(()=>selectNewRubriquage())
+
+onBeforeUnmount(()=> window.removeEventListener("resize", resizeWindow))
+
+
+//Methods
+function initRubriques(): void {
+  filterStore.filterUpdateRubriqueDisplay(rubriquage.value?.rubriques ?? []);
+  window.addEventListener("resize", resizeWindow);
+  nextTick(() => {
+    resizeWindow();
+  });
+}
+function addFilterFromPopover(rubrique: Rubrique): void {
+  const popover = popoverRubriqueRef?.value as InstanceType<typeof ClassicPopover>;
+  popover.clearClick();
+  addFilter(rubrique);
+}
+function addFilter(rubrique: Rubrique): void {
+  if (!rubriquage.value) {
+    return;
+  }
+  const filterToAdd = {
+    rubriquageId: rubriquage.value.rubriquageId ?? 0,
+    rubriqueId: rubrique.rubriqueId ?? 0,
+    nameRubriquage: rubriquage.value.title,
+    nameRubrique: rubrique.name,
+  };
+  modifyRubriquesFilter((a) => {
+    a.push(filterToAdd);
+    return a;
+  });
+  selectNewRubriquage();
+}
+function selectNewRubriquage() {
+  const rubriquageLength = props.rubriquages.length;
+  if (rubriquageLength === filterStore.filterRubrique.length) {
+    return;
+  }
+  let index = 0;
+  const rubriquageAlreadyFilter = filterStore.filterRubrique.map(
+    (a) => a.rubriquageId,
+  );
+  for (index; index < rubriquageLength; index++) {
+    const rubriquageIdIndex = props.rubriquages[index].rubriquageId;
+    if (
+      rubriquageIdIndex &&
+      !rubriquageAlreadyFilter.includes(rubriquageIdIndex)
+    ) {
+      break;
+    }
+  }
+  rubriquage.value = props.rubriquages[index];
+  initRubriques();
+}
+function resizeWindow(): void {
+  const rubriqueList = rubriqueListContainerRef?.value as HTMLElement;
+  if (null === rubriqueList) {
+    return;
+  }
+  rubriqueList.style.justifyContent = "flex-start";
+  hidenRubriques.value.length = 0;
+  rubriqueDisplay.value.forEach((element: Rubrique) => {
+    const el = rubriqueList.querySelector('#rubrique' + element.rubriqueId);
+    if (!el) return;
+    if (el.classList.contains("hid")) {
+      el.classList.remove("hid");
+    }
+  });
+  rubriqueDisplay.value.forEach((element: Rubrique) => {
+    const el = rubriqueList.querySelector('#rubrique' + element.rubriqueId);
+    if (!el) return;
+    const parent = el.parentElement;
+    if (
+      null !== parent &&
+      el.offsetLeft + el.clientWidth <= parent.clientWidth - 20
+    ) {
+      return;
+    }
+    hidenRubriques.value.push(element);
+    if (!el.classList.contains("hid")) {
+      el.className += " hid";
+    }
+  });
+  if (!hidenRubriques.value.length) {
+    rubriqueList.style.justifyContent = "center";
+  }
+}
+function onRubriquageSelected() {
+  initRubriques();
+}
 </script>
 
 <style lang="scss">
-
-
 .octopus-app {
   .rubrique-list-container {
     display: flex;

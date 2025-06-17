@@ -3,9 +3,9 @@
     <div class="d-flex align-items-center">
       <component 
         :is="inStudio? 'div':'h3'" 
-        :class="inStudio? 'm-1 fw-bold':'mb-0 me-2'">{{ $t("Podcast's comments") }}</component>
+        :class="inStudio? 'm-1 fw-bold':'mb-0 me-2'">{{ t("Podcast's comments") }}</component>
       <button
-        :title="$t('Refresh')"
+        :title="t('Refresh')"
         class="btn btn-transparent"
         @click="reload = !reload"
       >
@@ -30,11 +30,10 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import RefreshIcon from "vue-material-design-icons/Refresh.vue";
 import { Podcast } from "@/stores/class/general/podcast";
-import { defineAsyncComponent, defineComponent } from "vue";
-import { mapActions, mapState } from "pinia";
+import { computed, defineAsyncComponent, onBeforeMount, ref, Ref, watch } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import {
@@ -42,105 +41,88 @@ import {
   CommentsConfig,
 } from "@/stores/class/config/commentsConfig";
 import { CommentPodcast } from "@/stores/class/general/comment";
+import { useI18n } from "vue-i18n";
 const CommentList = defineAsyncComponent(() => import("./CommentList.vue"));
 const CommentInput = defineAsyncComponent(() => import("./CommentInput.vue"));
-export default defineComponent({
-  name: "CommentSection",
-  components: {
-    CommentList,
-    CommentInput,
-    RefreshIcon,
-  },
-  props: {
-    podcast: { default: undefined, type: Object as () => Podcast },
-    inStudio: { default: false, type: Boolean },
-    stateFilter: { default: "", type: String },
-  },
-  emits:['commentReceived'],
-  data() {
-    return {
-      reload: false as boolean,
-      configPodcast: undefined as CommentsConfig | undefined,
-      nbComments: 0 as number,
-      eventToHandle: undefined as CommentMessage | undefined,
-    };
-  },
-  computed: {
-    ...mapState(useCommentStore, [
-      "commentEventToHandle",
-      "commentInitialized",
-      "commentPodcastId",
-    ]),
-    ...mapState(useAuthStore, ["authOrgaId"]),
-    displayCommentSection(): boolean {
-      return this.canPostComment || this.nbComments > 0;
-    },
-    canPostComment(): boolean {
-      return this.getCanPostComment(
-        this.configPodcast,
-        this.podcast,
-        undefined !== this.authOrgaId,
-      );
-    },
-    eventActive(): boolean {
-      return undefined !== this.podcast?.conferenceId;
-    },
-  },
-  watch: {
-    commentEventToHandle: {
-      deep: true,
-      handler(): void {
-        if (
-          !this.commentEventToHandle.length ||
-          this.commentPodcastId !== this.podcast?.podcastId
-        ){
-          return;
-        }
-        this.eventToHandle = this.commentEventToHandle[0];
-        this.commentEventHandled();
-        this.$emit('commentReceived');
-      },
-    },
-  },
-  created() {
-    this.fetchPodcastCommentsConfig();
-  },
-  methods: {
-    ...mapActions(useCommentStore, [
-      "getCommentsConfig",
-      "getCanPostComment",
-      "commentEventHandled",
-      "initialize",
-      "initComments",
-    ]),
-    async fetchPodcastCommentsConfig() {
-      if (!this.podcast?.podcastId) {
-        return;
-      }
-      this.configPodcast = await this.getCommentsConfig(this.podcast);
-      if (!this.eventActive) {
-        return;
-      }
-      this.initLiveComments();
-    },
-    async initLiveComments(): Promise<void> {
-      if (!this.podcast?.podcastId || !this.podcast?.organisation.id) {
-        return;
-      }
-      if (!this.commentInitialized) {
-        await this.initialize();
-      }
-      await this.initComments(
-        this.podcast.podcastId,
-        this.podcast.organisation.id,
-      );
-    },
-    newComment(comment: CommentPodcast) {
-      if (this.eventActive) {
-        return;
-      }
-      this.eventToHandle = { type: "CREATE", comment: comment };
-    },
-  },
+
+//Props 
+const props = defineProps({
+  podcast: { default: undefined, type: Object as () => Podcast },
+  inStudio: { default: false, type: Boolean },
+  stateFilter: { default: "", type: String },
+})
+
+//Emits
+const emit = defineEmits(["commentReceived"]);
+
+//Data 
+const reload = ref(false);
+const configPodcast: Ref<CommentsConfig | undefined> = ref(undefined);
+const nbComments = ref(0);
+const eventToHandle: Ref<CommentMessage | undefined> = ref(undefined);
+
+//Composables
+const { t } = useI18n();
+const commentStore = useCommentStore();
+const authStore = useAuthStore();
+
+
+//Computed
+const displayCommentSection = computed(() => canPostComment.value || nbComments.value > 0);
+const canPostComment = computed(() => {
+  return commentStore.getCanPostComment(
+    configPodcast.value,
+    props.podcast,
+    undefined !== authStore.authOrgaId,
+  );
 });
+const eventActive = computed(() =>  undefined !== props.podcast?.conferenceId);
+
+
+//Watch
+watch(()=>commentStore.commentEventToHandle, async () => {
+  if (
+    !commentStore.commentEventToHandle.length ||
+    commentStore.commentPodcastId !== props.podcast?.podcastId
+  ){
+    return;
+  }
+  eventToHandle.value = commentStore.commentEventToHandle[0];
+  commentStore.commentEventHandled();
+  emit('commentReceived');
+}, {deep: true});
+
+
+onBeforeMount(()=>fetchPodcastCommentsConfig())
+
+
+//Methods
+async function fetchPodcastCommentsConfig() {
+  if (!props.podcast?.podcastId) {
+    return;
+  }
+  configPodcast.value = await commentStore.getCommentsConfig(props.podcast);
+  if (!eventActive.value) {
+    return;
+  }
+  initLiveComments();
+}
+async function initLiveComments(): Promise<void> {
+  if (!props.podcast?.podcastId || !props.podcast?.organisation.id) {
+    return;
+  }
+  if (!commentStore.commentInitialized) {
+    await commentStore.initialize();
+  }
+  await commentStore.initComments(
+    props.podcast.podcastId,
+    props.podcast.organisation.id,
+  );
+}
+function newComment(comment: CommentPodcast) {
+  if (eventActive.value) {
+    return;
+  }
+  eventToHandle.value = { type: "CREATE", comment: comment };
+}
 </script>

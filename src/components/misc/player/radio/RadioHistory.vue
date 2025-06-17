@@ -1,7 +1,7 @@
 <template>
   <div v-if="playerRadioHistory.length" class="d-flex align-items-center mt-3">
     <div class="fw-bold me-3">
-      {{ $t("Previously") + ":" }}
+      {{ t("Previously") + ":" }}
     </div>
     <button
       v-if="indexStart !== 0"
@@ -13,8 +13,8 @@
     <div ref="historyListContainer" class="history-list-container">
       <div
         v-for="(pastItem, index) in playerRadioHistory"
+        :id="'history' + index"
         :key="pastItem.title"
-        :ref="'history' + index"
         class="d-flex flex-shrink-0"
       >
         <div class="d-flex flex-shrink-0 align-items-end">
@@ -35,111 +35,92 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
-import { mapState } from "pinia";
 import dayjs from "dayjs";
 import radioHelper from "../../../../helper/radio/radioHelper";
-import { defineComponent } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from "vue";
 import { MediaRadio } from "@/stores/class/general/player";
-export default defineComponent({
-  name: "RadioHistory",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-  },
-  emits: ["updateNotListenTime"],
-  data() {
-    return {
-      indexStart: 0 as number,
-      indexNotDisplay: 100 as number,
-    };
-  },
 
-  computed: {
-    ...mapState(usePlayerStore, ["playerRadio"]),
-    playerRadioHistory() {
-      return this.playerRadio?.history ?? [];
-    },
-  },
-  watch: {
-    playerRadioHistory: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.$nextTick(() => {
-          this.handleResize(0);
-        });
-      },
-    },
-  },
-  created() {
-    window.addEventListener("resize", () => {
-      this.handleResize(0);
-    });
-  },
-  unmounted() {
-    window.removeEventListener("resize", () => {
-      this.handleResize(0);
-    });
-  },
-  mounted() {
-    this.handleResize(0);
-  },
-  methods: {
-    displayEverythingAfterIndex(indexAsked: number) {
-      for (let index = 0; index < this.playerRadioHistory.length; index++) {
-        const el = (this.$refs["history" + index] as Array<HTMLElement>)[0];
-        if (!el) continue;
-        if (index < indexAsked && !el.classList.contains("hid")) {
-          el.classList.add("hid");
-          continue;
-        }
-        if (index >= indexAsked && el.classList.contains("hid")) {
-          el.classList.remove("hid");
-        }
-      }
-    },
-    handleResize(indexAsked: number): void {
-      const historyList = this.$refs.historyListContainer as HTMLElement;
-      if (null === historyList || !historyList) {
-        return;
-      }
-      this.indexStart = indexAsked;
-      this.indexNotDisplay = this.playerRadioHistory.length;
-      this.displayEverythingAfterIndex(indexAsked);
-      for (
-        let index = this.indexStart + 1;
-        index < this.playerRadioHistory.length;
-        index++
-      ) {
-        const el = (this.$refs["history" + index] as Array<HTMLElement>)[0];
-        if (!el) continue;
-        if (index > this.indexNotDisplay && !el.classList.contains("hid")) {
-          el.classList.add("hid");
-          continue;
-        }
-        const parent = el.parentElement;
-        if (parent && el.offsetLeft + el.clientWidth > parent.clientWidth) {
-          this.indexNotDisplay = index;
-          el.classList.add("hid");
-        }
-      }
-    },
-    displayTimeItem(item: MediaRadio): string {
-      return dayjs(item.startDate).format("HH:mm");
-    },
-    displayPreviousItem(item: MediaRadio): string {
-      if (item.podcastId) {
-        return item.title;
-      }
-      return radioHelper.displayTitle(item);
-    },
-  },
-});
+//Data 
+const indexStart = ref(0);
+const indexNotDisplay = ref(100);
+const historyListContainerRef = useTemplateRef('historyListContainer');
+
+//Composables
+const { t } = useI18n();
+const playerStore = usePlayerStore();
+
+
+//Computed
+const playerRadioHistory = computed(() => playerStore.playerRadio?.history ?? []);
+   
+
+//Watch
+watch(playerRadioHistory, () => {
+  nextTick(() => {
+    handleResize(0);
+  });
+}, {deep: true,immediate: true});
+
+
+onMounted(()=>window.addEventListener("resize", () => {handleResize(0);}))
+onUnmounted(()=>window.removeEventListener("resize", () => {handleResize(0);}))
+
+
+//Methods
+function displayEverythingAfterIndex(indexAsked: number) {
+  for (let index = 0; index < playerRadioHistory.value.length; index++) {
+    const el = historyListContainerRef?.value?.querySelector('#history' + index);
+    if (!el) continue;
+    if (index < indexAsked && !el.classList.contains("hid")) {
+      el.classList.add("hid");
+      continue;
+    }
+    if (index >= indexAsked && el.classList.contains("hid")) {
+      el.classList.remove("hid");
+    }
+  }
+}
+function handleResize(indexAsked: number): void {
+  const historyList = historyListContainerRef?.value as HTMLElement;
+  if (null === historyList || !historyList) {
+    return;
+  }
+  indexStart.value = indexAsked;
+  indexNotDisplay.value = playerRadioHistory.value.length;
+  displayEverythingAfterIndex(indexAsked);
+  for (
+    let index = indexStart.value + 1;
+    index < playerRadioHistory.value.length;
+    index++
+  ) {
+    const el = historyListContainerRef?.value?.querySelector('#history' + index);
+    if (!el) continue;
+    if (index > indexNotDisplay.value && !el.classList.contains("hid")) {
+      el.classList.add("hid");
+      continue;
+    }
+    const parent = el.parentElement;
+    if (parent && el.offsetLeft + el.clientWidth > parent.clientWidth) {
+      indexNotDisplay.value = index;
+      el.classList.add("hid");
+    }
+  }
+}
+function displayTimeItem(item: MediaRadio): string {
+  return dayjs(item.startDate).format("HH:mm");
+}
+function displayPreviousItem(item: MediaRadio): string {
+  if (item.podcastId) {
+    return item.title;
+  }
+  return radioHelper.displayTitle(item);
+}
 </script>
 <style lang="scss">
 .octopus-app {

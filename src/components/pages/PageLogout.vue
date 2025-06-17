@@ -3,22 +3,19 @@
     class="page-box page-box-absolute page-logout"
   >
     <div class="logout-section">
-      <h1 class="mb-3">{{ $t("Logout") }}</h1>
+      <h1 class="mb-3">{{ t("Logout") }}</h1>
       <div class="loader"></div>
     </div>
   </section>
 </template>
 
-<script lang="ts">
-import { useFilterStore } from "../../stores/FilterStore";
-import { mapState } from "pinia";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PageNotFound",
-  computed: {
-    ...mapState(useFilterStore, ["filterIab"]),
-  },
-});
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
+
+//Composables
+const { t } = useI18n();
+
 </script>
 <style lang="scss">
 .octopus-app .page-logout {

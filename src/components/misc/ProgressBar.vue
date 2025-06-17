@@ -10,10 +10,10 @@
       aria-valuenow="0"
       aria-valuemin="0"
       aria-valuemax="100"
-      :aria-label="$t('Live progress bar')"
+      :aria-label="t('Live progress bar')"
       :style="'width: ' + secondaryProgress + '%'"
     />
-    <template v-if="playerMedia">
+    <template v-if="playerStore.playerMedia">
       <div
         v-if="mediaCueInPercent > 0"
         class="octopus-progress-bar bg-complementary"
@@ -30,10 +30,10 @@
       aria-valuenow="0"
       aria-valuemin="0"
       aria-valuemax="100"
-      :aria-label="$t('Listening progress bar')"
+      :aria-label="t('Listening progress bar')"
       :style="'width: ' + mainProgress + '%'"
     />
-    <template v-if="playerMedia">
+    <template v-if="playerStore.playerMedia">
       <div
         v-if="mediaCueInPercent > 0"
         class="octopus-progress-bar octopus-progress-bar-duration bg-complementary"
@@ -55,8 +55,8 @@
       class="octopus-progress-bar-cursor"
       :style="'left:' + mainProgress + '%'"
     />
-    <template v-if="playerChapteringPercent">
-      <template v-for="chapter in playerChapteringPercent" :key="chapter">
+    <template v-if="playerStore.playerChapteringPercent">
+      <template v-for="chapter in playerStore.playerChapteringPercent" :key="chapter">
         <div
           :id="'chapter-' + chapter.startPercent"
           class="octopus-progress-bar octopus-chapter"
@@ -82,66 +82,57 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { usePlayerStore } from "../../stores/PlayerStore";
-import { mapState } from "pinia";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
-export default defineComponent({
-  name: "ProgressBar",
-  components: {
-    ClassicPopover,
-  },
-  props: {
-    alertBar: { default: undefined, type: Number },
-    mainProgress: { default: 0, type: Number },
-    secondaryProgress: { default: 0, type: Number },
-    isProgressCursor: { default: false, type: Boolean },
-    inPlayer: { default: false, type: Boolean },
-  },
-  data() {
-    return {
-      mediaCueInPercent: 0 as number,
-      mediaCueOutPercent: 100 as number,
-    };
-  },
-  computed: {
-    ...mapState(usePlayerStore, [
-      "playerMedia",
-      "playerChapteringPercent",
-      "playerStatus",
-    ]),
-    display() {
-      return "STOPPED" !== this.playerStatus;
-    },
-  },
-  watch: {
-    playerMedia: {
-      deep: true,
-      immediate: true,
-      handler() {
-        if (this.playerMedia) {
-          this.mediaCueInPercent = this.timeMediaToPercent(
-            this.playerMedia.cueIn ?? 0,
-          );
-          this.mediaCueOutPercent = this.timeMediaToPercent(
-            this.playerMedia.cueOut ?? null,
-          );
-        }
-      },
-    },
-  },
-  methods: {
-    timeMediaToPercent(value: number | null): number {
-      if (null === value || !this.playerMedia) {
-        return 100;
-      }
-      return (value * 100) / (this.playerMedia?.duration ?? 1);
-    },
-  },
-});
+
+//Props 
+defineProps({
+  alertBar: { default: undefined, type: Number },
+  mainProgress: { default: 0, type: Number },
+  secondaryProgress: { default: 0, type: Number },
+  isProgressCursor: { default: false, type: Boolean },
+  inPlayer: { default: false, type: Boolean },
+})
+
+
+//Data 
+const mediaCueInPercent = ref(0);
+const mediaCueOutPercent = ref(100);
+
+
+//Composables
+const { t } = useI18n();
+const playerStore = usePlayerStore();
+
+//Computed
+const display = computed(() => "STOPPED" !== playerStore.playerStatus);
+
+
+//Watch
+watch(()=>playerStore.playerMedia, () => {
+  if (playerStore.playerMedia) {
+    mediaCueInPercent.value = timeMediaToPercent(
+      playerStore.playerMedia.cueIn ?? 0,
+    );
+    mediaCueOutPercent.value = timeMediaToPercent(
+      playerStore.playerMedia.cueOut ?? null,
+    );
+  }
+}, {deep: true, immediate: true});
+
+
+//Methods
+function timeMediaToPercent(value: number | null): number {
+  if (null === value || !playerStore.playerMedia) {
+    return 100;
+  }
+  return (value * 100) / (playerStore.playerMedia?.duration ?? 1);
+}
 </script>
 
 <style lang="scss">

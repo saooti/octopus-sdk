@@ -1,6 +1,6 @@
 <template>
   <section class="page-box">
-    <template v-if="loaded && !error">
+    <template v-if="loaded && !error && podcast">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
         :page-title="titlePage"
@@ -17,7 +17,7 @@
           @update-podcast="updatePodcast"
         />
         <ShareSocialsButtons
-          v-if="pageParameters.isShareButtons"
+          v-if="state.podcastPage.ShareButtons"
           :organisation-id="podcast.organisation.id"
         />
         <SharePlayer
@@ -30,8 +30,8 @@
         <PodcastInlineList
           :emission-id="podcast.emission.emissionId"
           :href="'/main/pub/emission/' + podcast.emission.emissionId"
-          :title="$t('More episodes of this emission')"
-          :button-text="$t('All podcast emission button')"
+          :title="t('More episodes of this emission')"
+          :button-text="t('All podcast emission button')"
           title-tag="h3"
         />
         <section v-if="!hideSuggestions">
@@ -40,7 +40,7 @@
               class="mt-4"
               title-tag="h3"
               :podcast-id="podcastId"
-              :title="$t('Suggested listening')"
+              :title="t('Suggested listening')"
             />
           </ClassicLazy>
           <ClassicLazy v-for="c in categories" :key="c.id" :min-height="550">
@@ -49,25 +49,25 @@
               title-tag="h3"
               :iab-id="c.id"
               :href="'/main/pub/category/' + c.id"
-              :title="$t('More episodes of this category : ', { name: c.name })"
-              :button-text="$t('All podcast button', { name: c.name })"
+              :title="t('More episodes of this category : ', { name: c.name })"
+              :button-text="t('All podcast button', { name: c.name })"
             />
           </ClassicLazy>
         </section>
       </div>
     </template>
     <ClassicLoading
-      :loading-text="!loaded ? $t('Loading content ...') : undefined"
+      :loading-text="!loaded ? t('Loading content ...') : undefined"
       :error-text="
         error
-          ? $t(`This episode is not available for (re)listening`)
+          ? t(`This episode is not available for (re)listening`)
           : undefined
       "
     />
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import youtubeVideoHelper from "../../helper/youtubeVideoHelper";
 import {useOrgaComputed} from "../composable/useOrgaComputed";
 import PodcastInlineList from "../display/podcasts/PodcastInlineList.vue";
@@ -84,13 +84,14 @@ import {
 } from "@/stores/class/conference/conference";
 import {useErrorHandler} from "../composable/useErrorHandler";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, onBeforeUnmount, ref, Ref, watch } from "vue";
 import { Category } from "@/stores/class/general/category";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
-import { mapState, mapActions } from "pinia";
 import { AxiosError } from "axios";
 import { useCommentStore } from "../../stores/CommentStore";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -103,240 +104,224 @@ const CommentSection = defineAsyncComponent(
 const PodcastmakerHeader = defineAsyncComponent(
   () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
-export default defineComponent({
-  name: "PodcastPage",
-  components: {
-    PodcastInlineList,
-    ShareSocialsButtons,
-    SharePlayer,
-    CommentSection,
-    PodcastModuleBox,
-    ClassicLoading,
-    ClassicLazy,
-    PodcastmakerHeader,
-  },
 
-  props: {
-    updateStatus: { default: undefined, type: String },
-    playingPodcast: { default: undefined, type: Object as () => Podcast },
-    podcastId: { default: 0, type: Number },
-  },
-
-  setup(){
-    const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
-    const { updatePathParams } = useSeoTitleUrl();
-    const {handle403} = useErrorHandler();
-    return { isPodcastmaker, isEditRights, authOrgaId, updatePathParams, handle403 }
-  },
-
-  data() {
-    return {
-      loaded: false as boolean,
-      podcast: undefined as Podcast | undefined,
-      error: false as boolean,
-      fetchConference: undefined as Conference | undefined,
-      infoReload: undefined as ReturnType<typeof setTimeout> | undefined,
-      youtubeId: undefined as string|undefined,
-    };
-  },
-
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useAuthStore, ["isRoleLive"]),
-    ...mapState(useGeneralStore, ["storedCategories"]),
-    hideSuggestions(): boolean {
-      return (
-        "true" ===
-        (this.podcast?.emission?.annotations?.["HIDE_SUGGESTIONS"] as
-          | string
-          | undefined)
-      );
-    },
-    pageParameters() {
-      return {
-        isShareButtons: state.podcastPage.ShareButtons as boolean,
-      };
-    },
-    emissionMainCategory(): number {
-      if (!this.podcast) {
-        return 0;
-      }
-      if (this.podcast.emission.annotations?.mainIabId) {
-        return parseInt(
-          this.podcast.emission.annotations.mainIabId as string,
-          10,
-        );
-      } else if (this.podcast.emission.iabIds?.length) {
-        return this.podcast.emission.iabIds[0];
-      }
-      return 0;
-    },
-    categories(): Array<Category> {
-      if ("undefined" === typeof this.podcast) return [];
-      return this.storedCategories
-        .filter((item: Category) => {
-          return (
-            this.podcast?.emission.iabIds &&
-            -1 !== this.podcast.emission.iabIds.indexOf(item.id)
-          );
-        })
-        .sort((a: Category, b: Category) => {
-          if (a.id === this.emissionMainCategory) return -1;
-          if (b.id === this.emissionMainCategory) return 1;
-          return 0;
-        });
-    },
-    editRight(): boolean {
-      return this.isEditRights(this.podcast?.organisation.id);
-    },
-    isLiveReadyToRecord(): boolean {
-      return (
-        undefined !== this.podcast?.conferenceId &&
-        0 !== this.podcast?.conferenceId &&
-        "READY_TO_RECORD" === this.podcast?.processingStatus
-      );
-    },
-    isOctopusAndAnimator(): boolean {
-      return !this.isPodcastmaker && this.editRight && this.isRoleLive;
-    },
-    titlePage(): string {
-      return this.isLiveReadyToRecord
-        ? this.$t("Live episode")
-        : this.$t("Episode");
-    },
-  },
-  watch: {
-    updateStatus(): void {
-      if (this.fetchConference && null !== this.fetchConference) {
-        this.fetchConference.status = this.updateStatus;
-      }
-    },
-    podcastId: {
-      immediate: true,
-      async handler() {
-        await this.getPodcastDetails();
-        if (!this.podcast || this.error) {
-          return;
-        }
-        this.initCommentUser();
-      },
-    },
-  },
-  beforeUnmount() {
-    this.contentToDisplayUpdate(null);
-    clearTimeout(this.infoReload);
-  },
-
-  methods: {
-    ...mapActions(useGeneralStore, ["contentToDisplayUpdate"]),
-    ...mapActions(useCommentStore, ["getCommentsConfig", "initCommentUser"]),
-    async initConference() {
-      if (!this.podcast || undefined == this.podcast.conferenceId || "READY_TO_RECORD" !== this.podcast.processingStatus) return;
-      this.fetchConference = { conferenceId: this.podcast.conferenceId, title: "" };
-      if (this.isOctopusAndAnimator) {
-        try {
-          this.fetchConference = await classicApi.fetchData<Conference>({
-            api: 9,
-            path: "conference/" + this.podcast.conferenceId,
-          });
-        } catch {
-          await this.fetchConferenceStatus();
-        }
-      } else {
-        await this.fetchConferenceStatus();
-      }
-      if (
-        this.fetchConference &&
-        -1 !== this.fetchConference.conferenceId &&
-        "PUBLISHING" !== this.fetchConference.status &&
-        "DEBRIEFING" !== this.fetchConference.status
-      ) {
-        this.fetchConferenceStatusLoop();
-      }
-    },
-    async fetchConferenceStatusLoop() {
-      if("PUBLISHING" ===this.fetchConference?.status){
-        return;
-      }
-      this.infoReload = setTimeout(async () => {
-        await this.fetchConferenceStatus();
-        this.fetchConferenceStatusLoop();
-      }, 3000);
-    },
-    async fetchConferenceStatus() {
-      try {
-        const data = await classicApi.fetchData<ConferencePublicInfo>({
-          api: 9,
-          path: "conference/info/" + this.podcast?.conferenceId,
-        });
-        this.fetchConference.status = data.status;
-      } catch {
-        //Do nothing
-      }
-    },
-    updatePodcast(podcastUpdated: Podcast): void {
-      this.podcast = podcastUpdated;
-    },
-    initError(): void {
-      this.error = true;
-      this.loaded = true;
-    },
-    async getPodcastDetails(): Promise<void> {
-      this.loaded = false;
-      this.error = false;
-      try {
-        const data = await classicApi.fetchData<Podcast>({
-          api: 0,
-          path: "podcast/" + this.podcastId,
-        });
-        if (
-          "PUBLIC" !== data.organisation.privacy &&
-          this.filterOrgaId !== data.organisation.id &&
-          this.$route.query.productor !== data.organisation.id
-        ) {
-          this.initError();
-          return;
-        }
-        this.podcast = data;
-        this.contentToDisplayUpdate(data);
-        if (
-          (!this.podcast.availability.visibility ||
-            ("READY_TO_RECORD" !== this.podcast.processingStatus &&
-              "READY" !== this.podcast.processingStatus &&
-              "PROCESSING" !== this.podcast.processingStatus) ||
-            false === this.podcast.valid) &&
-          !this.editRight
-        ) {
-          this.error = true;
-          this.loaded = true;
-          return;
-        }
-       this.podcastInProcessing();
-        this.updatePathParams(this.podcast.title);
-        await this.getCommentsConfig(this.podcast);
-        if((this.fetchConference?.videoProfile?.includes("video_") && "READY_TO_RECORD" === this.podcast.processingStatus) || undefined !== this.podcast.video?.videoId){
-          this.youtubeId = youtubeVideoHelper.getYoutubeId(this.podcast?.tags ?? []);
-        }
-        this.loaded = true;
-      } catch (error) {
-        this.handle403(error as AxiosError);
-        this.initError();
-      }
-    },
-
-    podcastInProcessing(){
-      if("PLANNED" !== this.podcast?.processingStatus){
-        this.initConference();
-        return;
-      }
-      this.infoReload = setTimeout(async () => {
-        this.podcast = await classicApi.fetchData<Podcast>({
-          api: 0,
-          path: "podcast/" + this.podcastId,
-        });
-        this.podcastInProcessing();
-      }, 2000);
-    }
-  },
+//Props 
+const props = defineProps({
+  updateStatus: { default: undefined, type: String },
+  playingPodcast: { default: undefined, type: Object as () => Podcast },
+  podcastId: { default: 0, type: Number },
 });
+
+
+//Data 
+const loaded = ref(false);
+const error = ref(false);
+const podcast: Ref<Podcast | undefined> = ref(undefined);
+const fetchConference: Ref<Conference | undefined> = ref(undefined);
+const infoReload: Ref<ReturnType<typeof setTimeout>| undefined> = ref(undefined);
+const youtubeId: Ref<string| undefined> = ref(undefined);
+
+//Composables
+const route = useRoute();
+const { t } = useI18n();
+const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
+const { updatePathParams } = useSeoTitleUrl();
+const {handle403} = useErrorHandler();
+const authStore = useAuthStore();
+const generalStore = useGeneralStore();
+const filterStore = useFilterStore();
+const commentStore = useCommentStore();
+
+//Computed
+const hideSuggestions = computed(() =>{
+  return (
+      "true" ===
+      (podcast.value?.emission?.annotations?.["HIDE_SUGGESTIONS"] as
+        | string
+        | undefined)
+    );
+});
+const emissionMainCategory = computed(() =>{
+  if (!podcast.value) {
+    return 0;
+  }
+  if (podcast.value.emission.annotations?.mainIabId) {
+    return parseInt(
+      podcast.value.emission.annotations.mainIabId as string,
+      10,
+    );
+  } else if(podcast.value.emission.iabIds?.length) {
+    return podcast.value.emission.iabIds[0];
+  }
+  return 0;
+});
+
+const categories = computed(() =>{
+  if ("undefined" === typeof podcast.value) return [];
+  return generalStore.storedCategories
+    .filter((item: Category) => {
+      return (
+        podcast.value?.emission.iabIds &&
+        -1 !== podcast.value.emission.iabIds.indexOf(item.id)
+      );
+    })
+    .sort((a: Category, b: Category) => {
+      if (a.id === emissionMainCategory.value) return -1;
+      if (b.id === emissionMainCategory.value) return 1;
+      return 0;
+    });
+});
+
+const editRight = computed(() =>{
+  return isEditRights(podcast.value?.organisation.id);
+});
+
+const isLiveReadyToRecord = computed(() =>{
+  return (
+    undefined !== podcast.value?.conferenceId &&
+    0 !== podcast.value?.conferenceId &&
+    "READY_TO_RECORD" === podcast.value?.processingStatus
+  );
+});
+
+const isOctopusAndAnimator = computed(() =>{
+  return !isPodcastmaker.value && editRight.value && authStore.isRoleLive;
+});
+
+const titlePage = computed(() =>{
+  return isLiveReadyToRecord.value? t("Live episode"): t("Episode");
+});
+
+
+//Watch
+watch(()=>props.updateStatus, () => {
+  if (fetchConference.value && null !== fetchConference.value) {
+    fetchConference.value.status = props.updateStatus;
+  }
+});
+watch(()=>props.podcastId, async () => {
+  await getPodcastDetails();
+  if (!podcast.value || error.value) {
+    return;
+  }
+  commentStore.initCommentUser();
+}, {immediate: true});
+
+
+onBeforeUnmount(() => {
+  generalStore.contentToDisplayUpdate(null);
+  clearTimeout(infoReload.value);
+});
+
+
+//Methods
+async function initConference() {
+  if (!podcast.value || undefined == podcast.value.conferenceId || "READY_TO_RECORD" !== podcast.value.processingStatus) return;
+  fetchConference.value = { conferenceId: podcast.value.conferenceId, title: "" };
+  if (isOctopusAndAnimator.value) {
+    try {
+      fetchConference.value = await classicApi.fetchData<Conference>({
+        api: 9,
+        path: "conference/" + podcast.value.conferenceId,
+      });
+    } catch {
+      await fetchConferenceStatus();
+    }
+  } else {
+    await fetchConferenceStatus();
+  }
+  if (
+    fetchConference.value &&
+    -1 !== fetchConference.value.conferenceId &&
+    "PUBLISHING" !== fetchConference.value.status &&
+    "DEBRIEFING" !== fetchConference.value.status
+  ) {
+    fetchConferenceStatusLoop();
+  }
+}
+
+async function fetchConferenceStatusLoop() {
+  if("PUBLISHING" ===fetchConference.value?.status){
+    return;
+  }
+  infoReload.value = setTimeout(async () => {
+    await fetchConferenceStatus();
+    fetchConferenceStatusLoop();
+  }, 3000);
+}
+async function fetchConferenceStatus() {
+  try {
+    const data = await classicApi.fetchData<ConferencePublicInfo>({
+      api: 9,
+      path: "conference/info/" + podcast.value?.conferenceId,
+    });
+    fetchConference.value.status = data.status;
+  } catch {
+    //Do nothing
+  }
+}
+function updatePodcast(podcastUpdated: Podcast): void {
+  podcast.value = podcastUpdated;
+}
+function initError(): void {
+  error.value = true;
+  loaded.value = true;
+}
+
+async function getPodcastDetails(): Promise<void> {
+  loaded.value = false;
+  error.value = false;
+  try {
+    const data = await classicApi.fetchData<Podcast>({
+      api: 0,
+      path: "podcast/" + props.podcastId,
+    });
+    if (
+      "PUBLIC" !== data.organisation.privacy &&
+      filterStore.filterOrgaId !== data.organisation.id &&
+      route.query.productor !== data.organisation.id
+    ) {
+      initError();
+      return;
+    }
+    podcast.value = data;
+    generalStore.contentToDisplayUpdate(data);
+    if (
+      (!podcast.value.availability.visibility ||
+        ("READY_TO_RECORD" !== podcast.value.processingStatus &&
+          "READY" !== podcast.value.processingStatus &&
+          "PROCESSING" !== podcast.value.processingStatus) ||
+        false === podcast.value.valid) &&
+      !editRight.value
+    ) {
+      error.value = true;
+      loaded.value = true;
+      return;
+    }
+    podcastInProcessing();
+    updatePathParams(podcast.value.title);
+    await commentStore.getCommentsConfig(podcast.value);
+    if((fetchConference.value?.videoProfile?.includes("video_") && "READY_TO_RECORD" === podcast.value.processingStatus) || undefined !== podcast.value.video?.videoId){
+      youtubeId.value = youtubeVideoHelper.getYoutubeId(podcast.value?.tags ?? []);
+    }
+    loaded.value = true;
+  } catch (error) {
+    handle403(error as AxiosError);
+    initError();
+  }
+}
+
+function podcastInProcessing(){
+  if("PLANNED" !== podcast.value?.processingStatus){
+    initConference();
+    return;
+  }
+  infoReload.value = setTimeout(async () => {
+    podcast.value = await classicApi.fetchData<Podcast>({
+      api: 0,
+      path: "podcast/" + props.podcastId,
+    });
+    podcastInProcessing();
+  }, 2000);
+}
 </script>

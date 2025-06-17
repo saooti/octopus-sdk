@@ -15,7 +15,7 @@
       :text-input="true"
       :readonly="readonly"
       :teleport="useTeleport"
-      :locale="formatLocale"
+      :locale="locale"
       :format="format"
       :auto-apply="true"
       :enable-seconds="displaySeconds"
@@ -38,128 +38,128 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClockOutlineIcon from "vue-material-design-icons/ClockOutline.vue";
 import dayjs from "dayjs";
 import VueDatePicker from "@vuepic/vue-datepicker";
-import { defineComponent } from "vue";
-export default defineComponent({
-  components: {
-    VueDatePicker,
-    ClockOutlineIcon,
-  },
-  props: {
-    id:{ default: undefined, type: String },
-    time: {
-      default: undefined,
-      type: Object as () => { hours: number; minutes: number; seconds: number },
-    },
-    date: { default: undefined, type: Date },
-    range: { default: undefined, type: Array as () => Array<Date> },
-    isMaxDate: { default: false, type: Boolean },
-    dateLimit: { default: undefined, type: Date },
-    isMinDate: { default: false, type: Boolean },
-    columnNumber: { default: 1, type: Number },
-    displaySeconds: { default: false, type: Boolean },
-    displayTimePicker: { default: true, type: Boolean },
-    isTimePicker: { default: false, type: Boolean },
-    useTeleport: { default: false, type: Boolean },
-    templateClass: { default: undefined, type: String },
-    readonly: { default: false, type: Boolean },
-    maxTime: {
-      default: null,
-      type: Object as () => {
-        hours?: number | string;
-        minutes?: number | string;
-        seconds?: number | string;
-      },
-    },
-    forceFormat: { default: undefined, type: String },
-    monthPicker: { default: false, type: Boolean },
-    customPosition: { default: null, type: Function },
-    isInline: { default: false, type: Boolean },
-    timePickerInline: { default: false, type: Boolean },
-    label: { default: undefined, type: String },
-    displayLabel: { default: false, type: Boolean },
-  },
+import { computed, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
-  emits: ["updateDate", "update:date"],
-  data() {
-    return {};
+//Props 
+const props = defineProps({
+  id:{ default: undefined, type: String },
+  time: {
+    default: undefined,
+    type: Object as () => { hours: number; minutes: number; seconds: number },
   },
-  computed: {
-    ariaLabels() {
-      return {
-        input: this.date ? this.formatDate(this.date) : undefined,
-        day: (value: { value: Date }) => {
-          return this.formatDate(value.value);
-        },
-      };
-    },
-    modelVal() {
-      if (this.time) {
-        return this.time;
-      }
-      if (this.range) {
-        return this.range;
-      }
-      if (this.date && this.monthPicker) {
-        return {
-          month: this.date.getMonth(),
-          year: this.date.getFullYear(),
-        };
-      }
-      return this.date;
-    },
-    formatLocale() {
-      return this.$i18n.locale;
-    },
-    format() {
-      if (this.forceFormat) {
-        return this.forceFormat;
-      }
-      if (this.monthPicker) {
-        return "MM/yyyy";
-      }
-      let timeString = "";
-      if (this.displayTimePicker || this.isTimePicker) {
-        timeString = "HH:mm";
-        if (this.displaySeconds) {
-          timeString = "HH:mm:ss";
-        }
-      }
-      const dayString = this.isTimePicker
-        ? timeString
-        : "dd/MM/yyyy " + timeString;
-      return this.range ? dayString + " - " + dayString : dayString;
-    },
-    now(): Date {
-      if (this.dateLimit) {
-        return this.dateLimit;
-      }
-      return dayjs().toDate();
+  date: { default: undefined, type: Date },
+  range: { default: undefined, type: Array as () => Array<Date> },
+  isMaxDate: { default: false, type: Boolean },
+  dateLimit: { default: undefined, type: Date },
+  isMinDate: { default: false, type: Boolean },
+  columnNumber: { default: 1, type: Number },
+  displaySeconds: { default: false, type: Boolean },
+  displayTimePicker: { default: true, type: Boolean },
+  isTimePicker: { default: false, type: Boolean },
+  useTeleport: { default: false, type: Boolean },
+  templateClass: { default: undefined, type: String },
+  readonly: { default: false, type: Boolean },
+  maxTime: {
+    default: null,
+    type: Object as () => {
+      hours?: number | string;
+      minutes?: number | string;
+      seconds?: number | string;
     },
   },
-  methods: {
-    updateValue(date: Date) {
-      if (!this.isInline) {
-        this.$refs.divContainer?.focus();
-      }
-      this.$emit("updateDate", date);
+  forceFormat: { default: undefined, type: String },
+  monthPicker: { default: false, type: Boolean },
+  customPosition: { default: null, type: Function },
+  isInline: { default: false, type: Boolean },
+  timePickerInline: { default: false, type: Boolean },
+  label: { default: undefined, type: String },
+  displayLabel: { default: false, type: Boolean },
+})
+
+//Emits
+const emit = defineEmits(["updateDate", "update:date"]);
+
+//Data
+const divContainerRef = useTemplateRef('divContainer');
+
+//Composables
+const {locale} = useI18n();
+
+//Computed
+const ariaLabels = computed(() => {
+  return {
+    input: props.date ? formatDate(props.date) : undefined,
+    day: (value: { value: Date }) => {
+      return formatDate(value.value);
     },
-    formatDate(value: Date): string {
-      const realMonth = value.getMonth() + 1;
-      return (
-        value.getDate() +
-        "/" +
-        (realMonth < 10 ? "0" : "") +
-        realMonth +
-        "/" +
-        value.getFullYear()
-      );
-    },
-  },
+  };
 });
+const modelVal = computed(() => {
+  if (props.time) {
+    return props.time;
+  }
+  if (props.range) {
+    return props.range;
+  }
+  if (props.date && props.monthPicker) {
+    return {
+      month: props.date.getMonth(),
+      year: props.date.getFullYear(),
+    };
+  }
+  return props.date;
+});
+const format = computed(() => {
+  if (props.forceFormat) {
+    return props.forceFormat;
+  }
+  if (props.monthPicker) {
+    return "MM/yyyy";
+  }
+  let timeString = "";
+  if (props.displayTimePicker || props.isTimePicker) {
+    timeString = "HH:mm";
+    if (props.displaySeconds) {
+      timeString = "HH:mm:ss";
+    }
+  }
+  const dayString = props.isTimePicker
+    ? timeString
+    : "dd/MM/yyyy " + timeString;
+  return props.range ? dayString + " - " + dayString : dayString;
+});
+const now = computed(() => {
+  if (props.dateLimit) {
+    return props.dateLimit;
+  }
+  return dayjs().toDate();
+});
+
+
+//Methods
+function updateValue(date: Date) {
+  if (!props.isInline) {
+    (divContainerRef?.value as HTMLElement)?.focus();
+  }
+  emit("updateDate", date);
+}
+
+function formatDate(value: Date): string {
+  const realMonth = value.getMonth() + 1;
+  return (
+    value.getDate() +
+    "/" +
+    (realMonth < 10 ? "0" : "") +
+    realMonth +
+    "/" +
+    value.getFullYear()
+  );
+}
 </script>
 <style lang="scss">
 @use "@vuepic/vue-datepicker/dist/main.css";

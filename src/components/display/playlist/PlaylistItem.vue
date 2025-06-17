@@ -5,12 +5,12 @@
         name: 'playlist',
         params: { playlistId: playlist.playlistId },
       }"
-      :title="$t('Playlist name page', { name: name })"
+      :title="t('Playlist name page', { name: name })"
       class="d-flex flex-grow-1 text-dark"
     >
       <div class="classic-element-text">
         <div v-if="!activePlaylist" class="sticker-empty-ressource">
-          {{ $t("Empty playlist") }}
+          {{ t("Empty playlist") }}
         </div>
         <div class="d-flex align-items-center element-name basic-line-clamp">
           {{ name }}
@@ -24,7 +24,7 @@
           <!-- eslint-enable -->
         </div>
         <router-link
-          v-if="!isPodcastmaker && playlist.organisation"
+          v-if="!state.generalParameters.podcastmaker && playlist.organisation"
           :to="{
             name: 'productor',
             params: { productorId: playlist.organisation.id },
@@ -38,63 +38,50 @@
         v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
         width="250"
         height="250"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
-        :title="$t('Playlist name image', { name: name })"
+        :title="t('Playlist name image', { name: name })"
         class="img-box"
       />
     </router-link>
   </article>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Playlist } from "@/stores/class/general/playlist";
 import { state } from "../../../stores/ParamSdkStore";
 import {useImageProxy} from "../../composable/useImageProxy";
 import displayHelper from "../../../helper/displayHelper";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PlaylistItem",
+import { computed, onMounted, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
 
-  props: {
-    playlist: { default: () => ({}), type: Object as () => Playlist },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    return { useProxyImageUrl }
-  },
+//Props 
+const props = defineProps({
+  playlist: { default: () => ({}), type: Object as () => Playlist },
+})
 
-  computed: {
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    organisation(): string {
-      return this.playlist?.publisher?.organisation?.name ?? "";
-    },
-    description(): string {
-      return this.playlist.description ?? "";
-    },
-    name(): string {
-      return this.playlist.title;
-    },
-    activePlaylist(): boolean {
-      return 0 !== Object.keys(this.playlist.samplingViews ?? []).length;
-    },
-  },
-  mounted() {
-    const playlistDesc = this.$refs.descriptionPlaylist as HTMLElement;
-    const playlistDescContainer = this.$refs
-      .descriptionPlaylistContainer as HTMLElement;
-    if (playlistDesc?.clientHeight > playlistDescContainer?.clientHeight) {
-      playlistDescContainer.classList.add("after-element-description");
-    }
-  },
-  methods:{
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+
+//Computed
+const description = computed(() => props.playlist.description ?? "");
+const name = computed(() => props.playlist.title ?? "");
+const activePlaylist = computed(() => 0 !== Object.keys(props.playlist.samplingViews ?? []).length);
+
+onMounted(()=>{
+  const playlistDesc = useTemplateRef('descriptionPlaylist')?.value as HTMLElement;
+  const playlistDescContainer = useTemplateRef('descriptionPlaylistContainer')?.value as HTMLElement;
+  if (playlistDesc?.clientHeight > playlistDescContainer?.clientHeight) {
+    playlistDescContainer.classList.add("after-element-description");
   }
-});
+})
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
 </script>
 <style lang="scss">
 .octopus-app .sticker-empty-ressource{

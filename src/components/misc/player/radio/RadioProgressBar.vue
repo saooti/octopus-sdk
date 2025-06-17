@@ -4,67 +4,56 @@
     min="0"
     max="100"
     :value="percentProgress"
-    :aria-label="$t('Radio')"
+    :aria-label="t('Radio')"
     :class="isAmbiance ? 'ambiance-progress' : ''"
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { usePlayerStore } from "../../../../stores/PlayerStore";
-import { mapState, mapActions } from "pinia";
 import dayjs from "dayjs";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "RadioProgressBar",
+import { useI18n } from "vue-i18n";
+import { computed, onMounted, onUnmounted, ref, Ref } from "vue";
 
-  components: {},
-  emits: ["updateNotListenTime"],
-  data() {
-    return {
-      percentInterval: undefined as ReturnType<typeof setTimeout> | undefined,
-    };
-  },
+//Data 
+const percentInterval: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
-  computed: {
-    ...mapState(usePlayerStore, ["playerRadio", "playerElapsed"]),
-    isAmbiance(): boolean {
-      return !this.playerRadio?.podcast?.podcastId;
-    },
-    percentProgress(): number {
-      if (!this.playerElapsed) {
-        return 0;
-      }
-      return this.playerElapsed * 100;
-    },
-  },
-  mounted() {
-    this.handlePercentInterval();
-  },
-  unmounted() {
-    clearInterval(this.percentInterval as unknown as number);
-  },
-  methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateElapsed"]),
-    handlePercentInterval(): void {
-      this.percentInterval = setInterval(() => {
-        this.calculatePercent();
-      }, 1000);
-    },
-    calculatePercent(): void {
-      if (!this.playerRadio?.metadata) {
-        return;
-      }
-      const actualMilliSecondsPlayed = dayjs()
-        .subtract(18, "second")
-        .diff(dayjs(this.playerRadio.metadata.startDate));
-      const percentPlayed =
-        actualMilliSecondsPlayed /
-        (this.playerRadio?.metadata.playDuration * 1000);
-      this.playerUpdateElapsed(
-        percentPlayed,
-        this.playerRadio?.metadata.playDuration,
-      );
-    },
-  },
+//Composables
+const { t } = useI18n();
+const playerStore = usePlayerStore();
+
+
+//Computed
+const isAmbiance = computed(() => !playerStore.playerRadio?.podcast?.podcastId);
+const percentProgress = computed(() => {
+  if (!playerStore.playerElapsed) {
+    return 0;
+  }
+  return playerStore.playerElapsed * 100;
 });
+
+
+onMounted(()=>handlePercentInterval())
+onUnmounted(()=>clearInterval(percentInterval.value as unknown as number))
+
+
+//Methods
+function handlePercentInterval(): void {
+  percentInterval.value = setInterval(() => {calculatePercent();}, 1000);
+}
+function calculatePercent(): void {
+  if (!playerStore.playerRadio?.metadata) {
+    return;
+  }
+  const actualMilliSecondsPlayed = dayjs()
+    .subtract(18, "second")
+    .diff(dayjs(playerStore.playerRadio.metadata.startDate));
+  const percentPlayed =
+    actualMilliSecondsPlayed /
+    (playerStore.playerRadio?.metadata.playDuration * 1000);
+    playerStore.playerUpdateElapsed(
+    percentPlayed,
+    playerStore.playerRadio?.metadata.playDuration,
+  );
+}
 </script>

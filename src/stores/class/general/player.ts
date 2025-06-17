@@ -11,6 +11,7 @@ export interface Radio {
   podcast?: Podcast;
   sessionId?: string;
   dateSessionId?: string;
+  secured?:boolean;
 }
 export interface MediaRadio {
   artist: string;

@@ -8,20 +8,21 @@
         name: 'podcast',
         params: { podcastId: podcast.podcastId },
       }"
-      :title="$t('Episode name page', { name: podcast.title })"
+      :title="t('Episode name page', { name: podcast.title })"
     >
       <img
         v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
         width="270"
         height="270"
-        role="presentation"
+        aria-hidden="true"
+        alt=""
         
         class="img-box img-box-podcast"
-        :title="$t('Episode name image', { name: podcast.title })"
+        :title="t('Episode name image', { name: podcast.title })"
       />
     </router-link>
     <div
-      v-if="isPodcastmaker"
+      v-if="state.generalParameters.podcastmaker"
       :class="mainRubrique ? 'mainRubrique' : 'notMainRubrique'"
     />
     <div
@@ -36,7 +37,7 @@
       {{ statusText }}
     </div>
     <div v-if="isRecordedInLive" class="live-image-status recording-bg">
-      {{ $t("Recorded in live") }}
+      {{ t("Recorded in live") }}
     </div>
     <PodcastPlayButton
       :podcast="podcast"
@@ -46,7 +47,7 @@
     <button
       v-if="displayDescription && isMobile"
       class="background-icon bg-dark text-white"
-      :title="isDescription ? $t('Hide description') : $t('Show description')"
+      :title="isDescription ? t('Hide description') : t('Show description')"
       @click="showDescription"
     >
       <ChevronDownIcon :class="{ 'arrow-transform': !isDescription }" />
@@ -54,107 +55,103 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import PodcastPlayButton from "./PodcastPlayButton.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import {useImageProxy} from "../../composable/useImageProxy";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "PodcastImage",
-  components: {
-    PodcastPlayButton,
-    ChevronDownIcon,
-  },
-  props: {
-    podcast: { default: () => ({}), type: Object as () => Podcast },
-    hidePlay: { default: false, type: Boolean },
-    displayDescription: { default: false, type: Boolean },
-    arrowDirection: { default: "up", type: String },
-    isAnimatorLive: { default: false, type: Boolean },
-    fetchConference: { default: undefined, type: Object as () => Conference },
-  },
-  emits: ["hideDescription", "showDescription"],
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    return { useProxyImageUrl }
-  },
-  data() {
-    return {
-      isDescription: false as boolean,
-    };
-  },
-  computed: {
-    mainRubrique(): boolean {
-      return (
-        undefined !== state.podcastPage.mainRubrique &&
-        0 !== state.podcastPage.mainRubrique &&
-        (this.podcast?.rubriqueIds?.includes(
-          state.podcastPage.mainRubrique,
-        ) as boolean)
-      );
-    },
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-    isMobile(): boolean {
-      return window.matchMedia("(hover: none)").matches;
-    },
-    isRecordedInLive(): boolean {
-      return (
-        undefined === this.fetchConference &&
-        undefined !== this.podcast.conferenceId &&
-        "READY_TO_RECORD" !== this.podcast.processingStatus
-      );
-    },
-    statusText(): string {
-      if (!this.fetchConference) return "";
-      switch (this.fetchConference.status) {
-        case "PLANNED":
-          return this.$t("live in few time");
-        case "PENDING":
-          if (this.isAnimatorLive) return this.$t("Open studio");
-          return this.$t("live upcoming");
-        case "RECORDING":
-          return this.$t("In live");
-        case "DEBRIEFING":
-          if ("READY_TO_RECORD" === this.podcast.processingStatus)
-            return this.$t("Not recording");
-          return this.$t("Debriefing");
-        case "ERROR":
-          return this.$t("In error");
-        case "PUBLISHING":
-          return this.$t("Publishing");
-        default:
-          return "";
-      }
-    },
-  },
-  watch: {
-    arrowDirection(): void {
-      if ("up" === this.arrowDirection) {
-        this.isDescription = true;
-        this.showDescription();
-      } else {
-        this.isDescription = false;
-        this.showDescription();
-      }
-    },
-  },
+import { computed, onBeforeMount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-  methods: {
-    showDescription(): void {
-      if (this.isDescription) {
-        this.$emit("hideDescription");
-      } else {
-        this.$emit("showDescription");
-      }
-      this.isDescription = !this.isDescription;
-    },
-  },
+//Props 
+const props = defineProps({
+  podcast: { default: () => ({}), type: Object as () => Podcast },
+  hidePlay: { default: false, type: Boolean },
+  displayDescription: { default: false, type: Boolean },
+  arrowDirection: { default: "up", type: String },
+  isAnimatorLive: { default: false, type: Boolean },
+  fetchConference: { default: undefined, type: Object as () => Conference },
+})
+
+//Emits
+const emit = defineEmits(["hideDescription", "showDescription"]);
+
+//Data 
+const isDescription = ref(false);
+const isMobile = ref(false);
+
+//Composables
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+
+//Computed
+const mainRubrique = computed(() => {
+  return (
+    undefined !== state.podcastPage.mainRubrique &&
+    0 !== state.podcastPage.mainRubrique &&
+    (props.podcast?.rubriqueIds?.includes(
+      state.podcastPage.mainRubrique,
+    ) as boolean)
+  );
 });
+const isRecordedInLive = computed(() => {
+  return (
+    undefined === props.fetchConference &&
+    undefined !== props.podcast.conferenceId &&
+    "READY_TO_RECORD" !== props.podcast.processingStatus
+  );
+});
+const statusText = computed(() => {
+  if (!props.fetchConference) return "";
+  switch (props.fetchConference.status) {
+    case "PLANNED":
+      return t("live in few time");
+    case "PENDING":
+      if (props.isAnimatorLive) return t("Open studio");
+      return t("live upcoming");
+    case "RECORDING":
+      return t("In live");
+    case "DEBRIEFING":
+      if ("READY_TO_RECORD" === props.podcast.processingStatus)
+        return t("Not recording");
+      return t("Debriefing");
+    case "ERROR":
+      return t("In error");
+    case "PUBLISHING":
+      return t("Publishing");
+    default:
+      return "";
+  }
+});
+
+
+//Watch
+watch(()=>props.arrowDirection, () => {
+  if ("up" === props.arrowDirection) {
+    isDescription.value = true;
+    showDescription();
+  } else {
+    isDescription.value = false;
+    showDescription();
+  }
+});
+
+
+onBeforeMount(()=>{
+  isMobile.value = window.matchMedia("(hover: none)").matches;
+})
+
+//Methods
+function showDescription(): void {
+  if (isDescription.value) {
+    emit("hideDescription");
+  } else {
+    emit("showDescription");
+  }
+  isDescription.value = !isDescription.value;
+}
 </script>
 
 <style lang="scss">

@@ -1,7 +1,7 @@
 <template>
   <button
     v-if="!playerError"
-    :title="$t('Play')"
+    :title="t('Play')"
     :class="{
       'p-0': !displayIsPaused && !displayIsPlaying,
       'play-button-box': !isBigButton,
@@ -18,104 +18,93 @@
     />
   </button>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import PlayIcon from "vue-material-design-icons/Play.vue";
 import PauseIcon from "vue-material-design-icons/Pause.vue";
 import ClassicSpinner from "../../ClassicSpinner.vue";
-import { defineComponent } from "vue";
-import { mapActions, mapState } from "pinia";
+import { computed, onMounted, onUnmounted } from "vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import { useVastStore } from "../../../../stores/VastStore";
-export default defineComponent({
-  name: "PlayerPlayButton",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    ClassicSpinner,
-    PlayIcon,
-    PauseIcon,
-  },
-  props: {
-    playerError: { default: false, type: Boolean },
-    isBigButton: { default: false, type: Boolean },
-  },
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapState(usePlayerStore, ["isPlaying", "isPaused"]),
-    ...mapState(useVastStore, ["isAdPlaying", "isAdPaused"]),
-    displayIsPlaying(): boolean {
-      return (
-        (this.isAdPlaying && !this.isAdPaused) ||
-        (!this.isAdPlaying && this.isPlaying)
-      );
-    },
-    displayIsPaused(): boolean {
-      return (
-        (this.isAdPlaying && this.isAdPaused) ||
-        (!this.isAdPlaying && this.isPaused)
-      );
-    },
-  },
-  created() {
-    window.addEventListener("keydown", this.addKeyboardControl);
-  },
-  beforeUnmount() {
-    window.removeEventListener("keydown", this.addKeyboardControl);
-  },
-  methods: {
-    ...mapActions(useVastStore, ["updateIsAdPaused"]),
-    ...mapActions(usePlayerStore, ["playerChangeStatus"]),
-    addKeyboardControl(event: KeyboardEvent): void {
-      if (!event || null === event) {
-        return;
-      }
-      const element = event.target as HTMLElement;
-      if (
-        !element ||
-        "INPUT" == element.tagName.toUpperCase() ||
-        "TEXTAREA" == element.tagName.toUpperCase()
-      ) {
-        return;
-      }
-      if (" " === event.key || "Spacebar" === event.key) {
-        event.preventDefault();
-        this.switchPausePlay();
-        return;
-      }
-      if (this.isAdPlaying) {
-        return;
-      }
-      if ("ArrowRight" === event.key && event.ctrlKey) {
-        this.changeCurrentTime(15);
-        return;
-      }
-      if ("ArrowLeft" === event.key && event.ctrlKey) {
-        this.changeCurrentTime(-15);
-      }
-    },
-    changeCurrentTime(delay: number) {
-      const audioPlayer: HTMLAudioElement | null =
-        document.querySelector("#audio-player");
-      if (!audioPlayer) {
-        return;
-      }
-      audioPlayer.currentTime += delay;
-    },
-    switchPausePlay(): void {
-      if (this.isAdPlaying) {
-        this.updateIsAdPaused(!this.isAdPaused);
-        return;
-      }
-      const audioPlayer: HTMLAudioElement | null =
-        document.querySelector("#audio-player");
-      if (!audioPlayer) {
-        return;
-      }
-      this.playerChangeStatus(!audioPlayer.paused);
-    },
-  },
+//Props 
+defineProps({
+  playerError: { default: false, type: Boolean },
+  isBigButton: { default: false, type: Boolean },
+})
+
+//Composables
+const { t } = useI18n();
+const playerStore = usePlayerStore();
+const vastStore = useVastStore();
+
+
+//Computed
+const displayIsPlaying = computed(() => {
+  return (
+    (vastStore.isAdPlaying && !vastStore.isAdPaused) ||
+    (!vastStore.isAdPlaying && playerStore.isPlaying)
+  );
 });
+const displayIsPaused = computed(() => {
+  return (
+    (vastStore.isAdPlaying && vastStore.isAdPaused) ||
+    (!vastStore.isAdPlaying && playerStore.isPaused)
+  );
+});
+
+
+onMounted(()=>window.addEventListener("keydown", addKeyboardControl));
+onUnmounted(()=>window.removeEventListener("keydown", addKeyboardControl))
+
+
+//Methods
+function addKeyboardControl(event: KeyboardEvent): void {
+  if (!event || null === event) {
+    return;
+  }
+  const element = event.target as HTMLElement;
+  if (
+    !element ||
+    "INPUT" == element.tagName.toUpperCase() ||
+    "TEXTAREA" == element.tagName.toUpperCase()
+  ) {
+    return;
+  }
+  if (" " === event.key || "Spacebar" === event.key) {
+    event.preventDefault();
+    switchPausePlay();
+    return;
+  }
+  if (vastStore.isAdPlaying) {
+    return;
+  }
+  if ("ArrowRight" === event.key && event.ctrlKey) {
+    changeCurrentTime(15);
+    return;
+  }
+  if ("ArrowLeft" === event.key && event.ctrlKey) {
+    changeCurrentTime(-15);
+  }
+}
+function changeCurrentTime(delay: number) {
+  const audioPlayer: HTMLAudioElement | null = document.querySelector("#audio-player");
+  if (!audioPlayer) {
+    return;
+  }
+  audioPlayer.currentTime += delay;
+}
+function switchPausePlay(): void {
+  if (vastStore.isAdPlaying) {
+    vastStore.updateIsAdPaused(!vastStore.isAdPaused);
+    return;
+  }
+  const audioPlayer: HTMLAudioElement | null =document.querySelector("#audio-player");
+  if (!audioPlayer) {
+    return;
+  }
+  playerStore.playerChangeStatus(!audioPlayer.paused);
+}
 </script>
 
 <style lang="scss">

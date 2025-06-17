@@ -12,21 +12,21 @@
           :class="{ active: !popularSort }"
           @click="sortChrono()"
         >
-          {{ $t("Last added") }}
+          {{ t("Last added") }}
         </button>
         <button
           class="btn btn-underline"
           :class="{ active: popularSort }"
           @click="sortPopular()"
         >
-          {{ $t("Most popular") }}
+          {{ t("Most popular") }}
         </button>
       </div>
       <div v-if="displayArrow" class="hide-phone">
         <button
           class="btn admin-button m-1"
           :class="{ disabled: !previousAvailable }"
-          :title="$t('Display previous')"
+          :title="t('Display previous')"
           @click="displayPrevious()"
         >
           <ChevronLeftIcon :size="30" />
@@ -34,7 +34,7 @@
         <button
           class="btn admin-button m-1"
           :class="{ disabled: !nextAvailable }"
-          :title="$t('Display next')"
+          :title="t('Display next')"
           @click="displayNext()"
         >
           <ChevronRightIcon :size="30" />
@@ -54,129 +54,122 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { useRubriquesFilterComputed } from "../../composable/route/useRubriquesFilterComputed";
 import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { defineComponent } from "vue";
-import { RouteLocationRaw } from "vue-router";
+import { computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
-export default defineComponent({
-  name: "PodcastInlineListTemplate",
-  components: {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    PlusIcon,
-  },
+import { useI18n } from "vue-i18n";
 
-  props: {
-    displayArrow: { default: true, type: Boolean },
-    previousAvailable: { default: false, type: Boolean },
-    nextAvailable: { default: false, type: Boolean },
-    popularSort: { default: false, type: Boolean },
-    buttonText: { default: undefined, type: String },
-    buttonPlus: { default: false, type: Boolean },
-    title: { default: "", type: String },
-    href: { default: undefined, type: String },
-    iabId: { default: undefined, type: Number },
-    rubriqueId: { default: () => [], type: Array as () => Array<number> },
-    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
-    podcastId: { default: undefined, type: Number },
-    titleTag: { default: "h2", type: String },
-  },
-  emits: ["sortChrono", "sortPopular", "displayPrevious", "displayNext"],
-  setup(){
-    const { returnRubriquesFilter } = useRubriquesFilterParam();
-    const { rubriqueQueryParam } = useRubriquesFilterComputed();
-    return { returnRubriquesFilter, rubriqueQueryParam }
-  },
-  data() {
-    return {};
-  },
+//Props 
+const props = defineProps({
+  displayArrow: { default: true, type: Boolean },
+  previousAvailable: { default: false, type: Boolean },
+  nextAvailable: { default: false, type: Boolean },
+  popularSort: { default: false, type: Boolean },
+  buttonText: { default: undefined, type: String },
+  buttonPlus: { default: false, type: Boolean },
+  title: { default: "", type: String },
+  href: { default: undefined, type: String },
+  iabId: { default: undefined, type: Number },
+  rubriqueId: { default: () => [], type: Array as () => Array<number> },
+  noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+  podcastId: { default: undefined, type: Number },
+  titleTag: { default: "h2", type: String },
+})
 
-  computed: {
-    ...mapState(useFilterStore, ["filterIab", "filterRubriquage", "filterOrgaId"]),
-    refTo(): string | RouteLocationRaw {
-      if (this.href) return this.href;
-      if (this.iabId) {
-        return {
-          name: "category",
-          params: { iabId: this.iabId },
-        };
-      }
-      return {
-        name: "podcasts",
-        query: {
-          iabId: this.filterIab?.id,
-          rubriquesId: this.rubriqueQueryParam,
-          productor: this.filterOrgaId
-        },
-      };
-    },
-  },
+//Emits
+const emit = defineEmits(["sortChrono", "sortPopular", "displayPrevious", "displayNext"]);
 
-  methods: {
-    sortChrono(): void {
-      this.$emit("sortChrono");
+//Composables
+const { t } = useI18n();
+const { returnRubriquesFilter } = useRubriquesFilterParam();
+const { rubriqueQueryParam } = useRubriquesFilterComputed();
+const filterStore = useFilterStore();
+const router = useRouter();
+const route = useRoute();
+
+
+//Computed
+const refTo = computed(() => {
+  if (props.href) return props.href;
+  if (props.iabId) {
+    return {
+      name: "category",
+      params: { iabId: props.iabId },
+    };
+  }
+  return {
+    name: "podcasts",
+    query: {
+      iabId: filterStore.filterIab?.id,
+      rubriquesId: rubriqueQueryParam.value,
+      productor: filterStore.filterOrgaId
     },
-    sortPopular(): void {
-      this.$emit("sortPopular");
-    },
-    displayPrevious(): void {
-      this.$emit("displayPrevious");
-    },
-    displayNext(): void {
-      this.$emit("displayNext");
-    },
-    handleSeeMoreButton(event: { preventDefault: () => void }) {
-      if (this.href ||
-        !this.rubriqueId ||
-        0 === this.rubriqueId.length ||
-        this.noRubriquageId.length
-      ) {
-        return;
-      }
-      event.preventDefault();
-      const rubriqueChosenId = this.rubriqueId.at(-1);
-      let filterToAdd: RubriquageFilter|undefined;
-      if (this.filterRubriquage.length) {
-        for (let i = 0, len = this.filterRubriquage.length; i < len; i++) {
-          const rubriqueChosen = this.filterRubriquage[i].rubriques.find(
-            (element: Rubrique) => element.rubriqueId === rubriqueChosenId,
-          );
-          if (rubriqueChosen) {
-            filterToAdd = {
-              rubriquageId: this.filterRubriquage[i].rubriquageId ?? 0,
-              rubriqueId: rubriqueChosenId,
-              nameRubriquage: this.filterRubriquage[i].title,
-              nameRubrique: rubriqueChosen.name,
-            };
-            break;
-          }
-        }
-      }
-      if(!filterToAdd){return;}
-      const queries = this.returnRubriquesFilter((a) => {
-        const indexRubriquage = a.findIndex(filter => filter.rubriquageId === filterToAdd.rubriquageId);
-        if (indexRubriquage === -1) {
-          a.push(filterToAdd);
-        } else {
-          a[indexRubriquage] = filterToAdd;
-        }
-        return a;
-      })
-      this.$router.push({
-        name: "podcasts",
-        query: {...this.$route.query, ...queries}
-      });
-    },
-  },
+  };
 });
+
+//Methods
+function sortChrono(): void {
+  emit("sortChrono");
+}
+function sortPopular(): void {
+  emit("sortPopular");
+}
+function displayPrevious(): void {
+  emit("displayPrevious");
+}
+function displayNext(): void {
+  emit("displayNext");
+}
+function handleSeeMoreButton(event: { preventDefault: () => void }) {
+  if (props.href ||
+    !props.rubriqueId ||
+    0 === props.rubriqueId.length ||
+    props.noRubriquageId.length
+  ) {
+    return;
+  }
+  event.preventDefault();
+  const rubriqueChosenId = props.rubriqueId.at(-1);
+  let filterToAdd: RubriquageFilter|undefined;
+  if (filterStore.filterRubriquage.length) {
+    for (let i = 0, len = filterStore.filterRubriquage.length; i < len; i++) {
+      const rubriqueChosen = filterStore.filterRubriquage[i].rubriques.find(
+        (element: Rubrique) => element.rubriqueId === rubriqueChosenId,
+      );
+      if (rubriqueChosen) {
+        filterToAdd = {
+          rubriquageId: filterStore.filterRubriquage[i].rubriquageId ?? 0,
+          rubriqueId: rubriqueChosenId,
+          nameRubriquage: filterStore.filterRubriquage[i].title,
+          nameRubrique: rubriqueChosen.name,
+        };
+        break;
+      }
+    }
+  }
+  if(!filterToAdd){return;}
+  const queries = returnRubriquesFilter((a) => {
+    const indexRubriquage = a.findIndex(filter => filter.rubriquageId === filterToAdd.rubriquageId);
+    if (indexRubriquage === -1) {
+      a.push(filterToAdd);
+    } else {
+      a[indexRubriquage] = filterToAdd;
+    }
+    return a;
+  })
+  router.push({
+    name: "podcasts",
+    query: {...route.query, ...queries}
+  });
+}
 </script>
 <style lang="scss">
 .octopus-app .podcast-inline-container {

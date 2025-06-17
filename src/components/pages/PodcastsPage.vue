@@ -45,6 +45,7 @@ import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
 import { computed, ref, watch } from "vue";
 
+//Props 
 const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
@@ -61,6 +62,12 @@ const props = defineProps({
   routeRubriques: { default: "", type: String },
 });
 
+
+//Data 
+const onlyVideo = ref(false);
+
+
+//Composables
 const {
   organisationId,
   searchPattern,
@@ -78,13 +85,13 @@ const {
   isInit
 } = useAdvancedParamInit(props, false);
 
-const onlyVideo = ref(false);
 
-
+//Computed
 const orgaArray = computed(() => organisationId.value ? [organisationId.value] : []);
 const withVideo = computed(() => false === onlyVideo.value ? undefined : true);
 
 
+//Watch
 watch(() => props.routeOnlyVideo, () =>{
   onlyVideo.value = "true" === props.routeOnlyVideo;
 }, {immediate: true});

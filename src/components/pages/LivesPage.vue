@@ -1,27 +1,27 @@
 <template>
   <section class="page-box">
-    <template v-if="!filterOrgaId && !organisationId && !isPodcastmaker">
+    <template v-if="!filterStore.filterOrgaId && !organisationId && !state.generalParameters.podcastmaker">
       <div class="align-self-start fw-bold mb-2">
-        {{ $t("Please chose a productor") }}
+        {{ t("Please chose a productor") }}
       </div>
       <OrganisationChooser
-        :defaultanswer="$t('Please chose a productor')"
+        :defaultanswer="t('Please chose a productor')"
         @selected="onOrganisationSelected"
       />
     </template>
-    <template v-if="filterOrgaId || organisationId">
+    <template v-if="filterStore.filterOrgaId || organisationId">
       <LiveList :organisation-id="organisationId" />
       <RadioList v-if="!notRadios" :organisation-id="organisationId" />
     </template>
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { state } from "../../stores/ParamSdkStore";
 import { Organisation } from "@/stores/class/general/organisation";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineAsyncComponent, onMounted } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
-import { mapState } from "pinia";
+import { useI18n } from "vue-i18n";
 const LiveList = defineAsyncComponent(
   () => import("../display/live/LiveList.vue"),
 );
@@ -31,37 +31,35 @@ const RadioList = defineAsyncComponent(
 const OrganisationChooser = defineAsyncComponent(
   () => import("../display/organisation/OrganisationChooser.vue"),
 );
-export default defineComponent({
-  components: {
-    LiveList,
-    RadioList,
-    OrganisationChooser,
-  },
-  props: {
-    organisationId: { default: undefined, type: String },
-    productor: { default: undefined, type: String },
-    notRadios: { default: false, type: Boolean },
-  },
-  emits: ["update:organisationId"],
 
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
 
-    isPodcastmaker(): boolean {
-      return state.generalParameters.podcastmaker as boolean;
-    },
-  },
-  created() {
-    if (this.productor) {
-      this.$emit("update:organisationId", this.productor);
-    } else if (this.filterOrgaId) {
-      this.$emit("update:organisationId", this.filterOrgaId);
-    }
-  },
-  methods: {
-    onOrganisationSelected(organisation: Organisation | undefined): void {
-      this.$emit("update:organisationId", organisation?.id);
-    },
-  },
+//Props
+const props = defineProps({
+  organisationId: { default: undefined, type: String },
+  productor: { default: undefined, type: String },
+  notRadios: { default: false, type: Boolean },
 });
+
+
+//Emits
+const emit = defineEmits(["update:organisationId"]);
+
+
+//Composables
+const { t } = useI18n();
+const filterStore = useFilterStore();
+
+
+onMounted(() => {
+  if (props.productor) {
+    emit("update:organisationId", props.productor);
+  } else if (filterStore.filterOrgaId) {
+    emit("update:organisationId", filterStore.filterOrgaId);
+  }
+})
+
+//Methods
+function onOrganisationSelected(organisation: Organisation | undefined): void {
+  emit("update:organisationId", organisation?.id);
+}
 </script>

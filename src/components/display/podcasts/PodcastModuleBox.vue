@@ -6,13 +6,13 @@
       :live="true"
       :recording="podcastConference"
       @delete-item="removeDeleted"
-      @validate-podcast="$emit('updatePodcast', $event)"
+      @validate-podcast="emit('updatePodcast', $event)"
     />
     <EditBox
       v-else-if="editRight && isEditBox"
       :podcast="podcast"
       :display-studio-access="isDebriefing"
-      @validate-podcast="$emit('updatePodcast', $event)"
+      @validate-podcast="emit('updatePodcast', $event)"
     />
     <div class="mb-2 w-100">
       <PodcastImage
@@ -38,7 +38,7 @@
           {{ date }}
         </time>
         <div v-if="isLiveReady" class="text-danger">
-          {{ $t("Episode record in live") }}
+          {{ t("Episode record in live") }}
         </div>
         <div class="d-flex flex-column align-items-end">
           <time :datetime="durationIso">
@@ -60,13 +60,13 @@
       <!-- eslint-enable -->
       <div class="my-3">
         <div class="mb-1">
-          {{ $t("Emission") + " : " }}
+          {{ t("Emission") + " : " }}
           <router-link
             :to="{
               name: 'emission',
               params: { emissionId: podcast.emission.emissionId },
             }"
-            :title="$t('Series name page', { name: podcast.emission.name })"
+            :title="t('Series name page', { name: podcast.emission.name })"
           >
             {{ podcast.emission.name }}
           </router-link>
@@ -77,7 +77,7 @@
           :is-guest="true"
         />
         <div v-if="!isPodcastmaker" class="mb-1">
-          {{ $t("Producted by : ") }}
+          {{ t("Producted by : ") }}
           <router-link
             :to="{
               name: 'productor',
@@ -88,27 +88,27 @@
           </router-link>
         </div>
         <div v-if="'' !== photoCredit" class="mb-1">
-          {{ $t("Photo credits") + " : " + photoCredit }}
+          {{ t("Photo credits") + " : " + photoCredit }}
         </div>
         <div v-if="'' !== audioCredit" class="mb-1">
-          {{ $t("Audio credits") + " : " + audioCredit }}
+          {{ t("Audio credits") + " : " + audioCredit }}
         </div>
         <div v-if="'' !== authorCredit" class="mb-1">
-          {{ $t("Author credits") + " : " + authorCredit }}
+          {{ t("Author credits") + " : " + authorCredit }}
         </div>
         <a
-          v-if="podcast.article && !isGarRole"
+          v-if="podcast.article && !authStore.isGarRole"
           class="btn d-flex align-items-center my-2 w-fit-content mb-1"
           :href="podcast.article"
           rel="noreferrer noopener"
           target="_blank"
-          :title="$t('New window', {text : $t('See associated article')})"
+          :title="t('New window', {text : t('See associated article')})"
         >
           <NewspaperVariantOutlineIcon class="me-1" />
-          <div>{{ $t("See associated article") }}</div>
+          <div>{{ t("See associated article") }}</div>
         </a>
         <PodcastPlayBar
-          v-if="isProgressBar"
+          v-if="state.emissionsPage.progressBar"
           :podcast="podcast"
         />
         <div v-if="editRight && !isPodcastmaker">
@@ -118,13 +118,13 @@
             "
             class="me-5 text-secondary"
           >
-            {{ $t("From RSS") }}
+            {{ t("From RSS") }}
           </div>
           <ErrorMessage v-if="'' !== errorMessage" :message="errorMessage" />
         </div>
         <div class="d-flex align-items-center flex-wrap">
           <LikeSection :edit-right="editRight" :podcast="podcast" />
-          <DownloadPodcastButton v-if="isDownloadButton" :podcast="podcast" />
+          <DownloadPodcastButton v-if="state.podcastPage.downloadButton" :podcast="podcast" />
         </div>
       </div>
     </div>
@@ -150,7 +150,7 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import NewspaperVariantOutlineIcon from "vue-material-design-icons/NewspaperVariantOutline.vue";
 import PodcastImage from "./PodcastImage.vue";
 import ParticipantDescription from "./ParticipantDescription.vue";
@@ -162,7 +162,7 @@ import {usePodcastView} from "../../composable/podcasts/usePodcastView";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 
-import { defineComponent, defineAsyncComponent, toRefs } from "vue";
+import { defineAsyncComponent, toRefs, computed } from "vue";
 const ErrorMessage = defineAsyncComponent(
   () => import("../../misc/ErrorMessage.vue"),
 );
@@ -191,129 +191,92 @@ const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 const ShareAnonymous = defineAsyncComponent(() => import("../sharing/ShareAnonymous.vue"));
 const PodcastRubriqueList = defineAsyncComponent(() => import("./PodcastRubriqueList.vue"));
-import { mapState } from "pinia";
-export default defineComponent({
-  name: "PodcastModuleBox",
-  components: {
-    PodcastImage,
-    ParticipantDescription,
-    TagList,
-    ErrorMessage,
-    PodcastPlayBar,
-    EditBox,
-    RecordingItemButton,
-    SubscribeButtons,
-    Countdown,
-    LikeSection,
-    PodcastRawTranscript,
-    DownloadPodcastButton,
-    NewspaperVariantOutlineIcon,
-    PodcastPlannedSpinner,
-    PodcastRubriqueList,
-    ShareAnonymous
-  },
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
-  props: {
-    playingPodcast: { default: undefined, type: Object as () => Podcast },
-    podcast: { default: undefined, type: Object as () => Podcast },
-    podcastConference: { default: undefined, type: Object as () => Conference },
-  },
+//Props 
+const props = defineProps({
+  playingPodcast: { default: undefined, type: Object as () => Podcast },
+  podcast: { default: undefined, type: Object as () => Podcast },
+  podcastConference: { default: undefined, type: Object as () => Conference },
+})
 
-  emits: ["updatePodcast"],
+//Emits
+const emit = defineEmits(["updatePodcast"]);
 
-  setup(props){
-    const propsRef = toRefs(props);
-    const { 
-      isLiveReadyToRecord,
-      isCounter,
-      timeRemaining,
-      isPlannedInProcessor,
-      date,
-      duration,
-      durationIso,
-      isPodcastmaker,
-      editRight
-    } = usePodcastView(propsRef.podcast, propsRef.podcastConference);
-    return { isPodcastmaker, editRight, isLiveReadyToRecord, isCounter, timeRemaining, isPlannedInProcessor, date, duration, durationIso }
-  },
+//Composables
+const { t } = useI18n();
+const propsRef = toRefs(props);
+const { 
+  isLiveReadyToRecord,
+  isCounter,
+  timeRemaining,
+  isPlannedInProcessor,
+  date,
+  duration,
+  durationIso,
+  isPodcastmaker,
+  editRight
+} = usePodcastView(propsRef.podcast, propsRef.podcastConference);
+const authStore = useAuthStore();
+const router = useRouter();
 
-  data() {
-    return {
-    };
-  },
-
-  computed: {
-    ...mapState(useAuthStore, ["isRoleLive", "isGarRole"]),
-    podcastRubriques(){
-      let rubriques = this.podcast?.rubriqueIds ?? [];
-      if(this.podcast?.emission?.rubriqueIds){
-        rubriques = [...new Set(rubriques.concat(this.podcast?.emission?.rubriqueIds))];
-      }
-      return rubriques;
-    },
-    errorMessage(): string {
-      if (!this.podcast?.availability.visibility) {
-        return this.$t("Podcast is not visible for listeners");
-      }
-      if ("ERROR" === this.podcast?.processingStatus) {
-        return this.$t("Podcast in ERROR, please contact Saooti");
-      }
-      return this.podcastNotValid ? this.$t("Podcast not validated") : "";
-    },
-    isProgressBar(): boolean {
-      return state.emissionsPage.progressBar as boolean;
-    },
-    isLiveReady(): boolean {
-      return (
-        undefined !== this.podcast?.conferenceId &&
-        0 !== this.podcast?.conferenceId &&
-        "READY" === this.podcast?.processingStatus
-      );
-    },
-    isDebriefing(): boolean {
-      return (
-        undefined !== this.podcastConference &&
-        "DEBRIEFING" === this.podcastConference.status
-      );
-    },
-    isOctopusAndAnimator(): boolean {
-      return !this.isPodcastmaker && this.editRight && this.isRoleLive;
-    },
-    podcastNotValid(): boolean {
-      return (
-        undefined !== this.podcast?.availability &&
-        false === this.podcast?.valid
-      );
-    },
-    photoCredit(): string {
-      return (this.podcast?.annotations?.photoCredit as string) ?? "";
-    },
-    audioCredit(): string {
-      return (this.podcast?.annotations?.audioCredit as string) ?? "";
-    },
-    authorCredit(): string {
-      return (this.podcast?.annotations?.authorCredit as string) ?? "";
-    },
-    isEditBox(): boolean {
-      return !((state.generalParameters.podcastmaker as boolean) ?? false);
-    },
-    isDownloadButton(): boolean {
-      return state.podcastPage.downloadButton as boolean;
-    },
-  },
-  methods: {
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-    removeDeleted(): void {
-      if (this.isLiveReadyToRecord) {
-        this.$router.push("/main/pub/lives");
-      } else if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push("/");
-      }
-    },
-  },
+//Computed
+const podcastRubriques = computed(() => {
+  let rubriques = props.podcast?.rubriqueIds ?? [];
+  if(props.podcast?.emission?.rubriqueIds){
+    rubriques = [...new Set(rubriques.concat(props.podcast?.emission?.rubriqueIds))];
+  }
+  return rubriques;
 });
+const errorMessage = computed(() => {
+  if (!props.podcast?.availability.visibility) {
+    return t("Podcast is not visible for listeners");
+  }
+  if ("ERROR" === props.podcast?.processingStatus) {
+    return t("Podcast in ERROR, please contact Saooti");
+  }
+  return podcastNotValid.value ? t("Podcast not validated") : "";
+});
+const isLiveReady = computed(() => {
+  return (
+    undefined !== props.podcast?.conferenceId &&
+    0 !== props.podcast?.conferenceId &&
+    "READY" === props.podcast?.processingStatus
+  );
+});
+const isDebriefing = computed(() => {
+  return (
+    undefined !== props.podcastConference &&
+    "DEBRIEFING" === props.podcastConference.status
+  );
+});
+const isOctopusAndAnimator = computed(() => {
+  return !isPodcastmaker && editRight && authStore.isRoleLive;
+});
+const podcastNotValid = computed(() => {
+  return (
+    undefined !== props.podcast?.availability &&
+    false === props.podcast?.valid
+  );
+});
+const photoCredit = computed(() => (props.podcast?.annotations?.photoCredit as string) ?? "");
+const audioCredit = computed(() => (props.podcast?.annotations?.audioCredit as string) ?? "");
+const authorCredit = computed(() => (props.podcast?.annotations?.authorCredit as string) ?? "");
+const isEditBox = computed(() => !((state.generalParameters.podcastmaker as boolean) ?? false));
+
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
+function removeDeleted(): void {
+  if (isLiveReadyToRecord.value) {
+    router.push("/main/pub/lives");
+  } else if (window.history.length > 1) {
+    router.go(-1);
+  } else {
+    router.push("/");
+  }
+}
 </script>

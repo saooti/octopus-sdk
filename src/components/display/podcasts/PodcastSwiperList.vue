@@ -17,7 +17,7 @@
     <template #list-inline>
       <ClassicLoading
         class="loading-size"
-        :loading-text="loading ? $t('Loading podcasts ...') : undefined"
+        :loading-text="loading ? t('Loading podcasts ...') : undefined"
       />
       <SwiperList v-if="!loading" :list-object="allPodcasts">
         <template #octopusSlide="{ option }">
@@ -31,7 +31,7 @@
   </PodcastInlineListTemplate>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import dayjs from "dayjs";
 import PodcastInlineListTemplate from "./PodcastInlineListTemplate.vue";
 import classicApi from "../../../api/classicApi";
@@ -39,119 +39,109 @@ import PodcastItem from "./PodcastItem.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import SwiperList from "../list/SwiperList.vue";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { mapState } from "pinia";
 import { Podcast } from "@/stores/class/general/podcast";
-import { defineComponent } from "vue";
+import { computed, onBeforeMount, Ref, ref, watch } from "vue";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
-export default defineComponent({
-  name: "PodcastSwiperList",
+import { useI18n } from "vue-i18n";
 
-  components: {
-    PodcastInlineListTemplate,
-    PodcastItem,
-    ClassicLoading,
-    SwiperList,
-  },
+//Props 
+const props = defineProps({
+  organisationId: { default: () => [], type: Array as () => Array<string> },
+  emissionId: { default: undefined, type: Number },
+  iabId: { default: undefined, type: Number },
+  title: { default: "", type: String },
+  href: { default: undefined, type: String },
+  buttonText: { default: undefined, type: String },
+  isArrow: { default: false, type: Boolean },
+  requirePopularSort: { default: undefined, type: Boolean },
+  buttonPlus: { default: false, type: Boolean },
+  rubriqueId: { default: () => [], type: Array as () => Array<number> },
+  rubriquageId: { default: () => [], type: Array as () => Array<number> },
+  noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+  query: { default: undefined, type: String },
+  lastThreeMonths: { default: false, type: Boolean },
+  titleTag: { default: "h2", type: String },
+})
 
-  props: {
-    organisationId: { default: () => [], type: Array as () => Array<string> },
-    emissionId: { default: undefined, type: Number },
-    iabId: { default: undefined, type: Number },
-    title: { default: "", type: String },
-    href: { default: undefined, type: String },
-    buttonText: { default: undefined, type: String },
-    isArrow: { default: false, type: Boolean },
-    requirePopularSort: { default: undefined, type: Boolean },
-    buttonPlus: { default: false, type: Boolean },
-    rubriqueId: { default: () => [], type: Array as () => Array<number> },
-    rubriquageId: { default: () => [], type: Array as () => Array<number> },
-    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
-    query: { default: undefined, type: String },
-    lastThreeMonths: { default: false, type: Boolean },
-    titleTag: { default: "h2", type: String },
-  },
-  emits: ["update:isArrow"],
+//Emits
+const emit = defineEmits(["update:isArrow"]);
 
-  data() {
-    return {
-      loading: true as boolean,
-      popularSort: false as boolean,
-      allPodcasts: [] as Array<Podcast>,
-    };
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    organisation(): Array<string> {
-      if (this.organisationId.length) {
-        return this.organisationId;
-      }
-      return this.filterOrgaId ? [this.filterOrgaId] : [];
-    },
-    watchVariable(): string {
-      return `${this.emissionId}|${this.organisationId}|${this.filterOrgaId}|${this.iabId}|${this.rubriqueId}|${this.rubriquageId}|${this.query}`;
-    },
-  },
-  watch: {
-    watchVariable(): void {
-      this.fetchNext();
-    },
-  },
+//Data 
+const loading = ref(true);
+const popularSort = ref(false);
+const allPodcasts: Ref<Array<Podcast>> = ref([]);
 
-  created() {
-    if (undefined !== this.requirePopularSort) {
-      this.popularSort = this.requirePopularSort;
-    }
-    if (undefined !== this.isArrow) {
-      this.$emit("update:isArrow", true);
-    }
-  },
-  mounted() {
-    this.fetchNext();
-  },
-  methods: {
-    async fetchNext(): Promise<void> {
-      const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
-        api: 0,
-        path: "podcast/search",
-        parameters: {
-          first: 0,
-          size: 12,
-          organisationId: this.organisation,
-          emissionId: this.emissionId,
-          iabId: this.iabId,
-          rubriqueId: this.rubriqueId.length ? this.rubriqueId : undefined,
-          rubriquageId: this.rubriquageId.length
-            ? this.rubriquageId
-            : undefined,
-          noRubriquageId: this.noRubriquageId.length
-            ? this.noRubriquageId
-            : undefined,
-          sort: this.popularSort ? "POPULARITY" : "DATE",
-          query: this.query,
-          includeStatus: ["READY", "PROCESSING"],
-          after:
-            this.popularSort && this.lastThreeMonths
-              ? dayjs().subtract(3, "months").toISOString()
-              : undefined,
-        },
-        specialTreatement: true,
-      });
-      this.loading = true;
-      this.allPodcasts = data.result.filter(
-        (pod: Podcast | null) => null !== pod,
-      );
-      this.loading = false;
-    },
-    sortPopular(): void {
-      if (this.popularSort) return;
-      this.popularSort = true;
-      this.fetchNext();
-    },
-    sortChrono(): void {
-      if (!this.popularSort) return;
-      this.popularSort = false;
-      this.fetchNext();
-    },
-  },
+
+//Composables
+const { t } = useI18n();
+const filterStore = useFilterStore();
+
+//Computed
+const organisation = computed(() => {
+  if (props.organisationId.length) {
+    return props.organisationId;
+  }
+  return filterStore.filterOrgaId ? [filterStore.filterOrgaId] : [];
 });
+const watchVariable = computed(() => {
+  return `${props.emissionId}|${props.organisationId}|${filterStore.filterOrgaId}|${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.query}`;
+});
+
+
+//Watch
+watch(watchVariable, () => fetchNext(), {immediate:true});
+
+onBeforeMount(()=>{
+  if (undefined !== props.requirePopularSort) {
+    popularSort.value = props.requirePopularSort;
+  }
+  if (undefined !== props.isArrow) {
+    emit("update:isArrow", true);
+  }
+})
+
+//Methods
+async function fetchNext(): Promise<void> {
+  const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+    api: 0,
+    path: "podcast/search",
+    parameters: {
+      first: 0,
+      size: 12,
+      organisationId: organisation.value,
+      emissionId: props.emissionId,
+      iabId: props.iabId,
+      rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
+      rubriquageId: props.rubriquageId.length
+        ? props.rubriquageId
+        : undefined,
+      noRubriquageId: props.noRubriquageId.length
+        ? props.noRubriquageId
+        : undefined,
+      sort: popularSort.value ? "POPULARITY" : "DATE",
+      query: props.query,
+      includeStatus: ["READY", "PROCESSING"],
+      after:
+      popularSort.value && props.lastThreeMonths
+          ? dayjs().subtract(3, "months").toISOString()
+          : undefined,
+    },
+    specialTreatement: true,
+  });
+  loading.value = true;
+  allPodcasts.value = data.result.filter(
+    (pod: Podcast | null) => null !== pod,
+  );
+  loading.value = false;
+}
+function sortPopular(): void {
+  if (popularSort.value) return;
+  popularSort.value = true;
+  fetchNext();
+}
+function sortChrono(): void {
+  if (!popularSort.value) return;
+  popularSort.value = false;
+  fetchNext();
+}
 </script>

@@ -13,216 +13,217 @@
     ></video>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { usePlayerStore } from "../../../../stores/PlayerStore";
-import { mapActions, mapState } from "pinia";
 import {usePlayerLogicProgress} from "../../../composable/player/usePlayerLogicProgress";
 import videojs, { VideoJsPlayer } from "video.js";
 import qualitySelectorHls from "videojs-quality-selector-hls";
 if (undefined === videojs.getPlugin("qualitySelectorHls")) {
   videojs.registerPlugin("qualitySelectorHls", qualitySelectorHls);
 }
-import { defineComponent } from "vue";
+import { computed, onMounted, onUnmounted, Ref, ref, useTemplateRef } from "vue";
 import { useAuthStore } from "../../../../stores/AuthStore";
-export default defineComponent({
-  name: "PlayerVideoHls",
+import { useI18n } from "vue-i18n";
 
-  props: {
-    hlsUrl: { default: "", type: String },
-    responsive: { default: false, type: Boolean },
-    isSecured: { default: true, type: Boolean },
-  },
-  emits: ["changeValid"],
+//Props 
+const props = defineProps({
+  hlsUrl: { default: "", type: String },
+  responsive: { default: false, type: Boolean },
+  isSecured: { default: true, type: Boolean },
+})
 
-  setup(){
-    const { downloadId, initLiveDownloadId, onTimeUpdateProgress, endListeningProgress} = usePlayerLogicProgress();
-    return { downloadId, initLiveDownloadId, onTimeUpdateProgress, endListeningProgress }
-  },
-  data() {
-    return {
-      errorPlay: "" as string,
-      useVideoSrc: false as boolean,
-      player: undefined as VideoJsPlayer | undefined,
-      playing: false as boolean,
-      isPaused: false as boolean,
-      stalledTimout: undefined as ReturnType<typeof setTimeout> | undefined,
-    };
-  },
-  computed: {
-    ...mapState(useAuthStore, ["authParam"]),
-    videoElement(): HTMLVideoElement {
-      return this.$refs.videoelement as HTMLVideoElement;
-    },
-    videoOptions() {
-      return {
-        autoplay: true,
-        controls: true,
-        liveui: true,
-        sources: [
-          {
-            src: this.hlsUrl,
-            type: "application/x-mpegURL",
-          },
-        ],
-        html5: {
-          vhs: {
-            overrideNative: !videojs.browser.IS_SAFARI,
-          },
-          nativeAudioTracks: false,
-          nativeVideoTracks: false,
-        },
-      };
-    },
-  },
-  mounted() {
-    this.playerUpdatePlayerHlsUrl(this.hlsUrl);
-    this.useVideoSrc =
-      "" !== this.videoElement.canPlayType("application/vnd.apple.mpegurl") &&
-      !navigator.userAgent.includes("Android");
-    this.playLive();
-  },
+//Data
+const errorPlay = ref("");
+const useVideoSrc = ref(false);
+const player: Ref<VideoJsPlayer | undefined> = ref(false);
+const playing = ref(false);
+const isPaused = ref(false);
+const stalledTimout: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
+const videoElementRef = useTemplateRef('videoelement');
 
-  beforeUnmount() {
-    if (this.playing) {
-      this.stopLive();
-    }
-  },
 
-  methods: {
-    ...mapActions(usePlayerStore, ["playerUpdateSeekTime", "playerUpdatePlayerHlsUrl"]),
-    definedStalledTimeout() {
-      this.isPaused = false;
-      this.stalledTimout = setTimeout(() => {
-        if (this.isPaused) {
-          return;
-        }
-        this.videoClean();
-        this.playLive();
-      }, 15000);
-    },
-    async playLive(): Promise<void> {
-      clearTimeout(this.stalledTimout);
-      this.definedStalledTimeout();
-      await this.initLiveDownloadId();
-      if (this.useVideoSrc) {
-        this.playLiveIos();
-        return;
-      }
-      if (this.isSecured && this.authParam.accessToken) {
-        const globalXhrRequestHook = (options: any) => {
-          options.beforeSend = (xhr: XMLHttpRequest) => {
-            xhr.setRequestHeader("Authorization", "Bearer "+this.authParam.accessToken);
-          };
-          return options;
-        };
-        videojs.Vhs.xhr.onRequest(globalXhrRequestHook);
-      }
-      this.player = videojs(
-        document.getElementById("video-element-hls") as Element,
-        this.videoOptions,
-        () => {
-          this.player.qualitySelectorHls({ displayCurrentQuality: true });
-          this.errorPlay = "";
-          this.playing = true;
-        },
-      );
-      this.player.on("error", (error) => {
-        this.stopLive();
-        if (error.description?.includes("403")) {
-          this.errorPlay = this.$t("Video is unavailable");
-        } else {
-          this.errorPlay = this.$t("Podcast play error");
-        }
-      });
-      this.player.on("seeking", () => {
-        this.playerUpdateSeekTime(this.player?.currentTime() ?? 0);
-      });
-      this.player.on("pause", () => {
-        this.isPaused = true;
-      });
-      this.player.on("timeupdate", () => {
-        clearTimeout(this.stalledTimout);
-        this.definedStalledTimeout();
-        this.onTimeUpdateVideo();
-      });
-      this.player.on("seeking", () => {
-        this.playerUpdateSeekTime(this.player?.currentTime() ?? 0);
-      });
-    },
-    async playLiveIos(): Promise<void> {
-      this.videoElement.onloadedmetadata = () => {
-        const playPromise = this.videoElement.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              this.errorPlay = "";
-              this.playing = true;
-            })
-            .catch(() => {
-              this.playing = false;
-            });
-        }
-      };
-      this.videoElement.onerror = async () => {
-        this.stopLive();
-        this.errorPlay = this.$t("Podcast play error");
-      };
-      this.videoElement.ontimeupdate = async () => {
-        clearTimeout(this.stalledTimout);
-        this.definedStalledTimeout();
-        this.onTimeUpdateVideo();
-      };
-      this.videoElement.onpause = async () => {
-        this.isPaused = true;
-      };
-      this.videoElement.onseeking = async () => {
-        this.playerUpdateSeekTime(this.videoElement.currentTime);
-      };
-      if (this.isSecured && this.authParam.accessToken) {
-        this.videoElement.src = this.hlsUrl + "access_token="+this.authParam.accessToken;
-      }else{
-        this.videoElement.src = this.hlsUrl;
-      }
-      this.videoElement.src = this.hlsUrl;
-    },
-    videoClean(): void {
-      if (this.useVideoSrc) {
-        this.videoElement.pause();
-        this.videoElement.removeAttribute("src");
-        this.videoElement.load();
-        return;
-      }
-      if (this.player) {
-        this.player.dispose();
-        //Redraw
-        const video_parent = document.getElementById("player-video-hls");
-        if (video_parent) {
-          const video = document.createElement("video");
-          video.id = "video-element-hls";
-          video.className = "video-js";
-          video.preload = "auto";
-          video.setAttribute("playsinline", "true");
-          video_parent.appendChild(video);
-        }
-      }
-    },
-    stopLive(): void {
-      clearTimeout(this.stalledTimout);
-      this.errorPlay = "";
-      this.videoClean();
-      this.playing = false;
-      this.endListeningProgress();
-    },
-    onTimeUpdateVideo(): void {
-      if (!this.downloadId) {
-        return;
-      }
-      const currentTime =
-        this.player?.currentTime() ?? this.videoElement.currentTime;
-      this.onTimeUpdateProgress(currentTime);
-    },
-  },
+//Composables
+const { t } = useI18n();
+const { downloadId, initLiveDownloadId, onTimeUpdateProgress, endListeningProgress} = usePlayerLogicProgress();
+const authStore = useAuthStore();
+const playerStore = usePlayerStore();
+
+
+
+//Computed
+const videoElement = computed(() => {
+  return videoElementRef?.value as HTMLVideoElement;
 });
+const videoOptions = computed(() => {
+  return {
+    autoplay: true,
+    controls: true,
+    liveui: true,
+    sources: [
+      {
+        src: props.hlsUrl,
+        type: "application/x-mpegURL",
+      },
+    ],
+    html5: {
+      vhs: {
+        overrideNative: !videojs.browser.IS_SAFARI,
+      },
+      nativeAudioTracks: false,
+      nativeVideoTracks: false,
+    },
+  };
+});
+
+
+onMounted(()=>{
+  playerStore.playerUpdatePlayerHlsUrl(props.hlsUrl);
+  useVideoSrc.value =
+    "" !== videoElement.value.canPlayType("application/vnd.apple.mpegurl") &&
+    !navigator.userAgent.includes("Android");
+  playLive();
+})
+
+onUnmounted(()=>{
+  if (playing.value) {
+    stopLive();
+  }
+})
+
+
+//Methods
+function definedStalledTimeout() {
+  isPaused.value = false;
+  stalledTimout.value = setTimeout(() => {
+    if (isPaused.value) {
+      return;
+    }
+    videoClean();
+    playLive();
+  }, 15000);
+}
+async function playLive(): Promise<void> {
+  clearTimeout(stalledTimout.value);
+  definedStalledTimeout();
+  await initLiveDownloadId();
+  if (useVideoSrc.value) {
+    playLiveIos();
+    return;
+  }
+  if (props.isSecured && authStore.authParam.accessToken) {
+    const globalXhrRequestHook = (options: any) => {
+      options.beforeSend = (xhr: XMLHttpRequest) => {
+        xhr.setRequestHeader("Authorization", "Bearer "+authStore.authParam.accessToken);
+      };
+      return options;
+    };
+    videojs.Vhs.xhr.onRequest(globalXhrRequestHook);
+  }
+  player.value = videojs(
+    document.getElementById("video-element-hls") as Element,
+    videoOptions.value,
+    () => {
+      player.value.qualitySelectorHls({ displayCurrentQuality: true });
+      errorPlay.value = "";
+      playing.value = true;
+    },
+  );
+  player.value.on("error", (error: any) => {
+    stopLive();
+    if (error.description?.includes("403")) {
+      errorPlay.value = t("Video is unavailable");
+    } else {
+      errorPlay.value = t("Podcast play error");
+    }
+  });
+  player.value.on("seeking", () => {
+    playerStore.playerUpdateSeekTime(player.value?.currentTime() ?? 0);
+  });
+  player.value.on("pause", () => {
+    isPaused.value = true;
+  });
+  player.value.on("timeupdate", () => {
+    clearTimeout(stalledTimout.value);
+    definedStalledTimeout();
+    onTimeUpdateVideo();
+  });
+  player.value.on("seeking", () => {
+    playerStore.playerUpdateSeekTime(player.value?.currentTime() ?? 0);
+  });
+}
+
+async function playLiveIos(): Promise<void> {
+  videoElement.value.onloadedmetadata = () => {
+    const playPromise = videoElement.value.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          errorPlay.value = "";
+          playing.value = true;
+        })
+        .catch(() => {
+          playing.value = false;
+        });
+    }
+  };
+  videoElement.value.onerror = async () => {
+    stopLive();
+    errorPlay.value = t("Podcast play error");
+  };
+  videoElement.value.ontimeupdate = async () => {
+    clearTimeout(stalledTimout.value);
+    definedStalledTimeout();
+    onTimeUpdateVideo();
+  };
+  videoElement.value.onpause = async () => {
+    isPaused.value = true;
+  };
+  videoElement.value.onseeking = async () => {
+    playerStore.playerUpdateSeekTime(videoElement.value.currentTime);
+  };
+  if (props.isSecured && authStore.authParam.accessToken) {
+    videoElement.value.src = props.hlsUrl + "access_token="+authStore.authParam.accessToken;
+  }else{
+    videoElement.value.src = props.hlsUrl;
+  }
+  videoElement.value.src = props.hlsUrl;
+}
+
+function videoClean(): void {
+  if (useVideoSrc.value) {
+    videoElement.value.pause();
+    videoElement.value.removeAttribute("src");
+    videoElement.value.load();
+    return;
+  }
+  if (player.value) {
+    player.value.dispose();
+    //Redraw
+    const video_parent = document.getElementById("player-video-hls");
+    if (video_parent) {
+      const video = document.createElement("video");
+      video.id = "video-element-hls";
+      video.className = "video-js";
+      video.preload = "auto";
+      video.setAttribute("playsinline", "true");
+      video_parent.appendChild(video);
+    }
+  }
+}
+function stopLive(): void {
+  clearTimeout(stalledTimout.value);
+  errorPlay.value = "";
+  videoClean();
+  playing.value = false;
+  endListeningProgress();
+}
+function onTimeUpdateVideo(): void {
+  if (!downloadId.value) {
+    return;
+  }
+  const currentTime =player.value?.currentTime() ?? videoElement.value.currentTime;
+  onTimeUpdateProgress(currentTime);
+}
 </script>
 
 <style lang="scss">

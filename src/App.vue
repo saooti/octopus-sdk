@@ -14,7 +14,7 @@
     </template>
   </div>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import TopBar from "@/components/misc/TopBar.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
 import ClassicLazy from "@/components/misc/ClassicLazy.vue";
@@ -22,104 +22,84 @@ import {useInit} from "./components/composable/useInit";
 import {useMetaTitle} from "./components/composable/useMetaTitle";
 import {useOrganisationFilter} from "./components/composable/useOrganisationFilter";
 import { useAuthStore } from "./stores/AuthStore";
-import { useFilterStore } from "./stores/FilterStore";
-import { useGeneralStore } from "./stores/GeneralStore";
-import { mapState, mapActions } from "pinia";
-import { defineAsyncComponent, defineComponent } from "vue";
+import { defineAsyncComponent, getCurrentInstance, onBeforeMount, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 const FooterOctopus = defineAsyncComponent(
   () => import("@/components/misc/FooterSection.vue"),
 );
 const CategoryFilter = defineAsyncComponent(
   () => import("@/components/display/categories/CategoryFilter.vue"),
 );
-export default defineComponent({
-  name: "App",
 
-  components: {
-    TopBar,
-    CategoryFilter,
-    FooterOctopus,
-    PlayerComponent,
-    ClassicLazy
-  },
+//Data 
+const reload = ref(false);
+const pageFullyLoad = ref(false);
+const firstDisplayCategoryFilter = ref(false);
 
-  setup(){
-    const { updateMetaTitle } = useMetaTitle();
-    const {initSdk} = useInit();
-    const {selectOrganisation} = useOrganisationFilter();
-    return { updateMetaTitle, initSdk, selectOrganisation }
-  },
+//Composables
+const {locale} = useI18n();
+const { updateMetaTitle } = useMetaTitle();
+const {initSdk} = useInit();
+const {selectOrganisation} = useOrganisationFilter();
+const authStore = useAuthStore();
+const route = useRoute();
 
-  data() {
-    return {
-      reload: false as boolean,
-      pageFullyLoad: false as boolean,
-      firstDisplayCategoryFilter: false as boolean,
-    };
-  },
 
-  computed: {
-    ...mapState(useFilterStore, ["filterRubriquage", "filterOrgaId"]),
-    ...mapState(useGeneralStore, ["storedCategories"]),
-    ...mapState(useAuthStore, ["authOrgaId"]),
-  },
-
-  watch: {
-    $route: {
-      immediate: true,
-      async handler() {
-        this.updateMetaTitle();
-        if (this.firstDisplayCategoryFilter) {
-          return;
-        }
-        const namesRouteWithCategoryFilter = [
-          "homePriv",
-          "home",
-          "podcasts",
-          "emissions",
-          "participants",
-          "playlists",
-        ];
-        this.firstDisplayCategoryFilter = namesRouteWithCategoryFilter.includes(
-          this.$route.name?.toString() ?? "",
-        );
-      },
-    },
-    "$i18n.locale"() {
-      this.updateMetaTitle();
-      this.$forceUpdate();
-      this.reload = !this.reload;
-    },
-  },
-  created() {
-    this.initApp();
-    setTimeout(() => {
-      this.pageFullyLoad = true;
-    }, 2000);
-  },
-  methods: {
-    ...mapActions(useFilterStore, ["filterUpdateRubrique"]),
-    async initApp() {
-      await this.initSdk();
-      await this.handleOrganisationFilter();
-    },
-    async handleOrganisationFilter() {
-      let orgaId = "";
-      if (
-        this.$route.query.productor &&
-        "string" === typeof this.$route.query.productor
-      ) {
-        orgaId = this.$route.query.productor;
-      } else if (this.authOrgaId) {
-        orgaId = this.authOrgaId;
-      }
-      if ("" === orgaId) {
-        return;
-      }
-      await this.selectOrganisation(orgaId);
-    },
-  },
+//Watch
+watch(route, async () => {
+  updateMetaTitle();
+  if (firstDisplayCategoryFilter.value) {
+    return;
+  }
+  const namesRouteWithCategoryFilter = [
+    "homePriv",
+    "home",
+    "podcasts",
+    "emissions",
+    "participants",
+    "playlists",
+  ];
+  firstDisplayCategoryFilter.value = namesRouteWithCategoryFilter.includes(
+    route.name?.toString() ?? "",
+  );
+}, {immediate: true});
+watch(locale,() => {
+  updateMetaTitle();
+  const instance = getCurrentInstance();
+  instance?.proxy?.$forceUpdate();
+  reload.value = !reload.value;
 });
+
+
+onBeforeMount(()=>{
+  initApp();
+  setTimeout(() => {
+    pageFullyLoad.value = true;
+  }, 2000);
+})
+
+
+//Methods
+async function initApp() {
+  await initSdk();
+  await handleOrganisationFilter();
+}
+async function handleOrganisationFilter() {
+  let orgaId = "";
+  if (
+   route.query.productor &&
+    "string" === typeof route.query.productor
+  ) {
+    orgaId = route.query.productor;
+  } else if (authStore.authOrgaId) {
+    orgaId = authStore.authOrgaId;
+  }
+  if ("" === orgaId) {
+    return;
+  }
+  await selectOrganisation(orgaId);
+}
 </script>
 
 <style lang="scss" src="@/style/octopus-library.scss"></style>

@@ -4,7 +4,7 @@
       :id="'emoji-picker-dropdown'+id"
       ref="emojiButton"
       class="btn btn-transparent d-flex align-items-center justify-content-center"
-      :title="$t('Pick your emoji')"
+      :title="t('Pick your emoji')"
     >
       <EmoticonExcitedOutlineIcon :size="34" />
     </button>
@@ -19,46 +19,38 @@
     >
       <Picker
         :data="emojiIndex"
-        :title="$t('Pick your emoji')"
+        :title="t('Pick your emoji')"
         emoji="point_up"
-        @select="$emit('emojiSelected', $event.native)"
+        @select="emit('emojiSelected', $event.native)"
       />
     </ClassicPopover>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {useResizePhone} from "../composable/useResizePhone";
 import EmoticonExcitedOutlineIcon from "vue-material-design-icons/EmoticonExcitedOutline.vue";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import data from "emoji-mart-vue-fast/data/all.json";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import { Picker, EmojiIndex } from "emoji-mart-vue-fast/src";
-const emojiIndex = new EmojiIndex(data);
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ClassicEmojiPicker",
-  components: {
-    Picker,
-    ClassicPopover,
-    EmoticonExcitedOutlineIcon,
-  },
-  props: {
-    popoverRelativeClass: { default: undefined, type: String },
-    isTopPosition: { default: false, type: Boolean },
-    id: { default: "", type: String },
-  },
-  emits: ["emojiSelected"],
-  setup(){
-    const { isPhone } = useResizePhone();
-    return { isPhone }
-  },
+import { useI18n } from "vue-i18n";
 
-  data() {
-    return {
-      emojiIndex: emojiIndex,
-    };
-  },
-});
+//Props 
+defineProps({
+  popoverRelativeClass: { default: undefined, type: String },
+  isTopPosition: { default: false, type: Boolean },
+  id: { default: "", type: String },
+})
+
+//Emits
+const emit = defineEmits(["emojiSelected"]);
+
+//Data 
+const emojiIndex = new EmojiIndex(data);
+
+//Composables
+const { t } = useI18n();
+const { isPhone } = useResizePhone();
 </script>
 

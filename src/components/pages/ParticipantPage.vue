@@ -2,16 +2,17 @@
   <section class="page-box">
     <template v-if="loaded && !error && participant">
       <h1>
-        {{ $t("Animator") }}
+        {{ t("Animator") }}
       </h1>
       <section class="d-flex flex-column align-items-center mb-3">
         <img
           v-lazy="useProxyImageUrl(participant.imageUrl, '200')"
           width="200"
           height="200"
-          role="presentation"
+          aria-hidden="true"
+        alt=""
           
-          :title="$t('Animator image', { name: name })"
+          :title="t('Animator image', { name: name })"
           class="img-box mb-3"
         />
         <h2 class="text-capitalize">
@@ -24,13 +25,13 @@
         />
         <!-- eslint-enable -->
         <EditBox
-          v-if="editRight && pageParameters.isEditBox"
+          v-if="editRight && !state.generalParameters.podcastmaker"
           :participant="participant"
           class="w-100 justify-content-center"
           @participant-update="updateParticipant"
         />
         <ShareSocialsButtons
-          v-if="pageParameters.isShareButtons"
+          v-if="state.podcastPage.ShareButtons"
           class="w-100"
           :organisation-id="participant.orga.id"
         >
@@ -55,16 +56,15 @@
       />
     </template>
     <ClassicLoading
-      :loading-text="!loaded ? $t('Loading content ...') : undefined"
-      :error-text="error ? $t(`Animator doesn't exist`) : undefined"
+      :loading-text="!loaded ? t('Loading content ...') : undefined"
+      :error-text="error ? t(`Animator doesn't exist`) : undefined"
     />
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
-import { useApiStore } from "../../stores/ApiStore";
 import { useFilterStore } from "../../stores/FilterStore";
 import displayHelper from "../../helper/displayHelper";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
@@ -73,9 +73,10 @@ import {useOrgaComputed} from "../composable/useOrgaComputed";
 import {useErrorHandler} from "../composable/useErrorHandler";
 import { Participant } from "@/stores/class/general/participant";
 import ClassicLoading from "../form/ClassicLoading.vue";
-import { defineComponent, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, ref, Ref, watch } from "vue";
 import { AxiosError } from "axios";
-import { mapState } from "pinia";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -86,106 +87,77 @@ const EditBox = defineAsyncComponent(
   () => import("@/components/display/edit/EditBox.vue"),
 );
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
-export default defineComponent({
-  components: {
-    ShareSocialsButtons,
-    PodcastFilterList,
-    EditBox,
-    ClassicLoading,
-    ShareAnonymous
-  },
-  props: {
-    participantId: { default: undefined, type: Number },
-  },
-  setup(){
-    const { useProxyImageUrl } = useImageProxy();
-    const {  isEditRights } = useOrgaComputed();
-    const { updatePathParams } = useSeoTitleUrl();
-    const {handle403} = useErrorHandler();
-    return { useProxyImageUrl, isEditRights, updatePathParams, handle403 }
-  },
-  data() {
-    return {
-      loaded: false as boolean,
-      participant: undefined as Participant | undefined,
-      error: false as boolean,
-      reload: false as boolean,
-    };
-  },
-  computed: {
-    ...mapState(useFilterStore, ["filterOrgaId"]),
-    ...mapState(useApiStore, ["apiUrl"]),
-    pageParameters() {
-      return {
-        isEditBox: !state.generalParameters.podcastmaker as boolean,
-        isShareButtons: state.podcastPage.ShareButtons as boolean,
-      };
-    },
-    rssUrl(): string {
-      return `${this.apiUrl}rss/participant/${this.participantId}`;
-    },
-    description(): string {
-      return this.participant?.description ?? "";
-    },
-    name(): string {
-      return `${this.participant?.firstName ?? ""} ${
-        this.participant?.lastName ?? ""
-      }`.trim();
-    },
-    editRight(): boolean {
-      return this.isEditRights(this.participant?.orga?.id);
-    },
-  },
-  watch: {
-    participant: {
-      deep: true,
-      handler() {
-        this.reload = !this.reload;
-      },
-    },
-    participantId: {
-      immediate: true,
-      handler() {
-        this.getParticipantDetails();
-      },
-    },
-  },
-  methods: {
-    urlify(text:string|undefined){
-      return displayHelper.urlify(text);
-    },
-    initError(): void {
-      this.error = true;
-      this.loaded = true;
-    },
-    async getParticipantDetails(): Promise<void> {
-      this.loaded = false;
-      try {
-        const data = await classicApi.fetchData<Participant>({
-          api: 0,
-          path: "participant/" + this.participantId,
-        });
-        if (
-          "PUBLIC" !== data?.orga?.privacy &&
-          this.filterOrgaId !== data?.orga?.id &&
-          this.$route.query.productor !== data?.orga?.id
-        ) {
-          this.initError();
-          return;
-        }
-        this.updateParticipant(data);
-        this.loaded = true;
-      } catch (error) {
-        this.handle403(error as AxiosError);
-        this.initError();
-      }
-    },
-    updateParticipant(participant: Participant): void {
-      this.participant = participant;
-      this.updatePathParams(this.name);
-    },
-  },
+
+
+//Props
+const props = defineProps({
+  participantId: { default: undefined, type: Number },
 });
+
+
+//Data
+const loaded = ref(false);
+const error = ref(false);
+const reload = ref(false);
+const participant: Ref<Participant | undefined> = ref(undefined);
+
+
+//Composables
+const route = useRoute();
+const { t } = useI18n();
+const { useProxyImageUrl } = useImageProxy();
+const {  isEditRights } = useOrgaComputed();
+const { updatePathParams } = useSeoTitleUrl();
+const {handle403} = useErrorHandler();
+const filterStore = useFilterStore();
+
+
+//Computed
+const description = computed(() =>participant.value?.description ?? "");
+const name = computed(() =>`${participant.value?.firstName ?? ""} ${participant.value?.lastName ?? ""}`.trim());
+const editRight = computed(() =>isEditRights(participant.value?.orga?.id));
+
+
+//Watch
+watch(participant, () => {reload.value = !reload.value}, {deep: true});
+watch(()=>props.participantId, () =>getParticipantDetails(), {immediate: true});
+
+
+
+//Methods
+function urlify(text:string|undefined){
+  return displayHelper.urlify(text);
+}
+function  initError(): void {
+  error.value = true;
+  loaded.value = true;
+}
+async function getParticipantDetails(): Promise<void> {
+  loaded.value = false;
+  try {
+    const data = await classicApi.fetchData<Participant>({
+      api: 0,
+      path: "participant/" + props.participantId,
+    });
+    if (
+      "PUBLIC" !== data?.orga?.privacy &&
+      filterStore.filterOrgaId !== data?.orga?.id &&
+      route.query.productor !== data?.orga?.id
+    ) {
+      initError();
+      return;
+    }
+    updateParticipant(data);
+    loaded.value = true;
+  } catch (error) {
+    handle403(error as AxiosError);
+    initError();
+  }
+}
+function updateParticipant(participantUpdated: Participant): void {
+  participant.value = participantUpdated;
+  updatePathParams(name.value);
+}
 </script>
 
 <style lang="scss">

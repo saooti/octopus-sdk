@@ -10,13 +10,13 @@ export const useInit= ()=>{
   const authStore = useAuthStore();
   const generalStore = useGeneralStore();
 
-  const i18n = useI18n()
+  const {locale} = useI18n()
 
   async function initSdk() {
     classicApi.fetchData<Array<Category>>({
       api: 0,
       path:`iab/list${authStore.authOrgaId ? "/" + authStore.authOrgaId : ""}`,
-      parameters:{ lang: i18n.locale.value },
+      parameters:{ lang: locale.value },
     })
     .then((data: Array<Category>) => {
       if(data.length){
