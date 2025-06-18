@@ -19,7 +19,10 @@
           >
             <router-link
               class="link-hover special-select-align-magic-trick"
-              :to="link.routeName"
+              :to="{
+                  name: link.routeName,
+                  query: getQueriesRouter(link.routeName),
+                }"
             >
               {{ link.title }}
             </router-link>
@@ -192,6 +195,10 @@ async function onOrganisationSelected( organisation: Organisation | undefined): 
     });
   }
 }
+//Expose
+defineExpose({
+  updateComment
+});
 </script>
 
 <style lang="scss">

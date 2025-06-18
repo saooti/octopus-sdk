@@ -203,4 +203,8 @@ function receiveEvent(event: CommentMessage) {
 function updateForAnswerDeleted(commentId: number) {
   modifyAnswerNumber(commentId, false);
 }
+//Expose
+defineExpose({
+  receiveEvent
+});
 </script>

@@ -9,4 +9,8 @@ import { CommentPodcast } from "@/stores/class/general/comment";
 function updateComment(comment: CommentPodcast): void {
   console.log(comment);
 }
+//Expose
+defineExpose({
+  updateComment
+});
 </script>

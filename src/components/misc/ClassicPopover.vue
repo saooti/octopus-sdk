@@ -295,6 +295,11 @@ function clearData() {
   posX.value = 0;
   posY.value = 0;
 }
+
+//Expose
+defineExpose({
+  clearClick
+});
 </script>
 <style lang="scss">
 

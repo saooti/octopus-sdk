@@ -179,6 +179,11 @@ function onOptionDeselect(event: unknown): void {
   }
   emit("selected", optionSelected.value);
 }
+
+//Expose
+defineExpose({
+  afterSearch
+});
 </script>
 <style lang="scss">
 @use "vue-select/dist/vue-select.css";
