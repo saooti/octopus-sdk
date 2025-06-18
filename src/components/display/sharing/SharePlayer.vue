@@ -264,7 +264,7 @@ const iFrameHeight = computed(() => {
     case "videoLive":
       return "450px";
     default:
-      return "530px";
+      return "540px";
   }
 });
 const iFrame = computed(() => {

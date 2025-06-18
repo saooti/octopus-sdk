@@ -265,7 +265,7 @@ function clearDataBlur(e: FocusEvent) {
   if (!(myElement as HTMLAnchorElement).href) {
     return clearClick();
   }
-  if (myElement.classList.contains("reallink")) {
+  if (myElement.classList.contains("realLink")) {
     myElement.click();
   } else {
     router.push((myElement as HTMLAnchorElement).pathname);

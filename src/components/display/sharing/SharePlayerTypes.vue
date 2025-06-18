@@ -85,9 +85,9 @@ const optionsSelect = computed(() => {
     { name: t("Default version"), value: "default", condition: true },
     { name: t("Large version"), value: "largeMore", condition: props.podcast?.podcastId, },
     {
-      name: t("Minimalist length version"),
+      name: props.podcast?.podcastId ? t("Minimalist length version"): t("Large version"),
       value: "large",
-      condition: props.podcast?.podcastId,
+      condition: true,
     },
     {
       name: t("Emission version"),
