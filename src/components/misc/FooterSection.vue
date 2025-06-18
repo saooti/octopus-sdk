@@ -195,10 +195,6 @@ async function onOrganisationSelected( organisation: Organisation | undefined): 
     });
   }
 }
-//Expose
-defineExpose({
-  updateComment
-});
 </script>
 
 <style lang="scss">
