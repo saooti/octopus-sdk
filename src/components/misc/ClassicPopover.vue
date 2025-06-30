@@ -72,7 +72,7 @@ const router= useRouter();
 const popoverId = computed(() => "popover" + props.target);
 const positionInlineStyle = computed(() => `left: ${posX.value}px; top: ${posY.value}px;max-height:${maxHeight.value}`);
 const displayPopover = computed(() => show.value && !props.disable);
-const isTopLayerPopover = computed(() => (props.isTopLayer || "octopus-modal"===props.relativeClass) && HTMLElement.prototype.hasOwnProperty("popover"));
+const isTopLayerPopover = computed(() => (props.isTopLayer || "octopus-modal"===props.relativeClass) && Object.hasOwn(HTMLElement.prototype, "popover"));
 
 
 //Watch

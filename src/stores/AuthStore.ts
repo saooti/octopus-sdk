@@ -5,19 +5,19 @@ import { defineStore } from "pinia";
 import { KeycloakInfo } from "@/stores/class/user/person";
 import { VideoConfig } from "@/stores/class/config/videoConfig";
 import classicApi from "../api/classicApi";
-
+interface AuthParam{
+  accessToken?: string;
+  refreshToken?: string;
+  expiration?: Date|string;
+  clientId?: string;
+}
 interface AuthState {
   authReload: number;
   authName: string;
   authOrgaId?: string;
   authOrgaName?: string;
   authRole: Array<string>;
-  authParam: {
-    accessToken?: string;
-    refreshToken?: string;
-    expiration?: Date;
-    clientId?: string;
-  };
+  authParam:AuthParam;
   authProfile?: Profile;
   authOrganisation: Organisation;
   authVideoConfig: VideoConfig;
@@ -115,25 +115,25 @@ export const useAuthStore = defineStore("AuthStore", {
     },
   },
   actions: {
-    authUpdate(authentication: any) {
+    authUpdate(authentication: {name?:string, organisationId?:string,organisationName?:string, role?:Array<string>}) {
       this.authName = authentication.name ?? this.authName;
       this.authOrgaId = authentication.organisationId ?? this.authOrgaId;
       this.authOrgaName = authentication.organisationName ?? this.authOrgaName;
       this.authRole = authentication.role ?? this.authRole;
     },
-    authUpdateParam(oAuthParam: any) {
+    authUpdateParam(oAuthParam: AuthParam) {
       this.authParam = oAuthParam;
     },
-    authUpdateProfile(profile: any) {
+    authUpdateProfile(profile: Profile) {
       this.authProfile = profile;
       this.authName = profile.firstname + " " + profile.lastname;
     },
-    authUpdateOrganisation(organisation: any) {
+    authUpdateOrganisation(organisation: Organisation) {
       this.authOrganisation = organisation;
       const saveFetchStore = useSaveFetchStore();
       saveFetchStore.forceUpdateAttributes(
         organisation.id,
-        organisation.attributes,
+        organisation.attributes??{}
       );
       saveFetchStore.forceUpdateData(organisation.id, organisation);
     },

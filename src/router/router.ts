@@ -144,9 +144,13 @@ const routes: Array<RouteRecordRaw> = [
     component: EmissionPage,
     props: (route: RouteLocationNormalized) => ({
       emissionId: parseInt(route.params.emissionId.toString(), 10),
+      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      routeQuery: route.query.q ?? "",
     }),
     meta:{
-      title: ""
+      title: "",
+      noScroll:true
     }
   },
   {
@@ -177,9 +181,13 @@ const routes: Array<RouteRecordRaw> = [
     component: ParticipantPage,
     props: (route: RouteLocationNormalized) => ({
       participantId: parseInt(route.params.participantId.toString(), 10),
+      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      routeQuery: route.query.q ?? "",
     }),
     meta:{
-      title: ""
+      title: "",
+      noScroll:true
     }
   },
   {
@@ -266,9 +274,13 @@ const routes: Array<RouteRecordRaw> = [
     component: PlaylistPage,
     props: (route: RouteLocationNormalized) => ({
       playlistId: parseInt(route.params.playlistId.toString(), 10),
+      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      routeQuery: route.query.q ?? "",
     }),
     meta:{
-      title: ""
+      title: "",
+      noScroll:true
     }
   },
   //Fake route to avoid errors
@@ -321,7 +333,8 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(),
   routes: routes,
-  scrollBehavior(): { left: number; top: number } {
+  scrollBehavior(to, from) {
+    if (to.name === from.name && to.meta.noScroll) return false;
     return { left: 0, top: 0 };
   },
 });

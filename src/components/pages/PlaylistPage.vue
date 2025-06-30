@@ -18,8 +18,7 @@
               width="250"
               height="250"
               aria-hidden="true"
-        alt=""
-              
+              alt=""
               :title="t('Playlist name image', { name: name })"
               class="img-box float-start me-3 mb-3"
             />
@@ -42,7 +41,13 @@
           :organisation-id="playlist.organisation.id"
         />
         <section class="module-box">
-          <PodcastList :playlist="playlist" />
+          <PodcastList 
+            v-if="isInit"
+            v-model:query="searchPattern"
+            :first="paginateFirst"
+            :size="ps"
+            :playlist="playlist"
+          />
         </section>
       </div>
     </template>
@@ -71,6 +76,7 @@ import {defineAsyncComponent, ref, Ref, computed, watch, onBeforeUnmount } from 
 import { AxiosError } from "axios";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -89,6 +95,9 @@ const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/Sha
 //Props
 const props = defineProps({
   playlistId: { default: undefined, type: Number },
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  routeQuery: { default: "", type: String },
 });
 
 
@@ -108,7 +117,11 @@ const {handle403} = useErrorHandler();
 const authStore = useAuthStore();
 const filterStore = useFilterStore();
 const generalStore = useGeneralStore();
-
+const {
+  searchPattern,
+  paginateFirst,
+  isInit
+} = useSimplePageParam(props, true);
 
 
 //Computed

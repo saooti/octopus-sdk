@@ -70,12 +70,17 @@
             :emission-id="emissionId"
           />
           <PodcastFilterList
+            v-if="isInit"
+            v-model:query="searchPattern"
             class="mx-2"
+            :first="paginateFirst"
+            :size="ps"
             :show-count="true"
             :emission-id="emissionId"
             :category-filter="false"
             :edit-right="editRight"
             :productor-id="[emission.orga.id]"
+            :force-update-parameters="true"
             @fetch="podcastsFetched"
           />
         </section>
@@ -110,6 +115,7 @@ import { useFilterStore } from "../../stores/FilterStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
@@ -143,6 +149,9 @@ const PodcastmakerHeader = defineAsyncComponent(
 //Props 
 const props = defineProps({
   emissionId: { default: undefined, type: Number },
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  routeQuery: { default: "", type: String },
 })
 
 
@@ -163,6 +172,11 @@ const authStore = useAuthStore();
 const filterStore = useFilterStore();
 const generalStore= useGeneralStore();
 const route= useRoute();
+const {
+  searchPattern,
+  paginateFirst,
+  isInit
+} = useSimplePageParam(props, true);
 
 
 //Computed

@@ -19,10 +19,7 @@
           >
             <router-link
               class="link-hover special-select-align-magic-trick"
-              :to="{
-                  name: link.routeName,
-                  query: getQueriesRouter(link.routeName),
-                }"
+              :to="link.routeName"
             >
               {{ link.title }}
             </router-link>
@@ -77,7 +74,6 @@
 
 <script setup lang="ts">
 import cookiesHelper from "../../helper/cookiesHelper";
-import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
@@ -106,7 +102,6 @@ const reset = ref(false);
 const organisationId: Ref<string | undefined> = ref(undefined);
 
 //Composables
-const { rubriqueQueryParam } = useRubriquesFilterComputed();
 const generalStore = useGeneralStore();
 const filterStore = useFilterStore();
 const authStore = useAuthStore();
@@ -143,20 +138,6 @@ watch(()=>filterStore.filterOrgaId, () => {
 
 
 //Methods
-function getQueriesRouter(routeName: string) {
-  if (
-    "podcasts" !== routeName &&
-    "emissions" !== routeName &&
-    "home" !== routeName
-  ) {
-    return { productor: filterStore.filterOrgaId };
-  }
-  return {
-    productor: filterStore.filterOrgaId,
-    iabId: filterStore.filterIab?.id,
-    rubriquesId: rubriqueQueryParam.value,
-  };
-}
 function changeLanguage(): void {
   cookiesHelper.setCookie("octopus-language", language.value);
   loadLocaleMessages(

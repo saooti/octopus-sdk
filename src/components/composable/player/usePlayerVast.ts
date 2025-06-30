@@ -3,10 +3,10 @@ import { useVastStore } from "../../../stores/VastStore";
 import { loadScript } from "../../../helper/loadScript";
 import {nextTick, Ref, ref, watch} from 'vue';
 import dayjs from "dayjs";
-let adsLoader: any;
-let adsManager:any;
-let adDisplayContainer:any;
-let adsRequest: any;
+let adsLoader: google.ima.AdsLoader;
+let adsManager:google.ima.AdsManager;
+let adDisplayContainer:google.ima.AdDisplayContainer;
+let adsRequest: google.ima.AdsRequest;
 export const usePlayerVast = ()=>{
   const imaLoaded = ref(false);
   const isContentFinished = ref(false);
@@ -83,7 +83,7 @@ export const usePlayerVast = ()=>{
     adsRequest.adTagUrl = vastUrl;
   }
 
-  function onAdsManagerLoaded(adsManagerLoadedEvent: any) {
+  function onAdsManagerLoaded(adsManagerLoadedEvent: google.ima.AdsManagerLoadedEvent) {
     const adsRenderingSettings = new google.ima.AdsRenderingSettings();
     adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
     adsManager = adsManagerLoadedEvent.getAdsManager(audioContainer.value, adsRenderingSettings);
@@ -117,7 +117,7 @@ export const usePlayerVast = ()=>{
     }
   }
 
-  function onAdError(adErrorEvent: any) {
+  function onAdError(adErrorEvent: google.ima.AdErrorEvent) {
     console.log(adErrorEvent.getError());
     destroyAdManager();
   }
@@ -132,7 +132,7 @@ export const usePlayerVast = ()=>{
     isAdRequested.value = false;
   }
 
-  function onAdEvent(adEvent: any) {
+  function onAdEvent(adEvent: google.ima.AdEvent) {
     const ad = adEvent.getAd();
     if(ad){
       vastStore.updateCurrentAd(ad);

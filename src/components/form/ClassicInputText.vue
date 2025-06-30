@@ -216,7 +216,7 @@ watch(textValue, () => {
 });
 watch(()=>props.textInit, () => {
   if (props.textInit !== textValue.value) {
-    emit("update:textInit", textValue.value);
+    textValue.value = props.textInit;
   }
 });
 

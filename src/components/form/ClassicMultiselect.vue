@@ -5,7 +5,7 @@
       'multiselect-no-deselect': noDeselect,
       'form-margin': displayLabel,
     }"
-    :style="{ width: width }"
+    :style="{ width: width, height: height }"
   >
     <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
       label
@@ -28,6 +28,7 @@
       "
       :filter="fakeSearch"
       :selectable="() => !maxOptionsSelected"
+      class="h-100"
       :class="{ 'border border-danger': textDanger?.length }"
       @open="onSearch"
       @search="onSearch"
@@ -93,6 +94,7 @@ const props = defineProps({
   multiple: { default: false, type: Boolean },
   isDisabled: { default: false, type: Boolean },
   width: { default: "100%", type: String },
+  height: { default: undefined, type: String },
   maxElement: { default: 50, type: Number },
   minSearchLength: { default: 3, type: Number },
   optionChosen: { default: undefined, type: Object as () => unknown },
@@ -209,6 +211,7 @@ defineExpose({
 
   .vs__dropdown-toggle {
     padding: 0;
+    height: 100%;
   }
 
   .vs__search:focus {

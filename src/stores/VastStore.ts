@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { AdPosition } from "./class/adserver/adPosition";
 
 interface VastState {
-  currentAd: any;
+  currentAd: google.ima.Ad|undefined;
   isAdPlaying: boolean;
   isAdPaused: boolean;
   isAdSkippable: boolean;
@@ -79,7 +79,7 @@ export const useVastStore = defineStore("VastStore", {
     ) {
       this.adPositionsPodcasts[podcastId] = adPositions;
     },
-    updateCurrentAd(currentAd: any) {
+    updateCurrentAd(currentAd: google.ima.Ad) {
       this.currentAd = currentAd;
       this.isAdSkipped = false;
     },

@@ -19,6 +19,7 @@
     "
     :just-size-chosen="justSizeChosen"
     :player-responsive="true"
+    :force-update-parameters="forceUpdateParameters"
   >
     <template #list>
       <div class="octopus-element-list">
@@ -85,6 +86,7 @@ const props = defineProps({
   justSizeChosen: { default: false, type: Boolean },
   withVideo: { default: undefined, type: Boolean },
   includeTag:{ default: () => [], type: Array as () => Array<string> },
+  forceUpdateParameters: { default: false, type: Boolean },
 })
 
 //Emits

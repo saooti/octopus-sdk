@@ -1,4 +1,4 @@
-function loadScript(src: string, async:boolean, callback: any) {
+function loadScript(src: string, async:boolean, callback: (isLoaded:boolean) => void) {
   const firstElement = document.getElementsByTagName('head')[0] || document.documentElement,
   scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
@@ -6,13 +6,13 @@ function loadScript(src: string, async:boolean, callback: any) {
   scriptElement.async = async;
   scriptElement.addEventListener('load', function() {
     if(callback && typeof callback === 'function') {
-      callback(true, window);
+      callback(true);
     }
   }, false);
-  scriptElement.addEventListener('error', function(error) {
+  scriptElement.addEventListener('error', function() {
     firstElement.removeChild(scriptElement);
     if(callback && typeof callback === 'function') {
-      callback(false, error);
+      callback(false);
     }
   }, false);
   firstElement.insertBefore(scriptElement, firstElement.firstChild);

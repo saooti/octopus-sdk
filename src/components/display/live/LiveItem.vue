@@ -75,11 +75,10 @@ async function fetchStatus(): Promise<void> {
     api: 9,
     path: "conference/info/" + props.fetchConference.conferenceId,
   });
-  const newStatus = confInfo.status;
-  if (newStatus !== props.fetchConference.status) {
+  if (confInfo.status !== props.fetchConference.status) {
     emit("updateItem", {
       ...props.fetchConference,
-      ...{ status: newStatus },
+      ...confInfo,
     });
   }
 }

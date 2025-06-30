@@ -12,8 +12,8 @@
     />
     <ListPaginate
       id="podcastPlaylistListPaginate"
-      v-model:first="first"
-      v-model:rows-per-page="size"
+      v-model:first="dfirst"
+      v-model:rows-per-page="dsize"
       v-model:is-mobile="isMobile"
       :text-count="
         podcasts.length > 1
@@ -29,6 +29,7 @@
           : undefined
       "
       :player-responsive="true"
+      :force-update-parameters="true"
     >
       <template #list>
         <div class="octopus-element-list">
@@ -73,14 +74,20 @@ import { useI18n } from "vue-i18n";
 //Props 
 const props = defineProps({
   playlist: { default: () => ({}), type: Object as () => Playlist },
+  first: { default: 0, type: Number },
+  size: { default: 30, type: Number },
+  query: { default: undefined, type: String },
 })
+
+//Emits
+const emit = defineEmits(["update:query"]);
 
 //Data 
 const loading = ref(true);
 const podcasts: Ref<Array<Podcast>> = ref([]);
 const podcastsQuery: Ref<Array<Podcast>> = ref([]);
-const size = ref(30);
-const first = ref(0);
+const dfirst = ref(props.first);
+const dsize = ref(props.size);
 const searchPattern = ref("");
 const isMobile = ref(false);
 
@@ -96,18 +103,19 @@ const podcastsDisplay = computed(() => {
   if (isMobile.value) {
     return podcastsQuery.value.slice(
       0,
-      Math.min(first.value + size.value, podcasts.value.length),
+      Math.min(dfirst.value + dsize.value, podcasts.value.length),
     );
   }
   return podcastsQuery.value.slice(
-    first.value,
-    Math.min(first.value + size.value, podcasts.value.length),
+    dfirst.value,
+    Math.min(dfirst.value + dsize.value, podcasts.value.length),
   );
 });
 const editRight = computed(() =>isEditRights(props.playlist.organisation?.id));
 
 //Watch
 watch(searchPattern,() => {
+  emit('update:query', searchPattern.value);
   if ("" !== searchPattern.value) {
     podcastsQuery.value = podcasts.value.filter((el: Podcast) => {
       return el.title
@@ -141,6 +149,7 @@ async function fetchContent(): Promise<void> {
         });
       }
       podcastsQuery.value = podcasts.value;
+      searchPattern.value = props.query ?? "";
     } catch (error) {
       handle403(error as AxiosError);
     }

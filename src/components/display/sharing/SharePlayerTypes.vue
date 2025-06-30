@@ -137,7 +137,7 @@ onMounted(()=>{
 function isNumeric(value: string): boolean {
   return /^-?\d+$/.test(value);
 }
-function selectChange($event: any) {
+function selectChange($event: Event) {
   const val = $event.target.value;
   if (!val) {
     return;

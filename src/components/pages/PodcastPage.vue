@@ -255,7 +255,8 @@ async function fetchConferenceStatus() {
       api: 9,
       path: "conference/info/" + podcast.value?.conferenceId,
     });
-    fetchConference.value.status = data.status;
+
+    fetchConference.value = {...fetchConference.value, ...data};
   } catch {
     //Do nothing
   }

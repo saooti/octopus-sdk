@@ -13,6 +13,7 @@
     :multiple="multiple"
     :min-search-length="1"
     :width="width"
+    :height="height"
     :is-disabled="isDisabled"
     :no-deselect="noDeselect"
     :display-required="displayRequired"
@@ -32,6 +33,7 @@ import { useI18n } from "vue-i18n";
 const props = defineProps({
   defaultanswer: { default: "", type: String },
   width: { default: "100%", type: String },
+  height: { default: undefined, type: String },
   multiple: { default: false, type: Boolean },
   isDisabled: { default: false, type: Boolean },
   initCategories: {

@@ -108,7 +108,7 @@ import {useMetaTitleWatch} from "./src/components/composable/useMetaTitleWatch.t
 import {useOrganisationFilter} from "./src/components/composable/useOrganisationFilter.ts";
 import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
-
+import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
 
 
 //helper
@@ -157,6 +157,7 @@ export {
     useOrganisationFilter,
     useInit,
     useErrorHandler,
+    useSimplePageParam,
     debounce,
     useVastStore,
     useSaveFetchStore,

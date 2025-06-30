@@ -16,7 +16,7 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   const audioElement: Ref<HTMLAudioElement | null>= ref(null);
   const hls: Ref<any>= ref(null);
   const hlsRetryTimeout: Ref<ReturnType<typeof setTimeout> | undefined>= ref(undefined);
-  const playPromise: Ref<any>= ref(undefined);
+  const playPromise: Ref<Promise<void>|undefined>= ref(undefined);
   const errorHls= ref(false);
 
 

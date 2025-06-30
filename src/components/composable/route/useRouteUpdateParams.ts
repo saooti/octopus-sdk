@@ -12,14 +12,14 @@ export const useRouteUpdateParams = ()=>{
     return ['podcasts', 'emissions'].includes(route.name?.toString()??"");
   }
 
-  function updatePaginateSize(ps:number){
-    if(checkPage()){
+  function updatePaginateSize(ps:number, force= false){
+    if(force ||checkPage()){
       router.push({query: {...route.query, ...{ps:ps, pr:1}}});
     }
   }
 
-  function updateRouteParam(update: {[key:string]: string|undefined}){
-    if(checkPage()){
+  function updateRouteParam(update: {[key:string]: string|undefined}, force= false){
+    if(force || checkPage()){
       router.push({query: {...route.query, ...update}});
     }
   }

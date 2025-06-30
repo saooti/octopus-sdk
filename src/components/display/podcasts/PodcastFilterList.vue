@@ -3,9 +3,10 @@
     <h3 class="mb-2">
       {{ titleFilter }}
     </h3>
-    <div class="d-flex align-items-center flex-wrap mb-2">
+    <div class="d-flex align-items-stretch flex-wrap mb-2">
       <div id="podcast-filter-list-category-chooser" class="w-50-responsive pe-3">
         <CategoryChooser
+          height="100%"
           :defaultanswer="t('No category filter')"
           @selected="onCategorySelected"
         />
@@ -18,8 +19,8 @@
       />
     </div>
     <PodcastList
-      :first="first"
-      :size="size"
+      :first="dfirst"
+      :size="dsize"
       :iab-id="iabId"
       :query="query"
       :participant-id="participantId"
@@ -29,6 +30,7 @@
       :include-hidden="editRight"
       :show-count="showCount"
       :display-sort-text="false"
+      :force-update-parameters="forceUpdateParameters"
       @fetch="fetch"
     />
   </section>
@@ -47,6 +49,9 @@ const CategoryChooser = defineAsyncComponent(
 
 //Props 
 const props = defineProps({
+  first: { default: 0, type: Number },
+  size: { default: 30, type: Number },
+  query: { default: undefined, type: String },
   participantId: { default: undefined, type: Number },
   name: { default: undefined, type: String },
   emissionId: { default: undefined, type: Number },
@@ -55,15 +60,16 @@ const props = defineProps({
   editRight: { default: false, type: Boolean },
   productorId: { default: () => [], type: Array as () => Array<string> },
   showCount: { default: false, type: Boolean },
+  forceUpdateParameters: { default: false, type: Boolean },
 })
 
 //Emits
-const emit = defineEmits(["fetch"]);
+const emit = defineEmits(["fetch", "update:query"]);
 
 //Data 
-const first = ref(0);
-const size = ref(30);
-const searchPattern = ref("");
+const dfirst = ref(props.first);
+const dsize = ref(props.size);
+const searchPattern = ref(props.query ?? "");
 const reloadList = ref(false);
 const iabId : Ref<number | undefined>= ref(undefined);
 
@@ -81,6 +87,9 @@ const query = computed(() => searchPattern.value.length >= 3 ? searchPattern.val
 //Watch
 watch(()=>props.reload, () => {
   reloadList.value = !reloadList.value;
+});
+watch(searchPattern, () => {
+  emit('update:query', searchPattern.value);
 });
 
 //Methods

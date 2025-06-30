@@ -252,7 +252,7 @@ const isDebriefing = computed(() => {
   );
 });
 const isOctopusAndAnimator = computed(() => {
-  return !isPodcastmaker && editRight && authStore.isRoleLive;
+  return !isPodcastmaker.value && editRight.value && authStore.isRoleLive;
 });
 const podcastNotValid = computed(() => {
   return (

@@ -54,7 +54,7 @@ import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
-import { computed, ref, watch } from "vue";
+import { computed, watch } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useI18n } from "vue-i18n";
 
@@ -72,13 +72,12 @@ const props = defineProps({
   isMobile: { default: false, type: Boolean },
   justSizeChosen: { default: false, type: Boolean },
   playerResponsive: { default: false, type: Boolean },
+  forceUpdateParameters: { default: false, type: Boolean },
 })
 
 //Emits
 const emit = defineEmits(["update:first", "update:rowsPerPage", "update:isMobile"]);
 
-//Data 
-const internSizeChange = ref(false);
   
 //Composables
 const { t } = useI18n();
@@ -99,13 +98,6 @@ const rangeSize = computed(() => {
 
 //Watch
 watch(isPhone, () => {emit("update:isMobile", isPhone.value);}, {immediate: true});
-watch(()=>props.first,  () => {
-  if (internSizeChange.value) {
-    internSizeChange.value = false;
-    return;
-  }
-  updateRouteParam({pr:(Math.floor(props.first / props.rowsPerPage) + 1).toString()});
-});
 
 //Methods
 function fetchMore() {
@@ -114,14 +106,12 @@ function fetchMore() {
 function changeFirst(firstValue: number) {
   scrollToTop();
   emit("update:first", firstValue);
+  updateRouteParam({pr:(Math.floor(firstValue/ props.rowsPerPage) + 1).toString()}, props.forceUpdateParameters);
 }
 function changeSize(sizeValue: number) {
   scrollToTop();
-  if (0 !== props.first) {
-    internSizeChange.value = true;
-  }
   emit("update:rowsPerPage", sizeValue);
-  updatePaginateSize(sizeValue);
+  updatePaginateSize(sizeValue, props.forceUpdateParameters);
 }
 function scrollToTop() {
   const element = document.getElementById(props.id);

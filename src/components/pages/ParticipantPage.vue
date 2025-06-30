@@ -47,12 +47,17 @@
       </section>
       <!-- productorId define to avoid overwrite #12817 -->
       <PodcastFilterList
+        v-if="isInit"
+        v-model:query="searchPattern"
+        :first="paginateFirst"
+        :size="ps"
         :participant-id="participantId"
         :name="name"
         :category-filter="true"
         :productor-id="['']"
         :reload="reload"
         :show-count="true"
+        :force-update-parameters="true"
       />
     </template>
     <ClassicLoading
@@ -77,6 +82,7 @@ import { computed, defineAsyncComponent, ref, Ref, watch } from "vue";
 import { AxiosError } from "axios";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -92,6 +98,9 @@ const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/Sha
 //Props
 const props = defineProps({
   participantId: { default: undefined, type: Number },
+  pr: { default: 0, type: Number },
+  ps: { default: 30, type: Number },
+  routeQuery: { default: "", type: String },
 });
 
 
@@ -110,6 +119,11 @@ const {  isEditRights } = useOrgaComputed();
 const { updatePathParams } = useSeoTitleUrl();
 const {handle403} = useErrorHandler();
 const filterStore = useFilterStore();
+const {
+  searchPattern,
+  paginateFirst,
+  isInit
+} = useSimplePageParam(props, true);
 
 
 //Computed
