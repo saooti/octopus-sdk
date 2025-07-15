@@ -28,7 +28,7 @@
       "
       :filter="fakeSearch"
       :selectable="() => !maxOptionsSelected"
-      class="h-100"
+      :style="{height: height }"
       :class="{ 'border border-danger': textDanger?.length }"
       @open="onSearch"
       @search="onSearch"

@@ -150,9 +150,9 @@ watch(changePaginate, () => {
   dfirst.value = props.first;
   dsize.value = props.size;
 });
-watch(changed, () => reloadList());
-watch(()=>props.reload, () => reloadList());
-watch(dsize, () => reloadList());
+watch(changed, () => fetchContent(true));
+watch(()=>props.reload, () => fetchContent(true));
+watch(dsize, () => fetchContent(true));
 watch(dfirst, () => {
   if (
     !podcasts.value[dfirst.value] ||
@@ -162,17 +162,13 @@ watch(dfirst, () => {
   }
 });
 
-onBeforeMount(()=>fetchContent(true))
+onBeforeMount(()=>fetchContent(false))
 
 //Methods
-function reloadList() {
-  dfirst.value = 0;
-  fetchContent(true);
-}
 async function fetchContent(reset: boolean): Promise<void> {
   loading.value = true;
   const param: FetchParam = {
-    first: dfirst.value,
+    first: reset ? 0 : dfirst.value,
     size: dsize.value,
     organisationId: organisation.value,
     emissionId: props.emissionId,
@@ -215,6 +211,7 @@ function afterFetching(
   data: { count: number; result: Array<Podcast>; sort: string },
 ): void {
   if (reset) {
+    dfirst.value = 0;
     podcasts.value.length = 0;
   }
   if (dfirst.value > podcasts.value.length) {

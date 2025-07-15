@@ -184,9 +184,6 @@ watch(()=>props.searchPattern, (value: string) => {
   if(search.length <= 3){
     valSort = props.isEmission? "LAST_PODCAST_DESC" : "DATE";
   }
-  if (valSort !== props.sort) {
-    emit("update:sort", valSort);
-  }
   updateRouteParamAdvanced({
     q: search.length ? search : undefined,
     s: valSort,

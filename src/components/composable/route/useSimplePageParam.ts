@@ -2,7 +2,7 @@ import { useFilterStore } from '../../../stores/FilterStore';
 import { useRouteUpdateParams } from './useRouteUpdateParams';
 import { computed, onMounted, Ref, ref, watch } from "vue";
 
-export const useSimplePageParam = (props: {readonly [key:string]: string|number}, force=false)=>{
+export const useSimplePageParam = (props: {readonly [key:string]: string|number}, force=false, advancedSearch=false)=>{
 
   const { updateRouteParam } = useRouteUpdateParams();
 
@@ -12,7 +12,7 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
   const searchPattern = ref("");
   const organisationId: Ref<string|undefined> = ref(undefined);
 
-  const searchMinSize = computed(() => searchPattern.value.length>3 ? searchPattern.value : "");
+  const searchMinSize = computed(() => getMinSize((props.routeQuery as string)));
   const paginateFirst = computed(() => {
     if(!props.pr){
       return 0;
@@ -21,9 +21,12 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
   });
 
   watch(searchPattern, () => {
-    updateRouteParam({
-      q: searchMinSize.value.length ? searchMinSize.value : undefined,
-    }, force);
+    if(!advancedSearch){
+      const query = getMinSize(searchPattern.value);
+      updateRouteParam({
+        q: query.length ? query : undefined,
+      }, force);
+    }
   });
 
   onMounted(() => {
@@ -32,6 +35,9 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
     isInit.value = true;
   })
 
+  function getMinSize(param:string){
+    return param.length>3 ?param : ""
+  }
   function initSearchPattern(){
     searchPattern.value = (props.routeQuery as string) ?? "";
   }

@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 
 export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
 
-  const { searchPattern,organisationId, searchMinSize, paginateFirst, initSearchPattern, initOrga} = useSimplePageParam(props);
+  const { searchPattern,organisationId, searchMinSize, paginateFirst, initSearchPattern, initOrga} = useSimplePageParam(props, false, true);
   const { isEditRights, isPodcastmaker } = useOrgaComputed();
   const { stringifyRubriquesFilter } = useRubriquesFilterParam();
 

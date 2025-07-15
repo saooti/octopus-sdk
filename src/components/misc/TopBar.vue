@@ -93,7 +93,8 @@ watch(()=>generalStore.contentToDisplay, async () => {
     needToBlur.value = false;
     return;
   }
-  const proxyUrl = useProxyImageUrl(generalStore.contentToDisplay.imageUrl,"270", undefined, true);
+  const widthAsked = window.innerWidth > 960 ? "1600":"1000";
+  const proxyUrl = useProxyImageUrl(generalStore.contentToDisplay.imageUrl,widthAsked, undefined, true);
   try {
     const result = await axios.get(proxyUrl);
     headerBackgroundImage.value = `background-image: url('${result.data}');`;

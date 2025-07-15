@@ -26,6 +26,7 @@
       :participant-id="participantId"
       :emission-id="emissionId"
       :organisation-id="productorId"
+      :sort-criteria="sort"
       :reload="reloadList"
       :include-hidden="editRight"
       :show-count="showCount"
@@ -82,7 +83,8 @@ const titleFilter = computed(() => {
     ? t("All podcast button", { name: props.name })
     : t("All podcast emission button");
 });
-const query = computed(() => searchPattern.value.length >= 3 ? searchPattern.value : "");
+const query = computed(() => searchPattern.value.length > 3 ? searchPattern.value : "");
+const sort = computed(() =>  !query.value.length ? "DATE" : "SCORE");
 
 //Watch
 watch(()=>props.reload, () => {

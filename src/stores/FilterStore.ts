@@ -52,7 +52,7 @@ export const useFilterStore = defineStore("FilterStore", {
       this.filterRubrique = rubriqueFilter;
     },
     filterUpdateRubriqueDisplay(rubriques: Array<Rubrique>) {
-      this.filterRubriqueDisplay = rubriques;
+      this.filterRubriqueDisplay = rubriques.filter(rubrique=> rubrique);
     },
     filterUpdateMedia(filter: {
       type?: string;

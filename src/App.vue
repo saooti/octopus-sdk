@@ -8,16 +8,14 @@
         <router-view />
         <PlayerComponent />
       </main>
-      <ClassicLazy :min-height="123">
-        <FooterOctopus />
-      </ClassicLazy>
+      <FooterOctopus />
     </template>
   </div>
 </template>
 <script setup lang="ts">
 import TopBar from "@/components/misc/TopBar.vue";
+import FooterOctopus from "@/components/misc/FooterSection.vue";
 import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
-import ClassicLazy from "@/components/misc/ClassicLazy.vue";
 import {useInit} from "./components/composable/useInit";
 import {useMetaTitle} from "./components/composable/useMetaTitle";
 import {useOrganisationFilter} from "./components/composable/useOrganisationFilter";
@@ -25,9 +23,7 @@ import { useAuthStore } from "./stores/AuthStore";
 import { defineAsyncComponent, getCurrentInstance, onBeforeMount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-const FooterOctopus = defineAsyncComponent(
-  () => import("@/components/misc/FooterSection.vue"),
-);
+
 const CategoryFilter = defineAsyncComponent(
   () => import("@/components/display/categories/CategoryFilter.vue"),
 );

@@ -152,8 +152,8 @@ watch(changePaginate, () => {
   dfirst.value = props.first;
   dsize.value = props.size;
 });
-watch(changed, () =>reloadList());
-watch(dsize, () =>reloadList());
+watch(changed, () =>fetchContent(true));
+watch(dsize, () =>fetchContent(true));
 watch(dfirst, () =>{
   if (
     !emissions.value[dfirst.value] ||
@@ -165,21 +165,17 @@ watch(dfirst, () =>{
 
 
 onMounted(()=>{
-  fetchContent(true);
+  fetchContent(false);
   if (displayRubriquage.value) {
     fetchRubriques();
   }
 })
 
 //Methods
-function reloadList() {
-  dfirst.value = 0;
-  fetchContent(true);
-}
 async function fetchContent(reset: boolean): Promise<void> {
   loading.value = true;
   const param: FetchParam = {
-    first: dfirst.value,
+    first: reset? 0: dfirst.value,
     size: dsize.value,
     query: props.query,
     organisationId: organisation.value,
@@ -212,6 +208,7 @@ function afterFetching(
   data: { count: number; result: Array<Emission>; sort: string },
 ): void {
   if (reset) {
+    dfirst.value = 0;
     emissions.value.length = 0;
   }
   if (dfirst.value > emissions.value.length) {

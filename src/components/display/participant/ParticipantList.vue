@@ -103,9 +103,9 @@ watch(changePaginate, () => {
   dfirst.value = props.first;
   dsize.value = props.size;
 });
-watch(()=>props.query, () => reloadList());
-watch(organisation, () => reloadList());
-watch(dsize, () => reloadList());
+watch(()=>props.query, () =>  fetchContent(true));
+watch(organisation, () => fetchContent(true));
+watch(dsize, () => fetchContent(true));
 watch(dfirst, () => {
   if (
     !participants.value[dfirst.value] ||
@@ -115,14 +115,10 @@ watch(dfirst, () => {
   }
 });
 
-onBeforeMount(()=>fetchContent(true))
+onBeforeMount(()=>fetchContent(false))
 
 
 //Methods
-function reloadList() {
-  dfirst.value = 0;
-  fetchContent(true);
-}
 async function fetchContent(reset: boolean): Promise<void> {
   loading.value = true;
   try {
@@ -131,7 +127,7 @@ async function fetchContent(reset: boolean): Promise<void> {
         api: 0,
         path: "participant/search",
         parameters: {
-          first: dfirst.value,
+          first: reset? 0: dfirst.value,
           size: dsize.value,
           query: props.query,
           organisationId: organisation.value,
@@ -141,6 +137,7 @@ async function fetchContent(reset: boolean): Promise<void> {
       },
     );
     if (reset) {
+      dfirst.value = 0;
       participants.value.length = 0;
     }
     displayCount.value = data.count;

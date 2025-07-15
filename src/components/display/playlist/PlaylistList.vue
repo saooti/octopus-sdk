@@ -98,8 +98,8 @@ watch(changePaginate, () => {
   dfirst.value = props.first;
   dsize.value = props.size;
 });
-watch(changed, () => reloadList());
-watch(dsize, () => reloadList());
+watch(changed, () => fetchContent(true));
+watch(dsize, () =>fetchContent(true));
 watch(dfirst, () => {
   if (
     !playlists.value[dfirst.value] ||
@@ -109,18 +109,14 @@ watch(dfirst, () => {
   }
 });
 
-onMounted(()=>fetchContent(true))
+onMounted(()=>fetchContent(false))
 
 
 //Methods
-function reloadList() {
-  dfirst.value = 0;
-  fetchContent(true);
-}
 async function fetchContent(reset: boolean): Promise<void> {
   loading.value = true;
   const param = {
-    first: dfirst.value,
+    first: reset ? 0 : dfirst.value,
     size: dsize.value,
     query: props.query,
     organisationId: organisation.value,
@@ -144,6 +140,7 @@ function afterFetching(
   data: { count: number; result: Array<Playlist>; sort: string },
 ): void {
   if (reset) {
+    dfirst.value = 0;
     playlists.value.length = 0;
   }
   if (dfirst.value > playlists.value.length) {

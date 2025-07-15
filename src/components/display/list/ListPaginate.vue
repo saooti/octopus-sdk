@@ -98,6 +98,9 @@ const rangeSize = computed(() => {
 
 //Watch
 watch(isPhone, () => {emit("update:isMobile", isPhone.value);}, {immediate: true});
+watch(()=>props.first,  () => {
+  updateRouteParam({pr:(Math.floor(props.first / props.rowsPerPage) + 1).toString()}, props.forceUpdateParameters);
+});
 
 //Methods
 function fetchMore() {
@@ -106,7 +109,6 @@ function fetchMore() {
 function changeFirst(firstValue: number) {
   scrollToTop();
   emit("update:first", firstValue);
-  updateRouteParam({pr:(Math.floor(firstValue/ props.rowsPerPage) + 1).toString()}, props.forceUpdateParameters);
 }
 function changeSize(sizeValue: number) {
   scrollToTop();
