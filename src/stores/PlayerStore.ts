@@ -215,7 +215,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerUpdateSeekTime(seekTime: number) {
       this.playerSeekTime = seekTime;
     },
-    playerMetadata(metadata: MediaRadio, history: Array<MediaRadio>) {
+    playerMetadata(metadata: MediaRadio|undefined, history: Array<MediaRadio>) {
       if (!this.playerRadio) {
         return;
       }

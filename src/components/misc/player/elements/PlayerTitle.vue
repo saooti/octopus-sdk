@@ -89,7 +89,7 @@ onUnmounted(()=>{
 async function fetchCurrentlyPlaying(): Promise<void> {
   fetchRadioMetadata(
     playerStore.playerRadio?.canalId ?? 0,
-    playerStore.playerRadio?.metadata.title ?? "",
+    playerStore.playerRadio?.metadata?.title ?? "",
     updateMetadata,
     updateAdvertising,
   );
@@ -98,11 +98,11 @@ function updateAdvertising(nextAdvertising: NextAdvertising): void {
   playerStore.playerRadioUpdateNextAdvertising(nextAdvertising);
 }
 function updateMetadata(
-  metadata: MediaRadio,
+  metadata: MediaRadio|undefined,
   podcast: Podcast | undefined,
   history: Array<MediaRadio>,
 ): void {
-  playerStore.playerMetadata(metadata, history);
+  playerStore.playerMetadata(metadata, history); //TODO
   playerStore.playerRadioPodcast(podcast);
 }
 </script>

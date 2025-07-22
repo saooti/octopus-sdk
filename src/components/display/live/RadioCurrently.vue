@@ -72,10 +72,7 @@ const currentlyPlayingString = computed(() => {
   if (playingRadio.value && playerStore.playerRadio) {
     return displayTitle(playerStore.playerRadio.metadata);
   }
-  if (currentMetadata.value) {
-    return displayTitle(currentMetadata.value);
-  }
-  return "";
+  return displayTitle(currentMetadata.value);
 });
 
 onMounted(()=>{
@@ -102,7 +99,7 @@ async function fetchCurrentlyPlaying(): Promise<void> {
     updateMetadata,
   );
 }
-function updateMetadata(metadata: MediaRadio, podcast?: Podcast): void {
+function updateMetadata(metadata: MediaRadio|undefined, podcast?: Podcast): void {
   currentMetadata.value = metadata;
   currentPodcast.value = podcast;
 }

@@ -405,4 +405,5 @@ export default {
   "Code copied!":"Koda kopirana!",
   "Copied!":"Kopirano!",
   "Color of the QR Code": "Barva kode QR",
+  "Silent stream":"Tihi tok",
 }

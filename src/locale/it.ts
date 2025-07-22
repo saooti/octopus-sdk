@@ -410,4 +410,5 @@ export default{
   "Code copied!":"Codice copiato!",
   "Copied!":"Copiato!",
   "Color of the QR Code": "Colore del codice QR",
+  "Silent stream":"Flusso silenzioso",
 };

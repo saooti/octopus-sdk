@@ -2,17 +2,19 @@ import classicApi from "../../../api/classicApi";
 import { MediaRadio, MetadataRadio, NextAdvertising } from '@/stores/class/general/player';
 import { Podcast } from '@/stores/class/general/podcast';
 import dayjs from 'dayjs';
-import radioHelper from "../../../helper/radio/radioHelper";
 import {onBeforeUnmount, Ref, ref} from 'vue';
+import { useI18n } from "vue-i18n";
 export const useFetchRadio = ()=>{
 
   const radioInterval : Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
+
+  const {t} = useI18n();
   
   async function fetchRadioMetadata(
     canalId: number,
     previousTitle: string,
     callbackMetadata: (
-      metadata: MediaRadio,
+      metadata: MediaRadio|undefined,
       podcast: Podcast | undefined,
       history: Array<MediaRadio>
     ) => void,
@@ -33,15 +35,19 @@ export const useFetchRadio = ()=>{
       callbackAdvertising(metadata.nextAdvertising);
     }
     const arrayMetadata = metadata.previously;
-    arrayMetadata.unshift(metadata.currently);
-    for (let index = 0, len = arrayMetadata.length; index < len; index++) {
-      if (
-        dayjs().valueOf() - 18000 >
-        dayjs(arrayMetadata[index].startDate).valueOf()
-      ) {
-        await useCallbackIfNewMetadata(previousTitle, arrayMetadata, index, len,callbackMetadata);
-        return;
+    if(null!==metadata.currently){
+      arrayMetadata.unshift(metadata.currently);
+      for (let index = 0, len = arrayMetadata.length; index < len; index++) {
+        if (
+          dayjs().valueOf() - 18000 >
+          dayjs(arrayMetadata[index].startDate).valueOf()
+        ) {
+          await useCallbackIfNewMetadata(previousTitle, arrayMetadata, index, len,callbackMetadata);
+          return;
+        }
       }
+    }else{
+      callbackMetadata(undefined, undefined, arrayMetadata);
     }
   }
   async function useCallbackIfNewMetadata(previousTitle: string, arrayMetadata: Array<MediaRadio>, index:number, len: number, callbackMetadata: (
@@ -63,9 +69,20 @@ export const useFetchRadio = ()=>{
       }
     }
   }
-  function displayTitle(metadata: MediaRadio): string {
-    return radioHelper.displayTitle(metadata);
+  function displayTitle(metadata: MediaRadio|undefined): string {
+    if(!metadata){
+      return t("Silent stream");
+    }
+    let title = "";
+    if (metadata?.title) {
+      title += metadata.title;
+    }
+    if (metadata?.artist) {
+      title += " - " + metadata.artist;
+    }
+    return title;
   }
+
 
 
   onBeforeUnmount(() => {

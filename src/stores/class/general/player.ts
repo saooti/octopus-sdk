@@ -4,7 +4,7 @@ import { Podcast } from "./podcast";
 export interface Radio {
   canalId: number;
   url: string;
-  metadata: MediaRadio;
+  metadata?: MediaRadio;
   history: Array<MediaRadio>;
   nextAdvertising: NextAdvertising;
   isInit: boolean;
@@ -30,7 +30,7 @@ export interface NextAdvertising {
 
 export interface MetadataRadio {
   channelId: number;
-  currently: MediaRadio;
+  currently: MediaRadio|null;
   previously: Array<MediaRadio>;
   nextAdvertising: NextAdvertising;
 }

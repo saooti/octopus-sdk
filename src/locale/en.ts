@@ -416,4 +416,5 @@ export default {
   "Code copied!":"Code copied!",
   "Copied!":"Copied!",
   "Color of the QR Code": "Color of the QR Code",
+  "Silent stream":"Silent stream",
 };

@@ -40,10 +40,10 @@ import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
 import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import { usePlayerStore } from "../../../../stores/PlayerStore";
 import dayjs from "dayjs";
-import radioHelper from "../../../../helper/radio/radioHelper";
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from "vue";
 import { MediaRadio } from "@/stores/class/general/player";
 import { useI18n } from "vue-i18n";
+import { useFetchRadio } from "@/components/composable/radio/usefetchRadioData";
 
 
 //Data 
@@ -54,6 +54,7 @@ const historyListContainerRef = useTemplateRef('historyListContainer');
 //Composables
 const { t } = useI18n();
 const playerStore = usePlayerStore();
+const {displayTitle} = useFetchRadio();
 
 
 //Computed
@@ -119,7 +120,7 @@ function displayPreviousItem(item: MediaRadio): string {
   if (item.podcastId) {
     return item.title;
   }
-  return radioHelper.displayTitle(item);
+  return displayTitle(item);
 }
 </script>
 <style lang="scss">

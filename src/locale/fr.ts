@@ -423,4 +423,5 @@ export default {
   "Code copied!":"Code copié !",
   "Copied!":"Copié !",
   "Color of the QR Code": "Couleur du Qr Code",
+  "Silent stream":"Flux silencieux",
 };
