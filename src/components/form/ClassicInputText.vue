@@ -12,6 +12,7 @@
         >{{ label }}
         <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
       </component>
+      <slot name="afterTitle"/>
       <template v-if="popover">
         <button
           :id="'popover' + inputId"
@@ -31,7 +32,9 @@
           <!-- eslint-enable -->
         </ClassicPopover>
       </template>
+      <slot name="afterHelp"/>
     </div>
+    <slot name="betweenTitleInput"/>
     <input
       v-if="!isWysiwyg && !isTextarea"
       v-show="showField"

@@ -20,11 +20,11 @@
           class="img-accordion"
           :src="imageUrl"
           aria-hidden="true"
-        alt=""
-          
+          alt=""
         />
-        <span class="flex-grow-1">{{ title }}</span>
-        <ChevronDownIcon :class="{ 'arrow-transform': isOpen }" />
+        <span>{{ title }}</span>
+        <slot name="afterTitle"/>
+        <ChevronDownIcon class="ms-auto" :class="{ 'arrow-transform': isOpen }" />
       </button>
       <div v-show="isOpen" class="body p-2">
         <slot />

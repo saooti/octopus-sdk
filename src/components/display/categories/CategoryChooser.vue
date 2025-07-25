@@ -17,6 +17,8 @@
     :is-disabled="isDisabled"
     :no-deselect="noDeselect"
     :display-required="displayRequired"
+    :popover="popover"
+    :popover-relative-class="popoverRelativeClass"
     @on-search="onSearchCategory"
     @selected="onCategorySelected"
   />
@@ -52,6 +54,8 @@ const props = defineProps({
   displayLabel: { default: false, type: Boolean },
   textDanger :{ default: undefined, type: String },
   displayRequired: { default: false, type: Boolean },
+  popover: { default: undefined, type: String },
+  popoverRelativeClass: { default: undefined, type: String },
 })
 
 //Emits

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="page-box page-box-absolute page-logout"
+    class="page-box page-box-absolute page-logout bg-gradient"
   >
     <div class="logout-section">
       <h1 class="mb-3">{{ t("Logout") }}</h1>
@@ -19,11 +19,6 @@ const { t } = useI18n();
 </script>
 <style lang="scss">
 .octopus-app .page-logout {
-  background: linear-gradient(
-    90deg,
-    var(--octopus-primary) 0%,
-    var(--octopus-tertiary) 100%
-  );
   display: flex;
   align-items: center;
   justify-content: center;

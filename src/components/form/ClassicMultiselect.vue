@@ -7,11 +7,31 @@
     }"
     :style="{ width: width, height: height }"
   >
-    <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
-      label
-    }}
-    <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
-  </label>
+    <div class="d-flex align-items-center">
+      <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
+        label
+      }}
+      <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
+      </label>
+      <template v-if="popover">
+        <button
+          :id="'popover' + id"
+          :title="t('Help')"
+          class="btn-transparent"
+        >
+          <HelpCircleIcon :size="30" />
+        </button>
+        <ClassicPopover
+          :target="'popover' + id"
+          popover-class="popover-z-index"
+          :relative-class="popoverRelativeClass"
+        >
+          <!-- eslint-disable vue/no-v-html -->
+          <div v-html="popover" />
+          <!-- eslint-enable -->
+        </ClassicPopover>
+      </template>
+    </div>
     <vSelect
       v-model="optionSelected"
       :input-id="id"
@@ -77,12 +97,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, Ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import vSelect from "vue-select";
-
+import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
+const ClassicPopover = defineAsyncComponent(
+  () => import("../misc/ClassicPopover.vue"),
+);
 
 //Props 
 const props = defineProps({
@@ -106,6 +129,8 @@ const props = defineProps({
   allowEmpty: { default: true, type: Boolean },
   textDanger :{ default: undefined, type: String },
   displayRequired: { default: false, type: Boolean },
+  popover: { default: undefined, type: String },
+  popoverRelativeClass: { default: undefined, type: String },
 })
 
 //Emits

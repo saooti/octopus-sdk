@@ -114,6 +114,11 @@ main, #app{
 		background: var(--octopus-complementary-color) !important;
 	}
 
+  .bg-gradient{
+    background: var(--octopus-primary);
+    background:var(--octopus-gradient);
+  }
+
   .text-blue-octopus{
     color: var(--octopus-tertiary) !important
   }

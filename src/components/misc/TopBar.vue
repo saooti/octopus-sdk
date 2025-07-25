@@ -3,7 +3,7 @@
     role="banner"
     class="header-saooti-play"
     :style="headerBackgroundImage"
-    :class="[generalStore.contentToDisplay ? 'header-img-bg':'header-color-bg', scrolled? 'scrolled':'', needToBlur ? 'header-force-blur':'']"
+    :class="[generalStore.contentToDisplay ? 'header-img-bg':'bg-gradient', scrolled? 'scrolled':'', needToBlur ? 'header-force-blur':'']"
   >
     <TopBarMainContent
       :is-phone="isPhone"
@@ -160,15 +160,7 @@ function handleScroll(): void {
       background-repeat: no-repeat;
       background-size: cover;
     }
-    &.header-color-bg{
-      background: var(--octopus-primary);
-      background: linear-gradient(
-        90deg,
-        var(--octopus-primary) 0%,
-        var(--octopus-tertiary) 100%
-      );
-    }
-    &.header-color-bg, &.scrolled{
+    &.bg-gradient, &.scrolled{
       box-shadow: 0 2px 15px 5px var(--octopus-shadow) !important; 
     }
   }

@@ -16,7 +16,7 @@ defineProps({
   --size-spinner: 3rem;
   --size-spinner-section: calc(var(--size-spinner) / 20);
   --half-size-spinner: calc(var(--size-spinner) / 2);
-
+  
   color: #000000;
   display: inline-block;
   position: relative;

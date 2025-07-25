@@ -27,6 +27,9 @@
     --octopus-background-transparent: oklch(from var(--octopus-background) l c h / 40%);
     --octopus-tertiary-really-transparent: oklch(from var(--octopus-tertiary) l c h / 30%);
 
+    //Gradient
+    --octopus-gradient : linear-gradient(90deg,var(--octopus-primary) 0%, var(--octopus-tertiary) 100%);
+
     // Size
     --octopus-image-size: 12.5rem;
     --octopus-podcast-size: 13.5rem;
