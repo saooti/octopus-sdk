@@ -78,7 +78,7 @@ import RssIcon from "vue-material-design-icons/Rss.vue";
 import { useApiStore } from "../../../stores/ApiStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
-import { computed, Ref, ref, useTemplateRef, watch } from "vue";
+import { computed, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 type Link = {
   name: string;
@@ -204,7 +204,9 @@ const rssUrl = computed(() => {
 
 
 //Watch
-watch(()=>props.windowWidth, () =>resizeWindow(), {immediate: true});
+watch(()=>props.windowWidth, () =>resizeWindow());
+
+onMounted(()=>resizeWindow());
 
 
 //Methods
