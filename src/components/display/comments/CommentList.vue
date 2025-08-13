@@ -116,8 +116,8 @@ const { t } = useI18n();
 const {handle403} = useErrorHandler();
 
 //Computed
-const changed = computed(() => `${props.size}|${props.reload}|${dsize.value}|${props.stateFilter}|${props.podcast?.podcastId}|${props.organisationId}`);
 const isNotAnAnswerList = computed(() =>  undefined === props.answerToComment);
+const changed = computed(() => `${props.size}|${props.reload}|${dsize.value}|${props.stateFilter}|${props.podcast?.podcastId}|${props.organisationId}`);
 const sortChoice = computed(() =>{
   return [
     { title: t("The most recent"), value: "DATE_DESC" },

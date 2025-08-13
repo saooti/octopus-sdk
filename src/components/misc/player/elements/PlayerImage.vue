@@ -22,7 +22,6 @@
         :height="imageWidth"
         aria-hidden="true"
         alt=""
-        
         :title="t('Episode name image', { name: podcastDisplay?.title })"
         class="player-image"
         :class="imageWidth > 50 ? 'big-player-image' : ''"

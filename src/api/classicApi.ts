@@ -78,7 +78,7 @@ export default {
         params.catchFunction();
       }else{
         const axiosError= error as AxiosError;
-        return Promise.reject(new Error(axiosError.message));
+        return Promise.reject(axiosError);
       }
     });
     return response?.data;
