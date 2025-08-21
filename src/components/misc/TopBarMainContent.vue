@@ -136,12 +136,10 @@
           :is-education="generalStore.platformEducation"
           :show="mobileMenuDisplay"
           :not-podcast-and-emission="inContentDisplayPage && !scrolled"
-          :scrolled="scrolled"
         />
         <HomeDropdown
           :is-education="generalStore.platformEducation"
           :mobile-menu-display="mobileMenuDisplay"
-          :scrolled="scrolled"
         />
         <router-link
           v-show="!isPhone && !inContentDisplayPage"

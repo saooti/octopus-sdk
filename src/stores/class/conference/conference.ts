@@ -8,6 +8,7 @@ export interface Conference {
   deletionAttempts?: number;
   directCode?: string;
   externalRtmpUrl?: ExternalRtmpUrl;
+  hlsIdentifier: string;
   hostname?: string;
   jingleDuration?: number;
   jingleFilePath?: string;
@@ -57,6 +58,7 @@ export function getEmptyConference(): Conference {
 export interface ConferencePublicInfo {
   status: string;
   videoProfile: string;
+  hlsIdentifier: string;
 }
 
 export interface ExternalRtmpUrl {

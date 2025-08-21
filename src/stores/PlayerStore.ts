@@ -32,6 +32,7 @@ interface PlayerState {
   playerChaptering?: Chaptering;
   playerDelayStitching: number;
   playerHlsUrl?: string;
+  playerHlsIdentifier?:string;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
@@ -49,6 +50,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
     playerVideo: false,
     playerChaptering: undefined,
     playerDelayStitching: 0,
+    playerHlsIdentifier: undefined,
   }),
   getters: {
     playerChapteringPercent(): ChapteringPercent | undefined {
@@ -146,6 +148,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerPodcast = undefined;
         this.playerMedia = undefined;
         this.playerLive = undefined;
+        this.playerHlsIdentifier = undefined;
         this.playerRadio = undefined;
         this.playerElapsed = 0;
         this.playerVideo = false;
@@ -168,6 +171,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerPodcast = undefined;
       this.playerMedia = undefined;
       this.playerLive = undefined;
+      this.playerHlsIdentifier = undefined;
       this.playerRadio = undefined;
       this.playerVideo = isVideo;
       this.playerElapsed = 0;
@@ -177,6 +181,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
         (!param.podcastId || param.processingStatus !== "READY")
       ) {
         this.playerLive = param;
+        this.playerHlsIdentifier = param.hlsIdentifier;
         this.playerCurrentChange = null;
         return;
       }

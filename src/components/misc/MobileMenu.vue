@@ -18,39 +18,11 @@
       :left-pos="true"
       :is-top-layer="true"
     >
-      <template v-for="link in routerLinkArray" :key="link.routeName">
-        <router-link
-          v-if="link.condition"
-          :class="
-            'home' === link.routeName
-              ? 'octopus-dropdown-item show-phone-flex'
-              : 'octopus-dropdown-item'
-          "
-          :to="{
-            name: link.routeName,
-            query: getQueriesRouter(link.routeName),
-          }"
-        >
-          {{ link.title }}
-        </router-link>
-      </template>
-      <a
-        v-if="!isAuthenticatedWithOrga"
-        class="octopus-dropdown-item realLink"
-        :href="pathLogin"
-      >
-        {{ t("Login") }}
-      </a>
-      <a v-else class="octopus-dropdown-item c-hand" href="/logout">
-        {{ t("Logout") }}
-      </a>
-      <router-link
-        v-if="!authStore.isGarRole"
-        class="octopus-dropdown-item"
-        to="/main/pub/contact"
-      >
-        {{ t("Contact") }}
-      </router-link>
+      <UserButtonContent 
+        :isEducation="isEducation" 
+        :navLabel="t('User menu')" 
+        :specificRoutes="routerLinkArray"
+        :displayUserContent="displayUserContent"/>
     </ClassicPopover>
   </div>
 </template>
@@ -62,20 +34,20 @@ import { state } from "../../stores/ParamSdkStore";
 import { defineAsyncComponent, ref, computed } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
-import { useApiStore } from "../../stores/ApiStore";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useResizePhone } from "../composable/useResizePhone";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
-
+const UserButtonContent = defineAsyncComponent(
+  () => import("./UserButtonContent.vue"),
+);
 
 //Props 
 const props = defineProps({
   isEducation: { default: false, type: Boolean },
   show: { default: false, type: Boolean },
   notPodcastAndEmission: { default: false, type: Boolean },
-  scrolled: { default: false, type: Boolean },
 })
 
 //Data 
@@ -85,59 +57,89 @@ const firstLoaded = ref(false);
 const { t } = useI18n();
 const { rubriqueQueryParam } = useRubriquesFilterComputed();
 const authStore = useAuthStore();
-const apiStore = useApiStore();
 const filterStore = useFilterStore();
-const route = useRoute();
+const { windowWidth } = useResizePhone();
 
 
 //Computed
+const displayUserContent = computed(() => 500>=windowWidth.value);
 const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
-const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
 const routerLinkArray = computed(() =>{
   return [
     {
       title: t("My space"),
-      routeName: "backoffice",
+      path:{
+        name: "backoffice",
+        query: getQueriesRouter(true),
+      },
+      class: "octopus-dropdown-item",
       condition: isAuthenticatedWithOrga.value,
     },
-    { title: t("Home"), routeName: "home", condition: true },
+    { 
+      title: t("Home"),
+      path:{
+        name: "home",
+        query: getQueriesRouter(false),
+      },
+      class:"octopus-dropdown-item show-phone-flex", 
+      condition: true
+    },
     {
       title: t("Radio & Live"),
-      routeName: "lives",
+      path:{
+        name: "lives",
+        query: getQueriesRouter(true),
+      },
+      class: "octopus-dropdown-item",
       condition:
         state.generalParameters.isLiveTab &&
         ((filterStore.filterOrgaId && filterStore.filterLive) || !filterStore.filterOrgaId),
     },
     {
       title: t("Podcasts"),
-      routeName: "podcasts",
+      path:{
+        name: "podcasts",
+        query: getQueriesRouter(false),
+      },
+      class: "octopus-dropdown-item",
       condition: !props.notPodcastAndEmission,
     },
     {
       title: t("Emissions"),
-      routeName: "emissions",
+      path:{
+        name: "emissions",
+        query: getQueriesRouter(false),
+      },
+      class: "octopus-dropdown-item",
       condition: !props.notPodcastAndEmission,
     },
     {
       title: t("Productors"),
-      routeName: "productors",
+      path:{
+        name: "productors",
+        query: getQueriesRouter(true),
+      },
+      class: "octopus-dropdown-item",
       condition:
         !state.generalParameters.podcastmaker && (!filterStore.filterOrgaId || props.isEducation),
     },
     {
       title: t("Playlists"),
-      routeName: "playlists",
+      path:{
+        name: "playlists",
+        query: getQueriesRouter(true),
+      },
+      class: "octopus-dropdown-item",
       condition: true,
     },
     {
       title: t("Speakers"),
-      routeName: "participants",
+      path:{
+        name: "participants",
+        query: getQueriesRouter(true),
+      },
+      class: "octopus-dropdown-item",
       condition: true,
-    },
-    {
-      title: t("Create an account"),
-      routeName: "createAccount",
-      condition: !isAuthenticatedWithOrga.value,
     },
   ];
 });
@@ -153,12 +155,8 @@ function handleMenuClick() {
     document.getElementById("mobile-menu-dropdown")?.click();
   }, 200);
 }
-function getQueriesRouter(routeName: string) {
-  if (
-    "podcasts" !== routeName &&
-    "emissions" !== routeName &&
-    "home" !== routeName
-  ) {
+function getQueriesRouter(onlyProductor:boolean) {
+  if (onlyProductor) {
     return { productor: filterStore.filterOrgaId };
   }
   return {

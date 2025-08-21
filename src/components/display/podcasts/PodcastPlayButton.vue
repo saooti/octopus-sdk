@@ -211,7 +211,10 @@ function play(isVideo: boolean): void {
     playerStore.playerPlay(
       {
         ...props.podcast,
-        ...{ conferenceId: props.fetchConference?.conferenceId },
+        ...{ 
+          conferenceId: props.fetchConference?.conferenceId,
+          hlsIdentifier: props.fetchConference?.hlsIdentifier,
+        },
       },
       isVideo,
     );

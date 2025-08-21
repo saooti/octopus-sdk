@@ -39,10 +39,10 @@ const playerStore = usePlayerStore();
 //Computed
 const isSecured = computed(() => "SECURED" === playerStore.playerLive?.organisation?.privacy);
 const hlsVideoUrl = computed(() => {
-  if (!playerStore.playerLive) {
+  if (!playerStore.playerHlsIdentifier) {
     return "";
   }
-  return `${apiStore.hlsUrl}live/video_dev.${playerStore.playerLive.conferenceId}/index.m3u8`;
+  return `${apiStore.hlsUrl}live/video_${playerStore.playerHlsIdentifier}/index.m3u8`;
 });
 
 onMounted(()=>{

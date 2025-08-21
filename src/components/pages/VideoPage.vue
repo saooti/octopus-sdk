@@ -193,7 +193,7 @@ const hlsVideoUrl = computed(() => {
   if (!recordingLive.value || !podcastConference.value) {
     return "";
   }
-  return `${apiStore.hlsUrl}live/video_dev.${podcastConference.value.conferenceId}/index.m3u8`;
+  return `${apiStore.hlsUrl}live/video_${podcastConference.value.hlsIdentifier}/index.m3u8`;
 });
 const isSecured = computed(() => {
   return "SECURED" === podcast.value?.organisation?.privacy;
@@ -255,7 +255,10 @@ async function getPodcastDetails(): Promise<void> {
         playerStore.playerPlay(
           {
             ...podcast.value,
-            ...{ conferenceId: podcast.value.conferenceId },
+            ...{ 
+              conferenceId: podcast.value.conferenceId,
+              hlsIdentifier: podcastConference.value?.hlsIdentifier,
+            },
           },
           true,
         );

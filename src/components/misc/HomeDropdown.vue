@@ -32,113 +32,43 @@
       :left-pos="true"
       :is-top-layer="true"
     >
-      <nav :aria-label="t('User menu')">
-        <ul class="p-0 m-0">
-          <template v-if="!isAuthenticated">
-            <li class="li-style-none">
-              <a class="octopus-dropdown-item realLink" :href="pathLogin">
-                {{ t("Login") }}
-              </a>
-            </li>
-            <li class="li-style-none">
-              <router-link
-                v-if="!state.generalParameters.podcastmaker"
-                class="octopus-dropdown-item"
-                to="/main/pub/create"
-              >
-                {{ t("Create an account") }}
-              </router-link>
-            </li>
-          </template>
-          <template v-else>
-            <li v-for="routerBack in routerBackoffice" :key="routerBack.path" class="li-style-none">
-              <router-link
-                v-if="!state.generalParameters.podcastmaker && routerBack.condition"
-                :class="routerBack.class"
-                :to="routerBack.path"
-              >
-                {{ routerBack.title }}
-              </router-link>
-            </li>
-            <template v-if="helpLinks.length">
-              <hr />
-              <li v-for="helpLink in helpLinks" :key="helpLink.title" class="li-style-none">
-                <a
-                  :href="helpLink.href"
-                  class="octopus-dropdown-item realLink"
-                  rel="noreferrer noopener"
-                  target="_blank"
-                  :title="t('New window', {text: helpLink.title})"
-                >
-                  {{ helpLink.title }}
-                  <OpenInNewIcon class="ms-1" :size="15"/>
-                </a>
-              </li>
-            </template>
-            <hr />
-            <li class="li-style-none">
-              <a class="octopus-dropdown-item c-hand" href="/logout">
-                {{ t("Logout") }}
-              </a>
-            </li>
-          </template>
-          <li class="li-style-none">
-            <router-link
-              v-if="!authStore.isGarRole"
-              class="octopus-dropdown-item"
-              to="/main/pub/contact"
-            >
-              {{ t("Contact") }}
-            </router-link>
-          </li>
-        </ul>
-      </nav>
+      <UserButtonContent :isEducation="isEducation" :navLabel="t('User menu')" :specificRoutes="routerBackoffice"/>
     </ClassicPopover>
   </div>
 </template>
 
 <script setup lang="ts">
-import OpenInNewIcon from "vue-material-design-icons/OpenInNew.vue";
+import UserButtonContent from "./UserButtonContent.vue";
 import AppsIcon from "vue-material-design-icons/Apps.vue";
 import AccountIcon from "vue-material-design-icons/Account.vue";
 import DownloadIcon from "vue-material-design-icons/Download.vue";
-import { state } from "../../stores/ParamSdkStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
 import { useAuthStore } from "../../stores/AuthStore";
 import { computed } from "vue";
-import { useApiStore } from "../../stores/ApiStore";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 //Props 
-const props = defineProps({
+defineProps({
   isEducation: { default: false, type: Boolean },
   mobileMenuDisplay: { default: false, type: Boolean },
-  scrolled: { default: false, type: Boolean },
 })
 
 //Composables
 const { t } = useI18n();
 const authStore = useAuthStore();
-const apiStore = useApiStore();
 const route = useRoute();
 const router = useRouter();
 
 //Computed
 const isAuthenticated = computed(() => undefined !== authStore.authProfile?.userId);
 const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
-const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
 const organisationsAvailable = computed(() =>  authStore.authProfile?.organisations ?? []);
-const helpLinks = computed(() => {
-  if (authStore.isGarRole || props.isEducation) {
+
+const routerBackoffice = computed(() => {
+  if(!isAuthenticated.value){
     return [];
   }
-  return [
-    { title:t("Help"), href: "https://help.octopus.saooti.com/Aide/"},
-    { title: t("TutoMag"), href: "https://help.octopus.saooti.com/" },
-  ];
-});
-const routerBackoffice = computed(() => {
   return [
     {
       title: t("My space"),

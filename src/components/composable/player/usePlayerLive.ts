@@ -51,8 +51,8 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   }
 
   function playLive() {
-    if (!playerStore.playerLive) return;
-    playerStore.playerUpdatePlayerHlsUrl(`${apiStore.hlsUrl}live/dev.${playerStore.playerLive.conferenceId}/index.m3u8`);
+    if (!playerStore.playerHlsIdentifier) return;
+    playerStore.playerUpdatePlayerHlsUrl(`${apiStore.hlsUrl}live/${playerStore.playerHlsIdentifier}/index.m3u8`);
     playHls();
   }
 
