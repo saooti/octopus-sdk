@@ -35,7 +35,7 @@ import { defineAsyncComponent, ref, computed } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useI18n } from "vue-i18n";
 import { useResizePhone } from "../composable/useResizePhone";
-import { useAuthStore } from "@/stores/AuthStore";
+import { useAuthStore } from "../../stores/AuthStore";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
