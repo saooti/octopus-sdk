@@ -135,6 +135,7 @@
         <MobileMenu
           :is-education="generalStore.platformEducation"
           :show="mobileMenuDisplay"
+          :inContentDisplayPage="inContentDisplayPage"
           :not-podcast-and-emission="inContentDisplayPage && !scrolled"
         />
         <HomeDropdown

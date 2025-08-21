@@ -31,6 +31,16 @@
           </li>
         </template>
         <template v-else>
+          <li v-for="routeBackoffice in routerBackoffice" :key="routeBackoffice.path" class="li-style-none">
+            <router-link
+              v-if="!state.generalParameters.podcastmaker && routeBackoffice.condition"
+              :class="routeBackoffice.class"
+              :to="routeBackoffice.path"
+            >
+              {{ routeBackoffice.title }}
+            </router-link>
+          </li>
+          <hr />
           <template v-if="helpLinks.length">
             <li v-for="helpLink in helpLinks" :key="helpLink.title" class="li-style-none">
               <a
@@ -44,8 +54,8 @@
                 <OpenInNewIcon class="ms-1" :size="15"/>
               </a>
             </li>
+            <hr />
           </template>
-          <hr />
           <li class="li-style-none">
             <a class="octopus-dropdown-item c-hand" href="/logout">
               {{ t("Logout") }}
@@ -87,7 +97,7 @@ interface RouteInfo{
 const props = defineProps({
   isEducation: { default: false, type: Boolean },
   navLabel: { default: "", type: String },
-  specificRoutes: { default: false, type: Array as ()=> Array<RouteInfo> },
+  specificRoutes: { default: ()=>[], type: Array as ()=> Array<RouteInfo> },
   displayUserContent: { default: true, type: Boolean },
 })
 
@@ -100,6 +110,9 @@ const route = useRoute();
 //Computed
 const isAuthenticated = computed(() => undefined !== authStore.authProfile?.userId);
 const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
+const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
+const organisationsAvailable = computed(() =>  authStore.authProfile?.organisations ?? []);
+
 const helpLinks = computed(() => {
   if (authStore.isGarRole || props.isEducation) {
     return [];
@@ -107,6 +120,39 @@ const helpLinks = computed(() => {
   return [
     { title:t("Help"), href: "https://help.octopus.saooti.com/Aide/"},
     { title: t("TutoMag"), href: "https://help.octopus.saooti.com/" },
+  ];
+});
+const routerBackoffice = computed(() => {
+  if(!isAuthenticated.value){
+    return [];
+  }
+  return [
+    {
+      title: t("My space"),
+      class: "octopus-dropdown-item show-small-screen",
+      path: "/main/priv/backoffice",
+      condition: isAuthenticatedWithOrga.value,
+    },
+    {
+      title: t("Upload"),
+      class: "octopus-dropdown-item show-small-screen",
+      path: "/main/priv/upload",
+      condition: isAuthenticatedWithOrga.value && authStore.isRoleContribution,
+    },
+    {
+      title: t("Edit my profile"),
+      class: "octopus-dropdown-item",
+      path: "/main/priv/edit/profile",
+      condition: true,
+    },
+    {
+      title: t("Edit my organisation"),
+      class: "octopus-dropdown-item",
+      path: "/main/priv/edit/organisation",
+      condition:
+      isAuthenticatedWithOrga.value &&
+        (authStore.isRoleOrganisation || 1 < organisationsAvailable.value.length),
+    },
   ];
 });
 

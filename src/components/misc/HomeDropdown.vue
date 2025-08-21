@@ -32,7 +32,7 @@
       :left-pos="true"
       :is-top-layer="true"
     >
-      <UserButtonContent :isEducation="isEducation" :navLabel="t('User menu')" :specificRoutes="routerBackoffice"/>
+      <UserButtonContent :isEducation="isEducation" :navLabel="t('User menu')"/>
     </ClassicPopover>
   </div>
 </template>
@@ -61,44 +61,7 @@ const route = useRoute();
 const router = useRouter();
 
 //Computed
-const isAuthenticated = computed(() => undefined !== authStore.authProfile?.userId);
 const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
-const organisationsAvailable = computed(() =>  authStore.authProfile?.organisations ?? []);
-
-const routerBackoffice = computed(() => {
-  if(!isAuthenticated.value){
-    return [];
-  }
-  return [
-    {
-      title: t("My space"),
-      class: "octopus-dropdown-item show-small-phone-flex",
-      path: "/main/priv/backoffice",
-      condition: isAuthenticatedWithOrga.value,
-    },
-    {
-      title: t("Upload"),
-      class: "octopus-dropdown-item show-small-phone-flex",
-      path: "/main/priv/upload",
-      condition: isAuthenticatedWithOrga.value && authStore.isRoleContribution,
-    },
-    {
-      title: t("Edit my profile"),
-      class: "octopus-dropdown-item",
-      path: "/main/priv/edit/profile",
-      condition: true,
-    },
-    {
-      title: t("Edit my organisation"),
-      class: "octopus-dropdown-item",
-      path: "/main/priv/edit/organisation",
-      condition:
-      isAuthenticatedWithOrga.value &&
-        (authStore.isRoleOrganisation || 1 < organisationsAvailable.value.length),
-    },
-  ];
-});
-
 
 //Methods
 function goToAdministration() {

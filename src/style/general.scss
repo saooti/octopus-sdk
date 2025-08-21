@@ -175,6 +175,13 @@ main, #app{
 		}
 	}
 
+  .show-small-screen{
+    display: none !important;
+		@media (width <= 500px) {
+			display: flex !important;
+		}
+	}
+
   .show-phone{
     display: none;
 

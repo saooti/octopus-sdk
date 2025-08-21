@@ -33,9 +33,9 @@ import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilt
 import { state } from "../../stores/ParamSdkStore";
 import { defineAsyncComponent, ref, computed } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
-import { useAuthStore } from "../../stores/AuthStore";
 import { useI18n } from "vue-i18n";
 import { useResizePhone } from "../composable/useResizePhone";
+import { useAuthStore } from "@/stores/AuthStore";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
 );
@@ -48,6 +48,7 @@ const props = defineProps({
   isEducation: { default: false, type: Boolean },
   show: { default: false, type: Boolean },
   notPodcastAndEmission: { default: false, type: Boolean },
+  inContentDisplayPage: { default: false, type: Boolean },
 })
 
 //Data 
@@ -56,25 +57,21 @@ const firstLoaded = ref(false);
 //Composables
 const { t } = useI18n();
 const { rubriqueQueryParam } = useRubriquesFilterComputed();
-const authStore = useAuthStore();
 const filterStore = useFilterStore();
+const authStore = useAuthStore();
 const { windowWidth } = useResizePhone();
 
 
 //Computed
-const displayUserContent = computed(() => 500>=windowWidth.value);
 const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
+const displayUserContent = computed(() =>{
+  if(isAuthenticatedWithOrga.value){
+    return 500>=windowWidth.value;
+  }
+  return props.show && !props.inContentDisplayPage;
+});
 const routerLinkArray = computed(() =>{
   return [
-    {
-      title: t("My space"),
-      path:{
-        name: "backoffice",
-        query: getQueriesRouter(true),
-      },
-      class: "octopus-dropdown-item",
-      condition: isAuthenticatedWithOrga.value,
-    },
     { 
       title: t("Home"),
       path:{
