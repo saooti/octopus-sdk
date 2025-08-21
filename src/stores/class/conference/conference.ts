@@ -8,7 +8,7 @@ export interface Conference {
   deletionAttempts?: number;
   directCode?: string;
   externalRtmpUrl?: ExternalRtmpUrl;
-  hlsIdentifier: string;
+  hlsIdentifier?: string;
   hostname?: string;
   jingleDuration?: number;
   jingleFilePath?: string;
