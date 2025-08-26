@@ -36,12 +36,6 @@
         </div>
       </div>
       <ChooseEpisodesNumber v-else :episodes-number="episodesNumber" @update-number="emit('update:episodesNumber', $event)"/>
-      <ClassicCheckbox
-        :text-init="proceedReading"
-        id-checkbox="proceed-reading-checkbox"
-        :label="t('Proceed reading')"
-        @update:text-init="emit('update:proceedReading', $event)"
-      />
     </template>
     <ClassicCheckbox
       v-if="displayIsVisible"
@@ -104,7 +98,6 @@ const props = defineProps({
   displayArticleParam: { default: false, type: Boolean },
   displayIsVisible: { default: false, type: Boolean },
   displayInsertCode: { default: false, type: Boolean },
-  proceedReading: { default: true, type: Boolean },
   displayArticle: { default: true, type: Boolean },
   displayTranscript: { default: true, type: Boolean },
   displayWave: { default: true, type: Boolean },
@@ -118,7 +111,6 @@ const props = defineProps({
 //Emits
 const emit = defineEmits([
   "episodeChoiceDisplay",
-  "update:proceedReading",
   "update:isVisible",
   "update:episodesNumber",
   "update:displayArticle",

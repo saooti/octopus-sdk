@@ -167,7 +167,6 @@ export default {
   "open left Menu": "Abrir/Cerrar menú",
   Participant: "Participante",
   "Number of player podcasts": "Número de pódcast en el reproductor",
-  "Proceed reading": "Seguir escuchando",
   "Without topic": "Sin tema",
   "Without rubric": "Sin sección",
   "Consider podcasts no visible":

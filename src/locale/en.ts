@@ -166,7 +166,6 @@ export default {
   "open left Menu": "Open/Close Menu",
   Participant: "Speaker",
   "Number of player podcasts": "Number of podcasts in the player ",
-  "Proceed reading": "Continue Listening",
   "Without topic": "Without a topic",
   "Without rubric": "Without a rubric",
   "Consider podcasts no visible":

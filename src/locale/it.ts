@@ -163,7 +163,6 @@ export default{
     'open left Menu': 'Apri/Chiudi Menu',
     Participant: 'Speaker',
     'Number of player podcasts': "Numero di podcast nel lettore",
-    'Proceed reading': 'Continua ad ascoltare',
     'Without topic': 'Senza un tema',
     'Without rubric': 'Senza una rubrica',
     'Consider podcasts no visible':

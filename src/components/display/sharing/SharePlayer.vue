@@ -44,7 +44,6 @@
             v-model:display-article="displayArticle"
             v-model:display-transcript="displayTranscript"
             v-model:display-wave="displayWave"
-            v-model:proceed-reading="proceedReading"
             v-model:is-visible="isVisible"
             v-model:player-auto-play="playerAutoPlay"
             v-model:episodes-number="episodesNumber"
@@ -125,7 +124,6 @@ const iFrameModel = ref("default");
 const isShareModal = ref(false);
 const color = ref("#40a372");
 const theme = ref("#000000");
-const proceedReading = ref(true);
 const episodeChoiceDisplay = ref("number");
 const episodesNumber = ref(3);
 const isVisible = ref(false);
@@ -341,9 +339,6 @@ function addUrlParameters(url: Array<string>) {
   url.push(
     `&color=${color.value.substring(1)}&theme=${theme.value.substring(1)}`,
   );
-  if (!proceedReading.value) {
-    url.push("&proceed=false");
-  }
   if (!displayArticle.value && displayArticleParam.value) {
     url.push("&article=false");
   }

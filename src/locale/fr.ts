@@ -168,7 +168,6 @@ export default {
   "open left Menu": "Ouvrir/Fermer le menu",
   Participant: "Intervenant",
   "Number of player podcasts": "Nombre d'épisodes dans le miniplayer",
-  "Proceed reading": "Poursuivre la lecture",
   "Without topic": "Sans rubriquage",
   "Without rubric": "Non rubriqué",
   "Consider podcasts no visible":

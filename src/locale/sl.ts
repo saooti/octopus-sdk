@@ -163,7 +163,6 @@ export default {
   "open left Menu": "Meni odpri/zapri",
   Participant: "Sodelujoči",
   "Number of player podcasts": "Število podkastov v predvajalniku",
-  "Proceed reading": "Nadaljuj s poslušanjem",
   "Without topic": "Brez teme",
   "Without rubric": "Brez rubrike",
   "Consider podcasts no visible": "Občinstvu skriti podkasti",
