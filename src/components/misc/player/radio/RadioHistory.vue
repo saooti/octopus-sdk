@@ -43,7 +43,7 @@ import dayjs from "dayjs";
 import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from "vue";
 import { MediaRadio } from "@/stores/class/general/player";
 import { useI18n } from "vue-i18n";
-import { useFetchRadio } from "@/components/composable/radio/usefetchRadioData";
+import { useFetchRadio } from "../../../composable/radio/usefetchRadioData";
 
 
 //Data 
