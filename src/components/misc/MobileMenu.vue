@@ -68,7 +68,7 @@ const displayUserContent = computed(() =>{
   if(isAuthenticatedWithOrga.value){
     return 500>=windowWidth.value;
   }
-  return props.show && !props.inContentDisplayPage;
+  return props.show;
 });
 const routerLinkArray = computed(() =>{
   return [
