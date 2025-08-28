@@ -1,5 +1,6 @@
 /** Document style */
 
+
 html{
   font-size: 20px;
   height: 100%;
@@ -9,7 +10,7 @@ html{
 body{
   margin: 0;
   color: var(--octopus-color-text);
-  font-family: Montserrat,sans-serif,"Helvetica Neue";
+  font-family: var(--octopus-font-family);
   font-size: 0.8rem;
   overflow-x: hidden;
   background: var(--octopus-secondary-lighter);
@@ -40,6 +41,10 @@ main, #app{
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  input {
+    font-family: var(--octopus-font-family);
   }
 
   /** Link style */

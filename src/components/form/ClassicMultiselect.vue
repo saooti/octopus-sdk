@@ -239,6 +239,9 @@ defineExpose({
     height: 100%;
   }
 
+  .vs__search, .vs__search:focus{
+    border: var(--vs-selected-border-width) solid transparent;
+  }
   .vs__search:focus {
     min-width: 150px;
   }
