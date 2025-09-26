@@ -28,7 +28,7 @@ import ClassicDatePicker from "../../form/ClassicDatePicker.vue";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-//Props 
+//Props
 const props = defineProps({
   isEmission: { default: false, type: Boolean },
   fromDate: { default: undefined, type: String },
@@ -38,7 +38,7 @@ const props = defineProps({
 //Emits
 const emit = defineEmits(["updateDates"]);
 
-//Data 
+//Data
 const isActive = ref([false, false]);
 const internDates = ref([
   dayjs().subtract(10, "days").startOf("day").toDate(),
@@ -50,6 +50,17 @@ const { t } = useI18n();
 
 
 //Watch
+watch(isActive, () => {
+  emit("updateDates", {
+    from: isActive.value[0]
+      ? dayjs(internDates.value[0]).toISOString()
+      : undefined,
+    to: isActive.value[1]
+      ? dayjs(internDates.value[1]).toISOString()
+      : undefined,
+  });
+}, { deep: true });
+
 watch(()=>props.toDate, () => {
   isActive.value[1] = undefined !== props.toDate;
   if (props.toDate && props.toDate !== internDates.value[1].toISOString()) {
@@ -75,6 +86,8 @@ watch(()=>props.fromDate, () => {
 
 
 //Methods
+
+
 function updateDate(index: number, value: Date): void {
   internDates.value[index] = value;
   if (
