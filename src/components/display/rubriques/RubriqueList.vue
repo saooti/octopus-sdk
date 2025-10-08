@@ -1,6 +1,8 @@
 <template>
   <div class="d-inline-flex w-100 mb-3 px-3 hide-phone">
     <div ref="rubriqueListContainer" class="rubrique-list-container">
+
+      <!-- Liste déroulante pour sélectionner le rubriquage -->
       <select
         v-model="rubriquage"
         :title="t('By topic')"
@@ -15,6 +17,8 @@
           {{ myRubriquage.title }}
         </option>
       </select>
+
+      <!-- Boutons de sélection de la rubrique -->
       <button
         v-for="rubrique in rubriqueDisplay"
         :id="'rubrique' + rubrique.rubriqueId"
@@ -25,6 +29,8 @@
         {{ rubrique.name }}
       </button>
     </div>
+
+    <!-- Bouton pour afficher les rubriques cachées -->
     <button
       v-show="hidenRubriques.length"
       id="rubriques-dropdown"
@@ -33,6 +39,8 @@
     >
       <PlusIcon />
     </button>
+
+    <!-- Popup de sélection des rubriques cachées -->
     <ClassicPopover
       ref="popoverRubrique"
       target="rubriques-dropdown"
@@ -43,6 +51,7 @@
         v-if="hidenRubriques.length"
         class="rubrique-chooser-minwidth"
         :all-rubriques="hidenRubriques"
+        :placeholder="rubriqueChooserText"
         @selected="addFilterFromPopover($event)"
       />
     </ClassicPopover>
@@ -105,6 +114,15 @@ const rubriquageDisplay = computed(() => {
     }
     return (b.title > a.title) ? -1 : 0;
   });
+});
+
+// Retourne le texte à afficher dans le RubriqueChooser
+const rubriqueChooserText = computed(() => {
+  if (!rubriquage.value) {
+    return '';
+  }
+  let topic = rubriquage.value.title;
+  return t('Enter name of topic', { topic });
 });
 
 
