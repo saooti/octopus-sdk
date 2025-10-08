@@ -43,7 +43,7 @@
             name: 'podcasts',
             query: {
               iabId: filterStore.filterIab?.id,
-              rubriquesId: rubriqueQueryParam.value,
+              rubriquesId: rubriqueQueryParam,
               productor: filterStore.filterOrgaId
             },
           }"
