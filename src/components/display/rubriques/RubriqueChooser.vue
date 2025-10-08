@@ -7,7 +7,7 @@
     :display-label="displayLabel"
     :label="label ?? t('By rubric')"
     :text-danger="textDanger"
-    :placeholder="t('Type string to filter by categories')"
+    :placeholder="placeholderText"
     :max-element="maxElement"
     :multiple="multiple"
     :min-search-length="1"
@@ -30,8 +30,14 @@ import { useI18n } from "vue-i18n";
 const props = defineProps({
   defaultanswer: { default: "", type: String },
   width: { default: "100%", type: String },
+  /**
+   * Active la sélection multiple
+   */
   multiple: { default: false, type: Boolean },
   reset: { default: false, type: Boolean },
+  /**
+   * Les rubriques à afficher
+   */
   allRubriques: { default: () => [], type: Array as () => Array<Rubrique> },
   rubriqueSelected: { default: undefined, type: Number },
   rubriqueSelectedArray: {
@@ -46,6 +52,10 @@ const props = defineProps({
   label:{default: undefined, type: String },
   displayLabel: { default: false, type: Boolean },
   textDanger :{ default: undefined, type: String },
+  /**
+   * Le texte affiché là où l'utilisateur doit effectuer sa saisie
+   */
+  placeholder: { type: String, required: false, default: undefined }
 })
 
 
@@ -55,7 +65,9 @@ const emit = defineEmits([
   "update:rubriqueSelectedArray",
   "selected"
 ]);
-//COmposables
+
+
+//Composables
 const { t } = useI18n();
 
 
@@ -102,6 +114,16 @@ const model = computed({
   },
 })
 
+/**
+ * Le texte à afficher dans la saisie de l'utilisateur
+ */
+const placeholderText = computed(() => {
+  if (props.placeholder) {
+    return props.placeholder;
+  } else {
+    return t('Type string to filter by categories');
+  }
+});
 
 //Watch
 watch(()=>props.rubriqueSelected, () => {

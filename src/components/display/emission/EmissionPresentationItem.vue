@@ -13,9 +13,9 @@
       :class="isVertical ? 'flex-column' : ''"
     >
       <img
-        v-lazy="useProxyImageUrl(emission.imageUrl, isVertical ? '400' : '250')"
-        :width="isVertical ? '400' : '250'"
-        :height="isVertical ? '400' : '250'"
+        v-lazy="useProxyImageUrl(emission.imageUrl, tailleImage)"
+        :width="tailleImage"
+        :height="tailleImage"
         :class="isVertical ? 'img-box-bigger' : ''"
         class="img-box"
         aria-hidden="true"
@@ -49,7 +49,7 @@ import {useResizePhone} from "../../composable/useResizePhone";
 import { Emission } from "@/stores/class/general/emission";
 import {useImageProxy} from "../../composable/useImageProxy";
 import displayHelper from "../../../helper/displayHelper";
-import { nextTick, useTemplateRef, watch } from "vue";
+import { nextTick, useTemplateRef, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 //Props 
@@ -68,6 +68,13 @@ const descriptionEmissionContainerRef = useTemplateRef('descriptionEmissionConta
 const { t } = useI18n();
 const { isPhone } = useResizePhone();
 const { useProxyImageUrl } = useImageProxy();
+
+// Computed
+// Calcul de la taille de l'image
+const tailleImage = computed(() => {
+  // L'élément fait 400 de large à la verticale, mais on prend en compte les bordures
+  return props.isVertical ? '396' : '250';
+});
 
 //Watch
 watch(isPhone, async () => {
@@ -114,8 +121,9 @@ function urlify(text:string|undefined){
   }
 
   .img-box-bigger {
-    width: 400px;
-    height: 400px;
+    // L'élément fait 400 de large à la verticale, mais on prend en compte les bordures
+    width: 396px;
+    height: 396px;
   }
 }
 </style>
