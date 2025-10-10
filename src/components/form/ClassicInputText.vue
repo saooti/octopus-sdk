@@ -113,6 +113,7 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
@@ -132,6 +133,7 @@ const ClassicEmojiPicker = defineAsyncComponent(
 const props = defineProps({
   inputId: { default: "", type: String },
   label: { default: "", type: String },
+  /** The input's value */
   textInit: { default: undefined, type: String },
   maxLength: { default: 0, type: Number },
   errorText: { default: "", type: String },
@@ -141,6 +143,7 @@ const props = defineProps({
   canBeNull: { default: false, type: Boolean },
   inputMaxLengthField: { default: undefined, type: Number },
   errorVariable: { default: true, type: Boolean },
+  /** Disable the text input */
   isDisable: { default: false, type: Boolean },
   indicText: { default: "", type: String },
   dataSelenium: { default: "", type: String },
@@ -239,6 +242,7 @@ function addEmojiSelected(emoji: string) {
   textValue.value = (textValue.value ?? "") + emoji;
 }
 </script>
+
 <style lang="scss">
 .octopus-app .classic-input-text {
   .text-indic {

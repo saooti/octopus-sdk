@@ -4,9 +4,10 @@
     <slot v-else name="preview" />
   </div>
 </template>
+
 <script setup lang="ts">
 import { useIntersectionObserver } from "@vueuse/core";
-import { ref, nextTick, watch } from "vue";
+import { ref, nextTick, watch, onMounted } from "vue";
 
 //Props
 const props = defineProps({
@@ -37,8 +38,8 @@ const { pause, resume } = useIntersectionObserver(
     if (isIntersecting) {
       // perhaps the user re-scrolled to a component that was set to unrender. In that case stop the unrendering timer
       clearTimeout(unrenderTimer);
-      // if we're dealing underndering lets add a waiting period of 200ms before rendering. If a component enters the viewport and also leaves it within 200ms it will not render at all. This saves work and improves performance when user scrolls very fast
 
+      // if we're dealing underndering lets add a waiting period of 200ms before rendering. If a component enters the viewport and also leaves it within 200ms it will not render at all. This saves work and improves performance when user scrolls very fast
       renderTimer = setTimeout(
         () => {
           shouldRender.value = true;
@@ -46,6 +47,7 @@ const { pause, resume } = useIntersectionObserver(
         },
         props.unrender ? 200 : 0,
       );
+
       if (!props.unrender) {
         pause();
       }
@@ -64,18 +66,27 @@ const { pause, resume } = useIntersectionObserver(
 );
 
 //Logic
-setTimeout(() => {
-  waitBeforeInit.value = false;
-}, props.initRenderDelay);
-if (props.renderOnIdle) {
-  onIdle(() => {
-    shouldRender.value = true;
-    emit("isRender", true);
-    if (!props.unrender) {
-      pause();
-    }
-  });
-}
+onMounted(() => {
+  if (props.initRenderDelay <= 0) {
+    // If there's no render delay, do not delay initialization
+    waitBeforeInit.value = false;
+  } else {
+    // Otherwise delay initialization
+    setTimeout(() => {
+      waitBeforeInit.value = false;
+    }, props.initRenderDelay);
+  }
+
+  if (props.renderOnIdle) {
+    onIdle(() => {
+      shouldRender.value = true;
+      emit("isRender", true);
+      if (!props.unrender) {
+        pause();
+      }
+    });
+  }
+});
 
 //Watch
 watch(
