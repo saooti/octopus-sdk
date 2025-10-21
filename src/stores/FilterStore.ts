@@ -71,3 +71,6 @@ export const useFilterStore = defineStore("FilterStore", {
     },
   },
 });
+
+/** Type for the FilterStore */
+export type FilterStore = ReturnType<typeof useFilterStore>;

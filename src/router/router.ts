@@ -4,11 +4,11 @@ import {
   RouteLocationNormalized,
   RouteRecordRaw,
 } from "vue-router";
-import { useFilterStore } from "../stores/FilterStore";
+import { useFilterStore, FilterStore } from "../stores/FilterStore";
 import { useSaveFetchStore } from "@/stores/SaveFetchStore";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import classicApi from "@/api/classicApi";
-import { useAuthStore } from "../stores/AuthStore";
+import { useAuthStore, AuthStore } from "../stores/AuthStore";
 import fetchHelper from "@/helper/fetchHelper";
 
 /*--------------------------------------------------------------------------
@@ -334,13 +334,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes: routes,
   scrollBehavior(to, from) {
-    if (to.name === from.name && to.meta.noScroll) return false;
-    return { left: 0, top: 0 };
+    if (to.name === from.name && to.meta.noScroll) {
+      return false;
+    } else {
+      return { left: 0, top: 0 };
+    }
   },
 });
 
 //Do in frontoffice but not podcastmakers
-async function getMyOrgaActive(authStore: any): Promise<string>{
+async function getMyOrgaActive(authStore: AuthStore): Promise<string>{
   const orgaActive = await classicApi.fetchData<string>({
     api: 3,
     path: "user/active"
@@ -352,7 +355,8 @@ async function getMyOrgaActive(authStore: any): Promise<string>{
   }
   return orgaActive;
 }
-async function changeOrgaFilter(orgaFilter: string, filterStore: any){
+
+async function changeOrgaFilter(orgaFilter: string, filterStore: FilterStore){
   const saveStore = useSaveFetchStore();
   const response = await saveStore.getOrgaData(orgaFilter);
   const data = await classicApi.fetchData<Array<Rubriquage>>({
@@ -375,10 +379,12 @@ async function changeOrgaFilter(orgaFilter: string, filterStore: any){
     isLive: isLive,
   });
 }
+
 let fetchMyOrgaActive = false;
 router.beforeResolve(async () =>{
   fetchMyOrgaActive = false;
 });
+
 router.beforeEach(async (to, from) => {
   if ("/logout" === to.path && "/logout" !== from.path) {
     setTimeout(() => {
