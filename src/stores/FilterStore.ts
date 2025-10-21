@@ -1,75 +1,115 @@
-import { Category } from "@/stores/class/general/category";
-import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
-import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { Rubrique } from "@/stores/class/rubrique/rubrique";
-import { defineStore } from "pinia";
+import { computed, ref } from 'vue';
 
-interface FilterState {
-  filterOrgaId?: string;
-  filterImgUrl?: string;
-  filterName?: string;
-  filterRubriquage: Array<Rubriquage>;
-  filterRubrique: Array<RubriquageFilter>;
-  filterRubriqueDisplay: Array<Rubrique>;
-  filterTypeMedia?: string;
-  filterSortOrder?: string;
-  filterSortField?: string;
-  filterLive?: boolean;
-  filterIab?: Category;
-}
-export const useFilterStore = defineStore("FilterStore", {
-  state: (): FilterState => ({
-    filterRubriquage: [],
-    filterRubrique: [],
-    filterRubriqueDisplay: [],
-    filterLive: false,
-  }),
-  actions: {
-    filterUpdateOrga(filter: {
-      orgaId?: string;
-      imgUrl?: string;
-      name?: string;
-      rubriquageArray?: Array<Rubriquage>;
-      isLive?: boolean;
-    }) {
-      if (filter.imgUrl || !filter.orgaId) {
-        this.filterImgUrl = filter.imgUrl;
-      }
-      if (filter.name || !filter.orgaId) {
-        this.filterName = filter.name;
-      }
-      if (filter.rubriquageArray) {
-        this.filterRubriquage = filter.rubriquageArray;
-      }
-      this.filterLive = filter.isLive;
-      this.filterIab = undefined;
-      this.filterOrgaId = filter.orgaId;
-    },
-    filterUpdateIab(iab?: Category) {
-      this.filterIab = iab;
-    },
-    filterUpdateRubrique(rubriqueFilter: Array<RubriquageFilter>) {
-      this.filterRubrique = rubriqueFilter;
-    },
-    filterUpdateRubriqueDisplay(rubriques: Array<Rubrique>) {
-      this.filterRubriqueDisplay = rubriques.filter(rubrique=> rubrique);
-    },
-    filterUpdateMedia(filter: {
-      type?: string;
-      order?: string;
-      field?: string;
-    }) {
-      if (filter.type) {
-        this.filterTypeMedia = filter.type;
-      }
-      if (filter.order) {
-        this.filterSortOrder = filter.order;
-      }
-      if (filter.field) {
-        this.filterSortField = filter.field;
-      }
-    },
-  },
+import { Category } from '@/stores/class/general/category';
+import { Rubriquage } from '@/stores/class/rubrique/rubriquage';
+import { RubriquageFilter } from '@/stores/class/rubrique/rubriquageFilter';
+import { Rubrique } from '@/stores/class/rubrique/rubrique';
+import { defineStore } from 'pinia';
+import { useAuthStore } from './AuthStore';
+import { useRoute } from 'vue-router';
+
+/**
+ * Store managing data regarding the filters to apply to know which
+ * podcasts to show.
+ */
+export const useFilterStore = defineStore("FilterStore", () => {
+  const _filterOrgaId = ref<string|null>(null);
+  const filterImgUrl = ref<string>();
+  const filterName = ref<string>();
+  const filterRubriquage = ref<Array<Rubriquage>>([]);
+  const filterRubrique = ref<Array<RubriquageFilter>>([]);
+  const filterRubriqueDisplay = ref<Array<Rubrique>>([]);
+  const filterTypeMedia = ref<string>();
+  const filterSortOrder = ref<string>();
+  const filterSortField = ref<string>();
+  const filterLive = ref<boolean>(false);
+  const filterIab = ref<Category>();
+
+  const route = useRoute();
+  const authStore = useAuthStore();
+
+  /**
+   * ID of the current organisation.
+   */
+  const filterOrgaId = computed(() => {
+    if (route?.query.displayAll === "true") {
+      return undefined;
+    } else if(_filterOrgaId.value === null) {
+      return authStore.authOrgaId;
+    } else {
+      return _filterOrgaId.value ?? undefined;
+    }
+  });
+
+  function filterUpdateOrga(filter: {
+    orgaId?: string;
+    imgUrl?: string;
+    name?: string;
+    rubriquageArray?: Array<Rubriquage>;
+    isLive?: boolean;
+  }) {
+    if (filter.imgUrl || !filter.orgaId) {
+      filterImgUrl.value = filter.imgUrl;
+    }
+    if (filter.name || !filter.orgaId) {
+      filterName.value = filter.name;
+    }
+    if (filter.rubriquageArray) {
+      filterRubriquage.value = filter.rubriquageArray;
+    }
+    filterLive.value = filter.isLive ?? false;
+    filterIab.value = undefined;
+    _filterOrgaId.value = filter.orgaId ?? null;
+  }
+
+  function filterUpdateIab(iab?: Category) {
+    filterIab.value = iab;
+  }
+
+  function filterUpdateRubrique(rubriqueFilter: Array<RubriquageFilter>) {
+    filterRubrique.value = rubriqueFilter;
+  }
+
+  function filterUpdateRubriqueDisplay(rubriques: Array<Rubrique>) {
+    filterRubriqueDisplay.value = rubriques.filter(rubrique=> rubrique);
+  }
+
+  function filterUpdateMedia(filter: {
+    type?: string;
+    order?: string;
+    field?: string;
+  }) {
+    if (filter.type) {
+      filterTypeMedia.value = filter.type;
+    }
+    if (filter.order) {
+      filterSortOrder.value = filter.order;
+    }
+    if (filter.field) {
+      filterSortField.value = filter.field;
+    }
+  }
+
+  return {
+    filterOrgaId,
+
+    filterUpdateOrga,
+    filterUpdateIab,
+    filterUpdateRubrique,
+    filterUpdateRubriqueDisplay,
+    filterUpdateMedia,
+
+    filterImgUrl,
+    filterName,
+    filterRubriquage,
+    filterRubrique,
+    filterRubriqueDisplay,
+    filterTypeMedia,
+    filterSortOrder,
+    filterSortField,
+    filterLive,
+    filterIab
+  };
 });
 
 /** Type for the FilterStore */

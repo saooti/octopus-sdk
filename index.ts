@@ -147,6 +147,9 @@ export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIc
 export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 
+// Routing
+import { setupRouter } from './src/router/utils';
+
 export {
     useResizePhone,
     useTagOf,
@@ -176,5 +179,6 @@ export {
     classicApi,
     cookiesHelper,
     downloadHelper,
-    displayHelper
+    displayHelper,
+    setupRouter
 };
