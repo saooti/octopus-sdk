@@ -22,5 +22,4 @@ yarn-error.log*
 *.sw?
 .scannerwork
 
-package-lock.json
 proxy.ts

@@ -11,6 +11,7 @@ interface AuthParam{
   expiration?: Date|string;
   clientId?: string;
 }
+
 interface AuthState {
   authReload: number;
   authName: string;

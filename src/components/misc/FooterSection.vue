@@ -5,11 +5,17 @@
     role="contentinfo"
     class="d-flex align-items-center justify-content-between border-top mt-auto"
   >
-    <div v-if="!state.generalParameters.podcastmaker" class="d-flex flex-column px-1">
+    <div
+      v-if="!state.generalParameters.podcastmaker"
+      class="d-flex flex-column px-1"
+    >
       <div class="text-dark my-1 special-select-align-magic-trick">
         &copy; Saooti 2025
       </div>
-      <FooterGarSection v-if="authStore.isGarRole" :auth-orga-id="authStore.authOrgaId" />
+      <FooterGarSection
+        v-if="authStore.isGarRole"
+        :auth-orga-id="authStore.authOrgaId"
+      />
       <nav :aria-label="t('Site menu')">
         <ul class="p-0 m-0">
           <li 
@@ -164,6 +170,11 @@ function changeLanguage(): void {
     }
   });
 }
+
+/**
+ * Select another organisation
+ * @param organisation The new organisation to focus on, or undefined to remove focus
+ */
 async function onOrganisationSelected( organisation: Organisation | undefined): Promise<void> {
   if (organisation?.id) {
     router.push({

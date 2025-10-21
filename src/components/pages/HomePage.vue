@@ -14,7 +14,7 @@
           :button-text="t('All podcast button', { name: c.name })"
         />
         <template #preview>
-          <div style="min-height: 650px"></div>
+          <div style="min-height: 650px" />
         </template>
       </ClassicLazy>
     </template>
@@ -33,7 +33,7 @@
           :button-text="t('All podcast button', { name: r.name })"
         />
         <template #preview>
-          <div style="min-height: 650px"></div>
+          <div style="min-height: 650px" />
         </template>
       </ClassicLazy>
       <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
@@ -129,8 +129,9 @@ const categories = computed(() => {
     });
   } else {
     arrayCategories = generalStore.storedCategories.filter((c: Category) => {
-      if (state.generalParameters.podcastmaker)
+      if (state.generalParameters.podcastmaker) {
         return c.podcastOrganisationCount;
+      }
       return c.podcastCount;
     });
   }

@@ -8,14 +8,14 @@
       <component
         :is="isWysiwyg? 'div': 'label'"
         :class="[classLabel, displayLabel ? '' : 'd-none']"
-        :for="isWysiwyg ? '': inputId"
+        :for="isWysiwyg ? '': computedInputId"
         >{{ label }}
         <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
       </component>
       <slot name="afterTitle"/>
       <template v-if="popover">
         <button
-          :id="'popover' + inputId"
+          :id="'popover' + computedInputId"
           :title="t('Help')"
           class="btn-transparent"
         >
@@ -23,7 +23,7 @@
         </button>
 
         <ClassicPopover
-          :target="'popover' + inputId"
+          :target="'popover' + computedInputId"
           popover-class="popover-z-index"
           :relative-class="popoverRelativeClass"
         >
@@ -38,7 +38,7 @@
     <input
       v-if="!isWysiwyg && !isTextarea"
       v-show="showField"
-      :id="inputId"
+      :id="computedInputId"
       ref="focusElement"
       v-model="textValue"
       :type="typeInput"
@@ -59,7 +59,7 @@
     <textarea
       v-else-if="isTextarea"
       v-show="showField"
-      :id="inputId"
+      :id="computedInputId"
       ref="focusElement"
       v-model="textValue"
       :data-selenium="dataSelenium"
@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
-import { computed, defineAsyncComponent, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
+import { computed, defineAsyncComponent, onMounted, Ref, ref, useTemplateRef, watch, getCurrentInstance } from "vue";
 import { useI18n } from "vue-i18n";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
@@ -174,6 +174,7 @@ const focusElementRef = useTemplateRef('focusElement');
 const { t } = useI18n();
 
 //Computed
+const computedInputId = computed(() => props.inputId || 'input-' + getCurrentInstance()?.uid);
 const isError = computed(() => !valueTrimValid.value || !valueLengthValid.value || !valueRegexValid.value);
 const countValue = computed(() => {
   if (textValue.value) {

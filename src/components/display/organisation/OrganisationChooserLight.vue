@@ -1,17 +1,17 @@
 <template>
-   <ClassicSelect
-      v-if="(!value || init) && organisation"
-      v-model:text-init="actual"
-      :display-label="false"
-      id-select="organisation-chooser-footer"
-      :label="t('select productor')"
-      :transparent="true"
-      :options="[
-        { title: organisation.name, value: organisation.id },
-        { title: t('No organisation filter'), value: 'NONE' },
-      ]"
-      class="my-1"
-    />
+  <ClassicSelect
+    v-if="(!value || init) && organisation"
+    v-model:text-init="actual"
+    :display-label="false"
+    id-select="organisation-chooser-footer"
+    :label="t('select productor')"
+    :transparent="true"
+    :options="[
+      { title: organisation.name, value: organisation.id },
+      { title: t('No organisation filter'), value: 'NONE' },
+    ]"
+    class="my-1"
+  />
 </template>
 
 <script setup lang="ts">
