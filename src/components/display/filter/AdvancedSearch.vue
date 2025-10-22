@@ -173,7 +173,7 @@ const isSelectValidity = computed(() => {
 
 //Watch
 watch(organisation, async () => {
-  const hidden =undefined !== organisation.value && organisationRight.value &&!props.isEmission;
+  const hidden = undefined !== organisation.value && organisationRight.value && !props.isEmission;
   if (hidden !== props.includeHidden) {
     updateIncludeHidden(hidden);
   }
@@ -189,7 +189,6 @@ watch(()=>props.searchPattern, (value: string) => {
     s: valSort,
   });
 });
-
 
 //Methods
 function updateMonetisable(value: string): void {
@@ -253,6 +252,7 @@ function clickShowFilters(): void {
   showFilters.value = !showFilters.value;
 }
 </script>
+
 <style lang="scss">
 .octopus-app {
   .advanced-search-container {

@@ -31,11 +31,11 @@ export const useFilterStore = defineStore("FilterStore", () => {
   /**
    * ID of the current organisation.
    */
-  const filterOrgaId = computed(() => {
+  const filterOrgaId = computed((): string|undefined => {
     if (route?.query.displayAll === "true") {
       return undefined;
     } else if (route?.query.productor) {
-      return route.query.productor;
+      return route.query.productor as string;
     } else if(_filterOrgaId.value === null) {
       return authStore.authOrgaId;
     } else {

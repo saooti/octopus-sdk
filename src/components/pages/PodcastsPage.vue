@@ -38,6 +38,7 @@
     />
   </section>
 </template>
+
 <script setup lang="ts">
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import ProductorSearch from "../display/filter/ProductorSearch.vue";
@@ -84,7 +85,6 @@ const {
   rubriquesFilterArrayIds,
   isInit
 } = useAdvancedParamInit(props, false);
-
 
 //Computed
 const orgaArray = computed(() => organisationId.value ? [organisationId.value] : []);
