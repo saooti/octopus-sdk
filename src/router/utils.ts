@@ -70,9 +70,7 @@ export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthSto
 
     // Update organisation
     if (isSamePath && orgaToFocus !== from.query.productor) {
-      if (undefined === orgaToFocus) {
-        filterStore.filterUpdateOrga({ orgaId: undefined });
-      } else if (filterStore.filterOrgaId !== orgaToFocus) {
+      if (filterStore.filterOrgaId !== orgaToFocus && orgaToFocus !== undefined) {
         await changeOrgaFilter(orgaToFocus, filterStore);
       }
     }

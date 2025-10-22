@@ -120,6 +120,7 @@ import cookiesHelper from "./src/helper/cookiesHelper.ts";
 import downloadHelper from "./src/helper/downloadHelper.ts";
 import displayHelper from "./src/helper/displayHelper.ts";
 import debounce from "./src/helper/debounceHelper.ts";
+import { deepEqual } from "./src/helper/equals.ts";
 
 //stores
 import {useVastStore} from "./src/stores/VastStore.ts";
@@ -178,6 +179,7 @@ export {
     ModuleApi,
     classicApi,
     cookiesHelper,
+    deepEqual,
     downloadHelper,
     displayHelper,
     setupRouter
