@@ -31,6 +31,8 @@ async function changeOrgaFilter(orgaFilter: string, filterStore: FilterStore){
 }
 
 let fetchMyOrgaActive = false;
+/** Variable used to apply beforeEach redirect only once */
+let resolved = false;
 
 /**
  * Utility function seting up the router with a custom beforeEach
@@ -38,9 +40,13 @@ let fetchMyOrgaActive = false;
 export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthStore) => Promise<string>): void {
   router.beforeResolve(async () =>{
     fetchMyOrgaActive = false;
+    // Reinit variable to allow one redirect
+    resolved = false;
   });
 
+  // Navigation guard that updates current organisation & may make redirects
   router.beforeEach(async (to, from) => {
+
     if ("/logout" === to.path && "/logout" !== from.path) {
       setTimeout(() => {
         window.location.reload(true);
@@ -61,6 +67,8 @@ export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthSto
         orgaToFocus = authStore.authOrgaId;
       }
     }
+
+    // Update organisation
     if (isSamePath && orgaToFocus !== from.query.productor) {
       if (undefined === orgaToFocus) {
         filterStore.filterUpdateOrga({ orgaId: undefined });
@@ -68,20 +76,25 @@ export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthSto
         await changeOrgaFilter(orgaToFocus, filterStore);
       }
     }
-    if ("/logout" !== to.path) {
+
+    // Only change target if not going to logout and not already resolved
+    if ("/logout" !== to.path && resolved !== true) {
+      resolved = true;
       const newQuery = {
         ...to.query
       };
 
       // Set productor
-      if (filterStore.filterOrgaId === undefined) {
+      if (to.query.productor) {
+        newQuery.productor = to.query.productor;
+      } else if (filterStore.filterOrgaId === undefined) {
         delete newQuery.productor;
       } else {
         newQuery.productor = filterStore.filterOrgaId;
       }
 
       // Enable 'displayAll' mode if already active
-      if (from.query.displayAll === "true" || to.query.displayAll === "true") {
+      if ((from.query.displayAll === "true" || to.query.displayAll === "true") && to.query.displayAll !== "false") {
         newQuery.displayAll = "true";
       } else {
         delete newQuery.displayAll;

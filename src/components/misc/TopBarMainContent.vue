@@ -13,22 +13,20 @@
         :src="logoUrl"
         aria-hidden="true"
         alt=""
-        
         width="140"
         height="50"
         title="Logo"
         :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
-      />
+      >
       <img
         v-else
         :src="useProxyImageUrl(imgUrl, '', '80')"
         aria-hidden="true"
         alt=""
-        
         class="client-logo"
         title="Logo"
         :class="generalStore.platformEducation ? 'education-logo' : ''"
-      />
+      >
     </router-link>
     <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
       {{ titleDisplay }}
@@ -127,10 +125,11 @@
                     {{ link.title }}
                   </router-link>
                 </li>
-            </template>
+              </template>
             </ul>
           </nav>
         </ClassicPopover>
+
         <MobileMenu
           :is-education="generalStore.platformEducation"
           :show="mobileMenuDisplay"

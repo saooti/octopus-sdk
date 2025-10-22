@@ -34,11 +34,22 @@ export const useFilterStore = defineStore("FilterStore", () => {
   const filterOrgaId = computed(() => {
     if (route?.query.displayAll === "true") {
       return undefined;
+    } else if (route?.query.productor) {
+      return route.query.productor;
     } else if(_filterOrgaId.value === null) {
       return authStore.authOrgaId;
     } else {
       return _filterOrgaId.value ?? undefined;
     }
+  });
+
+  /**
+   * The ID of the current organisation, regardless of other options.
+   * Use this if you want to know the organisation of the user even in
+   * unfocused mode (ie displayAll = true)
+   */
+  const realOrgaId = computed(() => {
+    return _filterOrgaId.value ?? undefined;
   });
 
   function filterUpdateOrga(filter: {
@@ -92,6 +103,7 @@ export const useFilterStore = defineStore("FilterStore", () => {
 
   return {
     filterOrgaId,
+    realOrgaId,
 
     filterUpdateOrga,
     filterUpdateIab,
