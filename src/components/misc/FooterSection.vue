@@ -5,11 +5,17 @@
     role="contentinfo"
     class="d-flex align-items-center justify-content-between border-top mt-auto"
   >
-    <div v-if="!state.generalParameters.podcastmaker" class="d-flex flex-column px-1">
+    <div
+      v-if="!state.generalParameters.podcastmaker"
+      class="d-flex flex-column px-1"
+    >
       <div class="text-dark my-1 special-select-align-magic-trick">
         &copy; Saooti 2025
       </div>
-      <FooterGarSection v-if="authStore.isGarRole" :auth-orga-id="authStore.authOrgaId" />
+      <FooterGarSection
+        v-if="authStore.isGarRole"
+        :auth-orga-id="authStore.authOrgaId"
+      />
       <nav :aria-label="t('Site menu')">
         <ul class="p-0 m-0">
           <li 
@@ -43,13 +49,11 @@
         class="my-1"
       />
       <OrganisationChooserLight
-        v-if="!state.generalParameters.podcastmaker && organisationId && authenticated"
+        v-if="!state.generalParameters.podcastmaker && authenticated"
         page="footer"
         width="auto"
         class="my-1"
         :defaultanswer="t('No organisation filter')"
-        :value="organisationId"
-        :reset="reset"
         @selected="onOrganisationSelected"
       />
     </div>
@@ -83,7 +87,7 @@ import { useFilterStore } from "../../stores/FilterStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { Category } from "@/stores/class/general/category";
-import { computed, defineAsyncComponent, Ref, ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { Organisation } from "@/stores/class/general/organisation";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -98,8 +102,6 @@ const { t, locale } = useI18n();
 
 //Data 
 const language = ref(locale);
-const reset = ref(false);
-const organisationId: Ref<string | undefined> = ref(undefined);
 
 //Composables
 const generalStore = useGeneralStore();
@@ -127,15 +129,6 @@ const routerLinkSecondArray = computed(() => {
 
 //Watch
 watch(language, () => changeLanguage());
-watch(()=>filterStore.filterOrgaId, () => {
-  if (filterStore.filterOrgaId) {
-    organisationId.value = filterStore.filterOrgaId;
-  } else {
-    reset.value = !reset.value;
-  }
-}, {immediate: true});
-
-
 
 //Methods
 function changeLanguage(): void {
@@ -164,15 +157,20 @@ function changeLanguage(): void {
     }
   });
 }
+
+/**
+ * Select another organisation
+ * @param organisation The new organisation to focus on, or undefined to remove focus
+ */
 async function onOrganisationSelected( organisation: Organisation | undefined): Promise<void> {
+  // TODO use router utils
   if (organisation?.id) {
     router.push({
-      query: { ...route.query, ...{ productor: organisation.id, o:undefined } },
+      query: { ...route.query, ...{ productor: organisation.id, o:undefined, displayAll: "false" } },
     });
   }else{
-    organisationId.value = undefined;
     router.push({
-      query: { ...route.query, ...{ productor: undefined } },
+      query: { ...route.query, ...{ productor: undefined, displayAll: "true" } },
     });
   }
 }

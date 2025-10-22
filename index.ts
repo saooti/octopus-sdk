@@ -120,6 +120,7 @@ import cookiesHelper from "./src/helper/cookiesHelper.ts";
 import downloadHelper from "./src/helper/downloadHelper.ts";
 import displayHelper from "./src/helper/displayHelper.ts";
 import debounce from "./src/helper/debounceHelper.ts";
+import { deepEqual } from "./src/helper/equals.ts";
 
 //stores
 import {useVastStore} from "./src/stores/VastStore.ts";
@@ -146,6 +147,9 @@ export const getPodcastAddictIcon = () => import("./src/components/icons/Podcast
 export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIcon.vue");
 export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
+
+// Routing
+import { setupRouter } from './src/router/utils';
 
 export {
     useResizePhone,
@@ -175,6 +179,8 @@ export {
     ModuleApi,
     classicApi,
     cookiesHelper,
+    deepEqual,
     downloadHelper,
-    displayHelper
+    displayHelper,
+    setupRouter
 };

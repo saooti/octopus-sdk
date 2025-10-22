@@ -13,22 +13,20 @@
         :src="logoUrl"
         aria-hidden="true"
         alt=""
-        
         width="140"
         height="50"
         title="Logo"
         :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
-      />
+      >
       <img
         v-else
         :src="useProxyImageUrl(imgUrl, '', '80')"
         aria-hidden="true"
         alt=""
-        
         class="client-logo"
         title="Logo"
         :class="generalStore.platformEducation ? 'education-logo' : ''"
-      />
+      >
     </router-link>
     <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
       {{ titleDisplay }}
@@ -46,14 +44,13 @@
           v-if="authStore.isGarRole"
           :src="logoUrl"
           aria-hidden="true"
-        alt=""
-          
+          alt=""
           width="100"
           height="29"
           class="ms-2"
           title="Logo"
           :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
-        />
+        >
         <a
           v-else
           href="https://www.saooti.com/"
@@ -64,14 +61,14 @@
           <img
             :src="logoUrl"
             aria-hidden="true"
-        alt=""
+            alt=""
             
             title="Saooti"
             width="100"
             height="29"
             class="ms-2"
             :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
-          />
+          >
         </a>
       </template>
       <div role="navigation" class="d-flex align-items-center justify-content-end flex-grow-1">
@@ -128,10 +125,11 @@
                     {{ link.title }}
                   </router-link>
                 </li>
-            </template>
+              </template>
             </ul>
           </nav>
         </ClassicPopover>
+
         <MobileMenu
           :is-education="generalStore.platformEducation"
           :show="mobileMenuDisplay"

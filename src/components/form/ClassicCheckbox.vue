@@ -2,7 +2,7 @@
   <div class="d-flex flex-nowrap align-items-center octopus-form-item">
     <div :class="isSwitch ? 'octopus-form-switch me-2' : ''">
       <input
-        :id="idCheckbox"
+        :id="computedIdCheckbox"
         :checked="textInit"
         type="checkbox"
         :disabled="isDisabled"
@@ -16,26 +16,35 @@
         v-if="isSwitch"
         class="slider btn-transparent"
         :title="label"
+        :disabled="isDisabled"
         @click="clickSlider"
         @keydown.space.prevent="clickSlider"
       />
     </div>
     <label
       class="c-hand"
-      :class="[classLabel, displayLabel ? '' : 'd-none']"
-      :for="idCheckbox"
-      >{{ label }}</label
+      :class="[classLabel, displayLabel ? '' : 'd-none', isDisabled ? 'disabled' : '']"
+      :for="computedIdCheckbox"
     >
+      {{ label }}
+    </label>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed, getCurrentInstance } from 'vue';
+
 //Props 
 const props = defineProps({
+  /** The ID for the checkbox input */
   idCheckbox: { default: "", type: String },
+  /** The label to display with the checkbox */
   label: { default: "", type: String },
+  /** Disables input */
   isDisabled: { default: false, type: Boolean },
+  /** The value of the checkbox */
   textInit: { default: false, type: Boolean },
+  /** If true, displays a switch instead of a checkbox */
   isSwitch: { default: false, type: Boolean },
   displayLabel: { default: true, type: Boolean },
   classLabel: { default: "", type: String },
@@ -44,6 +53,11 @@ const props = defineProps({
 
 //Emits
 const emit = defineEmits(["update:textInit", "clickAction"]);
+
+// Computed
+const computedIdCheckbox = computed(() => {
+  return props.idCheckbox || 'checkbox-' + getCurrentInstance()?.uid;
+});
 
 //Methods
 function emitClickAction(): void {
@@ -59,6 +73,12 @@ function clickSlider() {
 
 <style lang="scss">
 .octopus-app {
+
+  label.disabled {
+    color: var(--octopus-text-disabled);
+    cursor: default;
+  }
+
   .octopus-form-switch {
     position: relative;
     display: inline-block;
@@ -90,6 +110,11 @@ function clickSlider() {
       background-color: white;
       transition: 0.4s;
       border-radius: 50%;
+    }
+
+    .slider:disabled::before {
+      background-color: var(--octopus-text-disabled);
+      opacity: 0.6;
     }
 
     input:checked + .slider {

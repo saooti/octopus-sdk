@@ -29,11 +29,16 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
     }
   });
 
+  // When changing global organisation, update organisation here
+  watch(() => filterStore.filterOrgaId, () => {
+    organisationId.value = filterStore.filterOrgaId;
+  });
+
   onMounted(() => {
     initOrga();
     initSearchPattern();
     isInit.value = true;
-  })
+  });
 
   function getMinSize(param:string){
     return param.length>3 ?param : ""

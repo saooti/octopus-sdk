@@ -5,12 +5,14 @@ import { defineStore } from "pinia";
 import { KeycloakInfo } from "@/stores/class/user/person";
 import { VideoConfig } from "@/stores/class/config/videoConfig";
 import classicApi from "../api/classicApi";
+
 interface AuthParam{
   accessToken?: string;
   refreshToken?: string;
   expiration?: Date|string;
   clientId?: string;
 }
+
 interface AuthState {
   authReload: number;
   authName: string;
@@ -231,3 +233,6 @@ export const useAuthStore = defineStore("AuthStore", {
     },
   },
 });
+
+/** Type for the AuthStore */
+export type AuthStore = ReturnType<typeof useAuthStore>;

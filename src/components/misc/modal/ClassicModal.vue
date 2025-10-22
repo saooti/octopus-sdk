@@ -48,8 +48,11 @@ import { useI18n } from "vue-i18n";
 //Props 
 defineProps({
   idModal: { default: undefined, type: String },
+  /** The title of the modal */
   titleModal: { default: undefined, type: String },
+  /** If false, the modal won't display a close button (default: true) */
   closable: { default: true, type: Boolean },
+  /** If true, the modal can be reduced to show only the header (default: false) */
   canBeReduced: { default: false, type: Boolean },
 })
 
@@ -79,6 +82,7 @@ function closePopup(): void {
   emit("close");
 }
 </script>
+
 <style lang="scss">
 
 .octopus-app .octopus-modal.octopus-modal-top-layer{

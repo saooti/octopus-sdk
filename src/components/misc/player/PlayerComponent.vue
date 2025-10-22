@@ -52,6 +52,7 @@
     </template>
   </section>
 </template>
+
 <script setup lang="ts">
 import {usePlayerLogic} from "../../composable/player/usePlayerLogic";
 import { usePlayerStore } from "../../../stores/PlayerStore";

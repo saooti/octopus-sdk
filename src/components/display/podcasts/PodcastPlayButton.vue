@@ -228,6 +228,8 @@ function play(isVideo: boolean): void {
     position: absolute;
     inset: 0;
     background-color:var(--octopus-background-transparent);
+    // Allow pointer events to go through (allow click on image beneath blur)
+    pointer-events: none;
   }
 
   .live-image-status {

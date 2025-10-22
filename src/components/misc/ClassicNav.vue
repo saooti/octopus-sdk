@@ -1,3 +1,6 @@
+<!--
+  Component to make a tab-based navigation
+-->
 <template>
   <ul class="octopus-nav" :class="light ? 'light' : ''">
     <li

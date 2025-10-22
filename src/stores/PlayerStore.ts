@@ -141,6 +141,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
   },
   actions: {
+    /**
+     * Start playing audio/video
+     * @param param The data
+     * @param isVideo If true, enable video mode
+     */
     async playerPlay(param?: any, isVideo = false) {
       if (!param) {
         this.playerCurrentChange = null;

@@ -39,6 +39,7 @@
     </button>
   </div>
 </template>
+
 <script setup lang="ts">
 import ChevronUpIcon from "vue-material-design-icons/ChevronUp.vue";
 import WindowCloseIcon from "vue-material-design-icons/WindowClose.vue";

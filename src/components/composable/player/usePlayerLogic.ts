@@ -11,7 +11,8 @@ import fetchHelper from "../../../helper/fetchHelper";
 import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { FetchParam } from "@/stores/class/general/fetchParam";
-export const usePlayerLogic = (forceHide: Ref<boolean, boolean>)=>{
+
+export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
   const hlsReady= ref(false);
 
   const { listenTime, onPlay, setDownloadId, onTimeUpdateProgress, playLive, endingLive, playRadio} = usePlayerLive(hlsReady);

@@ -4,12 +4,10 @@ import {
   RouteLocationNormalized,
   RouteRecordRaw,
 } from "vue-router";
-import { useFilterStore } from "../stores/FilterStore";
-import { useSaveFetchStore } from "@/stores/SaveFetchStore";
-import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import classicApi from "@/api/classicApi";
-import { useAuthStore } from "../stores/AuthStore";
+import { AuthStore } from "../stores/AuthStore";
 import fetchHelper from "@/helper/fetchHelper";
+import { setupRouter } from "./utils";
 
 /*--------------------------------------------------------------------------
 Composants publics
@@ -334,13 +332,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes: routes,
   scrollBehavior(to, from) {
-    if (to.name === from.name && to.meta.noScroll) return false;
-    return { left: 0, top: 0 };
+    if (to.name === from.name && to.meta.noScroll) {
+      return false;
+    } else {
+      return { left: 0, top: 0 };
+    }
   },
 });
 
 //Do in frontoffice but not podcastmakers
-async function getMyOrgaActive(authStore: any): Promise<string>{
+async function getMyOrgaActive(authStore: AuthStore): Promise<string>{
   const orgaActive = await classicApi.fetchData<string>({
     api: 3,
     path: "user/active"
@@ -352,72 +353,7 @@ async function getMyOrgaActive(authStore: any): Promise<string>{
   }
   return orgaActive;
 }
-async function changeOrgaFilter(orgaFilter: string, filterStore: any){
-  const saveStore = useSaveFetchStore();
-  const response = await saveStore.getOrgaData(orgaFilter);
-  const data = await classicApi.fetchData<Array<Rubriquage>>({
-    api: 0,
-    path: "rubriquage/find/" + orgaFilter,
-    parameters: {
-      sort: "HOMEPAGEORDER",
-      homePageOrder: true,
-    },
-    specialTreatement: true,
-  });
-  const isLive = await saveStore.getOrgaLiveEnabled(orgaFilter);
-  filterStore.filterUpdateOrga({
-    orgaId: orgaFilter,
-    imgUrl: response.imageUrl,
-    name: response.name,
-    rubriquageArray: data.filter((element: Rubriquage) => {
-      return element.rubriques.length;
-    }),
-    isLive: isLive,
-  });
-}
-let fetchMyOrgaActive = false;
-router.beforeResolve(async () =>{
-  fetchMyOrgaActive = false;
-});
-router.beforeEach(async (to, from) => {
-  if ("/logout" === to.path && "/logout" !== from.path) {
-    setTimeout(() => {
-      window.location.reload(true);
-    }, 500);
-  }
-  const authStore = useAuthStore();
-  const filterStore = useFilterStore();
-  
-  const isSamePath = to.matched[0]?.path === from.matched[0]?.path && to.path.includes(from.path);
-  let orgaToFocus = isSamePath ? (to.query.productor?.toString() ?? undefined) : undefined;
 
-  if(authStore.authProfile){
-    if(!isSamePath && !fetchMyOrgaActive){
-      await getMyOrgaActive(authStore);
-      fetchMyOrgaActive = true;
-    }
-    if(undefined!==orgaToFocus){
-      orgaToFocus = authStore.authOrgaId;
-    }
-  }
-  if (isSamePath && orgaToFocus !== from.query.productor) {
-    if (undefined === orgaToFocus) {
-      filterStore.filterUpdateOrga({ orgaId: undefined });
-    } else if (filterStore.filterOrgaId !== orgaToFocus) {
-      await changeOrgaFilter(orgaToFocus, filterStore);
-    }
-  }
-  if (
-    "/logout" !== to.path &&
-    filterStore.filterOrgaId !== to.query.productor &&
-    undefined !== filterStore.filterOrgaId
-  ) {
-    return {
-      path: to.path,
-      query: { ...to.query, ...{ productor: filterStore.filterOrgaId } },
-      params: to.params,
-      name: to.name,
-    };
-  }
-});
+setupRouter(router, getMyOrgaActive);
+
 export default router;

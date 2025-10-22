@@ -122,8 +122,9 @@ const displayArray = computed(() => {
 });
 const displayRubriquage = computed(() => state.emissionsPage.rubriquage);
 const changePaginate = computed(() => `${props.first}|${props.size}`);
+/** Computed property to track for configuration changes */
 const changed = computed(() => {
-  return `${props.organisationId}|${props.query}|${props.monetisable}|${props.includeHidden}
+  return `${props.organisationId}|${props.query}|${props.monetisable}|${props.includeHidden}|\
   ${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.sort}|${props.noRubriquageId}`;
 });
 const sortText = computed(() => {

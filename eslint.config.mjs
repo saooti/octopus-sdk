@@ -1,5 +1,4 @@
 import eslint from '@eslint/js';
-import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
 import typescriptEslint from 'typescript-eslint';
@@ -23,7 +22,10 @@ export default typescriptEslint.config(
     },
     rules: {
       // your rules
+      "curly": ['error'],
+      "no-console": ['warn', { allow: ['warn', 'error'] }],
+      "no-warning-comments": ['warn'],
+      "no-duplicate-imports": ['warn']
     },
-  },
-  eslintConfigPrettier
+  }
 );
