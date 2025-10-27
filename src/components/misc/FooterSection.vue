@@ -163,14 +163,13 @@ function changeLanguage(): void {
  * @param organisation The new organisation to focus on, or undefined to remove focus
  */
 async function onOrganisationSelected( organisation: Organisation | undefined): Promise<void> {
-  // TODO use router utils
   if (organisation?.id) {
     router.push({
-      query: { ...route.query, ...{ productor: organisation.id, o:undefined, displayAll: "false" } },
+      query: { ...route.query, ...{ productor: organisation.id, o:undefined, viewall: "false" } },
     });
   }else{
     router.push({
-      query: { ...route.query, ...{ productor: undefined, displayAll: "true" } },
+      query: { ...route.query, ...{ productor: undefined, viewall: "true" } },
     });
   }
 }

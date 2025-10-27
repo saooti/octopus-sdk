@@ -6,7 +6,7 @@ import { KeycloakInfo } from "@/stores/class/user/person";
 import { VideoConfig } from "@/stores/class/config/videoConfig";
 import classicApi from "../api/classicApi";
 
-interface AuthParam{
+interface AuthParam {
   accessToken?: string;
   refreshToken?: string;
   expiration?: Date|string;
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore("AuthStore", {
       comments: undefined,
       attributes: {
         RSS_CONTACT: undefined,
-      },
+      }
     },
     authVideoConfig: { active: false },
   }),

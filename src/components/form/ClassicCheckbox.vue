@@ -11,7 +11,7 @@
         :tabindex="isSwitch ? '-1' : '0'"
         @input="emit('update:textInit', !textInit)"
         @click="emitClickAction"
-      />
+      >
       <button
         v-if="isSwitch"
         class="slider btn-transparent"
@@ -24,7 +24,7 @@
     <label
       class="c-hand"
       :class="[classLabel, displayLabel ? '' : 'd-none', isDisabled ? 'disabled' : '']"
-      :for="computedIdCheckbox"
+      @click="clickSlider"
     >
       {{ label }}
     </label>

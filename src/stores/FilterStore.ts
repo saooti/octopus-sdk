@@ -32,7 +32,7 @@ export const useFilterStore = defineStore("FilterStore", () => {
    * ID of the current organisation.
    */
   const filterOrgaId = computed((): string|undefined => {
-    if (route?.query.displayAll === "true") {
+    if (route?.query.viewall === "true") {
       return undefined;
     } else if (route?.query.productor) {
       return route.query.productor as string;
@@ -46,7 +46,7 @@ export const useFilterStore = defineStore("FilterStore", () => {
   /**
    * The ID of the current organisation, regardless of other options.
    * Use this if you want to know the organisation of the user even in
-   * unfocused mode (ie displayAll = true)
+   * unfocused mode (ie viewall = true)
    */
   const realOrgaId = computed(() => {
     return _filterOrgaId.value ?? undefined;

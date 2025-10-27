@@ -38,6 +38,7 @@ export const getClassicModal = () => import("./src/components/misc/modal/Classic
 export const getClassicLazy = () => import("./src/components/misc/ClassicLazy.vue");
 export const getContractPreviewModal = () => import("./src/components/misc/modal/ContractPreviewModal.vue");
 export const getClassicModalInBody = () => import("./src/components/misc/modal/ClassicModalInBody.vue");
+export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 
 
 //Display

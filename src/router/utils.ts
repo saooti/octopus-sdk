@@ -91,11 +91,11 @@ export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthSto
         newQuery.productor = filterStore.filterOrgaId;
       }
 
-      // Enable 'displayAll' mode if already active
-      if ((from.query.displayAll === "true" || to.query.displayAll === "true") && to.query.displayAll !== "false") {
-        newQuery.displayAll = "true";
+      // Enable 'viewall' mode if already active
+      if ((from.query.viewall === "true" || to.query.viewall === "true") && to.query.viewall !== "false") {
+        newQuery.viewall = "true";
       } else {
-        delete newQuery.displayAll;
+        delete newQuery.viewall;
       }
 
       // If the queries are different, update path

@@ -22,13 +22,13 @@ export function emptyOrganisationData(): Organisation {
   return {
     imageUrl: "",
     id: "",
-    name: "",
+    name: ""
   };
 }
 export function emptyOrgaData(defaultName: string): Organisation {
   return {
     imageUrl: "/img/emptypodcast.webp",
     id: "",
-    name: defaultName,
+    name: defaultName
   };
 }
