@@ -1,9 +1,23 @@
+<!--
+  Component displaying the play button on a podcast.
+  If the podcast is not available, an overlay is displayed with a message.
+-->
 <template>
-  <div v-if="!hidePlay || recordingLive" :class="classicPodcastPlay ? '' : 'img-blur-background'">
-    <div v-if="!classicPodcastPlay" class="live-image-status bg-dark">
+  <div
+    v-if="!hidePlay || recordingLive"
+    :class="{ 'img-blur-background': displayBanner, 'allow-play': classicPodcastPlay }"
+  >
+    <div
+      v-if="displayBanner"
+      class="live-image-status bg-dark"
+    >
       {{ textVisible }}
     </div>
-    <div class="multi-buttons-play" :class="justButtons ? 'play-button-relative' : ''">
+
+    <div
+      class="multi-buttons-play"
+      :class="justButtons ? 'play-button-relative' : ''"
+    >
       <template v-if="!isLiveToBeRecorded">
         <button 
           class="d-flex"
@@ -16,8 +30,14 @@
             v-if="!playingPodcast || (playingPodcast && playerStore.playerVideo)"
             :size="'audio' === hoverType ? 50 : 40"
           />
-          <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo"/>
-          <time v-if="!isVideoPodcast" class="ms-1" :datetime="durationIso">{{ durationString }}</time>
+          <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo" />
+          <time
+            v-if="!isVideoPodcast"
+            class="ms-1"
+            :datetime="durationIso"
+          >
+            {{ durationString }}
+          </time>
         </button>
         <button 
           v-if="isVideoPodcast"
@@ -27,15 +47,35 @@
           @mouseenter="hoverType = 'video'"
           @mouseleave="hoverType = ''"
         >
-          <PlayVideoIcon v-if="!playerStore.playerVideo" :size="'video' === hoverType ? 50 : 40" />
-          <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo"/>
-          <time class="ms-2" :datetime="durationIso">{{ durationString }}</time>
+          <PlayVideoIcon
+            v-if="!playerStore.playerVideo"
+            :size="'video' === hoverType ? 50 : 40"
+          />
+          <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo" />
+          <time
+            class="ms-2"
+            :datetime="durationIso"
+          >
+            {{ durationString }}
+          </time>
         </button>
-        <div v-if="!classicPodcastPlay" class="special-icon-play-button">
-          <component :is="iconName" :size="16" />
+
+        <div
+          v-if="displayBanner"
+          class="special-icon-play-button"
+        >
+          <component
+            :is="iconName"
+            :size="16"
+          />
         </div>
       </template>
-      <component :is="iconName" v-else :size="50" :title="textVisible" />
+      <component
+        :is="iconName"
+        v-else
+        :size="50"
+        :title="textVisible"
+      />
     </div>
   </div>
 </template>
@@ -70,6 +110,8 @@ const props = defineProps({
   hidePlay: { default: false, type: Boolean },
   fetchConference: { default: undefined, type: Object as () => Conference },
   justButtons: { default: false, type: Boolean },
+  /** Indicates that the podcast is displayed in a list */
+  inList: { default: false, type: Boolean }
 })
 
 
@@ -119,42 +161,65 @@ const isLiveValidAndVisible = computed(() => {
     props.podcast.availability.visibility
   );
 });
+
+/** Whether the podcast can be played */
 const classicPodcastPlay = computed(() => {
   return (
     isLiveValidAndVisible.value &&
     !isLiveToBeRecorded.value &&
     ("READY_TO_RECORD" === props.podcast.processingStatus ||
       "READY" === props.podcast.processingStatus ||
-      ("PROCESSING" === props.podcast.processingStatus &&
-        undefined === authStore.authOrgaId))
+      "PROCESSING" === props.podcast.processingStatus)
   );
 });
+
+const displayBanner = computed(() => {
+  return !classicPodcastPlay.value || ("PROCESSING" === props.podcast.processingStatus && !props.inList);
+});
+
 const iconName = computed(() => {
-  if (isLiveToBeRecorded.value) return ClockOutlineIcon;
+  if (isLiveToBeRecorded.value) {
+    return ClockOutlineIcon;
+  }
+
   if ("READY" === props.podcast.processingStatus || props.fetchConference) {
-    if (!props.podcast.valid) return CheckIcon;
+    if (!props.podcast.valid) {
+      return CheckIcon;
+    }
+
     if (
       !props.podcast.availability.visibility &&
       props.podcast.availability.date
-    )
+    ) {
       return ClockOutlineIcon;
+    }
+
     return EyeOffOutlineIcon;
   }
+
   if (
     "PLANNED" === props.podcast.processingStatus ||
     "PROCESSING" === props.podcast.processingStatus
-  )
+  ) {
     return TimerSandEmptyIcon;
-  if ("CANCELED" === props.podcast.processingStatus) return CancelIcon;
+  }
+
+  if ("CANCELED" === props.podcast.processingStatus) {
+    return CancelIcon;
+  }
   return AlertIcon;
 });
+
+/** The text to display when the podcast is not ready */
 const textVisible = computed(() => {
   if (isLiveToBeRecorded.value){
     return t("Podcast linked to waiting live");
   }
     
   if ("READY" === props.podcast.processingStatus || props.fetchConference) {
-    if (!props.podcast.valid) return t("Podcast to validate");
+    if (!props.podcast.valid) {
+      return t("Podcast to validate");
+    }
     if (
       !props.podcast.availability.visibility &&
       props.podcast.availability.date
@@ -174,6 +239,7 @@ const textVisible = computed(() => {
   }
   return t("Podcast in error");
 });
+
 const recordingLive = computed(() => {
   return (
     undefined !== props.fetchConference &&
@@ -188,7 +254,9 @@ const durationString = computed(() => {
   );
 });
 const durationIso = computed(() => {
-  if (!props.podcast || props.podcast.duration <= 1) return "";
+  if (!props.podcast || props.podcast.duration <= 1) {
+    return "";
+  }
   return dayjs.duration({ milliseconds: props.podcast.duration }).toISOString();
 });
 
@@ -230,6 +298,10 @@ function play(isVideo: boolean): void {
     background-color:var(--octopus-background-transparent);
     // Allow pointer events to go through (allow click on image beneath blur)
     pointer-events: none;
+
+    &.allow-play {
+      pointer-events: all;
+    }
   }
 
   .live-image-status {

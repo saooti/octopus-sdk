@@ -1,8 +1,13 @@
+<!--
+  Component displaying a list of podcasts IN A PLAYLIST
+  Do not confuse this with PodcastList from podcasts
+-->
 <template>
   <div>
     <h3 class="mb-3 align-self-baseline">
       {{ titleList }}
     </h3>
+
     <ClassicSearch
       v-if="!loading && notEmptyPlaylist"
       v-model:text-init="searchPattern"
@@ -10,6 +15,7 @@
       id-search="podcast-list-search"
       :label="t('Search')"
     />
+
     <ListPaginate
       id="podcastPlaylistListPaginate"
       v-model:first="dfirst"
@@ -38,7 +44,12 @@
             :key="p.podcastId"
             :min-height="410"
           >
-            <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
+            <PodcastItem
+              v-if="0 !== p.podcastId"
+              :podcast="p"
+              :in-list="true"
+            />
+
             <template #preview>
               <router-link
                 :to="{

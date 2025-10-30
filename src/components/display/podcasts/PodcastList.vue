@@ -1,3 +1,7 @@
+<!--
+  Component displaying a list of podcast
+  DO NOT confuse this with PodcastList from playlist
+-->
 <template>
   <ListPaginate
     id="podcastListPaginate"
@@ -28,7 +32,11 @@
           :key="p.podcastId"
           :min-height="410"
         >
-          <PodcastItem v-if="0 !== p.podcastId" :podcast="p" />
+          <PodcastItem
+            v-if="0 !== p.podcastId"
+            :podcast="p"
+            in-list
+          />
           <template #preview>
             <router-link
               :to="{

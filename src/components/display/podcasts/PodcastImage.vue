@@ -1,3 +1,8 @@
+<!--
+  Component to display the image of a podcast.
+  May also display additional information, for example when an error occured
+  when processing the file (using PodcastPlayButton).
+-->
 <template>
   <div
     v-if="podcast"
@@ -16,10 +21,9 @@
         height="270"
         aria-hidden="true"
         alt=""
-        
         class="img-box img-box-podcast"
         :title="t('Episode name image', { name: podcast.title })"
-      />
+      >
     </router-link>
     <div
       v-if="state.generalParameters.podcastmaker"
@@ -43,6 +47,7 @@
       :podcast="podcast"
       :hide-play="hidePlay"
       :fetch-conference="fetchConference"
+      :in-list="inList"
     />
     <button
       v-if="displayDescription && isMobile"
@@ -73,6 +78,8 @@ const props = defineProps({
   arrowDirection: { default: "up", type: String },
   isAnimatorLive: { default: false, type: Boolean },
   fetchConference: { default: undefined, type: Object as () => Conference },
+  /** Indicates that the podcast is displayed in a list */
+  inList: { default: false, type: Boolean }
 })
 
 //Emits
@@ -104,23 +111,37 @@ const isRecordedInLive = computed(() => {
   );
 });
 const statusText = computed(() => {
-  if (!props.fetchConference) return "";
+  if (!props.fetchConference) {
+    return "";
+  }
+
   switch (props.fetchConference.status) {
     case "PLANNED":
       return t("live in few time");
+
     case "PENDING":
-      if (props.isAnimatorLive) return t("Open studio");
-      return t("live upcoming");
+      if (props.isAnimatorLive) {
+        return t("Open studio");
+      } else {
+        return t("live upcoming");
+      }
+
     case "RECORDING":
       return t("In live");
+
     case "DEBRIEFING":
-      if ("READY_TO_RECORD" === props.podcast.processingStatus)
+      if ("READY_TO_RECORD" === props.podcast.processingStatus) {
         return t("Not recording");
-      return t("Debriefing");
+      } else {
+        return t("Debriefing");
+      }
+
     case "ERROR":
       return t("In error");
+
     case "PUBLISHING":
       return t("Publishing");
+
     default:
       return "";
   }

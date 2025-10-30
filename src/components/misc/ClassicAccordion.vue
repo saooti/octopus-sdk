@@ -21,7 +21,7 @@
           :src="imageUrl"
           aria-hidden="true"
           alt=""
-        />
+        >
         <span>{{ title }}</span>
         <slot name="afterTitle"/>
         <ChevronDownIcon class="ms-auto" :class="{ 'arrow-transform': isOpen }" />
@@ -58,7 +58,7 @@ const emit = defineEmits(["open"]);
 const isOpen = ref(false);
 
 //Watch
-watch(isOpen, () => emit("open"));
+watch(isOpen, () => emit("open", isOpen.value));
 
 onMounted(()=>{
   isOpen.value = props.initOpen;

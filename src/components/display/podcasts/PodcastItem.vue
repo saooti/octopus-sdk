@@ -10,6 +10,7 @@
       :display-description="0 !== description.length"
       :arrow-direction="arrowDirection"
       :fetch-conference="fetchConference"
+      :in-list="inList"
       @hide-description="hideDescription"
       @show-description="showDescription"
     />
@@ -50,7 +51,9 @@ import { Conference } from "@/stores/class/conference/conference";
 const props = defineProps({
   podcast: { default: () => ({}), type: Object as () => Podcast },
   fetchConference: { default: undefined, type: Object as () => Conference },
-})
+  /** Indicates that the podcast is displayed in a list */
+  inList: { default: false, type: Boolean }
+});
 
 //Data 
 const isMobile = ref(false);

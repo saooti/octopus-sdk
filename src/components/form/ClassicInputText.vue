@@ -4,15 +4,21 @@
     :class="{ 'form-margin': displayLabel }"
   >
     <div class="d-flex align-items-center">
-      <slot name="complementLabel"/>
+      <slot name="complementLabel" />
       <component
         :is="isWysiwyg? 'div': 'label'"
         :class="[classLabel, displayLabel ? '' : 'd-none']"
         :for="isWysiwyg ? '': computedInputId"
-        >{{ label }}
-        <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
+      >
+        {{ label }}
+        <AsteriskIcon
+          v-if="displayRequired"
+          :size="10"
+          class="ms-1 mb-2"
+          :title="t('Mandatory input')"
+        />
       </component>
-      <slot name="afterTitle"/>
+      <slot name="afterTitle" />
       <template v-if="popover">
         <button
           :id="'popover' + computedInputId"
@@ -32,9 +38,9 @@
           <!-- eslint-enable -->
         </ClassicPopover>
       </template>
-      <slot name="afterHelp"/>
+      <slot name="afterHelp" />
     </div>
-    <slot name="betweenTitleInput"/>
+    <slot name="betweenTitleInput" />
     <input
       v-if="!isWysiwyg && !isTextarea"
       v-show="showField"
@@ -55,7 +61,7 @@
       :disabled="isDisable"
       :required="!canBeNull"
       :autocomplete="autocompleteType"
-    />
+    >
     <textarea
       v-else-if="isTextarea"
       v-show="showField"
@@ -89,10 +95,16 @@
         :is-top-position="true"
         @emoji-selected="addEmojiSelected"
       />
-      <div v-if="isWysiwyg" class="h6">
+      <div
+        v-if="isWysiwyg"
+        class="h6"
+      >
         {{ t("Characters number calculated over HTML code") }}
       </div>
-      <div v-else-if="'' !== indicText" class="text-indic">
+      <div
+        v-else-if="'' !== indicText"
+        class="text-indic"
+      >
         {{ indicText }}
       </div>
       <div
