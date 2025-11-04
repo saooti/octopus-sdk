@@ -16,9 +16,9 @@
     <!-- Tooltip -->
     <ClassicPopover
       :target="computedId"
-      popover-class="popover-z-index"
+      popover-class="help-popover"
     >
-      <div class="reset">
+      <div class="content">
         <slot />
       </div>
     </ClassicPopover>
@@ -38,7 +38,13 @@ const computedId = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.reset {
+.content {
   font: revert;
+  font-size: 18px !important;
+  text-align: start;
+}
+
+.help-popover {
+  background-color: var(--octopus-secondary);
 }
 </style>

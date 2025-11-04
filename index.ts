@@ -39,6 +39,7 @@ export const getClassicLazy = () => import("./src/components/misc/ClassicLazy.vu
 export const getContractPreviewModal = () => import("./src/components/misc/modal/ContractPreviewModal.vue");
 export const getClassicModalInBody = () => import("./src/components/misc/modal/ClassicModalInBody.vue");
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
+export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
 
 
 //Display
@@ -152,6 +153,9 @@ export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 // Routing
 import { setupRouter } from './src/router/utils';
 
+// Types
+import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
+
 export {
     useResizePhone,
     useTagOf,
@@ -183,5 +187,6 @@ export {
     deepEqual,
     downloadHelper,
     displayHelper,
-    setupRouter
+    setupRouter,
+    SelectOption,
 };

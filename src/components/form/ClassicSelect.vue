@@ -1,9 +1,11 @@
 <template>
   <div class="classic-select" :class="{ 'form-margin': displayLabel }">
-    <label v-show="displayLabel" :for="idSelect" :class="classLabel">{{
-      label
-    }}
-    <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/></label>
+    <label v-show="displayLabel" :for="idSelect" :class="classLabel">
+      {{ label }}
+      <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
+      <slot name="after-label" />
+    </label>
+
     <select
       :id="idSelect"
       :value="textInit"
@@ -28,37 +30,36 @@
     </select>
   </div>
 </template>
+
 <script setup lang="ts">
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
+export interface SelectOption<T = number|string|undefined> {
+  title: string;
+  value: T;
+  fontFamily?: string;
+}
+
 //Props 
 const props = defineProps({
   idSelect: { default: "", type: String },
-    label: { default: "", type: String },
-    displayLabel: { default: true, type: Boolean },
-    transparent: { default: false, type: Boolean },
-    isDisabled: { default: false, type: Boolean },
-    options: {
-      default: () => [],
-      type: Array as () => Array<{
-        title: string;
-        value: number | string | undefined;
-        fontFamily?: string;
-      }>,
-    },
-    topOption: { default: undefined,type: Object as () => {
-      title: string;
-      value: number | string | undefined;
-      fontFamily?: string;
-    },
-    },
-    textInit: { default: undefined, type: [String, Number] },
-    classLabel: { default: "form-label", type: String },
-    orderOptions: { default: true, type: Boolean},
-    placeholder: { default: undefined, type: String},
-    displayRequired: { default: false, type: Boolean },
+  label: { default: "", type: String },
+  displayLabel: { default: true, type: Boolean },
+  transparent: { default: false, type: Boolean },
+  isDisabled: { default: false, type: Boolean },
+  options: {
+    default: () => [],
+    type: Array as () => Array<SelectOption>,
+  },
+  topOption: { default: undefined,type: Object as () => SelectOption,
+  },
+  textInit: { default: undefined, type: [String, Number] },
+  classLabel: { default: "form-label", type: String },
+  orderOptions: { default: true, type: Boolean},
+  placeholder: { default: undefined, type: String},
+  displayRequired: { default: false, type: Boolean },
 })
 
 
@@ -100,9 +101,8 @@ function onChange(value:string){
   emit('update:textInit', value)
 }
 </script>
+
 <style lang="scss">
-
-
 .octopus-app {
   select option:is(:checked, :hover){
     box-shadow: 0 0 10px 100px var(--octopus-secondary) inset;
