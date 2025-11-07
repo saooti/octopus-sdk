@@ -12,7 +12,6 @@
       isFixed && isTopLayerPopover ? 'position-fixed':'position-absolute',
       popoverClass]"
     :style="positionInlineStyle"
-    @focusout="clearDataBlur"
     @mouseenter="overPopover = true"
     @mouseleave="
       overPopover = false;
@@ -139,8 +138,8 @@ function removeListeners() {
     targetElement.value.removeEventListener("focusout", clearDataBlur);
   }
 }
-function handleClickEvent(){
-  if (show.value && isClick.value) {
+function handleClickEvent(e: MouseEvent | PointerEvent){
+  if (show.value && isClick.value && e.target !== popoverRef.value && !popoverRef.value?.contains(e.target)) {
     isClick.value = false;
     clearData();
     return -1;
@@ -180,7 +179,7 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
   if (props.disable || !e || !e.target) {
     return;
   }
-  if ("click" === e.type && -1 === handleClickEvent()) {
+  if ("click" === e.type && -1 === handleClickEvent(e)) {
     return;
   }
   show.value = true;
@@ -235,6 +234,7 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
     maxHeight.value = '80dvh';
   }
 }
+
 function clearDataBlur(e: FocusEvent) {
   if (isTabAction.value) {
     isTabAction.value = false;
@@ -245,14 +245,18 @@ function clearDataBlur(e: FocusEvent) {
   if (-1!==result) {
     return;
   }
+
+  const parent = popoverRef?.value as HTMLElement;
   if (!e.relatedTarget) {
+    if (parent !== null && parent.contains(e.target)) {
+      return;
+    }
     return clearClick();
   }
   const myElement = e.relatedTarget as HTMLElement;
   if (popoverId.value === myElement.id) {
     return;
   }
-  const parent =popoverRef?.value as HTMLElement;
   if (null === parent || !parent.contains(myElement)) {
     return clearClick();
   }
@@ -301,9 +305,8 @@ defineExpose({
   clearClick
 });
 </script>
+
 <style lang="scss">
-
-
 .octopus-popover {
   background: var(--octopus-background);
   border-radius: var(--octopus-border-radius);

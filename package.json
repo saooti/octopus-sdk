@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.0.16",
+  "version": "41.0.17",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -65,6 +65,7 @@
   },
   "devDependencies": {
     "@types/sockjs-client": "^1.5.4",
+    "@types/webpack-env": "^1.18.8",
     "@vitejs/plugin-vue": "^5.2.4",
     "eslint": "^9.28.0",
     "eslint-plugin-vue": "^9.33.0",
