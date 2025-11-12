@@ -416,4 +416,6 @@ export default {
   "Copied!":"¡Copiado!",
   "Color of the QR Code": "Color del código QR",
   "Silent stream":"Flujo silencioso",
+  "Emission - Not available for listeners": "Transmisión no visible para los oyentes",
+  "Emission - Not available explanation": "Este programa no es visible para los oyentes porque ha sido configurado para que sus episodios no se publiquen. Esta configuración está disponible en la configuración avanzada del programa.",
 }

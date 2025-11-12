@@ -418,4 +418,6 @@ export default {
   "Copied!":"Copied!",
   "Color of the QR Code": "Color of the QR Code",
   "Silent stream":"Silent stream",
+  "Emission - Not available for listeners": "Broadcast not visible to listeners",
+  "Emission - Not available explanation": "This show is not visible to listeners because it has been configured so that its episodes are not published. This configuration is available in the advanced settings of the show.",
 };

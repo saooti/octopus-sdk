@@ -415,4 +415,6 @@ export default {
   "Copied!":"Kopiert!",
   "Color of the QR Code": "Farbe des QR-Codes",
   "Silent stream":"Stiller Fluss",
+  "Emission - Not available for listeners": "Sendung für Hörer nicht sichtbar",
+  "Emission - Not available explanation": "Diese Sendung ist für Hörer nicht sichtbar, da sie so konfiguriert wurde, dass ihre Episoden nicht veröffentlicht werden. Diese Konfiguration ist in den erweiterten Einstellungen der Show verfügbar.",
 }

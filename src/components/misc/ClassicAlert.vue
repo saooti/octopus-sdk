@@ -20,7 +20,7 @@
         />
 
         <!-- Main content -->
-        <span class="ms-2">
+        <span class="ms-2 content">
             <strong v-if="title">
                 {{ title }}
                 <br>
@@ -62,6 +62,8 @@ const iconComponent = computed(() => {
         return Alert;
     } else if (type === 'error') {
         return CloseCircle;
+    } else {
+        return null;
     }
 });
 </script>
@@ -74,6 +76,12 @@ const iconComponent = computed(() => {
 
     .icon {
         align-items: start !important;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
     }
 
     $types: (

@@ -16,7 +16,11 @@
         aria-hidden="true"
         alt=""
         :title="t('Emission name image', { name: emission.name })"
-      />
+      >
+      <ClassicImageBanner v-if="!emissionVisible">
+        {{ t('Emission - Not available for listeners') }}
+      </ClassicImageBanner>
+
       <div class="classic-element-text">
         <div class="d-flex align-items-center element-name basic-line-clamp">
           <AlertIcon
@@ -63,12 +67,15 @@ import displayHelper from "../../../helper/displayHelper";
 import { computed, onBeforeMount, onMounted, ref, useTemplateRef } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
+
+import ClassicImageBanner from '../../misc/ClassicImageBanner.vue';
+
 import { useI18n } from "vue-i18n";
 
 //Props 
 const props = defineProps({
   emission: { default: () => ({}), type: Object as () => Emission },
-})
+});
 
 //Data 
 const activeEmission = ref(true);
@@ -80,12 +87,16 @@ const { isPodcastmaker, isEditRights } = useOrgaComputed();
 
 //Computed
 const editRight = computed(() => isEditRights(props.emission.orga.id));
-
+const emissionVisible = computed(() => {
+  return props.emission.visible !== false;
+});
 
 onBeforeMount(()=>{
-  if (!editRight.value) return;
+  if (!editRight.value) {
+    return;
+  }
   hasPodcast();
-})
+});
 
 onMounted(()=>{
   const emissionDesc = useTemplateRef('descriptionEmission')?.value as HTMLElement;

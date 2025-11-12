@@ -407,4 +407,6 @@ export default {
   "Copied!":"Kopirano!",
   "Color of the QR Code": "Barva kode QR",
   "Silent stream":"Tihi tok",
+  "Emission - Not available for listeners": "Oddaja ni vidna poslušalcem",
+  "Emission - Not available explanation": "Ta oddaja ni vidna poslušalcem, ker je bila konfigurirana tako, da njene epizode niso objavljene. Ta konfiguracija je na voljo v naprednih nastavitvah oddaje.",
 }

@@ -3,11 +3,12 @@
     <div class="d-flex align-items-center bg-warning p-2 rounded my-1">
       <AlertIcon :title="t('Warning')" class="me-1 text-danger" :size="16" />
       <div class="text-danger">
-        {{ message }}
+        <slot>{{ message }}</slot>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import { useI18n } from "vue-i18n";
@@ -20,3 +21,4 @@ defineProps({
 //Composables
 const { t } = useI18n();
 </script>
+

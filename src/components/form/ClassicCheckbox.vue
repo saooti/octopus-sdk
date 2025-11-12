@@ -1,3 +1,10 @@
+<!--
+  Simple component to display a checkbox
+  Use `v-model:text-init` to bind the value.
+
+  **Slots:**
+    `after-label` : A slot to display additional elements after the label
+-->
 <template>
   <div class="d-flex flex-nowrap align-items-center octopus-form-item">
     <div :class="isSwitch ? 'octopus-form-switch me-2' : ''">
@@ -27,6 +34,8 @@
       @click="clickSlider"
     >
       {{ label }}
+
+      <slot name="after-label" />
     </label>
   </div>
 </template>

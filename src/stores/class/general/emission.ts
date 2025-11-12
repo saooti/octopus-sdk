@@ -6,6 +6,7 @@ import { ItuneCategory } from "./ituneCategory";
 export interface Emission {
   imageUrl?: string;
   annotations?: { [key: string]: string | number | boolean | undefined };
+  beneficiaries: string[];
   description: string;
   emissionId: number;
   iabIds?: Array<number>;
@@ -26,6 +27,11 @@ export interface Emission {
   };
   createdByUserId?: string;
   privateRssType?:string;
+  /**
+   * Indicates that this emission and its episode are visible.
+   * *Default: true*
+   */
+  visible?: boolean;
 }
 
 export function emptyEmissionData(): Emission {

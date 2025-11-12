@@ -17,6 +17,7 @@
         <ClassicPopover
             :target="computedId"
             popover-class="help-popover"
+            :relative-class="relative ? 'page-element' : ''"
         >
             <div class="content">
                 <slot />
@@ -33,6 +34,8 @@ import ClassicPopover from './ClassicPopover.vue';
 
 const { colored, small } = defineProps<{
     colored?: boolean;
+    /** Make the popover relative (userful when in page-element) */
+    relative?: boolean;
     /** Make the icon smaller if true *(default: false)* */
     small?: boolean;
 }>();

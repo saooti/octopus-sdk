@@ -25,7 +25,8 @@
               alt=""
               :title="t('Emission name image', { name: name })"
               class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
-            />
+            >
+
             <div class="d-flex align-items-center justify-content-between">
               <h2>{{ name }}</h2>
               <ShareAnonymous v-if="!editRight" class="d-flex justify-content-end flex-grow-1" :emission="emission" :organisation-id="emission.orga.id"/>
@@ -36,6 +37,17 @@
               v-html="urlify(description)"
             />
             <!-- eslint-enable -->
+
+            <ErrorMessage v-if="emission.visible === false">
+              <div class="d-flex" style="align-items: center">
+                <div>{{ t('Emission - Not available for listeners') }}</div>
+
+                <ClassicHelpButton relative small>
+                  {{ t('Emission - Not available explanation') }}
+                </ClassicHelpButton>
+              </div>
+            </ErrorMessage>
+
             <div v-if="lastPodcast" class="d-flex align-items-center mt-3">
               <PodcastPlayButton
                 :podcast="lastPodcast"
@@ -116,6 +128,10 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useSimplePageParam } from "../composable/route/useSimplePageParam";
+
+import ErrorMessage from "../misc/ErrorMessage.vue";
+import ClassicHelpButton from "../misc/ClassicHelpButton.vue";
+
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),

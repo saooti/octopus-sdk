@@ -190,8 +190,16 @@ async function fetchContent(reset: boolean): Promise<void> {
       : undefined,
     rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
     rubriquageId: props.rubriquageId.length ? props.rubriquageId : undefined,
-    includeHidden: props.includeHidden,
+    includeHidden: props.includeHidden
   };
+
+  // When fetching hidden episodes, also fetch hidden emissions
+  if (props.includeHidden === true) {
+    param.visible = 'ALL';
+  } else {
+    param.visible = 'VISIBLE';
+  }
+
   try {
     const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
       api: 0,
