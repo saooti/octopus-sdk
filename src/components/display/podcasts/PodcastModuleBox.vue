@@ -260,13 +260,19 @@ const podcastNotValid = computed(() => {
     false === props.podcast?.valid
   );
 });
-const photoCredit = computed(() => (props.podcast?.annotations?.photoCredit as string) ?? "");
-const audioCredit = computed(() => (props.podcast?.annotations?.audioCredit as string) ?? "");
-const authorCredit = computed(() => (props.podcast?.annotations?.authorCredit as string) ?? "");
+const photoCredit = computed(() => formatCredits(props.podcast?.annotations?.photoCredit as string|undefined));
+const audioCredit = computed(() => formatCredits(props.podcast?.annotations?.audioCredit as string|undefined));
+const authorCredit = computed(() => formatCredits(props.podcast?.annotations?.authorCredit as string|undefined));
 const isEditBox = computed(() => !((state.generalParameters.podcastmaker as boolean) ?? false));
 
 
 //Methods
+function formatCredits(credits: string|undefined): string {
+  if (credits === undefined) {
+    return '';
+  }
+  return credits.split(',').map(s => s.trim()).join(', ');
+}
 function urlify(text:string|undefined){
   return displayHelper.urlify(text);
 }

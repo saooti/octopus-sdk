@@ -7,6 +7,10 @@
 - Ajout recherche par référence ayant-droit sur les émissions et épisodes
 - Ajout du composant `ClassicTagInput` pour simplifier la saisie de tags
 
+**Misc**
+
+- Amélioration affichage des crédits dans les épisodes
+
 ## 41.0.18 (12/11/2025)
 
 **Features**
