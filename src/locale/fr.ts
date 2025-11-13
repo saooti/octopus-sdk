@@ -426,5 +426,6 @@ export default {
   "Color of the QR Code": "Couleur du Qr Code",
   "Silent stream":"Flux silencieux",
   "Emission - Not available for listeners": "Émission non visible pour les auditeurs",
-  "Emission - Not available explanation": "Cette émission n'est pas visible pour les auditeurs car elle a été configurée pour que ses épisodes ne soient pas publiés. Cette configuration est disponible dans les paramètres avancés de l'émission."
+  "Emission - Not available explanation": "Cette émission n'est pas visible pour les auditeurs car elle a été configurée pour que ses épisodes ne soient pas publiés. Cette configuration est disponible dans les paramètres avancés de l'émission.",
+  "Filters - Beneficiaries": "Par références ayants-droit"
 };

@@ -418,4 +418,5 @@ export default {
   "Silent stream":"Flujo silencioso",
   "Emission - Not available for listeners": "Transmisión no visible para los oyentes",
   "Emission - Not available explanation": "Este programa no es visible para los oyentes porque ha sido configurado para que sus episodios no se publiquen. Esta configuración está disponible en la configuración avanzada del programa.",
+  "Filters - Beneficiaries": "Por referencias de titulares de derechos",
 }

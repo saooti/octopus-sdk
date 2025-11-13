@@ -41,12 +41,12 @@
                     />
 
                     <!-- Rights holders/beneficiaries -->
-                    <div class="mt-3 d-flex">
+                    <div v-if="beneficiariesEnabled" class="mt-3 d-flex">
                         <ClassicCheckbox
                             :text-init="beneficiaries !== null && beneficiaries !== undefined"
                             class="flex-shrink-0"
                             id-checkbox="search-beneficiaries-checkbox"
-                            :label="'[WIP] Ayants droits'"
+                            :label="t('Filters - Beneficiaries')"
                             @update:text-init="updateBeneficiariesCheckbox"
                         />
 
@@ -205,7 +205,10 @@ const isSelectValidity = computed(() => {
         props.includeHidden
     );
 });
-
+/** The beneficiaries filter is only displayed if beneficiaries are enabled */
+const beneficiariesEnabled = computed(() => {
+    return authStore.authOrganisation.attributes['beneficiaries.enabled'] === 'true';
+});
 
 //Watch
 watch(organisation, async () => {

@@ -98,6 +98,7 @@ export const getClassicEmojiPicker = () => import("./src/components/form/Classic
 export const getClassicContentEditable = () => import("./src/components/form/ClassicContentEditable.vue");
 export const getSwiperList = () => import("./src/components/display/list/SwiperList.vue");
 export const getClassicCopyButton = () => import("./src/components/form/ClassicCopyButton.vue");
+export const getClassicTagInput = () => import("./src/components/form/ClassicTagInput.vue");
 
 
 //Composable

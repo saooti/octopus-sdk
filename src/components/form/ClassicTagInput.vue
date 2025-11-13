@@ -1,11 +1,11 @@
 <template>
     <div
-        class="d-flex flex-wrap border align-items-center rounded p-2"
+        class="d-flex flex-wrap border align-items-center rounded px-2"
     >
         <div
             v-for="(tag, index) in tags"
             :key="tag"
-            class="vs__selected m-1"
+            class="vs__selected p-0 my-0 mx-1"
             :class="getClass(tag)"
         >
             <!--<button
@@ -45,8 +45,8 @@
             :id="'form-input-tag'"
             v-model="tagToEditTempValue"
             :title="$t('Edit')"
-            @blur="finishEditTag(index)"
-            @keydown.enter="finishEditTag(index)"
+            @blur="finishEditTag"
+            @keydown.enter="finishEditTag"
         >
         <button
             class="btn btn-add-tag m-1"
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref } from 'vue';
 
 import CloseIcon from "vue-material-design-icons/Close.vue";
 
