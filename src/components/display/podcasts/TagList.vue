@@ -12,7 +12,7 @@
       class="d-flex align-items-center border p-1 m-1 text-dark"
       :to="{
         name: 'tag',
-        params: { tag: tag},
+        params: { tag },
         query: organisationQuery
       }"
     >
@@ -82,7 +82,7 @@ const organisationQuery = computed(() => {
   if(filterStore.filterOrgaId){
     return undefined;
   }
-  return { o: props.orgaId};
+  return { o: props.orgaId };
 });
 /* const ouestFranceMainTag = computed(() => {
   if (props.podcastAnnotations?.["mainOfTag"]) {

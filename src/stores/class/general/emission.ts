@@ -32,6 +32,8 @@ export interface Emission {
    * *Default: true*
    */
   visible?: boolean;
+  /** An optional list of tags */
+  tags?: string[];
 }
 
 export function emptyEmissionData(): Emission {

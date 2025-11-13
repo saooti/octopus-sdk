@@ -6,6 +6,7 @@
 
 - Ajout recherche par référence ayant-droit sur les émissions et épisodes
 - Ajout du composant `ClassicTagInput` pour simplifier la saisie de tags
+- Affichage des mots-clés lors de la consultation d'une émission
 
 **Misc**
 

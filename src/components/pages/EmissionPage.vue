@@ -57,6 +57,15 @@
                 {{ t("Listen to the latest episode") }}
               </div>
             </div>
+
+            <!-- Tag list -->
+            <TagList
+              v-if="undefined !== emission.tags && 0 !== emission.tags.length"
+              :tag-list="emission.tags"
+              :orga-id="authOrgaId"
+              :emission-annotations="emission.annotations"
+            />
+
             <SubscribeButtons
               v-if="isPodcastmaker"
               class="mt-4"
@@ -160,6 +169,7 @@ const PodcastPlayButton = defineAsyncComponent(
 const PodcastmakerHeader = defineAsyncComponent(
   () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
+const TagList = defineAsyncComponent(() => import("../display/podcasts/TagList.vue"));
 
 
 //Props 

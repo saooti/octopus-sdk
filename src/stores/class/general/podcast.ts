@@ -37,7 +37,9 @@ export interface Podcast {
   rssEpisode?:string;
   score?: number;
   size?: number;
+  /** An optional list of tags */
   tags?: Array<string>;
+  /** An optional list of tags for OuestFrance */
   ofTags?: Array<string>;
   title: string;
   weekDownloadCount?: number;

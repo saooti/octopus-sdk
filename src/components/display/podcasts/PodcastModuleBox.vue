@@ -129,8 +129,8 @@
       </div>
     </div>
     <TagList
-      v-if="undefined !== podcast.tags && 0 !== podcast.tags.length"
-      :tag-list="podcast.tags"
+      v-if="undefined !== tags && 0 !== tags.length"
+      :tag-list="tags"
       :orga-id="podcast.organisation.id"
       :podcast-annotations="podcast.annotations"
     />
@@ -264,7 +264,18 @@ const photoCredit = computed(() => formatCredits(props.podcast?.annotations?.pho
 const audioCredit = computed(() => formatCredits(props.podcast?.annotations?.audioCredit as string|undefined));
 const authorCredit = computed(() => formatCredits(props.podcast?.annotations?.authorCredit as string|undefined));
 const isEditBox = computed(() => !((state.generalParameters.podcastmaker as boolean) ?? false));
-
+/** The tags to display */
+const tags = computed(() => {
+  const tags = [];
+  if(props.podcast.tags) {
+    tags.push(...props.podcast.tags);
+  }
+  // Also display tags defined on emission
+  if(props.podcast.emission.tags) {
+    tags.push(...props.podcast.emission.tags);
+  }
+  return tags;
+});
 
 //Methods
 function formatCredits(credits: string|undefined): string {
