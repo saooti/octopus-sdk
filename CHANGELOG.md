@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## En cours 41.0.19 (XX/11/2025)
+## 41.0.19 (13/11/2025)
 
 **Features**
 
