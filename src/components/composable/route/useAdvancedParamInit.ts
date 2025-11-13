@@ -7,7 +7,9 @@ import { useRubriquesFilterParam } from './useRubriquesFilterParam';
 import { computed, nextTick, onMounted, Ref, ref, watch } from "vue";
 import dayjs from "dayjs";
 
-export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
+import { RouteProps } from "./types";
+
+export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => {
 
   const { searchPattern,organisationId, searchMinSize, paginateFirst, initSearchPattern, initOrga} = useSimplePageParam(props, false, true);
   const { isEditRights, isPodcastmaker } = useOrgaComputed();
@@ -26,6 +28,7 @@ export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
   const validity = ref("true"); 
   const iabId: Ref<number|undefined> = ref(undefined);
   const rubriqueFilter: Ref<Array<RubriquageFilter>> = ref([]);
+  const beneficiaries = ref<string[]|null>(null);
 
 
   const organisationRight = computed(() => isEditRights(organisationId.value));
@@ -60,6 +63,7 @@ export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
   watch(() => props.routeIab, () => {iabId.value = props.routeIab;});
   watch(() => props.routeOrga, () => initOrga());
   watch(() => props.routeRubriques, () => initRubriquageFilter());
+  watch(() => props.routeBeneficiaries, initBeneficiariesFilter);
   watch(organisationId, () => {
     if (!isInit.value) {
       return;
@@ -146,7 +150,27 @@ export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
     rubriqueFilter.value = rubriqueFilterToUpdate;
   }
 
-	return {
+  function initBeneficiariesFilter() {
+    const data = props.routeBeneficiaries as string[];
+    // No beneficiaries
+    if (
+      data === undefined ||
+      data === null ||
+      data.length === 0
+    ) {
+      beneficiaries.value = null;
+      return;
+    }
+
+    // No changes
+    if(beneficiaries.value && data === beneficiaries.value){
+      return;
+    }
+
+    beneficiaries.value = data;
+  }
+
+  return {
     organisationId,
     searchPattern,
     monetisable,
@@ -160,6 +184,7 @@ export const useAdvancedParamInit = (props: any, isEmission: boolean)=>{
     paginateFirst,
     validity,
     rubriquesFilterArrayIds,
-    isInit
-	}
+    isInit,
+    beneficiaries
+  };
 }

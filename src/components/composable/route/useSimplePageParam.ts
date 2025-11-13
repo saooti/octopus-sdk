@@ -2,7 +2,9 @@ import { useFilterStore } from '../../../stores/FilterStore';
 import { useRouteUpdateParams } from './useRouteUpdateParams';
 import { computed, onMounted, Ref, ref, watch } from "vue";
 
-export const useSimplePageParam = (props: {readonly [key:string]: string|number}, force=false, advancedSearch=false)=>{
+import { RouteProps, ROUTE_PARAMS } from "./types";
+
+export const useSimplePageParam = (props: RouteProps, force=false, advancedSearch=false)=>{
 
   const { updateRouteParam } = useRouteUpdateParams();
 
@@ -24,7 +26,7 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
     if(!advancedSearch){
       const query = getMinSize(searchPattern.value);
       updateRouteParam({
-        q: query.length ? query : undefined,
+        [ROUTE_PARAMS.Query]: query.length ? query : undefined,
       }, force);
     }
   });
@@ -51,7 +53,7 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
   }
 
 
-	return {
+  return {
     searchPattern,
     organisationId,
     searchMinSize,
@@ -60,5 +62,5 @@ export const useSimplePageParam = (props: {readonly [key:string]: string|number}
     initOrga,
     updateRouteParam,
     isInit
-	}
+  };
 }

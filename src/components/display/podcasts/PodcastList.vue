@@ -95,6 +95,8 @@ const props = defineProps({
   withVideo: { default: undefined, type: Boolean },
   includeTag:{ default: () => [], type: Array as () => Array<string> },
   forceUpdateParameters: { default: false, type: Boolean },
+  /** The beneficiaries to filter on */
+  beneficiaries: { default: null, type: Array as () => Array<string> }
 })
 
 //Emits
@@ -128,7 +130,7 @@ const changed = computed(() => {
   return `${organisation.value}|${props.emissionId}|${props.sortCriteria}|${sort.value}
     ${props.iabId}|${props.participantId}|${props.query}|${props.monetisable}|${props.popularSort}|
     ${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.includeHidden}|${props.noRubriquageId}|${props.validity}|
-    ${props.withVideo}|${props.includeTag}`;
+    ${props.withVideo}|${props.includeTag}|${props.beneficiaries}`;
 });
 const organisation = computed(() => {
   if (props.organisationId) {
@@ -201,6 +203,7 @@ async function fetchContent(reset: boolean): Promise<void> {
     includeStatus: ["READY", "PROCESSING"],
     withVideo: props.withVideo,
     includeTag: props.includeTag.length ? props.includeTag : undefined,
+    beneficiary: props.beneficiaries ?? undefined
   };
   try {
     const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({

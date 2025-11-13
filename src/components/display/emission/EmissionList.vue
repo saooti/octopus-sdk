@@ -93,6 +93,8 @@ const props = defineProps({
   rubriquageId: { default: () => [], type: Array as () => Array<number> },
   noRubriquageId: { default: () => [], type: Array as () => Array<number> },
   nbPodcasts: { default: undefined, type: Number },
+  /** The beneficiaries to filter on */
+  beneficiaries: { default: null, type: Array as () => Array<string> }
 })
 
 //Data 
@@ -125,7 +127,8 @@ const changePaginate = computed(() => `${props.first}|${props.size}`);
 /** Computed property to track for configuration changes */
 const changed = computed(() => {
   return `${props.organisationId}|${props.query}|${props.monetisable}|${props.includeHidden}|\
-  ${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.sort}|${props.noRubriquageId}`;
+  ${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.before}|\
+  ${props.after}|${props.sort}|${props.noRubriquageId}|${props.beneficiaries}`;
 });
 const sortText = computed(() => {
   let textSort = "";
@@ -190,7 +193,8 @@ async function fetchContent(reset: boolean): Promise<void> {
       : undefined,
     rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
     rubriquageId: props.rubriquageId.length ? props.rubriquageId : undefined,
-    includeHidden: props.includeHidden
+    includeHidden: props.includeHidden,
+    beneficiary: props.beneficiaries ?? undefined
   };
 
   // When fetching hidden episodes, also fetch hidden emissions

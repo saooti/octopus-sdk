@@ -1,5 +1,8 @@
 import { useRoute, useRouter } from 'vue-router';
-export const useRouteUpdateParams = ()=>{
+
+import { RouteParams, AdvancedRouteParams } from './types';
+
+export const useRouteUpdateParams = () => {
 
   const router  = useRouter();
   const route  = useRoute();
@@ -12,37 +15,36 @@ export const useRouteUpdateParams = ()=>{
     return ['podcasts', 'emissions'].includes(route.name?.toString()??"");
   }
 
-  function updatePaginateSize(ps:number, force= false){
+  function updatePaginateSize(ps:number, force = false): void{
     if(force ||checkPage()){
       router.push({query: {...route.query, ...{ps:ps, pr:1}}});
     }
   }
 
-  function updateRouteParam(update: {[key:string]: string|undefined}, force= false){
+  function updateRouteParam(update: RouteParams, force = false): void {
     if(force || checkPage()){
       router.push({query: {...route.query, ...update}});
     }
   }
 
-  function updateRouteParamAdvanced(update: {[key:string]: string|undefined}){
+  function updateRouteParamAdvanced(update: AdvancedRouteParams): void {
     if(checkPageAdvanced()){
       router.push({query: {...route.query, ...update}});
     }
   }
 
-  function updateFiltersParam(update: {[key:string]: string|undefined}, advancedUpdate: {[key:string]: string|undefined}){
-    if(checkPageAdvanced()){
-      router.push({query: {...route.query, ...update, ...advancedUpdate}});
-    }else{
-      router.push({query: {...route.query, ...update}});
+  function updateFiltersParam(update: RouteParams, advancedUpdate: AdvancedRouteParams){
+    if(checkPageAdvanced()) {
+      router.push({query: { ...route.query, ...update, ...advancedUpdate }});
+    } else {
+      router.push({query: { ...route.query, ...update }});
     }
   }
 
-
-	return {
+  return {
     updatePaginateSize,
     updateRouteParam,
     updateRouteParamAdvanced,
     updateFiltersParam
-	}
+  }
 }

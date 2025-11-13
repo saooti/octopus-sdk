@@ -212,6 +212,7 @@ defineExpose({
   afterSearch
 });
 </script>
+
 <style lang="scss">
 @use "vue-select/dist/vue-select.css";
 /* stylelint-disable */

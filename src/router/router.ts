@@ -9,6 +9,8 @@ import { AuthStore } from "../stores/AuthStore";
 import fetchHelper from "@/helper/fetchHelper";
 import { setupRouter } from "./utils";
 
+import { ROUTE_PARAMS } from "../components/composable/route/useRouteUpdateParams";
+
 /*--------------------------------------------------------------------------
 Composants publics
 --------------------------------------------------------------------------*/
@@ -96,6 +98,7 @@ const routes: Array<RouteRecordRaw> = [
       routeOnlyVideo:route.query.v ?? "",
       routeOrga:route.query.o,
       routeRubriques :route.query.r ?? route.query.rubriquesId,
+      routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries],
     }),
     meta:{
       title: "Podcasts",
@@ -117,6 +120,7 @@ const routes: Array<RouteRecordRaw> = [
       routeTo: route.query.to,
       routeOrga:route.query.o,
       routeRubriques :route.query.r ?? route.query.rubriquesId,
+      routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries],
     }),
     meta:{
       title: "Emissions",

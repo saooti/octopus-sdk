@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## En cours 41.0.18 (XX/11/2025)
+## En cours 41.0.19 (XX/11/2025)
+
+**Features**
+
+- Ajout recherche par référence ayant-droit sur les émissions et épisodes
+
+## 41.0.18 (12/11/2025)
 
 **Features**
 

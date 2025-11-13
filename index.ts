@@ -156,6 +156,8 @@ import { setupRouter } from './src/router/utils';
 // Types
 import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
 
+import { ROUTE_PARAMS } from "./src/components/composable/route/types";
+
 export {
     useResizePhone,
     useTagOf,
@@ -189,4 +191,5 @@ export {
     displayHelper,
     setupRouter,
     SelectOption,
+    ROUTE_PARAMS
 };
