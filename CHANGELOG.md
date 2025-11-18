@@ -9,6 +9,7 @@
 **Misc**
 
 - Correction d'un warning sur `SwiperList`
+- Mise à jour des dépendances
 
 ## 41.0.19 (13/11/2025)
 
