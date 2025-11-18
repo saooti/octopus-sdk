@@ -151,6 +151,7 @@ const props = defineProps({
   errorText: { default: "", type: String },
   isTextarea: { default: false, type: Boolean },
   isWysiwyg: { default: false, type: Boolean },
+  /** A regex checked against the input, if the input doesn't match mark it with error */
   regex: { default: undefined, type: RegExp },
   canBeNull: { default: false, type: Boolean },
   inputMaxLengthField: { default: undefined, type: Number },

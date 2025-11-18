@@ -65,7 +65,7 @@ const popoverRef = useTemplateRef('popover');
 
 
 //Composables
-const router= useRouter();
+const router = useRouter();
 
 //Computed
 const popoverId = computed(() => "popover" + props.target);

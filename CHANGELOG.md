@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 41.0.20
+
+**Features**
+
+- `durationHelper.convertTimestamptoString` accepte les nanosecondes
+
+**Misc**
+
+- Correction d'un warning sur `SwiperList`
+
 ## 41.0.19 (13/11/2025)
 
 **Features**

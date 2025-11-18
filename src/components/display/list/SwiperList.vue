@@ -5,9 +5,11 @@
         :key="manualReload"
         :slides-per-view="numberItem"
         :space-between="0"
-        :loop="true"
+        :loop="loop"
         :slides-offset-before="offsetSwiper"
         :slides-offset-after="offsetSwiper"
+        :allow-slide-next="loop"
+        :allow-slide-prev="loop"
         :navigation="true"
         :modules="modules"
         @slides-updated="slidesUpdated"
@@ -44,7 +46,6 @@ const props = defineProps({
  
 //Data 
 const manualReload = ref(0);
-const modules = ref([Navigation]);
 const numberItem = ref(5);
 const offsetSwiper = ref(40);
 const widthSwiperUsable = ref(0);
@@ -71,6 +72,18 @@ const sizeItem = computed(() => {
 });
 const itemRecalculizedSize = computed(() => widthSwiperUsable.value / numberItem.value);
 
+/** Indicates that the swiper should loop */
+const loop = computed((): boolean => {
+  return (props.listObject.length > numberItem.value);
+});
+
+const modules = computed(() => {
+  if (loop.value === true) {
+    return [Navigation];
+  } else {
+    return [];
+  }
+});
 
 //Watch
 watch(windowWidth, () => onWindowResize());
