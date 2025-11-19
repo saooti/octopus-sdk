@@ -12,6 +12,7 @@
       isFixed && isTopLayerPopover ? 'position-fixed':'position-absolute',
       popoverClass]"
     :style="positionInlineStyle"
+    @focusout="clearDataBlur"
     @mouseenter="overPopover = true"
     @mouseleave="
       overPopover = false;
@@ -139,7 +140,8 @@ function removeListeners() {
   }
 }
 function handleClickEvent(e: MouseEvent | PointerEvent){
-  if (show.value && isClick.value && e.target !== popoverRef.value && !popoverRef.value?.contains(e.target)) {
+  console.log('click');
+  if (show.value && isClick.value /*&& e.target !== popoverRef.value && !popoverRef.value?.contains(e.target)*/) {
     isClick.value = false;
     clearData();
     return -1;
@@ -175,6 +177,7 @@ function handleRightPos(rectElement: DOMRect, parentLeft: number, sizeAvailable:
   }
 }
 function setPopoverData(e: MouseEvent | PointerEvent) {
+  console.log('SET');
   clearInterval(clearTimeout.value as unknown as number);
   if (props.disable || !e || !e.target) {
     return;
@@ -236,37 +239,50 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
 }
 
 function clearDataBlur(e: FocusEvent) {
+  //alert('clear data blur');
+
+  console.log('clear data blur');
   if (isTabAction.value) {
+    console.log('tab action');
     isTabAction.value = false;
     return;
   }
+
   //Exception timepicker in popover
   const result = Array.from(e?.target?.classList ?? []).findIndex((val) => { return val.startsWith("dp__");});
   if (-1!==result) {
+    console.log('timepicker');
     return;
   }
 
   const parent = popoverRef?.value as HTMLElement;
   if (!e.relatedTarget) {
+    // Probably not useful, since target is the element losing focus
     if (parent !== null && parent.contains(e.target)) {
       return;
     }
+    console.log('not related');
     return clearClick();
   }
   const myElement = e.relatedTarget as HTMLElement;
+  console.log(parent, myElement);
   if (popoverId.value === myElement.id) {
+    console.log('related is popover');
     return;
   }
   if (null === parent || !parent.contains(myElement)) {
+    console.log('no parent');
     return clearClick();
   }
   if (
     null === myElement.classList ||
     !myElement.classList.contains("octopus-dropdown-item")
   ) {
+    console.log('dropdwon');
     return;
   }
   if (!(myElement as HTMLAnchorElement).href) {
+    console.log('not link');
     return clearClick();
   }
   if (myElement.classList.contains("realLink")) {
@@ -295,9 +311,9 @@ function clearData() {
   if (isClick.value) {
     return;
   }
-  show.value = false;
+  /*show.value = false;
   posX.value = 0;
-  posY.value = 0;
+  posY.value = 0;*/
 }
 
 //Expose
@@ -307,6 +323,11 @@ defineExpose({
 </script>
 
 <style lang="scss">
+
+* {
+  //background-color: rgba(0, 255, 0, 0.2) !important;
+}
+
 .octopus-popover {
   background: var(--octopus-background);
   border-radius: var(--octopus-border-radius);
