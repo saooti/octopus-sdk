@@ -50,6 +50,10 @@ export const useAuthStore = defineStore("AuthStore", {
     authVideoConfig: { active: false },
   }),
   getters: {
+    /** Indicates that the user is authenticated */
+    isAuthenticated(): boolean {
+      return this.authParam.accessToken !== undefined;
+    },
     isRoleAdmin(): boolean {
       return this.authRole.includes("ADMIN");
     },

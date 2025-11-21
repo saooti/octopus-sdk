@@ -10,7 +10,6 @@
       :display-description="0 !== description.length"
       :arrow-direction="arrowDirection"
       :fetch-conference="fetchConference"
-      :show-processing="showProcessing"
       @hide-description="hideDescription"
       @show-description="showDescription"
     />
@@ -50,9 +49,7 @@ import { Conference } from "@/stores/class/conference/conference";
 //Props 
 const props = defineProps({
   podcast: { default: () => ({}), type: Object as () => Podcast },
-  fetchConference: { default: undefined, type: Object as () => Conference },
-  /** Indicates that the processing status of the episode may be shown */
-  showProcessing: { default: false, type: Boolean }
+  fetchConference: { default: undefined, type: Object as () => Conference }
 });
 
 //Data 

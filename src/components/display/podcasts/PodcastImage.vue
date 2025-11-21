@@ -47,7 +47,7 @@
       :podcast="podcast"
       :hide-play="hidePlay"
       :fetch-conference="fetchConference"
-      :show-processing="showProcessing"
+      :show-processing="isAuthenticated"
     />
     <button
       v-if="displayDescription && isMobile"
@@ -69,6 +69,7 @@ import { Conference } from "@/stores/class/conference/conference";
 import {useImageProxy} from "../../composable/useImageProxy";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useAuthStore } from "../../../stores/AuthStore";
 
 //Props 
 const props = defineProps({
@@ -77,9 +78,7 @@ const props = defineProps({
   displayDescription: { default: false, type: Boolean },
   arrowDirection: { default: "up", type: String },
   isAnimatorLive: { default: false, type: Boolean },
-  fetchConference: { default: undefined, type: Object as () => Conference },
-  /** Indicates that the processing status of the episode may be shown */
-  showProcessing: { default: false, type: Boolean }
+  fetchConference: { default: undefined, type: Object as () => Conference }
 })
 
 //Emits
@@ -92,6 +91,7 @@ const isMobile = ref(false);
 //Composables
 const { t } = useI18n();
 const { useProxyImageUrl } = useImageProxy();
+const { isAuthenticated } = useAuthStore();
 
 //Computed
 const mainRubrique = computed(() => {
