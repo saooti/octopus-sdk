@@ -47,7 +47,7 @@
       :podcast="podcast"
       :hide-play="hidePlay"
       :fetch-conference="fetchConference"
-      :in-list="inList"
+      :show-processing="showProcessing"
     />
     <button
       v-if="displayDescription && isMobile"
@@ -78,8 +78,8 @@ const props = defineProps({
   arrowDirection: { default: "up", type: String },
   isAnimatorLive: { default: false, type: Boolean },
   fetchConference: { default: undefined, type: Object as () => Conference },
-  /** Indicates that the podcast is displayed in a list */
-  inList: { default: false, type: Boolean }
+  /** Indicates that the processing status of the episode may be shown */
+  showProcessing: { default: false, type: Boolean }
 })
 
 //Emits

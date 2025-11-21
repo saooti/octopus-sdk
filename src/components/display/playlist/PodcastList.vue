@@ -47,7 +47,6 @@
             <PodcastItem
               v-if="0 !== p.podcastId"
               :podcast="p"
-              :in-list="true"
             />
 
             <template #preview>

@@ -35,7 +35,6 @@
           <PodcastItem
             v-if="0 !== p.podcastId"
             :podcast="p"
-            in-list
           />
           <template #preview>
             <router-link

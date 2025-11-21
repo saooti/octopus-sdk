@@ -6,6 +6,10 @@
 
 - `durationHelper.convertTimestamptoString` accepte les nanosecondes
 
+**Fixes**
+
+- Bannière 'en cours de traitement' ne s'affiche que pour la consultation d'épisode
+
 **Misc**
 
 - Correction d'un warning sur `SwiperList`

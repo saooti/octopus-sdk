@@ -25,6 +25,7 @@
             : '',
         ]"
         class="me-3"
+        show-processing
         :hide-play="isLiveReadyToRecord"
         :podcast="podcast"
         :playing-podcast="playingPodcast"

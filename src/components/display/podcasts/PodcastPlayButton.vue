@@ -93,7 +93,6 @@ import DurationHelper from "../../../helper/durationHelper";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
-import { useAuthStore } from "../../../stores/AuthStore";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { computed, defineAsyncComponent, ref } from "vue";
 import dayjs from "dayjs";
@@ -110,8 +109,8 @@ const props = defineProps({
   hidePlay: { default: false, type: Boolean },
   fetchConference: { default: undefined, type: Object as () => Conference },
   justButtons: { default: false, type: Boolean },
-  /** Indicates that the podcast is displayed in a list */
-  inList: { default: false, type: Boolean }
+  /** Indicates that the processing status of the episode may be shown */
+  showProcessing: { default: false, type: Boolean }
 })
 
 
@@ -120,7 +119,6 @@ const hoverType = ref("");
 
 //Composables
 const { t } = useI18n();
-const authStore = useAuthStore();
 const playerStore = usePlayerStore();
 const router = useRouter();
 
@@ -174,7 +172,7 @@ const classicPodcastPlay = computed(() => {
 });
 
 const displayBanner = computed(() => {
-  return !classicPodcastPlay.value || ("PROCESSING" === props.podcast.processingStatus && !props.inList);
+  return !classicPodcastPlay.value || ("PROCESSING" === props.podcast.processingStatus && props.showProcessing);
 });
 
 const iconName = computed(() => {
