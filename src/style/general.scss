@@ -62,26 +62,30 @@ main, #app{
 
   /** Flex style */
   .d-flex-low-importance{
-		display: flex;
-	}
+    display: flex;
+  }
 
   .d-flex-column{
-		display: flex;
-		flex-direction: row;
+    display: flex;
+    flex-direction: row;
 
-		@media (width <= 960px) {
-			flex-direction: column;
-		}
-	}
+    @media (width <= 960px) {
+      flex-direction: column;
+    }
+  }
 
   .d-flex-row{
-		display: flex;
-		flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-		@media (width <= 960px) {
-			flex-flow: row wrap;
-		}
-	}
+    @media (width <= 960px) {
+      flex-flow: row wrap;
+    }
+  }
+
+  .justify-space-between {
+    justify-content: space-between;
+  }
 
 
   @media (width <= 960px) {
