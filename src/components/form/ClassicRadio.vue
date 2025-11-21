@@ -25,23 +25,28 @@
         @input="onChange($event.target.value)"
       >
       <label class="c-hand" :for="idRadio + option.value">
-        <slot :name="'label-' + option.value" :option="option">{{ option.title }}</slot>
+        <slot :name="'label-' + option.value" v-bind="slotBindings(option)">{{ option.title }}</slot>
       </label>
 
-      <slot :name="'after-' + option.value" :option="option" />
+      <slot :name="'after-' + option.value" v-bind="slotBindings(option)" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 
+interface Option {
+  title: string;
+  value: string | undefined
+};
+
 //Props 
-defineProps({
+const { textInit } = defineProps({
   idRadio: { default: "", type: String },
   isDisabled: { default: false, type: Boolean },
   options: {
     default: () => [],
-    type: Array as () => Array<{ title: string; value: string | undefined }>,
+    type: Array as () => Array<Option>,
   },
   textInit: { default: undefined, type: String },
   isColumn: { default: true, type: Boolean },
@@ -53,6 +58,13 @@ const emit = defineEmits(["update:textInit"]);
 //Methods
 function onChange(value:string){
   emit('update:textInit', value)
+}
+
+function slotBindings(option: Option): { option: Option; selected: boolean } {
+  return {
+    option,
+    selected: textInit === option.value
+  }
 }
 
 </script>
