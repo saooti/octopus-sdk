@@ -36,7 +36,7 @@ function formatDuration(
         (hours > 0 ? this.formatToString(hours) + separator : "") +
         this.formatToString(minutes) +
         separator +
-        this.formatToString(seconds) +
+        this.formatToString(seconds.toFixed(2)) +
         (isLast ? separator : "")
     );
 }
