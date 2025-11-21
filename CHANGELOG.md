@@ -12,6 +12,7 @@
 
 **Misc**
 
+- Ajout de slots sur `ClassicRadio`
 - Correction d'un warning sur `SwiperList`
 - Mise à jour des dépendances
 

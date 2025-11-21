@@ -1,3 +1,12 @@
+<!--
+  Simple component to display radio buttons.
+
+  Available slots:
+    `label-{option.value}`: Slot to replace the label of the current option.
+                            Binding: `option`: the current option
+    `after-{option.value}`: Slot after the radio button
+                            Binding: `option`: the current option
+-->
 <template>
   <div role="radiogroup" class="d-flex" :class="isColumn ? 'flex-column' : ''">
     <div
@@ -14,10 +23,12 @@
         :value="option.value"
         :disabled="isDisabled"
         @input="onChange($event.target.value)"
-      />
-      <label class="c-hand" :for="idRadio + option.value">{{
-        option.title
-      }}</label>
+      >
+      <label class="c-hand" :for="idRadio + option.value">
+        <slot :name="'label-' + option.value" :option="option">{{ option.title }}</slot>
+      </label>
+
+      <slot :name="'after-' + option.value" :option="option" />
     </div>
   </div>
 </template>
