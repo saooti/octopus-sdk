@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 41.0.21 (25/11/2025)
+
+**Fixes**
+
+- Correction affichage durée quand il n'y a pas de décimales
+
+**Misc**
+
+- Amélioration affichage bouton PlayPodcast
+
 ## 41.0.20 (21/11/2025)
 
 **Features**

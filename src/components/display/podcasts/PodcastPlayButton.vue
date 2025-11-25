@@ -33,7 +33,7 @@
           <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo" />
           <time
             v-if="!isVideoPodcast"
-            class="ms-1"
+            class="ms-1 me-2"
             :datetime="durationIso"
           >
             {{ durationString }}
@@ -53,7 +53,7 @@
           />
           <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo" />
           <time
-            class="ms-2"
+            class="ms-2 me-2"
             :datetime="durationIso"
           >
             {{ durationString }}

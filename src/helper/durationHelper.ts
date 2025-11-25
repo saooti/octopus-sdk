@@ -32,11 +32,17 @@ function formatDuration(
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
     const seconds = totalSeconds - hours * 3600 - minutes * 60;
+
+    // In case seconds have decimal, round to 3 decimals, otherwise do not use decimals
+    const secondsStr = Math.round(seconds) == seconds ?
+        this.formatToString(seconds) :
+        this.formatToString(seconds.toFixed(3));
+
     return (
         (hours > 0 ? this.formatToString(hours) + separator : "") +
         this.formatToString(minutes) +
         separator +
-        this.formatToString(seconds.toFixed(2)) +
+        secondsStr +
         (isLast ? separator : "")
     );
 }
