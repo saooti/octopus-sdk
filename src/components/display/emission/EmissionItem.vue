@@ -22,7 +22,7 @@
       </ClassicImageBanner>
 
       <div class="classic-element-text">
-        <div class="d-flex align-items-center element-name basic-line-clamp">
+        <div class="d-flex align-items-center element-name">
           <AlertIcon
             v-if="!activeEmission && !isPodcastmaker && editRight"
             :size="16"
@@ -131,3 +131,9 @@ async function hasPodcast(): Promise<void> {
   }
 }
 </script>
+
+<style scoped lang="scss">
+article {
+  max-height: 254px;  // Image size + a few pixels for border
+}
+</style>

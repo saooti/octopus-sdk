@@ -142,8 +142,6 @@ async function loadPodcasts(): Promise<void> {
 </script>
 
 <style lang="scss">
-
-
 .emission-player-container {
   list-style: none;
   background: var(--octopus-background);

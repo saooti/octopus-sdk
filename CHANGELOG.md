@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 41.1.0
+
+**Features**
+
+- Accélération `selectOrganisation`
+- Ajout d'options de personnalisation à `EmissionInlineList`
+- Ajout d'options de personnalisation à `EmissionPresentationItem`
+
+**Fixes**
+
+- Correction taille variable de `EmissionItem`
+
 ## 41.0.21 (25/11/2025)
 
 **Fixes**

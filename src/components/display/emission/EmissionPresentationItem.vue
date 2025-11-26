@@ -1,3 +1,6 @@
+<!--
+  Component to display an emission with its description
+-->
 <template>
   <article
     class="classic-element-container emission-presentation-container mt-3"
@@ -53,11 +56,14 @@ import { nextTick, useTemplateRef, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 //Props 
-const props = defineProps({
-  emission: { default: () => ({}), type: Object as () => Emission },
-  isVertical: { default: false, type: Boolean },
-  isDescription: { default: false, type: Boolean },
-})
+const props = defineProps<{
+  /** The emission to display */
+  emission: Emission;
+  /** When true display the card vertically */
+  isVertical?: boolean;
+  /** When true also display the description */
+  isDescription?: boolean;
+}>();
 
 //Data
 const descriptionEmissionRef = useTemplateRef('descriptionEmission');
@@ -111,6 +117,11 @@ function urlify(text:string|undefined){
       height: 0;
       flex-grow: 1;
       max-height: unset;
+
+      p:first-child {
+        // Prevent unecessary space before first paragraph
+        margin-top: 0 !important;
+      }
     }
   }
 

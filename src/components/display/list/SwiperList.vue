@@ -41,6 +41,7 @@ import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 //Props 
 const props = defineProps({
   listObject: { default: () => [], type: Array as () => Array<unknown> },
+  /** Size, in **rem**, of the emission items */
   sizeItemOverload: { default: undefined, type: Number },
 })
  

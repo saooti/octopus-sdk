@@ -18,8 +18,8 @@ export const useOrganisationFilter= ()=>{
  
   async function  selectOrganisation(organisationId: string): Promise<void> {
     try {
-      const response = await saveFetchStore.getOrgaData(organisationId);
-      const data = await classicApi.fetchData<Array<Rubriquage>>({
+      const getOrgaData = saveFetchStore.getOrgaData(organisationId);
+      const fetchData = classicApi.fetchData<Array<Rubriquage>>({
         api: 0,
         path:"rubriquage/find/" + organisationId,
         parameters:{
@@ -28,7 +28,10 @@ export const useOrganisationFilter= ()=>{
         },
         specialTreatement:true
       });
-      const isLive = await saveFetchStore.getOrgaLiveEnabled(organisationId);
+      const getOrgaLive = saveFetchStore.getOrgaLiveEnabled(organisationId);
+
+      const [response, data, isLive] = await Promise.all([getOrgaData, fetchData, getOrgaLive]);
+      
       filterStore.filterUpdateOrga({
         orgaId: organisationId,
         imgUrl: response.imageUrl,
