@@ -28,6 +28,7 @@
       </template>
     </SwiperList>
     <router-link
+      v-if="href"
       :to="href"
       class="btn btn-primary align-self-center w-fit-content m-4"
     >
@@ -51,6 +52,7 @@ import { AxiosError } from "axios";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";
+import { RouteParams } from "vue-router";
 
 //Props 
 const props = defineProps<{
@@ -62,7 +64,7 @@ const props = defineProps<{
   emissionDisplay?: 'player'|'simple';
   /** When set to true with the 'simple' emissionDisplay, display emissions vertically */
   emissionVertical?: boolean;
-  href?: string;
+  href?: string|RouteParams;
   buttonText?: string;
   /** Number of podcasts shown when using player display */
   nbPodcasts?: number;
