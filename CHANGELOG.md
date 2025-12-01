@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.1 (01/12/2025)
+
+**Fixes**
+
+- Passage de `pinia` en *peerDependency*
+
 ## 41.1.0 (01/12/2025)
 
 **Features**
