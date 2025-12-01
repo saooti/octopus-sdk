@@ -24,7 +24,7 @@
           :title="playingPodcast? t('Pause') : t('Play')"
           @mouseenter="hoverType = 'audio'"
           @mouseleave="hoverType = ''" 
-          @click="play(false)"
+          @click.prevent="play(false)"
         >
           <PlayIcon
             v-if="!playingPodcast || (playingPodcast && playerStore.playerVideo)"
@@ -43,7 +43,7 @@
           v-if="isVideoPodcast"
           :title="t('Video')" 
           :disabled="playerStore.playerVideo"
-          @click="play(true)"
+          @click.prevent="play(true)"
           @mouseenter="hoverType = 'video'"
           @mouseleave="hoverType = ''"
         >

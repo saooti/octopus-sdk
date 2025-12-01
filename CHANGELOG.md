@@ -7,10 +7,19 @@
 - Accélération `selectOrganisation`
 - Ajout d'options de personnalisation à `EmissionInlineList`
 - Ajout d'options de personnalisation à `EmissionPresentationItem`
+- Ajout des composants `PresentationLayout` & `PresentationItem`
+  - `PresentationLayout` permet de simplement disposer quelques éléments
+  - `PresentationItem` permet de simplement afficher une image avec description
+- Ajout de `PodcastPresentationList`, pendant podcast de `EmissionPresentationList`
 
 **Fixes**
 
 - Correction taille variable de `EmissionItem`
+
+**Misc**
+
+- Réécriture de `EmissionPresentationItem` & `EmissionPresentationList` pour
+  utiliser `PresentationItem` & `PresentationLayout`
 
 ## 41.0.21 (25/11/2025)
 

@@ -1,60 +1,24 @@
 <template>
-  <div class="d-flex flex-column p-3">
-    <h2 class="mb-3">{{ title }}</h2>
-    <ClassicLoading
-      :loading-text="loading ? t('Loading emissions ...') : undefined"
-      :error-text="error ? t(`Error`) : undefined"
-    />
-    <template v-if="!loading && !error">
-      <div class="d-flex flex-nowrap align-items-stretch overflow-phone-auto">
-        <EmissionItemPresentation
-          v-if="allEmissions[0]"
-          :class="!isPhone ? 'me-3' : ''"
-          :emission="allEmissions[0]"
-          :is-vertical="!isPhone"
-          :is-description="isDescription"
-        />
-        <div
-          v-if="allEmissions.length > 1"
-          class="emission-column emission-column-margin d-flex-row flex-nowrap"
-          :class="allEmissions.length <= 3 ? 'flex-grow-1' : ''"
-        >
-          <EmissionItemPresentation
-            v-if="allEmissions[1]"
-            :emission="allEmissions[1]"
-            :is-description="isDescription"
-          />
-          <EmissionItemPresentation
-            v-if="allEmissions[2]"
-            :emission="allEmissions[2]"
-            :is-description="isDescription"
-          />
-        </div>
-        <div
-          v-if="allEmissions.length > 3"
-          class="emission-column d-flex-row flex-nowrap show-emission-column"
-        >
-          <EmissionItemPresentation
-            v-if="allEmissions[3]"
-            :emission="allEmissions[3]"
-            :is-description="isDescription"
-          />
-          <EmissionItemPresentation
-            v-if="allEmissions[4]"
-            :emission="allEmissions[4]"
-            :is-description="isDescription"
-          />
-        </div>
-      </div>
-      <router-link
-        v-if="buttonText && href"
-        :to="href"
-        class="btn btn-primary align-self-center w-fit-content m-4"
-      >
-        {{ buttonText }}
-      </router-link>
+  <ClassicLoading
+    :loading-text="loading ? $t('Loading emissions ...') : undefined"
+    :error-text="error ? $t(`Error`) : undefined"
+  />
+  <PresentationLayout
+    v-if="!loading && !error"
+    :title="title"
+    :items="allEmissions"
+    :route="href"
+    :button-text="buttonText"
+  >
+    <template #item="{ item, first }">
+      <EmissionItemPresentation
+        :class="!isPhone && first ? 'me-3' : ''"
+        :emission="item"
+        :is-vertical="!isPhone && first"
+        :is-description="isDescription"
+      />
     </template>
-  </div>
+  </PresentationLayout>
 </template>
 
 <script setup lang="ts">
@@ -66,7 +30,9 @@ import { defineAsyncComponent, onMounted, Ref, ref } from "vue";
 import { AxiosError } from "axios";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
-import { useI18n } from "vue-i18n";
+
+import PresentationLayout from "../../layout/PresentationLayout.vue"; 
+
 const EmissionItemPresentation = defineAsyncComponent(
   () => import("./EmissionPresentationItem.vue"),
 );
@@ -87,7 +53,6 @@ const error = ref(false);
 const allEmissions: Ref<Array<Emission>> = ref([]);
   
 //Composables
-const { t } = useI18n();
 const { isPhone } = useResizePhone();
 const {handle403} = useErrorHandler();
 
@@ -121,47 +86,3 @@ async function fetchNext(): Promise<void> {
   loading.value = false;
 }
 </script>
-<style lang="scss">
-.octopus-app {
-  .overflow-phone-auto {
-    @media (width <= 960px) {
-      overflow-y: auto;
-      scroll-snap-type: x mandatory;
-
-      .classic-element-container{
-        scroll-snap-align: center;
-      }
-    }
-  }
-
-  .emission-column {
-    flex-shrink: 0;
-    width: calc((100% - 420px) / 2);
-
-    @media (width <= 1550px) {
-      width: calc((100% - 420px));
-    }
-
-    @media (width <= 960px) {
-      width: auto;
-      flex-direction: row !important;
-    }
-  }
-
-  .emission-column-margin {
-    margin-right: 1rem;
-
-    @media (width <= 960px) {
-      margin-right: 0;
-    }
-  }
-
-  .show-emission-column {
-    display: flex;
-
-    @media (width <= 1550px) and (width > 960px) {
-      display: none;
-    }
-  }
-}
-</style>
