@@ -18,6 +18,7 @@
         </template>
       </ClassicLazy>
     </template>
+    
     <template v-else>
       <ClassicLazy
         v-for="(r, index) in rubriqueToShow"

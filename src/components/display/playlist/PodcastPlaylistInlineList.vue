@@ -2,7 +2,7 @@
   <PodcastInlineListTemplate
     v-if="loading || (!loading && 0 !== allPodcasts.length)"
     :display-arrow="false"
-    :button-text="t('See more')"
+    :button-text="noMoreButton ? undefined : t('See more')"
     :button-plus="true"
     :title="playlist?.title ?? ''"
     :href="'/main/pub/playlist/' + playlistId"
@@ -42,10 +42,13 @@ import { onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 //Props 
-const props = defineProps({
-  playlistId: { default: undefined, type: Number },
-  sizeItemOverload: { default: undefined, type: Number }
-})
+const props = defineProps<{
+  /** ID of the playlist to display */
+  playlistId: number;
+  sizeItemOverload?: number;
+  /** When set to true, disable display of "see more" button */
+  noMoreButton?: boolean;
+}>();
 
 //Data 
 const loading = ref(true);

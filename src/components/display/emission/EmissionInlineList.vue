@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column p-3 list-episode">
+  <div class="d-flex flex-column list-episode">
     <ClassicLoading
       :loading-text="loading ? t('Loading emissions ...') : undefined"
     />
@@ -9,7 +9,16 @@
       :list-object="allEmissions"
     >
       <template #octopusSlide="{ option }">
+        <EmissionPresentationItem
+          v-if="emissionDisplay === 'simple'"
+          :emission="option"
+          class="mx-2"
+          is-description
+          :is-vertical="emissionVertical"
+        />
+
         <EmissionPlayerItem
+          v-else
           class="flex-shrink-0 item-phone-margin"
           :emission="option"
           :class="[mainRubriquage(option)]"
@@ -19,6 +28,7 @@
       </template>
     </SwiperList>
     <router-link
+      v-if="href"
       :to="href"
       class="btn btn-primary align-self-center w-fit-content m-4"
     >
@@ -30,6 +40,7 @@
 <script setup lang="ts">
 import SwiperList from "../list/SwiperList.vue";
 import classicApi from "../../../api/classicApi";
+import EmissionPresentationItem from "./EmissionPresentationItem.vue";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import {useErrorHandler} from "../../composable/useErrorHandler";
@@ -41,17 +52,31 @@ import { AxiosError } from "axios";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";
+import { RouteParams } from "vue-router";
 
 //Props 
-const props = defineProps({
-  organisationId: { default: undefined, type: String },
-    href: { default: undefined, type: String },
-    buttonText: { default: undefined, type: String },
-    rubriqueId: { default: undefined, type: Number },
-    rubriquageId: { default: undefined, type: Number },
-    nbPodcasts: { default: undefined, type: Number },
-    itemSize: { default: undefined, type: Number },
-})
+const props = defineProps<{
+  /**
+   * Change style of emission item.
+   * Simple is what is seen everywhere, player displays a few podcasts that can
+   * be played directly
+   */
+  emissionDisplay?: 'player'|'simple';
+  /** When set to true with the 'simple' emissionDisplay, display emissions vertically */
+  emissionVertical?: boolean;
+  href?: string|RouteParams;
+  buttonText?: string;
+  /** Number of podcasts shown when using player display */
+  nbPodcasts?: number;
+  /** Size, in **rem**, of the emission items */
+  itemSize?: number;
+  /** Filter on organization */
+  organisationId?: string;
+  /** Filter on rubrique */
+  rubriqueId?: number;
+  /** Filter on rubriquage */
+  rubriquageId?: number;
+}>();
 
 
 //Data 
@@ -106,6 +131,7 @@ async function fetchRubriques(): Promise<void> {
   });
   rubriques.value = data.rubriques;
 }
+
 function rubriquesId(emission: Emission): string | undefined {
   if (
     !displayRubriquage.value ||
@@ -113,8 +139,10 @@ function rubriquesId(emission: Emission): string | undefined {
     0 === emission.rubriqueIds.length ||
     !rubriques.value ||
     !rubriques.value.length
-  )
+  ) {
     return undefined;
+  }
+
   const rubrique = rubriques.value.find(
     (element: Rubrique) =>
       element.rubriqueId &&
@@ -125,6 +153,7 @@ function rubriquesId(emission: Emission): string | undefined {
     return rubrique.name;
   }
 }
+
 function mainRubriquage(emission: Emission): string {
   return state.emissionsPage.mainRubrique &&
     emission.rubriqueIds?.includes(state.emissionsPage.mainRubrique)

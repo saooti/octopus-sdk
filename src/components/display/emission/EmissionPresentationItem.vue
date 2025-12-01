@@ -1,129 +1,34 @@
+<!--
+  Component to display an emission with its description
+-->
 <template>
-  <article
-    class="classic-element-container emission-presentation-container mt-3"
-    :class="isVertical ? 'emission-vertical-item' : ''"
-  >
-    <router-link
-      :to="{
-        name: 'emission',
-        params: { emissionId: emission.emissionId },
-      }"
-      :title="t('Series name page', { name: emission.name })"
-      class="d-flex-column flex-grow-1 text-dark"
-      :class="isVertical ? 'flex-column' : ''"
-    >
-      <img
-        v-lazy="useProxyImageUrl(emission.imageUrl, tailleImage)"
-        :width="tailleImage"
-        :height="tailleImage"
-        :class="isVertical ? 'img-box-bigger' : ''"
-        class="img-box"
-        aria-hidden="true"
-        alt=""
-        
-        :title="t('Emission name image', { name: emission.name })"
-      />
-      <div class="classic-element-text">
-        <div class="element-name mb-2 basic-line-clamp">
-          {{ emission.name }}
-        </div>
-        <div
-          v-if="!isPhone && isDescription"
-          ref="descriptionEmissionContainer"
-          class="element-description htms-wysiwyg-content"
-        >
-          <!-- eslint-disable vue/no-v-html -->
-          <div
-            ref="descriptionEmission"
-            v-html="urlify(emission.description || '')"
-          />
-          <!-- eslint-enable -->
-        </div>
-      </div>
-    </router-link>
-  </article>
+  <PresentationItem
+    :name="emission.name"
+    :route="route"
+    :image-url="emission.imageUrl"
+    :description="isDescription ? emission.description : undefined"
+    :vertical="isVertical"
+  />
 </template>
 
 <script setup lang="ts">
-import {useResizePhone} from "../../composable/useResizePhone";
 import { Emission } from "@/stores/class/general/emission";
-import {useImageProxy} from "../../composable/useImageProxy";
-import displayHelper from "../../../helper/displayHelper";
-import { nextTick, useTemplateRef, watch, computed } from "vue";
-import { useI18n } from "vue-i18n";
+import PresentationItem from "../../layout/PresentationItem.vue";
+import { computed } from "vue";
+import { RouteLocationRaw } from "vue-router";
 
 //Props 
-const props = defineProps({
-  emission: { default: () => ({}), type: Object as () => Emission },
-  isVertical: { default: false, type: Boolean },
-  isDescription: { default: false, type: Boolean },
-})
+const props = defineProps<{
+  /** The emission to display */
+  emission: Emission;
+  /** When true display the card vertically */
+  isVertical?: boolean;
+  /** When true also display the description */
+  isDescription?: boolean;
+}>();
 
-//Data
-const descriptionEmissionRef = useTemplateRef('descriptionEmission');
-const descriptionEmissionContainerRef = useTemplateRef('descriptionEmissionContainer');
-
-
-//Composables
-const { t } = useI18n();
-const { isPhone } = useResizePhone();
-const { useProxyImageUrl } = useImageProxy();
-
-// Computed
-// Calcul de la taille de l'image
-const tailleImage = computed(() => {
-  // L'élément fait 400 de large à la verticale, mais on prend en compte les bordures
-  return props.isVertical ? '396' : '250';
+const route = computed((): RouteLocationRaw => {
+  return 'emissions';//{ name: 'emissions'/*, params: { emissionId: props.emission.emissionId }*/ };
 });
 
-//Watch
-watch(isPhone, async () => {
-  nextTick(() => {
-    if (!props.isDescription || isPhone.value) {
-      return;
-    }
-    const emissionDesc = descriptionEmissionRef?.value as HTMLElement;
-    const emissionDescContainer = descriptionEmissionContainerRef?.value as HTMLElement;
-    if (
-      emissionDesc &&
-      emissionDescContainer &&
-      emissionDesc.clientHeight > emissionDescContainer.clientHeight
-    ) {
-      emissionDescContainer.classList.add("after-element-description");
-    }
-  });
-}, {immediate: true});
-
-//Methods
-function urlify(text:string|undefined){
-  return displayHelper.urlify(text);
-}
 </script>
-<style lang="scss">
-.octopus-app {
-  .emission-presentation-container {
-    @media (width <= 960px) {
-      width: 250px !important;
-      margin-right: 0.5rem;
-    }
-
-    .element-description {
-      height: 0;
-      flex-grow: 1;
-      max-height: unset;
-    }
-  }
-
-  .classic-element-container.emission-vertical-item {
-    flex-grow: 0;
-    width: 400px;
-    flex-shrink: 0;
-  }
-
-  .img-box-bigger {
-    // L'élément fait 400 de large à la verticale, mais on prend en compte les bordures
-    width: 396px;
-    height: 396px;
-  }
-}
-</style>
