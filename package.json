@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.1.0",
+  "version": "41.1.1",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -36,7 +36,6 @@
     "globals": "^16.5.0",
     "hls.js": "^1.6.14",
     "humanize-duration": "^3.33.1",
-    "pinia": "^3.0.4",
     "postcss-html": "^1.8.0",
     "qrcode.vue": "^3.6.0",
     "sass": "^1.94.1",
@@ -88,5 +87,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/saooti/octopus-sdk.git"
+  },
+  "peerDependencies": {
+    "pinia": "^2.3.0"
   }
 }
