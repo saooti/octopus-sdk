@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.2 (03/12/2025)
+
+**Fixes**
+
+- Correction lien de `EmissionPresentationItem`
+
 ## 41.1.1 (01/12/2025)
 
 **Fixes**

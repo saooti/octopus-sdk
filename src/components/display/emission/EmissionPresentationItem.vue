@@ -28,7 +28,7 @@ const props = defineProps<{
 }>();
 
 const route = computed((): RouteLocationRaw => {
-  return 'emissions';//{ name: 'emissions'/*, params: { emissionId: props.emission.emissionId }*/ };
+  return { name: 'emission', params: { emissionId: props.emission.emissionId } };
 });
 
 </script>
