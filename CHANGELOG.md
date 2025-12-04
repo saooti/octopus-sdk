@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.3 (04/12/2025)
+
+**Misc**
+
+- Les épisodes peuvent être écoutés dès qu'ils ne sont plus au statut "Planned"
+
 ## 41.1.2 (03/12/2025)
 
 **Fixes**
