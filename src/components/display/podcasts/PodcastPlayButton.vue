@@ -91,7 +91,7 @@ import CancelIcon from "vue-material-design-icons/Cancel.vue";
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import DurationHelper from "../../../helper/durationHelper";
 import { state } from "../../../stores/ParamSdkStore";
-import { Podcast } from "@/stores/class/general/podcast";
+import { Podcast, ProcessingStatus } from "../../../stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { computed, defineAsyncComponent, ref } from "vue";
@@ -126,7 +126,7 @@ const router = useRouter();
 const isVideoPodcast = computed(() => {
   return (
     (props.fetchConference?.videoProfile?.includes("video_") &&
-      "READY_TO_RECORD" === props.podcast.processingStatus) ||
+      ProcessingStatus.ReadyToRecord === props.podcast.processingStatus) ||
     undefined !== props.podcast.video?.videoId
   );
 });
@@ -148,7 +148,7 @@ const isLiveReadyToRecord = computed(() => {
   return (
     undefined !== props.podcast?.conferenceId &&
     0 !== props.podcast.conferenceId &&
-    "READY_TO_RECORD" === props.podcast.processingStatus
+    ProcessingStatus.ReadyToRecord === props.podcast.processingStatus
   );
 });
 const isLiveValidAndVisible = computed(() => {
@@ -163,16 +163,18 @@ const isLiveValidAndVisible = computed(() => {
 /** Whether the podcast can be played */
 const classicPodcastPlay = computed(() => {
   return (
-    isLiveValidAndVisible.value &&
+    //isLiveValidAndVisible.value &&
     !isLiveToBeRecorded.value &&
-    ("READY_TO_RECORD" === props.podcast.processingStatus ||
-      "READY" === props.podcast.processingStatus ||
-      "PROCESSING" === props.podcast.processingStatus)
+    ProcessingStatus.Planned !== props.podcast.processingStatus
   );
 });
 
 const displayBanner = computed(() => {
-  return !classicPodcastPlay.value || ("PROCESSING" === props.podcast.processingStatus && props.showProcessing);
+  return !(
+    isLiveValidAndVisible.value &&
+    !isLiveToBeRecorded.value &&
+    ProcessingStatus.Planned !== props.podcast.processingStatus
+  ) || (ProcessingStatus.Processing === props.podcast.processingStatus && props.showProcessing);
 });
 
 const iconName = computed(() => {
@@ -180,7 +182,7 @@ const iconName = computed(() => {
     return ClockOutlineIcon;
   }
 
-  if ("READY" === props.podcast.processingStatus || props.fetchConference) {
+  if (ProcessingStatus.Ready === props.podcast.processingStatus || props.fetchConference) {
     if (!props.podcast.valid) {
       return CheckIcon;
     }
@@ -196,15 +198,16 @@ const iconName = computed(() => {
   }
 
   if (
-    "PLANNED" === props.podcast.processingStatus ||
-    "PROCESSING" === props.podcast.processingStatus
+    ProcessingStatus.Planned === props.podcast.processingStatus ||
+    ProcessingStatus.Processing === props.podcast.processingStatus
   ) {
     return TimerSandEmptyIcon;
   }
 
-  if ("CANCELED" === props.podcast.processingStatus) {
+  if (ProcessingStatus.Cancelled === props.podcast.processingStatus) {
     return CancelIcon;
   }
+
   return AlertIcon;
 });
 
@@ -214,7 +217,7 @@ const textVisible = computed(() => {
     return t("Podcast linked to waiting live");
   }
     
-  if ("READY" === props.podcast.processingStatus || props.fetchConference) {
+  if (ProcessingStatus.Ready === props.podcast.processingStatus || props.fetchConference) {
     if (!props.podcast.valid) {
       return t("Podcast to validate");
     }
@@ -227,14 +230,15 @@ const textVisible = computed(() => {
     return t("Podcast no visible");
   }
   if (
-    "PLANNED" === props.podcast.processingStatus ||
-    "PROCESSING" === props.podcast.processingStatus
+    ProcessingStatus.Planned === props.podcast.processingStatus ||
+    ProcessingStatus.Processing === props.podcast.processingStatus
   ){
     return t("Podcast in process");
   }
-  if ("CANCELED" === props.podcast.processingStatus){
+  if (ProcessingStatus.Cancelled === props.podcast.processingStatus){
     return t("Podcast in cancelled status");
   }
+
   return t("Podcast in error");
 });
 
@@ -297,7 +301,8 @@ function play(isVideo: boolean): void {
     // Allow pointer events to go through (allow click on image beneath blur)
     pointer-events: none;
 
-    &.allow-play {
+    // Buttons intercept button events to allow start play
+    &.allow-play button {
       pointer-events: all;
     }
   }
