@@ -4,6 +4,22 @@ import { Participant } from "./participant";
 import { Person } from "../user/person";
 import { Video } from "./video";
 
+/**
+ * State of processing of the audio file
+ */
+export enum ProcessingStatus {
+  Planned = "PLANNED",
+  Processing = "PROCESSING",
+  Ready = "READY",
+  ReadyToRecord = "READY_TO_RECORD",
+  Error = "ERROR",
+  Cancelled = "CANCELED",
+  All = "ALL"
+}
+
+/**
+ * Data about a podcast/episode
+ */
 export interface Podcast {
   imageUrl?: string;
   animators?: Array<Participant>;
@@ -30,7 +46,8 @@ export interface Podcast {
   monetisable?: string;
   organisation: Organisation;
   podcastId: number;
-  processingStatus?: string;
+  /** The status of the processing of the audio file */
+  processingStatus?: ProcessingStatus;
   processorId?: string;
   pubDate?: string;
   publisher?: Person;
