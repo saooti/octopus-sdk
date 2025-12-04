@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.1.3",
+  "version": "41.1.4",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -89,6 +89,6 @@
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
   "peerDependencies": {
-    "pinia": "^2.3.0"
+    "pinia": ">=2.3.0"
   }
 }

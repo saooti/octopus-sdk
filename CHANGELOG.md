@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 41.1.4 (04/12/2025)
+
+**Misc**
+
+- Passage de `pinia` à version `>=2.3.0`
+  - *Podcastmaker* utilise la version `^2.3.0`
+  - *Frontoffice* utilise la version `^3.0.3`
+
 ## 41.1.3 (04/12/2025)
 
 **Misc**
