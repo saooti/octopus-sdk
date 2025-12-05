@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 41.2.0 (En cours)
+
+**Features**
+
+- Ajout du composant `ClassicDataTable` pour afficher des tableaux de données
+  facilement
+- Ajout du composant `ActionButton` pour faire un bouton déclenchant une action,
+  avec confirmation optionnelle
+- Ajout de la bibliothèque d'icones `src/components/icons.ts` pour uniformiser
+  les icones au sein des différents projets
+
 ## 41.1.15 (19/12/2025)
 
 **Fixes**
