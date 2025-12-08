@@ -32,24 +32,36 @@ interface SearchParams {
     size: number;
 }
 
-/**
- * Create a new group
- */
-export async function createGroup(group: Omit<EmissionGroup, 'groupId'|'emissionIds'>): Promise<EmissionGroup> {
-    return classicApi.postData<EmissionGroup>({
-        api: ModuleApi.DEFAULT,
-        path: BASE_PATH,
-        dataToSend: group
-    });
-}
+export const groupsApi = {
+    /**
+     * Create a new group
+     */
+    createGroup: async function(group: Omit<EmissionGroup, 'groupId'|'emissionIds'>): Promise<EmissionGroup> {
+        return classicApi.postData<EmissionGroup>({
+            api: ModuleApi.DEFAULT,
+            path: BASE_PATH,
+            dataToSend: group
+        });
+    },
 
-/**
- * Search groups
- */
-export async function searchGroups(parameters: Partial<SearchParams>): Promise<ListClassicReturn<EmissionGroup>> {
-    return classicApi.fetchData<ListClassicReturn<EmissionGroup>>({
-        api: ModuleApi.DEFAULT,
-        path: BASE_PATH + 'search',
-        parameters
-    });
-}
+    /**
+     * Delete a group
+     */
+    deleteGroup: async function(groupId: number): Promise<void> {
+        return classicApi.deleteData({
+            api: ModuleApi.DEFAULT,
+            path: BASE_PATH + groupId
+        });
+     },
+
+    /**
+     * Search groups
+     */
+    searchGroups: async function(parameters: Partial<SearchParams>): Promise<ListClassicReturn<EmissionGroup>> {
+        return classicApi.fetchData<ListClassicReturn<EmissionGroup>>({
+            api: ModuleApi.DEFAULT,
+            path: BASE_PATH + 'search',
+            parameters
+        });
+    }
+};

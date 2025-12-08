@@ -2,11 +2,15 @@
     Generic component to display an array of elements
 
     **Slots** :
-    - `item.[header.value]`
+    - `item-[header.value]`
       - Replace the default display of a value
       - Parameters :
         - `item`: The item being displayed
         - `value`: The value of the item
+    - `item-actions`
+      - When defined, add a final column dedicated to action buttons
+      - Parameters :
+        - `item`: The item being displayed
 -->
 <template>
     <ListPaginate
@@ -19,6 +23,7 @@
     >
         <template v-if="!loading" #list>
             <table class="w-100">
+                <!-- Displays the headers of the table -->
                 <thead>
                     <tr>
                         <th v-for="(header, i) in headers" :key="i">
@@ -27,11 +32,13 @@
                     </tr>
                 </thead>
 
+                <!-- Displays the data of the table -->
                 <tbody>
                     <tr v-for="(item, i) in items" :key="'item-' + i">
                         <td v-for="(header, j) in headers" :key="'item-' + i + '-' + j">
+                            <!-- Slot to allow for customisation of value display -->
                             <slot
-                                :name="'item.' + header.value.toString()"
+                                :name="'item-' + header.value.toString()"
                                 :item="item"
                                 :value="item[header.value]"
                             >
@@ -39,8 +46,9 @@
                             </slot>
                         </td>
 
-                        <td v-if="slots['item.actions']" class="d-flex">
-                            <slot name="item.actions" :item="item" />
+                        <!-- Slot to display optional actions -->
+                        <td v-if="slots['item-actions']" class="actions d-flex">
+                            <slot name="item-actions" :item="item" />
                         </td>
                     </tr>
                 </tbody>
@@ -56,7 +64,7 @@ import ListPaginate from '../display/list/ListPaginate.vue';
 /**
  * Header of table
  */
-export interface Header<T> {
+export interface ClassicDataTableHeader<T> {
     /** Label of the header */
     label: string;
     /** Key of the item that will be displayed */
@@ -70,7 +78,7 @@ const {
     /** The elements to display in the table */
     items: Array<T>;
     /** The columns to display in the table */
-    headers: Array<Header<T>>;
+    headers: Array<ClassicDataTableHeader<T>>;
     /** Index of first element in pagination */
     first?: number;
     /** Number of elements in pagination */
@@ -104,5 +112,10 @@ thead, tr/*:not(:last-child)*/ {
     td:first-child, th:first-child {
         padding: 0px 32px;
     }
+}
+
+.actions {
+    // Right align content
+    justify-content: right;
 }
 </style>

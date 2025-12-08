@@ -4,6 +4,11 @@
 
 **Features**
 
+- Ajout d'un système de notifications
+  - Intégrez `ClassicNotification` dans la vue principale pour afficher les
+    notifications
+  - Utilisez le composable `useNotifications` pour contrôler l'affichage des
+    notification depuis n'importe quel composant
 - Ajout du composant `ClassicDataTable` pour afficher des tableaux de données
   facilement
 - Ajout du composant `ActionButton` pour faire un bouton déclenchant une action,
