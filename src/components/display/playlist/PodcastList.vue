@@ -80,6 +80,7 @@ import { Playlist } from "@/stores/class/general/playlist";
 import { computed, onBeforeMount, Ref, ref, watch } from "vue";
 import { AxiosError } from "axios";
 import { useI18n } from "vue-i18n";
+import { playlistApi } from "../../../api/playlistApi";
 
 //Props 
 const props = defineProps({
@@ -137,7 +138,7 @@ watch(searchPattern,() => {
   }
 });
 
-onBeforeMount(()=>fetchContent());
+onBeforeMount(fetchContent);
 
 
 //Methods
@@ -146,10 +147,7 @@ async function fetchContent(): Promise<void> {
     podcasts.value.length = 0;
     loading.value = true;
     try {
-      podcasts.value = await classicApi.fetchData<Array<Podcast>>({
-        api: 0,
-        path: "playlist/" + props.playlist.playlistId + "/content",
-      });
+      podcasts.value = await playlistApi.getContentFull(props.playlist.playlistId);
       if (!editRight.value) {
         podcasts.value = podcasts.value.filter((p: Podcast | null) => {
           return (

@@ -17,52 +17,93 @@ export enum ProcessingStatus {
   All = "ALL"
 }
 
+/** Describe the availability of the podcast */
+export interface PodcastAvailability {
+  date?: number | null;
+  visibility?: boolean;
+  immediate?: boolean;
+}
+
 /**
  * Data about a podcast/episode
  */
-export interface Podcast {
-  imageUrl?: string;
-  animators?: Array<Participant>;
-  annotations?: { [key: string]: string | number | boolean | undefined };
-  audioStorageUrl: string;
-  audioUrl: string;
-  article?: string;
-  availability: {
-    date?: number | null;
-    visibility?: boolean;
-    immediate?: boolean;
-  };
-  comments?: string;
-  conferenceId?: number;
-  createdAt?: string;
-  createdByUserId?: string;
-  valid?: boolean;
-  description?: string;
-  downloadCount?: number;
-  duration: number;
-  email?: string;
-  emission: Emission;
-  guests?: Array<Participant>;
-  monetisable?: string;
-  organisation: Organisation;
+export interface Podcast extends BasePodcast {
+  /** ID of the podcast */
   podcastId: number;
+  /** Emission the podcast belongs to */
+  emission: Emission;
+  /** Organisation the podcast belongs to */
+  organisation: Organisation;
+  /** URL to the image */
+  imageUrl?: string;
+  /** URL to the audio file (for downloading) */
+  audioUrl: string;
+  /** URL to the audio file (file on bucket) */
+  audioStorageUrl: string;
+  /** Title of the podcast */
+  title: string;
+  /** The availability of the podcast */
+  availability: PodcastAvailability;
+  /** Description of the podcast */
+  description?: string;
+  /** Publishing date */
+  pubDate?: string;
   /** The status of the processing of the audio file */
   processingStatus?: ProcessingStatus;
+  /** An optional list of tags */
+  tags?: Array<string>;
+  /** An optional list of tags for OuestFrance */
+  ofTags?: Array<string>;
+
+  createdAt?: string;
+  createdByUserId?: string;
+  annotations?: { [key: string]: string | number | boolean | undefined };
+  article?: string;
+  comments?: string;
+  conferenceId?: number;
+  valid?: boolean;
+  downloadCount?: number;
+  weekDownloadCount?: number;
+  duration: number;
+  email?: string;
+  monetisable?: string;
+
+  animators?: Array<Participant>;
+  guests?: Array<Participant>;
   processorId?: string;
-  pubDate?: string;
   publisher?: Person;
   rubriqueIds?: Array<number>;
   rssEpisode?:string;
   score?: number;
   size?: number;
-  /** An optional list of tags */
-  tags?: Array<string>;
-  /** An optional list of tags for OuestFrance */
-  ofTags?: Array<string>;
-  title: string;
-  weekDownloadCount?: number;
   order?: number;
   video?: Video;
+}
+
+/**
+ * A podcast with incomplete data
+ */
+export interface SimplifiedPodcast extends
+  Omit<Podcast, 'emission'|'organisation'|'animators'|'guests'|'ofTags'|'comments'|'email'|'processorId'|'publisher'|'order'|'video'> {
+
+  /** The ID of the emission */
+  emissionId: number;
+  /** The ID of the organisation */
+  organisationId: string;
+}
+
+/**
+ * Convert a simplified podcast to a complete one
+ * @param simplified The incomplete podcast
+ * @param organisation The organisation the podcast belongs to
+ * @param emission The emission the podcast belongs to
+ */
+export function simplifiedToFull(simplified: SimplifiedPodcast, organisation: Organisation, emission: Emission): Podcast {
+  return {
+    ...simplified,
+    organisation,
+    emission
+  };
 }
 
 export function emptyPodcastData(): Podcast {

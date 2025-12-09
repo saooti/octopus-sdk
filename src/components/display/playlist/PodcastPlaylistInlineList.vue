@@ -40,6 +40,7 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { Playlist } from "@/stores/class/general/playlist";
 import { onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { playlistApi } from "../../../api/playlistApi";
 
 //Props 
 const props = defineProps<{
@@ -72,14 +73,17 @@ onMounted(()=>fetchContent())
 async function fetchContent(): Promise<void> {
   allPodcasts.value.length = 0;
   loading.value = true;
-  playlist.value = await classicApi.fetchData<Playlist>({
-    api: 0,
-    path: "playlist/" + props.playlistId,
-  });
-  allPodcasts.value = await classicApi.fetchData<Array<Podcast>>({
-    api: 0,
-    path: "playlist/" + props.playlistId + "/content",
-  });
+
+  // Retrieve both playlist & content at the same time
+  const [playlistData, content] = await Promise.all([
+    playlistApi.get(props.playlistId),
+    playlistApi.getContentFull(props.playlistId)
+  ]);
+
+  // Update data
+  playlist.value = playlistData;
+  allPodcasts.value = content;
+
   if (
     !(
       (undefined !== authStore.authOrgaId &&
