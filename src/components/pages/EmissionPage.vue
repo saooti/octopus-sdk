@@ -42,7 +42,7 @@
               <div class="d-flex" style="align-items: center">
                 <div>{{ t('Emission - Not available for listeners') }}</div>
 
-                <ClassicHelpButton relative small>
+                <ClassicHelpButton relative-class="page-element" small>
                   {{ t('Emission - Not available explanation') }}
                 </ClassicHelpButton>
               </div>

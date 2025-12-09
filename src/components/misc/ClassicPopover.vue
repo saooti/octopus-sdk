@@ -40,6 +40,7 @@ const props = defineProps({
   onlyClick: { type: Boolean, default: false },
   onlyMouse: { type: Boolean, default: false },
   isFixed: { type: Boolean, default: false },
+  /** Class(????) of the parent with relative positionning, must be set for proper positionning */
   relativeClass: { type: String, default: undefined },
   leftPos: { type: Boolean, default: false },
   topPos: { type: Boolean, default: false },

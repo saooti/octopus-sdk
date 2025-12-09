@@ -16,6 +16,11 @@
 - Ajout de la bibliothèque d'icones `src/components/icons.ts` pour uniformiser
   les icones au sein des différents projets
 
+**Fixes**
+
+- `ClassicHelpButton` utilise le string `relative-class` au lieu du booléen
+  `relative` pour déterminer l'élément parent.
+
 ## 41.1.15 (19/12/2025)
 
 **Fixes**

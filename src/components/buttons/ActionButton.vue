@@ -18,6 +18,7 @@
             :canceltext="$t('No')"
             @validate="onConfirmModal"
             @cancel="showModal = false"
+            @close="showModal = false"
         />
     </div>
 </template>

@@ -11,12 +11,13 @@ export interface EmissionGroup {
     /** Id of the group */
     groupId: number;
     /** Simple description */
-    description: string;
+    description?: string;
     /** The id of the organisation this group belongs to */
     organisationId: string;
     /** The list of ids of emissions in this group */
     emissionIds: Array<number>|null;
-    acpmMarque: string;
+    /** If set, defines this group as a "marque" group. */
+    acpmMarque?: string;
 }
 
 interface SearchParams {
@@ -52,7 +53,18 @@ export const groupsApi = {
             api: ModuleApi.DEFAULT,
             path: BASE_PATH + groupId
         });
-     },
+    },
+
+    /**
+     * Update a group
+     */
+    updateGroup: async function(group: Omit<EmissionGroup, 'emissionIds'>): Promise<EmissionGroup> {
+        return classicApi.putData({
+            api: ModuleApi.DEFAULT,
+            path: BASE_PATH,
+            dataToSend: group
+        });
+    },
 
     /**
      * Search groups
