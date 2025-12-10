@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.1.7 (10/12/2025)
+
+**Misc**
+
+- Ajout API podcast
+- Utilisation search V2 pour les podcasts
+
 ## 41.1.6 (10/12/2025)
 
 **Fixes**
@@ -12,6 +19,7 @@
 **Misc**
 
 - Ajout API playlist, emission, et organisation
+- Utilisation content V2 pour la récupération du contenu des playlist
 
 ## 41.1.4 (04/12/2025)
 
