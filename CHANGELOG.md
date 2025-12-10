@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.5 (10/12/2025)
+
+**Misc**
+
+- Ajout API playlist, emission, et organisation
+
 ## 41.1.4 (04/12/2025)
 
 **Misc**
