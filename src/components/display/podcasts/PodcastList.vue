@@ -60,12 +60,13 @@ import classicApi from "../../../api/classicApi";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { Podcast, emptyPodcastData } from "@/stores/class/general/podcast";
+import { Podcast, PodcastProcessingStatus, emptyPodcastData } from "../../../stores/class/general/podcast";
 import { computed, onBeforeMount, Ref, ref, watch } from "vue";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { AxiosError } from "axios";
-import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import { ListClassicReturn } from "../../../stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";
+import { podcastApi, PodcastMonetisation, PodcastSearchOptions, PodcastSort } from "../../../api/podcastApi";
 
 
 //Props 
@@ -77,7 +78,7 @@ const props = defineProps({
   iabId: { default: undefined, type: Number },
   participantId: { default: undefined, type: Number },
   query: { default: undefined, type: String },
-  monetisable: { default: undefined, type: String },
+  monetisable: { default: undefined, type: String as () => PodcastMonetisation },
   popularSort: { default: false, type: Boolean },
   reload: { default: false, type: Boolean },
   before: { default: undefined, type: String },
@@ -85,7 +86,7 @@ const props = defineProps({
   includeHidden: { default: false, type: Boolean },
   showCount: { default: false, type: Boolean },
   displaySortText: { default: true, type: Boolean },
-  sortCriteria: { default: undefined, type: String },
+  sortCriteria: { default: undefined, type: String as () => PodcastSort },
   validity: { default: 'true', type: String },
   rubriqueId: { default: () => [], type: Array as () => Array<number> },
   rubriquageId: { default: () => [], type: Array as () => Array<number> },
@@ -137,7 +138,7 @@ const organisation = computed(() => {
   }
   return filterStore.filterOrgaId ? [filterStore.filterOrgaId] : [];
 });
-const sort = computed(() => props.popularSort ? "POPULARITY" : (props.sortCriteria ?? "DATE"));
+const sort = computed(() => props.popularSort ? PodcastSort.POPULARITY : (props.sortCriteria ?? PodcastSort.DATE));
 const sortText = computed(() => {
   if (!props.displaySortText) {
     return "";
@@ -176,9 +177,15 @@ onBeforeMount(()=>fetchContent(false))
 //Methods
 async function fetchContent(reset: boolean): Promise<void> {
   loading.value = true;
-  const param: FetchParam = {
+
+  let validity: undefined|boolean = undefined;
+  if (props.validity !== undefined) {
+    validity = props.validity !== 'true';
+  }
+  
+  const param: PodcastSearchOptions = {
     first: reset ? 0 : dfirst.value,
-    size: dsize.value,
+    pageSize: dsize.value,
     organisationId: organisation.value,
     emissionId: props.emissionId,
     iabId: props.iabId,
@@ -186,31 +193,26 @@ async function fetchContent(reset: boolean): Promise<void> {
     query: props.query,
     monetisable: props.monetisable,
     sort: sort.value,
-    before: props.before,
-    after: props.after,
+    pubDateBefore: props.before,
+    pubDateAfter: props.after,
     noRubriquageId: props.noRubriquageId.length
       ? props.noRubriquageId
       : undefined,
     rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
     rubriquageId: props.rubriquageId.length ? props.rubriquageId : undefined,
     includeHidden: props.includeHidden,
-    validity: props.validity,
+    validity,
     /* publisherId:
       !this.onlyValid && !authStore.isRoleProduction
         ? authStore.authProfile?.userId
         : undefined, */
-    includeStatus: ["READY", "PROCESSING"],
+    processingStatus: [PodcastProcessingStatus.Ready, PodcastProcessingStatus.Processing],
     withVideo: props.withVideo,
-    includeTag: props.includeTag.length ? props.includeTag : undefined,
-    beneficiary: props.beneficiaries ?? undefined
+    tags: props.includeTag.length ? props.includeTag : undefined,
+    beneficiaries: props.beneficiaries ?? undefined
   };
   try {
-    const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
-      api: 0,
-      path: "podcast/search",
-      parameters: param,
-      specialTreatement: true,
-    });
+    const data = await podcastApi.searchFull(param, true);
     afterFetching(reset, data);
   } catch (error) {
     handle403(error as AxiosError);

@@ -7,7 +7,7 @@ import { Video } from "./video";
 /**
  * State of processing of the audio file
  */
-export enum ProcessingStatus {
+export enum PodcastProcessingStatus {
   Planned = "PLANNED",
   Processing = "PROCESSING",
   Ready = "READY",
@@ -27,7 +27,7 @@ export interface PodcastAvailability {
 /**
  * Data about a podcast/episode
  */
-export interface Podcast extends BasePodcast {
+export interface Podcast {
   /** ID of the podcast */
   podcastId: number;
   /** Emission the podcast belongs to */
@@ -49,7 +49,7 @@ export interface Podcast extends BasePodcast {
   /** Publishing date */
   pubDate?: string;
   /** The status of the processing of the audio file */
-  processingStatus?: ProcessingStatus;
+  processingStatus?: PodcastProcessingStatus;
   /** An optional list of tags */
   tags?: Array<string>;
   /** An optional list of tags for OuestFrance */

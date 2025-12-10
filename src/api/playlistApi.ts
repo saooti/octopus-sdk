@@ -4,6 +4,7 @@ import { Podcast, SimplifiedPodcast } from "../stores/class/general/podcast";
 import { Playlist } from "../stores/class/general/playlist";
 import { organisationApi } from "./organisationApi";
 import { emissionApi } from "./emissionApi";
+import { unique } from '../helper/arrayHelper';
 
 /**
  * Retrieve playlist data
@@ -27,10 +28,6 @@ async function getContent(playlistId: number): Promise<Array<SimplifiedPodcast>>
         api: ModuleApi.DEFAULT,
         path: 'v2/playlist/' + playlistId + '/content'
     });
-}
-
-function unique<T>(value: T, index: number, array: Array<T>): boolean {
-    return array.indexOf(value) === index;
 }
 
 /**

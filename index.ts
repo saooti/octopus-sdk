@@ -140,6 +140,7 @@ import classicApi from "./src/api/classicApi.ts";
 export { emissionApi } from "./src/api/emissionApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";
+export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
