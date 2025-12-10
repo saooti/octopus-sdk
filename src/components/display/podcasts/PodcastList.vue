@@ -68,36 +68,46 @@ import { ListClassicReturn } from "../../../stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";
 import { podcastApi, PodcastMonetisation, PodcastSearchOptions, PodcastSort } from "../../../api/podcastApi";
 
-
 //Props 
-const props = defineProps({
-  first: { default: 0, type: Number },
-  size: { default: 30, type: Number },
-  organisationId: { default: () => [], type: Array as () => Array<string> },
-  emissionId: { default: undefined, type: Number },
-  iabId: { default: undefined, type: Number },
-  participantId: { default: undefined, type: Number },
-  query: { default: undefined, type: String },
-  monetisable: { default: undefined, type: String as () => PodcastMonetisation },
-  popularSort: { default: false, type: Boolean },
-  reload: { default: false, type: Boolean },
-  before: { default: undefined, type: String },
-  after: { default: undefined, type: String },
-  includeHidden: { default: false, type: Boolean },
-  showCount: { default: false, type: Boolean },
-  displaySortText: { default: true, type: Boolean },
-  sortCriteria: { default: undefined, type: String as () => PodcastSort },
-  validity: { default: 'true', type: String },
-  rubriqueId: { default: () => [], type: Array as () => Array<number> },
-  rubriquageId: { default: () => [], type: Array as () => Array<number> },
-  noRubriquageId: { default: () => [], type: Array as () => Array<number> },
-  justSizeChosen: { default: false, type: Boolean },
-  withVideo: { default: undefined, type: Boolean },
-  includeTag:{ default: () => [], type: Array as () => Array<string> },
-  forceUpdateParameters: { default: false, type: Boolean },
+const props = withDefaults(defineProps<{
+  first?: number;
+  size?: number;
+  organisationId?: Array<string>;
+  emissionId?: number;
+  iabId?: number;
+  participantId?: number;
+  query?: string;
+  monetisable?: PodcastMonetisation;
+  popularSort?: boolean;
+  reload?: boolean;
+  before?: string;
+  after?: string;
+  includeHidden?: boolean;
+  showCount?: boolean;
+  displaySortText?: boolean;
+  sortCriteria?: PodcastSort;
+  validity?: 'true'|'false'|boolean;
+  rubriqueId?: Array<number>;
+  rubriquageId?: Array<number>;
+  noRubriquageId?: Array<number>;
+  justSizeChosen?: boolean;
+  withVideo?: boolean;
+  includeTag?: Array<string>;
+  forceUpdateParameters?: boolean;
   /** The beneficiaries to filter on */
-  beneficiaries: { default: null, type: Array as () => Array<string> }
-})
+  beneficiaries?: Array<string>;
+}>(), {
+  first: 0,
+  size: 30,
+  popularSort: false,
+  reload: false,
+  includeHidden: false,
+  showCount: false,
+  displaySortText: true,
+  validity: true,
+  justSizeChosen: false,
+  forceUpdateParameters: false
+});
 
 //Emits
 const emit = defineEmits(["fetch", "emptyList"]);
@@ -180,7 +190,7 @@ async function fetchContent(reset: boolean): Promise<void> {
 
   let validity: undefined|boolean = undefined;
   if (props.validity !== undefined) {
-    validity = props.validity !== 'true';
+    validity = props.validity === 'true' || props.validity === true;
   }
   
   const param: PodcastSearchOptions = {
@@ -195,11 +205,11 @@ async function fetchContent(reset: boolean): Promise<void> {
     sort: sort.value,
     pubDateBefore: props.before,
     pubDateAfter: props.after,
-    noRubriquageId: props.noRubriquageId.length
+    noRubriquageId: props.noRubriquageId?.length
       ? props.noRubriquageId
       : undefined,
-    rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
-    rubriquageId: props.rubriquageId.length ? props.rubriquageId : undefined,
+    rubriqueId: props.rubriqueId?.length ? props.rubriqueId : undefined,
+    rubriquageId: props.rubriquageId?.length ? props.rubriquageId : undefined,
     includeHidden: props.includeHidden,
     validity,
     /* publisherId:
@@ -208,7 +218,7 @@ async function fetchContent(reset: boolean): Promise<void> {
         : undefined, */
     processingStatus: [PodcastProcessingStatus.Ready, PodcastProcessingStatus.Processing],
     withVideo: props.withVideo,
-    tags: props.includeTag.length ? props.includeTag : undefined,
+    tags: props.includeTag?.length ? props.includeTag : undefined,
     beneficiaries: props.beneficiaries ?? undefined
   };
   try {
