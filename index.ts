@@ -137,6 +137,10 @@ import {useAuthStore} from "./src/stores/AuthStore.ts";
 import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
 import classicApi from "./src/api/classicApi.ts";
 
+export { emissionApi } from "./src/api/emissionApi.ts";
+export { organisationApi } from "./src/api/organisationApi.ts";
+export { playlistApi } from "./src/api/playlistApi.ts";
+
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
 export const getApplePodcastIcon = () => import("./src/components/icons/ApplePodcastIcon.vue");

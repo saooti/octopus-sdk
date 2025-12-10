@@ -42,15 +42,15 @@ import debounce from '../../../helper/debounceHelper';
 import PodcastItemInfo from "./PodcastItemInfo.vue";
 import PodcastImage from "./PodcastImage.vue";
 import dayjs from "dayjs";
-import { Podcast } from "@/stores/class/general/podcast";
+import { Podcast } from "../../../stores/class/general/podcast";
 import { computed, nextTick, onBeforeMount, ref, Ref, useTemplateRef } from "vue";
 import { Conference } from "@/stores/class/conference/conference";
 
 //Props 
-const props = defineProps({
-  podcast: { default: () => ({}), type: Object as () => Podcast },
-  fetchConference: { default: undefined, type: Object as () => Conference }
-});
+const props = defineProps<{
+  podcast: Podcast;
+  fetchConference?: Conference;
+}>();
 
 //Data 
 const isMobile = ref(false);
