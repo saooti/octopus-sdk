@@ -29,6 +29,10 @@ async function getContent(playlistId: number): Promise<Array<SimplifiedPodcast>>
     });
 }
 
+function unique<T>(value: T, index: number, array: Array<T>): boolean {
+    return array.indexOf(value) === index;
+}
+
 /**
  * Retrieve the podcasts defined in the playlist, with all their data
  * This query is longer, because it also needs to retrieve organisations &
@@ -40,10 +44,10 @@ async function getContentFull(playlistId: number): Promise<Array<Podcast>> {
     const simplified = await this.getContent(playlistId);
     const full: Array<Podcast> = [];
 
-    // TODO unique
-    const organisationIds = simplified.map((p: SimplifiedPodcast) => p.organisationId);
-    // TODO unique
-    const emissionIds = simplified.map((p: SimplifiedPodcast) => p.emissionId);
+    const organisationIds = simplified.map((p: SimplifiedPodcast) => p.organisationId)
+        .filter(unique);
+    const emissionIds = simplified.map((p: SimplifiedPodcast) => p.emissionId)
+        .filter(unique);
 
     const organisations = await organisationApi.getAllById(organisationIds);
     const emissions = await emissionApi.getAllById(emissionIds);

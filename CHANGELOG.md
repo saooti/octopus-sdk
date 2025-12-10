@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.1.6 (10/12/2025)
+
+**Fixes**
+
+- `playlistApi.getContentFull` ne récupère chaque émission & organisation qu'une
+  seule fois
+
 ## 41.1.5 (10/12/2025)
 
 **Misc**
