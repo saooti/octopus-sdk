@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.9 (11/12/2025)
+
+**Fixes**
+
+- Correction recherche dans `PodcastList`
+
 ## 41.1.8 (10/12/2025)
 
 **Fixes**

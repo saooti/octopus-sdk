@@ -86,7 +86,7 @@ const props = withDefaults(defineProps<{
   showCount?: boolean;
   displaySortText?: boolean;
   sortCriteria?: PodcastSort;
-  validity?: 'true'|'false'|boolean;
+  validity?: 'true'|'false'|''|boolean; // TODO improve this
   rubriqueId?: Array<number>;
   rubriquageId?: Array<number>;
   noRubriquageId?: Array<number>;
@@ -188,8 +188,10 @@ onBeforeMount(()=>fetchContent(false))
 async function fetchContent(reset: boolean): Promise<void> {
   loading.value = true;
 
+  // Sadly we kinda have no idea what will be passed as 'validity', we need to
+  // handle multiple cases.
   let validity: undefined|boolean = undefined;
-  if (props.validity !== undefined) {
+  if (props.validity !== undefined && props.validity !== '') {
     validity = props.validity === 'true' || props.validity === true;
   }
   
