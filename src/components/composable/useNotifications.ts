@@ -23,11 +23,17 @@ const notification = ref<Notification|null>(null);
  * Composable used to manage notifications
  */
 export const useNotifications = () => {
+    /**
+     * Add & display a notification
+     * @param newNotif The data of the new notification
+     */
     function addNotification(newNotif: Notification): void {
-        console.warn('new notification added');
         notification.value = { ...newNotif };
     }
 
+    /**
+     * Remove all notifications
+     */
     function clearNotifications(): void {
         notification.value = null;
     }

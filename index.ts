@@ -42,10 +42,12 @@ export const getClassicHelpButton = () => import("./src/components/misc/ClassicH
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
 
 import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
+import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";
 
 export {
     ClassicDataTable,
-    type ClassicDataTableHeader
+    type ClassicDataTableHeader,
+    ClassicNotifications
 }
 
 // Buttons
@@ -147,11 +149,15 @@ import {useAuthStore} from "./src/stores/AuthStore.ts";
 import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
 import classicApi from "./src/api/classicApi.ts";
 
+// API
 export { emissionApi } from "./src/api/emissionApi.ts";
 export * from "./src/api/groupsApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";
 export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
+
+// Types
+export { type Emission, emptyEmissionData } from "./src/stores/class/general/emission.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");

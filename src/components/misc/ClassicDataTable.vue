@@ -13,7 +13,17 @@
         - `item`: The item being displayed
 -->
 <template>
+    <ClassicDataTable_Internal 
+        v-if="noPagination"
+        :items="items"
+        :headers="headers"
+    >
+        <template v-for="(_, name) in $slots" v-slot:[name]="scope">
+            <slot :name="name" v-bind="{ ...scope }" />
+        </template>
+    </ClassicDataTable_Internal>
     <ListPaginate
+        v-else
         :first="first"
         :size="size"
         :text-count="$t('Number items', { nb: items.length })"
@@ -22,37 +32,14 @@
         :loading-text="$t('Loading content ...')"
     >
         <template v-if="!loading" #list>
-            <table class="w-100">
-                <!-- Displays the headers of the table -->
-                <thead>
-                    <tr>
-                        <th v-for="(header, i) in headers" :key="i">
-                            {{ header.label }}
-                        </th>
-                    </tr>
-                </thead>
-
-                <!-- Displays the data of the table -->
-                <tbody>
-                    <tr v-for="(item, i) in items" :key="'item-' + i">
-                        <td v-for="(header, j) in headers" :key="'item-' + i + '-' + j">
-                            <!-- Slot to allow for customisation of value display -->
-                            <slot
-                                :name="'item-' + header.value.toString()"
-                                :item="item"
-                                :value="item[header.value]"
-                            >
-                                {{ item[header.value] }}
-                            </slot>
-                        </td>
-
-                        <!-- Slot to display optional actions -->
-                        <td v-if="slots['item-actions']" class="actions d-flex">
-                            <slot name="item-actions" :item="item" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <ClassicDataTable_Internal 
+                :items="items"
+                :headers="headers"
+            >
+                <template v-for="(_, name) in $slots" v-slot:[name]="scope">
+                    <slot :name="name" v-bind="{ ...scope }" />
+                </template>
+            </ClassicDataTable_Internal>
         </template>
     </ListPaginate>
 </template>
@@ -60,29 +47,22 @@
 <script setup lang="ts" generic="T">
 import { ref, useSlots } from 'vue';
 import ListPaginate from '../display/list/ListPaginate.vue';
-
-/**
- * Header of table
- */
-export interface ClassicDataTableHeader<T> {
-    /** Label of the header */
-    label: string;
-    /** Key of the item that will be displayed */
-    value: keyof T;
-}
+import ClassicDataTable_Internal, {
+    type ClassicDataTableHeader,
+    type ClassicDataTableProps
+} from './ClassicDataTable_Internal.vue';
 
 const {
     first = 0,
-    size = 50
-} = defineProps<{
-    /** The elements to display in the table */
-    items: Array<T>;
-    /** The columns to display in the table */
-    headers: Array<ClassicDataTableHeader<T>>;
+    size = 50,
+    noPagination = false
+} = defineProps<ClassicDataTableProps<T> & {
     /** Index of first element in pagination */
     first?: number;
     /** Number of elements in pagination */
     size?: number;
+    /** Disable pagination */
+    noPagination?: boolean;
 }>();
 
 const slots = useSlots();

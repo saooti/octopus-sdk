@@ -15,6 +15,7 @@
   avec confirmation optionnelle
 - Ajout de la bibliothèque d'icones `src/components/icons.ts` pour uniformiser
   les icones au sein des différents projets
+- Ajout de l'API groupes
 
 **Fixes**
 
