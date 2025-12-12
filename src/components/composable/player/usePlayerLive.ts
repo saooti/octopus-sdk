@@ -1,7 +1,7 @@
 import stringHelper from "../../../helper/stringHelper";
 import { usePlayerLogicProgress } from "./usePlayerLogicProgress";
 import { computed, Ref, ref } from "vue";
-import { usePlayerStore } from "../../../stores/PlayerStore";
+import { usePlayerStore, PlayerStatus } from "../../../stores/PlayerStore";
 import { useApiStore } from "../../../stores/ApiStore";
 import dayjs from "dayjs";
 import { useAuthStore } from "../../../stores/AuthStore";
@@ -28,11 +28,8 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
     return authStore.authParam.accessToken && ("SECURED" === playerStore.playerLive?.organisation?.privacy || playerStore.playerRadio?.secured);
   });
 
-  
-
-
-  function onPlay(): void {
-    playerStore.playerChangeStatus("PAUSED"===playerStore.playerStatus);
+    function onPlay(): void {
+    playerStore.playerChangeStatus(PlayerStatus.PAUSED ===playerStore.playerStatus);
   }
 
   function playRadio() {
@@ -87,7 +84,8 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
       } else {
         await initHls();
       }
-    } catch {
+    } catch(e) {
+      console.error(e);
       onHlsError();
     }
   }
@@ -112,6 +110,7 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
       throw new Error("Hls is not supported ! ");
     }
     hls.value = new Hls({
+      autoStartLoad: true,
       xhrSetup: (xhr: XMLHttpRequest) => {
         if (needToAddToken.value) {
           xhr.setRequestHeader("Authorization", "Bearer " +authStore.authParam.accessToken);
@@ -124,16 +123,36 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
       if(true===errorHls.value){
         return;
       }
-      playPromise.value = (audioElement.value as HTMLAudioElement).play();
-      playPromise.value.then(() =>{
-        playPromise.value = undefined;
-        onPlay();
-      }).catch(()=>{
-        onHlsError();
-        playPromise.value = undefined;
-      })
+      setTimeout(() => {
+        playPromise.value = (audioElement.value as HTMLAudioElement).play();
+        playPromise.value.then(() =>{
+          playPromise.value = undefined;
+          onPlay();
+        }).catch((e)=>{
+          console.error(e);
+          onHlsError();
+          playPromise.value = undefined;
+        });
+      }, 500);
     });
-    hls.value.on(Hls.Events.ERROR, async (e, data:any) => {
+    hls.value.on(Hls.Events.ERROR, async (name: string, data:any) => {
+      // Stalling, we don't have enough data
+      if (data.details === 'bufferStalledError') {
+        // Some logs to be able to follow what's happening
+        console.warn('playback is stalling…');
+        playerStore.playerStatus = PlayerStatus.LOADING;
+        // Destroy current instance
+        hls.value.destroy();
+        // Wait a bit before restarting playback
+        setTimeout(initHls, 500);
+        return;
+      }
+      console.error('An error occured: ' + name + ' / ' + data.details);
+      console.error(data);
+      if (data.fatal && data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+        console.warn('Trying to recover...');
+        hls.value.recoverMediaError();
+      }
       errorHls.value = true;
       if(undefined===playPromise.value && data.fatal){
         onHlsError();

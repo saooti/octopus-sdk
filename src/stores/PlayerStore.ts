@@ -14,9 +14,17 @@ interface Transcript {
   actualText: string;
   value: Array<{ endTime: number; startTime: number; text: string }>;
 }
+
+export enum PlayerStatus {
+  STOPPED = "STOPPED",
+  LOADING = "LOADING",
+  PLAYING = "PLAYING",
+  PAUSED = "PAUSED"
+}
+
 interface PlayerState {
   playerCurrentChange: number | null;
-  playerStatus: string; //STOPPED, LOADING, PLAYING, PAUSED
+  playerStatus: PlayerStatus;
   playerPodcast: Podcast | undefined;
   playerVolume?: number; //From 0 to 1
   playerElapsed: number; //From 0 to 1

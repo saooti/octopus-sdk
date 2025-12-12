@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.10 (En cours)
+
+**Fixes**
+
+- Correction d'un problème de lecture des lives sous Firefox
+
 ## 41.1.9 (11/12/2025)
 
 **Fixes**
