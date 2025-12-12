@@ -187,7 +187,11 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
     if (Infinity === streamDuration) {
       const seekable = mediaTarget.seekable;
       if (seekable) {
-        streamDuration = seekable.end(seekable.length - 1);
+        try {
+          streamDuration = seekable.end(seekable.length - 1);
+        } catch (e) {
+          console.error(e);
+        }
       } else {
         streamDuration = mediaTarget.currentTime;
       }
