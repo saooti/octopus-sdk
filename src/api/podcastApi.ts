@@ -70,7 +70,7 @@ export interface PodcastSearchOptions extends Paginable<PodcastSort> {
     /** Filter by podcast having a video */
     withVideo?: boolean;
     /** Filter by tags */
-    tags: Array<string>;
+    tags?: Array<string>;
     /** Filter by beneficiaries/rights holder reference */
     beneficiaries?: Array<string>;
 }

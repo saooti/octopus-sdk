@@ -3,7 +3,7 @@
     <template v-if="loaded && !error && podcast">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :page-title="titlePage"
+        :page-title="useEmissionTitle ? podcast.emission.name : titlePage"
         :img-url="podcast.imageUrl"
       />
       <div
@@ -114,6 +114,8 @@ const props = defineProps({
   updateStatus: { default: undefined, type: String },
   playingPodcast: { default: undefined, type: Object as () => Podcast },
   podcastId: { default: 0, type: Number },
+  /** When true, display emission title in podcastmaker header */
+  useEmissionTitle: { default: false, type: Boolean }
 });
 
 

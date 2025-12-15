@@ -43,15 +43,15 @@ import { Emission } from "@/stores/class/general/emission";
 import { onMounted, Ref, ref } from "vue";
 import { AxiosError } from "axios";
 import {useResizePhone} from "../../composable/useResizePhone";
-import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import { ListClassicReturn } from "../../../stores/class/general/listReturn";
 
 import PresentationLayout from "../../layout/PresentationLayout.vue"; 
-import { Podcast } from "@/stores/class/general/podcast";
-import { ModuleApi } from "../../../api/apiConnection";
+import { Podcast, SimplifiedPodcast, simplifiedToFull } from "../../../stores/class/general/podcast";
 
 import PresentationItem from "../../layout/PresentationItem.vue"; 
 import PodcastPlayButton from "./PodcastPlayButton.vue"; 
 import { RouteLocationRaw } from "vue-router";
+import { podcastApi, PodcastSort } from "../../../api/podcastApi";
 
 //Props 
 const props = defineProps({
@@ -92,23 +92,29 @@ async function fetchNext(): Promise<void> {
       specialTreatement: true,
     });
 
-    // Retrieve the podcasts for these emissions
-    const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
-      api: ModuleApi.DEFAULT,
-      path: "podcast/search",
-      parameters: {
+    const promises: Array<Promise<SimplifiedPodcast>> = [];
+
+    for (let i = 0; i < emissions.result.length; i++) {
+      promises.push(podcastApi.search({
         first: 0,
-        size: 5,
-        organisationId: props.organisationId,
-        emissionId: emissions.result.map(e => e.emissionId),
-        sort: "DATE",
+        pageSize: 1,
+        organisationId: [props.organisationId],
+        emissionId: [emissions.result[i].emissionId],
+        sort: PodcastSort.DATE,
         rubriqueId: props.rubriquesId
-      },
-      specialTreatement: true
-    });
-    
+      }).then(r => r.result[0]));
+    }
+
+    // Retrieve the podcasts for these emissions
+    const data = await Promise.all(promises);
+
     podcasts.value = podcasts.value.concat(
-      data.result.filter((em: Podcast | null) => null !== em),
+      data.filter((em: SimplifiedPodcast | null) => null !== em).map(p => {
+        // Get emission from podcast
+        const emission = emissions.result.find(e => e.emissionId === p.emissionId);
+        // Create full podcast from simplified + emission
+        return simplifiedToFull(p, emission.orga, emission);
+      })
     );
     loading.value = false;
   } catch (errorWs) {

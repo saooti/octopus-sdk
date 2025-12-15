@@ -2,6 +2,13 @@
 
 ## 41.1.10 (En cours)
 
+**Misc**
+
+- Les pages d'émissions et d'épisodes peuvent afficher le titre de l'émission
+  en header
+- Ajustement pour assurer l'affichage d'épisodes d'émissions différentes dans
+  `PodcastPresentationList`.
+
 **Fixes**
 
 - Correction d'un problème de lecture des lives sous Firefox

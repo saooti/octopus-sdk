@@ -3,7 +3,7 @@
     <template v-if="loaded && !error && emission">
       <PodcastmakerHeader
         v-if="isPodcastmaker"
-        :page-title="t('Emission')"
+        :page-title="useEmissionTitle ? emission.name : t('Emission')"
         :img-url="emission.imageUrl"
       />
       <div
@@ -178,7 +178,8 @@ const props = defineProps({
   pr: { default: 0, type: Number },
   ps: { default: 30, type: Number },
   routeQuery: { default: "", type: String },
-})
+  useEmissionTitle: { default: false, type: Boolean }
+});
 
 
 //Data 
