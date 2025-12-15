@@ -111,6 +111,10 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
     }
     hls.value = new Hls({
       autoStartLoad: true,
+      liveDurationInfinity:true,
+      backBufferLength:10,
+      maxBufferLength:60,
+
       xhrSetup: (xhr: XMLHttpRequest) => {
         if (needToAddToken.value) {
           xhr.setRequestHeader("Authorization", "Bearer " +authStore.authParam.accessToken);
