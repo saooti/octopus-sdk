@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.11 (16/12/2025)
+
+**Misc**
+
+- Export de `ClassicWysiwyg`
+
 ## 41.1.10 (15/12/2025)
 
 **Misc**

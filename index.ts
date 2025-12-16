@@ -40,8 +40,6 @@ export const getContractPreviewModal = () => import("./src/components/misc/modal
 export const getClassicModalInBody = () => import("./src/components/misc/modal/ClassicModalInBody.vue");
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
-
-
 //Display
 export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
 export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");
@@ -99,7 +97,7 @@ export const getClassicContentEditable = () => import("./src/components/form/Cla
 export const getSwiperList = () => import("./src/components/display/list/SwiperList.vue");
 export const getClassicCopyButton = () => import("./src/components/form/ClassicCopyButton.vue");
 export const getClassicTagInput = () => import("./src/components/form/ClassicTagInput.vue");
-
+export const getClassicWysiwyg = () => import("./src/components/form/ClassicWysiwyg.vue");
 
 //Composable
 import {useResizePhone} from "./src/components/composable/useResizePhone";
