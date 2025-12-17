@@ -7,6 +7,7 @@
         <!-- Displays the headers of the table -->
         <thead>
             <tr>
+                <th v-if="selectable" />
                 <th v-for="(header, i) in headers" :key="i">
                     {{ header.label }}
                 </th>
@@ -16,6 +17,12 @@
         <!-- Displays the data of the table -->
         <tbody>
             <tr v-for="(item, i) in items" :key="'item-' + i">
+                <td v-if="selectable" class="selection">
+                    <ClassicCheckbox
+                        :text-init="isSelected(item)"
+                        @update:text-init="select(item)"
+                    />
+                </td>
                 <td v-for="(header, j) in headers" :key="'item-' + i + '-' + j">
                     <!-- Slot to allow for customisation of value display -->
                     <slot
@@ -39,6 +46,8 @@
 <script setup lang="ts" generic="T">
 import { ref, useSlots } from 'vue';
 
+import ClassicCheckbox from '../form/ClassicCheckbox.vue';
+
 /**
  * Header of table
  */
@@ -54,11 +63,34 @@ export interface ClassicDataTableProps<T> {
     items: Array<T>;
     /** The columns to display in the table */
     headers: Array<ClassicDataTableHeader<T>>;
+    /** When true, checkboxes allowing for selection will be displayed */
+    selectable?: boolean;
+    /** The currently selected items */
+    selection?: Array<T>;
 }
 
-defineProps<ClassicDataTableProps<T>>();
+export interface ClassicDataTableEvents<T> {
+        /** Event triggered when the selection changes */
+    (e: 'update:selection', selection: Array<T>): void
+}
+
+const { selection } = defineProps<ClassicDataTableProps<T>>();
+
+const emit = defineEmits<ClassicDataTableEvents<T>>();
 
 const slots = useSlots();
+
+function isSelected(element: T): boolean {
+    return selection.indexOf(element) >= 0;
+}
+
+function select(element: T): void  {
+    if (isSelected(element)) {
+        emit('update:selection', []);
+    } else {
+        emit('update:selection', [...selection, element]);
+    }
+}
 </script>
 
 <style scoped lang="scss">
@@ -87,5 +119,10 @@ thead, tr/*:not(:last-child)*/ {
 .actions {
     // Right align content
     justify-content: right;
+}
+
+.selection {
+    width: 20px;
+    padding: 0;
 }
 </style>

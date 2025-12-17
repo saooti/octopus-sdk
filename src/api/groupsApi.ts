@@ -40,11 +40,28 @@ interface SearchParams {
  * @param emission The emission to add to the groups
  * @param groups The list of groups to add the emission to
  */
-async function addToGroups(emission: Emission, groups: Array<EmissionGroup>): Promise<void> {
+async function addToGroups(emission: Emission|number, groups: Array<EmissionGroup>|Array<number>): Promise<void> {
+    if (groups.length === 0) {
+        return;
+    }
+
+    let emissionId: number;
+    if (typeof emission === 'object') {
+        emissionId = emission.emissionId;
+    } else {
+        emissionId = emission;
+    }
+    let groupIds: Array<number>;
+    if (typeof groups[0] === 'object') {
+        groupIds = (groups as Array<EmissionGroup>).map(g => g.groupId);
+    } else {
+        groupIds = groups as Array<number>;
+    }
+
     return classicApi.putData({
         api: ModuleApi.DEFAULT,
-        path: BASE_PATH + 'add/' + emission.emissionId,
-        dataToSend: groups.map(g => g.groupId)
+        path: BASE_PATH + 'add/' + emissionId,
+        dataToSend: groupIds
     });
 }
 
@@ -96,11 +113,28 @@ async function getAllById(groupIds: Array<number>): Promise<Record<string, Emiss
  * @param emission The emission to remove from the groups
  * @param groups The list of groups to remove the emission from
  */
-async function removeFromGroups(emission: Emission, groups: Array<EmissionGroup>): Promise<void> {
+async function removeFromGroups(emission: Emission|number, groups: Array<EmissionGroup>|Array<number>): Promise<void> {
+    if (groups.length === 0) {
+        return;
+    }
+
+    let emissionId: number;
+    if (typeof emission === 'object') {
+        emissionId = emission.emissionId;
+    } else {
+        emissionId = emission;
+    }
+    let groupIds: Array<number>;
+    if (typeof groups[0] === 'object') {
+        groupIds = (groups as Array<EmissionGroup>).map(g => g.groupId);
+    } else {
+        groupIds = groups as Array<number>;
+    }
+
     return classicApi.putData({
         api: ModuleApi.DEFAULT,
-        path: BASE_PATH + 'remove/' + emission.emissionId,
-        dataToSend: groups.map(g => g.groupId)
+        path: BASE_PATH + 'remove/' + emissionId,
+        dataToSend: groupIds
     });
 }
 

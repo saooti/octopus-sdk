@@ -15,8 +15,7 @@
 <template>
     <ClassicDataTable_Internal 
         v-if="noPagination"
-        :items="items"
-        :headers="headers"
+        v-bind="{ ...props, ...$attrs }"
     >
         <template v-for="(_, name) in $slots" v-slot:[name]="scope">
             <slot :name="name" v-bind="{ ...scope }" />
@@ -33,8 +32,7 @@
     >
         <template v-if="!loading" #list>
             <ClassicDataTable_Internal 
-                :items="items"
-                :headers="headers"
+                v-bind="{ ...props, ...$attrs }"
             >
                 <template v-for="(_, name) in $slots" v-slot:[name]="scope">
                     <slot :name="name" v-bind="{ ...scope }" />
@@ -49,13 +47,15 @@ import { ref, useSlots } from 'vue';
 import ListPaginate from '../display/list/ListPaginate.vue';
 import ClassicDataTable_Internal, {
     type ClassicDataTableHeader,
-    type ClassicDataTableProps
+    type ClassicDataTableProps,
+    type ClassicDataTableEvents
 } from './ClassicDataTable_Internal.vue';
 
 const {
     first = 0,
     size = 50,
-    noPagination = false
+    noPagination = false,
+    ...props
 } = defineProps<ClassicDataTableProps<T> & {
     /** Index of first element in pagination */
     first?: number;
@@ -66,6 +66,7 @@ const {
 }>();
 
 const slots = useSlots();
+//const emit = defineEmits<ClassicDataTableEvents<T>>();
 
 /** Indicates that data is loading in the table */
 const loading = ref(false);
