@@ -12,7 +12,7 @@
         <EmissionPresentationItem
           v-if="emissionDisplay === 'simple'"
           :emission="option"
-          class="mx-2"
+          class="mx-2 inline-list-element"
           is-description
           :is-vertical="emissionVertical"
         />
@@ -162,7 +162,7 @@ function mainRubriquage(emission: Emission): string {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-app {
   .list-episode {
     padding: 2rem 0 1rem !important;
@@ -174,6 +174,12 @@ function mainRubriquage(emission: Emission): string {
     h2 {
       margin-bottom: 1rem;
     }
+  }
+}
+
+.inline-list-element {
+  @media (width <= 960px) {
+    height: 334px;
   }
 }
 </style>

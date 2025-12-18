@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.14 (18/12/2025)
+
+**Misc**
+
+- Ajustements affichage pour smartphones
+
 ## 41.1.13 (18/12/2025)
 
 **Misc**

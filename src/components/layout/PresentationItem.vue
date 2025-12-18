@@ -82,7 +82,13 @@ const { useProxyImageUrl } = useImageProxy();
 // Calcul de la taille de l'image
 const tailleImage = computed(() => {
   // L'élément fait 400 de large à la verticale, mais on prend en compte les bordures
-  return props.vertical ? '396' : '250';
+  if (props.vertical) {
+    return '396';
+  } else if (isPhone.value) {
+    return '246';
+  } else {
+    return '250';
+  }
 });
 
 //Watch

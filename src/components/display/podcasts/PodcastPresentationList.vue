@@ -20,6 +20,7 @@
       >
         <template #after-image>
           <PodcastPlayButton
+            v-if="!isPhone"
             :podcast="item"
             :hide-play="false"
             :show-processing="false"
