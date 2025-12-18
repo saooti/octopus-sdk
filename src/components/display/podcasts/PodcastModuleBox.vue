@@ -130,7 +130,7 @@
       </div>
     </div>
     <TagList
-      v-if="undefined !== tags && 0 !== tags.length"
+      v-if="showTags"
       :tag-list="tags"
       :orga-id="podcast.organisation.id"
       :podcast-annotations="podcast.annotations"
@@ -196,11 +196,11 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 //Props 
-const props = defineProps({
-  playingPodcast: { default: undefined, type: Object as () => Podcast },
-  podcast: { default: undefined, type: Object as () => Podcast },
-  podcastConference: { default: undefined, type: Object as () => Conference },
-})
+const props = defineProps<{
+  podcast: Podcast;
+  playingPodcast?: Podcast;
+  podcastConference?: Conference;
+}>();
 
 //Emits
 const emit = defineEmits(["updatePodcast"]);
@@ -297,4 +297,12 @@ function removeDeleted(): void {
     router.push("/");
   }
 }
+
+const showTags = computed((): boolean => {
+  if (state.emissionsPage.hideTags === true) {
+    return false;
+  }
+
+  return undefined !== tags.value && 0 !== tags.value.length;
+});
 </script>

@@ -60,7 +60,7 @@
 
             <!-- Tag list -->
             <TagList
-              v-if="undefined !== emission.tags && 0 !== emission.tags.length"
+              v-if="showTags"
               :tag-list="emission.tags"
               :orga-id="authOrgaId"
               :emission-annotations="emission.annotations"
@@ -173,15 +173,18 @@ const TagList = defineAsyncComponent(() => import("../display/podcasts/TagList.v
 
 
 //Props 
-const props = defineProps({
-  emissionId: { default: undefined, type: Number },
-  pr: { default: 0, type: Number },
-  ps: { default: 30, type: Number },
-  routeQuery: { default: "", type: String },
+const props = withDefaults(defineProps<{
+  emissionId: number;
+  pr?: number;
+  ps?: number;
+  routeQuery?: string;
   /** When true, display emission title in podcastmaker header */
-  useEmissionTitle: { default: false, type: Boolean }
+  useEmissionTitle?: boolean;
+}>(), {
+  pr: 0,
+  ps: 30,
+  routeQuery: ''
 });
-
 
 //Data 
 const loaded = ref(false);
@@ -271,4 +274,13 @@ function podcastsFetched(podcasts: Array<Podcast>) {
     }
   }
 }
+
+/** Indicates whether to show tags */
+const showTags = computed((): boolean => {
+  if (state.podcastPage.hideTags === true) {
+    return false;
+  }
+
+  return undefined !== emission.value.tags && 0 !== emission.value.tags.length;
+});
 </script>

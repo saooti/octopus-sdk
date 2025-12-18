@@ -107,7 +107,7 @@ function urlify(text:string|undefined){
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-app {
   .item-presentation-container {
     @media (width <= 960px) {

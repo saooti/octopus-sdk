@@ -24,6 +24,7 @@ const state: ParamStore = {
     isVideoPage:false,
   },
 };
+
 export interface ParamStore {
   generalParameters: {
     forceOrganisationId?: string;
@@ -38,6 +39,8 @@ export interface ParamStore {
     ShareButtons?: boolean;
     mainRubrique?: number;
     downloadButton?:boolean;
+    /** If true, hide tags on podcast page */
+    hideTags?: boolean;
   };
   emissionsPage: {
     itemPlayer?: boolean;
@@ -45,14 +48,23 @@ export interface ParamStore {
     mainRubrique?: number;
     buttonMore?: boolean;
     progressBar?: boolean;
+    /** If true, hide tags on emission page */
+    hideTags?: boolean;
   },
   player: {
     isVideoPage?:boolean;
   };
 }
-const definedProps = (obj:unknown) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined));
 
-const initialize = function initialize(initObject: ParamStore): void {
+function definedProps<T>(obj: Partial<T>|undefined): Partial<T> {
+  if (obj === undefined) {
+    return {};
+  } else {
+    return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as Partial<T>;
+  }
+}
+
+const initialize = function initialize(initObject: Partial<ParamStore>): void {
   state.generalParameters = Object.assign(
     state.generalParameters,
     definedProps(initObject.generalParameters),

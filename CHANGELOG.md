@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.1.12 (18/12/2025)
+
+**Feature**
+
+- Ajout option de configuration dans `SdkParam` pour désactiver l'affichage des
+  mots-clés.
+
 ## 41.1.11 (16/12/2025)
 
 **Misc**
