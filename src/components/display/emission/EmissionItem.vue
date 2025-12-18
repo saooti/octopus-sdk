@@ -73,9 +73,10 @@ import ClassicImageBanner from '../../misc/ClassicImageBanner.vue';
 import { useI18n } from "vue-i18n";
 
 //Props 
-const props = defineProps({
-  emission: { default: () => ({}), type: Object as () => Emission },
-});
+const props = defineProps<{
+  /** The emission to display */
+  emission: Emission;
+}>();
 
 //Data 
 const activeEmission = ref(true);
@@ -135,5 +136,23 @@ async function hasPodcast(): Promise<void> {
 <style scoped lang="scss">
 article {
   max-height: 254px;  // Image size + a few pixels for border
+
+  // Adjust display for small screens
+  @media (width <= 960px) {
+    max-height: 500px;
+
+    a {
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+
+    .element-name {
+      font-size: 1rem;
+    }
+
+    .element-description {
+      font-size: 0.7rem;
+    }
+  }
 }
 </style>
