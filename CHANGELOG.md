@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 41.1.15 (19/12/2025)
+
+**Fixes**
+
+- Correction de l'affichage de certaines émission sur iPhone
+
+**Misc**
+
+- Troncature des descriptions d'émissions sur mobile
+
 ## 41.1.14 (18/12/2025)
 
 **Misc**

@@ -38,7 +38,7 @@
           <!-- eslint-disable vue/no-v-html -->
           <div
             ref="descriptionEmission"
-            v-html="urlify(emission.description || '')"
+            v-html="description"
           />
           <!-- eslint-enable -->
         </div>
@@ -71,6 +71,7 @@ import { ListClassicReturn } from "@/stores/class/general/listReturn";
 import ClassicImageBanner from '../../misc/ClassicImageBanner.vue';
 
 import { useI18n } from "vue-i18n";
+import { useResizePhone } from "../../composable/useResizePhone";
 
 //Props 
 const props = defineProps<{
@@ -111,6 +112,25 @@ onMounted(()=>{
   }
 })
 
+const { isPhone } = useResizePhone();
+const description = computed((): string => {
+  let str = props.emission.description;
+  if (!str) {
+    return '';
+  }
+
+  // Truncate description on phones
+  if (isPhone.value === true) {
+    const pattern = /^(.+?<\/p>)/;
+    const matches = str.match(pattern);
+    if (matches && matches.length === 2) {
+      str = matches[1];
+    }
+  }
+
+  return urlify(str);
+});
+
 //Methods
 function urlify(text:string|undefined){
   return displayHelper.urlify(text);
@@ -142,8 +162,8 @@ article {
     max-height: 500px;
 
     a {
-      flex-direction: column;
-      flex-wrap: nowrap;
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
     }
 
     .element-name {
