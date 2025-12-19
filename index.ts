@@ -40,6 +40,7 @@ export const getContractPreviewModal = () => import("./src/components/misc/modal
 export const getClassicModalInBody = () => import("./src/components/misc/modal/ClassicModalInBody.vue");
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
+export const getClassicBigChip = () => import("./src/components/misc/ClassicBigChip.vue");
 
 import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
 import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";

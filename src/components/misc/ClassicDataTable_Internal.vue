@@ -70,7 +70,7 @@ export interface ClassicDataTableProps<T> {
 }
 
 export interface ClassicDataTableEvents<T> {
-        /** Event triggered when the selection changes */
+    /** Event triggered when the selection changes */
     (e: 'update:selection', selection: Array<T>): void
 }
 

@@ -51,6 +51,8 @@ import ClassicDataTable_Internal, {
     type ClassicDataTableEvents
 } from './ClassicDataTable_Internal.vue';
 
+export type { ClassicDataTableHeader };
+
 const {
     first = 0,
     size = 50,

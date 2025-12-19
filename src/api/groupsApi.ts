@@ -19,7 +19,7 @@ export interface EmissionGroup {
     /** The list of ids of emissions in this group */
     emissionIds: Array<number>|null;
     /** If set, defines this group as a "marque" group. */
-    acpmMarque?: string;
+    acpmMarque: string|null;
 }
 
 interface SearchParams {
