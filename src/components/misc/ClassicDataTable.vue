@@ -43,12 +43,10 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { ref, useSlots } from 'vue';
 import ListPaginate from '../display/list/ListPaginate.vue';
 import ClassicDataTable_Internal, {
     type ClassicDataTableHeader,
-    type ClassicDataTableProps,
-    type ClassicDataTableEvents
+    type ClassicDataTableProps
 } from './ClassicDataTable_Internal.vue';
 
 export type { ClassicDataTableHeader };
@@ -65,13 +63,9 @@ const {
     size?: number;
     /** Disable pagination */
     noPagination?: boolean;
+    /** Indicates that data is loading */
+    loading?: boolean;
 }>();
-
-const slots = useSlots();
-//const emit = defineEmits<ClassicDataTableEvents<T>>();
-
-/** Indicates that data is loading in the table */
-const loading = ref(false);
 </script>
 
 <style scoped lang="scss">

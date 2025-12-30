@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { ref, useSlots } from 'vue';
+import { useSlots } from 'vue';
 
 import ClassicCheckbox from '../form/ClassicCheckbox.vue';
 
@@ -67,6 +67,8 @@ export interface ClassicDataTableProps<T> {
     selectable?: boolean;
     /** The currently selected items */
     selection?: Array<T>;
+    /** When set to false, only one element can be selected */
+    selectionMultiple?: boolean;
 }
 
 export interface ClassicDataTableEvents<T> {
@@ -74,7 +76,7 @@ export interface ClassicDataTableEvents<T> {
     (e: 'update:selection', selection: Array<T>): void
 }
 
-const { selection } = defineProps<ClassicDataTableProps<T>>();
+const { selection, selectionMultiple = true } = defineProps<ClassicDataTableProps<T>>();
 
 const emit = defineEmits<ClassicDataTableEvents<T>>();
 
@@ -87,6 +89,8 @@ function isSelected(element: T): boolean {
 function select(element: T): void  {
     if (isSelected(element)) {
         emit('update:selection', []);
+    } else if (selectionMultiple === false) {
+        emit('update:selection', [element]);
     } else {
         emit('update:selection', [...selection, element]);
     }

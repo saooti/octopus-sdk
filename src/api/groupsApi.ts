@@ -22,6 +22,13 @@ export interface EmissionGroup {
     acpmMarque: string|null;
 }
 
+interface Pagination {
+    /** Pagination */
+    first: number;
+    /** Number of elements */
+    size: number;
+}
+
 interface SearchParams {
     /** Filter by acpm */
     acpmMarque: string;
@@ -29,10 +36,6 @@ interface SearchParams {
     search: string;
     /** Filter by organisations */
     organisationIds: Array<string>;
-    /** Pagination */
-    first: number;
-    /** Number of elements */
-    size: number;
 }
 
 /**
@@ -152,12 +155,37 @@ async function update(group: Omit<EmissionGroup, 'emissionIds'>): Promise<Emissi
 /**
  * Search groups
  */
-async function search(parameters: Partial<SearchParams>): Promise<ListClassicReturn<EmissionGroup>> {
+async function search(parameters: Partial<SearchParams & Pagination>): Promise<ListClassicReturn<EmissionGroup>> {
     return classicApi.fetchData<ListClassicReturn<EmissionGroup>>({
         api: ModuleApi.DEFAULT,
         path: BASE_PATH + 'search',
         parameters
     });
+}
+
+/**
+ * Search for all groups, without pagination
+ */
+async function searchNoPagination(parameters: Partial<SearchParams>): Promise<Array<EmissionGroup>> {
+    const result: Array<EmissionGroup> = [];
+
+    let index = 0;
+    while (true) {
+        const response = await search({
+            ...parameters,
+            first: index,
+            size: 1
+        });
+
+        result.push(...response.result);
+        index += response.result.length;
+
+        if (index >= response.count || response.result.length === 0) {
+            break;
+        }
+    }
+
+    return result;
 }
 
 export const groupsApi = {
@@ -168,5 +196,6 @@ export const groupsApi = {
     getAllById,
     removeFromGroups,
     update,
-    search
+    search,
+    searchNoPagination
 };

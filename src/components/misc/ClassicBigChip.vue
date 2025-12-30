@@ -64,7 +64,8 @@ const emit = defineEmits<{
             }
         }
 
-        :deep(button) {
+        // Limit style to buttons directly in title (to not affect the modal)
+        & > div > :deep(button) {
             margin-top: -6px;
             padding: 0;
         }
