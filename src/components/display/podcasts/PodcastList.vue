@@ -106,6 +106,7 @@ const props = withDefaults(defineProps<{
   displaySortText: true,
   validity: true,
   justSizeChosen: false,
+  withVideo: undefined,
   forceUpdateParameters: false
 });
 

@@ -179,7 +179,7 @@ const props = withDefaults(defineProps<{
   ps?: number;
   routeQuery?: string;
   /** When true, display emission title in podcastmaker header */
-  useEmissionTitle?: boolean;
+  useEmissionTitle: boolean;
 }>(), {
   pr: 0,
   ps: 30,

@@ -27,6 +27,8 @@
   émissions ne s'affichent qu'une seule fois lors de la consultation de cet
   épisode
 - Le bouton de lecture vidéo ne disparait plus quand on lit une autre vidéo
+- Correction des épisodes avec vidéos n'apparaissant plus lors de la
+  consultation des émissions
 - `ClassicHelpButton` utilise le string `relative-class` au lieu du booléen
   `relative` pour déterminer l'élément parent.
 
