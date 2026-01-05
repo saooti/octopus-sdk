@@ -21,6 +21,12 @@
 - Ajout de l'API groupes
 - Ajout du filtrage par groupe sur les podcasts
 
+**Misc**
+
+- Les mots-clés définis à la fois sur une émission et sur un épisode de cette
+  émissions ne s'affichent qu'une seule fois lors de la consultation de cet
+  épisode
+
 **Fixes**
 
 - `ClassicHelpButton` utilise le string `relative-class` au lieu du booléen
