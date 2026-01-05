@@ -410,4 +410,6 @@ export default {
   "Emission - Not available for listeners": "Oddaja ni vidna poslušalcem",
   "Emission - Not available explanation": "Ta oddaja ni vidna poslušalcem, ker je bila konfigurirana tako, da njene epizode niso objavljene. Ta konfiguracija je na voljo v naprednih nastavitvah oddaje.",
   "Filters - Beneficiaries": "Po referencah imetnikov pravic",
+  "Filter - Emission groups": "Po oddajnih skupinah",
+  "Search - Emission groups placeholder": "Filtrirajte skupine po imenu"
 }

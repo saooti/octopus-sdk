@@ -9,7 +9,7 @@ import { AuthStore } from "../stores/AuthStore";
 import fetchHelper from "@/helper/fetchHelper";
 import { setupRouter } from "./utils";
 
-import { ROUTE_PARAMS } from "../components/composable/route/useRouteUpdateParams";
+import { ROUTE_PARAMS, RouteProps } from "../components/composable/route/types";
 
 /*--------------------------------------------------------------------------
 Composants publics
@@ -35,6 +35,33 @@ const PageNotFound = () => import("@/components/pages/PageNotFound.vue");
 const RadioPage = () => import("@/components/pages/RadioPage.vue");
 const VideoPage = () => import("@/components/pages/VideoPage.vue");
 const PageLogout = () => import("@/components/pages/PageLogout.vue");
+
+function getSimpleRouteProps(route:RouteLocationNormalized): RouteProps {
+  return {
+    pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+    ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+    routeQuery: route.query.q as string ?? ""
+  };
+}
+
+/**
+ * Return route props used for filtering
+ */
+function getRouteProps(route: RouteLocationNormalized): RouteProps {
+  return {
+    ...getSimpleRouteProps(route),
+    routeMonetisable: route.query.m as string ?? "",
+    routeIab: route.query.i ? parseInt(route.query.i.toString(), 10) : undefined,
+    routeSort: route.query.s as string ?? "",
+    routeIncludeHidden: route.query.h as string ?? "",
+    routeFrom: route.query.from as string|undefined,
+    routeTo: route.query.to as string|undefined,
+    routeOrga:route.query.o as string|undefined,
+    routeRubriques :route.query.r as string ?? route.query.rubriquesId as string|undefined,
+    routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries] as string[]|undefined,
+    routeEmissionGroups: (route.query[ROUTE_PARAMS.EmissionGroups] as string[]|undefined)?.map(g => parseInt(g, 10))
+  }
+}
 
 const routes: Array<RouteRecordRaw> = [
   /*--------------------------------------------------------------------------
@@ -84,22 +111,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main/pub/podcasts/",
     name: "podcasts",
     component: PodcastsPage,
-    props: (route: RouteLocationNormalized) => ({
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
-      routeQuery: route.query.q ?? "",
-      routeMonetisable: route.query.m ?? "",
-      routeIab: route.query.i ? parseInt(route.query.i.toString(), 10) : undefined,
-      routeSort: route.query.s ?? "",
-      routeIncludeHidden: route.query.h ?? "",
-      routeFrom: route.query.from,
-      routeTo: route.query.to,
-      routeValidity:route.query.vl ?? "",
-      routeOnlyVideo:route.query.v ?? "",
-      routeOrga:route.query.o,
-      routeRubriques :route.query.r ?? route.query.rubriquesId,
-      routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries],
-    }),
+    props: getRouteProps,
     meta:{
       title: "Podcasts",
     }
@@ -108,20 +120,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main/pub/emissions/",
     name: "emissions",
     component: EmissionsPage,
-    props: (route: RouteLocationNormalized) => ({
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
-      routeQuery: route.query.q ?? "",
-      routeMonetisable: route.query.m ?? "",
-      routeIab: route.query.i ? parseInt(route.query.i.toString(), 10) : undefined,
-      routeSort: route.query.s ?? "",
-      routeIncludeHidden: route.query.h ?? "",
-      routeFrom: route.query.from,
-      routeTo: route.query.to,
-      routeOrga:route.query.o,
-      routeRubriques :route.query.r ?? route.query.rubriquesId,
-      routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries],
-    }),
+    props: getRouteProps,
     meta:{
       title: "Emissions",
     }
@@ -131,10 +130,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "participants",
     component: ParticpantsPage,
     props: (route: RouteLocationNormalized) => ({
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      ...getSimpleRouteProps(route),
       routeOrga:route.query.o,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "Speakers",
@@ -145,10 +142,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "emission",
     component: EmissionPage,
     props: (route: RouteLocationNormalized) => ({
+      ...getSimpleRouteProps(route),
       emissionId: parseInt(route.params.emissionId.toString(), 10),
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "",
@@ -182,10 +177,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "participant",
     component: ParticipantPage,
     props: (route: RouteLocationNormalized) => ({
+      ...getSimpleRouteProps(route),
       participantId: parseInt(route.params.participantId.toString(), 10),
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "",
@@ -209,11 +202,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "rubrique",
     component: RubriquePage,
     props: (route: RouteLocationNormalized) => ({
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      ...getSimpleRouteProps(route),
       rubriqueId: parseInt(route.params.rubriqueId.toString(), 10),
       routeOrga:route.query.o,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "",
@@ -224,11 +215,9 @@ const routes: Array<RouteRecordRaw> = [
     name: "tag",
     component: TagPage,
     props: (route: RouteLocationNormalized) => ({
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      ...getSimpleRouteProps(route),
       tag: route.params.tag,
       routeOrga:route.query.o,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "",
@@ -261,10 +250,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "playlists",
     component: PlaylistsPage,
     props: (route: RouteLocationNormalized) => ({
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+      ...getSimpleRouteProps(route),
       routeOrga:route.query.o,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "Playlists"
@@ -275,10 +262,8 @@ const routes: Array<RouteRecordRaw> = [
     name: "playlist",
     component: PlaylistPage,
     props: (route: RouteLocationNormalized) => ({
+      ...getSimpleRouteProps(route),
       playlistId: parseInt(route.params.playlistId.toString(), 10),
-      pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
-      ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
-      routeQuery: route.query.q ?? "",
     }),
     meta:{
       title: "",

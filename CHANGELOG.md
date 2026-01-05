@@ -14,9 +14,12 @@
 - Ajout du composant `ActionButton` pour faire un bouton déclenchant une action,
   avec confirmation optionnelle
 - Ajout du composant `ClassicBigChip` pour afficher des éléments simples
+- Ajout du composant `EmissionGroupChooser` pour sélectionner un groupe
+  d'émissions parmis ceux définis
 - Ajout de la bibliothèque d'icones `src/components/icons.ts` pour uniformiser
   les icones au sein des différents projets
 - Ajout de l'API groupes
+- Ajout du filtrage par groupe sur les podcasts
 
 **Fixes**
 

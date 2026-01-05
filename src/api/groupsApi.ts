@@ -153,6 +153,18 @@ async function update(group: Omit<EmissionGroup, 'emissionIds'>): Promise<Emissi
 }
 
 /**
+ * Count number of groups
+ */
+async function count(parameters: Partial<SearchParams>): Promise<number> {
+    const result = await search({
+        ...parameters,
+        size: 0
+    });
+
+    return result.count;
+}
+
+/**
  * Search groups
  */
 async function search(parameters: Partial<SearchParams & Pagination>): Promise<ListClassicReturn<EmissionGroup>> {
@@ -190,6 +202,7 @@ async function searchNoPagination(parameters: Partial<SearchParams>): Promise<Ar
 
 export const groupsApi = {
     addToGroups,
+    count,
     create,
     remove,
     get,

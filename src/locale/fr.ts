@@ -21,7 +21,7 @@ export default {
   "Please set an animator": "Merci de sélectionner ou de créer un animateur.",
   "Term of use": "Conditions Générales d'Utilisation",
   "Producted by : ": "Produit par : ",
-  "Loading podcasts ...": "Chargement des épisodes ...",
+  "Loading podcasts ...": "Chargement des épisodes…",
   "All podcasts": "Tous les épisodes",
   Error: "Erreur",
   Upload: "Téléverser",
@@ -68,7 +68,7 @@ export default {
   "Loading productors ...": "Chargement des producteurs en cours...",
   "Loading emissions ...": "Chargement des émissions en cours...",
   "Emission name image": "Image de l'émission {name}",
-  "Loading content ...": "Chargement en cours ...",
+  "Loading content ...": "Chargement en cours…",
   Episode: "Épisode",
   "Episode name image": "Image de l'épisode {name}",
   "More episodes of this emission": "Plus d'épisodes de cette émission",
@@ -427,5 +427,7 @@ export default {
   "Silent stream":"Flux silencieux",
   "Emission - Not available for listeners": "Émission non visible pour les auditeurs",
   "Emission - Not available explanation": "Cette émission n'est pas visible pour les auditeurs car elle a été configurée pour que ses épisodes ne soient pas publiés. Cette configuration est disponible dans les paramètres avancés de l'émission.",
-  "Filters - Beneficiaries": "Par références ayants-droit"
+  "Filters - Beneficiaries": "Par références ayants-droit",
+  "Filters - Emission groups": "Par groupes d'émissions",
+  "Search - Emission groups placeholder": "Filtrer les groupes par nom"
 };

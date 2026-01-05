@@ -71,6 +71,7 @@ import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";
+import { EmissionGroup } from "../../../api/groupsApi";
 const EmissionItem = defineAsyncComponent(() => import("./EmissionItem.vue"));
 const EmissionPlayerItem = defineAsyncComponent(
   () => import("./EmissionPlayerItem.vue"),
@@ -94,7 +95,9 @@ const props = defineProps({
   noRubriquageId: { default: () => [], type: Array as () => Array<number> },
   nbPodcasts: { default: undefined, type: Number },
   /** The beneficiaries to filter on */
-  beneficiaries: { default: null, type: Array as () => Array<string> }
+  beneficiaries: { default: null, type: Array as () => Array<string> },
+  /** The emission groups to filter on */
+  emissionGroups: { default: null, type: Array as () => Array<EmissionGroup> }
 })
 
 //Data 
@@ -128,7 +131,8 @@ const changePaginate = computed(() => `${props.first}|${props.size}`);
 const changed = computed(() => {
   return `${props.organisationId}|${props.query}|${props.monetisable}|${props.includeHidden}|\
   ${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.before}|\
-  ${props.after}|${props.sort}|${props.noRubriquageId}|${props.beneficiaries}`;
+  ${props.after}|${props.sort}|${props.noRubriquageId}|${props.beneficiaries}|\
+  ${props.emissionGroups}`;
 });
 const sortText = computed(() => {
   let textSort = "";
@@ -203,6 +207,8 @@ async function fetchContent(reset: boolean): Promise<void> {
   } else {
     param.visible = 'VISIBLE';
   }
+
+  // TODO use emissionGroups
 
   try {
     const data = await classicApi.fetchData<ListClassicReturn<Emission>>({

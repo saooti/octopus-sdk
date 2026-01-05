@@ -32,6 +32,23 @@
                         @update:rubrique-filter="updateRubriquageFilter"
                     />
 
+                    <!-- Group filters -->
+                    <div v-if="!isEmission && showEmissionGroups" class="mt-3 d-flex">
+                        <ClassicCheckbox
+                            v-model:text-init="emissionGroupCheckbox"
+                            class="flex-shrink-0"
+                            id-checkbox="search-emission-groups-checkbox"
+                            :label="t('Filters - Emission groups')"
+                        />
+
+                        <EmissionGroupChooser
+                            v-if="emissionGroupCheckbox"
+                            class="ms-4 flex-grow-1"
+                            :groups="emissionGroups"
+                            @update:groups="updateEmissionGroupFilter"
+                        />
+                    </div>
+
                     <!-- Date -->
                     <DateFilter
                         :is-emission="isEmission"
@@ -117,7 +134,7 @@ import { useAuthStore } from "../../../stores/AuthStore";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { useRubriquesFilterParam } from "../../composable/route/useRubriquesFilterParam";
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
-import { defineAsyncComponent, ref, computed, watch } from "vue";
+import { defineAsyncComponent, ref, computed, watch, onMounted } from "vue";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
 const MonetizableFilter = defineAsyncComponent(
@@ -141,27 +158,35 @@ const ClassicCheckbox = defineAsyncComponent(
 const DateFilter = defineAsyncComponent(() => import("./DateFilter.vue"));
 const SearchOrder = defineAsyncComponent(() => import("./SearchOrder.vue"));
 import { ROUTE_PARAMS } from '../../composable/route/types';
+import { EmissionGroup, groupsApi } from "../../../api/groupsApi";
+import EmissionGroupChooser from "../emission/EmissionGroupChooser.vue";
+import { computedAsync } from "@vueuse/core";
 
 //Props 
-const props = defineProps({
-    organisationId: { default: undefined, type: String },
-    isEmission: { default: false, type: Boolean },
-    includeHidden: { default: false, type: Boolean },
-    sort: { default: "DATE", type: String },
-    onlyVideo: { default: false, type: Boolean },
-    monetisable: { default: "UNDEFINED", type: String },
-    iabId: { default: undefined, type: Number },
-    searchPattern: { default: "", type: String },
-    fromDate: { default: undefined, type: String },
-    toDate: { default: undefined, type: String },
-    validity: { default: 'true', type: String },
+const props = withDefaults(defineProps<{
+    organisationId?: string;
+    /** Indicates that the filters apply to emissions */
+    isEmission?: boolean;
+    includeHidden?: boolean;
+    sort?: string;
+    onlyVideo?: boolean;
+    monetisable?: string;
+    iabId?: number;
+    searchPattern?: string;
+    fromDate?: string;
+    toDate?: string;
+    validity?: string;
     /** The filter on beneficiaries */
-    beneficiaries: { default: null, type: Array as () => Array<string> },
-    rubriqueFilter: {
-        default: () => [],
-        type: Array as () => Array<RubriquageFilter>,
-    },
-})
+    beneficiaries?: Array<string>;
+    rubriqueFilter?: Array<RubriquageFilter>;
+    /** The filter on groups */
+    emissionGroups?: Array<EmissionGroup>;
+}>(), {
+    sort: "DATE",
+    monetisable: "UNDEFINED",
+    searchPattern: "",
+    validity: "true"
+});
 
 //Emits
 const emit = defineEmits([
@@ -174,13 +199,14 @@ const emit = defineEmits([
     "update:validity",
     "update:rubriqueFilter",
     "update:onlyVideo",
-    "update:beneficiaries"
+    "update:beneficiaries",
+    "update:emission-groups"
 ]);
 
 //Data 
 const showFilters = ref(false);
 const firstLoaded = ref(false);
-
+const showEmissionGroups = ref(false);
 
 //Composables
 const { t } = useI18n();
@@ -190,6 +216,13 @@ const generalStore = useGeneralStore();
 const filterStore = useFilterStore();
 const authStore = useAuthStore();
 
+onMounted(async() => {
+    // Only show emission groups if there are some
+    const nbGroups = await groupsApi.count({
+        organisationIds: [props.organisationId]
+    });
+    showEmissionGroups.value = nbGroups > 0;
+});
 
 //Computed
 const organisationRight = computed(() => isEditRights(props.organisationId));
@@ -205,6 +238,7 @@ const isSelectValidity = computed(() => {
         props.includeHidden
     );
 });
+
 /** The beneficiaries filter is only displayed if beneficiaries are enabled */
 const beneficiariesEnabled = computed(() => {
     return authStore.authOrganisation.attributes['beneficiaries.enabled'] === 'true';
@@ -288,9 +322,35 @@ function updateRubriquageFilter(value: Array<RubriquageFilter>) {
         filterRubriques = { rubriquesId: undefined };
     }
     updateRouteParamAdvanced({
-        ...{ r: valueString.length ? valueString : undefined },
+         r: valueString.length ? valueString : undefined,
         ...filterRubriques,
     });
+}
+
+/** Manage the checkbox enabling filtering on groups */
+const emissionGroupCheckbox = computed({
+    get(): boolean {
+        return props.emissionGroups !== undefined && props.emissionGroups !== null;
+    },
+    set(value: boolean): void {
+        if (value) {
+            updateEmissionGroupFilter([]);
+        } else {
+            updateEmissionGroupFilter(undefined);
+        }
+    }
+});
+
+/** Update selected groups */
+function updateEmissionGroupFilter(groups: Array<EmissionGroup>|undefined): void {
+    if (groups !== undefined && groups.length === 0) {
+        emit('update:emission-groups', []);
+    } else {
+        updateRouteParamAdvanced({
+            [ROUTE_PARAMS.EmissionGroups]: groups?.map(g => g.groupId)
+        });
+        emit('update:emission-groups', groups);
+    }
 }
 
 /** Update the beneficiaries filter */

@@ -60,6 +60,7 @@ export const getCategoryChooser = () => import("./src/components/display/categor
 export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");
 export const getCategoryFilter = () => import("./src/components/display/categories/CategoryFilter.vue");
 export const getEmissionList = () => import("./src/components/display/emission/EmissionList.vue");
+export const getEmissionGroupChooser = () => import("./src/components/display/emission/EmissionGroupChooser.vue");
 export const getOrganisationChooser = () => import("./src/components/display/organisation/OrganisationChooser.vue");
 export const getPodcastFilterList = () => import("./src/components/display/podcasts/PodcastFilterList.vue");
 export const getPodcastInlineList = () => import("./src/components/display/podcasts/PodcastInlineList.vue");
