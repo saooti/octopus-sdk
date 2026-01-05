@@ -15,6 +15,7 @@
             v-model:validity="validity"
             v-model:rubrique-filter="rubriqueFilter"
             v-model:beneficiaries="beneficiaries"
+            v-model:emission-groups="emissionGroups"
             :search-pattern="searchPattern"
             :is-emission="false"
             :organisation-id="organisationId"
@@ -37,6 +38,7 @@
             :beneficiaries="beneficiaries"
             :with-video="withVideo"
             :validity="validity"
+            :emission-groups="emissionGroups"
         />
     </section>
 </template>
@@ -47,30 +49,16 @@ import ProductorSearch from "../display/filter/ProductorSearch.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
 import { computed, ref, watch } from "vue";
+import { RouteProps } from "../composable/route/types";
 
 //Props 
-const props = defineProps({
-    pr: { default: 0, type: Number },
-    ps: { default: 30, type: Number },
-    routeQuery: { default: "", type: String },
-    routeMonetisable: { default: "UNDEFINED", type: String },
-    routeIab: { default: undefined, type: Number },
-    routeSort: { default: "DATE", type: String },
-    routeIncludeHidden: { default: "", type: String },
-    routeFrom: { default: undefined, type: String },
-    routeTo: { default: undefined, type: String },
-    routeValidity: { default: "", type: String },
-    routeOnlyVideo: { default: "", type: String },
-    routeOrga: { default: undefined, type: String },
-    routeRubriques: { default: "", type: String },
-    /** The filter on beneficiaries defined on the route props */
-    routeBeneficiaries: { default: null, type: Array as () => Array<string> }
+const props = withDefaults(defineProps<RouteProps>(), {
+    routeMonetisable: "UNDEFINED",
+    routeSort: "DATE"
 });
-
 
 //Data 
 const onlyVideo = ref(false);
-
 
 //Composables
 const {
@@ -88,13 +76,13 @@ const {
     validity,
     rubriquesFilterArrayIds,
     isInit,
-    beneficiaries
+    beneficiaries,
+    emissionGroups
 } = useAdvancedParamInit(props, false);
 
 //Computed
 const orgaArray = computed(() => organisationId.value ? [organisationId.value] : []);
 const withVideo = computed(() => false === onlyVideo.value ? undefined : true);
-
 
 //Watch
 watch(() => props.routeOnlyVideo, () =>{

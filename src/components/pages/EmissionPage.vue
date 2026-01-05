@@ -42,7 +42,7 @@
               <div class="d-flex" style="align-items: center">
                 <div>{{ t('Emission - Not available for listeners') }}</div>
 
-                <ClassicHelpButton relative small>
+                <ClassicHelpButton relative-class="page-element" small>
                   {{ t('Emission - Not available explanation') }}
                 </ClassicHelpButton>
               </div>
@@ -179,7 +179,7 @@ const props = withDefaults(defineProps<{
   ps?: number;
   routeQuery?: string;
   /** When true, display emission title in podcastmaker header */
-  useEmissionTitle?: boolean;
+  useEmissionTitle: boolean;
 }>(), {
   pr: 0,
   ps: 30,

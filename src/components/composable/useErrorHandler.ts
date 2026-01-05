@@ -12,6 +12,7 @@ export const useErrorHandler = ()=>{
       if (undefined === authStore.authOrgaId) {
         window.location.href = window.location.origin + "/sso/login";
       } else {
+        console.error(error);
         router.push({
           path: "/main/pub/error",
         });
@@ -19,7 +20,7 @@ export const useErrorHandler = ()=>{
     }
   }
 
-	return {
+  return {
     handle403
-	}
+  }
 }

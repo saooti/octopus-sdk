@@ -3,6 +3,9 @@ import { Organisation } from "./organisation";
 import { Person } from "../user/person";
 import { ItuneCategory } from "./ituneCategory";
 
+/**
+ * An emission
+ */
 export interface Emission {
   imageUrl?: string;
   annotations?: { [key: string]: string | number | boolean | undefined };
@@ -34,20 +37,23 @@ export interface Emission {
   visible?: boolean;
   /** An optional list of tags */
   tags?: string[];
+  /** The ids of groups this emission belongs to */
+  groupIds?: Array<number>
 }
 
-export function emptyEmissionData(): Emission {
+export function emptyEmissionData(orga?: Organisation): Emission {
   return {
     emissionId: 0,
     name: "",
     description: "",
     imageUrl: "",
     iabIds: undefined,
-    orga: {
+    orga: orga ?? {
       id: "",
       name: "",
       imageUrl: "",
     },
+    beneficiaries: [],
     rubriqueIds: [],
     monetisable: "UNDEFINED",
     limits: {},

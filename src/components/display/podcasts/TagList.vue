@@ -74,9 +74,12 @@ const filterStore = useFilterStore();
 
 //Computed
 const tagListFiltered = computed(() => {
-  return props.tagList.filter((tag: string) => {
+  const tags = props.tagList.filter((tag: string) => {
     return !tag.match(/^\[\[.*\]\]$/);
   });
+
+  // Each tag is only displayed once
+  return tags.filter((tag, index) => tags.indexOf(tag) === index);
 });
 const organisationQuery = computed(() => {
   if(filterStore.filterOrgaId){

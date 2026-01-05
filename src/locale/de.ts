@@ -418,4 +418,6 @@ export default {
   "Emission - Not available for listeners": "Sendung für Hörer nicht sichtbar",
   "Emission - Not available explanation": "Diese Sendung ist für Hörer nicht sichtbar, da sie so konfiguriert wurde, dass ihre Episoden nicht veröffentlicht werden. Diese Konfiguration ist in den erweiterten Einstellungen der Show verfügbar.",
   "Filters - Beneficiaries": "Nach Referenzen der Rechteinhaber",
+  "Filter - Emission groups": "Nach Broadcast-Gruppen",
+  "Search - Emission groups placeholder": "Filtern Sie Gruppen nach Namen"
 }

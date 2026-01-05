@@ -14,6 +14,8 @@ export interface RouteProps {
     routeRubriques?: string;
     /** The filter on beneficiaries defined on the route props */
     routeBeneficiaries?: string[];
+    /** The filter on emission groups defined on the route props */
+    routeEmissionGroups?: number[];
 }
 
 type DateStr = string;
@@ -32,16 +34,22 @@ export interface AdvancedRouteParams extends RouteParams {
     to?: DateStr;
     /** When set, filter on beneficiaries */
     b?: string[];
+    /** When set, filter on topics */
+    r?: string;
     q?: string;
+    /** When set, filter on groups */
+    gp?: number[];
 }
 
 type RouteParamEnum =
     'Beneficiaries' |
-    'Query'
+    'Query' |
+    'EmissionGroups'
     ;
 
 /** Utility to access route params by constants instead of undefined value */
 export const ROUTE_PARAMS: Record<RouteParamEnum, keyof AdvancedRouteParams> = {
     Beneficiaries: 'b',
-    Query: 'q'
+    Query: 'q',
+    EmissionGroups: 'gp'
 };

@@ -179,6 +179,11 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 				margin: 0.3rem;
 			}
 		}
+
+		&.btn-small {
+			font-size: 0.55rem;
+			padding: 0.2rem 0.4rem;
+		}
 		
 		&.admin-button{
 			padding: 0.3rem;

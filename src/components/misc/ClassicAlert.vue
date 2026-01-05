@@ -82,6 +82,13 @@ const iconComponent = computed(() => {
         display: flex;
         flex-direction: column;
         align-self: center;
+
+        &:deep(p) {
+            margin: 0 !important;
+            &:not(:first-child) {
+                margin-top: 8px !important;
+            }
+        }
     }
 
     $types: (

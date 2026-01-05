@@ -8,6 +8,7 @@ import { computed, nextTick, onMounted, Ref, ref, watch } from "vue";
 import dayjs from "dayjs";
 
 import { RouteProps } from "./types";
+import { EmissionGroup, groupsApi } from "../../../api/groupsApi";
 
 export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => {
 
@@ -29,7 +30,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
   const iabId: Ref<number|undefined> = ref(undefined);
   const rubriqueFilter: Ref<Array<RubriquageFilter>> = ref([]);
   const beneficiaries = ref<string[]|null>(null);
-
+  const emissionGroups = ref<EmissionGroup[]|null>(null);
 
   const organisationRight = computed(() => isEditRights(organisationId.value));
   const organisation = computed(() => organisationId.value ?? filterStore.filterOrgaId);
@@ -53,17 +54,18 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     }
   });
 
-  watch(() => props.routeQuery, () => initSearchPattern());
-  watch(() => props.routeMonetisable, () => initMonetisable());
-  watch(() => props.routeSort, () => initSort());
-  watch(() => props.routeIncludeHidden, () => initIncludeHidden());
-  watch(() => props.routeValidity, () => initValidity());
-  watch(() => props.routeFrom, () => initFromDate());
-  watch(() => props.routeTo, () => initToDate());
+  watch(() => props.routeQuery, initSearchPattern);
+  watch(() => props.routeMonetisable, initMonetisable);
+  watch(() => props.routeSort, initSort);
+  watch(() => props.routeIncludeHidden, initIncludeHidden);
+  watch(() => props.routeValidity, initValidity);
+  watch(() => props.routeFrom, initFromDate);
+  watch(() => props.routeTo, initToDate);
   watch(() => props.routeIab, () => {iabId.value = props.routeIab;});
-  watch(() => props.routeOrga, () => initOrga());
-  watch(() => props.routeRubriques, () => initRubriquageFilter());
+  watch(() => props.routeOrga, initOrga);
+  watch(() => props.routeRubriques, initRubriquageFilter);
   watch(() => props.routeBeneficiaries, initBeneficiariesFilter);
+  watch(() => props.routeEmissionGroups, initEmissionGroups);
   watch(organisationId, () => {
     if (!isInit.value) {
       return;
@@ -135,7 +137,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
       return
     }
     const rubriqueFilterToUpdate = [];
-    if(props.routeRubriques.trim().length){
+    if(props.routeRubriques?.trim().length){
       const arrayFilter = props.routeRubriques.split(",");
       for(const filter of arrayFilter){
         const rubriqueFilter = filter.split(":");
@@ -151,7 +153,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
   }
 
   function initBeneficiariesFilter() {
-    const data = props.routeBeneficiaries as string[];
+    const data = props.routeBeneficiaries;
     // No beneficiaries
     if (
       data === undefined ||
@@ -170,6 +172,28 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     beneficiaries.value = data;
   }
 
+  async function initEmissionGroups(): Promise<void> {
+    const data = props.routeEmissionGroups;
+    // No groups
+    if (
+      data === undefined ||
+      data === null ||
+      data.length === 0
+    ) {
+      emissionGroups.value = null;
+      return;
+    }
+
+    // No changes
+    if(emissionGroups.value && data === emissionGroups.value.map(g => g.groupId)){
+      return;
+    }
+
+    const groups = await groupsApi.getAllById(data);
+
+    emissionGroups.value = Object.values(groups);
+  }
+
   return {
     organisationId,
     searchPattern,
@@ -185,6 +209,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     validity,
     rubriquesFilterArrayIds,
     isInit,
-    beneficiaries
+    beneficiaries,
+    emissionGroups
   };
 }

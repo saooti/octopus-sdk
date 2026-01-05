@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## 41.2.0 (En cours)
+
+**Features**
+
+- Ajout d'un système de notifications
+  - Intégrez `ClassicNotification` dans la vue principale pour afficher les
+    notifications
+  - Utilisez le composable `useNotifications` pour contrôler l'affichage des
+    notification depuis n'importe quel composant
+- Ajout du composant `ClassicDataTable` pour afficher des tableaux de données
+  facilement
+- Ajout du composant `ActionButton` pour faire un bouton déclenchant une action,
+  avec confirmation optionnelle
+- Ajout du composant `ClassicBigChip` pour afficher des éléments simples
+- Ajout du composant `EmissionGroupChooser` pour sélectionner un groupe
+  d'émissions parmis ceux définis
+- Ajout de la bibliothèque d'icones `src/components/icons.ts` pour uniformiser
+  les icones au sein des différents projets
+- Ajout de l'API groupes
+- Ajout du filtrage par groupe sur les podcasts
+
+**Fixes**
+
+- Les mots-clés définis à la fois sur une émission et sur un épisode de cette
+  émissions ne s'affichent qu'une seule fois lors de la consultation de cet
+  épisode
+- Le bouton de lecture vidéo ne disparait plus quand on lit une autre vidéo
+- Correction des épisodes avec vidéos n'apparaissant plus lors de la
+  consultation des émissions
+- `ClassicHelpButton` utilise le string `relative-class` au lieu du booléen
+  `relative` pour déterminer l'élément parent.
+
 ## 41.1.15 (19/12/2025)
 
 **Fixes**

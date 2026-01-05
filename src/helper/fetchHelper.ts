@@ -114,6 +114,7 @@ export default {
       // remove empty array for stats #12323
       if (
         undefined !== value &&
+        null !== value &&
         "" !== value &&
         (!Array.isArray(value) || (Array.isArray(value) && value.length))
       ) {

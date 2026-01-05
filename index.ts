@@ -40,11 +40,27 @@ export const getContractPreviewModal = () => import("./src/components/misc/modal
 export const getClassicModalInBody = () => import("./src/components/misc/modal/ClassicModalInBody.vue");
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
+export const getClassicBigChip = () => import("./src/components/misc/ClassicBigChip.vue");
+
+import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
+import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";
+
+export {
+    ClassicDataTable,
+    type ClassicDataTableHeader,
+    ClassicNotifications
+}
+
+// Buttons
+import ActionButton from "./src/components/buttons/ActionButton.vue";
+export { ActionButton };
+
 //Display
 export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
 export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");
 export const getCategoryFilter = () => import("./src/components/display/categories/CategoryFilter.vue");
 export const getEmissionList = () => import("./src/components/display/emission/EmissionList.vue");
+export const getEmissionGroupChooser = () => import("./src/components/display/emission/EmissionGroupChooser.vue");
 export const getOrganisationChooser = () => import("./src/components/display/organisation/OrganisationChooser.vue");
 export const getPodcastFilterList = () => import("./src/components/display/podcasts/PodcastFilterList.vue");
 export const getPodcastInlineList = () => import("./src/components/display/podcasts/PodcastInlineList.vue");
@@ -110,7 +126,7 @@ import {useOrganisationFilter} from "./src/components/composable/useOrganisation
 import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
-
+import { useNotifications } from "./src/components/composable/useNotifications.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -135,10 +151,15 @@ import {useAuthStore} from "./src/stores/AuthStore.ts";
 import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
 import classicApi from "./src/api/classicApi.ts";
 
+// API
 export { emissionApi } from "./src/api/emissionApi.ts";
+export * from "./src/api/groupsApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";
 export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
+
+// Types
+export { type Emission, emptyEmissionData } from "./src/stores/class/general/emission.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
@@ -161,6 +182,7 @@ import { setupRouter } from './src/router/utils';
 import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
 
 import { ROUTE_PARAMS } from "./src/components/composable/route/types";
+import { defineAsyncComponent } from "vue";
 
 export {
     useResizePhone,
@@ -173,6 +195,7 @@ export {
     useInit,
     useErrorHandler,
     useSimplePageParam,
+    useNotifications,
     debounce,
     useVastStore,
     useSaveFetchStore,

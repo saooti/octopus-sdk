@@ -6,6 +6,9 @@ import { ModuleApi } from './apiConnection';
 import { unique } from '../helper/arrayHelper';
 import { organisationApi } from './organisationApi';
 import { emissionApi } from './emissionApi';
+import { EmissionGroup } from './groupsApi';
+import { FetchParam } from '@/stores/class/general/fetchParam';
+import { toRaw } from 'vue';
 
 export enum PodcastSort {
     DATE = 'DATE',
@@ -41,6 +44,8 @@ interface Paginable<S> {
 export interface PodcastSearchOptions extends Paginable<PodcastSort> {
     /** Filter by emission ID */
     emissionId?: number|number[];
+    /** Filter by emission groups */
+    emissionGroups?: EmissionGroup[];
     /** Filter by organisation ID */
     organisationId?: string[];
     /** Filter by title containing */
@@ -103,6 +108,47 @@ function get(podcastId: number): Promise<Podcast> {
     });
 }
 
+
+/**
+ * Convert easy to use PodcastSearchOptions to the actual FetchParams used by
+ * the endpoint.
+ */
+function processSearchParameters(search: PodcastSearchOptions): FetchParam {
+    const parameters: FetchParam = {};
+
+    Object.keys(search).forEach(key => {
+        const value = search[key];
+
+        if (value === undefined || value === null) {
+            return;
+        }
+
+        if (key === 'beneficiaries') {
+            parameters.beneficiary = value;
+        } else if (key === 'processingStatus') {
+            parameters.includeStatus = value;
+        } else if (key === 'tags') {
+            parameters.includeTags = value;
+        } else if (key === 'pubDateBefore') {
+            parameters.before = value;
+        } else if (key === 'pubDateAfter') {
+            parameters.after = value;
+        } else if (key === 'pageSize') {
+            parameters.size = value;
+        } else if (key === 'emissionGroups') {
+            const emissionIds = [search.emissionId ?? undefined].flat();
+            search.emissionGroups.forEach(group => {
+                emissionIds.push(...group.emissionIds);
+            });
+            parameters.emissionId = emissionIds;
+        } else {
+            parameters[key] = value;
+        }
+    });
+
+    return parameters;
+}
+
 /**
  * Search for podcasts. Retrieved podcasts are 'incomplete', some of their
  * properties are only IDs.
@@ -115,15 +161,7 @@ function search(options: PodcastSearchOptions, adaptParameters?: boolean): Promi
     return classicApi.fetchData<ListClassicReturn<SimplifiedPodcast>>({
         api: ModuleApi.DEFAULT,
         path: 'v2/podcast/search',
-        parameters: {
-            ...options,
-            beneficiary: options.beneficiaries,
-            includeStatus: options.processingStatus,
-            includeTags: options.tags,
-            before: options.pubDateBefore,
-            after: options.pubDateAfter,
-            size: options.pageSize ?? 50
-        },
+        parameters: processSearchParameters(options),
         specialTreatement: adaptParameters
     });
 }

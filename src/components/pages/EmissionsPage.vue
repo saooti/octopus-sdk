@@ -15,6 +15,7 @@
             v-model:to-date="toDate"
             v-model:rubrique-filter="rubriqueFilter"
             v-model:beneficiaries="beneficiaries"
+            v-model:emission-groups="emissionGroups"
             :search-pattern="searchPattern"
             :is-emission="true"
             :organisation-id="organisationId"
@@ -35,6 +36,7 @@
             :rubriquage-id="rubriquesFilterArrayIds.rubriquageId"
             :no-rubriquage-id="rubriquesFilterArrayIds.noRubriquageId"
             :beneficiaries="beneficiaries"
+            :emission-groups="emissionGroups"
         />
     </section>
 </template>
@@ -44,25 +46,17 @@ import EmissionList from "../display/emission/EmissionList.vue";
 import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
 import { defineAsyncComponent } from "vue";
+import { RouteProps } from "../composable/route/types";
 const ProductorSearch = defineAsyncComponent(
     () => import("../display/filter/ProductorSearch.vue"),
 );
 
 //Props
-const props = defineProps({
-    pr: { default: 0, type: Number },
-    ps: { default: 30, type: Number },
-    routeQuery: { default: "", type: String },
-    routeMonetisable: { default: "UNDEFINED", type: String },
-    routeIab: { default: undefined, type: Number },
-    routeSort: { default: "LAST_PODCAST_DESC", type: String },
-    routeIncludeHidden: { default: "", type: String },
-    routeFrom: { default: undefined, type: String },
-    routeTo: { default: undefined, type: String },
-    routeOrga: { default: undefined, type: String },
-    routeRubriques: { default: "", type: String },
-    /** The filter on beneficiaries defined on the route props */
-    routeBeneficiaries: { default: null, type: Array as () => Array<string> }
+const props = withDefaults(defineProps<RouteProps>(), {
+    pr: 0,
+    ps: 30,
+    routeMonetisable: "UNDEFINED",
+    routeSort: "LAST_PODCAST_DESC"
 });
 
 //Composables
@@ -80,6 +74,7 @@ const {
     paginateFirst,
     rubriquesFilterArrayIds,
     isInit,
-    beneficiaries
+    beneficiaries,
+    emissionGroups
 } = useAdvancedParamInit(props, true);
 </script>

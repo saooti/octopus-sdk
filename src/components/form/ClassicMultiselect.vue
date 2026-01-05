@@ -96,7 +96,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { computed, defineAsyncComponent, ref, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
@@ -108,37 +108,43 @@ const ClassicPopover = defineAsyncComponent(
 );
 
 //Props 
-const props = defineProps({
-  id: { default: "", type: String },
-  label: { default: "", type: String },
-  placeholder: { default: "", type: String },
-  optionLabel: { default: "", type: String },
-  inModal: { default: false, type: Boolean },
-  multiple: { default: false, type: Boolean },
-  isDisabled: { default: false, type: Boolean },
-  width: { default: "100%", type: String },
-  height: { default: undefined, type: String },
-  maxElement: { default: 50, type: Number },
-  minSearchLength: { default: 3, type: Number },
-  optionChosen: { default: undefined, type: Object as () => unknown },
-  noDeselect: { default: true, type: Boolean },
-  optionCustomTemplating: { default: "", type: String },
-  optionSelectedCustomTemplating: { default: "", type: String },
-  displayLabel: { default: false, type: Boolean },
-  maxOptions: { default: null, type: Number },
-  allowEmpty: { default: true, type: Boolean },
-  textDanger :{ default: undefined, type: String },
-  displayRequired: { default: false, type: Boolean },
-  popover: { default: undefined, type: String },
-  popoverRelativeClass: { default: undefined, type: String },
-})
+const {
+  inModal = false, multiple = false, isDisabled = false, width = "100%",
+  maxElement = 50, minSearchLength = 3, noDeselect = true, displayLabel = false,
+  allowEmpty = true, optionChosen, maxOptions = null,
+  optionCustomTemplating = '', optionSelectedCustomTemplating = ''
+} = defineProps<{
+  id?: string;
+  label?: string;
+  placeholder?: string;
+  optionLabel?: string;
+  inModal?: boolean;
+  multiple?: boolean;
+  isDisabled?: boolean;
+  width?: string;
+  height?: string;
+  maxElement?: number;
+  minSearchLength?: number;
+  /** Currently chosen option */
+  optionChosen?: T|Array<T>;
+  noDeselect?: boolean;
+  optionCustomTemplating?: string;
+  optionSelectedCustomTemplating?: string;
+  displayLabel?: boolean;
+  maxOptions?: number;
+  allowEmpty?: boolean;
+  textDanger ?:string;
+  displayRequired?: boolean;
+  popover?: string;
+  popoverRelativeClass?: string;
+}>();
 
 //Emits
 const emit = defineEmits(["onSearch", "selected", "onClose"]);
 
 //Data 
-const optionSelected : Ref<unknown>= ref(undefined);
-const options : Ref<Array<unknown>>= ref([]);
+const optionSelected : Ref<T|T[]>= ref(undefined);
+const options : Ref<Array<T>>= ref([]);
 const remainingElements = ref(0);
 const isLoading = ref(false);
 const searchInput = ref("");
@@ -149,20 +155,20 @@ const { t } = useI18n();
 
 //Computed
 const maxOptionsSelected = computed(() => {
-  if (props.maxOptions !== null && props.multiple) {
+  if (maxOptions !== null && multiple) {
     return (
-      (optionSelected.value as Array<unknown>).length >= props.maxOptions
+      (optionSelected.value as Array<T>).length >= maxOptions
     );
   }
   return false;
 });
 
 //Watch
-watch(()=>props.optionChosen, () => {
-  optionSelected.value = props.optionChosen;
+watch(()=>optionChosen, () => {
+  optionSelected.value = optionChosen;
 }, {deep: true, immediate: true});
 watch(optionSelected, () => {
-  if (props.noDeselect || null !== optionSelected.value) {
+  if (noDeselect || null !== optionSelected.value) {
     return;
   }
   emit("selected", undefined);
@@ -173,7 +179,7 @@ function fakeSearch(): Array<unknown> {
   return options.value;
 }
 function onSearch(search?: string): void {
-  if (search && search.length < props.minSearchLength) {
+  if (search && search.length < minSearchLength) {
     return;
   } else if (search) {
     searchInput.value = search;
@@ -185,20 +191,20 @@ function onClose() {
   emit("onClose", searchInput.value);
   searchInput.value = "";
 }
-function afterSearch(optionsFetched: Array<unknown>, count: number): void {
+function afterSearch(optionsFetched: Array<T>, count: number): void {
   options.value = optionsFetched;
-  remainingElements.value = Math.max(0, count - props.maxElement);
+  remainingElements.value = Math.max(0, count - maxElement);
   isLoading.value = false;
 }
 function onOptionSelected(optionSelected: unknown): void {
   emit("selected", optionSelected);
 }
 function onOptionDeselect(event: unknown): void {
-  if (!props.multiple) {
+  if (!multiple) {
     return;
   }
   if (
-    !props.allowEmpty &&
+    !allowEmpty &&
     0 === (optionSelected.value as Array<unknown>).length
   ) {
     (optionSelected.value as Array<unknown>).push(event);

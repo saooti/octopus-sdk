@@ -1,6 +1,9 @@
 <template>
   <div :id="id" class="d-flex flex-column align-items-center">
-    <ClassicLoading :loading-text="loadingText" :error-text="errorText" />
+    <ClassicLoading
+      v-if="loading || errorText"
+      :loading-text="loadingText" :error-text="errorText"
+    />
     <template v-if="!loading">
       <div
         v-if="!justSizeChosen"

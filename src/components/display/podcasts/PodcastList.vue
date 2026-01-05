@@ -56,17 +56,15 @@
 <script setup lang="ts">
 import ListPaginate from "../list/ListPaginate.vue";
 import {useErrorHandler} from "../../composable/useErrorHandler";
-import classicApi from "../../../api/classicApi";
 import PodcastItem from "./PodcastItem.vue";
 import ClassicLazy from "../../misc/ClassicLazy.vue";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { Podcast, PodcastProcessingStatus, emptyPodcastData } from "../../../stores/class/general/podcast";
 import { computed, onBeforeMount, Ref, ref, watch } from "vue";
-import { FetchParam } from "@/stores/class/general/fetchParam";
 import { AxiosError } from "axios";
-import { ListClassicReturn } from "../../../stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";
 import { podcastApi, PodcastMonetisation, PodcastSearchOptions, PodcastSort } from "../../../api/podcastApi";
+import { EmissionGroup } from "@/api/groupsApi";
 
 //Props 
 const props = withDefaults(defineProps<{
@@ -96,6 +94,8 @@ const props = withDefaults(defineProps<{
   forceUpdateParameters?: boolean;
   /** The beneficiaries to filter on */
   beneficiaries?: Array<string>;
+  /** The emission groups to filter on */
+  emissionGroups?: Array<EmissionGroup>;
 }>(), {
   first: 0,
   size: 30,
@@ -106,6 +106,7 @@ const props = withDefaults(defineProps<{
   displaySortText: true,
   validity: true,
   justSizeChosen: false,
+  withVideo: undefined,
   forceUpdateParameters: false
 });
 
@@ -140,7 +141,7 @@ const changed = computed(() => {
   return `${organisation.value}|${props.emissionId}|${props.sortCriteria}|${sort.value}
     ${props.iabId}|${props.participantId}|${props.query}|${props.monetisable}|${props.popularSort}|
     ${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.includeHidden}|${props.noRubriquageId}|${props.validity}|
-    ${props.withVideo}|${props.includeTag}|${props.beneficiaries}`;
+    ${props.withVideo}|${props.includeTag}|${props.beneficiaries}|${props.emissionGroups}`;
 });
 const organisation = computed(() => {
   if (props.organisationId) {
@@ -200,6 +201,7 @@ async function fetchContent(reset: boolean): Promise<void> {
     pageSize: dsize.value,
     organisationId: organisation.value,
     emissionId: props.emissionId,
+    emissionGroups: props.emissionGroups,
     iabId: props.iabId,
     participantId: props.participantId,
     query: props.query,
@@ -223,11 +225,16 @@ async function fetchContent(reset: boolean): Promise<void> {
     tags: props.includeTag?.length ? props.includeTag : undefined,
     beneficiaries: props.beneficiaries ?? undefined
   };
+
   try {
     const data = await podcastApi.searchFull(param, true);
     afterFetching(reset, data);
   } catch (error) {
-    handle403(error as AxiosError);
+    if (error instanceof AxiosError) {
+      handle403(error as AxiosError);
+    } else {
+      console.error('error', error);
+    }
   }
 }
 function afterFetching(
