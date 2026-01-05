@@ -47,11 +47,11 @@
           @mouseenter="hoverType = 'video'"
           @mouseleave="hoverType = ''"
         >
+          <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo" />
           <PlayVideoIcon
-            v-if="!playerStore.playerVideo"
+            v-else
             :size="'video' === hoverType ? 50 : 40"
           />
-          <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo" />
           <time
             class="ms-2 me-2"
             :datetime="durationIso"

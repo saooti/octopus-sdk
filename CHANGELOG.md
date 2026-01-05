@@ -21,14 +21,12 @@
 - Ajout de l'API groupes
 - Ajout du filtrage par groupe sur les podcasts
 
-**Misc**
+**Fixes**
 
 - Les mots-clés définis à la fois sur une émission et sur un épisode de cette
   émissions ne s'affichent qu'une seule fois lors de la consultation de cet
   épisode
-
-**Fixes**
-
+- Le bouton de lecture vidéo ne disparait plus quand on lit une autre vidéo
 - `ClassicHelpButton` utilise le string `relative-class` au lieu du booléen
   `relative` pour déterminer l'élément parent.
 
