@@ -160,6 +160,7 @@ export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/po
 
 // Types
 export { type Emission, emptyEmissionData } from "./src/stores/class/general/emission.ts";
+export { type Annotations } from "./src/stores/class/general";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");

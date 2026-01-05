@@ -1,6 +1,7 @@
 import { Organisation } from "./organisation";
 import { Person } from "../user/person";
 import { FetchParam } from "./fetchParam";
+import { Annotations } from ".";
 
 export interface Playlist {
   ambianceType?: string; //#11919 "NONE", "AMBIANCE", "PROGRAMMED"
@@ -14,6 +15,8 @@ export interface Playlist {
   type: string;
   samplingViews?: Array<PlaylistRule>;
   publisher?: Person;
+  /** The annotations of the playlist */
+  annotations?: Annotations;
 }
 
 export function emptyPlaylistData(): Playlist {

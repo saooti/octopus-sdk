@@ -58,7 +58,7 @@
         'border border-danger':
           forceError || (isError && (undefined !== textValue || canBeNull)),
       }"
-      :disabled="isDisable"
+      :disabled="isDisable || disabled"
       :required="!canBeNull"
       :autocomplete="autocompleteType"
     >
@@ -76,7 +76,7 @@
         'border border-danger':
           forceError || (isError && (undefined !== textValue || canBeNull)),
       }"
-      :disabled="isDisable"
+      :disabled="isDisable || disabled"
       :required="!canBeNull"
     />
     <ClassicWysiwyg
@@ -86,7 +86,7 @@
       :error-description="
         forceError || (isError && (undefined !== textValue || canBeNull))
       "
-      :is-disabled="isDisable"
+      :is-disabled="isDisable || disabled"
     />
     <div class="d-flex">
       <ClassicEmojiPicker
@@ -156,8 +156,15 @@ const props = defineProps({
   canBeNull: { default: false, type: Boolean },
   inputMaxLengthField: { default: undefined, type: Number },
   errorVariable: { default: true, type: Boolean },
-  /** Disable the text input */
+  /**
+   * Disable the text input
+   * @deprecated Use `disabled` instead
+   */
   isDisable: { default: false, type: Boolean },
+  /**
+   * Disable the text input
+   */
+  disabled: { default: false, type: Boolean },
   indicText: { default: "", type: String },
   dataSelenium: { default: "", type: String },
   placeholder: { default: "", type: String },

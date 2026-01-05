@@ -2,13 +2,14 @@ import { AdserverConfig } from "../adserver/adserverConfig";
 import { Organisation } from "./organisation";
 import { Person } from "../user/person";
 import { ItuneCategory } from "./ituneCategory";
+import { Annotations } from ".";
 
 /**
  * An emission
  */
 export interface Emission {
   imageUrl?: string;
-  annotations?: { [key: string]: string | number | boolean | undefined };
+  annotations?: Annotations;
   beneficiaries: string[];
   description: string;
   emissionId: number;

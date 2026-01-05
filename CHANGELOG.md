@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.3.0 (En cours)
+
+**Features**
+
+- Affichage des flux RSS définis sur les playlists
+
 ## 41.2.1 (05/01/2026)
 
 **Fixes**

@@ -80,6 +80,7 @@ import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
 import { computed, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { Playlist } from "@/stores/class/general/playlist";
 type Link = {
   name: string;
   icon: string;
@@ -89,12 +90,14 @@ type Link = {
 };
 
 //Props 
-const props = defineProps({
-  emission: { default: undefined, type: Object as () => Emission },
-  playlistId: { default: undefined, type: Number },
-  windowWidth: { default: 0, type: Number },
-  justifyCenter: { default: true, type: Boolean },
-})
+const props = withDefaults(defineProps<{
+  content: Emission|Playlist;
+  windowWidth?: number;
+  justifyCenter?: boolean;
+}>(), {
+  windowWidth: 0,
+  justifyCenter: true
+});
 
 //Data 
 const lastWindowWidth = ref(420);
@@ -193,11 +196,11 @@ const subscriptionsDisplay = computed(() => {
 });
 const rssUrl = computed(() => {
   const api = apiStore.apiUrl + "rss/";
-  if (props.emission) {
-    return api + "emission/" + props.emission?.emissionId + ".rss";
+  if ((props.content as Emission).emissionId) {
+    return api + "emission/" + (props.content as Emission).emissionId + ".rss";
   }
-  if (props.playlistId) {
-    return api + "playlist/" + props.playlistId + ".rss";
+  if ((props.content as Playlist).playlistId) {
+    return api + "playlist/" + (props.content as Playlist).playlistId + ".rss";
   }
   return undefined;
 });
@@ -212,7 +215,7 @@ onMounted(()=>resizeWindow());
 //Methods
 function getUrl(sub: string): string | undefined {
   return externaliseLinks(
-    props.emission?.annotations?.[sub] as string | undefined,
+    props.content.annotations?.[sub] as string | undefined,
   );
 }
 function externaliseLinks(link?: string): string | undefined {

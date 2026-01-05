@@ -21,8 +21,7 @@
       <SubscribeButtons
         v-if="!authStore.isGarRole"
         v-show="!scrolled"
-        :emission="emissionObject"
-        :playlist-id="generalStore.contentToDisplay?.playlistId"
+        :content="content"
         :window-width="windowWidth"
       />
     </div>
@@ -76,12 +75,17 @@ const titleToDisplay = computed(() => {
   }
   return "";
 });
-const emissionObject = computed(() => {
+
+/** The element displayed by the subscribe buttons */
+const content = computed(() => {
   if ((generalStore.contentToDisplay as Podcast)?.podcastId) {
     return (generalStore.contentToDisplay as Podcast).emission;
   }
   if ((generalStore.contentToDisplay as Emission)?.emissionId) {
     return generalStore.contentToDisplay as Emission;
+  }
+  if ((generalStore.contentToDisplay as Playlist)?.playlistId) {
+    return generalStore.contentToDisplay as Playlist;
   }
   return null;
 });

@@ -144,7 +144,7 @@
     <SubscribeButtons
       v-if="isPodcastmaker"
       class="mt-4"
-      :emission="podcast.emission"
+      :content="podcast.emission"
       :window-width="1000"
       :justify-center="false"
     />

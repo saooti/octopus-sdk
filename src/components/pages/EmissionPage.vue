@@ -69,7 +69,7 @@
             <SubscribeButtons
               v-if="isPodcastmaker"
               class="mt-4"
-              :emission="emission"
+              :content="emission"
               :window-width="1000"
               :justify-center="false"
             />
