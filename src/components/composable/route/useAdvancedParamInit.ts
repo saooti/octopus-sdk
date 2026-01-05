@@ -86,6 +86,8 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     initSort();
     initFromDate();
     initToDate();
+    initBeneficiariesFilter();
+    initEmissionGroups();
     nextTick(() => {
       isInit.value = true;
     });

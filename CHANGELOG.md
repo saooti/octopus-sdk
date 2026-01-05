@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 41.2.1 (05/01/2026)
+
+**Fixes**
+
+- Recherche avancées
+  - Correction chargements groupes & ayants-droits depuis routing
+  - Filtrage des groupes par organisation
+
+**Misc**
+
+- Export des routes principales pour réutilisation dans projets incluant le SDK
+
 ## 41.2.0 (05/01/2026)
 
 **Features**

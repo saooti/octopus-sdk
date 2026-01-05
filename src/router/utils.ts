@@ -5,6 +5,47 @@ import { Rubriquage } from "../stores/class/rubrique/rubriquage";
 import classicApi from "../api/classicApi";
 import { useAuthStore, AuthStore } from "../stores/AuthStore";
 import { deepEqual } from "../helper/equals";
+import { RouteLocationNormalized } from "vue-router";
+import { RouteProps } from "../components/composable/route/types";
+import { ROUTE_PARAMS } from "../components/composable/route/types";
+
+export function getSimpleRouteProps(route: RouteLocationNormalized): RouteProps {
+  return {
+    pr: route.query.pr ? parseInt(route.query.pr.toString(), 10) : undefined,
+    ps: route.query.ps ? parseInt(route.query.ps.toString(), 10) : undefined,
+    routeQuery: route.query.q as string ?? ""
+  };
+}
+
+/**
+ * Return route props used for filtering
+ */
+export function getRouteProps(route: RouteLocationNormalized): RouteProps {
+  let routeEmissionGroups: number[]|undefined = undefined;
+  const reg = route.query[ROUTE_PARAMS.EmissionGroups];
+
+  if (reg !== undefined) {
+    if (Array.isArray(reg)) {
+      routeEmissionGroups = reg.map(g => parseInt(g, 10));
+    } else {
+      routeEmissionGroups = [parseInt(reg, 10)];
+    }
+  }
+  
+  return {
+    ...getSimpleRouteProps(route),
+    routeMonetisable: route.query.m as string ?? "",
+    routeIab: route.query.i ? parseInt(route.query.i.toString(), 10) : undefined,
+    routeSort: route.query.s as string ?? "",
+    routeIncludeHidden: route.query.h as string ?? "",
+    routeFrom: route.query.from as string|undefined,
+    routeTo: route.query.to as string|undefined,
+    routeOrga:route.query.o as string|undefined,
+    routeRubriques :route.query.r as string ?? route.query.rubriquesId as string|undefined,
+    routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries] as string[]|undefined,
+    routeEmissionGroups
+  }
+}
 
 async function changeOrgaFilter(orgaFilter: string, filterStore: FilterStore){
   const saveStore = useSaveFetchStore();
@@ -37,7 +78,7 @@ let resolved = false;
 /**
  * Utility function seting up the router with a custom beforeEach
  */
-export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthStore) => Promise<string>): void {
+export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthStore) => Promise<void>): void {
   router.beforeResolve(async () =>{
     fetchMyOrgaActive = false;
     // Reinit variable to allow one redirect

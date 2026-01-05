@@ -44,6 +44,7 @@
                         <EmissionGroupChooser
                             v-if="emissionGroupCheckbox"
                             class="ms-4 flex-grow-1"
+                            :organisation-id="organisationId"
                             :groups="emissionGroups"
                             @update:groups="updateEmissionGroupFilter"
                         />

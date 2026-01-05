@@ -23,7 +23,7 @@ import { groupsApi, EmissionGroup } from "../../../api/groupsApi";
 //Props 
 const props = defineProps<{
     /** Filter by organisation */
-    organisationId?: Array<string>;
+    organisationId?: string|Array<string>;
     /** Currently selected groups */
     groups: Array<EmissionGroup>;
 }>();
@@ -41,7 +41,7 @@ async function onSearch(query?: string): Promise<void> {
         first: 0,
         size: maxElement,
         search: query,
-        organisationIds: props.organisationId,
+        organisationIds: [props.organisationId].flat(),
     });
 
     selectGroupRef.value!.afterSearch(

@@ -176,7 +176,8 @@ export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue")
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 
 // Routing
-import { setupRouter } from './src/router/utils';
+import { setupRouter, getSimpleRouteProps, getRouteProps } from './src/router/utils';
+import { routes as sdkRoutes } from './src/router/routes';
 
 // Types
 import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
@@ -217,6 +218,9 @@ export {
     downloadHelper,
     displayHelper,
     setupRouter,
+    getSimpleRouteProps,
+    getRouteProps,
+    sdkRoutes,
     SelectOption,
     ROUTE_PARAMS
 };
