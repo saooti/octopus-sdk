@@ -160,7 +160,6 @@ const SearchOrder = defineAsyncComponent(() => import("./SearchOrder.vue"));
 import { ROUTE_PARAMS } from '../../composable/route/types';
 import { EmissionGroup, groupsApi } from "../../../api/groupsApi";
 import EmissionGroupChooser from "../emission/EmissionGroupChooser.vue";
-import { computedAsync } from "@vueuse/core";
 
 //Props 
 const props = withDefaults(defineProps<{
