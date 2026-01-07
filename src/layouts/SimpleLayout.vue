@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePlayerStore } from '../../stores/PlayerStore';
+import { usePlayerStore } from '../stores/PlayerStore';
 import { onBeforeMount } from 'vue';
 
 const playerStore = usePlayerStore();
