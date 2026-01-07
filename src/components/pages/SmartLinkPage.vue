@@ -13,7 +13,7 @@
                 aria-hidden="true"
                 alt=""
             >
-            <div class="ms-4">
+            <div class="content">
                 <h1>{{ title }}</h1>
                 <p>
                     {{ element.description }}
@@ -28,15 +28,16 @@
                 :key="platform.name"
                 class="platform-btn"
             >
-                <button class="btn w-100" @click="openLink(platform.url)">
+                <button class="btn w-100" :style="gradient(platform)" @click="openLink(platform.url)">
                     <!-- Icon of platform -->
                     <component
                         :is="platform.icon"
+                        :size="36"
                         :fill-color="platform.color"
                         class="me-2"
                     />
 
-                    {{ platform.label }}
+                    <span class="platform-label">{{ platform.label }}</span>
                 </button>
             </div>
         </div>
@@ -52,7 +53,7 @@ import { Playlist } from '../../stores/class/general/playlist';
 import { playlistApi } from '../../api/playlistApi';
 import { emissionApi } from '../../api/emissionApi';
 import { useImageProxy } from '../composable/useImageProxy';
-import { useSharePlatforms } from '../composable/share/useSharePlateforms';
+import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePlateforms';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
@@ -114,6 +115,12 @@ const sharePlatforms = computed(() => {
     return getPlatformsWithLinks(element.value.annotations);
 });
 
+function gradient(platform: SharePlatform): Record<string, string> {
+    return {
+        '--gradient-color': platform.color
+    };
+}
+
 function openLink(link: string): void {
     window.open(link, '_blank').focus();
 }
@@ -134,13 +141,13 @@ function openLink(link: string): void {
         height: 100%;
         // Background image display
         object-fit: cover;
-        // Change image
+        // Blur image
         filter: blur(40px) sepia(0.4);
+        transform: scale(1.1);
 
         @media (width <= 960px) {
             // Better display for small screens
             filter: blur(15px);
-            transform: scale(1.1);
         }
     }
 }
@@ -177,10 +184,28 @@ article {
         border-radius: var(--border-radius);
 
         @media (width <= 960px) {
-            margin: -70px auto 0px;
+            margin: -70px auto 10px;
         }
     }
 
+    // Section for title & description of content
+    .content {
+        margin-left: 20px;
+
+        @media (width <= 960px) {
+            margin-left: 0;
+        }
+
+        h1 {
+            text-align: start !important;
+
+            @media (width <= 960px) {
+                text-align: center !important;
+            }
+        }
+    }
+
+    // Section for displaying platforms
     .platforms {
         // Allow display on columns
         display: flex;
@@ -209,11 +234,28 @@ article {
         .btn {
             display: flex;
             height: 52px;
-            // Center content horizontally
-            justify-content: center;
             // Center content vertically
             align-items: center;
+            padding-left: 40px;
+            background: linear-gradient(155deg, var(--octopus-secondary) 30%, oklch(from var(--gradient-color) l c h / 40%));
+            .platform-label {
+                margin-left: 30px;
+            }
+
+            &:hover {
+                background: linear-gradient(155deg, var(--octopus-secondary) 30%, oklch(from var(--gradient-color) l c h / 100%));
+            }
+
         }
     }
+}
+
+.footer {
+    cursor: pointer;
+    margin: 24px auto 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
