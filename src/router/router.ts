@@ -84,6 +84,6 @@ async function getMyOrgaActive(authStore: AuthStore): Promise<void>{
   }
 }
 
-setupRouter(router, getMyOrgaActive);
+setupRouter(router, getMyOrgaActive, () => import('../layouts/FullLayout.vue'));
 
 export default router;

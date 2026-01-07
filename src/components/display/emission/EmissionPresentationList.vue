@@ -31,7 +31,7 @@ import { AxiosError } from "axios";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 
-import PresentationLayout from "../../layout/PresentationLayout.vue"; 
+import PresentationLayout from "../../layouts/PresentationLayout.vue"; 
 
 const EmissionItemPresentation = defineAsyncComponent(
   () => import("./EmissionPresentationItem.vue"),

@@ -5,6 +5,11 @@
 **Features**
 
 - Affichage des flux RSS définis sur les playlists
+- Mise en place d'un système de layouts (cf [documentation](./doc/routing.md))
+
+**Misc**
+
+- Début de [doc](./doc/README.md)
 
 ## 41.2.1 (05/01/2026)
 

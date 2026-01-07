@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { Emission } from "@/stores/class/general/emission";
-import PresentationItem from "../../layout/PresentationItem.vue";
+import PresentationItem from "../../layouts/PresentationItem.vue";
 import { computed } from "vue";
 import { RouteLocationRaw } from "vue-router";
 

@@ -1,37 +1,23 @@
 <template>
   <div class="d-flex flex-column h-100 octopus-app">
-    <template v-if="pageFullyLoad">
-      <TopBar/>
-      <main role="main">
-        <CategoryFilter v-if="firstDisplayCategoryFilter" />
-        <div v-else class="category-filter-no-filter" />
-        <router-view />
-        <PlayerComponent />
-      </main>
-      <FooterOctopus />
-    </template>
+    <component v-if="pageFullyLoad" :is="route.meta.layoutComponent">
+      <router-view />
+    </component>
   </div>
 </template>
+
 <script setup lang="ts">
-import TopBar from "@/components/misc/TopBar.vue";
-import FooterOctopus from "@/components/misc/FooterSection.vue";
-import PlayerComponent from "@/components/misc/player/PlayerComponent.vue";
 import {useInit} from "./components/composable/useInit";
 import {useMetaTitle} from "./components/composable/useMetaTitle";
 import {useOrganisationFilter} from "./components/composable/useOrganisationFilter";
 import { useAuthStore } from "./stores/AuthStore";
-import { defineAsyncComponent, getCurrentInstance, onBeforeMount, ref, watch } from "vue";
+import { getCurrentInstance, onBeforeMount, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-
-const CategoryFilter = defineAsyncComponent(
-  () => import("@/components/display/categories/CategoryFilter.vue"),
-);
 
 //Data 
 const reload = ref(false);
 const pageFullyLoad = ref(false);
-const firstDisplayCategoryFilter = ref(false);
 
 //Composables
 const {locale} = useI18n();
@@ -41,32 +27,17 @@ const {selectOrganisation} = useOrganisationFilter();
 const authStore = useAuthStore();
 const route = useRoute();
 
-
 //Watch
 watch(route, async () => {
   updateMetaTitle();
-  if (firstDisplayCategoryFilter.value) {
-    return;
-  }
-  const namesRouteWithCategoryFilter = [
-    "homePriv",
-    "home",
-    "podcasts",
-    "emissions",
-    "participants",
-    "playlists",
-  ];
-  firstDisplayCategoryFilter.value = namesRouteWithCategoryFilter.includes(
-    route.name?.toString() ?? "",
-  );
-}, {immediate: true});
+}, { immediate: true });
+
 watch(locale,() => {
   updateMetaTitle();
   const instance = getCurrentInstance();
   instance?.proxy?.$forceUpdate();
   reload.value = !reload.value;
 });
-
 
 onBeforeMount(()=>{
   initApp();

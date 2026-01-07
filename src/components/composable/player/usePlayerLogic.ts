@@ -260,7 +260,7 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
   }
 
 
-	return {
+  return {
     audioUrlToPlay,
     listenTime,
     playerError,
@@ -275,5 +275,5 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
     onSeeked,
     onFinished,
     onPlay
-	}
+  }
 }

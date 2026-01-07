@@ -176,6 +176,9 @@ export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIc
 export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 
+// Layouts
+export const getSimpleLayout = () => import("./src/layouts/SimpleLayout.vue");
+
 // Routing
 import { setupRouter, getSimpleRouteProps, getRouteProps } from './src/router/utils';
 import { routes as sdkRoutes } from './src/router/routes';
@@ -184,7 +187,6 @@ import { routes as sdkRoutes } from './src/router/routes';
 import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
 
 import { ROUTE_PARAMS } from "./src/components/composable/route/types";
-import { defineAsyncComponent } from "vue";
 
 export {
     useResizePhone,

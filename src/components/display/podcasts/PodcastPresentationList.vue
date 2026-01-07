@@ -46,10 +46,10 @@ import { AxiosError } from "axios";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { ListClassicReturn } from "../../../stores/class/general/listReturn";
 
-import PresentationLayout from "../../layout/PresentationLayout.vue"; 
+import PresentationLayout from "../../layouts/PresentationLayout.vue"; 
 import { Podcast, SimplifiedPodcast, simplifiedToFull } from "../../../stores/class/general/podcast";
 
-import PresentationItem from "../../layout/PresentationItem.vue"; 
+import PresentationItem from "../../layouts/PresentationItem.vue"; 
 import PodcastPlayButton from "./PodcastPlayButton.vue"; 
 import { RouteLocationRaw } from "vue-router";
 import { podcastApi, PodcastSort } from "../../../api/podcastApi";

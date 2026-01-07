@@ -8,6 +8,7 @@ import { deepEqual } from "../helper/equals";
 import { RouteLocationNormalized } from "vue-router";
 import { RouteProps } from "../components/composable/route/types";
 import { ROUTE_PARAMS } from "../components/composable/route/types";
+import { type Component } from "vue";
 
 export function getSimpleRouteProps(route: RouteLocationNormalized): RouteProps {
   return {
@@ -71,18 +72,47 @@ async function changeOrgaFilter(orgaFilter: string, filterStore: FilterStore){
   });
 }
 
+// Type for loading layouts
+type LayoutLoader = () => Promise<{ default: Component }>;
+
+/**
+ * Utility function to prepare a layout for a given route
+ */
+async function loadLayout(loader: LayoutLoader, route: RouteLocationNormalized): Promise<void> {
+  try {
+    const layout = await loader();
+    route.meta.layoutComponent = layout.default;
+  } catch (e) {
+    console.error("Error occured while processing layout", e);
+    const layout = await import('../layouts/SimpleLayout.vue');
+    route.meta.layoutComponent = layout.default;
+  }
+}
+
 let fetchMyOrgaActive = false;
 /** Variable used to apply beforeEach redirect only once */
 let resolved = false;
 
 /**
  * Utility function seting up the router with a custom beforeEach
+ * @param router The router to setup
+ * @param getMyOrgaActive Callback to retrieve current organisation for user
+ * @param defaultLayout Loader for the default layout of pages
  */
-export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthStore) => Promise<void>): void {
+export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthStore) => Promise<void>, defaultLayout: LayoutLoader): void {
   router.beforeResolve(async () =>{
     fetchMyOrgaActive = false;
     // Reinit variable to allow one redirect
     resolved = false;
+  });
+
+  // Navigation guard that setups layout
+  router.beforeEach(async(route) => {
+    if (route.meta.layout) {
+      await loadLayout(route.meta.layout as LayoutLoader, route);
+    } else {
+      await loadLayout(defaultLayout, route);
+    }
   });
 
   // Navigation guard that updates current organisation & may make redirects

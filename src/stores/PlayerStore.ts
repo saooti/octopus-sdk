@@ -149,23 +149,27 @@ export const usePlayerStore = defineStore("PlayerStore", {
     },
   },
   actions: {
+    stop(): void {
+      this.playerCurrentChange = null;
+      this.playerStatus = "STOPPED";
+      this.playerPodcast = undefined;
+      this.playerMedia = undefined;
+      this.playerLive = undefined;
+      this.playerHlsIdentifier = undefined;
+      this.playerRadio = undefined;
+      this.playerElapsed = 0;
+      this.playerVideo = false;
+      this.playerChaptering = undefined;
+    },
     /**
      * Start playing audio/video
+     * Without parameters, stop playing
      * @param param The data
      * @param isVideo If true, enable video mode
      */
     async playerPlay(param?: any, isVideo = false) {
       if (!param) {
-        this.playerCurrentChange = null;
-        this.playerStatus = "STOPPED";
-        this.playerPodcast = undefined;
-        this.playerMedia = undefined;
-        this.playerLive = undefined;
-        this.playerHlsIdentifier = undefined;
-        this.playerRadio = undefined;
-        this.playerElapsed = 0;
-        this.playerVideo = false;
-        this.playerChaptering = undefined;
+        this.stop();
         return;
       }
       if (

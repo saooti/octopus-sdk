@@ -1,6 +1,7 @@
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
+
 export const useMetaTitle = ()=>{
 
   const route = useRoute();
@@ -8,12 +9,12 @@ export const useMetaTitle = ()=>{
   const {t} = useI18n();
 
   function updateMetaTitle(){
-    if(""!==route.meta.title){
-      document.title = route.meta.title ? t(route.meta.title) +' - '+ generalStore.metaTitle: generalStore.metaTitle;
+    if("" !== route.meta.title){
+      document.title = route.meta.title ? t(route.meta.title as string) + ' - ' + generalStore.metaTitle: generalStore.metaTitle;
     }
   }
 
-	return {
+  return {
     updateMetaTitle
-	}
+  }
 }
