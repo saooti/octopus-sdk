@@ -127,6 +127,7 @@ import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
 import { useNotifications } from "./src/components/composable/useNotifications.ts";
+export { useSharePlatforms } from "./src/components/composable/share/useSharePlateforms.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";

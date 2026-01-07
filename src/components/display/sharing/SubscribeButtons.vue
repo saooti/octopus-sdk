@@ -62,28 +62,18 @@
 </template>
 
 <script setup lang="ts">
-import RadiolineIcon from "../../icons/RadiolineIcon.vue";
-import TuninIcon from "../../icons/TuninIcon.vue";
-import PodcastAddictIcon from "../../icons/PodcastAddictIcon.vue";
-import PocketCastIcon from "../../icons/PocketCastIcon.vue";
-import PlayerFmIcon from "../../icons/PlayerFmIcon.vue";
-import IHeartIcon from "../../icons/IHeartIcon.vue";
-import AmazonMusicIcon from "../../icons/AmazonMusicIcon.vue";
-import DeezerIcon from "../../icons/DeezerIcon.vue";
-import ApplePodcastIcon from "../../icons/ApplePodcastIcon.vue";
-import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
-import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import RssIcon from "vue-material-design-icons/Rss.vue";
 import { useApiStore } from "../../../stores/ApiStore";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import { Emission } from "@/stores/class/general/emission";
-import { computed, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
+import { type Component, computed, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { Playlist } from "@/stores/class/general/playlist";
+import { useSharePlatforms } from "../../composable/share/useSharePlateforms";
 type Link = {
   name: string;
-  icon: string;
+  icon: Component;
   title: string;
   color?: string;
   url: string | undefined;
@@ -108,92 +98,13 @@ const subscribeButtonsContainerRef = useTemplateRef('subscribeButtonsContainer')
 //Composables
 const { t } = useI18n();
 const apiStore = useApiStore();
+const { getPlatformsWithLinks } = useSharePlatforms();
 
 //Computed
 const subscriptionsDisplay = computed(() => {
-  const sub = [
-    {
-      name: "applePodcast",
-      icon: ApplePodcastIcon,
-      title: "Apple Podcast | iTunes",
-      url: getUrl("applePodcast"),
-      color:"#aa1dd3"
-    },
-    {
-      name: "deezer",
-      icon: DeezerIcon,
-      title: "Deezer",
-      color:"#a238ff",
-      url: getUrl("deezer"),
-    },
-    {
-      name: "spotify",
-      icon: SpotifyIcon,
-      title: "Spotify",
-      color: "#1ed760",
-      url: getUrl("spotify"),
-    },
-    {
-      name: "amazon",
-      icon: AmazonMusicIcon,
-      title: "Amazon Music",
-      color: "#0c6cb3",
-      url: getUrl("amazon"),
-    },
-
-    {
-      name: "iHeart",
-      icon: IHeartIcon,
-      title: "iHeart",
-      url: getUrl("iHeart"),
-      color:"#e11b22"
-    },
-    {
-      name: "playerFm",
-      icon: PlayerFmIcon,
-      title: "PlayerFM",
-      url: getUrl("playerFm"),
-      color:"#bb202a"
-    },
-    {
-      name: "pocketCasts",
-      icon: PocketCastIcon,
-      title: "Pocket Casts",
-      url: getUrl("pocketCasts"),
-      color:"#f43e37"
-    },
-    {
-      name: "podcastAddict",
-      icon: PodcastAddictIcon,
-      title: "Podcast Addict",
-      url: getUrl("podcastAddict"),
-      color:"#f4842d"
-    },
-    {
-      name: "radioline",
-      icon: RadiolineIcon,
-      title: "Radioline",
-      url: getUrl("radioline"),
-      color:"#1678bd"
-    },
-
-    {
-      name: "tunein",
-      icon: TuninIcon,
-      title: "TuneIn",
-      url: getUrl("tunein"),
-      color:"#36b4a7"
-    },
-    {
-      name: "youtube",
-      icon: YoutubeIcon,
-      title: "YouTube Music",
-      color: "#fe0000",
-      url: getUrl("youtube"),
-    },
-  ];
-  return sub.filter((item) => item.url);
+  return getPlatformsWithLinks(props.content.annotations);
 });
+
 const rssUrl = computed(() => {
   const api = apiStore.apiUrl + "rss/";
   if ((props.content as Emission).emissionId) {
@@ -213,18 +124,6 @@ onMounted(()=>resizeWindow());
 
 
 //Methods
-function getUrl(sub: string): string | undefined {
-  return externaliseLinks(
-    props.content.annotations?.[sub] as string | undefined,
-  );
-}
-function externaliseLinks(link?: string): string | undefined {
-  if (!link) return link;
-  link = link.trim();
-  return !link.startsWith("http") && !link.startsWith("//")
-    ? "//" + link
-    : link;
-}
 function showAllElements() {
   subscriptionsDisplay.value.forEach((element: Link) => {
     const el = subscribeButtonsContainerRef?.value?.querySelector('#subLink' + element.name);

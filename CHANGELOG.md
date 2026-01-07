@@ -5,7 +5,11 @@
 **Features**
 
 - Affichage des flux RSS définis sur les playlists
+- Ajout d'une page de smartlink pour les émissions et les playlists
 - Mise en place d'un système de layouts (cf [documentation](./doc/routing.md))
+- Plateformes de distribution
+  - Factorisation du code pour simplifier la réutilisation
+  - Ajout de PodBean, Podcast Republic, et Castbox
 
 **Misc**
 

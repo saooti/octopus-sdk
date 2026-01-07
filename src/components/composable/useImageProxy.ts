@@ -24,7 +24,7 @@ export const useImageProxy = ()=>{
     return url;
   }
 
-	return {
+  return {
     useProxyImageUrl
-	}
+  }
 }
