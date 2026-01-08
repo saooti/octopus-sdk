@@ -29,14 +29,6 @@ export const routes: Array<RouteRecordRaw> = [
   Liens publics
   --------------------------------------------------------------------------*/
   {
-    path: "/",
-    name: "",
-    component: Home,
-    meta:{
-      title: "Home"
-    }
-  },
-  {
     path: "/main/pub/error",
     name: "error",
     component: error403Page,
@@ -99,7 +91,7 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/main/pub/emission/:emissionId(\\d+):title([^?]*)?:productor?",
+    path: "/main/pub/emission/:emissionId(\\d+):title([^?/]*)?:productor?",
     name: "emission",
     component: EmissionPage,
     props: (route: RouteLocationNormalized) => ({
@@ -232,7 +224,20 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/main/pub/playlist/:playlistId(\\d+):title([^?/]*)?/smartlink:productor?",
+    path: "/smartlink/e/:emissionId(\\d+):title([^?/]*)?:productor?",
+    name: "emission-smartlink",
+    component: SmartLinkPage,
+    props: (route: RouteLocationNormalized) => ({
+      emissionId: parseInt(route.params.emissionId.toString(), 10),
+    }),
+    meta:{
+      title: "",
+      noScroll:true,
+      layout: () => import('../layouts/SimpleLayout.vue')
+    }
+  },
+  {
+    path: "/smartlink/p/:playlistId(\\d+):title([^?/]*)?:productor?",
     name: "playlist-smartlink",
     component: SmartLinkPage,
     props: (route: RouteLocationNormalized) => ({

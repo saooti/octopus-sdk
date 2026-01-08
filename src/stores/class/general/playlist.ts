@@ -2,6 +2,7 @@ import { Organisation } from "./organisation";
 import { Person } from "../user/person";
 import { FetchParam } from "./fetchParam";
 import { Annotations } from ".";
+import { ItuneCategory } from "./ituneCategory";
 
 export interface Playlist {
   ambianceType?: string; //#11919 "NONE", "AMBIANCE", "PROGRAMMED"
@@ -17,6 +18,8 @@ export interface Playlist {
   publisher?: Person;
   /** The annotations of the playlist */
   annotations?: Annotations;
+  copyright?: string;
+  optItunesCategories?: Array<ItuneCategory>;
 }
 
 export function emptyPlaylistData(): Playlist {

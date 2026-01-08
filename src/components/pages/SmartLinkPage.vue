@@ -81,13 +81,14 @@ import { playlistApi } from '../../api/playlistApi';
 import { emissionApi } from '../../api/emissionApi';
 import { useImageProxy } from '../composable/useImageProxy';
 import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePlateforms';
-import { Organisation } from '../../stores/class/general/organisation';
+import { Organisation, OrganisationAttributes } from '../../stores/class/general/organisation';
 import { organisationApi } from '../../api/organisationApi';
 import { RouteLocationNormalized, useRouter } from 'vue-router';
 import { Podcast } from '@/stores/class/general/podcast';
 import { usePlayerStore } from '../../stores/PlayerStore';
 import { podcastApi, PodcastSort } from '../../api/podcastApi';
 import PlayerComponent from '../misc/player/PlayerComponent.vue';
+import { useSharePath } from '../composable/share/useSharePath';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
@@ -128,7 +129,7 @@ onMounted(async() => {
     // Update title & path
     updatePathParams(title.value);
 
-    getPodcastMakerUrl();
+    getOrganisationAttributes();
     getLatestPodcast();
 });
 
@@ -153,36 +154,33 @@ const organisation = computed((): Organisation|undefined => {
         return (element.value as Playlist).organisation;
     } else if (emissionId) {
         return (element.value as Emission).orga;
+
     }
 });
 
 /** The URL to the podcastmaker of the organisation, if any */
-const podcastmakerUrl = ref<string|null>(null);
+const organisationAttributes = ref<OrganisationAttributes|null>(null);
+const { getPodcastMakerUrl, getSharePath } = useSharePath();
 
-async function getPodcastMakerUrl(): Promise<void> {
+async function getOrganisationAttributes(): Promise<void> {
     if (organisation.value) {
-        const attributes = await organisationApi.getAttributes(organisation.value.id);
-        if (attributes.podcastmakerUrl) {
-            podcastmakerUrl.value = attributes.podcastmakerUrl;
-        }
+        organisationAttributes.value = await organisationApi.getAttributes(organisation.value.id);
     }
 }
 
 /** The URL to the element on the podcastmaker, if any */
 const podcastmakerElementUrl = computed((): string|undefined => {
-    if (!podcastmakerUrl.value) {
+    const podcastmakerUrl = getPodcastMakerUrl(organisationAttributes.value);
+    if (!podcastmakerUrl) {
         return undefined;
     }
 
     // Retrieve full URL of element
-    let route: RouteLocationNormalized;
     if (playlistId) {
-        route = router.resolve({ name: 'playlist', params: { playlistId }});
+        return getSharePath({ name: 'playlist', params: { playlistId }});
     } else if (emissionId) {
-        route = router.resolve({ name: 'emission', params: { emissionId }});
+        return getSharePath({ name: 'emission', params: { emissionId }});
     }
-
-    return podcastmakerUrl.value + route.path;
 });
 
 /**

@@ -14,6 +14,14 @@ const Home = () => import("../components/pages/HomePage.vue");
 const fakeRoutes = [
   {
     path: "/",
+    name: "",
+    component: Home,
+    meta:{
+      title: "Home"
+    }
+  },
+  {
+    path: "/",
     name: "backoffice",
     component: Home,
   },

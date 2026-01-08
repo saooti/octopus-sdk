@@ -169,6 +169,9 @@ const props = defineProps({
   dataSelenium: { default: "", type: String },
   placeholder: { default: "", type: String },
   popover: { default: undefined, type: String },
+  /**
+   * Display content but do not allow changes
+   */
   readonly: { default: false, type: Boolean },
   forceError: { default: false, type: Boolean },
   displayLabel: { default: true, type: Boolean },

@@ -6,10 +6,17 @@
 
 - Affichage des flux RSS définis sur les playlists
 - Ajout d'une page de smartlink pour les émissions et les playlists
+  - Affiche les informations de base de l'émission/la playlist
+  - Affiche les liens vers les différents diffuseurs définis
+  - Affiche un bouton de lecture du dernier épisode
+  - Affiche un lien vers le podcastmaker, si défini
 - Mise en place d'un système de layouts (cf [documentation](./doc/routing.md))
 - Plateformes de distribution
   - Factorisation du code pour simplifier la réutilisation
+  - Mise en place du composable `useSharePlatforms`
   - Ajout de PodBean, Podcast Republic, et Castbox
+- Ajout du composable `useSharePath`
+  - Regroupe la logique pour le calcul des paths pour les liens partagés
 
 **Misc**
 
