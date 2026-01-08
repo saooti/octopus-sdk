@@ -18,6 +18,15 @@
                 <p>
                     {{ element.description }}
                 </p>
+
+                <button
+                    v-if="latestPodcast"
+                    class="btn btn-primary pe-3"
+                    @click="playLatestPodcast"
+                >
+                    <PlayIcon class="me-2" />
+                    {{ $t('SmartLink - Listen to latest episode') }}
+                </button>
             </div>
         </div>
 
@@ -41,6 +50,22 @@
                 </button>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <a target="_blank" href="/">
+                <span>{{ $t('SmartLink - Made by') }}</span>
+                <img src="/img/logo_saooti_play_black.svg" height="24" class="ms-2" />
+            </a>
+            <a
+                v-if="podcastmakerElementUrl"
+                target="_blank"
+                :href="podcastmakerElementUrl"
+            >
+                <span v-if="playlistId">{{ $t('SmartLink - To playlist on podcastmaker', { organisation: organisation.name }) }}</span>
+                <span v-else-if="emissionId">{{ $t('SmartLink - To emission on podcastmaker', { organisation: organisation.name }) }}</span>
+            </a>
+        </div>
     </article>
 </template>
 
@@ -48,12 +73,21 @@
 import { computed, onMounted, ref } from 'vue';
 import { useSeoTitleUrl } from '../composable/route/useSeoTitleUrl';
 
+import PlayIcon from "vue-material-design-icons/Play.vue";
+
 import { Emission } from '../../stores/class/general/emission';
 import { Playlist } from '../../stores/class/general/playlist';
 import { playlistApi } from '../../api/playlistApi';
 import { emissionApi } from '../../api/emissionApi';
 import { useImageProxy } from '../composable/useImageProxy';
 import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePlateforms';
+import { Organisation } from '../../stores/class/general/organisation';
+import { organisationApi } from '../../api/organisationApi';
+import { RouteLocationNormalized, useRouter } from 'vue-router';
+import { Podcast } from '@/stores/class/general/podcast';
+import { usePlayerStore } from '../../stores/PlayerStore';
+import { podcastApi, PodcastSort } from '../../api/podcastApi';
+import PlayerComponent from '../misc/player/PlayerComponent.vue';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
@@ -76,6 +110,7 @@ interface EmissionProps {
 }
 
 const { playlistId, emissionId } = defineProps<PlaylistProps|EmissionProps>();
+const router = useRouter();
 
 /** The currently displayed element, if any */
 const element = ref<Playlist|Emission|null>(null);
@@ -92,6 +127,9 @@ onMounted(async() => {
 
     // Update title & path
     updatePathParams(title.value);
+
+    getPodcastMakerUrl();
+    getLatestPodcast();
 });
 
 /** Title of the element displayed */
@@ -103,6 +141,48 @@ const title = computed((): string => {
         return (element.value as Emission).name;
     }
     return '';
+});
+
+/** The organisation associated with the element */
+const organisation = computed((): Organisation|undefined => {
+    if (!element.value) {
+        return;
+    }
+
+    if (playlistId) {
+        return (element.value as Playlist).organisation;
+    } else if (emissionId) {
+        return (element.value as Emission).orga;
+    }
+});
+
+/** The URL to the podcastmaker of the organisation, if any */
+const podcastmakerUrl = ref<string|null>(null);
+
+async function getPodcastMakerUrl(): Promise<void> {
+    if (organisation.value) {
+        const attributes = await organisationApi.getAttributes(organisation.value.id);
+        if (attributes.podcastmakerUrl) {
+            podcastmakerUrl.value = attributes.podcastmakerUrl;
+        }
+    }
+}
+
+/** The URL to the element on the podcastmaker, if any */
+const podcastmakerElementUrl = computed((): string|undefined => {
+    if (!podcastmakerUrl.value) {
+        return undefined;
+    }
+
+    // Retrieve full URL of element
+    let route: RouteLocationNormalized;
+    if (playlistId) {
+        route = router.resolve({ name: 'playlist', params: { playlistId }});
+    } else if (emissionId) {
+        route = router.resolve({ name: 'emission', params: { emissionId }});
+    }
+
+    return podcastmakerUrl.value + route.path;
 });
 
 /**
@@ -123,6 +203,37 @@ function gradient(platform: SharePlatform): Record<string, string> {
 
 function openLink(link: string): void {
     window.open(link, '_blank').focus();
+}
+
+const playerStore = usePlayerStore();
+const latestPodcast = ref<Podcast|null>(null);
+
+async function getLatestPodcast(): Promise<void> {
+    if (playlistId) {
+        const content = await playlistApi.getContent(playlistId);
+        if (content.length > 0) {
+            const id = content[content.length - 1].podcastId;
+            latestPodcast.value = await podcastApi.get(id);
+        }
+    } else if (emissionId) {
+        const result = await podcastApi.searchFull({
+            emissionId,
+            sort: PodcastSort.LAST_PODCAST_DESC,
+            pageSize: 1
+        });
+
+        if (result.count > 0) {
+            latestPodcast.value = result.result[0];
+        }
+    }
+}
+
+function playLatestPodcast(): void {
+    if (!latestPodcast.value) {
+        return;
+    }
+
+    playerStore.playerPlay(latestPodcast.value);
 }
 </script>
 
@@ -252,10 +363,24 @@ article {
 
 .footer {
     cursor: pointer;
-    margin: 24px auto 0;
+    margin: 34px auto 0;
     font-size: 14px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+
+    @media (width <= 960px) {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        color: var(--octopus-color-text);
+
+        &:hover {
+            color: var(--octopus-primary);
+        }
+    }
 }
 </style>

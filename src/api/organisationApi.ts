@@ -1,6 +1,6 @@
 import classicApi from "./classicApi";
 import { ModuleApi } from "./apiConnection";
-import { Organisation } from "../stores/class/general/organisation";
+import { Organisation, OrganisationAttributes } from "../stores/class/general/organisation";
 import { mapFromGetAll } from "./apiUtils";
 
 /**
@@ -25,7 +25,20 @@ async function getAllById(organisationIds: Array<string>): Promise<Record<string
     return mapFromGetAll(organisationIds, get, 'id');
 }
 
+/**
+ * Retrieve the attributes of a given organisation
+ * @param organisationId The ID of the organisation
+ * @returns The attributes of the organisation
+ */
+async function getAttributes(organisationId: string): Promise<OrganisationAttributes> {
+    return classicApi.fetchData<OrganisationAttributes>({
+        api: ModuleApi.DEFAULT,
+        path: 'organisation/attributes/' + organisationId
+    });
+}
+
 export const organisationApi = {
     get,
-    getAllById
+    getAllById,
+    getAttributes
 };

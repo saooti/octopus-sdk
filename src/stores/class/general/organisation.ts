@@ -1,10 +1,16 @@
 import { Person } from "../user/person";
 
+export type OrganisationAttributes = {
+  [key: string]: string | number | boolean | undefined;
+  /** The URL to the podcastmaker of the organisation */
+  podcastmakerUrl?: string;
+};
+
 export interface Organisation {
   imageUrl: string;
   admin?: Person;
   comments?: string;
-  attributes?: { [key: string]: string | number | boolean | undefined };
+  attributes?: OrganisationAttributes;
   description?: string;
   id: string;
   location?: {
