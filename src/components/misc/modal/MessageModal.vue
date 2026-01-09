@@ -7,7 +7,7 @@
   >
     <template #body>
       <!-- eslint-disable vue/no-v-html -->
-      <div v-if="!save && !error" class="content" v-html="message" />
+      <div v-if="!save && !error" class="content" v-html="displayHelper.urlify(message)" />
       <!-- eslint-enable -->
       <ClassicLoading
         v-if="save || error"
@@ -45,6 +45,7 @@ import ClassicModal from "../modal/ClassicModal.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+import displayHelper from "../../../helper/displayHelper"; 
 //Props 
 const props = defineProps({
   title: { default: undefined, type: String },

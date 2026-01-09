@@ -2,11 +2,22 @@
 
 ## 42.3.1 (En cours)
 
+**Features**
+
 - Recherche avancée
   - Ajout du filtrage par groupe sur les émissions
   - Ajustement filtrage par groupe sur les podcasts
 - Miniplayer
   - Ajout d'une option de hauteur automatique
+- Les liens dans les descriptions s'ouvrent maintenant dans un nouvel onglet
+
+**Fixes**
+
+- Suppression d'un lien SmartLink oublié sur les playlists.
+- Correction d'affichage des descriptions html dans les SmartLinks
+
+**Misc**
+
 - Producteur mis à jour lors de la consultation d'une émission/playlist/podcast
   quand non connecté
 

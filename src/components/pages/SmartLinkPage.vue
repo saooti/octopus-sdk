@@ -4,7 +4,7 @@
     </div>
     <article v-if="element">
         <!-- Top part of smartlink, with image, title and description -->
-        <div class="d-flex">
+        <div class="content">
             <img
                 v-lazy="useProxyImageUrl(element.imageUrl, '250')"
                 width="250"
@@ -13,21 +13,17 @@
                 aria-hidden="true"
                 alt=""
             >
-            <div class="content">
-                <h1>{{ title }}</h1>
-                <p>
-                    {{ element.description }}
-                </p>
+            <h1>{{ title }}</h1>
+            <div v-html="displayHelper.urlify(element.description)" />
 
-                <button
-                    v-if="latestPodcast"
-                    class="btn btn-primary pe-3"
-                    @click="playLatestPodcast"
-                >
-                    <PlayIcon class="me-2" />
-                    {{ $t('SmartLink - Listen to latest episode') }}
-                </button>
-            </div>
+            <button
+                v-if="latestPodcast"
+                class="btn btn-primary pe-3"
+                @click="playLatestPodcast"
+            >
+                <PlayIcon class="me-2" />
+                {{ $t('SmartLink - Listen to latest episode') }}
+            </button>
         </div>
 
         <!-- Links -->
@@ -87,6 +83,7 @@ import { Podcast } from '@/stores/class/general/podcast';
 import { usePlayerStore } from '../../stores/PlayerStore';
 import { podcastApi, PodcastSort } from '../../api/podcastApi';
 import { useSharePath } from '../composable/share/useSharePath';
+import displayHelper from '../../helper/displayHelper';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
@@ -282,8 +279,11 @@ article {
     .img-box {
         // Move image
         margin-top: -70px;
-        margin-left: 20px;
         margin-bottom: 0px;
+
+        // Move image left with content going to its right, and below it
+        float: left;
+        margin-right: 20px;
 
         // Add a border
         border: 2px solid var(--background);

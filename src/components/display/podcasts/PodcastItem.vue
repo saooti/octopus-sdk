@@ -23,7 +23,7 @@
       ]"
     >
       <!-- eslint-disable vue/no-v-html -->
-      <div ref="descriptionPodcast" v-html="description" />
+      <div ref="descriptionPodcast" v-html="displayHelper.urlify(description)" />
       <!-- eslint-enable -->
     </div>
     <div
@@ -45,6 +45,8 @@ import dayjs from "dayjs";
 import { Podcast } from "../../../stores/class/general/podcast";
 import { computed, nextTick, onBeforeMount, ref, Ref, useTemplateRef } from "vue";
 import { Conference } from "@/stores/class/conference/conference";
+
+import displayHelper from "../../../helper/displayHelper";
 
 //Props 
 const props = defineProps<{

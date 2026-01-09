@@ -12,7 +12,6 @@
       >
         <section class="module-box">
           <EditBox v-if="editRight && !isPodcastmaker" :playlist="playlist" />
-          <router-link :to="{ name: 'playlist-smartlink', params: { playlistId: playlist.playlistId } }">SmartLink</router-link>
           <div class="mb-5 mt-3 description-text">
             <img
               v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
