@@ -3,6 +3,7 @@
     <legend class="h4 mb-2 mt-3">
       {{ t("player parameters") }}
     </legend>
+
     <template v-if="choseNumberEpisode">
       <div v-if="displayChoiceAllEpisodes" role="radiogroup">
         <div
@@ -37,6 +38,15 @@
       </div>
       <ChooseEpisodesNumber v-else :episodes-number="episodesNumber" @update-number="emit('update:episodesNumber', $event)"/>
     </template>
+
+    <ClassicCheckbox
+      v-if="displayAutoHeight"
+      :text-init="autoHeight"
+      id-checkbox="auto-height-checkbox"
+      :label="t('Miniplayer - Parameters - Auto height')"
+      @update:text-init="emit('update:autoHeight', $event)"
+    />
+
     <ClassicCheckbox
       v-if="displayIsVisible"
       :text-init="isVisible"
@@ -105,6 +115,8 @@ const props = defineProps({
   isPodcastNotVisible: { default: false, type: Boolean },
   episodesNumber: { default: 3, type: Number },
   insertCode: { default: false, type: Boolean },
+  displayAutoHeight: { default: false, type: Boolean },
+  autoHeight: { default: false, type: Boolean },
 })
 
 
@@ -117,7 +129,9 @@ const emit = defineEmits([
   "update:displayTranscript",
   "update:displayWave",
   "update:playerAutoPlay",
-  "update:insertCode"]);
+  "update:insertCode",
+  "update:autoHeight"
+]);
 
 
 //Data 

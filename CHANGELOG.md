@@ -5,6 +5,8 @@
 - Recherche avancée
   - Ajout du filtrage par groupe sur les émissions
   - Ajustement filtrage par groupe sur les podcasts
+- Miniplayer
+  - Ajout d'une option de hauteur automatique
 
 ## 42.3.0 (09/01/2026)
 

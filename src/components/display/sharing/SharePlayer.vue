@@ -48,6 +48,7 @@
             v-model:player-auto-play="playerAutoPlay"
             v-model:episodes-number="episodesNumber"
             v-model:insert-code="insertCode"
+            v-model:auto-height="autoHeight"
             :display-is-visible="displayIsVisible"
             :is-podcast-not-visible="isPodcastNotVisible"
             :chose-number-episode="displayChoiceAllEpisodes"
@@ -56,6 +57,7 @@
             :display-article-param="displayArticleParam"
             :display-wave-param="displayWaveParam"
             :display-insert-code="displayInsertCode"
+            :display-auto-height="iFrameModel.toLowerCase().includes('large')"
             @episode-choice-display="episodeChoiceDisplay = $event"
           />
 
@@ -132,6 +134,7 @@ const displayTranscript = ref(true);
 const displayWave = ref(false);
 const playerAutoPlay = ref(false);
 const insertCode = ref(false);
+const autoHeight = ref(false);
 const orgaAttributes : Ref<{ [key: string]: string | number | boolean | undefined }| undefined>= ref(undefined);
 
 
@@ -244,6 +247,7 @@ const iFrameSrc = computed(() => {
       url.push(`${props.podcast.podcastId}`);
     }
   }
+
   return addUrlParameters(url).join("");
 });
 const iFrameHeight = computed(() => {
@@ -356,6 +360,9 @@ function addUrlParameters(url: Array<string>) {
   }
   if (insertCode.value) {
     url.push("&insertCode=true");
+  }
+  if (autoHeight.value) {
+    url.push("&autoHeight=true");
   }
   return url;
 }

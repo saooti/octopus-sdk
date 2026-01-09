@@ -448,5 +448,6 @@
   "SmartLink - Listen to latest episode": "Écouter le dernier épisode",
   "SmartLink - Made by": "Hébergé par",
   "SmartLink - To emission on podcastmaker": "Page officielle de l'émission - {organisation}",
-  "SmartLink - To playlist on podcastmaker": "Page officielle de la playlist - {organisation}"
+  "SmartLink - To playlist on podcastmaker": "Page officielle de la playlist - {organisation}",
+  "Miniplayer - Parameters - Auto height": "Hauteur automatique"
 }
