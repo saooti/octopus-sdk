@@ -52,6 +52,7 @@ import { useAuthStore } from "../../../stores/AuthStore";
 import { Emission } from "@/stores/class/general/emission";
 import { Playlist } from "@/stores/class/general/playlist";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 //Props 
 const props = defineProps({
@@ -78,19 +79,19 @@ const arrayColors = ref([
 const filterStore = useFilterStore();
 const authStore = useAuthStore();
 const saveFetchStore = useSaveFetchStore();
-
+const router = useRouter();
 
 //Computed
 const pathShare = computed(() => {
   const orga = filterStore.filterOrgaId ? "?productor="+filterStore.filterOrgaId : "";
-  if(props.podcast){
-    return "/main/pub/podcast/"+ props.podcast.podcastId + orga
+  if(props.podcast) {
+    return router.resolve({ name: "podcast", params: { podcastId: props.podcast.podcastId } }) + orga;
   }
   if(props.emission){
-    return "/main/pub/emission/"+ props.emission.emissionId + orga
+    return router.resolve({ name: "emission", params: { emissionId: props.emission.emissionId } }) + orga;
   }
   if(props.playlist){
-    return "/main/pub/playlist/"+ props.playlist.playlistId + orga
+    return router.resolve({ name: "playlist", params: { playlistId: props.playlist.playlistId } }) + orga;
   }
   return "";
 });

@@ -25,6 +25,7 @@ export const useSeoTitleUrl = ()=>{
   }
 
 	return {
-    updatePathParams
+      updatePathParams,
+      stringUrlEncode
 	}
 }

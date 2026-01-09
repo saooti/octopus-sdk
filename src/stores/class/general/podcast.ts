@@ -54,6 +54,8 @@ export interface Podcast {
   tags?: Array<string>;
   /** An optional list of tags for OuestFrance */
   ofTags?: Array<string>;
+  /** List of beneficiaries/rights holders */
+  beneficiaries: Array<string>;
 
   createdAt?: string;
   createdByUserId?: string;
@@ -119,6 +121,7 @@ export function emptyPodcastData(): Podcast {
     title: "",
     description: undefined,
     tags: [],
+    beneficiaries: [],
     availability: {
       visibility: true,
       date: undefined,

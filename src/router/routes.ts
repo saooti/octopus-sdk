@@ -22,19 +22,12 @@ const PageNotFound = () => import("../components/pages/PageNotFound.vue");
 const RadioPage = () => import("../components/pages/RadioPage.vue");
 const VideoPage = () => import("../components/pages/VideoPage.vue");
 const PageLogout = () => import("../components/pages/PageLogout.vue");
+const SmartLinkPage = () => import("../components/pages/SmartLinkPage.vue");
 
 export const routes: Array<RouteRecordRaw> = [
   /*--------------------------------------------------------------------------
   Liens publics
   --------------------------------------------------------------------------*/
-  {
-    path: "/",
-    name: "",
-    component: Home,
-    meta:{
-      title: "Home"
-    }
-  },
   {
     path: "/main/pub/error",
     name: "error",
@@ -98,7 +91,7 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/main/pub/emission/:emissionId(\\d+):title([^?]*)?:productor?",
+    path: "/main/pub/emission/:emissionId(\\d+):title([^?/]*)?:productor?",
     name: "emission",
     component: EmissionPage,
     props: (route: RouteLocationNormalized) => ({
@@ -218,7 +211,7 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/main/pub/playlist/:playlistId(\\d+):title([^?]*)?:productor?",
+    path: "/main/pub/playlist/:playlistId(\\d+):title([^?/]*)?:productor?",
     name: "playlist",
     component: PlaylistPage,
     props: (route: RouteLocationNormalized) => ({
@@ -228,6 +221,32 @@ export const routes: Array<RouteRecordRaw> = [
     meta:{
       title: "",
       noScroll:true
+    }
+  },
+  {
+    path: "/smartlink/e/:emissionId(\\d+):title([^?/]*)?:productor?",
+    name: "emission-smartlink",
+    component: SmartLinkPage,
+    props: (route: RouteLocationNormalized) => ({
+      emissionId: parseInt(route.params.emissionId.toString(), 10),
+    }),
+    meta:{
+      title: "",
+      noScroll:true,
+      layout: () => import('../layouts/SimpleLayout.vue')
+    }
+  },
+  {
+    path: "/smartlink/p/:playlistId(\\d+):title([^?/]*)?:productor?",
+    name: "playlist-smartlink",
+    component: SmartLinkPage,
+    props: (route: RouteLocationNormalized) => ({
+      playlistId: parseInt(route.params.playlistId.toString(), 10),
+    }),
+    meta:{
+      title: "",
+      noScroll:true,
+      layout: () => import('../layouts/SimpleLayout.vue')
     }
   },
   { path: "/logout", component: PageLogout },

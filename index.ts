@@ -127,6 +127,8 @@ import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
 import { useNotifications } from "./src/components/composable/useNotifications.ts";
+export { useSharePlatforms } from "./src/components/composable/share/useSharePlateforms.ts";
+export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -160,6 +162,8 @@ export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/po
 
 // Types
 export { type Emission, emptyEmissionData } from "./src/stores/class/general/emission.ts";
+export { type Podcast, type PodcastAvailability } from "./src/stores/class/general/podcast.ts";
+export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
 export { type Annotations } from "./src/stores/class/general";
 
 //Icons
