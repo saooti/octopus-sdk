@@ -44,7 +44,7 @@ export interface PodcastSearchOptions extends Paginable<PodcastSort> {
     /** Filter by emission ID */
     emissionId?: number|number[];
     /** Filter by emission groups */
-    emissionGroups?: EmissionGroup[];
+    groupId?: number[];
     /** Filter by organisation ID */
     organisationId?: string[];
     /** Filter by title containing */
@@ -134,12 +134,6 @@ function processSearchParameters(search: PodcastSearchOptions): FetchParam {
             parameters.after = value;
         } else if (key === 'pageSize') {
             parameters.size = value;
-        } else if (key === 'emissionGroups') {
-            const emissionIds = [search.emissionId ?? undefined].flat();
-            search.emissionGroups.forEach(group => {
-                emissionIds.push(...group.emissionIds);
-            });
-            parameters.emissionId = emissionIds;
         } else {
             parameters[key] = value;
         }

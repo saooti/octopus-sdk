@@ -201,7 +201,7 @@ async function fetchContent(reset: boolean): Promise<void> {
     pageSize: dsize.value,
     organisationId: organisation.value,
     emissionId: props.emissionId,
-    emissionGroups: props.emissionGroups,
+    groupId: props.emissionGroups?.map(g => g.groupId),
     iabId: props.iabId,
     participantId: props.participantId,
     query: props.query,

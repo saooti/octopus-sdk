@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.3.1 (En cours)
+
+- Recherche avancée
+  - Ajout du filtrage par groupe sur les émissions
+  - Ajustement filtrage par groupe sur les podcasts
+
 ## 42.3.0 (09/01/2026)
 
 **Features**
@@ -27,7 +33,7 @@
 
 **Fixes**
 
-- Recherche avancées
+- Recherche avancée
   - Correction chargements groupes & ayants-droits depuis routing
   - Filtrage des groupes par organisation
 

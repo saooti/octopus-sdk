@@ -186,6 +186,7 @@ async function fetchContent(reset: boolean): Promise<void> {
     first: reset? 0: dfirst.value,
     size: dsize.value,
     query: props.query,
+    groupId: props.emissionGroups?.map(g => g.groupId),
     organisationId: organisation.value,
     monetisable: props.monetisable,
     iabId: props.iabId,

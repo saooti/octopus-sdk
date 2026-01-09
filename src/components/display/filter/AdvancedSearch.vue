@@ -33,7 +33,7 @@
                     />
 
                     <!-- Group filters -->
-                    <div v-if="!isEmission && showEmissionGroups" class="mt-3 d-flex">
+                    <div v-if="showEmissionGroups" class="mt-3 d-flex">
                         <ClassicCheckbox
                             v-model:text-init="emissionGroupCheckbox"
                             class="flex-shrink-0"
