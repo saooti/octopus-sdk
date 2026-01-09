@@ -96,6 +96,8 @@ import { AxiosError } from "axios";
 import { useCommentStore } from "../../stores/CommentStore";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { podcastApi } from "../../api/podcastApi";
+
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -268,6 +270,7 @@ async function fetchConferenceStatus() {
 }
 function updatePodcast(podcastUpdated: Podcast): void {
   podcast.value = podcastUpdated;
+  filterStore.updateOrgaIfNecessary(podcastUpdated.organisation.id);
 }
 function initError(): void {
   error.value = true;
@@ -290,7 +293,7 @@ async function getPodcastDetails(): Promise<void> {
       initError();
       return;
     }
-    podcast.value = data;
+    updatePodcast(data);
     generalStore.contentToDisplayUpdate(data);
     if (
       (!podcast.value.availability.visibility ||
@@ -323,10 +326,8 @@ function podcastInProcessing(){
     return;
   }
   infoReload.value = setTimeout(async () => {
-    podcast.value = await classicApi.fetchData<Podcast>({
-      api: 0,
-      path: "podcast/" + props.podcastId,
-    });
+    const podcast = await podcastApi.get(props.podcastId);
+    updatePodcast(podcast);
     podcastInProcessing();
   }, 2000);
 }

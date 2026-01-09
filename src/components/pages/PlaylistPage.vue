@@ -66,7 +66,6 @@ import {useOrgaComputed} from "../composable/useOrgaComputed";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import PodcastList from "../display/playlist/PodcastList.vue";
-import classicApi from "../../api/classicApi";
 import { useFilterStore } from "../../stores/FilterStore";
 import { state } from "../../stores/ParamSdkStore";
 import displayHelper from "../../helper/displayHelper";
@@ -78,6 +77,7 @@ import { AxiosError } from "axios";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useSimplePageParam } from "../composable/route/useSimplePageParam";
+import { playlistApi } from "../../api/playlistApi";
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
@@ -164,10 +164,8 @@ async function getPlaylistDetails(): Promise<void> {
   try {
     loaded.value = false;
     error.value = false;
-    playlist.value = await classicApi.fetchData<Playlist>({
-      api: 0,
-      path: "playlist/" + props.playlistId,
-    });
+    playlist.value = await playlistApi.get(props.playlistId);
+    filterStore.updateOrgaIfNecessary(playlist.value.organisation?.id);
     if (
       (!editRight.value && playlistRadio.value) ||
       ("PUBLIC" !== playlist.value.organisation?.privacy &&

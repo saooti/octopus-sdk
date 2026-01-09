@@ -32,16 +32,30 @@ export const useFilterStore = defineStore("FilterStore", () => {
    * ID of the current organisation.
    */
   const filterOrgaId = computed((): string|undefined => {
+    // When explicitly asking to view all content, disable filter
     if (route?.query.viewall === "true") {
       return undefined;
+
+    // When productor set in route, use it
     } else if (route?.query.productor) {
       return route.query.productor as string;
+
+    // If we don´t have an ID stored, use data from auth store
     } else if(_filterOrgaId.value === null) {
       return authStore.authOrgaId;
+
+    // Otherwise use stored ID
     } else {
       return _filterOrgaId.value ?? undefined;
     }
   });
+
+  /** Update stored organisation ID only if not already set */
+  function updateOrgaIfNecessary(orgaId: string|undefined): void {
+    if (orgaId && filterOrgaId.value === undefined) {
+      _filterOrgaId.value = orgaId;
+    }
+  }
 
   /**
    * The ID of the current organisation, regardless of other options.
@@ -105,6 +119,8 @@ export const useFilterStore = defineStore("FilterStore", () => {
     filterOrgaId,
     realOrgaId,
 
+    updateOrgaIfNecessary,
+    
     filterUpdateOrga,
     filterUpdateIab,
     filterUpdateRubrique,

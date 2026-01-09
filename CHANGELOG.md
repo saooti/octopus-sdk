@@ -7,6 +7,8 @@
   - Ajustement filtrage par groupe sur les podcasts
 - Miniplayer
   - Ajout d'une option de hauteur automatique
+- Producteur mis à jour lors de la consultation d'une émission/playlist/podcast
+  quand non connecté
 
 ## 42.3.0 (09/01/2026)
 

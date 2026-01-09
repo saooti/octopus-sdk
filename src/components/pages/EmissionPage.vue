@@ -119,7 +119,6 @@
 </template>
 
 <script setup lang="ts">
-import classicApi from "../../api/classicApi";
 import { state } from "../../stores/ParamSdkStore";
 import displayHelper from "../../helper/displayHelper";
 import {useImageProxy} from "../composable/useImageProxy";
@@ -140,6 +139,7 @@ import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 
 import ErrorMessage from "../misc/ErrorMessage.vue";
 import ClassicHelpButton from "../misc/ClassicHelpButton.vue";
+import { emissionApi } from "../../api/emissionApi";
 
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
@@ -243,10 +243,8 @@ async function getEmissionDetails(): Promise<void> {
   loaded.value = false;
   error.value = false;
   try {
-    emission.value = await classicApi.fetchData<Emission>({
-      api: 0,
-      path: "emission/" + props.emissionId,
-    });
+    emission.value = await emissionApi.get(props.emissionId);
+    filterStore.updateOrgaIfNecessary(emission.value.orga.id);
     if (
       "PUBLIC" !== emission.value.orga.privacy &&
       filterStore.filterOrgaId !== emission.value.orga.id &&
