@@ -21,6 +21,7 @@
 **Misc**
 
 - Début de [doc](./doc/README.md)
+- Début mise en place de tests unitaires
 
 ## 41.2.1 (05/01/2026)
 

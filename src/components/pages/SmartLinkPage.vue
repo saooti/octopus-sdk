@@ -83,11 +83,9 @@ import { useImageProxy } from '../composable/useImageProxy';
 import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePlateforms';
 import { Organisation, OrganisationAttributes } from '../../stores/class/general/organisation';
 import { organisationApi } from '../../api/organisationApi';
-import { RouteLocationNormalized, useRouter } from 'vue-router';
 import { Podcast } from '@/stores/class/general/podcast';
 import { usePlayerStore } from '../../stores/PlayerStore';
 import { podcastApi, PodcastSort } from '../../api/podcastApi';
-import PlayerComponent from '../misc/player/PlayerComponent.vue';
 import { useSharePath } from '../composable/share/useSharePath';
 
 const { updatePathParams } = useSeoTitleUrl();
@@ -111,7 +109,6 @@ interface EmissionProps {
 }
 
 const { playlistId, emissionId } = defineProps<PlaylistProps|EmissionProps>();
-const router = useRouter();
 
 /** The currently displayed element, if any */
 const element = ref<Playlist|Emission|null>(null);
@@ -135,10 +132,10 @@ onMounted(async() => {
 
 /** Title of the element displayed */
 const title = computed((): string => {
-    if (element.value as Playlist) {
+    if (playlistId) {
         return (element.value as Playlist).title;
     }
-    if (element.value as Emission) {
+    if (emissionId) {
         return (element.value as Emission).name;
     }
     return '';
