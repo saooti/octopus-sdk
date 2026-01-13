@@ -127,8 +127,9 @@ import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
 import { useNotifications } from "./src/components/composable/useNotifications.ts";
-export { useSharePlatforms } from "./src/components/composable/share/useSharePlateforms.ts";
+export { useSharePlatforms, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms.ts";
 export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
+export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -184,8 +185,8 @@ export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 export const getSimpleLayout = () => import("./src/layouts/SimpleLayout.vue");
 
 // Routing
-import { setupRouter, getSimpleRouteProps, getRouteProps } from './src/router/utils';
-import { routes as sdkRoutes } from './src/router/routes';
+export { setupRouter, getSimpleRouteProps, getRouteProps, overwriteRoutes } from './src/router/utils';
+export { routes as sdkRoutes } from './src/router/routes';
 
 // Types
 import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
@@ -224,10 +225,6 @@ export {
     deepEqual,
     downloadHelper,
     displayHelper,
-    setupRouter,
-    getSimpleRouteProps,
-    getRouteProps,
-    sdkRoutes,
     SelectOption,
     ROUTE_PARAMS
 };

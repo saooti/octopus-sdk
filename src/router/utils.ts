@@ -1,4 +1,4 @@
-import { Router } from "vue-router";
+import { Router, RouteRecordRaw, RouteRecordSingleView, RouteRecordSingleViewWithChildren } from "vue-router";
 import { useFilterStore, FilterStore } from "../stores/FilterStore";
 import { useSaveFetchStore } from "../stores/SaveFetchStore";
 import { Rubriquage } from "../stores/class/rubrique/rubriquage";
@@ -46,6 +46,46 @@ export function getRouteProps(route: RouteLocationNormalized): RouteProps {
     routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries] as string[]|undefined,
     routeEmissionGroups
   }
+}
+
+/**
+ * Utility type to use with `overwriteRoutes`.
+ */
+interface OverwriteRoute {
+  /** Name of the route to overwrite */
+  name: string;
+  /** Component to overwrite with */
+  component: Component;
+}
+
+/**
+ * Utility function to overwrite the routes defined in the SDK
+ * Overwrite the component of given routes based on their name, without
+ * having to specify the path.
+ * This allows for the SDK to completely manage its routes, and be able to
+ * change their paths, without having to update the routes in the app using the
+ * SDK.
+ */
+export function overwriteRoutes(routes: Array<RouteRecordSingleView| RouteRecordSingleViewWithChildren>, overwrite: Array<OverwriteRoute>): Array<RouteRecordRaw> {
+  const newRoutes = [...routes];
+
+  overwrite.forEach(overwrite => {
+    // Find route by name
+    const idx = newRoutes.findIndex(r => r.name === overwrite.name);
+    if (idx < 0) {
+      console.warn(`Could not find route '${overwrite.name}' to overwrite`);
+      return;
+    }
+
+    // Overwrite component of route
+    const data = newRoutes[idx];
+    newRoutes[idx] = {
+      ...data,
+      component: overwrite.component
+    }
+  });
+  
+  return newRoutes;
 }
 
 async function changeOrgaFilter(orgaFilter: string, filterStore: FilterStore){

@@ -1,6 +1,7 @@
 import { computed } from "vue";
 import { useAuthStore } from "../../stores/AuthStore";
 import { state } from "../../stores/ParamSdkStore";
+
 export const useOrgaComputed = ()=>{
 
   const authStore = useAuthStore();
@@ -15,9 +16,9 @@ export const useOrgaComputed = ()=>{
     );
   }
 
-	return {
+  return {
     isPodcastmaker,
     isEditRights,
     authOrgaId: authStore.authOrgaId
-	}
+  }
 }

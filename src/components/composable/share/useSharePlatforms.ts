@@ -14,16 +14,30 @@ import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { Annotations } from "@/stores/class/general";
 import { computed, type Component } from "vue";
-import { useI18n } from "vue-i18n";
+
+export enum SharePlatformName {
+    APPLE = "applePodcast",
+    DEEZER = "deezer",
+    SPOTIFY = "spotify",
+    AMAZON = "amazon",
+    I_HEART = "iHeart",
+    PLAYER_FM = "playerFm",
+    POCKET_CASTS = "pocketCasts",
+    PODCAST_ADDICT = "podcastAddict",
+    RADIOLINE = "radioline",
+    TUNE_IN = "tunein",
+    YOUTUBE = "youtube",
+    CASTBOX = "castbox",
+    PODBEAN = "podbean",
+    PODCAST_REPUBLIC = "podcastrepublic"
+}
 
 export interface SharePlatform {
     /** ID of the platform */
-    name: string;
-    /** Display text for the platform */
-    label: string;
+    name: SharePlatformName;
     /** Icon of the platform */
     icon: Component;
-    /** Title for buttons */
+    /** Display text/title for buttons */
     title: string;
     /** Color of the icon */
     color: string;
@@ -35,90 +49,75 @@ export interface SharePlatformUrl extends SharePlatform {
 }
 
 export const useSharePlatforms = () => {
-    const { t } = useI18n();
     
     const platforms = computed((): Array<SharePlatform> => {
         return [{
-            name: "applePodcast",
-            label: t("Apple podcast"),
+            name: SharePlatformName.APPLE,
             icon: ApplePodcastIcon,
             title: "Apple Podcast | iTunes",
             color:"#aa1dd3"
         }, {
-            name: "deezer",
-            label: t("Deezer"),
+            name: SharePlatformName.DEEZER,
             icon: DeezerIcon,
             title: "Deezer",
             color:"#a238ff",
         }, {
-            name: "spotify",
-            label: t("Spotify"),
+            name: SharePlatformName.SPOTIFY,
             icon: SpotifyIcon,
             title: "Spotify",
             color: "#1ed760",
         }, {
-            name: "amazon",
-            label: t("Amazon"),
+            name: SharePlatformName.AMAZON,
             icon: AmazonMusicIcon,
             title: "Amazon Music",
             color: "#0c6cb3",
         }, {
-            name: "iHeart",
-            label: t("iHeart"),
+            name: SharePlatformName.I_HEART,
             icon: IHeartIcon,
             title: "iHeart",
             color:"#e11b22"
         }, {
-            name: "playerFm",
-            label: t("Player FM"),
+            name: SharePlatformName.PLAYER_FM,
             icon: PlayerFmIcon,
-            title: "PlayerFM",
+            title: "Player FM",
             color:"#bb202a"
         }, {
-            name: "pocketCasts",
-            label: t("Pocket Casts"),
+            name: SharePlatformName.POCKET_CASTS,
             icon: PocketCastIcon,
             title: "Pocket Casts",
             color:"#f43e37"
         }, {
-            name: "podcastAddict",
-            label: t("Podcast Addict"),
+            name: SharePlatformName.PODCAST_ADDICT,
             icon: PodcastAddictIcon,
             title: "Podcast Addict",
             color:"#f4842d"
         }, {
-            name: "radioline",
-            label: t("Radioline"),
+            name: SharePlatformName.RADIOLINE,
             icon: RadiolineIcon,
             title: "Radioline",
             color:"#1678bd"
         }, {
-            name: "tunein",
-            label: t("Tunein"),
+            name: SharePlatformName.TUNE_IN,
             icon: TuninIcon,
             title: "TuneIn",
             color:"#36b4a7"
         }, {
-            name: "youtube",
-            label: t("YouTube Music"),
+            name: SharePlatformName.YOUTUBE,
             icon: YoutubeIcon,
             title: "YouTube Music",
             color: "#fe0000",
         }, {
-            name: "castbox",
-            label: t("Castbox"),
+            name: SharePlatformName.CASTBOX,
             icon: CastboxIcon,
             title: "Castbox",
             color: "#fe6222",
         }, {
-            name: "podbean",
-            label: t("PodBean"),
+            name: SharePlatformName.PODBEAN,
             icon: PodbeanIcon,
             title: "PodBean",
             color: "#428200",
         }, {
-            name: "podcastrepublic",
-            label: t("Podcast Republic"),
+            name: SharePlatformName.PODCAST_REPUBLIC,
             icon: PodcastRepublicIcon,
             title: "Podcast Republic",
             color: "#5c85dd",

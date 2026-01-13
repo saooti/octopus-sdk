@@ -105,10 +105,8 @@
             @fetch="podcastsFetched"
           />
         </section>
-        <ShareDistribution
-          v-if="editRight && !isPodcastmaker && securityRight && !authStore.isGarRole"
-          :emission-id="emissionId"
-        />
+
+        <slot name="bottom" v-bind="{ emission }" />
       </div>
     </template>
     <ClassicLoading
@@ -129,7 +127,6 @@ import { Emission } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineAsyncComponent, ref, Ref, computed, watch, onBeforeUnmount } from "vue";
 import { AxiosError } from "axios";
-import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useFilterStore } from "../../stores/FilterStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -150,9 +147,6 @@ const SharePlayer = defineAsyncComponent(
 );
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
-);
-const ShareDistribution = defineAsyncComponent(
-  () => import("../display/sharing/ShareDistribution.vue"),
 );
 const EditBox = defineAsyncComponent(
   () => import("@/components/display/edit/EditBox.vue"),
@@ -179,7 +173,7 @@ const props = withDefaults(defineProps<{
   ps?: number;
   routeQuery?: string;
   /** When true, display emission title in podcastmaker header */
-  useEmissionTitle: boolean;
+  useEmissionTitle?: boolean;
 }>(), {
   pr: 0,
   ps: 30,
@@ -199,7 +193,6 @@ const { useProxyImageUrl } = useImageProxy();
 const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
 const { updatePathParams } = useSeoTitleUrl();
 const {handle403} = useErrorHandler();
-const authStore = useAuthStore();
 const filterStore = useFilterStore();
 const generalStore= useGeneralStore();
 const route= useRoute();
@@ -214,13 +207,6 @@ const {
 const name = computed(() => emission.value?.name ?? "");
 const description = computed(() => emission.value?.description ?? "");
 const editRight = computed(() => isEditRights(emission.value?.orga.id));
-const securityRight = computed(() =>{
-  return (
-    "PUBLIC" === emission.value?.orga?.privacy ||
-    ("PRIVATE" === emission.value?.orga?.privacy &&
-      ![null, undefined, "PRIVATE"].includes(emission.value?.privateRssType))
-  );
-});
 
 
 //Watch

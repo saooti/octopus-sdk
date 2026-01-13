@@ -70,7 +70,7 @@ import { Emission } from "@/stores/class/general/emission";
 import { type Component, computed, onMounted, Ref, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { Playlist } from "@/stores/class/general/playlist";
-import { useSharePlatforms } from "../../composable/share/useSharePlateforms";
+import { useSharePlatforms } from "../../composable/share/useSharePlatforms";
 type Link = {
   name: string;
   icon: Component;

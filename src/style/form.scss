@@ -67,8 +67,8 @@
 		position: relative;
 		width: 100%;
 
-		&:is(:disabled, .disabled){
-			background: var(--octopus-secondary-lighter);
+		&:is(:disabled, .disabled) {
+			background: var(--octopus-secondary-lighter) !important;
 		}
 	}
 

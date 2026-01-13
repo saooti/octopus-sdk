@@ -117,7 +117,7 @@ const props = defineProps<{
   playingPodcast?: Podcast;
   podcastId: number;
   /** When true, display emission title in podcastmaker header */
-  useEmissionTitle: boolean;
+  useEmissionTitle?: boolean;
 }>();
 
 

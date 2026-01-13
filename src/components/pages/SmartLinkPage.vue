@@ -42,7 +42,7 @@
                         class="me-2"
                     />
 
-                    <span class="platform-label">{{ platform.label }}</span>
+                    <span class="platform-label">{{ platform.title }}</span>
                 </button>
             </div>
         </div>
@@ -76,7 +76,7 @@ import { Playlist } from '../../stores/class/general/playlist';
 import { playlistApi } from '../../api/playlistApi';
 import { emissionApi } from '../../api/emissionApi';
 import { useImageProxy } from '../composable/useImageProxy';
-import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePlateforms';
+import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePlatforms';
 import { Organisation, OrganisationAttributes } from '../../stores/class/general/organisation';
 import { organisationApi } from '../../api/organisationApi';
 import { Podcast } from '@/stores/class/general/podcast';

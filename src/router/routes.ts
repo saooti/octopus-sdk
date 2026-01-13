@@ -1,4 +1,4 @@
-import { RouteRecordRaw, RouteLocationNormalized } from "vue-router";
+import { RouteLocationNormalized, RouteRecordSingleView, RouteRecordSingleViewWithChildren } from "vue-router";
 
 import { getRouteProps, getSimpleRouteProps } from "./utils";
 
@@ -24,7 +24,7 @@ const VideoPage = () => import("../components/pages/VideoPage.vue");
 const PageLogout = () => import("../components/pages/PageLogout.vue");
 const SmartLinkPage = () => import("../components/pages/SmartLinkPage.vue");
 
-export const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordSingleView|RouteRecordSingleViewWithChildren> = [
   /*--------------------------------------------------------------------------
   Liens publics
   --------------------------------------------------------------------------*/
