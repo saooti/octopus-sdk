@@ -46,7 +46,7 @@
         @delete-comment="deleteComment(c.commentId)"
       />
       <ClassicLoading
-        :loading-text="loading ? t('Loading content ...') : undefined"
+        :loading-text="loading && !error ? t('Loading content ...') : undefined"
         :error-text="error ? t(`Comments loading error`) : undefined"
       />
       <button
@@ -64,10 +64,8 @@
 import SortVariantIcon from "vue-material-design-icons/SortVariant.vue";
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import {useErrorHandler} from "../../composable/useErrorHandler";
 import classicApi from "../../../api/classicApi";
 import { computed, defineAsyncComponent, onMounted, onUnmounted, Ref, ref, useTemplateRef, watch } from "vue";
-import { AxiosError } from "axios";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "@/stores/class/general/podcast";
 import {
@@ -113,7 +111,6 @@ const scrollComponentRef = useTemplateRef('scrollComponent');
 
 //Composables
 const { t } = useI18n();
-const {handle403} = useErrorHandler();
 
 //Computed
 const isNotAnAnswerList = computed(() =>  undefined === props.answerToComment);
@@ -244,12 +241,15 @@ async function fetchContent(reset: boolean): Promise<void> {
     dfirst.value += dsize.value;
     loading.value = false;
   } catch (errorWs) {
-    handle403(errorWs as AxiosError);
+    // Errors sometimes occur, and shouldn't trigger anything too drastic,
+    // so we only log it, instead of using handle403
+    console.error(errorWs);
     error.value = true;
   }
 }
 </script>
-<style lang="scss">
+
+<style scoped lang="scss">
 .octopus-app {
   .scrolling-comments {
     max-height: 715px;

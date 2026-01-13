@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 42.3.2 (En cours)
+
+**Misc**
+
+- Amélioration du système de plateformes de distribution
+  - Les plateformes affichées en bas de page d'émission sont maintenant gérées
+    par le frontoffice, et non le sdk
+  - Suppression de la localisation des noms, cela empêchait l'usage du
+    composable à différents endroits, et n'était pas pertinent (ce sont des
+    marques, il n'y a pas de localisation)
+- Les erreurs de récupération des commentaires ne renvoient plus sur une page
+  d'erreur
+
 ## 42.3.1 (09/01/2026)
 
 **Features**
