@@ -5,20 +5,32 @@
     <article v-if="element">
         <!-- Top part of smartlink, with image, title and description -->
         <div class="content">
-            <img
-                v-lazy="useProxyImageUrl(element.imageUrl, '250')"
-                width="250"
-                height="250"
-                class="img-box"
-                aria-hidden="true"
-                alt=""
-            >
+            <div class="left">
+                <img
+                    v-lazy="useProxyImageUrl(element.imageUrl, '250')"
+                    width="250"
+                    height="250"
+                    class="img-box"
+                    aria-hidden="true"
+                    alt=""
+                >
+                <!-- Play button when not viewing with phone -->
+                <button
+                    v-if="latestPodcast"
+                    class="btn btn-primary play-button pe-3 hide-phone"
+                    @click="playLatestPodcast"
+                >
+                    <PlayIcon class="me-2" />
+                    {{ $t('SmartLink - Listen to latest episode') }}
+                </button>
+            </div>
             <h1>{{ title }}</h1>
             <div v-html="displayHelper.urlify(element.description)" />
 
+            <!-- Play button when viewing with phone -->
             <button
                 v-if="latestPodcast"
-                class="btn btn-primary pe-3"
+                class="btn btn-primary play-button pe-3 mt-4 show-phone-flex"
                 @click="playLatestPodcast"
             >
                 <PlayIcon class="me-2" />
@@ -171,9 +183,9 @@ const podcastmakerElementUrl = computed((): string|undefined => {
 
     // Retrieve full URL of element
     if (playlistId) {
-        return getSharePath({ name: 'playlist', params: { playlistId }});
+        return getSharePath({ name: 'playlist', params: { playlistId }}, organisationAttributes.value);
     } else if (emissionId) {
-        return getSharePath({ name: 'emission', params: { emissionId }});
+        return getSharePath({ name: 'emission', params: { emissionId }}, organisationAttributes.value);
     }
 });
 
@@ -210,7 +222,7 @@ async function getLatestPodcast(): Promise<void> {
     } else if (emissionId) {
         const result = await podcastApi.searchFull({
             emissionId,
-            sort: PodcastSort.LAST_PODCAST_DESC,
+            sort: PodcastSort.DATE,
             pageSize: 1
         });
 
@@ -276,13 +288,36 @@ article {
         width: 100%;
     }
 
+    .play-button {
+        width: 250px;
+
+        // Center button
+        margin-right: auto !important;
+        margin-left: auto !important;
+
+        &::before {
+            // Remove additional content
+            display: none;
+        }
+    }
+
+    .left {
+        // Align left
+        float: left;
+
+        @media (width <= 960px) {
+            // On small screens, center content
+            margin: 0 auto;
+            float: none;
+        }
+    }
+
     .img-box {
         // Move image
         margin-top: -70px;
         margin-bottom: 0px;
 
         // Move image left with content going to its right, and below it
-        float: left;
         margin-right: 20px;
 
         // Add a border

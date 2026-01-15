@@ -7,6 +7,10 @@
 - Il est maintenant possible de forcer le filtrage par plusieurs rubrique, et
   non plus seulement une
 
+**Misc**
+
+- Ajustements affichage SmartLink
+
 ## 42.3.2 (14/01/2026)
 
 **Misc**
