@@ -44,6 +44,7 @@ export function getRouteProps(route: RouteLocationNormalized): RouteProps {
     routeOrga:route.query.o as string|undefined,
     routeRubriques :route.query.r as string ?? route.query.rubriquesId as string|undefined,
     routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries] as string[]|undefined,
+    routeOnlyVideo: route.query.v as string|undefined ?? "",
     routeEmissionGroups
   }
 }

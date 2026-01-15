@@ -6,7 +6,6 @@ import { ModuleApi } from './apiConnection';
 import { unique } from '../helper/arrayHelper';
 import { organisationApi } from './organisationApi';
 import { emissionApi } from './emissionApi';
-import { EmissionGroup } from './groupsApi';
 import { FetchParam } from '@/stores/class/general/fetchParam';
 
 export enum PodcastSort {

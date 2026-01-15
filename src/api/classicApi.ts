@@ -144,7 +144,7 @@ export default {
     return response.data;
   },
 
-  adjustParameters(params:RequestParameters){
+  adjustParameters(params: RequestParameters){
     const parametersUpdated = params.parameters ?? {};
     if (params.path.includes('podcast/search')){
       if(!params.parameters?.includeHidden || params.isNotAuth){
@@ -156,6 +156,7 @@ export default {
         }
       }
     }
+
     if(state.generalParameters.forceOrganisationId){
       if(!parametersUpdated.organisationId || !(parametersUpdated.organisationId as Array<string>)?.length){
         parametersUpdated.organisationId = state.generalParameters.forceOrganisationId;
@@ -163,12 +164,14 @@ export default {
         parametersUpdated.organisationId = undefined;
       }
     }
+
     if(undefined!==state.generalParameters.forceRubriqueId){
       if(!parametersUpdated.rubriqueId){
         parametersUpdated.rubriqueId = [];
       }
-      parametersUpdated.rubriqueId = (parametersUpdated.rubriqueId as Array<number>).concat([state.generalParameters.forceRubriqueId]);
+      parametersUpdated.rubriqueId = (parametersUpdated.rubriqueId as Array<number>).concat([state.generalParameters.forceRubriqueId].flat());
     }
-    return parametersUpdated
+
+    return parametersUpdated;
   },
 }

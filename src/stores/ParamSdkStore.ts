@@ -28,7 +28,7 @@ const state: ParamStore = {
 export interface ParamStore {
   generalParameters: {
     forceOrganisationId?: string;
-    forceRubriqueId?:number;
+    forceRubriqueId?: number|number[];
     podcastmaker?: boolean;
     buttonPlus?: boolean;
     isLiveTab?: boolean;
