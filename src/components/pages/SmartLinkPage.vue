@@ -291,9 +291,11 @@ article {
     .play-button {
         width: 250px;
 
-        // Center button
-        margin-right: auto !important;
-        margin-left: auto !important;
+        @media (width <= 960px) {
+            // Center button
+            margin-right: auto !important;
+            margin-left: auto !important;
+        }
 
         &::before {
             // Remove additional content
