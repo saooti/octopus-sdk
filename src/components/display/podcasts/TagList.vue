@@ -7,7 +7,7 @@
       {{ t("Podcast tags") + " : " }}
     </div>
     <router-link
-      v-for="(tag, index) in tagListFiltered"
+      v-for="(tag, index) in tags"
       :key="tag"
       class="d-flex align-items-center border p-1 m-1 text-dark"
       :to="{
@@ -27,9 +27,8 @@
             height="20"
             class="ouest-france-logo"
             aria-hidden="true"
-        alt=""
+            alt=""
             title="Ouest France"
-            
             src="/img/ouest_france_logo.svg" 
           />
           {{ formateOfTag(tag) }}
@@ -42,11 +41,19 @@
         />
       </template>
     </router-link>
+
+    <button
+      v-if="limitTags && !showAllTags"
+      class="btn"
+      @click="showAllTags = true"
+    >
+      {{ t('See more') }}
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 const ClassicPopover = defineAsyncComponent(
   () => import("../../misc/ClassicPopover.vue"),
 );
@@ -63,7 +70,9 @@ const props = defineProps({
       [key: string]: string | number | boolean | undefined;
     },
   },
-  orgaId: {default: "", type: String,},
+  orgaId: {default: "", type: String },
+  /** Max number of tags to display */
+  max: { type: Number, default: undefined }
 })
 
 
@@ -72,7 +81,21 @@ const { t } = useI18n()
 const { isOuestFranceTag, formateOfTag } = useTagOf();
 const filterStore = useFilterStore();
 
+const showAllTags = ref(false);
+
 //Computed
+const limitTags = computed((): boolean => {
+  return !!props.max && tagListFiltered.value.length > props.max;
+});
+
+const tags = computed(() => {
+  if (limitTags.value && !showAllTags.value) {
+    return limitedTags.value;
+  } else {
+    return tagListFiltered.value;
+  }
+});
+
 const tagListFiltered = computed(() => {
   const tags = props.tagList.filter((tag: string) => {
     return !tag.match(/^\[\[.*\]\]$/);
@@ -81,6 +104,11 @@ const tagListFiltered = computed(() => {
   // Each tag is only displayed once
   return tags.filter((tag, index) => tags.indexOf(tag) === index);
 });
+
+const limitedTags = computed(() => {
+  return tagListFiltered.value.slice(0, props.max);
+});
+
 const organisationQuery = computed(() => {
   if(filterStore.filterOrgaId){
     return undefined;
@@ -116,6 +144,11 @@ const organisationQuery = computed(() => {
       box-shadow: var(--octopus-shadow) 0 5px 15px;
       font-size: 0.9rem;
     }
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 4px 8px;
   }
 }
 </style>

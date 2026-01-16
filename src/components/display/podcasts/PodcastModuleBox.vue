@@ -134,6 +134,7 @@
       :tag-list="tags"
       :orga-id="podcast.organisation.id"
       :podcast-annotations="podcast.annotations"
+      :max="state.podcastPage.maxTags"
     />
     <PodcastRubriqueList
       v-if="podcastRubriques?.length"

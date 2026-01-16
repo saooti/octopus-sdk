@@ -41,6 +41,15 @@ export interface ParamStore {
     downloadButton?:boolean;
     /** If true, hide tags on podcast page */
     hideTags?: boolean;
+    /** The maximum number of tags that can be displayed */
+    maxTags?: number;
+  };
+  emissionPage: {
+    ShareButtons?: boolean;
+    /** If true, hide tags on emission page */
+    hideTags?: boolean;
+    /** The maximum number of tags that can be displayed */
+    maxTags?: number;
   };
   emissionsPage: {
     itemPlayer?: boolean;
@@ -48,8 +57,6 @@ export interface ParamStore {
     mainRubrique?: number;
     buttonMore?: boolean;
     progressBar?: boolean;
-    /** If true, hide tags on emission page */
-    hideTags?: boolean;
   },
   player: {
     isVideoPage?:boolean;

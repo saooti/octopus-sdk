@@ -64,6 +64,7 @@
               :tag-list="emission.tags"
               :orga-id="authOrgaId"
               :emission-annotations="emission.annotations"
+              :max="state.emissionPage.maxTags"
             />
 
             <SubscribeButtons
@@ -76,7 +77,7 @@
           </div>
         </section>
         <ShareSocialsButtons
-          v-if="state.podcastPage.ShareButtons"
+          v-if="state.emissionPage.ShareButtons"
           :organisation-id="emission.orga.id"
         />
         <SharePlayer
@@ -261,7 +262,7 @@ function podcastsFetched(podcasts: Array<Podcast>) {
 
 /** Indicates whether to show tags */
 const showTags = computed((): boolean => {
-  if (state.podcastPage.hideTags === true) {
+  if (state.emissionPage.hideTags === true) {
     return false;
   }
 

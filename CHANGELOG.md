@@ -8,6 +8,8 @@
   non plus seulement une
 - La page de playlist des podcastmakers affiche maintenant les boutons pour
   s'abonner sur les différentes plateformes
+- Option de configuration pour limiter le nombre de tags affichés sur les pages
+  d'émission et de podcast
 
 **Misc**
 
