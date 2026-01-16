@@ -1,10 +1,13 @@
 import classicApi from "./classicApi";
 import { ModuleApi } from "./apiConnection";
 import { Podcast, SimplifiedPodcast } from "../stores/class/general/podcast";
-import { Playlist } from "../stores/class/general/playlist";
+import { Playlist, PlaylistAmbianceType } from "../stores/class/general/playlist";
 import { organisationApi } from "./organisationApi";
 import { emissionApi } from "./emissionApi";
 import { unique } from '../helper/arrayHelper';
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import { Paginable } from "./types";
+import { FetchParam } from "@/stores/class/general/fetchParam";
 
 /**
  * Retrieve playlist data
@@ -64,10 +67,43 @@ async function getContentFull(playlistId: number): Promise<Array<Podcast>> {
 }
 
 /**
+ * Sort order for playlists
+ */
+enum PlaylistSort {
+    SCORE = "SCORE",
+    NAME = "NAME"
+}
+
+/**
+ * Search criterias for playlists
+ */
+interface PlaylistSearchOptions extends Paginable<PlaylistSort> {
+    /** Filter on organisations */
+    organisationId?: string[];
+    /** Fitler on name */
+    query?: string;
+    /** Filter on type */
+    type?: PlaylistAmbianceType;
+}
+
+/**
+ * Search for playlists based on criterias
+ */
+async function search(options?: PlaylistSearchOptions): Promise<ListClassicReturn<Playlist>> {
+    return await classicApi.fetchData<ListClassicReturn<Playlist>>({
+        api: ModuleApi.DEFAULT,
+        path: 'playlist/search',
+        specialTreatement: true,
+        parameters: options as FetchParam
+    });
+}
+
+/**
  * API to manage playlists
  */
 export const playlistApi = {
     get,
     getContent,
-    getContentFull
+    getContentFull,
+    search
 }

@@ -7,6 +7,7 @@ import { unique } from '../helper/arrayHelper';
 import { organisationApi } from './organisationApi';
 import { emissionApi } from './emissionApi';
 import { FetchParam } from '@/stores/class/general/fetchParam';
+import { Paginable } from './types';
 
 export enum PodcastSort {
     DATE = 'DATE',
@@ -23,15 +24,6 @@ export enum PodcastMonetisation {
     YES = "YES",
     NO = "NO",
     UNDEFINED = "UNDEFINED"
-}
-
-interface Paginable<S> {
-    /** The start of pagination */
-    first?: number;
-    /** The number of elements to retrieve */
-    pageSize?: number;
-    /** Sorting */
-    sort?: S;
 }
 
 /**

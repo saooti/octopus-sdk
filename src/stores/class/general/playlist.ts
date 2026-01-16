@@ -4,8 +4,18 @@ import { FetchParam } from "./fetchParam";
 import { Annotations } from ".";
 import { ItuneCategory } from "./ituneCategory";
 
+/**
+ * Type of ambiance for the playlist
+ * see #11919
+ */
+export enum PlaylistAmbianceType {
+  NONE = "NONE",
+  AMIBANCE = "AMBIANCE",
+  AMBIANCE_PROGRAMMED = "AMBIANCE_PROGRAMMED"
+}
+
 export interface Playlist {
-  ambianceType?: string; //#11919 "NONE", "AMBIANCE", "PROGRAMMED"
+  ambianceType?: PlaylistAmbianceType;
   imageUrl?: string;
   description: string;
   organisation?: Organisation;
@@ -24,7 +34,7 @@ export interface Playlist {
 
 export function emptyPlaylistData(): Playlist {
   return {
-    ambianceType: "NONE",
+    ambianceType: PlaylistAmbianceType.NONE,
     description: "",
     playlistId: 0,
     podcasts: undefined,

@@ -18,7 +18,7 @@ export const useRubriquesFilterComputed = ()=>{
     return undefined;
   });
 
-	return {
+  return {
     rubriqueQueryParam
-	}
+  }
 }

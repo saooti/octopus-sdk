@@ -12,7 +12,7 @@
           name: 'home',
           query: {
             iabId: filterStore.filterIab?.id,
-            rubriquesId: rubriqueQueryParam.value,
+            rubriquesId: rubriqueQueryParam,
             productor: filterStore.filterOrgaId
           },
         }"
@@ -34,11 +34,10 @@ const { rubriqueQueryParam } = useRubriquesFilterComputed();
 const filterStore = useFilterStore();
 const { t } = useI18n();
 
-
 //Computed
 const backgroundStyle = computed(() => "background-image: url('/img/404.svg');");
-
 </script>
+
 <style lang="scss">
 .octopus-app .page-not-found {
   background-size: cover;

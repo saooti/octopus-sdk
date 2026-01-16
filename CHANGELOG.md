@@ -1,17 +1,19 @@
 # CHANGELOG
 
-## 42.4.0 (En cours)
+## 41.4.0 (En cours)
 
 **Features**
 
 - Il est maintenant possible de forcer le filtrage par plusieurs rubrique, et
   non plus seulement une
+- La page de playlist des podcastmakers affiche maintenant les boutons pour
+  s'abonner sur les différentes plateformes
 
 **Misc**
 
 - Ajustements affichage SmartLink
 
-## 42.3.2 (14/01/2026)
+## 41.3.2 (14/01/2026)
 
 **Misc**
 
@@ -24,7 +26,7 @@
 - Les erreurs de récupération des commentaires ne renvoient plus sur une page
   d'erreur
 
-## 42.3.1 (09/01/2026)
+## 41.3.1 (09/01/2026)
 
 **Features**
 
@@ -45,7 +47,7 @@
 - Producteur mis à jour lors de la consultation d'une émission/playlist/podcast
   quand non connecté
 
-## 42.3.0 (09/01/2026)
+## 41.3.0 (09/01/2026)
 
 **Features**
 

@@ -30,6 +30,13 @@
             <p class="html-wysiwyg-content" v-html="urlify(description)" />
             <!-- eslint-enable -->
           </div>
+          <SubscribeButtons
+            v-if="isPodcastmaker"
+            class="mt-4"
+            :content="playlist"
+            :window-width="1000"
+            :justify-center="false"
+          />
         </section>
         <SharePlayer
           v-if="!isPodcastmaker && editRight"
@@ -77,6 +84,8 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 import { playlistApi } from "../../api/playlistApi";
+
+import SubscribeButtons from "../display/sharing/SubscribeButtons.vue"; 
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
