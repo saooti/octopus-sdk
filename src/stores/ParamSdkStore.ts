@@ -20,6 +20,7 @@ const state: ParamStore = {
     buttonMore: false,
     progressBar: false,
   },
+  emissionPage: {},
   player: {
     isVideoPage:false,
   },
@@ -60,6 +61,12 @@ export interface ParamStore {
   },
   player: {
     isVideoPage?:boolean;
+    /**
+     * Indicates that the play is at the top of the page.
+     * This adapts player settings for properly display.
+     * Currently *does not* position the player.
+     */
+    topPlacement?: boolean;
   };
 }
 
@@ -83,6 +90,10 @@ const initialize = function initialize(initObject: Partial<ParamStore>): void {
   state.emissionsPage = Object.assign(
     state.emissionsPage,
     definedProps(initObject.emissionsPage),
+  );
+  state.emissionPage = Object.assign(
+    state.emissionPage,
+    definedProps(initObject.emissionPage),
   );
   state.player = Object.assign(state.player, definedProps(initObject.player));
 };

@@ -46,6 +46,8 @@ const props = defineProps({
   topPos: { type: Boolean, default: false },
   popoverClass: { type: String, default: undefined },
   isTopLayer: { type: Boolean, default: false },
+  /** If set to true, max height of popover will not overflow from parent */
+  constrainHeight: { type: Boolean, default: true }
 })
 
 //Emits
@@ -229,7 +231,7 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
   if(isTopLayerPopover.value){
     posY.value = Math.max(0, posY.value);
     maxHeight.value = (window.innerHeight - posY.value) + "px";
-  }else if(props.relativeClass){
+  }else if(props.relativeClass && props.constrainHeight !== false) {
     maxHeight.value = (parentBottom- posY.value -parentTop) + "px";
   }else{
     maxHeight.value = '80dvh';

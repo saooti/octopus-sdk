@@ -10,9 +10,10 @@
     target="player-speed-button"
     relative-class="player-container"
     class="player-speed-dropdown"
-    :top-pos="true"
-    :only-click="true"
-    :is-fixed="true"
+    :constrain-height="state.player.topPlacement !== true"
+    :top-pos="state.player.topPlacement !== true"
+    only-click
+    is-fixed
   >
     <button
       v-for="(speed, index) in speedArray"
@@ -29,6 +30,7 @@
 import { useI18n } from "vue-i18n";
 import ClassicPopover from "../../ClassicPopover.vue";
 import { onMounted, Ref, ref } from "vue";
+import { state } from "../../../../stores/ParamSdkStore";
 
 //Data 
 const speedIndex = ref(2);
@@ -51,7 +53,7 @@ function changeSpeed(index: number) {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 
 .octopus-app {
   .speed-style {

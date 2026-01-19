@@ -26,7 +26,7 @@
     <PaginateSection
       v-if="!isPhone && !justSizeChosen && totalCount > 0"
       :id="id"
-      :style="playerResponsive ? 'bottom:' + playerStore.playerHeight : ''"
+      :style="pagingStyle"
       :first="first"
       :rows-per-page="rowsPerPage"
       :total-count="totalCount"
@@ -128,5 +128,13 @@ function scrollToTop() {
     window.scrollY -
     domHelper.convertRemToPixels(3.5);
   window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+/** Style to apply to the paging section */
+function pagingStyle(): Record<string, string> {
+  // Only change position if player is active and not at the top
+  if (props.playerResponsive && state.player.topPlacement !== true) {
+    return { 'bottom': playerStore.playerHeight };
+  }
 }
 </script>

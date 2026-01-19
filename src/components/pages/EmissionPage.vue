@@ -262,7 +262,7 @@ function podcastsFetched(podcasts: Array<Podcast>) {
 
 /** Indicates whether to show tags */
 const showTags = computed((): boolean => {
-  if (state.emissionPage.hideTags === true) {
+  if (state.emissionPage?.hideTags === true) {
     return false;
   }
 

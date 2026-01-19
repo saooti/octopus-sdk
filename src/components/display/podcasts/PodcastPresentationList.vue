@@ -97,7 +97,7 @@ async function fetchNext(): Promise<void> {
     for (let i = 0; i < emissions.result.length; i++) {
       promises.push(podcastApi.search({
         first: 0,
-        pageSize: 1,
+        size: 1,
         organisationId: [props.organisationId],
         emissionId: [emissions.result[i].emissionId],
         sort: PodcastSort.DATE,
@@ -109,7 +109,7 @@ async function fetchNext(): Promise<void> {
     const data = await Promise.all(promises);
 
     podcasts.value = podcasts.value.concat(
-      data.filter((em: SimplifiedPodcast | null) => null !== em).map(p => {
+      data.filter((em: SimplifiedPodcast | null) => null !== em && undefined !== em).map(p => {
         // Get emission from podcast
         const emission = emissions.result.find(e => e.emissionId === p.emissionId);
         // Create full podcast from simplified + emission
@@ -118,6 +118,7 @@ async function fetchNext(): Promise<void> {
     );
     loading.value = false;
   } catch (errorWs) {
+    console.log(errorWs);
     handle403(errorWs as AxiosError);
     error.value = true;
   }
