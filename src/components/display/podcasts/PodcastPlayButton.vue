@@ -28,7 +28,7 @@
         >
           <PlayIcon
             v-if="!playingPodcast || (playingPodcast && playerStore.playerVideo)"
-            :size="'audio' === hoverType ? 50 : 40"
+            :size="playIconSize"
           />
           <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo" />
           <time
@@ -99,6 +99,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useResizePhone } from "../../composable/useResizePhone";
 dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 
@@ -121,6 +122,7 @@ const hoverType = ref("");
 const { t } = useI18n();
 const playerStore = usePlayerStore();
 const router = useRouter();
+const { isPhone } = useResizePhone();
 
 //Computed
 const isVideoPodcast = computed(() => {
@@ -158,6 +160,17 @@ const isLiveValidAndVisible = computed(() => {
     undefined !== props.podcast.availability.visibility &&
     props.podcast.availability.visibility
   );
+});
+
+/** Size of the play icon */
+const playIconSize = computed(() => {
+  if (isPhone.value) {
+    return 36;
+  } else if (hoverType.value === 'audio') {
+    return 50;
+  } else {
+    return 40;
+  }
 });
 
 /** Whether the podcast can be played */
@@ -338,10 +351,15 @@ function play(isVideo: boolean): void {
     display: flex;
     position: absolute;
     bottom: 0;
+    left: 0;
     font-size: 1rem;
     color: white;
     background-color: var(--octopus-primary-less-transparent);
     border-radius: var(--octopus-border-radius);
+
+    @media (width <= 960px) {
+      font-size: 0.8rem;
+    }
 
     button{
       color: white;

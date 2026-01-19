@@ -11,6 +11,10 @@
 - Option de configuration pour limiter le nombre de tags affichés sur les pages
   d'émission et de podcast
 
+**Fixes**
+
+- Correction affichage bouton play des `PodcastPresentationList` sur mobile
+
 **Misc**
 
 - Ajustements affichage SmartLink

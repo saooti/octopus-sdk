@@ -143,6 +143,10 @@ function urlify(text:string|undefined){
     // Make it relative so that absolute elements associated with the image
     // are positioned within the image box
     position: relative;
+
+    @media (width <= 960px) {
+      height: calc(var(--octopus-image-height) - 4);
+    }
   }
 
   .img-box-bigger {
