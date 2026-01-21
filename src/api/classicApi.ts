@@ -165,11 +165,21 @@ export default {
       }
     }
 
+    // Force filter on rubrique
     if(undefined!==state.generalParameters.forceRubriqueId){
       if(!parametersUpdated.rubriqueId){
         parametersUpdated.rubriqueId = [];
       }
       parametersUpdated.rubriqueId = (parametersUpdated.rubriqueId as Array<number>).concat([state.generalParameters.forceRubriqueId].flat());
+    }
+
+    // Force filter on rubriquage
+    console.log()
+    if(undefined!==state.generalParameters.forceNoRubriquageId){
+      if(!parametersUpdated.noRubriquageId){
+        parametersUpdated.noRubriquageId = [];
+      }
+      (parametersUpdated.noRubriquageId as number[]).push(...([state.generalParameters.forceNoRubriquageId].flat()));
     }
 
     return parametersUpdated;

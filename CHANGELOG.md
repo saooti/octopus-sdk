@@ -6,6 +6,7 @@
 
 - Il est maintenant possible de forcer le filtrage par plusieurs rubrique, et
   non plus seulement une
+- Il est maintenant possible de forcer le filtrage sur des rubriquages exclus
 - La page de playlist des podcastmakers affiche maintenant les boutons pour
   s'abonner sur les différentes plateformes
 - Option de configuration pour limiter le nombre de tags affichés sur les pages

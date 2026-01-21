@@ -28,8 +28,12 @@ const state: ParamStore = {
 
 export interface ParamStore {
   generalParameters: {
+    /** Automatically filter results by this organisation */
     forceOrganisationId?: string;
+    /** Automatically filter results by these rubriques */
     forceRubriqueId?: number|number[];
+    /** Automatically exclude these rubriquage from results */
+    forceNoRubriquageId?: number|number[];
     podcastmaker?: boolean;
     buttonPlus?: boolean;
     isLiveTab?: boolean;

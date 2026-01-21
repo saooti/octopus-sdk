@@ -3,3 +3,4 @@
 ## Table des matières
 
 1. [Routing](./routing.md)
+2. [Configuration](./configuration.md)
