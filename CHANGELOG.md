@@ -20,6 +20,7 @@
 **Misc**
 
 - Ajustements affichage SmartLink
+- Ajout de quelques textes localisés
 
 ## 41.3.2 (14/01/2026)
 
