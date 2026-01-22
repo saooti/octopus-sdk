@@ -414,5 +414,6 @@
   "SmartLink - To playlist on podcastmaker": "Official playlist page - {organisation}",
   "Miniplayer - Parameters - Auto height": "Auto Height",
   "Edit": "Edit",
-  "Podcast": "Episode"
+  "Podcast": "Episode",
+  "Player - Transcription - AI Warning": "The transcription is based on AI and may contain errors, please let us know."
 }

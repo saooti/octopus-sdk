@@ -42,4 +42,8 @@
 
     // ClassicDataTable
     --table-line-height: 48px;
+
+    // Player
+    // Color for the transcript background
+    --octopus-player-transcript-bg-color: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
 }

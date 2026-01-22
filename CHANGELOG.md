@@ -13,6 +13,9 @@
   - Option de configuration pour limiter le nombre de tags affichés sur les
     pages d'émission et de podcast
   - Option de configuration pour les players en haut de page
+  - Option de configuration pour ouvrir le player en grand par défaut
+  - Option de configurqtion pour afficher un message informatif sur l'IA pour
+    la transcription dans le player
 - La page de playlist des podcastmakers affiche maintenant les boutons pour
   s'abonner sur les différentes plateformes
 

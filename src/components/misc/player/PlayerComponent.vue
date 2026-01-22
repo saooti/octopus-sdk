@@ -23,6 +23,7 @@
       @loadedmetadata="checkDelaytWithStitching"
     />
     <div id="ad-container"></div>
+
     <template v-if="displayWithTimeout">
       <PlayerVideo v-if="playerStore.playerVideo && isNotVideoPage" />
       <template v-else-if="!playerStore.playerVideo">
@@ -94,8 +95,6 @@ const {
 } = usePlayerLogic(forceHide);
 const playerStore = usePlayerStore();
 const route = useRoute();
-
-
 
 // Computed
 const display = computed(() => { return "STOPPED" !== playerStore.playerStatus;});

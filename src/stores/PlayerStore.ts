@@ -9,6 +9,9 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
 import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
 import classicApi from "../api/classicApi";
+
+import { state as sdkParams } from "./ParamSdkStore";
+
 interface Transcript {
   actual: number;
   actualText: string;
@@ -184,6 +187,11 @@ export const usePlayerStore = defineStore("PlayerStore", {
         //Do nothing
         return;
       }
+
+      if (sdkParams.player.startLarge === true && this.playerStatus === 'STOPPED') {
+        this.playerUpdateLargeVersion(true);
+      }
+      
       this.playerStatus = "LOADING";
       this.playerPodcast = undefined;
       this.playerMedia = undefined;
@@ -193,6 +201,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerVideo = isVideo;
       this.playerElapsed = 0;
       this.playerChaptering = undefined;
+
       if (
         param.conferenceId &&
         (!param.podcastId || param.processingStatus !== "READY")

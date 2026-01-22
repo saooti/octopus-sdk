@@ -38,10 +38,17 @@
 
     <div
       v-if="'' != transcriptText && !isAdPlaying"
-      class="flex-grow-1 d-flex align-items-center w-100"
+      class="transcript"
     >
-      <div class="flex-grow-1 p-1 text-center mx-3 transcript-bg rounded">
+      <div class="flex-grow-1 p-1 text-center w-100 transcript-bg rounded">
         {{ transcriptText }}
+      </div>
+
+      <div
+        v-if="transcriptInfo"
+        class="flex-grow-1 p-1 text-center transcript-info rounded"
+      >
+        {{ transcriptInfo }}
       </div>
     </div>
     <div class="d-flex align-items-center flex-grow-1">
@@ -76,9 +83,10 @@ import PlayerChaptering from "./chaptering/PlayerChaptering.vue";
 import PlayerImage from "./elements/PlayerImage.vue";
 import PlayerTitle from "./elements/PlayerTitle.vue";
 import PlayerPlayButton from "./elements/PlayerPlayButton.vue";
-import { defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useI18n } from "vue-i18n";
+import { state as sdkParams } from "../../../stores/ParamSdkStore";
 const RadioHistory = defineAsyncComponent(
   () => import("./radio/RadioHistory.vue"),
 );
@@ -99,7 +107,6 @@ defineProps( {
 //Emits
 const emit = defineEmits(['changePlayerLargeVersion']);
 
-
 //Composables
 const { 
   transcriptText,
@@ -110,6 +117,13 @@ const {
  } = usePlayerDisplayTime();
 const { t } = useI18n();
 const playerStore = usePlayerStore();
+
+/** Info message to display regarding transcript */
+const transcriptInfo = computed((): string|undefined => {
+  if (sdkParams.player.showAITranscriptWarning === true) {
+    return t('Player - Transcription - AI Warning');
+  }
+});
 
 //Methods
 function changePlayerLargeVersion() {
@@ -129,7 +143,7 @@ function seekClick(addTime: number): void {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-app {
   .player-container .img-box {
     width: 10rem;
@@ -151,8 +165,20 @@ function seekClick(addTime: number): void {
     }
   }
 
+  .transcript {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    width: 100%;
+    
+    .transcript-info {
+      font-style: italic;
+      font-size: 16px;
+    }
+  }
+
   .transcript-bg {
-    background: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
+    background: var(--octopus-player-transcript-bg-color);
   }
 }
 </style>

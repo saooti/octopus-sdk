@@ -437,5 +437,6 @@
   "SmartLink - Made by": "Hébergé par",
   "SmartLink - To emission on podcastmaker": "Page officielle de l'émission - {organisation}",
   "SmartLink - To playlist on podcastmaker": "Page officielle de la playlist - {organisation}",
-  "Miniplayer - Parameters - Auto height": "Hauteur automatique"
+  "Miniplayer - Parameters - Auto height": "Hauteur automatique",
+  "Player - Transcription - AI Warning": "La transcription est basée sur une IA et peut comporter des erreurs, n’hésitez pas à nous en informer."
 }

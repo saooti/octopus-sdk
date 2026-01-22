@@ -413,5 +413,6 @@
   "SmartLink - To playlist on podcastmaker": "Uradna stran seznama predvajanja - {organisation}",
   "Miniplayer - Parameters - Auto height": "Samodejna višina",
   "Edit": "Uredi",
-  "Podcast": "Epizoda"
+  "Podcast": "Epizoda",
+  "Player - Transcription - AI Warning": "Transkripcija temelji na umetni inteligenci in lahko vsebuje napake, zato nas obvestite."
 }

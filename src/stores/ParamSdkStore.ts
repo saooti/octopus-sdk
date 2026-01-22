@@ -74,6 +74,10 @@ export interface ParamStore {
      * Currently *does not* position the player.
      */
     topPlacement?: boolean;
+    /** Start with the large version by default */
+    startLarge?: boolean;
+    /** Show a warning regarding AI generation of transcripts */
+    showAITranscriptWarning?: boolean;
   };
 }
 
