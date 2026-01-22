@@ -8,6 +8,8 @@ import humanizeDuration from "humanize-duration";
 import {computed, Ref} from 'vue';
 import { useI18n } from 'vue-i18n';
 import {useOrgaComputed} from "../useOrgaComputed"
+import { state } from '../../../stores/ParamSdkStore';
+
 export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConference: Ref<Conference|undefined>)=>{
 
   const {locale} = useI18n();
@@ -44,7 +46,7 @@ export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConferen
     if (!podcast.value || 1970 === dayjs(podcast.value.pubDate).year()) {
       return "";
     }
-    if (isLiveReadyToRecord.value) {
+    if (isLiveReadyToRecord.value || state.generalParameters.showTimeWithDates) {
       return dayjs(podcast.value.pubDate).format("D MMMM YYYY - HH:mm");
     }
     return dayjs(podcast.value.pubDate).format("D MMMM YYYY");

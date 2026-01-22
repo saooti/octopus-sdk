@@ -65,7 +65,13 @@ const { t } = useI18n();
 const { isPodcastmaker } = useOrgaComputed();
 
 //Computed
-const date = computed(() => dayjs(props.podcast.pubDate).format("D MMMM YYYY"));
+const date = computed(() => {
+  let format = "D MMMM YYYY";
+  if (state.generalParameters.showTimeWithDates === true) {
+    format = "D MMMM YYYY - HH:mm";
+  }
+  return dayjs(props.podcast.pubDate).format(format);
+});
 const orgaNameDisplay = computed(() =>{
   if (props.podcast.organisation.name.length > 30) {
     return props.podcast.organisation.name.substring(0, 30) + "...";

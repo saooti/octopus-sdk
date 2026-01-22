@@ -34,7 +34,10 @@ export interface ParamStore {
     forceRubriqueId?: number|number[];
     /** Automatically exclude these rubriquage from results */
     forceNoRubriquageId?: number|number[];
+    /** Enable for podcastmakers */
     podcastmaker?: boolean;
+    /** Show time with the dates on podcasts */
+    showTimeWithDates?: boolean;
     buttonPlus?: boolean;
     isLiveTab?: boolean;
     isCaptchaTest?: boolean;

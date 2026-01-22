@@ -4,14 +4,17 @@
 
 **Features**
 
-- Il est maintenant possible de forcer le filtrage par plusieurs rubrique, et
-  non plus seulement une
-- Il est maintenant possible de forcer le filtrage sur des rubriquages exclus
+- Paramètres SDK
+  - Il est maintenant possible de forcer le filtrage par plusieurs rubrique, et
+    non plus seulement une
+  - Il est maintenant possible de forcer le filtrage sur des rubriquages exclus
+  - Option de configuration pour afficher l'heure de publication des podcasts
+    en plus de la date
+  - Option de configuration pour limiter le nombre de tags affichés sur les
+    pages d'émission et de podcast
+  - Option de configuration pour les players en haut de page
 - La page de playlist des podcastmakers affiche maintenant les boutons pour
   s'abonner sur les différentes plateformes
-- Option de configuration pour limiter le nombre de tags affichés sur les pages
-  d'émission et de podcast
-- Option de configuration pour les players en haut de page
 
 **Fixes**
 
