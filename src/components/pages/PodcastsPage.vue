@@ -53,6 +53,8 @@ import { RouteProps } from "../composable/route/types";
 
 //Props 
 const props = withDefaults(defineProps<RouteProps>(), {
+    pr: 0,
+    ps: 30,
     routeMonetisable: "UNDEFINED",
     routeSort: "DATE"
 });

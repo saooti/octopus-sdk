@@ -16,10 +16,10 @@ export const useSimplePageParam = (props: RouteProps, force=false, advancedSearc
 
   const searchMinSize = computed(() => getMinSize((props.routeQuery as string)));
   const paginateFirst = computed(() => {
-    if(!props.pr){
+    if(!props.pr || props.ps === undefined) {
       return 0;
     }
-    return  Math.max(((props.pr as number) - 1 ) * (props.ps as number), 0);
+    return Math.max(((props.pr as number) - 1 ) * (props.ps as number), 0);
   });
 
   watch(searchPattern, () => {

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.3.3 (23/01/2026)
+
+**Fixes**
+
+- Correction anomalie pagination sur épisodes
+
 ## 42.3.2 (14/01/2026)
 
 **Misc**
