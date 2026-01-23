@@ -198,7 +198,7 @@ async function fetchContent(reset: boolean): Promise<void> {
   
   const param: PodcastSearchOptions = {
     first: reset ? 0 : dfirst.value,
-    pageSize: dsize.value,
+    size: dsize.value,
     organisationId: organisation.value,
     emissionId: props.emissionId,
     groupId: props.emissionGroups?.map(g => g.groupId),

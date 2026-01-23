@@ -78,6 +78,8 @@ export interface ParamStore {
     startLarge?: boolean;
     /** Show a warning regarding AI generation of transcripts */
     showAITranscriptWarning?: boolean;
+    /** If true, the player will not close when finishing playing */
+    stayOpenOnFinish?: boolean;
   };
 }
 

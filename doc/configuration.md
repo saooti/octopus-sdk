@@ -45,3 +45,4 @@ exemple utilisé dans les podcastmakers pour n'afficher que certaines rubriques.
 - `startLarge` : Le player s'ouvrira par défaut dans sa variante *large*
 - `showAITranscriptWarning` : Affiche un message informatif indiquant que la
   transcription est générée par IA
+- `stayOpenOnFinish` : Ne ferme pas le player une fois la lecture terminée

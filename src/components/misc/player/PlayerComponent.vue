@@ -25,6 +25,9 @@
     <div id="ad-container"></div>
 
     <template v-if="displayWithTimeout">
+
+      <slot name="above" />
+    
       <PlayerVideo v-if="playerStore.playerVideo && isNotVideoPage" />
       <template v-else-if="!playerStore.playerVideo">
         <PlayerCompact

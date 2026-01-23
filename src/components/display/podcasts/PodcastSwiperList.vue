@@ -61,6 +61,8 @@ const props = defineProps({
   query: { default: undefined, type: String },
   lastThreeMonths: { default: false, type: Boolean },
   titleTag: { default: "h2", type: String },
+  /** The podcast from which suggestions are made */
+  podcastId: { type: Number }
 })
 
 //Emits
@@ -130,7 +132,8 @@ async function fetchNext(): Promise<void> {
   });
   loading.value = true;
   allPodcasts.value = data.result.filter(
-    (pod: Podcast | null) => null !== pod,
+    // Exclude empty podcasts and current podcast
+    (pod: Podcast | null) => null !== pod && pod.podcastId !== props.podcastId
   );
   loading.value = false;
 }

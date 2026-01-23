@@ -14,8 +14,9 @@
     pages d'émission et de podcast
   - Option de configuration pour les players en haut de page
   - Option de configuration pour ouvrir le player en grand par défaut
-  - Option de configurqtion pour afficher un message informatif sur l'IA pour
+  - Option de configuration pour afficher un message informatif sur l'IA pour
     la transcription dans le player
+  - Option de configuration pour ne pas fermer le player à la fin de la lecture
 - La page de playlist des podcastmakers affiche maintenant les boutons pour
   s'abonner sur les différentes plateformes
 

@@ -7,6 +7,7 @@ import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useVastStore } from "../../../stores/VastStore";
+import { state as sdkParams } from "../../../stores/ParamSdkStore";
 import fetchHelper from "../../../helper/fetchHelper";
 import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
@@ -256,7 +257,10 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
     if (playerStore.playerLive) {
       endingLive();
     }
-    forceHide.value = true;
+
+    if (sdkParams.player.stayOpenOnFinish !== true) {
+      forceHide.value = true;
+    }
   }
 
 

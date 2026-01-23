@@ -48,7 +48,7 @@ interface PlayerState {
 export const usePlayerStore = defineStore("PlayerStore", {
   state: (): PlayerState => ({
     playerCurrentChange: null,
-    playerStatus: "STOPPED",
+    playerStatus: PlayerStatus.STOPPED,
     playerPodcast: undefined,
     playerVolume: 1,
     playerElapsed: 0,
@@ -111,6 +111,17 @@ export const usePlayerStore = defineStore("PlayerStore", {
         return -1;
       }
     },
+
+    /** Returning remaining time in seconds */
+    playerRemainingSeconds(): number {
+      const elapsed = this.playerElapsedSeconds;
+      if (elapsed >= 0) {
+        return this.playerTotal - elapsed;
+      } else {
+        return -1;
+      }
+    },
+    
     playedTime(): string {
       if (-1 !== this.playerElapsedSeconds) {
         return DurationHelper.formatDuration(

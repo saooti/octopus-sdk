@@ -13,6 +13,7 @@
     :rubriquage-id="rubriquageId"
     :no-rubriquage-id="noRubriquageId"
     :query="query"
+    :podcast-id="podcastId"
     :last-three-months="lastThreeMonths"
     :title-tag="titleTag"
     @update:is-arrow="updateArrow($event)"
