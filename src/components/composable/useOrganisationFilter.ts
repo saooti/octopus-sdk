@@ -61,8 +61,8 @@ export const useOrganisationFilter= ()=>{
     filterStore.filterUpdateOrga({ orgaId: undefined });
   }
 
-	return {
+  return {
     selectOrganisation,
     removeSelectedOrga
-	}
+  }
 }

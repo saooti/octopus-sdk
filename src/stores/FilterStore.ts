@@ -8,6 +8,8 @@ import { defineStore } from 'pinia';
 import { useAuthStore } from './AuthStore';
 import { useRoute } from 'vue-router';
 
+import { state as sdkParams } from './ParamSdkStore';
+
 /**
  * Store managing data regarding the filters to apply to know which
  * podcasts to show.
@@ -52,7 +54,7 @@ export const useFilterStore = defineStore("FilterStore", () => {
 
   /** Update stored organisation ID only if not already set */
   function updateOrgaIfNecessary(orgaId: string|undefined): void {
-    if (orgaId && filterOrgaId.value === undefined) {
+    if (orgaId && filterOrgaId.value === undefined && sdkParams.generalParameters.podcastmaker !== true) {
       _filterOrgaId.value = orgaId;
     }
   }

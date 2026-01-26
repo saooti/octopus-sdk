@@ -9,6 +9,7 @@ import { RouteLocationNormalized } from "vue-router";
 import { RouteProps } from "../components/composable/route/types";
 import { ROUTE_PARAMS } from "../components/composable/route/types";
 import { type Component } from "vue";
+import { state as sdkParams } from "../stores/ParamSdkStore";
 
 export function getSimpleRouteProps(route: RouteLocationNormalized): RouteProps {
   return {
@@ -195,7 +196,9 @@ export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthSto
       };
 
       // Set productor
-      if (to.query.productor) {
+      if (sdkParams.generalParameters.podcastmaker === true) {
+        delete newQuery.productor;
+      } else if (to.query.productor) {
         newQuery.productor = to.query.productor;
       } else if (filterStore.filterOrgaId === undefined) {
         delete newQuery.productor;

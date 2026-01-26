@@ -1,4 +1,3 @@
-
 import classicApi from "../../api/classicApi";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
@@ -31,8 +30,7 @@ export const useInit= ()=>{
     }
   }
 
-
-	return {
+  return {
     initSdk
-	}
+  }
 }

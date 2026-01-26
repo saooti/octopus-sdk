@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.4.1 (En cours)
+
+**Fixes**
+
+- Corrige une anomalie sur les podcastmakers due à une mise à jour de
+  l'organisation trop aggressive
+
 ## 41.4.0 (26/01/2025)
 
 **Features**

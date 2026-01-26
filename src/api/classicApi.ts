@@ -174,7 +174,6 @@ export default {
     }
 
     // Force filter on rubriquage
-    console.log()
     if(undefined!==state.generalParameters.forceNoRubriquageId){
       if(!parametersUpdated.noRubriquageId){
         parametersUpdated.noRubriquageId = [];
