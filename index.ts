@@ -69,6 +69,7 @@ export const getShareButtons = () => import("./src/components/display/sharing/Sh
 export const getShareAnonymous = () => import("./src/components/display/sharing/ShareAnonymous.vue");
 export const getShareNewsletter = () => import("./src/components/display/sharing/ShareNewsletter.vue");
 export const getQrCode = () => import("./src/components/display/sharing/QrCode.vue");
+export const SubscribeButtons = defineAsyncComponent(() => import("./src/components/display/sharing/SubscribeButtons.vue"));
 
 
 
@@ -130,6 +131,7 @@ import { useNotifications } from "./src/components/composable/useNotifications.t
 export { useSharePlatforms, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms.ts";
 export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
 export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
+export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -181,6 +183,9 @@ export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIc
 export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
 
+// Podcastmaker
+export const PodcastmakerHeader = defineAsyncComponent(() => import("./src/components/display/podcastmaker/PodcastmakerHeader.vue"));
+
 // Layouts
 export const getSimpleLayout = () => import("./src/layouts/SimpleLayout.vue");
 
@@ -192,6 +197,7 @@ export { routes as sdkRoutes } from './src/router/routes';
 import { type SelectOption } from "./src/components/form/ClassicSelect.vue";
 
 import { ROUTE_PARAMS } from "./src/components/composable/route/types";
+import { defineAsyncComponent } from "vue";
 
 export {
     useResizePhone,

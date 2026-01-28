@@ -30,8 +30,8 @@ const backgroundDisplay = computed(() => {
     "250",
   )}');`;
 });
-
 </script>
+
 <style lang="scss">
 .octopus-app {
   .page-element.page-element-podcastmaker {

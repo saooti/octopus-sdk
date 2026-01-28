@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.4.2 (28/01/2026)
+
+**Misc**
+
+- Ajout export de composants jusque là non accessibles
+
 ## 41.4.1 (26/01/2026)
 
 **Fixes**
