@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.0 (En cours)
+
+**Fixes**
+
+- `ClassicPopover` se ferme correctement après perte de focus
+
 ## 41.4.2 (28/01/2026)
 
 **Misc**

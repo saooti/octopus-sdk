@@ -54,9 +54,10 @@ const props = defineProps({
 const emit = defineEmits(["updateVisibility"]);
 
 
-//Data 
+//Data
 const show = ref(false);
 const isClick = ref(false);
+const openedByHover = ref(false);
 const posX = ref(0);
 const posY = ref(0);
 const targetElement: Ref<HTMLElement | null> = ref(null);
@@ -94,6 +95,14 @@ watch(show, async () => {
     window.removeEventListener("keyup", addAccessibilityControl);
   }
 });
+watch(isClick, async () => {
+  // Only add global click listener if opened by click (not hover)
+  if (isClick.value && !openedByHover.value) {
+    window.addEventListener("click", handleOutsideClick, true);
+  } else {
+    window.removeEventListener("click", handleOutsideClick, true);
+  }
+});
 
 onMounted(()=>init())
 
@@ -101,6 +110,21 @@ onUnmounted(()=>removeListeners())
 
 
 //Methods
+function handleOutsideClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  const popover = popoverRef?.value as HTMLElement;
+  const targetEl = targetElement.value;
+
+  // Check if click is outside both the popover and the target element
+  if (
+    popover &&
+    !popover.contains(target) &&
+    targetEl &&
+    !targetEl.contains(target)
+  ) {
+    clearClick();
+  }
+}
 function addAccessibilityControl(event: KeyboardEvent): void {
   if (!event || null === event) {
     return;
@@ -184,6 +208,10 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
   }
   if ("click" === e.type && -1 === handleClickEvent(e)) {
     return;
+  }
+  // Track if opened by hover (mouseenter) vs click
+  if (e.type === "mouseenter") {
+    openedByHover.value = true;
   }
   show.value = true;
   let parentLeft = 0;
@@ -295,12 +323,14 @@ function clearDataTimeout() {
   }, 500);
 }
 function clearData() {
-  if (isClick.value) {
+  // Allow closing if opened by hover, even if clicked afterwards
+  if (isClick.value && !openedByHover.value) {
     return;
   }
   show.value = false;
   posX.value = 0;
   posY.value = 0;
+  openedByHover.value = false;
 }
 
 //Expose
