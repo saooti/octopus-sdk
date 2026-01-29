@@ -46,3 +46,7 @@ exemple utilisé dans les podcastmakers pour n'afficher que certaines rubriques.
 - `showAITranscriptWarning` : Affiche un message informatif indiquant que la
   transcription est générée par IA
 - `stayOpenOnFinish` : Ne ferme pas le player une fois la lecture terminée
+
+## Page de recherche
+
+- `sortCriteria` : Critère de tri sur la page de recherche

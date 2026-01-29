@@ -2,6 +2,12 @@
 
 ## 41.5.0 (En cours)
 
+**Features**
+
+- Paramètres SDK
+  - Il est maintenant possible de changer le critère de tri dans les résultats
+    de recherche
+
 **Fixes**
 
 - `ClassicPopover` se ferme correctement après perte de focus

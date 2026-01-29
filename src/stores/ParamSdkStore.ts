@@ -1,3 +1,5 @@
+import { PodcastSort } from "../api/podcastApi";
+
 const state: ParamStore = {
   generalParameters: {
     forceOrganisationId: undefined,//"ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c",
@@ -23,6 +25,9 @@ const state: ParamStore = {
   emissionPage: {},
   player: {
     isVideoPage:false,
+  },
+  searchPage: {
+    sortCriteria: undefined,
   },
 };
 
@@ -81,6 +86,10 @@ export interface ParamStore {
     /** If true, the player will not close when finishing playing */
     stayOpenOnFinish?: boolean;
   };
+  searchPage: {
+    /** The default sort criteria for search results */
+    sortCriteria?: PodcastSort;
+  };
 }
 
 function definedProps<T>(obj: Partial<T>|undefined): Partial<T> {
@@ -109,6 +118,10 @@ const initialize = function initialize(initObject: Partial<ParamStore>): void {
     definedProps(initObject.emissionPage),
   );
   state.player = Object.assign(state.player, definedProps(initObject.player));
+  state.searchPage = Object.assign(
+    state.searchPage,
+    definedProps(initObject.searchPage),
+  );
 };
 
 export default { initialize, state };

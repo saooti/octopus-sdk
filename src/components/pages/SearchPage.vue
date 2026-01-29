@@ -12,6 +12,7 @@
       :query="query"
       :first="0"
       :size="20"
+      :sort-criteria="sortCriteria"
       @empty-list="noResult = true"
     />
   </section>
@@ -22,8 +23,10 @@ import ClassicSearch from "../form/ClassicSearch.vue";
 import PodcastList from "../display/podcasts/PodcastList.vue";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { PodcastSort } from "../../api/podcastApi";
+import { state } from "../../stores/ParamSdkStore";
 
-//Props 
+//Props
 const props = defineProps({
   queryRoute: { default: "", type: String },
 });
@@ -37,6 +40,10 @@ const { t } = useI18n();
 
 
 //Computed
+const sortCriteria = computed(() => {
+  return state.searchPage.sortCriteria ?? PodcastSort.DATE;
+});
+
 const titlePage = computed(() =>{
   const locale = !noResult.value ? "Search results" : "Search - no results";
   return t(locale, { query: rawQuery.value });

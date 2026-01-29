@@ -45,6 +45,7 @@ paramStore.initialize({
   podcastPage: {},
   emissionsPage: {},
   player: {},
+  searchPage: {},
 });
 
 const pinia = createPinia();
