@@ -12,6 +12,10 @@
 
 - `ClassicPopover` se ferme correctement après perte de focus
 
+**Misc**
+
+- Mise à jour du système de tests pour mieux fonctionner avec pinia
+
 ## 41.4.2 (28/01/2026)
 
 **Misc**

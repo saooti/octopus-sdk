@@ -1,9 +1,11 @@
+import '@tests/mocks/useRouter';
+
 import { emissionApi } from "@/api/emissionApi";
 import { playlistApi } from "@/api/playlistApi";
 import SmartLinkPage from "@/components/pages/SmartLinkPage.vue";
 import { emptyEmissionData } from "@/stores/class/general/emission";
 import { emptyPlaylistData } from "@/stores/class/general/playlist";
-import { mount } from "@tests/utils";
+import { mount, setupPlayerStore } from "@tests/utils";
 import { describe, expect, it, Mock, vi } from "vitest";
 
 vi.mock('@/api/emissionApi', () => ({
@@ -38,10 +40,6 @@ vi.mock('@/components/composable/route/useSeoTitleUrl.ts', () => ({
 
 vi.mock('@/components/composable/useImageProxy', () => ({
     useImageProxy: () => ({ useProxyImageUrl: vi.fn() })
-}));
-
-vi.mock('@/stores/PlayerStore', () => ({
-    usePlayerStore: () => ({})
 }));
 
 vi.mock('vue-i18n', () => ({
@@ -79,7 +77,8 @@ describe('SmartLinkPage', () => {
                 const wrapper = await mount(SmartLinkPage, {
                     props: {
                         [testData.key]: 5
-                    }
+                    },
+                    beforeMount: setupPlayerStore()
                 });
 
                 expect(wrapper.text()).toContain(title);

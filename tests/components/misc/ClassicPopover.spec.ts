@@ -1,5 +1,7 @@
+import '@tests/mocks/useRouter';
+
 import ClassicPopover from '@/components/misc/ClassicPopover.vue';
-import { mount as testMount } from '@tests/utils';
+import { mount as testMount, VueWrapper } from '@tests/utils';
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
 import { nextTick } from 'vue';
 
@@ -20,14 +22,14 @@ describe('ClassicPopover', () => {
     });
 
     // Helper: Check if popover is visible
-    const isVisible = (wrapper: any): boolean => {
+    const isVisible = (wrapper: VueWrapper): boolean => {
         const element = wrapper.element as HTMLElement;
         return element.style.display !== 'none' &&
                window.getComputedStyle(element).display !== 'none';
     };
 
     // Helper: Mount popover with default props
-    const mount = async (props: Record<string, any> = {}) => {
+    const mount = async (props: Record<string, unknown> = {}) => {
         return testMount(ClassicPopover, {
             props: {
                 target: 'test-target',

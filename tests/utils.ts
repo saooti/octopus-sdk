@@ -1,6 +1,11 @@
 import { Component } from 'vue';
 import { vi } from 'vitest';
 import { mount as _mount, VueWrapper } from '@vue/test-utils';
+import { createPinia, type Pinia, setActivePinia } from 'pinia';
+
+import { useAuthStore } from '@/stores/AuthStore';
+import { PlayerStatus, usePlayerStore } from '@/stores/PlayerStore';
+import { Podcast } from '@/stores/class/general/podcast';
 
 /** Mock function for localisation */
 export function localisation(str: string, options?: Record<string,string>): string {
@@ -30,12 +35,16 @@ export async function mount(component: Component, options?: {
         /** Props to set on the component */
         props?: Record<string, unknown>,
         /** Stub subcomponents */
-        stubs?: Record<string, Component|boolean>|string[]
+        stubs?: Record<string, Component|boolean>|string[],
+        /** Hook called before mounting with access to Pinia instance for store initialization */
+        beforeMount?: (pinia: Pinia) => void | Promise<void>
     }): Promise<VueWrapper> {
 
     // Component stubbing
     const stubs: Record<string, Component|boolean> = {
-        'router-link': true
+        'router-link': {
+            template: '<a><slot /></a>'
+        }
     };
     if (options?.stubs !== undefined) {
         if (Array.isArray(options?.stubs)) {
@@ -49,13 +58,28 @@ export async function mount(component: Component, options?: {
         }
     }
 
-    // Mount component
+    // Create real Pinia instance for testing
+    const pinia = createPinia();
+
+    // Set as active Pinia so stores use this instance
+    setActivePinia(pinia);
+
+    // Call beforeMount hook if provided (allows test to configure stores)
+    if (options?.beforeMount) {
+        await options.beforeMount(pinia);
+    }
+
+    // Mount component with configured Pinia
     const wrapper = _mount(component, {
         global: {
             mocks: {
                 $t: localisation,
                 usePlayerStore: vi.fn()
             },
+            directives: {
+                lazy: vi.fn
+            },
+            plugins: [pinia],
             stubs
         },
         props: options?.props,
@@ -71,5 +95,64 @@ export async function mount(component: Component, options?: {
 
 const fetchData = vi.fn();
 fetchData.mockReturnValue(Promise.resolve());
+
+/**
+ * Helper for AuthStore configuration
+ * @returns beforeMount hook function
+ */
+export function setupAuthStore(config?: {
+    roles?: string | string[],
+    organisationId?: string,
+    organisationName?: string,
+    organisationAttributes?: Record<string, string | number | boolean>
+}) {
+    return async () => {
+        const roles = Array.isArray(config?.roles)
+            ? config.roles
+            : (config?.roles ? [config.roles] : []);
+
+        const orgId = config?.organisationId || "test-org-id";
+        const orgName = config?.organisationName || "Test Organisation";
+
+        const authStore = useAuthStore(); // Uses active pinia (no parameter)
+        authStore.$patch({
+            authRole: roles,
+            authOrgaId: orgId,
+            authOrgaName: orgName,
+            authOrganisation: {
+                id: orgId,
+                name: orgName,
+                imageUrl: "",
+                attributes: config?.organisationAttributes || {}
+            }
+        });
+    };
+}
+
+/**
+ * Helper for PlayerStore configuration
+ * @returns beforeMount hook function
+ */
+export function setupPlayerStore(config?: {
+    playerPodcast?: Podcast,
+    playerStatus?: PlayerStatus
+}) {
+    return async () => {
+        const playerStore = usePlayerStore(); // Uses active pinia
+        playerStore.$patch({
+            playerPodcast: config?.playerPodcast,
+            playerStatus: config?.playerStatus || PlayerStatus.STOPPED
+        });
+    };
+}
+
+/**
+ * Combines multiple store setups into one beforeMount hook
+ */
+export function combineStoreSetups(...setups: Array<() => void>) {
+    return () => {
+        setups.forEach(setup => setup());
+    };
+}
 
 export { VueWrapper };

@@ -1,12 +1,9 @@
 import '@tests/mocks/i18n';
-import '@tests/mocks/useAuthStore';
-import '@tests/mocks/useApiStore';
-import '@tests/mocks/usePlayerStore';
-import '@tests/mocks/useCommentStore';
+import '@tests/mocks/useRouter';
 
 import PodcastModuleBox from '@/components/display/podcasts/PodcastModuleBox.vue';
 import { emptyPodcastData, Podcast } from '@/stores/class/general/podcast';
-import { mount } from '@tests/utils';
+import { mount, setupAuthStore } from '@tests/utils';
 import { describe, expect, it } from 'vitest';
 import { initialize } from '@/stores/ParamSdkStore';
 
@@ -18,7 +15,8 @@ describe('PodcastModuleBox', () => {
         it('shows the date without time by default', async() => {
             const wrapper = await mount(PodcastModuleBox, {
                 props: { podcast },
-                stubs: ['ShareAnonymous', 'LikeSection']
+                stubs: ['ShareAnonymous', 'LikeSection'],
+                beforeMount: setupAuthStore()
             });
             expect(wrapper.text()).toContain('1 December 2025');
             expect(wrapper.text()).not.toContain('11:21');
@@ -27,7 +25,8 @@ describe('PodcastModuleBox', () => {
         it('shows the date without time when disable in SdkParams', async() => {
             const wrapper = await mount(PodcastModuleBox, {
                 props: { podcast },
-                stubs: ['ShareAnonymous', 'LikeSection']
+                stubs: ['ShareAnonymous', 'LikeSection'],
+                beforeMount: setupAuthStore()
             });
             expect(wrapper.text()).toContain('1 December 2025');
             expect(wrapper.text()).not.toContain('11:21');
@@ -39,7 +38,8 @@ describe('PodcastModuleBox', () => {
             });
             const wrapper = await mount(PodcastModuleBox, {
                 props: { podcast },
-                stubs: ['ShareAnonymous', 'LikeSection']
+                stubs: ['ShareAnonymous', 'LikeSection'],
+                beforeMount: setupAuthStore()
             });
             expect(wrapper.text()).toContain('1 December 2025');
             expect(wrapper.text()).toContain('11:21');
