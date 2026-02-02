@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 41.5.0 (En cours)
+## 41.5.0 (02/02/2026)
 
 **Features**
 
