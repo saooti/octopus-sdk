@@ -1,11 +1,12 @@
 import { Component } from 'vue';
 import { vi } from 'vitest';
 import { mount as _mount, VueWrapper } from '@vue/test-utils';
-import { createPinia, type Pinia, setActivePinia } from 'pinia';
+import { type Pinia, setActivePinia } from 'pinia';
+import { createTestingPinia } from '@pinia/testing';
 
-import { useAuthStore } from '@/stores/AuthStore';
-import { PlayerStatus, usePlayerStore } from '@/stores/PlayerStore';
-import { Podcast } from '@/stores/class/general/podcast';
+import { useAuthStore } from '../src/stores/AuthStore';
+import { PlayerStatus, usePlayerStore } from '../src/stores/PlayerStore';
+import { Podcast } from '../src/stores/class/general/podcast';
 
 /** Mock function for localisation */
 export function localisation(str: string, options?: Record<string,string>): string {
@@ -44,6 +45,9 @@ export async function mount(component: Component, options?: {
     const stubs: Record<string, Component|boolean> = {
         'router-link': {
             template: '<a><slot /></a>'
+        },
+        'RouterLink': {
+            template: '<a><slot /></a>'
         }
     };
     if (options?.stubs !== undefined) {
@@ -59,10 +63,9 @@ export async function mount(component: Component, options?: {
     }
 
     // Create real Pinia instance for testing
-    const pinia = createPinia();
-
-    // Set as active Pinia so stores use this instance
-    setActivePinia(pinia);
+    const pinia = createTestingPinia({
+        createSpy: vi.fn
+    });
 
     // Call beforeMount hook if provided (allows test to configure stores)
     if (options?.beforeMount) {

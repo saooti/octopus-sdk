@@ -16,7 +16,7 @@ interface AuthParam {
 interface AuthState {
   authReload: number;
   authName: string;
-  authOrgaId?: string;
+  authOrgaId: string|undefined;
   authOrgaName?: string;
   authRole: Array<string>;
   authParam:AuthParam;
@@ -29,6 +29,7 @@ export const useAuthStore = defineStore("AuthStore", {
     authReload: 0,
     authName: "",
     authRole: [],
+    authOrgaId: undefined,
     authParam: {
       accessToken: undefined,
       refreshToken: undefined,
