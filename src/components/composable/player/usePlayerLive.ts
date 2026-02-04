@@ -68,8 +68,10 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
       }
       const ua = navigator.userAgent.toLowerCase();
       const isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+      const isChrome = ua.indexOf("chrome") > -1;
       if (
         audioElement.value.canPlayType("application/vnd.apple.mpegurl") &&
+        !isChrome &&
         !isAndroid
       ) {
         if(needToAddToken.value) {

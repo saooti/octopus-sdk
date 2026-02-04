@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.1 (04/02/2026)
+
+**Fixes**
+
+- Correction d'un problème de lecture des lives sous chrome
+
 ## 41.5.0 (02/02/2026)
 
 **Features**

@@ -24,12 +24,11 @@ export const usePlayerDisplayTime = ()=>{
     return playerStore.transcriptText;
   });
 
-
-	return {
+  return {
     displayPlayTime,
     displayTotalTime,
     transcriptText,
     radioUrl: playerStore.radioUrl,
     isAdPlaying: vastStore.isAdPlaying,
-	}
+  }
 }
