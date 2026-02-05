@@ -131,7 +131,7 @@ const organisationQuery = computed(() => {
 }); */
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-app {
   .tag-list-component {
     .ouest-france-logo {

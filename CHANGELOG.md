@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.2 (En cours)
+
+**Misc**
+
+- Remise en place du style correct pour la plupart des boutons boutons
+
 ## 41.5.1 (04/02/2026)
 
 **Fixes**
