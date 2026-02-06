@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.3 (En cours)
+
+**Misc**
+
+- Correction double slash dans sharePath
+
 ## 41.5.2 (06/02/2026)
 
 **Misc**

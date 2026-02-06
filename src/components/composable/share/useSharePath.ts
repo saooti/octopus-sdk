@@ -1,5 +1,5 @@
 import { OrganisationAttributes } from "@/stores/class/general/organisation";
-import { RouteLocation, RouteLocationAsRelativeTyped, RouteLocationNormalized, useRouter } from "vue-router";
+import { RouteLocationAsRelativeTyped, useRouter } from "vue-router";
 import { useSeoTitleUrl } from "../route/useSeoTitleUrl";
 
 export const useSharePath = () => {
@@ -37,7 +37,11 @@ export const useSharePath = () => {
 	 */
 	function getSharePath(route: RouteLocationAsRelativeTyped, attributes?: OrganisationAttributes): string {
         const resolved = router.resolve(route);
-        return getBaseSharePath(attributes) + resolved.path;
+        // Remove trailing slash
+        const base = getBaseSharePath(attributes).replace(/\/$/, '');
+        // Remove leading slash
+        const path = resolved.path.replace(/^\//, '');
+        return base + '/' + path;
 	}
 
 	type GetSmartLinkParam = {
