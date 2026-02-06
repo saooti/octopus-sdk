@@ -5,6 +5,7 @@
 **Misc**
 
 - Remise en place du style correct pour la plupart des boutons boutons
+- Export de `PodcastList` de playlists
 
 ## 41.5.1 (04/02/2026)
 
