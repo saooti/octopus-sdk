@@ -33,7 +33,12 @@
               />
             </div>
           </template>
-          <PlayerVideoDigiteka v-else :video-id="videoId" :responsive="true" />
+          <PlayerVideoDigiteka
+            v-else
+            :video-id="videoId"
+            :podcast-id="podcastId"
+            responsive
+          />
         </div>
         <div class="w-30-responsive info-video-container">
           <div class="d-flex flex-column flex-grow-1 w-100">

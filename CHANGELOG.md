@@ -2,6 +2,10 @@
 
 ## 41.5.3 (En cours)
 
+**Fix**
+
+- Enregistrement stats d'écoutes pour vidéos Digiteka
+
 **Misc**
 
 - Correction double slash dans sharePath

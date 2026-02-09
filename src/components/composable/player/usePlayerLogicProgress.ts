@@ -14,10 +14,10 @@ export const usePlayerLogicProgress = ()=>{
   const authStore = useAuthStore();
 
   const intervalToSend = computed(() => { 
-    if(lastSend.value<180){
+    if(lastSend.value < 180){
       return 10;
     }
-    if(lastSend.value<1800){
+    if(lastSend.value < 1800){
       return 30;
     }
     return 60;
@@ -46,7 +46,9 @@ export const usePlayerLogicProgress = ()=>{
       return;
     }
     const audioPlayer: HTMLAudioElement | null = document.querySelector("#audio-player");
-    if (!audioPlayer) return;
+    if (!audioPlayer) {
+      return;
+    }
     audioPlayer.currentTime = playerStore.playerSeekTime;
   });
 
@@ -72,12 +74,15 @@ export const usePlayerLogicProgress = ()=>{
         },
       });
       setDownloadId(downloadIdFetched);
-    } catch {
+    } catch(e) {
       downloadId.value = null;
-      console.log("ERROR downloadId");
+      console.error("ERROR downloadId", e);
     }
   }
 
+  /**
+   * @param currentTime: Temps en seconds
+   */
   function onTimeUpdateProgress(currentTime: number): void {
     if (!downloadId.value) {
       return;
@@ -92,7 +97,7 @@ export const usePlayerLogicProgress = ()=>{
     } else {
       const newListenTime = currentTime - notListenTime.value;
       const diffTime = newListenTime - listenTime.value;
-      if(diffTime > 0 && diffTime<1){
+      if(diffTime > 0 && diffTime<1) {
         listenTime.value = newListenTime;
       }
     }
@@ -104,7 +109,9 @@ export const usePlayerLogicProgress = ()=>{
   }
 
   async function endListeningProgress(): Promise<void> {
-    if (!downloadId.value) return;
+    if (!downloadId.value) {
+      return;
+    }
     await sendListeningProgress(listenTime.value);
     downloadId.value = null;
     notListenTime.value = 0;
@@ -120,24 +127,26 @@ export const usePlayerLogicProgress = ()=>{
       paramUrlLive="&url="+encodeURI(playerStore.playerHlsUrl);
       urlLiveSent.value = true;
     }
+
+    // Send listening updates if listening lasted more than 30 seconds
     try {
       await classicApi.putData<string | null>({
         api: 0,
         path:"podcast/listen/" +downloadId.value +"?seconds=" +Math.round(listenTime)+paramUrlLive,
         isNotAuth:true
       });
-    } catch {
+    } catch(e) {
       //Do nothing
+      console.error(e);
     }
   }
 
-
-	return {
+  return {
     listenTime,
     downloadId,
     initLiveDownloadId,
     setDownloadId,
     onTimeUpdateProgress,
     endListeningProgress
-	}
+  }
 }

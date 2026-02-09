@@ -6,7 +6,11 @@
       </button>
       <div class="video-wrapper">
         <PlayerYoutubeEmbed v-if="youtubeId" :youtube-id="youtubeId" />
-        <PlayerVideoDigiteka v-else-if="!playerStore.playerLive" :video-id="playerStore.playerPodcast?.video?.videoId" />
+        <PlayerVideoDigiteka
+          v-else-if="!playerStore.playerLive"
+          :video-id="playerStore.playerPodcast?.video?.videoId"
+          :podcast-id="playerStore.playerPodcast.podcastId"
+        />
         <PlayerVideoHls v-else :hls-url="hlsVideoUrl" :is-secured="isSecured"/>
       </div>
     </template>
