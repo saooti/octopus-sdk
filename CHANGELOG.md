@@ -5,6 +5,7 @@
 **Misc**
 
 - Ajouts d'options pour customiser les éléments de `TopBar`
+- Ajout d'un slot `bottom` pour `PlaylistPage`
 
 ## 41.5.3 (09/02/2026)
 

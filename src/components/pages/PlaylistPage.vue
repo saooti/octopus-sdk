@@ -57,6 +57,8 @@
           />
         </section>
       </div>
+
+      <slot name="bottom" v-bind="{ playlist }" />
     </template>
     <ClassicLoading
       :loading-text="!loaded ? t('Loading content ...') : undefined"
