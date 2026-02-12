@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.4 (12/02/2026)
+
+**Misc**
+
+- Ajouts d'options pour customiser les éléments de `TopBar`
+
 ## 41.5.3 (09/02/2026)
 
 **Fix**

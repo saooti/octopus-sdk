@@ -9,7 +9,7 @@
       <AppsIcon :size="30" />
     </button>
     <router-link
-      v-if="isAuthenticatedWithOrga && authStore.isRoleContribution"
+      v-if="displayUpload"
       :title="t('Upload')"
       to="/main/priv/upload"
       class="btn admin-button hide-small-screen m-1 text-blue-octopus"
@@ -48,11 +48,15 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+export interface HomeDropdownProps {
+  isEducation?: boolean;
+  mobileMenuDisplay?: boolean;
+  /** Display the upload button */
+  displayUpload?: boolean;
+}
+
 //Props 
-defineProps({
-  isEducation: { default: false, type: Boolean },
-  mobileMenuDisplay: { default: false, type: Boolean },
-})
+defineProps<HomeDropdownProps>();
 
 //Composables
 const { t } = useI18n();

@@ -11,6 +11,7 @@
       :title-display="titleToDisplay"
       style="height: var(--header-size);"
       :class="headerBackgroundImage.length ? 'header-opacity':''"
+      :options="options?.topBarMainContent"
     />
   </header>
   <div v-if="generalStore.contentToDisplay" class="header-content-bg" :style="headerBackgroundImage" :class="{ scrolled: scrolled, 'header-force-blur':needToBlur }" >
@@ -30,7 +31,7 @@
 
 <script setup lang="ts">
 import {useImageProxy} from "../composable/useImageProxy";
-import TopBarMainContent from "./TopBarMainContent.vue";
+import TopBarMainContent, { type TopBarMainContentOptions } from "./TopBarMainContent.vue";
 import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useAuthStore } from "../../stores/AuthStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
@@ -44,6 +45,11 @@ const SubscribeButtons = defineAsyncComponent(
   () => import("../display/sharing/SubscribeButtons.vue"),
 );
 
+defineProps<{
+  options?: {
+    topBarMainContent?: TopBarMainContentOptions
+  }
+}>();
 
 //Data 
 const scrolled = ref(false);

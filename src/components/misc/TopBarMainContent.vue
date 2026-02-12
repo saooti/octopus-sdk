@@ -138,6 +138,7 @@
         <HomeDropdown
           :is-education="generalStore.platformEducation"
           :mobile-menu-display="mobileMenuDisplay"
+          v-bind="options?.homeDropdown"
         />
         <router-link
           v-show="!isPhone && !inContentDisplayPage"
@@ -160,7 +161,7 @@ import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import MagnifyIcon from "vue-material-design-icons/Magnify.vue";
 import { useRubriquesFilterComputed } from "../composable/route/useRubriquesFilterComputed";
 import { state } from "../../stores/ParamSdkStore";
-import HomeDropdown from "./HomeDropdown.vue";
+import HomeDropdown, { type HomeDropdownProps } from "./HomeDropdown.vue";
 import {useImageProxy} from "../composable/useImageProxy";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
@@ -170,13 +171,21 @@ import { useGeneralStore } from "../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
 const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
 
+export interface TopBarMainContentOptions {
+  homeDropdown?: HomeDropdownProps;
+}
+
+export interface TopBarMainContentProps {
+  isPhone?: boolean;
+  titleDisplay?: string;
+  scrolled?: boolean;
+};
 
 //Props 
-const props = defineProps({
-  isPhone: { default: false, type: Boolean },
-  titleDisplay: { default: "", type: String },
-  scrolled: { default: false, type: Boolean },
-})
+const props = defineProps<TopBarMainContentProps & {
+  /** Props for subcomponents */
+  options?: TopBarMainContentOptions;
+}>();
 
 
 //Composables
