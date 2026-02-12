@@ -20,6 +20,7 @@
           allowfullscreen="true"
           allow="clipboard-read; clipboard-write; autoplay"
           referrerpolicy="no-referrer-when-downgrade"
+          frameborder="0"
           :src="iFrameSrc"
           width="100%"
           :height="iFrameHeight"
@@ -273,7 +274,7 @@ const iFrame = computed(() => {
   const specialDigiteka = props.podcast?.video?.videoId
     ? 'allowfullscreen="true" referrerpolicy="no-referrer-when-downgrade"'
     : "";
-  return `<iframe src="${iFrameSrc.value}" width="100%" height="${iFrameHeight.value}" scrolling="no" ${specialDigiteka} allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
+  return `<iframe src="${iFrameSrc.value}" width="100%" height="${iFrameHeight.value}" frameborder="0" scrolling="no" ${specialDigiteka} allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
 });
 const dataTitle = computed(() => {
   if (props.podcast) return props.podcast.podcastId;

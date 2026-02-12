@@ -8,6 +8,7 @@
         id="miniplayerIframeRadio"
         title="Miniplayer"
         :src="iFrameSrc"
+        frameborder="0"
         width="100%"
         height="140px"
         style="overflow: hidden"
@@ -90,7 +91,7 @@ const iFrameSrc = computed(() => {
   return url;
 });
 const iFrame = computed(() => {
-  return `<iframe src="${iFrameSrc.value}" width="100%" height="140px" scrolling="no" allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
+  return `<iframe src="${iFrameSrc.value}" width="100%" height="140px" frameborder="0" scrolling="no" allow="clipboard-read; clipboard-write; autoplay"></iframe>`;
 });
 
 
