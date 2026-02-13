@@ -2,6 +2,11 @@
 
 ## 41.6.0
 
+**Fix**
+
+- Correctif pour la lecture de lives/radio sur Organisation sécurisée sous
+  chrome
+
 **Misc**
 
 - Ajout de `frameborder="0"` dans les iframes miniplayer

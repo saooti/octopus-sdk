@@ -28,19 +28,23 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
     return authStore.authParam.accessToken && ("SECURED" === playerStore.playerLive?.organisation?.privacy || playerStore.playerRadio?.secured);
   });
 
-    function onPlay(): void {
+  function onPlay(): void {
     playerStore.playerChangeStatus(PlayerStatus.PAUSED ===playerStore.playerStatus);
   }
 
   function playRadio() {
-    if (!playerStore.playerRadio) return;
+    if (!playerStore.playerRadio) {
+      return;
+    }
     handleSessionIdRadio();
     playerStore.playerUpdatePlayerHlsUrl(playerStore.playerRadio.url+"?origin=octopus&sessionId="+playerStore.playerRadio.sessionId);
     playHls();
   }
 
   function handleSessionIdRadio(){
-    if(!playerStore.playerRadio) return;
+    if(!playerStore.playerRadio) {
+      return;
+    }
     if(playerStore.playerRadio.sessionId && dayjs().diff(dayjs(playerStore.playerRadio.dateSessionId), 'm')<maxMinutesSessionId){
       return;
     }
@@ -48,7 +52,9 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   }
 
   function playLive() {
-    if (!playerStore.playerHlsIdentifier) return;
+    if (!playerStore.playerHlsIdentifier) {
+      return;
+    }
     playerStore.playerUpdatePlayerHlsUrl(`${apiStore.hlsUrl}live/${playerStore.playerHlsIdentifier}/index.m3u8`);
     playHls();
   }
@@ -74,11 +80,15 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         !isChrome &&
         !isAndroid
       ) {
+        let url = playerStore.playerHlsUrl;
         if(needToAddToken.value) {
-          audioElement.value.src = playerStore.playerHlsUrl+"?access_token="+authStore.authParam.accessToken;
-        }else{
-          audioElement.value.src = playerStore.playerHlsUrl;
+          if (url.includes('?')) {
+            url += "&access_token="+authStore.authParam.accessToken;
+          } else {
+            url += "?access_token="+authStore.authParam.accessToken;
+          }
         }
+        audioElement.value.src = url;
         await initLiveDownloadId();
         hlsReady.value = true;
         await audioElement.value.play();
