@@ -11,6 +11,7 @@
 **Misc**
 
 - Ajout de `frameborder="0"` dans les iframes miniplayer
+- Ajustements de composants génériques
 
 ## 41.5.4 (12/02/2026)
 

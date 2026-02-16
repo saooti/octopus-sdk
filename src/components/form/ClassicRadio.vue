@@ -4,8 +4,10 @@
   Available slots:
     `label-{option.value}`: Slot to replace the label of the current option.
                             Binding: `option`: the current option
+                                     `selected` : true if the option is selected
     `after-{option.value}`: Slot after the radio button
                             Binding: `option`: the current option
+                                     `selected` : true if the option is selected
 -->
 <template>
   <div role="radiogroup" class="d-flex" :class="isColumn ? 'flex-column' : ''">
@@ -33,20 +35,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-interface Option {
-  title: string;
-  value: string | undefined
-};
-
+<script setup generic="T extends { title: string; value: string|undefined; }" lang="ts">
 //Props 
 const { textInit } = defineProps({
   idRadio: { default: "", type: String },
   isDisabled: { default: false, type: Boolean },
   options: {
     default: () => [],
-    type: Array as () => Array<Option>,
+    type: Array as () => Array<T>,
   },
   textInit: { default: undefined, type: String },
   isColumn: { default: true, type: Boolean },
@@ -60,11 +56,10 @@ function onChange(value:string){
   emit('update:textInit', value)
 }
 
-function slotBindings(option: Option): { option: Option; selected: boolean } {
+function slotBindings(option: T): { option: T; selected: boolean } {
   return {
     option,
     selected: textInit === option.value
   }
 }
-
 </script>

@@ -82,7 +82,19 @@ const props = defineProps({
 })
 
 //Emits
-const emit = defineEmits(["updateDate", "update:date"]);
+const emit = defineEmits<{
+  /**
+   * Update the date
+   * @param value The new date
+   * @deprecated
+   */
+  (e: "updateDate", value: Date): void;
+  /**
+   * Update the date
+   * @param value The new date
+   */
+  (e: "update:date", value: Date): void;
+}>();
 
 //Data
 const divContainerRef = useTemplateRef('divContainer');
@@ -147,6 +159,7 @@ function updateValue(date: Date) {
     (divContainerRef?.value as HTMLElement)?.focus();
   }
   emit("updateDate", date);
+  emit("update:date", date);
 }
 
 function formatDate(value: Date): string {
