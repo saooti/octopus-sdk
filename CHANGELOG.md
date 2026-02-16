@@ -1,11 +1,12 @@
 # CHANGELOG
 
-## 41.6.0
+## 41.5.5 (En cours)
 
 **Fix**
 
 - Correctif pour la lecture de lives/radio sur Organisation sécurisée sous
   chrome
+- Correction affichage critère de filtrage pour épisodes à valider
 
 **Misc**
 

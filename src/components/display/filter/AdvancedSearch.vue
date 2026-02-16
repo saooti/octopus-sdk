@@ -233,7 +233,7 @@ const isSelectValidity = computed(() => {
         undefined !== organisation.value &&
         organisationRight.value &&
         authStore.isRoleContribution &&
-        !isPodcastmaker &&
+        !isPodcastmaker.value &&
         !props.isEmission &&
         props.includeHidden
     );
