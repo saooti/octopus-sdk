@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.6.0 (En cours)
+
+**Misc**
+
+- Ajout d'un props pour ajouter une entrée permettant de sélectionner toutes les
+  entrées dans `ClassicMultiselect`
+
 ## 41.5.5 (16/02/2026)
 
 **Fix**

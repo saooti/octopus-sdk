@@ -56,21 +56,33 @@
       @option:selected="onOptionSelected"
       @option:deselected="onOptionDeselect"
     >
+      
       <template v-if="optionCustomTemplating.length" #option="option">
         <slot :name="optionCustomTemplating" :option="option" />
       </template>
+      <template v-else-if="withSelectAll" #option="option">
+        <strong v-if="option.id === selectAll.id">
+          {{ option[optionLabel] }}
+        </strong>
+        <span v-else>
+          {{ option[optionLabel] }}
+        </span>
+      </template>
+
       <template
         v-if="optionSelectedCustomTemplating.length"
         #selected-option="option"
       >
         <slot :name="optionSelectedCustomTemplating" :option="option" />
       </template>
+
       <template #no-options="{ searching }">
         <span v-if="searching">{{
           t("No elements found. Consider changing the search query.")
         }}</span>
         <span v-else>{{ t("List is empty") }}</span>
       </template>
+
       <template #list-footer>
         <div v-if="remainingElements" class="vs__dropdown-option">
           {{
@@ -81,11 +93,13 @@
           }}
         </div>
       </template>
+
       <template #list-header>
         <div v-if="maxOptionsSelected" class="vs__dropdown-option">
           {{ t("Multiselect max options", { max: maxOptions }) }}
         </div>
       </template>
+
       <template #open-indicator="{ attributes }">
         <ChevronDownIcon v-bind="attributes" />
       </template>
@@ -112,12 +126,14 @@ const {
   inModal = false, multiple = false, isDisabled = false, width = "100%",
   maxElement = 50, minSearchLength = 3, noDeselect = true, displayLabel = false,
   allowEmpty = true, optionChosen, maxOptions = null,
-  optionCustomTemplating = '', optionSelectedCustomTemplating = ''
+  optionCustomTemplating = '', optionSelectedCustomTemplating = '',
+  optionLabel,
+  withSelectAll = false
 } = defineProps<{
   id?: string;
   label?: string;
   placeholder?: string;
-  optionLabel?: string;
+  optionLabel?: keyof T;
   inModal?: boolean;
   multiple?: boolean;
   isDisabled?: boolean;
@@ -137,10 +153,24 @@ const {
   displayRequired?: boolean;
   popover?: string;
   popoverRelativeClass?: string;
+  /**
+   * Add an option to select everything at once
+   * If set to a truthy string, the added option will have this value as its
+   * label. If set to true, use a generic label.
+   */
+  withSelectAll?: boolean|string;
 }>();
 
 //Emits
-const emit = defineEmits(["onSearch", "selected", "onClose"]);
+const emit = defineEmits<{
+  (e: "onSearch", query: string): void;
+  (e: "selected", data: Array<T>|T): void;
+  (e: "onClose", data: string): void;
+}>();
+
+//Composables
+const { t } = useI18n();
+
 
 //Data 
 const optionSelected : Ref<T|T[]>= ref(undefined);
@@ -148,10 +178,10 @@ const options : Ref<Array<T>>= ref([]);
 const remainingElements = ref(0);
 const isLoading = ref(false);
 const searchInput = ref("");
-
-//Composables
-const { t } = useI18n();
-
+const selectAll = {
+  id: 'SELECT_ALL',
+  [optionLabel]: withSelectAll && typeof withSelectAll === 'string' ? withSelectAll : t('All')
+} as unknown as T;
 
 //Computed
 const maxOptionsSelected = computed(() => {
@@ -178,6 +208,7 @@ watch(optionSelected, () => {
 function fakeSearch(): Array<unknown> {
   return options.value;
 }
+
 function onSearch(search?: string): void {
   if (search && search.length < minSearchLength) {
     return;
@@ -187,30 +218,44 @@ function onSearch(search?: string): void {
   isLoading.value = true;
   emit("onSearch", search);
 }
+
 function onClose() {
   emit("onClose", searchInput.value);
   searchInput.value = "";
 }
+
 function afterSearch(optionsFetched: Array<T>, count: number): void {
-  options.value = optionsFetched;
+  if (withSelectAll) {
+    options.value = [selectAll, ...optionsFetched];
+    count += 1;
+  } else {
+    options.value = optionsFetched;
+  }
   remainingElements.value = Math.max(0, count - maxElement);
   isLoading.value = false;
 }
-function onOptionSelected(optionSelected: unknown): void {
-  emit("selected", optionSelected);
+
+function onOptionSelected(newValue: Array<T>|T): void {
+  // Check if selectAll is included
+  if (withSelectAll && Array.isArray(newValue) && newValue.find(o => o.id === selectAll.id)) {
+    emit("selected", options.value.slice(1, -1));
+  } else {
+    emit("selected", newValue);
+  }
 }
-function onOptionDeselect(event: unknown): void {
+
+function onOptionDeselect(event: T): void {
   if (!multiple) {
     return;
   }
   if (
     !allowEmpty &&
-    0 === (optionSelected.value as Array<unknown>).length
+    0 === (optionSelected.value as Array<T>).length
   ) {
-    (optionSelected.value as Array<unknown>).push(event);
+    (optionSelected.value as Array<T>).push(event);
     return;
   }
-  emit("selected", optionSelected.value);
+  emit("selected", (optionSelected.value as Array<T>));
 }
 
 //Expose
