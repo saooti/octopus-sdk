@@ -133,7 +133,7 @@ export function emptyPodcastData(): Podcast {
       imageUrl: "",
     },
     pubDate: undefined,
-    conferenceId: 0,
+    conferenceId: undefined,
     duration: 0,
   };
 }
