@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.7 (20/02/2026)
+
+**Fix**
+
+- Correction affichage composants utilisant `swiper`
+
 ## 41.5.6 (20/02/2026)
 
 **Misc**

@@ -10,15 +10,17 @@
         :slides-offset-after="offsetSwiper"
         :allow-slide-next="loop"
         :allow-slide-prev="loop"
-        :navigation="true"
+        :navigation="navigationOptions"
         :modules="modules"
         @slides-updated="slidesUpdated"
         @slide-change="slideChange"
       >
-        <swiper-slide v-for="(obj, index) in listObject" :key="obj">
+        <swiper-slide v-for="(obj, index) in listObject" :key="index">
           <slot v-if="composableInit" name="octopusSlide" :option="obj" :index="index" />
         </swiper-slide>
       </swiper>
+      <div :id="prevElId" class="swiper-button-prev" />
+      <div :id="nextElId" class="swiper-button-next" />
     </template>
     <div v-else-if="composableInit" class="element-list-inline">
       <div v-for="(obj, index) in listObject" :key="obj" class="element-list-item">
@@ -36,7 +38,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import {useResizePhone} from "../../composable/useResizePhone";
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
+import { computed, getCurrentInstance, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 //Props 
 const props = defineProps({
@@ -48,7 +50,7 @@ const props = defineProps({
 //Data 
 const manualReload = ref(0);
 const numberItem = ref(5);
-const offsetSwiper = ref(40);
+const offsetSwiper = ref(0);
 const widthSwiperUsable = ref(0);
 const itemSizeWithoutRecalculed = ref(0);
 const composableInit = ref(false);
@@ -85,6 +87,17 @@ const modules = computed(() => {
     return [];
   }
 });
+
+const uid = computed((): number => {
+  const instance = getCurrentInstance();
+  return instance.uid;
+});
+const prevElId = computed((): string => 'swiper-button-prev-' + uid.value);
+const nextElId = computed((): string => 'swiper-button-next-' + uid.value);
+const navigationOptions = computed(() => ({
+  prevEl: '#' + prevElId.value,
+  nextEl: '#' + nextElId.value
+}));
 
 //Watch
 watch(windowWidth, () => onWindowResize());
@@ -143,12 +156,11 @@ function slideChange() {
     (nbTransformItems * itemRecalculizedSize.value + offsetSwiper.value) +
     "px, 0px, 0px)";
 }
-
 </script>
-<style lang="scss">
 
+<style lang="scss">
 :root {
-  --swiper-navigation-sides-offset: 0;
+  --swiper-navigation-sides-offset: -50px;
 }
 
 .swiper {
@@ -159,11 +171,11 @@ function slideChange() {
 .swiper-button-next,
 .swiper-button-prev {
   color: var(--octopus-primary) !important;
-  height: 100%;
+  //height: 100%;
   inset-block:0;
   margin: 0;
   width: 40px;
-  background: var(--octopus-background);
+  //background: var(--octopus-background);
 }
 
 .swiper-button-lock {
