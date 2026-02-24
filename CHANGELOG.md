@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.8 (24/02/2026)
+
+**Fix**
+
+- Correction "Tout sélectionner" du `ClassicMultiselect`
+
 ## 41.5.7 (20/02/2026)
 
 **Fix**
