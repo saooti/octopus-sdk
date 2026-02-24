@@ -238,7 +238,7 @@ function afterSearch(optionsFetched: Array<T>, count: number): void {
 function onOptionSelected(newValue: Array<T>|T): void {
   // Check if selectAll is included
   if (withSelectAll && Array.isArray(newValue) && newValue.find(o => o.id === selectAll.id)) {
-    emit("selected", options.value.slice(1, -1));
+    emit("selected", options.value.slice(1));
   } else {
     emit("selected", newValue);
   }
