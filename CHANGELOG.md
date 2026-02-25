@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.9 (25/02/2026)
+
+**Fix**
+
+- Autorise les utilisateurs `PODCAST_VALIDATION` à voir les épisodes à valider
+
 ## 41.5.8 (24/02/2026)
 
 **Fix**
