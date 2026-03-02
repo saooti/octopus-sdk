@@ -45,7 +45,11 @@
                 :key="platform.name"
                 class="platform-btn"
             >
-                <button class="btn w-100" :style="gradient(platform)" @click="openLink(platform.url)">
+                <button
+                    class="btn w-100"
+                    :style="gradient(platform)"
+                    @click="openLink(platform.url)"
+                >
                     <!-- Icon of platform -->
                     <component
                         :is="platform.icon"
@@ -63,7 +67,11 @@
         <div class="footer">
             <a target="_blank" href="/">
                 <span>{{ $t('SmartLink - Made by') }}</span>
-                <img src="/img/logo_saooti_play_black.svg" height="24" class="ms-2" />
+                <img
+                    src="/img/logo_saooti_play_black.svg"
+                    height="24"
+                    class="ms-2"
+                >
             </a>
             <a
                 v-if="podcastmakerElementUrl"
@@ -160,13 +168,13 @@ const organisation = computed((): Organisation|undefined => {
         return (element.value as Playlist).organisation;
     } else if (emissionId) {
         return (element.value as Emission).orga;
-
     }
+    return undefined;
 });
 
 /** The URL to the podcastmaker of the organisation, if any */
 const organisationAttributes = ref<OrganisationAttributes|null>(null);
-const { getPodcastMakerUrl, getSharePath } = useSharePath();
+const { getSharePath } = useSharePath();
 
 async function getOrganisationAttributes(): Promise<void> {
     if (organisation.value) {
@@ -174,19 +182,15 @@ async function getOrganisationAttributes(): Promise<void> {
     }
 }
 
-/** The URL to the element on the podcastmaker, if any */
+/** The URL to the element on the podcastmaker, or original platform, if any */
 const podcastmakerElementUrl = computed((): string|undefined => {
-    const podcastmakerUrl = getPodcastMakerUrl(organisationAttributes.value);
-    if (!podcastmakerUrl) {
-        return undefined;
-    }
-
     // Retrieve full URL of element
     if (playlistId) {
         return getSharePath({ name: 'playlist', params: { playlistId }}, organisationAttributes.value);
     } else if (emissionId) {
         return getSharePath({ name: 'emission', params: { emissionId }}, organisationAttributes.value);
     }
+    return undefined;
 });
 
 /**
@@ -223,7 +227,7 @@ async function getLatestPodcast(): Promise<void> {
         const result = await podcastApi.searchFull({
             emissionId,
             sort: PodcastSort.DATE,
-            pageSize: 1
+            size: 1
         });
 
         if (result.count > 0) {

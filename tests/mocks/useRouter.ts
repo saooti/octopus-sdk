@@ -6,6 +6,6 @@ vi.mock('vue-router', () => ({
         query: {}
     }),
     useRouter: () => ({
-        router: {}
+        resolve: () => ({ path: '' })
     })
 }));

@@ -1,5 +1,5 @@
 import { AdserverConfig } from "../adserver/adserverConfig";
-import { Organisation } from "./organisation";
+import { emptyOrganisationData, Organisation } from "./organisation";
 import { Person } from "../user/person";
 import { ItuneCategory } from "./ituneCategory";
 import { Annotations } from ".";
@@ -49,11 +49,7 @@ export function emptyEmissionData(orga?: Organisation): Emission {
     description: "",
     imageUrl: "",
     iabIds: undefined,
-    orga: orga ?? {
-      id: "",
-      name: "",
-      imageUrl: "",
-    },
+    orga: orga ?? emptyOrganisationData(),
     beneficiaries: [],
     rubriqueIds: [],
     monetisable: "UNDEFINED",

@@ -1,4 +1,4 @@
-import { Organisation } from "./organisation";
+import { emptyOrganisationData, Organisation } from "./organisation";
 import { Person } from "../user/person";
 import { FetchParam } from "./fetchParam";
 import { Annotations } from ".";
@@ -42,6 +42,7 @@ export function emptyPlaylistData(): Playlist {
     title: "",
     type: "DYNAMIC",
     samplingViews: [],
+    organisation: emptyOrganisationData()
   };
 }
 

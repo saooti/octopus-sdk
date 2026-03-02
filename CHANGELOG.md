@@ -2,6 +2,11 @@
 
 ## 41.6.0 (En cours)
 
+**Features**
+
+- Le smartlink affiche le lien vers saooti play si le podcastmaker n'est pas
+  défini
+
 ## 41.5.10 (02/03/2026)
 
 **Misc**
