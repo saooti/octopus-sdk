@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.5.10 (02/03/2026)
+
+**Misc**
+
+- Mise à jour des dépendances
+
 ## 41.5.9 (25/02/2026)
 
 **Fix**
