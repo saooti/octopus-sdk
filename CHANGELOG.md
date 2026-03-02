@@ -1,6 +1,30 @@
 # CHANGELOG
 
-## 41.6.0 (En cours)
+## 41.5.10 (02/03/2026)
+
+**Misc**
+
+- Mise à jour des dépendances
+
+## 41.5.9 (25/02/2026)
+
+**Fix**
+
+- Autorise les utilisateurs `PODCAST_VALIDATION` à voir les épisodes à valider
+
+## 41.5.8 (24/02/2026)
+
+**Fix**
+
+- Correction "Tout sélectionner" du `ClassicMultiselect`
+
+## 41.5.7 (20/02/2026)
+
+**Fix**
+
+- Correction affichage composants utilisant `swiper`
+
+## 41.5.6 (20/02/2026)
 
 **Misc**
 
