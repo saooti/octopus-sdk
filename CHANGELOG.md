@@ -11,6 +11,10 @@
 
 - Correction écoute épisodes non validés quand connecté
 
+**Misc**
+
+- Ajout utilitaire pour les plateformes de partage
+
 ## 41.5.10 (02/03/2026)
 
 **Misc**

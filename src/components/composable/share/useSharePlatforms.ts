@@ -125,6 +125,15 @@ export const useSharePlatforms = () => {
     });
 
     /**
+     * Helper to retrieve configuration of a specific platform
+     * @param platform The ID of the platform
+     * @return The configuration found
+     */
+    function getPlatformConfiguration(platform: SharePlatformName): SharePlatform|undefined {
+        return platforms.value.find(p => p.name === platform);
+    }
+
+    /**
      * Get platforms with their associated links.
      * A platform with no link will not be included
      * @param annotations The annotations of the element for which to get the
@@ -162,6 +171,7 @@ export const useSharePlatforms = () => {
 
     return {
         getPlatformsWithLinks,
+        getPlatformConfiguration,
         platforms
     }
 };
