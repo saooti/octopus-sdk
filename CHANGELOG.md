@@ -7,6 +7,10 @@
 - Le smartlink affiche le lien vers saooti play si le podcastmaker n'est pas
   défini
 
+**Fix**
+
+- Correction écoute épisodes non validés quand connecté
+
 ## 41.5.10 (02/03/2026)
 
 **Misc**

@@ -52,8 +52,7 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
       api:0,
       path:"podcast/download/register/"+playerStore.playerPodcast.podcastId + ".mp3",
       parameters:getAudioUrlParameters(),
-      headers: {'X-Extra-UA':'Saooti Player'},
-      isNotAuth:true
+      headers: {'X-Extra-UA':'Saooti Player'}
     });
     setDownloadId(response.downloadId.toString());
     audioUrlToPlay.value = response.location;
