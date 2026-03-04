@@ -104,14 +104,19 @@ watch(()=>generalStore.contentToDisplay, async () => {
     return;
   }
   const widthAsked = window.innerWidth > 960 ? "1600":"1000";
-  const proxyUrl = useProxyImageUrl(generalStore.contentToDisplay.imageUrl,widthAsked, undefined, true);
+  const proxyUrl = useProxyImageUrl(generalStore.contentToDisplay.imageUrl, widthAsked, undefined, true);
   try {
     const result = await axios.get(proxyUrl);
     headerBackgroundImage.value = `background-image: url('${result.data}');`;
     needToBlur.value = result.data === generalStore.contentToDisplay.imageUrl;
   } catch {
-    headerBackgroundImage.value = generalStore.contentToDisplay.imageUrl ? `background-image: url('${generalStore.contentToDisplay.imageUrl}');` : "";
-    needToBlur.value = true;
+    if (generalStore.contentToDisplay.imageUrl) {
+      const url = encodeURI(generalStore.contentToDisplay.imageUrl);
+      headerBackgroundImage.value = `background-image: url('${url}');`;
+      needToBlur.value = true;
+    } else {
+      headerBackgroundImage.value = '';
+    }
   }
 }, {deep: true, immediate: true});
 

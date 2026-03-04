@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.6.2 (En cours)
+
+**Fix**
+
+- **14235** - Correction affichage images avec caractères spéciaux dans leur nom
+
 ## 41.6.1 (04/03/2026)
 
 **Fix**

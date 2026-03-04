@@ -7,6 +7,10 @@ export const useImageProxy = ()=>{
     if (!url) {
       return "";
     }
+
+    // Encode URL to prevent some display issues
+    url = encodeURI(url);
+
     if (apiStore.imageUrl && url.includes("http")) {
       const size = height ? "height=" + height : "width=" + width;
       const encode = btoa(url).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
