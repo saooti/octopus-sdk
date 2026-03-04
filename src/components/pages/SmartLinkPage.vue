@@ -25,7 +25,7 @@
                 </button>
             </div>
             <h1>{{ title }}</h1>
-            <div v-html="displayHelper.urlify(element.description)" />
+            <div v-html="description" />
 
             <!-- Play button when viewing with phone -->
             <button
@@ -104,6 +104,7 @@ import { usePlayerStore } from '../../stores/PlayerStore';
 import { podcastApi, PodcastSort } from '../../api/podcastApi';
 import { useSharePath } from '../composable/share/useSharePath';
 import displayHelper from '../../helper/displayHelper';
+import { state } from '../../stores/ParamSdkStore';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
@@ -156,6 +157,21 @@ const title = computed((): string => {
         return (element.value as Emission).name;
     }
     return '';
+});
+
+/** Description of the element displayed */
+const description = computed((): string => {
+    let description = element.value.description;
+    if (state.smartLink.showOnlyFirstParagraphInDescription === true) {
+        // Find everything up to the end of the first paragraph, including newlines
+        const pattern = /^(.+?(?:\n+.*?)*<\/p>)/;
+        const matches = description.match(pattern);
+        if (matches && matches.length >= 2) {
+            description = matches[1];
+        }
+    }
+
+    return displayHelper.urlify(description);
 });
 
 /** The organisation associated with the element */
@@ -345,6 +361,8 @@ article {
 
         h1 {
             text-align: start !important;
+            font-size: var(--octopus-smartlink-title-fontsize);
+            color: var(--octopus-smartlink-title-color);
 
             @media (width <= 960px) {
                 text-align: center !important;

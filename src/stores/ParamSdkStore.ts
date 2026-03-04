@@ -29,6 +29,9 @@ const state: ParamStore = {
   searchPage: {
     sortCriteria: undefined,
   },
+  smartLink: {
+    showOnlyFirstParagraphInDescription: false
+  }
 };
 
 export interface ParamStore {
@@ -90,6 +93,12 @@ export interface ParamStore {
     /** The default sort criteria for search results */
     sortCriteria?: PodcastSort;
   };
+
+  /** Smartlink configuration */
+  smartLink: {
+    /** Truncate the description to the first paragraph */
+    showOnlyFirstParagraphInDescription?: boolean;
+  }
 }
 
 function definedProps<T>(obj: Partial<T>|undefined): Partial<T> {

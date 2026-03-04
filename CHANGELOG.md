@@ -1,10 +1,16 @@
 # CHANGELOG
 
-## 41.6.2 (En cours)
+## 41.7.0 (En cours)
+
+**Features**
+
+- **14301** - Ajout option `smartLink.showOnlyFirstParagraphInDescription` pour
+  tronquer la description à un paragraphe dans le SmartLink
 
 **Fix**
 
 - **14235** - Correction affichage images avec caractères spéciaux dans leur nom
+- Force style titre du SmartLink pour éviter overrides involontaires
 
 ## 41.6.1 (04/03/2026)
 

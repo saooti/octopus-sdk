@@ -46,4 +46,8 @@
     // Player
     // Color for the transcript background
     --octopus-player-transcript-bg-color: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
+
+    // Smartlink
+    --octopus-smartlink-title-color: var(--octopus-gray-text);
+    --octopus-smartlink-title-fontsize: 1.5rem;
 }
