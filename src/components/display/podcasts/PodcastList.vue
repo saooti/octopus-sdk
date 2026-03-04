@@ -104,7 +104,7 @@ const props = withDefaults(defineProps<{
   includeHidden: false,
   showCount: false,
   displaySortText: true,
-  validity: true,
+  validity: '',
   justSizeChosen: false,
   withVideo: undefined,
   forceUpdateParameters: false

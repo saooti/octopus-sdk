@@ -185,7 +185,7 @@ const props = withDefaults(defineProps<{
     sort: "DATE",
     monetisable: "UNDEFINED",
     searchPattern: "",
-    validity: "true"
+    validity: ""
 });
 
 //Emits

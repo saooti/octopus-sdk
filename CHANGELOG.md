@@ -4,6 +4,8 @@
 
 **Features**
 
+- **14298** - Les épisodes à valider sont visibles par défaut quand
+  l'utilisateur a les droits nécessaires
 - **14299** - Ajout de la plateforme 'Radio France'
 - **14301** - Ajout option `smartLink.showOnlyFirstParagraphInDescription` pour
   tronquer la description à un paragraphe dans le SmartLink
