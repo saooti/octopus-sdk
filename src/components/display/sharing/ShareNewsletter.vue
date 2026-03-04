@@ -85,16 +85,17 @@ const router = useRouter();
 const pathShare = computed(() => {
   const orga = filterStore.filterOrgaId ? "?productor="+filterStore.filterOrgaId : "";
   if(props.podcast) {
-    return router.resolve({ name: "podcast", params: { podcastId: props.podcast.podcastId } }) + orga;
+    return router.resolve({ name: "podcast", params: { podcastId: props.podcast.podcastId } }).path + orga;
   }
   if(props.emission){
-    return router.resolve({ name: "emission", params: { emissionId: props.emission.emissionId } }) + orga;
+    return router.resolve({ name: "emission", params: { emissionId: props.emission.emissionId } }).path + orga;
   }
   if(props.playlist){
-    return router.resolve({ name: "playlist", params: { playlistId: props.playlist.playlistId } }) + orga;
+    return router.resolve({ name: "playlist", params: { playlistId: props.playlist.playlistId } }).path + orga;
   }
   return "";
 });
+
 const newsletterInfo = computed(() => {
   if (props.podcast) {
     return {

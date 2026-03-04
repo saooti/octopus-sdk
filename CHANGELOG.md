@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.6.1 (04/03/2026)
+
+**Fix**
+
+- Correction code généré de newsletter
+
 ## 41.6.0 (03/03/2026)
 
 **Features**
