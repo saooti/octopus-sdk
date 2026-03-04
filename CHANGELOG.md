@@ -4,13 +4,16 @@
 
 **Features**
 
+- **14299** - Ajout de la plateforme 'Radio France'
 - **14301** - Ajout option `smartLink.showOnlyFirstParagraphInDescription` pour
   tronquer la description à un paragraphe dans le SmartLink
 
 **Fix**
 
 - **14235** - Correction affichage images avec caractères spéciaux dans leur nom
-- Force style titre du SmartLink pour éviter overrides involontaires
+- Correctifs visuels smartlink :
+  - Force le style du titre pour éviter overrides involontaires
+  - Amélioration de l'affichage si le contenu est long
 
 ## 41.6.1 (04/03/2026)
 

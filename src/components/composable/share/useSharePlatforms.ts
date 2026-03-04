@@ -10,6 +10,7 @@ import ApplePodcastIcon from "../../icons/ApplePodcastIcon.vue";
 import CastboxIcon from "../../icons/CastboxIcon.vue"; 
 import PodcastRepublicIcon from "../../icons/PodcastRepublicIcon.vue";
 import PodbeanIcon from "../../icons/PodbeanIcon.vue"; 
+import RadioFranceIcon from "../../icons/RadioFranceIcon.vue";
 import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { Annotations } from "@/stores/class/general";
@@ -29,7 +30,8 @@ export enum SharePlatformName {
     YOUTUBE = "youtube",
     CASTBOX = "castbox",
     PODBEAN = "podbean",
-    PODCAST_REPUBLIC = "podcastrepublic"
+    PODCAST_REPUBLIC = "podcastrepublic",
+    RADIO_FRANCE = "radiofrance"
 }
 
 export interface SharePlatform {
@@ -121,6 +123,11 @@ export const useSharePlatforms = () => {
             icon: PodcastRepublicIcon,
             title: "Podcast Republic",
             color: "#5c85dd",
+        }, {
+            name: SharePlatformName.RADIO_FRANCE,
+            icon: RadioFranceIcon,
+            title: "Radio France",
+            color: "#a90041",
         }];
     });
 
@@ -139,7 +146,7 @@ export const useSharePlatforms = () => {
      * @param annotations The annotations of the element for which to get the
                           platforms links
      */
-    function getPlatformsWithLinks(annotations:Annotations|undefined): Array<SharePlatformUrl> {
+    function getPlatformsWithLinks(annotations: Annotations|undefined): Array<SharePlatformUrl> {
         const ary: Array<SharePlatformUrl> = [];
         platforms.value.forEach(p => {
             const url = getUrl(p.name, annotations);
@@ -154,9 +161,7 @@ export const useSharePlatforms = () => {
     }
 
     function getUrl(sub: string, annotations: Annotations|undefined): string | undefined {
-        return externaliseLinks(
-            annotations?.[sub] as string | undefined,
-        );
+        return externaliseLinks(annotations?.[sub] as string | undefined);
     }
 
     function externaliseLinks(link?: string): string | undefined {

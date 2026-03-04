@@ -267,7 +267,7 @@ function playLatestPodcast(): void {
     height: 100%;
     overflow: hidden;
     // Do not take place in page
-    position: absolute;
+    position: fixed;
     // Make rest of page appear in front of image
     z-index: -1;
 
@@ -292,7 +292,7 @@ article {
     --background: white;
     --border-radius: 20px;
 
-    margin: 8rem auto 0;
+    margin: 8rem auto 2rem;
     padding: 20px;
     width: 900px;
     border-radius: var(--border-radius);
