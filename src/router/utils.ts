@@ -1,13 +1,11 @@
-import { Router, RouteRecordRaw, RouteRecordSingleView, RouteRecordSingleViewWithChildren } from "vue-router";
+import { Router, RouteRecordRaw, RouteRecordSingleView, RouteRecordSingleViewWithChildren, RouteLocationNormalized } from "vue-router";
 import { useFilterStore, FilterStore } from "../stores/FilterStore";
 import { useSaveFetchStore } from "../stores/SaveFetchStore";
 import { Rubriquage } from "../stores/class/rubrique/rubriquage";
 import classicApi from "../api/classicApi";
 import { useAuthStore, AuthStore } from "../stores/AuthStore";
 import { deepEqual } from "../helper/equals";
-import { RouteLocationNormalized } from "vue-router";
-import { RouteProps } from "../components/composable/route/types";
-import { ROUTE_PARAMS } from "../components/composable/route/types";
+import { RouteProps, ROUTE_PARAMS } from "../components/composable/route/types";
 import { type Component } from "vue";
 import { state as sdkParams } from "../stores/ParamSdkStore";
 
@@ -46,6 +44,7 @@ export function getRouteProps(route: RouteLocationNormalized): RouteProps {
     routeRubriques :route.query.r as string ?? route.query.rubriquesId as string|undefined,
     routeBeneficiaries: route.query[ROUTE_PARAMS.Beneficiaries] as string[]|undefined,
     routeOnlyVideo: route.query.v as string|undefined ?? "",
+    routeValidity: route.query.vl as string ?? "",
     routeEmissionGroups
   }
 }

@@ -16,6 +16,7 @@
 - Correctifs visuels smartlink :
   - Force le style du titre pour éviter overrides involontaires
   - Amélioration de l'affichage si le contenu est long
+- Ajout du paramètre de recherche `validity`/`vl` dans les props de route
 
 ## 41.6.1 (04/03/2026)
 
