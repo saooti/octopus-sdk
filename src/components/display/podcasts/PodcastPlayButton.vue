@@ -183,7 +183,7 @@ const classicPodcastPlay = computed(() => {
 });
 
 const displayBanner = computed(() => {
-  return !(
+  return props.justButtons !== true && !(
     isLiveValidAndVisible.value &&
     !isLiveToBeRecorded.value &&
     ProcessingStatus.Planned !== props.podcast.processingStatus
