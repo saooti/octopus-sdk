@@ -23,7 +23,14 @@
           alt=""
         >
         <span>{{ title }}</span>
-        <slot name="afterTitle"/>
+        <slot name="afterTitle" />
+
+        <span
+          v-if="subtitle && !isOpen"
+          class="subtitle"
+        >
+          &nbsp;-&nbsp;{{ subtitle }}
+        </span>
         <ChevronDownIcon class="ms-auto" :class="{ 'arrow-transform': isOpen }" />
       </button>
       <div v-show="isOpen" class="body p-2">
@@ -44,6 +51,8 @@ const AlertIcon = defineAsyncComponent(
 //Props
 const props = defineProps({
   title: { default: "", type: String },
+  /** Message displayed next to the title when closed */
+  subtitle: { default: undefined, type: String },
   idComposer: { default: "", type: String },
   isWarning: { default: false, type: Boolean },
   imageUrl: { default: undefined, type: String },
@@ -65,9 +74,8 @@ onMounted(()=>{
 })
 
 </script>
-<style lang="scss">
 
-
+<style scoped lang="scss">
 .octopus-accordion {
   > button {
     min-height: 50px;
@@ -109,6 +117,13 @@ onMounted(()=>{
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .subtitle {
+    color: var(--octopus-gray);
+    font-weight: 600;
+    font-style: italic;
+    font-size: 0.75rem;
   }
 }
 </style>
