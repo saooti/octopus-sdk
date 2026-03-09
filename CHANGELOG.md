@@ -1,6 +1,8 @@
 # CHANGELOG
 
-## 41.7.0 (En cours)
+## 41.8.0 (En cours)
+
+## 41.7.0 (09/03/2026)
 
 **Features**
 
@@ -17,6 +19,10 @@
   - Force le style du titre pour éviter overrides involontaires
   - Amélioration de l'affichage si le contenu est long
 - Ajout du paramètre de recherche `validity`/`vl` dans les props de route
+
+**Misc**
+
+- Mise à jour des dépéndances
 
 ## 41.6.1 (04/03/2026)
 
