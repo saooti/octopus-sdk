@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## 41.7.1 (En cours)
+## 41.7.2 (10/03/2026)
+
+**Fix**
+
+- Correction tri épisodes dans `PodcastPresentationList`
+
+## 41.7.1 (10/03/2026)
 
 **Fix**
 

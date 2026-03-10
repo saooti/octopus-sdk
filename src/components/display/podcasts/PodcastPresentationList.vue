@@ -116,9 +116,15 @@ async function fetchNext(): Promise<void> {
         return simplifiedToFull(p, emission.orga, emission);
       })
     );
+
+    // Sort podcasts by pub date so that the most recent one is focused
+    podcasts.value.sort((p1, p2) => {
+      return new Date(p2.pubDate).getTime() - new Date(p1.pubDate).getTime();
+    });
+    
     loading.value = false;
   } catch (errorWs) {
-    console.log(errorWs);
+    console.error(errorWs);
     handle403(errorWs as AxiosError);
     error.value = true;
   }
