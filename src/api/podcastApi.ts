@@ -79,12 +79,8 @@ async function downloadRegister(podcastId: number, parameters?: Record<string,un
     }>({
         api: ModuleApi.DEFAULT,
         path:"podcast/download/register/" + podcastId + ".mp3",
-        parameters: {
-            access_token: authStore.authParam.accessToken,
-            ...parameters
-        },
-        headers: {'X-Extra-UA':'Saooti Player'},
-        isNotAuth:true
+        parameters,
+        headers: {'X-Extra-UA':'Saooti Player'}
     });
 }
 

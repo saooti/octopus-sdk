@@ -9,9 +9,9 @@ import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useVastStore } from "../../../stores/VastStore";
 import { state as sdkParams } from "../../../stores/ParamSdkStore";
 import fetchHelper from "../../../helper/fetchHelper";
-import classicApi from "../../../api/classicApi";
 import dayjs from "dayjs";
 import { FetchParam } from "@/stores/class/general/fetchParam";
+import { podcastApi } from "../../../api/podcastApi";
 
 export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
   const hlsReady= ref(false);
@@ -45,15 +45,7 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
       audioUrlToPlay.value = getAudioUrl();
       return;
     }
-    const response = await classicApi.fetchData<{
-      location: string;
-      downloadId: number;
-    }>({
-      api:0,
-      path:"podcast/download/register/"+playerStore.playerPodcast.podcastId + ".mp3",
-      parameters:getAudioUrlParameters(),
-      headers: {'X-Extra-UA':'Saooti Player'}
-    });
+    const response = await podcastApi.downloadRegister(playerStore.playerPodcast.podcastId, getAudioUrlParameters());
     setDownloadId(response.downloadId.toString());
     audioUrlToPlay.value = response.location;
   });
@@ -120,8 +112,11 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
     }
   }
 
-  function getAudioUrlParameters(): FetchParam {
-    if (!playerStore.playerPodcast) return {};
+  function getAudioUrlParameters(addToken?: boolean): FetchParam {
+    if (!playerStore.playerPodcast) {
+      return {};
+    }
+    
     const parameters: FetchParam = {
       origin: "octopus",
       accepted: vastStore.useVastPlayerPodcast
@@ -133,10 +128,11 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
       parameters.consent = generalStore.consentTcf;
     }
     if (
+      addToken &&
       "SECURED" === playerStore.playerPodcast.organisation.privacy &&
       authStore.authParam.accessToken
     ) {
-      parameters.access_token =authStore.authParam.accessToken;
+      parameters.access_token = authStore.authParam.accessToken;
     }
     return parameters;
   }
@@ -145,14 +141,19 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
     if (playerStore.playerMedia){
       return playerStore.playerMedia.audioUrl ?? "";
     }
-    if (!playerStore.playerPodcast || playerStore.playerVideo) return "";
+    if (!playerStore.playerPodcast || playerStore.playerVideo) {
+      return "";
+    }
     if (
       !playerStore.playerPodcast.availability.visibility ||
       "PROCESSING" === playerStore.playerPodcast.processingStatus
-    )
+    ) {
       return playerStore.playerPodcast.audioStorageUrl;
-    if (listenError.value) return playerStore.playerPodcast.audioStorageUrl;
-    return playerStore.playerPodcast.podcastId + ".mp3?"+fetchHelper.getUriSearchParams(getAudioUrlParameters());
+    }
+    if (listenError.value) {
+      return playerStore.playerPodcast.audioStorageUrl;
+    }
+    return playerStore.playerPodcast.podcastId + ".mp3?"+fetchHelper.getUriSearchParams(getAudioUrlParameters(), true);
   }
 
   function reInitPlayer(force=false): void {

@@ -62,14 +62,10 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   async function playHls(): Promise<void> {
     try {
       if(null===audioElement.value){
-        audioElement.value = document.getElementById(
-          "audio-player",
-        ) as HTMLAudioElement;
+        audioElement.value = document.getElementById("audio-player") as HTMLAudioElement;
       }
       if (null === audioElement.value || !playerStore.playerHlsUrl) {
-        setTimeout(() => {
-          playHls();
-        }, 1000);
+        setTimeout(playHls, 1000);
         return;
       }
       const ua = navigator.userAgent.toLowerCase();

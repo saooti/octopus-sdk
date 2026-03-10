@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## 41.8.0 (En cours)
+## 41.7.1 (En cours)
+
+**Fix**
+
+- Correction lecture épisodes sur organisations sécurisées
+- Correction prise en compte paramètres SDK smartlink
 
 ## 41.7.0 (09/03/2026)
 

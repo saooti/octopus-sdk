@@ -131,6 +131,10 @@ const initialize = function initialize(initObject: Partial<ParamStore>): void {
     state.searchPage,
     definedProps(initObject.searchPage),
   );
+  state.smartLink = Object.assign(
+    state.smartLink,
+    definedProps(initObject.smartLink)
+  );
 };
 
 export default { initialize, state };
