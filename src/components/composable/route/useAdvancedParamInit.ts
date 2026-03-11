@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 
 import { RouteProps } from "./types";
 import { EmissionGroup, groupsApi } from "../../../api/groupsApi";
+import { useRights } from "../useRights";
 
 export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => {
 
@@ -18,7 +19,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
 
   const filterStore  = useFilterStore();
   const authStore  = useAuthStore();
-
+  const { canValidatePodcast } = useRights();
 
   const isInit = ref(false);
   const monetisable = ref("UNDEFINED");// UNDEFINED, YES, NO
@@ -125,8 +126,8 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     includeHidden.value = undefined !== organisation.value && organisationRight.value && "false"!==props.routeIncludeHidden;
   }
 
-  function initValidity(){
-    const cantDisplay = isPodcastmaker.value || isEmission || !includeHidden.value || !authStore.isRoleContribution || !organisationRight.value;
+  function initValidity() {
+    const cantDisplay = isPodcastmaker.value || isEmission || !includeHidden.value || !canValidatePodcast();
     if(cantDisplay){
       validity.value = "true";
     }else{

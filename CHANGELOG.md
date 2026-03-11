@@ -6,6 +6,10 @@
 
 - Intégration du composable de vérification des droits
 
+**Fix**
+
+- Correction affichage épisodes à valider pour `PODCAST_VALIDATION`.
+
 ## 41.7.2 (10/03/2026)
 
 **Fix**
