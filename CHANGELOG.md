@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.7.3 (En cours)
+
+**Features**
+
+- Intégration du composable de vérification des droits
+
 ## 41.7.2 (10/03/2026)
 
 **Fix**

@@ -1,7 +1,7 @@
 import { Component } from 'vue';
 import { vi } from 'vitest';
 import { mount as _mount, VueWrapper } from '@vue/test-utils';
-import { type Pinia, setActivePinia } from 'pinia';
+import { type Pinia, setActivePinia, createPinia } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
 import { useAuthStore } from '../src/stores/AuthStore';
@@ -159,3 +159,14 @@ export function combineStoreSetups(...setups: Array<() => void>) {
 }
 
 export { VueWrapper };
+
+/**
+ * Creates a Pinia instance without mounting a component.
+ * Use this for testing composables or APIs directly.
+ */
+export function setupPinia(setupFn?: () => void | Promise<void>): Pinia {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+    if (setupFn) { setupFn(); }
+    return pinia;
+}
