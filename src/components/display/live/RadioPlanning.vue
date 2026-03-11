@@ -254,9 +254,7 @@ function createArrayDays() {
     });
   }
 }
-async function fetchOccurrencesAndLives(): Promise<
-  Array<PlanningOccurrence | PlanningLive>
-> {
+async function fetchOccurrencesAndLives(): Promise<Array<PlanningOccurrence|PlanningLive>> {
   const params = {
     canalId: props.radio?.id,
     from:startOfDay.value,
@@ -275,6 +273,7 @@ async function fetchOccurrencesAndLives(): Promise<
     path: "live/list",
     parameters: params,
   });
+
   if (lives.length) {
     occurrences = occurrences.concat(lives);
     occurrences.sort((a, b) => {
@@ -286,6 +285,7 @@ async function fetchOccurrencesAndLives(): Promise<
   }
   return occurrences;
 }
+
 async function fetchOccurrences(): Promise<void> {
   if (planning.value[daySelected.value]) {
     return;
@@ -310,6 +310,7 @@ async function fetchOccurrences(): Promise<void> {
       ) {
         periodDayIndex += 1;
       }
+
       switch (periodOfDay.value[periodDayIndex].id) {
         case "morning":
           planning.value[daySelected.value].morning.push(occ);
@@ -325,8 +326,9 @@ async function fetchOccurrences(): Promise<void> {
       }
       planningLength.value[daySelected.value] += 1;
     }
-  } catch {
+  } catch(e) {
     error.value = true;
+    console.error(e);
   }
   loading.value = false;
 }
