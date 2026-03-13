@@ -417,5 +417,8 @@
   "Podcast": "Episodio",
   "Player - Transcription - AI Warning": "La transcripción se basa en IA y puede contener errores, háganoslo saber.",
   "All organisations": "Todas las organizaciones",
-  "Emission subtitle": "Subtítulo del programa"
+  "Emission subtitle": "Subtítulo del programa",
+  "Podcast type - Full": "Estándar",
+  "Podcast type - Trailer": "Tráiler",
+  "Podcast type - Bonus": "Bonificaciones"
 }

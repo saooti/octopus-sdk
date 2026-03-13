@@ -17,6 +17,13 @@ export enum PodcastProcessingStatus {
   All = "ALL"
 }
 
+/** Type of episode */
+export enum PodcastType {
+  FULL = 'full',
+  TRAILER = 'trailer',
+  BONUS = 'bonus'
+}
+
 /** Describe the availability of the podcast */
 export interface PodcastAvailability {
   date?: number | null;
@@ -46,6 +53,8 @@ export interface Podcast {
   availability: PodcastAvailability;
   /** Description of the podcast */
   description?: string;
+  /** Optional summary of the podcast */
+  summary?: string;
   /** Publishing date */
   pubDate?: string;
   /** The status of the processing of the audio file */
@@ -58,6 +67,12 @@ export interface Podcast {
   beneficiaries: Array<string>;
   /** Indicates that the episode has explicit content */
   explicit?: boolean;
+  /** Type of episode */
+  seasonEpisodeType: PodcastType;
+  /** Number of season in which podcast belongs */
+  seasonNumber?: number;
+  /** Order of the episode in the season */
+  seasonEpisodeNumber?: number;
 
   createdAt?: string;
   createdByUserId?: string;

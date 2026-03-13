@@ -417,5 +417,8 @@
   "Podcast": "Folge",
   "Player - Transcription - AI Warning": "Die Transkription basiert auf KI und kann Fehler enthalten, bitte teilen Sie uns dies mit.",
   "All organisations": "Alle Organisationen",
-  "Emission subtitle": "Untertitel der Sendung"
+  "Emission subtitle": "Untertitel der Sendung",
+  "Podcast type - Full": "Standard",
+  "Podcast type - Trailer": "Anhänger",
+  "Podcast type - Bonus": "Boni"
 }

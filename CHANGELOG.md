@@ -4,7 +4,7 @@
 
 **Features**
 
-- Ajout des propriétés relatives aux saisons sur les émissions
+- Ajout des propriétés relatives aux saisons sur les émissions et les épisodes
 
 ## 41.7.3 (11/03/2026)
 

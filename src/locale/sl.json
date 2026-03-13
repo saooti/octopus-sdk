@@ -416,5 +416,8 @@
   "Podcast": "Epizoda",
   "Player - Transcription - AI Warning": "Transkripcija temelji na umetni inteligenci in lahko vsebuje napake, zato nas obvestite.",
   "All organisations": "Vse organizacije",
-  "Emission subtitle": "Podnaslov oddaje"
+  "Emission subtitle": "Podnaslov oddaje",
+  "Podcast type - Full": "Standardno",
+  "Podcast type - Trailer": "Napovednik",
+  "Podcast type - Bonus": "Bonusi"
 }

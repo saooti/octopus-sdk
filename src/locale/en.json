@@ -417,5 +417,8 @@
   "Podcast": "Episode",
   "Player - Transcription - AI Warning": "The transcription is based on AI and may contain errors, please let us know.",
   "All organisations": "All organizations",
-  "Emission subtitle": "Subtitle of the show"
+  "Emission subtitle": "Subtitle of the show",
+  "Podcast type - Full": "Standard",
+  "Podcast type - Trailer": "Trailer",
+  "Podcast type - Bonus": "Bonuses"
 }

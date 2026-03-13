@@ -168,7 +168,7 @@ export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/po
 
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
-export { type Podcast, type PodcastAvailability } from "./src/stores/class/general/podcast.ts";
+export { type Podcast, type PodcastAvailability, PodcastType } from "./src/stores/class/general/podcast.ts";
 export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
 export { type Annotations } from "./src/stores/class/general";
 
