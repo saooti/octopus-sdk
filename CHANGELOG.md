@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.8.0 (En cours)
+
+**Features**
+
+- Ajout des propriétés relatives aux saisons sur les émissions
+
 ## 41.7.3 (11/03/2026)
 
 **Features**

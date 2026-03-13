@@ -56,6 +56,8 @@ export interface Podcast {
   ofTags?: Array<string>;
   /** List of beneficiaries/rights holders */
   beneficiaries: Array<string>;
+  /** Indicates that the episode has explicit content */
+  explicit?: boolean;
 
   createdAt?: string;
   createdByUserId?: string;

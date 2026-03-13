@@ -134,6 +134,7 @@ export { useSharePlatforms, SharePlatformName, type SharePlatform } from "./src/
 export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
 export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
 export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl.ts";
+export { useSeasonsManagement } from "./src/components/composable/useSeasonsManagement.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -166,7 +167,7 @@ export { playlistApi } from "./src/api/playlistApi.ts";
 export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
 
 // Types
-export { type Emission, emptyEmissionData } from "./src/stores/class/general/emission.ts";
+export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
 export { type Podcast, type PodcastAvailability } from "./src/stores/class/general/podcast.ts";
 export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
 export { type Annotations } from "./src/stores/class/general";

@@ -5,6 +5,18 @@ import { ItuneCategory } from "./ituneCategory";
 import { Annotations } from ".";
 
 /**
+ * Season settings for emissions
+ */
+export enum SeasonMode {
+  /** This emission doesn't have seasons */
+  NO_SEASON = 'NO_SEASON',
+  /** This emission has seasons and episodes are ordered by date */
+  SEASON_WITHOUT_PODCAST_NUMBERING = 'SEASON_WITHOUT_PODCAST_NUMBERING',
+  /** This emission has seasons and episodes are ordered manually */
+  SEASON_WITH_PODCAST_NUMBERING = 'SEASON_WITH_PODCAST_NUMBERING'
+}
+
+/**
  * An emission
  */
 export interface Emission {
@@ -40,6 +52,10 @@ export interface Emission {
   tags?: string[];
   /** The ids of groups this emission belongs to */
   groupIds?: Array<number>
+  /** Seasons configuration */
+  seasonMode: SeasonMode;
+  /** Indicates that the emission has explicit content */
+  explicit?: boolean;
 }
 
 export function emptyEmissionData(orga?: Organisation): Emission {
@@ -54,5 +70,6 @@ export function emptyEmissionData(orga?: Organisation): Emission {
     rubriqueIds: [],
     monetisable: "UNDEFINED",
     limits: {},
+    seasonMode: SeasonMode.NO_SEASON
   };
 }
