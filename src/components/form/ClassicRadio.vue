@@ -10,12 +10,12 @@
                                      `selected` : true if the option is selected
 -->
 <template>
-  <div role="radiogroup" class="d-flex" :class="isColumn ? 'flex-column' : ''">
+  <div role="radiogroup" class="d-flex" :class="isColumn !== false ? 'flex-column' : ''">
     <div
       v-for="option in options"
       :key="option.title"
       class="octopus-form-item"
-      :class="isColumn ? 'd-flex flex-nowrap align-items-center' : 'me-2'"
+      :class="isColumn !== false ? 'd-flex flex-nowrap align-items-center' : 'me-2'"
     >
       <input
         :id="idRadio + option.value"
@@ -37,22 +37,21 @@
 
 <script setup generic="T extends { title: string; value: string|undefined; }" lang="ts">
 //Props 
-const { textInit } = defineProps({
-  idRadio: { default: "", type: String },
-  isDisabled: { default: false, type: Boolean },
-  options: {
-    default: () => [],
-    type: Array as () => Array<T>,
-  },
-  textInit: { default: undefined, type: String },
-  isColumn: { default: true, type: Boolean },
-})
+const { textInit, isColumn = true } = defineProps<{
+  options: Array<T>;
+  textInit?: string;
+  idRadio?: string;
+  isDisabled?: boolean;
+  isColumn?: boolean;
+}>();
 
 //Emits
-const emit = defineEmits(["update:textInit"]);
+const emit = defineEmits<{
+  (e: 'update:textInit', value: string): void;
+}>();
 
 //Methods
-function onChange(value:string){
+function onChange(value: string){
   emit('update:textInit', value)
 }
 
