@@ -47,6 +47,12 @@ main, #app{
     font-family: var(--octopus-font-family);
   }
 
+  // Display an asterisk for required fields
+  label.required:after {
+    content: "*";
+    font-weight: bold;
+  }
+
   /** Link style */
   a{
     word-break: break-word;

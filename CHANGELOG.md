@@ -5,6 +5,8 @@
 **Features**
 
 - Ajout des propriétés relatives aux saisons sur les émissions et les épisodes
+- Ajout d'une classe `required` pour afficher une asterisque sur les champs
+  requis
 
 ## 41.7.3 (11/03/2026)
 
