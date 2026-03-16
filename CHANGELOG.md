@@ -4,9 +4,15 @@
 
 **Features**
 
-- Ajout des propriétés relatives aux saisons sur les émissions et les épisodes
+- **14083** - Ajout des propriétés relatives aux saisons sur les émissions et
+  les épisodes
 - Ajout d'une classe `required` pour afficher une asterisque sur les champs
   requis
+
+**Fix**
+
+- **14291** - Activation du bouton de génération de la transcription suite à
+  correction des droits
 
 ## 41.7.3 (11/03/2026)
 

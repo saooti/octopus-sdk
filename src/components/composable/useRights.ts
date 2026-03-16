@@ -150,7 +150,7 @@ export const useRights = () => {
     }
 
     function canEditTranscript(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION');
     }
 
     function canSeeHistory(): boolean {
