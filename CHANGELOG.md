@@ -9,7 +9,7 @@
   - `PodcastFilterList` permet de regrouper les épisodes en saisons
   - `EmissionPage` affiche ses épisodes en saisons si définies
   - `PodcastModuleBox` affiche le numéro de saison et d'épisode du podcast si
-    définis
+    définis et que le `seasonMode` permet leur affichage
 - Ajout d'une classe `required` pour afficher une asterisque sur les champs
   requis
 

@@ -2,6 +2,7 @@ import '@tests/mocks/i18n';
 import '@tests/mocks/useRouter';
 
 import PodcastModuleBox from '@/components/display/podcasts/PodcastModuleBox.vue';
+import { SeasonMode } from '@/stores/class/general/emission';
 import { emptyPodcastData, Podcast } from '@/stores/class/general/podcast';
 import { mount as testMount, setupAuthStore } from '@tests/utils';
 import { describe, expect, it } from 'vitest';
@@ -24,12 +25,6 @@ describe('PodcastModuleBox', () => {
             expect(wrapper.text()).not.toContain('11:21');
         });
 
-        it('shows the date without time when disable in SdkParams', async() => {
-            const wrapper = await mount(podcast);
-            expect(wrapper.text()).toContain('1 December 2025');
-            expect(wrapper.text()).not.toContain('11:21');
-        });
-
         it('shows the date with time when enabled in SdkParams', async() => {
             initialize({ generalParameters: { showTimeWithDates: true } });
             const wrapper = await mount(podcast);
@@ -39,22 +34,42 @@ describe('PodcastModuleBox', () => {
     });
 
     describe('season info', () => {
-        it.each([
-            { field: 'seasonNumber',       label: 'Podcast - Season'         },
-            { field: 'seasonEpisodeNumber', label: 'Podcast - Episode number' },
-        ])('hides $field when not set', async ({ label }) => {
-            const wrapper = await mount(emptyPodcastData());
-            expect(wrapper.text()).not.toContain(label);
+        function makePodcast(seasonMode = SeasonMode.NO_SEASON, overrides: Partial<Podcast> = {}) {
+            const podcast = emptyPodcastData();
+            podcast.emission.seasonMode = seasonMode;
+            return { ...podcast, ...overrides };
+        }
+
+        describe('season number', () => {
+            it('hidden when seasonNumber is not set', async () => {
+                const wrapper = await mount(makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING));
+                expect(wrapper.text()).not.toContain('Podcast - Season');
+            });
+
+            it('hidden when emission has no season mode', async () => {
+                const wrapper = await mount(makePodcast(SeasonMode.NO_SEASON, { seasonNumber: 2 }));
+                expect(wrapper.text()).not.toContain('Podcast - Season');
+            });
+
+            it.each([
+                SeasonMode.SEASON_WITH_PODCAST_NUMBERING,
+                SeasonMode.SEASON_WITHOUT_PODCAST_NUMBERING,
+            ])('shown for %s', async (seasonMode) => {
+                const wrapper = await mount(makePodcast(seasonMode, { seasonNumber: 2 }));
+                expect(wrapper.text()).toContain('Podcast - Season : 2');
+            });
         });
 
-        it('shows season number when set', async () => {
-            const wrapper = await mount({ ...emptyPodcastData(), seasonNumber: 2 });
-            expect(wrapper.text()).toContain('Podcast - Season : 2');
-        });
+        describe('episode number', () => {
+            it('hidden for SEASON_WITHOUT_PODCAST_NUMBERING', async () => {
+                const wrapper = await mount(makePodcast(SeasonMode.SEASON_WITHOUT_PODCAST_NUMBERING, { seasonEpisodeNumber: 5 }));
+                expect(wrapper.text()).not.toContain('Podcast - Episode number');
+            });
 
-        it('shows episode number when set', async () => {
-            const wrapper = await mount({ ...emptyPodcastData(), seasonEpisodeNumber: 5 });
-            expect(wrapper.text()).toContain('Podcast - Episode number : 5');
+            it('shown for SEASON_WITH_PODCAST_NUMBERING', async () => {
+                const wrapper = await mount(makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, { seasonEpisodeNumber: 5 }));
+                expect(wrapper.text()).toContain('Podcast - Episode number : 5');
+            });
         });
     });
 });

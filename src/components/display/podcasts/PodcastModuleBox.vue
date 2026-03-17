@@ -88,10 +88,10 @@
             {{ podcast.organisation.name }}
           </router-link>
         </div>
-        <div v-if="podcast.seasonNumber" class="mb-1">
+        <div v-if="showSeasonNumber" class="mb-1">
           {{ `${t('Podcast - Season')} : ${podcast.seasonNumber}` }}
         </div>
-        <div v-if="podcast.seasonEpisodeNumber" class="mb-1">
+        <div v-if="showSeasonEpisodeNumber" class="mb-1">
           {{ `${t('Podcast - Episode number')} : ${podcast.seasonEpisodeNumber}` }}
         </div>
         <div v-if="'' !== photoCredit" class="mb-1">
@@ -167,8 +167,12 @@ import { state } from "../../../stores/ParamSdkStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import displayHelper from "../../../helper/displayHelper";
 import {usePodcastView} from "../../composable/podcasts/usePodcastView";
-import { Podcast } from "@/stores/class/general/podcast";
-import { Conference } from "@/stores/class/conference/conference";
+import { Podcast } from "../../../stores/class/general/podcast";
+import { Conference } from "../../../stores/class/conference/conference";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useSeasonsManagement } from "../../composable/useSeasonsManagement";
+import { SeasonMode } from "../../../stores/class/general/emission";
 
 import { defineAsyncComponent, toRefs, computed } from "vue";
 const ErrorMessage = defineAsyncComponent(
@@ -199,8 +203,6 @@ const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 const ShareAnonymous = defineAsyncComponent(() => import("../sharing/ShareAnonymous.vue"));
 const PodcastRubriqueList = defineAsyncComponent(() => import("./PodcastRubriqueList.vue"));
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 
 //Props 
 const props = defineProps<{
@@ -228,6 +230,7 @@ const {
 } = usePodcastView(propsRef.podcast, propsRef.podcastConference);
 const authStore = useAuthStore();
 const router = useRouter();
+const { areSeasonsEnabled } = useSeasonsManagement();
 
 //Computed
 const podcastRubriques = computed(() => {
@@ -283,6 +286,14 @@ const tags = computed(() => {
     tags.push(...props.podcast.emission.tags);
   }
   return tags;
+});
+
+const showSeasonNumber = computed((): boolean => {
+  return areSeasonsEnabled(props.podcast.emission) && props.podcast.seasonNumber !== undefined;
+});
+
+const showSeasonEpisodeNumber = computed((): boolean => {
+  return props.podcast.emission.seasonMode === SeasonMode.SEASON_WITH_PODCAST_NUMBERING && props.podcast.seasonEpisodeNumber !== undefined;
 });
 
 //Methods
