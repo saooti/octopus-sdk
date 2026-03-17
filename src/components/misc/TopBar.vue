@@ -14,7 +14,13 @@
       :options="options?.topBarMainContent"
     />
   </header>
-  <div v-if="generalStore.contentToDisplay" class="header-content-bg" :style="headerBackgroundImage" :class="{ scrolled: scrolled, 'header-force-blur':needToBlur }" >
+
+  <div
+    v-if="generalStore.contentToDisplay"
+    class="header-content-bg"
+    :style="headerBackgroundImage"
+    :class="{ scrolled: scrolled, 'header-force-blur':needToBlur }"
+  >
     <div class="header-additional-content header-content">
       <h1 v-if="!scrolled" class="text-truncate">
         {{ titleToDisplay }}

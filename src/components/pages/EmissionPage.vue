@@ -54,7 +54,7 @@
                 :just-buttons="true"
               />
               <div class="ms-2 fw-bold">
-                {{ t("Listen to the latest episode") }}
+                {{ messageListenEpisode }}
               </div>
             </div>
 
@@ -125,7 +125,7 @@ import {useImageProxy} from "../composable/useImageProxy";
 import {useOrgaComputed} from "../composable/useOrgaComputed";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import {useErrorHandler} from "../composable/useErrorHandler";
-import { Emission } from "@/stores/class/general/emission";
+import { Emission, SeasonMode } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineAsyncComponent, ref, Ref, computed, watch, onBeforeUnmount } from "vue";
 import { AxiosError } from "axios";
@@ -139,6 +139,7 @@ import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 import ErrorMessage from "../misc/ErrorMessage.vue";
 import ClassicHelpButton from "../misc/ClassicHelpButton.vue";
 import { emissionApi } from "../../api/emissionApi";
+import { useSeasonsManagement } from "../composable/useSeasonsManagement";
 
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
@@ -203,6 +204,7 @@ const {
   paginateFirst,
   isInit
 } = useSimplePageParam(props, true);
+const { areSeasonsEnabled, formatSeason } = useSeasonsManagement();
 
 
 //Computed
@@ -210,6 +212,14 @@ const name = computed(() => emission.value?.name ?? "");
 const description = computed(() => emission.value?.description ?? "");
 const editRight = computed(() => isEditRights(emission.value?.orga.id));
 
+const messageListenEpisode = computed((): string => {
+  const base = t("Listen to the latest episode");
+  if (lastPodcast.value !== undefined && areSeasonsEnabled(emission.value)) {
+    return base + ` (${formatSeason(lastPodcast.value)})`;
+  } else {
+    return base;
+  }
+});
 
 //Watch
 watch(()=>props.emissionId, () => {getEmissionDetails()}, {immediate: true});
