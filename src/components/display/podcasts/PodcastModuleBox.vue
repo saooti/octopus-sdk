@@ -88,6 +88,12 @@
             {{ podcast.organisation.name }}
           </router-link>
         </div>
+        <div v-if="podcast.seasonNumber" class="mb-1">
+          {{ `${t('Podcast - Season')} : ${podcast.seasonNumber}` }}
+        </div>
+        <div v-if="podcast.seasonEpisodeNumber" class="mb-1">
+          {{ `${t('Podcast - Episode number')} : ${podcast.seasonEpisodeNumber}` }}
+        </div>
         <div v-if="'' !== photoCredit" class="mb-1">
           {{ t("Photo credits") + " : " + photoCredit }}
         </div>

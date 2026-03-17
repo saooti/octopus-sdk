@@ -421,5 +421,7 @@
   "Podcast type - Full": "Standard",
   "Podcast type - Trailer": "Anhänger",
   "Podcast type - Bonus": "Boni",
-  "Podcast - Season N": "Saison {season}"
+  "Podcast - Season N": "Saison {season}",
+  "Podcast - Season": "Jahreszeit",
+  "Podcast - Episode number": "Episodennummer"
 }

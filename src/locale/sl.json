@@ -420,5 +420,7 @@
   "Podcast type - Full": "Standardno",
   "Podcast type - Trailer": "Napovednik",
   "Podcast type - Bonus": "Bonusi",
-  "Podcast - Season N": "Sezona {season}"
+  "Podcast - Season N": "Sezona {season}",
+  "Podcast - Season": "Sezona",
+  "Podcast - Episode number": "Številka epizode"
 }

@@ -444,5 +444,7 @@
   "Podcast type - Full": "Standard",
   "Podcast type - Trailer": "Trailer",
   "Podcast type - Bonus": "Bonus",
-  "Podcast - Season N": "Saison {season}"
+  "Podcast - Season N": "Saison {season}",
+  "Podcast - Season": "Saison",
+  "Podcast - Episode number": "Numéro d'épisode"
 }
