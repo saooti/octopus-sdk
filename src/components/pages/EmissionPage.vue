@@ -125,7 +125,7 @@ import {useImageProxy} from "../composable/useImageProxy";
 import {useOrgaComputed} from "../composable/useOrgaComputed";
 import {useSeoTitleUrl} from "../composable/route/useSeoTitleUrl";
 import {useErrorHandler} from "../composable/useErrorHandler";
-import { Emission, SeasonMode } from "@/stores/class/general/emission";
+import { Emission } from "@/stores/class/general/emission";
 import ClassicLoading from "../form/ClassicLoading.vue";
 import { defineAsyncComponent, ref, Ref, computed, watch, onBeforeUnmount } from "vue";
 import { AxiosError } from "axios";
@@ -195,10 +195,10 @@ const { t } = useI18n();
 const { useProxyImageUrl } = useImageProxy();
 const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
 const { updatePathParams } = useSeoTitleUrl();
-const {handle403} = useErrorHandler();
+const { handle403 } = useErrorHandler();
 const filterStore = useFilterStore();
-const generalStore= useGeneralStore();
-const route= useRoute();
+const generalStore = useGeneralStore();
+const route = useRoute();
 const {
   searchPattern,
   paginateFirst,
@@ -222,7 +222,7 @@ const messageListenEpisode = computed((): string => {
 });
 
 //Watch
-watch(()=>props.emissionId, () => {getEmissionDetails()}, {immediate: true});
+watch(() => props.emissionId, getEmissionDetails, { immediate: true });
 
 
 onBeforeUnmount(() => {
@@ -259,12 +259,13 @@ async function getEmissionDetails(): Promise<void> {
     initError();
   }
 }
-function podcastsFetched(podcasts: Array<Podcast>) {
+function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
+  if (season !== undefined && season !== emission.value.seasonCount) {
+    return;
+  }
+
   for (const podcast of podcasts) {
-    if (
-      "READY" === podcast.processingStatus &&
-      podcast.availability.visibility
-    ) {
+    if ("READY" === podcast.processingStatus && podcast.availability.visibility) {
       lastPodcast.value = podcast;
       return;
     }

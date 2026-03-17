@@ -62,7 +62,7 @@
           :display-sort-text="false"
           :force-update-parameters="forceUpdateParameters"
           :seasons="[season]"
-          @fetch="fetch"
+          @fetch="fetch($event, season)"
         />
       </template>
     </ClassicNav>
@@ -109,7 +109,10 @@ const props = withDefaults(defineProps<{
 });
 
 //Emits
-const emit = defineEmits(["fetch", "update:query"]);
+const emit = defineEmits<{
+  (e: "fetch", podcasts: Array<Podcast>, season: number|undefined): void;
+  (e: "update:query", query: string): void;
+}>();
 
 //Data 
 const dfirst = ref(props.first);
@@ -172,8 +175,8 @@ watch(searchPattern, () => {
 function onCategorySelected(category: Category | undefined): void {
   iabId.value = category?.id ? category.id : undefined;
 }
-function fetch(podcasts: Array<Podcast>): void {
-  emit("fetch", podcasts);
+function fetch(podcasts: Array<Podcast>, season?: number): void {
+  emit("fetch", podcasts, season);
 }
 
 /** Name of the slot for the tab's title */
