@@ -1,4 +1,4 @@
-import { Podcast, PodcastProcessingStatus, SimplifiedPodcast } from '../stores/class/general/podcast';
+import { Podcast, PodcastProcessingStatus, PodcastType, SimplifiedPodcast } from '../stores/class/general/podcast';
 import { ListClassicReturn } from '../stores/class/general/listReturn';
 import { useAuthStore } from '../stores/AuthStore';
 import classicApi from './classicApi';
@@ -17,7 +17,9 @@ export enum PodcastSort {
     POPULARITY = 'POPULARITY',
     SCORE = 'SCORE',
     UPDATE_ASC = 'UPDATE_ASC',
-    UPDATE_DESC = 'UPDATE_DESC'
+    UPDATE_DESC = 'UPDATE_DESC',
+    /** Smart sort using seasons settings */
+    SEASONAL = 'SEASONAL'
 }
 
 export enum PodcastMonetisation {
@@ -68,11 +70,15 @@ export interface PodcastSearchOptions extends Paginable<PodcastSort> {
     tags?: Array<string>;
     /** Filter by beneficiaries/rights holder reference */
     beneficiaries?: Array<string>;
+    /** Filter by seasons */
+    season?: Array<number>;
+    /** Filter by season episode number */
+    seasonEpisode?: Array<number>;
+    /** Filter by episode type */
+    episodeType?: PodcastType;
 }
 
 async function downloadRegister(podcastId: number, parameters?: Record<string,unknown>): Promise<{ location: string; downloadId: number }> {
-    const authStore = useAuthStore();
-
     return classicApi.fetchData<{
         location: string;
         downloadId: number;
@@ -137,13 +143,28 @@ function processSearchParameters(search: PodcastSearchOptions): FetchParam {
  * @param adaptParameters If true, some adjustments will be made to the parameters
  * @return A list of simplified podcasts
  */
-function search(options: PodcastSearchOptions, adaptParameters?: boolean): Promise<ListClassicReturn<SimplifiedPodcast>> {
+async function search(options: PodcastSearchOptions, adaptParameters?: boolean): Promise<ListClassicReturn<SimplifiedPodcast>> {
     return classicApi.fetchData<ListClassicReturn<SimplifiedPodcast>>({
         api: ModuleApi.DEFAULT,
         path: 'v2/podcast/search',
         parameters: processSearchParameters(options),
         specialTreatement: adaptParameters
     });
+}
+
+/**
+ * Count podcasts matching the filters
+ * @param options The search criterias
+ * @param adaptParameters If true, some adjustments will be made to the parameters
+ * @return A list of simplified podcasts
+ */
+async function count(options: PodcastSearchOptions, adaptParameters?: boolean): Promise<number> {
+    const result = await search({
+        ...options,
+        size: 0
+    }, adaptParameters);
+
+    return result.count;
 }
 
 /**
@@ -185,6 +206,7 @@ async function searchFull(options:PodcastSearchOptions, adaptParameters?: boolea
 }
 
 export const podcastApi = {
+    count,
     downloadRegister,
     get,
     search,
