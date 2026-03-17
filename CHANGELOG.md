@@ -4,8 +4,10 @@
 
 **Features**
 
-- **14083** - Ajout des propriétés relatives aux saisons sur les émissions et
-  les épisodes
+- **14083** - Ajout des fonctionnalités de saisons et types d'épisodes
+  - Ajout des propriétés relatives aux saisons sur les émissions et les épisodes
+  - `PodcastFilterList` permet de regrouper les épisodes en saisons
+  - `EmissionPage` affiche ses épisodes en saisons si définies
 - Ajout d'une classe `required` pour afficher une asterisque sur les champs
   requis
 

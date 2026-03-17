@@ -420,5 +420,6 @@
   "Emission subtitle": "Untertitel der Sendung",
   "Podcast type - Full": "Standard",
   "Podcast type - Trailer": "Anhänger",
-  "Podcast type - Bonus": "Boni"
+  "Podcast type - Bonus": "Boni",
+  "Podcast - Season N": "Saison {season}"
 }

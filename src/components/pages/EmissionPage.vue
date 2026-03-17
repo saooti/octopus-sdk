@@ -99,6 +99,7 @@
             :size="ps"
             :show-count="true"
             :emission-id="emissionId"
+            :emission="emission"
             :category-filter="false"
             :edit-right="editRight"
             :productor-id="[emission.orga.id]"

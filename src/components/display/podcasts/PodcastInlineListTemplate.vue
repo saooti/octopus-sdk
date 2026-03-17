@@ -5,8 +5,9 @@
         {{ title }}
       </component>
     </div>
+
     <div v-if="!podcastId" class="d-flex justify-content-between">
-      <div class="d-flex">
+      <div v-if="!noSort" class="d-flex">
         <button
           class="btn btn-underline"
           :class="{ active: !popularSort }"
@@ -82,6 +83,8 @@ const props = defineProps({
   noRubriquageId: { default: () => [], type: Array as () => Array<number> },
   podcastId: { default: undefined, type: Number },
   titleTag: { default: "h2", type: String },
+  /** Hide sort options */
+  noSort: { default: false, type: Boolean }
 })
 
 //Emits

@@ -83,6 +83,7 @@ const props = withDefaults(defineProps<{
   includeHidden?: boolean;
   showCount?: boolean;
   displaySortText?: boolean;
+  /** Criteria to sort on */
   sortCriteria?: PodcastSort;
   validity?: 'true'|'false'|''|boolean; // TODO improve this
   rubriqueId?: Array<number>;
@@ -96,6 +97,8 @@ const props = withDefaults(defineProps<{
   beneficiaries?: Array<string>;
   /** The emission groups to filter on */
   emissionGroups?: Array<EmissionGroup>;
+  /** The seasons to filter on */
+  seasons?: Array<number>;
 }>(), {
   first: 0,
   size: 30,
@@ -223,7 +226,8 @@ async function fetchContent(reset: boolean): Promise<void> {
     processingStatus: [PodcastProcessingStatus.Ready, PodcastProcessingStatus.Processing],
     withVideo: props.withVideo,
     tags: props.includeTag?.length ? props.includeTag : undefined,
-    beneficiaries: props.beneficiaries ?? undefined
+    beneficiaries: props.beneficiaries ?? undefined,
+    season: props.seasons
   };
 
   try {

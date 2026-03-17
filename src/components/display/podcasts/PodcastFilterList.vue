@@ -18,7 +18,9 @@
         :label="t('Search')"
       />
     </div>
+
     <PodcastList
+      v-if="!showSeasons"
       :first="dfirst"
       :size="dsize"
       :iab-id="iabId"
@@ -34,6 +36,36 @@
       :force-update-parameters="forceUpdateParameters"
       @fetch="fetch"
     />
+    <ClassicNav
+      v-else
+      v-model:active-tab="activeSeasonTab"
+      :tab-number="seasons.length"
+    >
+      <template v-for="season in seasons" #[tabNameSlot(season)]>
+        {{ $t('Podcast - Season N', { season }) }}
+      </template>
+
+      <template v-for="season in seasons" #[tabContentSlot(season)] :key="season">
+        <PodcastList
+          class="flex-grow-1"
+          :first="dfirst"
+          :size="dsize"
+          :iab-id="iabId"
+          :query="query"
+          :participant-id="participantId"
+          :emission-id="emissionId"
+          :organisation-id="productorId"
+          :sort-criteria="sort"
+          :reload="reloadList"
+          :include-hidden="editRight"
+          :show-count="showCount"
+          :display-sort-text="false"
+          :force-update-parameters="forceUpdateParameters"
+          :seasons="[season]"
+          @fetch="fetch"
+        />
+      </template>
+    </ClassicNav>
   </section>
 </template>
 
@@ -41,28 +73,40 @@
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import PodcastList from "./PodcastList.vue";
 import { Category } from "@/stores/class/general/category";
-import { defineAsyncComponent, ref, Ref, computed, watch } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, watch, onMounted } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
+import ClassicNav from "../../misc/ClassicNav.vue";
+import { Emission } from "@/stores/class/general/emission";
+import { useSeasonsManagement } from "../../composable/useSeasonsManagement";
+import { PodcastSort } from "../../../api/podcastApi";
 const CategoryChooser = defineAsyncComponent(
   () => import("../categories/CategoryChooser.vue"),
 );
 
 //Props 
-const props = defineProps({
-  first: { default: 0, type: Number },
-  size: { default: 30, type: Number },
-  query: { default: undefined, type: String },
-  participantId: { default: undefined, type: Number },
-  name: { default: undefined, type: String },
-  emissionId: { default: undefined, type: Number },
-  categoryFilter: { default: false, type: Boolean },
-  reload: { default: false, type: Boolean },
-  editRight: { default: false, type: Boolean },
-  productorId: { default: () => [], type: Array as () => Array<string> },
-  showCount: { default: false, type: Boolean },
-  forceUpdateParameters: { default: false, type: Boolean },
-})
+const props = withDefaults(defineProps<{
+  first?: number;
+  size?: number;
+  query?: string;
+  participantId?: number;
+  name?: string;
+  emissionId?: number;
+  categoryFilter?: boolean;
+  reload?: boolean;
+  editRight?: boolean;
+  productorId?: Array<string>;
+  showCount?: boolean;
+  forceUpdateParameters?: boolean;
+  /**
+   * Emission for which to display podcasts
+   * If set, will check for seasons
+   */
+  emission?: Emission;
+}>(), {
+  first: 0,
+  size: 30
+});
 
 //Emits
 const emit = defineEmits(["fetch", "update:query"]);
@@ -73,9 +117,17 @@ const dsize = ref(props.size);
 const searchPattern = ref(props.query ?? "");
 const reloadList = ref(false);
 const iabId : Ref<number | undefined>= ref(undefined);
+const activeSeasonTab = ref(0);
 
 //Composables
 const { t } = useI18n();
+const { areSeasonsEnabled } = useSeasonsManagement();
+
+onMounted(() => {
+  if (showSeasons.value === true) {
+    activeSeasonTab.value = props.emission.seasonCount - 1;
+  }
+});
 
 //Computed
 const titleFilter = computed(() => {
@@ -84,7 +136,29 @@ const titleFilter = computed(() => {
     : t("All podcast emission button");
 });
 const query = computed(() => searchPattern.value.length > 3 ? searchPattern.value : "");
-const sort = computed(() =>  !query.value.length ? "DATE" : "SCORE");
+const sort = computed((): PodcastSort => {
+  if(showSeasons.value === true) {
+    return PodcastSort.SEASONAL;
+  } else if(!query.value.length) {
+    return PodcastSort.DATE;
+  } else {
+    return PodcastSort.SCORE;
+  }
+});
+
+const showSeasons = computed(() => {
+  return props.emission !== undefined && areSeasonsEnabled(props.emission) && props.emission.seasonCount > 0;
+});
+
+const seasons = computed((): Array<number> => {
+  const ary: Array<number> = [];
+  if (showSeasons.value === true) {
+    for (let i = 1; i <= props.emission.seasonCount; i++) {
+      ary.push(i);
+    }
+  }
+  return ary;
+});
 
 //Watch
 watch(()=>props.reload, () => {
@@ -100,5 +174,14 @@ function onCategorySelected(category: Category | undefined): void {
 }
 function fetch(podcasts: Array<Podcast>): void {
   emit("fetch", podcasts);
+}
+
+/** Name of the slot for the tab's title */
+function tabNameSlot(season: number): string {
+  return `${season - 1}`;
+}
+/** Name of the slot for the tab's content */
+function tabContentSlot(season: number): string {
+  return `tab${season - 1}`;
 }
 </script>
