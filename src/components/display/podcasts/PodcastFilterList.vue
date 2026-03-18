@@ -73,7 +73,7 @@
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import PodcastList from "./PodcastList.vue";
 import { Category } from "@/stores/class/general/category";
-import { defineAsyncComponent, ref, Ref, computed, watch, onMounted } from "vue";
+import { defineAsyncComponent, ref, Ref, computed, watch } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
 import ClassicNav from "../../misc/ClassicNav.vue";
@@ -120,17 +120,10 @@ const dsize = ref(props.size);
 const searchPattern = ref(props.query ?? "");
 const reloadList = ref(false);
 const iabId : Ref<number | undefined>= ref(undefined);
-const activeSeasonTab = ref(0);
 
 //Composables
 const { t } = useI18n();
 const { areSeasonsEnabled } = useSeasonsManagement();
-
-onMounted(() => {
-  if (showSeasons.value === true) {
-    activeSeasonTab.value = props.emission.seasonCount - 1;
-  }
-});
 
 //Computed
 const titleFilter = computed(() => {
@@ -139,6 +132,13 @@ const titleFilter = computed(() => {
     : t("All podcast emission button");
 });
 const query = computed(() => searchPattern.value.length > 3 ? searchPattern.value : "");
+
+const showSeasons = computed(() => {
+  return props.emission !== undefined && areSeasonsEnabled(props.emission) && props.emission.seasonCount > 0;
+});
+
+const activeSeasonTab = ref(showSeasons.value ? (props.emission?.seasonCount ?? 1) - 1 : 0);
+
 const sort = computed((): PodcastSort => {
   if(showSeasons.value === true) {
     return PodcastSort.SEASONAL;
@@ -147,10 +147,6 @@ const sort = computed((): PodcastSort => {
   } else {
     return PodcastSort.SCORE;
   }
-});
-
-const showSeasons = computed(() => {
-  return props.emission !== undefined && areSeasonsEnabled(props.emission) && props.emission.seasonCount > 0;
 });
 
 const seasons = computed((): Array<number> => {

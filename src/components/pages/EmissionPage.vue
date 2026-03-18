@@ -260,7 +260,7 @@ async function getEmissionDetails(): Promise<void> {
   }
 }
 function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
-  if (season !== undefined && season !== emission.value.seasonCount) {
+  if (season !== undefined && season !== emission.value?.seasonCount) {
     return;
   }
 
