@@ -421,5 +421,8 @@
     "Emission subtitle": "Sottotitolo dello spettacolo",
     "Podcast type - Full": "Standard",
     "Podcast type - Trailer": "Rimorchio",
-    "Podcast type - Bonus": "Bonus"
+    "Podcast type - Bonus": "Bonus",
+    "Podcast - Season N": "Stagione {season}",
+    "Podcast - Season": "Stagione",
+    "Podcast - Episode number": "Numero dell'episodio"
 }

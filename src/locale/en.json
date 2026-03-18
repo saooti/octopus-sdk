@@ -420,5 +420,8 @@
   "Emission subtitle": "Subtitle of the show",
   "Podcast type - Full": "Standard",
   "Podcast type - Trailer": "Trailer",
-  "Podcast type - Bonus": "Bonuses"
+  "Podcast type - Bonus": "Bonuses",
+  "Podcast - Season N": "Saison {season}",
+  "Podcast - Season": "Season",
+  "Podcast - Episode number": "Episode number"
 }

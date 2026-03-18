@@ -54,7 +54,7 @@
                 :just-buttons="true"
               />
               <div class="ms-2 fw-bold">
-                {{ t("Listen to the latest episode") }}
+                {{ messageListenEpisode }}
               </div>
             </div>
 
@@ -99,6 +99,7 @@
             :size="ps"
             :show-count="true"
             :emission-id="emissionId"
+            :emission="emission"
             :category-filter="false"
             :edit-right="editRight"
             :productor-id="[emission.orga.id]"
@@ -138,6 +139,7 @@ import { useSimplePageParam } from "../composable/route/useSimplePageParam";
 import ErrorMessage from "../misc/ErrorMessage.vue";
 import ClassicHelpButton from "../misc/ClassicHelpButton.vue";
 import { emissionApi } from "../../api/emissionApi";
+import { useSeasonsManagement } from "../composable/useSeasonsManagement";
 
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(
@@ -193,15 +195,16 @@ const { t } = useI18n();
 const { useProxyImageUrl } = useImageProxy();
 const { isPodcastmaker, isEditRights, authOrgaId } = useOrgaComputed();
 const { updatePathParams } = useSeoTitleUrl();
-const {handle403} = useErrorHandler();
+const { handle403 } = useErrorHandler();
 const filterStore = useFilterStore();
-const generalStore= useGeneralStore();
-const route= useRoute();
+const generalStore = useGeneralStore();
+const route = useRoute();
 const {
   searchPattern,
   paginateFirst,
   isInit
 } = useSimplePageParam(props, true);
+const { areSeasonsEnabled, formatSeason } = useSeasonsManagement();
 
 
 //Computed
@@ -209,9 +212,17 @@ const name = computed(() => emission.value?.name ?? "");
 const description = computed(() => emission.value?.description ?? "");
 const editRight = computed(() => isEditRights(emission.value?.orga.id));
 
+const messageListenEpisode = computed((): string => {
+  const base = t("Listen to the latest episode");
+  if (lastPodcast.value !== undefined && areSeasonsEnabled(emission.value)) {
+    return base + ` (${formatSeason(lastPodcast.value)})`;
+  } else {
+    return base;
+  }
+});
 
 //Watch
-watch(()=>props.emissionId, () => {getEmissionDetails()}, {immediate: true});
+watch(() => props.emissionId, getEmissionDetails, { immediate: true });
 
 
 onBeforeUnmount(() => {
@@ -248,12 +259,13 @@ async function getEmissionDetails(): Promise<void> {
     initError();
   }
 }
-function podcastsFetched(podcasts: Array<Podcast>) {
+function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
+  if (season !== undefined && season !== emission.value?.seasonCount) {
+    return;
+  }
+
   for (const podcast of podcasts) {
-    if (
-      "READY" === podcast.processingStatus &&
-      podcast.availability.visibility
-    ) {
+    if ("READY" === podcast.processingStatus && podcast.availability.visibility) {
       lastPodcast.value = podcast;
       return;
     }

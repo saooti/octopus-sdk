@@ -11,6 +11,7 @@
     :rubrique-id="rubriqueId"
     :no-rubriquage-id="noRubriquageId"
     :title-tag="titleTag"
+    :no-sort="noSort"
     @sort-chrono="sortChrono"
     @sort-popular="sortPopular"
   >
@@ -59,10 +60,14 @@ const props = defineProps({
   rubriquageId: { default: () => [], type: Array as () => Array<number> },
   noRubriquageId: { default: () => [], type: Array as () => Array<number> },
   query: { default: undefined, type: String },
+  /** Filter on season */
+  season: { default: undefined, type: Number },
   lastThreeMonths: { default: false, type: Boolean },
   titleTag: { default: "h2", type: String },
   /** The podcast from which suggestions are made */
-  podcastId: { type: Number }
+  podcastId: { type: Number },
+  /** Hide sort options */
+  noSort: { default: false, type: Boolean }
 })
 
 //Emits
@@ -104,6 +109,7 @@ onBeforeMount(()=>{
 
 //Methods
 async function fetchNext(): Promise<void> {
+  // TODO use podcastApi
   const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
     api: 0,
     path: "podcast/search",
@@ -123,10 +129,10 @@ async function fetchNext(): Promise<void> {
       sort: popularSort.value ? "POPULARITY" : "DATE",
       query: props.query,
       includeStatus: ["READY", "PROCESSING"],
-      after:
-      popularSort.value && props.lastThreeMonths
+      after: popularSort.value && props.lastThreeMonths
           ? dayjs().subtract(3, "months").toISOString()
           : undefined,
+      season: props.season
     },
     specialTreatement: true,
   });

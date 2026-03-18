@@ -51,6 +51,7 @@ main, #app{
   label.required:after {
     content: "*";
     font-weight: bold;
+    margin-left: 3px;
   }
 
   /** Link style */
