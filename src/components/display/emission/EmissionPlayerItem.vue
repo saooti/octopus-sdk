@@ -17,11 +17,10 @@
           width="330"
           height="330"
           aria-hidden="true"
-        alt=""
-          
           :title="t('Emission name image', { name: emission.name })"
+          :alt="t('Emission name image', { name: emission.name })"
           class="img-box"
-        />
+        >
       </div>
       <div class="fw-bold text-uppercase text-truncate p-2">
         {{ emission.name }}
@@ -64,7 +63,10 @@
             :podcast="p"
           />
         </div>
-        <PodcastPlayBasicButton v-if="!isProgressBar"/>
+        <PodcastPlayBasicButton
+          v-if="!isProgressBar"
+          :podcast="p"
+        />
       </div>
     </div>
     <div

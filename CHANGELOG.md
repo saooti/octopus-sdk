@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.8.1 (20/03/2026)
+
+**Fix**
+
+- Correction `EmissionPlayerItem` ne permettant pas de lire un épisode
+
 ## 41.8.0 (18/03/2026)
 
 **Features**
