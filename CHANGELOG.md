@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 41.8.2 (23/03/2026)
+
+**Fix**
+
+- **14083** Ajustements système de saison
+  - Le bon dernier épisode est récupéré sur les pages d'émissions
+  - Les saisons sont correctement énumérées sur les pages d'émissions
+
 ## 41.8.1 (20/03/2026)
 
 **Fix**

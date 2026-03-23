@@ -204,7 +204,7 @@ const {
   paginateFirst,
   isInit
 } = useSimplePageParam(props, true);
-const { areSeasonsEnabled, formatSeason } = useSeasonsManagement();
+const { areSeasonsEnabled, formatSeason, getMaxSeason } = useSeasonsManagement();
 
 
 //Computed
@@ -259,16 +259,22 @@ async function getEmissionDetails(): Promise<void> {
     initError();
   }
 }
-function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
-  if (season !== undefined && season !== emission.value?.seasonCount) {
-    return;
-  }
 
-  for (const podcast of podcasts) {
-    if ("READY" === podcast.processingStatus && podcast.availability.visibility) {
-      lastPodcast.value = podcast;
+function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
+  const isReadyAndVisible = (p: Podcast) => "READY" === p.processingStatus && p.availability.visibility;
+
+  if (areSeasonsEnabled(emission.value)) {
+    // Ignore results that are not from the last season
+    const maxSeason = getMaxSeason(emission.value);
+    if (season !== undefined && season !== maxSeason) {
       return;
     }
+    // If seasons are enabled, take last element
+    lastPodcast.value = podcasts.findLast(isReadyAndVisible);
+  } else {
+    // If seasons are disabled, we have a standard date desc sort, so we take
+    // first element
+    lastPodcast.value = podcasts.find(isReadyAndVisible);
   }
 }
 

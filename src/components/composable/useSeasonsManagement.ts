@@ -36,8 +36,17 @@ export const useSeasonsManagement = () => {
         }
     }
 
+    /**
+     * Returns the highest season number for the given emission, or -Infinity if none
+     * @param emission The emission to check
+     */
+    function getMaxSeason(emission: Emission | undefined): number {
+        return Math.max(...(emission?.seasons ?? []));
+    }
+
     return {
         areSeasonsEnabled,
-        formatSeason
+        formatSeason,
+        getMaxSeason,
     }
 }

@@ -23,7 +23,7 @@ import { emissionApi } from '@/api/emissionApi';
 const publicOrga = { id: 'org-1', name: 'Test', imageUrl: '', privacy: 'PUBLIC' };
 
 function makeEmission(seasonMode: SeasonMode) {
-    return { ...emptyEmissionData(), seasonMode, seasonCount: 2, orga: publicOrga };
+    return { ...emptyEmissionData(), seasonMode, seasons: [1, 2], orga: publicOrga };
 }
 
 function makeReadyPodcast(seasonMode: SeasonMode = SeasonMode.NO_SEASON) {
@@ -40,8 +40,18 @@ async function mountPage(seasonMode: SeasonMode) {
     return mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
 }
 
-async function triggerFetch(wrapper: VueWrapper, seasonMode: SeasonMode, season?: number) {
-    await wrapper.findComponent({ name: 'PodcastFilterList' }).vm.$emit('fetch', [makeReadyPodcast(seasonMode)], season);
+async function mountWithSeasons(seasons: number[]) {
+    vi.mocked(emissionApi.get).mockResolvedValue({
+        ...emptyEmissionData(),
+        seasonMode: SeasonMode.SEASON_WITH_PODCAST_NUMBERING,
+        seasons,
+        orga: publicOrga,
+    });
+    return mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+}
+
+async function triggerFetch(wrapper: VueWrapper, seasonMode: SeasonMode, season?: number, podcasts?: ReturnType<typeof makeReadyPodcast>[]) {
+    await wrapper.findComponent({ name: 'PodcastFilterList' }).vm.$emit('fetch', podcasts ?? [makeReadyPodcast(seasonMode)], season);
     await nextTick();
 }
 
@@ -70,7 +80,7 @@ describe('EmissionPage', () => {
     });
 
     describe('podcastsFetched season filtering', () => {
-        // seasonCount is 2 in makeEmission
+        // seasons is [1, 2] in makeEmission, so max season is 2
         it.each([undefined, 2])('shows lastPodcast when season is %s', async (season) => {
             const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, season);
@@ -80,6 +90,50 @@ describe('EmissionPage', () => {
         it('ignores podcasts from earlier seasons', async () => {
             const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 1);
+            expect(wrapper.text()).not.toContain('Listen to the latest episode');
+        });
+
+        it('accepts the highest season in the seasons array', async () => {
+            const wrapper = await mountWithSeasons([1, 2, 3]);
+            await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 3);
+            expect(wrapper.text()).toContain('Listen to the latest episode');
+        });
+
+        it('ignores a season below the max in the seasons array', async () => {
+            const wrapper = await mountWithSeasons([1, 2, 3]);
+            await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 2);
+            expect(wrapper.text()).not.toContain('Listen to the latest episode');
+        });
+    });
+
+    describe('podcastsFetched podcast selection', () => {
+        function makePodcast(seasonMode: SeasonMode, episodeNumber: number, { ready = true, visible = true } = {}) {
+            const podcast = makeReadyPodcast(seasonMode);
+            podcast.seasonEpisodeNumber = episodeNumber;
+            if (!ready) podcast.processingStatus = PodcastProcessingStatus.Processing;
+            if (!visible) podcast.availability.visibility = false;
+            return podcast;
+        }
+
+        it('with seasons enabled, selects the last ready visible podcast', async () => {
+            const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
+            const podcasts = [
+                makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 1),
+                makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 5),
+            ];
+            await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, undefined, podcasts);
+            expect(wrapper.text()).toContain('S1·E5');
+        });
+
+        it.each([SeasonMode.SEASON_WITH_PODCAST_NUMBERING, SeasonMode.NO_SEASON])('skips non-ready podcasts (%s)', async (seasonMode) => {
+            const wrapper = await mountPage(seasonMode);
+            await triggerFetch(wrapper, seasonMode, undefined, [makePodcast(seasonMode, 1, { ready: false })]);
+            expect(wrapper.text()).not.toContain('Listen to the latest episode');
+        });
+
+        it.each([SeasonMode.SEASON_WITH_PODCAST_NUMBERING, SeasonMode.NO_SEASON])('skips non-visible podcasts (%s)', async (seasonMode) => {
+            const wrapper = await mountPage(seasonMode);
+            await triggerFetch(wrapper, seasonMode, undefined, [makePodcast(seasonMode, 1, { visible: false })]);
             expect(wrapper.text()).not.toContain('Listen to the latest episode');
         });
     });

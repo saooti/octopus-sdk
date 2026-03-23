@@ -39,13 +39,13 @@
     <ClassicNav
       v-else
       v-model:active-tab="activeSeasonTab"
-      :tab-number="seasons.length"
+      :tab-number="emission.seasons.length"
     >
-      <template v-for="season in seasons" #[tabNameSlot(season)]>
+      <template v-for="season in emission.seasons" #[tabNameSlot(season)]>
         {{ $t('Podcast - Season N', { season }) }}
       </template>
 
-      <template v-for="season in seasons" #[tabContentSlot(season)] :key="season">
+      <template v-for="season in emission.seasons" #[tabContentSlot(season)] :key="season">
         <PodcastList
           class="flex-grow-1"
           :first="dfirst"
@@ -123,7 +123,7 @@ const iabId : Ref<number | undefined>= ref(undefined);
 
 //Composables
 const { t } = useI18n();
-const { areSeasonsEnabled } = useSeasonsManagement();
+const { areSeasonsEnabled, getMaxSeason } = useSeasonsManagement();
 
 //Computed
 const titleFilter = computed(() => {
@@ -134,10 +134,10 @@ const titleFilter = computed(() => {
 const query = computed(() => searchPattern.value.length > 3 ? searchPattern.value : "");
 
 const showSeasons = computed(() => {
-  return props.emission !== undefined && areSeasonsEnabled(props.emission) && props.emission.seasonCount > 0;
+  return props.emission !== undefined && areSeasonsEnabled(props.emission) && (props.emission.seasons?.length ?? 0) > 0;
 });
 
-const activeSeasonTab = ref(showSeasons.value ? (props.emission?.seasonCount ?? 1) - 1 : 0);
+const activeSeasonTab = ref(showSeasons.value ? (getMaxSeason(props.emission) - 1) : 0);
 
 const sort = computed((): PodcastSort => {
   if(showSeasons.value === true) {
@@ -147,16 +147,6 @@ const sort = computed((): PodcastSort => {
   } else {
     return PodcastSort.SCORE;
   }
-});
-
-const seasons = computed((): Array<number> => {
-  const ary: Array<number> = [];
-  if (showSeasons.value === true) {
-    for (let i = 1; i <= props.emission.seasonCount; i++) {
-      ary.push(i);
-    }
-  }
-  return ary;
 });
 
 //Watch

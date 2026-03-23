@@ -54,8 +54,8 @@ export interface Emission {
   groupIds?: Array<number>
   /** Seasons configuration */
   seasonMode: SeasonMode;
-  /** Number of seasons on this emission */
-  seasonCount: number;
+  /** Seasons defined on emission */
+  seasons?: Array<number>;
   /** Indicates that the emission has explicit content */
   explicit?: boolean;
 }
@@ -72,7 +72,6 @@ export function emptyEmissionData(orga?: Organisation): Emission {
     rubriqueIds: [],
     monetisable: "UNDEFINED",
     limits: {},
-    seasonMode: SeasonMode.NO_SEASON,
-    seasonCount: 0
+    seasonMode: SeasonMode.NO_SEASON
   };
 }
