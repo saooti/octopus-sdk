@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import ClassicSelect from "../../form/ClassicSelect.vue";
-import { Organisation } from "@/stores/class/general/organisation";
+import { Organisation } from "../../../stores/class/general/organisation";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

@@ -26,6 +26,7 @@
 - Correction warning avec les icônes de `useSharePlatforms`
 - Ajustement composants pour les podcastmakers
 - Mise à jour des dépendances
+- Les exports d'organisation viennent du SDK et non plus du package parent
 
 ## 41.8.4 (24/03/2026)
 

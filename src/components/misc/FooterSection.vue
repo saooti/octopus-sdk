@@ -88,7 +88,7 @@ import { useGeneralStore } from "../../stores/GeneralStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { Category } from "@/stores/class/general/category";
 import { computed, defineAsyncComponent, ref, watch } from "vue";
-import { Organisation } from "@/stores/class/general/organisation";
+import { Organisation } from "../../stores/class/general/organisation";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 const OrganisationChooserLight = defineAsyncComponent(
