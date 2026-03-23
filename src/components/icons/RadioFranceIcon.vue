@@ -15,25 +15,25 @@
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M37.0892 33.8774C37.0892 35.7523 36.5961 37.5174 35.7265 39.0643H50.1862C50.5743 37.3938 50.7809 35.6586 50.7809 33.8774C50.7809 23.6473 44.0269 14.9123 34.5121 11.4499V0.596397H21.9553V23.3202C23.0498 22.9984 24.2131 22.8248 25.419 22.8248C31.8644 22.8248 37.0892 27.7733 37.0892 33.8774Z"
-                fill="url(#paint0_linear_75_103)"
+                :fill="'url(#' + uid + 'p0)'"
             />
             <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M29.5724 44.3362C28.2958 44.7861 26.9145 45.0321 25.4717 45.0321C18.9987 45.0321 13.7507 40.0835 13.7507 33.9785C13.7507 32.2762 14.1593 30.664 14.8881 29.2236H0.500687C0.173332 30.7608 0 32.3507 0 33.9785C0 47.2455 11.404 58 25.4717 58C26.8678 58 28.2374 57.8924 29.5724 57.6889V44.3362Z"
-                fill="url(#paint1_linear_75_103)"
+                :fill="'url(#' + uid + 'p1)'"
             />
             <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M37.1502 33.909C37.1502 35.7895 36.6555 37.5598 35.7831 39.1113H50.2891C50.6784 37.4358 50.8857 35.6954 50.8857 33.909C50.8857 23.6484 44.1101 14.8873 34.5649 11.4146V0.528656H21.9678V23.3202C23.0658 22.9975 24.2329 22.8234 25.4426 22.8234C31.9087 22.8234 37.1502 27.7867 37.1502 33.909Z"
-                fill="url(#paint2_linear_75_103)"
+                :fill="'url(#' + uid + 'p2)'"
             />
             <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M29.5386 44.2967C28.2634 44.7479 26.8837 44.9945 25.4426 44.9945C18.977 44.9945 13.735 40.0316 13.735 33.9089C13.735 32.2017 14.1431 30.5848 14.8711 29.1403H0.500114C0.173133 30.682 0 32.2764 0 33.9089C0 47.2143 11.3909 58 25.4426 58C26.8371 58 28.2051 57.8921 29.5386 57.688V44.2967Z"
-                fill="url(#paint3_linear_75_103)"
+                :fill="'url(#' + uid + 'p3)'"
             />
             <path
                 fill-rule="evenodd"
@@ -98,7 +98,7 @@
             />
             <defs>
                 <linearGradient
-                    id="paint0_linear_75_103"
+                    :id="uid + 'p0'"
                     x1="37.483"
                     y1="3.20798"
                     x2="21.3118"
@@ -112,7 +112,7 @@
                     <stop offset="1" stop-color="#FD0323" />
                 </linearGradient>
                 <linearGradient
-                    id="paint1_linear_75_103"
+                    :id="uid + 'p1'"
                     x1="8.26123"
                     y1="34.1806"
                     x2="25.2003"
@@ -124,7 +124,7 @@
                     <stop offset="1" stop-color="#FF0101" />
                 </linearGradient>
                 <linearGradient
-                    id="paint2_linear_75_103"
+                    :id="uid + 'p2'"
                     x1="37.5457"
                     y1="3.14803"
                     x2="21.3224"
@@ -138,7 +138,7 @@
                     <stop offset="1" stop-color="#FD0323" />
                 </linearGradient>
                 <linearGradient
-                    id="paint3_linear_75_103"
+                    :id="uid + 'p3'"
                     x1="8.25178"
                     y1="34.035"
                     x2="25.2587"
@@ -155,8 +155,12 @@
 </template>
 
 <script setup lang="ts">
+import { useId } from 'vue'
+
+const uid = useId()
+
 defineProps({
-    size:      { default: 50,             type: Number },
+    size:      { default: 24,             type: Number },
     title:     { default: undefined,      type: String },
 })
 </script>

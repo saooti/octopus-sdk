@@ -6,6 +6,7 @@
 
 - **14083** - Correction affichage saisons sur page émission s'il y a un creux
   (par exemple saisons 2, 3, et pas de 1)
+- **14373** - Correction taille icone Radio France
 
 ## 41.8.2 (23/03/2026)
 
