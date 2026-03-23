@@ -1,10 +1,17 @@
 # CHANGELOG
 
+## 41.8.3 (En cours)
+
+**Fix**
+
+- **14083** - Correction affichage saisons sur page émission s'il y a un creux
+  (par exemple saisons 2, 3, et pas de 1)
+
 ## 41.8.2 (23/03/2026)
 
 **Fix**
 
-- **14083** Ajustements système de saison
+- **14083** - Ajustements système de saison
   - Le bon dernier épisode est récupéré sur les pages d'émissions
   - Les saisons sont correctement énumérées sur les pages d'émissions
 
