@@ -11,6 +11,8 @@ export type OrganisationAttributes = {
   ttsParams?: string;
   /** Translation parameters (JSON) */
   'translation-config'?: string;
+  /** Language of the RSS */
+  'rss-language'?: string;
 };
 
 export interface Organisation {
