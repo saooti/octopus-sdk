@@ -245,6 +245,31 @@ describe('useRights', () => {
         });
     });
 
+    describe('canEditTranscript', () => {
+        const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123' } as Podcast;
+        const otherPodcast = { podcastId: 2, createdByUserId: 'other-user' } as Podcast;
+
+        ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
+            it(`allows ${role} to edit transcript of any podcast`, async () => {
+                await setup([role]);
+                expect(useRights().canEditTranscript(otherPodcast)).toBe(true);
+            });
+        });
+
+        ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+            it(`${role} can only edit transcript of own podcast`, async () => {
+                await setup([role]);
+                expect(useRights().canEditTranscript(ownPodcast)).toBe(true);
+                expect(useRights().canEditTranscript(otherPodcast)).toBe(false);
+            });
+        });
+
+        it('denies unrelated roles', async () => {
+            await setup(['PODCAST_CRUD']);
+            expect(useRights().canEditTranscript(ownPodcast)).toBe(false);
+        });
+    });
+
     describe('Other permissions', () => {
         describe('canEditCodeInsertPlayer', () => {
             ['ADMIN', 'ORGANISATION'].forEach(role => {

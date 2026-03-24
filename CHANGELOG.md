@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.8.4 (En cours)
+
+**Fix**
+
+- **14291** - Correction vérification sur droits de transcription
+
 ## 41.8.3 (23/03/2026)
 
 **Fix**
