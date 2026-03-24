@@ -53,8 +53,8 @@ const props = defineProps({
     default: () => [],
     type: Array as () => Array<SelectOption>,
   },
-  topOption: { default: undefined,type: Object as () => SelectOption,
-  },
+  /** Option displayed at the top of list */
+  topOption: { default: undefined,type: Object as () => SelectOption },
   textInit: { default: undefined, type: [String, Number] },
   classLabel: { default: "form-label", type: String },
   orderOptions: { default: true, type: Boolean},
