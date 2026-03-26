@@ -6,6 +6,8 @@
 
 - **12535** - Implémentation de la traduction des sous-titres
   - Mise en place de l'api `transcriptionApi` pour simplifier les appels
+  - `PodcastRawTranscript` permet maintenant de choisir la langue de la
+    transcription
 - **14357** - Affichage des sous-titres et résumés d'épisodes, et des
   sous-titres des émissions
   - Ajout de nouveaux paramètres pour contrôler cet affichage :

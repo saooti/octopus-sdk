@@ -13,6 +13,21 @@
             >
                 <EyeOutlineIcon class="me-1" /> {{ t('Transcript Accessibility') }}
             </button>
+
+            <div
+                v-if="isOpen"
+                class="language-selector"
+            >
+                <span class="me-2">[WIP] Langues disponibles</span>
+                <ClassicSelect
+                    :text-init="currentLanguage"
+                    :is-disabled="!loadingDone"
+                    :options="availableLanguagesOptions"
+                    :display-label="false"
+                    @update:text-init="changeLanguage"
+                />
+            </div>
+            
             <button
                 class="btn btn-transcript"
                 :class="{ open: isOpen }"
@@ -23,13 +38,13 @@
         </div>
         <div v-if="isOpen" class="transcription-body">
             <ClassicLoading
-                :loading-text="!firstLoaded ? t('Loading content ...') : undefined"
+                :loading-text="!loadingDone ? t('Loading content ...') : undefined"
             />
             <div class="transcription-text">
-                <template v-if="firstLoaded && transcript?.length">
+                <template v-if="loadingDone && transcript?.length">
                     {{ transcript }}
                 </template>
-                <template v-if="firstLoaded && !transcript?.length">
+                <template v-if="loadingDone && !transcript?.length">
                     {{ t("Transcript does not yet exist for this episode") }}
                 </template>
             </div>
@@ -41,23 +56,31 @@
 import cookiesHelper from "../../../helper/cookiesHelper";
 import EyeOutlineIcon from "vue-material-design-icons/EyeOutline.vue";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import { computed, defineAsyncComponent, Ref, ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { transcriptionApi } from "../../../api/transcriptionApi";
+import { transcriptionApi, TranslationState } from "../../../api/transcriptionApi";
+import ClassicSelect from "../../form/ClassicSelect.vue";
 const AccessibilityModal = defineAsyncComponent(
     () => import("../accessibility/AccessibilityModal.vue"),
 );
 
 //Props 
-const props = defineProps({
-    podcastId: { default: undefined, type: Number },
-})
+const props = defineProps<{
+    /** ID of the podcast for which to display transcription */
+    podcastId: number;
+}>();
 
 //Data 
 const isOpen = ref(false);
-const firstLoaded = ref(false);
+const loadingDone = ref(false);
 const isAccessibilityModal = ref(false);
-const transcript: Ref<string | undefined> = ref(undefined);
+const transcript = ref<string|undefined>(undefined);
+/** Native language of the podcast */
+const nativeLanguage = ref('');
+/** List of languages for which a transcription exists */
+const availableLanguages = ref<Array<string>>([]);
+/** Currently shown language */
+const currentLanguage = ref('');
 
 //Composables
 const { t } = useI18n();
@@ -65,10 +88,20 @@ const { t } = useI18n();
 //Computed
 const buttonText = computed(() => isOpen.value? t("Hide transcript"): t("View transcript"));
 
+const availableLanguagesOptions = computed(() => {
+    return availableLanguages.value.map(lang => ({
+        title: lang,
+        value: lang
+    }));
+})
+
 //Watch
 watch(isOpen, () => {
-    if (isOpen.value && !firstLoaded.value) {
-        fetchTranscript();
+    if (isOpen.value && !loadingDone.value) {
+        if (props.podcastId) {
+            fetchTranscript();
+            fetchAvailableLanguages();
+        }
         getAccessibility();
     }
 });
@@ -88,9 +121,11 @@ function getAccessibility(){
         setCssProperty('--octopus-accessibility-color', color);
     }
 }
+
 function setCssProperty(name: string, value: string){
     document.documentElement.style.setProperty(name,value);
 }
+
 function saveAccessibility(accessibility: {fontSize: number,background: string,color: string}){
     setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
     cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
@@ -100,27 +135,61 @@ function saveAccessibility(accessibility: {fontSize: number,background: string,c
     cookiesHelper.setCookie("octopus-color",accessibility.color);
     isAccessibilityModal.value = false;
 }
+
 async function fetchTranscript() {
-    if (!props.podcastId) {
-        return;
-    }
     try {
         transcript.value = await transcriptionApi.getRawTranscription(props.podcastId);
     } catch(error) {
         //Do nothing
         console.error(error);
     }
-    firstLoaded.value = true;
+    loadingDone.value = true;
+}
+
+async function fetchAvailableLanguages(): Promise<void> {
+    try {
+        const translation = await transcriptionApi.getTranslations(props.podcastId);
+        availableLanguages.value = translation.translations
+            .filter(t => t.state === TranslationState.FINISHED)
+            .map(t => t.language);
+        nativeLanguage.value = translation.nativeLanguage;
+        currentLanguage.value = translation.nativeLanguage;
+        availableLanguages.value.unshift(translation.nativeLanguage);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function changeLanguage(language: string): Promise<void> {
+    loadingDone.value = false;
+    currentLanguage.value = language;
+    transcript.value = '';
+    try {
+        const srt = await transcriptionApi.getTranslation(props.podcastId, language);        
+        transcript.value = transcriptionApi.convertSrtToPlainText(srt);
+    } catch (error) {
+        console.error(error);
+    }
+    loadingDone.value = true;
 }
 </script>
 
-<style lang="scss">
-:root {
+<style scoped lang="scss">
+.octopus-app {
   --octopus-accessibility-font-size: 16px;
   --octopus-accessibility-background: var(--octopus-background);
   --octopus-accessibility-color: var(--octopus-color-text);
-}
-.octopus-app {
+
+  .language-selector {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+
+    span {
+        font-weight: 600;
+    }
+  }
+
   .transcription-section-buttons{
     display: flex;
     justify-content: space-between;

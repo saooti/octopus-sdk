@@ -39,7 +39,20 @@ export interface PodcastTranslationData {
 async function getTranslations(podcastId: number): Promise<PodcastTranslationData> {
     return classicApi.fetchData<PodcastTranslationData>({
         api: ModuleApi.SPEECHTOTEXT,
-        path: 'transcription/' + podcastId
+        path: `transcription/${podcastId}/languages`
+    });
+}
+
+/**
+ * Returns the translation in a given language for the podcast
+ * @param podcastId ID of the podcast
+ * @param language The target language
+ * @returns The transcription
+ */
+async function getTranslation(podcastId: number, language: string): Promise<string> {
+    return classicApi.fetchData<string>({
+        api: ModuleApi.SPEECHTOTEXT,
+        path: `transcription/${podcastId}/languages/${language}/srt`
     });
 }
 
@@ -75,5 +88,6 @@ function convertSrtToPlainText(srt: string): string {
 export const transcriptionApi = {
     convertSrtToPlainText,
     getTranslations,
+    getTranslation,
     getRawTranscription
 };

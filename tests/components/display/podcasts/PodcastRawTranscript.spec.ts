@@ -4,11 +4,24 @@ import { flushPromises } from '@vue/test-utils';
 import { defineComponent, nextTick } from 'vue';
 import { mount as testMount } from '@tests/utils';
 import PodcastRawTranscript from '@/components/display/podcasts/PodcastRawTranscript.vue';
+import { TranslationState } from '@/api/transcriptionApi';
 
 vi.mock('@/api/transcriptionApi', () => ({
     transcriptionApi: {
         getRawTranscription: vi.fn().mockResolvedValue('Sample transcript text'),
-        getTranslations: vi.fn().mockResolvedValue([]),
+        getTranslations: vi.fn().mockResolvedValue({
+            podcastId: 1,
+            nativeLanguage: 'fr',
+            translations: [],
+        }),
+        getTranslation: vi.fn().mockResolvedValue(''),
+        convertSrtToPlainText: vi.fn().mockReturnValue('Converted text'),
+    },
+    TranslationState: {
+        TRANSLATING: 'TRANSLATING',
+        FINISHED: 'FINISHED',
+        FAILED: 'FAILED',
+        AI_LIMIT_EXCEEDED: 'AI_LIMIT_EXCEEDED',
     },
 }));
 
@@ -38,10 +51,23 @@ const mount = (props: Record<string, unknown> = {}) =>
 const open = (wrapper: Awaited<ReturnType<typeof mount>>) =>
     wrapper.find('.btn-transcript').trigger('click');
 
+const mountAndOpen = async (podcastId = 1) => {
+    const wrapper = await mount({ podcastId });
+    await open(wrapper);
+    return wrapper;
+};
+
 describe('PodcastRawTranscript', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.mocked(transcriptionApi.getRawTranscription).mockResolvedValue('Sample transcript text');
+        vi.mocked(transcriptionApi.getTranslations).mockResolvedValue({
+            podcastId: 1,
+            nativeLanguage: 'fr',
+            translations: [],
+        });
+        vi.mocked(transcriptionApi.getTranslation).mockResolvedValue('');
+        vi.mocked(transcriptionApi.convertSrtToPlainText).mockReturnValue('Converted text');
         vi.mocked(cookiesHelper.getCookie).mockReturnValue(null);
     });
 
@@ -53,38 +79,38 @@ describe('PodcastRawTranscript', () => {
     });
 
     describe('toggling', () => {
-        it('shows body, updates button text and shows accessibility button when opened', async () => {
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+        it('shows body, language selector, button text and accessibility button when opened', async () => {
+            const wrapper = await mountAndOpen();
             expect(wrapper.find('.transcription-body').exists()).toBe(true);
+            expect(wrapper.find('.language-selector').exists()).toBe(true);
             expect(wrapper.find('.btn-transcript').text()).toBe('Hide transcript');
             expect(wrapper.find('.btn-primary').exists()).toBe(true);
         });
 
-        it('hides transcript body when closed again', async () => {
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+        it('hides transcript body and language selector when closed again', async () => {
+            const wrapper = await mountAndOpen();
             await open(wrapper);
             expect(wrapper.find('.transcription-body').exists()).toBe(false);
+            expect(wrapper.find('.language-selector').exists()).toBe(false);
         });
     });
 
     describe('transcript fetching', () => {
-        it('fetches transcript when opened for the first time', async () => {
-            const wrapper = await mount({ podcastId: 42 });
-            await open(wrapper);
+        it('fetches transcript and languages when opened for the first time', async () => {
+            await mountAndOpen(42);
             expect(transcriptionApi.getRawTranscription).toHaveBeenCalledWith(42);
+            expect(transcriptionApi.getTranslations).toHaveBeenCalledWith(42);
         });
 
         it('does not fetch when podcastId is undefined', async () => {
             const wrapper = await mount({});
             await open(wrapper);
             expect(transcriptionApi.getRawTranscription).not.toHaveBeenCalled();
+            expect(transcriptionApi.getTranslations).not.toHaveBeenCalled();
         });
 
         it('fetches only once when closed and reopened', async () => {
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            const wrapper = await mountAndOpen();
             await flushPromises();
             await open(wrapper); // close
             await open(wrapper); // reopen
@@ -96,10 +122,65 @@ describe('PodcastRawTranscript', () => {
             ['', 'Transcript does not yet exist for this episode'],
         ])('displays correct content for transcript %j', async (transcript, expected) => {
             vi.mocked(transcriptionApi.getRawTranscription).mockResolvedValue(transcript);
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            const wrapper = await mountAndOpen();
             await flushPromises();
             expect(wrapper.find('.transcription-text').text()).toContain(expected);
+        });
+    });
+
+    describe('language selector', () => {
+        it('populates language options from finished translations', async () => {
+            vi.mocked(transcriptionApi.getTranslations).mockResolvedValue({
+                podcastId: 1,
+                nativeLanguage: 'fr',
+                translations: [
+                    { language: 'en', state: TranslationState.FINISHED },
+                    { language: 'es', state: TranslationState.TRANSLATING },
+                    { language: 'de', state: TranslationState.FINISHED },
+                ],
+            });
+            const wrapper = await mountAndOpen();
+            await flushPromises();
+            const select = wrapper.findComponent({ name: 'ClassicSelect' });
+            const options = select.props('options') as Array<{ title: string; value: string }>;
+            expect(options.map(o => o.value)).toEqual(['fr', 'en', 'de']);
+        });
+
+        it('sets native language as the initial selected language', async () => {
+            const wrapper = await mountAndOpen();
+            await flushPromises();
+            const select = wrapper.findComponent({ name: 'ClassicSelect' });
+            expect(select.props('textInit')).toBe('fr');
+        });
+
+        it('fetches translation and converts SRT when language changes', async () => {
+            const srtContent = '1\n00:00:01,000 --> 00:00:02,000\nHello world\n\n';
+            vi.mocked(transcriptionApi.getTranslation).mockResolvedValue(srtContent);
+            vi.mocked(transcriptionApi.convertSrtToPlainText).mockReturnValue('Hello world ');
+            const wrapper = await mountAndOpen();
+            await flushPromises();
+            const select = wrapper.findComponent({ name: 'ClassicSelect' });
+            await select.vm.$emit('update:textInit', 'en');
+            await flushPromises();
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'en');
+            expect(transcriptionApi.convertSrtToPlainText).toHaveBeenCalledWith(srtContent);
+            expect(wrapper.find('.transcription-text').text()).toContain('Hello world');
+        });
+
+        it('disables language select while loading', async () => {
+            let resolveTranslation!: (value: string) => void;
+            vi.mocked(transcriptionApi.getTranslation).mockReturnValue(
+                new Promise(resolve => { resolveTranslation = resolve; })
+            );
+            const wrapper = await mountAndOpen();
+            await flushPromises();
+            const select = wrapper.findComponent({ name: 'ClassicSelect' });
+            await select.vm.$emit('update:textInit', 'en');
+            await nextTick();
+            expect(select.props('isDisabled')).toBe(true);
+            resolveTranslation('');
+            await flushPromises();
+            expect(select.props('isDisabled')).toBe(false);
         });
     });
 
@@ -112,8 +193,7 @@ describe('PodcastRawTranscript', () => {
                 return null;
             });
             const spy = vi.spyOn(document.documentElement.style, 'setProperty');
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            await mountAndOpen();
             expect(cookiesHelper.getCookie).toHaveBeenCalledWith('octopus-font-size');
             expect(cookiesHelper.getCookie).toHaveBeenCalledWith('octopus-background');
             expect(cookiesHelper.getCookie).toHaveBeenCalledWith('octopus-color');
@@ -124,21 +204,18 @@ describe('PodcastRawTranscript', () => {
 
         it('does not set CSS properties when cookies are absent', async () => {
             const spy = vi.spyOn(document.documentElement.style, 'setProperty');
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            await mountAndOpen();
             expect(spy).not.toHaveBeenCalled();
         });
 
         it('shows accessibility modal when its button is clicked', async () => {
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            const wrapper = await mountAndOpen();
             await wrapper.find('.btn-primary').trigger('click');
             expect(wrapper.findComponent(AccessibilityModalStub).exists()).toBe(true);
         });
 
         it('closes accessibility modal on close event', async () => {
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            const wrapper = await mountAndOpen();
             await wrapper.find('.btn-primary').trigger('click');
             wrapper.findComponent(AccessibilityModalStub).vm.$emit('close');
             await nextTick();
@@ -147,8 +224,7 @@ describe('PodcastRawTranscript', () => {
 
         it('saves settings to cookies and CSS and closes modal on save', async () => {
             const spy = vi.spyOn(document.documentElement.style, 'setProperty');
-            const wrapper = await mount({ podcastId: 1 });
-            await open(wrapper);
+            const wrapper = await mountAndOpen();
             await wrapper.find('.btn-primary').trigger('click');
             wrapper.findComponent(AccessibilityModalStub).vm.$emit('save', {
                 fontSize: 18, background: '#fff', color: '#000',
