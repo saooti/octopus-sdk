@@ -161,6 +161,7 @@ import classicApi from "./src/api/classicApi.ts";
 
 // API
 export { emissionApi } from "./src/api/emissionApi.ts";
+export { transcriptionApi } from "./src/api/transcriptionApi.ts";
 export * from "./src/api/groupsApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";

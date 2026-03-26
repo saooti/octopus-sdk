@@ -1,52 +1,56 @@
 <template>
-  <div>
-    <AccessibilityModal
-      v-if="isAccessibilityModal"
-      @save="saveAccessibility"
-      @close="isAccessibilityModal = false"
-    />
-    <div class="transcription-section-buttons">
-      <button v-if="isOpen" class="btn btn-primary m-0" @click="isAccessibilityModal = true">
-        <EyeOutlineIcon class="me-1"/> {{ t('Transcript Accessibility') }}
-      </button>
-      <button
-        class="btn btn-transcript"
-        :class="{ open: isOpen }"
-        @click="isOpen = !isOpen"
-      >
-        {{ buttonText }}
-      </button>
+    <div>
+        <AccessibilityModal
+            v-if="isAccessibilityModal"
+            @save="saveAccessibility"
+            @close="isAccessibilityModal = false"
+        />
+        <div class="transcription-section-buttons">
+            <button
+                v-if="isOpen"
+                class="btn btn-primary m-0"
+                @click="isAccessibilityModal = true"
+            >
+                <EyeOutlineIcon class="me-1" /> {{ t('Transcript Accessibility') }}
+            </button>
+            <button
+                class="btn btn-transcript"
+                :class="{ open: isOpen }"
+                @click="isOpen = !isOpen"
+            >
+                {{ buttonText }}
+            </button>
+        </div>
+        <div v-if="isOpen" class="transcription-body">
+            <ClassicLoading
+                :loading-text="!firstLoaded ? t('Loading content ...') : undefined"
+            />
+            <div class="transcription-text">
+                <template v-if="firstLoaded && transcript?.length">
+                    {{ transcript }}
+                </template>
+                <template v-if="firstLoaded && !transcript?.length">
+                    {{ t("Transcript does not yet exist for this episode") }}
+                </template>
+            </div>
+        </div>
     </div>
-    <div v-if="isOpen" class="transcription-body">
-      <ClassicLoading
-        :loading-text="!firstLoaded ? t('Loading content ...') : undefined"
-      />
-      <div class="transcription-text">
-        <template v-if="firstLoaded && transcript?.length">{{
-          transcript
-        }}</template>
-        <template v-if="firstLoaded && !transcript?.length">{{
-          t("Transcript does not yet exist for this episode")
-        }}</template>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import cookiesHelper from "../../../helper/cookiesHelper";
 import EyeOutlineIcon from "vue-material-design-icons/EyeOutline.vue";
-import classicApi from "../../../api/classicApi";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { computed, defineAsyncComponent, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { transcriptionApi } from "../../../api/transcriptionApi";
 const AccessibilityModal = defineAsyncComponent(
-  () => import("../accessibility/AccessibilityModal.vue"),
+    () => import("../accessibility/AccessibilityModal.vue"),
 );
 
 //Props 
 const props = defineProps({
-  podcastId: { default: undefined, type: Number },
+    podcastId: { default: undefined, type: Number },
 })
 
 //Data 
@@ -59,58 +63,57 @@ const transcript: Ref<string | undefined> = ref(undefined);
 const { t } = useI18n();
 
 //Computed
-const buttonText = computed(() =>  isOpen.value? t("Hide transcript"): t("View transcript"));
+const buttonText = computed(() => isOpen.value? t("Hide transcript"): t("View transcript"));
 
 //Watch
 watch(isOpen, () => {
-  if (isOpen.value && !firstLoaded.value) {
-    fetchTranscript();
-    getAccessibility();
-  }
+    if (isOpen.value && !firstLoaded.value) {
+        fetchTranscript();
+        getAccessibility();
+    }
 });
 
 //Methods
 function getAccessibility(){
-  const fontSize = cookiesHelper.getCookie("octopus-font-size");
-  if (null !== fontSize) {
-    setCssProperty('--octopus-accessibility-font-size', fontSize);
-  }
-  const background = cookiesHelper.getCookie("octopus-background");
-  if (null !== background) {
-    setCssProperty('--octopus-accessibility-background', background);
-  }
-  const color = cookiesHelper.getCookie("octopus-color");
-  if (null !== color) {
-    setCssProperty('--octopus-accessibility-color', color);
-  }
+    const fontSize = cookiesHelper.getCookie("octopus-font-size");
+    if (null !== fontSize) {
+        setCssProperty('--octopus-accessibility-font-size', fontSize);
+    }
+    const background = cookiesHelper.getCookie("octopus-background");
+    if (null !== background) {
+        setCssProperty('--octopus-accessibility-background', background);
+    }
+    const color = cookiesHelper.getCookie("octopus-color");
+    if (null !== color) {
+        setCssProperty('--octopus-accessibility-color', color);
+    }
 }
 function setCssProperty(name: string, value: string){
-  document.documentElement.style.setProperty(name,value);
+    document.documentElement.style.setProperty(name,value);
 }
 function saveAccessibility(accessibility: {fontSize: number,background: string,color: string}){
-  setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
-  cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
-  setCssProperty('--octopus-accessibility-background', accessibility.background);
-  cookiesHelper.setCookie("octopus-background",accessibility.background);
-  setCssProperty('--octopus-accessibility-color', accessibility.color);
-  cookiesHelper.setCookie("octopus-color",accessibility.color);
-  isAccessibilityModal.value = false;
+    setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
+    cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
+    setCssProperty('--octopus-accessibility-background', accessibility.background);
+    cookiesHelper.setCookie("octopus-background",accessibility.background);
+    setCssProperty('--octopus-accessibility-color', accessibility.color);
+    cookiesHelper.setCookie("octopus-color",accessibility.color);
+    isAccessibilityModal.value = false;
 }
 async function fetchTranscript() {
-  if (!props.podcastId) {
-    return;
-  }
-  try {
-    transcript.value = await classicApi.fetchData({
-      api: 11,
-      path: `transcription/text/${props.podcastId}`,
-    });
-  } catch {
-    //Do nothing
-  }
-  firstLoaded.value = true;
+    if (!props.podcastId) {
+        return;
+    }
+    try {
+        transcript.value = await transcriptionApi.getRawTranscription(props.podcastId);
+    } catch(error) {
+        //Do nothing
+        console.error(error);
+    }
+    firstLoaded.value = true;
 }
 </script>
+
 <style lang="scss">
 :root {
   --octopus-accessibility-font-size: 16px;
