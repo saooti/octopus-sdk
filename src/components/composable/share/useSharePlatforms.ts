@@ -14,7 +14,7 @@ import RadioFranceIcon from "../../icons/RadioFranceIcon.vue";
 import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { Annotations } from "@/stores/class/general";
-import { computed, type Component } from "vue";
+import { computed, markRaw, type Component } from "vue";
 
 export enum SharePlatformName {
     APPLE = "applePodcast",
@@ -55,77 +55,77 @@ export const useSharePlatforms = () => {
     const platforms = computed((): Array<SharePlatform> => {
         return [{
             name: SharePlatformName.APPLE,
-            icon: ApplePodcastIcon,
+            icon: markRaw(ApplePodcastIcon),
             title: "Apple Podcast | iTunes",
             color:"#aa1dd3"
         }, {
             name: SharePlatformName.DEEZER,
-            icon: DeezerIcon,
+            icon: markRaw(DeezerIcon),
             title: "Deezer",
             color:"#a238ff",
         }, {
             name: SharePlatformName.SPOTIFY,
-            icon: SpotifyIcon,
+            icon: markRaw(SpotifyIcon),
             title: "Spotify",
             color: "#1ed760",
         }, {
             name: SharePlatformName.AMAZON,
-            icon: AmazonMusicIcon,
+            icon: markRaw(AmazonMusicIcon),
             title: "Amazon Music",
             color: "#0c6cb3",
         }, {
             name: SharePlatformName.I_HEART,
-            icon: IHeartIcon,
+            icon: markRaw(IHeartIcon),
             title: "iHeart",
             color:"#e11b22"
         }, {
             name: SharePlatformName.PLAYER_FM,
-            icon: PlayerFmIcon,
+            icon: markRaw(PlayerFmIcon),
             title: "Player FM",
             color:"#bb202a"
         }, {
             name: SharePlatformName.POCKET_CASTS,
-            icon: PocketCastIcon,
+            icon: markRaw(PocketCastIcon),
             title: "Pocket Casts",
             color:"#f43e37"
         }, {
             name: SharePlatformName.PODCAST_ADDICT,
-            icon: PodcastAddictIcon,
+            icon: markRaw(PodcastAddictIcon),
             title: "Podcast Addict",
             color:"#f4842d"
         }, {
             name: SharePlatformName.RADIOLINE,
-            icon: RadiolineIcon,
+            icon: markRaw(RadiolineIcon),
             title: "Radioline",
             color:"#1678bd"
         }, {
             name: SharePlatformName.TUNE_IN,
-            icon: TuninIcon,
+            icon: markRaw(TuninIcon),
             title: "TuneIn",
             color:"#36b4a7"
         }, {
             name: SharePlatformName.YOUTUBE,
-            icon: YoutubeIcon,
+            icon: markRaw(YoutubeIcon),
             title: "YouTube Music",
             color: "#fe0000",
         }, {
             name: SharePlatformName.CASTBOX,
-            icon: CastboxIcon,
+            icon: markRaw(CastboxIcon),
             title: "Castbox",
             color: "#fe6222",
         }, {
             name: SharePlatformName.PODBEAN,
-            icon: PodbeanIcon,
+            icon: markRaw(PodbeanIcon),
             title: "PodBean",
             color: "#428200",
         }, {
             name: SharePlatformName.PODCAST_REPUBLIC,
-            icon: PodcastRepublicIcon,
+            icon: markRaw(PodcastRepublicIcon),
             title: "Podcast Republic",
             color: "#5c85dd",
         }, {
             name: SharePlatformName.RADIO_FRANCE,
-            icon: RadioFranceIcon,
+            icon: markRaw(RadioFranceIcon),
             title: "Radio France",
             color: "#a90041",
         }];
