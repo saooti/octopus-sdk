@@ -113,6 +113,7 @@ export const useTranslation = () => {
 
     return {
         convertSrtToPlainText,
+        getMostRelevantLanguage,
         getMostRelevantTranslation
     }
 };

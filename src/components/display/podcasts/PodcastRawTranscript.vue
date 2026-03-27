@@ -15,7 +15,7 @@
             </button>
 
             <div
-                v-if="isOpen"
+                v-if="isOpen && availableLanguagesOptions.length > 0"
                 class="language-selector"
             >
                 <span class="me-2">[WIP] Langues disponibles</span>
@@ -85,7 +85,7 @@ const currentLanguage = ref('');
 
 //Composables
 const { t } = useI18n();
-const { convertSrtToPlainText, getMostRelevantTranslation } = useTranslation();
+const { convertSrtToPlainText, getMostRelevantLanguage } = useTranslation();
 
 //Computed
 const buttonText = computed(() => isOpen.value? t("Hide transcript"): t("View transcript"));
@@ -140,15 +140,20 @@ function saveAccessibility(accessibility: {fontSize: number,background: string,c
 async function fetchTranscripts(): Promise<void> {
     try {
         const translation = await transcriptionApi.getTranslations(props.podcastId);
-        const srt = await getMostRelevantTranslation(translation);
+        const language = await getMostRelevantLanguage(translation);
+        const srt = await transcriptionApi.getTranslation(props.podcastId, language, true);
         transcript.value = convertSrtToPlainText(srt);
         
         availableLanguages.value = translation.translations
             .filter(t => t.state === TranslationState.FINISHED)
             .map(t => t.language);
         nativeLanguage.value = translation.nativeLanguage;
-        currentLanguage.value = translation.nativeLanguage;
+        currentLanguage.value = language;
         availableLanguages.value.unshift(translation.nativeLanguage);
+
+        if (!availableLanguages.value.includes(language)) {
+            availableLanguages.value.push(language);
+        }
     } catch (error) {
         console.error(error);
     }

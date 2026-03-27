@@ -60,15 +60,16 @@ const mountAndOpen = async (podcastId = 1) => {
 
 describe('PodcastRawTranscript', () => {
     let mockConvertSrtToPlainText: ReturnType<typeof vi.fn>;
-    let mockGetMostRelevantTranslation: ReturnType<typeof vi.fn>;
+    let mockGetMostRelevantLanguage: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
         vi.clearAllMocks();
         mockConvertSrtToPlainText = vi.fn().mockReturnValue('Converted text');
-        mockGetMostRelevantTranslation = vi.fn().mockResolvedValue('Sample transcript text');
+        mockGetMostRelevantLanguage = vi.fn().mockResolvedValue('fr');
         vi.mocked(useTranslation).mockReturnValue({
             convertSrtToPlainText: mockConvertSrtToPlainText,
-            getMostRelevantTranslation: mockGetMostRelevantTranslation,
+            getMostRelevantLanguage: mockGetMostRelevantLanguage,
+            getMostRelevantTranslation: vi.fn(),
         } as ReturnType<typeof useTranslation>);
         vi.mocked(transcriptionApi.getTranslations).mockResolvedValue({
             podcastId: 1,
@@ -89,6 +90,7 @@ describe('PodcastRawTranscript', () => {
     describe('toggling', () => {
         it('shows body, language selector, button text and accessibility button when opened', async () => {
             const wrapper = await mountAndOpen();
+            await flushPromises();
             expect(wrapper.find('.transcription-body').exists()).toBe(true);
             expect(wrapper.find('.language-selector').exists()).toBe(true);
             expect(wrapper.find('.btn-transcript').text()).toBe('Hide transcript');
@@ -124,11 +126,10 @@ describe('PodcastRawTranscript', () => {
         });
 
         it.each([
-            ['Sample transcript text', 'Sample transcript text'],
+            ['Converted text', 'Converted text'],
             ['', 'Transcript does not yet exist for this episode'],
-        ])('displays correct content when getMostRelevantTranslation resolves to %j', async (srtResult, expected) => {
-            mockGetMostRelevantTranslation.mockResolvedValue(srtResult);
-            mockConvertSrtToPlainText.mockReturnValue(srtResult);
+        ])('displays correct content for converted text %j', async (convertedText, expected) => {
+            mockConvertSrtToPlainText.mockReturnValue(convertedText);
             const wrapper = await mountAndOpen();
             await flushPromises();
             expect(wrapper.find('.transcription-text').text()).toContain(expected);
@@ -153,7 +154,7 @@ describe('PodcastRawTranscript', () => {
             expect(options.map(o => o.value)).toEqual(['fr', 'en', 'de']);
         });
 
-        it('sets native language as the initial selected language', async () => {
+        it('sets the most relevant language as the initial selected language', async () => {
             const wrapper = await mountAndOpen();
             await flushPromises();
             const select = wrapper.findComponent({ name: 'ClassicSelect' });
@@ -176,6 +177,9 @@ describe('PodcastRawTranscript', () => {
 
         it('disables language select while loading', async () => {
             let resolveTranslation!: (value: string) => void;
+            // First call (fetchTranscripts) resolves to make the selector visible
+            vi.mocked(transcriptionApi.getTranslation).mockResolvedValueOnce('');
+            // Subsequent call (changeLanguage) hangs
             vi.mocked(transcriptionApi.getTranslation).mockReturnValue(
                 new Promise(resolve => { resolveTranslation = resolve; })
             );
@@ -193,7 +197,7 @@ describe('PodcastRawTranscript', () => {
 
     describe('accessibility', () => {
         it('reads cookies and applies CSS properties on open', async () => {
-            vi.mocked(cookiesHelper.getCookie).mockImplementation(name => {
+            vi.mocked(cookiesHelper.getCookie).mockImplementation((name: string) => {
                 if (name === 'octopus-font-size') { return '20px'; }
                 if (name === 'octopus-background') { return '#000'; }
                 if (name === 'octopus-color') { return '#fff'; }

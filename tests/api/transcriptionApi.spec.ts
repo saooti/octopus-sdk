@@ -12,7 +12,7 @@ import { ModuleApi } from '../../src/api/apiConnection';
 
 describe('transcriptionApi', () => {
     beforeEach(() => {
-        vi.mocked(classicApi.fetchData).mockResolvedValue(undefined);
+        vi.mocked(classicApi.fetchData).mockResolvedValue('');
     });
 
     describe('getTranslations', () => {

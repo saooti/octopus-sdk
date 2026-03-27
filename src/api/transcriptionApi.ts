@@ -31,6 +31,11 @@ export interface PodcastTranslationData {
     translations: Array<TranslationData>;
 }
 
+interface TranslationProgress {
+    started: boolean;
+    percent: number;
+}
+
 /**
  * Returns the translations defined on the podcast
  * @param podcastId ID of the podcast
@@ -56,10 +61,22 @@ async function getTranslation(podcastId: number, language: string, mayCreate?: b
         path = `${path}?mayCreateIfNotExists=${mayCreate}`;
     }
 
-    return classicApi.fetchData<string>({
-        api: ModuleApi.SPEECHTOTEXT,
-        path
-    });
+    let found = false;
+    while (!found) {
+        const result = await classicApi.fetchData<string|TranslationProgress>({
+            api: ModuleApi.SPEECHTOTEXT,
+            path
+        });
+
+        // Stop when we get the proper result
+        if (typeof result === 'string') {
+            found = true;
+            return result;
+        }
+
+        // Wait some time before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
 }
 
 /**
