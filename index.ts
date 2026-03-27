@@ -173,6 +173,7 @@ export { type Organisation, type OrganisationAttributes, emptyOrganisationData, 
 export { type Podcast, type PodcastAvailability, PodcastType } from "./src/stores/class/general/podcast.ts";
 export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
 export { type Annotations } from "./src/stores/class/general";
+export { CreateTranslation, type TranslationConfiguration, defaultTranslationConfig } from "./src/stores/class/transcript/transcriptParams.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");

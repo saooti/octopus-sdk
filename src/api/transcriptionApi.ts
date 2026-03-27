@@ -47,12 +47,18 @@ async function getTranslations(podcastId: number): Promise<PodcastTranslationDat
  * Returns the translation in a given language for the podcast
  * @param podcastId ID of the podcast
  * @param language The target language
+ * @param mayCreate *(optional)* If set to true, request creation if not available
  * @returns The transcription
  */
-async function getTranslation(podcastId: number, language: string): Promise<string> {
+async function getTranslation(podcastId: number, language: string, mayCreate?: boolean): Promise<string> {
+    let path = `transcription/${podcastId}/languages/${language}/srt`;
+    if (mayCreate !== undefined) {
+        path = `${path}?mayCreateIfNotExists=${mayCreate}`;
+    }
+
     return classicApi.fetchData<string>({
         api: ModuleApi.SPEECHTOTEXT,
-        path: `transcription/${podcastId}/languages/${language}/srt`
+        path
     });
 }
 
@@ -68,25 +74,7 @@ async function getRawTranscription(podcastId: number): Promise<string> {
     });
 }
 
-
-/**
- * Convert SRT data to plain text
- * @param srt The data to convert
- * @returns The plain text
- */
-function convertSrtToPlainText(srt: string): string {
-    const srtPattern =
-        /\d+\n[\d:,]+\s+-{2}>\s+[\d:,]+\n([\s\S]*?(?=\n{2}|$))/gm;
-    const result: Array<string> = [];
-    let matches: string[];
-    while ((matches = srtPattern.exec(srt)) != null) {
-        result.push(matches[1] + " ");
-    }
-    return result.join("");
-}
-
 export const transcriptionApi = {
-    convertSrtToPlainText,
     getTranslations,
     getTranslation,
     getRawTranscription

@@ -59,6 +59,7 @@ import ClassicLoading from "../../form/ClassicLoading.vue";
 import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { transcriptionApi, TranslationState } from "../../../api/transcriptionApi";
+import { useTranslation } from "../../composable/useTranslation";
 import ClassicSelect from "../../form/ClassicSelect.vue";
 const AccessibilityModal = defineAsyncComponent(
     () => import("../accessibility/AccessibilityModal.vue"),
@@ -84,6 +85,7 @@ const currentLanguage = ref('');
 
 //Composables
 const { t } = useI18n();
+const { convertSrtToPlainText, getMostRelevantTranslation } = useTranslation();
 
 //Computed
 const buttonText = computed(() => isOpen.value? t("Hide transcript"): t("View transcript"));
@@ -99,8 +101,7 @@ const availableLanguagesOptions = computed(() => {
 watch(isOpen, () => {
     if (isOpen.value && !loadingDone.value) {
         if (props.podcastId) {
-            fetchTranscript();
-            fetchAvailableLanguages();
+            fetchTranscripts();
         }
         getAccessibility();
     }
@@ -136,19 +137,12 @@ function saveAccessibility(accessibility: {fontSize: number,background: string,c
     isAccessibilityModal.value = false;
 }
 
-async function fetchTranscript() {
-    try {
-        transcript.value = await transcriptionApi.getRawTranscription(props.podcastId);
-    } catch(error) {
-        //Do nothing
-        console.error(error);
-    }
-    loadingDone.value = true;
-}
-
-async function fetchAvailableLanguages(): Promise<void> {
+async function fetchTranscripts(): Promise<void> {
     try {
         const translation = await transcriptionApi.getTranslations(props.podcastId);
+        const srt = await getMostRelevantTranslation(translation);
+        transcript.value = convertSrtToPlainText(srt);
+        
         availableLanguages.value = translation.translations
             .filter(t => t.state === TranslationState.FINISHED)
             .map(t => t.language);
@@ -158,6 +152,7 @@ async function fetchAvailableLanguages(): Promise<void> {
     } catch (error) {
         console.error(error);
     }
+    loadingDone.value = true;
 }
 
 async function changeLanguage(language: string): Promise<void> {
@@ -166,7 +161,7 @@ async function changeLanguage(language: string): Promise<void> {
     transcript.value = '';
     try {
         const srt = await transcriptionApi.getTranslation(props.podcastId, language);        
-        transcript.value = transcriptionApi.convertSrtToPlainText(srt);
+        transcript.value = convertSrtToPlainText(srt);
     } catch (error) {
         console.error(error);
     }

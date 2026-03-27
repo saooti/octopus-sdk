@@ -4,18 +4,14 @@ import { flushPromises } from '@vue/test-utils';
 import { defineComponent, nextTick } from 'vue';
 import { mount as testMount } from '@tests/utils';
 import PodcastRawTranscript from '@/components/display/podcasts/PodcastRawTranscript.vue';
-import { TranslationState } from '@/api/transcriptionApi';
-
 vi.mock('@/api/transcriptionApi', () => ({
     transcriptionApi: {
-        getRawTranscription: vi.fn().mockResolvedValue('Sample transcript text'),
         getTranslations: vi.fn().mockResolvedValue({
             podcastId: 1,
             nativeLanguage: 'fr',
             translations: [],
         }),
         getTranslation: vi.fn().mockResolvedValue(''),
-        convertSrtToPlainText: vi.fn().mockReturnValue('Converted text'),
     },
     TranslationState: {
         TRANSLATING: 'TRANSLATING',
@@ -25,6 +21,10 @@ vi.mock('@/api/transcriptionApi', () => ({
     },
 }));
 
+vi.mock('@/components/composable/useTranslation', () => ({
+    useTranslation: vi.fn(),
+}));
+
 vi.mock('@/helper/cookiesHelper', () => ({
     default: {
         getCookie: vi.fn().mockReturnValue(null),
@@ -32,7 +32,8 @@ vi.mock('@/helper/cookiesHelper', () => ({
     },
 }));
 
-import { transcriptionApi } from '@/api/transcriptionApi';
+import { transcriptionApi, TranslationState } from '@/api/transcriptionApi';
+import { useTranslation } from '@/components/composable/useTranslation';
 import cookiesHelper from '@/helper/cookiesHelper';
 
 const AccessibilityModalStub = defineComponent({
@@ -58,16 +59,23 @@ const mountAndOpen = async (podcastId = 1) => {
 };
 
 describe('PodcastRawTranscript', () => {
+    let mockConvertSrtToPlainText: ReturnType<typeof vi.fn>;
+    let mockGetMostRelevantTranslation: ReturnType<typeof vi.fn>;
+
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.mocked(transcriptionApi.getRawTranscription).mockResolvedValue('Sample transcript text');
+        mockConvertSrtToPlainText = vi.fn().mockReturnValue('Converted text');
+        mockGetMostRelevantTranslation = vi.fn().mockResolvedValue('Sample transcript text');
+        vi.mocked(useTranslation).mockReturnValue({
+            convertSrtToPlainText: mockConvertSrtToPlainText,
+            getMostRelevantTranslation: mockGetMostRelevantTranslation,
+        } as ReturnType<typeof useTranslation>);
         vi.mocked(transcriptionApi.getTranslations).mockResolvedValue({
             podcastId: 1,
             nativeLanguage: 'fr',
             translations: [],
         });
         vi.mocked(transcriptionApi.getTranslation).mockResolvedValue('');
-        vi.mocked(transcriptionApi.convertSrtToPlainText).mockReturnValue('Converted text');
         vi.mocked(cookiesHelper.getCookie).mockReturnValue(null);
     });
 
@@ -96,16 +104,14 @@ describe('PodcastRawTranscript', () => {
     });
 
     describe('transcript fetching', () => {
-        it('fetches transcript and languages when opened for the first time', async () => {
+        it('fetches translations when opened for the first time', async () => {
             await mountAndOpen(42);
-            expect(transcriptionApi.getRawTranscription).toHaveBeenCalledWith(42);
             expect(transcriptionApi.getTranslations).toHaveBeenCalledWith(42);
         });
 
         it('does not fetch when podcastId is undefined', async () => {
             const wrapper = await mount({});
             await open(wrapper);
-            expect(transcriptionApi.getRawTranscription).not.toHaveBeenCalled();
             expect(transcriptionApi.getTranslations).not.toHaveBeenCalled();
         });
 
@@ -114,14 +120,15 @@ describe('PodcastRawTranscript', () => {
             await flushPromises();
             await open(wrapper); // close
             await open(wrapper); // reopen
-            expect(transcriptionApi.getRawTranscription).toHaveBeenCalledTimes(1);
+            expect(transcriptionApi.getTranslations).toHaveBeenCalledTimes(1);
         });
 
         it.each([
             ['Sample transcript text', 'Sample transcript text'],
             ['', 'Transcript does not yet exist for this episode'],
-        ])('displays correct content for transcript %j', async (transcript, expected) => {
-            vi.mocked(transcriptionApi.getRawTranscription).mockResolvedValue(transcript);
+        ])('displays correct content when getMostRelevantTranslation resolves to %j', async (srtResult, expected) => {
+            mockGetMostRelevantTranslation.mockResolvedValue(srtResult);
+            mockConvertSrtToPlainText.mockReturnValue(srtResult);
             const wrapper = await mountAndOpen();
             await flushPromises();
             expect(wrapper.find('.transcription-text').text()).toContain(expected);
@@ -156,14 +163,14 @@ describe('PodcastRawTranscript', () => {
         it('fetches translation and converts SRT when language changes', async () => {
             const srtContent = '1\n00:00:01,000 --> 00:00:02,000\nHello world\n\n';
             vi.mocked(transcriptionApi.getTranslation).mockResolvedValue(srtContent);
-            vi.mocked(transcriptionApi.convertSrtToPlainText).mockReturnValue('Hello world ');
+            mockConvertSrtToPlainText.mockReturnValue('Hello world ');
             const wrapper = await mountAndOpen();
             await flushPromises();
             const select = wrapper.findComponent({ name: 'ClassicSelect' });
             await select.vm.$emit('update:textInit', 'en');
             await flushPromises();
             expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'en');
-            expect(transcriptionApi.convertSrtToPlainText).toHaveBeenCalledWith(srtContent);
+            expect(mockConvertSrtToPlainText).toHaveBeenCalledWith(srtContent);
             expect(wrapper.find('.transcription-text').text()).toContain('Hello world');
         });
 
@@ -187,9 +194,9 @@ describe('PodcastRawTranscript', () => {
     describe('accessibility', () => {
         it('reads cookies and applies CSS properties on open', async () => {
             vi.mocked(cookiesHelper.getCookie).mockImplementation(name => {
-                if (name === 'octopus-font-size') return '20px';
-                if (name === 'octopus-background') return '#000';
-                if (name === 'octopus-color') return '#fff';
+                if (name === 'octopus-font-size') { return '20px'; }
+                if (name === 'octopus-background') { return '#000'; }
+                if (name === 'octopus-color') { return '#fff'; }
                 return null;
             });
             const spy = vi.spyOn(document.documentElement.style, 'setProperty');
