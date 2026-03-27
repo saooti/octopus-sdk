@@ -1,5 +1,12 @@
 # CHANGELOG
 
+
+## 41.9.0 (En cours)
+
+**Misc**
+
+- Correction warning avec les icônes de `useSharePlatforms`
+
 ## 41.8.4 (24/03/2026)
 
 **Fix**
