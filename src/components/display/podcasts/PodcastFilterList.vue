@@ -41,11 +41,11 @@
       v-model:active-tab="activeSeasonTab"
       :tab-number="emission.seasons.length"
     >
-      <template v-for="season in emission.seasons" #[tabNameSlot(season)]>
+      <template v-for="(season, i) in emission.seasons" #[tabNameSlot(i)]>
         {{ $t('Podcast - Season N', { season }) }}
       </template>
 
-      <template v-for="season in emission.seasons" #[tabContentSlot(season)] :key="season">
+      <template v-for="(season, i) in emission.seasons" #[tabContentSlot(i)] :key="season">
         <PodcastList
           class="flex-grow-1"
           :first="dfirst"
@@ -137,7 +137,7 @@ const showSeasons = computed(() => {
   return props.emission !== undefined && areSeasonsEnabled(props.emission) && (props.emission.seasons?.length ?? 0) > 0;
 });
 
-const activeSeasonTab = ref(showSeasons.value ? (getMaxSeason(props.emission) - 1) : 0);
+const activeSeasonTab = ref(showSeasons.value ? props.emission.seasons?.indexOf(getMaxSeason(props.emission)) ?? 0 : 0);
 
 const sort = computed((): PodcastSort => {
   if(showSeasons.value === true) {
@@ -166,11 +166,11 @@ function fetch(podcasts: Array<Podcast>, season?: number): void {
 }
 
 /** Name of the slot for the tab's title */
-function tabNameSlot(season: number): string {
-  return `${season - 1}`;
+function tabNameSlot(index: number): string {
+  return `${index}`;
 }
 /** Name of the slot for the tab's content */
-function tabContentSlot(season: number): string {
-  return `tab${season - 1}`;
+function tabContentSlot(index: number): string {
+  return `tab${index}`;
 }
 </script>

@@ -66,7 +66,7 @@ export const useRights = () => {
     }
 
     function canDuplicatePodcast(): boolean {
-        // Same as creationm but notably without PODCAST_CRUD and
+        // Same as creation but notably without PODCAST_CRUD and
         // RESTRICTED_ANIMATION
         return roleContainsAny(
             'ADMIN',
@@ -149,8 +149,16 @@ export const useRights = () => {
         return roleContainsAny('ADMIN', 'ORGANISATION');
     }
 
-    function canEditTranscript(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION');
+    function canEditTranscript(podcast: Podcast): boolean {
+        if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
+            return true;
+        }
+
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION')) {
+            return podcast.createdByUserId === authStore.authProfile?.userId;
+        }
+
+        return false;
     }
 
     function canSeeHistory(): boolean {
