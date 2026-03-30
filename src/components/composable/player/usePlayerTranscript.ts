@@ -2,10 +2,13 @@ import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useVastStore } from "../../../stores/VastStore";
 import classicApi from "../../../api/classicApi";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
+import { useTranslation } from "../useTranslation";
+
 export const usePlayerTranscript = ()=>{
 
   const playerStore = usePlayerStore();
   const vastStore = useVastStore();
+  const { getMostRelevantTranslation } = useTranslation();
 
   async function checkDelaytWithStitching(){
     playerStore.playerUpdateDelayStitching(0);
@@ -37,10 +40,8 @@ export const usePlayerTranscript = ()=>{
       playerStore.playerUpdateTranscript();
       return;
     }
-    const result = await classicApi.fetchData<string>({
-      api:11,
-      path:`response/${playerStore.playerPodcast.podcastId}`,
-    });
+
+    const result = await getMostRelevantTranslation(playerStore.playerPodcast.podcastId);
 
     const arrayTranscript = parseSrt(result);
     const actualText =

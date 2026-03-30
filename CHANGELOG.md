@@ -12,6 +12,8 @@
     transcription
     - La langue la plus pertinente pour l'utilisateur est sélectionnée par
       défaut
+  - La transcription affichée dans le player correspond à la langue la plus
+    pertinente disponible
 - **14357** - Affichage des sous-titres et résumés d'épisodes, et des
   sous-titres des émissions
   - Ajout de nouveaux paramètres pour contrôler cet affichage :

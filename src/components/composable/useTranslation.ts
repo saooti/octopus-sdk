@@ -103,7 +103,27 @@ export const useTranslation = () => {
      * @param translationData The translation data for the podcast
      * @returns The translation
      */
-    async function getMostRelevantTranslation(translationData: PodcastTranslationData): Promise<string> {
+    async function getMostRelevantTranslation(translationData: PodcastTranslationData): Promise<string>;
+    /**
+     * Get the relevant translation for the current user
+     * @param podcastId The ID of the podcast
+     * @returns The translation
+     */
+    async function getMostRelevantTranslation(podcastId: number): Promise<string>;
+
+    /**
+     * Get the relevant translation for the current user
+     * @param translationData The translation data for the podcast
+     * @returns The translation
+     */
+    async function getMostRelevantTranslation(data: PodcastTranslationData|number): Promise<string> {
+        let translationData: PodcastTranslationData;
+        if (typeof data === 'number') {
+            translationData = await transcriptionApi.getTranslations(data);
+        } else {
+            translationData = data;
+        }
+
         const targetLanguage = await getMostRelevantLanguage(translationData);
 
         // Finally get translation with chosen language

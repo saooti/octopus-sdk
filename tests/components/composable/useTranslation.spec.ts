@@ -9,6 +9,7 @@ import { useTranslation } from '@/components/composable/useTranslation';
 vi.mock('@/api/transcriptionApi', () => ({
     transcriptionApi: {
         getTranslation: vi.fn().mockResolvedValue('srt content'),
+        getTranslations: vi.fn(),
     },
 }));
 
@@ -129,6 +130,15 @@ describe('useTranslation', () => {
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
 
             expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'es', true);
+        });
+
+        it('fetches translation data first when called with a podcast ID', async () => {
+            vi.mocked(transcriptionApi.getTranslations).mockResolvedValue(makeTranslationData());
+
+            await composable.getMostRelevantTranslation(1);
+
+            expect(transcriptionApi.getTranslations).toHaveBeenCalledWith(1);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr', true);
         });
     });
 });
