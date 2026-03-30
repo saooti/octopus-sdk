@@ -163,17 +163,15 @@ function mainRubriquage(emission: Emission): string {
 </script>
 
 <style scoped lang="scss">
-.octopus-app {
-  .list-episode {
-    padding: 2rem 0 1rem !important;
+.list-episode {
+  padding: 2rem 0 1rem;
 
-    @media (width <= 450px) {
-      padding: 0.5rem 0 1rem !important;
-    }
+  @media (width <= 450px) {
+    padding: 0.5rem 0 1rem;
+  }
 
-    h2 {
-      margin-bottom: 1rem;
-    }
+  h2 {
+    margin-bottom: 1rem;
   }
 }
 

@@ -16,8 +16,10 @@
         />
       </template>
     </SwiperList>
+
     <router-link
-      :to="href"
+      v-if="buttonText"
+      :to="href ?? { name: 'participants' }"
       class="btn btn-primary align-self-center w-fit-content m-4"
     >
       {{ buttonText }}
@@ -53,7 +55,7 @@ const allParticipants: Ref<Array<Participant>> = ref([]);
   
 //Composables
 const { t } = useI18n();
-const {handle403} = useErrorHandler();
+const { handle403 } = useErrorHandler();
 
 onMounted(()=>fetchNext())
 
@@ -80,20 +82,19 @@ async function fetchNext(): Promise<void> {
   }
 }
 </script>
-<style lang="scss">
-.octopus-app {
-  .list-participants{
-    .element-list-inline{
-        @media (width <= 960px) {
-        > div{
-          margin: 0 0.5rem 0 0;
-        }
+
+<style scoped lang="scss">
+.list-participants{
+  .element-list-inline{
+      @media (width <= 960px) {
+      > div{
+        margin: 0 0.5rem 0 0;
       }
     }
+  }
 
-    .participant-item-container{
-      margin:0;
-    }
+  .participant-item-container{
+    margin:0;
   }
 }
 </style>

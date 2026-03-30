@@ -1,11 +1,11 @@
 # CHANGELOG
 
-
 ## 41.9.0 (En cours)
 
 **Misc**
 
 - Correction warning avec les icônes de `useSharePlatforms`
+- Ajustement composants pour les podcastmakers
 
 ## 41.8.4 (24/03/2026)
 
