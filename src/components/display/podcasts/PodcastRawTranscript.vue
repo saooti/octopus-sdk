@@ -140,7 +140,9 @@ function saveAccessibility(accessibility: {fontSize: number,background: string,c
 async function fetchTranscripts(): Promise<void> {
     try {
         const translation = await transcriptionApi.getTranslations(props.podcastId);
-        const language = await getMostRelevantLanguage(translation);
+        const { ready, available } = await getMostRelevantLanguage(translation);
+        // If available language is set, it is better than ready, so use it
+        const language = available ?? ready;
         const srt = await transcriptionApi.getTranslation(props.podcastId, language, true);
         transcript.value = convertSrtToPlainText(srt);
         

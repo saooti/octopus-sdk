@@ -65,7 +65,7 @@ describe('PodcastRawTranscript', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         mockConvertSrtToPlainText = vi.fn().mockReturnValue('Converted text');
-        mockGetMostRelevantLanguage = vi.fn().mockResolvedValue('fr');
+        mockGetMostRelevantLanguage = vi.fn().mockResolvedValue({ ready: 'fr' });
         vi.mocked(useTranslation).mockReturnValue({
             convertSrtToPlainText: mockConvertSrtToPlainText,
             getMostRelevantLanguage: mockGetMostRelevantLanguage,

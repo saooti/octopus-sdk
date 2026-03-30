@@ -80,7 +80,7 @@ describe('useTranslation', () => {
         it('uses the native language when it matches the browser language', async () => {
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
 
-            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr', true);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr');
             expect(podcastApi.get).not.toHaveBeenCalled();
         });
 
@@ -93,10 +93,10 @@ describe('useTranslation', () => {
 
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
 
-            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'en', true);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'en');
         });
 
-        it('falls back to English when browser language is unavailable but English is available', async () => {
+        it('falls back to native language when English is ON_DEMAND but not yet generated', async () => {
             vi.mocked(getLanguage).mockReturnValue('de');
             setOrgTranslationConfig({
                 createTranslation: { en: CreateTranslation.ON_DEMAND },
@@ -105,7 +105,7 @@ describe('useTranslation', () => {
 
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
 
-            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'en', true);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr');
         });
 
         it('falls back to native language when neither browser language nor English is available', async () => {
@@ -117,10 +117,10 @@ describe('useTranslation', () => {
 
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
 
-            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr', true);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr');
         });
 
-        it('treats ON_DEMAND as available', async () => {
+        it('falls back to native language when browser language is ON_DEMAND but not yet generated', async () => {
             vi.mocked(getLanguage).mockReturnValue('es');
             setOrgTranslationConfig({
                 createTranslation: { es: CreateTranslation.ON_DEMAND },
@@ -129,7 +129,7 @@ describe('useTranslation', () => {
 
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
 
-            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'es', true);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr');
         });
 
         it('fetches translation data first when called with a podcast ID', async () => {
@@ -138,7 +138,7 @@ describe('useTranslation', () => {
             await composable.getMostRelevantTranslation(1);
 
             expect(transcriptionApi.getTranslations).toHaveBeenCalledWith(1);
-            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr', true);
+            expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(1, 'fr');
         });
     });
 });

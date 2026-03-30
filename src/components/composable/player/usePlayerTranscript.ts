@@ -3,12 +3,13 @@ import { useVastStore } from "../../../stores/VastStore";
 import classicApi from "../../../api/classicApi";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
 import { useTranslation } from "../useTranslation";
+import { transcriptionApi } from "../../../api/transcriptionApi";
 
 export const usePlayerTranscript = ()=>{
 
   const playerStore = usePlayerStore();
   const vastStore = useVastStore();
-  const { getMostRelevantTranslation } = useTranslation();
+  const { getMostRelevantLanguage } = useTranslation();
 
   async function checkDelaytWithStitching(){
     playerStore.playerUpdateDelayStitching(0);
@@ -41,7 +42,13 @@ export const usePlayerTranscript = ()=>{
       return;
     }
 
-    const result = await getMostRelevantTranslation(playerStore.playerPodcast.podcastId);
+    // Retrieve best language for transcription
+    const podcastId = playerStore.playerPodcast.podcastId;
+    const translationData = await transcriptionApi.getTranslations(podcastId);
+    const { ready, available } = await getMostRelevantLanguage(translationData);
+
+    // Retrieve transcription
+    const result = await transcriptionApi.getTranslation(podcastId, ready);
 
     const arrayTranscript = parseSrt(result);
     const actualText =
@@ -54,6 +61,23 @@ export const usePlayerTranscript = ()=>{
       actualText: actualText,
       value: arrayTranscript
     });
+
+    if (ready !== available) {
+      // If there's a better language available, trigger its generation
+      const result = await transcriptionApi.getTranslation(podcastId, available, true);
+
+      const arrayTranscript = parseSrt(result);
+      const actualText =
+        arrayTranscript?.[0]?.startTime === 0 ? arrayTranscript[0].text : "";
+      if(!arrayTranscript){
+        return;
+      }
+      playerStore.playerUpdateTranscript({
+        actual: playerStore.playerTranscript?.actual,
+        actualText: actualText,
+        value: arrayTranscript
+      });
+    }
   }
 
   function parseSrt(transcript: string) {
