@@ -36,6 +36,8 @@
       <RadioHistory v-if="radioUrl" />
     </div>
 
+
+    <!-- Transcription -->
     <div
       v-if="'' != transcriptText && !isAdPlaying"
       class="transcript"
@@ -43,6 +45,12 @@
       <div class="flex-grow-1 p-1 text-center w-100 transcript-bg rounded">
         {{ transcriptText }}
       </div>
+      <ClassicLoading
+        v-if="generatingTranscriptLanguage"
+        small
+        spinner-color="white"
+        :loading-text="$t('Player - Generating subtitles', { language: generatingTranscriptLanguage })"
+      />
 
       <div
         v-if="transcriptInfo"
@@ -51,6 +59,8 @@
         {{ transcriptInfo }}
       </div>
     </div>
+
+    <!-- Buttons -->
     <div class="d-flex align-items-center flex-grow-1">
       <button
         title="-15''"
@@ -87,6 +97,9 @@ import { computed, defineAsyncComponent } from "vue";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useI18n } from "vue-i18n";
 import { state as sdkParams } from "../../../stores/ParamSdkStore";
+import ClassicLoading from "../../form/ClassicLoading.vue";
+import { usePlayerTranscript } from "../../composable/player/usePlayerTranscript";
+
 const RadioHistory = defineAsyncComponent(
   () => import("./radio/RadioHistory.vue"),
 );
@@ -117,6 +130,7 @@ const {
  } = usePlayerDisplayTime();
 const { t } = useI18n();
 const playerStore = usePlayerStore();
+const { generatingTranscriptLanguage } = usePlayerTranscript();
 
 /** Info message to display regarding transcript */
 const transcriptInfo = computed((): string|undefined => {

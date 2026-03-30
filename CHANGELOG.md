@@ -25,6 +25,7 @@
   d'épisode dans les `PodcastItemInfo`
 - La configuration eslint est maintenant exportée, elle peut donc être intégrée
   telle quelle dans les projets se basant sur le SDK
+- Ajout d'options de configuration pour `ClassicLoading` et `ClassicSpinner`
 
 **Fix**
 

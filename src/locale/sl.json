@@ -422,5 +422,6 @@
   "Podcast type - Bonus": "Bonusi",
   "Podcast - Season N": "Sezona {season}",
   "Podcast - Season": "Sezona",
-  "Podcast - Episode number": "Številka epizode"
+  "Podcast - Episode number": "Številka epizode",
+  "Player - Generating subtitles": "Generiranje podnapisov v {language}…"
 }

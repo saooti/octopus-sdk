@@ -423,5 +423,6 @@
   "Podcast type - Bonus": "Boni",
   "Podcast - Season N": "Saison {season}",
   "Podcast - Season": "Jahreszeit",
-  "Podcast - Episode number": "Episodennummer"
+  "Podcast - Episode number": "Episodennummer",
+  "Player - Generating subtitles": "Generierung von Untertiteln in {language}…"
 }

@@ -446,5 +446,6 @@
   "Podcast type - Bonus": "Bonus",
   "Podcast - Season N": "Saison {season}",
   "Podcast - Season": "Saison",
-  "Podcast - Episode number": "Numéro d'épisode"
+  "Podcast - Episode number": "Numéro d'épisode",
+  "Player - Generating subtitles": "Génération des sous-titres en {language}…"
 }

@@ -4,6 +4,10 @@ import classicApi from "../../../api/classicApi";
 import { AdserverOtherEmission } from "@/stores/class/adserver/adserverOtherEmission";
 import { useTranslation } from "../useTranslation";
 import { transcriptionApi } from "../../../api/transcriptionApi";
+import { ref } from "vue";
+
+/** Contains the language of the transcript being generated */
+const generatingTranscriptLanguage = ref<string|null>(null);
 
 export const usePlayerTranscript = ()=>{
 
@@ -37,6 +41,7 @@ export const usePlayerTranscript = ()=>{
   }
 
   async function getTranscription(): Promise<void> {
+    generatingTranscriptLanguage.value = null;
     if (!playerStore.playerPodcast) {
       playerStore.playerUpdateTranscript();
       return;
@@ -63,6 +68,8 @@ export const usePlayerTranscript = ()=>{
     });
 
     if (ready !== available) {
+      generatingTranscriptLanguage.value = available;
+
       // If there's a better language available, trigger its generation
       const result = await transcriptionApi.getTranslation(podcastId, available, true);
 
@@ -77,6 +84,7 @@ export const usePlayerTranscript = ()=>{
         actualText: actualText,
         value: arrayTranscript
       });
+      generatingTranscriptLanguage.value = null;
     }
   }
 
@@ -135,11 +143,11 @@ export const usePlayerTranscript = ()=>{
     }
   }
 
-
-	return {
+  return {
     checkDelaytWithStitching,
     getTranscription,
     onTimeUpdateTranscript,
-    onSeekedTranscript
-	}
+    onSeekedTranscript,
+    generatingTranscriptLanguage
+  }
 }
