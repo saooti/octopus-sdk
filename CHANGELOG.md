@@ -2,6 +2,10 @@
 
 ## 41.9.0 (En cours)
 
+**Fix**
+
+- Correction `z-index` des boutons de `SwiperList`
+
 **Misc**
 
 - Correction warning avec les icônes de `useSharePlatforms`
