@@ -76,7 +76,11 @@ export interface Podcast {
 
   createdAt?: string;
   createdByUserId?: string;
-  annotations?: { [key: string]: string | number | boolean | undefined };
+  annotations?: {
+    [key: string]: string | number | boolean | undefined;
+    /** Subtitle of the podcast */
+    subtitle?: string;
+  };
   article?: string;
   comments?: string;
   conferenceId?: number;

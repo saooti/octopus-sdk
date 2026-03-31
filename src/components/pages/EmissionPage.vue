@@ -23,14 +23,23 @@
               height="250"
               aria-hidden="true"
               alt=""
-              :title="t('Emission name image', { name: name })"
+              :title="t('Emission name image', { name })"
               class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
             >
 
             <div class="d-flex align-items-center justify-content-between">
               <h2>{{ name }}</h2>
-              <ShareAnonymous v-if="!editRight" class="d-flex justify-content-end flex-grow-1" :emission="emission" :organisation-id="emission.orga.id"/>
+              <ShareAnonymous
+                v-if="!editRight"
+                class="d-flex justify-content-end flex-grow-1"
+                :emission="emission"
+                :organisation-id="emission.orga.id"
+              />
             </div>
+            <h3 v-if="showSubtitle" class="text-secondary">
+              {{ emission.annotations.subtitle }}
+            </h3>
+
             <!-- eslint-disable vue/no-v-html -->
             <p
               class="html-wysiwyg-content description-text"
@@ -277,6 +286,11 @@ function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
     lastPodcast.value = podcasts.find(isReadyAndVisible);
   }
 }
+
+/** Indicates whether to show subtitle */
+const showSubtitle = computed((): boolean => {
+  return emission.value.annotations?.subtitle && state.emissionPage?.hideSubtitle !== true;
+});
 
 /** Indicates whether to show tags */
 const showTags = computed((): boolean => {
