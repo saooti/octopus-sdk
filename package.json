@@ -102,6 +102,7 @@
       "default": "./index.ts"
     },
     "./src/*": "./src/*",
+    "./tests/*": "./tests/*",
     "./eslint-config": {
       "types": "./eslint-config.d.ts",
       "default": "./eslint-config.mjs"
