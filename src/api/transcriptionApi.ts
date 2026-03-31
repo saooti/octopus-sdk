@@ -62,6 +62,8 @@ async function getTranslation(podcastId: number, language: string, mayCreate?: b
     }
 
     let found = false;
+    let timeout = 1000;
+    const timeoutStep = 100;
     while (!found) {
         const result = await classicApi.fetchData<string|TranslationProgress>({
             api: ModuleApi.SPEECHTOTEXT,
@@ -75,8 +77,15 @@ async function getTranslation(podcastId: number, language: string, mayCreate?: b
         }
 
         // Wait some time before retrying
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, timeout));
+        timeout += timeoutStep;
+
+        if (timeout >= 60 * 1000) {
+            break;
+        }
     }
+
+    throw new Error('Timeout lors de la récupération de la transcription');
 }
 
 /**

@@ -18,7 +18,7 @@
                 v-if="isOpen && availableLanguagesOptions.length > 0"
                 class="language-selector"
             >
-                <span class="me-2">[WIP] Langues disponibles</span>
+                <span class="me-2">{{ t('Transcript - Available languages') }}</span>
                 <ClassicSelect
                     :text-init="currentLanguage"
                     :is-disabled="!loadingDone"

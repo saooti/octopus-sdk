@@ -67,7 +67,7 @@ export const usePlayerTranscript = ()=>{
       value: arrayTranscript
     });
 
-    if (ready !== available) {
+    if (available !== undefined && ready !== available) {
       generatingTranscriptLanguage.value = available;
 
       // If there's a better language available, trigger its generation

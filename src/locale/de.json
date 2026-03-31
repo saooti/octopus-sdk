@@ -424,5 +424,6 @@
   "Podcast - Season N": "Saison {season}",
   "Podcast - Season": "Jahreszeit",
   "Podcast - Episode number": "Episodennummer",
-  "Player - Generating subtitles": "Generierung von Untertiteln in {language}…"
+  "Player - Generating subtitles": "Generierung von Untertiteln in {language}…",
+  "Transcript - Available languages": "Verfügbare Sprachen"
 }
