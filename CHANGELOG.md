@@ -4,6 +4,13 @@
 
 **Features**
 
+- **14357** - Affichage des sous-titres et résumés d'épisodes, et des
+  sous-titres des émissions
+  - Ajout de nouveaux paramètres pour contrôler cet affichage :
+    - `hideSubtitle` dans `emissionPage` & `podcastPage`, pour cacher les
+      sous-titres
+    - `descriptionOrSummary` dans `emissionPage`, pour choisir quel élément
+      afficher
 - **14387** - Affichage du numéro de saison et d'épisode, ainsi que du type
   d'épisode dans les `PodcastItemInfo`
 - La configuration eslint est maintenant exportée, elle peut donc être intégrée

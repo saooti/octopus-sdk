@@ -13,7 +13,8 @@ const state: ParamStore = {
   podcastPage: {
     ShareButtons: true,
     mainRubrique: 0,
-    downloadButton: false
+    downloadButton: false,
+    descriptionOrSummary: 'description'
   },
   emissionsPage: {
     itemPlayer: false,
@@ -51,7 +52,7 @@ export interface ParamStore {
     isCaptchaTest?: boolean;
     podcastItem?: number;
   };
-  podcastPage:  {
+  podcastPage: {
     ShareButtons?: boolean;
     mainRubrique?: number;
     downloadButton?:boolean;
@@ -59,6 +60,10 @@ export interface ParamStore {
     hideTags?: boolean;
     /** The maximum number of tags that can be displayed */
     maxTags?: number;
+    /** If true, do not display subtitles on podcast pages */
+    hideSubtitle?: boolean;
+    /** Select whether to display description, summary, or both */
+    descriptionOrSummary: 'description'|'summary'|'both';
   };
   emissionPage: {
     ShareButtons?: boolean;
@@ -66,6 +71,8 @@ export interface ParamStore {
     hideTags?: boolean;
     /** The maximum number of tags that can be displayed */
     maxTags?: number;
+    /** If true, do not display subtitles on podcast pages */
+    hideSubtitle?: boolean;
   };
   emissionsPage: {
     itemPlayer?: boolean;
@@ -73,7 +80,7 @@ export interface ParamStore {
     mainRubrique?: number;
     buttonMore?: boolean;
     progressBar?: boolean;
-  },
+  };
   player: {
     isVideoPage?:boolean;
     /**

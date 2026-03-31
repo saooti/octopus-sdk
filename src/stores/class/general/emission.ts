@@ -21,7 +21,10 @@ export enum SeasonMode {
  */
 export interface Emission {
   imageUrl?: string;
-  annotations?: Annotations;
+  annotations?: Annotations & {
+    /** Subtitle of the emission */
+    subtitle?: string;
+  };
   beneficiaries: string[];
   description: string;
   emissionId: number;

@@ -48,13 +48,24 @@
           <ShareAnonymous v-if="!editRight" :podcast="podcast" :organisation-id="podcast.organisation.id"/>
         </div>
       </div>
-      <h2 class="mb-3">
+      <h2 :class="{ 'mb-3': !showSubtitle }">
         {{ podcast.title }}
       </h2>
-      <PodcastPlannedSpinner v-if="isPlannedInProcessor"/>
+      <h3 v-if="showSubtitle" class="mb-3 text-secondary">
+        {{ podcast.annotations.subtitle }}
+      </h3>
+      
+      <PodcastPlannedSpinner v-if="isPlannedInProcessor" />
       <Countdown v-if="isCounter" :time-remaining="timeRemaining" />
       <!-- eslint-disable vue/no-v-html -->
       <div
+        v-if="showSummary"
+        class="description-text html-wysiwyg-content"
+        :class="{ 'mb-4': showSummary && showDescription }"
+        v-html="urlify(podcast.summary)"
+      />
+      <div
+        v-if="showDescription"
         class="description-text html-wysiwyg-content"
         v-html="urlify(podcast.description)"
       />
@@ -296,6 +307,21 @@ const showSeasonEpisodeNumber = computed((): boolean => {
   return props.podcast.emission.seasonMode === SeasonMode.SEASON_WITH_PODCAST_NUMBERING && props.podcast.seasonEpisodeNumber !== undefined;
 });
 
+/** Indicates whether to show subtitle */
+const showSubtitle = computed((): boolean => {
+  return props.podcast.annotations.subtitle && state.podcastPage?.hideSubtitle !== true;
+});
+
+/** Indicates whether to show description */
+const showDescription = computed((): boolean => {
+  return state.podcastPage?.descriptionOrSummary !== 'summary';
+});
+
+/** Indicates whether to show summary */
+const showSummary = computed((): boolean => {
+  return props.podcast.summary && state.podcastPage?.descriptionOrSummary !== 'description' && state.podcastPage?.descriptionOrSummary !== undefined;
+});
+
 //Methods
 function formatCredits(credits: string|undefined): string {
   if (credits === undefined) {
@@ -317,7 +343,7 @@ function removeDeleted(): void {
 }
 
 const showTags = computed((): boolean => {
-  if (state.emissionsPage.hideTags === true) {
+  if (state.podcastPage.hideTags === true) {
     return false;
   }
 
