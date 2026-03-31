@@ -10,6 +10,7 @@
 
 - Correction warning avec les icônes de `useSharePlatforms`
 - Ajustement composants pour les podcastmakers
+- Mise à jour des dépendances
 
 ## 41.8.4 (24/03/2026)
 
