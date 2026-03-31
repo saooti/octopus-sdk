@@ -175,6 +175,7 @@ function slideChange() {
   inset-block:0;
   margin: 0;
   width: 40px;
+  z-index: 5;
   //background: var(--octopus-background);
 }
 
