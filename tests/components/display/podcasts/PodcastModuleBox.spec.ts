@@ -33,6 +33,70 @@ describe('PodcastModuleBox', () => {
         });
     });
 
+    describe('subtitle', () => {
+        it('shows subtitle when annotation is set', async () => {
+            initialize({ podcastPage: { descriptionOrSummary: 'description' } });
+            const podcast = emptyPodcastData();
+            podcast.annotations = { subtitle: 'My subtitle' };
+            const wrapper = await mount(podcast);
+            expect(wrapper.text()).toContain('My subtitle');
+        });
+
+        it('hides subtitle when annotation is not set', async () => {
+            initialize({ podcastPage: { descriptionOrSummary: 'description' } });
+            const wrapper = await mount(emptyPodcastData());
+            expect(wrapper.find('h3').exists()).toBe(false);
+        });
+
+        it('hides subtitle when hideSubtitle is true', async () => {
+            initialize({ podcastPage: { hideSubtitle: true, descriptionOrSummary: 'description' } });
+            const podcast = emptyPodcastData();
+            podcast.annotations = { subtitle: 'My subtitle' };
+            const wrapper = await mount(podcast);
+            expect(wrapper.text()).not.toContain('My subtitle');
+            initialize({ podcastPage: { hideSubtitle: false, descriptionOrSummary: 'description' } });
+        });
+    });
+
+    describe('description and summary', () => {
+        function makePodcastWithContent(): Podcast {
+            const podcast = emptyPodcastData();
+            podcast.description = 'The description';
+            podcast.summary = 'The summary';
+            return podcast;
+        }
+
+        it('shows description and hides summary by default', async () => {
+            initialize({ podcastPage: { descriptionOrSummary: 'description' } });
+            const wrapper = await mount(makePodcastWithContent());
+            expect(wrapper.html()).toContain('The description');
+            expect(wrapper.html()).not.toContain('The summary');
+        });
+
+        it('shows summary and hides description when descriptionOrSummary is summary', async () => {
+            initialize({ podcastPage: { descriptionOrSummary: 'summary' } });
+            const wrapper = await mount(makePodcastWithContent());
+            expect(wrapper.html()).toContain('The summary');
+            expect(wrapper.html()).not.toContain('The description');
+        });
+
+        it('shows both description and summary when descriptionOrSummary is both', async () => {
+            initialize({ podcastPage: { descriptionOrSummary: 'both' } });
+            const wrapper = await mount(makePodcastWithContent());
+            expect(wrapper.html()).toContain('The description');
+            expect(wrapper.html()).toContain('The summary');
+        });
+
+        it('hides summary when podcast has none', async () => {
+            initialize({ podcastPage: { descriptionOrSummary: 'both' } });
+            const podcast = emptyPodcastData();
+            podcast.description = 'The description';
+            const wrapper = await mount(podcast);
+            expect(wrapper.html()).toContain('The description');
+            expect(wrapper.html()).not.toContain('The summary');
+        });
+    });
+
     describe('season info', () => {
         function makePodcast(seasonMode = SeasonMode.NO_SEASON, overrides: Partial<Podcast> = {}) {
             const podcast = emptyPodcastData();

@@ -19,6 +19,7 @@ vi.mock('@/components/composable/useImageProxy', () => ({
 }));
 
 import { emissionApi } from '@/api/emissionApi';
+import { initialize } from '@/stores/ParamSdkStore';
 
 const publicOrga = { id: 'org-1', name: 'Test', imageUrl: '', privacy: 'PUBLIC' };
 
@@ -103,6 +104,36 @@ describe('EmissionPage', () => {
             const wrapper = await mountWithSeasons([1, 2, 3]);
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 2);
             expect(wrapper.text()).not.toContain('Listen to the latest episode');
+        });
+    });
+
+    describe('subtitle', () => {
+        it('shows subtitle when annotation is set', async () => {
+            vi.mocked(emissionApi.get).mockResolvedValue({
+                ...emptyEmissionData(),
+                annotations: { subtitle: 'Emission subtitle' },
+                orga: publicOrga,
+            });
+            const wrapper = await mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+            expect(wrapper.text()).toContain('Emission subtitle');
+        });
+
+        it('hides subtitle when annotation is not set', async () => {
+            vi.mocked(emissionApi.get).mockResolvedValue({ ...emptyEmissionData(), orga: publicOrga });
+            const wrapper = await mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+            expect(wrapper.find('h3').exists()).toBe(false);
+        });
+
+        it('hides subtitle when hideSubtitle is true', async () => {
+            initialize({ emissionPage: { hideSubtitle: true } });
+            vi.mocked(emissionApi.get).mockResolvedValue({
+                ...emptyEmissionData(),
+                annotations: { subtitle: 'Emission subtitle' },
+                orga: publicOrga,
+            });
+            const wrapper = await mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+            expect(wrapper.text()).not.toContain('Emission subtitle');
+            initialize({ emissionPage: { hideSubtitle: false } });
         });
     });
 

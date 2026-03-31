@@ -289,7 +289,7 @@ function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
 
 /** Indicates whether to show subtitle */
 const showSubtitle = computed((): boolean => {
-  return emission.value.annotations.subtitle && state.emissionPage?.hideSubtitle !== true;
+  return emission.value.annotations?.subtitle && state.emissionPage?.hideSubtitle !== true;
 });
 
 /** Indicates whether to show tags */

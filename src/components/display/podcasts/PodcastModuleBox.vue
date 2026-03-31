@@ -309,7 +309,7 @@ const showSeasonEpisodeNumber = computed((): boolean => {
 
 /** Indicates whether to show subtitle */
 const showSubtitle = computed((): boolean => {
-  return props.podcast.annotations.subtitle && state.podcastPage?.hideSubtitle !== true;
+  return props.podcast.annotations?.subtitle && state.podcastPage?.hideSubtitle !== true;
 });
 
 /** Indicates whether to show description */
