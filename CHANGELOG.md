@@ -4,6 +4,8 @@
 
 **Features**
 
+- **14387** - Affichage du numéro de saison et d'épisode, ainsi que du type
+  d'épisode dans les `PodcastItemInfo`
 - La configuration eslint est maintenant exportée, elle peut donc être intégrée
   telle quelle dans les projets se basant sur le SDK
 
