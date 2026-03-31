@@ -32,14 +32,27 @@ export const usePlayerTranscript = ()=>{
       path:`ad/test/podcast/${playerStore.playerPodcast.podcastId}`,
       isNotAuth:true
     });
-    const doubletsLength = adserverConfig.config.doublets.length;
-    if(1 === doubletsLength && "pre" === adserverConfig.config.doublets[0].timing.insertion) {
-      playerStore.playerUpdateDelayStitching( audioPlayer.duration - (playerStore.playerPodcast.duration / 1000));
-    } else if(0===doubletsLength || 1=== doubletsLength &&  "post" === adserverConfig.config.doublets[0].timing.insertion) {
-      return;
-    } else {
+
+    // In case of midroll ads, we can't properly display transcription, so
+    // we disable it.
+    const hasOtherThanPreOrPost = adserverConfig.config.doublets
+      .filter(doublet => !(["pre", "post"].includes(doublet.timing.insertion)))
+      .length > 0;
+    if (hasOtherThanPreOrPost) {
+      console.warn("This episode's ad settings doesn't allow for transcription");
       playerStore.playerUpdateChaptering();
       playerStore.playerUpdateTranscript();
+      return;
+    }
+
+    // In case of preroll ads, delay start of transcription
+    const hasPre = adserverConfig.config.doublets
+      .filter(doublet => doublet.timing.insertion === "pre")
+      .length > 0;
+    if(hasPre) {
+      // Since we have the expected time (from playerStore) and effective time
+      // (from audioPlayer, which include ads), we just delay by the delta
+      playerStore.playerUpdateDelayStitching( audioPlayer.duration - (playerStore.playerPodcast.duration / 1000));
     }
   }
 

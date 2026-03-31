@@ -29,6 +29,8 @@
 
 **Fix**
 
+- **14404** - Correction affichage de la transcription dans le cas de preroll/
+  postrolls multiples
 - Correction `z-index` des boutons de `SwiperList`
 - La propriété `focus` de `ClassicInputText` est à `false` par défaut
 
