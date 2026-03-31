@@ -95,5 +95,16 @@
   },
   "peerDependencies": {
     "pinia": ">=2.3.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.ts"
+    },
+    "./src/*": "./src/*",
+    "./eslint-config": {
+      "types": "./eslint-config.d.ts",
+      "default": "./eslint-config.mjs"
+    }
   }
 }
