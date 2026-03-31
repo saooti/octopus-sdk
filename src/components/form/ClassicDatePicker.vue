@@ -19,8 +19,8 @@
       :format="format"
       :auto-apply="true"
       :enable-seconds="displaySeconds"
-      :max-date="isMaxDate && !isTimePicker ? now : undefined"
-      :min-date="isMinDate && !isTimePicker ? now : undefined"
+      :max-date="isMaxDate && !isTimePicker ? limit : undefined"
+      :min-date="isMinDate && !isTimePicker ? limit : undefined"
       :range="undefined !== range"
       :multi-calendars="columnNumber > 1 ? columnNumber : false"
       :inline="isInline"
@@ -54,8 +54,13 @@ const props = defineProps({
   },
   date: { default: undefined, type: Date },
   range: { default: undefined, type: Array as () => Array<Date> },
+  /** Enable maximum date limit.
+   * If `dateLimit` is not set, use current datetime. */
   isMaxDate: { default: false, type: Boolean },
+  /** Date limit when `isMaxDate` or `isMinDate` are set */
   dateLimit: { default: undefined, type: Date },
+  /** Enable minimum date limit.
+   * If `dateLimit` is not set, use current datetime. */
   isMinDate: { default: false, type: Boolean },
   columnNumber: { default: 1, type: Number },
   displaySeconds: { default: false, type: Boolean },
@@ -145,7 +150,7 @@ const format = computed(() => {
     : "dd/MM/yyyy " + timeString;
   return props.range ? dayString + " - " + dayString : dayString;
 });
-const now = computed(() => {
+const limit = computed(() => {
   if (props.dateLimit) {
     return props.dateLimit;
   }
