@@ -12,6 +12,7 @@
 **Fix**
 
 - Correction `z-index` des boutons de `SwiperList`
+- La propriété `focus` de `ClassicInputText` est à `false` par défaut
 
 **Misc**
 

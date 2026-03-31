@@ -175,7 +175,7 @@ const props = defineProps({
   readonly: { default: false, type: Boolean },
   forceError: { default: false, type: Boolean },
   displayLabel: { default: true, type: Boolean },
-  focus: { default: true, type: Boolean },
+  focus: { default: false, type: Boolean },
   isEmojiPicker: { default: false, type: Boolean },
   popoverRelativeClass: { default: undefined, type: String },
   forceReload: { default: false, type: Boolean },
