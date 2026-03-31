@@ -9,35 +9,9 @@ import paramStore from "@/stores/ParamSdkStore";
 import '../public/css/fonts/localFonts/style.css';
 import { useApiStore } from "./stores/ApiStore";
 import { useAuthStore } from "./stores/AuthStore";
+import { getLanguage } from "./helper/language";
 
-
-const nameEQ = "octopus-language=";
-const ca = document.cookie.split(";");
-let language = "";
-for (const valueCookie of ca) {
-  let c = valueCookie;
-  while (c.startsWith(" ")) c = c.substring(1, c.length);
-  if (0 === c.indexOf(nameEQ)) {
-    language = c.substring(nameEQ.length, c.length);
-    break;
-  }
-}
-if (0 === language.length) {
-  const navigatorLang = navigator.language;
-  language = "fr";
-  if (navigatorLang.includes("en")) {
-    language = "en";
-  } else if (navigatorLang.includes("it")) {
-    language = "it";
-  } else if (navigatorLang.includes("sl")) {
-    language = "sl";
-  } else if (navigatorLang.includes("es")) {
-    language = "es";
-  } else if (navigatorLang.includes("de")) {
-    language = "de";
-  }
-}
-
+const language = getLanguage();
 const i18n = setupI18n({legacy: false, locale: language }, false, false);
 
 paramStore.initialize({

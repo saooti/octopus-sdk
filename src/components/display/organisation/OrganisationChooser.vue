@@ -49,7 +49,7 @@ import { computed, onBeforeMount, ref, Ref, useTemplateRef, watch } from "vue";
 import {
   emptyOrgaData,
   Organisation,
-} from "@/stores/class/general/organisation";
+} from "../../../stores/class/general/organisation";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
 import { useI18n } from "vue-i18n";

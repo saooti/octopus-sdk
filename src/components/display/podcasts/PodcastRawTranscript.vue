@@ -1,123 +1,197 @@
 <template>
-  <div>
-    <AccessibilityModal
-      v-if="isAccessibilityModal"
-      @save="saveAccessibility"
-      @close="isAccessibilityModal = false"
-    />
-    <div class="transcription-section-buttons">
-      <button v-if="isOpen" class="btn btn-primary m-0" @click="isAccessibilityModal = true">
-        <EyeOutlineIcon class="me-1"/> {{ t('Transcript Accessibility') }}
-      </button>
-      <button
-        class="btn btn-transcript"
-        :class="{ open: isOpen }"
-        @click="isOpen = !isOpen"
-      >
-        {{ buttonText }}
-      </button>
+    <div>
+        <AccessibilityModal
+            v-if="isAccessibilityModal"
+            @save="saveAccessibility"
+            @close="isAccessibilityModal = false"
+        />
+        <div class="transcription-section-buttons">
+            <button
+                v-if="isOpen"
+                class="btn btn-primary m-0"
+                @click="isAccessibilityModal = true"
+            >
+                <EyeOutlineIcon class="me-1" /> {{ t('Transcript Accessibility') }}
+            </button>
+
+            <div
+                v-if="isOpen && availableLanguagesOptions.length > 0"
+                class="language-selector"
+            >
+                <span class="me-2">{{ t('Transcript - Available languages') }}</span>
+                <ClassicSelect
+                    :text-init="currentLanguage"
+                    :is-disabled="!loadingDone"
+                    :options="availableLanguagesOptions"
+                    :display-label="false"
+                    @update:text-init="changeLanguage"
+                />
+            </div>
+            
+            <button
+                class="btn btn-transcript"
+                :class="{ open: isOpen }"
+                @click="isOpen = !isOpen"
+            >
+                {{ buttonText }}
+            </button>
+        </div>
+        <div v-if="isOpen" class="transcription-body">
+            <ClassicLoading
+                :loading-text="!loadingDone ? t('Loading content ...') : undefined"
+            />
+            <div class="transcription-text">
+                <template v-if="loadingDone && transcript?.length">
+                    {{ transcript }}
+                </template>
+                <template v-if="loadingDone && !transcript?.length">
+                    {{ t("Transcript does not yet exist for this episode") }}
+                </template>
+            </div>
+        </div>
     </div>
-    <div v-if="isOpen" class="transcription-body">
-      <ClassicLoading
-        :loading-text="!firstLoaded ? t('Loading content ...') : undefined"
-      />
-      <div class="transcription-text">
-        <template v-if="firstLoaded && transcript?.length">{{
-          transcript
-        }}</template>
-        <template v-if="firstLoaded && !transcript?.length">{{
-          t("Transcript does not yet exist for this episode")
-        }}</template>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import cookiesHelper from "../../../helper/cookiesHelper";
 import EyeOutlineIcon from "vue-material-design-icons/EyeOutline.vue";
-import classicApi from "../../../api/classicApi";
 import ClassicLoading from "../../form/ClassicLoading.vue";
-import { computed, defineAsyncComponent, Ref, ref, watch } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { transcriptionApi, TranslationState } from "../../../api/transcriptionApi";
+import { useTranslation } from "../../composable/useTranslation";
+import ClassicSelect from "../../form/ClassicSelect.vue";
 const AccessibilityModal = defineAsyncComponent(
-  () => import("../accessibility/AccessibilityModal.vue"),
+    () => import("../accessibility/AccessibilityModal.vue"),
 );
 
 //Props 
-const props = defineProps({
-  podcastId: { default: undefined, type: Number },
-})
+const props = defineProps<{
+    /** ID of the podcast for which to display transcription */
+    podcastId: number;
+}>();
 
 //Data 
 const isOpen = ref(false);
-const firstLoaded = ref(false);
+const loadingDone = ref(false);
 const isAccessibilityModal = ref(false);
-const transcript: Ref<string | undefined> = ref(undefined);
+const transcript = ref<string|undefined>(undefined);
+/** Native language of the podcast */
+const nativeLanguage = ref('');
+/** List of languages for which a transcription exists */
+const availableLanguages = ref<Array<string>>([]);
+/** Currently shown language */
+const currentLanguage = ref('');
 
 //Composables
 const { t } = useI18n();
+const { convertSrtToPlainText, getMostRelevantLanguage } = useTranslation();
 
 //Computed
-const buttonText = computed(() =>  isOpen.value? t("Hide transcript"): t("View transcript"));
+const buttonText = computed(() => isOpen.value? t("Hide transcript"): t("View transcript"));
+
+const availableLanguagesOptions = computed(() => {
+    return availableLanguages.value.map(lang => ({
+        title: lang,
+        value: lang
+    }));
+})
 
 //Watch
 watch(isOpen, () => {
-  if (isOpen.value && !firstLoaded.value) {
-    fetchTranscript();
-    getAccessibility();
-  }
+    if (isOpen.value && !loadingDone.value) {
+        if (props.podcastId) {
+            fetchTranscripts();
+        }
+        getAccessibility();
+    }
 });
 
 //Methods
 function getAccessibility(){
-  const fontSize = cookiesHelper.getCookie("octopus-font-size");
-  if (null !== fontSize) {
-    setCssProperty('--octopus-accessibility-font-size', fontSize);
-  }
-  const background = cookiesHelper.getCookie("octopus-background");
-  if (null !== background) {
-    setCssProperty('--octopus-accessibility-background', background);
-  }
-  const color = cookiesHelper.getCookie("octopus-color");
-  if (null !== color) {
-    setCssProperty('--octopus-accessibility-color', color);
-  }
+    const fontSize = cookiesHelper.getCookie("octopus-font-size");
+    if (null !== fontSize) {
+        setCssProperty('--octopus-accessibility-font-size', fontSize);
+    }
+    const background = cookiesHelper.getCookie("octopus-background");
+    if (null !== background) {
+        setCssProperty('--octopus-accessibility-background', background);
+    }
+    const color = cookiesHelper.getCookie("octopus-color");
+    if (null !== color) {
+        setCssProperty('--octopus-accessibility-color', color);
+    }
 }
+
 function setCssProperty(name: string, value: string){
-  document.documentElement.style.setProperty(name,value);
+    document.documentElement.style.setProperty(name,value);
 }
+
 function saveAccessibility(accessibility: {fontSize: number,background: string,color: string}){
-  setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
-  cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
-  setCssProperty('--octopus-accessibility-background', accessibility.background);
-  cookiesHelper.setCookie("octopus-background",accessibility.background);
-  setCssProperty('--octopus-accessibility-color', accessibility.color);
-  cookiesHelper.setCookie("octopus-color",accessibility.color);
-  isAccessibilityModal.value = false;
+    setCssProperty('--octopus-accessibility-font-size', accessibility.fontSize+'px');
+    cookiesHelper.setCookie("octopus-font-size", accessibility.fontSize+'px');
+    setCssProperty('--octopus-accessibility-background', accessibility.background);
+    cookiesHelper.setCookie("octopus-background",accessibility.background);
+    setCssProperty('--octopus-accessibility-color', accessibility.color);
+    cookiesHelper.setCookie("octopus-color",accessibility.color);
+    isAccessibilityModal.value = false;
 }
-async function fetchTranscript() {
-  if (!props.podcastId) {
-    return;
-  }
-  try {
-    transcript.value = await classicApi.fetchData({
-      api: 11,
-      path: `transcription/text/${props.podcastId}`,
-    });
-  } catch {
-    //Do nothing
-  }
-  firstLoaded.value = true;
+
+async function fetchTranscripts(): Promise<void> {
+    try {
+        const translation = await transcriptionApi.getTranslations(props.podcastId);
+        const { ready, available } = await getMostRelevantLanguage(translation);
+        // If available language is set, it is better than ready, so use it
+        const language = available ?? ready;
+        const srt = await transcriptionApi.getTranslation(props.podcastId, language, true);
+        transcript.value = convertSrtToPlainText(srt);
+        
+        availableLanguages.value = translation.translations
+            .filter(t => t.state === TranslationState.FINISHED)
+            .map(t => t.language);
+        nativeLanguage.value = translation.nativeLanguage;
+        currentLanguage.value = language;
+        availableLanguages.value.unshift(translation.nativeLanguage);
+
+        if (!availableLanguages.value.includes(language)) {
+            availableLanguages.value.push(language);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    loadingDone.value = true;
+}
+
+async function changeLanguage(language: string): Promise<void> {
+    loadingDone.value = false;
+    currentLanguage.value = language;
+    transcript.value = '';
+    try {
+        const srt = await transcriptionApi.getTranslation(props.podcastId, language);        
+        transcript.value = convertSrtToPlainText(srt);
+    } catch (error) {
+        console.error(error);
+    }
+    loadingDone.value = true;
 }
 </script>
-<style lang="scss">
-:root {
+
+<style scoped lang="scss">
+.octopus-app {
   --octopus-accessibility-font-size: 16px;
   --octopus-accessibility-background: var(--octopus-background);
   --octopus-accessibility-color: var(--octopus-color-text);
-}
-.octopus-app {
+
+  .language-selector {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+
+    span {
+        font-weight: 600;
+    }
+  }
+
   .transcription-section-buttons{
     display: flex;
     justify-content: space-between;

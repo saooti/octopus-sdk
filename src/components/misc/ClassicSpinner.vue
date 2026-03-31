@@ -1,23 +1,36 @@
 <template>
-  <div class="octopus-spinner" :style="small ? '--size-spinner:1rem;' : ''" >
-    <div v-for="index of 12" :key="index"></div>
+  <div
+    class="octopus-spinner"
+    :style="style"
+  >
+    <div v-for="index of 12" :key="index" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 //Props 
-defineProps({
+const props = defineProps({
   small: { default: false, type: Boolean },
+  color: { default: undefined, type: String }
 })
+
+const style = computed(() => ({
+  '--size-spinner': props.small ? '1.5rem' : '3rem',
+  '--color-spinner': props.color === undefined ? '#000000' : props.color
+}));
 </script>
+
 <style lang="scss">
 .octopus-app .octopus-spinner {
 
   --size-spinner: 3rem;
   --size-spinner-section: calc(var(--size-spinner) / 20);
   --half-size-spinner: calc(var(--size-spinner) / 2);
+  --color-spinner: #000000;
   
-  color: #000000;
+  color: var(--color-spinner);
   display: inline-block;
   position: relative;
   width: var(--size-spinner);
@@ -86,6 +99,7 @@ defineProps({
     transform: rotate(330deg);
     animation-delay: 0s;
   }
+
   @keyframes octopus-spinner {
     0% {
       opacity: 1;

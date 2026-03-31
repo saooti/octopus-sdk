@@ -4,6 +4,16 @@
 
 **Features**
 
+- **12535** - Implémentation de la traduction des sous-titres
+  - Mise en place de l'api `transcriptionApi` pour simplifier les appels
+  - Ajout du composable `useTranslation` pour regrouper les opérations relatives
+    aux traductions
+  - `PodcastRawTranscript` permet maintenant de choisir la langue de la
+    transcription
+    - La langue la plus pertinente pour l'utilisateur est sélectionnée par
+      défaut
+  - La transcription affichée dans le player correspond à la langue la plus
+    pertinente disponible
 - **14357** - Affichage des sous-titres et résumés d'épisodes, et des
   sous-titres des émissions
   - Ajout de nouveaux paramètres pour contrôler cet affichage :
@@ -15,9 +25,12 @@
   d'épisode dans les `PodcastItemInfo`
 - La configuration eslint est maintenant exportée, elle peut donc être intégrée
   telle quelle dans les projets se basant sur le SDK
+- Ajout d'options de configuration pour `ClassicLoading` et `ClassicSpinner`
 
 **Fix**
 
+- **14404** - Correction affichage de la transcription dans le cas de preroll/
+  postrolls multiples
 - Correction `z-index` des boutons de `SwiperList`
 - La propriété `focus` de `ClassicInputText` est à `false` par défaut
 
@@ -26,6 +39,7 @@
 - Correction warning avec les icônes de `useSharePlatforms`
 - Ajustement composants pour les podcastmakers
 - Mise à jour des dépendances
+- Les exports d'organisation viennent du SDK et non plus du package parent
 
 ## 41.8.4 (24/03/2026)
 

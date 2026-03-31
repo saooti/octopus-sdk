@@ -161,6 +161,7 @@ import classicApi from "./src/api/classicApi.ts";
 
 // API
 export { emissionApi } from "./src/api/emissionApi.ts";
+export { transcriptionApi } from "./src/api/transcriptionApi.ts";
 export * from "./src/api/groupsApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";
@@ -168,9 +169,23 @@ export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/po
 
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
+export { type Organisation, type OrganisationAttributes, emptyOrganisationData, emptyOrgaData } from "./src/stores/class/general/organisation.ts";
 export { type Podcast, type PodcastAvailability, PodcastType } from "./src/stores/class/general/podcast.ts";
 export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
 export { type Annotations } from "./src/stores/class/general";
+export {
+    CreateTranslation,
+    type TranslationConfiguration,
+    defaultTranslationConfig,
+    defaultModifyPodcastConfig,
+    defaultTtsParams,
+    type ModifyPodcastConfig,
+    ModifyPodcastEnum,
+    type TranscriptParams,
+    type TtsParams,
+    type ProviderTts,
+    type Voice
+} from "./src/stores/class/transcript/transcriptParams.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");

@@ -20,6 +20,7 @@ export const usePlayerDisplayTime = ()=>{
     }
     return playerStore.totalTime;
   });
+
   const transcriptText = computed(() => { 
     return playerStore.transcriptText;
   });

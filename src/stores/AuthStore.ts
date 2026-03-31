@@ -1,4 +1,4 @@
-import { Organisation } from "@/stores/class/general/organisation";
+import { Organisation } from "./class/general/organisation";
 import { Profile } from "@/stores/class/user/profile";
 import { useSaveFetchStore } from "./SaveFetchStore";
 import { defineStore } from "pinia";

@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.8.4",
+  "version": "41.9.0",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -12,7 +12,7 @@
     "bundle": "vite-bundle-visualizer",
     "proxy_authentifié": "node proxy.ts",
     "proxy_non_authentifié": "node proxy.ts false",
-    "lint": "eslint --fix src",
+    "lint": "eslint --fix --max-warnings 0",
     "stylelint": "stylelint **/*.{scss,vue} --fix",
     "sonar": "sonar -Dsonar.host.url=http://localhost:9000"
   },

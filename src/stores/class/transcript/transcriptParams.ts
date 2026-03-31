@@ -2,6 +2,7 @@ export interface TranscriptParams {
   automation: string; // super, {date}, false 
   ttsParams: TtsParams;
   modifyPodcast: ModifyPodcastConfig
+  translationConfig: TranslationConfiguration;
 }
 export interface TtsParams {
   super: string;
@@ -27,6 +28,18 @@ export enum ModifyPodcastEnum {
   OVERWRITE="OVERWRITE"
 }
 
+export interface TranslationConfiguration {
+  createTranslation:{[lang:string]: CreateTranslation};
+  otherLanguage:CreateTranslation; //Cannot be ALWAYS
+}
+
+export enum CreateTranslation {
+  NEVER = "NEVER",
+  ON_DEMAND = "ON_DEMAND",
+  ALWAYS = "ALWAYS",
+  SUPER="SUPER"
+}
+
 export function defaultTtsParams(): TtsParams {
   return {
     super: "true",
@@ -45,6 +58,18 @@ export function defaultModifyPodcastConfig(): ModifyPodcastConfig {
     modifyDescription:ModifyPodcastEnum.NO,
     createDescriptionUsingAi: false,
     wordsNumber: 100,
+  };
+}
+
+/**
+ * Create a default object of TranslationConfiguration
+ * @param isEmission Optional, if set and true changes default values
+ * @returns The object
+ */
+export function defaultTranslationConfig(isEmission?: boolean): TranslationConfiguration {
+  return {
+    createTranslation:{},
+    otherLanguage: isEmission ? CreateTranslation.SUPER : CreateTranslation.NEVER
   };
 }
 

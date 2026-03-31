@@ -156,5 +156,6 @@ export function emptyPodcastData(): Podcast {
     pubDate: undefined,
     conferenceId: undefined,
     duration: 0,
+    seasonEpisodeType: PodcastType.FULL
   };
 }

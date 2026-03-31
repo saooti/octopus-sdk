@@ -423,5 +423,7 @@
   "Podcast type - Bonus": "Bonificaciones",
   "Podcast - Season N": "Temporada {season}",
   "Podcast - Season": "Estación",
-  "Podcast - Episode number": "Número de episodio"
+  "Podcast - Episode number": "Número de episodio",
+  "Player - Generating subtitles": "Generación de subtítulos en {language}…",
+  "Transcript - Available languages": "Idiomas disponibles"
 }

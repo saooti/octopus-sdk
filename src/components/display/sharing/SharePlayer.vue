@@ -376,7 +376,7 @@ function initColor(): void {
     : "#40a372";
   theme.value = Object.hasOwn(orgaAttributes.value, "THEME")
     ? (orgaAttributes.value.THEME as string)
-    : "#000000";
+    : "#ffffff";
 }
 </script>
 

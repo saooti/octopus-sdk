@@ -1,4 +1,4 @@
-import { OrganisationAttributes } from "@/stores/class/general/organisation";
+import { OrganisationAttributes } from "../../../stores/class/general/organisation";
 import { RouteLocationAsRelativeTyped, useRouter } from "vue-router";
 import { useSeoTitleUrl } from "../route/useSeoTitleUrl";
 

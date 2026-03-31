@@ -47,7 +47,7 @@
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import ClassicSearch from "../../form/ClassicSearch.vue";
 import { state } from "../../../stores/ParamSdkStore";
-import { Organisation } from "@/stores/class/general/organisation";
+import { Organisation } from "../../../stores/class/general/organisation";
 import { useFilterStore } from "../../../stores/FilterStore";
 import { defineAsyncComponent, ref, computed, watch, onBeforeMount } from "vue";
 import { useAuthStore } from "../../../stores/AuthStore";

@@ -3,8 +3,8 @@
     v-if="loadingText"
     class="d-flex align-items-center justify-content-center"
   >
-    <ClassicSpinner class="me-3" />
-    <div class="h3">
+    <ClassicSpinner :small="small" :color="spinnerColor" class="me-3" />
+    <div :class="small ? 'text-secondary' : 'h3'">
       {{ loadingText }}
     </div>
   </div>
@@ -20,5 +20,9 @@ import ClassicSpinner from "../misc/ClassicSpinner.vue";
 defineProps({
   loadingText: { default: undefined, type: String },
   errorText: { default: undefined, type: String },
+  /** Reduce size of the loading animation and text */
+  small: { default: false, type: Boolean },
+  /** Color of the spinner */
+  spinnerColor: { default: undefined, type: String }
 })
 </script>

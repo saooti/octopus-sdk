@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { state } from "../../stores/ParamSdkStore";
-import { Organisation } from "@/stores/class/general/organisation";
+import { Organisation } from "../../stores/class/general/organisation";
 import { defineAsyncComponent, onMounted } from "vue";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useI18n } from "vue-i18n";

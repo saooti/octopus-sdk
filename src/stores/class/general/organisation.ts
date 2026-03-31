@@ -1,9 +1,18 @@
 import { Person } from "../user/person";
 
 export type OrganisationAttributes = {
-  [key: string]: string | number | boolean | undefined;
+  //[key: string]: string | number | boolean | undefined;
+  automation?: string;
+  /** JSON */
+  'modify-podcast'?: string;
   /** The URL to the podcastmaker of the organisation */
   podcastmakerUrl?: string;
+  /** Text to speech parameters (JSON) */
+  ttsParams?: string;
+  /** Translation parameters (JSON) */
+  'translation-config'?: string;
+  /** Language of the RSS */
+  'rss-language'?: string;
 };
 
 export interface Organisation {
