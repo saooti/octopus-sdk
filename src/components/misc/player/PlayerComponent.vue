@@ -22,7 +22,7 @@
       @pause="onPause"
       @loadedmetadata="checkDelaytWithStitching"
     />
-    <div id="ad-container"></div>
+    <div id="ad-container" />
 
     <template v-if="displayWithTimeout">
 

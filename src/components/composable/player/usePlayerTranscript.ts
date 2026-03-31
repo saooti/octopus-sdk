@@ -17,24 +17,27 @@ export const usePlayerTranscript = ()=>{
 
   async function checkDelaytWithStitching(){
     playerStore.playerUpdateDelayStitching(0);
-    if(vastStore.useVastPlayerPodcast){return;}
-    const audioPlayer = document.querySelector("#audio-player") as HTMLAudioElement;
-    if (!playerStore.playerTranscript || !audioPlayer || !playerStore.playerPodcast ||
-      audioPlayer.duration <= playerStore.playerPodcast.duration / 1000 + 5) 
-    {
+    if(vastStore.useVastPlayerPodcast){
       return;
     }
+
+    const audioPlayer = document.querySelector("#audio-player") as HTMLAudioElement;
+    if (!playerStore.playerTranscript || !audioPlayer || !playerStore.playerPodcast ||
+      audioPlayer.duration <= playerStore.playerPodcast.duration / 1000 + 5) {
+      return;
+    }
+
     const adserverConfig = await classicApi.fetchData<AdserverOtherEmission>({
       api:0,
       path:`ad/test/podcast/${playerStore.playerPodcast.podcastId}`,
       isNotAuth:true
     });
     const doubletsLength = adserverConfig.config.doublets.length;
-    if(1=== doubletsLength &&  "pre" === adserverConfig.config.doublets[0].timing.insertion){
+    if(1 === doubletsLength && "pre" === adserverConfig.config.doublets[0].timing.insertion) {
       playerStore.playerUpdateDelayStitching( audioPlayer.duration - (playerStore.playerPodcast.duration / 1000));
-    }else if(0===doubletsLength || 1=== doubletsLength &&  "post" === adserverConfig.config.doublets[0].timing.insertion){
+    } else if(0===doubletsLength || 1=== doubletsLength &&  "post" === adserverConfig.config.doublets[0].timing.insertion) {
       return;
-    }else{
+    } else {
       playerStore.playerUpdateChaptering();
       playerStore.playerUpdateTranscript();
     }
