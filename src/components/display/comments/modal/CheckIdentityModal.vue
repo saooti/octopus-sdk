@@ -11,6 +11,7 @@
         v-model:text-init="name"
         v-model:error-variable="errorName"
         input-id="adserver-tag"
+        focus
         :label="t('Let\'s get acquainted :')"
         :max-length="Constants.MAX_COMMENT_NAME"
         :placeholder="t('Your name')"

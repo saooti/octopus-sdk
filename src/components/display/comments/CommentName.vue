@@ -14,6 +14,7 @@
         v-model:text-init="temporaryName"
         v-model:error-variable="errorName"
         input-id="comment-name-input"
+        focus
         :label="t('Your name')"
         :max-length="Constants.MAX_COMMENT_NAME"
         autocomplete-type="name"
