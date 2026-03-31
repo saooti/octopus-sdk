@@ -2,6 +2,11 @@
 
 ## 41.9.0 (En cours)
 
+**Features**
+
+- La configuration eslint est maintenant exportée, elle peut donc être intégrée
+  telle quelle dans les projets se basant sur le SDK
+
 **Fix**
 
 - Correction `z-index` des boutons de `SwiperList`
