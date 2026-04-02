@@ -137,12 +137,14 @@ function saveAccessibility(accessibility: {fontSize: number,background: string,c
     isAccessibilityModal.value = false;
 }
 
-async function fetchTranscripts(): Promise<void> {
+async function fetchTranscripts(language?: string): Promise<void> {
     try {
         const translation = await transcriptionApi.getTranslations(props.podcastId);
-        const { ready, available } = await getMostRelevantLanguage(translation);
-        // If available language is set, it is better than ready, so use it
-        const language = available ?? ready;
+        if (language === undefined) {
+            const { ready, available } = await getMostRelevantLanguage(translation);
+            // If available language is set, it is better than ready, so use it
+            language = available ?? ready;
+        }
         const srt = await transcriptionApi.getTranslation(props.podcastId, language, true);
         transcript.value = convertSrtToPlainText(srt);
         
@@ -165,7 +167,7 @@ async function fetchTranscripts(): Promise<void> {
 async function changeLanguage(language: string): Promise<void> {
     loadingDone.value = false;
     currentLanguage.value = language;
-    transcript.value = '';
+    transcript.value = undefined;
     try {
         const srt = await transcriptionApi.getTranslation(props.podcastId, language);        
         transcript.value = convertSrtToPlainText(srt);
@@ -174,6 +176,15 @@ async function changeLanguage(language: string): Promise<void> {
     }
     loadingDone.value = true;
 }
+
+/** Force reloading */
+function reset(): void {
+    if (isOpen.value || loadingDone.value) {
+        fetchTranscripts(currentLanguage.value);
+    }
+}
+
+defineExpose({ reset });
 </script>
 
 <style scoped lang="scss">
