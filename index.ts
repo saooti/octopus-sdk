@@ -135,6 +135,7 @@ export { useSharePath } from "./src/components/composable/share/useSharePath.ts"
 export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
 export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl.ts";
 export { useSeasonsManagement } from "./src/components/composable/useSeasonsManagement.ts";
+export { useTranslation } from "./src/components/composable/useTranslation.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -161,7 +162,7 @@ import classicApi from "./src/api/classicApi.ts";
 
 // API
 export { emissionApi } from "./src/api/emissionApi.ts";
-export { transcriptionApi } from "./src/api/transcriptionApi.ts";
+export { transcriptionApi, type TranslationData } from "./src/api/transcriptionApi.ts";
 export * from "./src/api/groupsApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";

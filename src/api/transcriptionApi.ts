@@ -1,3 +1,4 @@
+import { ModifyPodcastConfig } from "../stores/class/transcript/transcriptParams";
 import { ModuleApi } from "./apiConnection";
 import classicApi from "./classicApi";
 
@@ -100,8 +101,73 @@ async function getRawTranscription(podcastId: number): Promise<string> {
     });
 }
 
+/**
+ * Generate the transcription on the given podcast
+ * @param podcastId ID of the podcast on which to do the transcription
+ * @param langauge Target language. Should be the native language of the podcast
+ * @param params Transcription parameters
+ */
+async function generateTranscription(podcastId: number, language: string, params: ModifyPodcastConfig): Promise<void> {
+    await classicApi.putData({
+        api: ModuleApi.SPEECHTOTEXT,
+        path: `convert/${language}/${podcastId}`,
+        dataToSend: params
+    });
+}
+
+/**
+ * Regenerate the transcription on the given podcast
+ * Currently does the same as `generateTranscription`, but should be used when
+ * relevant in case of future evolutions.
+ * @param podcastId ID of the podcast on which to do the transcription
+ * @param langauge Target language. Should be the native language of the podcast
+ * @param params Transcription parameters
+ */
+async function regenerateTranscription(podcastId: number, language: string, params: ModifyPodcastConfig): Promise<void> {
+    await classicApi.putData({
+        api: ModuleApi.SPEECHTOTEXT,
+        path: `regenerate/${language}/${podcastId}`,
+        dataToSend: params
+    });
+}
+
+/**
+ * Change the visibility of the podcast
+ * @param podcastId ID of the podcast for which to change the visibility
+ * @param visibility New visibility state
+ */
+async function changeTranscriptionVisibility(podcastId: number, visibility: boolean): Promise<void> {
+    await classicApi.putData({
+        api: 11,
+        path: "visibility/" + podcastId,
+        parameters: {
+            visibility
+        }
+    });
+}
+
+/**
+ * Update the transcription of a podcast
+ * @param podcastId ID of the podcast
+ * @param transcript The new transcript
+ */
+async function updateTranscription(podcastId: number, transcript: string): Promise<void> {
+    await classicApi.postData({
+        api: ModuleApi.SPEECHTOTEXT,
+        path: "update/" + podcastId,
+        dataToSend: {
+            file: new File([transcript], "file")
+        },
+        contentType: "formData"
+    });
+}
+
 export const transcriptionApi = {
+    changeTranscriptionVisibility,
     getTranslations,
     getTranslation,
-    getRawTranscription
+    getRawTranscription,
+    generateTranscription,
+    regenerateTranscription,
+    updateTranscription
 };

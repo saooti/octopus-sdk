@@ -8,6 +8,10 @@
   - La régénration de la transcription invalide les données de
     `PodcastRawTranscript`
 - **14406** - Ajout de `useDayjs` qui permet d'avoir des dates réactives 
+- Ajout de nouveaux endpoints à `transcriptionApi`
+- Ajout nouveaux exports:
+  - composable `useTranslation`
+  - types `TranslationData`, `ModifyPodcastConfig`
 
 **Fixes**
 
