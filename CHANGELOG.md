@@ -14,6 +14,9 @@
   - composable `useTranslation`
   - types `TranslationData`, `ModifyPodcastConfig`
   - énumération `TranslationState`
+- Améliorations composants :
+  - `ClassicInputText` en mode `textarea` scrolle en haut du contenu par défaut
+  - `ClassicAlert` a maintenant un props `text` qui enlève le font et la bordure
 
 **Fixes**
 

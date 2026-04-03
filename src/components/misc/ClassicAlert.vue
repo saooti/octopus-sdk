@@ -8,7 +8,7 @@
 -->
 <template>
     <div
-        class="p-2 pe-4 my-2 rounded d-flex alert"
+        class="p-2 pe-4 rounded d-flex alert"
         :class="cardClass"
     >
         <!-- The icon -->
@@ -16,7 +16,7 @@
             :is="iconComponent"
             v-if="!noIcon"
             class="icon"
-            :size="30"
+            :size="text ? 22 : 30"
         />
 
         <!-- Main content -->
@@ -39,18 +39,26 @@ import CheckCircle from 'vue-material-design-icons/CheckCircle.vue';
 import CloseCircle from 'vue-material-design-icons/CloseCircle.vue';
 import Information from 'vue-material-design-icons/Information.vue';
 
-const { type } = defineProps<{
+const { type, text } = defineProps<{
     /** Disables the icon when true */
     noIcon?: boolean;
     /** An optional title for the alert */
     title?: string;
     /** The type of message */
     type: 'info'|'success'|'warning'|'error';
+    /** Use a simpler display */
+    text?: boolean;
 }>();
 
 /** The class applied to the alert */
-const cardClass = computed(() => {
-    return 'alert-' + type;
+const cardClass = computed((): Array<string> => {
+    const classes = ['alert-' + type];
+    if (text === true) {
+        classes.push('text-alert');
+    } else {
+        classes.push('my-2');
+    }
+    return classes;
 });
 
 const iconComponent = computed(() => {
@@ -70,9 +78,10 @@ const iconComponent = computed(() => {
 
 <style lang="scss" scoped>
 .alert {
-    //color: white;
-    border: 1px solid;
-    border-left: 8px solid;
+    &:not(.text-alert) {
+        border: 1px solid;
+        border-left: 8px solid;
+    }
 
     .icon {
         align-items: start !important;
@@ -98,14 +107,17 @@ const iconComponent = computed(() => {
         'error': var(--octopus-danger),
     );
 
-    &.alert {
-        @each $type, $color in $types {
-            &-#{$type} {
+    @each $type, $color in $types {
+        &-#{$type} {
+            &:not(.text-alert) {
                 background-color: hsl(from #{$color} h s 95) !important;
                 border-color: #{$color} !important;
-                .icon {
-                    color: #{$color};
-                }
+            }
+            &.text-alert {
+                color: #{$color} !important;
+            }
+            .icon {
+                color: #{$color};
             }
         }
     }
