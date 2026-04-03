@@ -13,6 +13,7 @@
 - Ajout nouveaux exports:
   - composable `useTranslation`
   - types `TranslationData`, `ModifyPodcastConfig`
+  - énumération `TranslationState`
 
 **Fixes**
 
