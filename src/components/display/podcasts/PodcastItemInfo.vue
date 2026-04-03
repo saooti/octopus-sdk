@@ -60,7 +60,6 @@
 <script setup lang="ts">
 import AnimatorsItem from "./AnimatorsItem.vue";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
-import dayjs from "dayjs";
 import { computed, defineAsyncComponent } from "vue";
 import { Podcast, PodcastType } from "../../../stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
@@ -68,6 +67,7 @@ import { useI18n } from "vue-i18n";
 import { useSeasonsManagement } from "../../composable/useSeasonsManagement";
 import BullhornIcon from 'vue-material-design-icons/Bullhorn.vue';
 import GiftIcon from 'vue-material-design-icons/Gift.vue';
+import { useDayjs } from "../../composable/useDayjs";
 const PodcastPlayBar = defineAsyncComponent(
     () => import("./PodcastPlayBar.vue"),
 );
@@ -81,6 +81,7 @@ const props = defineProps({
 const { t } = useI18n();
 const { isPodcastmaker } = useOrgaComputed();
 const { formatSeason } = useSeasonsManagement();
+const { dayjs } = useDayjs();
 
 //Computed
 const date = computed(() => {
@@ -90,6 +91,7 @@ const date = computed(() => {
     }
     return dayjs(props.podcast.pubDate).format(format);
 });
+
 const orgaNameDisplay = computed(() =>{
     if (props.podcast.organisation.name.length > 30) {
         return props.podcast.organisation.name.substring(0, 30) + "...";

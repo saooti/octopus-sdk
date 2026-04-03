@@ -2,6 +2,10 @@
 
 ## 41.9.1 (En cours)
 
+**Features**
+
+- **14406** - Ajout de `useDayjs` qui permet d'avoir des dates réactives 
+
 ## 41.9.0 (31/03/2026)
 
 **Features**
