@@ -6,6 +6,11 @@
 
 - **14406** - Ajout de `useDayjs` qui permet d'avoir des dates réactives 
 
+**Fixes**
+
+- **14330** - La page d'émission propose uniquement le dernier épisode
+  **valide** à la lecture
+
 ## 41.9.0 (31/03/2026)
 
 **Features**

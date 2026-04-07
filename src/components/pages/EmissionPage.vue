@@ -269,8 +269,11 @@ async function getEmissionDetails(): Promise<void> {
   }
 }
 
+function isReadyAndVisibleAndValid(p: Podcast): boolean {
+  return "READY" === p.processingStatus && p.availability.visibility && p.valid === true;
+}
+
 function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
-  const isReadyAndVisible = (p: Podcast) => "READY" === p.processingStatus && p.availability.visibility;
 
   if (areSeasonsEnabled(emission.value)) {
     // Ignore results that are not from the last season
@@ -279,11 +282,11 @@ function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
       return;
     }
     // If seasons are enabled, take last element
-    lastPodcast.value = podcasts.findLast(isReadyAndVisible);
+    lastPodcast.value = podcasts.findLast(isReadyAndVisibleAndValid);
   } else {
     // If seasons are disabled, we have a standard date desc sort, so we take
     // first element
-    lastPodcast.value = podcasts.find(isReadyAndVisible);
+    lastPodcast.value = podcasts.find(isReadyAndVisibleAndValid);
   }
 }
 
