@@ -4,7 +4,19 @@
 
 **Features**
 
+- **12535** - Améliorations pour la traduction
+  - La régénration de la transcription invalide les données de
+    `PodcastRawTranscript`
 - **14406** - Ajout de `useDayjs` qui permet d'avoir des dates réactives 
+- Mise à jour des droits relatifs aux transcriptions/traductions
+- Ajout de nouveaux endpoints à `transcriptionApi`
+- Ajout nouveaux exports:
+  - composable `useTranslation`
+  - types `TranslationData`, `ModifyPodcastConfig`
+  - énumération `TranslationState`
+- Améliorations composants :
+  - `ClassicInputText` en mode `textarea` scrolle en haut du contenu par défaut
+  - `ClassicAlert` a maintenant un props `text` qui enlève le font et la bordure
 
 **Fixes**
 

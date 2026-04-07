@@ -154,11 +154,19 @@ export const useRights = () => {
             return true;
         }
 
-        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION')) {
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'PODCAST_CRUD')) {
             return podcast.createdByUserId === authStore.authProfile?.userId;
         }
 
         return false;
+    }
+
+    function canEditTranscriptVisibility(podcast: Podcast): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
+    }
+
+    function canEditTranslation(podcast: Podcast): boolean {
+        return canEditTranscript(podcast);
     }
 
     function canSeeHistory(): boolean {
@@ -198,6 +206,8 @@ export const useRights = () => {
         // Other
         canEditCodeInsertPlayer,
         canEditTranscript,
+        canEditTranslation,
+        canEditTranscriptVisibility,
         canSeeHistory,
         isRestrictedProduction
     }

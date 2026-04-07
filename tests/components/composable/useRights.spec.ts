@@ -256,7 +256,7 @@ describe('useRights', () => {
             });
         });
 
-        ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+        ['RESTRICTED_PRODUCTION', 'PODCAST_CRUD'].forEach(role => {
             it(`${role} can only edit transcript of own podcast`, async () => {
                 await setup([role]);
                 expect(useRights().canEditTranscript(ownPodcast)).toBe(true);
@@ -265,8 +265,50 @@ describe('useRights', () => {
         });
 
         it('denies unrelated roles', async () => {
-            await setup(['PODCAST_CRUD']);
+            await setup(['RESTRICTED_ANIMATION']);
             expect(useRights().canEditTranscript(ownPodcast)).toBe(false);
+        });
+    });
+
+    describe('canEditTranslation', () => {
+        const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123' } as Podcast;
+        const otherPodcast = { podcastId: 2, createdByUserId: 'other-user' } as Podcast;
+
+        ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
+            it(`allows ${role} to edit transcript of any podcast`, async () => {
+                await setup([role]);
+                expect(useRights().canEditTranslation(otherPodcast)).toBe(true);
+            });
+        });
+
+        ['RESTRICTED_PRODUCTION', 'PODCAST_CRUD'].forEach(role => {
+            it(`${role} can only edit transcript of own podcast`, async () => {
+                await setup([role]);
+                expect(useRights().canEditTranslation(ownPodcast)).toBe(true);
+                expect(useRights().canEditTranslation(otherPodcast)).toBe(false);
+            });
+        });
+
+        it('denies unrelated roles', async () => {
+            await setup(['RESTRICTED_ANIMATION']);
+            expect(useRights().canEditTranslation(ownPodcast)).toBe(false);
+        });
+    });
+
+    describe('canEditTranscriptVisibility', () => {
+        const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123' } as Podcast;
+        const otherPodcast = { podcastId: 2, createdByUserId: 'other-user' } as Podcast;
+
+        ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
+            it(`allows ${role} to edit transcript of any podcast`, async () => {
+                await setup([role]);
+                expect(useRights().canEditTranscriptVisibility(otherPodcast)).toBe(true);
+            });
+        });
+
+        it('denies unrelated roles', async () => {
+            await setup(['PODCAST_CRUD']);
+            expect(useRights().canEditTranscriptVisibility(ownPodcast)).toBe(false);
         });
     });
 

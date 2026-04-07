@@ -64,7 +64,7 @@ export const useTranslation = () => {
      * @param emission *(optional)* If set, will also check in emission settings
      * @returns Whether the language is available or not
      */
-    function translationConfig(language: string, emission?: Emission): CreateTranslation {
+    function getTranslationConfig(language: string, emission?: Emission): CreateTranslation {
         const orgAttributes = authStore.authOrganisation.attributes;
         const emissionTranslation = parseOrDefault(emission?.annotations['translation-config'] as string|undefined, true);
         const orgTranslation = parseOrDefault(orgAttributes?.['translation-config']);
@@ -93,8 +93,8 @@ export const useTranslation = () => {
             const podcast = await podcastApi.get(translationData.podcastId);
             const emission = podcast.emission;
 
-            const baseLangConfig = translationConfig(baseLanguage, emission);
-            const defaultLangConfig = translationConfig(DEFAULT_LANGUAGE, emission);
+            const baseLangConfig = getTranslationConfig(baseLanguage, emission);
+            const defaultLangConfig = getTranslationConfig(DEFAULT_LANGUAGE, emission);
 
             // 2. If the language of the browser is available, use it
             if (baseLangConfig === CreateTranslation.ALWAYS) {
@@ -169,6 +169,7 @@ export const useTranslation = () => {
     return {
         convertSrtToPlainText,
         getMostRelevantLanguage,
-        getMostRelevantTranslation
+        getMostRelevantTranslation,
+        getTranslationConfig
     }
 };

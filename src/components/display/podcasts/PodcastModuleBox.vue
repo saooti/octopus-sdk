@@ -12,6 +12,7 @@
       v-else-if="editRight && isEditBox"
       :podcast="podcast"
       :display-studio-access="isDebriefing"
+      @update-transcription="resetTranscription"
       @validate-podcast="emit('updatePodcast', $event)"
     />
     <div class="mb-2 w-100">
@@ -158,7 +159,10 @@
       :orga-id="podcast.organisation.id"
       :rubrique-ids="podcastRubriques"
     />
-    <PodcastRawTranscript :podcast-id="podcast.podcastId" />
+    <PodcastRawTranscript
+      ref="podcastRawTranscript"
+      :podcast-id="podcast.podcastId"
+    />
     <SubscribeButtons
       v-if="isPodcastmaker"
       class="mt-4"
@@ -185,7 +189,7 @@ import { useRouter } from "vue-router";
 import { useSeasonsManagement } from "../../composable/useSeasonsManagement";
 import { SeasonMode } from "../../../stores/class/general/emission";
 
-import { defineAsyncComponent, toRefs, computed } from "vue";
+import { defineAsyncComponent, toRefs, computed, useTemplateRef } from "vue";
 const ErrorMessage = defineAsyncComponent(
   () => import("../../misc/ErrorMessage.vue"),
 );
@@ -242,6 +246,9 @@ const {
 const authStore = useAuthStore();
 const router = useRouter();
 const { areSeasonsEnabled } = useSeasonsManagement();
+
+/** Reference to the PodcastRqwTranscript */
+const podcastRawTranscript = useTemplateRef('podcastRawTranscript');
 
 //Computed
 const podcastRubriques = computed(() => {
@@ -340,6 +347,10 @@ function removeDeleted(): void {
   } else {
     router.push("/");
   }
+}
+
+function resetTranscription(): void {
+  podcastRawTranscript.value.reset();
 }
 
 const showTags = computed((): boolean => {

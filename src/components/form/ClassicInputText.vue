@@ -259,7 +259,17 @@ onMounted(()=>{
   if (props.errorVariable !== isError.value) {
     emit("update:errorVariable", isError.value);
   }
-})
+
+  if (props.isTextarea) {
+    // Delay a scroll back to the top of the text area
+    setTimeout(() => {
+      const textArea = document.getElementById(computedInputId.value);
+      if (textArea) {
+        textArea.scrollTop = 0;
+      }
+    }, 100);
+  }
+});
  
 //Methods
 function addEmojiSelected(emoji: string) {

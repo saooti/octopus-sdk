@@ -63,7 +63,7 @@ export interface ParamStore {
     /** If true, do not display subtitles on podcast pages */
     hideSubtitle?: boolean;
     /** Select whether to display description, summary, or both */
-    descriptionOrSummary: 'description'|'summary'|'both';
+    descriptionOrSummary?: 'description'|'summary'|'both';
   };
   emissionPage: {
     ShareButtons?: boolean;
