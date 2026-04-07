@@ -1,18 +1,17 @@
 import { Conference } from '@/stores/class/conference/conference';
 import { Podcast } from '@/stores/class/general/podcast';
-import dayjs from 'dayjs';
-import duration from "dayjs/plugin/duration";
-dayjs.extend(duration);
 // @ts-expect-error Bibliothèque non typée
 import humanizeDuration from "humanize-duration";
 import {computed, Ref} from 'vue';
 import { useI18n } from 'vue-i18n';
 import {useOrgaComputed} from "../useOrgaComputed"
 import { state } from '../../../stores/ParamSdkStore';
+import { useDayjs } from '../useDayjs';
 
 export const usePodcastView = (podcast: Ref<Podcast|undefined>,  podcastConference: Ref<Conference|undefined>)=>{
 
   const {locale} = useI18n();
+  const { dayjs } = useDayjs();
 
   const {isEditRights, isPodcastmaker} = useOrgaComputed();
 
