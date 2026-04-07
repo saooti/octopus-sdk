@@ -21,14 +21,14 @@ describe('PodcastModuleBox', () => {
 
         it('shows the date without time by default', async() => {
             const wrapper = await mount(podcast);
-            expect(wrapper.text()).toContain('1 December 2025');
+            expect(wrapper.text()).toContain('1 décembre 2025');
             expect(wrapper.text()).not.toContain('11:21');
         });
 
         it('shows the date with time when enabled in SdkParams', async() => {
             initialize({ generalParameters: { showTimeWithDates: true } });
             const wrapper = await mount(podcast);
-            expect(wrapper.text()).toContain('1 December 2025');
+            expect(wrapper.text()).toContain('1 décembre 2025');
             expect(wrapper.text()).toContain('11:21');
         });
     });

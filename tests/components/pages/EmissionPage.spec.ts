@@ -33,6 +33,7 @@ function makeReadyPodcast(seasonMode: SeasonMode = SeasonMode.NO_SEASON) {
     podcast.seasonNumber = 1;
     podcast.seasonEpisodeNumber = 3;
     podcast.emission.seasonMode = seasonMode;
+    podcast.valid = true;
     return podcast;
 }
 

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.9.2 (En cours)
+
+**Fixes**
+
+- Correction tests
+
 ## 41.9.1 (07/04/2026)
 
 **Features**
