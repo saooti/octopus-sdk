@@ -14,6 +14,12 @@ interface RelevantLanguages {
     available?: string;
 }
 
+enum Availability {
+    Available,
+    ToGenerate,
+    Unavailable
+}
+
 export const useTranslation = () => {
 
     const authStore = useAuthStore();
@@ -72,6 +78,32 @@ export const useTranslation = () => {
         return getConfigurationFor(language, emissionTranslation, orgTranslation);
     }
 
+    function getLanguageAvailability(language: string, emission: Emission, translationData: PodcastTranslationData): Availability {
+        
+        // 1. If language of podcast == language of browser, use that language
+        if (language === translationData.nativeLanguage) {
+            return Availability.Available;
+        } else {
+            const langConfig = getTranslationConfig(language, emission);
+
+            // 2. If the language of the browser is available, use it
+            if (langConfig === CreateTranslation.ALWAYS) {
+                return Availability.Available;
+            }
+            // 2b. If the language is on demand, check if generated
+            else if (langConfig === CreateTranslation.ON_DEMAND) {
+                // Check if translation is already generated
+                if (translationData.translations.find(t => t.language === language && t.state === TranslationState.FINISHED)) {
+                    return Availability.Available;
+                } else {
+                    return Availability.ToGenerate;
+                }
+            }
+        }
+
+        return Availability.Unavailable;
+    }
+
     /**
      * Get the relevant language for the current user
      * @param translationData The translation data for the podcast
@@ -81,56 +113,49 @@ export const useTranslation = () => {
      *                        undefined if *ready* is better)
      */
     async function getMostRelevantLanguage(translationData: PodcastTranslationData): Promise<RelevantLanguages> {
-        const languages: RelevantLanguages = {
-            ready: translationData.nativeLanguage
-        };
-        const baseLanguage = getLanguage();
+        const userLanguage = getLanguage(false);
 
-        // 1. If language of podcast == language of browser, use that language
-        if (baseLanguage === translationData.nativeLanguage) {
-            languages.ready = baseLanguage;
-        } else {
-            const podcast = await podcastApi.get(translationData.podcastId);
-            const emission = podcast.emission;
+        // If user language is native, do not go further
+        if (userLanguage === translationData.nativeLanguage) {
+            return { ready: userLanguage };
+        }
 
-            const baseLangConfig = getTranslationConfig(baseLanguage, emission);
-            const defaultLangConfig = getTranslationConfig(DEFAULT_LANGUAGE, emission);
-
-            // 2. If the language of the browser is available, use it
-            if (baseLangConfig === CreateTranslation.ALWAYS) {
-                languages.ready = baseLanguage;
+        // Compute all available languages. Use language set on site, then
+        // languages defined on browser, then default, and finally native language
+        const languages: string[] = [];
+        [userLanguage, ...navigator.languages, DEFAULT_LANGUAGE, translationData.nativeLanguage].forEach(l => {
+            if (!languages.includes(l)) {
+                languages.push(l);
             }
-            // 2b. If the language is on demand, check if generated
-            else if (baseLangConfig === CreateTranslation.ON_DEMAND && !languages.available) {
-                // Check if translation is already generated
-                if (translationData.translations.find(t => t.language === baseLanguage && t.state === TranslationState.FINISHED)) {
-                    languages.ready = baseLanguage;
-                } else {
-                    languages.available = baseLanguage;
+            // For each language, if it is a variant (for example fr-CH), also
+            // add the base language
+            if (l.includes('-')) {
+                const base = l.split('-')[0];
+                if (!languages.includes(base)) {
+                    languages.push(base);
                 }
             }
+        });
 
-            // 3. If default language is available, use it
-            else if (defaultLangConfig === CreateTranslation.ALWAYS) {
-                languages.ready = DEFAULT_LANGUAGE;
-            }
-            // 3b. If the language is on demand, it will be created
-            else if (defaultLangConfig === CreateTranslation.ON_DEMAND && !languages.available) {
-                // Check if translation is already generated
-                if (translationData.translations.find(t => t.language === DEFAULT_LANGUAGE && t.state === TranslationState.FINISHED)) {
-                    languages.ready = DEFAULT_LANGUAGE;
-                } else {
-                    languages.available = DEFAULT_LANGUAGE;
-                }
+        const podcast = await podcastApi.get(translationData.podcastId);
+        const emission = podcast.emission;
+
+        let bestReady: string|null = null;
+        let bestAvailable: string|null = null;
+
+        for (const language of languages) {
+            const avaibility = getLanguageAvailability(language, emission, translationData);
+            if (avaibility === Availability.Available && bestReady === null) {
+                bestReady = language;
+                break;
             }
 
-            // 4. Otherwise, use default language of podcast
-            else {
-                languages.ready = translationData.nativeLanguage;
+            if (avaibility === Availability.ToGenerate && bestAvailable === null) {
+                bestAvailable = language;
             }
         }
 
-        return languages;
+        return { ready: bestReady, available: bestAvailable ?? undefined };
     }
 
     /**

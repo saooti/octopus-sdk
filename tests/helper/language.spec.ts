@@ -2,8 +2,8 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { getLanguage } from '../../src/helper/language';
 
 function setNavigatorLanguage(lang: string) {
-    Object.defineProperty(navigator, 'language', {
-        value: lang,
+    Object.defineProperty(navigator, 'languages', {
+        value: [lang],
         configurable: true,
     });
 }
@@ -29,15 +29,15 @@ describe('language', () => {
 
         describe('navigator-based detection', () => {
             it.each([
-                ['en-US', 'en'],
-                ['it-IT', 'it'],
-                ['sl-SI', 'sl'],
-                ['de-DE', 'de'],
-                ['es-ES', 'es'],
-                ['fr-FR', 'fr'],
-                ['ja-JP', 'fr'],
-            ])('returns "%s" for navigator language %s', (navigatorLang, expected) => {
-                setNavigatorLanguage(navigatorLang);
+                { input: 'en-US', expected: 'en' },
+                { input: 'it-IT', expected: 'it' },
+                { input: 'sl-SI', expected: 'sl' },
+                { input: 'de-DE', expected: 'de' },
+                { input: 'es-ES', expected: 'es' },
+                { input: 'fr-FR', expected: 'fr' },
+                { input: 'ja-JP', expected: 'fr' }
+            ])('returns "$expected" for navigator language $input', ({ input , expected }) => {
+                setNavigatorLanguage(input);
                 expect(getLanguage()).toBe(expected);
             });
         });

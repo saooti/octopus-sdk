@@ -2,6 +2,13 @@
 
 ## 41.9.2 (En cours)
 
+**Features**
+
+- **12535** - Amélioration de la sélection de la langue utilisée
+  - Prend maintenant en compte les langues alternatives du navigateur
+  - Prend en compte les langue "de base" des variantes (par exemple "fr" sera
+    utilisé pour un utilisateur "fr-CH")
+
 **Fixes**
 
 - Correction tests

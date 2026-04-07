@@ -76,6 +76,36 @@ describe('useTranslation', () => {
         });
     });
 
+    describe('getMostRelevantLanguage', () => {
+        it('bases its results on the language alternatives in the browser', async () => {
+            vi.mocked(getLanguage).mockReturnValue('de');
+
+            Object.defineProperty(navigator, 'languages', {
+                value: ['fr', 'it', 'de'],
+                configurable: true
+            });
+
+            const translationData = { nativeLanguage: 'it', podcastId: 0, translations: [] };
+
+            const result = await composable.getMostRelevantLanguage(translationData)
+            expect(result.ready).toBe('it');
+        });
+
+        it('takes into consideration the "base" languages of variants', async () => {
+            vi.mocked(getLanguage).mockReturnValue('fr-CH');
+
+            Object.defineProperty(navigator, 'languages', {
+                value: ['fr-CH', 'it', 'de'],
+                configurable: true
+            });
+
+            const translationData = { nativeLanguage: 'fr', podcastId: 0, translations: [] };
+
+            const result = await composable.getMostRelevantLanguage(translationData)
+            expect(result.ready).toBe('fr');
+        });
+    });
+
     describe('getMostRelevantTranslation', () => {
         it('uses the native language when it matches the browser language', async () => {
             await composable.getMostRelevantTranslation(makeTranslationData({ nativeLanguage: 'fr' }));
