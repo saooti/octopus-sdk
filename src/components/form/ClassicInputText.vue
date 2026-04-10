@@ -116,7 +116,7 @@
         {{ errorText }}
       </div>
       <p
-        v-if="0 !== maxLength"
+        v-if="0 !== maxLength && showField"
         class="counter-align-right"
         :class="{ 'text-danger': !valueLengthValid }"
       >

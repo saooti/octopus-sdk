@@ -6,6 +6,10 @@
 
 - Export de `useDayjs` pour un dayjs avec réactivité
 
+**Fixes**
+
+- Correction affichage compteur limite quand champ caché
+
 ## 41.9.2 (07/04/2026)
 
 **Features**
