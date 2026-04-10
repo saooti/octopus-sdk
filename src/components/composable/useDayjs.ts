@@ -10,6 +10,9 @@ import "dayjs/locale/sl";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
+import localizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(localizedFormat);
+
 export const useDayjs = () => {
     const { locale } = useI18n();
 

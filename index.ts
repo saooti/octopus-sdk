@@ -136,6 +136,7 @@ export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts"
 export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl.ts";
 export { useSeasonsManagement } from "./src/components/composable/useSeasonsManagement.ts";
 export { useTranslation } from "./src/components/composable/useTranslation.ts";
+export { useDayjs } from "./src/components/composable/useDayjs.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";

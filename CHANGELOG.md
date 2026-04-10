@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.9.3 (En cours)
+
+**Features**
+
+- Export de `useDayjs` pour un dayjs avec réactivité
+
 ## 41.9.2 (07/04/2026)
 
 **Features**
