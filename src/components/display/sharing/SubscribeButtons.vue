@@ -2,6 +2,7 @@
   <div
     v-if="subscriptionsDisplay.length || rssUrl"
     class="subscribe-buttons-container"
+    :class="{ 'justify-center': justifyCenter }"
   >
     <div ref="subscribeButtonsContainer">
       <a
@@ -10,28 +11,34 @@
         :key="sub.name"
         rel="noreferrer noopener"
         target="_blank"
-        :class="[
-          0 === index ? 'first' : '',
-          subscriptionsDisplay.length - 1 === index ? 'last' : '',
-        ]"
-        class="btn share-btn mx-2"
+        :class="{
+          first: 0 === index,
+          last: subscriptionsDisplay.length - 1 === index,
+          mono,
+          small
+        }"
+        class="btn share-btn"
         :href="sub.url"
         :title="t('New window', {text: sub.title})"
       >
-        <component :is="sub.icon" :fill-color="sub?.color" />
+        <component :is="sub.icon" :fill-color="fillColor(sub)" :size="iconSize" />
       </a>
     </div>
     <a
+      v-if="!noRss"
       id="rss-suscribe-button"
       rel="noreferrer noopener"
       target="_blank"
-      class="btn share-btn mx-2"
+      class="btn share-btn"
+      :class="{ mono, small }"
       :href="rssUrl"
       :title="t('New window', {text: t('Rss feed')})"
     >
-      <RssIcon />
+      <RssIcon :fill-color="fillColor()" :size="iconSize" />
     </a>
+
     <button
+      v-if="limit === undefined"
       v-show="hiddenLinks.length"
       id="subscribe-buttons-dropdown"
       class="btn share-btn mx-2"
@@ -54,7 +61,11 @@
         :href="link.url"
         :title="t('New window', {text: link.title})"
       >
-        <component :is="link.icon" :fill-color="link.color" class="me-1" />
+        <component
+          :is="link.icon"
+          :fill-color="fillColor(link)"
+          class="me-1"
+        />
         {{ link.title }}
       </a>
     </ClassicPopover>
@@ -71,6 +82,7 @@ import { type Component, computed, onMounted, Ref, ref, useTemplateRef, watch } 
 import { useI18n } from "vue-i18n";
 import { Playlist } from "@/stores/class/general/playlist";
 import { useSharePlatforms } from "../../composable/share/useSharePlatforms";
+
 type Link = {
   name: string;
   icon: Component;
@@ -84,9 +96,21 @@ const props = withDefaults(defineProps<{
   content: Emission|Playlist;
   windowWidth?: number;
   justifyCenter?: boolean;
+  /** Display the icons with just the octopus primary color */
+  mono?: boolean;
+  /** If set, limit the number of icons (will not display plus button) */
+  limit?: number;
+  /** Disable the RSS icon */
+  noRss?: boolean;
+  /** Smaller icons */
+  small?: boolean;
 }>(), {
   windowWidth: 0,
-  justifyCenter: true
+  justifyCenter: true,
+  mono: false,
+  limit: undefined,
+  noRss: false,
+  small: false
 });
 
 //Data 
@@ -116,18 +140,22 @@ const rssUrl = computed(() => {
   return undefined;
 });
 
+const iconSize = computed((): number => {
+  return props.small ? 20 : 24;
+});
 
 //Watch
 watch(()=>props.windowWidth, () =>resizeWindow());
 
 onMounted(()=>resizeWindow());
 
-
 //Methods
 function showAllElements() {
   subscriptionsDisplay.value.forEach((element: Link) => {
     const el = subscribeButtonsContainerRef?.value?.querySelector('#subLink' + element.name);
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     if (el.classList.contains("hid")) {
       el.classList.remove("hid");
     }
@@ -135,9 +163,11 @@ function showAllElements() {
 }
 function hideOnlyNecessaryElements() {
   let parentWidth = 0;
-  subscriptionsDisplay.value.forEach((element: Link) => {
+  subscriptionsDisplay.value.forEach((element: Link, index: number) => {
     const el = subscribeButtonsContainerRef?.value?.querySelector('#subLink' + element.name);
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     if (!parentWidth) {
       const buttonMoreWidth = el.clientWidth + 20;
       parentWidth =
@@ -145,7 +175,7 @@ function hideOnlyNecessaryElements() {
         (el.parentElement?.offsetLeft ?? 0) -
         buttonMoreWidth;
     }
-    if (el.offsetLeft + el.clientWidth + 20 < parentWidth) {
+    if (el.offsetLeft + el.clientWidth + 20 < parentWidth && (props.limit === undefined || index < props.limit)) {
       return;
     }
     hiddenLinks.value.push(element);
@@ -178,15 +208,27 @@ function resizeWindow() {
   }
   subscribeList.style.flexGrow = "0";
 }
+
+function fillColor(link?: Link): string|undefined {
+  if (props.mono === true) {
+    return 'white';
+  } else {
+    return link?.color;
+  }
+}
 </script>
-<style lang="scss">
+
+<style scoped lang="scss">
 .octopus-app {
   .subscribe-buttons-container {
     max-width: 420px;
     align-self: center;
     display: inline-flex;
     width: 100%;
-    justify-content: center;
+
+    &.justify-center {
+      justify-content: center;
+    }
 
     & > div {
       display: inline-flex;
@@ -198,6 +240,22 @@ function resizeWindow() {
     @media (width <= 960px) {
       margin-top: 0.8rem;
     }
+  }
+}
+
+.share-btn {
+  margin-right: .5rem;
+  margin-left: .5rem;
+
+  &.mono {
+    background-color: var(--octopus-primary);
+  }
+
+  &.small {
+    height: 1.8rem !important;
+    width: 1.8rem !important;
+    margin-right: .2rem;
+    margin-left: .2rem;
   }
 }
 </style>

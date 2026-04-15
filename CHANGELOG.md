@@ -5,6 +5,7 @@
 **Features**
 
 - Ajout fonction de formattage de date dans `useDayjs`
+- Ajout props de configuration pour `SubscribeButtons`
 
 **Fixes**
 
