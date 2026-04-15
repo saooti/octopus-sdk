@@ -2,6 +2,10 @@
 
 ## 41.9.4 (En cours)
 
+**Features**
+
+- Ajout fonction de formattage de date dans `useDayjs`
+
 ## 41.9.3 (10/04/2026)
 
 **Features**

@@ -37,6 +37,7 @@
           <div style="min-height: 650px" />
         </template>
       </ClassicLazy>
+
       <template v-if="rubriqueDisplay && rubriqueDisplay.length > 0">
         <router-link
           v-if="rubriqueDisplay.length >= rubriqueMaxDisplay"

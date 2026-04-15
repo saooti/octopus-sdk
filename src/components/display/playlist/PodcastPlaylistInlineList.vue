@@ -30,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import classicApi from "../../../api/classicApi";
 import PodcastInlineListTemplate from "../podcasts/PodcastInlineListTemplate.vue";
 import PodcastItem from "../podcasts/PodcastItem.vue";
 import SwiperList from "../list/SwiperList.vue";
