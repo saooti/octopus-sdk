@@ -71,7 +71,7 @@ export const getShareAnonymous = () => import("./src/components/display/sharing/
 export const getShareNewsletter = () => import("./src/components/display/sharing/ShareNewsletter.vue");
 export const getQrCode = () => import("./src/components/display/sharing/QrCode.vue");
 export const SubscribeButtons = defineAsyncComponent(() => import("./src/components/display/sharing/SubscribeButtons.vue"));
-
+export const PodcastSeasonInfo = defineAsyncComponent(() => import("./src/components/display/podcasts/PodcastSeasonInfo.vue"));
 
 
 export const getEmissionInlineList = () => import("./src/components/display/emission/EmissionInlineList.vue");

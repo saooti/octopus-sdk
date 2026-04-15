@@ -5,17 +5,7 @@
                 {{ date }}
             </time>
 
-            <div class="podcast-item-season">
-                {{ formatSeason(podcast) }}
-                <BullhornIcon
-                    v-if="podcast.seasonEpisodeType === PodcastType.TRAILER"
-                    :title="$t('Podcast type - Trailer')"
-                />
-                <GiftIcon
-                    v-if="podcast.seasonEpisodeType === PodcastType.BONUS"
-                    :title="$t('Podcast type - Bonus')"
-                />
-            </div>
+            <PodcastSeasonInfo :podcast="podcast" />
         </div>
 
         <router-link
@@ -61,12 +51,10 @@
 import AnimatorsItem from "./AnimatorsItem.vue";
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { computed, defineAsyncComponent } from "vue";
-import { Podcast, PodcastType } from "../../../stores/class/general/podcast";
+import { Podcast } from "../../../stores/class/general/podcast";
 import { state } from "../../../stores/ParamSdkStore";
 import { useI18n } from "vue-i18n";
-import { useSeasonsManagement } from "../../composable/useSeasonsManagement";
-import BullhornIcon from 'vue-material-design-icons/Bullhorn.vue';
-import GiftIcon from 'vue-material-design-icons/Gift.vue';
+import PodcastSeasonInfo from "./PodcastSeasonInfo.vue";
 import { useDayjs } from "../../composable/useDayjs";
 const PodcastPlayBar = defineAsyncComponent(
     () => import("./PodcastPlayBar.vue"),
@@ -80,16 +68,12 @@ const props = defineProps({
 //Composables
 const { t } = useI18n();
 const { isPodcastmaker } = useOrgaComputed();
-const { formatSeason } = useSeasonsManagement();
-const { dayjs } = useDayjs();
 
 //Computed
-const date = computed(() => {
-    let format = "D MMMM YYYY";
-    if (state.generalParameters.showTimeWithDates === true) {
-        format = "D MMMM YYYY - HH:mm";
-    }
-    return dayjs(props.podcast.pubDate).format(format);
+const { formatDate } = useDayjs();
+
+const date = computed((): string => {
+    return formatDate(props.podcast.pubDate);
 });
 
 const orgaNameDisplay = computed(() =>{
@@ -119,20 +103,5 @@ const orgaNameDisplay = computed(() =>{
 .podcast-item-status {
     display: flex;
     justify-content: space-between;
-}
-
-.podcast-item-season {
-    display: flex;
-    --icon-size: 0.8rem;
-
-    .material-design-icon {
-        position: relative;
-        top: -3px;
-        margin-left: 4px;
-
-        width: var(--icon-size);
-        height: var(--icon-size);
-        color: var(--octopus-primary);
-    }
 }
 </style>
