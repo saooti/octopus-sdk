@@ -24,6 +24,10 @@ export interface Emission {
   annotations?: Annotations & {
     /** Subtitle of the emission */
     subtitle?: string;
+    /** Default animators (ids separated by commas) for newly created podcasts */
+    podcastDefaultAnimators?: string;
+    /** Default description for newly created podcasts */
+    podcastDefaultDescription?: string;
   };
   beneficiaries: string[];
   description: string;
