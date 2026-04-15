@@ -6,6 +6,10 @@
 
 - Ajout fonction de formattage de date dans `useDayjs`
 
+**Fixes**
+
+- **14442** - Correction anomalie calcul langues
+
 ## 41.9.3 (10/04/2026)
 
 **Features**

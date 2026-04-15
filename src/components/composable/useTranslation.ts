@@ -1,6 +1,5 @@
 import { getLanguage } from "../../helper/language";
 import { transcriptionApi, TranslationState, type PodcastTranslationData } from "../../api/transcriptionApi";
-import { useAuthStore } from "../../stores/AuthStore";
 import { CreateTranslation, defaultTranslationConfig, TranslationConfiguration } from "../../stores/class/transcript/transcriptParams";
 import { podcastApi } from "../../api/podcastApi";
 import { Emission } from "../../stores/class/general/emission";
@@ -21,8 +20,6 @@ enum Availability {
 }
 
 export const useTranslation = () => {
-
-    const authStore = useAuthStore();
 
     /**
      * Convert SRT data to plain text
@@ -70,9 +67,9 @@ export const useTranslation = () => {
      * @param emission *(optional)* If set, will also check in emission settings
      * @returns Whether the language is available or not
      */
-    function getTranslationConfig(language: string, emission?: Emission): CreateTranslation {
-        const orgAttributes = authStore.authOrganisation.attributes;
-        const emissionTranslation = parseOrDefault(emission?.annotations['translation-config'] as string|undefined, true);
+    function getTranslationConfig(language: string, emission: Emission): CreateTranslation {
+        const orgAttributes = emission.orga.attributes;
+        const emissionTranslation = parseOrDefault(emission?.annotations?.['translation-config'] as string|undefined, true);
         const orgTranslation = parseOrDefault(orgAttributes?.['translation-config']);
 
         return getConfigurationFor(language, emissionTranslation, orgTranslation);

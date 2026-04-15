@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { defineComponent } from 'vue';
 import { mount as _mount } from '@vue/test-utils';
 import { setupPinia } from '@tests/utils';
-import { useAuthStore } from '@/stores/AuthStore';
 import { CreateTranslation } from '@/stores/class/transcript/transcriptParams';
 import { useTranslation } from '@/components/composable/useTranslation';
+import type { Emission } from '@/stores/class/general/emission';
 
 vi.mock('@/api/transcriptionApi', () => ({
     transcriptionApi: {
@@ -15,7 +15,7 @@ vi.mock('@/api/transcriptionApi', () => ({
 
 vi.mock('@/api/podcastApi', () => ({
     podcastApi: {
-        get: vi.fn().mockResolvedValue({ emission: undefined }),
+        get: vi.fn(),
     },
 }));
 
@@ -31,15 +31,26 @@ function makeTranslationData(overrides: Partial<PodcastTranslationData> = {}): P
     return { podcastId: 1, nativeLanguage: 'fr', translations: [], ...overrides };
 }
 
-function setOrgTranslationConfig(config: object) {
-    const authStore = useAuthStore();
-    authStore.$patch({
-        authOrganisation: {
+function makeEmission(orgConfig?: object): Emission {
+    return {
+        emissionId: 0,
+        name: '',
+        description: '',
+        orga: {
             id: 'test-org',
             imageUrl: '',
-            attributes: { 'translation-config': JSON.stringify(config) },
+            name: 'Test Org',
+            attributes: orgConfig ? { 'translation-config': JSON.stringify(orgConfig) } : undefined,
         },
-    });
+        beneficiaries: [],
+        rubriqueIds: [],
+        monetisable: 'UNDEFINED',
+        seasonMode: 'NO_SEASON' as never,
+    };
+}
+
+function setOrgTranslationConfig(config: object) {
+    vi.mocked(podcastApi.get).mockResolvedValue({ emission: makeEmission(config) } as never);
 }
 
 describe('useTranslation', () => {
@@ -48,7 +59,7 @@ describe('useTranslation', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.mocked(transcriptionApi.getTranslation).mockResolvedValue('srt content');
-        vi.mocked(podcastApi.get).mockResolvedValue({ emission: undefined } as never);
+        vi.mocked(podcastApi.get).mockResolvedValue({ emission: makeEmission() } as never);
         vi.mocked(getLanguage).mockReturnValue('fr');
 
         let result!: ReturnType<typeof useTranslation>;
