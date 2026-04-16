@@ -11,6 +11,7 @@
 
 **Fixes**
 
+- **14433** - Rétablissement bouton play vidéo
 - **14442** - Correction anomalie calcul langues
 - **14445** - Correction appel génération transcription
 

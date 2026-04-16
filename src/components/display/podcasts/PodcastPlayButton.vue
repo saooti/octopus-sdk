@@ -91,7 +91,7 @@ import CancelIcon from "vue-material-design-icons/Cancel.vue";
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import DurationHelper from "../../../helper/durationHelper";
 import { state } from "../../../stores/ParamSdkStore";
-import { Podcast, PodcastProcessingStatus as ProcessingStatus } from "../../../stores/class/general/podcast";
+import { Podcast, PodcastProcessingStatus as ProcessingStatus, SimplifiedPodcast } from "../../../stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import { usePlayerStore } from "../../../stores/PlayerStore";
 import { computed, defineAsyncComponent, ref } from "vue";
@@ -103,10 +103,9 @@ import { useResizePhone } from "../../composable/useResizePhone";
 dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 
-
 //Props 
 const props = defineProps({
-  podcast: { default: () => ({}), type: Object as () => Podcast },
+  podcast: { default: () => ({}), type: Object as () => Podcast|SimplifiedPodcast },
   hidePlay: { default: false, type: Boolean },
   fetchConference: { default: undefined, type: Object as () => Conference },
   justButtons: { default: false, type: Boolean },
@@ -129,7 +128,8 @@ const isVideoPodcast = computed(() => {
   return (
     (props.fetchConference?.videoProfile?.includes("video_") &&
       ProcessingStatus.ReadyToRecord === props.podcast.processingStatus) ||
-    undefined !== props.podcast.video?.videoId
+    ('video' in props.podcast && undefined !== props.podcast.video?.videoId) ||
+    ('videoId' in props.podcast && undefined !== props.podcast.videoId)
   );
 });
 const playingLive = computed(() => {
