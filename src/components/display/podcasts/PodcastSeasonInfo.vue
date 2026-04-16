@@ -1,5 +1,5 @@
 <template>
-    <div class="podcast-item-season">
+    <span class="podcast-item-season">
         {{ formatSeason(podcast) }}
         <BullhornIcon
             v-if="podcast.seasonEpisodeType === PodcastType.TRAILER"
@@ -9,7 +9,7 @@
             v-if="podcast.seasonEpisodeType === PodcastType.BONUS"
             :title="$t('Podcast type - Bonus')"
         />
-    </div>
+    </span>
 </template>
 
 <script setup lang="ts">
@@ -28,7 +28,7 @@ const { formatSeason } = useSeasonsManagement();
 
 <style scoped lang="scss">
 .podcast-item-season {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     --icon-size: 0.8rem;
 

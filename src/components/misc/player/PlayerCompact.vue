@@ -2,7 +2,7 @@
   <div class="d-flex align-items-center flex-grow-1 ps-2">
     <PlayerImage />
     <PlayerPlayButton :player-error="playerError" />
-    <div class="text-light player-grow-content">
+    <div class="player-text player-grow-content">
       <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
         <PlayerTitle :player-error="playerError" :hls-ready="hlsReady" />
         <div
@@ -25,14 +25,14 @@
     <button
       id="player-up-btn"
       :title="'' != transcriptText ? t('View transcript') : t('Enlarge')"
-      class="btn play-button-box btn-transparent text-light me-0"
+      class="btn play-button-box btn-transparent player-text me-0"
       @click="changePlayerLargeVersion"
     >
       <ChevronUpIcon />
     </button>
     <button
       :title="t('Close')"
-      class="btn play-button-box btn-transparent text-light"
+      class="btn play-button-box btn-transparent player-text"
       @click="stopPlayer"
     >
       <WindowCloseIcon />
@@ -87,7 +87,7 @@ function changePlayerLargeVersion() {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-app .player-grow-content {
   display: flex;
   flex-direction: column;
@@ -96,5 +96,9 @@ function changePlayerLargeVersion() {
   overflow: hidden;
   font-size: 0.8rem;
   padding: 0 0.5rem;
+}
+
+.player-text {
+  color: var(--octopus-player-text-color);
 }
 </style>

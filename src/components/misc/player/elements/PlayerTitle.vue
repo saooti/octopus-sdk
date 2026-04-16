@@ -4,7 +4,7 @@
   </div>
   <component
     :is="vastStore.linkAdvertising ? 'a' : 'div'"
-    class="flex-grow-1 text-truncate text-light"
+    class="flex-grow-1 text-truncate"
     :class="titleClass"
     :href="vastStore.linkAdvertising"
     rel="noreferrer noopener"
@@ -54,12 +54,15 @@ const podcastTitle = computed(() => {
   if (playerStore.playerPodcast) {
     return playerStore.playerPodcast.title;
   }
-  if (playerStore.playerMedia) return playerStore.playerMedia.title;
+  if (playerStore.playerMedia) {
+    return playerStore.playerMedia.title;
+  }
   if (playerStore.playerLive) {
-    if (!props.hlsReady)
+    if (!props.hlsReady) {
       return (
         playerStore.playerLive.title + " (" + t("Start in a while") + ")"
       );
+    }
     return playerStore.playerLive.title;
   }
   return "";

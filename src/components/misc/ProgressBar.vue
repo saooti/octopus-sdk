@@ -26,7 +26,7 @@
       />
     </template>
     <div
-      class="octopus-progress-bar bg-primary"
+      class="octopus-progress-bar current-progress"
       aria-valuenow="0"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -135,15 +135,16 @@ function timeMediaToPercent(value: number | null): number {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-app{
   .octopus-progress{
     display: flex;
     overflow: hidden;
-    background-color:var(--octopus-secondary-lighter);
+    background-color: var(--octopus-player-progress-background-color);
     border-radius: var(--octopus-border-radius);
     position: relative;
     cursor: pointer;
+
     .octopus-progress-bar{
       position: absolute;
       display: flex;
@@ -154,6 +155,7 @@ function timeMediaToPercent(value: number | null): number {
       text-align: center;
       white-space: nowrap;
       background-color: var(--octopus-primary);
+      background-color: var(--octopus-player-progress-color-current);
       transition: width 0.6s ease;
     }
 
@@ -205,16 +207,16 @@ function timeMediaToPercent(value: number | null): number {
   }
 
   .player-container {
-  .octopus-small-popover {
-    font-size: 0.7rem;
-    background: var(--octopus-player-color);
-    color: white;
-    border: 0;
+    .octopus-small-popover {
+      font-size: 0.7rem;
+      background: var(--octopus-player-color);
+      color: white;
+      border: 0;
 
-    .p-2 {
-      padding: 0.2rem !important;
+      .p-2 {
+        padding: 0.2rem !important;
+      }
     }
   }
-}
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div
-    class="d-flex flex-column align-items-center my-2 flex-grow-1 text-light position-relative overflow-y-auto"
+    class="d-flex flex-column align-items-center my-2 flex-grow-1 player-text position-relative overflow-y-auto"
   >
     <button
       :title="t('Reduce')"
-      class="player-reduce-button btn bg-transparent text-light"
+      class="player-reduce-button btn bg-transparent player-text"
       @click="changePlayerLargeVersion"
     >
       <ChevronDownIcon :size="40" />
@@ -64,7 +64,7 @@
     <div class="d-flex align-items-center flex-grow-1">
       <button
         title="-15''"
-        class="btn bg-transparent text-light"
+        class="btn bg-transparent player-text"
         :disabled="isAdPlaying"
         @click="seekClick(-15)"
       >
@@ -74,7 +74,7 @@
 
       <button
         title="+15''"
-        class="btn bg-transparent text-light"
+        class="btn bg-transparent player-text"
         :disabled="isAdPlaying"
         @click="seekClick(15)"
       >
@@ -194,5 +194,9 @@ function seekClick(addTime: number): void {
   .transcript-bg {
     background: var(--octopus-player-transcript-bg-color);
   }
+}
+
+.player-text {
+  color: var(--octopus-player-text-color);
 }
 </style>

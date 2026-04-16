@@ -7,6 +7,7 @@
 - Ajout fonction de formattage de date dans `useDayjs`
 - Ajout props de configuration pour `SubscribeButtons`
 - Ajout de définition de nouvelles annotations d'émission
+- Ajout de variables CSS pour la configuration de l'aspect du player
 
 **Fixes**
 

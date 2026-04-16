@@ -46,6 +46,12 @@
     // Player
     // Color for the transcript background
     --octopus-player-transcript-bg-color: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
+    // Color for the text
+    --octopus-player-text-color: oklch(98.16% 0.0017 247.84deg);
+    // Color for the progress bar
+    --octopus-player-progress-color-current: var(--octopus-primary);
+    // Color for the progress bar background
+    --octopus-player-progress-background-color: var(--octopus-secondary-lighter);
 
     // Smartlink
     --octopus-smartlink-title-color: var(--octopus-gray-text);
