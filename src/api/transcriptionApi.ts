@@ -108,7 +108,7 @@ async function getRawTranscription(podcastId: number): Promise<string> {
  * @param params Transcription parameters
  */
 async function generateTranscription(podcastId: number, language: string, params: ModifyPodcastConfig): Promise<void> {
-    await classicApi.putData({
+    await classicApi.postData({
         api: ModuleApi.SPEECHTOTEXT,
         path: `convert/${language}/${podcastId}`,
         dataToSend: params
