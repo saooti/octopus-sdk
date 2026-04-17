@@ -136,8 +136,9 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerElapsed > 0 &&
         this.playerTotal &&
         this.playerTotal > 0
-      )
+      ) {
         return DurationHelper.formatDuration(Math.round(this.playerTotal));
+      }
       return "--:--";
     },
     isPlaying(): boolean {

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.9.5 (17/04/2026)
+
+**Fixes**
+
+- **14433** - Correction problème lecture vidéo
+
 ## 41.9.4 (16/04/2026)
 
 **Features**

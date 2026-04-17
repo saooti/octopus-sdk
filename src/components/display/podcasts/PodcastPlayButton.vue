@@ -100,6 +100,7 @@ import duration from "dayjs/plugin/duration";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useResizePhone } from "../../composable/useResizePhone";
+import { podcastApi } from "../../../api/podcastApi";
 dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 
@@ -276,7 +277,7 @@ const durationIso = computed(() => {
 });
 
 //Methods
-function play(isVideo: boolean): void {
+async function play(isVideo: boolean): Promise<void> {
   if (isLiveToBeRecorded.value) {
     return;
   }
@@ -288,18 +289,22 @@ function play(isVideo: boolean): void {
     router.push("/main/pub/video/" + props.podcast.podcastId);
     return;
   }
+
+  let podcast: Podcast|SimplifiedPodcast = props.podcast;
+  if (isVideo && !('video' in props.podcast)) {
+    podcast = await podcastApi.get(props.podcast.podcastId);
+  }
+  
   if (!recordingLive.value) {
-    playerStore.playerPlay(props.podcast, isVideo);
+    playerStore.playerPlay(podcast, isVideo);
   } else {
     playerStore.playerPlay(
       {
-        ...props.podcast,
-        ...{ 
-          conferenceId: props.fetchConference?.conferenceId,
-          hlsIdentifier: props.fetchConference?.hlsIdentifier,
-        },
+        ...podcast,
+        conferenceId: props.fetchConference?.conferenceId,
+        hlsIdentifier: props.fetchConference?.hlsIdentifier,
       },
-      isVideo,
+      isVideo
     );
   }
 }
