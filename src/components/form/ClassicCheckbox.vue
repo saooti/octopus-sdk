@@ -31,6 +31,7 @@
     <label
       class="c-hand"
       :class="[classLabel, displayLabel ? '' : 'd-none', isDisabled ? 'disabled' : '']"
+      :for="isSwitch ? undefined : computedIdCheckbox"
       @click="clickSlider"
     >
       {{ label }}
@@ -73,7 +74,7 @@ function emitClickAction(): void {
   emit("clickAction");
 }
 function clickSlider() {
-  if (!props.isDisabled) {
+  if (!props.isDisabled && props.isSwitch) {
     emit("update:textInit", !props.textInit);
     emitClickAction();
   }

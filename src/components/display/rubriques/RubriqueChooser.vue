@@ -29,7 +29,7 @@ import { useI18n } from "vue-i18n";
 //Props 
 const props = defineProps({
   defaultanswer: { default: "", type: String },
-  width: { default: "100%", type: String },
+  width: { default: undefined, type: String },
   /**
    * Active la sélection multiple
    */
