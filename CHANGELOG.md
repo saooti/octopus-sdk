@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## 41.10.0 (En cours)
+## 41.9.6 (20/04/2026)
+
+**Features**
+
+- Ajout `transcriptionApi.updateTranslation`
 
 **Misc**
 

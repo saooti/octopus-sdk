@@ -162,6 +162,20 @@ async function updateTranscription(podcastId: number, transcript: string): Promi
     });
 }
 
+/**
+ * Update the translation of a podcast
+ * @param podcastId ID of the podcast
+ * @param transcript The new translation
+ */
+async function updateTranslation(podcastId: number, language: string, translation: string): Promise<void> {
+    await classicApi.putData({
+        api: ModuleApi.SPEECHTOTEXT,
+        path: `transcription/${podcastId}/languages/${language}/srt`,
+        dataToSend: translation,
+        raw: true
+    });
+}
+
 export const transcriptionApi = {
     changeTranscriptionVisibility,
     getTranslations,
@@ -169,5 +183,6 @@ export const transcriptionApi = {
     getRawTranscription,
     generateTranscription,
     regenerateTranscription,
-    updateTranscription
+    updateTranscription,
+    updateTranslation
 };

@@ -84,7 +84,7 @@ export default {
     return response?.data;
   },
 
-  async putData<Type>(params: RequestParameters): Promise<Type> {
+  async putData<Type>(params: RequestParameters & { raw?: boolean }): Promise<Type> {
     let paramsString = "";
     if(params.parameters){
       const parameters = fetchHelper.getUriSearchParams(params.parameters).toString();
@@ -106,13 +106,18 @@ export default {
           dataToSend.append(key, value);
         }
       }
+    } else if (params.raw === true && params.dataToSend) {
+      typeHeader = { "Content-Type": 'text/plain; charset=utf-8' };
+      dataToSend = params.dataToSend;
     }else if(null!=params.dataToSend || undefined!=params.dataToSend){
       typeHeader = { "Content-Type": 'application/json; charset=utf-8' };
-      dataToSend = JSON.stringify(params.dataToSend);
+      dataToSend = params.dataToSend;//JSON.stringify(params.dataToSend);
     }
+
     if(params.noContentType){
       typeHeader = {};
     }
+
     const response = await axios.put(url,dataToSend,{headers:{...params.headers, ...typeHeader, ...authHeaders} });
     return response.data;
   },
