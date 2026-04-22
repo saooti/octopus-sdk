@@ -120,7 +120,7 @@ function processSearchParameters(search: PodcastSearchOptions): FetchParam {
         } else if (key === 'processingStatus') {
             parameters.includeStatus = value;
         } else if (key === 'tags') {
-            parameters.includeTags = value;
+            parameters.includeTag = value;
         } else if (key === 'pubDateBefore') {
             parameters.before = value;
         } else if (key === 'pubDateAfter') {
