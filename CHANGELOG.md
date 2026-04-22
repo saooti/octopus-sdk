@@ -7,6 +7,11 @@
 - Ajout event `blur` sur `ClassicInputText`
 - Ajout composant `ClassicButtonGroup`
 
+**Fixes**
+
+- Correction timer dans `ClassicInputText` faisant échouer les tests de manière
+  aléatoire
+
 ## 41.9.6 (20/04/2026)
 
 **Features**

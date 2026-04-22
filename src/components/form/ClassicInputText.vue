@@ -130,7 +130,7 @@
 <script setup lang="ts">
 import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
-import { computed, defineAsyncComponent, onMounted, Ref, ref, useTemplateRef, watch, getCurrentInstance } from "vue";
+import { computed, defineAsyncComponent, onMounted, onUnmounted, Ref, ref, useTemplateRef, watch, getCurrentInstance } from "vue";
 import { useI18n } from "vue-i18n";
 const ClassicPopover = defineAsyncComponent(
   () => import("../misc/ClassicPopover.vue"),
@@ -263,13 +263,18 @@ onMounted(()=>{
 
   if (props.isTextarea) {
     // Delay a scroll back to the top of the text area
-    setTimeout(() => {
+    scrollTimer = setTimeout(() => {
       const textArea = document.getElementById(computedInputId.value);
       if (textArea) {
         textArea.scrollTop = 0;
       }
     }, 100);
   }
+});
+
+let scrollTimer: ReturnType<typeof setTimeout> | undefined;
+onUnmounted(() => {
+  clearTimeout(scrollTimer);
 });
  
 //Methods
