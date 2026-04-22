@@ -55,6 +55,11 @@ export {
 import ActionButton from "./src/components/buttons/ActionButton.vue";
 export { ActionButton };
 
+// Form
+import ClassicButtonGroup from "./src/components/form/ClassicButtonGroup.vue";
+export { ClassicButtonGroup };
+export type { ButtonGroupOption } from "./src/components/form/ClassicButtonGroup.vue";
+
 //Display
 export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
 export const getCategoryList = () => import("./src/components/display/categories/CategoryList.vue");

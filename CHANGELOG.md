@@ -5,6 +5,7 @@
 **Features**
 
 - Ajout event `blur` sur `ClassicInputText`
+- Ajout composant `ClassicButtonGroup`
 
 ## 41.9.6 (20/04/2026)
 
