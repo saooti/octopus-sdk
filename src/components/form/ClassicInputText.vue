@@ -61,6 +61,7 @@
       :disabled="isDisable || disabled"
       :required="!canBeNull"
       :autocomplete="autocompleteType"
+      @blur="emit('blur')"
     >
     <textarea
       v-else-if="isTextarea"
@@ -187,7 +188,7 @@ const props = defineProps({
 })
 
 //Emits
-const emit = defineEmits(["update:textInit", "update:errorVariable"]);
+const emit = defineEmits(["update:textInit", "update:errorVariable", "blur"]);
 
 //Data 
 const textValue : Ref<string | undefined>= ref(undefined);
