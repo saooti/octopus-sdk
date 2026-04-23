@@ -9,6 +9,7 @@
 
 **Fixes**
 
+- **14353** - Correction erreur sur page radio
 - **14354** - Correction recherche par tag
 - Correction timer dans `ClassicInputText` faisant échouer les tests de manière
   aléatoire

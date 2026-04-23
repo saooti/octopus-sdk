@@ -26,7 +26,7 @@
         {{ titleToDisplay }}
       </h1>
       <SubscribeButtons
-        v-if="!authStore.isGarRole"
+        v-if="!authStore.isGarRole && content"
         v-show="!scrolled"
         :content="content"
         :window-width="windowWidth"
