@@ -14,6 +14,10 @@
 - Correction timer dans `ClassicInputText` faisant échouer les tests de manière
   aléatoire
 
+**Misc**
+
+- Ajustement affichage bouton play de `RadioImage`
+
 ## 41.9.6 (20/04/2026)
 
 **Features**
