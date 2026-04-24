@@ -6,6 +6,7 @@
 
 - Ajout event `blur` sur `ClassicInputText`
 - Ajout composant `ClassicButtonGroup`
+- Ajout `radioApi`
 
 **Fixes**
 

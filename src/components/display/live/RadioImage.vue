@@ -18,7 +18,7 @@
     />
     <button class="radio-play-button" @click="playRadio">
       <PlayIcon v-if="!playingRadio" :title="t('Play')" :size="40" />
-      <PodcastIsPlaying v-else/>
+      <PodcastIsPlaying v-else />
       <div class="mx-2">
         {{ playText }}
       </div>

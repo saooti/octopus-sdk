@@ -173,6 +173,7 @@ export * from "./src/api/groupsApi.ts";
 export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";
 export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
+export { radioApi } from "./src/api/radioApi.ts";
 
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
@@ -193,6 +194,7 @@ export {
     type ProviderTts,
     type Voice
 } from "./src/stores/class/transcript/transcriptParams.ts";
+export { type Canal } from "./src/stores/class/radio/canal.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");

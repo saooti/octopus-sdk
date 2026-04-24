@@ -104,6 +104,7 @@ function updateMetadata(metadata: MediaRadio|undefined, podcast?: Podcast): void
   currentPodcast.value = podcast;
 }
 </script>
+
 <style lang="scss">
 .octopus-app .small-img-box {
   height: 80px;
