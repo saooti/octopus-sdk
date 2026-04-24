@@ -18,6 +18,7 @@
 **Misc**
 
 - Ajustement affichage bouton play de `RadioImage`
+- Correction vulnérabilité xmidom
 
 ## 41.9.6 (20/04/2026)
 
