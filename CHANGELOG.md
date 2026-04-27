@@ -7,6 +7,8 @@
 - Ajout event `blur` sur `ClassicInputText`
 - Ajout composant `ClassicButtonGroup`
 - Ajout `radioApi`
+- Ajout d'un helper `gap-X` pour contrôler l'espacement des éléments flex
+  - Fonctionne comme le helper de marges `mt-X`
 
 **Fixes**
 
