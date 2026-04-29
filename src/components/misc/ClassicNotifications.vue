@@ -3,21 +3,24 @@
 -->
 <template>
     <MessageModal
-        v-if="notification !== null"
-        :title="notification.title"
-        :message="notification.message"
-        :closeable="notification.closeable !== false"
-        @close="clearNotifications"
+        v-if="currentNotification"
+        :title="currentNotification.title"
+        :message="currentNotification.message"
+        :closeable="currentNotification.closeable !== false"
+        @close="clearNotification"
     />
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
+import { useNotificationStore } from '../../stores/NotificationStore';
 import MessageModal from './modal/MessageModal.vue';
 
-import { useNotifications } from '../composable/useNotifications';
+const {
+    clearNotification
+} = useNotificationStore();
 
 const {
-    notification,
-    clearNotifications
-} = useNotifications();
+    currentNotification,
+} = storeToRefs(useNotificationStore());
 </script>

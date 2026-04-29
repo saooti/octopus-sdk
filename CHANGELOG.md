@@ -9,6 +9,8 @@
 - Ajout `radioApi`
 - Ajout d'un helper `gap-X` pour contrôler l'espacement des éléments flex
   - Fonctionne comme le helper de marges `mt-X`
+- Utilisation d'un store à la place d'un composable pour la gestion des
+  notifications
 
 **Fixes**
 

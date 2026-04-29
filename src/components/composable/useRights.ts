@@ -12,6 +12,7 @@ export enum EditRight {
     Restricted,    // User cannot edit because element is used elsewhere
     Full           // User can edit
 }
+
 /**
  * Composable to manage rights.
  * Based on AuthStore, but converts roles to easily usable tests for various

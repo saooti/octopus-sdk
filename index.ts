@@ -134,7 +134,6 @@ import {useOrganisationFilter} from "./src/components/composable/useOrganisation
 import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
-import { useNotifications } from "./src/components/composable/useNotifications.ts";
 export { useSharePlatforms, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms.ts";
 export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
 export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
@@ -163,6 +162,7 @@ import {useFilterStore} from "./src/stores/FilterStore.ts";
 import {useCommentStore} from "./src/stores/CommentStore.ts";
 import {useApiStore} from "./src/stores/ApiStore.ts";
 import {useAuthStore} from "./src/stores/AuthStore.ts";
+export * from "./src/stores/NotificationStore.ts";
 import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
 import classicApi from "./src/api/classicApi.ts";
 
@@ -240,7 +240,6 @@ export {
     useInit,
     useErrorHandler,
     useSimplePageParam,
-    useNotifications,
     debounce,
     useVastStore,
     useSaveFetchStore,
