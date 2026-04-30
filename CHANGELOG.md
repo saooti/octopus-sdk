@@ -7,6 +7,9 @@
 - **14384** - Changements système d'aggregateurs
   - Mise en place de `aggregatorsApi` pour faciliter les requêtes
   - Ajout de fonctions utilitaires pour les droits
+  - Intégration des plateformes personnalisées à `useSharePlatforms`
+- Ajout d'un composant `ClassicAvatar` pour identifier des éléments avec une
+  image ou lettre sur fond coloré
 - Ajout event `blur` sur `ClassicInputText`
 - Amélioration accessibilité `ClassicInputText`
 - Ajout composant `ClassicButtonGroup`

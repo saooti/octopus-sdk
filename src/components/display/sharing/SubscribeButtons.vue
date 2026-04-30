@@ -21,7 +21,12 @@
         :href="sub.url"
         :title="t('New window', {text: sub.title})"
       >
-        <component :is="sub.icon" :fill-color="fillColor(sub)" :size="iconSize" />
+        <component
+          :is="sub.icon"
+          :fill-color="fillColor(sub)"
+          :size="iconSize"
+          non-decorative
+        />
       </a>
     </div>
     <a

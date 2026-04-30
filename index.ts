@@ -134,7 +134,7 @@ import {useOrganisationFilter} from "./src/components/composable/useOrganisation
 import {useInit} from "./src/components/composable/useInit.ts";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
-export { useSharePlatforms, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms.ts";
+export { useSharePlatforms, PREDEFINED_PLATFORMS, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms.ts";
 export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
 export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
 export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl.ts";
