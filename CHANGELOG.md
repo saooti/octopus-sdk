@@ -4,6 +4,9 @@
 
 **Features**
 
+- **14384** - Changements système d'aggregateurs
+  - Mise en place de `aggregatorsApi` pour faciliter les requêtes
+  - Ajout de fonctions utilitaires pour les droits
 - Ajout event `blur` sur `ClassicInputText`
 - Amélioration accessibilité `ClassicInputText`
 - Ajout composant `ClassicButtonGroup`

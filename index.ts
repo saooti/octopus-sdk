@@ -174,6 +174,7 @@ export { organisationApi } from "./src/api/organisationApi.ts";
 export { playlistApi } from "./src/api/playlistApi.ts";
 export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
 export { radioApi } from "./src/api/radioApi.ts";
+export * from "./src/api/aggregatorsApi.ts";
 
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";

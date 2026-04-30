@@ -178,6 +178,21 @@ export const useRights = () => {
         return roleContainsAny('RESTRICTED_PRODUCTION') && !roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
     }
 
+    /** Can the current user create an aggregator */
+    function canCreateAggregator(): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION');
+    }
+
+    /** Can the current user edit an aggregator */
+    function canEditAggregator(): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION');
+    }
+
+    /** Can the current user delete an aggregator */
+    function canDeleteAggregator(): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION');
+    }
+
     return {
         // Emissions
         canCreateEmission,
@@ -203,6 +218,11 @@ export const useRights = () => {
         getParticipantEditRight,
         canEditParticipant,
         canDeleteParticipant,
+
+        // Aggregators
+        canCreateAggregator,
+        canEditAggregator,
+        canDeleteAggregator,
 
         // Other
         canEditCodeInsertPlayer,

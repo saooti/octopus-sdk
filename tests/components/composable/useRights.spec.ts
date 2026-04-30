@@ -312,6 +312,24 @@ describe('useRights', () => {
         });
     });
 
+    describe('Aggregator permissions', () => {
+        ['canCreateAggregator', 'canEditAggregator', 'canDeleteAggregator'].forEach(method => {
+            describe(method, () => {
+                ['ADMIN', 'ORGANISATION'].forEach(role => {
+                    it(`allows ${role}`, async () => {
+                        await setup([role]);
+                        expect(useRights()[method as 'canCreateAggregator']()).toBe(true);
+                    });
+                });
+
+                it('denies unrelated roles', async () => {
+                    await setup(['PRODUCTION']);
+                    expect(useRights()[method as 'canCreateAggregator']()).toBe(false);
+                });
+            });
+        });
+    });
+
     describe('Other permissions', () => {
         describe('canEditCodeInsertPlayer', () => {
             ['ADMIN', 'ORGANISATION'].forEach(role => {
