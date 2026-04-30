@@ -5,7 +5,9 @@
 **Features**
 
 - Ajout event `blur` sur `ClassicInputText`
+- Amélioration accessibilité `ClassicInputText`
 - Ajout composant `ClassicButtonGroup`
+- `ClassicRadio` calcule automatiquement un id si non défini
 - Ajout `radioApi`
 - Ajout d'un helper `gap-X` pour contrôler l'espacement des éléments flex
   - Fonctionne comme le helper de marges `mt-X`

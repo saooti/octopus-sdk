@@ -15,6 +15,8 @@
         <component
             :is="iconComponent"
             v-if="!noIcon"
+            aria-hidden="true"
+            focusable="false"
             class="icon"
             :size="text ? 22 : 30"
         />

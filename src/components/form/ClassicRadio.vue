@@ -18,15 +18,15 @@
       :class="isColumn !== false ? 'd-flex flex-nowrap align-items-center' : 'me-2'"
     >
       <input
-        :id="idRadio + option.value"
+        :id="computedId + option.value"
         :checked="textInit === option.value"
         type="radio"
-        :name="idRadio"
+        :name="computedId"
         :value="option.value"
         :disabled="isDisabled"
         @input="onChange($event.target.value)"
       >
-      <label class="c-hand" :for="idRadio + option.value">
+      <label class="c-hand" :for="computedId + option.value">
         <slot :name="'label-' + option.value" v-bind="slotBindings(option)">{{ option.title }}</slot>
       </label>
 
@@ -36,8 +36,10 @@
 </template>
 
 <script setup generic="T extends { title: string; value: string|undefined; }" lang="ts">
+import { computed, getCurrentInstance } from 'vue';
+
 //Props 
-const { textInit, isColumn = true } = defineProps<{
+const { textInit, isColumn = true, idRadio } = defineProps<{
   options: Array<T>;
   textInit?: string;
   idRadio?: string;
@@ -49,6 +51,15 @@ const { textInit, isColumn = true } = defineProps<{
 const emit = defineEmits<{
   (e: 'update:textInit', value: string): void;
 }>();
+
+const uid = getCurrentInstance()?.uid;
+const computedId = computed((): string => {
+  if (idRadio !== undefined) {
+    return idRadio;
+  } else {
+    return 'classic-radio-' + uid;
+  }
+});
 
 //Methods
 function onChange(value: string){

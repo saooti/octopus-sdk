@@ -241,7 +241,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
         return;
       }
       if (param.canalId) {
-        this.playerRadio = { ...param, ...{ isInit: false } };
+        this.playerRadio = { ...param, isInit: false };
         this.playerCurrentChange = -param.canalId;
       }
     },

@@ -60,6 +60,7 @@
       }"
       :disabled="isDisable || disabled"
       :required="!canBeNull"
+      :aria-required="!canBeNull"
       :autocomplete="autocompleteType"
       @blur="emit('blur')"
     >
