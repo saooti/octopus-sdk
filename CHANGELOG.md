@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.10.3 (04/05/2026)
+
+**Fixes**
+
+- Correction index invalide suite à 41.10.2
+
 ## 41.10.2 (04/05/2026)
 
 **Misc**
