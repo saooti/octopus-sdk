@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.10.2 (04/05/2026)
+
+**Misc**
+
+- Suppression de RadioFrance des plateformes audio, afin d'utiliser la
+  nouvelle fonctionnalité d'identification des plateformes audio
+
 ## 41.10.1 (04/05/2026)
 
 **Fixes**

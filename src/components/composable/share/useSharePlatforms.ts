@@ -10,7 +10,6 @@ import ApplePodcastIcon from "../../icons/ApplePodcastIcon.vue";
 import CastboxIcon from "../../icons/CastboxIcon.vue"; 
 import PodcastRepublicIcon from "../../icons/PodcastRepublicIcon.vue";
 import PodbeanIcon from "../../icons/PodbeanIcon.vue"; 
-import RadioFranceIcon from "../../icons/RadioFranceIcon.vue";
 import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { Annotations } from "@/stores/class/general";
@@ -34,8 +33,7 @@ export enum SharePlatformName {
     YOUTUBE = "youtube",
     CASTBOX = "castbox",
     PODBEAN = "podbean",
-    PODCAST_REPUBLIC = "podcastrepublic",
-    RADIO_FRANCE = "radiofrance"
+    PODCAST_REPUBLIC = "podcastrepublic"
 }
 
 export interface SharePlatform {
@@ -126,11 +124,6 @@ export const PREDEFINED_PLATFORMS: Array<SharePlatform> = [{
     icon: markRaw(PodcastRepublicIcon),
     title: "Podcast Republic",
     color: "#5c85dd",
-}, {
-    name: SharePlatformName.RADIO_FRANCE,
-    icon: markRaw(RadioFranceIcon),
-    title: "Radio France",
-    color: "#a90041",
 }];
 
 export const useSharePlatforms = () => {
