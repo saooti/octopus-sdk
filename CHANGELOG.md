@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.10.1 (04/05/2026)
+
+**Fixes**
+
+- **14469** - Correction récupération incorrecte de la configuration de
+  traduction de l'organisation
+
 ## 41.10.0 (04/05/2026)
 
 **Features**

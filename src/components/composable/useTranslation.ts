@@ -3,6 +3,8 @@ import { transcriptionApi, TranslationState, type PodcastTranslationData } from 
 import { CreateTranslation, defaultTranslationConfig, TranslationConfiguration } from "../../stores/class/transcript/transcriptParams";
 import { podcastApi } from "../../api/podcastApi";
 import { Emission } from "../../stores/class/general/emission";
+import { OrganisationAttributes } from "@/stores/class/general/organisation";
+import { organisationApi } from "../../api/organisationApi";
 
 const DEFAULT_LANGUAGE = 'en';
 
@@ -67,21 +69,20 @@ export const useTranslation = () => {
      * @param emission *(optional)* If set, will also check in emission settings
      * @returns Whether the language is available or not
      */
-    function getTranslationConfig(language: string, emission: Emission): CreateTranslation {
-        const orgAttributes = emission.orga.attributes;
-        const emissionTranslation = parseOrDefault(emission?.annotations?.['translation-config'] as string|undefined, true);
-        const orgTranslation = parseOrDefault(orgAttributes?.['translation-config']);
+    function getTranslationConfig(language: string, emission: Emission, orgaAttributes: OrganisationAttributes): CreateTranslation {
+        const emissionTranslation = parseOrDefault(emission.annotations?.['translation-config'] as string|undefined, true);
+        const orgTranslation = parseOrDefault(orgaAttributes?.['translation-config']);
 
         return getConfigurationFor(language, emissionTranslation, orgTranslation);
     }
 
-    function getLanguageAvailability(language: string, emission: Emission, translationData: PodcastTranslationData): Availability {
+    function getLanguageAvailability(language: string, emission: Emission, orgaAttributes: OrganisationAttributes, translationData: PodcastTranslationData): Availability {
         
         // 1. If language of podcast == language of browser, use that language
         if (language === translationData.nativeLanguage) {
             return Availability.Available;
         } else {
-            const langConfig = getTranslationConfig(language, emission);
+            const langConfig = getTranslationConfig(language, emission, orgaAttributes);
 
             // 2. If the language of the browser is available, use it
             if (langConfig === CreateTranslation.ALWAYS) {
@@ -136,12 +137,13 @@ export const useTranslation = () => {
 
         const podcast = await podcastApi.get(translationData.podcastId);
         const emission = podcast.emission;
+        const orgaAttributes = await organisationApi.getAttributes(podcast.organisation.id);
 
         let bestReady: string|null = null;
         let bestAvailable: string|null = null;
 
         for (const language of languages) {
-            const avaibility = getLanguageAvailability(language, emission, translationData);
+            const avaibility = getLanguageAvailability(language, emission, orgaAttributes, translationData);
             if (avaibility === Availability.Available && bestReady === null) {
                 bestReady = language;
                 break;

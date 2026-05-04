@@ -19,19 +19,26 @@ vi.mock('@/api/podcastApi', () => ({
     },
 }));
 
+vi.mock('@/api/organisationApi', () => ({
+    organisationApi: {
+        getAttributes: vi.fn()
+    }
+}));
+
 vi.mock('@/helper/language', () => ({
     getLanguage: vi.fn().mockReturnValue('fr'),
 }));
 
 import { transcriptionApi, type PodcastTranslationData } from '@/api/transcriptionApi';
 import { podcastApi } from '@/api/podcastApi';
+import { organisationApi } from '@/api/organisationApi';
 import { getLanguage } from '@/helper/language';
 
 function makeTranslationData(overrides: Partial<PodcastTranslationData> = {}): PodcastTranslationData {
     return { podcastId: 1, nativeLanguage: 'fr', translations: [], ...overrides };
 }
 
-function makeEmission(orgConfig?: object): Emission {
+function makeEmission(): Emission {
     return {
         emissionId: 0,
         name: '',
@@ -40,7 +47,6 @@ function makeEmission(orgConfig?: object): Emission {
             id: 'test-org',
             imageUrl: '',
             name: 'Test Org',
-            attributes: orgConfig ? { 'translation-config': JSON.stringify(orgConfig) } : undefined,
         },
         beneficiaries: [],
         rubriqueIds: [],
@@ -50,7 +56,17 @@ function makeEmission(orgConfig?: object): Emission {
 }
 
 function setOrgTranslationConfig(config: object) {
-    vi.mocked(podcastApi.get).mockResolvedValue({ emission: makeEmission(config) } as never);
+    vi.mocked(podcastApi.get).mockResolvedValue({
+        emission: makeEmission(),
+        organisation: { id: 1 }
+    } as never);
+    setOrgAttributes(config);
+}
+
+function setOrgAttributes(orgConfig: object) {
+    vi.mocked(organisationApi.getAttributes).mockResolvedValue({
+        'translation-config': JSON.stringify(orgConfig)
+    });
 }
 
 describe('useTranslation', () => {
@@ -97,6 +113,10 @@ describe('useTranslation', () => {
             });
 
             const translationData = { nativeLanguage: 'it', podcastId: 0, translations: [] };
+            setOrgTranslationConfig({
+                createTranslation: { en: CreateTranslation.ALWAYS },
+                otherLanguage: CreateTranslation.NEVER,
+            });
 
             const result = await composable.getMostRelevantLanguage(translationData)
             expect(result.ready).toBe('it');
@@ -111,6 +131,10 @@ describe('useTranslation', () => {
             });
 
             const translationData = { nativeLanguage: 'fr', podcastId: 0, translations: [] };
+            setOrgTranslationConfig({
+                createTranslation: { en: CreateTranslation.ALWAYS },
+                otherLanguage: CreateTranslation.NEVER,
+            });
 
             const result = await composable.getMostRelevantLanguage(translationData)
             expect(result.ready).toBe('fr');
