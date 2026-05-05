@@ -2,6 +2,10 @@
 
 ## 41.11.0 (En cours)
 
+**Features**
+
+- **14327** - Ajout droits pour éléments médiathèque
+
 **Misc**
 
 - Mise à jour eslint & ajout dans peerDependencies

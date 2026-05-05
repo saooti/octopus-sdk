@@ -1,11 +1,14 @@
+import { Mix } from "@/stores/class/radio/mix";
 import { useAuthStore } from "../../stores/AuthStore";
 import type { Emission } from "../../stores/class/general/emission";
 import type { Podcast } from "../../stores/class/general/podcast";
+import { PlaylistMedia } from "@/stores/class/radio/playlistMedia";
+import { Cartouchier } from "@/stores/class/cartouchier/cartouchier";
 
 type Role =
     'ADMIN'|'ORGANISATION'|
     'PRODUCTION'|'RESTRICTED_PRODUCTION'|'PODCAST_CRUD'|'PODCAST_VALIDATION'|
-    'PLAYLISTS'|'RESTRICTED_ANIMATION';
+    'PLAYLISTS'|'ANIMATION'|'RESTRICTED_ANIMATION'|'RADIO'|'LIVE';
 
 export enum EditRight {
     None,          // User cannot edit
@@ -193,7 +196,7 @@ export const useRights = () => {
         return roleContainsAny('ADMIN', 'ORGANISATION');
     }
 
-    /** Can read/edit RSS rules */
+    /** Can read RSS rules */
     function canReadRSSRules(): boolean {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
     }
@@ -201,6 +204,29 @@ export const useRights = () => {
     /** Can edit RSS rules */
     function canEditRSSRules(): boolean {
         return canReadRSSRules();
+    }
+    
+    /** Can the current user create a mediatheque element ? */
+    function canCreateMediathequeElement(): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION');
+    }
+
+    /** Can the current user edit a mediatheque element ? */
+    function canEditMediathequeElement(element: Mix|PlaylistMedia|Cartouchier): boolean {
+        if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION') === true) {
+            return true;
+        }
+
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD') === true) {
+            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId;
+        }
+
+        return false;
+    }
+
+    /** Can the current user delete a mediatheque element ? */
+    function canDeleteMediathequeElement(element: Mix|PlaylistMedia|Cartouchier): boolean {
+        return canEditMediathequeElement(element);
     }
 
     return {
@@ -237,6 +263,11 @@ export const useRights = () => {
         // RSS Rules
         canReadRSSRules,
         canEditRSSRules,
+
+        // Mediatheque
+        canCreateMediathequeElement,
+        canEditMediathequeElement,
+        canDeleteMediathequeElement,
 
         // Other
         canEditCodeInsertPlayer,

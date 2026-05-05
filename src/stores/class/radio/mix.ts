@@ -5,6 +5,8 @@ export interface Mix {
   name: string;
   organisationId: string;
   samplings: Array<MediaSampling>;
+  /** ID of the user that created this mix */
+  ownerId?: string;
 }
 
 export interface MediaSampling {

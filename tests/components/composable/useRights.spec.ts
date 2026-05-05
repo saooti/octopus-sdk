@@ -5,6 +5,7 @@ import { useRights } from '@/components/composable/useRights';
 import type { Organisation } from '@/stores/class/general/organisation';
 import type { Emission } from '@/stores/class/general/emission';
 import type { Podcast } from '@/stores/class/general/podcast';
+import type { Mix } from '@/stores/class/radio/mix';
 
 async function setup(roles: string[], userId = 'test-user-123'): Promise<void> {
     setupPinia();
@@ -326,6 +327,57 @@ describe('useRights', () => {
                     await setup(['PRODUCTION']);
                     expect(useRights()[method as 'canCreateAggregator']()).toBe(false);
                 });
+            });
+        });
+    });
+
+    describe('Mediatheque permissions', () => {
+        const ownMix = { ownerId: 'test-user-123' } as Mix;
+        const otherMix = { ownerId: 'other-user' } as Mix;
+        const noOwnerMix = {} as Mix;
+
+        describe('canCreateMediathequeElement', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreateMediathequeElement()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreateMediathequeElement()).toBe(false);
+            });
+        });
+
+        describe('canEditMediathequeElement', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditMediathequeElement(otherMix)).toBe(true);
+                });
+            });
+
+            ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD'].forEach(role => {
+                it(`${role} can only edit own element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditMediathequeElement(ownMix)).toBe(true);
+                    expect(useRights().canEditMediathequeElement(otherMix)).toBe(false);
+                    expect(useRights().canEditMediathequeElement(noOwnerMix)).toBe(false);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditMediathequeElement(ownMix)).toBe(false);
+            });
+        });
+
+        describe('canDeleteMediathequeElement', () => {
+            it('restricted user can delete own element but not others\'', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().canDeleteMediathequeElement(ownMix)).toBe(true);
+                expect(useRights().canDeleteMediathequeElement(otherMix)).toBe(false);
             });
         });
     });
