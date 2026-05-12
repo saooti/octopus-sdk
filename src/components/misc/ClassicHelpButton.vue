@@ -73,5 +73,6 @@ const iconSize = computed(() => {
 
 .help-popover {
     background-color: var(--octopus-secondary-lighter);
+    max-width: 60%;
 }
 </style>

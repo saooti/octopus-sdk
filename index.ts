@@ -52,8 +52,7 @@ export {
 }
 
 // Buttons
-import ActionButton from "./src/components/buttons/ActionButton.vue";
-export { ActionButton };
+export * from "./src/components/buttons/";
 
 // Form
 import ClassicButtonGroup from "./src/components/form/ClassicButtonGroup.vue";

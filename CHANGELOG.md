@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 41.10.4 (En cours)
+
+**Fixes**
+
+- Imports de stores relatifs dans `EmissionList`
+- Limitation de la largeur des messages de `ClassicHelpButton`
+
 ## 41.10.3 (04/05/2026)
 
 **Fixes**
