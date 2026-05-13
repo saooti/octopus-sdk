@@ -14,7 +14,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 	button {
 		cursor: pointer;
 
-		&:disabled{
+		&:disabled, &[aria-disabled="true"]{
 			cursor: default !important;
 		}
 	}
@@ -106,10 +106,12 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			background: var(--octopus-primary-more-transparent);
 		}
 
-		&:not(.btn-underline, .btn-primary, .btn-on-dark, .btn-transparent, .admin-button, .share-btn):disabled{
-      		cursor: default;
-			background-color: var(--octopus-secondary-lighter) !important;
-			color:  var(--octopus-text-disabled) !important;
+		&:not(.btn-underline, .btn-primary, .btn-on-dark, .btn-transparent, .admin-button, .share-btn){
+			&:disabled, &[aria-disabled="true"] {
+	      		cursor: default;
+				background-color: var(--octopus-secondary-lighter) !important;
+				color:  var(--octopus-text-disabled) !important;
+			}
 		}
 
 		&.btn-underline{
@@ -167,8 +169,8 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 				border-color: var(--octopus-color-on-primary) !important;
 			}
 
-			&:not(.btn-on-dark):disabled,
-			&.btn-on-dark:disabled{
+			&:not(.btn-on-dark):disabled, &:not(.btn-on-dark)[aria-disabled="true"],
+			&.btn-on-dark:disabled, &.btn-on-dark[aria-disabled="true"] {
 				background-color: var(--octopus-secondary-darker);
 				border: 1px solid black;
 				cursor: default;
@@ -200,6 +202,17 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		}
 		
 	}
+
+	// Make disabled state visible
+	.btn:disabled, .btn:disabled:hover, .btn[aria-disabled="true"], .btn[aria-disabled="true"]:hover {
+		filter: grayscale(100%);
+		opacity: 60%;
+
+		&:not(.btn-transparent) {
+			background-color: var(--octopus-secondary);
+		}
+	}
+
 
 	.btn-transparent{
 		background: transparent;

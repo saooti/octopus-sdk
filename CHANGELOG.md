@@ -10,6 +10,11 @@
 - Imports de stores relatifs dans `EmissionList`
 - Limitation de la largeur des messages de `ClassicHelpButton`
 
+**Misc**
+
+- Ajout de `ClassicButton`, un bouton intégrant des éléments d'accessibilité
+- Ajustement style boutons désactivés avec `aria-disabled`
+
 ## 41.10.3 (04/05/2026)
 
 **Fixes**
