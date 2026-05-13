@@ -41,11 +41,15 @@
       v-model:active-tab="activeSeasonTab"
       :tab-number="emission.seasons.length"
     >
-      <template v-for="(season, i) in emission.seasons" #[tabNameSlot(i)]>
+      <template v-for="(season, i) in seasons" #[tabNameSlot(i)]>
         {{ $t('Podcast - Season N', { season }) }}
       </template>
 
-      <template v-for="(season, i) in emission.seasons" #[tabContentSlot(i)] :key="season">
+      <template
+        v-for="(season, i) in seasons"
+        #[tabContentSlot(i)]
+        :key="season"
+      >
         <PodcastList
           class="flex-grow-1"
           :first="dfirst"
@@ -136,6 +140,8 @@ const query = computed(() => searchPattern.value.length > 3 ? searchPattern.valu
 const showSeasons = computed(() => {
   return props.emission !== undefined && areSeasonsEnabled(props.emission) && (props.emission.seasons?.length ?? 0) > 0;
 });
+
+const seasons = computed((): Array<number> => [...props.emission.seasons].sort());
 
 const activeSeasonTab = ref(showSeasons.value ? props.emission.seasons?.indexOf(getMaxSeason(props.emission)) ?? 0 : 0);
 

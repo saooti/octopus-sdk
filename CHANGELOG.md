@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.10.5 (En cours)
+
+**Fixes**
+
+- **14486** - Tri des saisons sur la page d'émission
+
 ## 41.10.4 (13/05/2026)
 
 **Fixes**
