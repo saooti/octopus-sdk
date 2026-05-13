@@ -4,6 +4,9 @@
 
 **Fixes**
 
+- **14384** - Correctifs identification des plateformes
+  - Envoi de l'organisationId correct quand non connecté
+  - Correction taille des `ClassicAvatar`
 - Imports de stores relatifs dans `EmissionList`
 - Limitation de la largeur des messages de `ClassicHelpButton`
 

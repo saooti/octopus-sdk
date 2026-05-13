@@ -127,7 +127,7 @@ const subscribeButtonsContainerRef = useTemplateRef('subscribeButtonsContainer')
 //Composables
 const { t } = useI18n();
 const apiStore = useApiStore();
-const { getPlatformsWithLinks } = useSharePlatforms();
+const { getPlatformsWithLinks, initPlatforms } = useSharePlatforms();
 
 //Computed
 const subscriptionsDisplay = computed(() => {
@@ -152,7 +152,11 @@ const iconSize = computed((): number => {
 //Watch
 watch(()=>props.windowWidth, () =>resizeWindow());
 
-onMounted(()=>resizeWindow());
+onMounted(() => {
+  resizeWindow();
+  const orga = 'orga' in props.content ? props.content.orga : props.content.organisation;
+  initPlatforms(orga.id);
+});
 
 //Methods
 function showAllElements() {

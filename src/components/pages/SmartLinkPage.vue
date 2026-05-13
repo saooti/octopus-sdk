@@ -108,7 +108,7 @@ import { state } from '../../stores/ParamSdkStore';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
-const { getPlatformsWithLinks } = useSharePlatforms();
+const { getPlatformsWithLinks, initPlatforms } = useSharePlatforms();
 
 /** Props used when displaying a playlist */
 interface PlaylistProps {
@@ -135,8 +135,10 @@ onMounted(async() => {
     // Retrieve element
     if (playlistId) {
         element.value = await playlistApi.get(playlistId);
+        initPlatforms(element.value.organisation.id);
     } else if (emissionId) {
         element.value = await emissionApi.get(emissionId);
+        initPlatforms(element.value.orga.id);
     } else {
         console.error('No content defined');
     }

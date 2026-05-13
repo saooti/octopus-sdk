@@ -13,9 +13,8 @@ import PodbeanIcon from "../../icons/PodbeanIcon.vue";
 import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { Annotations } from "@/stores/class/general";
-import { h, markRaw, onMounted, ref, type Component } from "vue";
+import { h, markRaw, ref, type Component, type Ref } from "vue";
 import { aggregatorsApi } from "../../../api/aggregatorsApi";
-import { useAuthStore } from "../../../stores/AuthStore";
 import { useNotificationStore } from "../../../stores/NotificationStore";
 import ClassicAvatar from "../../misc/ClassicAvatar.vue";
 
@@ -130,18 +129,24 @@ export const useSharePlatforms = () => {
 
     const platforms = ref<Array<SharePlatform>>([]);
 
-    const { authOrgaId } = useAuthStore();
     const { addNotification } = useNotificationStore();
 
-    onMounted(async (): Promise<void> => {
-        platforms.value.push(...PREDEFINED_PLATFORMS);
+    async function initPlatforms(organisationId: string): Promise<void> {
+        // (Re)initialize the platforms
+        platforms.value = [...PREDEFINED_PLATFORMS];
+
         try {
-            const customPlatforms = await aggregatorsApi.getAll(authOrgaId);
+            const customPlatforms = await aggregatorsApi.getAll(organisationId);
             customPlatforms.forEach(platform => {
                 platforms.value.push({
                     name: platform.name,
                     title: platform.name,
-                    icon: markRaw(() => h(ClassicAvatar, { name: platform.name, imageUrl: platform.image })),
+                    icon: markRaw((props, { attrs }) => h(ClassicAvatar, {
+                        ...attrs,
+                        ...props,
+                        name: platform.name,
+                        imageUrl: platform.image
+                    })),
                     color: "white",
                     annotation: `ptfaudio_${platform.name}`
                 });
@@ -152,7 +157,7 @@ export const useSharePlatforms = () => {
                 message: error
             });
         }
-    });
+    }
     
     /**
      * Helper to retrieve configuration of a specific platform
@@ -198,6 +203,7 @@ export const useSharePlatforms = () => {
     }
 
     return {
+        initPlatforms,
         getPlatformsWithLinks,
         getPlatformConfiguration,
         platforms
