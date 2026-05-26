@@ -103,6 +103,7 @@ const PodcastPlayBasicButton = defineAsyncComponent(() => import("../podcasts/Po
 //Props 
 const props = defineProps({
   emission: { default: () => ({}), type: Object as () => Emission },
+  /** Number of podcasts to display (default: 2); if set to 0, no podcasts will be displayed */
   nbPodcasts: { default: undefined, type: Number },
   rubriqueName: { default: undefined, type: String },
 })
@@ -125,6 +126,10 @@ onBeforeMount(()=>loadPodcasts())
 
 //Methods
 async function loadPodcasts(): Promise<void> {
+  if (props.nbPodcasts === 0) {
+    return;
+  }
+
   const nb = props.nbPodcasts ? props.nbPodcasts : 2;
   const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
     api: 0,

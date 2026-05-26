@@ -2,6 +2,10 @@
 
 ## 41.10.5 (En cours)
 
+**Features**
+
+- Possibilité de désactiver l'affichage des podcasts dans `EmissionPlayerItem`
+
 **Fixes**
 
 - **14486** - Tri des saisons sur la page d'émission
