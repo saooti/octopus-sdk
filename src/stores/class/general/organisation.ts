@@ -1,5 +1,10 @@
 import { Person } from "../user/person";
 
+export enum MonetisationOptions {
+  YES = 'YES',
+  NO = 'NO'
+}
+
 export type OrganisationAttributes = {
   //[key: string]: string | number | boolean | undefined;
   automation?: string;
@@ -13,6 +18,10 @@ export type OrganisationAttributes = {
   'translation-config'?: string;
   /** Language of the RSS */
   'rss-language'?: string;
+  /** Monetisation of the organisation */
+  MONETISABLE?: MonetisationOptions;
+  /** Privacy parameters (JSON) */
+  PRIVATE?: string;
 };
 
 export interface Organisation {
@@ -26,7 +35,7 @@ export interface Organisation {
     longitude: number;
     latitude: number;
   };
-  monetisable?: string;
+  monetisable?: MonetisationOptions;
   name: string;
   notSeenOnKeycloak?: number;
   score?: number;

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.10.6 (En cours)
+
+**Fixes**
+
+- **144228** - Correction lecture épisodes non publiés sur orga sécurisée
+
 ## 41.10.5 (26/05/2026)
 
 **Features**

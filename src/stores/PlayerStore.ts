@@ -11,6 +11,8 @@ import { Chaptering, ChapteringPercent } from "./class/chaptering/chaptering";
 import classicApi from "../api/classicApi";
 
 import { state as sdkParams } from "./ParamSdkStore";
+import { Canal } from "./class/radio/canal";
+import { Conference } from "./class/conference/conference";
 
 interface Transcript {
   actual: number;
@@ -92,10 +94,18 @@ export const usePlayerStore = defineStore("PlayerStore", {
       return chapteringPercent;
     },
     playerHeight() {
-      if ("STOPPED" === this.playerStatus) return '0px';
-      if (this.playerVideo) return "0px" /* "281px" */;
-      if (this.playerLargeVersion) return "27rem";
-      if (window.innerWidth > 450) return "6rem";
+      if ("STOPPED" === this.playerStatus) {
+        return '0px';
+      }
+      if (this.playerVideo) {
+        return "0px" /* "281px" */;
+      }
+      if (this.playerLargeVersion) {
+        return "27rem";
+      }
+      if (window.innerWidth > 450) {
+        return "6rem";
+      }
       return "3.5rem";
     },
 
@@ -182,19 +192,27 @@ export const usePlayerStore = defineStore("PlayerStore", {
      * @param param The data
      * @param isVideo If true, enable video mode
      */
-    async playerPlay(param?: any, isVideo = false) {
+    async playerPlay(param?: Podcast|Media|Canal|Conference, isVideo = false) {
       if (!param) {
         this.stop();
         return;
       }
       if (
-        (this.playerPodcast &&
+        (
+          this.playerPodcast &&
+          'podcastId' in param &&
           this.playerPodcast.podcastId === param.podcastId &&
-          isVideo === this.playerVideo) ||
-        (this.playerMedia && this.playerMedia.mediaId === param.mediaId) ||
-        (this.playerLive &&
+          isVideo === this.playerVideo
+        ) || (
+          this.playerMedia &&
+          'mediaId' in param &&
+          this.playerMedia.mediaId === param.mediaId
+        ) || (
+          this.playerLive &&
+          'conferenceId' in param &&
           this.playerLive.conferenceId === param.conferenceId &&
-          isVideo === this.playerVideo)
+          isVideo === this.playerVideo
+        )
       ) {
         //Do nothing
         return;
@@ -215,6 +233,7 @@ export const usePlayerStore = defineStore("PlayerStore", {
       this.playerChaptering = undefined;
 
       if (
+        'conferenceId' in param &&
         param.conferenceId &&
         (!param.podcastId || param.processingStatus !== "READY")
       ) {
@@ -223,24 +242,28 @@ export const usePlayerStore = defineStore("PlayerStore", {
         this.playerCurrentChange = null;
         return;
       }
-      if (param.podcastId) {
-        this.playerPodcast = param;
-        this.playerCurrentChange = param.podcastId;
-        if (param.annotations?.chaptering) {
+
+      if ('podcastId' in param && param.podcastId) {
+        const podcast = param as Podcast;
+        this.playerPodcast = podcast;
+        this.playerCurrentChange = podcast.podcastId;
+        if (podcast.annotations?.chaptering) {
           this.playerChaptering = await classicApi.fetchData<Chaptering>({
-            api:4,
-            path:param.annotations.chaptering as string,
-            isNotAuth:true
+            api: 4,
+            path: podcast.annotations.chaptering as string,
+            isNotAuth: true
           });
         }
         return;
       }
-      if (param.mediaId) {
+
+      if ('mediaId' in param && param.mediaId) {
         this.playerMedia = param;
         this.playerCurrentChange = null;
         return;
       }
-      if (param.canalId) {
+
+      if ('canalId' in param && param.canalId) {
         this.playerRadio = { ...param, isInit: false };
         this.playerCurrentChange = -param.canalId;
       }

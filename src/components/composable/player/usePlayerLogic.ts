@@ -12,9 +12,12 @@ import fetchHelper from "../../../helper/fetchHelper";
 import dayjs from "dayjs";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { podcastApi } from "../../../api/podcastApi";
+import { Organisation } from "../../../stores/class/general/organisation";
+import { organisationApi } from "../../../api/organisationApi";
+import { OrganisationPrivacy } from "../../../stores/class/securisation/privateOrganisation";
 
 export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
-  const hlsReady= ref(false);
+  const hlsReady = ref(false);
 
   const { listenTime, onPlay, setDownloadId, onTimeUpdateProgress, playLive, endingLive, playRadio} = usePlayerLive(hlsReady);
   const { contentEndedAdsLoader } = usePlayerStitching();
@@ -35,6 +38,10 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
 
   watch(()=>getAudioUrl(), async () => {
     playerError.value = false;
+
+    // In some cases, the audio does not go through normal download endpoint
+    // Mostly when the podcast is not available to users
+    let download = true;
     if (
       playerStore.playerMedia ||
       !playerStore.playerPodcast ||
@@ -42,12 +49,32 @@ export const usePlayerLogic = (forceHide: Ref<boolean, boolean>) => {
       !playerStore.playerPodcast.availability.visibility ||
       listenError.value
     ) {
-      audioUrlToPlay.value = getAudioUrl();
-      return;
+        download = false;
+
+        // Not yet available podcasts in secured organisations go through
+        // download if possible (see #14228)
+        const podcast = playerStore.playerPodcast;
+        if (podcast && !podcast.availability.visibility) {
+          let organisation: Organisation|null = null;
+          if (podcast.organisation) {
+            organisation = podcast.organisation;
+          } else if ('organisationId' in podcast) {
+            // Handle case of missing organisation (for example for SimplifiedPodcast)
+            organisation = await organisationApi.get(podcast.organisationId as string);
+          }
+          if (organisation.privacy === OrganisationPrivacy.SECURED) {
+            download = true;
+          }
+        }
     }
-    const response = await podcastApi.downloadRegister(playerStore.playerPodcast.podcastId, getAudioUrlParameters());
-    setDownloadId(response.downloadId.toString());
-    audioUrlToPlay.value = response.location;
+
+    if (download) {
+      const response = await podcastApi.downloadRegister(playerStore.playerPodcast.podcastId, getAudioUrlParameters());
+      setDownloadId(response.downloadId.toString());
+      audioUrlToPlay.value = response.location;
+    } else {
+      audioUrlToPlay.value = getAudioUrl();
+    }
   });
 
   watch(()=>playerStore.playerPodcast, async () => {
