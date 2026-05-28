@@ -6,6 +6,10 @@
 
 - **14534** - Correction affichage boutons de plateformes
 
+**Misc**
+
+- Mise à jour dépendances
+
 ## 41.10.6 (27/05/2026)
 
 **Fixes**
