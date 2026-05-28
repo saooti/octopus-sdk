@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.10.7 (En cours)
+
+**Fixes**
+
+- **14534** - Correction affichage boutons de plateformes
+
 ## 41.10.6 (27/05/2026)
 
 **Fixes**
