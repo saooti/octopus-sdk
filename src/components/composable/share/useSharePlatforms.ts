@@ -13,7 +13,7 @@ import PodbeanIcon from "../../icons/PodbeanIcon.vue";
 import YoutubeIcon from "vue-material-design-icons/Youtube.vue";
 import SpotifyIcon from "vue-material-design-icons/Spotify.vue";
 import { Annotations } from "@/stores/class/general";
-import { h, markRaw, ref, type Component, type Ref } from "vue";
+import { h, markRaw, ref, type Component } from "vue";
 import { aggregatorsApi } from "../../../api/aggregatorsApi";
 import { useNotificationStore } from "../../../stores/NotificationStore";
 import ClassicAvatar from "../../misc/ClassicAvatar.vue";
@@ -136,7 +136,7 @@ export const useSharePlatforms = () => {
         platforms.value = [...PREDEFINED_PLATFORMS];
 
         try {
-            const customPlatforms = await aggregatorsApi.getAll(organisationId);
+            const customPlatforms = await aggregatorsApi.getAllNoAuth(organisationId);
             customPlatforms.forEach(platform => {
                 platforms.value.push({
                     name: platform.name,

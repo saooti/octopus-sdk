@@ -47,7 +47,22 @@ async function getAll(organisationId?: string): Promise<Array<Aggregator>> {
     });
 }
 
+/**
+ * Return the list of all user-defined aggregators, without filter data.
+ * This doesn't require to be authenticated.
+ * @param organisationId If defined, the aggregators will be filtered for this
+ *                       organisation
+ */
+async function getAllNoAuth(organisationId?: string): Promise<Array<PredefinedAggregator>> {
+    return classicApi.fetchData<Array<Aggregator>>({
+        api: ModuleApi.DEFAULT,
+        path: 'rss/aggregator/noauth/list',
+        parameters: organisationId ? { organisationId } : undefined
+    });
+}
+
 export const aggregatorsApi = {
     getPredefined,
-    getAll
+    getAll,
+    getAllNoAuth
 };
