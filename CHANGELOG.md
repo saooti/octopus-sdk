@@ -10,7 +10,8 @@
 
 **Misc**
 
-- Mise à jour eslint & ajout dans peerDependencies
+- Mise à jour eslint
+- Déplacement de diverses dépendances dans `peerDependencies`
 
 ## 41.10.9 (01/06/2026)
 
