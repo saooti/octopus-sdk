@@ -5,6 +5,11 @@
 **Features**
 
 - **14327** - Ajout droits pour éléments médiathèque
+- Revue du système de droits
+  - Propose maintenant des fonction `get*Right`, permettant d'obtenir la raison
+    du rejet
+  - Les anciennes fonctions `can*` existent toujours et sont dérivées des
+    nouvelles
 - Ajout du composant `ClassicTabs` pour simplifier la gestion d'onglets
   - `ClassicNav` est déprécié en conséquence
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { setupPinia, setupAuthStore } from '@tests/utils';
 import { useAuthStore } from '@/stores/AuthStore';
-import { useRights } from '@/components/composable/useRights';
+import { useRights, ActionRight } from '@/components/composable/useRights';
 import type { Organisation } from '@/stores/class/general/organisation';
 import type { Emission } from '@/stores/class/general/emission';
 import type { Podcast } from '@/stores/class/general/podcast';
@@ -496,6 +496,101 @@ describe('useRights', () => {
                     await setup([role]);
                     expect(useRights().canEditCodeInsertPlayer()).toBe(false);
                 });
+            });
+        });
+    });
+
+    describe('ActionRight detailed reasons', () => {
+        describe('getEditEmissionRight', () => {
+            it('returns Allowed for PRODUCTION', async () => {
+                await setup(['PRODUCTION']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'other' } as Emission)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own emission', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' emission', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'other' } as Emission)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without emission access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditPodcastRight', () => {
+            it('returns Allowed for PRODUCTION on any podcast', async () => {
+                await setup(['PRODUCTION']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'other', valid: true } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'test-user-123', valid: true } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'other', valid: true } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNotOwner for PODCAST_CRUD editing others\' podcast', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditPodcastRight({ valid: false, publisher: { userId: 'other' } } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without podcast access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'test-user-123', valid: true } as Podcast)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditCartouchierRight', () => {
+            it('returns Allowed for ANIMATION on any element', async () => {
+                await setup(['ANIMATION']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'other' } as Cartouchier)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own element', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'test-user-123' } as Cartouchier)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' element', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'other' } as Cartouchier)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without cartouchier access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'test-user-123' } as Cartouchier)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditTranscriptRight', () => {
+            it('returns Allowed for PRODUCTION on any podcast', async () => {
+                await setup(['PRODUCTION']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'other' } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for PODCAST_CRUD editing own transcript', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for PODCAST_CRUD editing others\' transcript', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'other' } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without transcript access', async () => {
+                await setup(['RESTRICTED_ANIMATION']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.DeniedNoRight);
             });
         });
     });

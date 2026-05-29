@@ -124,7 +124,7 @@ export const getClassicTagInput = () => import("./src/components/form/ClassicTag
 export const getClassicWysiwyg = () => import("./src/components/form/ClassicWysiwyg.vue");
 
 //Composable
-import { useRights, EditRight } from "./src/components/composable/useRights.ts";
+import { useRights, EditRight, ActionRight } from "./src/components/composable/useRights.ts";
 import {useResizePhone} from "./src/components/composable/useResizePhone";
 import {useTagOf} from "./src/components/composable/useTagOf.ts";
 import {useSelenium} from "./src/components/composable/useSelenium.ts";
@@ -231,6 +231,7 @@ import { defineAsyncComponent } from "vue";
 export {
     useRights,
     EditRight,
+    ActionRight,
     useResizePhone,
     useTagOf,
     useSelenium,

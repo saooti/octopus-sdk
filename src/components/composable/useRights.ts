@@ -16,6 +16,54 @@ export enum EditRight {
     Full           // User can edit
 }
 
+export enum ActionRight {
+    Allowed,        // User can perform the action
+    DeniedNoRight,  // User lacks the required role
+    DeniedNotOwner  // User has a restricted role but does not own the resource
+}
+
+// Constraint type for the object passed to deriveCanFunctions.
+// any[] is intentional: it allows functions with any parameter signature to satisfy
+// the constraint while still enforcing that the return type is ActionRight.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SyncRightFns = Record<string, (...args: any[]) => ActionRight>;
+
+// Maps every key of the form `get${A}Right` to `can${A}`, preserving the parameter
+// types of the original function but changing the return type to boolean.
+// Keys that do not match the naming convention are dropped (mapped to never).
+type CanFns<T extends SyncRightFns> = {
+    [K in keyof T as K extends `get${infer A}Right` ? `can${A}` : never]:
+        T[K] extends (...args: infer P) => ActionRight ? (...args: P) => boolean : never;
+};
+
+/**
+ * Generates boolean shortcut functions from a set of `getRightXxx` functions.
+ *
+ * Convention: `get${Action}Right(…args) → ActionRight`
+ *         becomes `can${Action}(…args) → boolean`
+ *
+ * The generated function returns true when the underlying getRightXxx returns
+ * ActionRight.Allowed, and false otherwise. This means callers that only need
+ * a simple yes/no answer can use canXxx(), while callers that need the specific
+ * denial reason (DeniedNoRight vs DeniedNotOwner) can call getRightXxx() directly.
+ *
+ * Only synchronous functions should be passed here; async rights functions must
+ * be wrapped manually.
+ */
+function deriveCanFunctions<T extends SyncRightFns>(fns: T): CanFns<T> {
+    const result = {} as CanFns<T>;
+    for (const key of Object.keys(fns) as (keyof T & string)[]) {
+        if (key.startsWith('get') && key.endsWith('Right')) {
+            const canKey = `can${key.slice(3, -5)}` as keyof CanFns<T>;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (result as any)[canKey] = (...args: unknown[]) =>
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (fns as any)[key](...args) === ActionRight.Allowed;
+        }
+    }
+    return result;
+}
+
 /**
  * Composable to manage rights.
  * Based on AuthStore, but converts roles to easily usable tests for various
@@ -28,105 +76,116 @@ export const useRights = () => {
 	    return (authStore.authRole as Role[]).findIndex((r: Role) => roles.includes(r)) > -1;
     }
 
-    // Creation is limited by roles
-    function canCreateEmission(): boolean {
-	    return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION');
+    // Emission rights
+    function getCreateEmissionRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditEmission(emission: Emission): boolean {
+    function getEditEmissionRight(emission: Emission): ActionRight {
         if (
-            // Can edit new emissions
-            (!emission.emissionId && canCreateEmission()) ||
-            // Can edit when with sufficient rights
-		    roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
+            (!emission.emissionId && getCreateEmissionRight() === ActionRight.Allowed) ||
+            roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
         ) {
-            return true;
+            return ActionRight.Allowed;
         }
-
-	    // Can only edit if has created the emission
-	    return (roleContainsAny('RESTRICTED_PRODUCTION') && emission.createdByUserId === authStore.authProfile?.userId);
+        if (roleContainsAny('RESTRICTED_PRODUCTION')) {
+            return emission.createdByUserId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
+        }
+        return ActionRight.DeniedNoRight;
     }
 
-    function canDeleteEmission(): boolean {
-	    // In case of restricted production, it will only delete podcasts
-	    // created by user, and delete the emission only if empty afterwards
-	    return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION');
+    function getDeleteEmissionRight(): ActionRight {
+        // In case of restricted production, it will only delete podcasts
+        // created by user, and delete the emission only if empty afterwards
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditCommentsConfigEmission(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
+    function getEditCommentsConfigEmissionRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canCreatePodcast(): boolean {
-        // All roles that can create podcasts
+    // Podcast rights
+    function getCreatePodcastRight(): ActionRight {
         return roleContainsAny(
-            'ADMIN',
-            'ORGANISATION',
-            'PRODUCTION',
-            'PODCAST_CRUD',
-            'RESTRICTED_PRODUCTION',
-            'RESTRICTED_ANIMATION'
-        );
+            'ADMIN', 'ORGANISATION', 'PRODUCTION', 'PODCAST_CRUD',
+            'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'
+        )
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canDuplicatePodcast(): boolean {
-        // Same as creation but notably without PODCAST_CRUD and
-        // RESTRICTED_ANIMATION
-        return roleContainsAny(
-            'ADMIN',
-            'ORGANISATION',
-            'PRODUCTION',
-            'RESTRICTED_PRODUCTION',
-        );
+    function getDuplicatePodcastRight(): ActionRight {
+        // Same as creation but notably without PODCAST_CRUD and RESTRICTED_ANIMATION
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditPodcast(podcast: Podcast): boolean {
-        // Full rights users can edit any podcast
+    function getEditPodcastRight(podcast: Podcast): ActionRight {
         if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
-            return true;
+            return ActionRight.Allowed;
         }
-
-        // RESTRICTED users can only edit their own podcasts
         if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION')) {
-            return podcast.createdByUserId === authStore.authProfile?.userId;
+            return podcast.createdByUserId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
         }
-
-        // PODCAST_CRUD can only edit their own non-valid podcasts
         if (roleContainsAny('PODCAST_CRUD')) {
-            return podcast.valid === false &&
-                   podcast.publisher?.userId === authStore.authProfile?.userId;
+            return podcast.valid === false && podcast.publisher?.userId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
         }
-
-        return false;
+        return ActionRight.DeniedNoRight;
     }
 
-    function canDeletePodcast(podcast: Podcast): boolean {
-        // Same permissions as editing
-        return canEditPodcast(podcast);
+    function getDeletePodcastRight(podcast: Podcast): ActionRight {
+        return getEditPodcastRight(podcast);
     }
 
-    function canValidatePodcast(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'PODCAST_VALIDATION');
+    function getValidatePodcastRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'PODCAST_VALIDATION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditCommentsConfigPodcast(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
+    function getEditCommentsConfigPodcastRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canCreatePlaylist(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS');
+    // Playlist rights
+    function getCreatePlaylistRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditPlaylist(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS');
+    function getEditPlaylistRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canDeletePlaylist(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS');
+    function getDeletePlaylistRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canCreateParticipant(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION');
+    // Participant rights
+    function getCreateParticipantRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
     async function getParticipantEditRight(participantId: number|undefined): Promise<EditRight> {
@@ -143,36 +202,127 @@ export const useRights = () => {
         return editRight === EditRight.Full;
     }
 
-
     async function canDeleteParticipant(participantId: number|undefined): Promise<boolean> {
         const editRight = await getParticipantEditRight(participantId);
         return editRight === EditRight.Full;
     }
 
-    function canEditCodeInsertPlayer(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION');
+    // Aggregator rights
+    function getCreateAggregatorRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditTranscript(podcast: Podcast): boolean {
-        if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
-            return true;
-        }
+    function getEditAggregatorRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
 
+    function getDeleteAggregatorRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    // Cartouchier rights
+    function getCreateCartouchierRight(): ActionRight {
+        return roleContainsAny(
+            'ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
+            'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'
+        )
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    function getEditCartouchierRight(element: Cartouchier): ActionRight {
+        if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION')) {
+            return ActionRight.Allowed;
+        }
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD')) {
+            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
+        }
+        return ActionRight.DeniedNoRight;
+    }
+
+    function getDeleteCartouchierRight(element: Cartouchier): ActionRight {
+        return getEditCartouchierRight(element);
+    }
+
+    // PlaylistMedia rights
+    function getCreatePlaylistMediaRight(): ActionRight {
+        return roleContainsAny(
+            'ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
+            'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'
+        )
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    function getEditPlaylistMediaRight(element: PlaylistMedia): ActionRight {
+        if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION')) {
+            return ActionRight.Allowed;
+        }
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD')) {
+            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
+        }
+        return ActionRight.DeniedNoRight;
+    }
+
+    function getDeletePlaylistMediaRight(element: PlaylistMedia): ActionRight {
+        return getEditPlaylistMediaRight(element);
+    }
+
+    // Mix rights
+    function getCreateMixRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'RADIO')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    function getEditMixRight(_element: Mix): ActionRight {
+        return getCreateMixRight();
+    }
+
+    function getDeleteMixRight(element: Mix): ActionRight {
+        return getEditMixRight(element);
+    }
+
+    // Other action rights
+    function getEditCodeInsertPlayerRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    function getEditTranscriptRight(podcast: Podcast): ActionRight {
+        if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
+            return ActionRight.Allowed;
+        }
         if (roleContainsAny('RESTRICTED_PRODUCTION', 'PODCAST_CRUD')) {
-            return podcast.createdByUserId === authStore.authProfile?.userId;
+            return podcast.createdByUserId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
         }
-
-        return false;
+        return ActionRight.DeniedNoRight;
     }
 
-    function canEditTranscriptVisibility(podcast: Podcast): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
+    function getEditTranscriptVisibilityRight(_podcast: Podcast): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
-    function canEditTranslation(podcast: Podcast): boolean {
-        return canEditTranscript(podcast);
+    function getEditTranslationRight(podcast: Podcast): ActionRight {
+        return getEditTranscriptRight(podcast);
     }
 
+    // View/utility checks — outside the action pattern
     function canSeeHistory(): boolean {
         return roleContainsAny('ADMIN', 'ORGANISATION');
     }
@@ -181,144 +331,70 @@ export const useRights = () => {
         return roleContainsAny('RESTRICTED_PRODUCTION') && !roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
     }
 
-    /** Can the current user create an aggregator */
-    function canCreateAggregator(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION');
-    }
+    const rightFns = {
+        // Emissions
+        getCreateEmissionRight,
+        getEditEmissionRight,
+        getDeleteEmissionRight,
+        getEditCommentsConfigEmissionRight,
+        // Podcasts
+        getCreatePodcastRight,
+        getDuplicatePodcastRight,
+        getEditPodcastRight,
+        getDeletePodcastRight,
+        getValidatePodcastRight,
+        getEditCommentsConfigPodcastRight,
+        // Playlists
+        getCreatePlaylistRight,
+        getEditPlaylistRight,
+        getDeletePlaylistRight,
+        // Participants (sync only)
+        getCreateParticipantRight,
+        // Aggregators
+        getCreateAggregatorRight,
+        getEditAggregatorRight,
+        getDeleteAggregatorRight,
+        // Cartouchier
+        getCreateCartouchierRight,
+        getEditCartouchierRight,
+        getDeleteCartouchierRight,
+        // PlaylistMedia
+        getCreatePlaylistMediaRight,
+        getEditPlaylistMediaRight,
+        getDeletePlaylistMediaRight,
+        // Mix
+        getCreateMixRight,
+        getEditMixRight,
+        getDeleteMixRight,
+        // Other
+        getEditCodeInsertPlayerRight,
+        getEditTranscriptRight,
+        getEditTranscriptVisibilityRight,
+        getEditTranslationRight,
+    };
 
-    /** Can the current user edit an aggregator */
-    function canEditAggregator(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION');
-    }
+    const canFns = deriveCanFunctions(rightFns);
 
-    /** Can the current user delete an aggregator */
-    function canDeleteAggregator(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION');
-    }
-
-    /** Can read RSS rules */
     function canReadRSSRules(): boolean {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
     }
 
-    /** Can edit RSS rules */
     function canEditRSSRules(): boolean {
         return canReadRSSRules();
     }
-    
-    /** Can the current user create a mediatheque element ? */
-    function canCreateCartouchier(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION');
-    }
-
-    /** Can the current user edit a mediatheque element ? */
-    function canEditCartouchier(element: Cartouchier): boolean {
-        if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION') === true) {
-            return true;
-        }
-
-        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD') === true) {
-            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId;
-        }
-
-        return false;
-    }
-
-    /** Can the current user delete a mediatheque element ? */
-    function canDeleteCartouchier(element: Cartouchier): boolean {
-        return canEditCartouchier(element);
-    }
-
-    /** Can the current user create a playlistmedia (bac) ? */
-    function canCreatePlaylistMedia(): boolean {
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION');
-    }
-
-    /** Can the current user edit a playlistmedia (bac) ? */
-    function canEditPlaylistMedia(element: PlaylistMedia): boolean {
-        if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION') === true) {
-            return true;
-        }
-
-        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD') === true) {
-            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId;
-        }
-
-        return false;
-    }
-
-    /** Can the current user delete a playlistmedia (bac) ? */
-    function canDeletePlaylistMedia(element: PlaylistMedia): boolean {
-        return canEditPlaylistMedia(element);
-    }
-
-    /** Can the current user create a mix ? */
-    function canCreateMix(): boolean {
-        return roleContainsAny('ADMIN', 'RADIO');
-    }
-
-    /** Can the current user edit a mix ? */
-    function canEditMix(element: Mix): boolean {
-        return canCreateMix();
-    }
-
-    /** Can the current user delete a mix ? */
-    function canDeleteMix(element: Mix): boolean {
-        return canEditMix(element);
-    }
 
     return {
-        // Emissions
-        canCreateEmission,
-        canEditEmission,
-        canDeleteEmission,
-        canEditCommentsConfigEmission,
-
-        // Podcasts
-        canCreatePodcast,
-        canDuplicatePodcast,
-        canEditPodcast,
-        canDeletePodcast,
-        canValidatePodcast,
-        canEditCommentsConfigPodcast,
-
-        // Playlists
-        canCreatePlaylist,
-        canEditPlaylist,
-        canDeletePlaylist,
-
-        // Participants
-        canCreateParticipant,
+        ...rightFns,
+        ...canFns,
+        // Async participant (kept manually — async functions excluded from deriveCanFunctions)
         getParticipantEditRight,
         canEditParticipant,
         canDeleteParticipant,
-
-        // Aggregators
-        canCreateAggregator,
-        canEditAggregator,
-        canDeleteAggregator,
-
-        // RSS Rules
+        // RSS Rules (manual — outside the getRightXxx convention)
         canReadRSSRules,
         canEditRSSRules,
-
-        // Mediatheque
-        canCreateCartouchier,
-        canEditCartouchier,
-        canDeleteCartouchier,
-        canCreatePlaylistMedia,
-        canEditPlaylistMedia,
-        canDeletePlaylistMedia,
-        canCreateMix,
-        canEditMix,
-        canDeleteMix,
-
-        // Other
-        canEditCodeInsertPlayer,
-        canEditTranscript,
-        canEditTranslation,
-        canEditTranscriptVisibility,
+        // View/utility checks
         canSeeHistory,
-        isRestrictedProduction
-    }
-}
+        isRestrictedProduction,
+    };
+};
