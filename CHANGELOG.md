@@ -5,6 +5,8 @@
 **Features**
 
 - **14327** - Ajout droits pour éléments médiathèque
+- Ajout du composant `ClassicTabs` pour simplifier la gestion d'onglets
+  - `ClassicNav` est déprécié en conséquence
 
 **Misc**
 

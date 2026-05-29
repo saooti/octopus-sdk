@@ -41,9 +41,11 @@ export const getClassicModalInBody = () => import("./src/components/misc/modal/C
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
 export const getClassicBigChip = () => import("./src/components/misc/ClassicBigChip.vue");
+export const getClassicTabs = () => import("./src/components/misc/ClassicTabs.vue");
 
 import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
 import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";
+export { type Tab } from "./src/components/misc/ClassicTabs.vue";
 
 export {
     ClassicDataTable,
