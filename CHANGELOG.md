@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.11.0 (En cours)
+
+**Misc**
+
+- Mise à jour eslint & ajout dans peerDependencies
+
 ## 41.10.8 (29/05/2026)
 
 **Fixes**

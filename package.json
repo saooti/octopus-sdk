@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.10.8",
+  "version": "41.11.0-beta",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -70,7 +70,7 @@
     "@vitejs/plugin-vue": "^5.2.4",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.39.1",
-    "eslint-plugin-vue": "^9.33.0",
+    "eslint-plugin-vue": "10.9.1",
     "happy-dom": "^20.1.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
@@ -94,6 +94,7 @@
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
   "peerDependencies": {
+    "eslint-plugin-vue": "^10.9.1",
     "pinia": ">=2.3.0"
   },
   "exports": {
