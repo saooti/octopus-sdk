@@ -6,6 +6,8 @@ import type { Organisation } from '@/stores/class/general/organisation';
 import type { Emission } from '@/stores/class/general/emission';
 import type { Podcast } from '@/stores/class/general/podcast';
 import type { Mix } from '@/stores/class/radio/mix';
+import { PlaylistMedia } from '@/stores/class/radio/playlistMedia';
+import { Cartouchier } from '@/stores/class/cartouchier/cartouchier';
 
 async function setup(roles: string[], userId = 'test-user-123'): Promise<void> {
     setupPinia();
@@ -331,53 +333,151 @@ describe('useRights', () => {
         });
     });
 
-    describe('Mediatheque permissions', () => {
-        const ownMix = { ownerId: 'test-user-123' } as Mix;
-        const otherMix = { ownerId: 'other-user' } as Mix;
-        const noOwnerMix = {} as Mix;
+    describe('Cartouchier permissions', () => {
+        const ownCartouchier = { ownerId: 'test-user-123' } as Cartouchier;
+        const otherCartouchier = { ownerId: 'other-user' } as Cartouchier;
+        const noOwnerCartouchier = {} as Cartouchier;
 
-        describe('canCreateMediathequeElement', () => {
+        describe('canCreateCartouchier', () => {
             ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
                 it(`allows ${role}`, async () => {
                     await setup([role]);
-                    expect(useRights().canCreateMediathequeElement()).toBe(true);
+                    expect(useRights().canCreateCartouchier()).toBe(true);
                 });
             });
 
             it('denies unrelated roles', async () => {
                 await setup(['PLAYLISTS']);
-                expect(useRights().canCreateMediathequeElement()).toBe(false);
+                expect(useRights().canCreateCartouchier()).toBe(false);
             });
         });
 
-        describe('canEditMediathequeElement', () => {
+        describe('canEditCartouchier', () => {
             ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION'].forEach(role => {
                 it(`allows ${role} to edit any element`, async () => {
                     await setup([role]);
-                    expect(useRights().canEditMediathequeElement(otherMix)).toBe(true);
+                    expect(useRights().canEditCartouchier(otherCartouchier)).toBe(true);
                 });
             });
 
             ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD'].forEach(role => {
                 it(`${role} can only edit own element`, async () => {
                     await setup([role]);
-                    expect(useRights().canEditMediathequeElement(ownMix)).toBe(true);
-                    expect(useRights().canEditMediathequeElement(otherMix)).toBe(false);
-                    expect(useRights().canEditMediathequeElement(noOwnerMix)).toBe(false);
+                    expect(useRights().canEditCartouchier(ownCartouchier)).toBe(true);
+                    expect(useRights().canEditCartouchier(otherCartouchier)).toBe(false);
+                    expect(useRights().canEditCartouchier(noOwnerCartouchier)).toBe(false);
                 });
             });
 
             it('denies unrelated roles', async () => {
                 await setup(['PLAYLISTS']);
-                expect(useRights().canEditMediathequeElement(ownMix)).toBe(false);
+                expect(useRights().canEditCartouchier(ownCartouchier)).toBe(false);
             });
         });
 
-        describe('canDeleteMediathequeElement', () => {
+        describe('canDeleteCartouchier', () => {
             it('restricted user can delete own element but not others\'', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().canDeleteMediathequeElement(ownMix)).toBe(true);
-                expect(useRights().canDeleteMediathequeElement(otherMix)).toBe(false);
+                expect(useRights().canDeleteCartouchier(ownCartouchier)).toBe(true);
+                expect(useRights().canDeleteCartouchier(otherCartouchier)).toBe(false);
+            });
+        });
+    });
+
+    describe('Bac/PlaylistMedia permissions', () => {
+        const ownBac = { ownerId: 'test-user-123' } as PlaylistMedia;
+        const otherBac = { ownerId: 'other-user' } as PlaylistMedia;
+        const noOwnerBac = {} as PlaylistMedia;
+
+        describe('canCreatePlaylistMedia', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreatePlaylistMedia()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreatePlaylistMedia()).toBe(false);
+            });
+        });
+
+        describe('canEditPlaylistMedia', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditPlaylistMedia(otherBac)).toBe(true);
+                });
+            });
+
+            ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD'].forEach(role => {
+                it(`${role} can only edit own element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditPlaylistMedia(ownBac)).toBe(true);
+                    expect(useRights().canEditPlaylistMedia(otherBac)).toBe(false);
+                    expect(useRights().canEditPlaylistMedia(noOwnerBac)).toBe(false);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditPlaylistMedia(ownBac)).toBe(false);
+            });
+        });
+
+        describe('canDeletePlaylistMedia', () => {
+            it('restricted user can delete own element but not others\'', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().canDeletePlaylistMedia(ownBac)).toBe(true);
+                expect(useRights().canDeletePlaylistMedia(otherBac)).toBe(false);
+            });
+        });
+    });
+
+    describe('Mix permissions', () => {
+        const ownMix = { ownerId: 'test-user-123' } as Mix;
+        const otherMix = { ownerId: 'other-user' } as Mix;
+
+        describe('canCreateMix', () => {
+            ['ADMIN', 'RADIO'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreateMix()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreateMix()).toBe(false);
+            });
+        });
+
+        describe('canEditMix', () => {
+            ['ADMIN', 'RADIO'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditMix(otherMix)).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditMix(ownMix)).toBe(false);
+            });
+        });
+
+        describe('canDeleteMix', () => {
+            ['ADMIN', 'RADIO'].forEach(role => {
+                it(`allows ${role} to delete any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canDeleteMix(otherMix)).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canDeleteMix(ownMix)).toBe(false);
             });
         });
     });

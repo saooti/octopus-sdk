@@ -207,12 +207,12 @@ export const useRights = () => {
     }
     
     /** Can the current user create a mediatheque element ? */
-    function canCreateMediathequeElement(): boolean {
+    function canCreateCartouchier(): boolean {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION');
     }
 
     /** Can the current user edit a mediatheque element ? */
-    function canEditMediathequeElement(element: Mix|PlaylistMedia|Cartouchier): boolean {
+    function canEditCartouchier(element: Cartouchier): boolean {
         if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION') === true) {
             return true;
         }
@@ -225,8 +225,46 @@ export const useRights = () => {
     }
 
     /** Can the current user delete a mediatheque element ? */
-    function canDeleteMediathequeElement(element: Mix|PlaylistMedia|Cartouchier): boolean {
-        return canEditMediathequeElement(element);
+    function canDeleteCartouchier(element: Cartouchier): boolean {
+        return canEditCartouchier(element);
+    }
+
+    /** Can the current user create a playlistmedia (bac) ? */
+    function canCreatePlaylistMedia(): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION');
+    }
+
+    /** Can the current user edit a playlistmedia (bac) ? */
+    function canEditPlaylistMedia(element: PlaylistMedia): boolean {
+        if(roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION') === true) {
+            return true;
+        }
+
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD') === true) {
+            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId;
+        }
+
+        return false;
+    }
+
+    /** Can the current user delete a playlistmedia (bac) ? */
+    function canDeletePlaylistMedia(element: PlaylistMedia): boolean {
+        return canEditPlaylistMedia(element);
+    }
+
+    /** Can the current user create a mix ? */
+    function canCreateMix(): boolean {
+        return roleContainsAny('ADMIN', 'RADIO');
+    }
+
+    /** Can the current user edit a mix ? */
+    function canEditMix(element: Mix): boolean {
+        return canCreateMix();
+    }
+
+    /** Can the current user delete a mix ? */
+    function canDeleteMix(element: Mix): boolean {
+        return canEditMix(element);
     }
 
     return {
@@ -265,9 +303,15 @@ export const useRights = () => {
         canEditRSSRules,
 
         // Mediatheque
-        canCreateMediathequeElement,
-        canEditMediathequeElement,
-        canDeleteMediathequeElement,
+        canCreateCartouchier,
+        canEditCartouchier,
+        canDeleteCartouchier,
+        canCreatePlaylistMedia,
+        canEditPlaylistMedia,
+        canDeletePlaylistMedia,
+        canCreateMix,
+        canEditMix,
+        canDeleteMix,
 
         // Other
         canEditCodeInsertPlayer,
