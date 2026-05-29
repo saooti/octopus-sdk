@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.10.8 (En cours)
+
+**Fixes**
+
+- **14524** - Accès aux aggrégateurs sans authentification
+
 ## 41.10.7 (28/05/2026)
 
 **Fixes**
