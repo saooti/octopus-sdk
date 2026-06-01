@@ -78,6 +78,7 @@ export const getShareNewsletter = () => import("./src/components/display/sharing
 export const getQrCode = () => import("./src/components/display/sharing/QrCode.vue");
 export const SubscribeButtons = defineAsyncComponent(() => import("./src/components/display/sharing/SubscribeButtons.vue"));
 export const PodcastSeasonInfo = defineAsyncComponent(() => import("./src/components/display/podcasts/PodcastSeasonInfo.vue"));
+export const RightsIndicator = defineAsyncComponent(() => import("./src/components/display/RightsIndicator.vue"));
 
 
 export const getEmissionInlineList = () => import("./src/components/display/emission/EmissionInlineList.vue");
@@ -124,7 +125,7 @@ export const getClassicTagInput = () => import("./src/components/form/ClassicTag
 export const getClassicWysiwyg = () => import("./src/components/form/ClassicWysiwyg.vue");
 
 //Composable
-import { useRights, EditRight, ActionRight } from "./src/components/composable/useRights.ts";
+import { useRights, ActionRight } from "./src/components/composable/useRights.ts";
 import {useResizePhone} from "./src/components/composable/useResizePhone";
 import {useTagOf} from "./src/components/composable/useTagOf.ts";
 import {useSelenium} from "./src/components/composable/useSelenium.ts";
@@ -230,7 +231,6 @@ import { defineAsyncComponent } from "vue";
 
 export {
     useRights,
-    EditRight,
     ActionRight,
     useResizePhone,
     useTagOf,

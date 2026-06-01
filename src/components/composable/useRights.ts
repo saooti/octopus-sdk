@@ -10,16 +10,10 @@ type Role =
     'PRODUCTION'|'RESTRICTED_PRODUCTION'|'PODCAST_CRUD'|'PODCAST_VALIDATION'|
     'PLAYLISTS'|'ANIMATION'|'RESTRICTED_ANIMATION'|'RADIO'|'LIVE';
 
-export enum EditRight {
-    None,          // User cannot edit
-    Restricted,    // User cannot edit because element is used elsewhere
-    Full           // User can edit
-}
-
 export enum ActionRight {
-    Allowed,        // User can perform the action
-    DeniedNoRight,  // User lacks the required role
-    DeniedNotOwner  // User has a restricted role but does not own the resource
+    Allowed = 'allowed',         // User can perform the action
+    DeniedNoRight = 'no_right',  // User lacks the required role
+    DeniedNotOwner = 'not_owner' // User has a restricted role but does not own the resource
 }
 
 // Constraint type for the object passed to deriveCanFunctions.
@@ -188,23 +182,19 @@ export const useRights = () => {
             : ActionRight.DeniedNoRight;
     }
 
-    async function getParticipantEditRight(participantId: number|undefined): Promise<EditRight> {
+    async function getParticipantEditRight(participantId: number|undefined): Promise<ActionRight> {
         // New participants can be edited, and also with sufficient rights
-	    if(!participantId || roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')) {
-	        return EditRight.Full;
-	    } else {
-	        return EditRight.None;
-	    }
+        return (!participantId || roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION'))
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
     }
 
     async function canEditParticipant(participantId: number|undefined): Promise<boolean> {
-        const editRight = await getParticipantEditRight(participantId);
-        return editRight === EditRight.Full;
+        return await getParticipantEditRight(participantId) === ActionRight.Allowed;
     }
 
     async function canDeleteParticipant(participantId: number|undefined): Promise<boolean> {
-        const editRight = await getParticipantEditRight(participantId);
-        return editRight === EditRight.Full;
+        return await getParticipantEditRight(participantId) === ActionRight.Allowed;
     }
 
     // Aggregator rights

@@ -426,5 +426,10 @@
     "Podcast - Season": "Stagione",
     "Podcast - Episode number": "Numero dell'episodio",
     "Player - Generating subtitles": "Generazione di sottotitoli in {language}…",
-    "Transcript - Available languages": "Lingue disponibili"
+    "Transcript - Available languages": "Lingue disponibili",
+    "Generic - Action disabled - Not owner": "Questa azione non è disponibile perché i tuoi diritti non ti consentono di modificare o eliminare elementi di cui non sei proprietario",
+    "RightsIndicator -  Podcast - Not owner": "Questo podcast è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
+    "RightsIndicator - Cartouchier - Not owner": "Questo bossolo è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
+    "RightsIndicator - PlaylistMedia - Not owner": "Questo contenitore è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
+    "RightsIndicator - Mix - Not owner": "Questo mix è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo."
 }

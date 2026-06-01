@@ -425,5 +425,10 @@
   "Podcast - Season": "Season",
   "Podcast - Episode number": "Episode number",
   "Player - Generating subtitles": "Generation of subtitles in {language}…",
-  "Transcript - Available languages": "Languages ​​available"
+  "Transcript - Available languages": "Languages ​​available",
+  "Generic - Action disabled - Not owner": "This action is not available because your rights do not allow you to modify or delete elements of which you are not the owner",
+  "RightsIndicator -  Podcast - Not owner": "This podcast was created by another user, you can view it, but you cannot edit it.",
+  "RightsIndicator - Cartouchier - Not owner": "This cartridge case was created by another user, you can view it, but you cannot modify it.",
+  "RightsIndicator - PlaylistMedia - Not owner": "This bin was created by another user, you can view it, but you cannot modify it.",
+  "RightsIndicator - Mix - Not owner": "This mix was created by another user, you can view it, but you cannot edit it."
 }

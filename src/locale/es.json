@@ -425,5 +425,10 @@
   "Podcast - Season": "Estación",
   "Podcast - Episode number": "Número de episodio",
   "Player - Generating subtitles": "Generación de subtítulos en {language}…",
-  "Transcript - Available languages": "Idiomas disponibles"
+  "Transcript - Available languages": "Idiomas disponibles",
+  "Generic - Action disabled - Not owner": "Esta acción no está disponible porque tus derechos no te permiten modificar o eliminar elementos de los que no eres propietario",
+  "RightsIndicator -  Podcast - Not owner": "Este podcast fue creado por otro usuario, puedes verlo, pero no puedes editarlo.",
+  "RightsIndicator - Cartouchier - Not owner": "Esta cartuchera fue creada por otro usuario, puedes verla, pero no puedes modificarla.",
+  "RightsIndicator - PlaylistMedia - Not owner": "Este contenedor fue creado por otro usuario, puedes verlo, pero no puedes modificarlo.",
+  "RightsIndicator - Mix - Not owner": "Esta mezcla fue creada por otro usuario, puedes verla, pero no puedes editarla."
 }

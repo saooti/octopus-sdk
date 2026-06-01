@@ -10,6 +10,8 @@
     du rejet
   - Les anciennes fonctions `can*` existent toujours et sont dérivées des
     nouvelles
+  - Ajout du composant `RightsIndicator` pour faciliter l'affichage des droits
+    de l'utilisateur sur un élément particulier
 - Ajout du composant `ClassicTabs` pour simplifier la gestion d'onglets
   - `ClassicNav` est déprécié en conséquence
 

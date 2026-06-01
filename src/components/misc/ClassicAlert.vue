@@ -10,16 +10,21 @@
     <div
         class="p-2 pe-4 rounded d-flex alert"
         :class="cardClass"
+        :role="type === 'error' || type === 'warning' ? 'alert' : 'status'"
+        :aria-live="type === 'error' || type === 'warning' ? 'assertive' : 'polite'"
+        aria-atomic="true"
     >
-        <!-- The icon -->
-        <component
-            :is="iconComponent"
-            v-if="!noIcon"
-            aria-hidden="true"
-            focusable="false"
-            class="icon"
-            :size="text ? 22 : 30"
-        />
+        <span aria-hidden="true">
+            <slot name="icon">
+                <!-- The icon -->
+                <component
+                    :is="iconComponent"
+                    v-if="!noIcon"
+                    class="icon"
+                    :size="text ? 22 : 30"
+                />
+            </slot>
+        </span>
 
         <!-- Main content -->
         <span class="ms-2 content">
@@ -41,7 +46,7 @@ import CheckCircle from 'vue-material-design-icons/CheckCircle.vue';
 import CloseCircle from 'vue-material-design-icons/CloseCircle.vue';
 import Information from 'vue-material-design-icons/Information.vue';
 
-const { type, text } = defineProps<{
+const { type, title = undefined, text } = defineProps<{
     /** Disables the icon when true */
     noIcon?: boolean;
     /** An optional title for the alert */
