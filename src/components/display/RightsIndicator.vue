@@ -1,16 +1,33 @@
 <template>
-    <ClassicAlert
-        v-if="!hasAccess && text"
-        type="info"
-    >
-        <template #icon>
+    <div v-if="displayIndicator">
+        <div v-if="!text">
             <LockIcon
+                :id="iconId"
+                :class="{ invisible: hasAccess }"
                 aria-hidden="true"
                 fill-color="var(--octopus-primary)"
             />
-        </template>
-        {{ message }}
-    </ClassicAlert>
+            <ClassicPopover
+                v-if="!hasAccess"
+                :target="iconId"
+                only-mouse
+            >
+                {{ message }}
+            </ClassicPopover>
+        </div>
+        <ClassicAlert
+            v-else-if="!hasAccess"
+            type="info"
+        >
+            <template #icon>
+                <LockIcon
+                    aria-hidden="true"
+                    fill-color="var(--octopus-primary)"
+                />
+            </template>
+            {{ message }}
+        </ClassicAlert>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -19,14 +36,19 @@ import { PlaylistMedia } from '../../stores/class/radio/playlistMedia';
 import { Podcast } from '../../stores/class/general/podcast';
 import { Cartouchier } from '../../stores/class/cartouchier/cartouchier';
 import { Media } from "../../stores/class/general/media";
-import { computed } from 'vue';
+import { computed, getCurrentInstance } from 'vue';
 import { useI18n } from 'vue-i18n';
 import LockIcon from 'vue-material-design-icons/Lock.vue';
 import { ActionRight, useRights } from '../composable/useRights';
 import ClassicAlert from '../misc/ClassicAlert.vue';
+import ClassicPopover from '../misc/ClassicPopover.vue';
+import { state } from '../../stores/ParamSdkStore';
+import { useAuthStore } from '../../stores/AuthStore';
+import { storeToRefs } from 'pinia';
 
 const rights = useRights();
 const { t, te } = useI18n();
+const { isAuthenticated } = storeToRefs(useAuthStore());
 
 type Action = 'create'|'edit'|'delete'|'any';
 
@@ -75,6 +97,17 @@ const actionSegmentMap: Record<Exclude<Action, 'any'>, ActionSegment> = {
     delete: 'Delete',
 };
 
+/**
+ * Whether to display the indicator
+ * It is not shown on podcastmaker, or for unidentified users
+ */
+const displayIndicator = computed((): boolean => {
+    return !state.generalParameters.podcastmaker && isAuthenticated.value;
+});
+
+/**
+ * The entity on which rights are checked
+ */
 const entity = computed((): [EntitySegment, RightEntity]|null => {
     let arg: RightEntity;
     let entitySegment: EntitySegment|undefined;
@@ -101,6 +134,9 @@ const entity = computed((): [EntitySegment, RightEntity]|null => {
     return [entitySegment, arg];
 });
 
+/**
+ * The current rights for the given entity
+ */
 const actionRight = computed((): ActionRight => {
     const data = entity.value;
     if (!data) {
@@ -136,6 +172,7 @@ const actionRight = computed((): ActionRight => {
     return callRightMethod(methodName, arg);
 });
 
+/** Helper for calling the method on useRights */
 function callRightMethod(key: RightMethodKey, arg: unknown): ActionRight {
     return (rights[key] as (arg?: unknown) => ActionRight)(arg);
 }
@@ -171,4 +208,8 @@ const message = computed((): string => {
         return t(genericKey);
     }
 });
+
+const uid = getCurrentInstance()?.uid;
+/** ID of the icon for reference by the popover */
+const iconId = computed((): string => 'rights-indicator-' + uid);
 </script>
