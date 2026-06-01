@@ -193,6 +193,16 @@ export const useRights = () => {
         return roleContainsAny('ADMIN', 'ORGANISATION');
     }
 
+    /** Can read/edit RSS rules */
+    function canReadRSSRules(): boolean {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION');
+    }
+
+    /** Can edit RSS rules */
+    function canEditRSSRules(): boolean {
+        return canReadRSSRules();
+    }
+
     return {
         // Emissions
         canCreateEmission,
@@ -223,6 +233,10 @@ export const useRights = () => {
         canCreateAggregator,
         canEditAggregator,
         canDeleteAggregator,
+
+        // RSS Rules
+        canReadRSSRules,
+        canEditRSSRules,
 
         // Other
         canEditCodeInsertPlayer,

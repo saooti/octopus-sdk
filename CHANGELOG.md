@@ -6,6 +6,12 @@
 
 - Mise à jour eslint & ajout dans peerDependencies
 
+## 41.10.9 (01/06/2026)
+
+**Fixes**
+
+- **14539** - Ajout droits pour accès règles RSS
+
 ## 41.10.8 (29/05/2026)
 
 **Fixes**
