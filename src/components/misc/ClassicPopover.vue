@@ -1,30 +1,31 @@
 <template>
-  <div
-    v-show="displayPopover"
-    :id="'popover' + target"
-    ref="popover"
-    popover
-    tabindex="0"
-    class="octopus-popover border"
-    :class="[
-      displayPopover ? 'd-block': '',
-      onlyClick ? 'octopus-dropdown' : '',
-      isFixed && isTopLayerPopover ? 'position-fixed':'position-absolute',
-      popoverClass]"
-    :style="positionInlineStyle"
-    @mouseenter="overPopover = true"
-    @mouseleave="
-      overPopover = false;
-      clearData();
-    "
-  >
-    <div v-if="title" class="bg-secondary-light p-2">
-      {{ title }}
+  <Teleport to="body">
+    <div
+      v-show="displayPopover"
+      :id="'popover' + target"
+      ref="popover"
+      popover
+      tabindex="0"
+      class="octopus-popover border position-fixed"
+      :class="[
+        displayPopover ? 'd-block': '',
+        onlyClick ? 'octopus-dropdown' : '',
+        popoverClass]"
+      :style="positionInlineStyle"
+      @mouseenter="overPopover = true"
+      @mouseleave="
+        overPopover = false;
+        clearData();
+      "
+    >
+      <div v-if="title" class="bg-secondary-light p-2">
+        {{ title }}
+      </div>
+      <div class="p-2">
+        <slot>{{ content }}</slot>
+      </div>
     </div>
-    <div class="p-2">
-      <slot>{{ content }}</slot>
-    </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -40,13 +41,13 @@ const props = defineProps({
   onlyClick: { type: Boolean, default: false },
   onlyMouse: { type: Boolean, default: false },
   isFixed: { type: Boolean, default: false },
-  /** Class(????) of the parent with relative positionning, must be set for proper positionning */
+  /** @deprecated No longer needed. The popover is teleported to body and always uses position:fixed. */
   relativeClass: { type: String, default: undefined },
   leftPos: { type: Boolean, default: false },
   topPos: { type: Boolean, default: false },
   popoverClass: { type: String, default: undefined },
   isTopLayer: { type: Boolean, default: false },
-  /** If set to true, max height of popover will not overflow from parent */
+  /** @deprecated No longer needed. If set to true, max height of popover will not overflow from parent */
   constrainHeight: { type: Boolean, default: true }
 })
 
@@ -214,56 +215,24 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
     openedByHover.value = true;
   }
   show.value = true;
-  let parentLeft = 0;
-  let parentTop = 0;
-  let parentScrollTop = 0;
-  let parentBottom = 0;
-  let parentWidth=0;
   const popover = popoverRef?.value as HTMLElement;
-  if (!isTopLayerPopover.value && props.relativeClass) {
-    const modalBody = document.getElementsByClassName(props.relativeClass,)[0];
-    if (undefined === modalBody) {
-      popover.style.display = "block";
-      posX.value = 0;
-      posY.value = 0;
-      return;
-    }
-    const modalBodyRect = modalBody.getBoundingClientRect();
-    parentLeft = modalBodyRect.left;
-    parentTop = modalBodyRect.top;
-    parentScrollTop = modalBody.scrollTop;
-    parentBottom=modalBodyRect.bottom;
-    parentWidth = modalBodyRect.width;
-  }
+  // The popover is teleported to <body> and uses position:fixed, so
+  // getBoundingClientRect() coordinates map directly to viewport coordinates.
   const rectElement = (e.target as HTMLElement).getBoundingClientRect();
   popover.style.display = "block";
   const sizePopover = popover.clientWidth;
-  const sizeAvailable = parentWidth || window.innerWidth;
   if (props.leftPos) {
-    handleLeftPos(rectElement, parentLeft, sizeAvailable, sizePopover);
+    handleLeftPos(rectElement, 0, window.innerWidth, sizePopover);
   } else {
-    handleRightPos(rectElement, parentLeft, sizeAvailable, sizePopover);
+    handleRightPos(rectElement, 0, window.innerWidth, sizePopover);
   }
   posX.value = Math.max(0, posX.value);
   const yPosParent = props.topPos ? rectElement.top : rectElement.bottom;
   const yGap = props.topPos
     ? -5 - popover.clientHeight
     : 5;
-  
-  posY.value =
-    yPosParent +
-    parentScrollTop -
-    parentTop +
-    (props.isFixed ? 0 : window.scrollY) +
-    yGap;
-  if(isTopLayerPopover.value){
-    posY.value = Math.max(0, posY.value);
-    maxHeight.value = (window.innerHeight - posY.value) + "px";
-  }else if(props.relativeClass && props.constrainHeight !== false) {
-    maxHeight.value = (parentBottom- posY.value -parentTop) + "px";
-  }else{
-    maxHeight.value = '80dvh';
-  }
+  posY.value = Math.max(0, yPosParent + yGap);
+  maxHeight.value = (window.innerHeight - posY.value) + "px";
 }
 
 function clearDataBlur(e: FocusEvent) {

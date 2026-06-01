@@ -7,6 +7,7 @@ import { nextTick } from 'vue';
 
 describe('ClassicPopover', () => {
     let targetElement: HTMLElement;
+    let wrapper: VueWrapper | undefined;
 
     beforeEach(() => {
         targetElement = document.createElement('button');
@@ -16,27 +17,35 @@ describe('ClassicPopover', () => {
     });
 
     afterEach(() => {
+        wrapper?.unmount();
+        wrapper = undefined;
         if (targetElement?.parentNode) {
             targetElement.parentNode.removeChild(targetElement);
         }
     });
 
+    // The popover is teleported to <body>; retrieve it by its deterministic id.
+    const getPopoverEl = (): HTMLElement =>
+        document.getElementById('popovertest-target') as HTMLElement;
+
     // Helper: Check if popover is visible
-    const isVisible = (wrapper: VueWrapper): boolean => {
-        const element = wrapper.element as HTMLElement;
+    const isVisible = (): boolean => {
+        const element = getPopoverEl();
+        if (!element) return false;
         return element.style.display !== 'none' &&
                window.getComputedStyle(element).display !== 'none';
     };
 
     // Helper: Mount popover with default props
     const mount = async (props: Record<string, unknown> = {}) => {
-        return testMount(ClassicPopover, {
+        wrapper = await testMount(ClassicPopover, {
             props: {
                 target: 'test-target',
                 content: 'Test content',
                 ...props
             }
         });
+        return wrapper;
     };
 
     // Helper: Open popover via hover
@@ -68,179 +77,175 @@ describe('ClassicPopover', () => {
 
     describe('hover behavior (onlyClick=false, default)', () => {
         it('opens on mouseenter and closes on mouseleave of target', async () => {
-            const wrapper = await mount();
+            await mount();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
 
             await openViaHover();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             await closeViaHover();
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
 
         it('stays open when mouse moves from target to popover content', async () => {
-            const wrapper = await mount();
+            await mount();
 
             await openViaHover();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Mouse enters popover
-            const popoverElement = wrapper.element as HTMLElement;
-            popoverElement.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+            getPopoverEl().dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
             await nextTick();
 
             // Leave target
             await closeViaHover();
 
             // Should still be open because mouse is over popover
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
         });
 
         it('closes when mouse leaves popover content', async () => {
-            const wrapper = await mount();
+            await mount();
 
             await openViaHover();
 
             // Move to popover
-            const popoverElement = wrapper.element as HTMLElement;
-            popoverElement.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+            getPopoverEl().dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
             await nextTick();
 
             // Leave popover
-            popoverElement.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+            getPopoverEl().dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
             await nextTick();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
 
         it('closes via mouseleave even after clicking the target', async () => {
-            const wrapper = await mount();
+            await mount();
 
             await openViaHover();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Click the target (sets isClick to true)
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Leave with mouse
             await closeViaHover();
 
             // Should be closed because it was opened by hover
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
     });
 
     describe('click behavior (onlyClick=true)', () => {
         it('opens on click of target', async () => {
-            const wrapper = await mount({ onlyClick: true });
+            await mount({ onlyClick: true });
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
 
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
         });
 
         it('does not open on mouseenter when onlyClick is true', async () => {
-            const wrapper = await mount({ onlyClick: true });
+            await mount({ onlyClick: true });
 
             await openViaHover();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
 
         it('stays open when clicking inside popover', async () => {
-            const wrapper = await mount({ onlyClick: true });
+            await mount({ onlyClick: true });
 
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Click inside popover
-            const popoverElement = wrapper.element as HTMLElement;
             const insideElement = document.createElement('button');
-            popoverElement.appendChild(insideElement);
+            getPopoverEl().appendChild(insideElement);
             insideElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             await nextTick();
 
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
         });
 
         it('closes when clicking outside both popover and target', async () => {
-            const wrapper = await mount({ onlyClick: true });
+            await mount({ onlyClick: true });
 
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             await clickOutside();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
 
         it('closes when clicking inside popover then clicking outside', async () => {
-            const wrapper = await mount({ onlyClick: true });
+            await mount({ onlyClick: true });
 
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Click inside popover
-            const popoverElement = wrapper.element as HTMLElement;
             const insideButton = document.createElement('button');
-            popoverElement.appendChild(insideButton);
+            getPopoverEl().appendChild(insideButton);
             insideButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
             await nextTick();
 
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Click outside
             await clickOutside();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
 
         it('toggles when clicking target while already open', async () => {
-            const wrapper = await mount({ onlyClick: true });
+            await mount({ onlyClick: true });
 
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Click target again
             await openViaClick();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
     });
 
     describe('mixed behavior (onlyMouse=false, onlyClick=false)', () => {
         it('can open via hover or click', async () => {
-            const wrapper = await mount({ onlyClick: false, onlyMouse: false });
+            await mount({ onlyClick: false, onlyMouse: false });
 
             // Open via hover
             await openViaHover();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Close
             await closeViaHover();
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
 
             // Open via click
             await openViaClick();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
         });
     });
 
     describe('expose clearClick method', () => {
         it('exposes clearClick method to close popover programmatically', async () => {
-            const wrapper = await mount();
+            await mount();
 
             await openViaHover();
-            expect(isVisible(wrapper)).toBe(true);
+            expect(isVisible()).toBe(true);
 
             // Close programmatically
-            (wrapper.vm as any).clearClick();
+            (wrapper!.vm as unknown as { clearClick: () => void }).clearClick();
             await nextTick();
 
-            expect(isVisible(wrapper)).toBe(false);
+            expect(isVisible()).toBe(false);
         });
     });
 });

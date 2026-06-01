@@ -15,6 +15,11 @@
 - Ajout du composant `ClassicTabs` pour simplifier la gestion d'onglets
   - `ClassicNav` est déprécié en conséquence
 
+**Fixes**
+
+- Correction des problèmes de placement de `ClassicPopover`
+  - Les props `constraintHeight` & `relativeClass` sont maintenant dépréciés
+
 **Misc**
 
 - Mise à jour eslint
