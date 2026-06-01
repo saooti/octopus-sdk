@@ -1,9 +1,10 @@
-import { Mix } from "@/stores/class/radio/mix";
+import { Mix } from "../../stores/class/radio/mix";
 import { useAuthStore } from "../../stores/AuthStore";
 import type { Emission } from "../../stores/class/general/emission";
 import type { Podcast } from "../../stores/class/general/podcast";
-import { PlaylistMedia } from "@/stores/class/radio/playlistMedia";
+import { PlaylistMedia } from "../../stores/class/radio/playlistMedia";
 import { Cartouchier } from "../../stores/class/cartouchier/cartouchier";
+import { Media } from "../../stores/class/general/media";
 
 type Role =
     'ADMIN'|'ORGANISATION'|
@@ -268,6 +269,32 @@ export const useRights = () => {
         return getEditPlaylistMediaRight(element);
     }
 
+    // Media rights
+    function getCreateMediaRight(): ActionRight {
+        return roleContainsAny(
+            'ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
+            'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'
+        )
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    function getEditMediaRight(element: Media): ActionRight {
+        if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION')) {
+            return ActionRight.Allowed;
+        }
+        if (roleContainsAny('RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD')) {
+            return element.ownerId !== undefined && element.ownerId !== null && element.ownerId === authStore.authProfile?.userId
+                ? ActionRight.Allowed
+                : ActionRight.DeniedNotOwner;
+        }
+        return ActionRight.DeniedNoRight;
+    }
+
+    function getDeleteMediaRight(element: Media): ActionRight {
+        return getEditMediaRight(element);
+    }
+
     // Mix rights
     function getCreateMixRight(): ActionRight {
         return roleContainsAny('ADMIN', 'RADIO')
@@ -352,6 +379,10 @@ export const useRights = () => {
         getCreatePlaylistMediaRight,
         getEditPlaylistMediaRight,
         getDeletePlaylistMediaRight,
+        // Media
+        getCreateMediaRight,
+        getEditMediaRight,
+        getDeleteMediaRight,
         // Mix
         getCreateMixRight,
         getEditMixRight,

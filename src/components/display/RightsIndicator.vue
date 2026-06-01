@@ -18,6 +18,7 @@ import { Mix } from '../../stores/class/radio/mix';
 import { PlaylistMedia } from '../../stores/class/radio/playlistMedia';
 import { Podcast } from '../../stores/class/general/podcast';
 import { Cartouchier } from '../../stores/class/cartouchier/cartouchier';
+import { Media } from "../../stores/class/general/media";
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import LockIcon from 'vue-material-design-icons/Lock.vue';
@@ -41,6 +42,7 @@ type NeverEntities = {
     cartouchier?: never;
     mix?: never;
     playlistMedia?: never;
+    media?: never;
 };
 
 interface PropsPodcast extends PropsBase, Omit<NeverEntities, 'podcast'> {
@@ -55,14 +57,17 @@ interface PropsMix extends PropsBase, Omit<NeverEntities, 'mix'> {
 interface PropsPlaylistMedia extends PropsBase, Omit<NeverEntities, 'playlistMedia'> {
     playlistMedia: PlaylistMedia|boolean;
 }
+interface PropsMedia extends PropsBase, Omit<NeverEntities, 'media'> {
+    media: Media|boolean;
+}
 
-const props = defineProps<PropsPodcast|PropsCartouchier|PropsMix|PropsPlaylistMedia>();
+const props = defineProps<PropsPodcast|PropsCartouchier|PropsMix|PropsPlaylistMedia|PropsMedia>();
 
 type Rights = ReturnType<typeof useRights>;
 type ActionSegment = 'Create'|'Edit'|'Delete';
-type EntitySegment = 'Podcast'|'Cartouchier'|'Mix'|'PlaylistMedia';
+type EntitySegment = 'Podcast'|'Cartouchier'|'Mix'|'PlaylistMedia'|'Media';
 type RightMethodKey = `get${ActionSegment}${EntitySegment}Right` & keyof Rights;
-type RightEntity = Podcast|Cartouchier|Mix|PlaylistMedia|boolean|undefined;
+type RightEntity = Podcast|Cartouchier|Mix|PlaylistMedia|Media|boolean|undefined;
 
 const actionSegmentMap: Record<Exclude<Action, 'any'>, ActionSegment> = {
     create: 'Create',
@@ -86,6 +91,9 @@ const entity = computed((): [EntitySegment, RightEntity]|null => {
     } else if ('playlistMedia' in props && props.playlistMedia) {
         entitySegment = 'PlaylistMedia';
         arg = props.playlistMedia;
+    } else if ('media' in props && props.media) {
+        entitySegment = 'Media';
+        arg = props.media;
     } else {
         return null;
     }
