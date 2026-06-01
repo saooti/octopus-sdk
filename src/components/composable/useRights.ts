@@ -3,7 +3,7 @@ import { useAuthStore } from "../../stores/AuthStore";
 import type { Emission } from "../../stores/class/general/emission";
 import type { Podcast } from "../../stores/class/general/podcast";
 import { PlaylistMedia } from "@/stores/class/radio/playlistMedia";
-import { Cartouchier } from "@/stores/class/cartouchier/cartouchier";
+import { Cartouchier } from "../../stores/class/cartouchier/cartouchier";
 
 type Role =
     'ADMIN'|'ORGANISATION'|

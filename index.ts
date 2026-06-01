@@ -198,6 +198,8 @@ export {
     type Voice
 } from "./src/stores/class/transcript/transcriptParams.ts";
 export { type Canal } from "./src/stores/class/radio/canal.ts";
+export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier.ts";
+export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche.ts";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
