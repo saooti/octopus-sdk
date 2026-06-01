@@ -297,7 +297,7 @@ export const useRights = () => {
 
     // Mix rights
     function getCreateMixRight(): ActionRight {
-        return roleContainsAny('ADMIN', 'RADIO')
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'RADIO')
             ? ActionRight.Allowed
             : ActionRight.DeniedNoRight;
     }
