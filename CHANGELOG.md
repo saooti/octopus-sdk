@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.10.9 (En cours)
+
+**Fixes**
+
+- **14539** - Ajout droits pour accès règles RSS
+
 ## 41.10.8 (29/05/2026)
 
 **Fixes**
