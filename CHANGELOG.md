@@ -24,6 +24,7 @@
 
 - Mise à jour eslint
 - Déplacement de diverses dépendances dans `peerDependencies`
+- Suppression des propriétés liées aux media dans `FilterStore`
 
 ## 41.10.9 (01/06/2026)
 
