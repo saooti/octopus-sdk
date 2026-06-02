@@ -7,9 +7,14 @@ import { nextTick } from 'vue';
 
 describe('ClassicPopover', () => {
     let targetElement: HTMLElement;
+    let appElement: HTMLElement;
     let wrapper: VueWrapper | undefined;
 
     beforeEach(() => {
+        appElement = document.createElement('div');
+        appElement.id = 'app';
+        document.body.appendChild(appElement);
+
         targetElement = document.createElement('button');
         targetElement.id = 'test-target';
         targetElement.textContent = 'Trigger';
@@ -22,9 +27,12 @@ describe('ClassicPopover', () => {
         if (targetElement?.parentNode) {
             targetElement.parentNode.removeChild(targetElement);
         }
+        if (appElement?.parentNode) {
+            appElement.parentNode.removeChild(appElement);
+        }
     });
 
-    // The popover is teleported to <body>; retrieve it by its deterministic id.
+    // The popover is teleported to #app; retrieve it by its deterministic id.
     const getPopoverEl = (): HTMLElement =>
         document.getElementById('popovertest-target') as HTMLElement;
 

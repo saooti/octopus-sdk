@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <Teleport to="#app">
     <div
       v-show="displayPopover"
       :id="'popover' + target"
