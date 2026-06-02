@@ -14,6 +14,7 @@
     de l'utilisateur sur un élément particulier
 - Ajout du composant `ClassicTabs` pour simplifier la gestion d'onglets
   - `ClassicNav` est déprécié en conséquence
+- Ajout de l'api `mediathequeApi`
 
 **Fixes**
 
