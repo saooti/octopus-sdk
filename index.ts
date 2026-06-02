@@ -193,6 +193,7 @@ export {
 export { type Canal } from "./src/stores/class/radio/canal.ts";
 export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier.ts";
 export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche.ts";
+export { type PlaylistMedia } from "./src/stores/class/radio/playlistMedia";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
