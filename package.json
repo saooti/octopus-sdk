@@ -65,11 +65,13 @@
     "@types/sockjs-client": "^1.5.4",
     "@types/webpack-env": "^1.18.8",
     "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/language-core": "~3.1.5",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.39.1",
     "eslint-plugin-vue": "10.9.1",
     "happy-dom": "^20.1.0",
     "typescript": "^5.9.3",
+    "unplugin-dts": "^1.0.2",
     "vitest": "^4.0.16"
   },
   "postcss": {
@@ -102,7 +104,8 @@
   },
   "exports": {
     ".": {
-      "default": "./index.ts"
+      "types": "./target/dist/index.d.ts",
+      "default": "./target/dist/index.ts"
     },
     "./src/*": "./src/*",
     "./tests/*": "./tests/*",
@@ -110,5 +113,8 @@
       "types": "./eslint-config.d.ts",
       "default": "./eslint-config.mjs"
     }
-  }
+  },
+  "files": [
+    "target/dist"
+  ]
 }

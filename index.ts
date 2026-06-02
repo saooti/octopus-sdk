@@ -127,59 +127,59 @@ export const getClassicTagInput = () => import("./src/components/form/ClassicTag
 export const getClassicWysiwyg = () => import("./src/components/form/ClassicWysiwyg.vue");
 
 //Composable
-import { useRights, ActionRight } from "./src/components/composable/useRights.ts";
+import { useRights, ActionRight } from "./src/components/composable/useRights";
 import {useResizePhone} from "./src/components/composable/useResizePhone";
-import {useTagOf} from "./src/components/composable/useTagOf.ts";
-import {useSelenium} from "./src/components/composable/useSelenium.ts";
-import {useImageProxy} from "./src/components/composable/useImageProxy.ts";
-import {useMetaTitle} from "./src/components/composable/useMetaTitle.ts";
-import {useMetaTitleWatch} from "./src/components/composable/useMetaTitleWatch.ts";
-import {useOrganisationFilter} from "./src/components/composable/useOrganisationFilter.ts";
-import {useInit} from "./src/components/composable/useInit.ts";
-import {useErrorHandler} from "./src/components/composable/useErrorHandler.ts";
+import {useTagOf} from "./src/components/composable/useTagOf";
+import {useSelenium} from "./src/components/composable/useSelenium";
+import {useImageProxy} from "./src/components/composable/useImageProxy";
+import {useMetaTitle} from "./src/components/composable/useMetaTitle";
+import {useMetaTitleWatch} from "./src/components/composable/useMetaTitleWatch";
+import {useOrganisationFilter} from "./src/components/composable/useOrganisationFilter";
+import {useInit} from "./src/components/composable/useInit";
+import {useErrorHandler} from "./src/components/composable/useErrorHandler";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
-export { useSharePlatforms, PREDEFINED_PLATFORMS, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms.ts";
-export { useSharePath } from "./src/components/composable/share/useSharePath.ts";
-export { useOrgaComputed } from "./src/components/composable/useOrgaComputed.ts";
-export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl.ts";
-export { useSeasonsManagement } from "./src/components/composable/useSeasonsManagement.ts";
-export { useTranslation } from "./src/components/composable/useTranslation.ts";
-export { useDayjs } from "./src/components/composable/useDayjs.ts";
-export { useSticky } from "./src/components/composable/useSticky.ts";
+export { useSharePlatforms, PREDEFINED_PLATFORMS, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms";
+export { useSharePath } from "./src/components/composable/share/useSharePath";
+export { useOrgaComputed } from "./src/components/composable/useOrgaComputed";
+export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl";
+export { useSeasonsManagement } from "./src/components/composable/useSeasonsManagement";
+export { useTranslation } from "./src/components/composable/useTranslation";
+export { useDayjs } from "./src/components/composable/useDayjs";
+export { useSticky } from "./src/components/composable/useSticky";
 
 //helper
-import domHelper from "./src/helper/domHelper.ts";
-import durationHelper from "./src/helper/durationHelper.ts";
-import stringHelper from "./src/helper/stringHelper.ts";
-import fetchHelper from "./src/helper/fetchHelper.ts";
-import cookiesHelper from "./src/helper/cookiesHelper.ts";
-import downloadHelper from "./src/helper/downloadHelper.ts";
-import displayHelper from "./src/helper/displayHelper.ts";
-import debounce from "./src/helper/debounceHelper.ts";
-import { deepEqual } from "./src/helper/equals.ts";
+import domHelper from "./src/helper/domHelper";
+import durationHelper from "./src/helper/durationHelper";
+import stringHelper from "./src/helper/stringHelper";
+import fetchHelper from "./src/helper/fetchHelper";
+import cookiesHelper from "./src/helper/cookiesHelper";
+import downloadHelper from "./src/helper/downloadHelper";
+import displayHelper from "./src/helper/displayHelper";
+import debounce from "./src/helper/debounceHelper";
+import { deepEqual } from "./src/helper/equals";
 export { colorFromString } from './src/helper/colorFromString';
 
 //stores
-import {useVastStore} from "./src/stores/VastStore.ts";
-import {useSaveFetchStore} from "./src/stores/SaveFetchStore.ts";
-import {usePlayerStore} from "./src/stores/PlayerStore.ts";
-import {useGeneralStore} from "./src/stores/GeneralStore.ts";
-import {useFilterStore} from "./src/stores/FilterStore.ts";
-import {useCommentStore} from "./src/stores/CommentStore.ts";
-import {useApiStore} from "./src/stores/ApiStore.ts";
-import {useAuthStore} from "./src/stores/AuthStore.ts";
-export * from "./src/stores/NotificationStore.ts";
-import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
-import classicApi from "./src/api/classicApi.ts";
+import {useVastStore} from "./src/stores/VastStore";
+import {useSaveFetchStore} from "./src/stores/SaveFetchStore";
+import {usePlayerStore} from "./src/stores/PlayerStore";
+import {useGeneralStore} from "./src/stores/GeneralStore";
+import {useFilterStore} from "./src/stores/FilterStore";
+import {useCommentStore} from "./src/stores/CommentStore";
+import {useApiStore} from "./src/stores/ApiStore";
+import {useAuthStore} from "./src/stores/AuthStore";
+export * from "./src/stores/NotificationStore";
+import {getApiUrl, ModuleApi} from "./src/api/apiConnection";
+import classicApi from "./src/api/classicApi";
 
 // API
 export * from "./src/api";
 
 // Types
-export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
-export { type Organisation, type OrganisationAttributes, emptyOrganisationData, emptyOrgaData } from "./src/stores/class/general/organisation.ts";
-export { type Podcast, type SimplifiedPodcast, type PodcastAvailability, PodcastType, podcastToSimplified } from "./src/stores/class/general/podcast.ts";
-export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
+export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission";
+export { type Organisation, type OrganisationAttributes, emptyOrganisationData, emptyOrgaData } from "./src/stores/class/general/organisation";
+export { type Podcast, type SimplifiedPodcast, type PodcastAvailability, PodcastType, podcastToSimplified } from "./src/stores/class/general/podcast";
+export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist";
 export { type Annotations } from "./src/stores/class/general";
 export {
     CreateTranslation,
@@ -193,11 +193,11 @@ export {
     type TtsParams,
     type ProviderTts,
     type Voice
-} from "./src/stores/class/transcript/transcriptParams.ts";
-export * from "./src/stores/class/radio/canal";
+} from "./src/stores/class/transcript/transcriptParams";
 export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier.ts";
 export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche.ts";
 export { type PlaylistMedia } from "./src/stores/class/radio/playlistMedia";
+export * from "./src/stores/class/radio/canal";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
