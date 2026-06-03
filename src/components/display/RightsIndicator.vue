@@ -7,6 +7,7 @@
                 aria-hidden="true"
                 fill-color="var(--octopus-primary)"
             />
+            <span v-if="!hasAccess" class="rights-visually-hidden">{{ message }}</span>
             <ClassicPopover
                 v-if="!hasAccess"
                 :target="iconId"
@@ -15,18 +16,20 @@
                 {{ message }}
             </ClassicPopover>
         </div>
-        <ClassicAlert
-            v-else-if="!hasAccess"
-            type="info"
-        >
-            <template #icon>
-                <LockIcon
-                    aria-hidden="true"
-                    fill-color="var(--octopus-primary)"
-                />
-            </template>
-            {{ message }}
-        </ClassicAlert>
+        <div aria-live="polite" aria-atomic="true">
+            <ClassicAlert
+                v-if="text && !hasAccess"
+                type="info"
+            >
+                <template #icon>
+                    <LockIcon
+                        aria-hidden="true"
+                        fill-color="var(--octopus-primary)"
+                    />
+                </template>
+                {{ message }}
+            </ClassicAlert>
+        </div>
     </div>
 </template>
 
@@ -213,3 +216,18 @@ const uid = getCurrentInstance()?.uid;
 /** ID of the icon for reference by the popover */
 const iconId = computed((): string => 'rights-indicator-' + uid);
 </script>
+
+<style scoped lang="scss">
+/** Helper class to keep the data accessible for screen readers */
+.rights-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+</style>

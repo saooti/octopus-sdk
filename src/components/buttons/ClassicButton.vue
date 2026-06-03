@@ -1,7 +1,10 @@
+<!-- A simple button with accessibility in mind -->
 <template>
     <button
         class="btn"
         :aria-disabled="disabled"
+        :title="title"
+        :aria-label="title"
         @click="onClick"
     >
         <slot />
@@ -12,6 +15,8 @@
 const props = defineProps<{
     /** Disable the button */
     disabled?: boolean;
+    /** Title of the button */
+    title?: string;
 }>();
 
 const emit = defineEmits<{
