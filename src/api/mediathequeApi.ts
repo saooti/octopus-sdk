@@ -2,6 +2,21 @@ import { PlaylistMedia } from "../stores/class/radio/playlistMedia";
 import { Mix } from "../stores/class/radio/mix";
 import { ModuleApi } from "./apiConnection";
 import classicApi from "./classicApi";
+import { Cartouchier } from "@/stores/class/cartouchier/cartouchier";
+
+/**
+ * Retrieve all cartouchier from the given organisation
+ * @param organisationId The ID of the organisation
+ * @param options Filtering options
+ * @returns List of cartouchier belonging to the organisation
+ */
+async function getAllCartouchiers(organisationId: string, options?: { ownerId?: string }): Promise<Array<Cartouchier>> {
+    return classicApi.fetchData<Array<Cartouchier>>({
+        api: ModuleApi.MEDIA,
+        path: `cartouchier/list/${organisationId}`,
+        parameters: options
+    });
+}
 
 /**
  * Retrieve all mix from the given organisation
@@ -29,12 +44,14 @@ async function deleteMix(mixId: number): Promise<void> {
 /**
  * Retrieve all playlist from the given organisation
  * @param organisationId The ID of the organisation
+ * @param options Filtering options
  * @returns List of playlist belonging to the organisation
  */
-async function getAllPlaylists(organisationId: string): Promise<Array<PlaylistMedia>> {
+async function getAllPlaylists(organisationId: string, options?: { ownerId?: string }): Promise<Array<PlaylistMedia>> {
     return classicApi.fetchData<Array<PlaylistMedia>>({
         api: ModuleApi.MEDIA,
-        path: `playlist/${organisationId}`
+        path: `playlist/${organisationId}`,
+        parameters: options
     });
 }
 
@@ -50,6 +67,7 @@ async function deletePlaylist(playlistId: number): Promise<void> {
 }
 
 export const mediathequeApi = {
+    getAllCartouchiers,
     getAllMix,
     deleteMix,
     getAllPlaylists,
