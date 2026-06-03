@@ -18,6 +18,7 @@
 
 **Fixes**
 
+- **14549** - Suppression du fond de `ClassicAvatar` quand l'image est définie
 - Correction des problèmes de placement de `ClassicPopover`
   - Les props `constraintHeight` & `relativeClass` sont maintenant dépréciés
 

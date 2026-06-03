@@ -44,12 +44,18 @@ const { useProxyImageUrl } = useImageProxy();
 
 const containerStyle = computed((): StyleValue => {
     const size = `${props.size}px`;
-    return {
-        'background-color': colorFromString(props.name),
-        'font-size': `${props.size / 2}px`,
+    const style: StyleValue = {
         height: size,
         width: size
     };
+
+    // Add background only if there's no image to display
+    if (props.imageUrl === undefined) {
+        style['background-color'] = colorFromString(props.name);
+        style['font-size'] = `${props.size / 2}px`;
+    }
+
+    return style;
 });
 </script>
 
