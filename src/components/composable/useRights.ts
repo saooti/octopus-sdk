@@ -5,6 +5,7 @@ import type { Podcast } from "../../stores/class/general/podcast";
 import { PlaylistMedia } from "../../stores/class/radio/playlistMedia";
 import { Cartouchier } from "../../stores/class/cartouchier/cartouchier";
 import { Media } from "../../stores/class/general/media";
+import { Conference } from "../../stores/class/conference/conference";
 
 type Role =
     'ADMIN'|'ORGANISATION'|
@@ -339,6 +340,15 @@ export const useRights = () => {
         return getEditTranscriptRight(podcast);
     }
 
+    // Live
+    function getAccessRecordingRight(conference: Conference, isLive: boolean): ActionRight {
+        if (isLive) {
+            return roleContainsAny('LIVE') ? ActionRight.Allowed : ActionRight.DeniedNoRight;
+        } else {
+            return roleContainsAny('ANIMATION', 'RESTRICTED_ANIMATION') ? ActionRight.Allowed : ActionRight.DeniedNoRight;
+        }
+    }
+
     // View/utility checks — outside the action pattern
     function canSeeHistory(): boolean {
         return roleContainsAny('ADMIN', 'ORGANISATION');
@@ -388,6 +398,7 @@ export const useRights = () => {
         getEditMixRight,
         getDeleteMixRight,
         // Other
+        getAccessRecordingRight,
         getEditCodeInsertPlayerRight,
         getEditTranscriptRight,
         getEditTranscriptVisibilityRight,

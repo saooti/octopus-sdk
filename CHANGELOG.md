@@ -5,6 +5,7 @@
 **Features**
 
 - **14327** - Ajout droits pour éléments médiathèque
+- **14494** - Ajout droits pour accès enregistrements
 - Revue du système de droits
   - Propose maintenant des fonction `get*Right`, permettant d'obtenir la raison
     du rejet
