@@ -21,9 +21,6 @@ export const useFilterStore = defineStore("FilterStore", () => {
   const filterRubriquage = ref<Array<Rubriquage>>([]);
   const filterRubrique = ref<Array<RubriquageFilter>>([]);
   const filterRubriqueDisplay = ref<Array<Rubrique>>([]);
-  const filterTypeMedia = ref<string>();
-  const filterSortOrder = ref<string>();
-  const filterSortField = ref<string>();
   const filterLive = ref<boolean>(false);
   const filterIab = ref<Category>();
 
@@ -101,22 +98,6 @@ export const useFilterStore = defineStore("FilterStore", () => {
     filterRubriqueDisplay.value = rubriques.filter(rubrique=> rubrique);
   }
 
-  function filterUpdateMedia(filter: {
-    type?: string;
-    order?: string;
-    field?: string;
-  }) {
-    if (filter.type) {
-      filterTypeMedia.value = filter.type;
-    }
-    if (filter.order) {
-      filterSortOrder.value = filter.order;
-    }
-    if (filter.field) {
-      filterSortField.value = filter.field;
-    }
-  }
-
   return {
     filterOrgaId,
     realOrgaId,
@@ -127,16 +108,12 @@ export const useFilterStore = defineStore("FilterStore", () => {
     filterUpdateIab,
     filterUpdateRubrique,
     filterUpdateRubriqueDisplay,
-    filterUpdateMedia,
 
     filterImgUrl,
     filterName,
     filterRubriquage,
     filterRubrique,
     filterRubriqueDisplay,
-    filterTypeMedia,
-    filterSortOrder,
-    filterSortField,
     filterLive,
     filterIab
   };

@@ -41,9 +41,11 @@ export const getClassicModalInBody = () => import("./src/components/misc/modal/C
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
 export const getClassicBigChip = () => import("./src/components/misc/ClassicBigChip.vue");
+export const getClassicTabs = () => import("./src/components/misc/ClassicTabs.vue");
 
 import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
 import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";
+export { type Tab } from "./src/components/misc/ClassicTabs.vue";
 
 export {
     ClassicDataTable,
@@ -76,6 +78,7 @@ export const getShareNewsletter = () => import("./src/components/display/sharing
 export const getQrCode = () => import("./src/components/display/sharing/QrCode.vue");
 export const SubscribeButtons = defineAsyncComponent(() => import("./src/components/display/sharing/SubscribeButtons.vue"));
 export const PodcastSeasonInfo = defineAsyncComponent(() => import("./src/components/display/podcasts/PodcastSeasonInfo.vue"));
+export const RightsIndicator = defineAsyncComponent(() => import("./src/components/display/RightsIndicator.vue"));
 
 
 export const getEmissionInlineList = () => import("./src/components/display/emission/EmissionInlineList.vue");
@@ -122,7 +125,7 @@ export const getClassicTagInput = () => import("./src/components/form/ClassicTag
 export const getClassicWysiwyg = () => import("./src/components/form/ClassicWysiwyg.vue");
 
 //Composable
-import { useRights, EditRight } from "./src/components/composable/useRights.ts";
+import { useRights, ActionRight } from "./src/components/composable/useRights.ts";
 import {useResizePhone} from "./src/components/composable/useResizePhone";
 import {useTagOf} from "./src/components/composable/useTagOf.ts";
 import {useSelenium} from "./src/components/composable/useSelenium.ts";
@@ -166,14 +169,7 @@ import {getApiUrl, ModuleApi} from "./src/api/apiConnection.ts";
 import classicApi from "./src/api/classicApi.ts";
 
 // API
-export { emissionApi } from "./src/api/emissionApi.ts";
-export { transcriptionApi, type TranslationData, TranslationState } from "./src/api/transcriptionApi.ts";
-export * from "./src/api/groupsApi.ts";
-export { organisationApi } from "./src/api/organisationApi.ts";
-export { playlistApi } from "./src/api/playlistApi.ts";
-export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./src/api/podcastApi.ts";
-export { radioApi } from "./src/api/radioApi.ts";
-export * from "./src/api/aggregatorsApi.ts";
+export * from "./src/api";
 
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
@@ -195,6 +191,9 @@ export {
     type Voice
 } from "./src/stores/class/transcript/transcriptParams.ts";
 export { type Canal } from "./src/stores/class/radio/canal.ts";
+export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier.ts";
+export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche.ts";
+export { type PlaylistMedia } from "./src/stores/class/radio/playlistMedia";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
@@ -228,7 +227,7 @@ import { defineAsyncComponent } from "vue";
 
 export {
     useRights,
-    EditRight,
+    ActionRight,
     useResizePhone,
     useTagOf,
     useSelenium,

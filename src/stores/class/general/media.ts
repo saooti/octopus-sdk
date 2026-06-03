@@ -14,6 +14,8 @@ export interface Media {
   cueIn?: number;
   cueOut?: number;
   bpm?: number;
+  /** ID of the user that created this cartouchier */
+  ownerId?: string;
 }
 
 export function emptyMediaData(): Media {

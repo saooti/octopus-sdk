@@ -7,4 +7,6 @@ export interface PlaylistMedia {
   name: string;
   organisationId: string;
   medias: Array<Media>;
+  /** ID of the user that created this playlist media */
+  ownerId?: string;
 }

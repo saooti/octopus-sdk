@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { setupPinia, setupAuthStore } from '@tests/utils';
 import { useAuthStore } from '@/stores/AuthStore';
-import { useRights } from '@/components/composable/useRights';
+import { useRights, ActionRight } from '@/components/composable/useRights';
 import type { Organisation } from '@/stores/class/general/organisation';
 import type { Emission } from '@/stores/class/general/emission';
 import type { Podcast } from '@/stores/class/general/podcast';
+import type { Mix } from '@/stores/class/radio/mix';
+import { PlaylistMedia } from '@/stores/class/radio/playlistMedia';
+import { Cartouchier } from '@/stores/class/cartouchier/cartouchier';
+import type { Media } from '@/stores/class/general/media';
 
 async function setup(roles: string[], userId = 'test-user-123'): Promise<void> {
     setupPinia();
@@ -330,6 +334,207 @@ describe('useRights', () => {
         });
     });
 
+    describe('Cartouchier permissions', () => {
+        const ownCartouchier = { ownerId: 'test-user-123' } as Cartouchier;
+        const otherCartouchier = { ownerId: 'other-user' } as Cartouchier;
+        const noOwnerCartouchier = {} as Cartouchier;
+
+        describe('canCreateCartouchier', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreateCartouchier()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreateCartouchier()).toBe(false);
+            });
+        });
+
+        describe('canEditCartouchier', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditCartouchier(otherCartouchier)).toBe(true);
+                });
+            });
+
+            ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD'].forEach(role => {
+                it(`${role} can only edit own element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditCartouchier(ownCartouchier)).toBe(true);
+                    expect(useRights().canEditCartouchier(otherCartouchier)).toBe(false);
+                    expect(useRights().canEditCartouchier(noOwnerCartouchier)).toBe(false);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditCartouchier(ownCartouchier)).toBe(false);
+            });
+        });
+
+        describe('canDeleteCartouchier', () => {
+            it('restricted user can delete own element but not others\'', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().canDeleteCartouchier(ownCartouchier)).toBe(true);
+                expect(useRights().canDeleteCartouchier(otherCartouchier)).toBe(false);
+            });
+        });
+    });
+
+    describe('Bac/PlaylistMedia permissions', () => {
+        const ownBac = { ownerId: 'test-user-123' } as PlaylistMedia;
+        const otherBac = { ownerId: 'other-user' } as PlaylistMedia;
+        const noOwnerBac = {} as PlaylistMedia;
+
+        describe('canCreatePlaylistMedia', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreatePlaylistMedia()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreatePlaylistMedia()).toBe(false);
+            });
+        });
+
+        describe('canEditPlaylistMedia', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditPlaylistMedia(otherBac)).toBe(true);
+                });
+            });
+
+            ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD'].forEach(role => {
+                it(`${role} can only edit own element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditPlaylistMedia(ownBac)).toBe(true);
+                    expect(useRights().canEditPlaylistMedia(otherBac)).toBe(false);
+                    expect(useRights().canEditPlaylistMedia(noOwnerBac)).toBe(false);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditPlaylistMedia(ownBac)).toBe(false);
+            });
+        });
+
+        describe('canDeletePlaylistMedia', () => {
+            it('restricted user can delete own element but not others\'', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().canDeletePlaylistMedia(ownBac)).toBe(true);
+                expect(useRights().canDeletePlaylistMedia(otherBac)).toBe(false);
+            });
+        });
+    });
+
+    describe('Media permissions', () => {
+        const ownMedia = { mediaId: 1, ownerId: 'test-user-123' } as Media;
+        const otherMedia = { mediaId: 2, ownerId: 'other-user' } as Media;
+        const noOwnerMedia = { mediaId: 3 } as Media;
+
+        describe('canCreateMedia', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
+             'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreateMedia()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreateMedia()).toBe(false);
+            });
+        });
+
+        describe('canEditMedia', () => {
+            ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditMedia(otherMedia)).toBe(true);
+                });
+            });
+
+            ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION', 'PODCAST_CRUD'].forEach(role => {
+                it(`${role} can only edit own element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditMedia(ownMedia)).toBe(true);
+                    expect(useRights().canEditMedia(otherMedia)).toBe(false);
+                    expect(useRights().canEditMedia(noOwnerMedia)).toBe(false);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditMedia(ownMedia)).toBe(false);
+            });
+        });
+
+        describe('canDeleteMedia', () => {
+            it('delegates to canEditMedia', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().canDeleteMedia(ownMedia)).toBe(true);
+                expect(useRights().canDeleteMedia(otherMedia)).toBe(false);
+            });
+        });
+    });
+
+    describe('Mix permissions', () => {
+        const ownMix = { ownerId: 'test-user-123' } as Mix;
+        const otherMix = { ownerId: 'other-user' } as Mix;
+
+        describe('canCreateMix', () => {
+            ['ADMIN', 'RADIO'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreateMix()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreateMix()).toBe(false);
+            });
+        });
+
+        describe('canEditMix', () => {
+            ['ADMIN', 'RADIO'].forEach(role => {
+                it(`allows ${role} to edit any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditMix(otherMix)).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditMix(ownMix)).toBe(false);
+            });
+        });
+
+        describe('canDeleteMix', () => {
+            ['ADMIN', 'RADIO'].forEach(role => {
+                it(`allows ${role} to delete any element`, async () => {
+                    await setup([role]);
+                    expect(useRights().canDeleteMix(otherMix)).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canDeleteMix(ownMix)).toBe(false);
+            });
+        });
+    });
+
     describe('Other permissions', () => {
         describe('canEditCodeInsertPlayer', () => {
             ['ADMIN', 'ORGANISATION'].forEach(role => {
@@ -344,6 +549,128 @@ describe('useRights', () => {
                     await setup([role]);
                     expect(useRights().canEditCodeInsertPlayer()).toBe(false);
                 });
+            });
+        });
+    });
+
+    describe('ActionRight detailed reasons', () => {
+        describe('getEditEmissionRight', () => {
+            it('returns Allowed for PRODUCTION', async () => {
+                await setup(['PRODUCTION']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'other' } as Emission)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own emission', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' emission', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'other' } as Emission)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without emission access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditPodcastRight', () => {
+            it('returns Allowed for PRODUCTION on any podcast', async () => {
+                await setup(['PRODUCTION']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'other', valid: true } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'test-user-123', valid: true } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'other', valid: true } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNotOwner for PODCAST_CRUD editing others\' podcast', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditPodcastRight({ valid: false, publisher: { userId: 'other' } } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without podcast access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditPodcastRight({ createdByUserId: 'test-user-123', valid: true } as Podcast)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditCartouchierRight', () => {
+            it('returns Allowed for ANIMATION on any element', async () => {
+                await setup(['ANIMATION']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'other' } as Cartouchier)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own element', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'test-user-123' } as Cartouchier)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' element', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'other' } as Cartouchier)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without cartouchier access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditCartouchierRight({ ownerId: 'test-user-123' } as Cartouchier)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditMediaRight', () => {
+            it('returns Allowed for ANIMATION on any element', async () => {
+                await setup(['ANIMATION']);
+                expect(useRights().getEditMediaRight({ mediaId: 1, ownerId: 'other' } as Media)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for RESTRICTED_PRODUCTION editing own element', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditMediaRight({ mediaId: 1, ownerId: 'test-user-123' } as Media)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' element', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                expect(useRights().getEditMediaRight({ mediaId: 1, ownerId: 'other' } as Media)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNotOwner when ownerId is absent', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditMediaRight({ mediaId: 1 } as Media)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without media access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditMediaRight({ mediaId: 1, ownerId: 'test-user-123' } as Media)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditTranscriptRight', () => {
+            it('returns Allowed for PRODUCTION on any podcast', async () => {
+                await setup(['PRODUCTION']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'other' } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns Allowed for PODCAST_CRUD editing own transcript', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNotOwner for PODCAST_CRUD editing others\' transcript', async () => {
+                await setup(['PODCAST_CRUD']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'other' } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('returns DeniedNoRight for role without transcript access', async () => {
+                await setup(['RESTRICTED_ANIMATION']);
+                expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.DeniedNoRight);
             });
         });
     });

@@ -2,9 +2,30 @@
 
 ## 41.11.0 (En cours)
 
+**Features**
+
+- **14327** - Ajout droits pour éléments médiathèque
+- Revue du système de droits
+  - Propose maintenant des fonction `get*Right`, permettant d'obtenir la raison
+    du rejet
+  - Les anciennes fonctions `can*` existent toujours et sont dérivées des
+    nouvelles
+  - Ajout du composant `RightsIndicator` pour faciliter l'affichage des droits
+    de l'utilisateur sur un élément particulier
+- Ajout du composant `ClassicTabs` pour simplifier la gestion d'onglets
+  - `ClassicNav` est déprécié en conséquence
+- Ajout de l'api `mediathequeApi`
+
+**Fixes**
+
+- Correction des problèmes de placement de `ClassicPopover`
+  - Les props `constraintHeight` & `relativeClass` sont maintenant dépréciés
+
 **Misc**
 
-- Mise à jour eslint & ajout dans peerDependencies
+- Mise à jour eslint
+- Déplacement de diverses dépendances dans `peerDependencies`
+- Suppression des propriétés liées aux media dans `FilterStore`
 
 ## 41.10.9 (01/06/2026)
 

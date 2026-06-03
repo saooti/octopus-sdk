@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.11.0-beta",
+  "version": "41.11.0-beta2",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -54,11 +54,8 @@
     "videojs-quality-selector-hls": "^1.1.1",
     "vite": "^6.4.1",
     "vite-bundle-visualizer": "^1.2.1",
-    "vue": "^3.5.24",
-    "vue-i18n": "^11.1.12",
     "vue-material-design-icons": "^5.3.1",
     "vue-recaptcha": "^2.0.3",
-    "vue-router": "^4.6.3",
     "vue-select": "^4.0.0-beta.6",
     "vue3-lazyload": "^0.3.8",
     "vue3-swatches": "^1.2.4"
@@ -95,7 +92,10 @@
   },
   "peerDependencies": {
     "eslint-plugin-vue": "^10.9.1",
-    "pinia": ">=2.3.0"
+    "pinia": ">=2.3.0",
+    "vue": "^3.5.0",
+    "vue-i18n": "^11.1.0",
+    "vue-router": "^4.6.0"
   },
   "exports": {
     ".": {

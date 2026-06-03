@@ -1,5 +1,6 @@
 <!--
   Component to make a tab-based navigation
+  @deprecated Use ClassicTabs instead
 -->
 <template>
   <ul class="octopus-nav" :class="light ? 'light' : ''">
@@ -41,9 +42,13 @@
 
 //Props 
 defineProps({
+  /** Number of tabs to display */
   tabNumber: { default: 0, type: Number },
+  /** Currently active tab */
   activeTab: { default: 0, type: Number },
+  /** Alternative css */
   transparent: { default: false, type: Boolean },
+  /** Alternative css */
   light: { default: false, type: Boolean },
 })
 
