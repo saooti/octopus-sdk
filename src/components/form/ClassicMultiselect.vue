@@ -11,8 +11,9 @@
       <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
         label
       }}
-      <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
+        <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
       </label>
+
       <template v-if="popover">
         <button
           :id="'popover' + id"
@@ -32,6 +33,7 @@
         </ClassicPopover>
       </template>
     </div>
+
     <vSelect
       v-model="optionSelected"
       :input-id="id"
@@ -60,6 +62,7 @@
       <template v-if="optionCustomTemplating.length" #option="option">
         <slot :name="optionCustomTemplating" :option="option" />
       </template>
+
       <template v-else-if="withSelectAll" #option="option">
         <strong v-if="option.id === selectAll.id">
           {{ option[optionLabel] }}
@@ -74,6 +77,10 @@
         #selected-option="option"
       >
         <slot :name="optionSelectedCustomTemplating" :option="option" />
+      </template>
+
+      <template #selected-option-container="{ option, deselect, disabled, multiple: mul }">
+        <slot name="selected-option-container" v-bind="{ option, deselect, disabled, multiple: mul }" />
       </template>
 
       <template #no-options="{ searching }">

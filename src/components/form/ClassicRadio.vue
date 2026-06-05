@@ -10,66 +10,76 @@
                                      `selected` : true if the option is selected
 -->
 <template>
-  <div role="radiogroup" class="d-flex" :class="isColumn !== false ? 'flex-column' : ''">
     <div
-      v-for="option in options"
-      :key="option.title"
-      class="octopus-form-item"
-      :class="isColumn !== false ? 'd-flex flex-nowrap align-items-center' : 'me-2'"
+        role="radiogroup"
+        class="d-flex"
+        :class="isColumn !== false ? 'flex-column' : ''"
     >
-      <input
-        :id="computedId + option.value"
-        :checked="textInit === option.value"
-        type="radio"
-        :name="computedId"
-        :value="option.value"
-        :disabled="isDisabled"
-        @input="onChange($event.target.value)"
-      >
-      <label class="c-hand" :for="computedId + option.value">
-        <slot :name="'label-' + option.value" v-bind="slotBindings(option)">{{ option.title }}</slot>
-      </label>
+        <div
+            v-for="option in options"
+            :key="option.title"
+            class="octopus-form-item"
+            :class="isColumn !== false ? 'd-flex flex-nowrap align-items-center' : 'me-2'"
+        >
+            <input
+                :id="computedId + option.value"
+                :checked="textInit === option.value"
+                type="radio"
+                :name="computedId"
+                :value="option.value"
+                :disabled="isDisabled"
+                @input="onChange($event.target.value)"
+            >
+            <label class="c-hand" :for="computedId + option.value">
+                <slot :name="'label-' + option.value" v-bind="slotBindings(option)">{{ option.title }}</slot>
+            </label>
 
-      <slot :name="'after-' + option.value" v-bind="slotBindings(option)" />
+            <slot :name="'after-' + option.value" v-bind="slotBindings(option)" />
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup generic="T extends { title: string; value: string|undefined; }" lang="ts">
 import { computed, getCurrentInstance } from 'vue';
 
 //Props 
-const { textInit, isColumn = true, idRadio } = defineProps<{
-  options: Array<T>;
-  textInit?: string;
-  idRadio?: string;
-  isDisabled?: boolean;
-  isColumn?: boolean;
+const { options, textInit, isColumn = true, idRadio } = defineProps<{
+    options: Array<T>;
+    textInit?: string;
+    idRadio?: string;
+    isDisabled?: boolean;
+    isColumn?: boolean;
 }>();
 
 //Emits
 const emit = defineEmits<{
-  (e: 'update:textInit', value: string): void;
+    (e: 'update:textInit', value: string): void;
+    /** Emitted with update:text-init, containing the selected object */
+    (e: 'selected-item', value: T): void;
 }>();
 
 const uid = getCurrentInstance()?.uid;
 const computedId = computed((): string => {
-  if (idRadio !== undefined) {
-    return idRadio;
-  } else {
-    return 'classic-radio-' + uid;
-  }
+    if (idRadio !== undefined) {
+        return idRadio;
+    } else {
+        return 'classic-radio-' + uid;
+    }
 });
 
 //Methods
-function onChange(value: string){
-  emit('update:textInit', value)
+function onChange(value: string): void {
+    emit('update:textInit', value);
+    const item = options.find(elt => elt.value === value);
+    if (item) {
+        emit('selected-item', item);
+    }
 }
 
 function slotBindings(option: T): { option: T; selected: boolean } {
-  return {
-    option,
-    selected: textInit === option.value
-  }
+    return {
+        option,
+        selected: textInit === option.value
+    }
 }
 </script>

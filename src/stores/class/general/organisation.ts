@@ -22,6 +22,8 @@ export type OrganisationAttributes = {
   MONETISABLE?: MonetisationOptions;
   /** Privacy parameters (JSON) */
   PRIVATE?: string;
+  /** Live recordings enabled */
+  'live.active'?: boolean;
 };
 
 export interface Organisation {
