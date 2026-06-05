@@ -31,7 +31,6 @@
     "@vueuse/core": "^13.9.0",
     "autoprefixer": "^10.4.22",
     "axios": "^1.13.2",
-    "dayjs": "^1.11.19",
     "emoji-mart-vue-fast": "^15.0.5",
     "express": "^5.1.0",
     "globals": "^16.5.0",
@@ -91,6 +90,7 @@
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
   "peerDependencies": {
+    "dayjs": "^1.11.0",
     "eslint-plugin-vue": "^10.9.1",
     "pinia": ">=2.3.0",
     "vue": "^3.5.0",
@@ -99,7 +99,6 @@
   },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
       "default": "./index.ts"
     },
     "./src/*": "./src/*",
