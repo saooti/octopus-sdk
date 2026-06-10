@@ -1,4 +1,4 @@
-import { ref, onMounted, onBeforeUnmount, type Ref } from 'vue';
+import { ref, toValue, onMounted, onBeforeUnmount, type Ref, type MaybeRef } from 'vue';
 
 /**
  * Detects whether a sticky element is currently stuck (fixed at its `top` offset)
@@ -6,9 +6,13 @@ import { ref, onMounted, onBeforeUnmount, type Ref } from 'vue';
  *
  * A 1px invisible sentinel element is inserted immediately before the sticky element.
  * When that sentinel scrolls out of the IntersectionObserver's root viewport (adjusted
- * by the element's computed `top` offset), the element is considered stuck.
+ * by `topOffset`), the element is considered stuck.
+ *
+ * `topOffset` must match the element's CSS `top` value in pixels. It is read once at
+ * mount time. Pass a `Ref<number>` if the value is computed asynchronously (e.g. from
+ * a CSS variable set by JavaScript after first render).
  */
-export function useSticky(elementRef: Ref<HTMLElement | null>) {
+export function useSticky(elementRef: Ref<HTMLElement | null>, topOffset: MaybeRef<number> = 0) {
     const isStuck = ref(false);
     let sentinel: HTMLElement | null = null;
     let observer: IntersectionObserver | null = null;
@@ -19,7 +23,7 @@ export function useSticky(elementRef: Ref<HTMLElement | null>) {
             return;
         }
 
-        const topOffset = parseInt(getComputedStyle(el).top) || 0;
+        const offset = toValue(topOffset);
 
         sentinel = document.createElement('div');
         sentinel.style.cssText = 'height:1px;pointer-events:none;';
@@ -27,7 +31,7 @@ export function useSticky(elementRef: Ref<HTMLElement | null>) {
 
         observer = new IntersectionObserver(
             ([entry]) => { isStuck.value = !entry.isIntersecting; },
-            { rootMargin: `-${topOffset}px 0px 0px 0px` }
+            { rootMargin: `-${offset}px 0px 0px 0px` }
         );
         observer.observe(sentinel);
     });
