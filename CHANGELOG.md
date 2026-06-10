@@ -8,6 +8,7 @@
 - Ajout d'un composable `useSticky` pour déterminer quand un élément sticky se
   déclenche
 - Ajout de `@stylistic/eslint-plugin` et mise à jour des règles eslint
+- Ajout d'un prop dans `ClassicPopover` pour modifier le z-index
 
 ## 41.11.0 (05/06/2026)
 

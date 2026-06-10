@@ -48,7 +48,9 @@ const props = defineProps({
   popoverClass: { type: String, default: undefined },
   isTopLayer: { type: Boolean, default: false },
   /** @deprecated No longer needed. If set to true, max height of popover will not overflow from parent */
-  constrainHeight: { type: Boolean, default: true }
+  constrainHeight: { type: Boolean, default: true },
+  /** Force z-index */
+  zIndex: { type: Number, default: undefined }
 })
 
 //Emits
@@ -74,7 +76,12 @@ const router = useRouter();
 
 //Computed
 const popoverId = computed(() => "popover" + props.target);
-const positionInlineStyle = computed(() => `left: ${posX.value}px; top: ${posY.value}px;max-height:${maxHeight.value}`);
+const positionInlineStyle = computed(() => ({
+  left: `${posX.value}px`,
+  top: `${posY.value}px`,
+  'max-height': maxHeight.value,
+  'z-index': props.zIndex ?? 10
+}));
 const displayPopover = computed(() => show.value && !props.disable);
 const isTopLayerPopover = computed(() => (props.isTopLayer || "octopus-modal"===props.relativeClass) && Object.hasOwn(HTMLElement.prototype, "popover"));
 
