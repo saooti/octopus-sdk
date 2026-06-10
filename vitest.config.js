@@ -12,7 +12,8 @@ export default defineConfig(env => mergeConfig(viteConfig(env), defineConfig({
         environment: 'happy-dom',
         //setupFiles: ['./tests/setup.ts'],
         typecheck: {
-            enabled: true
+            enabled: true,
+            tsconfig: './tsconfig.test.json'
         }
     }
 })));
