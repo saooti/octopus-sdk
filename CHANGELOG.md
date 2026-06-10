@@ -7,6 +7,7 @@
 - Export de `colorFromString` pour usage hors du sdk
 - Ajout d'un composable `useSticky` pour déterminer quand un élément sticky se
   déclenche
+- Ajout de `@stylistic/eslint-plugin` et mise à jour des règles eslint
 
 ## 41.11.0 (05/06/2026)
 

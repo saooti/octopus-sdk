@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@pinia/testing": "^1.0.3",
+    "@stylistic/eslint-plugin": "*",
     "@types/sockjs-client": "^1.5.4",
     "@types/webpack-env": "^1.18.8",
     "@vitejs/plugin-vue": "^5.2.4",
@@ -90,9 +91,11 @@
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
   "peerDependencies": {
+    "@stylistic/eslint-plugin": "^5.10.0",
     "dayjs": "^1.11.0",
     "eslint-plugin-vue": "^10.9.1",
     "pinia": ">=2.3.0",
+    "typescript-eslint": "^8.47.0",
     "vue": "^3.5.0",
     "vue-i18n": "^11.1.0",
     "vue-router": "^4.6.0"

@@ -2,6 +2,7 @@ import eslint from '@eslint/js';
 import eslintPluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
 import typescriptEslint from 'typescript-eslint';
+import stylistic from '@stylistic/eslint-plugin';
 
 export default typescriptEslint.config(
   { ignores: ['*.d.ts', '**/coverage', '**/dist'] },
@@ -11,6 +12,9 @@ export default typescriptEslint.config(
       ...typescriptEslint.configs.recommended,
       ...eslintPluginVue.configs['flat/recommended'],
     ],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     files: ['**/*.{ts,vue}'],
     languageOptions: {
       ecmaVersion: 'latest',
@@ -33,11 +37,13 @@ export default typescriptEslint.config(
       "vue/no-ref-as-operand": ['error'],
 
       // Indentation
+      "@stylistic/indent": ['warn', 4, { "SwitchCase": 0 }],
       "vue/html-indent": ['warn', 4],
       "vue/script-indent": ['warn', 4],
+      "@stylistic/no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 
       // Number of attributes per line (increase because sometimes two is not a lot)
       "vue/max-attributes-per-line": ['warn', { singleline: 2 } ]
-    },
+    }
   }
 );
