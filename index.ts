@@ -144,6 +144,7 @@ export { useSeoTitleUrl } from "./src/components/composable/route/useSeoTitleUrl
 export { useSeasonsManagement } from "./src/components/composable/useSeasonsManagement.ts";
 export { useTranslation } from "./src/components/composable/useTranslation.ts";
 export { useDayjs } from "./src/components/composable/useDayjs.ts";
+export { useSticky } from "./src/components/composable/useSticky.ts";
 
 //helper
 import domHelper from "./src/helper/domHelper.ts";
@@ -155,6 +156,7 @@ import downloadHelper from "./src/helper/downloadHelper.ts";
 import displayHelper from "./src/helper/displayHelper.ts";
 import debounce from "./src/helper/debounceHelper.ts";
 import { deepEqual } from "./src/helper/equals.ts";
+export { colorFromString } from './src/helper/colorFromString';
 
 //stores
 import {useVastStore} from "./src/stores/VastStore.ts";

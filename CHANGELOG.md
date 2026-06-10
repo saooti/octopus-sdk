@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 41.12.1 (En cours)
+
+**Features**
+
+- Export de `colorFromString` pour usage hors du sdk
+- Ajout d'un composable `useSticky` pour déterminer quand un élément sticky se
+  déclenche
+
 ## 41.11.0 (05/06/2026)
 
 **Features**
