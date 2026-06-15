@@ -12,6 +12,8 @@
 - Ajout d'un slot `option` pour `ClassicSelect`
 - Ajustement de `OctopusMultiselect` pour fonctionner correctement avec des
   objets identiques avec références différentes
+- Ajout de nouvelles classes utilitaires dans le css
+- Ajout de nouvelles options d'apparence pour `ClassicButton`
 
 **Fixes**
 

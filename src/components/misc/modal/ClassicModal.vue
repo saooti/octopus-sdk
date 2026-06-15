@@ -31,6 +31,7 @@
       </div>
     </div>
     <div v-show="!onlyHeader" class="octopus-modal-body">
+      <slot />
       <slot name="body" />
     </div>
     <div v-show="!onlyHeader" class="octopus-modal-footer">
