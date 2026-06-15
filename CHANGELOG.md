@@ -12,6 +12,11 @@
 - Ajustement de `OctopusMultiselect` pour fonctionner correctement avec des
   objets identiques avec références différentes
 
+**Fixes**
+
+- Correction d'une exception dans `deepEquals` si la comparaison est faite entre
+  une variable primitive et un objet
+
 ## 41.11.0 (05/06/2026)
 
 **Features**
