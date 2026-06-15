@@ -159,4 +159,26 @@ describe('OctopusMultiselect', () => {
         const allCheckboxLabel = wrapper.find('.octopus-multiselect-dropdown > .octopus-form-item label');
         expect(allCheckboxLabel.text()).toBe('Tout');
     });
+
+    it('deselects by optionKey even when selected objects are different references', async () => {
+        const selected = [{ id: 1, name: 'Alpha' }];
+        const wrapper = await mount(OctopusMultiselect, {
+            props: { options, optionLabel: 'name', optionKey: 'id', selected },
+        });
+        await wrapper.find('input').trigger('focus');
+        const optionCheckboxes = wrapper.findAll('.octopus-multiselect-options input[type="checkbox"]');
+        await optionCheckboxes[0].trigger('input');
+        expect(wrapper.emitted('update:selected')?.[0]).toEqual([[]]);
+    });
+
+    it('toggleAll deselects by optionKey even when selected objects are different references', async () => {
+        const selected = options.map((o) => ({ ...o }));
+        const wrapper = await mount(OctopusMultiselect, {
+            props: { options, optionLabel: 'name', optionKey: 'id', selected },
+        });
+        await wrapper.find('input').trigger('focus');
+        const allCheckbox = wrapper.find('.octopus-multiselect-dropdown > .octopus-form-item input[type="checkbox"]');
+        await allCheckbox.trigger('input');
+        expect(wrapper.emitted('update:selected')?.[0]).toEqual([[]]);
+    });
 });

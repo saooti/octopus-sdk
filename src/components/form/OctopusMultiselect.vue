@@ -76,6 +76,8 @@ const props = defineProps<{
     selected?: T[];
     /** Full list of options to display or filter. */
     options: T[];
+    /** Key of each option object to use as the ID */
+    optionKey?: keyof T;
     /** Key of each option object to use as the display label. */
     optionLabel: keyof T & string;
     /** Disables the field and all checkboxes when true. */
@@ -150,13 +152,21 @@ function getLabel(option: T): string {
 }
 
 function isSelected(option: T): boolean {
-    return props.selected?.includes(option) ?? false;
+    if (props.optionKey) {
+        return props.selected?.find(s => s[props.optionKey] === option[props.optionKey]) !== undefined;
+    } else {
+        return props.selected?.includes(option) ?? false;
+    }
 }
 
 function toggleOption(option: T): void {
     const current = props.selected ?? [];
     if (isSelected(option)) {
-        emit('update:selected', current.filter((item) => item !== option));
+        const key = props.optionKey;
+        emit('update:selected', key
+            ? current.filter((item) => item[key] !== option[key])
+            : current.filter((item) => item !== option)
+        );
     } else {
         emit('update:selected', [...current, option]);
     }
@@ -168,7 +178,11 @@ function toggleAll(val: boolean): void {
         const toAdd = displayedOptions.value.filter((option: T) => !isSelected(option));
         emit('update:selected', [...current, ...toAdd]);
     } else {
-        emit('update:selected', current.filter((item: T) => !displayedOptions.value.includes(item)));
+        const key = props.optionKey;
+        emit('update:selected', current.filter((item: T) => key
+            ? !displayedOptions.value.some((opt) => opt[key] === item[key])
+            : !displayedOptions.value.includes(item)
+        ));
     }
 }
 

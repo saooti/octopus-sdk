@@ -9,6 +9,8 @@
   déclenche
 - Ajout de `@stylistic/eslint-plugin` et mise à jour des règles eslint
 - Ajout d'un prop dans `ClassicPopover` pour modifier le z-index
+- Ajustement de `OctopusMultiselect` pour fonctionner correctement avec des
+  objets identiques avec références différentes
 
 ## 41.11.0 (05/06/2026)
 
