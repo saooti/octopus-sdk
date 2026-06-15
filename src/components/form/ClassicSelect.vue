@@ -17,7 +17,14 @@
       :required="displayRequired"
       @change="onChange($event.target.value)"
     >
-      <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
+      <option
+        v-if="placeholder"
+        value=""
+        disabled
+        selected
+      >
+        {{ placeholder }}
+      </option>
       <option
         v-for="option in optionsOrder"
         :key="option.title"
@@ -25,7 +32,9 @@
         :data-selenium="'select-option-' + option.value"
         :style="option.fontFamily ? 'font-family:' + option.fontFamily : ''"
       >
-        {{ option.title }}
+        <slot name="option" :option="option">
+          {{ option.title }}
+        </slot>
       </option>
     </select>
   </div>
