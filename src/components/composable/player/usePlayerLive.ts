@@ -24,12 +24,17 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   const apiStore = useApiStore();
   const authStore = useAuthStore();
 
-  const needToAddToken = computed(() => { 
-    return authStore.authParam.accessToken && ("SECURED" === playerStore.playerLive?.organisation?.privacy || playerStore.playerRadio?.secured);
-  });
+  function needToAddToken(url: string): boolean { 
+    if (authStore.authParam.accessToken && ("SECURED" === playerStore.playerLive?.organisation?.privacy || playerStore.playerRadio?.secured)) {
+      const baseDomain = apiStore.frontendUrl.replace(/^https?:\/\//, '');
+      // Add token only if request is on same domain
+      return url.includes(baseDomain);
+    }
+    return false;
+  }
 
   function onPlay(): void {
-    playerStore.playerChangeStatus(PlayerStatus.PAUSED ===playerStore.playerStatus);
+    playerStore.playerChangeStatus(PlayerStatus.PAUSED === playerStore.playerStatus);
   }
 
   function playRadio() {
@@ -77,7 +82,7 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         !isAndroid
       ) {
         let url = playerStore.playerHlsUrl;
-        if(needToAddToken.value) {
+        if(needToAddToken(url)) {
           if (url.includes('?')) {
             url += "&access_token="+authStore.authParam.accessToken;
           } else {
@@ -123,8 +128,8 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
       backBufferLength:10,
       maxBufferLength:60,
 
-      xhrSetup: (xhr: XMLHttpRequest) => {
-        if (needToAddToken.value) {
+      xhrSetup: (xhr: XMLHttpRequest, url: string) => {
+        if (needToAddToken(url)) {
           xhr.setRequestHeader("Authorization", "Bearer " +authStore.authParam.accessToken);
         }
       }
