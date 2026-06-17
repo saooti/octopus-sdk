@@ -122,16 +122,14 @@ export const useTranslation = () => {
         // languages defined on browser, then default, and finally native language
         const languages: string[] = [];
         [userLanguage, ...navigator.languages, DEFAULT_LANGUAGE, translationData.nativeLanguage].forEach(l => {
+            // For each language, if it is a variant (for example fr-CH), use
+            // only the base language
+            if (l.includes('-')) {
+                l = l.split('-')[0];
+            }
+
             if (!languages.includes(l)) {
                 languages.push(l);
-            }
-            // For each language, if it is a variant (for example fr-CH), also
-            // add the base language
-            if (l.includes('-')) {
-                const base = l.split('-')[0];
-                if (!languages.includes(base)) {
-                    languages.push(base);
-                }
             }
         });
 

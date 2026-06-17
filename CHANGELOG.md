@@ -28,6 +28,13 @@
 
 - Mise à jour des règles eslint
 
+## 41.11.1 (17/06/2026)
+
+**Fixes**
+
+- **14257** - Correction lecture radio depuis orga sécurisée
+- **14587** - Correction détection de langue pour les sous-titres
+
 ## 41.11.0 (05/06/2026)
 
 **Features**
