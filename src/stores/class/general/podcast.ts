@@ -129,6 +129,14 @@ export function simplifiedToFull(simplified: SimplifiedPodcast, organisation: Or
   };
 }
 
+export function podcastToSimplified(full: Podcast): SimplifiedPodcast {
+  return {
+    ...full,
+    emissionId: full.emission.emissionId,
+    organisationId: full.organisation.id
+  };
+}
+
 export function emptyPodcastData(): Podcast {
   return {
     podcastId: 0,

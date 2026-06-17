@@ -178,7 +178,7 @@ export * from "./src/api";
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission.ts";
 export { type Organisation, type OrganisationAttributes, emptyOrganisationData, emptyOrgaData } from "./src/stores/class/general/organisation.ts";
-export { type Podcast, type PodcastAvailability, PodcastType } from "./src/stores/class/general/podcast.ts";
+export { type Podcast, type PodcastAvailability, PodcastType, podcastToSimplified } from "./src/stores/class/general/podcast.ts";
 export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist.ts";
 export { type Annotations } from "./src/stores/class/general";
 export {

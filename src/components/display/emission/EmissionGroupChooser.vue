@@ -1,6 +1,6 @@
 <template>
     <OctopusMultiselect
-        :placeholder="$t('Search - Emission groups placeholder')"
+        :placeholder="placeholder ?? $t('Search - Emission groups placeholder')"
         :selected="groups"
         :options="allGroups"
         :no-border="noBorder"
@@ -22,6 +22,8 @@ const props = defineProps<{
     organisationId?: string|Array<string>;
     /** Currently selected groups */
     groups: Array<EmissionGroup>;
+    /** Change default placeholder */
+    placeholder?: string;
     /** Disable borders */
     noBorder?: boolean;
 }>();
