@@ -59,7 +59,8 @@ export * from "./src/components/buttons/";
 // Form
 import ClassicButtonGroup from "./src/components/form/ClassicButtonGroup.vue";
 import OctopusMultiselect from "./src/components/form/OctopusMultiselect.vue";
-export { ClassicButtonGroup, OctopusMultiselect };
+import OctopusSelect from "./src/components/form/OctopusSelect.vue";
+export { ClassicButtonGroup, OctopusMultiselect, OctopusSelect };
 export type { ButtonGroupOption } from "./src/components/form/ClassicButtonGroup.vue";
 
 //Display

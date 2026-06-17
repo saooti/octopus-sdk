@@ -120,20 +120,19 @@ describe('OctopusMultiselect', () => {
         expect(wrapper.emitted('update:selected')?.[0]).toEqual([[]]);
     });
 
-    it('shows selected items summary in placeholder', async () => {
+    it('shows selected items in the selection display', async () => {
         const wrapper = await mount(OctopusMultiselect, {
             props: { options, optionLabel: 'name', selected: [options[0], options[1]] },
         });
-        const input = wrapper.find('input');
-        expect(input.attributes('placeholder')).toBe('Alpha, Beta');
+        expect(wrapper.find('.octopus-multiselect-selection-text').text()).toBe('Alpha, Beta');
+        expect(wrapper.find('.octopus-multiselect-selection-count').exists()).toBe(false);
     });
 
-    it('shows count in placeholder when more than 2 items selected', async () => {
+    it('shows overflow count badge when more than visible items are selected', async () => {
         const wrapper = await mount(OctopusMultiselect, {
             props: { options, optionLabel: 'name', selected: [...options] },
         });
-        const input = wrapper.find('input');
-        expect(input.attributes('placeholder')).toBe('Alpha, Beta (+1)');
+        expect(wrapper.find('.octopus-multiselect-selection-count').exists()).toBe(true);
     });
 
     it('disables input when isDisabled is true', async () => {

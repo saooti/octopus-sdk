@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 41.12.1 (En cours)
+## 41.12.0 (En cours)
 
 **Features**
 
@@ -10,8 +10,11 @@
 - Ajout de `@stylistic/eslint-plugin` et mise à jour des règles eslint
 - Ajout d'un prop dans `ClassicPopover` pour modifier le z-index
 - Ajout d'un slot `option` pour `ClassicSelect`
-- Ajustement de `OctopusMultiselect` pour fonctionner correctement avec des
-  objets identiques avec références différentes
+- Composants `Octopus`
+  - Ajout de `OctopusSelect`, une version moderne de `ClassicSelect`
+  - Mise en commun de code entre `OctopusSelect` & `OctopusMultiselect`
+  - Ajustement de `OctopusMultiselect` pour fonctionner correctement avec des
+    objets identiques avec références différentes
 - Ajout de nouvelles classes utilitaires dans le css
 - Ajout de nouvelles options d'apparence pour `ClassicButton`
 

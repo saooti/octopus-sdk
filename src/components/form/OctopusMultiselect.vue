@@ -16,8 +16,22 @@
             class="octopus-multiselect-field"
             :class="{ disabled: isDisabled, open: isOpen, noBorder }"
             @click="openDropdown"
+            @mouseenter="isHovered = true"
+            @mouseleave="isHovered = false"
         >
+            <div
+                v-show="hasSelected && !isOpen"
+                ref="selectionRef"
+                class="octopus-multiselect-selection"
+            >
+                <span class="octopus-multiselect-selection-text">{{ selectionLabels }}</span>
+                <span
+                    v-if="overflowCount > 0"
+                    class="octopus-multiselect-selection-count"
+                >(+{{ overflowCount }})</span>
+            </div>
             <input
+                v-show="!hasSelected || isOpen"
                 :id="computedId"
                 ref="inputRef"
                 v-model="searchQuery"
@@ -35,6 +49,13 @@
             >
                 <ChevronDownIcon />
             </button>
+        </div>
+
+        <div
+            v-if="expandOnHover && isHovered && !isOpen && overflowCount > 0"
+            class="octopus-multiselect-hover-tooltip"
+        >
+            {{ allLabelsText }}
         </div>
 
         <div v-if="isOpen" class="octopus-multiselect-dropdown">
@@ -63,11 +84,11 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { computed, getCurrentInstance, nextTick, ref, shallowRef, watch } from 'vue';
-import { onClickOutside } from '@vueuse/core';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue';
 import ClassicCheckbox from './ClassicCheckbox.vue';
+import { useOctopusDropdown } from '../composable/form/useOctopusDropdown';
 
 const props = defineProps<{
     /** Optional label displayed above the field. */
@@ -86,47 +107,39 @@ const props = defineProps<{
     placeholder?: string;
     /** Label for the "select all" checkbox. Defaults to the translated "All" string. */
     selectAllText?: string;
-    /** If provided, called on every input change; its return value replaces the displayed options. */
-    onSearch?: (query: string) => T[] | Promise<T[]>;
     /** Disable the border around the input */
     noBorder?: boolean;
+    /** When true, hovering the closed field with overflow shows a tooltip listing all selected items. */
+    expandOnHover?: boolean;
 }>();
 
 const emit = defineEmits<{
     /** Emitted when the selection changes. */
     (e: 'update:selected', value: T[]): void;
+    /** Emitted on every input change. When listened to, the parent is responsible for
+     *  updating `options`; otherwise the component filters `options` client-side. */
+    (e: 'search', query: string): void;
 }>();
 
 const { t } = useI18n();
 
-const searchQuery = ref('');
-const isOpen = ref(false);
-const internalOptions = shallowRef<T[]>([]);
-const containerRef = ref<HTMLElement | null>(null);
-const inputRef = ref<HTMLInputElement | null>(null);
+const {
+    searchQuery,
+    isOpen,
+    isHovered,
+    containerRef,
+    inputRef,
+    computedId,
+    displayedOptions,
+    inputPlaceholder,
+    getLabel,
+    openDropdown,
+    toggleDropdown,
+    handleInput,
+} = useOctopusDropdown(props, (query) => emit('search', query), 'multiselect');
 
-const computedId = computed(() => 'multiselect-' + getCurrentInstance()?.uid);
-
-watch(
-    () => props.options,
-    (val) => {
-        internalOptions.value = val;
-    },
-    { immediate: true }
-);
-
-const displayedOptions = computed((): Array<T> => {
-    if (props.onSearch) {
-        return internalOptions.value;
-    }
-    const query = searchQuery.value.toLowerCase();
-    if (!query) {
-        return props.options;
-    }
-    return props.options.filter((option) =>
-        getLabel(option).toLowerCase().includes(query)
-    );
-});
+const selectionRef = ref<HTMLElement | null>(null);
+const visibleCount = ref(2);
 
 const allSelected = computed(() => {
     if (displayedOptions.value.length === 0) {
@@ -135,21 +148,19 @@ const allSelected = computed(() => {
     return displayedOptions.value.every((option) => isSelected(option));
 });
 
-const inputPlaceholder = computed(() => {
-    const selected = props.selected ?? [];
-    if (selected.length === 0) {
-        return props.placeholder ?? t('Search');
-    }
-    const labels = selected.map(getLabel);
-    if (labels.length <= 2) {
-        return labels.join(', ');
-    }
-    return `${labels.slice(0, 2).join(', ')} (+${labels.length - 2})`;
-});
+const hasSelected = computed(() => (props.selected?.length ?? 0) > 0);
 
-function getLabel(option: T): string {
-    return option[props.optionLabel] as string;
-}
+const selectionLabels = computed(() =>
+    (props.selected ?? []).slice(0, visibleCount.value).map(getLabel).join(', ')
+);
+
+const overflowCount = computed(() =>
+    Math.max(0, (props.selected?.length ?? 0) - visibleCount.value)
+);
+
+const allLabelsText = computed(() =>
+    (props.selected ?? []).map(getLabel).join(', ')
+);
 
 function isSelected(option: T): boolean {
     if (props.optionKey) {
@@ -186,41 +197,72 @@ function toggleAll(val: boolean): void {
     }
 }
 
-function openDropdown(): void {
-    if (props.isDisabled) {
+function updateVisibleCount(): void {
+    const container = selectionRef.value;
+    const selected = props.selected ?? [];
+    if (!container || selected.length < 2) {
+        visibleCount.value = selected.length;
         return;
     }
-    isOpen.value = true;
-    nextTick(() => {
-        inputRef.value?.focus();
-    });
-}
 
-function closeDropdown(): void {
-    isOpen.value = false;
-    searchQuery.value = '';
-}
-
-function toggleDropdown(): void {
-    if (isOpen.value) {
-        closeDropdown();
-    } else {
-        openDropdown();
-    }
-}
-
-async function handleInput(): Promise<void> {
-    if (!props.onSearch) {
+    const availableWidth = container.offsetWidth;
+    if (availableWidth === 0) {
         return;
     }
-    const result = await props.onSearch(searchQuery.value);
-    internalOptions.value = result;
+
+    const labels = selected.map(getLabel);
+    const measurer = document.createElement('span');
+    measurer.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;';
+    container.appendChild(measurer);
+
+    measurer.textContent = labels.join(', ');
+    if (measurer.offsetWidth <= availableWidth) {
+        visibleCount.value = labels.length;
+        container.removeChild(measurer);
+        return;
+    }
+
+    measurer.textContent = `(+${labels.length})`;
+    const badgeWidth = measurer.offsetWidth + 4;
+    const textAvailable = availableWidth - badgeWidth;
+
+    let count = 0;
+    for (let i = 0; i < labels.length; i++) {
+        measurer.textContent = labels.slice(0, i + 1).join(', ');
+        if (measurer.offsetWidth > textAvailable) {
+            break;
+        }
+        count = i + 1;
+    }
+
+    container.removeChild(measurer);
+    visibleCount.value = Math.max(1, count);
 }
 
-onClickOutside(containerRef, closeDropdown);
+let resizeObserver: ResizeObserver | null = null;
+
+onMounted(() => {
+    if (selectionRef.value) {
+        resizeObserver = new ResizeObserver(updateVisibleCount);
+        resizeObserver.observe(selectionRef.value);
+    }
+    updateVisibleCount();
+});
+
+onUnmounted(() => {
+    resizeObserver?.disconnect();
+});
+
+watch(() => props.selected, updateVisibleCount);
+
+watch(isOpen, (val) => {
+    if (!val) {
+        nextTick(updateVisibleCount);
+    }
+});
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .octopus-multiselect {
     position: relative;
 
@@ -246,6 +288,30 @@ onClickOutside(containerRef, closeDropdown);
         }
     }
 
+    .octopus-multiselect-selection {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        padding: 0.4rem 0.5rem;
+        height: 2rem;
+        gap: 0.25rem;
+    }
+
+    .octopus-multiselect-selection-text {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .octopus-multiselect-selection-count {
+        flex-shrink: 0;
+        white-space: nowrap;
+        color: var(--octopus-primary);
+    }
+
     .octopus-multiselect-input {
         flex: 1;
         border: none;
@@ -255,6 +321,21 @@ onClickOutside(containerRef, closeDropdown);
         outline: none;
         cursor: inherit;
         min-width: 0;
+    }
+
+    .octopus-multiselect-hover-tooltip {
+        position: absolute;
+        top: calc(100% + 2px);
+        left: 0;
+        right: 0;
+        z-index: 101;
+        background: white;
+        border: 1px solid var(--octopus-border-default);
+        border-radius: var(--octopus-border-radius);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+        word-break: break-word;
+        pointer-events: none;
     }
 
     .octopus-multiselect-chevron {
