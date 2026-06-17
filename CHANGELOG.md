@@ -24,6 +24,10 @@
 - Correction d'une exception dans `deepEquals` si la comparaison est faite entre
   une variable primitive et un objet
 
+**Misc**
+
+- Mise à jour des règles eslint
+
 ## 41.11.0 (05/06/2026)
 
 **Features**

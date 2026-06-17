@@ -43,7 +43,9 @@ export default typescriptEslint.config(
       "@stylistic/no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 
       // Number of attributes per line (increase because sometimes two is not a lot)
-      "vue/max-attributes-per-line": ['warn', { singleline: 2 } ]
+      "vue/max-attributes-per-line": ['warn', { singleline: 2 } ],
+
+      "@typescript-eslint/no-unused-vars": "warn"
     }
   }
 );
