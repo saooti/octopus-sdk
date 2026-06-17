@@ -17,6 +17,7 @@
     objets identiques avec références différentes
 - Ajout de nouvelles classes utilitaires dans le css
 - Ajout de nouvelles options d'apparence pour `ClassicButton`
+- Changement propriété principale de `ClassicButtonGroup` pour plus de cohérence
 
 **Fixes**
 

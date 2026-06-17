@@ -5,7 +5,7 @@
             :key="option.value"
             type="button"
             class="btn"
-            :class="{ active: modelValue.includes(option.value) }"
+            :class="{ active: value.includes(option.value) }"
             @click="toggle(option.value)"
         >
             {{ option.label }}
@@ -13,28 +13,30 @@
     </div>
 </template>
 
-<script setup lang="ts">
-export interface ButtonGroupOption {
+<script setup lang="ts" generic="T">
+export interface ButtonGroupOption<T> {
     label: string;
-    value: string;
+    value: T;
 }
 
 const props = defineProps<{
-    options: ButtonGroupOption[];
-    modelValue: string[];
+    /** Currently selected values */
+    value: T[];
+    /** Possible values */
+    options: ButtonGroupOption<T>[];
 }>();
 
 const emit = defineEmits<{
-    'update:modelValue': [values: string[]];
+    (e: 'update:value', values: T[]): void;
 }>();
 
-function toggle(value: string): void {
-    const isSelected = props.modelValue.includes(value);
-    if (isSelected && props.modelValue.length <= 1) { return; }
+function toggle(value: T): void {
+    const isSelected = props.value.includes(value);
+    if (isSelected && props.value.length <= 1) { return; }
     const newValues = isSelected
-        ? props.modelValue.filter(v => v !== value)
-        : [...props.modelValue, value];
-    emit('update:modelValue', newValues);
+        ? props.value.filter(v => v !== value)
+        : [...props.value, value];
+    emit('update:value', newValues);
 }
 </script>
 
