@@ -317,6 +317,7 @@ watch(isOpen, (val) => {
         border: none;
         background: transparent;
         padding: 0.4rem 0.5rem;
+        padding-right: 0;
         height: 2rem;
         outline: none;
         cursor: inherit;

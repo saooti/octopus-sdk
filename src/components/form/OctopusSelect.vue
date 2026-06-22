@@ -176,9 +176,8 @@ function selectOption(option: T): void {
         text-overflow: ellipsis;
         white-space: nowrap;
         padding: 0.4rem 0.5rem;
+        padding-right: 0;
         height: 2rem;
-        display: flex;
-        align-items: center;
     }
 
     .octopus-select-input {

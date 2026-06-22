@@ -14,6 +14,19 @@ async function get(radioId: number): Promise<Canal> {
     });
 }
 
+/**
+ * Retrieve all radio canal by organisation
+ * @param organisationId Id of the organisation
+ * @returns The list of canal data
+ */
+async function getAll(organisationId: string): Promise<Array<Canal>> {
+    return await classicApi.fetchData<Array<Canal>>({
+        api: ModuleApi.RADIO,
+        path: "canal/orga/" + organisationId + "/"
+    });
+}
+
 export const radioApi = {
-    get
+    get,
+    getAll
 };
