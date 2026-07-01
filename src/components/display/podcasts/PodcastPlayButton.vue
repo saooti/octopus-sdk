@@ -359,15 +359,15 @@ async function play(isVideo: boolean): Promise<void> {
     left: 0;
     font-size: 1rem;
     color: white;
-    background-color: var(--octopus-primary-less-transparent);
-    border-radius: var(--octopus-border-radius);
+    background-color: var(--octopus-btn-play-bg);
+    border-radius: var(--octopus-btn-play-radius);
 
     @media (width <= 960px) {
       font-size: 0.8rem;
     }
 
     button{
-      color: white;
+      color: var(--octopus-btn-play-fg);
       background-color: transparent;
       border: 0;
       display: flex;

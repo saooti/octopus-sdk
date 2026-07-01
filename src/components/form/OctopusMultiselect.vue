@@ -58,33 +58,40 @@
             {{ allLabelsText }}
         </div>
 
-        <div v-if="isOpen" class="octopus-multiselect-dropdown">
-            <ClassicCheckbox
-                :text-init="allSelected"
-                :label="selectAllText ?? t('All')"
-                :is-disabled="isDisabled"
-                @update:text-init="toggleAll"
-            />
-
-            <div class="octopus-multiselect-options">
+        <Teleport to=".octopus-app">
+            <div
+                v-if="isOpen"
+                ref="dropdownRef"
+                class="octopus-multiselect-dropdown"
+                :style="dropdownStyle"
+            >
                 <ClassicCheckbox
-                    v-for="(option, index) in displayedOptions"
-                    :key="index"
-                    :text-init="isSelected(option)"
-                    :label="getLabel(option)"
+                    :text-init="allSelected"
+                    :label="selectAllText ?? t('All')"
                     :is-disabled="isDisabled"
-                    @update:text-init="toggleOption(option)"
+                    @update:text-init="toggleAll"
                 />
-                <span v-if="displayedOptions.length === 0" class="text-indic px-2">
-                    {{ t('No elements found. Consider changing the search query.') }}
-                </span>
+
+                <div class="octopus-multiselect-options">
+                    <ClassicCheckbox
+                        v-for="(option, index) in displayedOptions"
+                        :key="index"
+                        :text-init="isSelected(option)"
+                        :label="getLabel(option)"
+                        :is-disabled="isDisabled"
+                        @update:text-init="toggleOption(option)"
+                    />
+                    <span v-if="displayedOptions.length === 0" class="text-indic px-2">
+                        {{ t('No elements found. Consider changing the search query.') }}
+                    </span>
+                </div>
             </div>
-        </div>
+        </Teleport>
     </div>
 </template>
 
 <script setup lang="ts" generic="T">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { type CSSProperties, computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue';
 import ClassicCheckbox from './ClassicCheckbox.vue';
@@ -123,6 +130,10 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
+// Ref on the teleported dropdown div — passed as ignored element to useOctopusDropdown
+// so clicks inside the dropdown don't trigger the click-outside handler.
+const dropdownRef = ref<HTMLElement | null>(null);
+
 const {
     searchQuery,
     isOpen,
@@ -136,9 +147,23 @@ const {
     openDropdown,
     toggleDropdown,
     handleInput,
-} = useOctopusDropdown(props, (query) => emit('search', query), 'multiselect');
+} = useOctopusDropdown(props, (query) => emit('search', query), 'multiselect', [dropdownRef]);
 
 const selectionRef = ref<HTMLElement | null>(null);
+
+// Position of the teleported dropdown (position: fixed, anchored below the trigger field)
+const dropdownStyle = ref<CSSProperties>({});
+
+function updateDropdownPosition(): void {
+    if (!containerRef.value) { return; }
+    const rect = containerRef.value.getBoundingClientRect();
+    dropdownStyle.value = {
+        position: 'fixed',
+        top: `${rect.bottom + 2}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+    };
+}
 const visibleCount = ref(2);
 
 const allSelected = computed(() => {
@@ -247,16 +272,23 @@ onMounted(() => {
         resizeObserver.observe(selectionRef.value);
     }
     updateVisibleCount();
+    // Keep the teleported dropdown aligned when the page scrolls or the viewport resizes
+    window.addEventListener('scroll', updateDropdownPosition, true);
+    window.addEventListener('resize', updateDropdownPosition);
 });
 
 onUnmounted(() => {
     resizeObserver?.disconnect();
+    window.removeEventListener('scroll', updateDropdownPosition, true);
+    window.removeEventListener('resize', updateDropdownPosition);
 });
 
 watch(() => props.selected, updateVisibleCount);
 
 watch(isOpen, (val) => {
-    if (!val) {
+    if (val) {
+        nextTick(updateDropdownPosition);
+    } else {
         nextTick(updateVisibleCount);
     }
 });
@@ -345,31 +377,30 @@ watch(isOpen, (val) => {
         align-items: center;
     }
 
-    .octopus-multiselect-dropdown {
-        position: absolute;
-        top: calc(100% + 2px);
-        left: 0;
-        right: 0;
-        z-index: 100;
-        background: white;
-        border: 1px solid var(--octopus-border-default);
-        border-radius: var(--octopus-border-radius);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        padding: 0.25rem 0;
+}
 
-        > .octopus-form-item {
-            padding: 0.25rem 0.5rem;
-            border-bottom: 1px solid var(--octopus-secondary);
-        }
+// Dropdown is teleported to body — scoped rules must be top-level so that [data-v-xxxx]
+// is matched directly on the element rather than via a descendant-of-.octopus-multiselect selector.
+.octopus-multiselect-dropdown {
+    z-index: 100;
+    background: white;
+    border: 1px solid var(--octopus-border-default);
+    border-radius: var(--octopus-border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.25rem 0;
+
+    > .octopus-form-item {
+        padding: 0.25rem 0.5rem;
+        border-bottom: 1px solid var(--octopus-secondary);
     }
+}
 
-    .octopus-multiselect-options {
-        max-height: 14rem;
-        overflow-y: auto;
+.octopus-multiselect-options {
+    max-height: 14rem;
+    overflow-y: auto;
 
-        .octopus-form-item {
-            padding: 0.25rem 0.5rem;
-        }
+    .octopus-form-item {
+        padding: 0.25rem 0.5rem;
     }
 }
 </style>

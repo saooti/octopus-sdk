@@ -43,6 +43,13 @@
     // ClassicDataTable
     --table-line-height: 48px;
 
+    // Buttons
+    --octopus-btn-primary-bg: var(--octopus-primary);
+    --octopus-btn-primary-fg: var(--octopus-color-on-primary);
+    --octopus-btn-play-bg: var(--octopus-primary-less-transparent);
+    --octopus-btn-play-fg: white;
+    --octopus-btn-play-radius: var(--octopus-border-radius);
+
     // Player
     // Color for the transcript background
     --octopus-player-transcript-bg-color: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
@@ -52,6 +59,10 @@
     --octopus-player-progress-color-current: var(--octopus-primary);
     // Color for the progress bar background
     --octopus-player-progress-background-color: var(--octopus-secondary-lighter);
+    // Color of the player's button
+    --octopus-player-btn-bg: var(--octopus-btn-primary-bg);
+    // Color of the player's button
+    --octopus-player-btn-fg: var(--octopus-btn-primary-fg);
 
     // Smartlink
     --octopus-smartlink-title-color: var(--octopus-gray-text);

@@ -42,27 +42,34 @@
             </button>
         </div>
 
-        <div v-if="isOpen" class="octopus-select-dropdown">
-            <div class="octopus-select-options">
-                <button
-                    v-for="(option, index) in displayedOptions"
-                    :key="index"
-                    class="octopus-select-option"
-                    :class="{ selected: isSelected(option) }"
-                    @click="selectOption(option)"
-                >
-                    {{ getLabel(option) }}
-                </button>
-                <span v-if="displayedOptions.length === 0" class="text-indic px-2">
-                    {{ t('No elements found. Consider changing the search query.') }}
-                </span>
+        <Teleport to=".octopus-app">
+            <div
+                v-if="isOpen"
+                ref="dropdownRef"
+                class="octopus-select-dropdown"
+                :style="dropdownStyle"
+            >
+                <div class="octopus-select-options">
+                    <button
+                        v-for="(option, index) in displayedOptions"
+                        :key="index"
+                        class="octopus-select-option"
+                        :class="{ selected: isSelected(option) }"
+                        @click="selectOption(option)"
+                    >
+                        {{ getLabel(option) }}
+                    </button>
+                    <span v-if="displayedOptions.length === 0" class="text-indic px-2">
+                        {{ t('No elements found. Consider changing the search query.') }}
+                    </span>
+                </div>
             </div>
-        </div>
+        </Teleport>
     </div>
 </template>
 
 <script setup lang="ts" generic="T">
-import { computed, toRaw } from 'vue';
+import { type CSSProperties, computed, nextTick, onMounted, onUnmounted, ref, toRaw, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue';
 import { useOctopusDropdown } from '../composable/form/useOctopusDropdown';
@@ -104,6 +111,10 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
+// Ref on the teleported dropdown div — passed as ignored element to useOctopusDropdown
+// so clicks inside the dropdown don't trigger the click-outside handler.
+const dropdownRef = ref<HTMLElement | null>(null);
+
 const {
     searchQuery,
     isOpen,
@@ -117,7 +128,38 @@ const {
     closeDropdown,
     toggleDropdown,
     handleInput,
-} = useOctopusDropdown(props, (query) => emit('search', query), 'select');
+} = useOctopusDropdown(props, (query) => emit('search', query), 'select', [dropdownRef]);
+
+// Position of the teleported dropdown (position: fixed, anchored below the trigger field)
+const dropdownStyle = ref<CSSProperties>({});
+
+function updateDropdownPosition(): void {
+    if (!containerRef.value) { return; }
+    const rect = containerRef.value.getBoundingClientRect();
+    dropdownStyle.value = {
+        position: 'fixed',
+        top: `${rect.bottom + 2}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+    };
+}
+
+watch(isOpen, (val) => {
+    if (val) {
+        nextTick(updateDropdownPosition);
+    }
+});
+
+onMounted(() => {
+    // Keep the teleported dropdown aligned when the page scrolls or the viewport resizes
+    window.addEventListener('scroll', updateDropdownPosition, true);
+    window.addEventListener('resize', updateDropdownPosition);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', updateDropdownPosition, true);
+    window.removeEventListener('resize', updateDropdownPosition);
+});
 
 const selectedLabel = computed(() =>
     props.value !== undefined ? getLabel(props.value) : undefined
@@ -197,41 +239,40 @@ function selectOption(option: T): void {
         align-items: center;
     }
 
-    .octopus-select-dropdown {
-        position: absolute;
-        top: calc(100% + 2px);
-        left: 0;
-        right: 0;
-        z-index: 100;
-        background: white;
-        border: 1px solid var(--octopus-border-default);
-        border-radius: var(--octopus-border-radius);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        padding: 0.25rem 0;
+}
+
+// Dropdown is teleported to body — scoped rules must be top-level so that [data-v-xxxx]
+// is matched directly on the element rather than via a descendant-of-.octopus-select selector.
+.octopus-select-dropdown {
+    z-index: 100;
+    background: white;
+    border: 1px solid var(--octopus-border-default);
+    border-radius: var(--octopus-border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.25rem 0;
+}
+
+.octopus-select-options {
+    max-height: 14rem;
+    overflow-y: auto;
+}
+
+.octopus-select-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--octopus-secondary-lighter);
     }
 
-    .octopus-select-options {
-        max-height: 14rem;
-        overflow-y: auto;
-    }
-
-    .octopus-select-option {
-        display: block;
-        width: 100%;
-        text-align: left;
-        padding: 0.25rem 0.5rem;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-
-        &:hover {
-            background: var(--octopus-secondary-lighter);
-        }
-
-        &.selected {
-            font-weight: 600;
-            color: var(--octopus-primary);
-        }
+    &.selected {
+        font-weight: 600;
+        color: var(--octopus-primary);
     }
 }
 </style>

@@ -7,7 +7,7 @@
       'play-button-box': !isBigButton,
       'play-big-button-box': isBigButton,
     }"
-    class="btn text-light bg-primary"
+    class="btn text-light"
     @click="switchPausePlay"
   >
     <PlayIcon v-if="displayIsPaused" :size="isBigButton ? 60 : 30" />
@@ -107,23 +107,27 @@ function switchPausePlay(): void {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "../../../../style/playButton";
-.octopus-app {
-  .play-button-box:not(.small-font) {
-    font-size: 1rem !important;
-  }
-  .play-big-button-box {
-    height: 5rem;
-    width: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.5rem;
-    border-radius: 50% !important;
-    font-size: 2.5rem !important;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
+
+.btn {
+  color: var(--octopus-player-btn-fg);
+  background-color: var(--octopus-player-btn-bg);
+}
+
+.play-button-box:not(.small-font) {
+  font-size: 1rem !important;
+}
+.play-big-button-box {
+  height: 5rem;
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem;
+  border-radius: 50% !important;
+  font-size: 2.5rem !important;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 </style>

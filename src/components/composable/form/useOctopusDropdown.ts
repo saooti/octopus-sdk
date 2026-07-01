@@ -1,5 +1,5 @@
 import { computed, getCurrentInstance, nextTick, ref } from 'vue';
-import { onClickOutside } from '@vueuse/core';
+import { type MaybeElementRef, onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
 export interface OctopusDropdownProps<T> {
@@ -13,7 +13,12 @@ export interface OctopusDropdownProps<T> {
 export function useOctopusDropdown<T>(
     props: OctopusDropdownProps<T>,
     emitSearch: (query: string) => void,
-    idPrefix: string = 'octopus-dropdown'
+    idPrefix: string = 'octopus-dropdown',
+    // Extra elements to exclude from the click-outside check.
+    // Needed when the dropdown is teleported outside containerRef (e.g. to body):
+    // without this, clicking inside the teleported dropdown triggers closeDropdown
+    // because it is no longer a DOM descendant of containerRef.
+    ignore?: MaybeElementRef[]
 ) {
     const { t } = useI18n();
     const instance = getCurrentInstance();
@@ -78,7 +83,7 @@ export function useOctopusDropdown<T>(
         }
     }
 
-    onClickOutside(containerRef, closeDropdown);
+    onClickOutside(containerRef, closeDropdown, ignore?.length ? { ignore } : undefined);
 
     return {
         searchQuery,

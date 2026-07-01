@@ -18,6 +18,7 @@
 - Ajout de nouvelles classes utilitaires dans le css
 - Ajout de nouvelles options d'apparence pour `ClassicButton`
 - Changement propriété principale de `ClassicButtonGroup` pour plus de cohérence
+- Ajout de variables CSS pour configurer l'aspect de divers boutons
 
 **Fixes**
 

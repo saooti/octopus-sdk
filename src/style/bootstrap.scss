@@ -153,10 +153,10 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: var(--octopus-primary);
+			background: var(--octopus-btn-primary-bg);
 			border: 1px solid var(--octopus-primary);
 			border-radius: var(--octopus-border-radius) !important;
-			color: var(--octopus-color-on-primary) !important;
+			color: var(--octopus-btn-primary-fg) !important;
 			font-weight: 500;
 
 			&:not(.btn-on-dark):is(:focus, :hover, :active, .active){
