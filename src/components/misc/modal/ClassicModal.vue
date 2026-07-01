@@ -110,6 +110,8 @@ function closePopup(): void {
 
   @media (width <= 500px) {
     width: 95vw;
+    margin-left: 2.5vw;
+    margin-right: 2.5vw;
   }
 
  .octopus-modal-body {

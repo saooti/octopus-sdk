@@ -48,6 +48,7 @@ export interface ParamStore {
     /** Show time with the dates on podcasts */
     showTimeWithDates?: boolean;
     buttonPlus?: boolean;
+    /** Show the "Radio & Live" tab in the navigation; driven by additionalConfiguration from the backend */
     isLiveTab?: boolean;
     isCaptchaTest?: boolean;
     podcastItem?: number;

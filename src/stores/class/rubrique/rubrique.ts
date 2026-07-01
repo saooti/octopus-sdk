@@ -3,7 +3,7 @@ export interface Rubrique {
   name: string;
   podcastCount?: number;
   rubriquageId?: number;
-  rubriqueId?: number;
+  rubriqueId: number;
   score?: number;
   organisationPrivacy?: string;
 }
