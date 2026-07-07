@@ -154,7 +154,7 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 			align-items: center;
 			justify-content: center;
 			background: var(--octopus-btn-primary-bg);
-			border: 1px solid var(--octopus-primary);
+			border: 1px solid var(--octopus-btn-primary-bg);
 			border-radius: var(--octopus-border-radius) !important;
 			color: var(--octopus-btn-primary-fg) !important;
 			font-weight: 500;
@@ -234,7 +234,8 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		width: 2.5rem !important;
 		height: 2.5rem !important;
 		padding: 0.5rem;
-		color : var(--octopus-primary);
+		color : var(--octopus-btn-social-fg);
+		background-color : var(--octopus-btn-social-bg);
 		flex-shrink: 0;
 		border-radius: 50% !important;
 
