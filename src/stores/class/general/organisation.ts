@@ -24,12 +24,18 @@ export type OrganisationAttributes = {
   PRIVATE?: string;
   /** Live recordings enabled */
   'live.active'?: boolean;
+  /** Videos enabled */
+  'video.active'?: boolean;
   /**
    * List of rubriquage **names**.
    * The rubriques from these rubriquage are stored in stats and can be queried
    * upon.
    */
   rubriquage4MMIdentifier?: string;
+  /**
+   * Enable individualized stats
+   */
+  nominal_analytic?: string;
 };
 
 export interface Organisation {
