@@ -15,6 +15,8 @@
   - Mise en commun de code entre `OctopusSelect` & `OctopusMultiselect`
   - Ajustement de `OctopusMultiselect` pour fonctionner correctement avec des
     objets identiques avec références différentes
+  - Ajout de nouvelles options à `OctopusMultiselect` pour permettre la saisie
+    de données et avoir une meilleure UX en cas de longue liste
 - Ajout de nouvelles classes utilitaires dans le css
 - Ajout de nouvelles options d'apparence pour `ClassicButton`
 - Changement propriété principale de `ClassicButtonGroup` pour plus de cohérence

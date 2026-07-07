@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 
 export interface OctopusDropdownProps<T> {
     options: T[];
-    optionLabel: keyof T & string;
+    optionLabel?: keyof T & string;
     optionKey?: keyof T;
     isDisabled?: boolean;
     placeholder?: string;
@@ -51,7 +51,10 @@ export function useOctopusDropdown<T>(
     const inputPlaceholder = computed(() => props.placeholder ?? t('Search'));
 
     function getLabel(option: T): string {
-        return option[props.optionLabel] as string;
+        if (props.optionLabel) {
+            return option[props.optionLabel] as string;
+        }
+        return option as unknown as string;
     }
 
     function openDropdown(): void {

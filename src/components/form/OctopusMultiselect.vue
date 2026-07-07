@@ -41,6 +41,7 @@
                 :disabled="isDisabled"
                 @focus="openDropdown"
                 @input="handleInput"
+                @keydown.enter="handleCustomValueEnter"
             >
             <button
                 class="btn-transparent octopus-multiselect-chevron"
@@ -74,14 +75,20 @@
 
                 <div class="octopus-multiselect-options">
                     <ClassicCheckbox
-                        v-for="(option, index) in displayedOptions"
+                        v-for="(option, index) in visibleOptions"
                         :key="index"
                         :text-init="isSelected(option)"
                         :label="getLabel(option)"
                         :is-disabled="isDisabled"
                         @update:text-init="toggleOption(option)"
                     />
-                    <span v-if="displayedOptions.length === 0" class="text-indic px-2">
+                    <template v-if="allowCustomValue && searchQuery.trim()">
+                        <hr v-if="visibleOptions.length > 0">
+                        <span class="text-indic px-2">
+                            {{ t('Press Enter to add this value') }}
+                        </span>
+                    </template>
+                    <span v-else-if="visibleOptions.length === 0" class="text-indic px-2">
                         {{ t('No elements found. Consider changing the search query.') }}
                     </span>
                 </div>
@@ -106,8 +113,16 @@ const props = defineProps<{
     options: T[];
     /** Key of each option object to use as the ID */
     optionKey?: keyof T;
-    /** Key of each option object to use as the display label. */
-    optionLabel: keyof T & string;
+    /** Key of each option object to use as the display label. Omit when `options` is a
+     *  plain `string[]` — each string is used as its own label. Note: omitting this for
+     *  an object array is a runtime mistake (not caught at compile time) and will render
+     *  "[object Object]". */
+    optionLabel?: keyof T & string;
+    /** When true, pressing Enter in the search input adds the typed text as a new
+     *  selected value, even if it doesn't match any option. Intended for use when
+     *  options are plain strings (`optionLabel` omitted) — casting arbitrary typed
+     *  text into an object-shaped T would not produce a valid option. */
+    allowCustomValue?: boolean;
     /** Disables the field and all checkboxes when true. */
     isDisabled?: boolean;
     /** Placeholder shown in the input when no items are selected. Defaults to the translated "Search" string. */
@@ -118,6 +133,10 @@ const props = defineProps<{
     noBorder?: boolean;
     /** When true, hovering the closed field with overflow shows a tooltip listing all selected items. */
     expandOnHover?: boolean;
+    /** When true, options selected at the moment the dropdown opens are moved to the
+     *  top of the list. This is a snapshot taken at open time — it does not live-reorder
+     *  while the dropdown stays open, only on the next closed→open transition. */
+    pullSelectedToTop?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -166,11 +185,35 @@ function updateDropdownPosition(): void {
 }
 const visibleCount = ref(2);
 
+// Selection snapshot captured the instant the dropdown opens, used only to freeze the
+// sort order when pullSelectedToTop is set — does not react to later `selected` changes
+// while the dropdown stays open.
+const pinnedSnapshot = ref<T[]>([]);
+
+// Selected values not present in `options` — only populated when allowCustomValue is set,
+// so a custom value typed via handleCustomValueEnter still shows (checked) in the dropdown.
+const customSelectedOptions = computed<T[]>(() => {
+    if (!props.allowCustomValue) { return []; }
+    return (props.selected ?? []).filter((item) => !isInOptions(item));
+});
+
+const visibleOptions = computed<T[]>(() => {
+    const query = searchQuery.value.toLowerCase();
+    const filteredCustom = query
+        ? customSelectedOptions.value.filter((option) => getLabel(option).toLowerCase().includes(query))
+        : customSelectedOptions.value;
+    const combined = [...displayedOptions.value, ...filteredCustom];
+    if (!props.pullSelectedToTop) {
+        return combined;
+    }
+    return [...combined.filter(isPinned), ...combined.filter((option) => !isPinned(option))];
+});
+
 const allSelected = computed(() => {
-    if (displayedOptions.value.length === 0) {
+    if (visibleOptions.value.length === 0) {
         return false;
     }
-    return displayedOptions.value.every((option) => isSelected(option));
+    return visibleOptions.value.every((option) => isSelected(option));
 });
 
 const hasSelected = computed(() => (props.selected?.length ?? 0) > 0);
@@ -195,6 +238,22 @@ function isSelected(option: T): boolean {
     }
 }
 
+function isInOptions(option: T): boolean {
+    if (props.optionKey) {
+        return props.options.some((opt) => opt[props.optionKey] === option[props.optionKey]);
+    } else {
+        return props.options.includes(option);
+    }
+}
+
+function isPinned(option: T): boolean {
+    if (props.optionKey) {
+        return pinnedSnapshot.value.some((s) => s[props.optionKey] === option[props.optionKey]);
+    } else {
+        return pinnedSnapshot.value.includes(option);
+    }
+}
+
 function toggleOption(option: T): void {
     const current = props.selected ?? [];
     if (isSelected(option)) {
@@ -208,16 +267,27 @@ function toggleOption(option: T): void {
     }
 }
 
+function handleCustomValueEnter(): void {
+    if (!props.allowCustomValue) { return; }
+    const value = searchQuery.value.trim();
+    if (!value) { return; }
+    const customOption = value as unknown as T;
+    if (!isSelected(customOption)) {
+        emit('update:selected', [...(props.selected ?? []), customOption]);
+    }
+    searchQuery.value = '';
+}
+
 function toggleAll(val: boolean): void {
     const current = props.selected ?? [];
     if (val) {
-        const toAdd = displayedOptions.value.filter((option: T) => !isSelected(option));
+        const toAdd = visibleOptions.value.filter((option: T) => !isSelected(option));
         emit('update:selected', [...current, ...toAdd]);
     } else {
         const key = props.optionKey;
         emit('update:selected', current.filter((item: T) => key
-            ? !displayedOptions.value.some((opt) => opt[key] === item[key])
-            : !displayedOptions.value.includes(item)
+            ? !visibleOptions.value.some((opt) => opt[key] === item[key])
+            : !visibleOptions.value.includes(item)
         ));
     }
 }
@@ -287,6 +357,7 @@ watch(() => props.selected, updateVisibleCount);
 
 watch(isOpen, (val) => {
     if (val) {
+        pinnedSnapshot.value = [...(props.selected ?? [])];
         nextTick(updateDropdownPosition);
     } else {
         nextTick(updateVisibleCount);
@@ -402,5 +473,11 @@ watch(isOpen, (val) => {
     .octopus-form-item {
         padding: 0.25rem 0.5rem;
     }
+}
+
+hr {
+    border-top: 1px solid var(--octopus-secondary);
+    border-bottom: none;
+    margin: 0;
 }
 </style>

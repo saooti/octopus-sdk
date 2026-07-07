@@ -51,7 +51,7 @@
             >
                 <div class="octopus-select-options">
                     <button
-                        v-for="(option, index) in displayedOptions"
+                        v-for="(option, index) in visibleOptions"
                         :key="index"
                         class="octopus-select-option"
                         :class="{ selected: isSelected(option) }"
@@ -59,7 +59,7 @@
                     >
                         {{ getLabel(option) }}
                     </button>
-                    <span v-if="displayedOptions.length === 0" class="text-indic px-2">
+                    <span v-if="visibleOptions.length === 0" class="text-indic px-2">
                         {{ t('No elements found. Consider changing the search query.') }}
                     </span>
                 </div>
@@ -93,6 +93,10 @@ const props = withDefaults(defineProps<{
     noBorder?: boolean;
     /** When true (default), clicking the already-selected option clears the selection. */
     allowDeselect?: boolean;
+    /** When true, the option matching the current value is moved to the top of the list
+     *  the moment the dropdown opens. This is a snapshot taken at open time — it does not
+     *  live-reorder while the dropdown stays open, only on the next closed→open transition. */
+    pullSelectedToTop?: boolean;
 }>(), {
     label: undefined,
     value: undefined,
@@ -144,8 +148,14 @@ function updateDropdownPosition(): void {
     };
 }
 
+// Value snapshot captured the instant the dropdown opens, used only to freeze the
+// sort order when pullSelectedToTop is set — does not react to later `value` changes
+// while the dropdown stays open.
+const pinnedValue = ref<T | undefined>(undefined);
+
 watch(isOpen, (val) => {
     if (val) {
+        pinnedValue.value = props.value;
         nextTick(updateDropdownPosition);
     }
 });
@@ -174,6 +184,23 @@ function isSelected(option: T): boolean {
     }
     return toRaw(props.value as object) === toRaw(option as object);
 }
+
+function isPinned(option: T): boolean {
+    if (pinnedValue.value === undefined) {
+        return false;
+    }
+    if (props.optionKey) {
+        return pinnedValue.value[props.optionKey] === option[props.optionKey];
+    }
+    return toRaw(pinnedValue.value as object) === toRaw(option as object);
+}
+
+const visibleOptions = computed<T[]>(() => {
+    if (!props.pullSelectedToTop) {
+        return displayedOptions.value;
+    }
+    return [...displayedOptions.value.filter(isPinned), ...displayedOptions.value.filter((option) => !isPinned(option))];
+});
 
 function selectOption(option: T): void {
     if (isSelected(option) && props.allowDeselect) {

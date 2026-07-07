@@ -3,6 +3,7 @@ import '@tests/mocks/i18n';
 import OctopusSelect from '@/components/form/OctopusSelect.vue';
 import { DOMWrapper, type VueWrapper } from '@vue/test-utils';
 import { mount } from '@tests/utils';
+import { nextTick } from 'vue';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const options = [
@@ -14,6 +15,20 @@ const options = [
 // The dropdown is teleported to .octopus-app — helper to query it from the document.
 function getDropdown(): Element | null {
     return document.body.querySelector('.octopus-select-dropdown');
+}
+
+function getOptionLabels(): string[] {
+    return Array.from(document.body.querySelectorAll('.octopus-select-option'))
+        .map((el) => el.textContent?.trim() ?? '');
+}
+
+// Simulates a click outside the component to trigger onClickOutside's closeDropdown.
+async function clickOutside(): Promise<void> {
+    const outsideElement = document.createElement('div');
+    document.body.appendChild(outsideElement);
+    outsideElement.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await nextTick();
+    document.body.removeChild(outsideElement);
 }
 
 describe('OctopusSelect', () => {
@@ -164,5 +179,61 @@ describe('OctopusSelect', () => {
         await wrapper.find('.octopus-select-field').trigger('click');
         const optionButtons = document.body.querySelectorAll('.octopus-select-option');
         expect(optionButtons[0].classList).toContain('selected');
+    });
+
+    describe('pullSelectedToTop', () => {
+        it('does not reorder options when pullSelectedToTop is not set', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', value: options[1] },
+            });
+            await wrapper.find('input').trigger('focus');
+            expect(getOptionLabels()).toEqual(['Alpha', 'Beta', 'Gamma']);
+        });
+
+        it('moves the selected option to the top when pullSelectedToTop is true', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', value: options[1], pullSelectedToTop: true },
+            });
+            await wrapper.find('input').trigger('focus');
+            expect(getOptionLabels()).toEqual(['Beta', 'Alpha', 'Gamma']);
+        });
+
+        it('does not reorder while the dropdown stays open as the value changes', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', pullSelectedToTop: true },
+            });
+            await wrapper.find('input').trigger('focus');
+            await wrapper.setProps({ value: options[2] });
+            expect(getOptionLabels()).toEqual(['Alpha', 'Beta', 'Gamma']);
+        });
+
+        it('re-pins using the latest value after closing and reopening', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', value: options[2], pullSelectedToTop: true },
+            });
+            await wrapper.find('input').trigger('focus');
+            await clickOutside();
+            await wrapper.find('input').trigger('focus');
+            expect(getOptionLabels()).toEqual(['Gamma', 'Alpha', 'Beta']);
+        });
+
+        it('pins by optionKey even when the value is a different reference', async () => {
+            const value = { id: 2, name: 'Beta' };
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', optionKey: 'id', value, pullSelectedToTop: true },
+            });
+            await wrapper.find('input').trigger('focus');
+            expect(getOptionLabels()).toEqual(['Beta', 'Alpha', 'Gamma']);
+        });
+
+        it('still respects the active search filter when pinning', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', value: options[2], pullSelectedToTop: true },
+            });
+            await wrapper.find('input').trigger('focus');
+            await wrapper.find('input').setValue('be');
+            await wrapper.find('input').trigger('input');
+            expect(getOptionLabels()).toEqual(['Beta']);
+        });
     });
 });
