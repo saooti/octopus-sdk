@@ -2,37 +2,38 @@
   Simple component to display a few podcasts
 -->
 <template>
-  <PresentationLayout
-    v-if="!loading && !error"
-    :title="title"
-    :items="podcasts"
-    :route="href"
-    :button-text="buttonText"
-  >
-    <template #item="{ item, first }">
-      <PresentationItem
-        :class="!isPhone && first ? 'me-3' : ''"
-        :name="item.title"
-        :route="route(item)"
-        :image-url="item.imageUrl"
-        :description="item.description"
-        :vertical="!isPhone && first"
-      >
-        <template #after-image>
-          <PodcastPlayButton
-            :podcast="item"
-            :hide-play="false"
-            :show-processing="false"
-          />
+    <PresentationLayout
+        v-if="!loading && !error"
+        :title="title"
+        :items="podcasts"
+        :route="href"
+        :button-text="buttonText"
+    >
+        <template #item="{ item, first }">
+            <PresentationItem
+                :class="!isPhone && first ? 'me-3' : ''"
+                :name="item.title"
+                :route="route(item)"
+                :image-url="item.imageUrl"
+                :description="item.description"
+                :vertical="!isPhone && first"
+                :tags="tagsFor(item)"
+            >
+                <template #after-image>
+                    <PodcastPlayButton
+                        :podcast="item"
+                        :hide-play="false"
+                        :show-processing="false"
+                    />
+                </template>
+            </PresentationItem>
         </template>
-      </PresentationItem>
-    </template>
-  </PresentationLayout>
-  <ClassicLoading
-    v-else
-    :loading-text="loading ? $t('Loading emissions ...') : undefined"
-    :error-text="error ? $t(`Error`) : undefined"
-  />
+    </PresentationLayout>
+    <ClassicLoading
+        v-else
+        :loading-text="loading ? $t('Loading emissions ...') : undefined"
+        :error-text="error ? $t(`Error`) : undefined"
+    />
 </template>
 
 <script setup lang="ts">
@@ -52,15 +53,16 @@ import PresentationItem from "../../layouts/PresentationItem.vue";
 import PodcastPlayButton from "./PodcastPlayButton.vue"; 
 import { RouteLocationRaw } from "vue-router";
 import { podcastApi, PodcastSort } from "../../../api/podcastApi";
+import { usePresentationItemTags } from "../../composable/usePresentationItemTags";
 
 //Props 
 const props = defineProps({
-  organisationId: { default: undefined, type: String },
-  title: { default: "", type: String },
-  href: { default: undefined, type: String },
-  buttonText: { default: undefined, type: String },
-  isDescription: { default: false, type: Boolean },
-  rubriquesId: { default: [], type: Array<number> },
+    organisationId: { default: undefined, type: String },
+    title: { default: "", type: String },
+    href: { default: undefined, type: String },
+    buttonText: { default: undefined, type: String },
+    isDescription: { default: false, type: Boolean },
+    rubriquesId: { default: [], type: Array<number> },
 })
 
 //Data 
@@ -70,71 +72,72 @@ const podcasts: Ref<Array<Podcast>> = ref([]);
   
 //Composables
 const { isPhone } = useResizePhone();
-const {handle403} = useErrorHandler();
+const { handle403 } = useErrorHandler();
+const { tagsFor } = usePresentationItemTags();
 
-onMounted(()=>fetchNext())
+onMounted(fetchNext);
 
 //Methods
 async function fetchNext(): Promise<void> {
-  loading.value = true;
-  try {
-    // Retrieve latest emissions
-    const emissions = await classicApi.fetchData<ListClassicReturn<Emission>>({
-      api: 0,
-      path: "emission/search",
-      parameters: {
-        first: 0,
-        size: 5,
-        organisationId: props.organisationId,
-        sort: "LAST_PODCAST_DESC",
-        rubriqueId: props.rubriquesId
-      },
-      specialTreatement: true,
-    });
+    loading.value = true;
+    try {
+        // Retrieve latest emissions
+        const emissions = await classicApi.fetchData<ListClassicReturn<Emission>>({
+            api: 0,
+            path: "emission/search",
+            parameters: {
+                first: 0,
+                size: 5,
+                organisationId: props.organisationId,
+                sort: "LAST_PODCAST_DESC",
+                rubriqueId: props.rubriquesId
+            },
+            specialTreatement: true,
+        });
 
-    const promises: Array<Promise<SimplifiedPodcast>> = [];
+        const promises: Array<Promise<SimplifiedPodcast>> = [];
 
-    for (let i = 0; i < emissions.result.length; i++) {
-      promises.push(podcastApi.search({
-        first: 0,
-        size: 1,
-        organisationId: [props.organisationId],
-        emissionId: [emissions.result[i].emissionId],
-        sort: PodcastSort.DATE,
-        rubriqueId: props.rubriquesId
-      }).then(r => r.result[0]));
-    }
+        for (let i = 0; i < emissions.result.length; i++) {
+            promises.push(podcastApi.search({
+                first: 0,
+                size: 1,
+                organisationId: [props.organisationId],
+                emissionId: [emissions.result[i].emissionId],
+                sort: PodcastSort.DATE,
+                rubriqueId: props.rubriquesId
+            }).then(r => r.result[0]));
+        }
 
-    // Retrieve the podcasts for these emissions
-    const data = await Promise.all(promises);
+        // Retrieve the podcasts for these emissions
+        const data = await Promise.all(promises);
 
-    podcasts.value = podcasts.value.concat(
-      data.filter((em: SimplifiedPodcast | null) => null !== em && undefined !== em).map(p => {
-        // Get emission from podcast
-        const emission = emissions.result.find(e => e.emissionId === p.emissionId);
-        // Create full podcast from simplified + emission
-        return simplifiedToFull(p, emission.orga, emission);
-      })
-    );
+        podcasts.value = podcasts.value.concat(
+            data.filter((em: SimplifiedPodcast | null) => null !== em && undefined !== em).map(p => {
+                // Get emission from podcast
+                const emission = emissions.result.find(e => e.emissionId === p.emissionId);
+                // Create full podcast from simplified + emission
+                return simplifiedToFull(p, emission.orga, emission);
+            })
+        );
 
-    // Sort podcasts by pub date so that the most recent one is focused
-    podcasts.value.sort((p1, p2) => {
-      return new Date(p2.pubDate).getTime() - new Date(p1.pubDate).getTime();
-    });
+        // Sort podcasts by pub date so that the most recent one is focused
+        podcasts.value.sort((p1, p2) => {
+            return new Date(p2.pubDate).getTime() - new Date(p1.pubDate).getTime();
+        });
     
+        loading.value = false;
+    } catch (errorWs) {
+        console.error(errorWs);
+        handle403(errorWs as AxiosError);
+        error.value = true;
+    }
     loading.value = false;
-  } catch (errorWs) {
-    console.error(errorWs);
-    handle403(errorWs as AxiosError);
-    error.value = true;
-  }
-  loading.value = false;
 }
 
 function route(podcast: Podcast): RouteLocationRaw {
-  return {
-    name: 'podcast',
-    params: { podcastId: podcast.podcastId }
-  }
+    return {
+        name: 'podcast',
+        params: { podcastId: podcast.podcastId }
+    }
 }
 </script>

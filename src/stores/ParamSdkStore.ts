@@ -32,6 +32,9 @@ const state: ParamStore = {
   },
   smartLink: {
     showOnlyFirstParagraphInDescription: false
+  },
+  presentationItems: {
+    tags: 'none'
   }
 };
 
@@ -100,6 +103,11 @@ export interface ParamStore {
   searchPage: {
     /** The default sort criteria for search results */
     sortCriteria?: PodcastSort;
+  };
+
+  /** Settings for presentation items */
+  presentationItems: {
+    tags: 'none'|'iab';
   };
 
   /** Smartlink configuration */
