@@ -28,6 +28,7 @@
 
 - Correction d'une exception dans `deepEquals` si la comparaison est faite entre
   une variable primitive et un objet
+- Correction du placement du header `PodcastmakerHeader`
 
 **Misc**
 
