@@ -1,3 +1,5 @@
+import { Ambiance } from "./canal";
+
 export interface TimeValue {
   hours: number;
   minutes: number;
@@ -55,11 +57,9 @@ export interface Recurrence {
   crons: Array<Cron>;
   duration: number;
 }
-export interface AmbianceRecurrence extends Recurrence {
-  armbPlaylistName?: string;
-  mediaPlaylistId?: number;
-  mixId?: number;
-}
+
+export type AmbianceRecurrence = Recurrence & Ambiance;
+
 export interface PlanningRecurrence extends Recurrence {
   octopusPlaylistName: string;
   octopusPlaylistId: number;
@@ -69,6 +69,7 @@ export interface PlanningRecurrence extends Recurrence {
   advertisingTag: null | string;
   adCount: number;
 }
+
 export interface Exclusion {
   exclusionId: number;
   validityStart: string;

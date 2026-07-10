@@ -1,4 +1,4 @@
-import { Canal } from "../stores/class/radio/canal";
+import { Ambiance, Canal } from "../stores/class/radio/canal";
 import classicApi from "./classicApi";
 import { ModuleApi } from "./apiConnection";
 
@@ -26,7 +26,23 @@ async function getAll(organisationId: string): Promise<Array<Canal>> {
     });
 }
 
+/**
+ * Set the default ambiance for the given canal
+ * @param canalId ID of the canal to change
+ * @param ambiance New ambiance settings
+ * @returns The modified ambiance
+ */
+async function setDefaultAmbiance(canalId: number, ambiance: Ambiance): Promise<Ambiance> {
+    return await classicApi.putData<Ambiance>({
+        api: ModuleApi.RADIO,
+        path: `ambiance/canal/${canalId}/default`,
+        dataToSend: ambiance
+    });
+    
+}
+
 export const radioApi = {
     get,
-    getAll
+    getAll,
+    setDefaultAmbiance
 };
