@@ -8,16 +8,17 @@
         :image-url="emission.imageUrl"
         :description="isDescription ? emission.description : undefined"
         :vertical="isVertical"
-        :tags="tagsFor(emission)"
+        :tags="tags"
+        :additional-info="additionalInfoFor(emission)"
     />
 </template>
 
 <script setup lang="ts">
 import { Emission } from "@/stores/class/general/emission";
 import PresentationItem from "../../layouts/PresentationItem.vue";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { RouteLocationRaw } from "vue-router";
-import { usePresentationItemTags } from "../../composable/usePresentationItemTags";
+import { usePresentationItem } from "../../composable/usePresentationItem";
 
 //Props 
 const props = defineProps<{
@@ -29,7 +30,12 @@ const props = defineProps<{
     isDescription?: boolean;
 }>();
 
-const { tagsFor } = usePresentationItemTags();
+const tags = ref([]);
+const { tagsFor, additionalInfoFor } = usePresentationItem();
+
+watch(props.emission, async () => {
+    tags.value = await tagsFor(props.emission);
+}, { immediate: true });
 
 const route = computed((): RouteLocationRaw => {
     return { name: 'emission', params: { emissionId: props.emission.emissionId } };

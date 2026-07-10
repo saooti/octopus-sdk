@@ -107,7 +107,17 @@ export interface ParamStore {
 
   /** Settings for presentation items */
   presentationItems: {
-    tags: 'none'|'iab';
+    /** Type of tags to display on presentation items */
+    tags: 'none'|'iab'|'rubrique';
+    /**
+     * For rubrique type, the ID of the rubriquage the rubriques must belong to
+     * to be displayed. If not set, will display all rubriques.
+     */
+    tagsRubriquageId?: number;
+    /** Limit number of tags */
+    tagsLimit?: number;
+    /** Additional infos displayed in presentation item */
+    additionalInfo?: Array<'productor'|'date'>;
   };
 
   /** Smartlink configuration */
@@ -150,6 +160,10 @@ const initialize = function initialize(initObject: Partial<ParamStore>): void {
   state.smartLink = Object.assign(
     state.smartLink,
     definedProps(initObject.smartLink)
+  );
+  state.presentationItems = Object.assign(
+    state.presentationItems,
+    definedProps(initObject.presentationItems)
   );
 };
 

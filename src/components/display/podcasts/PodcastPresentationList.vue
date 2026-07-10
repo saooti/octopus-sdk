@@ -17,7 +17,8 @@
                 :image-url="item.imageUrl"
                 :description="item.description"
                 :vertical="!isPhone && first"
-                :tags="tagsFor(item)"
+                :tags="tags.get(item.podcastId)"
+                :additional-info="additionalInfoFor(item)"
             >
                 <template #after-image>
                     <PodcastPlayButton
@@ -41,7 +42,7 @@ import classicApi from "../../../api/classicApi";
 import {useErrorHandler} from "../../composable/useErrorHandler";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { Emission } from "@/stores/class/general/emission";
-import { onMounted, Ref, ref } from "vue";
+import { onMounted, reactive, Ref, ref, watch } from "vue";
 import { AxiosError } from "axios";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { ListClassicReturn } from "../../../stores/class/general/listReturn";
@@ -53,7 +54,7 @@ import PresentationItem from "../../layouts/PresentationItem.vue";
 import PodcastPlayButton from "./PodcastPlayButton.vue"; 
 import { RouteLocationRaw } from "vue-router";
 import { podcastApi, PodcastSort } from "../../../api/podcastApi";
-import { usePresentationItemTags } from "../../composable/usePresentationItemTags";
+import { usePresentationItem } from "../../composable/usePresentationItem";
 
 //Props 
 const props = defineProps({
@@ -69,13 +70,23 @@ const props = defineProps({
 const loading = ref(true);
 const error = ref(false);
 const podcasts: Ref<Array<Podcast>> = ref([]);
+const tags = reactive(new Map<number, Array<string>>());
   
 //Composables
 const { isPhone } = useResizePhone();
 const { handle403 } = useErrorHandler();
-const { tagsFor } = usePresentationItemTags();
+const { tagsFor, additionalInfoFor } = usePresentationItem();
 
 onMounted(fetchNext);
+
+watch(podcasts, async () => {
+    podcasts.value.forEach(async (podcast) => {
+        if (!tags.has(podcast.podcastId)) {
+            const t = await tagsFor(podcast);
+            tags.set(podcast.podcastId, t);
+        }
+    });
+});
 
 //Methods
 async function fetchNext(): Promise<void> {

@@ -36,15 +36,27 @@
                 <slot name="after-image" />
             </div>
       
-            <div class="classic-element-text">
+            <div
+                class="classic-element-text pb-0"
+                :class="{ 'pt-1': vertical }"
+            >
                 <div class="element-name mb-2 basic-line-clamp">
                     {{ name }}
                 </div>
                 <div
                     v-if="!isPhone && description"
                     ref="descriptionItemContainer"
-                    class="element-description htms-wysiwyg-content"
+                    class="element-description htms-wysiwyg-content mt-0"
                 >
+                    <div v-if="additionalInfo" class="mb-2">
+                        <div
+                            v-for="info, index in additionalInfo"
+                            :key="index"
+                            class="text-secondary"
+                        >
+                            {{ info }}
+                        </div>
+                    </div>
                     <!-- eslint-disable vue/no-v-html -->
                     <div
                         ref="descriptionItem"
@@ -74,6 +86,8 @@ const props = defineProps<{
     name: string;
     /** Tags associated with the element (rubriques, themes, etc) */
     tags?: Array<string>;
+    /** Additional info displayed below name */
+    additionalInfo?: Array<string>;
     /** The description of the element */
     description?: string;
     /** When true display the card vertically */
@@ -157,7 +171,7 @@ function urlify(text:string|undefined){
         position: relative;
 
         @media (width <= 960px) {
-            height: calc(var(--octopus-image-height) - 4);
+            height: calc(var(--octopus-image-size) - 4);
         }
     }
 

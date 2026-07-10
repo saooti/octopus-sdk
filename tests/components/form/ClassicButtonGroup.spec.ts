@@ -49,4 +49,30 @@ describe('ClassicButtonGroup', () => {
         await wrapper.findAll('button')[0].trigger('click');
         expect(wrapper.emitted('update:value')).toBeUndefined();
     });
+
+    describe('solo prop', () => {
+        it('emits only the clicked value when clicking an inactive button', async () => {
+            const wrapper = await mount(ClassicButtonGroup, {
+                props: { options, value: ['PODCAST'], solo: true },
+            });
+            await wrapper.findAll('button')[1].trigger('click');
+            expect(wrapper.emitted('update:value')?.[0]).toEqual([['VIDEO']]);
+        });
+
+        it('emits only the clicked value when clicking the already active button', async () => {
+            const wrapper = await mount(ClassicButtonGroup, {
+                props: { options, value: ['PODCAST'], solo: true },
+            });
+            await wrapper.findAll('button')[0].trigger('click');
+            expect(wrapper.emitted('update:value')?.[0]).toEqual([['PODCAST']]);
+        });
+
+        it('replaces multiple active values with the clicked one', async () => {
+            const wrapper = await mount(ClassicButtonGroup, {
+                props: { options, value: ['PODCAST', 'VIDEO'], solo: true },
+            });
+            await wrapper.findAll('button')[2].trigger('click');
+            expect(wrapper.emitted('update:value')?.[0]).toEqual([['LIVE']]);
+        });
+    });
 });

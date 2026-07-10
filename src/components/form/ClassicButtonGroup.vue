@@ -24,6 +24,8 @@ const props = defineProps<{
     value: T[];
     /** Possible values */
     options: ButtonGroupOption<T>[];
+    /** Select only one option */
+    solo?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -31,12 +33,16 @@ const emit = defineEmits<{
 }>();
 
 function toggle(value: T): void {
-    const isSelected = props.value.includes(value);
-    if (isSelected && props.value.length <= 1) { return; }
-    const newValues = isSelected
-        ? props.value.filter(v => v !== value)
-        : [...props.value, value];
-    emit('update:value', newValues);
+    if (props.solo === true) {
+        emit('update:value', [value]);
+    } else {
+        const isSelected = props.value.includes(value);
+        if (isSelected && props.value.length <= 1) { return; }
+        const newValues = isSelected
+            ? props.value.filter(v => v !== value)
+            : [...props.value, value];
+        emit('update:value', newValues);
+    }
 }
 </script>
 
