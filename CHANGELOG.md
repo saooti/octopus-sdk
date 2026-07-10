@@ -23,6 +23,7 @@
 - Ajout de variables CSS pour configurer l'aspect de divers boutons
 - Ajout d'une propriété SDK permettant d'afficher des tags sur les éléments de
   type `PresentationItem`
+- Ajout de l'api `rubriqueApi`
 
 **Fixes**
 

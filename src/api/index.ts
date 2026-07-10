@@ -7,3 +7,4 @@ export { podcastApi, PodcastSort, type PodcastSearchOptions } from "./podcastApi
 export { radioApi } from "./radioApi";
 export * from "./aggregatorsApi";
 export * from "./mediathequeApi";
+export * from "./rubriquesApi";
