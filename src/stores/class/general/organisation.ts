@@ -32,10 +32,14 @@ export type OrganisationAttributes = {
    * upon.
    */
   rubriquage4MMIdentifier?: string;
-  /**
-   * Enable individualized stats
-   */
+  /** Enable individualized stats */
   nominal_analytic?: string;
+  /** Email of contact for RSS feed */
+  RSS_CONTACT?: string;
+  /** */
+  'allow-participant-rss'?: string;
+  /** Disallow RSS sharing */
+  noSharing?: string;
 };
 
 export interface Organisation {
