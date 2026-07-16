@@ -2,6 +2,11 @@
 
 ## 41.12.1 (En cours)
 
+**Fixes**
+
+- Correction d'une anomalie de chargement du style de la modale utilisée par
+  `ClassicNotifications`
+
 ## 41.12.0 (13/07/2026)
 
 **Features**

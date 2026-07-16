@@ -227,7 +227,8 @@ export const useAuthStore = defineStore("AuthStore", {
         });
         this.authUpdateOrganisation(activeOrganisation);
         this.fetchProfileAsynchrone();
-      } catch {
+      } catch(error) {
+        console.error(error);
         if (this.authReload > 5) {
           return;
         }
