@@ -3,10 +3,7 @@
 -->
 <template>
   <div class="d-flex flex-column p-3">
-    <h2
-      v-if="title"
-      class="mb-3"
-    >
+    <h2 v-if="title">
       {{ title }}
     </h2>
     

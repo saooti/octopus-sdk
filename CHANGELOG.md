@@ -7,6 +7,10 @@
 - Correction d'une anomalie de chargement du style de la modale utilisée par
   `ClassicNotifications`
 
+**Misc**
+
+- Suppression de la marge entre le titre et le contenu pour `PresentationLayout`
+
 ## 41.12.0 (13/07/2026)
 
 **Features**
