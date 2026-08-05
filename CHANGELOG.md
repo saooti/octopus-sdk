@@ -12,6 +12,8 @@
 
 - Correction d'une anomalie de chargement du style de la modale utilisée par
   `ClassicNotifications`
+- Ajout mode alternatif pour la récupération des épisodes dans
+  `PodcastPresentationList`
 
 **Misc**
 
