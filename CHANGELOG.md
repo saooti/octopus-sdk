@@ -5,6 +5,7 @@
 **Features**
 
 - Ajout de nouvelles fonctions dans l'api `rubriqueApi`
+- Option de `AdvancedSearch` pour ne pas afficher le filtre de groupe
 
 **Fixes**
 
