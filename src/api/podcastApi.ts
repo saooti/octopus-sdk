@@ -1,6 +1,5 @@
 import { Podcast, PodcastProcessingStatus, PodcastType, SimplifiedPodcast } from '../stores/class/general/podcast';
 import { ListClassicReturn } from '../stores/class/general/listReturn';
-import { useAuthStore } from '../stores/AuthStore';
 import classicApi from './classicApi';
 import { ModuleApi } from './apiConnection';
 import { unique } from '../helper/arrayHelper';

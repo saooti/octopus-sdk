@@ -45,6 +45,9 @@ export default typescriptEslint.config(
       // Number of attributes per line (increase because sometimes two is not a lot)
       "vue/max-attributes-per-line": ['warn', { singleline: 2 } ],
 
+      // Disable default values required for props
+      "vue/require-default-prop": ['off'],
+
       "@typescript-eslint/no-unused-vars": "warn"
     }
   }
