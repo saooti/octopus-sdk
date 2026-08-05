@@ -81,6 +81,7 @@ const props = withDefaults(defineProps<{
   before?: string;
   after?: string;
   includeHidden?: boolean;
+  /** Enable the display of number of items in ListPaginate */
   showCount?: boolean;
   displaySortText?: boolean;
   /** Criteria to sort on */

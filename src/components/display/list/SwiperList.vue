@@ -1,10 +1,10 @@
 <template>
-  <div ref="root" class="position-relative w-100" :style="{ '--swiper-gap': gapPx + 'px' }">
+  <div ref="root" class="position-relative w-100">
     <template v-if="!isPhone">
       <swiper
         :key="manualReload"
         :slides-per-view="numberItem"
-        :space-between="0"
+        :space-between="gapPx"
         :loop="loop"
         :slides-offset-before="offsetSwiper"
         :slides-offset-after="offsetSwiper"
@@ -157,7 +157,7 @@ function slideChange() {
   );
   wrapper.style.transform =
     "translate3d(" +
-    (nbTransformItems * itemRecalculizedSize.value + offsetSwiper.value) +
+    (nbTransformItems * (itemRecalculizedSize.value + gapPx) + offsetSwiper.value) +
     "px, 0px, 0px)";
 }
 </script>
@@ -191,9 +191,5 @@ function slideChange() {
   display: flex !important;
   align-items: center;
   justify-content: center;
-}
-
-.swiper-wrapper {
-  gap: var(--swiper-gap);
 }
 </style>
