@@ -16,6 +16,7 @@
 **Misc**
 
 - Suppression de la marge entre le titre et le contenu pour `PresentationLayout`
+- Uniformisation espacement pour composants PM
 
 ## 41.12.0 (13/07/2026)
 

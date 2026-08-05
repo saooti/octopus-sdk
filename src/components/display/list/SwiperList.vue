@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="position-relative w-100">
+  <div ref="root" class="position-relative w-100" :style="{ '--swiper-gap': gapPx + 'px' }">
     <template v-if="!isPhone">
       <swiper
         :key="manualReload"
@@ -47,7 +47,8 @@ const props = defineProps({
   sizeItemOverload: { default: undefined, type: Number },
 })
  
-//Data 
+//Data
+const gapPx = 10;
 const manualReload = ref(0);
 const numberItem = ref(5);
 const offsetSwiper = ref(0);
@@ -73,7 +74,10 @@ const sizeItem = computed(() => {
     ? state.generalParameters.podcastItem
     : 13.5;
 });
-const itemRecalculizedSize = computed(() => widthSwiperUsable.value / numberItem.value);
+const itemRecalculizedSize = computed(() => {
+  const totalGap = gapPx * Math.max(numberItem.value - 1, 0);
+  return (widthSwiperUsable.value - totalGap) / numberItem.value;
+});
 
 /** Indicates that the swiper should loop */
 const loop = computed((): boolean => {
@@ -119,10 +123,10 @@ function onWindowResize(){
   const el = rootRef?.value as HTMLElement;
   if (!el) return;
   widthSwiperUsable.value =el.offsetWidth - offsetSwiper.value * 2;
-  const sixteen = domHelper.convertRemToPixels(sizeItem.value + 0.5);
+  const itemSizePx = domHelper.convertRemToPixels(sizeItem.value + 0.5);
   numberItem.value = Math.max(
     1,
-    Math.floor(widthSwiperUsable.value / sixteen),
+    Math.floor((widthSwiperUsable.value + gapPx) / (itemSizePx + gapPx)),
   );
   itemSizeWithoutRecalculed.value =el.offsetWidth / numberItem.value;
 }
@@ -187,5 +191,9 @@ function slideChange() {
   display: flex !important;
   align-items: center;
   justify-content: center;
+}
+
+.swiper-wrapper {
+  gap: var(--swiper-gap);
 }
 </style>

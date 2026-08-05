@@ -1,18 +1,21 @@
 <template>
   <div class="d-flex flex-column list-episode">
+    <h2 v-if="title" class="mb-0">
+      {{ title }}
+    </h2>
     <ClassicLoading
       :loading-text="loading ? t('Loading emissions ...') : undefined"
     />
     <SwiperList
       v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)"
-      :size-item-overload="itemSize"
+      :size-item-overload="sizeItemOverload"
       :list-object="allEmissions"
     >
       <template #octopusSlide="{ option }">
         <EmissionPresentationItem
           v-if="emissionDisplay === 'simple'"
           :emission="option"
-          class="mx-2 inline-list-element"
+          class="inline-list-element"
           is-description
           :is-vertical="emissionVertical"
         />
@@ -76,6 +79,8 @@ const props = defineProps<{
   rubriqueId?: number;
   /** Filter on rubriquage */
   rubriquageId?: number;
+  /** Title of the section */
+  title?: string;
 }>();
 
 
@@ -93,6 +98,16 @@ const {handle403} = useErrorHandler();
 //Computed
 const displayRubriquage = computed(() => state.emissionsPage.rubriquage);
  
+const sizeItemOverload = computed(() => {
+  if (props.itemSize) {
+    return props.itemSize;
+  } else if (props.emissionDisplay === 'simple') {
+    return 25;
+  } else {
+    return undefined;
+  }
+})
+
 onMounted(()=>{
   fetchNext();
   if (displayRubriquage.value) {

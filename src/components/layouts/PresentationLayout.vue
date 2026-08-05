@@ -2,7 +2,7 @@
   A simple layout to display 5 elements over 3 columns
 -->
 <template>
-  <div class="d-flex flex-column p-3">
+  <div class="d-flex flex-column py-3">
     <h2 v-if="title">
       {{ title }}
     </h2>
@@ -98,10 +98,10 @@ defineProps<{
 
   .column {
     flex-shrink: 0;
-    width: calc((100% - 420px) / 2);
+    width: calc((100% - 420px - 1rem) / 2);
 
     @media (width <= 1550px) {
-      width: calc((100% - 420px));
+      width: calc((100% - 420px - 1rem));
     }
 
     @media (width <= 960px) {
