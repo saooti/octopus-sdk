@@ -6,6 +6,7 @@
 
 - Ajout de nouvelles fonctions dans l'api `rubriqueApi`
 - Option de `AdvancedSearch` pour ne pas afficher le filtre de groupe
+- Ajout callback sur fermeture de notifications
 
 **Fixes**
 

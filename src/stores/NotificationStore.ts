@@ -15,6 +15,8 @@ interface Notification {
     type: NotificationType;
     /** When set to false, disallow manual closing of modal notification (default: true) */
     closeable?: boolean;
+    /** Callback called when the notification is closed */
+    closeCallback?: () => void;
 }
 
 export const useNotificationStore = defineStore('notifications', () => {
@@ -34,6 +36,10 @@ export const useNotificationStore = defineStore('notifications', () => {
         if (notif !== null) {
             const idx = notificationQueue.value.indexOf(notif);
             notificationQueue.value.splice(idx, 1);
+
+            if (notif.closeCallback) {
+                notif.closeCallback();
+            }
         }
     }
 
