@@ -2,6 +2,10 @@
 
 ## 41.12.1 (En cours)
 
+**Features**
+
+- Ajout de nouvelles fonctions dans l'api `rubriqueApi`
+
 **Fixes**
 
 - Correction d'une anomalie de chargement du style de la modale utilisée par

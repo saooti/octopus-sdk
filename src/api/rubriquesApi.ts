@@ -24,6 +24,18 @@ async function searchRubriquages(organisationIds: Array<string>, searchOptions?:
     });
 }
 
+/**
+ * Fetch rubriquage data by ID
+ * @param rubriquageId ID of the rubriquage to fetch
+ * @returns The rubriquage
+ */
+async function getRubriquage(rubriquageId: number): Promise<Rubriquage> {
+    return classicApi.fetchData<Rubriquage>({
+        api: ModuleApi.DEFAULT,
+        path: `rubriquage/${rubriquageId}`
+    });
+}
+
 async function searchRubriques(searchOptions?: {
     rubriquageId?: number;
     organisationId?: string|Array<string>;
@@ -61,6 +73,7 @@ async function getCachedRubrique(rubriqueId: number): Promise<Rubrique> {
 }
 
 export const rubriquesApi = {
+    getRubriquage,
     getRubrique,
     getCachedRubrique,
     searchRubriquages,
