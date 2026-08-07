@@ -44,7 +44,7 @@
                     {{ name }}
                 </div>
                 <div
-                    v-if="!isPhone && description"
+                    v-if="!isPhone && (description || additionalInfo)"
                     ref="descriptionItemContainer"
                     class="element-description htms-wysiwyg-content mt-0"
                 >
@@ -59,6 +59,7 @@
                     </div>
                     <!-- eslint-disable vue/no-v-html -->
                     <div
+                        v-if="description"
                         ref="descriptionItem"
                         v-html="urlify(description || '')"
                     />

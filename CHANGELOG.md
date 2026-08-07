@@ -14,6 +14,7 @@
   `ClassicNotifications`
 - Ajout mode alternatif pour la récupération des épisodes dans
   `PodcastPresentationList`
+- Affichage des infos additionelles dans PresentationItem même sans description
 
 **Misc**
 

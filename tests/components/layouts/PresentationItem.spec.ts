@@ -28,9 +28,9 @@ describe('PresentationItem', () => {
             expect(wrapper.find('.text-secondary').exists()).toBe(false);
         });
 
-        it('does not render additionalInfo when there is no description', async () => {
+        it('renders each additionalInfo even when there is no description', async () => {
             const wrapper = await mount({ additionalInfo: ['Saooti'] });
-            expect(wrapper.find('.text-secondary').exists()).toBe(false);
+            expect(wrapper.find('.text-secondary').exists()).toBe(true);
         });
     });
 });
