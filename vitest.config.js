@@ -2,7 +2,11 @@ import { defineConfig, mergeConfig } from 'vitest/config';
 import viteConfig from './vite.config';
 const path = require('path');
 
-export default defineConfig(mergeConfig(viteConfig, defineConfig({
+const resolvedViteConfig = typeof viteConfig === 'function'
+    ? viteConfig({ mode: 'test', command: 'serve' })
+    : viteConfig;
+
+export default defineConfig(mergeConfig(resolvedViteConfig, defineConfig({
     resolve: {
         alias: {
             '@tests': path.resolve(__dirname, './tests')

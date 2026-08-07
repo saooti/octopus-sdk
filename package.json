@@ -6,6 +6,7 @@
   "author": "Saooti",
   "scripts": {
     "build": "vite build",
+    "build:watch": "vite build --watch --mode development",
     "test": "vitest",
     "bundle": "vite-bundle-visualizer",
     "proxy_authentifié": "node proxy.ts",

@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue';
 import dts from 'unplugin-dts/vite';
 const path = require('path');
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   css: {
     preprocessorOptions: {
         scss: {
@@ -24,7 +24,7 @@ export default defineConfig({
     },
     rollupOptions: {
       // Mark all dependencies as external so they are not bundled
-      external: (id) => !id.startsWith('.') && !path.isAbsolute(id)
+      external: (id) => !id.startsWith('.') && !id.startsWith('@/') && !path.isAbsolute(id)
     }
   },
   resolve: {
@@ -42,8 +42,10 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    dts(),
+    // Skip type declaration generation in dev/watch builds (used for linking)
+    // to keep rebuilds fast; run a full `npm run build` before publishing.
+    ...(mode === 'development' ? [] : [dts()]),
   ]
-});
+}));
 
 /* eslint-enable */

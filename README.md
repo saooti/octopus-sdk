@@ -14,7 +14,7 @@ Utiliser dans un projet en local:
 ```bash
 # Dans le SDK
 npm link  # Nécessaire uniquement la première fois
-npm build --watch
+npm run build:watch
 
 # Dans le projet
 npm link @saooti/octopus-sdk
