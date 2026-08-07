@@ -7,7 +7,7 @@
       <button
         v-for="paginateButton in buttonsLeft"
         :key="paginateButton.title"
-        class="btn"
+        class="btn btn-paginate"
         :title="paginateButton.title"
         :disabled="paginateButton.disabled"
         @click="paginateButton.action"
@@ -23,10 +23,10 @@
         </svg>
       </button>
       <template v-for="pageNumber in pagination" :key="pageNumber">
-        <span v-if="null === pageNumber" class="btn btn-min-width"> ... </span>
+        <span v-if="null === pageNumber" class="btn btn-min-width btn-paginate"> ... </span>
         <button
           v-else
-          class="btn btn-min-width"
+          class="btn btn-min-width btn-paginate"
           :class="{ active: page === pageNumber - 1 }"
           @click="changeFirst((pageNumber - 1) * rowsPerPage)"
         >
@@ -36,7 +36,7 @@
       <button
         v-for="paginateButton in buttonsRight"
         :key="paginateButton.title"
-        class="btn btn-min-width"
+        class="btn btn-min-width btn-paginate"
         :title="paginateButton.title"
         :disabled="paginateButton.disabled"
         @click="paginateButton.action"
@@ -176,6 +176,7 @@ function changeFirst(newFirst: number) {
   emit("update:first", newFirst);
 }
 </script>
+
 <style lang="scss">
 
 .octopus-app {
@@ -189,15 +190,18 @@ function changeFirst(newFirst: number) {
     padding: 0.5rem 0;
     z-index: 10;
 
-    .btn {
+    .btn.btn-paginate {
       border-radius: 0;
+      color: var(--octopus-btn-paginate-fg);
+      background: var(--octopus-btn-paginate-bg);
 
       &.active {
-        background: var(--octopus-primary-more-transparent);
+        color: var(--octopus-btn-paginate-active-fg);
+        background: var(--octopus-btn-paginate-active-bg);
       }
     }
   }
-  
+
   .module-box .paginate-fixed,
   .octopus-modal .paginate-fixed,
   .octopus-accordion .paginate-fixed {

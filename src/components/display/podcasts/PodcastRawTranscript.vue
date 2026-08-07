@@ -215,7 +215,6 @@ defineExpose({ reset });
     position: relative;
     border-radius: var(--octopus-border-radius);
     overflow: hidden;
-    background: var(--octopus-secondary);
     transition: all 0.2s linear 0s;
     
     &.open{

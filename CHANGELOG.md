@@ -20,6 +20,7 @@
 - Suppression de la marge entre le titre et le contenu pour `PresentationLayout`
 - Uniformisation espacement pour composants PM
 - Mise à jour règles eslint
+- Ajustement couleurs pour boutons secondaires
 
 ## 41.12.0 (13/07/2026)
 
