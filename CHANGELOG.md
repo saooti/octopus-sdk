@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 42.0.0 (En cours)
+
+### Features
+
+- Refacto export et configuration de build pour résoudre problème import
+  internes
+
 ## 41.12.1 (En cours)
 
 **Features**

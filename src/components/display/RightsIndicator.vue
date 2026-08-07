@@ -70,19 +70,19 @@ type NeverEntities = {
     media?: never;
 };
 
-interface PropsPodcast extends PropsBase, Omit<NeverEntities, 'podcast'> {
+export interface PropsPodcast extends PropsBase, Omit<NeverEntities, 'podcast'> {
     podcast: Podcast|boolean;
 }
-interface PropsCartouchier extends PropsBase, Omit<NeverEntities, 'cartouchier'> {
+export interface PropsCartouchier extends PropsBase, Omit<NeverEntities, 'cartouchier'> {
     cartouchier: Cartouchier|boolean;
 }
-interface PropsMix extends PropsBase, Omit<NeverEntities, 'mix'> {
+export interface PropsMix extends PropsBase, Omit<NeverEntities, 'mix'> {
     mix: Mix|boolean;
 }
-interface PropsPlaylistMedia extends PropsBase, Omit<NeverEntities, 'playlistMedia'> {
+export interface PropsPlaylistMedia extends PropsBase, Omit<NeverEntities, 'playlistMedia'> {
     playlistMedia: PlaylistMedia|boolean;
 }
-interface PropsMedia extends PropsBase, Omit<NeverEntities, 'media'> {
+export interface PropsMedia extends PropsBase, Omit<NeverEntities, 'media'> {
     media: Media|boolean;
 }
 

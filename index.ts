@@ -194,8 +194,8 @@ export {
     type ProviderTts,
     type Voice
 } from "./src/stores/class/transcript/transcriptParams";
-export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier.ts";
-export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche.ts";
+export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier";
+export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche";
 export { type PlaylistMedia } from "./src/stores/class/radio/playlistMedia";
 export * from "./src/stores/class/radio/canal";
 

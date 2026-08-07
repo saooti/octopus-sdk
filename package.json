@@ -1,13 +1,11 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.12.1-beta3",
+  "version": "42.0.0-beta",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
   "scripts": {
-    "serve": "vite preview",
     "build": "vite build",
-    "dev": "vite",
     "test": "vitest",
     "bundle": "vite-bundle-visualizer",
     "proxy_authentifié": "node proxy.ts",
@@ -104,8 +102,8 @@
   },
   "exports": {
     ".": {
-      "types": "./target/dist/index.d.ts",
-      "default": "./target/dist/index.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
     },
     "./src/*": "./src/*",
     "./tests/*": "./tests/*",
@@ -115,6 +113,7 @@
     }
   },
   "files": [
-    "target/dist"
+    "dist",
+    "src"
   ]
 }
