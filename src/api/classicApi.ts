@@ -19,6 +19,10 @@ interface RequestParameters{
   responseType?:{[key: string]: string},
 }
 
+export interface APIOptions {
+    adaptParameters?: boolean;
+}
+
 export default {
   async fetchData<Type>(params:RequestParameters): Promise<Type> {
     let paramsString = "";

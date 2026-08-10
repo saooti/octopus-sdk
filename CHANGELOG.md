@@ -4,8 +4,11 @@
 
 ### Features
 
+- **14594** - Ajout support 'mode' pour rubriquage afin de préparer les sous
+  organisations
 - Refacto export et configuration de build pour résoudre problème import
   internes
+- Ajout de nouvelles méthodes dans l'API de rubriques
 
 ## 41.12.1 (En cours)
 

@@ -158,6 +158,7 @@ import displayHelper from "./src/helper/displayHelper";
 import debounce from "./src/helper/debounceHelper";
 import { deepEqual } from "./src/helper/equals";
 export { colorFromString } from './src/helper/colorFromString';
+export * from './src/helper/rubriquesHelper';
 
 //stores
 import {useVastStore} from "./src/stores/VastStore";
@@ -194,6 +195,8 @@ export {
     type ProviderTts,
     type Voice
 } from "./src/stores/class/transcript/transcriptParams";
+export { type Rubrique } from "./src/stores/class/rubrique/rubrique";
+export { type Rubriquage, RubriquageMode, RUBRIQUAGE_HOMEORDER_RESET } from "./src/stores/class/rubrique/rubriquage";
 export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier";
 export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche";
 export { type PlaylistMedia } from "./src/stores/class/radio/playlistMedia";

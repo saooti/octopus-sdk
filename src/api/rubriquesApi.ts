@@ -1,8 +1,12 @@
-import { classicApi, ModuleApi } from "@saooti/octopus-sdk";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
-import { useCacheStore } from "../stores/CacheStore";
+import { useCacheStore } from "@/stores/CacheStore";
+import classicApi, { type APIOptions } from "./classicApi";
+import { ModuleApi } from "./apiConnection";
 
+////////////////////////////////////////////////////////////////////////////////
+// Rubriquage
+////////////////////////////////////////////////////////////////////////////////
 /**
  * Find rubriquages according to criterias
  * @param organisationIds List of organisation IDs for which to retrieve the
@@ -13,14 +17,27 @@ async function searchRubriquages(organisationIds: Array<string>, searchOptions?:
     rubriquageId?: number;
     organisationId?: string|Array<string>;
     query?: string;
-}): Promise<Array<Rubriquage>> {
+}, options?: APIOptions): Promise<Array<Rubriquage>> {
     return classicApi.fetchData<Array<Rubriquage>>({
         api: ModuleApi.DEFAULT,
         path: 'rubriquage/find',
         parameters: {
             organisationId: organisationIds,
             ...searchOptions
-        }
+        },
+        specialTreatement: options?.adaptParameters
+    });
+}
+/**
+ * Create a new rubriquage
+ * @param data The new rubriquage data
+ * @returns The created rubriquage
+ */
+async function createRubriquage(data: Omit<Rubriquage, 'rubriquageId'>): Promise<Rubriquage> {
+    return classicApi.postData<Rubriquage>({
+        api: ModuleApi.DEFAULT,
+        path: "rubriquage/",
+        dataToSend: data
     });
 }
 
@@ -36,6 +53,38 @@ async function getRubriquage(rubriquageId: number): Promise<Rubriquage> {
     });
 }
 
+/**
+ * Update the values of the rubriquage
+ * @param data The new rubriquage data
+ * @returns The updated rubriquage
+ */
+async function updateRubriquage(data: Rubriquage): Promise<Rubriquage> {
+    return classicApi.putData<Rubriquage>({
+        api: ModuleApi.DEFAULT,
+        path: "rubriquage/",
+        dataToSend: data
+    });
+}
+
+/**
+ * Delete a rubriquage
+ * @param data Either the rubriquage to delete, or its ID
+ * @returns An empty promise
+ */
+async function deleteRubriquage(data: Rubriquage|number): Promise<void> {
+    const rubriquageId = typeof data === 'object' ?
+        data.rubriquageId :
+        data;
+        
+    await classicApi.deleteData<void>({
+        api: ModuleApi.DEFAULT,
+        path: "rubriquage/" + rubriquageId
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Rubriques
+////////////////////////////////////////////////////////////////////////////////
 async function searchRubriques(searchOptions?: {
     rubriquageId?: number;
     organisationId?: string|Array<string>;
@@ -73,9 +122,12 @@ async function getCachedRubrique(rubriqueId: number): Promise<Rubrique> {
 }
 
 export const rubriquesApi = {
+    createRubriquage,
     getRubriquage,
     getRubrique,
     getCachedRubrique,
     searchRubriquages,
-    searchRubriques
+    searchRubriques,
+    updateRubriquage,
+    deleteRubriquage
 };
