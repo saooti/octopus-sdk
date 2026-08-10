@@ -9,6 +9,7 @@
 - Refacto export et configuration de build pour résoudre problème import
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques
+- Passage des slots de ClassicRadioLabel vers ClassicRadio
 
 ## 41.12.1 (En cours)
 

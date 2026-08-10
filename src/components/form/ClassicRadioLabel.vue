@@ -1,6 +1,12 @@
 <template>
   <component :is="typeTag" class="d-flex flex-column">
-    <component :is="'fieldset'===typeTag ? 'legend': 'div'" v-if="radioLabel" :class="classLabel">{{ radioLabel }}</component>
+    <component
+      :is="'fieldset'===typeTag ? 'legend': 'div'"
+      v-if="radioLabel"
+      :class="classLabel"
+    >
+      {{ radioLabel }}
+    </component>
     <ClassicRadio
       :id-radio="idRadio"
       :is-disabled="isDisabled"
@@ -8,7 +14,14 @@
       :text-init="textInit"
       :is-column="isColumn"
       @update:text-init="onChange($event)"
-    />
+    >
+      <template
+        v-for="slot of Object.keys($slots)"
+        #[slot]="scope"
+      >
+        <slot :name="slot" v-bind="{ ...scope }" />
+      </template>
+    </ClassicRadio>
   </component>
 </template>
 
