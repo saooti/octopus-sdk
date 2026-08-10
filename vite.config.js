@@ -16,6 +16,10 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: 'dist',
+    // Watch rebuilds only emit .mjs chunks (dts is skipped in dev mode, see
+    // below); keep emptyOutDir false so those rebuilds don't delete the
+    // dist/index.d.ts produced by a prior full `npm run build`.
+    emptyOutDir: false,
     target: 'esnext',
     lib: {
       entry: path.resolve(__dirname, 'index.ts'),
