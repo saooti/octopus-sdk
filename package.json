@@ -106,6 +106,7 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.mjs"
     },
+    "./style.css": "./dist/index.css",
     "./src/*": "./src/*",
     "./tests/*": "./tests/*",
     "./eslint-config": {
