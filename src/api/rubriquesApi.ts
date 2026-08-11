@@ -121,6 +121,80 @@ async function getCachedRubrique(rubriqueId: number): Promise<Rubrique> {
     return cacheStore.getData(`rubrique-${rubriqueId}`, () => getRubrique(rubriqueId));
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Scope
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * List the rubrique IDS associated to the given user
+ * @param userId The ID of the user for which to retrieve this data
+ * @returns The list of IDs of rubriques
+ */
+async function listUserScope(userId: string): Promise<Array<number>> {
+    return classicApi.fetchData<Array<number>>({
+        api: ModuleApi.DEFAULT,
+        path: `rubrique/user/list/rubriques/${userId}`
+    });
+}
+
+/**
+ * Update the associated rubriques to the user
+ * @param userId The ID of the user for which to change the rights scope
+ * @param previousScope Previous rubrique IDs
+ * @param rubriqueIds New rubrique IDs to set
+ * @returns A promise
+ */
+async function setUserScope(userId: string, previousScope: Array<number>, rubriqueIds: Array<number>): Promise<void> {
+
+    const associatedIds: Array<number> = [];
+    const dissociatedIds: Array<number> = [];
+    const promises: Array<Promise<void>> = [];
+
+    // Create a set containing all ids, will iterare over all of them to check
+    // whether to add or remove them
+    const allIds = new Set<number>();
+    previousScope.forEach(allIds.add, allIds);
+    rubriqueIds.forEach(allIds.add, allIds);
+
+
+    // Find out which IDs need to be added/remove
+    allIds.forEach(id => {
+        const inOld = previousScope.includes(id);
+        const inNew = rubriqueIds.includes(id);
+
+        if (inOld && !inNew) {
+            dissociatedIds.push(id);
+        } else if (!inOld && inNew) {
+            associatedIds.push(id);
+        }
+    })
+
+    // API call for adding rubriques
+    if (associatedIds.length > 0) {
+        promises.push(classicApi.postData({
+            api: ModuleApi.DEFAULT,
+            path: 'rubrique/user/associate',
+            dataToSend: {
+                rubriqueIds: associatedIds,
+                userIds: [userId]
+            }
+        }));
+    }
+
+    // API call for removing rubriques
+    if (dissociatedIds.length > 0) {
+        promises.push(classicApi.postData({
+            api: ModuleApi.DEFAULT,
+            path: 'rubrique/user/dissociate',
+            dataToSend: {
+                rubriqueIds: dissociatedIds,
+                userIds: [userId]
+            }
+        }));
+    }
+
+    return Promise.all(promises).then();
+}
+
 export const rubriquesApi = {
     createRubriquage,
     getRubriquage,
@@ -129,5 +203,7 @@ export const rubriquesApi = {
     searchRubriquages,
     searchRubriques,
     updateRubriquage,
-    deleteRubriquage
+    deleteRubriquage,
+    listUserScope,
+    setUserScope
 };

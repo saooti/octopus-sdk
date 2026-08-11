@@ -6,6 +6,7 @@
 
 - **14594** - Ajout support 'mode' pour rubriquage afin de préparer les sous
   organisations
+- **14594** - Ajout endpoints gestion portée des droits utilisateur
 - Refacto export et configuration de build pour résoudre problème import
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques
