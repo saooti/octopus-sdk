@@ -9,6 +9,7 @@ import type { Mix } from '@/stores/class/radio/mix';
 import { PlaylistMedia } from '@/stores/class/radio/playlistMedia';
 import { Cartouchier } from '@/stores/class/cartouchier/cartouchier';
 import type { Media } from '@/stores/class/general/media';
+import type { Rubrique } from '@/stores/class/rubrique/rubrique';
 
 async function setup(roles: string[], userId = 'test-user-123'): Promise<void> {
     setupPinia();
@@ -313,6 +314,36 @@ describe('useRights', () => {
         it('denies unrelated roles', async () => {
             await setup(['PODCAST_CRUD']);
             expect(useRights().canEditTranscriptVisibility(ownPodcast)).toBe(false);
+        });
+    });
+
+    describe('Rubrique/Rubriquage permissions', () => {
+        describe('canCreateRubriques', () => {
+            ['ADMIN', 'ORGANISATION', 'EDITION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canCreateRubriques()).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canCreateRubriques()).toBe(false);
+            });
+        });
+
+        describe('canEditRubriques', () => {
+            ['ADMIN', 'ORGANISATION', 'EDITION'].forEach(role => {
+                it(`allows ${role}`, async () => {
+                    await setup([role]);
+                    expect(useRights().canEditRubriques({ rubriqueId: 1, name: 'Test' } as Rubrique)).toBe(true);
+                });
+            });
+
+            it('denies unrelated roles', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().canEditRubriques({ rubriqueId: 1, name: 'Test' } as Rubrique)).toBe(false);
+            });
         });
     });
 
@@ -649,6 +680,18 @@ describe('useRights', () => {
             it('returns DeniedNoRight for role without media access', async () => {
                 await setup(['PLAYLISTS']);
                 expect(useRights().getEditMediaRight({ mediaId: 1, ownerId: 'test-user-123' } as Media)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditRubriquesRight', () => {
+            it('returns Allowed for EDITION', async () => {
+                await setup(['EDITION']);
+                expect(useRights().getEditRubriquesRight({ rubriqueId: 1, name: 'Test' } as Rubrique)).toBe(ActionRight.Allowed);
+            });
+
+            it('returns DeniedNoRight for role without rubrique access', async () => {
+                await setup(['PLAYLISTS']);
+                expect(useRights().getEditRubriquesRight({ rubriqueId: 1, name: 'Test' } as Rubrique)).toBe(ActionRight.DeniedNoRight);
             });
         });
 

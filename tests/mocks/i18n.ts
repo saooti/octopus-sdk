@@ -5,6 +5,7 @@ import { localisation } from "@tests/utils";
 vi.mock('vue-i18n', () => ({
     useI18n: () => ({
         t: localisation,
+        te: () => true,
         locale: ref('fr')
     }),
     createI18n: () => {}

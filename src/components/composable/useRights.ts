@@ -6,11 +6,15 @@ import { PlaylistMedia } from "../../stores/class/radio/playlistMedia";
 import { Cartouchier } from "../../stores/class/cartouchier/cartouchier";
 import { Media } from "../../stores/class/general/media";
 import { Conference } from "../../stores/class/conference/conference";
+import { Rubrique } from "@/stores/class/rubrique/rubrique";
+import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 
 type Role =
     'ADMIN'|'ORGANISATION'|
     'PRODUCTION'|'RESTRICTED_PRODUCTION'|'PODCAST_CRUD'|'PODCAST_VALIDATION'|
-    'PLAYLISTS'|'ANIMATION'|'RESTRICTED_ANIMATION'|'RADIO'|'LIVE';
+    'PLAYLISTS'|'ANIMATION'|'RESTRICTED_ANIMATION'|'RADIO'|'LIVE'|
+    'EDITION'
+    ;
 
 export enum ActionRight {
     Allowed = 'allowed',         // User can perform the action
@@ -69,10 +73,12 @@ export const useRights = () => {
     const authStore = useAuthStore();
 
     function roleContainsAny(...roles: Role[]): boolean {
-	    return (authStore.authRole as Role[]).findIndex((r: Role) => roles.includes(r)) > -1;
+        return (authStore.authRole as Role[]).findIndex((r: Role) => roles.includes(r)) > -1;
     }
 
+    ////////////////////////////
     // Emission rights
+    ////////////////////////////
     function getCreateEmissionRight(): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
             ? ActionRight.Allowed
@@ -158,7 +164,9 @@ export const useRights = () => {
             : ActionRight.DeniedNoRight;
     }
 
+    ////////////////////////////
     // Playlist rights
+    ////////////////////////////
     function getCreatePlaylistRight(): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PLAYLISTS')
             ? ActionRight.Allowed
@@ -177,7 +185,9 @@ export const useRights = () => {
             : ActionRight.DeniedNoRight;
     }
 
+    ////////////////////////////
     // Participant rights
+    ////////////////////////////
     function getCreateParticipantRight(): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
             ? ActionRight.Allowed
@@ -199,7 +209,23 @@ export const useRights = () => {
         return await getParticipantEditRight(participantId) === ActionRight.Allowed;
     }
 
+    ////////////////////////////
+    // Rubriques/rubriquage rights
+    ////////////////////////////
+    function getCreateRubriquesRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION', 'EDITION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function getEditRubriquesRight(_element: Rubrique|Rubriquage): ActionRight {
+        return getCreateRubriquesRight();
+    }
+
+    ////////////////////////////
     // Aggregator rights
+    ////////////////////////////
     function getCreateAggregatorRight(): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION')
             ? ActionRight.Allowed
@@ -218,7 +244,9 @@ export const useRights = () => {
             : ActionRight.DeniedNoRight;
     }
 
+    ////////////////////////////
     // Cartouchier rights
+    ////////////////////////////
     function getCreateCartouchierRight(): ActionRight {
         return roleContainsAny(
             'ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
@@ -244,7 +272,9 @@ export const useRights = () => {
         return getEditCartouchierRight(element);
     }
 
+    ////////////////////////////
     // PlaylistMedia rights
+    ////////////////////////////
     function getCreatePlaylistMediaRight(): ActionRight {
         return roleContainsAny(
             'ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
@@ -270,7 +300,9 @@ export const useRights = () => {
         return getEditPlaylistMediaRight(element);
     }
 
+    ////////////////////////////
     // Media rights
+    ////////////////////////////
     function getCreateMediaRight(): ActionRight {
         return roleContainsAny(
             'ADMIN', 'ORGANISATION', 'PRODUCTION', 'RADIO', 'ANIMATION',
@@ -296,7 +328,9 @@ export const useRights = () => {
         return getEditMediaRight(element);
     }
 
+    ////////////////////////////
     // Mix rights
+    ////////////////////////////
     function getCreateMixRight(): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'RADIO')
             ? ActionRight.Allowed
@@ -311,7 +345,9 @@ export const useRights = () => {
         return getEditMixRight(element);
     }
 
+    ////////////////////////////
     // Other action rights
+    ////////////////////////////
     function getEditCodeInsertPlayerRight(): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION')
             ? ActionRight.Allowed
@@ -330,6 +366,7 @@ export const useRights = () => {
         return ActionRight.DeniedNoRight;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function getEditTranscriptVisibilityRight(_podcast: Podcast): ActionRight {
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
             ? ActionRight.Allowed
@@ -340,7 +377,9 @@ export const useRights = () => {
         return getEditTranscriptRight(podcast);
     }
 
+    ////////////////////////////
     // Live
+    ////////////////////////////
     function getAccessRecordingRight(conference: Conference, isLive: boolean): ActionRight {
         if (isLive) {
             return roleContainsAny('LIVE') ? ActionRight.Allowed : ActionRight.DeniedNoRight;
@@ -377,6 +416,9 @@ export const useRights = () => {
         getDeletePlaylistRight,
         // Participants (sync only)
         getCreateParticipantRight,
+        // Rubriques/Rubriquages
+        getCreateRubriquesRight,
+        getEditRubriquesRight,
         // Aggregators
         getCreateAggregatorRight,
         getEditAggregatorRight,
