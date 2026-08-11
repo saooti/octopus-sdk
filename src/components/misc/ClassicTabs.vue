@@ -7,6 +7,7 @@
     <ClassicNav
         v-model:active-tab="activeTab"
         :tab-number="tabs.length"
+        :flex-column="flexColumn"
     >
         <template v-for="(tab, index) in tabs" #[index]>
             {{ tab.label }}
@@ -37,6 +38,8 @@ const props = defineProps<{
     tabs: Array<Tab>;
     /** Currently active tab */
     activeTab: TabId;
+    /** Apply flex-column to content */
+    flexColumn?: boolean;
 }>();
 
 const emit = defineEmits<{

@@ -12,6 +12,10 @@
 - Ajout de nouvelles méthodes dans l'API de rubriques
 - Passage des slots de ClassicRadioLabel vers ClassicRadio
 
+### Misc
+
+- Ajout props utilitaires pour ClassicHelpButton et ClassicTabs
+
 ## 41.12.1 (En cours)
 
 **Features**
