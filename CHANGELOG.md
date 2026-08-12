@@ -13,6 +13,10 @@
 - Ajout de nouvelles méthodes dans l'API de rubriques
 - Passage des slots de ClassicRadioLabel vers ClassicRadio
 
+### Fixes
+
+- Correction chargement composants stub suite à changement build
+
 ### Misc
 
 - Ajout props utilitaires pour ClassicHelpButton et ClassicTabs

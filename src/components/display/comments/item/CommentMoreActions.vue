@@ -49,6 +49,12 @@
         </button>
       </template>
     </ClassicPopover>
+    <!--
+      CommentMoreActionsAdmin is not defined in the SDK: it is resolved at
+      runtime from the consuming app's globally registered components
+      (app.component()), and renders nothing if the app hasn't registered one
+      under that name.
+    -->
     <CommentMoreActionsAdmin
       v-if="editRight"
       v-model:comment="commentForVmodel"
@@ -61,7 +67,6 @@
 import DotsVerticalIcon from "vue-material-design-icons/DotsVertical.vue";
 import {useSelenium} from "../../../composable/useSelenium";
 import classicApi from "../../../../api/classicApi";
-import CommentMoreActionsAdmin from "@/components/display/comments/item/CommentMoreActionsAdmin.vue";
 import { useAuthStore } from "../../../../stores/AuthStore";
 import { CommentPodcast } from "@/stores/class/general/comment";
 import { Podcast } from "@/stores/class/general/podcast";

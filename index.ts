@@ -138,6 +138,7 @@ import {useOrganisationFilter} from "./src/components/composable/useOrganisation
 import {useInit} from "./src/components/composable/useInit";
 import {useErrorHandler} from "./src/components/composable/useErrorHandler";
 import { useSimplePageParam } from "./src/components/composable/route/useSimplePageParam";
+export { CHECK_TOKEN_KEY, LOAD_LOCALE_MESSAGES_KEY } from "./src/components/composable/keys";
 export { useSharePlatforms, PREDEFINED_PLATFORMS, SharePlatformName, type SharePlatform } from "./src/components/composable/share/useSharePlatforms";
 export { useSharePath } from "./src/components/composable/share/useSharePath";
 export { useOrgaComputed } from "./src/components/composable/useOrgaComputed";

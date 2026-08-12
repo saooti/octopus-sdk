@@ -15,7 +15,14 @@
           :podcast="podcast"
           :podcast-conference="fetchConference"
           @update-podcast="updatePodcast"
-        />
+        >
+          <template #recording-item-button="slotProps">
+            <slot name="recording-item-button" v-bind="slotProps" />
+          </template>
+          <template #edit-box="slotProps">
+            <slot name="edit-box" v-bind="slotProps" />
+          </template>
+        </PodcastModuleBox>
         <ShareSocialsButtons
           v-if="state.podcastPage.ShareButtons"
           :organisation-id="podcast.organisation.id"

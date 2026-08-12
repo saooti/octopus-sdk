@@ -1,19 +1,21 @@
 <template>
   <section v-if="podcast" class="module-box">
-    <RecordingItemButton
+    <slot
       v-if="!!podcastConference && isLiveReadyToRecord && isOctopusAndAnimator"
+      name="recording-item-button"
       :podcast="podcast"
       :live="true"
       :recording="podcastConference"
-      @delete-item="removeDeleted"
-      @validate-podcast="emit('updatePodcast', $event)"
+      :on-delete-item="removeDeleted"
+      :on-validate-podcast="(p) => emit('updatePodcast', p)"
     />
-    <EditBox
+    <slot
       v-else-if="editRight && isEditBox"
+      name="edit-box"
       :podcast="podcast"
       :display-studio-access="isDebriefing"
-      @update-transcription="resetTranscription"
-      @validate-podcast="emit('updatePodcast', $event)"
+      :on-update-transcription="resetTranscription"
+      :on-validate-podcast="(p) => emit('updatePodcast', p)"
     />
     <div class="mb-2 w-100">
       <PodcastImage
@@ -192,12 +194,6 @@ import { SeasonMode } from "../../../stores/class/general/emission";
 import { defineAsyncComponent, toRefs, computed, useTemplateRef } from "vue";
 const ErrorMessage = defineAsyncComponent(
   () => import("../../misc/ErrorMessage.vue"),
-);
-const RecordingItemButton = defineAsyncComponent(
-  () => import("@/components/display/studio/RecordingItemButton.vue"),
-);
-const EditBox = defineAsyncComponent(
-  () => import("@/components/display/edit/EditBox.vue"),
 );
 const PodcastPlayBar = defineAsyncComponent(
   () => import("./PodcastPlayBar.vue"),

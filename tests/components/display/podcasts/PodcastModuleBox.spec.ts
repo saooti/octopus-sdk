@@ -2,16 +2,22 @@ import '@tests/mocks/i18n';
 import '@tests/mocks/useRouter';
 
 import PodcastModuleBox from '@/components/display/podcasts/PodcastModuleBox.vue';
+import { Conference } from '@/stores/class/conference/conference';
 import { SeasonMode } from '@/stores/class/general/emission';
 import { emptyPodcastData, Podcast } from '@/stores/class/general/podcast';
 import { mount as testMount, setupAuthStore } from '@tests/utils';
 import { describe, expect, it } from 'vitest';
 import { initialize } from '@/stores/ParamSdkStore';
 
-const mount = (podcast: Podcast) => testMount(PodcastModuleBox, {
-    props: { podcast },
+const mount = (podcast: Podcast, options?: {
+    podcastConference?: Conference,
+    slots?: Record<string, unknown>,
+    roles?: string | string[],
+}) => testMount(PodcastModuleBox, {
+    props: { podcast, podcastConference: options?.podcastConference },
     stubs: ['ShareAnonymous', 'LikeSection'],
-    beforeMount: setupAuthStore()
+    slots: options?.slots,
+    beforeMount: setupAuthStore({ roles: options?.roles, organisationId: podcast.organisation?.id })
 });
 
 describe('PodcastModuleBox', () => {
@@ -134,6 +140,104 @@ describe('PodcastModuleBox', () => {
                 const wrapper = await mount(makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, { seasonEpisodeNumber: 5 }));
                 expect(wrapper.text()).toContain('Podcast - Episode number : 5');
             });
+        });
+    });
+
+    describe('edit-box slot', () => {
+        it('passes the podcast, display-studio-access, and validate callback to the slot', async () => {
+            const podcast = emptyPodcastData();
+            podcast.organisation.id = 'org-1';
+            const wrapper = await mount(podcast, {
+                podcastConference: { conferenceId: 1, title: '', status: 'DEBRIEFING' },
+                slots: {
+                    'edit-box': `<template #edit-box="{ podcast, displayStudioAccess, onValidatePodcast }">
+                        <button
+                            class="edit-box-slot"
+                            :data-podcast-id="podcast?.podcastId"
+                            :data-debriefing="displayStudioAccess"
+                            @click="onValidatePodcast({ ...podcast, valid: true })"
+                        />
+                    </template>`
+                }
+            });
+
+            const button = wrapper.find('.edit-box-slot');
+            expect(button.exists()).toBe(true);
+            expect(button.attributes('data-podcast-id')).toBe(String(podcast.podcastId));
+            expect(button.attributes('data-debriefing')).toBe('true');
+
+            await button.trigger('click');
+            expect(wrapper.emitted('updatePodcast')?.[0]).toEqual([{ ...podcast, valid: true }]);
+        });
+
+        it('is not rendered when the user has no edit rights', async () => {
+            const podcast = emptyPodcastData();
+            podcast.organisation.id = 'org-1';
+            const wrapper = await testMount(PodcastModuleBox, {
+                props: { podcast },
+                stubs: ['ShareAnonymous', 'LikeSection'],
+                slots: { 'edit-box': `<template #edit-box><button class="edit-box-slot" /></template>` },
+                beforeMount: setupAuthStore({ organisationId: 'org-2' })
+            });
+
+            expect(wrapper.find('.edit-box-slot').exists()).toBe(false);
+        });
+    });
+
+    describe('recording-item-button slot', () => {
+        function makeLiveReadyPodcast() {
+            const podcast = emptyPodcastData();
+            podcast.organisation.id = 'org-1';
+            podcast.conferenceId = 42;
+            podcast.processingStatus = 'READY_TO_RECORD';
+            return podcast;
+        }
+
+        it('takes priority over edit-box and passes podcast/live/recording and callbacks to the slot', async () => {
+            const podcast = makeLiveReadyPodcast();
+            const podcastConference: Conference = { conferenceId: 42, title: '', status: 'PUBLISHING' };
+            const wrapper = await mount(podcast, {
+                podcastConference,
+                roles: 'LIVE',
+                slots: {
+                    'recording-item-button': `<template #recording-item-button="{ podcast, live, recording, onDeleteItem, onValidatePodcast }">
+                        <button
+                            class="recording-slot"
+                            :data-podcast-id="podcast?.podcastId"
+                            :data-live="live"
+                            :data-recording-status="recording?.status"
+                            @click="onValidatePodcast({ ...podcast, valid: true })"
+                        />
+                        <button class="recording-delete-slot" @click="onDeleteItem" />
+                    </template>`,
+                    'edit-box': `<template #edit-box><button class="edit-box-slot" /></template>`
+                }
+            });
+
+            const button = wrapper.find('.recording-slot');
+            expect(button.exists()).toBe(true);
+            expect(button.attributes('data-podcast-id')).toBe(String(podcast.podcastId));
+            expect(button.attributes('data-live')).toBe('true');
+            expect(button.attributes('data-recording-status')).toBe('PUBLISHING');
+            expect(wrapper.find('.edit-box-slot').exists()).toBe(false);
+
+            await button.trigger('click');
+            expect(wrapper.emitted('updatePodcast')?.[0]).toEqual([{ ...podcast, valid: true }]);
+        });
+
+        it('falls back to edit-box when there is no live conference', async () => {
+            const podcast = emptyPodcastData();
+            podcast.organisation.id = 'org-1';
+            const wrapper = await mount(podcast, {
+                roles: 'LIVE',
+                slots: {
+                    'recording-item-button': `<template #recording-item-button><button class="recording-slot" /></template>`,
+                    'edit-box': `<template #edit-box><button class="edit-box-slot" /></template>`
+                }
+            });
+
+            expect(wrapper.find('.recording-slot').exists()).toBe(false);
+            expect(wrapper.find('.edit-box-slot').exists()).toBe(true);
         });
     });
 });

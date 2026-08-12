@@ -37,6 +37,12 @@ export async function mount(component: Component, options?: {
         props?: Record<string, unknown>,
         /** Stub subcomponents */
         stubs?: Record<string, Component|boolean>|string[],
+        /** Slot content to render into the mounted component */
+        slots?: Record<string, unknown>,
+        /** Components to register globally on the test app instance (e.g. to test components resolved at runtime via app.component()) */
+        globalComponents?: Record<string, Component>,
+        /** Values to provide on the test app instance (e.g. to test values resolved at runtime via app.provide()/inject()) */
+        provide?: Record<string | symbol, unknown>,
         /** Hook called before mounting with access to Pinia instance for store initialization */
         beforeMount?: (pinia: Pinia) => void | Promise<void>
     }): Promise<VueWrapper> {
@@ -83,9 +89,12 @@ export async function mount(component: Component, options?: {
                 lazy: vi.fn
             },
             plugins: [pinia],
-            stubs
+            stubs,
+            components: options?.globalComponents,
+            provide: options?.provide
         },
         props: options?.props,
+        slots: options?.slots,
         shallow: options?.shallow
     });
 

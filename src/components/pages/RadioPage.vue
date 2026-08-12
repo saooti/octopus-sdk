@@ -23,7 +23,7 @@
             </div>
           </div>
           <RadioCurrently :radio="radio" />
-          <EditBoxRadio v-if="editRight" :radio="radio" />
+          <slot v-if="editRight" name="edit-box-radio" :radio="radio" />
         </section>
         <ShareSocialsButtons :organisation-id="radio.organisationId" />
         <RadioPlanning :radio="radio" />
@@ -58,9 +58,6 @@ const SharePlayerRadio = defineAsyncComponent(
 );
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
-);
-const EditBoxRadio = defineAsyncComponent(
-  () => import("@/components/display/edit/EditBoxRadio.vue"),
 );
 const RadioCurrently = defineAsyncComponent(
   () => import("../display/live/RadioCurrently.vue"),

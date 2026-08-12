@@ -11,7 +11,12 @@
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
         <section class="module-box">
-          <EditBox v-if="editRight && !isPodcastmaker" :playlist="playlist" />
+          <slot
+            v-if="editRight && !isPodcastmaker"
+            name="edit-box"
+            :playlist="playlist"
+          />
+
           <div class="mb-5 mt-3 description-text">
             <img
               v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
@@ -90,9 +95,6 @@ import { playlistApi } from "../../api/playlistApi";
 import SubscribeButtons from "../display/sharing/SubscribeButtons.vue"; 
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
-);
-const EditBox = defineAsyncComponent(
-  () => import("@/components/display/edit/EditBox.vue"),
 );
 const SharePlayer = defineAsyncComponent(
   () => import("../display/sharing/SharePlayer.vue"),

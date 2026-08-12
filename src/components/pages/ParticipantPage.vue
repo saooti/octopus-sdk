@@ -10,8 +10,7 @@
           width="200"
           height="200"
           aria-hidden="true"
-        alt=""
-          
+          alt=""
           :title="t('Animator image', { name: name })"
           class="img-box mb-3"
         />
@@ -24,11 +23,11 @@
           v-html="urlify(description)"
         />
         <!-- eslint-enable -->
-        <EditBox
+        <slot
           v-if="editRight && !state.generalParameters.podcastmaker"
+          name="edit-box"
           :participant="participant"
-          class="w-100 justify-content-center"
-          @participant-update="updateParticipant"
+          :on-updated="updateParticipant"
         />
         <ShareSocialsButtons
           v-if="state.podcastPage.ShareButtons"
@@ -88,9 +87,6 @@ const ShareSocialsButtons = defineAsyncComponent(
 );
 const PodcastFilterList = defineAsyncComponent(
   () => import("../display/podcasts/PodcastFilterList.vue"),
-);
-const EditBox = defineAsyncComponent(
-  () => import("@/components/display/edit/EditBox.vue"),
 );
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 

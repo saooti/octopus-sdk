@@ -11,11 +11,13 @@
         :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
       >
         <section class="module-box">
-          <EditBox
+          <slot
             v-if="editRight && !isPodcastmaker"
+            name="edit-box"
             :emission="emission"
-            @is-updated="getEmissionDetails"
+            :on-updated="getEmissionDetails"
           />
+
           <div class="w-100 mb-2">
             <img
               v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
@@ -159,9 +161,6 @@ const SharePlayer = defineAsyncComponent(
 );
 const ShareSocialsButtons = defineAsyncComponent(
   () => import("../display/sharing/ShareSocialsButtons.vue"),
-);
-const EditBox = defineAsyncComponent(
-  () => import("@/components/display/edit/EditBox.vue"),
 );
 const SubscribeButtons = defineAsyncComponent(
   () => import("../display/sharing/SubscribeButtons.vue"),
