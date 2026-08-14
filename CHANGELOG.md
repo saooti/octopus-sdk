@@ -8,6 +8,8 @@
   organisations
 - **14594** - Ajout endpoints gestion portée des droits utilisateur
 - **14594** - Ajout droits création/édition rubriques/rubriquages
+- **14594** - Récupération de la portée de droits des utilisateurs lors de leur
+  connexion
 - Refacto export et configuration de build pour résoudre problème import
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques

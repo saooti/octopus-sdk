@@ -431,5 +431,7 @@
   "RightsIndicator -  Podcast - Not owner": "Este podcast fue creado por otro usuario, puedes verlo, pero no puedes editarlo.",
   "RightsIndicator - Cartouchier - Not owner": "Esta cartuchera fue creada por otro usuario, puedes verla, pero no puedes modificarla.",
   "RightsIndicator - PlaylistMedia - Not owner": "Este contenedor fue creado por otro usuario, puedes verlo, pero no puedes modificarlo.",
-  "RightsIndicator - Mix - Not owner": "Esta mezcla fue creada por otro usuario, puedes verla, pero no puedes editarla."
+  "RightsIndicator - Mix - Not owner": "Esta mezcla fue creada por otro usuario, puedes verla, pero no puedes editarla.",
+  "Auth error - Couldn't retrieve user info - Title": "Error de conexión",
+  "Auth error - Couldn't retrieve user info - Message": "Se produjo un error al recuperar su información de usuario. Por favor recarga la página. Si el problema persiste, comuníquese con nuestro soporte."
 }

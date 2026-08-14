@@ -430,5 +430,7 @@
   "RightsIndicator -  Podcast - Not owner": "Ta podcast je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga urejati.",
   "RightsIndicator - Cartouchier - Not owner": "Ta tulec je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga spreminjati.",
   "RightsIndicator - PlaylistMedia - Not owner": "Ta koš je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga spreminjati.",
-  "RightsIndicator - Mix - Not owner": "Ta miks je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga urejati."
+  "RightsIndicator - Mix - Not owner": "Ta miks je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga urejati.",
+  "Auth error - Couldn't retrieve user info - Title": "Napaka pri povezavi",
+  "Auth error - Couldn't retrieve user info - Message": "Pri pridobivanju vaših uporabniških podatkov je prišlo do napake. Ponovno naložite stran. Če težave ne odpravite, se obrnite na našo podporo."
 }

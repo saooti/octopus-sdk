@@ -8,6 +8,7 @@ export interface Profile {
   imageUrl?: string;
   description?: string;
   organisations?: Array<Organisation>;
+  scope: Array<number>;
   attributes?: {
     [key: string]: string | number | boolean | undefined | Array<string>;
   };

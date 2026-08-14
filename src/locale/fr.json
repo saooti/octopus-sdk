@@ -436,6 +436,9 @@
   "Filters - Emission groups": "Par groupes d'émissions",
   "Search - Emission groups placeholder": "Filtrer les groupes par nom",
 
+  "Auth error - Couldn't retrieve user info - Title": "Erreur de connexion",
+  "Auth error - Couldn't retrieve user info - Message": "Une erreur est survenue lors de la récupération de vos informations d'utilisateur. Veuillez recharger la page. Si le problème persiste, merci de contacter notre support.",
+
   "SmartLink - Listen to latest episode": "Écouter le dernier épisode",
   "SmartLink - Made by": "Hébergé par",
   "SmartLink - To emission on podcastmaker": "Page officielle de l'émission - {organisation}",

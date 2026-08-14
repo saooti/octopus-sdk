@@ -431,5 +431,7 @@
   "RightsIndicator -  Podcast - Not owner": "This podcast was created by another user, you can view it, but you cannot edit it.",
   "RightsIndicator - Cartouchier - Not owner": "This cartridge case was created by another user, you can view it, but you cannot modify it.",
   "RightsIndicator - PlaylistMedia - Not owner": "This bin was created by another user, you can view it, but you cannot modify it.",
-  "RightsIndicator - Mix - Not owner": "This mix was created by another user, you can view it, but you cannot edit it."
+  "RightsIndicator - Mix - Not owner": "This mix was created by another user, you can view it, but you cannot edit it.",
+  "Auth error - Couldn't retrieve user info - Title": "Connection error",
+  "Auth error - Couldn't retrieve user info - Message": "An error occurred while retrieving your user information. Please reload the page. If the problem persists, please contact our support."
 }

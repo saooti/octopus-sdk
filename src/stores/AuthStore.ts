@@ -5,6 +5,9 @@ import { defineStore } from "pinia";
 import { KeycloakInfo } from "@/stores/class/user/person";
 import { VideoConfig } from "@/stores/class/config/videoConfig";
 import classicApi from "../api/classicApi";
+import { useNotificationStore } from "./NotificationStore";
+import { useI18n } from "vue-i18n";
+import { rubriquesApi } from "@/api";
 
 interface AuthParam {
   accessToken?: string;
@@ -24,6 +27,7 @@ interface AuthState {
   authOrganisation: Organisation;
   authVideoConfig: VideoConfig;
 }
+
 export const useAuthStore = defineStore("AuthStore", {
   state: (): AuthState => ({
     authReload: 0,
@@ -120,6 +124,23 @@ export const useAuthStore = defineStore("AuthStore", {
     isVideoOrga(): boolean {
       return this.authVideoConfig.active;
     },
+    userScope(): Array<number> {
+      // This should not happen, but in case our user has no profile, invalidate
+      // the scope.
+      if (!this.authProfile) {
+        return [-1];
+      }
+
+      // Admins are not affected by scope
+      if(
+        this.authRole.includes('ADMIN') ||
+        this.authRole.includes('ORGANISATION')
+      ) {
+        return [];
+      } else {
+        return this.authProfile.scope;
+      }
+    }
   },
   actions: {
     authUpdate(authentication: {name?:string, organisationId?:string,organisationName?:string, role?:Array<string>}) {
@@ -176,20 +197,30 @@ export const useAuthStore = defineStore("AuthStore", {
           return;
         }
         this.authReload += 1;
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 500 * this.authReload));
         await this.fetchProfileAsynchrone();
       }
     },
     async fetchProfile() {
       try {
-        const profileData = await classicApi.fetchData<KeycloakInfo>({
+        const profileDataPromise = classicApi.fetchData<KeycloakInfo>({
           api: 20,
           path:"userinfo",
         });
-        const availablesOrganisations = await classicApi.fetchData<Array<Organisation>>({
+
+        const availablesOrganisationsPromise = classicApi.fetchData<Array<Organisation>>({
           api: 0,
           path:"user/me/organisations",
         });
+
+        const [profileData, availablesOrganisations] = await Promise.all([
+          profileDataPromise,
+          availablesOrganisationsPromise
+        ]);
+
+        // Retrieve user's rights scope
+        const scope = await rubriquesApi.listUserScope(profileData.sub);
+
         const array = (availablesOrganisations ?? []).toSorted(function (a: Organisation, b: Organisation) {
           if (a.name.toLowerCase() < b.name.toLowerCase()) {
             return -1;
@@ -199,6 +230,7 @@ export const useAuthStore = defineStore("AuthStore", {
           }
           return 0;
         });
+
         const profile = {
           firstname: profileData.given_name,
           lastname: profileData.family_name,
@@ -212,7 +244,9 @@ export const useAuthStore = defineStore("AuthStore", {
             active_organisation: profileData.active_organisation,
           },
           organisations: array,
+          scope
         };
+
         this.authUpdateProfile(profile);
         if (!profileData.active_organisation) {
           return;
@@ -230,10 +264,19 @@ export const useAuthStore = defineStore("AuthStore", {
       } catch(error) {
         console.error(error);
         if (this.authReload > 5) {
+          const { addNotification } = useNotificationStore();
+          const { t } = useI18n();
+          addNotification({
+            type: 'error',
+            title: t('Auth error - Couldn\'t retrieve user info - Title'),
+            message: t('Auth error - Couldn\'t retrieve user info - Message')
+          });
           return;
         }
         this.authReload += 1;
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, 500 * this.authReload));
         await this.fetchProfile();
       }
     },
