@@ -116,7 +116,8 @@ export function setupAuthStore(config?: {
     roles?: string | string[],
     organisationId?: string,
     organisationName?: string,
-    organisationAttributes?: Record<string, string | number | boolean>
+    organisationAttributes?: Record<string, string | number | boolean>,
+    scope?: Array<number>
 }) {
     return async () => {
         const roles = Array.isArray(config?.roles)
@@ -136,6 +137,10 @@ export function setupAuthStore(config?: {
                 name: orgName,
                 imageUrl: "",
                 attributes: config?.organisationAttributes || {}
+            },
+            authProfile: {
+                ...(authStore.authProfile ?? {}),
+                scope: config?.scope ?? []
             }
         });
     };

@@ -2,16 +2,24 @@ import '@tests/mocks/i18n';
 import '@tests/mocks/useRouter';
 
 import PodcastItemInfo from '@/components/display/podcasts/PodcastItemInfo.vue';
+import { useAuthStore } from '@/stores/AuthStore';
 import { SeasonMode } from '@/stores/class/general/emission';
 import { emptyPodcastData, Podcast, PodcastType } from '@/stores/class/general/podcast';
-import { mount as testMount } from '@tests/utils';
+import { mount as testMount, setupAuthStore } from '@tests/utils';
 import { describe, expect, it } from 'vitest';
 
-const mount = (podcast: Partial<Podcast> = {}) => {
+const mount = (podcast: Partial<Podcast> = {}, auth?: { roles: string[], scope?: number[] }) => {
     const base = emptyPodcastData();
     return testMount(PodcastItemInfo, {
         props: { podcast: { ...base, ...podcast } },
         stubs: ['PodcastPlayBar', 'AnimatorsItem', 'BullhornIcon', 'GiftIcon'],
+        beforeMount: auth ? async () => {
+            await setupAuthStore({ roles: auth.roles, scope: auth.scope })();
+            useAuthStore().$patch({
+                authProfile: { userId: 'test-user-123', scope: auth.scope ?? [] },
+                authParam: { accessToken: 'test-token', refreshToken: undefined, expiration: undefined },
+            });
+        } : undefined
     });
 };
 
@@ -60,6 +68,31 @@ describe('PodcastItemInfo', () => {
             const wrapper = await mount({ seasonEpisodeType: PodcastType.FULL });
             expect(wrapper.findComponent({ name: 'BullhornIcon' }).exists()).toBe(false);
             expect(wrapper.findComponent({ name: 'GiftIcon' }).exists()).toBe(false);
+        });
+    });
+
+    describe('RightsIndicator (scope)', () => {
+        it('shows RightsIndicator when the podcast is out of the user\'s scope', async () => {
+            const wrapper = await mount(
+                { podcastId: 1, rubriqueIds: [10] },
+                { roles: ['PRODUCTION'], scope: [999] }
+            );
+
+            const icon = wrapper.find('.rights-indicator-icon');
+            expect(icon.exists()).toBe(true);
+            expect(icon.classes()).not.toContain('invisible');
+            expect(wrapper.text()).toContain('RightsIndicator - Podcast - Insufficient scope');
+        });
+
+        it('hides RightsIndicator when the podcast is within the user\'s scope', async () => {
+            const wrapper = await mount(
+                { podcastId: 1, rubriqueIds: [10] },
+                { roles: ['PRODUCTION'], scope: [10] }
+            );
+
+            const icon = wrapper.find('.rights-indicator-icon');
+            expect(icon.exists()).toBe(true);
+            expect(icon.classes()).toContain('invisible');
         });
     });
 });

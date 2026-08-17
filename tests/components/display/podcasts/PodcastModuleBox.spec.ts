@@ -2,6 +2,7 @@ import '@tests/mocks/i18n';
 import '@tests/mocks/useRouter';
 
 import PodcastModuleBox from '@/components/display/podcasts/PodcastModuleBox.vue';
+import { useAuthStore } from '@/stores/AuthStore';
 import { Conference } from '@/stores/class/conference/conference';
 import { SeasonMode } from '@/stores/class/general/emission';
 import { emptyPodcastData, Podcast } from '@/stores/class/general/podcast';
@@ -13,11 +14,22 @@ const mount = (podcast: Podcast, options?: {
     podcastConference?: Conference,
     slots?: Record<string, unknown>,
     roles?: string | string[],
+    scope?: number[],
 }) => testMount(PodcastModuleBox, {
     props: { podcast, podcastConference: options?.podcastConference },
-    stubs: ['ShareAnonymous', 'LikeSection'],
+    stubs: ['ShareAnonymous', 'LikeSection', 'PodcastRubriqueList'],
     slots: options?.slots,
-    beforeMount: setupAuthStore({ roles: options?.roles, organisationId: podcast.organisation?.id })
+    beforeMount: async () => {
+        await setupAuthStore({ roles: options?.roles, organisationId: podcast.organisation?.id, scope: options?.scope })();
+        // Only patch authParam (which drives isAuthenticated / RightsIndicator visibility) when a
+        // scope is explicitly under test, to avoid changing the auth state for pre-existing tests.
+        if (options?.scope !== undefined) {
+            useAuthStore().$patch({
+                authProfile: { userId: 'test-user-123', scope: options.scope },
+                authParam: { accessToken: 'test-token', refreshToken: undefined, expiration: undefined },
+            });
+        }
+    }
 });
 
 describe('PodcastModuleBox', () => {
@@ -238,6 +250,29 @@ describe('PodcastModuleBox', () => {
 
             expect(wrapper.find('.recording-slot').exists()).toBe(false);
             expect(wrapper.find('.edit-box-slot').exists()).toBe(true);
+        });
+    });
+
+    describe('RightsIndicator (scope)', () => {
+        it('shows RightsIndicator when the podcast is out of the user\'s scope', async () => {
+            const podcast = emptyPodcastData();
+            podcast.rubriqueIds = [10];
+            const wrapper = await mount(podcast, { roles: 'PRODUCTION', scope: [999] });
+
+            const icon = wrapper.find('.rights-indicator-icon');
+            expect(icon.exists()).toBe(true);
+            expect(icon.classes()).not.toContain('invisible');
+            expect(wrapper.text()).toContain('RightsIndicator - Podcast - Insufficient scope');
+        });
+
+        it('hides RightsIndicator when the podcast is within the user\'s scope', async () => {
+            const podcast = emptyPodcastData();
+            podcast.rubriqueIds = [10];
+            const wrapper = await mount(podcast, { roles: 'PRODUCTION', scope: [10] });
+
+            const icon = wrapper.find('.rights-indicator-icon');
+            expect(icon.exists()).toBe(true);
+            expect(icon.classes()).toContain('invisible');
         });
     });
 });

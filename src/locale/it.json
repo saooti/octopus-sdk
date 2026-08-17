@@ -429,10 +429,13 @@
     "Player - Generating subtitles": "Generazione di sottotitoli in {language}…",
     "Transcript - Available languages": "Lingue disponibili",
     "Generic - Action disabled - Not owner": "Questa azione non è disponibile perché i tuoi diritti non ti consentono di modificare o eliminare elementi di cui non sei proprietario",
-    "RightsIndicator -  Podcast - Not owner": "Questo podcast è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
+    "RightsIndicator - Podcast - Not owner": "Questo podcast è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
     "RightsIndicator - Cartouchier - Not owner": "Questo bossolo è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
     "RightsIndicator - PlaylistMedia - Not owner": "Questo contenitore è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
     "RightsIndicator - Mix - Not owner": "Questo mix è stato creato da un altro utente, puoi visualizzarlo, ma non puoi modificarlo.",
     "Auth error - Couldn't retrieve user info - Title": "Errore di connessione",
-    "Auth error - Couldn't retrieve user info - Message": "Si è verificato un errore durante il recupero delle informazioni utente. Per favore ricarica la pagina. Se il problema persiste, contatta il nostro supporto."
+    "Auth error - Couldn't retrieve user info - Message": "Si è verificato un errore durante il recupero delle informazioni utente. Per favore ricarica la pagina. Se il problema persiste, contatta il nostro supporto.",
+    "RightsIndicator - Podcast - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di modificare o eliminare questo episodio",
+    "RightsIndicator - Emission - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di modificare o eliminare questa trasmissione",
+    "RightsIndicator - Generic - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di modificare o eliminare questo elemento"
 }

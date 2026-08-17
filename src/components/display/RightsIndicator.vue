@@ -1,11 +1,17 @@
 <template>
-    <div v-if="displayIndicator">
+    <div
+        v-if="displayIndicator"
+        :class="{ inline: inline }"
+        title=""
+    >
         <div v-if="!text">
-            <LockIcon
+            <Icon
                 :id="iconId"
+                class="rights-indicator-icon"
                 :class="{ invisible: hasAccess }"
                 aria-hidden="true"
                 fill-color="var(--octopus-primary)"
+                :size="inline ? 20 : 24"
             />
             <span v-if="!hasAccess" class="rights-visually-hidden">{{ message }}</span>
             <ClassicPopover
@@ -22,7 +28,7 @@
                 type="info"
             >
                 <template #icon>
-                    <LockIcon
+                    <Icon
                         aria-hidden="true"
                         fill-color="var(--octopus-primary)"
                     />
@@ -41,13 +47,16 @@ import { Cartouchier } from '../../stores/class/cartouchier/cartouchier';
 import { Media } from "../../stores/class/general/media";
 import { computed, getCurrentInstance } from 'vue';
 import { useI18n } from 'vue-i18n';
-import LockIcon from 'vue-material-design-icons/Lock.vue';
 import { ActionRight, useRights } from '../composable/useRights';
 import ClassicAlert from '../misc/ClassicAlert.vue';
 import ClassicPopover from '../misc/ClassicPopover.vue';
 import { state } from '../../stores/ParamSdkStore';
 import { useAuthStore } from '../../stores/AuthStore';
 import { storeToRefs } from 'pinia';
+import Icons from '@/components/icons'; 
+import { Emission } from '@/stores/class/general/emission';
+
+const Icon = Icons.RightsIndicator;
 
 const rights = useRights();
 const { t, te } = useI18n();
@@ -60,10 +69,13 @@ interface PropsBase {
     action: Action;
     /** Display reason as text instead of only tooltip */
     text?: boolean;
+    /** Use inline instead of block */
+    inline?: boolean;
 }
 
 type NeverEntities = {
     podcast?: never;
+    emission?: never;
     cartouchier?: never;
     mix?: never;
     playlistMedia?: never;
@@ -72,6 +84,9 @@ type NeverEntities = {
 
 export interface PropsPodcast extends PropsBase, Omit<NeverEntities, 'podcast'> {
     podcast: Podcast|boolean;
+}
+export interface PropsEmission extends PropsBase, Omit<NeverEntities, 'emission'> {
+    emission: Emission|boolean;
 }
 export interface PropsCartouchier extends PropsBase, Omit<NeverEntities, 'cartouchier'> {
     cartouchier: Cartouchier|boolean;
@@ -86,13 +101,13 @@ export interface PropsMedia extends PropsBase, Omit<NeverEntities, 'media'> {
     media: Media|boolean;
 }
 
-const props = defineProps<PropsPodcast|PropsCartouchier|PropsMix|PropsPlaylistMedia|PropsMedia>();
+const props = defineProps<PropsPodcast|PropsEmission|PropsCartouchier|PropsMix|PropsPlaylistMedia|PropsMedia>();
 
 type Rights = ReturnType<typeof useRights>;
 type ActionSegment = 'Create'|'Edit'|'Delete';
-type EntitySegment = 'Podcast'|'Cartouchier'|'Mix'|'PlaylistMedia'|'Media';
+type EntitySegment = 'Podcast'|'Emission'|'Cartouchier'|'Mix'|'PlaylistMedia'|'Media';
 type RightMethodKey = `get${ActionSegment}${EntitySegment}Right` & keyof Rights;
-type RightEntity = Podcast|Cartouchier|Mix|PlaylistMedia|Media|boolean|undefined;
+type RightEntity = Podcast|Emission|Cartouchier|Mix|PlaylistMedia|Media|boolean|undefined;
 
 const actionSegmentMap: Record<Exclude<Action, 'any'>, ActionSegment> = {
     create: 'Create',
@@ -118,6 +133,9 @@ const entity = computed((): [EntitySegment, RightEntity]|null => {
     if ('podcast' in props && props.podcast) {
         entitySegment = 'Podcast';
         arg = props.podcast;
+    } else if ('emission' in props && props.emission) {
+        entitySegment = 'Emission';
+        arg = props.emission;
     } else if ('cartouchier' in props && props.cartouchier) {
         entitySegment = 'Cartouchier';
         arg = props.cartouchier;
@@ -198,6 +216,11 @@ const message = computed((): string => {
         genericKey = 'Generic - Action disabled - Not owner';
         break;
 
+    case ActionRight.DeniedInsufficientScope:
+        key = `RightsIndicator - ${entitySegment} - Insufficient scope`;
+        genericKey = 'Generic - Action disabled - Insufficient scope';
+        break;
+
     case ActionRight.DeniedNoRight:
         return 'insufficient rights';
 
@@ -218,6 +241,29 @@ const iconId = computed((): string => 'rights-indicator-' + uid);
 </script>
 
 <style scoped lang="scss">
+div.inline {
+    display: inline;
+    // Properly align text with it
+    vertical-align: top;
+}
+
+.inline div {
+    display: inline;
+}
+
+.inline .rights-indicator-icon {
+    display: inline-flex;
+    // Propertly align content
+    position: relative;
+    bottom: -4px;
+    // Ensure it doesn't take place in the text
+    height: 1px;
+}
+
+.inline .invisible {
+    display: none;
+}
+
 /** Helper class to keep the data accessible for screen readers */
 .rights-visually-hidden {
     position: absolute;

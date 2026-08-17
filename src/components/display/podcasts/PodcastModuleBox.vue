@@ -52,6 +52,11 @@
         </div>
       </div>
       <h2 :class="{ 'mb-3': !showSubtitle }">
+        <RightsIndicator
+          :podcast="podcast"
+          action="edit"
+          inline
+        />
         {{ podcast.title }}
       </h2>
       <h3 v-if="showSubtitle" class="mb-3 text-secondary">
@@ -190,6 +195,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useSeasonsManagement } from "../../composable/useSeasonsManagement";
 import { SeasonMode } from "../../../stores/class/general/emission";
+import RightsIndicator from "../RightsIndicator.vue"; 
 
 import { defineAsyncComponent, toRefs, computed, useTemplateRef } from "vue";
 const ErrorMessage = defineAsyncComponent(

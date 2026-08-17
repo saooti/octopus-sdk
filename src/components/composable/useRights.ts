@@ -17,9 +17,14 @@ type Role =
     ;
 
 export enum ActionRight {
-    Allowed = 'allowed',         // User can perform the action
-    DeniedNoRight = 'no_right',  // User lacks the required role
-    DeniedNotOwner = 'not_owner' // User has a restricted role but does not own the resource
+    /** User can perform the action */
+    Allowed = 'allowed',
+    /** User lacks the required role */
+    DeniedNoRight = 'no_right',  
+    /** User has a restricted role but does not own the resource **/
+    DeniedNotOwner = 'not_owner',
+    /** User is scoped to specific rubriques */
+    DeniedInsufficientScope = 'no_scope'
 }
 
 // Constraint type for the object passed to deriveCanFunctions.
@@ -76,6 +81,22 @@ export const useRights = () => {
         return (authStore.authRole as Role[]).findIndex((r: Role) => roles.includes(r)) > -1;
     }
 
+    function hasSufficientScope(elementRubriques: Array<number> = [], parentRubriques: Array<number> = []): boolean {
+        const ids = elementRubriques.concat(parentRubriques);
+        const scope = authStore.userScope;
+        if (scope.length === 0) {
+            return true;
+        }
+
+        for (const id of scope) {
+            if (ids.includes(id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     ////////////////////////////
     // Emission rights
     ////////////////////////////
@@ -86,12 +107,17 @@ export const useRights = () => {
     }
 
     function getEditEmissionRight(emission: Emission): ActionRight {
+        if (!hasSufficientScope(emission.rubriqueIds)) {
+            return ActionRight.DeniedInsufficientScope;
+        }
+        
         if (
             (!emission.emissionId && getCreateEmissionRight() === ActionRight.Allowed) ||
             roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
         ) {
             return ActionRight.Allowed;
         }
+
         if (roleContainsAny('RESTRICTED_PRODUCTION')) {
             return emission.createdByUserId === authStore.authProfile?.userId
                 ? ActionRight.Allowed
@@ -100,12 +126,18 @@ export const useRights = () => {
         return ActionRight.DeniedNoRight;
     }
 
-    function getDeleteEmissionRight(): ActionRight {
+    function getDeleteEmissionRight(emission: Emission): ActionRight {
         // In case of restricted production, it will only delete podcasts
         // created by user, and delete the emission only if empty afterwards
-        return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION')
-            ? ActionRight.Allowed
-            : ActionRight.DeniedNoRight;
+        if (roleContainsAny('ADMIN', 'ORGANISATION')) {
+            return ActionRight.Allowed;
+        } else if (roleContainsAny('PRODUCTION', 'RESTRICTED_PRODUCTION')) {
+            return hasSufficientScope(emission.rubriqueIds)
+                ? ActionRight.Allowed
+                : ActionRight.DeniedInsufficientScope;
+        } else {
+            return ActionRight.DeniedNoRight;
+        }
     }
 
     function getEditCommentsConfigEmissionRight(): ActionRight {
@@ -115,13 +147,16 @@ export const useRights = () => {
     }
 
     // Podcast rights
-    function getCreatePodcastRight(): ActionRight {
-        return roleContainsAny(
-            'ADMIN', 'ORGANISATION', 'PRODUCTION', 'PODCAST_CRUD',
-            'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'
-        )
-            ? ActionRight.Allowed
-            : ActionRight.DeniedNoRight;
+    function getCreatePodcastRight(emission?: Emission): ActionRight {
+        if(roleContainsAny('ADMIN', 'ORGANISATION')) {
+            return ActionRight.Allowed;
+        } else if (roleContainsAny('PRODUCTION', 'PODCAST_CRUD', 'RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION')) {
+            return !emission || hasSufficientScope(emission.rubriqueIds)
+                ? ActionRight.Allowed
+                : ActionRight.DeniedInsufficientScope;
+        } else {
+            return ActionRight.DeniedNoRight;
+        }
     }
 
     function getDuplicatePodcastRight(): ActionRight {
@@ -132,6 +167,10 @@ export const useRights = () => {
     }
 
     function getEditPodcastRight(podcast: Podcast): ActionRight {
+        if (!hasSufficientScope(podcast.rubriqueIds, podcast.emission.rubriqueIds)) {
+            return ActionRight.DeniedInsufficientScope;
+        }
+
         if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
             return ActionRight.Allowed;
         }

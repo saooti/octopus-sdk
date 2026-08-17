@@ -30,7 +30,14 @@
             >
 
             <div class="d-flex align-items-center justify-content-between">
-              <h2>{{ name }}</h2>
+              <h2>
+                <RightsIndicator
+                  inline
+                  :emission="emission"
+                  action="edit"
+                />
+                {{ name }}
+              </h2>
               <ShareAnonymous
                 v-if="!editRight"
                 class="d-flex justify-content-end flex-grow-1"
@@ -146,11 +153,11 @@ import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useSimplePageParam } from "../composable/route/useSimplePageParam";
-
 import ErrorMessage from "../misc/ErrorMessage.vue";
 import ClassicHelpButton from "../misc/ClassicHelpButton.vue";
 import { emissionApi } from "../../api/emissionApi";
 import { useSeasonsManagement } from "../composable/useSeasonsManagement";
+import RightsIndicator from "../display/RightsIndicator.vue"; 
 
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 const PodcastFilterList = defineAsyncComponent(

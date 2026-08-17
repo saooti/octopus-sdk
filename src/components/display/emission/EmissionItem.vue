@@ -29,6 +29,11 @@
             class="text-danger me-1"
             :title="t('Emission have not podcasts')"
           />
+          <RightsIndicator
+            inline
+            :emission="emission"
+            action="edit"
+          />
           {{ emission.name }}
         </div>
         <div
@@ -67,6 +72,7 @@ import displayHelper from "../../../helper/displayHelper";
 import { computed, onBeforeMount, onMounted, ref, useTemplateRef } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import RightsIndicator from "../RightsIndicator.vue"; 
 
 import ClassicImageBanner from '../../misc/ClassicImageBanner.vue';
 

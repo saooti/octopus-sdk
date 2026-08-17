@@ -16,6 +16,11 @@
             class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
             :title="t('Episode name page', { name: podcast.title })"
         >
+            <RightsIndicator
+                inline
+                :podcast="podcast"
+                action="edit"
+            />
             {{ podcast.title }}
         </router-link>
 
@@ -49,6 +54,7 @@
 
 <script setup lang="ts">
 import AnimatorsItem from "./AnimatorsItem.vue";
+import RightsIndicator from "../RightsIndicator.vue"; 
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
 import { computed, defineAsyncComponent } from "vue";
 import { Podcast } from "../../../stores/class/general/podcast";
@@ -56,6 +62,7 @@ import { state } from "../../../stores/ParamSdkStore";
 import { useI18n } from "vue-i18n";
 import PodcastSeasonInfo from "./PodcastSeasonInfo.vue";
 import { useDayjs } from "../../composable/useDayjs";
+
 const PodcastPlayBar = defineAsyncComponent(
     () => import("./PodcastPlayBar.vue"),
 );

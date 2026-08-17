@@ -427,10 +427,13 @@
   "Player - Generating subtitles": "Generiranje podnapisov v {language}…",
   "Transcript - Available languages": "Razpoložljivi jeziki",
   "Generic - Action disabled - Not owner": "To dejanje ni na voljo, ker vam vaše pravice ne dovoljujejo spreminjanja ali brisanja elementov, katerih lastnik niste",
-  "RightsIndicator -  Podcast - Not owner": "Ta podcast je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga urejati.",
+  "RightsIndicator - Podcast - Not owner": "Ta podcast je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga urejati.",
   "RightsIndicator - Cartouchier - Not owner": "Ta tulec je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga spreminjati.",
   "RightsIndicator - PlaylistMedia - Not owner": "Ta koš je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga spreminjati.",
   "RightsIndicator - Mix - Not owner": "Ta miks je ustvaril drug uporabnik, lahko si ga ogledate, ne morete pa ga urejati.",
   "Auth error - Couldn't retrieve user info - Title": "Napaka pri povezavi",
-  "Auth error - Couldn't retrieve user info - Message": "Pri pridobivanju vaših uporabniških podatkov je prišlo do napake. Ponovno naložite stran. Če težave ne odpravite, se obrnite na našo podporo."
+  "Auth error - Couldn't retrieve user info - Message": "Pri pridobivanju vaših uporabniških podatkov je prišlo do napake. Ponovno naložite stran. Če težave ne odpravite, se obrnite na našo podporo.",
+  "RightsIndicator - Podcast - Insufficient scope": "Obseg vaših pravic vam ne dovoljuje spreminjanja ali brisanja te epizode",
+  "RightsIndicator - Emission - Insufficient scope": "Obseg vaših pravic vam ne dovoljuje spreminjanja ali brisanja te oddaje",
+  "RightsIndicator - Generic - Insufficient scope": "Obseg vaših pravic vam ne dovoljuje spreminjanja ali brisanja tega elementa"
 }

@@ -4,12 +4,15 @@
 
 ### Features
 
-- **14594** - Ajout support 'mode' pour rubriquage afin de préparer les sous
-  organisations
-- **14594** - Ajout endpoints gestion portée des droits utilisateur
-- **14594** - Ajout droits création/édition rubriques/rubriquages
-- **14594** - Récupération de la portée de droits des utilisateurs lors de leur
-  connexion
+- **14594** - Implémentation des droits associés aux rubriques (anciennement
+  sous-organisations)
+  - Ajout support 'mode' pour rubriquage afin de préparer les sous organisations
+  - Ajout endpoints gestion portée des droits utilisateur
+  - Ajout droits création/édition rubriques/rubriquages
+  - Récupération de la portée de droits des utilisateurs lors de leur
+    connexion
+  - Vérification des droits en fonction de la portée, et ajout de
+    `RightsIndicator` sur les podcasts & émissions
 - Refacto export et configuration de build pour résoudre problème import
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques

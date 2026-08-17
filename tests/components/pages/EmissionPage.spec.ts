@@ -2,7 +2,8 @@ import '@tests/mocks/i18n';
 import '@tests/mocks/useRouter';
 
 import EmissionPage from '@/components/pages/EmissionPage.vue';
-import { emptyEmissionData, SeasonMode } from '@/stores/class/general/emission';
+import { useAuthStore } from '@/stores/AuthStore';
+import { Emission, emptyEmissionData, SeasonMode } from '@/stores/class/general/emission';
 import { emptyPodcastData, PodcastProcessingStatus } from '@/stores/class/general/podcast';
 import { mount, setupAuthStore, VueWrapper } from '@tests/utils';
 import { describe, expect, it, vi } from 'vitest';
@@ -40,6 +41,26 @@ function makeReadyPodcast(seasonMode: SeasonMode = SeasonMode.NO_SEASON) {
 async function mountPage(seasonMode: SeasonMode) {
     vi.mocked(emissionApi.get).mockResolvedValue(makeEmission(seasonMode));
     return mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+}
+
+const emissionPageScopeStubs = [
+    'PodcastmakerHeader', 'ShareAnonymous', 'PodcastFilterList', 'SharePlayer',
+    'ShareSocialsButtons', 'SubscribeButtons', 'LiveHorizontalList', 'PodcastPlayButton', 'TagList'
+];
+
+async function mountForScope(emission: Emission, auth: { roles: string[], scope: number[] }) {
+    vi.mocked(emissionApi.get).mockResolvedValue(emission);
+    return mount(EmissionPage, {
+        props: { emissionId: 1 },
+        stubs: emissionPageScopeStubs,
+        beforeMount: async () => {
+            await setupAuthStore({ roles: auth.roles, organisationId: emission.orga.id, scope: auth.scope })();
+            useAuthStore().$patch({
+                authProfile: { userId: 'test-user-123', scope: auth.scope },
+                authParam: { accessToken: 'test-token', refreshToken: undefined, expiration: undefined },
+            });
+        }
+    });
 }
 
 async function mountWithSeasons(seasons: number[]) {
@@ -205,6 +226,27 @@ describe('EmissionPage', () => {
             });
 
             expect(wrapper.find('.edit-box-slot').exists()).toBe(false);
+        });
+    });
+
+    describe('RightsIndicator (scope)', () => {
+        it('shows RightsIndicator when the emission is out of the user\'s scope', async () => {
+            const emission = { ...emptyEmissionData(), orga: publicOrga, rubriqueIds: [10] };
+            const wrapper = await mountForScope(emission, { roles: ['PRODUCTION'], scope: [999] });
+
+            const icon = wrapper.find('.rights-indicator-icon');
+            expect(icon.exists()).toBe(true);
+            expect(icon.classes()).not.toContain('invisible');
+            expect(wrapper.text()).toContain('RightsIndicator - Emission - Insufficient scope');
+        });
+
+        it('hides RightsIndicator when the emission is within the user\'s scope', async () => {
+            const emission = { ...emptyEmissionData(), orga: publicOrga, rubriqueIds: [10] };
+            const wrapper = await mountForScope(emission, { roles: ['PRODUCTION'], scope: [10] });
+
+            const icon = wrapper.find('.rights-indicator-icon');
+            expect(icon.exists()).toBe(true);
+            expect(icon.classes()).toContain('invisible');
         });
     });
 });

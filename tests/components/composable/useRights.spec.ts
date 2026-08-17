@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { setupPinia, setupAuthStore } from '@tests/utils';
+import { mockEmission, mockPodcast } from '@tests/mocks/rights';
 import { useAuthStore } from '@/stores/AuthStore';
 import { useRights, ActionRight } from '@/components/composable/useRights';
 import type { Organisation } from '@/stores/class/general/organisation';
@@ -11,10 +12,10 @@ import { Cartouchier } from '@/stores/class/cartouchier/cartouchier';
 import type { Media } from '@/stores/class/general/media';
 import type { Rubrique } from '@/stores/class/rubrique/rubrique';
 
-async function setup(roles: string[], userId = 'test-user-123'): Promise<void> {
+async function setup(roles: string[], userId = 'test-user-123', scope: Array<number> = []): Promise<void> {
     setupPinia();
     await setupAuthStore({ roles })();
-    useAuthStore().$patch({ authProfile: { userId } });
+    useAuthStore().$patch({ authProfile: { userId, scope } });
 }
 
 describe('useRights', () => {
@@ -36,17 +37,17 @@ describe('useRights', () => {
         describe('canEditEmission', () => {
             it('allows ADMIN to edit any emission', async () => {
                 await setup(['ADMIN']);
-                expect(useRights().canEditEmission({ emissionId: 1, createdByUserId: 'other-user' } as Emission)).toBe(true);
+                expect(useRights().canEditEmission(mockEmission({ createdByUserId: 'other-user' }))).toBe(true);
             });
 
             it('allows RESTRICTED_PRODUCTION to edit own emission', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().canEditEmission({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(true);
+                expect(useRights().canEditEmission(mockEmission({ createdByUserId: 'test-user-123' }))).toBe(true);
             });
 
             it('denies RESTRICTED_PRODUCTION editing others\' emission', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().canEditEmission({ emissionId: 1, createdByUserId: 'other-user' } as Emission)).toBe(false);
+                expect(useRights().canEditEmission(mockEmission({ createdByUserId: 'other-user' }))).toBe(false);
             });
 
             it('allows editing new emissions if can create', async () => {
@@ -68,13 +69,13 @@ describe('useRights', () => {
             ['ADMIN', 'ORGANISATION', 'PRODUCTION', 'RESTRICTED_PRODUCTION'].forEach(role => {
                 it(`allows ${role}`, async () => {
                     await setup([role]);
-                    expect(useRights().canDeleteEmission()).toBe(true);
+                    expect(useRights().canDeleteEmission(mockEmission({}))).toBe(true);
                 });
             });
 
             it('denies unrelated roles', async () => {
                 await setup(['PLAYLISTS']);
-                expect(useRights().canDeleteEmission()).toBe(false);
+                expect(useRights().canDeleteEmission(mockEmission({}))).toBe(false);
             });
         });
     });
@@ -109,8 +110,8 @@ describe('useRights', () => {
         });
 
         describe('canEditPodcast', () => {
-            const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123', valid: true } as Podcast;
-            const otherPodcast = { podcastId: 1, createdByUserId: 'other-user', valid: true } as Podcast;
+            const ownPodcast = mockPodcast({ createdByUserId: 'test-user-123', valid: true });
+            const otherPodcast = mockPodcast({ createdByUserId: 'other-user', valid: true });
 
             ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
                 it(`allows ${role} to edit any podcast`, async () => {
@@ -121,19 +122,19 @@ describe('useRights', () => {
 
             it('allows PODCAST_CRUD to edit own non-valid podcast', async () => {
                 await setup(['PODCAST_CRUD']);
-                const podcast = { podcastId: 1, valid: false, publisher: { userId: 'test-user-123' } } as Podcast;
+                const podcast = mockPodcast({ valid: false, publisher: { userId: 'test-user-123' } });
                 expect(useRights().canEditPodcast(podcast)).toBe(true);
             });
 
             it('denies PODCAST_CRUD editing own valid podcast', async () => {
                 await setup(['PODCAST_CRUD']);
-                const podcast = { podcastId: 1, valid: true, publisher: { userId: 'test-user-123' } } as Podcast;
+                const podcast = mockPodcast({ valid: true, publisher: { userId: 'test-user-123' } });
                 expect(useRights().canEditPodcast(podcast)).toBe(false);
             });
 
             it('denies PODCAST_CRUD editing others\' podcast', async () => {
                 await setup(['PODCAST_CRUD']);
-                const podcast = { podcastId: 1, valid: false, publisher: { userId: 'other-user' } } as Podcast;
+                const podcast = mockPodcast({ valid: false, publisher: { userId: 'other-user' } });
                 expect(useRights().canEditPodcast(podcast)).toBe(false);
             });
 
@@ -158,14 +159,14 @@ describe('useRights', () => {
             ['RESTRICTED_PRODUCTION', 'RESTRICTED_ANIMATION'].forEach(role => {
                 it(`allows ${role} + PODCAST_CRUD to edit own valid podcast`, async () => {
                     await setup([role, 'PODCAST_CRUD']);
-                    const podcast = { podcastId: 1, createdByUserId: 'test-user-123', valid: true, publisher: { userId: 'test-user-123' } } as Podcast;
+                    const podcast = mockPodcast({ createdByUserId: 'test-user-123', valid: true, publisher: { userId: 'test-user-123' } });
                     expect(useRights().canEditPodcast(podcast)).toBe(true);
                 });
             });
 
             it('denies RESTRICTED_PRODUCTION + PODCAST_CRUD editing others\' valid podcast', async () => {
                 await setup(['RESTRICTED_PRODUCTION', 'PODCAST_CRUD']);
-                const podcast = { podcastId: 1, createdByUserId: 'other-user', valid: true, publisher: { userId: 'other-user' } } as Podcast;
+                const podcast = mockPodcast({ createdByUserId: 'other-user', valid: true, publisher: { userId: 'other-user' } });
                 expect(useRights().canEditPodcast(podcast)).toBe(false);
             });
         });
@@ -173,8 +174,8 @@ describe('useRights', () => {
         describe('canDeletePodcast', () => {
             it('delegates to canEditPodcast', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().canDeletePodcast({ podcastId: 1, createdByUserId: 'test-user-123' } as Podcast)).toBe(true);
-                expect(useRights().canDeletePodcast({ podcastId: 1, createdByUserId: 'other-user' } as Podcast)).toBe(false);
+                expect(useRights().canDeletePodcast(mockPodcast({ createdByUserId: 'test-user-123'}))).toBe(true);
+                expect(useRights().canDeletePodcast(mockPodcast({ createdByUserId: 'other-user' }))).toBe(false);
             });
         });
 
@@ -251,8 +252,8 @@ describe('useRights', () => {
     });
 
     describe('canEditTranscript', () => {
-        const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123' } as Podcast;
-        const otherPodcast = { podcastId: 2, createdByUserId: 'other-user' } as Podcast;
+        const ownPodcast = mockPodcast({ createdByUserId: 'test-user-123' });
+        const otherPodcast = mockPodcast({ createdByUserId: 'other-user' });
 
         ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
             it(`allows ${role} to edit transcript of any podcast`, async () => {
@@ -276,8 +277,8 @@ describe('useRights', () => {
     });
 
     describe('canEditTranslation', () => {
-        const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123' } as Podcast;
-        const otherPodcast = { podcastId: 2, createdByUserId: 'other-user' } as Podcast;
+        const ownPodcast = mockPodcast({ createdByUserId: 'test-user-123' });
+        const otherPodcast = mockPodcast({ createdByUserId: 'other-user' });
 
         ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
             it(`allows ${role} to edit transcript of any podcast`, async () => {
@@ -301,8 +302,8 @@ describe('useRights', () => {
     });
 
     describe('canEditTranscriptVisibility', () => {
-        const ownPodcast = { podcastId: 1, createdByUserId: 'test-user-123' } as Podcast;
-        const otherPodcast = { podcastId: 2, createdByUserId: 'other-user' } as Podcast;
+        const ownPodcast = mockPodcast({ createdByUserId: 'test-user-123' });
+        const otherPodcast = mockPodcast({ createdByUserId: 'other-user' });
 
         ['ADMIN', 'ORGANISATION', 'PRODUCTION'].forEach(role => {
             it(`allows ${role} to edit transcript of any podcast`, async () => {
@@ -588,49 +589,49 @@ describe('useRights', () => {
         describe('getEditEmissionRight', () => {
             it('returns Allowed for PRODUCTION', async () => {
                 await setup(['PRODUCTION']);
-                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'other' } as Emission)).toBe(ActionRight.Allowed);
+                expect(useRights().getEditEmissionRight(mockEmission({ createdByUserId: 'other' }))).toBe(ActionRight.Allowed);
             });
 
             it('returns Allowed for RESTRICTED_PRODUCTION editing own emission', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(ActionRight.Allowed);
+                expect(useRights().getEditEmissionRight(mockEmission({ createdByUserId: 'test-user-123' }))).toBe(ActionRight.Allowed);
             });
 
             it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' emission', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'other' } as Emission)).toBe(ActionRight.DeniedNotOwner);
+                expect(useRights().getEditEmissionRight(mockEmission({ createdByUserId: 'other' }))).toBe(ActionRight.DeniedNotOwner);
             });
 
             it('returns DeniedNoRight for role without emission access', async () => {
                 await setup(['PLAYLISTS']);
-                expect(useRights().getEditEmissionRight({ emissionId: 1, createdByUserId: 'test-user-123' } as Emission)).toBe(ActionRight.DeniedNoRight);
+                expect(useRights().getEditEmissionRight(mockEmission({ createdByUserId: 'test-user-123' }))).toBe(ActionRight.DeniedNoRight);
             });
         });
 
         describe('getEditPodcastRight', () => {
             it('returns Allowed for PRODUCTION on any podcast', async () => {
                 await setup(['PRODUCTION']);
-                expect(useRights().getEditPodcastRight({ createdByUserId: 'other', valid: true } as Podcast)).toBe(ActionRight.Allowed);
+                expect(useRights().getEditPodcastRight(mockPodcast({ createdByUserId: 'other', valid: true }))).toBe(ActionRight.Allowed);
             });
 
             it('returns Allowed for RESTRICTED_PRODUCTION editing own podcast', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().getEditPodcastRight({ createdByUserId: 'test-user-123', valid: true } as Podcast)).toBe(ActionRight.Allowed);
+                expect(useRights().getEditPodcastRight(mockPodcast({ createdByUserId: 'test-user-123', valid: true }))).toBe(ActionRight.Allowed);
             });
 
             it('returns DeniedNotOwner for RESTRICTED_PRODUCTION editing others\' podcast', async () => {
                 await setup(['RESTRICTED_PRODUCTION']);
-                expect(useRights().getEditPodcastRight({ createdByUserId: 'other', valid: true } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+                expect(useRights().getEditPodcastRight(mockPodcast({ createdByUserId: 'other', valid: true }))).toBe(ActionRight.DeniedNotOwner);
             });
 
             it('returns DeniedNotOwner for PODCAST_CRUD editing others\' podcast', async () => {
                 await setup(['PODCAST_CRUD']);
-                expect(useRights().getEditPodcastRight({ valid: false, publisher: { userId: 'other' } } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+                expect(useRights().getEditPodcastRight(mockPodcast({ valid: false, publisher: { userId: 'other' } }))).toBe(ActionRight.DeniedNotOwner);
             });
 
             it('returns DeniedNoRight for role without podcast access', async () => {
                 await setup(['PLAYLISTS']);
-                expect(useRights().getEditPodcastRight({ createdByUserId: 'test-user-123', valid: true } as Podcast)).toBe(ActionRight.DeniedNoRight);
+                expect(useRights().getEditPodcastRight(mockPodcast({ createdByUserId: 'test-user-123', valid: true }))).toBe(ActionRight.DeniedNoRight);
             });
         });
 
@@ -714,6 +715,123 @@ describe('useRights', () => {
             it('returns DeniedNoRight for role without transcript access', async () => {
                 await setup(['RESTRICTED_ANIMATION']);
                 expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+    });
+
+    describe('Scope permissions', () => {
+        describe('getEditEmissionRight scope', () => {
+            it('denies PRODUCTION with insufficient scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                expect(useRights().getEditEmissionRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows PRODUCTION with matching scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [1]);
+                expect(useRights().getEditEmissionRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.Allowed);
+            });
+
+            it('denies RESTRICTED_PRODUCTION with insufficient scope even on own emission', async () => {
+                await setup(['RESTRICTED_PRODUCTION'], 'test-user-123', [999]);
+                expect(useRights().getEditEmissionRight(mockEmission({ createdByUserId: 'test-user-123', rubriqueIds: [1] })))
+                    .toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows RESTRICTED_PRODUCTION with matching scope on own emission', async () => {
+                await setup(['RESTRICTED_PRODUCTION'], 'test-user-123', [1]);
+                expect(useRights().getEditEmissionRight(mockEmission({ createdByUserId: 'test-user-123', rubriqueIds: [1] })))
+                    .toBe(ActionRight.Allowed);
+            });
+
+            it('allows ADMIN regardless of scope', async () => {
+                await setup(['ADMIN'], 'test-user-123', [999]);
+                expect(useRights().getEditEmissionRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.Allowed);
+            });
+
+            it('canEditEmission forwards the scope-driven denial', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                expect(useRights().canEditEmission(mockEmission({ rubriqueIds: [1] }))).toBe(false);
+            });
+        });
+
+        describe('getDeleteEmissionRight scope', () => {
+            it('denies PRODUCTION with insufficient scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                expect(useRights().getDeleteEmissionRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows PRODUCTION with matching scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [1]);
+                expect(useRights().getDeleteEmissionRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.Allowed);
+            });
+
+            it('allows ADMIN regardless of scope', async () => {
+                await setup(['ADMIN'], 'test-user-123', [999]);
+                expect(useRights().getDeleteEmissionRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.Allowed);
+            });
+        });
+
+        describe('getCreatePodcastRight scope', () => {
+            it('allows creation without an emission arg regardless of scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                expect(useRights().getCreatePodcastRight()).toBe(ActionRight.Allowed);
+            });
+
+            it('denies PRODUCTION with insufficient scope when an emission is passed', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                expect(useRights().getCreatePodcastRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows PRODUCTION with matching scope when an emission is passed', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [1]);
+                expect(useRights().getCreatePodcastRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.Allowed);
+            });
+
+            it('allows ADMIN regardless of scope', async () => {
+                await setup(['ADMIN'], 'test-user-123', [999]);
+                expect(useRights().getCreatePodcastRight(mockEmission({ rubriqueIds: [1] }))).toBe(ActionRight.Allowed);
+            });
+        });
+
+        describe('getEditPodcastRight scope', () => {
+            it('denies PRODUCTION when neither podcast nor emission rubriques match scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditPodcastRight(podcast)).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows PRODUCTION when the podcast\'s own rubriques match scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [1]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditPodcastRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('allows PRODUCTION when only the emission\'s rubriques match scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [2]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditPodcastRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('denies RESTRICTED_PRODUCTION with insufficient scope even on own podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({
+                    createdByUserId: 'test-user-123',
+                    rubriqueIds: [1],
+                    emission: mockEmission({ rubriqueIds: [2] })
+                });
+                expect(useRights().getEditPodcastRight(podcast)).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows ADMIN regardless of scope', async () => {
+                await setup(['ADMIN'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditPodcastRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('canEditPodcast forwards the scope-driven denial', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().canEditPodcast(podcast)).toBe(false);
             });
         });
     });
