@@ -7,6 +7,7 @@ import { organisationApi } from './organisationApi';
 import { emissionApi } from './emissionApi';
 import { FetchParam } from '@/stores/class/general/fetchParam';
 import { Paginable } from './types';
+import { participantApi } from './participantApi';
 
 export enum PodcastSort {
     DATE = 'DATE',
@@ -186,18 +187,30 @@ async function searchFull(options:PodcastSearchOptions, adaptParameters?: boolea
         .filter(unique);
     const emissionIds = podcasts.result.map((p: SimplifiedPodcast) => p.emissionId)
         .filter(unique);
+    const participantIds = podcasts.result.map((p: SimplifiedPodcast) => p.animatorId ?? [])
+        .flat()
+        .filter(unique);
 
-    const organisations = await organisationApi.getAllById(organisationIds);
-    const emissions = await emissionApi.getAllById(emissionIds);
+    const organisationsPromise = organisationApi.getAllById(organisationIds);
+    const emissionsPromise = emissionApi.getAllById(emissionIds);
+    const participantsPromise = participantApi.getAllById(participantIds);
+
+    const [organisations, emissions, participants] = await Promise.all([
+        organisationsPromise,
+        emissionsPromise,
+        participantsPromise
+    ])
 
     podcasts.result.forEach((s: SimplifiedPodcast) => {
         const organisation = organisations[s.organisationId];
         const emission = emissions[s.emissionId];
+        const animators = s.animatorId?.map(id => participants[id]);
 
         full.result.push({
             ...s,
             organisation,
-            emission
+            emission,
+            animators
         });
     });
 

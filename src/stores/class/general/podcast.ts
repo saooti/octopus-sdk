@@ -113,6 +113,8 @@ export interface SimplifiedPodcast extends
   emissionId: number;
   /** The ID of the organisation */
   organisationId: string;
+  /** The ID of the animators */
+  animatorId?: Array<number>;
 }
 
 /**

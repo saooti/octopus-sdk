@@ -17,11 +17,15 @@
 
 ### Fixes
 
+- **[14747]** - Récupération des animateurs pour conversion `SimplifiedPodcast`
+  -> `Podcast`
 - Correction chargement composants stub suite à changement build
 
 ### Misc
 
 - Ajout props utilitaires pour ClassicHelpButton et ClassicTabs
+
+[14747]: https://trac.saooti.net/ticket/14747
 
 ## 41.12.1 (En cours)
 
