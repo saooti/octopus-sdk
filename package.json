@@ -107,7 +107,7 @@
       "default": "./dist/index.mjs"
     },
     "./style.css": "./dist/index.css",
-    "./src/*": "./src/*",
+    "./octopus-library.scss": "./src/style/octopus-library.scss",
     "./tests": {
       "types": "./tests/index.ts",
       "default": "./dist/tests.mjs"
