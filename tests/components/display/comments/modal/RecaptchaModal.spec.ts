@@ -1,4 +1,5 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 import RecaptchaModal from '@/components/display/comments/modal/RecaptchaModal.vue';
 import { CHECK_TOKEN_KEY } from '@/components/composable/keys';

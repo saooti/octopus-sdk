@@ -1,9 +1,10 @@
-import '@tests/mocks/useRouter';
-import '@tests/mocks/i18n';
+import { mockUseRouter, mockI18n } from '@tests/mocks';
+vi.mock('vue-router', () => mockUseRouter());
+vi.mock('vue-i18n', () => mockI18n());
 
 import HomeDropdown from '@/components/misc/HomeDropdown.vue';
 import { mount } from '@tests/utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('HomeDropdown - displayUpload prop', () => {
     it('displays the upload button when displayUpload is true', async () => {

@@ -1,9 +1,10 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 import ClipboardModal from '@/components/misc/modal/ClipboardModal.vue';
 import { emptyEmissionData } from '@/stores/class/general/emission';
 import { mount, setupAuthStore } from '@tests/utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 // Stands in for the real implementation that a consuming app (e.g.
 // frontoffice) registers globally via app.component("RssSection", ...).

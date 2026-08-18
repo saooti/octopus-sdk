@@ -1,4 +1,5 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 import OctopusMultiselect from '@/components/form/OctopusMultiselect.vue';
 import { DOMWrapper, type VueWrapper } from '@vue/test-utils';

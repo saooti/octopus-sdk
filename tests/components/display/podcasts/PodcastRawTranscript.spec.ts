@@ -1,4 +1,5 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { flushPromises } from '@vue/test-utils';
 import { defineComponent, nextTick } from 'vue';

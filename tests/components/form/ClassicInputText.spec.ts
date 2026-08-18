@@ -1,8 +1,9 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 import ClassicInputText from '@/components/form/ClassicInputText.vue';
 import { mount } from '@tests/utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('ClassicInputText', () => {
     describe('aria-required', () => {

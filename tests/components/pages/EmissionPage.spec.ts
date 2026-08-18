@@ -1,5 +1,6 @@
-import '@tests/mocks/i18n';
-import '@tests/mocks/useRouter';
+import { mockI18n, mockUseRouter } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
+vi.mock('vue-router', () => mockUseRouter());
 
 import EmissionPage from '@/components/pages/EmissionPage.vue';
 import { useAuthStore } from '@/stores/AuthStore';

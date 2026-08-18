@@ -1,9 +1,10 @@
-import '@tests/mocks/i18n';
-import '@tests/mocks/useRouter';
+import { mockI18n, mockUseRouter } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
+vi.mock('vue-router', () => mockUseRouter());
 
 import PresentationItem from '@/components/layouts/PresentationItem.vue';
 import { mount as testMount } from '@tests/utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 const baseProps = {
     route: 'podcast',

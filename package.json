@@ -108,7 +108,14 @@
     },
     "./style.css": "./dist/index.css",
     "./src/*": "./src/*",
-    "./tests/*": "./tests/*",
+    "./tests": {
+      "types": "./tests/index.ts",
+      "default": "./dist/tests.mjs"
+    },
+    "./tests/mocks": {
+      "types": "./tests/mocks/index.ts",
+      "default": "./dist/tests-mocks.mjs"
+    },
     "./eslint-config": {
       "types": "./eslint-config.d.ts",
       "default": "./eslint-config.mjs"

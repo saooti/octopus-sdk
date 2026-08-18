@@ -1,4 +1,5 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 vi.mock('@/api', () => ({
     rubriquesApi: { getCachedRubrique: vi.fn() },

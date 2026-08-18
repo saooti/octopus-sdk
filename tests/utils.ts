@@ -7,17 +7,9 @@ import { createTestingPinia } from '@pinia/testing';
 import { useAuthStore } from '../src/stores/AuthStore';
 import { PlayerStatus, usePlayerStore } from '../src/stores/PlayerStore';
 import { Podcast } from '../src/stores/class/general/podcast';
+import { localisation } from './localisation';
 
-/** Mock function for localisation */
-export function localisation(str: string, options?: Record<string,string>): string {
-    let result = str;
-    if (options) {
-        Object.entries(options).forEach(([key, value]) => {
-            result += ` ${key}:${value}`;
-        });
-    }
-    return result;
-}
+export { localisation };
 
 /**
  * Utility function to mount a component for testing.

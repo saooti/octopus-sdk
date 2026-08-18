@@ -1,10 +1,11 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 import OctopusSelect from '@/components/form/OctopusSelect.vue';
 import { DOMWrapper, type VueWrapper } from '@vue/test-utils';
 import { mount } from '@tests/utils';
 import { nextTick } from 'vue';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const options = [
     { id: 1, name: 'Alpha' },

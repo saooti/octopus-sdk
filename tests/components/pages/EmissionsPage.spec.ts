@@ -1,9 +1,10 @@
-import '@tests/mocks/useAdvancedParamInit';
+import { mockAdvancedParamInit } from '@tests/mocks';
+vi.mock('@/components/composable/route/useAdvancedParamInit', () => mockAdvancedParamInit());
 
 import EmissionsPage from '@/components/pages/EmissionsPage.vue';
 import { mount } from '@tests/utils';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('EmissionsPage', () => {
     describe('props', () => {

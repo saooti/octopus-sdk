@@ -1,5 +1,6 @@
-import '@tests/mocks/i18n';
-import '@tests/mocks/useRouter';
+import { mockI18n, mockUseRouter } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
+vi.mock('vue-router', () => mockUseRouter());
 
 import ParticipantPage from '@/components/pages/ParticipantPage.vue';
 import { emptyParticipantData } from '@/stores/class/general/participant';

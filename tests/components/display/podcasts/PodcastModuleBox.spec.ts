@@ -1,5 +1,6 @@
-import '@tests/mocks/i18n';
-import '@tests/mocks/useRouter';
+import { mockI18n, mockUseRouter } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
+vi.mock('vue-router', () => mockUseRouter());
 
 import PodcastModuleBox from '@/components/display/podcasts/PodcastModuleBox.vue';
 import { useAuthStore } from '@/stores/AuthStore';
@@ -7,7 +8,7 @@ import { Conference } from '@/stores/class/conference/conference';
 import { SeasonMode } from '@/stores/class/general/emission';
 import { emptyPodcastData, Podcast } from '@/stores/class/general/podcast';
 import { mount as testMount, setupAuthStore } from '@tests/utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { initialize } from '@/stores/ParamSdkStore';
 
 const mount = (podcast: Podcast, options?: {

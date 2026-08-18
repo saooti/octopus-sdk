@@ -17,6 +17,7 @@
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques
 - Passage des slots de ClassicRadioLabel vers ClassicRadio
+- Correction build pour tests
 
 ### Fixes
 
