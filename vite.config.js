@@ -8,12 +8,15 @@ const path = require('path');
 
 // Chunk filenames are content-hashed, and since emptyOutDir is false (to
 // preserve dist/index.d.ts between incremental builds), every rebuild leaves
-// the previous version of every chunk behind. Purge stale .mjs chunks after
-// each build/rebuild so dist doesn't grow unbounded during a long
-// build:watch session. This must run in writeBundle (after the new chunks
-// are written), not buildStart: deleting old chunks up front leaves a window
-// where dist has no .mjs files at all, which linked consumers (frontoffice,
-// podcastmaker) can catch mid-rebuild and choke on.
+// the previous version of every chunk behind. Purge stale .mjs/.css output
+// after each build/rebuild so dist doesn't grow unbounded during a long
+// build:watch session, and so an orphaned CSS bundle can't linger with
+// scopeIds that no longer match the current component chunks (this is what
+// caused dist/index.css to go stale after the CSS output name changed to
+// octopus-sdk.css). This must run in writeBundle (after the new chunks are
+// written), not buildStart: deleting old chunks up front leaves a window
+// where dist has no .mjs/.css files at all, which linked consumers
+// (frontoffice, podcastmaker) can catch mid-rebuild and choke on.
 function cleanStaleChunks() {
   return {
     name: 'clean-stale-chunks',
@@ -21,7 +24,7 @@ function cleanStaleChunks() {
       const outDir = path.resolve(__dirname, 'dist');
       const freshFiles = new Set(Object.keys(bundle));
       for (const file of fs.readdirSync(outDir)) {
-        if (file.endsWith('.mjs') && !freshFiles.has(file)) {
+        if ((file.endsWith('.mjs') || file.endsWith('.css')) && !freshFiles.has(file)) {
           fs.unlinkSync(path.join(outDir, file));
         }
       }
@@ -56,7 +59,15 @@ export default defineConfig(({ mode }) => ({
     },
     rollupOptions: {
       // Mark all dependencies as external so they are not bundled
-      external: (id) => !id.startsWith('.') && !id.startsWith('@/') && !id.startsWith('@tests/') && !path.isAbsolute(id)
+      external: (id) => !id.startsWith('.') && !id.startsWith('@/') && !id.startsWith('@tests/') && !path.isAbsolute(id),
+      output: {
+        // Pin the combined CSS output name so it always matches the
+        // "./style.css" export in package.json. Without this, adding/
+        // removing lib entries can silently change the default name
+        // (it drifted from index.css to octopus-sdk.css), leaving the
+        // exported path pointing at a stale file.
+        assetFileNames: 'index.css'
+      }
     }
   },
   resolve: {
