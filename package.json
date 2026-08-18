@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "42.0.0-beta",
+  "version": "42.0.0-beta2",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -123,6 +123,9 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "tests",
+    "eslint-config.mjs",
+    "eslint-config.d.ts"
   ]
 }
