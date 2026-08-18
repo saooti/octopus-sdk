@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "42.0.0-beta2",
+  "version": "42.0.0-beta3",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -119,13 +119,15 @@
     "./eslint-config": {
       "types": "./eslint-config.d.ts",
       "default": "./eslint-config.mjs"
-    }
+    },
+    "./fonts/style.css": "./public/css/fonts/localFonts/style.css"
   },
   "files": [
     "dist",
     "src",
     "tests",
     "eslint-config.mjs",
-    "eslint-config.d.ts"
+    "eslint-config.d.ts",
+    "public/css/fonts/localFonts"
   ]
 }
