@@ -137,6 +137,18 @@ async function listUserScope(userId: string): Promise<Array<number>> {
 }
 
 /**
+ * List the user IDS associated to the given rubrique
+ * @param rubriqueId The ID of the rubrique for which to retrieve this data
+ * @returns The list of IDs of users
+ */
+async function listUsersScopedByRubrique(rubriqueId: string): Promise<Array<string>> {
+    return classicApi.fetchData<Array<string>>({
+        api: ModuleApi.DEFAULT,
+        path: `rubrique/user/list/users/${rubriqueId}`
+    });
+}
+
+/**
  * Update the associated rubriques to the user
  * @param userId The ID of the user for which to change the rights scope
  * @param previousScope Previous rubrique IDs
@@ -205,5 +217,6 @@ export const rubriquesApi = {
     updateRubriquage,
     deleteRubriquage,
     listUserScope,
+    listUsersScopedByRubrique,
     setUserScope
 };
