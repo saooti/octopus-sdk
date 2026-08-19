@@ -316,6 +316,20 @@ describe('useRights', () => {
             await setup(['PODCAST_CRUD']);
             expect(useRights().canEditTranscriptVisibility(ownPodcast)).toBe(false);
         });
+
+        it('denies PRODUCTION with insufficient scope', async () => {
+            await setup(['PRODUCTION'], 'test-user-123', [999]);
+            const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+            expect(useRights().canEditTranscriptVisibility(podcast)).toBe(false);
+        });
+    });
+
+    describe('canEditChaptering', () => {
+        it('delegates to canEditPodcast', async () => {
+            await setup(['RESTRICTED_PRODUCTION']);
+            expect(useRights().canEditChaptering(mockPodcast({ createdByUserId: 'test-user-123', valid: true }))).toBe(true);
+            expect(useRights().canEditChaptering(mockPodcast({ createdByUserId: 'other-user', valid: true }))).toBe(false);
+        });
     });
 
     describe('Rubrique/Rubriquage permissions', () => {
@@ -699,22 +713,52 @@ describe('useRights', () => {
         describe('getEditTranscriptRight', () => {
             it('returns Allowed for PRODUCTION on any podcast', async () => {
                 await setup(['PRODUCTION']);
-                expect(useRights().getEditTranscriptRight({ createdByUserId: 'other' } as Podcast)).toBe(ActionRight.Allowed);
+                expect(useRights().getEditTranscriptRight(mockPodcast({ createdByUserId: 'other' }))).toBe(ActionRight.Allowed);
             });
 
             it('returns Allowed for PODCAST_CRUD editing own transcript', async () => {
                 await setup(['PODCAST_CRUD']);
-                expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.Allowed);
+                expect(useRights().getEditTranscriptRight(mockPodcast({ createdByUserId: 'test-user-123' }))).toBe(ActionRight.Allowed);
             });
 
             it('returns DeniedNotOwner for PODCAST_CRUD editing others\' transcript', async () => {
                 await setup(['PODCAST_CRUD']);
-                expect(useRights().getEditTranscriptRight({ createdByUserId: 'other' } as Podcast)).toBe(ActionRight.DeniedNotOwner);
+                expect(useRights().getEditTranscriptRight(mockPodcast({ createdByUserId: 'other' }))).toBe(ActionRight.DeniedNotOwner);
             });
 
             it('returns DeniedNoRight for role without transcript access', async () => {
                 await setup(['RESTRICTED_ANIMATION']);
-                expect(useRights().getEditTranscriptRight({ createdByUserId: 'test-user-123' } as Podcast)).toBe(ActionRight.DeniedNoRight);
+                expect(useRights().getEditTranscriptRight(mockPodcast({ createdByUserId: 'test-user-123' }))).toBe(ActionRight.DeniedNoRight);
+            });
+        });
+
+        describe('getEditChapteringRight', () => {
+            it('matches getEditPodcastRight for ADMIN on any podcast', async () => {
+                await setup(['ADMIN']);
+                const podcast = mockPodcast({ createdByUserId: 'other', valid: true });
+                expect(useRights().getEditChapteringRight(podcast)).toBe(useRights().getEditPodcastRight(podcast));
+                expect(useRights().getEditChapteringRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('matches getEditPodcastRight for RESTRICTED_PRODUCTION on own podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                const podcast = mockPodcast({ createdByUserId: 'test-user-123', valid: true });
+                expect(useRights().getEditChapteringRight(podcast)).toBe(useRights().getEditPodcastRight(podcast));
+                expect(useRights().getEditChapteringRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('matches getEditPodcastRight for RESTRICTED_PRODUCTION on others\' podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION']);
+                const podcast = mockPodcast({ createdByUserId: 'other', valid: true });
+                expect(useRights().getEditChapteringRight(podcast)).toBe(useRights().getEditPodcastRight(podcast));
+                expect(useRights().getEditChapteringRight(podcast)).toBe(ActionRight.DeniedNotOwner);
+            });
+
+            it('matches getEditPodcastRight with insufficient scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditChapteringRight(podcast)).toBe(useRights().getEditPodcastRight(podcast));
+                expect(useRights().getEditChapteringRight(podcast)).toBe(ActionRight.DeniedInsufficientScope);
             });
         });
     });
@@ -832,6 +876,74 @@ describe('useRights', () => {
                 await setup(['PRODUCTION'], 'test-user-123', [999]);
                 const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
                 expect(useRights().canEditPodcast(podcast)).toBe(false);
+            });
+        });
+
+        describe('getEditTranscriptRight scope', () => {
+            it('denies PRODUCTION when neither podcast nor emission rubriques match scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptRight(podcast)).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows PRODUCTION when the podcast\'s own rubriques match scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [1]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('allows PRODUCTION when only the emission\'s rubriques match scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [2]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('denies RESTRICTED_PRODUCTION with insufficient scope even on own podcast', async () => {
+                await setup(['RESTRICTED_PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({
+                    createdByUserId: 'test-user-123',
+                    rubriqueIds: [1],
+                    emission: mockEmission({ rubriqueIds: [2] })
+                });
+                expect(useRights().getEditTranscriptRight(podcast)).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows ADMIN regardless of scope', async () => {
+                await setup(['ADMIN'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('canEditTranscript forwards the scope-driven denial', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().canEditTranscript(podcast)).toBe(false);
+            });
+        });
+
+        describe('getEditTranscriptVisibilityRight scope', () => {
+            it('denies PRODUCTION with insufficient scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptVisibilityRight(podcast)).toBe(ActionRight.DeniedInsufficientScope);
+            });
+
+            it('allows PRODUCTION with matching scope', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [1]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptVisibilityRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('allows ADMIN regardless of scope', async () => {
+                await setup(['ADMIN'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().getEditTranscriptVisibilityRight(podcast)).toBe(ActionRight.Allowed);
+            });
+
+            it('canEditTranscriptVisibility forwards the scope-driven denial', async () => {
+                await setup(['PRODUCTION'], 'test-user-123', [999]);
+                const podcast = mockPodcast({ rubriqueIds: [1], emission: mockEmission({ rubriqueIds: [2] }) });
+                expect(useRights().canEditTranscriptVisibility(podcast)).toBe(false);
             });
         });
     });

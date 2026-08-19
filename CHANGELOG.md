@@ -13,6 +13,7 @@
     connexion
   - Vérification des droits en fonction de la portée, et ajout de
     `RightsIndicator` sur les podcasts & émissions
+- **[14594]** - Ajout fonction de test des droits pour le chapitrage
 - Refacto export et configuration de build pour résoudre problème import
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques
@@ -28,8 +29,6 @@
 ### Misc
 
 - Ajout props utilitaires pour ClassicHelpButton et ClassicTabs
-
-[14747]: https://trac.saooti.net/ticket/14747
 
 ## 41.12.1 (En cours)
 

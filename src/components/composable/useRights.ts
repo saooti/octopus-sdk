@@ -394,6 +394,9 @@ export const useRights = () => {
     }
 
     function getEditTranscriptRight(podcast: Podcast): ActionRight {
+        if (!hasSufficientScope(podcast.rubriqueIds, podcast.emission.rubriqueIds)) {
+            return ActionRight.DeniedInsufficientScope;
+        }
         if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
             return ActionRight.Allowed;
         }
@@ -405,8 +408,11 @@ export const useRights = () => {
         return ActionRight.DeniedNoRight;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function getEditTranscriptVisibilityRight(_podcast: Podcast): ActionRight {
+    function getEditTranscriptVisibilityRight(podcast: Podcast): ActionRight {
+        if (!hasSufficientScope(podcast.rubriqueIds, podcast.emission.rubriqueIds)) {
+            return ActionRight.DeniedInsufficientScope;
+        }
+
         return roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')
             ? ActionRight.Allowed
             : ActionRight.DeniedNoRight;
@@ -414,6 +420,10 @@ export const useRights = () => {
 
     function getEditTranslationRight(podcast: Podcast): ActionRight {
         return getEditTranscriptRight(podcast);
+    }
+
+    function getEditChapteringRight(podcast: Podcast): ActionRight {
+        return getEditPodcastRight(podcast);
     }
 
     ////////////////////////////
@@ -484,6 +494,7 @@ export const useRights = () => {
         getEditTranscriptRight,
         getEditTranscriptVisibilityRight,
         getEditTranslationRight,
+        getEditChapteringRight
     };
 
     const canFns = deriveCanFunctions(rightFns);
