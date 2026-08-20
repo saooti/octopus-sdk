@@ -436,5 +436,5 @@
   "Auth error - Couldn't retrieve user info - Message": "Beim Abrufen Ihrer Benutzerinformationen ist ein Fehler aufgetreten. Bitte laden Sie die Seite neu. Sollte das Problem weiterhin bestehen, wenden Sie sich bitte an unseren Support.",
   "RightsIndicator - Podcast - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, diese Episode zu ändern oder zu löschen",
   "RightsIndicator - Emission - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, diese Sendung zu ändern oder zu löschen",
-  "RightsIndicator - Generic - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, dieses Element zu ändern oder zu löschen"
+  "RightsIndicator - Generic - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, dieses Element zu erstellen, zu ändern oder zu löschen"
 }

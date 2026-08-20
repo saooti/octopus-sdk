@@ -81,6 +81,7 @@ export const getQrCode = () => import("./src/components/display/sharing/QrCode.v
 export const SubscribeButtons = defineAsyncComponent(() => import("./src/components/display/sharing/SubscribeButtons.vue"));
 export const PodcastSeasonInfo = defineAsyncComponent(() => import("./src/components/display/podcasts/PodcastSeasonInfo.vue"));
 export const RightsIndicator = defineAsyncComponent(() => import("./src/components/display/RightsIndicator.vue"));
+export const RightsWrapper = defineAsyncComponent(() => import("./src/components/display/RightsWrapper.vue"));
 
 
 export const getEmissionInlineList = () => import("./src/components/display/emission/EmissionInlineList.vue");

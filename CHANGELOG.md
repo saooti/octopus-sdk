@@ -19,6 +19,8 @@
 - Ajout de nouvelles méthodes dans l'API de rubriques
 - Passage des slots de ClassicRadioLabel vers ClassicRadio
 - Correction build pour tests
+- Extension du système RightsIndicator pour simplifier son usage dans d'autres
+  cas (cf RightsWrapper)
 
 ### Fixes
 

@@ -437,5 +437,5 @@
     "Auth error - Couldn't retrieve user info - Message": "Si è verificato un errore durante il recupero delle informazioni utente. Per favore ricarica la pagina. Se il problema persiste, contatta il nostro supporto.",
     "RightsIndicator - Podcast - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di modificare o eliminare questo episodio",
     "RightsIndicator - Emission - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di modificare o eliminare questa trasmissione",
-    "RightsIndicator - Generic - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di modificare o eliminare questo elemento"
+    "RightsIndicator - Generic - Insufficient scope": "L'ambito dei tuoi diritti non ti consente di creare, modificare o eliminare questo elemento"
 }

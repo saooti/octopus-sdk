@@ -462,5 +462,5 @@
   "RightsIndicator - Mix - Not owner": "Ce mix a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
   "RightsIndicator - Podcast - Insufficient scope": "La portée de vos droits ne vous permet pas de modifier ou supprimer cet épisode",
   "RightsIndicator - Emission - Insufficient scope": "La portée de vos droits ne vous permet pas de modifier ou supprimer cette émission",
-  "RightsIndicator - Generic - Insufficient scope": "La portée de vos droits ne vous permet pas de modifier ou supprimer cet élément"
+  "RightsIndicator - Generic - Insufficient scope": "La portée de vos droits ne vous permet pas de créer, modifier ou supprimer cet élément"
 }

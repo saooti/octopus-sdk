@@ -385,14 +385,8 @@ export const useRights = () => {
     }
 
     ////////////////////////////
-    // Other action rights
+    // Transcript/translation rights
     ////////////////////////////
-    function getEditCodeInsertPlayerRight(): ActionRight {
-        return roleContainsAny('ADMIN', 'ORGANISATION')
-            ? ActionRight.Allowed
-            : ActionRight.DeniedNoRight;
-    }
-
     function getEditTranscriptRight(podcast: Podcast): ActionRight {
         if (!hasSufficientScope(podcast.rubriqueIds, podcast.emission.rubriqueIds)) {
             return ActionRight.DeniedInsufficientScope;
@@ -422,10 +416,6 @@ export const useRights = () => {
         return getEditTranscriptRight(podcast);
     }
 
-    function getEditChapteringRight(podcast: Podcast): ActionRight {
-        return getEditPodcastRight(podcast);
-    }
-
     ////////////////////////////
     // Live
     ////////////////////////////
@@ -435,6 +425,37 @@ export const useRights = () => {
         } else {
             return roleContainsAny('ANIMATION', 'RESTRICTED_ANIMATION') ? ActionRight.Allowed : ActionRight.DeniedNoRight;
         }
+    }
+
+    ////////////////////////////
+    // Other action rights
+    ////////////////////////////
+    function getEditCodeInsertPlayerRight(): ActionRight {
+        return roleContainsAny('ADMIN', 'ORGANISATION')
+            ? ActionRight.Allowed
+            : ActionRight.DeniedNoRight;
+    }
+
+    function getEditChapteringRight(podcast: Podcast): ActionRight {
+        return getEditPodcastRight(podcast);
+    }
+
+    function getCreatePromoVideoRight(podcast: Podcast): ActionRight {
+        if (!hasSufficientScope(podcast.rubriqueIds, podcast.emission.rubriqueIds)) {
+            return ActionRight.DeniedInsufficientScope;
+        } else if (roleContainsAny('ADMIN', 'ORGANISATION', 'PRODUCTION')) {
+            return ActionRight.Allowed;
+        } else {
+            return ActionRight.DeniedNoRight;
+        }
+    }
+
+    function getEditPromoVideoRight(podcast: Podcast): ActionRight {
+        return getCreatePromoVideoRight(podcast);
+    }
+
+    function getDeletePromoVideoRight(podcast: Podcast): ActionRight {
+        return getCreatePromoVideoRight(podcast);
     }
 
     // View/utility checks — outside the action pattern
@@ -488,13 +509,17 @@ export const useRights = () => {
         getCreateMixRight,
         getEditMixRight,
         getDeleteMixRight,
-        // Other
-        getAccessRecordingRight,
-        getEditCodeInsertPlayerRight,
+        // Translation/transcription
         getEditTranscriptRight,
         getEditTranscriptVisibilityRight,
         getEditTranslationRight,
-        getEditChapteringRight
+        // Other
+        getAccessRecordingRight,
+        getEditCodeInsertPlayerRight,
+        getEditChapteringRight,
+        getCreatePromoVideoRight,
+        getEditPromoVideoRight,
+        getDeletePromoVideoRight
     };
 
     const canFns = deriveCanFunctions(rightFns);
