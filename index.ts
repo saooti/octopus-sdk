@@ -162,6 +162,7 @@ import debounce from "./src/helper/debounceHelper";
 import { deepEqual } from "./src/helper/equals";
 export { colorFromString } from './src/helper/colorFromString';
 export * from './src/helper/rubriquesHelper';
+export * from './src/helper/arrayHelper';
 
 //stores
 import {useVastStore} from "./src/stores/VastStore";

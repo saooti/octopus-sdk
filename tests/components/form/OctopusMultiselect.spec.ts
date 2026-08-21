@@ -74,6 +74,25 @@ describe('OctopusMultiselect', () => {
         expect(getDropdown()).not.toBeNull();
     });
 
+    it('teleports the dropdown into an ancestor ClassicPopover instead of .octopus-app', async () => {
+        // ClassicPopover also teleports to .octopus-app: without this, both end up as DOM
+        // siblings there instead of the dropdown being nested inside the popover, which is
+        // what makes ClassicPopover's outside-click containment check misfire and close it.
+        const popoverElement = document.createElement('div');
+        popoverElement.className = 'octopus-popover';
+        appElement.appendChild(popoverElement);
+
+        wrapper = await mount(OctopusMultiselect, {
+            props: { options, optionLabel: 'name' },
+        });
+        popoverElement.appendChild(wrapper.element);
+
+        await wrapper.find('input').trigger('focus');
+
+        expect(popoverElement.querySelector('.octopus-multiselect-dropdown')).not.toBeNull();
+        expect(appElement.querySelector(':scope > .octopus-multiselect-dropdown')).toBeNull();
+    });
+
     it('shows "All" checkbox and one checkbox per option when open', async () => {
         wrapper = await mount(OctopusMultiselect, {
             props: { options, optionLabel: 'name' },
@@ -175,16 +194,16 @@ describe('OctopusMultiselect', () => {
         expect(wrapper.find('.octopus-multiselect-selection-count').exists()).toBe(true);
     });
 
-    it('disables input when isDisabled is true', async () => {
+    it('disables input when disabled is true', async () => {
         wrapper = await mount(OctopusMultiselect, {
-            props: { options, optionLabel: 'name', isDisabled: true },
+            props: { options, optionLabel: 'name', disabled: true },
         });
         expect(wrapper.find('input').attributes('disabled')).toBeDefined();
     });
 
     it('does not open dropdown when disabled', async () => {
         wrapper = await mount(OctopusMultiselect, {
-            props: { options, optionLabel: 'name', isDisabled: true },
+            props: { options, optionLabel: 'name', disabled: true },
         });
         await wrapper.find('input').trigger('focus');
         expect(getDropdown()).toBeNull();

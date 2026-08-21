@@ -74,6 +74,25 @@ describe('OctopusSelect', () => {
         expect(getDropdown()).not.toBeNull();
     });
 
+    it('teleports the dropdown into an ancestor ClassicPopover instead of .octopus-app', async () => {
+        // ClassicPopover also teleports to .octopus-app: without this, both end up as DOM
+        // siblings there instead of the dropdown being nested inside the popover, which is
+        // what makes ClassicPopover's outside-click containment check misfire and close it.
+        const popoverElement = document.createElement('div');
+        popoverElement.className = 'octopus-popover';
+        appElement.appendChild(popoverElement);
+
+        wrapper = await mount(OctopusSelect, {
+            props: { options, optionLabel: 'name' },
+        });
+        popoverElement.appendChild(wrapper.element);
+
+        await wrapper.find('input').trigger('focus');
+
+        expect(popoverElement.querySelector('.octopus-select-dropdown')).not.toBeNull();
+        expect(appElement.querySelector(':scope > .octopus-select-dropdown')).toBeNull();
+    });
+
     it('shows one button per option when open', async () => {
         wrapper = await mount(OctopusSelect, {
             props: { options, optionLabel: 'name' },
@@ -159,15 +178,15 @@ describe('OctopusSelect', () => {
 
     it('does not open dropdown when disabled', async () => {
         wrapper = await mount(OctopusSelect, {
-            props: { options, optionLabel: 'name', isDisabled: true },
+            props: { options, optionLabel: 'name', disabled: true },
         });
         await wrapper.find('input').trigger('focus');
         expect(getDropdown()).toBeNull();
     });
 
-    it('disables input when isDisabled is true', async () => {
+    it('disables input when disabled is true', async () => {
         wrapper = await mount(OctopusSelect, {
-            props: { options, optionLabel: 'name', isDisabled: true },
+            props: { options, optionLabel: 'name', disabled: true },
         });
         expect(wrapper.find('input').attributes('disabled')).toBeDefined();
     });

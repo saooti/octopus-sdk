@@ -27,6 +27,7 @@
 - **[14747]** - Récupération des animateurs pour conversion `SimplifiedPodcast`
   -> `Podcast`
 - Correction chargement composants stub suite à changement build
+- Correction affichage Octopus(Multi)Select dans ClassicPopover
 
 ### Misc
 

@@ -28,6 +28,12 @@ export function useOctopusDropdown<T>(
     const isHovered = ref(false);
     const containerRef = ref<HTMLElement | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
+    // Where the dropdown/options list (teleported out of normal flow) should land. Defaults
+    // to the app root, but when this component is used inside a ClassicPopover, teleporting
+    // there instead keeps the dropdown a real DOM descendant of it — otherwise both end up as
+    // siblings under the same teleport target, and ClassicPopover's outside-click/blur checks
+    // (which rely on DOM containment) see clicks inside the dropdown as "outside" and close it.
+    const teleportTarget = ref<string | HTMLElement>('.octopus-app');
 
     const computedId = computed(() => `${idPrefix}-${instance?.uid}`);
 
@@ -61,6 +67,7 @@ export function useOctopusDropdown<T>(
         if (props.isDisabled) {
             return;
         }
+        teleportTarget.value = containerRef.value?.closest<HTMLElement>('.octopus-popover') ?? '.octopus-app';
         isOpen.value = true;
         nextTick(() => {
             inputRef.value?.focus();
@@ -94,6 +101,7 @@ export function useOctopusDropdown<T>(
         isHovered,
         containerRef,
         inputRef,
+        teleportTarget,
         computedId,
         hasSearchListener,
         displayedOptions,
