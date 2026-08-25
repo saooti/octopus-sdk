@@ -48,9 +48,9 @@
 import { state } from "../../../../stores/ParamSdkStore";
 import ClassicLoading from "../../../form/ClassicLoading.vue";
 import ClassicModal from "../../../misc/modal/ClassicModal.vue";
-import api from "@/api/initialize";
+import { CHECK_TOKEN_KEY } from "../../../composable/keys";
 import { VueRecaptcha } from "vue-recaptcha";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, inject, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 //Props 
@@ -74,6 +74,10 @@ const captchRef = useTemplateRef('invisibleRecaptcha');
 
 //Composables
 const { t } = useI18n();
+// checkToken is not defined in the SDK: it is resolved at runtime from the
+// consuming app's globally provided implementation (app.provide()), and
+// defaults to always-verified when the app hasn't provided one.
+const checkToken = inject(CHECK_TOKEN_KEY, async () => true);
 
 //Computed
 const errorRecaptchaText = computed(() =>{
@@ -87,7 +91,7 @@ const isCaptchaTest = computed(() => state.generalParameters.isCaptchaTest as bo
 
 //Methods
 async function handleSuccess(token: string) {
-  isVerify.value = await api.checkToken(token);
+  isVerify.value = await checkToken(token);
   sendAction();
 }
 function handleError() {

@@ -14,9 +14,9 @@
 
         <div
             class="octopus-multiselect-field"
-            :class="{ disabled: isDisabled, open: isOpen, noBorder }"
+            :class="{ disabled, open: isOpen, noBorder }"
             @click="openDropdown"
-            @mouseenter="isHovered = true"
+            @mouseenter="onFieldMouseEnter"
             @mouseleave="isHovered = false"
         >
             <div
@@ -38,28 +38,29 @@
                 type="text"
                 class="octopus-multiselect-input"
                 :placeholder="inputPlaceholder"
-                :disabled="isDisabled"
+                :disabled="disabled"
                 @focus="openDropdown"
                 @input="handleInput"
                 @keydown.enter="handleCustomValueEnter"
             >
             <button
                 class="btn-transparent octopus-multiselect-chevron"
-                :disabled="isDisabled"
+                :disabled="disabled"
                 @click.stop="toggleDropdown"
             >
                 <ChevronDownIcon />
             </button>
         </div>
 
-        <div
-            v-if="expandOnHover && isHovered && !isOpen && overflowCount > 0"
-            class="octopus-multiselect-hover-tooltip"
-        >
-            {{ allLabelsText }}
-        </div>
+        <Teleport :to="teleportTarget">
+            <div
+                v-if="expandOnHover && isHovered && !isOpen && overflowCount > 0"
+                class="octopus-multiselect-hover-tooltip"
+                :style="dropdownStyle"
+            >
+                {{ allLabelsText }}
+            </div>
 
-        <Teleport to=".octopus-app">
             <div
                 v-if="isOpen"
                 ref="dropdownRef"
@@ -69,7 +70,7 @@
                 <ClassicCheckbox
                     :text-init="allSelected"
                     :label="selectAllText ?? t('All')"
-                    :is-disabled="isDisabled"
+                    :is-disabled="disabled"
                     @update:text-init="toggleAll"
                 />
 
@@ -79,7 +80,7 @@
                         :key="index"
                         :text-init="isSelected(option)"
                         :label="getLabel(option)"
-                        :is-disabled="isDisabled"
+                        :is-disabled="disabled"
                         @update:text-init="toggleOption(option)"
                     />
                     <template v-if="allowCustomValue && searchQuery.trim()">
@@ -124,7 +125,7 @@ const props = defineProps<{
      *  text into an object-shaped T would not produce a valid option. */
     allowCustomValue?: boolean;
     /** Disables the field and all checkboxes when true. */
-    isDisabled?: boolean;
+    disabled?: boolean;
     /** Placeholder shown in the input when no items are selected. Defaults to the translated "Search" string. */
     placeholder?: string;
     /** Label for the "select all" checkbox. Defaults to the translated "All" string. */
@@ -159,6 +160,7 @@ const {
     isHovered,
     containerRef,
     inputRef,
+    teleportTarget,
     computedId,
     displayedOptions,
     inputPlaceholder,
@@ -173,6 +175,8 @@ const selectionRef = ref<HTMLElement | null>(null);
 // Position of the teleported dropdown (position: fixed, anchored below the trigger field)
 const dropdownStyle = ref<CSSProperties>({});
 
+// Also used to position the hover tooltip: both are teleported and anchored the same way
+// (fixed, directly below the field, same width), and are never shown at the same time.
 function updateDropdownPosition(): void {
     if (!containerRef.value) { return; }
     const rect = containerRef.value.getBoundingClientRect();
@@ -183,6 +187,14 @@ function updateDropdownPosition(): void {
         width: `${rect.width}px`,
     };
 }
+
+function onFieldMouseEnter(): void {
+    isHovered.value = true;
+    if (props.expandOnHover) {
+        nextTick(updateDropdownPosition);
+    }
+}
+
 const visibleCount = ref(2);
 
 // Selection snapshot captured the instant the dropdown opens, used only to freeze the
@@ -427,21 +439,6 @@ watch(isOpen, (val) => {
         min-width: 0;
     }
 
-    .octopus-multiselect-hover-tooltip {
-        position: absolute;
-        top: calc(100% + 2px);
-        left: 0;
-        right: 0;
-        z-index: 101;
-        background: white;
-        border: 1px solid var(--octopus-border-default);
-        border-radius: var(--octopus-border-radius);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        padding: 0.5rem;
-        word-break: break-word;
-        pointer-events: none;
-    }
-
     .octopus-multiselect-chevron {
         padding: 0.25rem 0.5rem;
         display: flex;
@@ -450,8 +447,19 @@ watch(isOpen, (val) => {
 
 }
 
-// Dropdown is teleported to body — scoped rules must be top-level so that [data-v-xxxx]
-// is matched directly on the element rather than via a descendant-of-.octopus-multiselect selector.
+// Dropdown/tooltip are teleported to body — scoped rules must be top-level so that
+// [data-v-xxxx] is matched directly on the element rather than via a descendant-of-.octopus-multiselect selector.
+.octopus-multiselect-hover-tooltip {
+    z-index: 101;
+    background: white;
+    border: 1px solid var(--octopus-border-default);
+    border-radius: var(--octopus-border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    word-break: break-word;
+    pointer-events: none;
+}
+
 .octopus-multiselect-dropdown {
     z-index: 100;
     background: white;

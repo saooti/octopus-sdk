@@ -81,13 +81,14 @@ import cookiesHelper from "../../helper/cookiesHelper";
 import ClassicSelect from "../form/ClassicSelect.vue";
 import AcpmImage from "./AcpmImage.vue";
 import { state } from "../../stores/ParamSdkStore";
-import { loadLocaleMessages } from "@/i18n";
+import { loadLocaleMessages as loadSdkLocaleMessages } from "../../i18n";
+import { LOAD_LOCALE_MESSAGES_KEY } from "../composable/keys";
 import classicApi from "../../api/classicApi";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { Category } from "@/stores/class/general/category";
-import { computed, defineAsyncComponent, ref, watch } from "vue";
+import { computed, defineAsyncComponent, inject, ref, watch } from "vue";
 import { Organisation } from "../../stores/class/general/organisation";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -109,6 +110,10 @@ const filterStore = useFilterStore();
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+// loadLocaleMessages is resolved at runtime from the consuming app's
+// globally provided implementation (app.provide()), e.g. to merge in its
+// own locale bundles; defaults to the SDK's own base-translations loader.
+const loadLocaleMessages = inject(LOAD_LOCALE_MESSAGES_KEY, loadSdkLocaleMessages);
 
 
 //Computed
@@ -175,24 +180,22 @@ async function onOrganisationSelected( organisation: Organisation | undefined): 
 }
 </script>
 
-<style lang="scss">
-.octopus-app {
-  #footer {
-    font-size: max(0.6rem, 12px);
-    bottom: 0;
-    z-index: 10;
-    background: white;
-    padding: 0 2rem;
+<style scoped lang="scss">
+#footer {
+  font-size: max(0.6rem, 12px);
+  bottom: 0;
+  z-index: 10;
+  background: white;
+  padding: 0 2rem;
 
-    a,
-    .link-hover.btn-transparent {
-      font-weight: 500;
-      color: var(--octopus-gray-text) !important;
-    }
+  a,
+  .link-hover.btn-transparent {
+    font-weight: 500;
+    color: var(--octopus-gray-text) !important;
+  }
 
-    .special-select-align-magic-trick {
-      margin-left: 0.16rem;
-    }
+  .special-select-align-magic-trick {
+    margin-left: 0.16rem;
   }
 }
 </style>

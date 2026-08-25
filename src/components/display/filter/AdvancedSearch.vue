@@ -181,6 +181,8 @@ const props = withDefaults(defineProps<{
     rubriqueFilter?: Array<RubriquageFilter>;
     /** The filter on groups */
     emissionGroups?: Array<EmissionGroup>;
+    /** Force hide the emission group filter */
+    hideEmissionGroups?: boolean;
 }>(), {
     sort: "DATE",
     monetisable: "UNDEFINED",
@@ -217,6 +219,10 @@ const filterStore = useFilterStore();
 const authStore = useAuthStore();
 
 onMounted(async() => {
+    if (props.hideEmissionGroups) {
+        showEmissionGroups.value = false;
+        return;
+    }
     // Only show emission groups if there are some
     const nbGroups = await groupsApi.count({
         organisationIds: [props.organisationId]

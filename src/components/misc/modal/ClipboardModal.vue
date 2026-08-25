@@ -15,6 +15,11 @@
           :snackbar-text="t('Link in clipboard')"
         />
       </p>
+      <!--
+        RssSection is not defined in the SDK: it is resolved at runtime from
+        the consuming app's globally registered components (app.component()),
+        and renders nothing if the app hasn't registered one under that name.
+      -->
       <RssSection
         v-if="emission && undefined !== authStore.authOrgaId"
         :emission="emission"
@@ -27,12 +32,8 @@
 import ClassicCopyButton from "../../form/ClassicCopyButton.vue";
 import ClassicModal from "../modal/ClassicModal.vue";
 import { Emission } from "@/stores/class/general/emission";
-import { defineAsyncComponent } from "vue";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useI18n } from "vue-i18n";
-const RssSection = defineAsyncComponent(
-  () => import("@/components/display/aggregator/RssSection.vue"),
-);
 
 //Props 
 defineProps({

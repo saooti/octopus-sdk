@@ -1,5 +1,6 @@
-import '@tests/mocks/useRouter';
-import '@tests/mocks/i18n';
+import { mockUseRouter, mockI18n } from '@tests/mocks';
+vi.mock('vue-router', () => mockUseRouter());
+vi.mock('vue-i18n', () => mockI18n());
 
 import SharePlayer from '@/components/display/sharing/SharePlayer.vue';
 import { mount as testMount } from '@tests/utils';

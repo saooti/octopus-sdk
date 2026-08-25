@@ -1,8 +1,9 @@
-import '@tests/mocks/useRouter';
+import { mockUseRouter } from '@tests/mocks';
+vi.mock('vue-router', () => mockUseRouter());
 
 import ClassicPopover from '@/components/misc/ClassicPopover.vue';
 import { mount as testMount, VueWrapper } from '@tests/utils';
-import { describe, expect, it, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 
 describe('ClassicPopover', () => {

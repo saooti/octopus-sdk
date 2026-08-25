@@ -7,17 +7,9 @@ import { createTestingPinia } from '@pinia/testing';
 import { useAuthStore } from '../src/stores/AuthStore';
 import { PlayerStatus, usePlayerStore } from '../src/stores/PlayerStore';
 import { Podcast } from '../src/stores/class/general/podcast';
+import { localisation } from './localisation';
 
-/** Mock function for localisation */
-export function localisation(str: string, options?: Record<string,string>): string {
-    let result = str;
-    if (options) {
-        Object.entries(options).forEach(([key, value]) => {
-            result += ` ${key}:${value}`;
-        });
-    }
-    return result;
-}
+export { localisation };
 
 /**
  * Utility function to mount a component for testing.
@@ -37,6 +29,12 @@ export async function mount(component: Component, options?: {
         props?: Record<string, unknown>,
         /** Stub subcomponents */
         stubs?: Record<string, Component|boolean>|string[],
+        /** Slot content to render into the mounted component */
+        slots?: Record<string, unknown>,
+        /** Components to register globally on the test app instance (e.g. to test components resolved at runtime via app.component()) */
+        globalComponents?: Record<string, Component>,
+        /** Values to provide on the test app instance (e.g. to test values resolved at runtime via app.provide()/inject()) */
+        provide?: Record<string | symbol, unknown>,
         /** Hook called before mounting with access to Pinia instance for store initialization */
         beforeMount?: (pinia: Pinia) => void | Promise<void>
     }): Promise<VueWrapper> {
@@ -83,9 +81,12 @@ export async function mount(component: Component, options?: {
                 lazy: vi.fn
             },
             plugins: [pinia],
-            stubs
+            stubs,
+            components: options?.globalComponents,
+            provide: options?.provide
         },
         props: options?.props,
+        slots: options?.slots,
         shallow: options?.shallow
     });
 
@@ -107,7 +108,8 @@ export function setupAuthStore(config?: {
     roles?: string | string[],
     organisationId?: string,
     organisationName?: string,
-    organisationAttributes?: Record<string, string | number | boolean>
+    organisationAttributes?: Record<string, string | number | boolean>,
+    scope?: Array<number>
 }) {
     return async () => {
         const roles = Array.isArray(config?.roles)
@@ -127,6 +129,10 @@ export function setupAuthStore(config?: {
                 name: orgName,
                 imageUrl: "",
                 attributes: config?.organisationAttributes || {}
+            },
+            authProfile: {
+                ...(authStore.authProfile ?? {}),
+                scope: config?.scope ?? []
             }
         });
     };

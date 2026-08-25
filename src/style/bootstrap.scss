@@ -88,7 +88,8 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 		transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 		font-size:.7rem;
 		border-radius: var(--octopus-border-radius);
-		background: var(--octopus-secondary); 
+		color: var(--octopus-btn-secondary-fg);
+		background: var(--octopus-btn-secondary-bg);
 		text-decoration: none !important;
 		white-space: nowrap;
 		border-width: 0;

@@ -18,6 +18,7 @@ vi.mock('vue-i18n', () => {
 
 import { describe, expect, it } from 'vitest';
 import { mount, setupAuthStore } from '@tests/utils';
+import { mockEmission, mockPodcast } from '@tests/mocks/rights';
 import { useAuthStore } from '@/stores/AuthStore';
 import RightsIndicator from '@/components/display/RightsIndicator.vue';
 import type { Podcast } from '@/stores/class/general/podcast';
@@ -25,13 +26,24 @@ import type { Mix } from '@/stores/class/radio/mix';
 import type { PlaylistMedia } from '@/stores/class/radio/playlistMedia';
 import type { Cartouchier } from '@/stores/class/cartouchier/cartouchier';
 import type { Media } from '@/stores/class/general/media';
+import type { Emission } from '@/stores/class/general/emission';
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
 const ownUserId = 'test-user-123';
 
-const ownPodcast = { podcastId: 1, createdByUserId: ownUserId, valid: true } as Podcast;
-const otherPodcast = { podcastId: 2, createdByUserId: 'other-user', valid: true } as Podcast;
+const ownPodcast = mockPodcast({ podcastId: 1, createdByUserId: ownUserId, valid: true });
+const otherPodcast = mockPodcast({ podcastId: 2, createdByUserId: 'other-user', valid: true });
+
+const ownScopedPodcast = mockPodcast({ podcastId: 3, createdByUserId: ownUserId, valid: true, rubriqueIds: [10] });
+const emissionScopedPodcast = mockPodcast({
+    podcastId: 4, createdByUserId: ownUserId, valid: true,
+    emission: mockEmission({ rubriqueIds: [20] })
+});
+
+const ownEmission = mockEmission({ emissionId: 1, createdByUserId: ownUserId });
+const otherEmission = mockEmission({ emissionId: 2, createdByUserId: 'other-user' });
+const scopedEmission = mockEmission({ emissionId: 3, createdByUserId: ownUserId, rubriqueIds: [10] });
 
 const ownCartouchier = {
     cartouchierId: 1, ownerId: ownUserId,
@@ -65,13 +77,13 @@ const otherMedia = { mediaId: 2, ownerId: 'other-user' } as Media;
 
 // ── Helper ───────────────────────────────────────────────────────────────────
 
-async function mountWith(props: Record<string, unknown>, roles: string[]) {
+async function mountWith(props: Record<string, unknown>, roles: string[], scope: number[] = []) {
     return mount(RightsIndicator, {
         props: { text: true, ...props },
         beforeMount: async () => {
-            await setupAuthStore({ roles })();
+            await setupAuthStore({ roles, scope })();
             useAuthStore().$patch({
-                authProfile: { userId: ownUserId },
+                authProfile: { userId: ownUserId, scope },
                 authParam: { accessToken: 'test-token', refreshToken: undefined, expiration: undefined },
             });
         }
@@ -85,6 +97,11 @@ describe('RightsIndicator', () => {
     describe('entity detection', () => {
         it('detects podcast entity and grants access for privileged role', async () => {
             const wrapper = await mountWith({ action: 'create', podcast: ownPodcast }, ['PRODUCTION']);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('detects emission entity and grants access for privileged role', async () => {
+            const wrapper = await mountWith({ action: 'create', emission: ownEmission }, ['PRODUCTION']);
             expect(wrapper.find('.alert').exists()).toBe(false);
         });
 
@@ -124,6 +141,16 @@ describe('RightsIndicator', () => {
 
         it('shows alert when user lacks create right for podcast', async () => {
             const wrapper = await mountWith({ action: 'create', podcast: ownPodcast }, ['PLAYLISTS']);
+            expect(wrapper.find('.alert').exists()).toBe(true);
+        });
+
+        it('hides alert when user has create right for emission', async () => {
+            const wrapper = await mountWith({ action: 'create', emission: ownEmission }, ['RESTRICTED_PRODUCTION']);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows alert when user lacks create right for emission', async () => {
+            const wrapper = await mountWith({ action: 'create', emission: ownEmission }, ['PLAYLISTS']);
             expect(wrapper.find('.alert').exists()).toBe(true);
         });
 
@@ -167,6 +194,16 @@ describe('RightsIndicator', () => {
             expect(wrapper.find('.alert').exists()).toBe(true);
         });
 
+        it('hides alert when user can edit their own emission', async () => {
+            const wrapper = await mountWith({ action: 'edit', emission: ownEmission }, ['RESTRICTED_PRODUCTION']);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows alert when restricted user cannot edit another user\'s emission', async () => {
+            const wrapper = await mountWith({ action: 'edit', emission: otherEmission }, ['RESTRICTED_PRODUCTION']);
+            expect(wrapper.find('.alert').exists()).toBe(true);
+        });
+
         it('hides alert when admin edits another user\'s cartouchier', async () => {
             const wrapper = await mountWith({ action: 'edit', cartouchier: otherCartouchier }, ['ADMIN']);
             expect(wrapper.find('.alert').exists()).toBe(false);
@@ -190,6 +227,16 @@ describe('RightsIndicator', () => {
 
     // ── action = 'delete' ────────────────────────────────────────────────────
     describe("action = 'delete'", () => {
+        it('hides alert when user can delete an emission', async () => {
+            const wrapper = await mountWith({ action: 'delete', emission: otherEmission }, ['ADMIN']);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows alert when user lacks delete right for emission', async () => {
+            const wrapper = await mountWith({ action: 'delete', emission: otherEmission }, ['PLAYLISTS']);
+            expect(wrapper.find('.alert').exists()).toBe(true);
+        });
+
         it('hides alert when user can delete their own playlistMedia', async () => {
             const wrapper = await mountWith({ action: 'delete', playlistMedia: ownPlaylistMedia }, ['RESTRICTED_ANIMATION']);
             expect(wrapper.find('.alert').exists()).toBe(false);
@@ -259,6 +306,11 @@ describe('RightsIndicator', () => {
             expect(wrapper.text()).toContain('RightsIndicator - Podcast - Not owner');
         });
 
+        it('renders entity-specific i18n key for ActionRight.DeniedNotOwner on emission', async () => {
+            const wrapper = await mountWith({ action: 'edit', emission: otherEmission }, ['RESTRICTED_PRODUCTION']);
+            expect(wrapper.text()).toContain('RightsIndicator - Emission - Not owner');
+        });
+
         it('renders entity-specific i18n key for ActionRight.DeniedNotOwner on cartouchier', async () => {
             const wrapper = await mountWith({ action: 'edit', cartouchier: otherCartouchier }, ['RESTRICTED_PRODUCTION']);
             expect(wrapper.text()).toContain('RightsIndicator - Cartouchier - Not owner');
@@ -290,6 +342,22 @@ describe('RightsIndicator', () => {
 
     // ── Method dispatch ───────────────────────────────────────────────────────
     describe('right method dispatch', () => {
+        it('calls getCreateEmissionRight for action=create + emission', async () => {
+            const allowed = await mountWith({ action: 'create', emission: ownEmission }, ['ORGANISATION']);
+            expect(allowed.find('.alert').exists()).toBe(false);
+
+            const denied = await mountWith({ action: 'create', emission: ownEmission }, ['PLAYLISTS']);
+            expect(denied.find('.alert').exists()).toBe(true);
+        });
+
+        it('calls getDeleteEmissionRight for action=delete + emission', async () => {
+            const allowed = await mountWith({ action: 'delete', emission: otherEmission }, ['ORGANISATION']);
+            expect(allowed.find('.alert').exists()).toBe(false);
+
+            const denied = await mountWith({ action: 'delete', emission: otherEmission }, ['PLAYLISTS']);
+            expect(denied.find('.alert').exists()).toBe(true);
+        });
+
         it('calls getCreateCartouchierRight for action=create + cartouchier', async () => {
             // RADIO can create cartouchier
             const allowed = await mountWith({ action: 'create', cartouchier: ownCartouchier }, ['RADIO']);
@@ -340,6 +408,74 @@ describe('RightsIndicator', () => {
 
             const denied = await mountWith({ action: 'delete', media: otherMedia }, ['PODCAST_CRUD']);
             expect(denied.find('.alert').exists()).toBe(true);
+        });
+    });
+
+    // ── scope ─────────────────────────────────────────────────────────────────
+    describe('scope', () => {
+        it('hides alert on create when scope matches the podcast\'s own rubriques', async () => {
+            // action=create+podcast passes the podcast itself as the scope-check arg
+            const wrapper = await mountWith({ action: 'create', podcast: ownScopedPodcast }, ['PRODUCTION'], [10]);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows insufficient scope alert on create when scope does not match', async () => {
+            const wrapper = await mountWith({ action: 'create', podcast: ownScopedPodcast }, ['PRODUCTION'], [999]);
+            expect(wrapper.find('.alert').exists()).toBe(true);
+            expect(wrapper.text()).toContain('RightsIndicator - Podcast - Insufficient scope');
+        });
+
+        it('hides alert on edit when scope matches the podcast\'s own rubriques', async () => {
+            const wrapper = await mountWith({ action: 'edit', podcast: ownScopedPodcast }, ['PRODUCTION'], [10]);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('hides alert on edit when scope matches only the emission\'s rubriques', async () => {
+            const wrapper = await mountWith({ action: 'edit', podcast: emissionScopedPodcast }, ['PRODUCTION'], [20]);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows insufficient scope alert on edit when scope matches neither podcast nor emission', async () => {
+            const wrapper = await mountWith({ action: 'edit', podcast: ownScopedPodcast }, ['PRODUCTION'], [999]);
+            expect(wrapper.find('.alert').exists()).toBe(true);
+            expect(wrapper.text()).toContain('RightsIndicator - Podcast - Insufficient scope');
+        });
+
+        it('shows insufficient scope alert (not "not owner") for restricted user with mismatched scope on own podcast', async () => {
+            const wrapper = await mountWith(
+                { action: 'edit', podcast: ownScopedPodcast }, ['RESTRICTED_PRODUCTION'], [999]
+            );
+            expect(wrapper.find('.alert').exists()).toBe(true);
+            expect(wrapper.text()).toContain('RightsIndicator - Podcast - Insufficient scope');
+        });
+
+        it('hides alert for ADMIN regardless of scope', async () => {
+            const wrapper = await mountWith({ action: 'edit', podcast: ownScopedPodcast }, ['ADMIN'], [999]);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows insufficient scope alert on edit when scope does not match the emission\'s rubriques', async () => {
+            const wrapper = await mountWith({ action: 'edit', emission: scopedEmission }, ['PRODUCTION'], [999]);
+            expect(wrapper.find('.alert').exists()).toBe(true);
+            expect(wrapper.text()).toContain('RightsIndicator - Emission - Insufficient scope');
+        });
+
+        it('hides alert on edit when scope matches the emission\'s rubriques', async () => {
+            const wrapper = await mountWith({ action: 'edit', emission: scopedEmission }, ['PRODUCTION'], [10]);
+            expect(wrapper.find('.alert').exists()).toBe(false);
+        });
+
+        it('shows insufficient scope alert (not "not owner") for restricted user with mismatched scope on own emission', async () => {
+            const wrapper = await mountWith(
+                { action: 'edit', emission: scopedEmission }, ['RESTRICTED_PRODUCTION'], [999]
+            );
+            expect(wrapper.find('.alert').exists()).toBe(true);
+            expect(wrapper.text()).toContain('RightsIndicator - Emission - Insufficient scope');
+        });
+
+        it('hides alert for ADMIN editing an out-of-scope emission', async () => {
+            const wrapper = await mountWith({ action: 'edit', emission: scopedEmission }, ['ADMIN'], [999]);
+            expect(wrapper.find('.alert').exists()).toBe(false);
         });
     });
 });

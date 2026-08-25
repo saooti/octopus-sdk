@@ -428,8 +428,15 @@
   "Player - Generating subtitles": "Generación de subtítulos en {language}…",
   "Transcript - Available languages": "Idiomas disponibles",
   "Generic - Action disabled - Not owner": "Esta acción no está disponible porque tus derechos no te permiten modificar o eliminar elementos de los que no eres propietario",
-  "RightsIndicator -  Podcast - Not owner": "Este podcast fue creado por otro usuario, puedes verlo, pero no puedes editarlo.",
+  "RightsIndicator - Podcast - Not owner": "Este podcast fue creado por otro usuario, puedes verlo, pero no puedes editarlo.",
   "RightsIndicator - Cartouchier - Not owner": "Esta cartuchera fue creada por otro usuario, puedes verla, pero no puedes modificarla.",
   "RightsIndicator - PlaylistMedia - Not owner": "Este contenedor fue creado por otro usuario, puedes verlo, pero no puedes modificarlo.",
-  "RightsIndicator - Mix - Not owner": "Esta mezcla fue creada por otro usuario, puedes verla, pero no puedes editarla."
+  "RightsIndicator - Mix - Not owner": "Esta mezcla fue creada por otro usuario, puedes verla, pero no puedes editarla.",
+  "Auth error - Couldn't retrieve user info - Title": "Error de conexión",
+  "Auth error - Couldn't retrieve user info - Message": "Se produjo un error al recuperar su información de usuario. Por favor recarga la página. Si el problema persiste, comuníquese con nuestro soporte.",
+  "RightsIndicator - Podcast - Insufficient scope": "El alcance de tus derechos no te permite modificar o eliminar este episodio.",
+  "RightsIndicator - Emission - Insufficient scope": "El alcance de tus derechos no te permite modificar o eliminar esta transmisión.",
+  "RightsIndicator - Generic - Insufficient scope": "El alcance de sus derechos no le permite crear, modificar o eliminar este elemento",
+  "Generic - Content unavailable - Country blocked - Title": "Contenido no disponible",
+  "Generic - Content unavailable - Country blocked - Message": "Este contenido no está disponible en su país."
 }

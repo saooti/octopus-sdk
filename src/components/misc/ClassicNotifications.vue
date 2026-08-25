@@ -14,7 +14,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useNotificationStore } from '../../stores/NotificationStore';
-import MessageModal from './modal/MessageModal.vue';
+
+const MessageModal = defineAsyncComponent(() => import('./modal/MessageModal.vue'));
+
+import { defineAsyncComponent } from 'vue';
 
 const {
     clearNotification

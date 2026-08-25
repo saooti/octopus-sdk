@@ -9,7 +9,7 @@
         :description="isDescription ? emission.description : undefined"
         :vertical="isVertical"
         :tags="tags"
-        :additional-info="additionalInfoFor(emission)"
+        :additional-info="additionalInfo"
     />
 </template>
 
@@ -31,10 +31,14 @@ const props = defineProps<{
 }>();
 
 const tags = ref([]);
+const additionalInfo = ref([]);
 const { tagsFor, additionalInfoFor } = usePresentationItem();
 
 watch(props.emission, async () => {
-    tags.value = await tagsFor(props.emission);
+    [tags.value, additionalInfo.value] = await Promise.all([
+        tagsFor(props.emission),
+        additionalInfoFor(props.emission)
+    ]);
 }, { immediate: true });
 
 const route = computed((): RouteLocationRaw => {

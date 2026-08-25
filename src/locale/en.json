@@ -428,8 +428,15 @@
   "Player - Generating subtitles": "Generation of subtitles in {language}…",
   "Transcript - Available languages": "Languages ​​available",
   "Generic - Action disabled - Not owner": "This action is not available because your rights do not allow you to modify or delete elements of which you are not the owner",
-  "RightsIndicator -  Podcast - Not owner": "This podcast was created by another user, you can view it, but you cannot edit it.",
+  "RightsIndicator - Podcast - Not owner": "This podcast was created by another user, you can view it, but you cannot edit it.",
   "RightsIndicator - Cartouchier - Not owner": "This cartridge case was created by another user, you can view it, but you cannot modify it.",
   "RightsIndicator - PlaylistMedia - Not owner": "This bin was created by another user, you can view it, but you cannot modify it.",
-  "RightsIndicator - Mix - Not owner": "This mix was created by another user, you can view it, but you cannot edit it."
+  "RightsIndicator - Mix - Not owner": "This mix was created by another user, you can view it, but you cannot edit it.",
+  "Auth error - Couldn't retrieve user info - Title": "Connection error",
+  "Auth error - Couldn't retrieve user info - Message": "An error occurred while retrieving your user information. Please reload the page. If the problem persists, please contact our support.",
+  "RightsIndicator - Podcast - Insufficient scope": "The scope of your rights does not allow you to modify or delete this episode",
+  "RightsIndicator - Emission - Insufficient scope": "The scope of your rights does not allow you to modify or delete this broadcast",
+  "RightsIndicator - Generic - Insufficient scope": "The scope of your rights does not allow you to create, modify or delete this element",
+  "Generic - Content unavailable - Country blocked - Title": "Content unavailable",
+  "Generic - Content unavailable - Country blocked - Message": "This content is not available in your country."
 }

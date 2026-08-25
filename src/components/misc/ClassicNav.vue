@@ -31,7 +31,7 @@
       v-show="$slots['tab' + (index - 1)]"
       :key="index - 1"
       class="octopus-tab-pane"
-      :class="activeTab === index - 1 ? 'active' : ''"
+      :class="{ active: activeTab === index - 1, 'flex-column': flexColumn }"
     >
       <slot :name="'tab' + (index - 1)" :is-active="activeTab === index - 1" />
     </div>
@@ -50,6 +50,8 @@ defineProps({
   transparent: { default: false, type: Boolean },
   /** Alternative css */
   light: { default: false, type: Boolean },
+  /** Vertical content */
+  flexColumn: { default: false, type: Boolean }
 })
 
 //Emits

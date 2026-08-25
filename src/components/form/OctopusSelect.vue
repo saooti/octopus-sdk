@@ -14,7 +14,7 @@
 
         <div
             class="octopus-select-field"
-            :class="{ disabled: isDisabled, open: isOpen, noBorder }"
+            :class="{ disabled, open: isOpen, noBorder }"
             @click="openDropdown"
         >
             <span
@@ -29,20 +29,20 @@
                 type="text"
                 class="octopus-select-input"
                 :placeholder="inputPlaceholder"
-                :disabled="isDisabled"
+                :disabled="disabled"
                 @focus="openDropdown"
                 @input="handleInput"
             >
             <button
                 class="btn-transparent octopus-select-chevron"
-                :disabled="isDisabled"
+                :disabled="disabled"
                 @click.stop="toggleDropdown"
             >
                 <ChevronDownIcon />
             </button>
         </div>
 
-        <Teleport to=".octopus-app">
+        <Teleport :to="teleportTarget">
             <div
                 v-if="isOpen"
                 ref="dropdownRef"
@@ -86,7 +86,7 @@ const props = withDefaults(defineProps<{
     /** Key of each option object to use as the display label. */
     optionLabel: keyof T & string;
     /** Disables the field when true. */
-    isDisabled?: boolean;
+    disabled?: boolean;
     /** Placeholder shown in the input when no item is selected. Defaults to the translated "Search" string. */
     placeholder?: string;
     /** Disable the border around the input. */
@@ -124,6 +124,7 @@ const {
     isOpen,
     containerRef,
     inputRef,
+    teleportTarget,
     computedId,
     displayedOptions,
     inputPlaceholder,

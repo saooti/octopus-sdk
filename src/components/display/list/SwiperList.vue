@@ -4,7 +4,7 @@
       <swiper
         :key="manualReload"
         :slides-per-view="numberItem"
-        :space-between="0"
+        :space-between="gapPx"
         :loop="loop"
         :slides-offset-before="offsetSwiper"
         :slides-offset-after="offsetSwiper"
@@ -47,7 +47,8 @@ const props = defineProps({
   sizeItemOverload: { default: undefined, type: Number },
 })
  
-//Data 
+//Data
+const gapPx = 10;
 const manualReload = ref(0);
 const numberItem = ref(5);
 const offsetSwiper = ref(0);
@@ -73,7 +74,10 @@ const sizeItem = computed(() => {
     ? state.generalParameters.podcastItem
     : 13.5;
 });
-const itemRecalculizedSize = computed(() => widthSwiperUsable.value / numberItem.value);
+const itemRecalculizedSize = computed(() => {
+  const totalGap = gapPx * Math.max(numberItem.value - 1, 0);
+  return (widthSwiperUsable.value - totalGap) / numberItem.value;
+});
 
 /** Indicates that the swiper should loop */
 const loop = computed((): boolean => {
@@ -119,10 +123,10 @@ function onWindowResize(){
   const el = rootRef?.value as HTMLElement;
   if (!el) return;
   widthSwiperUsable.value =el.offsetWidth - offsetSwiper.value * 2;
-  const sixteen = domHelper.convertRemToPixels(sizeItem.value + 0.5);
+  const itemSizePx = domHelper.convertRemToPixels(sizeItem.value + 0.5);
   numberItem.value = Math.max(
     1,
-    Math.floor(widthSwiperUsable.value / sixteen),
+    Math.floor((widthSwiperUsable.value + gapPx) / (itemSizePx + gapPx)),
   );
   itemSizeWithoutRecalculed.value =el.offsetWidth / numberItem.value;
 }
@@ -153,7 +157,7 @@ function slideChange() {
   );
   wrapper.style.transform =
     "translate3d(" +
-    (nbTransformItems * itemRecalculizedSize.value + offsetSwiper.value) +
+    (nbTransformItems * (itemRecalculizedSize.value + gapPx) + offsetSwiper.value) +
     "px, 0px, 0px)";
 }
 </script>

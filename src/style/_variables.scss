@@ -46,11 +46,17 @@
     // Buttons
     --octopus-btn-primary-bg: var(--octopus-primary);
     --octopus-btn-primary-fg: var(--octopus-color-on-primary);
+    --octopus-btn-secondary-bg: var(--octopus-secondary);
+    --octopus-btn-secondary-fg: black;
     --octopus-btn-play-bg: var(--octopus-primary-less-transparent);
     --octopus-btn-play-fg: white;
     --octopus-btn-play-radius: var(--octopus-border-radius);
     --octopus-btn-social-bg: var(--octopus-secondary);
     --octopus-btn-social-fg: var(--octopus-primary);
+    --octopus-btn-paginate-fg: var(--octopus-btn-secondary-fg);
+    --octopus-btn-paginate-bg: var(--octopus-btn-secondary-bg);
+    --octopus-btn-paginate-active-fg: var(--octopus-btn-paginate-fg);
+    --octopus-btn-paginate-active-bg: var(--octopus-primary-more-transparent);
 
     // Player
     // Color for the transcript background

@@ -1,8 +1,12 @@
-import { classicApi, ModuleApi } from "@saooti/octopus-sdk";
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
-import { useCacheStore } from "../stores/CacheStore";
+import { useCacheStore } from "@/stores/CacheStore";
+import classicApi, { type APIOptions } from "./classicApi";
+import { ModuleApi } from "./apiConnection";
 
+////////////////////////////////////////////////////////////////////////////////
+// Rubriquage
+////////////////////////////////////////////////////////////////////////////////
 /**
  * Find rubriquages according to criterias
  * @param organisationIds List of organisation IDs for which to retrieve the
@@ -13,17 +17,74 @@ async function searchRubriquages(organisationIds: Array<string>, searchOptions?:
     rubriquageId?: number;
     organisationId?: string|Array<string>;
     query?: string;
-}): Promise<Array<Rubriquage>> {
+}, options?: APIOptions): Promise<Array<Rubriquage>> {
     return classicApi.fetchData<Array<Rubriquage>>({
         api: ModuleApi.DEFAULT,
         path: 'rubriquage/find',
         parameters: {
             organisationId: organisationIds,
             ...searchOptions
-        }
+        },
+        specialTreatement: options?.adaptParameters
+    });
+}
+/**
+ * Create a new rubriquage
+ * @param data The new rubriquage data
+ * @returns The created rubriquage
+ */
+async function createRubriquage(data: Omit<Rubriquage, 'rubriquageId'>): Promise<Rubriquage> {
+    return classicApi.postData<Rubriquage>({
+        api: ModuleApi.DEFAULT,
+        path: "rubriquage/",
+        dataToSend: data
     });
 }
 
+/**
+ * Fetch rubriquage data by ID
+ * @param rubriquageId ID of the rubriquage to fetch
+ * @returns The rubriquage
+ */
+async function getRubriquage(rubriquageId: number): Promise<Rubriquage> {
+    return classicApi.fetchData<Rubriquage>({
+        api: ModuleApi.DEFAULT,
+        path: `rubriquage/${rubriquageId}`
+    });
+}
+
+/**
+ * Update the values of the rubriquage
+ * @param data The new rubriquage data
+ * @returns The updated rubriquage
+ */
+async function updateRubriquage(data: Rubriquage): Promise<Rubriquage> {
+    return classicApi.putData<Rubriquage>({
+        api: ModuleApi.DEFAULT,
+        path: "rubriquage/",
+        dataToSend: data
+    });
+}
+
+/**
+ * Delete a rubriquage
+ * @param data Either the rubriquage to delete, or its ID
+ * @returns An empty promise
+ */
+async function deleteRubriquage(data: Rubriquage|number): Promise<void> {
+    const rubriquageId = typeof data === 'object' ?
+        data.rubriquageId :
+        data;
+        
+    await classicApi.deleteData<void>({
+        api: ModuleApi.DEFAULT,
+        path: "rubriquage/" + rubriquageId
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Rubriques
+////////////////////////////////////////////////////////////////////////////////
 async function searchRubriques(searchOptions?: {
     rubriquageId?: number;
     organisationId?: string|Array<string>;
@@ -60,9 +121,102 @@ async function getCachedRubrique(rubriqueId: number): Promise<Rubrique> {
     return cacheStore.getData(`rubrique-${rubriqueId}`, () => getRubrique(rubriqueId));
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Scope
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * List the rubrique IDS associated to the given user
+ * @param userId The ID of the user for which to retrieve this data
+ * @returns The list of IDs of rubriques
+ */
+async function listUserScope(userId: string): Promise<Array<number>> {
+    return classicApi.fetchData<Array<number>>({
+        api: ModuleApi.DEFAULT,
+        path: `rubrique/user/list/rubriques/${userId}`
+    });
+}
+
+/**
+ * List the user IDS associated to the given rubrique
+ * @param rubriqueId The ID of the rubrique for which to retrieve this data
+ * @returns The list of IDs of users
+ */
+async function listUsersScopedByRubrique(rubriqueId: string): Promise<Array<string>> {
+    return classicApi.fetchData<Array<string>>({
+        api: ModuleApi.DEFAULT,
+        path: `rubrique/user/list/users/${rubriqueId}`
+    });
+}
+
+/**
+ * Update the associated rubriques to the user
+ * @param userId The ID of the user for which to change the rights scope
+ * @param previousScope Previous rubrique IDs
+ * @param rubriqueIds New rubrique IDs to set
+ * @returns A promise
+ */
+async function setUserScope(userId: string, previousScope: Array<number>, rubriqueIds: Array<number>): Promise<void> {
+
+    const associatedIds: Array<number> = [];
+    const dissociatedIds: Array<number> = [];
+    const promises: Array<Promise<void>> = [];
+
+    // Create a set containing all ids, will iterare over all of them to check
+    // whether to add or remove them
+    const allIds = new Set<number>();
+    previousScope.forEach(allIds.add, allIds);
+    rubriqueIds.forEach(allIds.add, allIds);
+
+
+    // Find out which IDs need to be added/remove
+    allIds.forEach(id => {
+        const inOld = previousScope.includes(id);
+        const inNew = rubriqueIds.includes(id);
+
+        if (inOld && !inNew) {
+            dissociatedIds.push(id);
+        } else if (!inOld && inNew) {
+            associatedIds.push(id);
+        }
+    })
+
+    // API call for adding rubriques
+    if (associatedIds.length > 0) {
+        promises.push(classicApi.postData({
+            api: ModuleApi.DEFAULT,
+            path: 'rubrique/user/associate',
+            dataToSend: {
+                rubriqueIds: associatedIds,
+                userIds: [userId]
+            }
+        }));
+    }
+
+    // API call for removing rubriques
+    if (dissociatedIds.length > 0) {
+        promises.push(classicApi.postData({
+            api: ModuleApi.DEFAULT,
+            path: 'rubrique/user/dissociate',
+            dataToSend: {
+                rubriqueIds: dissociatedIds,
+                userIds: [userId]
+            }
+        }));
+    }
+
+    return Promise.all(promises).then();
+}
+
 export const rubriquesApi = {
+    createRubriquage,
+    getRubriquage,
     getRubrique,
     getCachedRubrique,
     searchRubriquages,
-    searchRubriques
+    searchRubriques,
+    updateRubriquage,
+    deleteRubriquage,
+    listUserScope,
+    listUsersScopedByRubrique,
+    setUserScope
 };

@@ -1,10 +1,65 @@
 # CHANGELOG
 
-## 41.12.1 (19/08/2026)
+## 42.0.0 (En cours)
+
+### Features
+
+- **14594** - Implémentation des droits associés aux rubriques (anciennement
+  sous-organisations)
+  - Ajout support 'mode' pour rubriquage afin de préparer les sous organisations
+  - Ajout endpoints gestion portée des droits utilisateur
+  - Ajout droits création/édition rubriques/rubriquages
+  - Récupération de la portée de droits des utilisateurs lors de leur
+    connexion
+  - Vérification des droits en fonction de la portée, et ajout de
+    `RightsIndicator` sur les podcasts & émissions
+- **[14594]** - Ajout fonction de test des droits pour le chapitrage
+- **14670** - Affichage d'un message explicite en cas de contenu bloqué
+- Refacto export et configuration de build pour résoudre problème import
+  internes
+- Ajout de nouvelles méthodes dans l'API de rubriques
+- Passage des slots de ClassicRadioLabel vers ClassicRadio
+- Correction build pour tests
+- Extension du système RightsIndicator pour simplifier son usage dans d'autres
+  cas (cf RightsWrapper)
+- Ajout de 'restrictive-rubrique' pour les infos additionnelles des éléments de
+  présentation
 
 ### Fixes
 
+- **[14747]** - Récupération des animateurs pour conversion `SimplifiedPodcast`
+  -> `Podcast`
+- Correction chargement composants stub suite à changement build
+- Correction affichage Octopus(Multi)Select dans ClassicPopover
+- Correction style Footer non scopé
+
+### Misc
+
+- Ajout props utilitaires pour ClassicHelpButton et ClassicTabs
+
+## 41.12.1 (19/08/2026)
+
+**Features**
+
+- Ajout de nouvelles fonctions dans l'api `rubriqueApi`
+- Option de `AdvancedSearch` pour ne pas afficher le filtre de groupe
+- Ajout callback sur fermeture de notifications
+
+**Fixes**
+
+- Correction d'une anomalie de chargement du style de la modale utilisée par
+  `ClassicNotifications`
+- Ajout mode alternatif pour la récupération des épisodes dans
+  `PodcastPresentationList`
+- Affichage des infos additionelles dans PresentationItem même sans description
 - Gestion des erreurs dans downloadHelper
+
+**Misc**
+
+- Suppression de la marge entre le titre et le contenu pour `PresentationLayout`
+- Uniformisation espacement pour composants PM
+- Mise à jour règles eslint
+- Ajustement couleurs pour boutons secondaires
 
 ## 41.12.0 (13/07/2026)
 

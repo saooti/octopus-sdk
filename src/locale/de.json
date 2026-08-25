@@ -428,8 +428,15 @@
   "Player - Generating subtitles": "Generierung von Untertiteln in {language}…",
   "Transcript - Available languages": "Verfügbare Sprachen",
   "Generic - Action disabled - Not owner": "Diese Aktion ist nicht verfügbar, da Ihre Rechte es Ihnen nicht erlauben, Elemente zu ändern oder zu löschen, deren Eigentümer Sie nicht sind",
-  "RightsIndicator -  Podcast - Not owner": "Dieser Podcast wurde von einem anderen Benutzer erstellt. Sie können ihn ansehen, aber nicht bearbeiten.",
+  "RightsIndicator - Podcast - Not owner": "Dieser Podcast wurde von einem anderen Benutzer erstellt. Sie können ihn ansehen, aber nicht bearbeiten.",
   "RightsIndicator - Cartouchier - Not owner": "Diese Patronenhülse wurde von einem anderen Benutzer erstellt. Sie können sie anzeigen, aber nicht ändern.",
   "RightsIndicator - PlaylistMedia - Not owner": "Dieser Behälter wurde von einem anderen Benutzer erstellt. Sie können ihn anzeigen, aber nicht ändern.",
-  "RightsIndicator - Mix - Not owner": "Dieser Mix wurde von einem anderen Benutzer erstellt. Sie können ihn anzeigen, aber nicht bearbeiten."
+  "RightsIndicator - Mix - Not owner": "Dieser Mix wurde von einem anderen Benutzer erstellt. Sie können ihn anzeigen, aber nicht bearbeiten.",
+  "Auth error - Couldn't retrieve user info - Title": "Verbindungsfehler",
+  "Auth error - Couldn't retrieve user info - Message": "Beim Abrufen Ihrer Benutzerinformationen ist ein Fehler aufgetreten. Bitte laden Sie die Seite neu. Sollte das Problem weiterhin bestehen, wenden Sie sich bitte an unseren Support.",
+  "RightsIndicator - Podcast - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, diese Episode zu ändern oder zu löschen",
+  "RightsIndicator - Emission - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, diese Sendung zu ändern oder zu löschen",
+  "RightsIndicator - Generic - Insufficient scope": "Der Umfang Ihrer Rechte erlaubt es Ihnen nicht, dieses Element zu erstellen, zu ändern oder zu löschen",
+  "Generic - Content unavailable - Country blocked - Title": "Inhalt nicht verfügbar",
+  "Generic - Content unavailable - Country blocked - Message": "Dieser Inhalt ist in Ihrem Land nicht verfügbar."
 }

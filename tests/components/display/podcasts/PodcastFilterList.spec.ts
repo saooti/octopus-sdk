@@ -1,9 +1,10 @@
-import '@tests/mocks/i18n';
+import { mockI18n } from '@tests/mocks';
+vi.mock('vue-i18n', () => mockI18n());
 
 import PodcastFilterList from '@/components/display/podcasts/PodcastFilterList.vue';
 import { Emission, emptyEmissionData, SeasonMode } from '@/stores/class/general/emission';
 import { mount as testMount } from '@tests/utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 const mount = (props: Record<string, unknown> = {}) =>
     testMount(PodcastFilterList, { shallow: true, props });

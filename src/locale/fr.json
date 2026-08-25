@@ -436,6 +436,9 @@
   "Filters - Emission groups": "Par groupes d'émissions",
   "Search - Emission groups placeholder": "Filtrer les groupes par nom",
 
+  "Auth error - Couldn't retrieve user info - Title": "Erreur de connexion",
+  "Auth error - Couldn't retrieve user info - Message": "Une erreur est survenue lors de la récupération de vos informations d'utilisateur. Veuillez recharger la page. Si le problème persiste, merci de contacter notre support.",
+
   "SmartLink - Listen to latest episode": "Écouter le dernier épisode",
   "SmartLink - Made by": "Hébergé par",
   "SmartLink - To emission on podcastmaker": "Page officielle de l'émission - {organisation}",
@@ -451,10 +454,16 @@
   "Player - Generating subtitles": "Génération des sous-titres en {language}…",
 
   "Transcript - Available languages": "Langues disponibles",
+
+  "Generic - Content unavailable - Country blocked - Title": "Contenu indisponible",
+  "Generic - Content unavailable - Country blocked - Message": "Ce contenu n'est pas disponible dans votre pays.",
   
   "Generic - Action disabled - Not owner": "Cette action n'est pas disponible car vos droits ne vous permettent pas de modifier ou supprimer des éléments dont vous n'êtes pas propriétaire",
-  "RightsIndicator -  Podcast - Not owner": "Ce podcast a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
+  "RightsIndicator - Podcast - Not owner": "Ce podcast a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
   "RightsIndicator - Cartouchier - Not owner": "Ce cartouchier a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
   "RightsIndicator - PlaylistMedia - Not owner": "Ce bac a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
-  "RightsIndicator - Mix - Not owner": "Ce mix a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier."
+  "RightsIndicator - Mix - Not owner": "Ce mix a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
+  "RightsIndicator - Podcast - Insufficient scope": "La portée de vos droits ne vous permet pas de modifier ou supprimer cet épisode",
+  "RightsIndicator - Emission - Insufficient scope": "La portée de vos droits ne vous permet pas de modifier ou supprimer cette émission",
+  "RightsIndicator - Generic - Insufficient scope": "La portée de vos droits ne vous permet pas de créer, modifier ou supprimer cet élément"
 }

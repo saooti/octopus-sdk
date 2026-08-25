@@ -17,7 +17,7 @@
         <ClassicPopover
             :target="computedId"
             popover-class="help-popover"
-            :relative-class="relativeClass"
+            :relative-class="inModal ? 'octopus-modal' : relativeClass"
         >
             <div class="content">
                 <slot />
@@ -34,6 +34,8 @@ import ClassicPopover from './ClassicPopover.vue';
 
 const { colored, small } = defineProps<{
     colored?: boolean;
+    /** Automatically sets relative class to octopus-modal */
+    inModal?: boolean;
     /** Make the popover relative (userful when in page-element) */
     relativeClass?: string;
     /** Make the icon smaller if true *(default: false)* */

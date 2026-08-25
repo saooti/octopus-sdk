@@ -18,7 +18,7 @@
                 :description="item.description"
                 :vertical="!isPhone && first"
                 :tags="tags.get(item.podcastId)"
-                :additional-info="additionalInfoFor(item)"
+                :additional-info="additionalInfo.get(item.podcastId)"
             >
                 <template #after-image>
                     <PodcastPlayButton
@@ -57,20 +57,41 @@ import { podcastApi, PodcastSort } from "../../../api/podcastApi";
 import { usePresentationItem } from "../../composable/usePresentationItem";
 
 //Props 
-const props = defineProps({
-    organisationId: { default: undefined, type: String },
-    title: { default: "", type: String },
-    href: { default: undefined, type: String },
-    buttonText: { default: undefined, type: String },
-    isDescription: { default: false, type: Boolean },
-    rubriquesId: { default: [], type: Array<number> },
-})
+const props = withDefaults(defineProps<{
+    /**
+     * ID of the organisation
+     */
+    organisationId?: string;
+    /**
+     * Title of the section
+     */
+    title?: string;
+    /**
+     * Link to the "more" section
+     */
+    href?: string;
+    /**
+     * Label for the "more" button
+     */
+    buttonText?: string;
+    /**
+     * Display podcasts exclusively from these rubriques
+     */
+    rubriquesId?: Array<number>;
+    /**
+     * Mode of retrieval for podcasts
+     */
+    retrievalMode?: 'by-emission'|'any';
+}>(), {
+    retrievalMode: 'by-emission'
+});
 
 //Data 
 const loading = ref(true);
 const error = ref(false);
 const podcasts: Ref<Array<Podcast>> = ref([]);
 const tags = reactive(new Map<number, Array<string>>());
+const additionalInfo = reactive(new Map<number, Array<string>>());
   
 //Composables
 const { isPhone } = useResizePhone();
@@ -82,8 +103,12 @@ onMounted(fetchNext);
 watch(podcasts, async () => {
     podcasts.value.forEach(async (podcast) => {
         if (!tags.has(podcast.podcastId)) {
-            const t = await tagsFor(podcast);
+            const [t, i] = await Promise.all([
+                tagsFor(podcast),
+                additionalInfoFor(podcast)
+            ]);
             tags.set(podcast.podcastId, t);
+            additionalInfo.set(podcast.podcastId, i);
         }
     });
 });
@@ -92,47 +117,16 @@ watch(podcasts, async () => {
 async function fetchNext(): Promise<void> {
     loading.value = true;
     try {
-        // Retrieve latest emissions
-        const emissions = await classicApi.fetchData<ListClassicReturn<Emission>>({
-            api: 0,
-            path: "emission/search",
-            parameters: {
-                first: 0,
-                size: 5,
-                organisationId: props.organisationId,
-                sort: "LAST_PODCAST_DESC",
-                rubriqueId: props.rubriquesId
-            },
-            specialTreatement: true,
-        });
-
-        const promises: Array<Promise<SimplifiedPodcast>> = [];
-
-        for (let i = 0; i < emissions.result.length; i++) {
-            promises.push(podcastApi.search({
-                first: 0,
-                size: 1,
-                organisationId: [props.organisationId],
-                emissionId: [emissions.result[i].emissionId],
-                sort: PodcastSort.DATE,
-                rubriqueId: props.rubriquesId
-            }).then(r => r.result[0]));
+        let func: () => Promise<Array<Podcast>>;
+        if (props.retrievalMode === 'any') {
+            func = fetchPodcasts;
+        } else {
+            func = fetchPodcastsByEmission;
         }
-
-        // Retrieve the podcasts for these emissions
-        const data = await Promise.all(promises);
-
-        podcasts.value = podcasts.value.concat(
-            data.filter((em: SimplifiedPodcast | null) => null !== em && undefined !== em).map(p => {
-                // Get emission from podcast
-                const emission = emissions.result.find(e => e.emissionId === p.emissionId);
-                // Create full podcast from simplified + emission
-                return simplifiedToFull(p, emission.orga, emission);
-            })
-        );
+        const result = await func();
 
         // Sort podcasts by pub date so that the most recent one is focused
-        podcasts.value.sort((p1, p2) => {
+        podcasts.value = result.sort((p1, p2) => {
             return new Date(p2.pubDate).getTime() - new Date(p1.pubDate).getTime();
         });
     
@@ -143,6 +137,57 @@ async function fetchNext(): Promise<void> {
         error.value = true;
     }
     loading.value = false;
+}
+
+async function fetchPodcasts(): Promise<Array<Podcast>> {
+    const response = await podcastApi.searchFull({
+        first: 0,
+        size: 5,
+        organisationId: [props.organisationId],
+        sort: PodcastSort.DATE,
+        rubriqueId: props.rubriquesId
+    }, true);
+
+    return response.result;
+}
+
+async function fetchPodcastsByEmission(): Promise<Array<Podcast>> {
+    // Retrieve latest emissions
+    const emissions = await classicApi.fetchData<ListClassicReturn<Emission>>({
+        api: 0,
+        path: "emission/search",
+        parameters: {
+            first: 0,
+            size: 5,
+            organisationId: props.organisationId,
+            sort: "LAST_PODCAST_DESC",
+            rubriqueId: props.rubriquesId
+        },
+        specialTreatement: true
+    });
+
+    const promises: Array<Promise<SimplifiedPodcast>> = [];
+
+    for (let i = 0; i < emissions.result.length; i++) {
+        promises.push(podcastApi.search({
+            first: 0,
+            size: 1,
+            organisationId: [props.organisationId],
+            emissionId: [emissions.result[i].emissionId],
+            sort: PodcastSort.DATE,
+            rubriqueId: props.rubriquesId
+        }, true).then(r => r.result[0]));
+    }
+
+    // Retrieve the podcasts for these emissions
+    const data = await Promise.all(promises);
+
+    return data.filter((em: SimplifiedPodcast | null) => null !== em && undefined !== em).map(p => {
+        // Get emission from podcast
+        const emission = emissions.result.find(e => e.emissionId === p.emissionId);
+        // Create full podcast from simplified + emission
+        return simplifiedToFull(p, emission.orga, emission);
+    });
 }
 
 function route(podcast: Podcast): RouteLocationRaw {

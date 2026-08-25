@@ -1,4 +1,5 @@
-import '@tests/mocks/useRouter';
+import { mockUseRouter } from '@tests/mocks';
+vi.mock('vue-router', () => mockUseRouter());
 
 import { emissionApi } from "@/api/emissionApi";
 import { playlistApi } from "@/api/playlistApi";

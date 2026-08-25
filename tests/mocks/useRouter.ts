@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
-
-vi.mock('vue-router', () => ({
-    useRoute: () => ({
-        path: '',
-        query: {}
-    }),
-    useRouter: () => ({
-        resolve: () => ({ path: '' })
-    })
-}));
+export function mockUseRouter() {
+    return {
+        useRoute: () => ({
+            path: '',
+            query: {}
+        }),
+        useRouter: () => ({
+            resolve: () => ({ path: '' })
+        })
+    };
+}

@@ -1,4 +1,5 @@
-import '@tests/mocks/useRouter';
+import { mockUseRouter } from '@tests/mocks';
+vi.mock('vue-router', () => mockUseRouter());
 
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { defineComponent, nextTick } from 'vue';

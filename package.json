@@ -1,13 +1,12 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "41.12.1",
+  "version": "42.0.0-beta5",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
   "scripts": {
-    "serve": "vite preview",
     "build": "vite build",
-    "dev": "vite",
+    "build:watch": "vite build --watch --mode development",
     "test": "vitest",
     "bundle": "vite-bundle-visualizer",
     "proxy_authentifié": "node proxy.ts",
@@ -65,11 +64,13 @@
     "@types/sockjs-client": "^1.5.4",
     "@types/webpack-env": "^1.18.8",
     "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/language-core": "~3.1.5",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.39.1",
     "eslint-plugin-vue": "10.9.1",
     "happy-dom": "^20.1.0",
     "typescript": "^5.9.3",
+    "unplugin-dts": "^1.0.2",
     "vitest": "^4.0.16"
   },
   "postcss": {
@@ -102,13 +103,31 @@
   },
   "exports": {
     ".": {
-      "default": "./index.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
     },
-    "./src/*": "./src/*",
-    "./tests/*": "./tests/*",
+    "./style.css": "./dist/index.css",
+    "./octopus-library.scss": "./src/style/octopus-library.scss",
+    "./tests": {
+      "types": "./tests/index.ts",
+      "default": "./dist/tests.mjs"
+    },
+    "./tests/mocks": {
+      "types": "./tests/mocks/index.ts",
+      "default": "./dist/tests-mocks.mjs"
+    },
     "./eslint-config": {
       "types": "./eslint-config.d.ts",
       "default": "./eslint-config.mjs"
-    }
-  }
+    },
+    "./fonts/style.css": "./public/css/fonts/localFonts/style.css"
+  },
+  "files": [
+    "dist",
+    "src",
+    "tests",
+    "eslint-config.mjs",
+    "eslint-config.d.ts",
+    "public/css/fonts/localFonts"
+  ]
 }

@@ -15,7 +15,7 @@ export const usePresentationItem = () => {
             .map(cat => cat.name);
     }
 
-    async function rubriqueTags(element: Podcast|Emission): Promise<Array<string>> {
+    async function rubriqueTags(element: Podcast|Emission, filterRubriquageId?: number): Promise<Array<string>> {
         const rubriqueIds: Array<number> = [];
         if (element.rubriqueIds) {
             rubriqueIds.push(...element.rubriqueIds);
@@ -26,9 +26,8 @@ export const usePresentationItem = () => {
         const promises = rubriqueIds.map(rubriquesApi.getCachedRubrique);
         const rubriques = await Promise.all(promises);
 
-        if (state.presentationItems.tagsRubriquageId) {
-            const rubriquageId = state.presentationItems.tagsRubriquageId;
-            return rubriques.filter(r => r.rubriquageId === rubriquageId).map(r => r.name);
+        if (filterRubriquageId) {
+            return rubriques.filter(r => r.rubriquageId === filterRubriquageId).map(r => r.name);
         } else {
             return rubriques.map(r => r.name);
         }
@@ -41,7 +40,7 @@ export const usePresentationItem = () => {
             const emission = 'emission' in element ? element.emission : element;
             tags = iabTags(emission);
         } else if (type === 'rubrique') {
-            tags = await rubriqueTags(element);
+            tags = await rubriqueTags(element, state.presentationItems.tagsRubriquageId);
         }
 
         if (tags && state.presentationItems.tagsLimit) {
@@ -51,8 +50,9 @@ export const usePresentationItem = () => {
         return tags;
     }
 
-    function additionalInfoFor(element: Podcast|Emission): Array<string>|undefined {
+    async function additionalInfoFor(element: Podcast|Emission): Promise<Array<string>|undefined> {
         const prop = state.presentationItems.additionalInfo;
+        const restrictiveRubriquageId = state.presentationItems.restrictiveRubriquageId;
         if (!prop?.length) {
             return undefined;
         }
@@ -60,7 +60,7 @@ export const usePresentationItem = () => {
         const podcast = 'emission' in element ? element : null;
         const emission = podcast?.emission ?? element as Emission;
 
-        return prop.map(property => {
+        const result = await Promise.all(prop.map(async property => {
             if (property === 'date') {
                 if (podcast?.pubDate) {
                     return formatDate(podcast.pubDate);
@@ -69,9 +69,14 @@ export const usePresentationItem = () => {
                 }
             } else if (property === 'productor') {
                 return emission.orga.name;
+            } else if (property === 'restrictive-rubrique' && restrictiveRubriquageId !== undefined) {
+                const rubriques = await rubriqueTags(element, restrictiveRubriquageId);
+                return rubriques.join(', ');
             }
             return null;
-        }).filter(p => p !== null);
+        }));
+
+        return result.filter(p => p !== null);
     }
 
     return { tagsFor, additionalInfoFor };
