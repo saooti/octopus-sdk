@@ -31,6 +31,7 @@
   -> `Podcast`
 - Correction chargement composants stub suite à changement build
 - Correction affichage Octopus(Multi)Select dans ClassicPopover
+- Correction style Footer non scopé
 
 ### Misc
 

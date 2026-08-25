@@ -180,24 +180,22 @@ async function onOrganisationSelected( organisation: Organisation | undefined): 
 }
 </script>
 
-<style lang="scss">
-.octopus-app {
-  #footer {
-    font-size: max(0.6rem, 12px);
-    bottom: 0;
-    z-index: 10;
-    background: white;
-    padding: 0 2rem;
+<style scoped lang="scss">
+#footer {
+  font-size: max(0.6rem, 12px);
+  bottom: 0;
+  z-index: 10;
+  background: white;
+  padding: 0 2rem;
 
-    a,
-    .link-hover.btn-transparent {
-      font-weight: 500;
-      color: var(--octopus-gray-text) !important;
-    }
+  a,
+  .link-hover.btn-transparent {
+    font-weight: 500;
+    color: var(--octopus-gray-text) !important;
+  }
 
-    .special-select-align-magic-trick {
-      margin-left: 0.16rem;
-    }
+  .special-select-align-magic-trick {
+    margin-left: 0.16rem;
   }
 }
 </style>
