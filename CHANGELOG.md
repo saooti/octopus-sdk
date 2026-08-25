@@ -13,7 +13,7 @@
     connexion
   - Vérification des droits en fonction de la portée, et ajout de
     `RightsIndicator` sur les podcasts & émissions
-- **[14594]** - Ajout fonction de test des droits pour le chapitrage
+  - Ajout fonction de test des droits pour le chapitrage
 - **14670** - Affichage d'un message explicite en cas de contenu bloqué
 - Refacto export et configuration de build pour résoudre problème import
   internes
@@ -27,7 +27,7 @@
 
 ### Fixes
 
-- **[14747]** - Récupération des animateurs pour conversion `SimplifiedPodcast`
+- **14747** - Récupération des animateurs pour conversion `SimplifiedPodcast`
   -> `Podcast`
 - Correction chargement composants stub suite à changement build
 - Correction affichage Octopus(Multi)Select dans ClassicPopover
@@ -36,6 +36,7 @@
 ### Misc
 
 - Ajout props utilitaires pour ClassicHelpButton et ClassicTabs
+- Mise à jour des dépendances
 
 ## 41.12.1 (19/08/2026)
 
