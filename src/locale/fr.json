@@ -454,6 +454,9 @@
   "Player - Generating subtitles": "Génération des sous-titres en {language}…",
 
   "Transcript - Available languages": "Langues disponibles",
+
+  "Generic - Content unavailable - Country blocked - Title": "Contenu indisponible",
+  "Generic - Content unavailable - Country blocked - Message": "Ce contenu n'est pas disponible dans votre pays.",
   
   "Generic - Action disabled - Not owner": "Cette action n'est pas disponible car vos droits ne vous permettent pas de modifier ou supprimer des éléments dont vous n'êtes pas propriétaire",
   "RightsIndicator - Podcast - Not owner": "Ce podcast a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",

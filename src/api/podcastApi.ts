@@ -8,6 +8,9 @@ import { emissionApi } from './emissionApi';
 import { FetchParam } from '@/stores/class/general/fetchParam';
 import { Paginable } from './types';
 import { participantApi } from './participantApi';
+import { useNotificationStore } from '@/stores/NotificationStore';
+import { AxiosError } from 'axios';
+import { getI18n } from '@/i18n';
 
 export enum PodcastSort {
     DATE = 'DATE',
@@ -79,15 +82,32 @@ export interface PodcastSearchOptions extends Paginable<PodcastSort> {
 }
 
 async function downloadRegister(podcastId: number, parameters?: Record<string,unknown>): Promise<{ location: string; downloadId: number }> {
-    return classicApi.fetchData<{
-        location: string;
-        downloadId: number;
-    }>({
-        api: ModuleApi.DEFAULT,
-        path:"podcast/download/register/" + podcastId + ".mp3",
-        parameters,
-        headers: {'X-Extra-UA':'Saooti Player'}
-    });
+    try {
+        return await classicApi.fetchData<{
+            location: string;
+            downloadId: number;
+        }>({
+            api: ModuleApi.DEFAULT,
+            path:"podcast/download/register/" + podcastId + ".mp3",
+            parameters,
+            headers: {'X-Extra-UA':'Saooti Player'}
+        });
+    } catch(e) {
+        if (e instanceof AxiosError && e.status === 403) {
+            const error = e.response.data;
+            // #14620 - match "Country FR is not whitelisted" or "Country FR is blacklisted"
+            if (error.includes('is blacklisted') || error.includes('is not whitelisted')) {
+                const { addNotification } = useNotificationStore();
+                const t = getI18n().global.t as (key: string) => string;
+                addNotification({
+                    type: 'error',
+                    title: t('Generic - Content unavailable - Country blocked - Title'),
+                    message: t('Generic - Content unavailable - Country blocked - Message')
+                });
+            }
+        }
+        return Promise.reject(e);
+    }
 }
 
 /**

@@ -14,6 +14,7 @@
   - Vérification des droits en fonction de la portée, et ajout de
     `RightsIndicator` sur les podcasts & émissions
 - **[14594]** - Ajout fonction de test des droits pour le chapitrage
+- **14670** - Affichage d'un message explicite en cas de contenu bloqué
 - Refacto export et configuration de build pour résoudre problème import
   internes
 - Ajout de nouvelles méthodes dans l'API de rubriques

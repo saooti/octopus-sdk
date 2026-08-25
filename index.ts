@@ -183,6 +183,9 @@ import classicApi from "./src/api/classicApi";
 export * from "./src/api";
 export { TranslationState } from "./src/api/transcriptionApi";
 
+// i18n
+export { registerI18n } from "./src/i18n";
+
 // Types
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission";
 export { type Organisation, type OrganisationAttributes, emptyOrganisationData, emptyOrgaData } from "./src/stores/class/general/organisation";

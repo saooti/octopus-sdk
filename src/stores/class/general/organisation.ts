@@ -40,6 +40,8 @@ export type OrganisationAttributes = {
   'allow-participant-rss'?: string;
   /** Disallow RSS sharing */
   noSharing?: string;
+  /** Geoblocage parameters (JSON) */
+  geoblocage?: string;
 };
 
 export interface Organisation {
