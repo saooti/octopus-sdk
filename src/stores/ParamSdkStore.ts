@@ -117,7 +117,12 @@ export interface ParamStore {
     /** Limit number of tags */
     tagsLimit?: number;
     /** Additional infos displayed in presentation item */
-    additionalInfo?: Array<'productor'|'date'>;
+    additionalInfo?: Array<'productor'|'date'|'restrictive-rubrique'>;
+    /**
+     * ID of the restrictive rubriquage ID, used only when additionalInfo
+     * contains 'restricted-rubrique'
+     */
+    restrictiveRubriquageId?: number;
   };
 
   /** Smartlink configuration */

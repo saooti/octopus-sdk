@@ -18,7 +18,7 @@
                 :description="item.description"
                 :vertical="!isPhone && first"
                 :tags="tags.get(item.podcastId)"
-                :additional-info="additionalInfoFor(item)"
+                :additional-info="additionalInfo.get(item.podcastId)"
             >
                 <template #after-image>
                     <PodcastPlayButton
@@ -91,6 +91,7 @@ const loading = ref(true);
 const error = ref(false);
 const podcasts: Ref<Array<Podcast>> = ref([]);
 const tags = reactive(new Map<number, Array<string>>());
+const additionalInfo = reactive(new Map<number, Array<string>>());
   
 //Composables
 const { isPhone } = useResizePhone();
@@ -102,8 +103,12 @@ onMounted(fetchNext);
 watch(podcasts, async () => {
     podcasts.value.forEach(async (podcast) => {
         if (!tags.has(podcast.podcastId)) {
-            const t = await tagsFor(podcast);
+            const [t, i] = await Promise.all([
+                tagsFor(podcast),
+                additionalInfoFor(podcast)
+            ]);
             tags.set(podcast.podcastId, t);
+            additionalInfo.set(podcast.podcastId, i);
         }
     });
 });

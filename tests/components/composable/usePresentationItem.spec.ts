@@ -106,59 +106,59 @@ describe('usePresentationItem', () => {
     });
 
     describe('additionalInfoFor', () => {
-        it('returns undefined when additionalInfo is not configured', () => {
+        it('returns undefined when additionalInfo is not configured', async () => {
             const { additionalInfoFor } = usePresentationItem();
-            expect(additionalInfoFor(emptyEmissionData())).toBeUndefined();
+            expect(await additionalInfoFor(emptyEmissionData())).toBeUndefined();
         });
 
-        it('returns undefined when additionalInfo is empty', () => {
+        it('returns undefined when additionalInfo is empty', async () => {
             state.presentationItems.additionalInfo = [];
             const { additionalInfoFor } = usePresentationItem();
-            expect(additionalInfoFor(emptyEmissionData())).toBeUndefined();
+            expect(await additionalInfoFor(emptyEmissionData())).toBeUndefined();
         });
 
-        it('resolves productor from the emission organisation name for an emission', () => {
+        it('resolves productor from the emission organisation name for an emission', async () => {
             state.presentationItems.additionalInfo = ['productor'];
             const { additionalInfoFor } = usePresentationItem();
             const emission: Emission = { ...emptyEmissionData(), orga: { id: '1', name: 'Saooti', imageUrl: '' } };
-            expect(additionalInfoFor(emission)).toEqual(['Saooti']);
+            expect(await additionalInfoFor(emission)).toEqual(['Saooti']);
         });
 
-        it('resolves productor from the podcast emission organisation name', () => {
+        it('resolves productor from the podcast emission organisation name', async () => {
             state.presentationItems.additionalInfo = ['productor'];
             const { additionalInfoFor } = usePresentationItem();
             const podcast: Podcast = emptyPodcastData();
             podcast.emission = { ...emptyEmissionData(), orga: { id: '1', name: 'Saooti', imageUrl: '' } };
-            expect(additionalInfoFor(podcast)).toEqual(['Saooti']);
+            expect(await additionalInfoFor(podcast)).toEqual(['Saooti']);
         });
 
-        it('formats the podcast pubDate for the date info', () => {
+        it('formats the podcast pubDate for the date info', async () => {
             state.presentationItems.additionalInfo = ['date'];
             const { additionalInfoFor } = usePresentationItem();
             const podcast: Podcast = emptyPodcastData();
             podcast.pubDate = '2025-12-01T10:21:31.000+00:00';
-            expect(additionalInfoFor(podcast)).toEqual(['1 décembre 2025']);
+            expect(await additionalInfoFor(podcast)).toEqual(['1 décembre 2025']);
         });
 
-        it('omits the date info for an emission (no pubDate)', () => {
+        it('omits the date info for an emission (no pubDate)', async () => {
             state.presentationItems.additionalInfo = ['date'];
             const { additionalInfoFor } = usePresentationItem();
-            expect(additionalInfoFor(emptyEmissionData())).toEqual([]);
+            expect(await additionalInfoFor(emptyEmissionData())).toEqual([]);
         });
 
-        it('omits the date info for a podcast without a pubDate', () => {
+        it('omits the date info for a podcast without a pubDate', async () => {
             state.presentationItems.additionalInfo = ['date'];
             const { additionalInfoFor } = usePresentationItem();
-            expect(additionalInfoFor(emptyPodcastData())).toEqual([]);
+            expect(await additionalInfoFor(emptyPodcastData())).toEqual([]);
         });
 
-        it('combines multiple info entries in order', () => {
+        it('combines multiple info entries in order', async () => {
             state.presentationItems.additionalInfo = ['date', 'productor'];
             const { additionalInfoFor } = usePresentationItem();
             const podcast: Podcast = emptyPodcastData();
             podcast.pubDate = '2025-12-01T10:21:31.000+00:00';
             podcast.emission = { ...emptyEmissionData(), orga: { id: '1', name: 'Saooti', imageUrl: '' } };
-            expect(additionalInfoFor(podcast)).toEqual(['1 décembre 2025', 'Saooti']);
+            expect(await additionalInfoFor(podcast)).toEqual(['1 décembre 2025', 'Saooti']);
         });
     });
 });

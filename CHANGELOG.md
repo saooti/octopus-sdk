@@ -22,6 +22,8 @@
 - Correction build pour tests
 - Extension du système RightsIndicator pour simplifier son usage dans d'autres
   cas (cf RightsWrapper)
+- Ajout de 'restrictive-rubrique' pour les infos additionnelles des éléments de
+  présentation
 
 ### Fixes
 
