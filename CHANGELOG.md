@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.0.1 (En cours)
+
+### Misc
+
+- Ajout de nouvelles variables CSS pour configuration des titres
+
 ## 42.0.0 (25/08/2026)
 
 ### Features
