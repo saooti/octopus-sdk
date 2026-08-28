@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.0.2 (En cours)
+
+### Fixes
+
+- **14793** - Affichage message plus pertinent pour RightsIndicator
+
 ## 42.0.1 (28/08/2026)
 
 ### Misc

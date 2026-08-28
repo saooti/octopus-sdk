@@ -179,7 +179,9 @@ export const useRightsIndicator = (props: PropsPodcast|PropsEmission|PropsCartou
             break;
 
         case ActionRight.DeniedNoRight:
-            return 'insufficient rights';
+            key = `RightsIndicator - ${entitySegment} - Insufficient rights`;
+            genericKey = 'RightsIndicator - Generic - Insufficient rights';
+            break;
 
         default:
             return 'Cannot process rights';

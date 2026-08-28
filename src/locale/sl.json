@@ -437,5 +437,8 @@
   "RightsIndicator - Emission - Insufficient scope": "Obseg vaših pravic vam ne dovoljuje spreminjanja ali brisanja te oddaje",
   "RightsIndicator - Generic - Insufficient scope": "Obseg vaših pravic vam ne dovoljuje ustvarjanja, spreminjanja ali brisanja tega elementa",
   "Generic - Content unavailable - Country blocked - Title": "Vsebina ni na voljo",
-  "Generic - Content unavailable - Country blocked - Message": "Ta vsebina ni na voljo v vaši državi."
+  "Generic - Content unavailable - Country blocked - Message": "Ta vsebina ni na voljo v vaši državi.",
+  "RightsIndicator - Podcast - Insufficient rights": "Vaše pravice vam ne dovoljujejo spreminjanja ali brisanja te epizode",
+  "RightsIndicator - Emission - Insufficient rights": "Vaše pravice vam ne dovoljujejo spreminjanja ali brisanja te oddaje",
+  "RightsIndicator - Generic - Insufficient rights": "Vaše pravice vam ne dovoljujejo ustvarjanja, spreminjanja ali brisanja tega elementa"
 }

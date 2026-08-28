@@ -295,9 +295,14 @@ describe('RightsIndicator', () => {
             expect(wrapper.find('.alert').exists()).toBe(false);
         });
 
-        it('renders "insufficient rights" for ActionRight.DeniedNoRight', async () => {
+        it('renders entity-specific i18n key for ActionRight.DeniedNoRight on podcast', async () => {
             const wrapper = await mountWith({ action: 'create', podcast: ownPodcast }, ['PLAYLISTS']);
-            expect(wrapper.text()).toContain('insufficient rights');
+            expect(wrapper.text()).toContain('RightsIndicator - Podcast - Insufficient rights');
+        });
+
+        it('renders entity-specific i18n key for ActionRight.DeniedNoRight on emission', async () => {
+            const wrapper = await mountWith({ action: 'create', emission: otherEmission }, ['PLAYLISTS']);
+            expect(wrapper.text()).toContain('RightsIndicator - Emission - Insufficient rights');
         });
 
         it('renders entity-specific i18n key for ActionRight.DeniedNotOwner on podcast', async () => {

@@ -438,5 +438,8 @@
   "RightsIndicator - Emission - Insufficient scope": "The scope of your rights does not allow you to modify or delete this broadcast",
   "RightsIndicator - Generic - Insufficient scope": "The scope of your rights does not allow you to create, modify or delete this element",
   "Generic - Content unavailable - Country blocked - Title": "Content unavailable",
-  "Generic - Content unavailable - Country blocked - Message": "This content is not available in your country."
+  "Generic - Content unavailable - Country blocked - Message": "This content is not available in your country.",
+  "RightsIndicator - Podcast - Insufficient rights": "Your rights do not allow you to modify or delete this episode",
+  "RightsIndicator - Emission - Insufficient rights": "Your rights do not allow you to modify or delete this broadcast",
+  "RightsIndicator - Generic - Insufficient rights": "Your rights do not allow you to create, modify or delete this element"
 }
