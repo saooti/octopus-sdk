@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 42.0.3 (En cours)
+
+### Fixes
+
+- Correction CacheStore ne pouvant pas s'initialiser dans certaines
+  circonstances
+
 ## 42.0.2 (28/08/2026)
 
 ### Fixes

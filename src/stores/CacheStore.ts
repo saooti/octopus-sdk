@@ -1,5 +1,4 @@
-import { useDayjs } from "../components/composable/useDayjs";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { defineStore } from "pinia";
 
 /**
@@ -14,7 +13,6 @@ interface CachedData<T> {
 
 export const useCacheStore = defineStore('cache', () => {
 
-    const { dayjs } = useDayjs();
     const cachedData: Record<string, CachedData<unknown>> = {};
 
     async function getData<T>(key: string, callback: () => Promise<T>): Promise<T> {
