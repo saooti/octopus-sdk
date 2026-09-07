@@ -5,6 +5,7 @@
 ### Misc
 
 - Ajustement des éléments `PresentationItem` pour podcastmaker
+- La non récupération du scope de l'utilisateur n'empêche plus la connexion
 
 ## 42.0.3 (31/08/2026)
 

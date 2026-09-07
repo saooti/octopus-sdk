@@ -219,7 +219,16 @@ export const useAuthStore = defineStore("AuthStore", {
         ]);
 
         // Retrieve user's rights scope
-        const scope = await rubriquesApi.listUserScope(profileData.sub);
+        const scope: Array<number> = [];
+        // TODO remove when scope feature is available on prod
+        try {
+          const s = await rubriquesApi.listUserScope(profileData.sub);
+          scope.push(...s);
+        } catch (e) {
+          console.error(e);
+          // Disable scope
+          scope.push(-1);
+        }
 
         const array = (availablesOrganisations ?? []).toSorted(function (a: Organisation, b: Organisation) {
           if (a.name.toLowerCase() < b.name.toLowerCase()) {
