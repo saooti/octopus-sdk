@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.0.4 (En cours)
+
+### Misc
+
+- Ajustement des éléments `PresentationItem` pour podcastmaker
+
 ## 42.0.3 (31/08/2026)
 
 ### Fixes

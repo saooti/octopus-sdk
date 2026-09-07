@@ -4,6 +4,7 @@ import { useGeneralStore } from "../../stores/GeneralStore";
 import { Podcast } from "../../stores/class/general/podcast";
 import { rubriquesApi } from "../../api";
 import { useDayjs } from "./useDayjs";
+import { unique } from "@/helper/arrayHelper";
 
 export const usePresentationItem = () => {
     const generalStore = useGeneralStore();
@@ -23,7 +24,8 @@ export const usePresentationItem = () => {
         if ('emission' in element && element.emission.rubriqueIds) {
             rubriqueIds.push(...element.emission.rubriqueIds);
         }
-        const promises = rubriqueIds.map(rubriquesApi.getCachedRubrique);
+        const uniqueRubriqueIds = rubriqueIds.filter(unique);
+        const promises = uniqueRubriqueIds.map(rubriquesApi.getCachedRubrique);
         const rubriques = await Promise.all(promises);
 
         if (filterRubriquageId) {

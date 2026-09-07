@@ -194,10 +194,17 @@ function urlify(text:string|undefined){
         > span {
             background-color: white;
             padding: .25em .75em;
-            border-radius: var(--octopus-border-radius);
             font-size: 14px;
             font-weight: bold;
             color: var(--octopus-primary);
+            border-radius: var(--octopus-border-radius);
+            border: 1px solid color-mix(in lch, var(--octopus-primary), transparent 60%);
+
+            // Limit width
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }
