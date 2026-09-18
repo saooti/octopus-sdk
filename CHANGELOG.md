@@ -8,6 +8,10 @@
 - Correction dun problème daffichage de PresentationLayout sur écrans > 960 &
   < 1550
 
+## Misc
+
+- Mise à jour de dépendances pour corriger des vulnérabilités
+
 ## 42.0.4 (07/09/2026)
 
 ### Misc
