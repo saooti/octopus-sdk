@@ -16,3 +16,19 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const vastStore = useVastStore();
 </script>
+
+<style scoped lang="scss">
+.octopus-app {
+  progress {
+      background-color: var(--octopus-player-progress-background-color);
+      border-radius: var(--octopus-border-radius);
+      accent-color: var(--octopus-player-progress-color-current);
+      color: var(--octopus-player-progress-color-current);
+      border: none;
+
+      &::-moz-progress-bar, &::-webkit-progress-value {
+        background: var(--octopus-player-progress-color-current);
+      }
+  }
+}
+</style>

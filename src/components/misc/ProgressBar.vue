@@ -154,7 +154,6 @@ function timeMediaToPercent(value: number | null): number {
       color: var(--octopus-color-on-primary);
       text-align: center;
       white-space: nowrap;
-      background-color: var(--octopus-primary);
       background-color: var(--octopus-player-progress-color-current);
       transition: width 0.6s ease;
     }

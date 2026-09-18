@@ -2,9 +2,9 @@
   <div class="d-flex align-items-center">
     <div
       v-if="currentlyPlayingString.length || podcastRadio"
-      class="me-2 fw-bold"
+      class="fw-bold me-1"
     >
-      {{ t("Currently") + " : " }}
+      {{ t("Currently") }}&nbsp;:
     </div>
     <router-link
       v-if="podcastRadio"
@@ -22,7 +22,6 @@
         class="small-img-box"
         aria-hidden="true"
         alt=""
-        
         :title="t('Episode name image', { name: podcastRadio.title })"
       />
       <div>{{ podcastRadio.title }}</div>

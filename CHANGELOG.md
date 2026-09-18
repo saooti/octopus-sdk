@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.0.5 (En cours)
+
+### Fixes
+
+- Correction couleur player radio/pub
+
 ## 42.0.4 (07/09/2026)
 
 ### Misc
