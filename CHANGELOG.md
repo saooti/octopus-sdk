@@ -5,6 +5,8 @@
 ### Fixes
 
 - Correction couleur player radio/pub
+- Correction dun problème daffichage de PresentationLayout sur écrans > 960 &
+  < 1550
 
 ## 42.0.4 (07/09/2026)
 

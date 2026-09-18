@@ -11,9 +11,13 @@
       <!-- First column & first item -->
       <slot
         v-if="items[0]"
-        name="first" :item="items[0]"
+        name="first"
+        :item="items[0]"
       >
-        <slot name="item" :item="items[0]" :first="true" />
+        <slot
+          name="item"
+          :item="items[0]"
+          :first="true" />
       </slot>
 
       <!-- Second column & second/third items -->
@@ -122,7 +126,9 @@ defineProps<{
     display: flex;
 
     @media (width <= 1550px) and (width > 960px) {
-      display: none;
+      &.column {
+        display: none;
+      }
     }
   }
 }

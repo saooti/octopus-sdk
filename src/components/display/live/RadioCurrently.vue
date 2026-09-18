@@ -82,7 +82,7 @@ onMounted(()=>{
 })
 
 onUnmounted(()=>{
-  clearInterval(radioInterval.value as unknown as number);
+  clearInterval(radioInterval.value);
   radioInterval.value= undefined;
 })
 
