@@ -48,6 +48,11 @@ export default defineConfig(({ mode }) => ({
     // dist/index.d.ts produced by a prior full `npm run build`.
     emptyOutDir: false,
     target: 'esnext',
+    // Keep dev/watch builds (used for linking) readable in Vue Devtools:
+    // minification mangles identifiers and strips the setup()-binding names
+    // Vue emits for the inspector. Run a full `npm run build` before publishing.
+    minify: mode !== 'development',
+    sourcemap: mode === 'development',
     lib: {
       entry: {
         index: path.resolve(__dirname, 'index.ts'),

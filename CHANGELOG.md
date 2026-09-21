@@ -8,6 +8,10 @@
 - Correction dun problème daffichage de PresentationLayout sur écrans > 960 &
   < 1550
 
+### Misc
+
+- Amélioration build de développement pour vue dev tools
+
 ## Misc
 
 - Mise à jour de dépendances pour corriger des vulnérabilités
