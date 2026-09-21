@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import classicApi from "../api/classicApi";
 import { useAuthStore } from "./AuthStore";
-import { Organisation } from "./class/general/organisation";
+import { Organisation, OrganisationAttributes } from "./class/general/organisation";
 import { Rubriquage } from "./class/rubrique/rubriquage";
 
 type SaveObject = { [key: string]: string | number | boolean | undefined };
@@ -20,7 +20,7 @@ export const useSaveFetchStore = defineStore("SaveFetchStore", {
     orgaRubriques:{},
   }),
   actions: {
-    async getOrgaAttributes(orgaId: string): Promise<SaveObject> {
+    async getOrgaAttributes(orgaId: string): Promise<OrganisationAttributes> {
       if (this.orgaPublicAttributes[orgaId]) {
         return this.orgaPublicAttributes[orgaId];
       }

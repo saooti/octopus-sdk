@@ -163,6 +163,7 @@ import { deepEqual } from "./src/helper/equals";
 export { colorFromString } from './src/helper/colorFromString';
 export * from './src/helper/rubriquesHelper';
 export * from './src/helper/arrayHelper';
+export * from './src/helper/featureHelper';
 
 //stores
 import {useVastStore} from "./src/stores/VastStore";

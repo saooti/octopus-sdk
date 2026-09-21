@@ -7,7 +7,7 @@ import { VideoConfig } from "@/stores/class/config/videoConfig";
 import classicApi from "../api/classicApi";
 import { useNotificationStore } from "./NotificationStore";
 import { useI18n } from "vue-i18n";
-import { rubriquesApi } from "@/api";
+import { organisationApi, rubriquesApi } from "@/api";
 
 interface AuthParam {
   accessToken?: string;
@@ -173,10 +173,8 @@ export const useAuthStore = defineStore("AuthStore", {
           api: 0,
           path:"organisation/attributes/" + encodeURI(this.authOrganisation.id)
         });
-        this.authVideoConfig = await classicApi.fetchData<VideoConfig>({
-          api: 0,
-          path:"video/config/" + encodeURI(this.authOrganisation.id),
-        });
+        this.authVideoConfig = await organisationApi.getVideoConfig(this.authOrganisation.id);
+
         const organisation: Organisation = {
           ...this.authOrganisation,
           ...{ attributes: organisationData },

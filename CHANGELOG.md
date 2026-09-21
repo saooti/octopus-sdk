@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.0.6 (En cours)
+
+### Features
+
+- Ajout d'un helper pour vérifier l'activation des fonctionnalités
+
 ## 42.0.5 (21/09/2026)
 
 ### Fixes

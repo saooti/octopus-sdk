@@ -2,6 +2,8 @@ import classicApi from "./classicApi";
 import { ModuleApi } from "./apiConnection";
 import { Organisation, OrganisationAttributes } from "../stores/class/general/organisation";
 import { mapFromGetAll } from "./apiUtils";
+import { VideoConfig } from "@/stores/class/config/videoConfig";
+import { useCacheStore } from "@/stores/CacheStore";
 
 /**
  * Retrieve an organisation by ID
@@ -37,8 +39,24 @@ async function getAttributes(organisationId: string): Promise<OrganisationAttrib
     });
 }
 
+/**
+ * Retrieve the video configuration of a given organisation
+ * @param organisationId The ID of the organisation
+ * @returns The video configuration of the organisation
+ */
+async function getVideoConfig(organisationId: string): Promise<VideoConfig> {
+    const cacheStore = useCacheStore();
+    return cacheStore.getData(`org-video-config-${organisationId}`, () => {
+        return classicApi.fetchData<VideoConfig>({
+            api: ModuleApi.DEFAULT,
+            path:"video/config/" + encodeURI(organisationId)
+        });
+    });
+}
+
 export const organisationApi = {
     get,
     getAllById,
-    getAttributes
+    getAttributes,
+    getVideoConfig
 };
