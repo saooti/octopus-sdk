@@ -347,7 +347,8 @@ defineExpose({
       }
 
       &:is(:hover, :focus){
-        background: var(--octopus-secondary-lighter);
+        color: var(--octopus-popover-dropdown-item-color-fg-hover);
+        background: var(--octopus-popover-dropdown-item-color-bg-hover);
       }
     }
 

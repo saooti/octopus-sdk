@@ -6,6 +6,7 @@
 
 - **[14860]** - Ajout lien vers smartlink dans menu émission
 - Ajout d'un helper pour vérifier l'activation des fonctionnalités
+- Ajout de variables CSS pour configurer menus popover
 
 [14860]: https://trac.saooti.net/ticket/14860
 

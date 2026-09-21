@@ -58,6 +58,12 @@
     --octopus-btn-paginate-active-fg: var(--octopus-btn-paginate-fg);
     --octopus-btn-paginate-active-bg: var(--octopus-primary-more-transparent);
 
+    // Popover
+    // Color for text of items in popovers when hovered
+    --octopus-popover-dropdown-item-color-fg-hover: var(--octopus-color-text);
+    // Color for background of items in popovers when hovered
+    --octopus-popover-dropdown-item-color-bg-hover: var(--octopus-secondary-lighter);
+
     // Player
     // Color for the transcript background
     --octopus-player-transcript-bg-color: oklch(from var(--octopus-player-color) calc(l + 0.1) c h);
