@@ -440,5 +440,6 @@
   "Generic - Content unavailable - Country blocked - Message": "Ta vsebina ni na voljo v vaši državi.",
   "RightsIndicator - Podcast - Insufficient rights": "Vaše pravice vam ne dovoljujejo spreminjanja ali brisanja te epizode",
   "RightsIndicator - Emission - Insufficient rights": "Vaše pravice vam ne dovoljujejo spreminjanja ali brisanja te oddaje",
-  "RightsIndicator - Generic - Insufficient rights": "Vaše pravice vam ne dovoljujejo ustvarjanja, spreminjanja ali brisanja tega elementa"
+  "RightsIndicator - Generic - Insufficient rights": "Vaše pravice vam ne dovoljujejo ustvarjanja, spreminjanja ali brisanja tega elementa",
+  "SmartLink - Share link": "Povezava za skupno rabo SmartLink"
 }

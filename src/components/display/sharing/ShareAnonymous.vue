@@ -70,6 +70,7 @@
 <script setup lang="ts">
 import QrcodeIcon from "vue-material-design-icons/Qrcode.vue";
 import LinkVariantIcon from "vue-material-design-icons/LinkVariant.vue";
+import LinkVariantPlusIcon from "vue-material-design-icons/LinkVariantPlus.vue";
 import DotsHorizontalIcon from "vue-material-design-icons/DotsHorizontal.vue";
 import ClassicPopover from "../../misc/ClassicPopover.vue";
 import displayHelper from "../../../helper/displayHelper";
@@ -83,6 +84,7 @@ import { Playlist } from "@/stores/class/general/playlist";
 import { state } from "../../../stores/ParamSdkStore";
 import classicApi from "../../../api/classicApi";
 import { useI18n } from "vue-i18n";
+import { useSharePath } from "@/components/composable/share/useSharePath";
 const SnackBar = defineAsyncComponent(() => import("../../misc/SnackBar.vue"));
 const NewsletterModal = defineAsyncComponent(
   () => import("../../misc/modal/NewsletterModal.vue"),
@@ -136,7 +138,7 @@ const { t } = useI18n();
 const authStore = useAuthStore();
 const apiStore = useApiStore();
 const saveFetchStore = useSaveFetchStore();
-
+const { getSmartLink } = useSharePath();
 
 //Computed
 const urlPage = computed(() => window.location.href);
@@ -170,6 +172,7 @@ const titleRssButton = computed(() => {
   }
   return t("Subscribe to this RSS feed");
 });
+
 const dropdownButtons = computed(() => {
   return [
     {
@@ -177,6 +180,12 @@ const dropdownButtons = computed(() => {
       icon: LinkVariantIcon,
       condition:true,
       emitName: "link",
+    },
+    {
+      title: t("SmartLink - Share link"),
+      icon: LinkVariantPlusIcon,
+      condition: isPodcastmaker.value && (props.emission || props.playlist),
+      emitName: "smartlink",
     },
     {
       title: t("Share the player"),
@@ -238,10 +247,14 @@ function determinePlayerCanBeShared() {
     playerCanBeSharedAnonymous.value = "true" === emissionAnnot.notExclusive;
   }
 }
+
 function clickButton(name: string) {
   switch (name) {
     case "link":
       displayHelper.onCopyCode(urlPage.value, afterCopy);
+      break;
+    case "smartlink":
+      this.openSmartLink();
       break;
     case "newsletter":
       isNewsletterModal.value = true;
@@ -259,6 +272,30 @@ function clickButton(name: string) {
       break;
   }
 }
+
+function openSmartLink(): void {
+  const pmUrl = new URL(window.location.href);
+  const podcastmakerUrl = `${pmUrl.origin}/`;
+  let url: string;
+
+  if (props.emission) {
+    url = getSmartLink({
+      title: props.emission.name,
+      emissionId: props.emission?.emissionId,
+    }, {
+      podcastmakerUrl
+    });
+  } else if (props.playlist) {
+    url = getSmartLink({
+      title: props.playlist.title,
+      playlistId: props.playlist?.playlistId,
+    }, {
+      podcastmakerUrl
+    });
+  }
+  window.open(url, '_blank').focus();
+}
+
 function afterCopy(): void {
   if (!lazyLoadingSnackbar.value) {
     lazyLoadingSnackbar.value = true;

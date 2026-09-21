@@ -441,5 +441,6 @@
   "Generic - Content unavailable - Country blocked - Message": "This content is not available in your country.",
   "RightsIndicator - Podcast - Insufficient rights": "Your rights do not allow you to modify or delete this episode",
   "RightsIndicator - Emission - Insufficient rights": "Your rights do not allow you to modify or delete this broadcast",
-  "RightsIndicator - Generic - Insufficient rights": "Your rights do not allow you to create, modify or delete this element"
+  "RightsIndicator - Generic - Insufficient rights": "Your rights do not allow you to create, modify or delete this element",
+  "SmartLink - Share link": "SmartLink share link"
 }
