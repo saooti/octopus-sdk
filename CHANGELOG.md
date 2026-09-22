@@ -8,6 +8,11 @@
 - Ajout d'un helper pour vérifier l'activation des fonctionnalités
 - Ajout de variables CSS pour configurer menus popover
 
+### Misc
+
+- **[14822]** - Changement nom pour plateforme apple
+
+[14822]: https://trac.saooti.net/ticket/14822
 [14860]: https://trac.saooti.net/ticket/14860
 
 ## 42.0.5 (21/09/2026)

@@ -56,7 +56,7 @@ export interface SharePlatformUrl extends SharePlatform {
 export const PREDEFINED_PLATFORMS: Array<SharePlatform> = [{
     name: SharePlatformName.APPLE,
     icon: markRaw(ApplePodcastIcon),
-    title: "Apple Podcast | iTunes",
+    title: "Apple Podcasts",
     color: "#aa1dd3"
 }, {
     name: SharePlatformName.DEEZER,
