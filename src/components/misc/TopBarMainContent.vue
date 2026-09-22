@@ -1,9 +1,9 @@
 <template>
     <div class="top-bar-grid header-content" :class="{ scrolled: titleIsDisplayed }">
-        <div class="d-flex">
+        <div class="d-flex align-items-center">
             <!-- Logo to the left -->
             <router-link
-                class="top-bar-logo d-flex align-items-center"
+                class="top-bar-logo d-block"
                 :to="{
                     name: 'home',
                     query: getQueriesRouter('home'),
@@ -30,6 +30,9 @@
                     :class="generalStore.platformEducation ? 'education-logo' : ''"
                 >
             </router-link>
+
+            <RightsScopeMenu v-model:open="menuOpen" />
+            <RightsScopeSelector class="ms-4" @change="menuOpen = true" />
         </div>
 
         <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
@@ -173,9 +176,11 @@ import {useImageProxy} from "../composable/useImageProxy";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
-import {  defineAsyncComponent, computed } from "vue";
+import { defineAsyncComponent, computed, ref } from "vue";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
+import RightsScopeSelector from "./RightsScopeSelector.vue";
+import RightsScopeMenu from "./RightsScopeMenu.vue"; 
 const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
 
 export interface TopBarMainContentOptions {
@@ -202,6 +207,8 @@ const { rubriqueQueryParam } = useRubriquesFilterComputed();
 const authStore = useAuthStore();
 const generalStore = useGeneralStore();
 const filterStore = useFilterStore();
+
+const menuOpen = ref(false);
 
 //Computed
 const mobileMenuDisplay = computed(() => props.isPhone || inContentDisplayPage.value);
@@ -280,7 +287,7 @@ function getQueriesRouter(routeName: string) {
 .top-bar-grid {
     display: grid;
     grid-template-columns: 1fr 5fr;
-    padding: 0 1rem;
+    padding: 0 1rem 0 0.5rem;
 
     &.scrolled {
         grid-template-columns: 1fr 2fr 1fr;
