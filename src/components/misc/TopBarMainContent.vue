@@ -31,7 +31,8 @@
                 >
             </router-link>
 
-            <RightsScopeSelector class="ms-4" />
+            <RightsScopeMenu v-model:open="menuOpen" />
+            <RightsScopeSelector class="ms-4" @change="menuOpen = true" />
         </div>
 
         <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">
@@ -206,6 +207,8 @@ const { rubriqueQueryParam } = useRubriquesFilterComputed();
 const authStore = useAuthStore();
 const generalStore = useGeneralStore();
 const filterStore = useFilterStore();
+
+const menuOpen = ref(false);
 
 //Computed
 const mobileMenuDisplay = computed(() => props.isPhone || inContentDisplayPage.value);

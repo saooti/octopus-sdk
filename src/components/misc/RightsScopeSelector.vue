@@ -4,14 +4,11 @@
         class="d-flex flex-column ms-4"
     >
         <span class="label mb-1">Filtrage du contenu ({{ rubriquage?.title }})</span>
-        <OctopusSelect
-            id="header-scope-selector"
-            :value="selectedSubOrganisation ?? undefined"
-            :options="subOrganisations"
-            option-key="id"
-            option-label="name"
-            @update:value="selectSubOrganisation"
-        />
+        <div class="d-flex selected">
+            <span class="me-2">{{ selectedSubOrganisation?.name ?? 'Aucun filtrage' }}</span>
+            <SwapIcon @click="$emit('change')" />
+            <ClearIcon v-if="selectedSubOrganisation" />
+        </div>
     </div>
 </template>
 
@@ -19,16 +16,17 @@
 import { useAuthStore } from "../../stores/AuthStore";
 import { ref, toRef, watch } from "vue";
 import { useSubOrganisations } from "../composable/useSubOrganisations";
-import OctopusSelect from "../form/OctopusSelect.vue";
 import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
 import { rubriquesApi } from "@/api";
+
+import SwapIcon from "vue-material-design-icons/SwapHorizontalCircleOutline.vue";
+import ClearIcon from "vue-material-design-icons/CloseCircleOutline.vue";
 
 //Composables
 const authStore = useAuthStore();
 const authOrgaId = toRef(authStore, 'authOrgaId');
 const rubriquage = ref<Rubriquage|null>(null);
 const {
-    selectSubOrganisation,
     selectedSubOrganisation,
     subOrganisations
 } = useSubOrganisations(authOrgaId);
@@ -46,6 +44,7 @@ watch(authOrgaId, async () => {
 #header-scope-selector:deep(.octopus-select-field) {
     background: transparent;
     border-color: rgba(255, 255, 255, 0.1);
+    margin-left: 200px;
 
     .octopus-select-value {
         color: var(--octopus-secondary);
@@ -60,6 +59,13 @@ watch(authOrgaId, async () => {
     button {
         color: rgba(255, 255, 255, 0.3);
     }
+}
+
+.selected {
+    color: var(--octopus-secondary);
+    font-weight: bold;
+    align-content: center;
+    align-items: center;
 }
 
 .label {
