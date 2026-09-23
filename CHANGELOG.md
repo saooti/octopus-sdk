@@ -4,6 +4,9 @@
 
 ### Features
 
+- **[14799]** - Sélecteur de "sous organisation"
+  - Ajout d'un sélecteur dans le header
+  - Auto sélection si l'utilisateur a une portée de droits
 - **[14860]** - Ajout lien vers smartlink dans menu émission
 - Ajout d'un helper pour vérifier l'activation des fonctionnalités
 - Ajout de variables CSS pour configurer menus popover
@@ -13,6 +16,7 @@
 - **[14822]** - Changement nom pour plateforme apple
 - Renommage de la page error en error-403
 
+[14799]: https://trac.saooti.net/ticket/14799
 [14822]: https://trac.saooti.net/ticket/14822
 [14860]: https://trac.saooti.net/ticket/14860
 

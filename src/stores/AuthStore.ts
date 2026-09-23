@@ -8,6 +8,8 @@ import classicApi from "../api/classicApi";
 import { useNotificationStore } from "./NotificationStore";
 import { useI18n } from "vue-i18n";
 import { organisationApi, rubriquesApi } from "@/api";
+import { useSubOrganisations } from "@/components/composable/useSubOrganisations";
+import { toRef } from "vue";
 
 interface AuthParam {
   accessToken?: string;
@@ -268,6 +270,12 @@ export const useAuthStore = defineStore("AuthStore", {
         });
         this.authUpdateOrganisation(activeOrganisation);
         this.fetchProfileAsynchrone();
+
+        if (scope.length > 0) {
+          const { selectSubOrganisation, getSubOrganisation } = useSubOrganisations(toRef(activeOrganisation, 'id'));
+          const org = await getSubOrganisation(scope[0]);
+          selectSubOrganisation(org);
+        }
       } catch(error) {
         console.error(error);
         if (this.authReload > 5) {
