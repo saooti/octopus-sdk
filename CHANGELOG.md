@@ -11,6 +11,7 @@
 ### Misc
 
 - **[14822]** - Changement nom pour plateforme apple
+- Renommage de la page error en error-403
 
 [14822]: https://trac.saooti.net/ticket/14822
 [14860]: https://trac.saooti.net/ticket/14860

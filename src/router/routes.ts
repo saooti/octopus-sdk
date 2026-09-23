@@ -17,7 +17,7 @@ const TagPage = () => import("../components/pages/TagPage.vue");
 const LivesPage = () => import("../components/pages/LivesPage.vue");
 const PlaylistPage = () => import("../components/pages/PlaylistPage.vue");
 const PlaylistsPage = () => import("../components/pages/PlaylistsPage.vue");
-const error403Page = () => import("../components/pages/Error403Page.vue");
+const Error403Page = () => import("../components/pages/Error403Page.vue");
 const PageNotFound = () => import("../components/pages/PageNotFound.vue");
 const RadioPage = () => import("../components/pages/RadioPage.vue");
 const VideoPage = () => import("../components/pages/VideoPage.vue");
@@ -30,8 +30,8 @@ export const routes: Array<RouteRecordSingleView|RouteRecordSingleViewWithChildr
   --------------------------------------------------------------------------*/
   {
     path: "/main/pub/error",
-    name: "error",
-    component: error403Page,
+    name: "error-403",
+    component: Error403Page,
   },
   {
     path: "/main/pub/home",
