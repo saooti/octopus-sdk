@@ -442,5 +442,15 @@
   "RightsIndicator - Podcast - Insufficient rights": "Your rights do not allow you to modify or delete this episode",
   "RightsIndicator - Emission - Insufficient rights": "Your rights do not allow you to modify or delete this broadcast",
   "RightsIndicator - Generic - Insufficient rights": "Your rights do not allow you to create, modify or delete this element",
-  "SmartLink - Share link": "SmartLink share link"
+  "SmartLink - Share link": "SmartLink share link",
+  "RightsScopeMenu - Title": "Focus on content",
+  "RightsScopeMenu - Search": "To research",
+  "RightsScopeMenu - Letters - No sub orga for letter": "No elements for this letter",
+  "RightsScopeMenu - First list - Title": "Content within the scope of your rights",
+  "RightsScopeMenu - Second list - Title scoped": "Content beyond the scope of your rights",
+  "RightsScopeMenu - Second list - Title unscoped": "All content",
+  "RightsScopeMenu - No result": "No items match your search",
+  "RightsScopeSelector - Title": "Content filtering ({rubriquage})",
+  "RightsScopeSelector - No filter": "No filtering",
+  "RightsScopeSelector - Clear filter": "Remove filtering"
 }

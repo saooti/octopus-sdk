@@ -442,5 +442,15 @@
   "RightsIndicator - Podcast - Insufficient rights": "Tus derechos no te permiten modificar ni eliminar este episodio.",
   "RightsIndicator - Emission - Insufficient rights": "Tus derechos no te permiten modificar ni eliminar esta transmisión",
   "RightsIndicator - Generic - Insufficient rights": "Tus derechos no te permiten crear, modificar o eliminar este elemento",
-  "SmartLink - Share link": "Enlace para compartir SmartLink"
+  "SmartLink - Share link": "Enlace para compartir SmartLink",
+  "RightsScopeMenu - Title": "Centrarse en el contenido",
+  "RightsScopeMenu - Search": "investigar",
+  "RightsScopeMenu - Letters - No sub orga for letter": "No hay elementos para esta carta.",
+  "RightsScopeMenu - First list - Title": "Contenido dentro del alcance de tus derechos",
+  "RightsScopeMenu - Second list - Title scoped": "Contenido más allá del alcance de sus derechos",
+  "RightsScopeMenu - Second list - Title unscoped": "Todo el contenido",
+  "RightsScopeMenu - No result": "Ningún artículo coincide con tu búsqueda",
+  "RightsScopeSelector - Title": "Filtrado de contenidos ({rubriquage})",
+  "RightsScopeSelector - No filter": "Sin filtrado",
+  "RightsScopeSelector - Clear filter": "Quitar filtrado"
 }

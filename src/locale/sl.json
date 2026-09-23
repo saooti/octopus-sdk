@@ -441,5 +441,15 @@
   "RightsIndicator - Podcast - Insufficient rights": "Vaše pravice vam ne dovoljujejo spreminjanja ali brisanja te epizode",
   "RightsIndicator - Emission - Insufficient rights": "Vaše pravice vam ne dovoljujejo spreminjanja ali brisanja te oddaje",
   "RightsIndicator - Generic - Insufficient rights": "Vaše pravice vam ne dovoljujejo ustvarjanja, spreminjanja ali brisanja tega elementa",
-  "SmartLink - Share link": "Povezava za skupno rabo SmartLink"
+  "SmartLink - Share link": "Povezava za skupno rabo SmartLink",
+  "RightsScopeMenu - Title": "Osredotočite se na vsebino",
+  "RightsScopeMenu - Search": "Za raziskovanje",
+  "RightsScopeMenu - Letters - No sub orga for letter": "Ni elementov za to pismo",
+  "RightsScopeMenu - First list - Title": "Vsebina v okviru vaših pravic",
+  "RightsScopeMenu - Second list - Title scoped": "Vsebina, ki presega obseg vaših pravic",
+  "RightsScopeMenu - Second list - Title unscoped": "Vse vsebine",
+  "RightsScopeMenu - No result": "Noben element ne ustreza vašemu iskanju",
+  "RightsScopeSelector - Title": "Filtriranje vsebine ({rubriquage})",
+  "RightsScopeSelector - Clear filter": "Odstranite filtriranje",
+  "RightsScopeSelector - No filter": "Brez filtriranja"
 }

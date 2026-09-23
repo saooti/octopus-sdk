@@ -469,5 +469,17 @@
   "RightsIndicator - Generic - Insufficient scope": "La portée de vos droits ne vous permet pas de créer, modifier ou supprimer cet élément",
   "RightsIndicator - Podcast - Insufficient rights": "Vos droits ne vous permettent pas de modifier ou supprimer cet épisode",
   "RightsIndicator - Emission - Insufficient rights": "Vos droits ne vous permettent pas de modifier ou supprimer cette émission",
-  "RightsIndicator - Generic - Insufficient rights": "Vos droits ne vous permettent pas de créer, modifier ou supprimer cet élément"
+  "RightsIndicator - Generic - Insufficient rights": "Vos droits ne vous permettent pas de créer, modifier ou supprimer cet élément",
+
+  "RightsScopeMenu - Title": "Faire un focus sur le contenu",
+  "RightsScopeMenu - Search": "Rechercher",
+  "RightsScopeMenu - Letters - No sub orga for letter": "Aucun élément pour cette lettre",
+  "RightsScopeMenu - First list - Title": "Contenu dans la portée de vos droits",
+  "RightsScopeMenu - Second list - Title scoped": "Contenu hors de la portée de vos droits",
+  "RightsScopeMenu - Second list - Title unscoped": "Tout le contenu",
+  "RightsScopeMenu - No result": "Aucun élément ne correspond à votre recherche",
+
+  "RightsScopeSelector - Title": "Filtrage du contenu ({rubriquage})",
+  "RightsScopeSelector - No filter": "Aucun filtrage",
+  "RightsScopeSelector - Clear filter": "Retirer le filtrage"
 }

@@ -47,6 +47,7 @@
                 v-if="isOpen"
                 ref="dropdownRef"
                 class="octopus-select-dropdown"
+                :class="dropdownClass"
                 :style="dropdownStyle"
             >
                 <div class="octopus-select-options">
@@ -97,11 +98,14 @@ const props = withDefaults(defineProps<{
      *  the moment the dropdown opens. This is a snapshot taken at open time — it does not
      *  live-reorder while the dropdown stays open, only on the next closed→open transition. */
     pullSelectedToTop?: boolean;
+    /** Extra class applied to the teleported dropdown, to style it from the parent via :global(). */
+    dropdownClass?: string;
 }>(), {
     label: undefined,
     value: undefined,
     optionKey: undefined,
     placeholder: undefined,
+    dropdownClass: undefined,
     allowDeselect: true,
 });
 

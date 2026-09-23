@@ -32,7 +32,11 @@
             </router-link>
 
             <RightsScopeMenu v-model:open="menuOpen" />
-            <RightsScopeSelector class="ms-4" @change="menuOpen = true" />
+            <RightsScopeSelector
+                class="ms-4"
+                :open="menuOpen"
+                @change="menuOpen = true"
+            />
         </div>
 
         <h1 v-if="titleIsDisplayed" class="text-truncate m-0 align-self-center">

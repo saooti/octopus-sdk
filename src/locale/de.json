@@ -442,5 +442,15 @@
   "RightsIndicator - Podcast - Insufficient rights": "Ihre Rechte erlauben es Ihnen nicht, diese Episode zu ändern oder zu löschen",
   "RightsIndicator - Emission - Insufficient rights": "Aufgrund Ihrer Rechte ist es Ihnen nicht gestattet, diese Sendung zu ändern oder zu löschen",
   "RightsIndicator - Generic - Insufficient rights": "Ihre Rechte erlauben es Ihnen nicht, dieses Element zu erstellen, zu ändern oder zu löschen",
-  "SmartLink - Share link": "SmartLink-Freigabelink"
+  "SmartLink - Share link": "SmartLink-Freigabelink",
+  "RightsScopeMenu - Title": "Konzentrieren Sie sich auf den Inhalt",
+  "RightsScopeMenu - Search": "Zur Recherche",
+  "RightsScopeMenu - Letters - No sub orga for letter": "Keine Elemente für diesen Brief",
+  "RightsScopeMenu - First list - Title": "Inhalte im Rahmen Ihrer Rechte",
+  "RightsScopeMenu - Second list - Title scoped": "Inhalte außerhalb des Rahmens Ihrer Rechte",
+  "RightsScopeMenu - Second list - Title unscoped": "Alle Inhalte",
+  "RightsScopeMenu - No result": "Keine Artikel entsprechen Ihrer Suche",
+  "RightsScopeSelector - Title": "Inhaltsfilterung ({rubriquage})",
+  "RightsScopeSelector - No filter": "Keine Filterung",
+  "RightsScopeSelector - Clear filter": "Filterung entfernen"
 }
