@@ -148,6 +148,7 @@ export { useSeasonsManagement } from "./src/components/composable/useSeasonsMana
 export { useTranslation } from "./src/components/composable/useTranslation";
 export { useDayjs } from "./src/components/composable/useDayjs";
 export { useSticky } from "./src/components/composable/useSticky";
+export { useSubOrganisations, type SubOrganisation } from "./src/components/composable/useSubOrganisations";
 
 //helper
 export { getLanguage } from "./src/helper/language";
@@ -164,6 +165,7 @@ export { colorFromString } from './src/helper/colorFromString';
 export * from './src/helper/rubriquesHelper';
 export * from './src/helper/arrayHelper';
 export * from './src/helper/featureHelper';
+export * from './src/helper/slugify';
 
 //stores
 import {useVastStore} from "./src/stores/VastStore";

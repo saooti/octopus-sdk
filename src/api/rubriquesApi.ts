@@ -1,5 +1,5 @@
 import { Rubrique } from "@/stores/class/rubrique/rubrique";
-import { Rubriquage } from "@/stores/class/rubrique/rubriquage";
+import { Rubriquage, RubriquageMode } from "@/stores/class/rubrique/rubriquage";
 import { useCacheStore } from "@/stores/CacheStore";
 import classicApi, { type APIOptions } from "./classicApi";
 import { ModuleApi } from "./apiConnection";
@@ -28,6 +28,18 @@ async function searchRubriquages(organisationIds: Array<string>, searchOptions?:
         specialTreatement: options?.adaptParameters
     });
 }
+
+/**
+ * Find rubriquages according to criterias
+ * @param organisationId ID of the organisation for which to retrieve the
+                         rubriquage
+ * @returns The found rubriquage
+ */
+async function findRestrictiveRubriquage(organisationId: string): Promise<Rubriquage|undefined> {
+    const all = await searchRubriquages([organisationId]);
+    return all.find(r => r.mode === RubriquageMode.RESTRICTIVE);
+}
+
 /**
  * Create a new rubriquage
  * @param data The new rubriquage data
@@ -209,6 +221,7 @@ async function setUserScope(userId: string, previousScope: Array<number>, rubriq
 
 export const rubriquesApi = {
     createRubriquage,
+    findRestrictiveRubriquage,
     getRubriquage,
     getRubrique,
     getCachedRubrique,
