@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.1.1 (En cours)
+
+### Fixes
+
+- Correction erreur ClassicWysiwyg
+
 ## 42.1.0 (23/09/2026)
 
 ### Features

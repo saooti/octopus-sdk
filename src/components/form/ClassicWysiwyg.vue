@@ -123,7 +123,7 @@ import FormatListNumberedIcon from "vue-material-design-icons/FormatListNumbered
 import { EditorContent, Editor } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
-import TextStyle from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
 import Link from "@tiptap/extension-link";
 import HardBreak from "@tiptap/extension-hard-break";
 import { onMounted, onUnmounted, Ref, ref, watch } from "vue";
@@ -162,7 +162,6 @@ watch(()=>props.isDisabled,() => {
     });
   }
 });
-
 
 onMounted(()=>{
   editor.value = new Editor({
@@ -235,9 +234,8 @@ function setLink() {
     .run();
 }
 </script>
+
 <style lang="scss">
-
-
 .octopus-app {
   .wysiwyg-editor {
     .form-input {
