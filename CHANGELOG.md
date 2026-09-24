@@ -6,6 +6,12 @@
 
 - Correction erreur ClassicWysiwyg
 
+### Misc
+
+- **[14825]** - Mise à jour date copyright
+
+[14825]: https://trac.saooti.net/ticket/14825
+
 ## 42.1.0 (23/09/2026)
 
 ### Features

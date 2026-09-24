@@ -10,7 +10,7 @@
       class="d-flex flex-column px-1"
     >
       <div class="text-dark my-1 special-select-align-magic-trick">
-        &copy; Saooti 2025
+        &copy; Saooti {{ dayjs().year() }}
       </div>
       <FooterGarSection
         v-if="authStore.isGarRole"
@@ -92,6 +92,7 @@ import { computed, defineAsyncComponent, inject, ref, watch } from "vue";
 import { Organisation } from "../../stores/class/general/organisation";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import { useDayjs } from "../composable/useDayjs";
 const OrganisationChooserLight = defineAsyncComponent(
   () => import("../display/organisation/OrganisationChooserLight.vue"),
 );
@@ -110,6 +111,7 @@ const filterStore = useFilterStore();
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+const { dayjs } = useDayjs();
 // loadLocaleMessages is resolved at runtime from the consuming app's
 // globally provided implementation (app.provide()), e.g. to merge in its
 // own locale bundles; defaults to the SDK's own base-translations loader.
