@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 41.1.2 (En cours)
+
+### Features
+
+- **[14358]** - Affichage d'un message en cas d'erreur de publication
+  ApplePodcast
+
+### Fixes
+
+- La non publication d'un épisode ne vient plus masquer les erreurs
+
+[14358]: https://trac.saooti.net/ticket/14358
+
 ## 42.1.1 (24/09/2026)
 
 ### Fixes

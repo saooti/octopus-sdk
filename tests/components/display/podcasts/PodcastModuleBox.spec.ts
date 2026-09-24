@@ -3,6 +3,7 @@ vi.mock('vue-i18n', () => mockI18n());
 vi.mock('vue-router', () => mockUseRouter());
 
 import PodcastModuleBox from '@/components/display/podcasts/PodcastModuleBox.vue';
+import ClassicAlert from '@/components/misc/ClassicAlert.vue';
 import { useAuthStore } from '@/stores/AuthStore';
 import { Conference } from '@/stores/class/conference/conference';
 import { SeasonMode } from '@/stores/class/general/emission';
@@ -251,6 +252,73 @@ describe('PodcastModuleBox', () => {
 
             expect(wrapper.find('.recording-slot').exists()).toBe(false);
             expect(wrapper.find('.edit-box-slot').exists()).toBe(true);
+        });
+    });
+
+    describe('alert', () => {
+        function makePodcast(overrides: Partial<Podcast> = {}, appleVideoStatus?: string): Podcast {
+            const podcast = { ...emptyPodcastData(), ...overrides };
+            podcast.organisation.id = 'org-1';
+            podcast.annotations = { appleVideoStatus };
+            return podcast;
+        }
+
+        async function getAlert(podcast: Podcast) {
+            const wrapper = await mount(podcast);
+            return wrapper.findComponent(ClassicAlert);
+        }
+
+        it('is not displayed when there is nothing to report', async () => {
+            const alert = await getAlert(makePodcast());
+            expect(alert.exists()).toBe(false);
+        });
+
+        it.each(['CREATED', 'UPDATED', 'NO_APPLE_KEYS'])('is not displayed for apple video status %s', async (status) => {
+            const alert = await getAlert(makePodcast({}, status));
+            expect(alert.exists()).toBe(false);
+        });
+
+        it.each<[string, Partial<Podcast>, string|undefined, string, string]>([
+            ['processing error', { processingStatus: 'ERROR' }, undefined, 'error', 'Podcast in ERROR, please contact Saooti'],
+            ['apple video error', {}, 'FAILED', 'error', 'Apple podcast - Error - Undefined status:FAILED'],
+            ['not validated', { valid: false }, undefined, 'warning', 'Podcast not validated'],
+            ['HLS not ready', {}, 'HLS_NOT_READY', 'info', 'Apple podcast - Info - HLS_NOT_READY'],
+            ['not visible', { availability: { visibility: false } }, undefined, 'warning', 'Podcast is not visible for listeners']
+        ])('displays %s', async (_, overrides, appleVideoStatus, type, message) => {
+            const alert = await getAlert(makePodcast(overrides, appleVideoStatus));
+            expect(alert.props('type')).toBe(type);
+            expect(alert.text()).toBe(message);
+        });
+
+        it('prioritizes processing error over apple video error', async () => {
+            const alert = await getAlert(makePodcast({ processingStatus: 'ERROR' }, 'FAILED'));
+            expect(alert.text()).toBe('Podcast in ERROR, please contact Saooti');
+        });
+
+        it('prioritizes apple video error over non validation', async () => {
+            const alert = await getAlert(makePodcast({ valid: false }, 'FAILED'));
+            expect(alert.text()).toBe('Apple podcast - Error - Undefined status:FAILED');
+        });
+
+        it('prioritizes non validation over HLS not ready', async () => {
+            const alert = await getAlert(makePodcast({ valid: false }, 'HLS_NOT_READY'));
+            expect(alert.text()).toBe('Podcast not validated');
+        });
+
+        it('does not hide errors when the podcast is not visible', async () => {
+            const alert = await getAlert(makePodcast({ processingStatus: 'ERROR', availability: { visibility: false } }));
+            expect(alert.text()).toBe('Podcast in ERROR, please contact Saooti');
+        });
+
+        it('is not displayed when the user has no edit rights', async () => {
+            const podcast = makePodcast({ processingStatus: 'ERROR' });
+            podcast.organisation.id = 'org-2';
+            const wrapper = await testMount(PodcastModuleBox, {
+                props: { podcast },
+                stubs: ['ShareAnonymous', 'LikeSection', 'PodcastRubriqueList'],
+                beforeMount: setupAuthStore({ organisationId: 'org-1' })
+            });
+            expect(wrapper.findComponent(ClassicAlert).exists()).toBe(false);
         });
     });
 

@@ -452,5 +452,7 @@
   "RightsScopeMenu - No result": "Keine Artikel entsprechen Ihrer Suche",
   "RightsScopeSelector - Title": "Inhaltsfilterung ({rubriquage})",
   "RightsScopeSelector - No filter": "Keine Filterung",
-  "RightsScopeSelector - Clear filter": "Filterung entfernen"
+  "RightsScopeSelector - Clear filter": "Filterung entfernen",
+  "Apple podcast - Error - Undefined": "Es war nicht möglich, diesen Podcast als Video auf ApplePodcast zu veröffentlichen (Status: {status})",
+  "Apple podcast - Info - HLS_NOT_READY": "Der Podcast ist noch nicht als Video auf ApplePodcast verfügbar, er sollte in wenigen Minuten verfügbar sein"
 }

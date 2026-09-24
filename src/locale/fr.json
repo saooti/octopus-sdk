@@ -436,6 +436,9 @@
   "Filters - Emission groups": "Par groupes d'émissions",
   "Search - Emission groups placeholder": "Filtrer les groupes par nom",
 
+  "Apple podcast - Error - Undefined": "Il n'a pas été possible de publier ce podcast en vidéo sur ApplePodcast (status : {status})",
+  "Apple podcast - Info - HLS_NOT_READY": "Le podcast n'est pas encore disponible en vidéo sur ApplePodcast, il devrait l'être d'ici quelques minutes",
+
   "Auth error - Couldn't retrieve user info - Title": "Erreur de connexion",
   "Auth error - Couldn't retrieve user info - Message": "Une erreur est survenue lors de la récupération de vos informations d'utilisateur. Veuillez recharger la page. Si le problème persiste, merci de contacter notre support.",
 
