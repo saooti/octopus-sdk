@@ -76,6 +76,17 @@
                         />
                     </div>
 
+                    <!-- 14876 - Only my episodes -->
+                    <div v-if="!isEmission && !isPodcastmaker" class="mt-3 d-flex">
+                        <ClassicCheckbox
+                            :text-init="onlyMyEpisodes"
+                            class="flex-shrink-0"
+                            id-checkbox="search-onlymine-checkbox"
+                            :label="t('Filters - Only my episodes')"
+                            @update:text-init="updateOnlyMineCheckbox"
+                        />
+                    </div>
+
                     <div
                         v-if="organisation && organisationRight && !isPodcastmaker"
                         class="d-flex flex-column mt-3"
@@ -178,6 +189,8 @@ const props = withDefaults(defineProps<{
     validity?: string;
     /** The filter on beneficiaries */
     beneficiaries?: Array<string>;
+    /** The filter for only my episodes */
+    onlyMyEpisodes?: boolean;
     rubriqueFilter?: Array<RubriquageFilter>;
     /** The filter on groups */
     emissionGroups?: Array<EmissionGroup>;
@@ -202,7 +215,8 @@ const emit = defineEmits([
     "update:rubriqueFilter",
     "update:onlyVideo",
     "update:beneficiaries",
-    "update:emission-groups"
+    "update:emission-groups",
+    "update:only-my-episodes"
 ]);
 
 //Data 
@@ -376,6 +390,14 @@ function updateBeneficiariesCheckbox(value: boolean): void {
     } else {
         updateBeneficiaries(undefined);
     }
+}
+
+/** Update the value of the 'only mine' checkbox */
+function updateOnlyMineCheckbox(value: boolean): void {
+    emit('update:only-my-episodes', value);
+    updateRouteParamAdvanced({
+        [ROUTE_PARAMS.OnlyMyEpisodes]: value || undefined
+    });
 }
 
 function clickShowFilters(): void {

@@ -454,5 +454,6 @@
   "RightsScopeSelector - No filter": "No focus",
   "RightsScopeSelector - Clear filter": "Remove focus",
   "Apple podcast - Error - Undefined": "It was not possible to publish this podcast as video on ApplePodcast (status: {status})",
-  "Apple podcast - Info - HLS_NOT_READY": "The podcast is not yet available in video on ApplePodcast, it should be available in a few minutes"
+  "Apple podcast - Info - HLS_NOT_READY": "The podcast is not yet available in video on ApplePodcast, it should be available in a few minutes",
+  "Filters - Only my episodes": "Show only episodes"
 }

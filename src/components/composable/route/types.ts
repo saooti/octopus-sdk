@@ -16,6 +16,8 @@ export interface RouteProps {
     routeBeneficiaries?: string[];
     /** The filter on emission groups defined on the route props */
     routeEmissionGroups?: number[];
+    /** Filter only the episodes of the current user */
+    routeOnlyMyEpisodes?: boolean;
 }
 
 type DateStr = string;
@@ -39,17 +41,21 @@ export interface AdvancedRouteParams extends RouteParams {
     q?: string;
     /** When set, filter on groups */
     gp?: number[];
+    /** When set, filter only episodes of current user */
+    own?: boolean;
 }
 
 type RouteParamEnum =
     'Beneficiaries' |
     'Query' |
-    'EmissionGroups'
+    'EmissionGroups' |
+    'OnlyMyEpisodes'
     ;
 
 /** Utility to access route params by constants instead of undefined value */
 export const ROUTE_PARAMS: Record<RouteParamEnum, keyof AdvancedRouteParams> = {
     Beneficiaries: 'b',
     Query: 'q',
-    EmissionGroups: 'gp'
+    EmissionGroups: 'gp',
+    OnlyMyEpisodes: 'own'
 };

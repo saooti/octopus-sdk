@@ -2,9 +2,16 @@
 
 ## 41.1.3 (En cours)
 
+### Features
+
+- **[14876]** - Ajout d'une option pour rechercher uniquement les épisodes de
+  l'utilisateur courant
+
 ### Misc
 
 - Ajustement texte pour sélecteur de focus
+
+[14876]: https://trac.saooti.net/ticket/14876
 
 ## 41.1.2 (24/09/2026)
 

@@ -434,6 +434,7 @@
   "Emission - Not available explanation": "Cette émission n'est pas visible pour les auditeurs car elle a été configurée pour que ses épisodes ne soient pas publiés. Cette configuration est disponible dans les paramètres avancés de l'émission.",
   "Filters - Beneficiaries": "Par références ayants-droit",
   "Filters - Emission groups": "Par groupes d'émissions",
+  "Filters - Only my episodes": "Afficher uniquement mes épisodes",
   "Search - Emission groups placeholder": "Filtrer les groupes par nom",
 
   "Apple podcast - Error - Undefined": "Il n'a pas été possible de publier ce podcast en vidéo sur ApplePodcast (status : {status})",

@@ -1,7 +1,6 @@
 import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { useOrgaComputed } from "../useOrgaComputed";
 import { useFilterStore } from "../../../stores/FilterStore";
-import { useAuthStore } from "../../../stores/AuthStore";
 import { useSimplePageParam } from './useSimplePageParam';
 import { useRubriquesFilterParam } from './useRubriquesFilterParam';
 import { computed, nextTick, onMounted, Ref, ref, watch } from "vue";
@@ -18,7 +17,6 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
   const { stringifyRubriquesFilter } = useRubriquesFilterParam();
 
   const filterStore  = useFilterStore();
-  const authStore  = useAuthStore();
   const { canValidatePodcast } = useRights();
 
   const isInit = ref(false);
@@ -32,6 +30,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
   const rubriqueFilter: Ref<Array<RubriquageFilter>> = ref([]);
   const beneficiaries = ref<string[]|null>(null);
   const emissionGroups = ref<EmissionGroup[]|null>(null);
+  const onlyMyEpisodes = ref(false);
 
   const organisationRight = computed(() => isEditRights(organisationId.value));
   const organisation = computed(() => organisationId.value ?? filterStore.filterOrgaId);
@@ -66,6 +65,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
   watch(() => props.routeOrga, initOrga);
   watch(() => props.routeRubriques, initRubriquageFilter);
   watch(() => props.routeBeneficiaries, initBeneficiariesFilter);
+  watch(() => props.routeOnlyMyEpisodes, initOnlyMyEpisodes);
   watch(() => props.routeEmissionGroups, initEmissionGroups);
   watch(organisationId, () => {
     if (!isInit.value) {
@@ -88,6 +88,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     initFromDate();
     initToDate();
     initBeneficiariesFilter();
+    initOnlyMyEpisodes();
     initEmissionGroups();
     nextTick(() => {
       isInit.value = true;
@@ -175,6 +176,11 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     beneficiaries.value = data;
   }
 
+  function initOnlyMyEpisodes() {
+    const data = props.routeOnlyMyEpisodes;
+    onlyMyEpisodes.value = data;
+  }
+
   async function initEmissionGroups(): Promise<void> {
     const data = props.routeEmissionGroups;
     // No groups
@@ -213,6 +219,7 @@ export const useAdvancedParamInit = (props: RouteProps, isEmission: boolean) => 
     rubriquesFilterArrayIds,
     isInit,
     beneficiaries,
-    emissionGroups
+    emissionGroups,
+    onlyMyEpisodes
   };
 }

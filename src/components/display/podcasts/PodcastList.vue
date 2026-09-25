@@ -65,6 +65,7 @@ import { AxiosError } from "axios";
 import { useI18n } from "vue-i18n";
 import { podcastApi, PodcastMonetisation, PodcastSearchOptions, PodcastSort } from "../../../api/podcastApi";
 import { EmissionGroup } from "@/api/groupsApi";
+import { useAuthStore } from "@/stores/AuthStore";
 
 //Props 
 const props = withDefaults(defineProps<{
@@ -98,6 +99,8 @@ const props = withDefaults(defineProps<{
   beneficiaries?: Array<string>;
   /** The emission groups to filter on */
   emissionGroups?: Array<EmissionGroup>;
+  /** Show only episodes created by current user */
+  onlyMyEpisodes?: boolean;
   /** The seasons to filter on */
   seasons?: Array<number>;
 }>(), {
@@ -129,6 +132,7 @@ const podcasts: Ref<Array<Podcast>> = ref([]);
 const { t } = useI18n();
 const {handle403} = useErrorHandler();
 const filterStore = useFilterStore();
+const authStore = useAuthStore();
 
 //Computed
 const displayArray = computed(() => {
@@ -145,7 +149,7 @@ const changed = computed(() => {
   return `${organisation.value}|${props.emissionId}|${props.sortCriteria}|${sort.value}
     ${props.iabId}|${props.participantId}|${props.query}|${props.monetisable}|${props.popularSort}|
     ${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.includeHidden}|${props.noRubriquageId}|${props.validity}|
-    ${props.withVideo}|${props.includeTag}|${props.beneficiaries}|${props.emissionGroups}`;
+    ${props.withVideo}|${props.includeTag}|${props.beneficiaries}|${props.emissionGroups}|${props.onlyMyEpisodes}`;
 });
 const organisation = computed(() => {
   if (props.organisationId) {
@@ -220,10 +224,7 @@ async function fetchContent(reset: boolean): Promise<void> {
     rubriquageId: props.rubriquageId?.length ? props.rubriquageId : undefined,
     includeHidden: props.includeHidden,
     validity,
-    /* publisherId:
-      !this.onlyValid && !authStore.isRoleProduction
-        ? authStore.authProfile?.userId
-        : undefined, */
+    publisherId: props.onlyMyEpisodes ? authStore.authProfile?.userId : undefined,
     processingStatus: [PodcastProcessingStatus.Ready, PodcastProcessingStatus.Processing],
     withVideo: props.withVideo,
     tags: props.includeTag?.length ? props.includeTag : undefined,

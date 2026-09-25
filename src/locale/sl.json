@@ -453,5 +453,6 @@
   "RightsScopeSelector - Clear filter": "Odstrani fokus",
   "RightsScopeSelector - No filter": "Brez fokusa",
   "Apple podcast - Error - Undefined": "Tega podcasta ni bilo mogoče objaviti kot video na ApplePodcast (stanje: {status})",
-  "Apple podcast - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na ApplePodcastu, na voljo bi moral biti čez nekaj minut"
+  "Apple podcast - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na ApplePodcastu, na voljo bi moral biti čez nekaj minut",
+  "Filters - Only my episodes": "Prikaži samo epizode"
 }

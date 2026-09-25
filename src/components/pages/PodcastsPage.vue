@@ -16,6 +16,7 @@
             v-model:rubrique-filter="rubriqueFilter"
             v-model:beneficiaries="beneficiaries"
             v-model:emission-groups="emissionGroups"
+            v-model:only-my-episodes="onlyMyEpisodes"
             :search-pattern="searchPattern"
             :is-emission="false"
             :organisation-id="organisationId"
@@ -38,6 +39,7 @@
             :beneficiaries="beneficiaries"
             :with-video="withVideo"
             :validity="validity"
+            :only-my-episodes="onlyMyEpisodes"
             :emission-groups="emissionGroups"
         />
     </section>
@@ -79,7 +81,8 @@ const {
     rubriquesFilterArrayIds,
     isInit,
     beneficiaries,
-    emissionGroups
+    emissionGroups,
+    onlyMyEpisodes
 } = useAdvancedParamInit(props, false);
 
 //Computed
