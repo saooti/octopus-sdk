@@ -449,9 +449,9 @@
   "RightsScopeMenu - Second list - Title scoped": "Vsebina, ki presega obseg vaših pravic",
   "RightsScopeMenu - Second list - Title unscoped": "Vse vsebine",
   "RightsScopeMenu - No result": "Noben element ne ustreza vašemu iskanju",
-  "RightsScopeSelector - Title": "Filtriranje vsebine ({rubriquage})",
-  "RightsScopeSelector - Clear filter": "Odstranite filtriranje",
-  "RightsScopeSelector - No filter": "Brez filtriranja",
+  "RightsScopeSelector - Title": "Fokus – {rubriquage}",
+  "RightsScopeSelector - Clear filter": "Odstrani fokus",
+  "RightsScopeSelector - No filter": "Brez fokusa",
   "Apple podcast - Error - Undefined": "Tega podcasta ni bilo mogoče objaviti kot video na ApplePodcast (stanje: {status})",
   "Apple podcast - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na ApplePodcastu, na voljo bi moral biti čez nekaj minut"
 }

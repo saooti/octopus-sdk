@@ -450,9 +450,9 @@
   "RightsScopeMenu - Second list - Title scoped": "Content beyond the scope of your rights",
   "RightsScopeMenu - Second list - Title unscoped": "All content",
   "RightsScopeMenu - No result": "No items match your search",
-  "RightsScopeSelector - Title": "Content filtering ({rubriquage})",
-  "RightsScopeSelector - No filter": "No filtering",
-  "RightsScopeSelector - Clear filter": "Remove filtering",
+  "RightsScopeSelector - Title": "Focus - {rubriquage}",
+  "RightsScopeSelector - No filter": "No focus",
+  "RightsScopeSelector - Clear filter": "Remove focus",
   "Apple podcast - Error - Undefined": "It was not possible to publish this podcast as video on ApplePodcast (status: {status})",
   "Apple podcast - Info - HLS_NOT_READY": "The podcast is not yet available in video on ApplePodcast, it should be available in a few minutes"
 }

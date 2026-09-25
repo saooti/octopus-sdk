@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 41.1.3 (En cours)
+
+### Misc
+
+- Ajustement texte pour sélecteur de focus
+
 ## 41.1.2 (24/09/2026)
 
 ### Features

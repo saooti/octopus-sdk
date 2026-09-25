@@ -482,7 +482,7 @@
   "RightsScopeMenu - Second list - Title unscoped": "Tout le contenu",
   "RightsScopeMenu - No result": "Aucun élément ne correspond à votre recherche",
 
-  "RightsScopeSelector - Title": "Filtrage du contenu ({rubriquage})",
-  "RightsScopeSelector - No filter": "Aucun filtrage",
-  "RightsScopeSelector - Clear filter": "Retirer le filtrage"
+  "RightsScopeSelector - Title": "Focus - {rubriquage}",
+  "RightsScopeSelector - No filter": "Aucun focus",
+  "RightsScopeSelector - Clear filter": "Retirer le focus"
 }

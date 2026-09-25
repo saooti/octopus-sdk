@@ -451,9 +451,9 @@
     "RightsScopeMenu - Second list - Title scoped": "Contenuti che esulano dall'ambito dei tuoi diritti",
     "RightsScopeMenu - Second list - Title unscoped": "Tutti i contenuti",
     "RightsScopeMenu - No result": "Nessun articolo corrisponde alla tua ricerca",
-    "RightsScopeSelector - Title": "Filtraggio dei contenuti ({rubriquage})",
-    "RightsScopeSelector - No filter": "Nessun filtraggio",
-    "RightsScopeSelector - Clear filter": "Rimuovere il filtraggio",
+    "RightsScopeSelector - Title": "Focus - {rubriquage}",
+    "RightsScopeSelector - No filter": "Nessuna concentrazione",
+    "RightsScopeSelector - Clear filter": "Rimuovi la messa a fuoco",
     "Apple podcast - Error - Undefined": "Non è stato possibile pubblicare questo podcast come video su ApplePodcast (stato: {status})",
     "Apple podcast - Info - HLS_NOT_READY": "Il podcast non è ancora disponibile in video su ApplePodcast, dovrebbe essere disponibile tra pochi minuti"
 }
