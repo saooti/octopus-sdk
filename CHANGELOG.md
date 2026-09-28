@@ -6,6 +6,7 @@
 
 - **[14876]** - Ajout d'une option pour rechercher uniquement les épisodes de
   l'utilisateur courant
+- **[14878]** - Utilitaires apple video + slot message erreur
 
 ### Fixes
 
@@ -19,6 +20,7 @@
 [14727]: https://trac.saooti.net/ticket/14727
 [14799]: https://trac.saooti.net/ticket/14799
 [14876]: https://trac.saooti.net/ticket/14876
+[14878]: https://trac.saooti.net/ticket/14878
 
 ## 41.1.2 (24/09/2026)
 

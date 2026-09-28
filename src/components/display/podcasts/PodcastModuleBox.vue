@@ -157,7 +157,11 @@
                         :type="alert.type"
                         style="width: fit-content"
                     >
-                        {{ alert.message }}
+                        <div class="d-flex align-items-center">
+                            {{ alert.message }}
+
+                            <slot name="alert-message" :alert="alert" />
+                        </div>
                     </ClassicAlert>
                 </div>
                 <div class="d-flex align-items-center flex-wrap">
@@ -211,6 +215,7 @@ import RightsIndicator from "../RightsIndicator.vue";
 import ClassicAlert from "@/components/misc/ClassicAlert.vue"; 
 
 import { defineAsyncComponent, toRefs, computed, useTemplateRef } from "vue";
+import { useAppleVideo } from "@/components/composable/useAppleVideo";
 const PodcastPlayBar = defineAsyncComponent(
     () => import("./PodcastPlayBar.vue"),
 );
@@ -258,6 +263,7 @@ const {
 const authStore = useAuthStore();
 const router = useRouter();
 const { areSeasonsEnabled } = useSeasonsManagement();
+const { isErrorStatus, toGenericErrorCode } = useAppleVideo();
 
 /** Reference to the PodcastRqwTranscript */
 const podcastRawTranscript = useTemplateRef('podcastRawTranscript');
@@ -271,22 +277,27 @@ const podcastRubriques = computed(() => {
     return rubriques;
 });
 
-/** Status d'apple video ne déclenchant pas une erreur */
-const NO_ERROR_APPLE_VIDEO_STATUS = ['CREATED', 'UPDATED', 'HLS_NOT_READY', 'NO_APPLE_KEYS'];
-const alert = computed((): { type: 'error'|'warning'|'info'; message: string }|null => {
+interface Alert {
+    type: 'error'|'warning'|'info';
+    message: string;
+    code?: string;
+}
+
+const alert = computed((): Alert|null => {
     if ("ERROR" === props.podcast?.processingStatus) {
         return {
             type: 'error',
             message: t("Podcast in ERROR, please contact Saooti")
         };
     }
-    const appleVideoStatus = props.podcast?.annotations?.appleVideoStatus;
-    if (appleVideoStatus && !NO_ERROR_APPLE_VIDEO_STATUS.includes(appleVideoStatus as string)) {
+    const appleVideoStatus = props.podcast?.annotations?.appleVideoStatus as string|undefined;
+    if (isErrorStatus(appleVideoStatus)) {
         return {
             type: 'error',
             message: t('Apple podcast - Error - Undefined', {
                 status: appleVideoStatus
-            })
+            }),
+            code: toGenericErrorCode(appleVideoStatus)
         };
     }
     if (podcastNotValid.value) {
@@ -298,7 +309,8 @@ const alert = computed((): { type: 'error'|'warning'|'info'; message: string }|n
     if (appleVideoStatus === 'HLS_NOT_READY') {
         return {
             type: 'info',
-            message: t('Apple podcast - Info - HLS_NOT_READY')
+            message: t('Apple podcast - Info - HLS_NOT_READY'),
+            code: toGenericErrorCode(appleVideoStatus)
         };
     }
     if (!props.podcast?.availability.visibility) {

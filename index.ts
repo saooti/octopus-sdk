@@ -149,6 +149,7 @@ export { useTranslation } from "./src/components/composable/useTranslation";
 export { useDayjs } from "./src/components/composable/useDayjs";
 export { useSticky } from "./src/components/composable/useSticky";
 export { useSubOrganisations, type SubOrganisation } from "./src/components/composable/useSubOrganisations";
+export { useAppleVideo } from "./src/components/composable/useAppleVideo";
 
 //helper
 export { getLanguage } from "./src/helper/language";

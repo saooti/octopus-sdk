@@ -22,6 +22,9 @@
           <template #edit-box="slotProps">
             <slot name="edit-box" v-bind="slotProps" />
           </template>
+          <template #alert-message="slotProps">
+            <slot name="alert-message" v-bind="slotProps" />
+          </template>
         </PodcastModuleBox>
         <ShareSocialsButtons
           v-if="state.podcastPage.ShareButtons"
