@@ -2,6 +2,11 @@
 
 ## 42.2.1 (En cours)
 
+### Misc
+
+- Mise en place de Husky
+- Mise en place de lint-staged
+
 ## 41.2.0 (28/09/2026)
 
 ### Features

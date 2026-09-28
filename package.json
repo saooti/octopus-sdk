@@ -13,7 +13,13 @@
     "proxy_non_authentifié": "node proxy.ts false",
     "lint": "eslint --fix --max-warnings 0",
     "stylelint": "stylelint **/*.{scss,vue} --fix",
-    "sonar": "sonar -Dsonar.host.url=http://localhost:9000"
+    "sonar": "sonar -Dsonar.host.url=http://localhost:9000",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,jsx,ts,tsx,vue}": [
+      "npm run lint"
+    ]
   },
   "dependencies": {
     "@multiformats/murmur3": "^2.1.8",
@@ -69,6 +75,8 @@
     "eslint": "^9.39.1",
     "eslint-plugin-vue": "10.9.1",
     "happy-dom": "^20.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "typescript": "^5.9.3",
     "unplugin-dts": "^1.0.2",
     "vitest": "^4.0.16"
