@@ -190,13 +190,13 @@ export { TranslationState } from "./src/api/transcriptionApi";
 export { registerI18n } from "./src/i18n";
 
 // Types
+export * from "./src/stores/class/general";
 export { type Emission, SeasonMode, emptyEmissionData } from "./src/stores/class/general/emission";
 export { type Organisation, type OrganisationAttributes, emptyOrganisationData, emptyOrgaData } from "./src/stores/class/general/organisation";
 export { type Podcast, type SimplifiedPodcast, type PodcastAvailability, PodcastType, podcastToSimplified } from "./src/stores/class/general/podcast";
 export { type Playlist, type PlaylistRule } from "./src/stores/class/general/playlist";
-export { type Annotations } from "./src/stores/class/general";
 export { type ListClassicReturn } from "./src/stores/class/general/listReturn";
-export { type AdserverTiming } from "./src/stores/class/adserver/adserverTiming";
+export * from "./src/stores/class/adserver";
 export {
     CreateTranslation,
     type TranslationConfiguration,

@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 41.1.3 (En cours)
+## 41.2.0 (En cours)
 
 ### Features
 
@@ -9,8 +9,10 @@
 
 ### Misc
 
+- **[14727]** - Export des classes liées aux adservers
 - Ajustement texte pour sélecteur de focus
 
+[14727]: https://trac.saooti.net/ticket/14727
 [14876]: https://trac.saooti.net/ticket/14876
 
 ## 41.1.2 (24/09/2026)

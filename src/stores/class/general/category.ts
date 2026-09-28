@@ -1,4 +1,5 @@
 import { AdserverConfig } from "../adserver/adserverConfig";
+
 export interface Category {
   id: number;
   name: string;
