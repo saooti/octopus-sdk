@@ -7,12 +7,17 @@
 - **[14876]** - Ajout d'une option pour rechercher uniquement les épisodes de
   l'utilisateur courant
 
+### Fixes
+
+- **[14799]** - Tri par ordre alphabétique dans menu "sous organisation"
+
 ### Misc
 
 - **[14727]** - Export des classes liées aux adservers
 - Ajustement texte pour sélecteur de focus
 
 [14727]: https://trac.saooti.net/ticket/14727
+[14799]: https://trac.saooti.net/ticket/14799
 [14876]: https://trac.saooti.net/ticket/14876
 
 ## 41.1.2 (24/09/2026)

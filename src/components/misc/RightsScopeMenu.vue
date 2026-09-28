@@ -179,7 +179,9 @@ const userSubOrgas = computed((): Array<SubOrganisation> => {
     const userScope = authStore.userScope;
     return subOrganisations.value
         .filter(sub => sub.name.includes(normalizedSearch.value))
-        .filter(sub => userScope.includes(sub.id));
+        .filter(sub => userScope.includes(sub.id))
+        .sort((o1, o2) => o1.name.localeCompare(o2.name))
+    ;
 });
 
 const showFirstList = computed((): boolean => {
@@ -204,7 +206,9 @@ const subOrgaByLetter = computed((): Map<string, Array<SubOrganisation>> => {
 
     const filtered = subOrganisations.value
         .filter(sub => sub.name.includes(normalizedSearch.value))
-        .filter(sub => !userSubOrgas.value.includes(sub));
+        .filter(sub => !userSubOrgas.value.includes(sub))
+        .sort((o1, o2) => o1.name.localeCompare(o2.name))
+    ;
 
     if (showLetters.value) {
         filtered.forEach((sub: SubOrganisation) => {
