@@ -1,9 +1,9 @@
 import DurationHelper from "../helper/durationHelper";
 import { Media } from "@/stores/class/general/media";
 import {
-  MediaRadio,
-  NextAdvertising,
-  Radio,
+    MediaRadio,
+    NextAdvertising,
+    Radio,
 } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { defineStore } from "pinia";
@@ -14,309 +14,309 @@ import { state as sdkParams } from "./ParamSdkStore";
 import { Canal } from "./class/radio/canal";
 import { Conference } from "./class/conference/conference";
 
-interface Transcript {
-  actual: number;
-  actualText: string;
-  value: Array<{ endTime: number; startTime: number; text: string }>;
+export interface PlayerTranscript {
+    current: number;
+    currentText: Array<string>;
+    value: Array<{ endTime: number; startTime: number; text: Array<string> }>;
 }
 
 export enum PlayerStatus {
-  STOPPED = "STOPPED",
-  LOADING = "LOADING",
-  PLAYING = "PLAYING",
-  PAUSED = "PAUSED"
+    STOPPED = "STOPPED",
+    LOADING = "LOADING",
+    PLAYING = "PLAYING",
+    PAUSED = "PAUSED"
 }
 
 interface PlayerState {
-  playerCurrentChange: number | null;
-  playerStatus: PlayerStatus;
-  playerPodcast: Podcast | undefined;
-  playerVolume?: number; //From 0 to 1
-  playerElapsed: number; //From 0 to 1
-  playerTotal: number;
-  playerMedia: Media | undefined;
-  playerLive: Podcast | undefined;
-  playerRadio: Radio | undefined;
-  playerStop?: boolean;
-  playerSeekTime?: number;
-  playerTranscript?: Transcript;
-  playerLargeVersion: boolean;
-  playerVideo: boolean;
-  playerChaptering?: Chaptering;
-  playerDelayStitching: number;
-  playerHlsUrl?: string;
-  playerHlsIdentifier?:string;
+    playerCurrentChange: number | null;
+    playerStatus: PlayerStatus;
+    playerPodcast: Podcast | undefined;
+    playerVolume?: number; //From 0 to 1
+    playerElapsed: number; //From 0 to 1
+    playerTotal: number;
+    playerMedia: Media | undefined;
+    playerLive: Podcast | undefined;
+    playerRadio: Radio | undefined;
+    playerStop?: boolean;
+    playerSeekTime?: number;
+    playerTranscript?: PlayerTranscript;
+    playerLargeVersion: boolean;
+    playerVideo: boolean;
+    playerChaptering?: Chaptering;
+    playerDelayStitching: number;
+    playerHlsUrl?: string;
+    playerHlsIdentifier?:string;
 }
 export const usePlayerStore = defineStore("PlayerStore", {
-  state: (): PlayerState => ({
-    playerCurrentChange: null,
-    playerStatus: PlayerStatus.STOPPED,
-    playerPodcast: undefined,
-    playerVolume: 1,
-    playerElapsed: 0,
-    playerTotal: 0,
-    playerMedia: undefined,
-    playerLive: undefined,
-    playerRadio: undefined,
-    playerSeekTime: 0,
-    playerLargeVersion: false,
-    playerVideo: false,
-    playerChaptering: undefined,
-    playerDelayStitching: 0,
-    playerHlsIdentifier: undefined,
-  }),
-  getters: {
-    playerChapteringPercent(): ChapteringPercent | undefined {
-      if (!this.playerChaptering || 0 === this.playerTotal) {
-        return;
-      }
-      const chapteringPercent: ChapteringPercent = [];
-      for (
-        let i = 0, len = this.playerChaptering.chapters.length;
-        i < len;
-        i++
-      ) {
-        const startTime = this.playerChaptering.chapters[i].startTime;
-        chapteringPercent.push({
-          startTime: startTime,
-          startDisplay: DurationHelper.formatDuration(startTime, ":", false),
-          startPercent: (startTime * 100) / Math.round(this.playerTotal),
-          endPercent: 100,
-          title: this.playerChaptering.chapters[i].title,
-        });
-      }
-      for (let i = 0, len = chapteringPercent.length; i < len; i++) {
-        chapteringPercent[i].endPercent =
-          chapteringPercent[i].startPercent +
+    state: (): PlayerState => ({
+        playerCurrentChange: null,
+        playerStatus: PlayerStatus.STOPPED,
+        playerPodcast: undefined,
+        playerVolume: 1,
+        playerElapsed: 0,
+        playerTotal: 0,
+        playerMedia: undefined,
+        playerLive: undefined,
+        playerRadio: undefined,
+        playerSeekTime: 0,
+        playerLargeVersion: false,
+        playerVideo: false,
+        playerChaptering: undefined,
+        playerDelayStitching: 0,
+        playerHlsIdentifier: undefined,
+    }),
+    getters: {
+        playerChapteringPercent(): ChapteringPercent | undefined {
+            if (!this.playerChaptering || 0 === this.playerTotal) {
+                return;
+            }
+            const chapteringPercent: ChapteringPercent = [];
+            for (
+                let i = 0, len = this.playerChaptering.chapters.length;
+                i < len;
+                i++
+            ) {
+                const startTime = this.playerChaptering.chapters[i].startTime;
+                chapteringPercent.push({
+                    startTime: startTime,
+                    startDisplay: DurationHelper.formatDuration(startTime, ":", false),
+                    startPercent: (startTime * 100) / Math.round(this.playerTotal),
+                    endPercent: 100,
+                    title: this.playerChaptering.chapters[i].title,
+                });
+            }
+            for (let i = 0, len = chapteringPercent.length; i < len; i++) {
+                chapteringPercent[i].endPercent =
+                    chapteringPercent[i].startPercent +
           ((chapteringPercent[i + 1]?.startPercent ?? 100) -
             chapteringPercent[i].startPercent);
-      }
-      return chapteringPercent;
-    },
-    playerHeight() {
-      if ("STOPPED" === this.playerStatus) {
-        return '0px';
-      }
-      if (this.playerVideo) {
-        return "0px" /* "281px" */;
-      }
-      if (this.playerLargeVersion) {
-        return "27rem";
-      }
-      if (window.innerWidth > 450) {
-        return "6rem";
-      }
-      return "3.5rem";
-    },
+            }
+            return chapteringPercent;
+        },
+        playerHeight() {
+            if ("STOPPED" === this.playerStatus) {
+                return '0px';
+            }
+            if (this.playerVideo) {
+                return "0px" /* "281px" */;
+            }
+            if (this.playerLargeVersion) {
+                return "27rem";
+            }
+            if (window.innerWidth > 450) {
+                return "6rem";
+            }
+            return "3.5rem";
+        },
 
-    playerElapsedSeconds(): number {
-      if (
-        this.playerElapsed &&
+        playerElapsedSeconds(): number {
+            if (
+                this.playerElapsed &&
         this.playerElapsed > 0 &&
         this.playerTotal &&
         this.playerTotal > 0
-      ) {
-        return this.playerElapsed * this.playerTotal;
-      } else {
-        return -1;
-      }
-    },
+            ) {
+                return this.playerElapsed * this.playerTotal;
+            } else {
+                return -1;
+            }
+        },
 
-    /** Returning remaining time in seconds */
-    playerRemainingSeconds(): number {
-      const elapsed = this.playerElapsedSeconds;
-      if (elapsed >= 0) {
-        return this.playerTotal - elapsed;
-      } else {
-        return -1;
-      }
-    },
+        /** Returning remaining time in seconds */
+        playerRemainingSeconds(): number {
+            const elapsed = this.playerElapsedSeconds;
+            if (elapsed >= 0) {
+                return this.playerTotal - elapsed;
+            } else {
+                return -1;
+            }
+        },
     
-    playedTime(): string {
-      if (-1 !== this.playerElapsedSeconds) {
-        return DurationHelper.formatDuration(
-          Math.round(this.playerElapsedSeconds),
-        );
-      }
-      return "--:--";
-    },
-    totalTime(): string {
-      if (
-        this.playerElapsed &&
+        playedTime(): string {
+            if (-1 !== this.playerElapsedSeconds) {
+                return DurationHelper.formatDuration(
+                    Math.round(this.playerElapsedSeconds),
+                );
+            }
+            return "--:--";
+        },
+        totalTime(): string {
+            if (
+                this.playerElapsed &&
         this.playerElapsed > 0 &&
         this.playerTotal &&
         this.playerTotal > 0
-      ) {
-        return DurationHelper.formatDuration(Math.round(this.playerTotal));
-      }
-      return "--:--";
+            ) {
+                return DurationHelper.formatDuration(Math.round(this.playerTotal));
+            }
+            return "--:--";
+        },
+        isPlaying(): boolean {
+            return "PLAYING" === this.playerStatus;
+        },
+        isPaused(): boolean {
+            return "PAUSED" === this.playerStatus;
+        },
+        podcastImage(): string {
+            if (this.playerRadio) {
+                return this.playerRadio.podcast?.imageUrl ?? "";
+            }
+            return this.playerPodcast?.imageUrl ?? "";
+        },
+        emissionName(): string {
+            return this.playerPodcast?.emission?.name ?? "";
+        },
+        transcriptText(): Array<string> {
+            return this.playerTranscript?.currentText ?? [];
+        },
+        radioUrl(): string | undefined {
+            return this.playerRadio?.url ?? undefined;
+        },
     },
-    isPlaying(): boolean {
-      return "PLAYING" === this.playerStatus;
-    },
-    isPaused(): boolean {
-      return "PAUSED" === this.playerStatus;
-    },
-    podcastImage(): string {
-      if (this.playerRadio) {
-        return this.playerRadio.podcast?.imageUrl ?? "";
-      }
-      return this.playerPodcast?.imageUrl ?? "";
-    },
-    emissionName(): string {
-      return this.playerPodcast?.emission?.name ?? "";
-    },
-    transcriptText(): string {
-      return this.playerTranscript?.actualText ?? "";
-    },
-    radioUrl(): string | undefined {
-      return this.playerRadio?.url ?? undefined;
-    },
-  },
-  actions: {
-    stop(): void {
-      this.playerCurrentChange = null;
-      this.playerStatus = "STOPPED";
-      this.playerPodcast = undefined;
-      this.playerMedia = undefined;
-      this.playerLive = undefined;
-      this.playerHlsIdentifier = undefined;
-      this.playerRadio = undefined;
-      this.playerElapsed = 0;
-      this.playerVideo = false;
-      this.playerChaptering = undefined;
-    },
-    /**
+    actions: {
+        stop(): void {
+            this.playerCurrentChange = null;
+            this.playerStatus = "STOPPED";
+            this.playerPodcast = undefined;
+            this.playerMedia = undefined;
+            this.playerLive = undefined;
+            this.playerHlsIdentifier = undefined;
+            this.playerRadio = undefined;
+            this.playerElapsed = 0;
+            this.playerVideo = false;
+            this.playerChaptering = undefined;
+        },
+        /**
      * Start playing audio/video
      * Without parameters, stop playing
      * @param param The data
      * @param isVideo If true, enable video mode
      */
-    async playerPlay(param?: Podcast|Media|Canal|Conference, isVideo = false) {
-      if (!param) {
-        this.stop();
-        return;
-      }
-      if (
-        (
-          this.playerPodcast &&
+        async playerPlay(param?: Podcast|Media|Canal|Conference, isVideo = false) {
+            if (!param) {
+                this.stop();
+                return;
+            }
+            if (
+                (
+                    this.playerPodcast &&
           'podcastId' in param &&
           this.playerPodcast.podcastId === param.podcastId &&
           isVideo === this.playerVideo
-        ) || (
-          this.playerMedia &&
+                ) || (
+                    this.playerMedia &&
           'mediaId' in param &&
           this.playerMedia.mediaId === param.mediaId
-        ) || (
-          this.playerLive &&
+                ) || (
+                    this.playerLive &&
           'conferenceId' in param &&
           this.playerLive.conferenceId === param.conferenceId &&
           isVideo === this.playerVideo
-        )
-      ) {
-        //Do nothing
-        return;
-      }
+                )
+            ) {
+                //Do nothing
+                return;
+            }
 
-      if (sdkParams.player.startLarge === true && this.playerStatus === 'STOPPED') {
-        this.playerUpdateLargeVersion(true);
-      }
+            if (sdkParams.player.startLarge === true && this.playerStatus === 'STOPPED') {
+                this.playerUpdateLargeVersion(true);
+            }
       
-      this.playerStatus = "LOADING";
-      this.playerPodcast = undefined;
-      this.playerMedia = undefined;
-      this.playerLive = undefined;
-      this.playerHlsIdentifier = undefined;
-      this.playerRadio = undefined;
-      this.playerVideo = isVideo;
-      this.playerElapsed = 0;
-      this.playerChaptering = undefined;
+            this.playerStatus = "LOADING";
+            this.playerPodcast = undefined;
+            this.playerMedia = undefined;
+            this.playerLive = undefined;
+            this.playerHlsIdentifier = undefined;
+            this.playerRadio = undefined;
+            this.playerVideo = isVideo;
+            this.playerElapsed = 0;
+            this.playerChaptering = undefined;
 
-      if (
-        'conferenceId' in param &&
+            if (
+                'conferenceId' in param &&
         param.conferenceId &&
         (!param.podcastId || param.processingStatus !== "READY")
-      ) {
-        this.playerLive = param;
-        this.playerHlsIdentifier = param.hlsIdentifier;
-        this.playerCurrentChange = null;
-        return;
-      }
+            ) {
+                this.playerLive = param;
+                this.playerHlsIdentifier = param.hlsIdentifier;
+                this.playerCurrentChange = null;
+                return;
+            }
 
-      if ('podcastId' in param && param.podcastId) {
-        const podcast = param as Podcast;
-        this.playerPodcast = podcast;
-        this.playerCurrentChange = podcast.podcastId;
-        if (podcast.annotations?.chaptering) {
-          this.playerChaptering = await classicApi.fetchData<Chaptering>({
-            api: 4,
-            path: podcast.annotations.chaptering as string,
-            isNotAuth: true
-          });
-        }
-        return;
-      }
+            if ('podcastId' in param && param.podcastId) {
+                const podcast = param as Podcast;
+                this.playerPodcast = podcast;
+                this.playerCurrentChange = podcast.podcastId;
+                if (podcast.annotations?.chaptering) {
+                    this.playerChaptering = await classicApi.fetchData<Chaptering>({
+                        api: 4,
+                        path: podcast.annotations.chaptering as string,
+                        isNotAuth: true
+                    });
+                }
+                return;
+            }
 
-      if ('mediaId' in param && param.mediaId) {
-        this.playerMedia = param;
-        this.playerCurrentChange = null;
-        return;
-      }
+            if ('mediaId' in param && param.mediaId) {
+                this.playerMedia = param;
+                this.playerCurrentChange = null;
+                return;
+            }
 
-      if ('canalId' in param && param.canalId) {
-        this.playerRadio = { ...param, isInit: false };
-        this.playerCurrentChange = -param.canalId;
-      }
-    },
+            if ('canalId' in param && param.canalId) {
+                this.playerRadio = { ...param, isInit: false };
+                this.playerCurrentChange = -param.canalId;
+            }
+        },
 
-    playerChangeStatus(isPause: boolean) {
-      this.playerStatus = isPause? "PAUSED" : "PLAYING";
-    },
+        playerChangeStatus(isPause: boolean) {
+            this.playerStatus = isPause? "PAUSED" : "PLAYING";
+        },
 
-    playerUpdateSeekTime(seekTime: number) {
-      this.playerSeekTime = seekTime;
-    },
-    playerMetadata(metadata: MediaRadio|undefined, history: Array<MediaRadio>) {
-      if (!this.playerRadio) {
-        return;
-      }
-      this.playerRadio.metadata = metadata;
-      this.playerRadio.history = history;
-    },
-    playerRadioUpdateNextAdvertising(nextAdvertising: NextAdvertising) {
-      if (!this.playerRadio) {
-        return;
-      }
-      this.playerRadio.nextAdvertising = nextAdvertising;
-    },
-    playerRadioPodcast(podcast: Podcast | undefined) {
-      if (!this.playerRadio) {
-        return;
-      }
-      this.playerRadio.podcast = podcast;
-    },
+        playerUpdateSeekTime(seekTime: number) {
+            this.playerSeekTime = seekTime;
+        },
+        playerMetadata(metadata: MediaRadio|undefined, history: Array<MediaRadio>) {
+            if (!this.playerRadio) {
+                return;
+            }
+            this.playerRadio.metadata = metadata;
+            this.playerRadio.history = history;
+        },
+        playerRadioUpdateNextAdvertising(nextAdvertising: NextAdvertising) {
+            if (!this.playerRadio) {
+                return;
+            }
+            this.playerRadio.nextAdvertising = nextAdvertising;
+        },
+        playerRadioPodcast(podcast: Podcast | undefined) {
+            if (!this.playerRadio) {
+                return;
+            }
+            this.playerRadio.podcast = podcast;
+        },
 
-    playerUpdateElapsed(elapsed: number, total?: number) {
-      this.playerElapsed = elapsed;
-      if (total) {
-        this.playerTotal = total;
-      }
-    },
+        playerUpdateElapsed(elapsed: number, total?: number) {
+            this.playerElapsed = elapsed;
+            if (total) {
+                this.playerTotal = total;
+            }
+        },
 
-    playerUpdateTranscript(transcript?: Transcript) {
-      this.playerTranscript = transcript;
+        playerUpdateTranscript(transcript?: PlayerTranscript) {
+            this.playerTranscript = transcript;
+        },
+        playerUpdateLargeVersion(largeVersion: boolean) {
+            this.playerLargeVersion = largeVersion;
+        },
+        playerUpdateChaptering(chaptering?: Chaptering) {
+            this.playerChaptering = chaptering;
+        },
+        playerUpdateDelayStitching(delay: number) {
+            this.playerDelayStitching = delay;
+        },
+        playerUpdatePlayerHlsUrl(hlsUrl: string|undefined) {
+            this.playerHlsUrl = hlsUrl;
+        },
     },
-    playerUpdateLargeVersion(largeVersion: boolean) {
-      this.playerLargeVersion = largeVersion;
-    },
-    playerUpdateChaptering(chaptering?: Chaptering) {
-      this.playerChaptering = chaptering;
-    },
-    playerUpdateDelayStitching(delay: number) {
-      this.playerDelayStitching = delay;
-    },
-    playerUpdatePlayerHlsUrl(hlsUrl: string|undefined) {
-      this.playerHlsUrl = hlsUrl;
-    },
-  },
 });

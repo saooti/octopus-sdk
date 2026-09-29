@@ -90,12 +90,12 @@ describe('useTranslation', () => {
     describe('convertSrtToPlainText', () => {
         it('converts a single SRT block to plain text', () => {
             const srt = '1\n00:00:01,000 --> 00:00:02,000\nHello world\n\n';
-            expect(composable.convertSrtToPlainText(srt)).toBe('Hello world ');
+            expect(composable.convertSrtToPlainText(srt)).toBe('Hello world');
         });
 
         it('joins multiple SRT blocks', () => {
             const srt = '1\n00:00:01,000 --> 00:00:02,000\nHello\n\n2\n00:00:03,000 --> 00:00:04,000\nworld\n\n';
-            expect(composable.convertSrtToPlainText(srt)).toBe('Hello world ');
+            expect(composable.convertSrtToPlainText(srt)).toBe('Hello world');
         });
 
         it('returns an empty string for empty input', () => {

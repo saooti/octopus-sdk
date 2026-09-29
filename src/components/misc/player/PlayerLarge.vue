@@ -1,87 +1,92 @@
 <template>
-  <div
-    class="d-flex flex-column align-items-center my-2 flex-grow-1 player-text position-relative overflow-y-auto"
-  >
-    <button
-      :title="t('Reduce')"
-      class="player-reduce-button btn bg-transparent player-text"
-      @click="changePlayerLargeVersion"
-    >
-      <ChevronDownIcon :size="40" />
-    </button>
-    <PlayerImage :image-width="200" />
-    <PlayerTitle
-      :player-error="playerError"
-      :hls-ready="hlsReady"
-      title-class="h3"
-    />
-    <PlayerChaptering class="justify-content-center w-100" />
-    <div class="player-grow-large-content">
-      <PlayerProgressBar
-        class-progress="large"
-        :show-comments="true"
-        :display-alert-bar="displayAlertBar"
-        :percent-live-progress="percentLiveProgress"
-        :duration-live-position="durationLivePosition"
-        :player-error="playerError"
-        :listen-time="listenTime"
-      />
-      <div
-        v-if="!playerError && (!radioUrl || isAdPlaying)"
-        class="d-flex justify-content-between"
-      >
-        <div>{{ displayPlayTime }}</div>
-        <div>{{ displayTotalTime }}</div>
-      </div>
-      <RadioHistory v-if="radioUrl" />
-    </div>
-
-
-    <!-- Transcription -->
     <div
-      v-if="'' != transcriptText && !isAdPlaying"
-      class="transcript"
+        class="d-flex flex-column align-items-center my-2 flex-grow-1 player-text position-relative overflow-y-auto"
     >
-      <div class="flex-grow-1 p-1 text-center w-100 transcript-bg rounded">
-        {{ transcriptText }}
-      </div>
-      <ClassicLoading
-        v-if="generatingTranscriptLanguage"
-        small
-        spinner-color="white"
-        :loading-text="$t('Player - Generating subtitles', { language: generatingTranscriptLanguage })"
-      />
+        <button
+            :title="t('Reduce')"
+            class="player-reduce-button btn bg-transparent player-text"
+            @click="changePlayerLargeVersion"
+        >
+            <ChevronDownIcon :size="40" />
+        </button>
+        <PlayerImage :image-width="200" />
+        <PlayerTitle
+            :player-error="playerError"
+            :hls-ready="hlsReady"
+            title-class="h3"
+        />
+        <PlayerChaptering class="justify-content-center w-100" />
+        <div class="player-grow-large-content">
+            <PlayerProgressBar
+                class-progress="large"
+                :show-comments="true"
+                :display-alert-bar="displayAlertBar"
+                :percent-live-progress="percentLiveProgress"
+                :duration-live-position="durationLivePosition"
+                :player-error="playerError"
+                :listen-time="listenTime"
+            />
+            <div
+                v-if="!playerError && (!radioUrl || isAdPlaying)"
+                class="d-flex justify-content-between"
+            >
+                <div>{{ displayPlayTime }}</div>
+                <div>{{ displayTotalTime }}</div>
+            </div>
+            <RadioHistory v-if="radioUrl" />
+        </div>
 
-      <div
-        v-if="transcriptInfo"
-        class="flex-grow-1 p-1 text-center transcript-info rounded"
-      >
-        {{ transcriptInfo }}
-      </div>
+
+        <!-- Transcription -->
+        <div
+            v-if="transcriptText.length > 0 && !isAdPlaying"
+            class="transcript"
+        >
+            <div class="flex-grow-1 p-1 text-center w-100 transcript-bg rounded">
+                <div
+                    v-for="line, i in transcriptText"
+                    :key="i"
+                >
+                    {{ line }}
+                </div>
+            </div>
+            <ClassicLoading
+                v-if="generatingTranscriptLanguage"
+                small
+                spinner-color="white"
+                :loading-text="$t('Player - Generating subtitles', { language: generatingTranscriptLanguage })"
+            />
+
+            <div
+                v-if="transcriptInfo"
+                class="flex-grow-1 p-1 text-center transcript-info rounded"
+            >
+                {{ transcriptInfo }}
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex align-items-center flex-grow-1">
+            <button
+                title="-15''"
+                class="btn bg-transparent player-text"
+                :disabled="isAdPlaying"
+                @click="seekClick(-15)"
+            >
+                <Rewind15Icon :size="44" />
+            </button>
+            <PlayerPlayButton :player-error="playerError" :is-big-button="true" />
+
+            <button
+                title="+15''"
+                class="btn bg-transparent player-text"
+                :disabled="isAdPlaying"
+                @click="seekClick(15)"
+            >
+                <FastForward15Icon :size="44" />
+            </button>
+        </div>
     </div>
-
-    <!-- Buttons -->
-    <div class="d-flex align-items-center flex-grow-1">
-      <button
-        title="-15''"
-        class="btn bg-transparent player-text"
-        :disabled="isAdPlaying"
-        @click="seekClick(-15)"
-      >
-        <Rewind15Icon :size="44" />
-      </button>
-      <PlayerPlayButton :player-error="playerError" :is-big-button="true" />
-
-      <button
-        title="+15''"
-        class="btn bg-transparent player-text"
-        :disabled="isAdPlaying"
-        @click="seekClick(15)"
-      >
-        <FastForward15Icon :size="44" />
-      </button>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -101,20 +106,20 @@ import ClassicLoading from "../../form/ClassicLoading.vue";
 import { usePlayerTranscript } from "../../composable/player/usePlayerTranscript";
 
 const RadioHistory = defineAsyncComponent(
-  () => import("./radio/RadioHistory.vue"),
+    () => import("./radio/RadioHistory.vue"),
 );
 const PlayerProgressBar = defineAsyncComponent(
-  () => import("./progressbar/PlayerProgressBar.vue"),
+    () => import("./progressbar/PlayerProgressBar.vue"),
 );
 
 //Props
 defineProps( {
-  playerError: { default: false, type: Boolean },
-  displayAlertBar: { default: false, type: Boolean },
-  percentLiveProgress: { default: 0, type: Number },
-  durationLivePosition: { default: 0, type: Number },
-  listenTime: { default: 0, type: Number },
-  hlsReady: { default: false, type: Boolean },
+    playerError: { default: false, type: Boolean },
+    displayAlertBar: { default: false, type: Boolean },
+    percentLiveProgress: { default: 0, type: Number },
+    durationLivePosition: { default: 0, type: Number },
+    listenTime: { default: 0, type: Number },
+    hlsReady: { default: false, type: Boolean },
 });
 
 //Emits
@@ -122,38 +127,39 @@ const emit = defineEmits(['changePlayerLargeVersion']);
 
 //Composables
 const { 
-  transcriptText,
-  radioUrl,
-  isAdPlaying,
-  displayPlayTime,
-  displayTotalTime,
- } = usePlayerDisplayTime();
+    transcriptText,
+    radioUrl,
+    isAdPlaying,
+    displayPlayTime,
+    displayTotalTime,
+} = usePlayerDisplayTime();
 const { t } = useI18n();
 const playerStore = usePlayerStore();
 const { generatingTranscriptLanguage } = usePlayerTranscript();
 
 /** Info message to display regarding transcript */
 const transcriptInfo = computed((): string|undefined => {
-  if (sdkParams.player.showAITranscriptWarning === true) {
-    return t('Player - Transcription - AI Warning');
-  }
+    if (sdkParams.player.showAITranscriptWarning === true) {
+        return t('Player - Transcription - AI Warning');
+    }
+    return undefined;
 });
 
 //Methods
 function changePlayerLargeVersion() {
-  emit("changePlayerLargeVersion");
+    emit("changePlayerLargeVersion");
 }
 function seekClick(addTime: number): void {
-  const audioPlayer: HTMLAudioElement | null =
-    document.querySelector("#audio-player");
-  if (!audioPlayer) {
-    return;
-  }
-  const seekTo = audioPlayer.currentTime + addTime;
-  if (playerStore.playerPodcast || playerStore.playerLive) {
-    playerStore.playerUpdateSeekTime(seekTo > 0 ? seekTo : 0);
-  }
-  audioPlayer.currentTime = seekTo > 0 ? seekTo : 0;
+    const audioPlayer: HTMLAudioElement | null =
+        document.querySelector("#audio-player");
+    if (!audioPlayer) {
+        return;
+    }
+    const seekTo = audioPlayer.currentTime + addTime;
+    if (playerStore.playerPodcast || playerStore.playerLive) {
+        playerStore.playerUpdateSeekTime(seekTo > 0 ? seekTo : 0);
+    }
+    audioPlayer.currentTime = seekTo > 0 ? seekTo : 0;
 }
 </script>
 

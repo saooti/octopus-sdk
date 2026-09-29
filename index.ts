@@ -171,7 +171,7 @@ export * from './src/helper/slugify';
 //stores
 import {useVastStore} from "./src/stores/VastStore";
 import {useSaveFetchStore} from "./src/stores/SaveFetchStore";
-import {usePlayerStore} from "./src/stores/PlayerStore";
+export { usePlayerStore, type PlayerTranscript } from "./src/stores/PlayerStore";
 import {useGeneralStore} from "./src/stores/GeneralStore";
 import {useFilterStore} from "./src/stores/FilterStore";
 import {useCommentStore} from "./src/stores/CommentStore";
@@ -217,6 +217,7 @@ export { type Cartouchier } from "./src/stores/class/cartouchier/cartouchier";
 export { type Cartouche, emptyCartouche } from "./src/stores/class/cartouchier/cartouche";
 export { type PlaylistMedia } from "./src/stores/class/radio/playlistMedia";
 export * from "./src/stores/class/radio/canal";
+export * from "./src/stores/class/general/player";
 
 //Icons
 export const getAmazonMusicIcon = () => import("./src/components/icons/AmazonMusicIcon.vue");
@@ -264,7 +265,6 @@ export {
     debounce,
     useVastStore,
     useSaveFetchStore,
-    usePlayerStore,
     useGeneralStore,
     useFilterStore,
     useCommentStore,

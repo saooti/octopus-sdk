@@ -5,6 +5,7 @@ import { podcastApi } from "../../api/podcastApi";
 import { Emission } from "../../stores/class/general/emission";
 import { OrganisationAttributes } from "@/stores/class/general/organisation";
 import { organisationApi } from "../../api/organisationApi";
+import { parseSrtTranscript } from "@/helper/transcriptHelper";
 
 const DEFAULT_LANGUAGE = 'en';
 
@@ -29,14 +30,8 @@ export const useTranslation = () => {
      * @returns The plain text
      */
     function convertSrtToPlainText(srt: string): string {
-        const srtPattern =
-            /\d+\n[\d:,]+\s+-{2}>\s+[\d:,]+\n([\s\S]*?(?=\n{2}|$))/gm;
-        const result: Array<string> = [];
-        let matches: string[];
-        while ((matches = srtPattern.exec(srt)) != null) {
-            result.push(matches[1] + " ");
-        }
-        return result.join("");
+        const parsed = parseSrtTranscript(srt);
+        return parsed.flatMap(p => p.text).join(' ');
     }
 
     function getApplicationConf(language: string, conf: TranslationConfiguration): CreateTranslation {

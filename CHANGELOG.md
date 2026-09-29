@@ -1,11 +1,17 @@
 # CHANGELOG
 
-## 42.2.1 (En cours)
+## 42.3.0 (En cours)
+
+### Features
+
+- **[14847]** - Ajout support pour transcription sur plusieurs lignes
 
 ### Misc
 
 - Mise en place de Husky
 - Mise en place de lint-staged
+
+[14847]: https://trac.saooti.net/ticket/14847
 
 ## 41.2.0 (28/09/2026)
 

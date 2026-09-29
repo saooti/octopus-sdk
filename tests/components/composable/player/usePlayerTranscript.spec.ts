@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { defineComponent } from 'vue';
-import { mount as _mount } from '@vue/test-utils';
-import { flushPromises } from '@vue/test-utils';
+import { mount as _mount, flushPromises } from '@vue/test-utils';
 import { setupPinia } from '@tests/utils';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { useVastStore } from '@/stores/VastStore';
@@ -71,7 +70,7 @@ describe('usePlayerTranscript', () => {
             expect(mockGetMostRelevantLanguage).not.toHaveBeenCalled();
         });
 
-        it('sets actualText from the first entry when it starts at 0', async () => {
+        it('sets currentText from the first entry when it starts at 0', async () => {
             playerStore.$patch({ playerPodcast: { podcastId: 42 } as never });
             vi.mocked(transcriptionApi.getTranslation).mockResolvedValue(SRT_FROM_ZERO);
             const spy = vi.spyOn(playerStore, 'playerUpdateTranscript');
@@ -81,23 +80,23 @@ describe('usePlayerTranscript', () => {
             expect(transcriptionApi.getTranslations).toHaveBeenCalledWith(42);
             expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(42, 'fr');
             expect(spy).toHaveBeenCalledWith({
-                actual: 0,
-                actualText: 'Hello',
+                current: 0,
+                currentText: ['Hello'],
                 value: [
-                    { startTime: 0, endTime: 2, text: 'Hello' },
-                    { startTime: 2, endTime: 4, text: 'World' },
+                    { startTime: 0, endTime: 2, text: ['Hello'] },
+                    { startTime: 2, endTime: 4, text: ['World'] },
                 ],
             });
         });
 
-        it('sets empty actualText when the first entry starts after 0', async () => {
+        it('sets empty currentText when the first entry starts after 0', async () => {
             playerStore.$patch({ playerPodcast: { podcastId: 42 } as never });
             vi.mocked(transcriptionApi.getTranslation).mockResolvedValue(SRT_DELAYED_START);
             const spy = vi.spyOn(playerStore, 'playerUpdateTranscript');
 
             await composable.getTranscription();
 
-            expect(spy).toHaveBeenCalledWith(expect.objectContaining({ actualText: '' }));
+            expect(spy).toHaveBeenCalledWith(expect.objectContaining({ currentText: '' }));
         });
     });
 
@@ -148,10 +147,10 @@ describe('usePlayerTranscript', () => {
 
             expect(transcriptionApi.getTranslation).toHaveBeenCalledWith(42, 'en', true);
             expect(spy).toHaveBeenCalledWith(expect.objectContaining({
-                actualText: 'Hello',
+                currentText: ['Hello'],
                 value: [
-                    { startTime: 0, endTime: 2, text: 'Hello' },
-                    { startTime: 2, endTime: 4, text: 'World' },
+                    { startTime: 0, endTime: 2, text: ['Hello'] },
+                    { startTime: 2, endTime: 4, text: ['World'] },
                 ],
             }));
         });
@@ -163,21 +162,21 @@ describe('usePlayerTranscript', () => {
             expect(playerStore.playerTranscript).toBeUndefined();
         });
 
-        it('sets actualText when currentTime reaches startTime', () => {
+        it('sets currentText when currentTime reaches startTime', () => {
             playerStore.playerUpdateTranscript({
-                actual: 0, actualText: '',
+                current: 0, currentText: '',
                 value: [{ startTime: 1, endTime: 3, text: 'Hello' }],
             });
 
             composable.onTimeUpdateTranscript(1.5);
 
-            expect(playerStore.playerTranscript?.actualText).toBe('Hello');
-            expect(playerStore.playerTranscript?.actual).toBe(0);
+            expect(playerStore.playerTranscript?.currentText).toBe('Hello');
+            expect(playerStore.playerTranscript?.current).toBe(0);
         });
 
         it('advances to the next entry when currentTime exceeds endTime', () => {
             playerStore.playerUpdateTranscript({
-                actual: 0, actualText: '',
+                current: 0, currentText: '',
                 value: [
                     { startTime: 0, endTime: 2, text: 'Hello' },
                     { startTime: 2, endTime: 4, text: 'World' },
@@ -186,8 +185,8 @@ describe('usePlayerTranscript', () => {
 
             composable.onTimeUpdateTranscript(3);
 
-            expect(playerStore.playerTranscript?.actual).toBe(1);
-            expect(playerStore.playerTranscript?.actualText).toBe('World');
+            expect(playerStore.playerTranscript?.current).toBe(1);
+            expect(playerStore.playerTranscript?.currentText).toBe('World');
         });
     });
 
@@ -199,7 +198,7 @@ describe('usePlayerTranscript', () => {
 
         it('seeks to the correct entry index', () => {
             playerStore.playerUpdateTranscript({
-                actual: 0, actualText: '',
+                current: 0, currentText: '',
                 value: [
                     { startTime: 0, endTime: 2, text: 'Hello' },
                     { startTime: 2, endTime: 4, text: 'World' },
@@ -209,7 +208,7 @@ describe('usePlayerTranscript', () => {
 
             composable.onSeekedTranscript(3);
 
-            expect(playerStore.playerTranscript?.actual).toBe(1);
+            expect(playerStore.playerTranscript?.current).toBe(1);
         });
     });
 
@@ -227,7 +226,7 @@ describe('usePlayerTranscript', () => {
             ['useVastPlayerPodcast is true', () => useVastStore().$patch({ useVastPlayerPodcast: true })],
             ['no #audio-player element exists', () => playerStore.$patch({
                 playerPodcast: { podcastId: 1 } as never,
-                playerTranscript: { actual: 0, actualText: '', value: [] },
+                playerTranscript: { current: 0, currentText: '', value: [] },
             })],
         ])('returns early when %s', async (_, setup) => {
             setup();
