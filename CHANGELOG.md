@@ -11,6 +11,7 @@
 
 - Mise en place de Husky
 - Mise en place de lint-staged
+- Identification de certaines routes par nom
 
 [14847]: https://trac.saooti.net/ticket/14847
 
