@@ -177,7 +177,7 @@
             :podcast-annotations="podcast.annotations"
             :max="state.podcastPage.maxTags"
         />
-        <PodcastRubriqueList
+        <InlineRubriqueList
             v-if="podcastRubriques?.length"
             :orga-id="podcast.organisation.id"
             :rubrique-ids="podcastRubriques"
@@ -234,7 +234,7 @@ const PodcastPlannedSpinner = defineAsyncComponent(
 const Countdown = defineAsyncComponent(() => import("../live/CountDown.vue"));
 const TagList = defineAsyncComponent(() => import("./TagList.vue"));
 const ShareAnonymous = defineAsyncComponent(() => import("../sharing/ShareAnonymous.vue"));
-const PodcastRubriqueList = defineAsyncComponent(() => import("./PodcastRubriqueList.vue"));
+const InlineRubriqueList = defineAsyncComponent(() => import("../rubriques/InlineRubriqueList.vue"));
 
 //Props 
 const props = defineProps<{

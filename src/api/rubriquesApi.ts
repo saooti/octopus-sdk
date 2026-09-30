@@ -110,6 +110,17 @@ async function searchRubriques(searchOptions?: {
 }
 
 /**
+ * Fetch rubriques data by multiple ID
+ * @param rubriqueId ID of the rubrique to fetch
+ * @returns The rubrique
+ */
+async function getAllRubriquesById(rubriqueIds: Array<number>): Promise<Array<Rubrique>> {
+    const promises = rubriqueIds.map(getRubrique);
+
+    return await Promise.all(promises);
+}
+
+/**
  * Fetch rubrique data by ID
  * @see getCachedRubrique
  * @param rubriqueId ID of the rubrique to fetch
@@ -222,6 +233,7 @@ async function setUserScope(userId: string, previousScope: Array<number>, rubriq
 export const rubriquesApi = {
     createRubriquage,
     findRestrictiveRubriquage,
+    getAllRubriquesById,
     getRubriquage,
     getRubrique,
     getCachedRubrique,

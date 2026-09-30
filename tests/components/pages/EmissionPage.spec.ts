@@ -25,8 +25,8 @@ import { initialize } from '@/stores/ParamSdkStore';
 
 const publicOrga = { id: 'org-1', name: 'Test', imageUrl: '', privacy: 'PUBLIC' };
 
-function makeEmission(seasonMode: SeasonMode) {
-    return { ...emptyEmissionData(), seasonMode, seasons: [1, 2], orga: publicOrga };
+function makeSeasonEmission(seasonMode: SeasonMode, seasons: number[] = [1, 2]): Partial<Emission> {
+    return { seasonMode, seasons };
 }
 
 function makeReadyPodcast(seasonMode: SeasonMode = SeasonMode.NO_SEASON) {
@@ -39,39 +39,28 @@ function makeReadyPodcast(seasonMode: SeasonMode = SeasonMode.NO_SEASON) {
     return podcast;
 }
 
-async function mountPage(seasonMode: SeasonMode) {
-    vi.mocked(emissionApi.get).mockResolvedValue(makeEmission(seasonMode));
-    return mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+async function mountPage(emission: Partial<Emission> = {}, options: NonNullable<Parameters<typeof mount>[1]> = {}) {
+    vi.mocked(emissionApi.get).mockResolvedValue({ ...emptyEmissionData(), orga: publicOrga, ...emission });
+    return mount(EmissionPage, { shallow: true, props: { emissionId: 1 }, ...options });
 }
 
 const emissionPageScopeStubs = [
-    'PodcastmakerHeader', 'ShareAnonymous', 'PodcastFilterList', 'SharePlayer',
-    'ShareSocialsButtons', 'SubscribeButtons', 'LiveHorizontalList', 'PodcastPlayButton', 'TagList'
+    'PodcastmakerHeader', 'ShareAnonymous', 'PodcastFilterList', 'SharePlayer', 'ShareSocialsButtons',
+    'SubscribeButtons', 'LiveHorizontalList', 'PodcastPlayButton', 'TagList', 'InlineRubriqueList'
 ];
 
-async function mountForScope(emission: Emission, auth: { roles: string[], scope: number[] }) {
-    vi.mocked(emissionApi.get).mockResolvedValue(emission);
-    return mount(EmissionPage, {
-        props: { emissionId: 1 },
+async function mountForScope(emission: Partial<Emission>, auth: { roles: string[], scope: number[] }) {
+    return mountPage(emission, {
+        shallow: false,
         stubs: emissionPageScopeStubs,
         beforeMount: async () => {
-            await setupAuthStore({ roles: auth.roles, organisationId: emission.orga.id, scope: auth.scope })();
+            await setupAuthStore({ roles: auth.roles, organisationId: publicOrga.id, scope: auth.scope })();
             useAuthStore().$patch({
                 authProfile: { userId: 'test-user-123', scope: auth.scope },
                 authParam: { accessToken: 'test-token', refreshToken: undefined, expiration: undefined },
             });
         }
     });
-}
-
-async function mountWithSeasons(seasons: number[]) {
-    vi.mocked(emissionApi.get).mockResolvedValue({
-        ...emptyEmissionData(),
-        seasonMode: SeasonMode.SEASON_WITH_PODCAST_NUMBERING,
-        seasons,
-        orga: publicOrga,
-    });
-    return mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
 }
 
 async function triggerFetch(wrapper: VueWrapper, seasonMode: SeasonMode, season?: number, podcasts?: ReturnType<typeof makeReadyPodcast>[]) {
@@ -82,12 +71,12 @@ async function triggerFetch(wrapper: VueWrapper, seasonMode: SeasonMode, season?
 describe('EmissionPage', () => {
     describe('messageListenEpisode', () => {
         it('does not show season info before any podcast is fetched', async () => {
-            const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.SEASON_WITH_PODCAST_NUMBERING));
             expect(wrapper.text()).not.toContain('S1·E3');
         });
 
         it('shows base message without season info for NO_SEASON emission', async () => {
-            const wrapper = await mountPage(SeasonMode.NO_SEASON);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.NO_SEASON));
             await triggerFetch(wrapper, SeasonMode.NO_SEASON);
             expect(wrapper.text()).toContain('Listen to the latest episode');
             expect(wrapper.text()).not.toContain('(S');
@@ -97,34 +86,34 @@ describe('EmissionPage', () => {
             { seasonMode: SeasonMode.SEASON_WITH_PODCAST_NUMBERING,    expected: 'Listen to the latest episode (S1·E3)' },
             { seasonMode: SeasonMode.SEASON_WITHOUT_PODCAST_NUMBERING, expected: 'Listen to the latest episode (S1)'    },
         ])('appends season info for $seasonMode', async ({ seasonMode, expected }) => {
-            const wrapper = await mountPage(seasonMode);
+            const wrapper = await mountPage(makeSeasonEmission(seasonMode));
             await triggerFetch(wrapper, seasonMode);
             expect(wrapper.text()).toContain(expected);
         });
     });
 
     describe('podcastsFetched season filtering', () => {
-        // seasons is [1, 2] in makeEmission, so max season is 2
+        // seasons is [1, 2] by default in makeSeasonEmission, so max season is 2
         it.each([undefined, 2])('shows lastPodcast when season is %s', async (season) => {
-            const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.SEASON_WITH_PODCAST_NUMBERING));
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, season);
             expect(wrapper.text()).toContain('Listen to the latest episode');
         });
 
         it('ignores podcasts from earlier seasons', async () => {
-            const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.SEASON_WITH_PODCAST_NUMBERING));
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 1);
             expect(wrapper.text()).not.toContain('Listen to the latest episode');
         });
 
         it('accepts the highest season in the seasons array', async () => {
-            const wrapper = await mountWithSeasons([1, 2, 3]);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, [1, 2, 3]));
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 3);
             expect(wrapper.text()).toContain('Listen to the latest episode');
         });
 
         it('ignores a season below the max in the seasons array', async () => {
-            const wrapper = await mountWithSeasons([1, 2, 3]);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, [1, 2, 3]));
             await triggerFetch(wrapper, SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 2);
             expect(wrapper.text()).not.toContain('Listen to the latest episode');
         });
@@ -132,29 +121,18 @@ describe('EmissionPage', () => {
 
     describe('subtitle', () => {
         it('shows subtitle when annotation is set', async () => {
-            vi.mocked(emissionApi.get).mockResolvedValue({
-                ...emptyEmissionData(),
-                annotations: { subtitle: 'Emission subtitle' },
-                orga: publicOrga,
-            });
-            const wrapper = await mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+            const wrapper = await mountPage({ annotations: { subtitle: 'Emission subtitle' } });
             expect(wrapper.text()).toContain('Emission subtitle');
         });
 
         it('hides subtitle when annotation is not set', async () => {
-            vi.mocked(emissionApi.get).mockResolvedValue({ ...emptyEmissionData(), orga: publicOrga });
-            const wrapper = await mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+            const wrapper = await mountPage();
             expect(wrapper.find('h3').exists()).toBe(false);
         });
 
         it('hides subtitle when hideSubtitle is true', async () => {
             initialize({ emissionPage: { hideSubtitle: true } });
-            vi.mocked(emissionApi.get).mockResolvedValue({
-                ...emptyEmissionData(),
-                annotations: { subtitle: 'Emission subtitle' },
-                orga: publicOrga,
-            });
-            const wrapper = await mount(EmissionPage, { shallow: true, props: { emissionId: 1 } });
+            const wrapper = await mountPage({ annotations: { subtitle: 'Emission subtitle' } });
             expect(wrapper.text()).not.toContain('Emission subtitle');
             initialize({ emissionPage: { hideSubtitle: false } });
         });
@@ -164,13 +142,17 @@ describe('EmissionPage', () => {
         function makePodcast(seasonMode: SeasonMode, episodeNumber: number, { ready = true, visible = true } = {}) {
             const podcast = makeReadyPodcast(seasonMode);
             podcast.seasonEpisodeNumber = episodeNumber;
-            if (!ready) podcast.processingStatus = PodcastProcessingStatus.Processing;
-            if (!visible) podcast.availability.visibility = false;
+            if (!ready) {
+                podcast.processingStatus = PodcastProcessingStatus.Processing;
+            }
+            if (!visible) {
+                podcast.availability.visibility = false;
+            }
             return podcast;
         }
 
         it('with seasons enabled, selects the last ready visible podcast', async () => {
-            const wrapper = await mountPage(SeasonMode.SEASON_WITH_PODCAST_NUMBERING);
+            const wrapper = await mountPage(makeSeasonEmission(SeasonMode.SEASON_WITH_PODCAST_NUMBERING));
             const podcasts = [
                 makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 1),
                 makePodcast(SeasonMode.SEASON_WITH_PODCAST_NUMBERING, 5),
@@ -180,13 +162,13 @@ describe('EmissionPage', () => {
         });
 
         it.each([SeasonMode.SEASON_WITH_PODCAST_NUMBERING, SeasonMode.NO_SEASON])('skips non-ready podcasts (%s)', async (seasonMode) => {
-            const wrapper = await mountPage(seasonMode);
+            const wrapper = await mountPage(makeSeasonEmission(seasonMode));
             await triggerFetch(wrapper, seasonMode, undefined, [makePodcast(seasonMode, 1, { ready: false })]);
             expect(wrapper.text()).not.toContain('Listen to the latest episode');
         });
 
         it.each([SeasonMode.SEASON_WITH_PODCAST_NUMBERING, SeasonMode.NO_SEASON])('skips non-visible podcasts (%s)', async (seasonMode) => {
-            const wrapper = await mountPage(seasonMode);
+            const wrapper = await mountPage(makeSeasonEmission(seasonMode));
             await triggerFetch(wrapper, seasonMode, undefined, [makePodcast(seasonMode, 1, { visible: false })]);
             expect(wrapper.text()).not.toContain('Listen to the latest episode');
         });
@@ -194,10 +176,7 @@ describe('EmissionPage', () => {
 
     describe('edit-box slot', () => {
         it('passes the emission and an on-updated callback that refetches it', async () => {
-            vi.mocked(emissionApi.get).mockResolvedValue({ ...emptyEmissionData(), orga: publicOrga });
-            const wrapper = await mount(EmissionPage, {
-                shallow: true,
-                props: { emissionId: 1 },
+            const wrapper = await mountPage({}, {
                 slots: {
                     'edit-box': `<template #edit-box="{ emission, onUpdated }">
                         <button class="edit-box-slot" :data-orga="emission?.orga?.id" @click="onUpdated()" />
@@ -216,10 +195,7 @@ describe('EmissionPage', () => {
         });
 
         it('is not rendered when the user has no edit rights', async () => {
-            vi.mocked(emissionApi.get).mockResolvedValue({ ...emptyEmissionData(), orga: publicOrga });
-            const wrapper = await mount(EmissionPage, {
-                shallow: true,
-                props: { emissionId: 1 },
+            const wrapper = await mountPage({}, {
                 slots: {
                     'edit-box': `<template #edit-box><button class="edit-box-slot" /></template>`
                 },
@@ -232,8 +208,7 @@ describe('EmissionPage', () => {
 
     describe('RightsIndicator (scope)', () => {
         it('shows RightsIndicator when the emission is out of the user\'s scope', async () => {
-            const emission = { ...emptyEmissionData(), orga: publicOrga, rubriqueIds: [10] };
-            const wrapper = await mountForScope(emission, { roles: ['PRODUCTION'], scope: [999] });
+            const wrapper = await mountForScope({ rubriqueIds: [10] }, { roles: ['PRODUCTION'], scope: [999] });
 
             const icon = wrapper.find('.rights-indicator-icon');
             expect(icon.exists()).toBe(true);
@@ -242,8 +217,7 @@ describe('EmissionPage', () => {
         });
 
         it('hides RightsIndicator when the emission is within the user\'s scope', async () => {
-            const emission = { ...emptyEmissionData(), orga: publicOrga, rubriqueIds: [10] };
-            const wrapper = await mountForScope(emission, { roles: ['PRODUCTION'], scope: [10] });
+            const wrapper = await mountForScope({ rubriqueIds: [10] }, { roles: ['PRODUCTION'], scope: [10] });
 
             const icon = wrapper.find('.rights-indicator-icon');
             expect(icon.exists()).toBe(true);

@@ -19,7 +19,7 @@ const mount = (podcast: Podcast, options?: {
     scope?: number[],
 }) => testMount(PodcastModuleBox, {
     props: { podcast, podcastConference: options?.podcastConference },
-    stubs: ['ShareAnonymous', 'LikeSection', 'PodcastRubriqueList'],
+    stubs: ['ShareAnonymous', 'LikeSection', 'InlineRubriqueList'],
     slots: options?.slots,
     beforeMount: async () => {
         await setupAuthStore({ roles: options?.roles, organisationId: podcast.organisation?.id, scope: options?.scope })();

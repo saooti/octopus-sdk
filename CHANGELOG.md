@@ -5,6 +5,7 @@
 ### Features
 
 - **[14847]** - Ajout support pour transcription sur plusieurs lignes
+- Affichage des rubriques sur la page d'émission
 
 ### Misc
 
