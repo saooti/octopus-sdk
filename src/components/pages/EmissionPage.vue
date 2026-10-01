@@ -196,8 +196,6 @@ const props = withDefaults(defineProps<{
     pr?: number;
     ps?: number;
     routeQuery?: string;
-    /** When true, display emission title in podcastmaker header */
-    useEmissionTitle?: boolean;
 }>(), {
     pr: 0,
     ps: 30,
@@ -301,6 +299,11 @@ function podcastsFetched(podcasts: Array<Podcast>, season: number|undefined) {
         lastPodcast.value = podcasts.find(isReadyAndVisibleAndValid);
     }
 }
+
+/** Indicates whether to display emission name in header */
+const useEmissionTitle = computed((): boolean => {
+    return state.emissionPage?.displayEmissionTitleInHeader === true;
+});
 
 /** Indicates whether to show subtitle */
 const showSubtitle = computed((): boolean => {

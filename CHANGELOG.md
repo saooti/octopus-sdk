@@ -15,7 +15,13 @@
 
 [14847]: https://trac.saooti.net/ticket/14847
 
-## 41.2.0 (28/09/2026)
+## 42.2.1 (01/10/2026)
+
+### Misc
+
+- Ajout paramétrage pour affichage header podcastmaker
+
+## 42.2.0 (28/09/2026)
 
 ### Features
 
@@ -37,7 +43,7 @@
 [14876]: https://trac.saooti.net/ticket/14876
 [14878]: https://trac.saooti.net/ticket/14878
 
-## 41.1.2 (24/09/2026)
+## 42.1.2 (24/09/2026)
 
 ### Features
 
