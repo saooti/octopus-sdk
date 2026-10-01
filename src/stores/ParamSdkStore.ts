@@ -14,7 +14,8 @@ const state: ParamStore = {
     ShareButtons: true,
     mainRubrique: 0,
     downloadButton: false,
-    descriptionOrSummary: 'description'
+    descriptionOrSummary: 'description',
+    displayEmissionTitleInHeader: false
   },
   emissionsPage: {
     itemPlayer: false,
@@ -22,6 +23,7 @@ const state: ParamStore = {
     mainRubrique: undefined,
     buttonMore: false,
     progressBar: false,
+    displayEmissionTitleInHeader: false
   },
   emissionPage: {},
   player: {
@@ -68,6 +70,8 @@ export interface ParamStore {
     hideSubtitle?: boolean;
     /** Select whether to display description, summary, or both */
     descriptionOrSummary?: 'description'|'summary'|'both';
+    /** Displays the emission title in the header instead of the generic "Episode" */
+    displayEmissionTitleInHeader: boolean;
   };
   emissionPage: {
     ShareButtons?: boolean;
@@ -77,6 +81,8 @@ export interface ParamStore {
     maxTags?: number;
     /** If true, do not display subtitles on podcast pages */
     hideSubtitle?: boolean;
+    /** Displays the emission title in the header instead of the generic "Emission" */
+    displayEmissionTitleInHeader: boolean;
   };
   emissionsPage: {
     itemPlayer?: boolean;

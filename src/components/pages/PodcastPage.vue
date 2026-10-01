@@ -126,8 +126,6 @@ const props = defineProps<{
   updateStatus?: string;
   playingPodcast?: Podcast;
   podcastId: number;
-  /** When true, display emission title in podcastmaker header */
-  useEmissionTitle?: boolean;
 }>();
 
 
@@ -204,6 +202,11 @@ const isLiveReadyToRecord = computed(() =>{
 
 const isOctopusAndAnimator = computed(() =>{
   return !isPodcastmaker.value && editRight.value && authStore.isRoleLive;
+});
+
+/** Indicates whether to display emission name in header */
+const useEmissionTitle = computed((): boolean => {
+    return state.podcastPage?.displayEmissionTitleInHeader === true;
 });
 
 const titlePage = computed(() =>{
