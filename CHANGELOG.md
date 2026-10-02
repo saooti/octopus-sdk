@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 42.2.2 (En cours)
+
+### Fixes
+
+- Correction problème lecture radio sur organisation sécurisée
+
 ## 42.2.1 (01/10/2026)
 
 ### Misc

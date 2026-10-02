@@ -1,10 +1,10 @@
 import stringHelper from "../../../helper/stringHelper";
 import { usePlayerLogicProgress } from "./usePlayerLogicProgress";
-import { computed, Ref, ref } from "vue";
+import { Ref, ref } from "vue";
 import { usePlayerStore, PlayerStatus } from "../../../stores/PlayerStore";
 import { useApiStore } from "../../../stores/ApiStore";
-import dayjs from "dayjs";
 import { useAuthStore } from "../../../stores/AuthStore";
+import { useDayjs } from "../useDayjs";
 /* eslint-disable*/
 let Hls:any = null;
 /* eslint-enable*/
@@ -23,12 +23,14 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
   const playerStore = usePlayerStore();
   const apiStore = useApiStore();
   const authStore = useAuthStore();
+  const { dayjs } = useDayjs();
 
   function needToAddToken(url: string): boolean { 
     if (authStore.authParam.accessToken && ("SECURED" === playerStore.playerLive?.organisation?.privacy || playerStore.playerRadio?.secured)) {
-      const baseDomain = apiStore.frontendUrl.replace(/^https?:\/\//, '');
-      // Add token only if request is on same domain
-      return url.includes(baseDomain);
+      // Add token only if request is on the same host as the playlist (segments may be served by an
+      // S3-compatible storage that rejects any non-AWS Authorization header)
+      const streamHost = new URL(playerStore.playerHlsUrl ?? '', location.href).host;
+      return new URL(url, location.href).host === streamHost;
     }
     return false;
   }
@@ -164,8 +166,7 @@ export const usePlayerLive = (hlsReady: Ref<boolean>)=>{
         setTimeout(initHls, 500);
         return;
       }
-      console.error('An error occured: ' + name + ' / ' + data.details);
-      console.error(data);
+      console.error('An error occured: ' + name + ' / ' + data.details, data);
       if (data.fatal && data.type === Hls.ErrorTypes.MEDIA_ERROR) {
         console.warn('Trying to recover...');
         hls.value.recoverMediaError();
