@@ -15,6 +15,12 @@
 
 [14847]: https://trac.saooti.net/ticket/14847
 
+## 42.2.2 (02/10/2026)
+
+### Fixes
+
+- Correction problème lecture radio sur organisation sécurisée
+
 ## 42.2.1 (01/10/2026)
 
 ### Misc
