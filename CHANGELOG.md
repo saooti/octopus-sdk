@@ -9,6 +9,11 @@
 - Ajout d'options pour configurer les barres de recherche
 - Ajout de l'option de fermer les `ClassicAlert`
 
+### Fixes
+
+- **[14788]** - Affichage d'un message quand écoute d'un épisode géobloqué dans
+  SmartLink
+
 ### Misc
 
 - **[14810]** - Améliorations de parcours
@@ -17,6 +22,7 @@
 - Mise en place de lint-staged
 - Identification de certaines routes par nom
 
+[14788]: https://trac.saooti.net/ticket/14788
 [14810]: https://trac.saooti.net/ticket/14810
 [14847]: https://trac.saooti.net/ticket/14847
 

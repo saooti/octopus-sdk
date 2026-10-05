@@ -1,4 +1,6 @@
 <template>
+    <ClassicNotifications />
+    
     <div v-if="element" class="background">
         <img :src="useProxyImageUrl(element.imageUrl, '1600')">
     </div>
@@ -90,6 +92,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useSeoTitleUrl } from '../composable/route/useSeoTitleUrl';
 
 import PlayIcon from "vue-material-design-icons/Play.vue";
+import ClassicNotifications from '../misc/ClassicNotifications.vue'; 
 
 import { Emission } from '../../stores/class/general/emission';
 import { Playlist } from '../../stores/class/general/playlist';
