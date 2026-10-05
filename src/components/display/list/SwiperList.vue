@@ -1,33 +1,46 @@
 <template>
-  <div ref="root" class="position-relative w-100">
-    <template v-if="!isPhone">
-      <swiper
-        :key="manualReload"
-        :slides-per-view="numberItem"
-        :space-between="gapPx"
-        :loop="loop"
-        :slides-offset-before="offsetSwiper"
-        :slides-offset-after="offsetSwiper"
-        :allow-slide-next="loop"
-        :allow-slide-prev="loop"
-        :navigation="navigationOptions"
-        :modules="modules"
-        @slides-updated="slidesUpdated"
-        @slide-change="slideChange"
-      >
-        <swiper-slide v-for="(obj, index) in listObject" :key="index">
-          <slot v-if="composableInit" name="octopusSlide" :option="obj" :index="index" />
-        </swiper-slide>
-      </swiper>
-      <div :id="prevElId" class="swiper-button-prev" />
-      <div :id="nextElId" class="swiper-button-next" />
-    </template>
-    <div v-else-if="composableInit" class="element-list-inline">
-      <div v-for="(obj, index) in listObject" :key="obj" class="element-list-item">
-        <slot name="octopusSlide" :option="obj" :index="index" />
-      </div>
+    <div ref="root" class="position-relative w-100">
+        <template v-if="!isPhone">
+            <swiper
+                :key="manualReload"
+                :slides-per-view="numberItem"
+                :space-between="gapPx"
+                :loop="loop"
+                :slides-offset-before="offsetSwiper"
+                :slides-offset-after="offsetSwiper"
+                :allow-slide-next="loop"
+                :allow-slide-prev="loop"
+                :navigation="navigationOptions"
+                :modules="modules"
+                @slides-updated="slidesUpdated"
+                @slide-change="slideChange"
+            >
+                <swiper-slide v-for="(obj, index) in listObject" :key="index">
+                    <slot
+                        v-if="composableInit"
+                        name="octopusSlide"
+                        :option="obj"
+                        :index="index"
+                    />
+                </swiper-slide>
+            </swiper>
+            <div :id="prevElId" class="swiper-button-prev" />
+            <div :id="nextElId" class="swiper-button-next" />
+        </template>
+        <div v-else-if="composableInit" class="element-list-inline">
+            <div
+                v-for="(obj, index) in listObject"
+                :key="obj"
+                class="element-list-item"
+            >
+                <slot
+                    name="octopusSlide"
+                    :option="obj"
+                    :index="index"
+                />
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -42,9 +55,9 @@ import { computed, getCurrentInstance, nextTick, onMounted, ref, useTemplateRef,
 
 //Props 
 const props = defineProps({
-  listObject: { default: () => [], type: Array as () => Array<unknown> },
-  /** Size, in **rem**, of the emission items */
-  sizeItemOverload: { default: undefined, type: Number },
+    listObject: { default: () => [], type: Array as () => Array<unknown> },
+    /** Size, in **rem**, of the emission items */
+    sizeItemOverload: { default: undefined, type: Number },
 })
  
 //Data
@@ -64,101 +77,101 @@ const { isPhone, windowWidth } = useResizePhone();
 
 //Computed
 const sizeItem = computed(() => {
-  if (props.sizeItemOverload) {
-    return props.sizeItemOverload;
-  }
-  if (windowWidth.value <= 450) {
-    return 12.5;
-  }
-  return state.generalParameters.podcastItem
-    ? state.generalParameters.podcastItem
-    : 13.5;
+    if (props.sizeItemOverload) {
+        return props.sizeItemOverload;
+    }
+    if (windowWidth.value <= 450) {
+        return 12.5;
+    }
+    return state.generalParameters.podcastItem
+        ? state.generalParameters.podcastItem
+        : 13.5;
 });
 const itemRecalculizedSize = computed(() => {
-  const totalGap = gapPx * Math.max(numberItem.value - 1, 0);
-  return (widthSwiperUsable.value - totalGap) / numberItem.value;
+    const totalGap = gapPx * Math.max(numberItem.value - 1, 0);
+    return (widthSwiperUsable.value - totalGap) / numberItem.value;
 });
 
 /** Indicates that the swiper should loop */
 const loop = computed((): boolean => {
-  return (props.listObject.length > numberItem.value);
+    return (props.listObject.length > numberItem.value);
 });
 
 const modules = computed(() => {
-  if (loop.value === true) {
-    return [Navigation];
-  } else {
-    return [];
-  }
+    if (loop.value === true) {
+        return [Navigation];
+    } else {
+        return [];
+    }
 });
 
 const uid = computed((): number => {
-  const instance = getCurrentInstance();
-  return instance.uid;
+    const instance = getCurrentInstance();
+    return instance.uid;
 });
 const prevElId = computed((): string => 'swiper-button-prev-' + uid.value);
 const nextElId = computed((): string => 'swiper-button-next-' + uid.value);
 const navigationOptions = computed(() => ({
-  prevEl: '#' + prevElId.value,
-  nextEl: '#' + nextElId.value
+    prevEl: '#' + prevElId.value,
+    nextEl: '#' + nextElId.value
 }));
 
 //Watch
 watch(windowWidth, () => onWindowResize());
 watch(()=>props.listObject, () => {
-  manualReload.value += 1;
+    manualReload.value += 1;
 }, {deep:true});
 
 
 onMounted(()=>{
-  nextTick(() => {
-    onWindowResize();
-    composableInit.value = true;
-  });
+    nextTick(() => {
+        onWindowResize();
+        composableInit.value = true;
+    });
 })
 
 
 //Methods
 function onWindowResize(){
-  const el = rootRef?.value as HTMLElement;
-  if (!el) return;
-  widthSwiperUsable.value =el.offsetWidth - offsetSwiper.value * 2;
-  const itemSizePx = domHelper.convertRemToPixels(sizeItem.value + 0.5);
-  numberItem.value = Math.max(
-    1,
-    Math.floor((widthSwiperUsable.value + gapPx) / (itemSizePx + gapPx)),
-  );
-  itemSizeWithoutRecalculed.value =el.offsetWidth / numberItem.value;
+    const el = rootRef?.value as HTMLElement;
+    if (!el) {return;}
+    widthSwiperUsable.value =el.offsetWidth - offsetSwiper.value * 2;
+    const itemSizePx = domHelper.convertRemToPixels(sizeItem.value + 0.5);
+    numberItem.value = Math.max(
+        1,
+        Math.floor((widthSwiperUsable.value + gapPx) / (itemSizePx + gapPx)),
+    );
+    itemSizeWithoutRecalculed.value =el.offsetWidth / numberItem.value;
 }
 function slidesUpdated() {
-  const el = rootRef?.value as HTMLElement;
-  if (!el) return;
-  const slides = el.getElementsByClassName("swiper-slide") as Array<HTMLElement>;
-  for (const slide of slides) {
-    slide.style.width = itemRecalculizedSize.value + "px";
-  }
+    const el = rootRef?.value as HTMLElement;
+    if (!el) {return;}
+    const slides = el.getElementsByClassName("swiper-slide") as Array<HTMLElement>;
+    for (const slide of slides) {
+        slide.style.width = itemRecalculizedSize.value + "px";
+    }
 }
 function slideChange() {
-  const el = rootRef?.value as HTMLElement;
-  if (!el) return;
-  const wrapper = el.getElementsByClassName("swiper-wrapper")[0] as HTMLElement;
-  if (wrapper.style.transform.includes("translate3d(40px")) {
-    return;
-  }
-  const matches = /^^translate3d\((-*\d+\.*\d*)px/.exec(
-    wrapper.style.transform,
-  );
-  if (!matches || matches.length <= 1) {
-    return;
-  }
-  const transformPixel = parseFloat(matches[1]) - offsetSwiper.value;
-  const nbTransformItems = Math.round(
-    transformPixel / itemSizeWithoutRecalculed.value,
-  );
-  wrapper.style.transform =
-    "translate3d(" +
-    (nbTransformItems * (itemRecalculizedSize.value + gapPx) + offsetSwiper.value) +
-    "px, 0px, 0px)";
+    const el = rootRef?.value as HTMLElement;
+    if (!el) {return;}
+    const wrapper = el.getElementsByClassName("swiper-wrapper")[0] as HTMLElement;
+    if (wrapper.style.transform.includes("translate3d(40px")) {
+        return;
+    }
+    const matches = /^^translate3d\((-*\d+\.*\d*)px/.exec(
+        wrapper.style.transform,
+    );
+    if (!matches || matches.length <= 1) {
+        return;
+    }
+    const transformPixel = parseFloat(matches[1]) - offsetSwiper.value;
+    const nbTransformItems = Math.round(
+        transformPixel / itemSizeWithoutRecalculed.value,
+    );
+    wrapper.style.transform =
+        "translate3d(" +
+        (nbTransformItems * (itemRecalculizedSize.value + gapPx) + offsetSwiper.value) +
+        "px, 0px, 0px)";
 }
 </script>
 
@@ -174,7 +187,7 @@ function slideChange() {
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: var(--octopus-primary) !important;
+  color: var(--octopus-swiper-arrow-color) !important;
   //height: 100%;
   inset-block:0;
   margin: 0;
