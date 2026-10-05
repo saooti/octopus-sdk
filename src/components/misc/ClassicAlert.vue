@@ -8,6 +8,7 @@
 -->
 <template>
     <div
+        v-if="open"
         class="p-2 pe-4 rounded d-flex alert"
         :class="cardClass"
         :role="type === 'error' || type === 'warning' ? 'alert' : 'status'"
@@ -35,16 +36,29 @@
 
             <slot />
         </span>
+
+        <ClassicButton
+            v-if="closeable"
+            icon
+            :title="$t('Close')"
+        >
+            <Close
+                aria-hidden="true"
+                @click="open = false"
+            />
+        </ClassicButton>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { ClassicButton } from '../buttons'; 
 
 import Alert from 'vue-material-design-icons/Alert.vue';
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue';
 import CloseCircle from 'vue-material-design-icons/CloseCircle.vue';
 import Information from 'vue-material-design-icons/Information.vue';
+import Close from 'vue-material-design-icons/Close.vue';
 
 const { type, title = undefined, text } = defineProps<{
     /** Disables the icon when true */
@@ -55,7 +69,11 @@ const { type, title = undefined, text } = defineProps<{
     type: 'info'|'success'|'warning'|'error';
     /** Use a simpler display */
     text?: boolean;
+    /** Allow closing the alert */
+    closeable?: boolean;
 }>();
+
+const open = ref(true);
 
 /** The class applied to the alert */
 const cardClass = computed((): Array<string> => {
@@ -98,6 +116,7 @@ const iconComponent = computed(() => {
         display: flex;
         flex-direction: column;
         align-self: center;
+        flex-grow: 1;
 
         &:deep(p) {
             margin: 0 !important;
