@@ -26,7 +26,12 @@
                         :monetisable="monetisable"
                         @update:monetisable="updateMonetisable"
                     />
-                    <CategorySearchFilter :iab-id="iabId" @update:iab-id="updateIab" />
+                    <CategorySearchFilter
+                        v-if="state.advancedSearch?.disableIabFiltering !== true"
+                        :iab-id="iabId"
+                        class="mb-3"
+                        @update:iab-id="updateIab"
+                    />
                     <RubriqueFilter
                         :rubrique-filter="rubriqueFilter"
                         @update:rubrique-filter="updateRubriquageFilter"
@@ -149,6 +154,7 @@ import { RubriquageFilter } from "@/stores/class/rubrique/rubriquageFilter";
 import { defineAsyncComponent, ref, computed, watch, onMounted } from "vue";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
+import { state } from "@/stores/ParamSdkStore";
 const MonetizableFilter = defineAsyncComponent(
     () => import("./MonetizableFilter.vue"),
 );
@@ -342,7 +348,7 @@ function updateRubriquageFilter(value: Array<RubriquageFilter>) {
         filterRubriques = { rubriquesId: undefined };
     }
     updateRouteParamAdvanced({
-         r: valueString.length ? valueString : undefined,
+        r: valueString.length ? valueString : undefined,
         ...filterRubriques,
     });
 }

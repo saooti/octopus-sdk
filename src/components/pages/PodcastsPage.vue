@@ -1,10 +1,12 @@
 <template>
     <section v-if="isInit" class="page-box">
         <ProductorSearch
+            v-if="state.podcastsPage?.hideSearch !== true"
             v-model:organisation-id="organisationId"
             v-model:search-pattern="searchPattern"
         />
         <AdvancedSearch
+            v-if="state.podcastsPage?.hideSearch !== true"
             v-model:only-video="onlyVideo"
             v-model:monetisable="monetisable"
             v-model:iab-id="iabId"
@@ -52,6 +54,7 @@ import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
 import { computed, ref, watch } from "vue";
 import { RouteProps } from "../composable/route/types";
+import { state } from "@/stores/ParamSdkStore";
 
 //Props 
 const props = withDefaults(defineProps<RouteProps>(), {

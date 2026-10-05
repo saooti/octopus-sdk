@@ -6,6 +6,7 @@
 
 - **[14847]** - Ajout support pour transcription sur plusieurs lignes
 - Affichage des rubriques sur la page d'émission
+- Ajout d'options pour configurer les barres de recherche
 
 ### Misc
 

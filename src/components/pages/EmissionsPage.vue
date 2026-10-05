@@ -2,11 +2,13 @@
     <section v-if="isInit" class="page-box">
         <slot name="new-emission" />
         <ProductorSearch
+            v-if="state.emissionsPage?.hideSearch !== true"
             v-model:organisation-id="organisationId"
             v-model:search-pattern="searchPattern"
             type="emission"
         />
         <AdvancedSearch
+            v-if="state.emissionsPage?.hideSearch !== true"
             v-model:monetisable="monetisable"
             v-model:iab-id="iabId"
             v-model:sort="sort"
@@ -47,6 +49,8 @@ import AdvancedSearch from "../display/filter/AdvancedSearch.vue";
 import {useAdvancedParamInit} from "../composable/route/useAdvancedParamInit";
 import { defineAsyncComponent } from "vue";
 import { RouteProps } from "../composable/route/types";
+import { state } from "@/stores/ParamSdkStore";
+
 const ProductorSearch = defineAsyncComponent(
     () => import("../display/filter/ProductorSearch.vue"),
 );

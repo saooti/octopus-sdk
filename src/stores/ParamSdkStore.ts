@@ -1,181 +1,199 @@
 import { PodcastSort } from "../api/podcastApi";
 
 const state: ParamStore = {
-  generalParameters: {
-    forceOrganisationId: undefined,//"ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c",
-    forceRubriqueId: undefined,
-    podcastmaker: false,
-    buttonPlus: true,
-    isLiveTab: true,
-    isCaptchaTest: true,
-    podcastItem: 13.5,
-  },
-  podcastPage: {
-    ShareButtons: true,
-    mainRubrique: 0,
-    downloadButton: false,
-    descriptionOrSummary: 'description',
-    displayEmissionTitleInHeader: false
-  },
-  emissionsPage: {
-    itemPlayer: false,
-    rubriquage: undefined,
-    mainRubrique: undefined,
-    buttonMore: false,
-    progressBar: false,
-    displayEmissionTitleInHeader: false
-  },
-  emissionPage: {},
-  player: {
-    isVideoPage:false,
-  },
-  searchPage: {
-    sortCriteria: undefined,
-  },
-  smartLink: {
-    showOnlyFirstParagraphInDescription: false
-  },
-  presentationItems: {
-    tags: 'none'
-  }
+    generalParameters: {
+        forceOrganisationId: undefined,//"ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c",
+        forceRubriqueId: undefined,
+        podcastmaker: false,
+        buttonPlus: true,
+        isLiveTab: true,
+        isCaptchaTest: true,
+        podcastItem: 13.5,
+    },
+    podcastsPage: {},
+    podcastPage: {
+        ShareButtons: true,
+        mainRubrique: 0,
+        downloadButton: false,
+        descriptionOrSummary: 'description',
+        displayEmissionTitleInHeader: false
+    },
+    emissionsPage: {
+        itemPlayer: false,
+        rubriquage: undefined,
+        mainRubrique: undefined,
+        buttonMore: false,
+        progressBar: false
+    },
+    emissionPage: {},
+    player: {
+        isVideoPage:false,
+    },
+    searchPage: {
+        sortCriteria: undefined,
+    },
+    advancedSearch: {},
+    smartLink: {
+        showOnlyFirstParagraphInDescription: false
+    },
+    presentationItems: {
+        tags: 'none'
+    }
 };
 
 export interface ParamStore {
-  generalParameters: {
+    generalParameters: {
     /** Automatically filter results by this organisation */
-    forceOrganisationId?: string;
-    /** Automatically filter results by these rubriques */
-    forceRubriqueId?: number|number[];
-    /** Automatically exclude these rubriquage from results */
-    forceNoRubriquageId?: number|number[];
-    /** Enable for podcastmakers */
-    podcastmaker?: boolean;
-    /** Show time with the dates on podcasts */
-    showTimeWithDates?: boolean;
-    buttonPlus?: boolean;
-    /** Show the "Radio & Live" tab in the navigation; driven by additionalConfiguration from the backend */
-    isLiveTab?: boolean;
-    isCaptchaTest?: boolean;
-    podcastItem?: number;
-  };
-  podcastPage: {
-    ShareButtons?: boolean;
-    mainRubrique?: number;
-    downloadButton?:boolean;
-    /** If true, hide tags on podcast page */
-    hideTags?: boolean;
-    /** The maximum number of tags that can be displayed */
-    maxTags?: number;
-    /** If true, do not display subtitles on podcast pages */
-    hideSubtitle?: boolean;
-    /** Select whether to display description, summary, or both */
-    descriptionOrSummary?: 'description'|'summary'|'both';
-    /** Displays the emission title in the header instead of the generic "Episode" */
-    displayEmissionTitleInHeader: boolean;
-  };
-  emissionPage: {
-    ShareButtons?: boolean;
-    /** If true, hide tags on emission page */
-    hideTags?: boolean;
-    /** The maximum number of tags that can be displayed */
-    maxTags?: number;
-    /** If true, do not display subtitles on podcast pages */
-    hideSubtitle?: boolean;
-    /** Displays the emission title in the header instead of the generic "Emission" */
-    displayEmissionTitleInHeader: boolean;
-  };
-  emissionsPage: {
-    itemPlayer?: boolean;
-    rubriquage?: number;
-    mainRubrique?: number;
-    buttonMore?: boolean;
-    progressBar?: boolean;
-  };
-  player: {
-    isVideoPage?:boolean;
-    /**
+        forceOrganisationId?: string;
+        /** Automatically filter results by these rubriques */
+        forceRubriqueId?: number|number[];
+        /** Automatically exclude these rubriquage from results */
+        forceNoRubriquageId?: number|number[];
+        /** Enable for podcastmakers */
+        podcastmaker?: boolean;
+        /** Show time with the dates on podcasts */
+        showTimeWithDates?: boolean;
+        buttonPlus?: boolean;
+        /** Show the "Radio & Live" tab in the navigation; driven by additionalConfiguration from the backend */
+        isLiveTab?: boolean;
+        isCaptchaTest?: boolean;
+        podcastItem?: number;
+    };
+    podcastPage: {
+        ShareButtons?: boolean;
+        mainRubrique?: number;
+        downloadButton?:boolean;
+        /** If true, hide tags on podcast page */
+        hideTags?: boolean;
+        /** The maximum number of tags that can be displayed */
+        maxTags?: number;
+        /** If true, do not display subtitles on podcast pages */
+        hideSubtitle?: boolean;
+        /** Select whether to display description, summary, or both */
+        descriptionOrSummary?: 'description'|'summary'|'both';
+        /** Displays the emission title in the header instead of the generic "Episode" */
+        displayEmissionTitleInHeader?: boolean;
+    };
+    podcastsPage: {
+    /** Hide the search bar in the page */
+        hideSearch?: boolean;
+    };
+    emissionPage: {
+        ShareButtons?: boolean;
+        /** If true, hide tags on emission page */
+        hideTags?: boolean;
+        /** The maximum number of tags that can be displayed */
+        maxTags?: number;
+        /** If true, do not display subtitles on podcast pages */
+        hideSubtitle?: boolean;
+        /** Displays the emission title in the header instead of the generic "Emission" */
+        displayEmissionTitleInHeader?: boolean;
+    };
+    emissionsPage: {
+        itemPlayer?: boolean;
+        rubriquage?: number;
+        mainRubrique?: number;
+        buttonMore?: boolean;
+        progressBar?: boolean;
+        /** Hide the search bar in the page */
+        hideSearch?: boolean;
+    };
+    advancedSearch: {
+        disableIabFiltering?: boolean;
+    };
+    player: {
+        isVideoPage?:boolean;
+        /**
      * Indicates that the play is at the top of the page.
      * This adapts player settings for properly display.
      * Currently *does not* position the player.
      */
-    topPlacement?: boolean;
-    /** Start with the large version by default */
-    startLarge?: boolean;
-    /** Show a warning regarding AI generation of transcripts */
-    showAITranscriptWarning?: boolean;
-    /** If true, the player will not close when finishing playing */
-    stayOpenOnFinish?: boolean;
-  };
-  searchPage: {
+        topPlacement?: boolean;
+        /** Start with the large version by default */
+        startLarge?: boolean;
+        /** Show a warning regarding AI generation of transcripts */
+        showAITranscriptWarning?: boolean;
+        /** If true, the player will not close when finishing playing */
+        stayOpenOnFinish?: boolean;
+    };
+    searchPage: {
     /** The default sort criteria for search results */
-    sortCriteria?: PodcastSort;
-  };
+        sortCriteria?: PodcastSort;
+    };
 
-  /** Settings for presentation items */
-  presentationItems: {
+    /** Settings for presentation items */
+    presentationItems: {
     /** Type of tags to display on presentation items */
-    tags: 'none'|'iab'|'rubrique';
-    /**
+        tags: 'none'|'iab'|'rubrique';
+        /**
      * For rubrique type, the ID of the rubriquage the rubriques must belong to
      * to be displayed. If not set, will display all rubriques.
      */
-    tagsRubriquageId?: number;
-    /** Limit number of tags */
-    tagsLimit?: number;
-    /** Additional infos displayed in presentation item */
-    additionalInfo?: Array<'productor'|'date'|'restrictive-rubrique'>;
-    /**
+        tagsRubriquageId?: number;
+        /** Limit number of tags */
+        tagsLimit?: number;
+        /** Additional infos displayed in presentation item */
+        additionalInfo?: Array<'productor'|'date'|'restrictive-rubrique'>;
+        /**
      * ID of the restrictive rubriquage ID, used only when additionalInfo
      * contains 'restricted-rubrique'
      */
-    restrictiveRubriquageId?: number;
-  };
+        restrictiveRubriquageId?: number;
+    };
 
-  /** Smartlink configuration */
-  smartLink: {
+    /** Smartlink configuration */
+    smartLink: {
     /** Truncate the description to the first paragraph */
-    showOnlyFirstParagraphInDescription?: boolean;
-  }
+        showOnlyFirstParagraphInDescription?: boolean;
+    }
 }
 
 function definedProps<T>(obj: Partial<T>|undefined): Partial<T> {
-  if (obj === undefined) {
-    return {};
-  } else {
-    return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as Partial<T>;
-  }
+    if (obj === undefined) {
+        return {};
+    } else {
+        return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as Partial<T>;
+    }
 }
 
 const initialize = function initialize(initObject: Partial<ParamStore>): void {
-  state.generalParameters = Object.assign(
-    state.generalParameters,
-    definedProps(initObject.generalParameters),
-  );
-  state.podcastPage = Object.assign(
-    state.podcastPage,
-    definedProps(initObject.podcastPage),
-  );
-  state.emissionsPage = Object.assign(
-    state.emissionsPage,
-    definedProps(initObject.emissionsPage),
-  );
-  state.emissionPage = Object.assign(
-    state.emissionPage,
-    definedProps(initObject.emissionPage),
-  );
-  state.player = Object.assign(state.player, definedProps(initObject.player));
-  state.searchPage = Object.assign(
-    state.searchPage,
-    definedProps(initObject.searchPage),
-  );
-  state.smartLink = Object.assign(
-    state.smartLink,
-    definedProps(initObject.smartLink)
-  );
-  state.presentationItems = Object.assign(
-    state.presentationItems,
-    definedProps(initObject.presentationItems)
-  );
+    state.generalParameters = Object.assign(
+        state.generalParameters,
+        definedProps(initObject.generalParameters),
+    );
+    state.podcastPage = Object.assign(
+        state.podcastPage,
+        definedProps(initObject.podcastPage),
+    );
+    state.podcastsPage = Object.assign(
+        state.podcastsPage,
+        definedProps(initObject.podcastsPage),
+    );
+    state.emissionsPage = Object.assign(
+        state.emissionsPage,
+        definedProps(initObject.emissionsPage),
+    );
+    state.emissionPage = Object.assign(
+        state.emissionPage,
+        definedProps(initObject.emissionPage),
+    );
+    state.advancedSearch = Object.assign(
+        state.advancedSearch,
+        definedProps(initObject.advancedSearch),
+    );
+    state.player = Object.assign(state.player, definedProps(initObject.player));
+    state.searchPage = Object.assign(
+        state.searchPage,
+        definedProps(initObject.searchPage),
+    );
+    state.smartLink = Object.assign(
+        state.smartLink,
+        definedProps(initObject.smartLink)
+    );
+    state.presentationItems = Object.assign(
+        state.presentationItems,
+        definedProps(initObject.presentationItems)
+    );
 };
 
 export default { initialize, state };
