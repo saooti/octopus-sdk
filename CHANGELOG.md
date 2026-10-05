@@ -10,10 +10,13 @@
 
 ### Misc
 
+- **[14810]** - Améliorations de parcours
+  - Lien vers menu d'administration dans menu utilisateur
 - Mise en place de Husky
 - Mise en place de lint-staged
 - Identification de certaines routes par nom
 
+[14810]: https://trac.saooti.net/ticket/14810
 [14847]: https://trac.saooti.net/ticket/14847
 
 ## 42.2.2 (02/10/2026)

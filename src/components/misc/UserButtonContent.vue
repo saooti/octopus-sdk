@@ -166,6 +166,12 @@ const routerBackoffice = computed(() => {
                 isAuthenticatedWithOrga.value &&
                 (authStore.isRoleOrganisation || 1 < organisationsAvailable.value.length),
         },
+        {
+            title: t("My space"),
+            class: "octopus-dropdown-item",
+            path: { name: "backoffice" },
+            condition: isAuthenticatedWithOrga.value
+        },
     ];
 });
 
