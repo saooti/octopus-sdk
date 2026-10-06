@@ -4,6 +4,7 @@ import { type Component } from "vue";
 import Account from "vue-material-design-icons/Account.vue";
 import AccountGroup from "vue-material-design-icons/AccountGroup.vue";
 import Airplane from "vue-material-design-icons/Airplane.vue";
+import Archive from "vue-material-design-icons/Archive.vue";
 import Basketball from "vue-material-design-icons/Basketball.vue";
 import Beaker from "vue-material-design-icons/Beaker.vue";
 import Bell from "vue-material-design-icons/Bell.vue";
@@ -18,6 +19,8 @@ import Clock from "vue-material-design-icons/Clock.vue";
 import Earth from "vue-material-design-icons/Earth.vue";
 import Factory from "vue-material-design-icons/Factory.vue";
 import File from "vue-material-design-icons/File.vue";
+import Home from "vue-material-design-icons/Home.vue";
+import HomeGroup from "vue-material-design-icons/HomeGroup.vue";
 import Laptop from "vue-material-design-icons/Laptop.vue";
 import MapMarker from "vue-material-design-icons/MapMarker.vue";
 import Microphone from "vue-material-design-icons/Microphone.vue";
@@ -30,6 +33,7 @@ import Sprout from "vue-material-design-icons/Sprout.vue";
 import Star from "vue-material-design-icons/Star.vue";
 import ThoughtBubble from "vue-material-design-icons/ThoughtBubble.vue";
 import Tools from "vue-material-design-icons/Tools.vue";
+import TractorVariant from "vue-material-design-icons/TractorVariant.vue";
 import Train from "vue-material-design-icons/Train.vue";
 import Trophy from "vue-material-design-icons/Trophy.vue";
 import Web from "vue-material-design-icons/Web.vue";
@@ -39,6 +43,7 @@ const Icons = {
     Account,
     AccountGroup,
     Airplane,
+    Archive,
     Basketball,
     Beaker,
     Bell,
@@ -53,6 +58,8 @@ const Icons = {
     Earth,
     Factory,
     File,
+    Home,
+    HomeGroup,
     Laptop,
     MapMarker,
     Microphone,
@@ -65,6 +72,7 @@ const Icons = {
     Star,
     ThoughtBubble,
     Tools,
+    TractorVariant,
     Train,
     Trophy,
     Web,
