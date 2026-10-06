@@ -58,6 +58,8 @@ export interface ParamStore {
         isLiveTab?: boolean;
         isCaptchaTest?: boolean;
         podcastItem?: number;
+        /** Also show pagination on top of page */
+        paginationOnTop?: boolean;
     };
     podcastPage: {
         ShareButtons?: boolean;

@@ -4,6 +4,7 @@
 
 ### Features
 
+- **[14592]** - Option pour pavé de navigation en haut des listes
 - **[14847]** - Ajout support pour transcription sur plusieurs lignes
 - Affichage des rubriques sur la page d'émission
 - Ajout d'options pour configurer les barres de recherche
@@ -22,6 +23,7 @@
 - Mise en place de lint-staged
 - Identification de certaines routes par nom
 
+[14592]: https://trac.saooti.net/ticket/14592
 [14788]: https://trac.saooti.net/ticket/14788
 [14810]: https://trac.saooti.net/ticket/14810
 [14847]: https://trac.saooti.net/ticket/14847
