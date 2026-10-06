@@ -1,3 +1,4 @@
+import { Rubrique } from "@/stores/class/rubrique/rubrique";
 import { type Component } from "vue";
 
 import Account from "vue-material-design-icons/Account.vue";
@@ -77,9 +78,14 @@ export const useSelectableIcons = () => {
     function getIcon(name: IconName): Component {
         return Icons[name];
     }
+
+    function getRubricIcon(rubric: Rubrique): Component|undefined {
+        return getIcon(rubric.annotations?.rubricIcon as IconName|undefined);
+    }
     
     return {
         Icons,
-        getIcon
+        getIcon,
+        getRubricIcon
     };
 }
