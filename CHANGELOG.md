@@ -6,6 +6,7 @@
 
 - **[14592]** - Option pour pavé de navigation en haut des listes
 - **[14847]** - Ajout support pour transcription sur plusieurs lignes
+- **[14923]** - Ajout sélecteur d'icônes
 - Affichage des rubriques sur la page d'émission
 - Ajout d'options pour configurer les barres de recherche
 - Ajout de l'option de fermer les `ClassicAlert`
@@ -27,6 +28,7 @@
 [14788]: https://trac.saooti.net/ticket/14788
 [14810]: https://trac.saooti.net/ticket/14810
 [14847]: https://trac.saooti.net/ticket/14847
+[14923]: https://trac.saooti.net/ticket/14923
 
 ## 42.2.2 (02/10/2026)
 

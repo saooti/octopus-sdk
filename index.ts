@@ -57,11 +57,7 @@ export {
 export * from "./src/components/buttons/";
 
 // Form
-import ClassicButtonGroup from "./src/components/form/ClassicButtonGroup.vue";
-import OctopusMultiselect from "./src/components/form/OctopusMultiselect.vue";
-import OctopusSelect from "./src/components/form/OctopusSelect.vue";
-export { ClassicButtonGroup, OctopusMultiselect, OctopusSelect };
-export type { ButtonGroupOption } from "./src/components/form/ClassicButtonGroup.vue";
+export * from "./src/components/form/";
 
 //Display
 export const getCategoryChooser = () => import("./src/components/display/categories/CategoryChooser.vue");
@@ -150,6 +146,7 @@ export { useDayjs } from "./src/components/composable/useDayjs";
 export { useSticky } from "./src/components/composable/useSticky";
 export { useSubOrganisations, type SubOrganisation } from "./src/components/composable/useSubOrganisations";
 export { useAppleVideo } from "./src/components/composable/useAppleVideo";
+export { useSelectableIcons, type IconName } from "./src/components/composable/useSelectableIcons";
 
 //helper
 export { getLanguage } from "./src/helper/language";

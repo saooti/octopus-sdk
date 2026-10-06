@@ -1,49 +1,52 @@
 <template>
-  <PodcastSwiperList
-    :organisation-id="organisationId"
-    :emission-id="emissionId"
-    :iab-id="iabId"
-    :title="title"
-    :href="href"
-    :button-text="buttonText"
-    :is-arrow="isArrow"
-    :require-popular-sort="requirePopularSort"
-    :button-plus="buttonPlus"
-    :rubrique-id="rubriqueId"
-    :rubriquage-id="rubriquageId"
-    :no-rubriquage-id="noRubriquageId"
-    :query="query"
-    :podcast-id="podcastId"
-    :last-three-months="lastThreeMonths"
-    :title-tag="titleTag"
-    @update:is-arrow="updateArrow($event)"
-  />
+    <PodcastSwiperList
+        :organisation-id="organisationId"
+        :emission-id="emissionId"
+        :iab-id="iabId"
+        :title="title"
+        :title-icon="titleIcon"
+        :href="href"
+        :button-text="buttonText"
+        :is-arrow="isArrow"
+        :require-popular-sort="requirePopularSort"
+        :button-plus="buttonPlus"
+        :rubrique-id="rubriqueId"
+        :rubriquage-id="rubriquageId"
+        :no-rubriquage-id="noRubriquageId"
+        :query="query"
+        :podcast-id="podcastId"
+        :last-three-months="lastThreeMonths"
+        :title-tag="titleTag"
+        @update:is-arrow="updateArrow($event)"
+    />
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, type Component } from "vue";
 const PodcastSwiperList = defineAsyncComponent(
-  () => import("./PodcastSwiperList.vue"),
+    () => import("./PodcastSwiperList.vue"),
 );
 
 //Props 
 defineProps({
-  organisationId: { default: () => [], type: Array as () => Array<string> },
-  emissionId: { default: undefined, type: Number },
-  iabId: { default: undefined, type: Number },
-  title: { default: "", type: String },
-  href: { default: undefined, type: String },
-  buttonText: { default: undefined, type: String },
-  isArrow: { default: false, type: Boolean },
-  requirePopularSort: { default: undefined, type: Boolean },
-  buttonPlus: { default: false, type: Boolean },
-  rubriqueId: { default: () => [], type: Array as () => Array<number> },
-  rubriquageId: { default: () => [], type: Array as () => Array<number> },
-  noRubriquageId: { default: () => [], type: Array as () => Array<number> },
-  query: { default: undefined, type: String },
-  podcastId: { default: undefined, type: Number },
-  lastThreeMonths: { default: false, type: Boolean },
-  titleTag: { default: "h2", type: String },
+    organisationId: { default: () => [], type: Array as () => Array<string> },
+    emissionId: { default: undefined, type: Number },
+    iabId: { default: undefined, type: Number },
+    title: { default: "", type: String },
+    /** Add an icon before the title */
+    titleIcon: { default: undefined, type: Object as () => Component },
+    href: { default: undefined, type: String },
+    buttonText: { default: undefined, type: String },
+    isArrow: { default: false, type: Boolean },
+    requirePopularSort: { default: undefined, type: Boolean },
+    buttonPlus: { default: false, type: Boolean },
+    rubriqueId: { default: () => [], type: Array as () => Array<number> },
+    rubriquageId: { default: () => [], type: Array as () => Array<number> },
+    noRubriquageId: { default: () => [], type: Array as () => Array<number> },
+    query: { default: undefined, type: String },
+    podcastId: { default: undefined, type: Number },
+    lastThreeMonths: { default: false, type: Boolean },
+    titleTag: { default: "h2", type: String },
 })
 
 //Emits
@@ -51,7 +54,7 @@ const emit = defineEmits(["update:isArrow"]);
 
 //Methods
 function updateArrow(value: boolean){
-  emit("update:isArrow", value);
+    emit("update:isArrow", value);
 }
 </script>
 <style lang="scss">
