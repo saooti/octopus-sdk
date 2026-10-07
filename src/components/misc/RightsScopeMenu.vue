@@ -87,12 +87,12 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, nextTick, onUnmounted, ref, toRef, useTemplateRef, watch } from 'vue';
-import { getClassicInputText, useAuthStore } from '@saooti/octopus-sdk'; 
+import { useAuthStore } from '../../stores/AuthStore';
 import { SubOrganisation, useSubOrganisations } from '../composable/useSubOrganisations';
 import { useI18n } from 'vue-i18n';
 import CloseIcon from 'vue-material-design-icons/Close.vue';
 
-const ClassicInputText = defineAsyncComponent(getClassicInputText);
+const ClassicInputText = defineAsyncComponent(() => import('../form/ClassicInputText.vue'));
 
 const { t } = useI18n();
 

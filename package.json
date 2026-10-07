@@ -1,12 +1,14 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "42.3.0-beta1",
+  "version": "42.3.0-beta2",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
   "scripts": {
     "build": "vite build",
     "build:watch": "NODE_ENV=development vite build --watch --mode development",
+    "smoke": "vite build -c scripts/smoke-bundle/vite.config.mjs",
+    "prepublishOnly": "npm run build && npm run smoke",
     "test": "vitest",
     "bundle": "vite-bundle-visualizer",
     "proxy_authentifié": "node proxy.ts",

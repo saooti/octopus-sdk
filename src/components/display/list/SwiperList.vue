@@ -54,11 +54,24 @@ import {useResizePhone} from "../../composable/useResizePhone";
 import { computed, getCurrentInstance, nextTick, onMounted, ref, useTemplateRef, watch } from "vue";
 
 //Props 
-const props = defineProps({
-    listObject: { default: () => [], type: Array as () => Array<unknown> },
-    /** Size, in **rem**, of the emission items */
-    sizeItemOverload: { default: undefined, type: Number },
-})
+interface BaseProps {
+    listObject?: Array<unknown>;
+}
+type Props = BaseProps & (
+    | {
+        /** Size, in **rem**, of the items */
+        sizeItemOverload?: number;
+        itemCount?: never;
+    }
+    | {
+        /** Number of items shown at once (overrides item size) */
+        itemCount: number;
+        sizeItemOverload?: never;
+    }
+);
+const props = withDefaults(defineProps<Props>(), {
+    listObject: () => []
+});
  
 //Data
 const gapPx = 10;
@@ -87,6 +100,7 @@ const sizeItem = computed(() => {
         ? state.generalParameters.podcastItem
         : 13.5;
 });
+
 const itemRecalculizedSize = computed(() => {
     const totalGap = gapPx * Math.max(numberItem.value - 1, 0);
     return (widthSwiperUsable.value - totalGap) / numberItem.value;
@@ -117,7 +131,7 @@ const navigationOptions = computed(() => ({
 }));
 
 //Watch
-watch(windowWidth, () => onWindowResize());
+watch([windowWidth, () => props.itemCount], () => onWindowResize());
 watch(()=>props.listObject, () => {
     manualReload.value += 1;
 }, {deep:true});
@@ -136,11 +150,15 @@ function onWindowResize(){
     const el = rootRef?.value as HTMLElement;
     if (!el) {return;}
     widthSwiperUsable.value =el.offsetWidth - offsetSwiper.value * 2;
-    const itemSizePx = domHelper.convertRemToPixels(sizeItem.value + 0.5);
-    numberItem.value = Math.max(
-        1,
-        Math.floor((widthSwiperUsable.value + gapPx) / (itemSizePx + gapPx)),
-    );
+    if (props.itemCount) {
+        numberItem.value = Math.max(1, props.itemCount);
+    } else {
+        const itemSizePx = domHelper.convertRemToPixels(sizeItem.value + 0.5);
+        numberItem.value = Math.max(
+            1,
+            Math.floor((widthSwiperUsable.value + gapPx) / (itemSizePx + gapPx)),
+        );
+    }
     itemSizeWithoutRecalculed.value =el.offsetWidth / numberItem.value;
 }
 function slidesUpdated() {
