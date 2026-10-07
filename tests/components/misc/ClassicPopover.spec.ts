@@ -1,5 +1,9 @@
 import { mockUseRouter } from '@tests/mocks';
-vi.mock('vue-router', () => mockUseRouter());
+const routerPush = vi.hoisted(() => vi.fn());
+vi.mock('vue-router', () => {
+    const mock = mockUseRouter();
+    return { ...mock, useRouter: () => ({ ...mock.useRouter(), push: routerPush }) };
+});
 
 import ClassicPopover from '@/components/misc/ClassicPopover.vue';
 import { mount as testMount, VueWrapper } from '@tests/utils';
@@ -40,7 +44,7 @@ describe('ClassicPopover', () => {
     // Helper: Check if popover is visible
     const isVisible = (): boolean => {
         const element = getPopoverEl();
-        if (!element) return false;
+        if (!element) {return false;}
         return element.style.display !== 'none' &&
                window.getComputedStyle(element).display !== 'none';
     };
@@ -240,6 +244,22 @@ describe('ClassicPopover', () => {
             // Open via click
             await openViaClick();
             expect(isVisible()).toBe(true);
+        });
+    });
+
+    describe('focusout navigation to dropdown item', () => {
+        it('keeps query and hash when navigating to the focused link', async () => {
+            await mount({ onlyClick: true });
+            await openViaClick();
+
+            const link = document.createElement('a');
+            link.href = '/page?foo=bar#anchor';
+            link.className = 'octopus-dropdown-item';
+            getPopoverEl().appendChild(link);
+
+            targetElement.dispatchEvent(new FocusEvent('focusout', { relatedTarget: link }));
+
+            expect(routerPush).toHaveBeenCalledWith('/page?foo=bar#anchor');
         });
     });
 

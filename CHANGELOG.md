@@ -13,6 +13,7 @@
 
 ### Fixes
 
+- **[14724]** - Correction liens dans `ClassicPopover`
 - **[14788]** - Affichage d'un message quand écoute d'un épisode géobloqué dans
   SmartLink
 
@@ -26,6 +27,7 @@
 - Identification de certaines routes par nom
 
 [14592]: https://trac.saooti.net/ticket/14592
+[14724]: https://trac.saooti.net/ticket/14724
 [14788]: https://trac.saooti.net/ticket/14788
 [14810]: https://trac.saooti.net/ticket/14810
 [14847]: https://trac.saooti.net/ticket/14847
