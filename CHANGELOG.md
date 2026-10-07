@@ -22,6 +22,7 @@
   - Lien vers menu d'administration dans menu utilisateur
 - Mise en place de Husky
 - Mise en place de lint-staged
+- Mise à jour des dépendances
 - Identification de certaines routes par nom
 
 [14592]: https://trac.saooti.net/ticket/14592
