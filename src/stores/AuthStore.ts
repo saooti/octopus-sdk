@@ -9,7 +9,7 @@ import { useNotificationStore } from "./NotificationStore";
 import { useI18n } from "vue-i18n";
 import { organisationApi, rubriquesApi } from "@/api";
 import { useSubOrganisations } from "@/components/composable/useSubOrganisations";
-import { toRef } from "vue";
+import { nextTick, toRef } from "vue";
 
 interface AuthParam {
     accessToken?: string;
@@ -221,7 +221,7 @@ export const useAuthStore = defineStore("AuthStore", {
                 // Retrieve user's rights scope
                 const scope: Array<number> = [];
                 try {
-                    const s = await rubriquesApi.listUserScope(profileData.sub);
+                    const s = await rubriquesApi.listUserScope(profileData.sub, profileData.active_organisation);
                     scope.push(...s);
                 } catch (e) {
                     console.error(e);
@@ -271,9 +271,17 @@ export const useAuthStore = defineStore("AuthStore", {
                 this.fetchProfileAsynchrone();
 
                 if (scope.length > 0) {
-                    const { selectSubOrganisation, getSubOrganisation } = useSubOrganisations(toRef(activeOrganisation, 'id'));
-                    const org = await getSubOrganisation(scope[0]);
-                    selectSubOrganisation(org);
+                    const { selectSubOrganisation, getSubOrganisation } = useSubOrganisations(toRef(this, 'authOrgaId'));
+                    nextTick(async () => {
+                        try {
+                            const org = await getSubOrganisation(scope[0]);
+                            selectSubOrganisation(org);
+                        } catch(e) {
+                            // Log error but do not fail, as ignoring this is better
+                            // than not connecting user.
+                            console.error('An error occured while selecting sub organisation', e);
+                        }
+                    });
                 }
             } catch(error) {
                 console.error(error);

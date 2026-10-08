@@ -16,6 +16,7 @@
 - **[14724]** - Correction liens dans `ClassicPopover`
 - **[14788]** - Affichage d'un message quand écoute d'un épisode géobloqué dans
   SmartLink
+- **[14937]** - Correction récupération scope hors organisation active
 
 ### Misc
 
@@ -32,6 +33,7 @@
 [14810]: https://trac.saooti.net/ticket/14810
 [14847]: https://trac.saooti.net/ticket/14847
 [14923]: https://trac.saooti.net/ticket/14923
+[14937]: https://trac.saooti.net/ticket/14937
 
 ## 42.2.2 (02/10/2026)
 

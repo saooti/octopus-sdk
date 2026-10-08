@@ -150,13 +150,29 @@ async function getCachedRubrique(rubriqueId: number): Promise<Rubrique> {
 /**
  * List the rubrique IDS associated to the given user
  * @param userId The ID of the user for which to retrieve this data
+ * @param organisationId The ID of the organisation in which the scope is defined
  * @returns The list of IDs of rubriques
  */
-async function listUserScope(userId: string): Promise<Array<number>> {
-    return classicApi.fetchData<Array<number>>({
+async function listUserScope(userId: string, organisationId?: string): Promise<Array<number>> {
+    const scopePromise = classicApi.fetchData<Array<number>>({
         api: ModuleApi.DEFAULT,
         path: `rubrique/user/list/rubriques/${userId}`
     });
+
+    if (organisationId === undefined) {
+        return scopePromise;
+    }
+
+    const rubriquesPromise = searchRubriques({ organisationId });
+
+    const [scope, rubriques] = await Promise.all([
+        scopePromise,
+        rubriquesPromise
+    ]);
+
+    const rubriquesIds = rubriques.map(r => r.rubriqueId);
+
+    return scope.filter(s => rubriquesIds.includes(s));
 }
 
 /**
