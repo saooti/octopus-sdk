@@ -119,6 +119,7 @@
     },
     "./style.css": "./dist/index.css",
     "./octopus-library.scss": "./src/style/octopus-library.scss",
+    "./breakpoints.scss": "./src/style/_breakpoints.scss",
     "./tests": {
       "types": "./tests/index.ts",
       "default": "./dist/tests.mjs"

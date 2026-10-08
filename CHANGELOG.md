@@ -26,6 +26,7 @@
 - Mise en place de lint-staged
 - Mise à jour des dépendances
 - Identification de certaines routes par nom
+- Ajout `src/style/_breakpoints.scss` pour simplifier la gestion des breakpoints
 
 [14592]: https://trac.saooti.net/ticket/14592
 [14724]: https://trac.saooti.net/ticket/14724
