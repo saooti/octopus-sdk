@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 42.3.1 (En cours)
+
+### Fixes
+
+- **[14942]** - Correction composant `QrCode` pour usage multiple
+
+[14942]: https://trac.saooti.net/ticket/14942
+
 ## 42.3.0 (9/10/2026)
 
 ### Features
