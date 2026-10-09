@@ -12,7 +12,7 @@
         </div>
 
         <div v-if="!podcastId" class="d-flex justify-content-between">
-            <div v-if="!noSort" class="d-flex">
+            <div v-if="!noSort" class="d-flex sort">
                 <button
                     class="btn btn-underline"
                     :class="{ active: !popularSort }"
@@ -185,8 +185,9 @@ function handleSeeMoreButton(event: { preventDefault: () => void }) {
     });
 }
 </script>
-<style lang="scss">
-.octopus-app .podcast-inline-container {
+
+<style scoped lang="scss">
+.podcast-inline-container {
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -194,5 +195,11 @@ function handleSeeMoreButton(event: { preventDefault: () => void }) {
   @media (width <= 450px) {
     padding: 1rem 0;
   }
+}
+
+.sort {
+    .btn {
+        color: var(--octopus-color-text);
+    }
 }
 </style>

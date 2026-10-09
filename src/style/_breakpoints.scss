@@ -1,0 +1,22 @@
+// Shared breakpoints, kept in sync with useResizePhone (isPhone = width < 960)
+$phone: 960px;
+$tablet: 1280px;
+
+// Applies styles when the viewport is strictly narrower than $width
+@mixin below($width) {
+    @media (width < $width) {
+        @content;
+    }
+}
+
+@mixin phone {
+    @include below($phone) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @include below($tablet) {
+        @content;
+    }
+}

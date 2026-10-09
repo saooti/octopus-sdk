@@ -9,293 +9,300 @@ import { useNotificationStore } from "./NotificationStore";
 import { useI18n } from "vue-i18n";
 import { organisationApi, rubriquesApi } from "@/api";
 import { useSubOrganisations } from "@/components/composable/useSubOrganisations";
-import { toRef } from "vue";
+import { nextTick, toRef } from "vue";
 
 interface AuthParam {
-  accessToken?: string;
-  refreshToken?: string;
-  expiration?: Date|string;
-  clientId?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    expiration?: Date|string;
+    clientId?: string;
 }
 
 interface AuthState {
-  authReload: number;
-  authName: string;
-  authOrgaId: string|undefined;
-  authOrgaName?: string;
-  authRole: Array<string>;
-  authParam:AuthParam;
-  authProfile?: Profile;
-  authOrganisation: Organisation;
-  authVideoConfig: VideoConfig;
+    authReload: number;
+    authName: string;
+    authOrgaId: string|undefined;
+    authOrgaName?: string;
+    authRole: Array<string>;
+    authParam:AuthParam;
+    authProfile?: Profile;
+    authOrganisation: Organisation;
+    authVideoConfig: VideoConfig;
 }
 
 export const useAuthStore = defineStore("AuthStore", {
-  state: (): AuthState => ({
-    authReload: 0,
-    authName: "",
-    authRole: [],
-    authOrgaId: undefined,
-    authParam: {
-      accessToken: undefined,
-      refreshToken: undefined,
-      expiration: undefined,
-    },
-    authProfile: undefined,
-    authOrganisation: {
-      id: "",
-      name: "",
-      imageUrl: "",
-      description: undefined,
-      monetisable: undefined,
-      location: undefined,
-      comments: undefined,
-      attributes: {
-        RSS_CONTACT: undefined,
-      }
-    },
-    authVideoConfig: { active: false },
-  }),
-  getters: {
+    state: (): AuthState => ({
+        authReload: 0,
+        authName: "",
+        authRole: [],
+        authOrgaId: undefined,
+        authParam: {
+            accessToken: undefined,
+            refreshToken: undefined,
+            expiration: undefined,
+        },
+        authProfile: undefined,
+        authOrganisation: {
+            id: "",
+            name: "",
+            imageUrl: "",
+            description: undefined,
+            monetisable: undefined,
+            location: undefined,
+            comments: undefined,
+            attributes: {
+                RSS_CONTACT: undefined,
+            }
+        },
+        authVideoConfig: { active: false },
+    }),
+    getters: {
     /** Indicates that the user is authenticated */
-    isAuthenticated(): boolean {
-      return this.authParam.accessToken !== undefined;
-    },
-    isRoleAdmin(): boolean {
-      return this.authRole.includes("ADMIN");
-    },
-    isRoleAnimator(): boolean {
-      return this.authRole.includes("ANIMATION");
-    },
-    isRoleUsers(): boolean {
-      return this.authRole.includes("USERS");
-    },
-    isRoleOrganisation(): boolean {
-      return this.authRole.includes("ORGANISATION");
-    },
-    isRoleProduction(): boolean {
-      return this.authRole.includes("PRODUCTION");
-    },
-    isRolePublication(): boolean {
-      return this.authRole.includes("PODCAST_VALIDATION");
-    },
-    isRoleContribution(): boolean {
-      return this.authRole.includes("PODCAST_CRUD");
-    },
-    isRolePlaylists(): boolean {
-      return this.authRole.includes("PLAYLISTS");
-    },
-    isRoleComments(): boolean {
-      return this.authRole.includes("COMMENTS_MODERATION");
-    },
-    isRoleEditor(): boolean {
-      return this.authRole.includes("EDITION");
-    },
-    isRoleAnalytics(): boolean {
-      return this.authRole.includes("ANALYTICS");
-    },
-    isRoleAdvertising(): boolean {
-      return this.authRole.includes("ADVERTISING");
-    },
-    isRoleLive(): boolean {
-      return this.authRole.includes("LIVE");
-    },
-    isRoleRadio(): boolean {
-      return this.authRole.includes("RADIO");
-    },
-    isRoleBillingAdmin(): boolean {
-      return this.authRole.includes("BILLING_ADMIN");
-    },
-    isRoleBillingViewer(): boolean {
-      return this.authRole.includes("BILLING_VIEWER");
-    },
-    isOneOfRoleProduction(): boolean {
-      return (
-        this.authRole.includes("PRODUCTION") ||
+        isAuthenticated(): boolean {
+            return this.authParam.accessToken !== undefined;
+        },
+        isRoleAdmin(): boolean {
+            return this.authRole.includes("ADMIN");
+        },
+        isRoleAnimator(): boolean {
+            return this.authRole.includes("ANIMATION");
+        },
+        isRoleUsers(): boolean {
+            return this.authRole.includes("USERS");
+        },
+        isRoleOrganisation(): boolean {
+            return this.authRole.includes("ORGANISATION");
+        },
+        isRoleProduction(): boolean {
+            return this.authRole.includes("PRODUCTION");
+        },
+        isRolePublication(): boolean {
+            return this.authRole.includes("PODCAST_VALIDATION");
+        },
+        isRoleContribution(): boolean {
+            return this.authRole.includes("PODCAST_CRUD");
+        },
+        isRolePlaylists(): boolean {
+            return this.authRole.includes("PLAYLISTS");
+        },
+        isRoleComments(): boolean {
+            return this.authRole.includes("COMMENTS_MODERATION");
+        },
+        isRoleEditor(): boolean {
+            return this.authRole.includes("EDITION");
+        },
+        isRoleAnalytics(): boolean {
+            return this.authRole.includes("ANALYTICS");
+        },
+        isRoleAdvertising(): boolean {
+            return this.authRole.includes("ADVERTISING");
+        },
+        isRoleLive(): boolean {
+            return this.authRole.includes("LIVE");
+        },
+        isRoleRadio(): boolean {
+            return this.authRole.includes("RADIO");
+        },
+        isRoleBillingAdmin(): boolean {
+            return this.authRole.includes("BILLING_ADMIN");
+        },
+        isRoleBillingViewer(): boolean {
+            return this.authRole.includes("BILLING_VIEWER");
+        },
+        isOneOfRoleProduction(): boolean {
+            return (
+                this.authRole.includes("PRODUCTION") ||
         this.authRole.includes("RESTRICTED_PRODUCTION")
-      );
-    },
-    isRoleRestrictedProduction(): boolean {
-      return this.authRole.includes("RESTRICTED_PRODUCTION");
-    },
-    isGarRole(): string | undefined {
-      return this.authProfile?.attributes?.["GAR"] as
+            );
+        },
+        isRoleRestrictedProduction(): boolean {
+            return this.authRole.includes("RESTRICTED_PRODUCTION");
+        },
+        isGarRole(): string | undefined {
+            return this.authProfile?.attributes?.["GAR"] as
         | string
         | undefined; /*CHEF_ETABLISSEMENT, ENSEIGNANT, ELEVE, undefined */
-    },
-    isVideoOrga(): boolean {
-      return this.authVideoConfig.active;
-    },
-    userScope(): Array<number> {
-      // This should not happen, but in case our user has no profile, invalidate
-      // the scope.
-      if (!this.authProfile) {
-        return [-1];
-      }
+        },
+        isVideoOrga(): boolean {
+            return this.authVideoConfig.active;
+        },
+        userScope(): Array<number> {
+            // This should not happen, but in case our user has no profile, invalidate
+            // the scope.
+            if (!this.authProfile) {
+                return [-1];
+            }
 
-      // Admins are not affected by scope
-      if(
-        this.authRole.includes('ADMIN') ||
+            // Admins are not affected by scope
+            if(
+                this.authRole.includes('ADMIN') ||
         this.authRole.includes('ORGANISATION')
-      ) {
-        return [];
-      } else {
-        return this.authProfile.scope;
-      }
-    }
-  },
-  actions: {
-    authUpdate(authentication: {name?:string, organisationId?:string,organisationName?:string, role?:Array<string>}) {
-      this.authName = authentication.name ?? this.authName;
-      this.authOrgaId = authentication.organisationId ?? this.authOrgaId;
-      this.authOrgaName = authentication.organisationName ?? this.authOrgaName;
-      this.authRole = authentication.role ?? this.authRole;
-    },
-    authUpdateParam(oAuthParam: AuthParam) {
-      this.authParam = oAuthParam;
-    },
-    authUpdateProfile(profile: Profile) {
-      this.authProfile = profile;
-      this.authName = profile.firstname + " " + profile.lastname;
-    },
-    authUpdateOrganisation(organisation: Organisation) {
-      this.authOrganisation = organisation;
-      const saveFetchStore = useSaveFetchStore();
-      saveFetchStore.forceUpdateAttributes(
-        organisation.id,
-        organisation.attributes??{}
-      );
-      saveFetchStore.forceUpdateData(organisation.id, organisation);
-    },
-    async fetchProfileAsynchrone() {
-      try {
-        const organisationData  = await classicApi.fetchData<{
-          [key: string]: string;
-        }>({
-          api: 0,
-          path:"organisation/attributes/" + encodeURI(this.authOrganisation.id)
-        });
-        this.authVideoConfig = await organisationApi.getVideoConfig(this.authOrganisation.id);
-
-        const organisation: Organisation = {
-          ...this.authOrganisation,
-          ...{ attributes: organisationData },
-        };
-        if (organisation.attributes?.SEPA) {
-          const orgaSepa = Object.getOwnPropertyDescriptor(
-            organisation.attributes,
-            "SEPA",
-          );
-          if (orgaSepa) {
-            Object.defineProperty(organisation.attributes, "iban", orgaSepa);
-          }
-          delete organisation.attributes["SEPA"];
+            ) {
+                return [];
+            } else {
+                return this.authProfile.scope;
+            }
         }
-        this.authUpdateOrganisation(organisation);
-      } catch {
-        if (this.authReload > 5) {
-          return;
-        }
-        this.authReload += 1;
-        await new Promise((resolve) => setTimeout(resolve, 500 * this.authReload));
-        await this.fetchProfileAsynchrone();
-      }
     },
-    async fetchProfile() {
-      try {
-        const profileDataPromise = classicApi.fetchData<KeycloakInfo>({
-          api: 20,
-          path:"userinfo",
-        });
+    actions: {
+        authUpdate(authentication: {name?:string, organisationId?:string,organisationName?:string, role?:Array<string>}) {
+            this.authName = authentication.name ?? this.authName;
+            this.authOrgaId = authentication.organisationId ?? this.authOrgaId;
+            this.authOrgaName = authentication.organisationName ?? this.authOrgaName;
+            this.authRole = authentication.role ?? this.authRole;
+        },
+        authUpdateParam(oAuthParam: AuthParam) {
+            this.authParam = oAuthParam;
+        },
+        authUpdateProfile(profile: Profile) {
+            this.authProfile = profile;
+            this.authName = profile.firstname + " " + profile.lastname;
+        },
+        authUpdateOrganisation(organisation: Organisation) {
+            this.authOrganisation = organisation;
+            const saveFetchStore = useSaveFetchStore();
+            saveFetchStore.forceUpdateAttributes(
+                organisation.id,
+                organisation.attributes??{}
+            );
+            saveFetchStore.forceUpdateData(organisation.id, organisation);
+        },
+        async fetchProfileAsynchrone() {
+            try {
+                const organisationData  = await classicApi.fetchData<{
+                    [key: string]: string;
+                }>({
+                    api: 0,
+                    path:"organisation/attributes/" + encodeURI(this.authOrganisation.id)
+                });
+                this.authVideoConfig = await organisationApi.getVideoConfig(this.authOrganisation.id);
 
-        const availablesOrganisationsPromise = classicApi.fetchData<Array<Organisation>>({
-          api: 0,
-          path:"user/me/organisations",
-        });
+                const organisation: Organisation = {
+                    ...this.authOrganisation,
+                    ...{ attributes: organisationData },
+                };
+                if (organisation.attributes?.SEPA) {
+                    const orgaSepa = Object.getOwnPropertyDescriptor(
+                        organisation.attributes,
+                        "SEPA",
+                    );
+                    if (orgaSepa) {
+                        Object.defineProperty(organisation.attributes, "iban", orgaSepa);
+                    }
+                    delete organisation.attributes["SEPA"];
+                }
+                this.authUpdateOrganisation(organisation);
+            } catch {
+                if (this.authReload > 5) {
+                    return;
+                }
+                this.authReload += 1;
+                await new Promise((resolve) => setTimeout(resolve, 500 * this.authReload));
+                await this.fetchProfileAsynchrone();
+            }
+        },
+        async fetchProfile() {
+            try {
+                const profileDataPromise = classicApi.fetchData<KeycloakInfo>({
+                    api: 20,
+                    path:"userinfo",
+                });
 
-        const [profileData, availablesOrganisations] = await Promise.all([
-          profileDataPromise,
-          availablesOrganisationsPromise
-        ]);
+                const availablesOrganisationsPromise = classicApi.fetchData<Array<Organisation>>({
+                    api: 0,
+                    path:"user/me/organisations",
+                });
 
-        // Retrieve user's rights scope
-        const scope: Array<number> = [];
-        // TODO remove when scope feature is available on prod
-        try {
-          const s = await rubriquesApi.listUserScope(profileData.sub);
-          scope.push(...s);
-        } catch (e) {
-          console.error(e);
-          // Disable scope
-          scope.push(-1);
-        }
+                const [profileData, availablesOrganisations] = await Promise.all([
+                    profileDataPromise,
+                    availablesOrganisationsPromise
+                ]);
 
-        const array = (availablesOrganisations ?? []).toSorted(function (a: Organisation, b: Organisation) {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return -1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return 1;
-          }
-          return 0;
-        });
+                // Retrieve user's rights scope
+                const scope: Array<number> = [];
+                try {
+                    const s = await rubriquesApi.listUserScope(profileData.sub, profileData.active_organisation);
+                    scope.push(...s);
+                } catch (e) {
+                    console.error(e);
+                    // Disable scope
+                    scope.push(-1);
+                }
 
-        const profile = {
-          firstname: profileData.given_name,
-          lastname: profileData.family_name,
-          email: profileData.email,
-          userId: profileData.sub,
-          attributes: {
-            CGUValid: profileData.CGUValid,
-            GAR: profileData.GAR,
-            description: profileData.description,
-            imageUrl: profileData.imageUrl,
-            active_organisation: profileData.active_organisation,
-          },
-          organisations: array,
-          scope
-        };
+                const array = (availablesOrganisations ?? []).toSorted(function (a: Organisation, b: Organisation) {
+                    if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                        return -1;
+                    }
+                    if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                        return 1;
+                    }
+                    return 0;
+                });
 
-        this.authUpdateProfile(profile);
-        if (!profileData.active_organisation) {
-          return;
-        }
-        const activeOrganisation = await classicApi.fetchData<Organisation>({
-          api: 0,
-          path:"organisation/" + profileData.active_organisation,
-        });
-        this.authUpdate({
-          organisationId: activeOrganisation.id,
-          organisationName: activeOrganisation.name,
-        });
-        this.authUpdateOrganisation(activeOrganisation);
-        this.fetchProfileAsynchrone();
+                const profile = {
+                    firstname: profileData.given_name,
+                    lastname: profileData.family_name,
+                    email: profileData.email,
+                    userId: profileData.sub,
+                    attributes: {
+                        CGUValid: profileData.CGUValid,
+                        GAR: profileData.GAR,
+                        description: profileData.description,
+                        imageUrl: profileData.imageUrl,
+                        active_organisation: profileData.active_organisation,
+                    },
+                    organisations: array,
+                    scope
+                };
 
-        if (scope.length > 0) {
-          const { selectSubOrganisation, getSubOrganisation } = useSubOrganisations(toRef(activeOrganisation, 'id'));
-          const org = await getSubOrganisation(scope[0]);
-          selectSubOrganisation(org);
-        }
-      } catch(error) {
-        console.error(error);
-        if (this.authReload > 5) {
-          const { addNotification } = useNotificationStore();
-          const { t } = useI18n();
-          addNotification({
-            type: 'error',
-            title: t('Auth error - Couldn\'t retrieve user info - Title'),
-            message: t('Auth error - Couldn\'t retrieve user info - Message')
-          });
-          return;
-        }
-        this.authReload += 1;
+                this.authUpdateProfile(profile);
+                if (!profileData.active_organisation) {
+                    return;
+                }
+                const activeOrganisation = await classicApi.fetchData<Organisation>({
+                    api: 0,
+                    path:"organisation/" + profileData.active_organisation,
+                });
+                this.authUpdate({
+                    organisationId: activeOrganisation.id,
+                    organisationName: activeOrganisation.name,
+                });
+                this.authUpdateOrganisation(activeOrganisation);
+                this.fetchProfileAsynchrone();
 
-        // Wait before retrying
-        await new Promise((resolve) => setTimeout(resolve, 500 * this.authReload));
-        await this.fetchProfile();
-      }
+                if (scope.length > 0) {
+                    const { selectSubOrganisation, getSubOrganisation } = useSubOrganisations(toRef(this, 'authOrgaId'));
+                    nextTick(async () => {
+                        try {
+                            const org = await getSubOrganisation(scope[0]);
+                            selectSubOrganisation(org);
+                        } catch(e) {
+                            // Log error but do not fail, as ignoring this is better
+                            // than not connecting user.
+                            console.error('An error occured while selecting sub organisation', e);
+                        }
+                    });
+                }
+            } catch(error) {
+                console.error(error);
+                if (this.authReload > 5) {
+                    const { addNotification } = useNotificationStore();
+                    const { t } = useI18n();
+                    addNotification({
+                        type: 'error',
+                        title: t('Auth error - Couldn\'t retrieve user info - Title'),
+                        message: t('Auth error - Couldn\'t retrieve user info - Message')
+                    });
+                    return;
+                }
+                this.authReload += 1;
+
+                // Wait before retrying
+                await new Promise((resolve) => setTimeout(resolve, 500 * this.authReload));
+                await this.fetchProfile();
+            }
+        },
     },
-  },
 });
 
 /** Type for the AuthStore */
