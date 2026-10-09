@@ -210,7 +210,7 @@ function slideChange() {
   inset-block:0;
   margin: 0;
   width: 40px;
-  z-index: 5;
+  z-index: 5 !important;
   //background: var(--octopus-background);
 }
 
