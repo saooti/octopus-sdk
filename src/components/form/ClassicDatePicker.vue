@@ -5,7 +5,9 @@
             class="form-label"
             :for="'dp-input-'+id"
             :class="displayLabel ? '' : 'd-none'"
-        >{{ label }}</label>
+        >
+            {{ label }}
+        </label>
         <VueDatePicker
             :uid="id"
             :model-value="modelVal"
@@ -16,7 +18,7 @@
             :text-input="true"
             :readonly="readonly"
             :teleport="useTeleport"
-            :locale="locale"
+            :locale="getLocale(locale)"
             :format="format"
             :auto-apply="true"
             :enable-seconds="displaySeconds"
@@ -45,6 +47,7 @@ import dayjs from "dayjs";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { computed, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { getLocale } from "@/i18n";
 
 //Props 
 const props = defineProps({
@@ -55,13 +58,17 @@ const props = defineProps({
     },
     date: { default: undefined, type: Date },
     range: { default: undefined, type: Array as () => Array<Date> },
-    /** Enable maximum date limit.
-   * If `dateLimit` is not set, use current datetime. */
+    /**
+     * Enable maximum date limit.
+     * If `dateLimit` is not set, use current datetime.
+     */
     isMaxDate: { default: false, type: Boolean },
     /** Date limit when `isMaxDate` or `isMinDate` are set */
     dateLimit: { default: undefined, type: Date },
-    /** Enable minimum date limit.
-   * If `dateLimit` is not set, use current datetime. */
+    /**
+     * Enable minimum date limit.
+     * If `dateLimit` is not set, use current datetime.
+     */
     isMinDate: { default: false, type: Boolean },
     columnNumber: { default: 1, type: Number },
     displaySeconds: { default: false, type: Boolean },
@@ -106,7 +113,7 @@ const emit = defineEmits<{
 const divContainerRef = useTemplateRef('divContainer');
 
 //Composables
-const {locale} = useI18n();
+const { locale } = useI18n();
 
 //Computed
 const ariaLabels = computed(() => {

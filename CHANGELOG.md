@@ -6,6 +6,7 @@
 
 - **[14831]** - Correction problème géneration traduction
 - **[14942]** - Correction composant `QrCode` pour usage multiple
+- Correction erreur locale dans ClassicDatePicker
 
 [14831]: https://trac.saooti.net/ticket/14831
 [14942]: https://trac.saooti.net/ticket/14942
