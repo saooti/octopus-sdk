@@ -10,7 +10,7 @@
       ref="videoelement"
       class="video-js"
       playsinline
-    ></video>
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -128,7 +128,9 @@ async function playLive(): Promise<void> {
       playing.value = true;
     },
   );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   player.value.on("error", (error: any) => {
+    console.error(error);
     stopLive();
     if (error.description?.includes("403")) {
       errorPlay.value = t("Video is unavailable");
