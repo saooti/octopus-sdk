@@ -35,11 +35,11 @@ export const useTranslation = () => {
     }
 
     function getApplicationConf(language: string, conf: TranslationConfiguration): CreateTranslation {
-        if (language in conf.createTranslation) {
+        if (conf.createTranslation && language in conf.createTranslation) {
             return conf.createTranslation[language];
         }
 
-        return conf.otherLanguage;
+        return conf.otherLanguage ?? CreateTranslation.NEVER;
     }
 
     /**

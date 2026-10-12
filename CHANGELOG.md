@@ -4,8 +4,10 @@
 
 ### Fixes
 
+- **[14831]** - Correction problème géneration traduction
 - **[14942]** - Correction composant `QrCode` pour usage multiple
 
+[14831]: https://trac.saooti.net/ticket/14831
 [14942]: https://trac.saooti.net/ticket/14942
 
 ## 42.3.0 (9/10/2026)
