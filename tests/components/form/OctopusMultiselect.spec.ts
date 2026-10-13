@@ -379,14 +379,15 @@ describe('OctopusMultiselect', () => {
             expect(wrapper.find('.octopus-multiselect-selection-text').text()).toBe('Alpha, Beta');
         });
 
-        it('adds typed value as a new selection on Enter when allowCustomValue is true', async () => {
+        it('emits add-custom with the typed value on Enter when allowCustomValue is true', async () => {
             wrapper = await mount(OctopusMultiselect, {
                 props: { options: stringOptions, selected: [], allowCustomValue: true },
             });
             await wrapper.find('input').trigger('focus');
             await wrapper.find('input').setValue('Delta');
             await wrapper.find('input').trigger('keydown.enter');
-            expect(wrapper.emitted('update:selected')?.[0]).toEqual([['Delta']]);
+            expect(wrapper.emitted('add-custom')?.[0]).toEqual(['Delta']);
+            expect(wrapper.emitted('update:selected')).toBeUndefined();
         });
 
         it('does not add typed value on Enter when allowCustomValue is not set', async () => {
@@ -448,8 +449,8 @@ describe('OctopusMultiselect', () => {
             await wrapper.find('input').trigger('focus');
             await wrapper.find('input').setValue('Delta');
             await wrapper.find('input').trigger('keydown.enter');
-            const emittedSelected = wrapper.emitted('update:selected')?.[0]?.[0] as string[];
-            await wrapper.setProps({ selected: emittedSelected });
+            const customValue = wrapper.emitted('add-custom')?.[0]?.[0] as string;
+            await wrapper.setProps({ selected: [customValue] });
             const labels = Array.from(document.body.querySelectorAll('.octopus-multiselect-options label'))
                 .map((l) => l.textContent?.trim());
             expect(labels).toContain('Delta');

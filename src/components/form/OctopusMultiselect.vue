@@ -146,6 +146,8 @@ const emit = defineEmits<{
     /** Emitted on every input change. When listened to, the parent is responsible for
      *  updating `options`; otherwise the component filters `options` client-side. */
     (e: 'search', query: string): void;
+    /** Emitted when the user enters a custom value */
+    (e: 'add-custom', value: string): void;
 }>();
 
 const { t } = useI18n();
@@ -283,10 +285,7 @@ function handleCustomValueEnter(): void {
     if (!props.allowCustomValue) { return; }
     const value = searchQuery.value.trim();
     if (!value) { return; }
-    const customOption = value as unknown as T;
-    if (!isSelected(customOption)) {
-        emit('update:selected', [...(props.selected ?? []), customOption]);
-    }
+    emit('add-custom', value);
     searchQuery.value = '';
 }
 
