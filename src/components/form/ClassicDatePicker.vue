@@ -13,7 +13,7 @@
             :time-picker="isTimePicker"
             :time-config="timeConfig"
             :ui="templateClass ? { input: templateClass } : {}"
-            :input-attrs="{ clearable: false, id: 'dp-input-' + id }"
+            :input-attrs="{ clearable: false, id: id ? 'dp-input-' + id : undefined }"
             :text-input="true"
             :readonly="readonly"
             :teleport="useTeleport"
@@ -150,10 +150,11 @@ const format = computed(() => {
             timeString = "HH:mm:ss";
         }
     }
-    const dayString = props.isTimePicker
+    // For ranges, vue-datepicker applies the format to each date and joins
+    // them with its own separator
+    return props.isTimePicker
         ? timeString
         : "dd/MM/yyyy " + timeString;
-    return props.range ? dayString + " - " + dayString : dayString;
 });
 const timeConfig = computed(() => {
     return {
