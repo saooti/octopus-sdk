@@ -4,12 +4,14 @@
 
 ### Fixes
 
+- **[14600]** - Correction lecture live sur chrome
 - **[14831]** - Correction problème géneration traduction
 - **[14942]** - Correction composant `QrCode` pour usage multiple
 - Corrections erreurs dans `ClassicDatePicker` dues à la mise à jour de
   `vue-date-picker`
 - Correction valeurs custom dans OctopusMultiselect
 
+[14600]: https://trac.saooti.net/ticket/14600
 [14831]: https://trac.saooti.net/ticket/14831
 [14942]: https://trac.saooti.net/ticket/14942
 
