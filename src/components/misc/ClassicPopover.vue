@@ -248,7 +248,7 @@ function clearDataBlur(e: FocusEvent) {
         return;
     }
     //Exception timepicker in popover
-    const result = Array.from(e?.target?.classList ?? []).findIndex((val) => { return val.startsWith("dp__");});
+    const result = Array.from(e?.target?.classList ?? []).findIndex((val) => { return val.startsWith("dp--");});
     if (-1!==result) {
         return;
     }

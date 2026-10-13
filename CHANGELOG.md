@@ -6,7 +6,8 @@
 
 - **[14831]** - Correction problème géneration traduction
 - **[14942]** - Correction composant `QrCode` pour usage multiple
-- Correction erreur locale dans ClassicDatePicker
+- Corrections erreurs dans `ClassicDatePicker` dues à la mise à jour de
+  `vue-date-picker`
 - Correction valeurs custom dans OctopusMultiselect
 
 [14831]: https://trac.saooti.net/ticket/14831

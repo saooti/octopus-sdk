@@ -9,29 +9,25 @@
             {{ label }}
         </label>
         <VueDatePicker
-            :uid="id"
             :model-value="modelVal"
             :time-picker="isTimePicker"
-            :time-picker-inline="isTimePicker && timePickerInline"
-            :input-class-name="templateClass"
-            :clearable="false"
+            :time-config="timeConfig"
+            :ui="templateClass ? { input: templateClass } : {}"
+            :input-attrs="{ clearable: false, id: 'dp-input-' + id }"
             :text-input="true"
             :readonly="readonly"
             :teleport="useTeleport"
             :locale="getLocale(locale)"
-            :format="format"
+            :formats="{ input: format }"
             :auto-apply="true"
-            :enable-seconds="displaySeconds"
             :max-date="isMaxDate && !isTimePicker ? limit : undefined"
             :min-date="isMinDate && !isTimePicker ? limit : undefined"
             :range="undefined !== range"
             :multi-calendars="columnNumber > 1 ? columnNumber : false"
             :inline="isInline"
-            :enable-time-picker="!isTimePicker ? displayTimePicker : undefined"
             :aria-labels="ariaLabels"
             :max-time="maxTime"
             :month-picker="monthPicker"
-            :alt-position="customPosition"
             @update:model-value="updateValue($event)"
         >
             <template v-if="isTimePicker" #input-icon>
@@ -80,13 +76,14 @@ const props = defineProps({
     maxTime: {
         default: null,
         type: Object as () => {
-            hours?: number | string;
-            minutes?: number | string;
+            hours: number | string;
+            minutes: number | string;
             seconds?: number | string;
         },
     },
     forceFormat: { default: undefined, type: String },
     monthPicker: { default: false, type: Boolean },
+    /** @deprecated No longer supported since vue-datepicker v14 */
     customPosition: { default: null, type: Function },
     isInline: { default: false, type: Boolean },
     timePickerInline: { default: false, type: Boolean },
@@ -158,6 +155,13 @@ const format = computed(() => {
         : "dd/MM/yyyy " + timeString;
     return props.range ? dayString + " - " + dayString : dayString;
 });
+const timeConfig = computed(() => {
+    return {
+        enableSeconds: props.displaySeconds,
+        timePickerInline: props.isTimePicker && props.timePickerInline,
+        ...(!props.isTimePicker && { enableTimePicker: props.displayTimePicker })
+    };
+});
 const limit = computed(() => {
     if (props.dateLimit) {
         return props.dateLimit;
@@ -191,7 +195,7 @@ function formatDate(value: Date): string {
 @use "@vuepic/vue-datepicker/dist/main.css";
 
 /* stylelint-disable-next-line */
-.dp__theme_light {
+.dp--theme-light {
   --dp-primary-color: var(--octopus-primary);
   --dp-time-font-size: 1rem;
 }
