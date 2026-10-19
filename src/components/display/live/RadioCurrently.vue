@@ -34,13 +34,13 @@
 
 <script setup lang="ts">
 import {useFetchRadio} from "../../composable/radio/usefetchRadioData";
-import { usePlayerStore } from "../../../stores/PlayerStore";
 import {useImageProxy} from "../../composable/useImageProxy";
 import { computed, onMounted, onUnmounted, ref, Ref } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 import { MediaRadio } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
+import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
 
 //Props 
 const props = defineProps({
@@ -57,20 +57,26 @@ const radioInterval: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefi
 const { t } = useI18n();
 const { fetchRadioMetadata, displayTitle } = useFetchRadio();
 const { useProxyImageUrl } = useImageProxy();
-const playerStore = usePlayerStore();
+const { radioPlaying, podcastPlaying } = useSaootiPlayer();
 
 //Computed
-const playingRadio = computed(() => playerStore.playerRadio && playerStore.playerRadio.canalId === props.radio?.id);
+const playingRadio = computed(() => radioPlaying.value !== undefined && radioPlaying.value === props.radio?.id);
 const podcastRadio = computed(() => {
+  /*
+  TODO PLAYER
   if (playingRadio.value) {
     return playerStore.playerRadio?.podcast;
   }
+  */
   return currentPodcast.value;
 });
 const currentlyPlayingString = computed(() => {
-  if (playingRadio.value && playerStore.playerRadio) {
+  /*
+  TODO PLAYER
+  if (playingRadio.value) {
     return displayTitle(playerStore.playerRadio.metadata);
   }
+  */
   return displayTitle(currentMetadata.value);
 });
 

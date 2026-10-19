@@ -11,24 +11,27 @@
 <script setup lang="ts">
 import PlayIcon from "vue-material-design-icons/Play.vue";
 import PauseIcon from "vue-material-design-icons/Pause.vue";
-import { usePlayerStore } from "../../../stores/PlayerStore";
 import { computed } from "vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
-
+import { saootiPlayer } from "@saooti/saooti-player";
+import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
 
 //Props 
-const props = defineProps({
-  podcast: { default: () => ({}), type: Object as () => Podcast },
-})
+const props = defineProps<{
+  podcast: Podcast;
+}>();
 
 //Composables
 const { t } = useI18n();
-const playerStore = usePlayerStore();
+const { playerStatus, podcastPlaying } = useSaootiPlayer();
 
 //Computed
-const btnPlay = computed(() => playerStore.playerPodcast !== props.podcast || (playerStore.playerPodcast === props.podcast && 'PAUSED' === playerStore.playerStatus));
+const currentPodcastPlaying = computed((): boolean =>
+  props.podcast.podcastId === podcastPlaying.value
+);
 
+const btnPlay = computed(() => !currentPodcastPlaying.value || (currentPodcastPlaying.value && 'PAUSED' === playerStatus.value));
 
 //Methods
 function clickBtn(podcast: Podcast){
@@ -39,14 +42,14 @@ function clickBtn(podcast: Podcast){
   pause();
 }
 function play(podcast: Podcast): void {
-  if (podcast === playerStore.playerPodcast) {
-    playerStore.playerChangeStatus(false);
+  if (currentPodcastPlaying.value) {
+    saootiPlayer.togglePlay();
   } else {
-    playerStore.playerPlay(podcast);
+    saootiPlayer.playPodcast(podcast.podcastId);
   }
 }
 function pause(): void {
-  playerStore.playerChangeStatus(true);
+  saootiPlayer.stop();
 }
 </script>
 <style lang="scss">

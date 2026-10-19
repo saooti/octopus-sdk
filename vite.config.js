@@ -90,7 +90,13 @@ export default defineConfig(({ mode }) => ({
     }
   },
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => tag === 'saooti-player'
+        }
+      }
+    }),
     cleanStaleChunks(),
     // Skip type declaration generation in dev/watch builds (used for linking)
     // to keep rebuilds fast; run a full `npm run build` before publishing.

@@ -26,6 +26,7 @@
   "dependencies": {
     "@multiformats/murmur3": "^2.2.8",
     "@popperjs/core": "^2.11.8",
+    "@saooti/saooti-player": "^0.1.0",
     "@stomp/stompjs": "^7.3.0",
     "@tato30/vue-pdf": "^2.2.0",
     "@tiptap/extension-hard-break": "^3.31.4",

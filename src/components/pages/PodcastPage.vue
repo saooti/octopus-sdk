@@ -128,7 +128,6 @@ const props = defineProps<{
   podcastId: number;
 }>();
 
-
 //Data 
 const loaded = ref(false);
 const error = ref(false);

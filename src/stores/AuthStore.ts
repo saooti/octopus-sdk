@@ -136,7 +136,7 @@ export const useAuthStore = defineStore("AuthStore", {
             // Admins are not affected by scope
             if(
                 this.authRole.includes('ADMIN') ||
-        this.authRole.includes('ORGANISATION')
+                this.authRole.includes('ORGANISATION')
             ) {
                 return [];
             } else {

@@ -77,7 +77,7 @@ import PaginateSection from "./PaginateSection.vue";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import { computed, watch } from "vue";
-import { usePlayerStore } from "../../../stores/PlayerStore";
+//import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useI18n } from "vue-i18n";
 
 //Props 
@@ -154,8 +154,12 @@ function scrollToTop() {
 /** Style to apply to the paging section */
 function pagingStyle(): Record<string, string> {
     // Only change position if player is active and not at the top
+    /*
+    TODO PLAYER
     if (props.playerResponsive && state.player.topPlacement !== true) {
         return { 'bottom': playerStore.playerHeight };
     }
+    */
+    return {};
 }
 </script>

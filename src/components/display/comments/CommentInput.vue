@@ -56,7 +56,7 @@ import { CommentPodcast } from "@/stores/class/general/comment";
 import Constants from "../../../../public/config";
 import { defineAsyncComponent, ref, computed, watch, useTemplateRef } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
-import { usePlayerStore } from "../../../stores/PlayerStore";
+//import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useI18n } from "vue-i18n";
 const CheckIdentityModal = defineAsyncComponent(
@@ -96,7 +96,7 @@ const textareaRef = useTemplateRef('textarea');
 
 //Composables
 const { t } = useI18n();
-const playerStore = usePlayerStore();
+//const playerStore = usePlayerStore();
 const commentStore = useCommentStore();
 const authStore = useAuthStore();
 
@@ -153,6 +153,7 @@ async function postComment(): Promise<void> {
 }
 function defineTimelineValue(): number {
   let timeline = 0;
+  /* TODO PLAYER
   if (
     undefined !== props.podcast &&
     (playerStore.playerPodcast?.podcastId === props.podcast.podcastId ||
@@ -165,6 +166,7 @@ function defineTimelineValue(): number {
       );
     }
   }
+  */
   return timeline < 0 ? 0 : timeline;
 }
 </script>
