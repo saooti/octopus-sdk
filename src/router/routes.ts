@@ -115,17 +115,6 @@ export const routes: Array<RouteRecordSingleView|RouteRecordSingleViewWithChildr
     }
   },
   {
-    path: "/main/pub/video/:podcastId(\\d+):title([^?]*)?:productor?",
-    name: "video",
-    component: VideoPage,
-    props: (route: RouteLocationNormalized) => ({
-      podcastId: parseInt(route.params.podcastId.toString(), 10),
-    }),
-    meta:{
-      title: ""
-    }
-  },
-  {
     path: "/main/pub/participant/:participantId(\\d+):title([^?]*)?:productor?",
     name: "participant",
     component: ParticipantPage,

@@ -30,10 +30,10 @@
                     @click.prevent="play(false)"
                 >
                     <PlayIcon
-                        v-if="!playingPodcast || (playingPodcast && playerStore.playerVideo)"
+                        v-if="!playingPodcast || (playingPodcast && saootiPlayer.state.isVideo)"
                         :size="playIconSize"
                     />
-                    <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo" />
+                    <PodcastIsPlaying v-if="playingPodcast && !saootiPlayer.state.isVideo" />
                     <time
                         v-if="!isVideoPodcast"
                         class="ms-1 me-2"
@@ -46,14 +46,14 @@
                     v-if="isVideoPodcast"
                     :title="t('Video')"
                     :aria-label="videoLabel"
-                    :disabled="playerStore.playerVideo"
+                    :disabled="saootiPlayer.state.isVideo"
                     @click.prevent="play(true)"
                     @mouseenter="hoverType = 'video'"
                     @focus="hoverType = 'video'"
                     @mouseleave="hoverType = ''"
                     @focusout="hoverType = ''"
                 >
-                    <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo" />
+                    <PodcastIsPlaying v-if="playingPodcast && saootiPlayer.state.isVideo" />
                     <PlayVideoIcon
                         v-else
                         :size="'video' === hoverType ? 50 : 40"
@@ -99,7 +99,7 @@ import DurationHelper from "../../../helper/durationHelper";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast, PodcastProcessingStatus as ProcessingStatus, SimplifiedPodcast } from "../../../stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
-import { usePlayerStore } from "../../../stores/PlayerStore";
+import { saootiPlayer } from "@saooti/saooti-player";
 import { computed, defineAsyncComponent, ref } from "vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -107,6 +107,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useResizePhone } from "../../composable/useResizePhone";
 import { podcastApi } from "../../../api/podcastApi";
+import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
 dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 
@@ -126,9 +127,10 @@ const hoverType = ref("");
 
 //Composables
 const { t } = useI18n();
-const playerStore = usePlayerStore();
+//const playerStore = usePlayerStore();
 const router = useRouter();
 const { isPhone } = useResizePhone();
+const { videoPlaying } = useSaootiPlayer();
 
 //Computed
 const isVideoPodcast = computed(() => {
@@ -140,17 +142,25 @@ const isVideoPodcast = computed(() => {
     );
 });
 const playingLive = computed(() => {
+    return false;
+    /*
+    TODO PLAYER
     return (
         undefined !== props.fetchConference &&
         "null" !== props.fetchConference.toString() &&
         playerStore.playerLive?.conferenceId === props.fetchConference.conferenceId
     );
+    */
 });
 const playingPodcast = computed(() => {
+    return false;
+    /*
+    TODO PLAYER
     return (
         playerStore.playerPodcast?.podcastId === props.podcast.podcastId ||
         playingLive.value
     );
+    */
 });
 const isLiveToBeRecorded = computed(() => undefined === props.fetchConference && isLiveReadyToRecord.value);
 const isLiveReadyToRecord = computed(() => {
@@ -295,35 +305,38 @@ const durationIso = computed(() => {
 
 //Methods
 async function play(isVideo: boolean): Promise<void> {
-    if (isLiveToBeRecorded.value) {
-        return;
-    }
-    if (playingPodcast.value && isVideo === playerStore.playerVideo) {
-        playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
-        return;
-    }
-    if (isVideo && state.player.isVideoPage) {
-        router.push("/main/pub/video/" + props.podcast.podcastId);
-        return;
-    }
+  if (isLiveToBeRecorded.value) {
+    return;
+  }
+  /*
+  TODO player
+  if (playingPodcast.value && isVideo === playerStore.playerVideo) {
+    playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
+    return;
+  }
+  */
 
     let podcast: Podcast|SimplifiedPodcast = props.podcast;
     if (isVideo && !('video' in props.podcast)) {
         podcast = await podcastApi.get(props.podcast.podcastId);
     }
   
-    if (!recordingLive.value) {
-        playerStore.playerPlay(podcast, isVideo);
-    } else {
-        playerStore.playerPlay(
-            {
-                ...podcast,
-                conferenceId: props.fetchConference?.conferenceId,
-                hlsIdentifier: props.fetchConference?.hlsIdentifier,
-            },
-            isVideo
-        );
-    }
+  if (!recordingLive.value) {
+    saootiPlayer.playPodcast(podcast.podcastId, isVideo);
+    //playerStore.playerPlay(podcast, isVideo);
+  } else {
+    /*
+    TODO player
+    playerStore.playerPlay(
+      {
+        ...podcast,
+        conferenceId: props.fetchConference?.conferenceId,
+        hlsIdentifier: props.fetchConference?.hlsIdentifier,
+      },
+      isVideo
+    );
+    */
+  }
 }
 </script>
 

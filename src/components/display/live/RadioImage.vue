@@ -28,29 +28,31 @@
 
 <script setup lang="ts">
 import PlayIcon from "vue-material-design-icons/Play.vue";
-import { usePlayerStore } from "../../../stores/PlayerStore";
-import { useAuthStore } from "../../../stores/AuthStore";
 import {useImageProxy} from "../../composable/useImageProxy";
 import { computed, defineAsyncComponent } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 import { useI18n } from "vue-i18n";
+import { saootiPlayer } from "@saooti/saooti-player";
+import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
 const PodcastIsPlaying = defineAsyncComponent(() => import("../podcasts/PodcastIsPlaying.vue"));
 
 //Props 
-const props = defineProps({
-  radio: { default: undefined, type: Object as () => Canal },
-})
+const props = defineProps<{
+  radio: Canal;
+}>();
 
 //Composables
 const { t } = useI18n();
 const { useProxyImageUrl } = useImageProxy();
-const authStore = useAuthStore();
-const playerStore = usePlayerStore();
+const { playerStatus, radioPlaying } = useSaootiPlayer();
 
 //Computed
-const playingRadio = computed(() => playerStore.playerRadio && playerStore.playerRadio.canalId === props.radio?.id);
+const playingRadio = computed(() => {
+  return radioPlaying.value === props.radio.id;
+});
+
 const playText = computed(() => {
-  return playingRadio.value && "PLAYING" === playerStore.playerStatus? t("Pause") : t("Play");
+  return playingRadio.value && "PLAYING" === playerStatus.value ? t("Pause") : t("Play");
 });
 
 
@@ -59,20 +61,18 @@ function playRadio(): void {
   if (!props.radio) {
     return;
   }
+
   if (playingRadio.value) {
-    playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
+    saootiPlayer.togglePlay();
   } else {
-    playerStore.playerPlay({
-      canalId: props.radio.id,
-      url: "https://" + props.radio.url + "/live.m3u8",
-      metadata: "",
-      secured: props.radio.organisationId === authStore.authOrganisation?.id && "SECURED"===authStore.authOrganisation?.privacy
-    });
+    saootiPlayer.playRadio(props.radio.id);
+    //secured: props.radio.organisationId === authStore.authOrganisation?.id && "SECURED"===authStore.authOrganisation?.privacy
   }
 }
 </script>
-<style lang="scss">
-.octopus-app .radio-play-button{
+
+<style scoped lang="scss">
+.radio-play-button{
   display: flex;
   align-items: center;
   position: absolute;

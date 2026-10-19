@@ -5,7 +5,7 @@ import { type Pinia, setActivePinia, createPinia } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
 import { useAuthStore } from '../src/stores/AuthStore';
-import { PlayerStatus, usePlayerStore } from '../src/stores/PlayerStore';
+//import { PlayerStatus, usePlayerStore } from '../src/stores/PlayerStore';
 import { Podcast } from '../src/stores/class/general/podcast';
 import { localisation } from './localisation';
 

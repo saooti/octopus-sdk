@@ -6,10 +6,15 @@
 </template>
 
 <script setup lang="ts">
-import { usePlayerStore } from '../stores/PlayerStore';
 import { onBeforeMount, onBeforeUnmount } from 'vue';
+/*
+TODO PLAYER
+import { usePlayerStore } from '../stores/PlayerStore';
 import PlayerComponent from '../components/misc/player/PlayerComponent.vue';
+*/
 
+/*
+TODO PLAYER
 const playerStore = usePlayerStore();
 
 onBeforeMount(() => {
@@ -22,4 +27,5 @@ onBeforeUnmount(() => {
     // Stop playing to avoid issues when switching from no layout
     playerStore.stop();
 });
+*/
 </script>

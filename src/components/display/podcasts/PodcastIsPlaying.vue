@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="'PLAYING' === playerStore.playerStatus ? 'play-animation' : ''"
+    :class="'PLAYING' === playerStatus ? 'play-animation' : ''"
     class="bloc-paddle mx-1"
   >
     <span class="paddle1" />
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePlayerStore } from "../../../stores/PlayerStore";
+import { useSaootiPlayer } from '@/components/composable/useSaootiPlayer';
 
-const playerStore = usePlayerStore();
+const { playerStatus } = useSaootiPlayer();
 </script>
