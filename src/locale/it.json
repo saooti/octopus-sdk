@@ -456,5 +456,6 @@
     "RightsScopeSelector - Clear filter": "Rimuovi la messa a fuoco",
     "Apple podcast - Error - Undefined": "Non è stato possibile pubblicare questo podcast come video su ApplePodcast (stato: {status})",
     "Apple podcast - Info - HLS_NOT_READY": "Il podcast non è ancora disponibile in video su ApplePodcast, dovrebbe essere disponibile tra pochi minuti",
-    "Filters - Only my episodes": "Mostra solo episodi"
+    "Filters - Only my episodes": "Mostra solo episodi",
+    "Skip to content": "Vai al contenuto"
 }
