@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 42.3.2 (En cours)
+
+### Fixes
+
+- **[14085]** - Correctif quand aucune publicité par défaut
+
+[14085]: https://trac.saooti.net/ticket/14085
+
 ## 42.3.1 (13/10/2026)
 
 ### Fixes
