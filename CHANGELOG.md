@@ -6,6 +6,10 @@
 
 - **[14085]** - Correctif quand aucune publicité par défaut
 
+### Misc
+
+- Ajout titres sur pages émissions/épisodes pour conformité RGAA
+
 [14085]: https://trac.saooti.net/ticket/14085
 
 ## 42.3.1 (13/10/2026)

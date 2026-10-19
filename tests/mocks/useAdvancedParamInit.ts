@@ -1,4 +1,4 @@
-export function mockAdvancedParamInit() {
+export function mockAdvancedParamInit(overrides: Record<string, unknown> = {}) {
     return {
         useAdvancedParamInit: () => ({
             organisationId: undefined,
@@ -17,6 +17,7 @@ export function mockAdvancedParamInit() {
             isInit: undefined,
             beneficiaries: undefined,
             emissionGroups: undefined,
+            ...overrides
         })
     };
 }

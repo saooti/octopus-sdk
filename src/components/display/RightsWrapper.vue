@@ -3,7 +3,7 @@
         v-if="displayIndicator"
     >
         <slot :id="elementId" :has-access="hasAccess" />
-        <span v-if="!hasAccess" class="rights-visually-hidden">{{ message }}</span>
+        <span v-if="!hasAccess" class="visually-hidden">{{ message }}</span>
         <ClassicPopover
             v-if="!hasAccess"
             :target="elementId"
@@ -27,18 +27,3 @@ const uid = getCurrentInstance()?.uid;
 /** ID of the icon for reference by the popover */
 const elementId = computed((): string => 'rights-wrapper-' + uid);
 </script>
-
-<style scoped lang="scss">
-/** Helper class to keep the data accessible for screen readers */
-.rights-visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-</style>

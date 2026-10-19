@@ -1,5 +1,9 @@
 <template>
     <section v-if="isInit" class="page-box">
+        <!-- Hidden title, for RGAA compliance (criterion 9.1: each page must have a h1) -->
+        <h1 class="visually-hidden">
+            {{ $t('Emissions') }}
+        </h1>
         <slot name="new-emission" />
         <ProductorSearch
             v-if="state.emissionsPage?.hideSearch !== true"
