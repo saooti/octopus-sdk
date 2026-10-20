@@ -29,7 +29,6 @@
                         v-if="displayTopPaginate"
                         :id="id"
                         class="pt-0 pb-0"
-                        :style="pagingStyle"
                         :first="first"
                         :rows-per-page="rowsPerPage"
                         :total-count="totalCount"
@@ -44,7 +43,6 @@
         <PaginateSection
             v-if="!isPhone && !justSizeChosen && totalCount > 0"
             :id="id"
-            :style="pagingStyle"
             :first="first"
             :rows-per-page="rowsPerPage"
             :total-count="totalCount"
@@ -77,7 +75,6 @@ import PaginateSection from "./PaginateSection.vue";
 import {useResizePhone} from "../../composable/useResizePhone";
 import { useRouteUpdateParams } from "../../composable/route/useRouteUpdateParams";
 import { computed, watch } from "vue";
-import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useI18n } from "vue-i18n";
 
 //Props 
@@ -92,7 +89,6 @@ const props = defineProps({
     loading: { default: false, type: Boolean },
     isMobile: { default: false, type: Boolean },
     justSizeChosen: { default: false, type: Boolean },
-    playerResponsive: { default: false, type: Boolean },
     forceUpdateParameters: { default: false, type: Boolean },
 })
 
@@ -104,7 +100,6 @@ const emit = defineEmits(["update:first", "update:rowsPerPage", "update:isMobile
 const { t } = useI18n();
 const { isPhone, windowWidth } = useResizePhone();
 const { updateRouteParam, updatePaginateSize } = useRouteUpdateParams();
-const playerStore = usePlayerStore();
 
 
 //Computed
@@ -149,13 +144,5 @@ function scrollToTop() {
         window.scrollY -
         domHelper.convertRemToPixels(3.5);
     window.scrollTo({ top: y, behavior: "smooth" });
-}
-
-/** Style to apply to the paging section */
-function pagingStyle(): Record<string, string> {
-    // Only change position if player is active and not at the top
-    if (props.playerResponsive && state.player.topPlacement !== true) {
-        return { 'bottom': playerStore.playerHeight };
-    }
 }
 </script>

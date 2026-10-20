@@ -15,7 +15,6 @@ export const getRubrique = () => import("./src/components/pages/RubriquePage.vue
 export const getTag = () => import("./src/components/pages/TagPage.vue");
 export const getError403Page = () => import("./src/components/pages/Error403Page.vue");
 export const getRadio = () => import("./src/components/pages/RadioPage.vue");
-export const getVideo = () => import("./src/components/pages/VideoPage.vue");
 export const getMapPage= () => import("./src/components/pages/MapPage.vue");
 export const getPageNotFound= () => import("./src/components/pages/PageNotFound.vue");
 export const getPageLogout= () => import("./src/components/pages/PageLogout.vue");
@@ -26,7 +25,6 @@ export const getNav = () => import("./src/components/misc/ClassicNav.vue");
 export const getProgressBar = () => import("./src/components/misc/ProgressBar.vue");
 export const getSpinner = () => import("./src/components/misc/ClassicSpinner.vue");
 export const getFooter = () => import("./src/components/misc/FooterSection.vue");
-export const getPlayer = () => import("./src/components/misc/player/PlayerComponent.vue");
 export const getSnackbar = () => import("./src/components/misc/SnackBar.vue");
 export const getTopBar = () => import("./src/components/misc/TopBar.vue");
 export const getMobileMenu = () => import("./src/components/misc/MobileMenu.vue");
@@ -170,7 +168,7 @@ export * from './src/helper/slugify';
 //stores
 import {useVastStore} from "./src/stores/VastStore";
 import {useSaveFetchStore} from "./src/stores/SaveFetchStore";
-export { usePlayerStore, type PlayerTranscript } from "./src/stores/PlayerStore";
+export { type PlayerTranscript } from "./src/stores/PlayerStore";
 import {useGeneralStore} from "./src/stores/GeneralStore";
 import {useFilterStore} from "./src/stores/FilterStore";
 import {useCommentStore} from "./src/stores/CommentStore";

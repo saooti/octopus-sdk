@@ -2,24 +2,24 @@
 <template>
     <slot />
     <div class="flex-grow-1" />
-    <PlayerComponent />
+    <saooti-player :locale="locale" />
 </template>
 
 <script setup lang="ts">
-import { usePlayerStore } from '../stores/PlayerStore';
 import { onBeforeMount, onBeforeUnmount } from 'vue';
-import PlayerComponent from '../components/misc/player/PlayerComponent.vue';
+import { saootiPlayer } from "@saooti/saooti-player";
+import { useI18n } from 'vue-i18n';
 
-const playerStore = usePlayerStore();
+const { locale } = useI18n();
 
 onBeforeMount(() => {
     // Stop playing to avoid issues when switching to no layout
-    playerStore.stop();
+    saootiPlayer.stop();
 });
 
 
 onBeforeUnmount(() => {
     // Stop playing to avoid issues when switching from no layout
-    playerStore.stop();
+    saootiPlayer.stop();
 });
 </script>

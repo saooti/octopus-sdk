@@ -139,10 +139,6 @@
                     <NewspaperVariantOutlineIcon class="me-1" />
                     <div>{{ t("See associated article") }}</div>
                 </a>
-                <PodcastPlayBar
-                    v-if="state.emissionsPage.progressBar"
-                    :podcast="podcast"
-                />
                 <div v-if="editRight && !isPodcastmaker">
                     <div
                         v-if="
@@ -216,9 +212,6 @@ import ClassicAlert from "@/components/misc/ClassicAlert.vue";
 
 import { defineAsyncComponent, toRefs, computed, useTemplateRef } from "vue";
 import { useAppleVideo } from "@/components/composable/useAppleVideo";
-const PodcastPlayBar = defineAsyncComponent(
-    () => import("./PodcastPlayBar.vue"),
-);
 const SubscribeButtons = defineAsyncComponent(
     () => import("../sharing/SubscribeButtons.vue"),
 );
