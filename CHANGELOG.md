@@ -9,6 +9,7 @@
 ### Misc
 
 - Ajout titres sur pages émissions/épisodes pour conformité RGAA
+- Amélioration de la conformité RGAA
 
 [14085]: https://trac.saooti.net/ticket/14085
 
