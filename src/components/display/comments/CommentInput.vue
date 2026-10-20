@@ -56,9 +56,10 @@ import { CommentPodcast } from "@/stores/class/general/comment";
 import Constants from "../../../../public/config";
 import { defineAsyncComponent, ref, computed, watch, useTemplateRef } from "vue";
 import { useCommentStore } from "../../../stores/CommentStore";
-//import { usePlayerStore } from "../../../stores/PlayerStore";
 import { useAuthStore } from "../../../stores/AuthStore";
 import { useI18n } from "vue-i18n";
+import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
+import { saootiPlayer } from "@saooti/saooti-player";
 const CheckIdentityModal = defineAsyncComponent(
     () => import("./modal/CheckIdentityModal.vue"),
 );
@@ -96,9 +97,9 @@ const textareaRef = useTemplateRef('textarea');
 
 //Composables
 const { t } = useI18n();
-//const playerStore = usePlayerStore();
 const commentStore = useCommentStore();
 const authStore = useAuthStore();
+const { podcastPlaying } = useSaootiPlayer();
 
 //Computed
 const commentTooLong = computed(() => countComment.value <= maxComment);
@@ -154,20 +155,18 @@ async function postComment(): Promise<void> {
 }
 function defineTimelineValue(): number {
     let timeline = 0;
-    /* TODO PLAYER
     if (
         undefined !== props.podcast &&
-        (playerStore.playerPodcast?.podcastId === props.podcast.podcastId ||
-            playerStore.playerLive?.podcastId === props.podcast.podcastId)
+        (podcastPlaying.value === props.podcast.podcastId ||
+            saootiPlayer.state.live?.podcastId === props.podcast.podcastId)
     ) {
-        timeline = Math.round(playerStore.playerElapsed * playerStore.playerTotal);
-        if (props.podcast.duration && playerStore.playerPodcast) {
+        timeline = Math.round(saootiPlayer.state.currentTime);
+        if (props.podcast.duration && podcastPlaying.value) {
             timeline = Math.round(
-                timeline - (playerStore.playerTotal - props.podcast.duration / 1000),
+                timeline - (saootiPlayer.state.duration - props.podcast.duration / 1000),
             );
         }
     }
-    */
     return timeline < 0 ? 0 : timeline;
 }
 </script>

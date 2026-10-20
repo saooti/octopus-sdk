@@ -96,7 +96,6 @@ import EyeOffOutlineIcon from "vue-material-design-icons/EyeOffOutline.vue";
 import CancelIcon from "vue-material-design-icons/Cancel.vue";
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import DurationHelper from "../../../helper/durationHelper";
-import { state } from "../../../stores/ParamSdkStore";
 import { Podcast, PodcastProcessingStatus as ProcessingStatus, SimplifiedPodcast } from "../../../stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import { saootiPlayer } from "@saooti/saooti-player";
@@ -104,7 +103,6 @@ import { computed, defineAsyncComponent, ref } from "vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { useResizePhone } from "../../composable/useResizePhone";
 import { podcastApi } from "../../../api/podcastApi";
 import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
@@ -128,9 +126,8 @@ const hoverType = ref("");
 //Composables
 const { t } = useI18n();
 //const playerStore = usePlayerStore();
-const router = useRouter();
 const { isPhone } = useResizePhone();
-const { videoPlaying } = useSaootiPlayer();
+const { livePlaying, playerStatus, podcastPlaying, videoPlaying } = useSaootiPlayer();
 
 //Computed
 const isVideoPodcast = computed(() => {
@@ -141,26 +138,13 @@ const isVideoPodcast = computed(() => {
         ('videoId' in props.podcast && undefined !== props.podcast.videoId)
     );
 });
+
 const playingLive = computed(() => {
-    return false;
-    /*
-    TODO PLAYER
-    return (
-        undefined !== props.fetchConference &&
-        "null" !== props.fetchConference.toString() &&
-        playerStore.playerLive?.conferenceId === props.fetchConference.conferenceId
-    );
-    */
+    return livePlaying.value !== undefined && livePlaying.value === props.fetchConference?.conferenceId;
 });
+
 const playingPodcast = computed(() => {
-    return false;
-    /*
-    TODO PLAYER
-    return (
-        playerStore.playerPodcast?.podcastId === props.podcast.podcastId ||
-        playingLive.value
-    );
-    */
+    return podcastPlaying.value === props.podcast.podcastId || playingLive.value;
 });
 const isLiveToBeRecorded = computed(() => undefined === props.fetchConference && isLiveReadyToRecord.value);
 const isLiveReadyToRecord = computed(() => {
@@ -286,7 +270,7 @@ const durationString = computed(() => {
     );
 });
 /** Whether this podcast is currently heard (loaded and not paused) */
-const isPlaying = computed(() => playingPodcast.value && "PLAYING" === playerStore.playerStatus);
+const isPlaying = computed(() => playingPodcast.value && "PLAYING" === playerStatus.value);
 /** Names of the buttons: episode and visible duration, kept for voice control */
 const audioLabel = computed(() => t(isPlaying.value ? "PodcastPlayButton - Pause" : "PodcastPlayButton - Play", {
     title: props.podcast.title,
@@ -305,38 +289,21 @@ const durationIso = computed(() => {
 
 //Methods
 async function play(isVideo: boolean): Promise<void> {
-  if (isLiveToBeRecorded.value) {
-    return;
-  }
-  /*
-  TODO player
-  if (playingPodcast.value && isVideo === playerStore.playerVideo) {
-    playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
-    return;
-  }
-  */
+    if (isLiveToBeRecorded.value) {
+        return;
+    }
+
+    if (playingPodcast.value && isVideo === videoPlaying.value) {
+        saootiPlayer.togglePlay();
+        return;
+    }
 
     let podcast: Podcast|SimplifiedPodcast = props.podcast;
     if (isVideo && !('video' in props.podcast)) {
         podcast = await podcastApi.get(props.podcast.podcastId);
     }
   
-  if (!recordingLive.value) {
     saootiPlayer.playPodcast(podcast.podcastId, isVideo);
-    //playerStore.playerPlay(podcast, isVideo);
-  } else {
-    /*
-    TODO player
-    playerStore.playerPlay(
-      {
-        ...podcast,
-        conferenceId: props.fetchConference?.conferenceId,
-        hlsIdentifier: props.fetchConference?.hlsIdentifier,
-      },
-      isVideo
-    );
-    */
-  }
 }
 </script>
 
