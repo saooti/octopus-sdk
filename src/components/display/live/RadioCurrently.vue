@@ -1,35 +1,35 @@
 <template>
-  <div class="d-flex align-items-center">
-    <div
-      v-if="currentlyPlayingString.length || podcastRadio"
-      class="fw-bold me-1"
-    >
-      {{ t("Currently") }}&nbsp;:
+    <div class="d-flex align-items-center">
+        <div
+            v-if="currentlyPlayingString.length || podcastRadio"
+            class="fw-bold me-1"
+        >
+            {{ t("Currently") }}&nbsp;:
+        </div>
+        <router-link
+            v-if="podcastRadio"
+            class="d-flex align-items-center"
+            :to="{
+                name: 'podcast',
+                params: { podcastId: podcastRadio.podcastId },
+            }"
+            :title="t('Episode name page', { name: podcastRadio.title })"
+        >
+            <img
+                v-lazy="useProxyImageUrl(podcastRadio.imageUrl, '80')"
+                width="80"
+                height="80"
+                class="small-img-box"
+                aria-hidden="true"
+                alt=""
+                :title="t('Episode name image', { name: podcastRadio.title })"
+            >
+            <div>{{ podcastRadio.title }}</div>
+        </router-link>
+        <div v-else-if="currentlyPlayingString.length">
+            {{ currentlyPlayingString }}
+        </div>
     </div>
-    <router-link
-      v-if="podcastRadio"
-      class="d-flex align-items-center"
-      :to="{
-        name: 'podcast',
-        params: { podcastId: podcastRadio.podcastId },
-      }"
-      :title="t('Episode name page', { name: podcastRadio.title })"
-    >
-      <img
-        v-lazy="useProxyImageUrl(podcastRadio.imageUrl, '80')"
-        width="80"
-        height="80"
-        class="small-img-box"
-        aria-hidden="true"
-        alt=""
-        :title="t('Episode name image', { name: podcastRadio.title })"
-      />
-      <div>{{ podcastRadio.title }}</div>
-    </router-link>
-    <div v-else-if="currentlyPlayingString.length">
-      {{ currentlyPlayingString }}
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -41,10 +41,11 @@ import { MediaRadio } from "@/stores/class/general/player";
 import { Podcast } from "@/stores/class/general/podcast";
 import { useI18n } from "vue-i18n";
 import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
+import { saootiPlayer } from "@saooti/saooti-player";
 
 //Props 
 const props = defineProps({
-  radio: { default: undefined, type: Object as () => Canal },
+    radio: { default: undefined, type: Object as () => Canal },
 })
 
 //Data 
@@ -57,61 +58,56 @@ const radioInterval: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefi
 const { t } = useI18n();
 const { fetchRadioMetadata, displayTitle } = useFetchRadio();
 const { useProxyImageUrl } = useImageProxy();
-const { radioPlaying, podcastPlaying } = useSaootiPlayer();
+const { radioPlaying } = useSaootiPlayer();
 
 //Computed
 const playingRadio = computed(() => radioPlaying.value !== undefined && radioPlaying.value === props.radio?.id);
-const podcastRadio = computed(() => {
-  /*
-  TODO PLAYER
-  if (playingRadio.value) {
-    return playerStore.playerRadio?.podcast;
-  }
-  */
-  return currentPodcast.value;
+const podcastRadio = computed((): Podcast => {
+    if (playingRadio.value) {
+        return saootiPlayer.state.radio?.podcast as Podcast;
+    }
+    return currentPodcast.value;
 });
+
 const currentlyPlayingString = computed(() => {
-  /*
-  TODO PLAYER
-  if (playingRadio.value) {
-    return displayTitle(playerStore.playerRadio.metadata);
-  }
-  */
-  return displayTitle(currentMetadata.value);
+    if (playingRadio.value) {
+        return displayTitle(saootiPlayer.state.radio?.metadata);
+    }
+    return displayTitle(currentMetadata.value);
 });
 
 onMounted(()=>{
-  fetchCurrentlyPlaying();
-  radioInterval.value = setInterval(() => {
     fetchCurrentlyPlaying();
-  }, 10000);
+    radioInterval.value = setInterval(() => {
+        fetchCurrentlyPlaying();
+    }, 10000);
 })
 
 onUnmounted(()=>{
-  clearInterval(radioInterval.value);
-  radioInterval.value= undefined;
+    clearInterval(radioInterval.value);
+    radioInterval.value= undefined;
 })
 
 
 //Methods
 async function fetchCurrentlyPlaying(): Promise<void> {
-  if (!props.radio || playingRadio.value) {
-    return;
-  }
-  fetchRadioMetadata(
-    props.radio.id,
-    currentMetadata.value?.title ?? "",
-    updateMetadata,
-  );
+    if (!props.radio || playingRadio.value) {
+        return;
+    }
+    fetchRadioMetadata(
+        props.radio.id,
+        currentMetadata.value?.title ?? "",
+        updateMetadata,
+    );
 }
 function updateMetadata(metadata: MediaRadio|undefined, podcast?: Podcast): void {
-  currentMetadata.value = metadata;
-  currentPodcast.value = podcast;
+    currentMetadata.value = metadata;
+    currentPodcast.value = podcast;
 }
 </script>
 
-<style lang="scss">
-.octopus-app .small-img-box {
+<style scoped lang="scss">
+.small-img-box {
   height: 80px;
   width: 80px;
   border-radius: var(--octopus-border-radius);
