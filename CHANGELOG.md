@@ -5,6 +5,7 @@
 ### Fixes
 
 - **[14085]** - Correctif quand aucune publicité par défaut
+- **[14985]** - Correction filtrage focus incorrect
 
 ### Misc
 
@@ -12,6 +13,7 @@
 - Amélioration de la conformité RGAA
 
 [14085]: https://trac.saooti.net/ticket/14085
+[14985]: https://trac.saooti.net/ticket/14985
 
 ## 42.3.1 (13/10/2026)
 

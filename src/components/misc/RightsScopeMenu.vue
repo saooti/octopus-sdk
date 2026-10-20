@@ -205,7 +205,7 @@ const subOrgaByLetter = computed((): Map<string, Array<SubOrganisation>> => {
     const data: Map<string, Array<SubOrganisation>> = new Map();
 
     const filtered = subOrganisations.value
-        .filter(sub => sub.name.includes(normalizedSearch.value))
+        .filter(sub => normalize(sub.name).includes(normalizedSearch.value))
         .filter(sub => !userSubOrgas.value.includes(sub))
         .sort((o1, o2) => o1.name.localeCompare(o2.name))
     ;
