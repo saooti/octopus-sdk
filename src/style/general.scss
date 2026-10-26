@@ -55,10 +55,10 @@ main, #app{
   }
 
   /** Link style */
-  a{
+  a {
     word-break: break-word;
     text-decoration: none;
-    color: var(--octopus-primary);
+    color: var(--octopus-link-fg);
   }
 
   /** Break style */
