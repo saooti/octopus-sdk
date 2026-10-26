@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { getLanguage } from '../../src/helper/language';
 
 function setNavigatorLanguage(lang: string) {
@@ -9,8 +9,12 @@ function setNavigatorLanguage(lang: string) {
 }
 
 describe('language', () => {
-    afterEach(() => {
-        document.cookie = 'octopus-language=; Max-Age=0';
+    // Reset before (not after) each test, as other test files may have
+    // left a language cookie behind when running without isolation
+    beforeEach(() => {
+        // happy-dom tracks cookies with and without an explicit path separately
+        document.cookie = 'octopus-language=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        document.cookie = 'octopus-language=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
         setNavigatorLanguage('fr-FR');
     });
 
