@@ -163,14 +163,14 @@ async function listUserScope(userId: string, organisationId?: string): Promise<A
         return scopePromise;
     }
 
-    const rubriquesPromise = searchRubriques({ organisationId });
+    const rubriquagePromise = findRestrictiveRubriquage(organisationId);
 
-    const [scope, rubriques] = await Promise.all([
+    const [scope, rubriquage] = await Promise.all([
         scopePromise,
-        rubriquesPromise
+        rubriquagePromise
     ]);
 
-    const rubriquesIds = rubriques.map(r => r.rubriqueId);
+    const rubriquesIds = rubriquage.rubriques.map(r => r.rubriqueId);
 
     return scope.filter(s => rubriquesIds.includes(s));
 }

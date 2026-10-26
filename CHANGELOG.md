@@ -6,6 +6,8 @@
 
 - **[14085]** - Correctif quand aucune publicité par défaut
 - **[14985]** - Correction filtrage focus incorrect
+- **[15012]** - Problème récupération rubrique restreinte quand trop de
+  rubriques
 
 ### Misc
 
@@ -14,6 +16,7 @@
 
 [14085]: https://trac.saooti.net/ticket/14085
 [14985]: https://trac.saooti.net/ticket/14985
+[15012]: https://trac.saooti.net/ticket/15012
 
 ## 42.3.1 (13/10/2026)
 
