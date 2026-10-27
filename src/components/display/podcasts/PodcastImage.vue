@@ -20,7 +20,8 @@
             aria-hidden="true"
         >
             <img
-                v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
+                loading="lazy"
+                :src="useProxyImageUrl(podcast.imageUrl, '270')"
                 width="270"
                 height="270"
                 aria-hidden="true"
@@ -50,7 +51,7 @@
             :podcast="podcast"
             :hide-play="hidePlay"
             :fetch-conference="fetchConference"
-            :show-processing="isAuthenticated"
+            :show-processing="showProcessing || isAuthenticated"
         />
         <button
             v-if="displayDescription && isMobile"
@@ -81,7 +82,8 @@ const props = defineProps({
     displayDescription: { default: false, type: Boolean },
     arrowDirection: { default: "up", type: String },
     isAnimatorLive: { default: false, type: Boolean },
-    fetchConference: { default: undefined, type: Object as () => Conference }
+    fetchConference: { default: undefined, type: Object as () => Conference },
+    showProcessing: { default: false, type: Boolean }
 })
 
 //Emits

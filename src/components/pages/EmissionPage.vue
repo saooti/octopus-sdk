@@ -20,7 +20,8 @@
 
                     <div class="w-100 mb-2">
                         <img
-                            v-lazy="useProxyImageUrl(emission.imageUrl, '250')"
+                            loading="lazy"
+                            :src="useProxyImageUrl(emission.imageUrl, '250')"
                             width="250"
                             height="250"
                             aria-hidden="true"

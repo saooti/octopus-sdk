@@ -456,5 +456,6 @@
   "Apple podcast - Error - Undefined": "It was not possible to publish this podcast as video on ApplePodcast (status: {status})",
   "Apple podcast - Info - HLS_NOT_READY": "The podcast is not yet available in video on ApplePodcast, it should be available in a few minutes",
   "Filters - Only my episodes": "Show only episodes",
-  "Skip to content": "Go to content"
+  "Skip to content": "Go to content",
+  "SubscribeButtons - Open": "Open {open} page of '{name}'"
 }

@@ -11,7 +11,7 @@
   >
     <audio
       id="audio-player"
-      :src="!playerStore.playerLive && !playerStore.playerRadio ? audioUrlToPlay : undefined"
+      :src="audioSrc"
       autoplay
       @timeupdate="onTimeUpdate"
       @ended="onFinished"
@@ -102,6 +102,18 @@ const route = useRoute();
 // Computed
 const display = computed(() => { return "STOPPED" !== playerStore.playerStatus;});
 const isNotVideoPage = computed(() => { return "video" !== route.name});
+
+const audioSrc = computed((): string => {
+  if (!playerStore.playerLive && !playerStore.playerRadio) {
+    if(audioUrlToPlay.value === '') {
+      return undefined;
+    } else {
+      return audioUrlToPlay.value;
+    }
+  }
+
+  return undefined;
+});
 
 // Watch
 watch(()=>playerStore.playerHeight, async () => {

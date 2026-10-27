@@ -19,14 +19,14 @@
                 }"
                 class="btn share-btn"
                 :href="sub.url"
-                :title="t('New window', {text: sub.title})"
+                :title="t('New window', {text: getTitle(sub.title)})"
             >
                 <component
                     :is="sub.icon"
                     :fill-color="fillColor(sub)"
                     :size="iconSize"
-                    non-decorative
                 />
+                <span class="visually-hidden">{{ getTitle(sub.title) }}</span>
             </a>
         </div>
         <a
@@ -37,9 +37,10 @@
             class="btn share-btn"
             :class="{ mono, small }"
             :href="rssUrl"
-            :title="t('New window', {text: t('Rss feed')})"
+            :title="t('New window', {text: getTitle(t('Rss feed'))})"
         >
             <RssIcon :fill-color="fillColor()" :size="iconSize" />
+            <span class="visually-hidden">{{ getTitle(t('Rss feed')) }}</span>
         </a>
 
         <button
@@ -184,6 +185,11 @@ function fillColor(link?: Link): string|undefined {
     } else {
         return link?.color;
     }
+}
+
+function getTitle(element: string): string {
+    const name = 'title' in props.content ? props.content.title : props.content.name;
+    return t('SubscribeButtons - Open', { open: element, name });
 }
 </script>
 

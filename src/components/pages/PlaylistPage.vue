@@ -19,7 +19,8 @@
 
           <div class="mb-5 mt-3 description-text">
             <img
-              v-lazy="useProxyImageUrl(playlist.imageUrl, '250')"
+              loading="lazy"
+              :src="useProxyImageUrl(playlist.imageUrl, '250')"
               width="250"
               height="250"
               aria-hidden="true"

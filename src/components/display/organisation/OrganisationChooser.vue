@@ -22,7 +22,8 @@
         :data-selenium="'organisation-chooser-' + seleniumFormat(option.name)"
       >
         <img
-          v-lazy="useProxyImageUrl(option.imageUrl, '32')"
+          loading="lazy"
+          :src="useProxyImageUrl(option.imageUrl, '32')"
           width="32"
           height="32"
           class="me-2"

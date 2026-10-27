@@ -9,7 +9,8 @@
       :title="t('Participant name page', { name: name })"
     >
       <img
-        v-lazy="useProxyImageUrl(participant.imageUrl, '200')"
+        loading="lazy"
+        :src="useProxyImageUrl(participant.imageUrl, '200')"
         width="200"
         height="200"
         aria-hidden="true"

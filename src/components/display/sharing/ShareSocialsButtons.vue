@@ -18,6 +18,7 @@
                     :title="t('New window', {text: button.title})"
                 >
                     <component :is="button.icon" :size="34" />
+                    <span class="visually-hidden">{{ t('New window', {text: button.title}) }}</span>
                 </a>
             </template>
             <slot name="additional-buttons" />

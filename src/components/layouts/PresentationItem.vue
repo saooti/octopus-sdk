@@ -16,7 +16,8 @@
                 :class="vertical ? 'img-box-bigger' : ''"
             >
                 <img
-                    v-lazy="useProxyImageUrl(imageUrl, tailleImage)"
+                    loading="lazy"
+                    :src="useProxyImageUrl(imageUrl, tailleImage)"
                     :width="tailleImage"
                     :height="tailleImage"
                     aria-hidden="true"

@@ -9,7 +9,8 @@
         <div class="content">
             <div class="left">
                 <img
-                    v-lazy="useProxyImageUrl(element.imageUrl, '250')"
+                    loading="lazy"
+                    :src="useProxyImageUrl(element.imageUrl, '250')"
                     width="250"
                     height="250"
                     class="img-box"

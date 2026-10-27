@@ -486,5 +486,7 @@
 
   "RightsScopeSelector - Title": "Focus - {rubriquage}",
   "RightsScopeSelector - No filter": "Aucun focus",
-  "RightsScopeSelector - Clear filter": "Retirer le focus"
+  "RightsScopeSelector - Clear filter": "Retirer le focus",
+
+  "SubscribeButtons - Open": "Ouvrir la page {open} de '{name}'"
 }
