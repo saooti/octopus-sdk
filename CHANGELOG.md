@@ -14,6 +14,7 @@
 - Ajout titres sur pages émissions/épisodes pour conformité RGAA
 - Amélioration de la conformité RGAA
 - Amélioration performance tests unitaires
+- Ajout règles eslint pour accessibilité
 
 [14085]: https://trac.saooti.net/ticket/14085
 [14985]: https://trac.saooti.net/ticket/14985

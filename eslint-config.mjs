@@ -3,6 +3,7 @@ import eslintPluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
 import typescriptEslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
+import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility';
 
 export default typescriptEslint.config(
   { ignores: ['*.d.ts', '**/coverage', '**/dist'] },
@@ -11,6 +12,8 @@ export default typescriptEslint.config(
       eslint.configs.recommended,
       ...typescriptEslint.configs.recommended,
       ...eslintPluginVue.configs['flat/recommended'],
+      // Accessibility checks on templates (RGAA)
+      ...vuejsAccessibility.configs['flat/recommended'],
     ],
     plugins: {
       '@stylistic': stylistic,
@@ -47,6 +50,13 @@ export default typescriptEslint.config(
 
       // Disable default values required for props
       "vue/require-default-prop": ['off'],
+
+      // Accessibility: a label is valid when nested OR linked with "for"
+      // (default requires both)
+      "vuejs-accessibility/label-has-for": ['error', { required: { some: ['nesting', 'id'] } }],
+      // Flags every <audio> without <track>, which RGAA does not require;
+      // video captions are checked at runtime by rgaa_checker
+      "vuejs-accessibility/media-has-caption": ['off'],
 
       "@typescript-eslint/no-unused-vars": "warn"
     }
