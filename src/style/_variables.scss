@@ -43,6 +43,9 @@
     // ClassicDataTable
     --table-line-height: 48px;
 
+    // Focus
+    --octopus-focus-color: var(--octopus-primary);
+
     // Links
     --octopus-link-fg: var(--octopus-primary);
 
@@ -60,6 +63,10 @@
     --octopus-btn-paginate-bg: var(--octopus-btn-secondary-bg);
     --octopus-btn-paginate-active-fg: var(--octopus-btn-paginate-fg);
     --octopus-btn-paginate-active-bg: var(--octopus-primary-more-transparent);
+    --octopus-btn-paginate-disabled-fg: oklch(from var(--octopus-btn-paginate-fg) l c h / 40%);
+    --octopus-btn-paginate-disabled-bg: oklch(from var(--octopus-btn-paginate-bg) l c h / 50%);
+    --octopus-btn-transparent-fg: var(--octopus-btn-secondary-fg);
+    --octopus-btn-transparent-bg: transparent;
 
     // Popover
     // Color for text of items in popovers when hovered

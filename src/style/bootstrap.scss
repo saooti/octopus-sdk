@@ -255,7 +255,8 @@ input:not([class^="vs__"]), button:not([class^="vs__"]), select:not([class^="vs_
 
 
 	.btn-transparent{
-		background: transparent;
+		background: var(--octopus-btn-transparent-bg);
+		color: var(--octopus-btn-transparent-fg);
 		border: 0;
 	}
 

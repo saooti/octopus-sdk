@@ -34,7 +34,7 @@ main, #app{
 
   *:focus-visible{
     outline: none;
-    box-shadow: 0 0 10px 1px var(--octopus-primary) !important;
+    box-shadow: 0 0 10px 1px var(--octopus-focus-color) !important;
   }
 
   span.material-design-icon{

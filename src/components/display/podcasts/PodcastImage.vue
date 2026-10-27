@@ -4,60 +4,63 @@
   when processing the file (using PodcastPlayButton).
 -->
 <template>
-  <div
-    v-if="podcast"
-    class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
-  >
-    <router-link
-      :to="{
-        name: 'podcast',
-        params: { podcastId: podcast.podcastId },
-      }"
-      :title="t('Episode name page', { name: podcast.title })"
-    >
-      <img
-        v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
-        width="270"
-        height="270"
-        aria-hidden="true"
-        alt=""
-        class="img-box img-box-podcast"
-        :title="t('Episode name image', { name: podcast.title })"
-      >
-    </router-link>
     <div
-      v-if="state.generalParameters.podcastmaker"
-      :class="mainRubrique ? 'mainRubrique' : 'notMainRubrique'"
-    />
-    <div
-      v-if="fetchConference"
-      class="live-image-status"
-      :class="
-        fetchConference && 'null' !== fetchConference && fetchConference.status
-          ? fetchConference.status.toLowerCase() + '-bg'
-          : ''
-      "
+        v-if="podcast"
+        class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
     >
-      {{ statusText }}
+        <!--
+      Link is unfocusable to avoid double focusable links with PodcastItemInfo
+    -->
+        <router-link
+            :to="{
+                name: 'podcast',
+                params: { podcastId: podcast.podcastId },
+            }"
+            tabindex="-1"
+            aria-hidden="true"
+        >
+            <img
+                v-lazy="useProxyImageUrl(podcast.imageUrl, '270')"
+                width="270"
+                height="270"
+                aria-hidden="true"
+                alt=""
+                class="img-box img-box-podcast"
+            >
+        </router-link>
+        <div
+            v-if="state.generalParameters.podcastmaker"
+            :class="mainRubrique ? 'mainRubrique' : 'notMainRubrique'"
+        />
+        <div
+            v-if="fetchConference"
+            class="live-image-status"
+            :class="
+                fetchConference && 'null' !== fetchConference && fetchConference.status
+                    ? fetchConference.status.toLowerCase() + '-bg'
+                    : ''
+            "
+        >
+            {{ statusText }}
+        </div>
+        <div v-if="isRecordedInLive" class="live-image-status recording-bg">
+            {{ t("Recorded in live") }}
+        </div>
+        <PodcastPlayButton
+            :podcast="podcast"
+            :hide-play="hidePlay"
+            :fetch-conference="fetchConference"
+            :show-processing="isAuthenticated"
+        />
+        <button
+            v-if="displayDescription && isMobile"
+            class="background-icon bg-dark text-white"
+            :title="isDescription ? t('Hide description') : t('Show description')"
+            @click="showDescription"
+        >
+            <ChevronDownIcon :class="{ 'arrow-transform': !isDescription }" />
+        </button>
     </div>
-    <div v-if="isRecordedInLive" class="live-image-status recording-bg">
-      {{ t("Recorded in live") }}
-    </div>
-    <PodcastPlayButton
-      :podcast="podcast"
-      :hide-play="hidePlay"
-      :fetch-conference="fetchConference"
-      :show-processing="isAuthenticated"
-    />
-    <button
-      v-if="displayDescription && isMobile"
-      class="background-icon bg-dark text-white"
-      :title="isDescription ? t('Hide description') : t('Show description')"
-      @click="showDescription"
-    >
-      <ChevronDownIcon :class="{ 'arrow-transform': !isDescription }" />
-    </button>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -73,12 +76,12 @@ import { useAuthStore } from "../../../stores/AuthStore";
 
 //Props 
 const props = defineProps({
-  podcast: { default: () => ({}), type: Object as () => Podcast },
-  hidePlay: { default: false, type: Boolean },
-  displayDescription: { default: false, type: Boolean },
-  arrowDirection: { default: "up", type: String },
-  isAnimatorLive: { default: false, type: Boolean },
-  fetchConference: { default: undefined, type: Object as () => Conference }
+    podcast: { default: () => ({}), type: Object as () => Podcast },
+    hidePlay: { default: false, type: Boolean },
+    displayDescription: { default: false, type: Boolean },
+    arrowDirection: { default: "up", type: String },
+    isAnimatorLive: { default: false, type: Boolean },
+    fetchConference: { default: undefined, type: Object as () => Conference }
 })
 
 //Emits
@@ -95,83 +98,83 @@ const { isAuthenticated } = useAuthStore();
 
 //Computed
 const mainRubrique = computed(() => {
-  return (
-    undefined !== state.podcastPage.mainRubrique &&
-    0 !== state.podcastPage.mainRubrique &&
-    (props.podcast?.rubriqueIds?.includes(
-      state.podcastPage.mainRubrique,
-    ) as boolean)
-  );
+    return (
+        undefined !== state.podcastPage.mainRubrique &&
+        0 !== state.podcastPage.mainRubrique &&
+        (props.podcast?.rubriqueIds?.includes(
+            state.podcastPage.mainRubrique,
+        ) as boolean)
+    );
 });
 const isRecordedInLive = computed(() => {
-  return (
-    undefined === props.fetchConference &&
-    undefined !== props.podcast.conferenceId &&
-    "READY_TO_RECORD" !== props.podcast.processingStatus
-  );
+    return (
+        undefined === props.fetchConference &&
+        undefined !== props.podcast.conferenceId &&
+        "READY_TO_RECORD" !== props.podcast.processingStatus
+    );
 });
 const statusText = computed(() => {
-  if (!props.fetchConference) {
-    return "";
-  }
+    if (!props.fetchConference) {
+        return "";
+    }
 
-  switch (props.fetchConference.status) {
+    switch (props.fetchConference.status) {
     case "PLANNED":
-      return t("live in few time");
+        return t("live in few time");
 
     case "PENDING":
-      if (props.isAnimatorLive) {
-        return t("Open studio");
-      } else {
-        return t("live upcoming");
-      }
+        if (props.isAnimatorLive) {
+            return t("Open studio");
+        } else {
+            return t("live upcoming");
+        }
 
     case "RECORDING":
-      return t("In live");
+        return t("In live");
 
     case "DEBRIEFING":
-      if ("READY_TO_RECORD" === props.podcast.processingStatus) {
-        return t("Not recording");
-      } else {
-        return t("Debriefing");
-      }
+        if ("READY_TO_RECORD" === props.podcast.processingStatus) {
+            return t("Not recording");
+        } else {
+            return t("Debriefing");
+        }
 
     case "ERROR":
-      return t("In error");
+        return t("In error");
 
     case "PUBLISHING":
-      return t("Publishing");
+        return t("Publishing");
 
     default:
-      return "";
-  }
+        return "";
+    }
 });
 
 
 //Watch
 watch(()=>props.arrowDirection, () => {
-  if ("up" === props.arrowDirection) {
-    isDescription.value = true;
-    showDescription();
-  } else {
-    isDescription.value = false;
-    showDescription();
-  }
+    if ("up" === props.arrowDirection) {
+        isDescription.value = true;
+        showDescription();
+    } else {
+        isDescription.value = false;
+        showDescription();
+    }
 });
 
 
 onBeforeMount(()=>{
-  isMobile.value = window.matchMedia("(hover: none)").matches;
+    isMobile.value = window.matchMedia("(hover: none)").matches;
 })
 
 //Methods
 function showDescription(): void {
-  if (isDescription.value) {
-    emit("hideDescription");
-  } else {
-    emit("showDescription");
-  }
-  isDescription.value = !isDescription.value;
+    if (isDescription.value) {
+        emit("hideDescription");
+    } else {
+        emit("showDescription");
+    }
+    isDescription.value = !isDescription.value;
 }
 </script>
 
