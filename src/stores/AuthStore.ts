@@ -10,6 +10,7 @@ import { useI18n } from "vue-i18n";
 import { organisationApi, rubriquesApi } from "@/api";
 import { useSubOrganisations } from "@/components/composable/useSubOrganisations";
 import { nextTick, toRef } from "vue";
+import { saootiPlayer } from "@saooti/saooti-player";
 
 interface AuthParam {
     accessToken?: string;
@@ -150,9 +151,11 @@ export const useAuthStore = defineStore("AuthStore", {
             this.authOrgaId = authentication.organisationId ?? this.authOrgaId;
             this.authOrgaName = authentication.organisationName ?? this.authOrgaName;
             this.authRole = authentication.role ?? this.authRole;
+            this.updatePlayerAuth();
         },
         authUpdateParam(oAuthParam: AuthParam) {
             this.authParam = oAuthParam;
+            this.updatePlayerAuth();
         },
         authUpdateProfile(profile: Profile) {
             this.authProfile = profile;
@@ -302,7 +305,14 @@ export const useAuthStore = defineStore("AuthStore", {
                 await this.fetchProfile();
             }
         },
-    },
+
+        updatePlayerAuth(): void {
+            saootiPlayer.updateAuth({
+                accessToken: this.authParam.accessToken,
+                authOrgaId: this.authOrgaId
+            });
+        }
+    }
 });
 
 /** Type for the AuthStore */
