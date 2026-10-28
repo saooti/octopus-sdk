@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 42.4.0 (En cours)
+
+### Features
+
+- **[14959]** - Intégration librairie saooti-player
+
+[14959]: https://trac.saooti.net/ticket/14959
+
 ## 42.3.4 (En cours)
 
 ### Fixes

@@ -5,8 +5,6 @@ import { type Pinia, setActivePinia, createPinia } from 'pinia';
 import { createTestingPinia } from '@pinia/testing';
 
 import { useAuthStore } from '../src/stores/AuthStore';
-//import { PlayerStatus, usePlayerStore } from '../src/stores/PlayerStore';
-import { Podcast } from '../src/stores/class/general/podcast';
 import { localisation } from './localisation';
 
 export { localisation };
@@ -23,23 +21,23 @@ export { localisation };
  * @returns A wrapper for the component
  */
 export async function mount(component: Component, options?: {
-        /** Use shallow mounting (do not mount subcomponents) */
-        shallow?: boolean,
-        /** Props to set on the component */
-        props?: Record<string, unknown>,
-        /** Stub subcomponents */
-        stubs?: Record<string, Component|boolean>|string[],
-        /** Slot content to render into the mounted component */
-        slots?: Record<string, unknown>,
-        /** Components to register globally on the test app instance (e.g. to test components resolved at runtime via app.component()) */
-        globalComponents?: Record<string, Component>,
-        /** Values to provide on the test app instance (e.g. to test values resolved at runtime via app.provide()/inject()) */
-        provide?: Record<string | symbol, unknown>,
-        /** Hook called before mounting with access to Pinia instance for store initialization */
-        beforeMount?: (pinia: Pinia) => void | Promise<void>,
-        /** Element to attach the component to, needed e.g. to test focus */
-        attachTo?: HTMLElement | string
-    }): Promise<VueWrapper> {
+    /** Use shallow mounting (do not mount subcomponents) */
+    shallow?: boolean,
+    /** Props to set on the component */
+    props?: Record<string, unknown>,
+    /** Stub subcomponents */
+    stubs?: Record<string, Component|boolean>|string[],
+    /** Slot content to render into the mounted component */
+    slots?: Record<string, unknown>,
+    /** Components to register globally on the test app instance (e.g. to test components resolved at runtime via app.component()) */
+    globalComponents?: Record<string, Component>,
+    /** Values to provide on the test app instance (e.g. to test values resolved at runtime via app.provide()/inject()) */
+    provide?: Record<string | symbol, unknown>,
+    /** Hook called before mounting with access to Pinia instance for store initialization */
+    beforeMount?: (pinia: Pinia) => void | Promise<void>,
+    /** Element to attach the component to, needed e.g. to test focus */
+    attachTo?: HTMLElement | string
+}): Promise<VueWrapper> {
 
     // Component stubbing
     const stubs: Record<string, Component|boolean> = {
@@ -76,8 +74,7 @@ export async function mount(component: Component, options?: {
     const wrapper = _mount(component, {
         global: {
             mocks: {
-                $t: localisation,
-                usePlayerStore: vi.fn()
+                $t: localisation
             },
             directives: {
                 lazy: vi.fn
@@ -137,23 +134,6 @@ export function setupAuthStore(config?: {
                 ...(authStore.authProfile ?? {}),
                 scope: config?.scope ?? []
             }
-        });
-    };
-}
-
-/**
- * Helper for PlayerStore configuration
- * @returns beforeMount hook function
- */
-export function setupPlayerStore(config?: {
-    playerPodcast?: Podcast,
-    playerStatus?: PlayerStatus
-}) {
-    return async () => {
-        const playerStore = usePlayerStore(); // Uses active pinia
-        playerStore.$patch({
-            playerPodcast: config?.playerPodcast,
-            playerStatus: config?.playerStatus || PlayerStatus.STOPPED
         });
     };
 }

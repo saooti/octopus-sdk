@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "42.3.3",
+  "version": "42.4.0-beta1",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@multiformats/murmur3": "^2.2.8",
     "@popperjs/core": "^2.11.8",
-    "@saooti/saooti-player": "^0.1.0",
+    "@saooti/saooti-player": "file:../saooti-player/saooti-saooti-player-0.1.0.tgz",
     "@stomp/stompjs": "^7.3.0",
     "@tato30/vue-pdf": "^2.2.0",
     "@tiptap/extension-hard-break": "^3.31.4",

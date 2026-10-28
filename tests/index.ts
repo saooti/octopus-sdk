@@ -3,7 +3,6 @@ export {
     mount,
     VueWrapper,
     setupAuthStore,
-    setupPlayerStore,
     combineStoreSetups,
     setupPinia
 } from './utils';

@@ -125,7 +125,6 @@ const hoverType = ref("");
 
 //Composables
 const { t } = useI18n();
-//const playerStore = usePlayerStore();
 const { isPhone } = useResizePhone();
 const { livePlaying, playerStatus, podcastPlaying, videoPlaying } = useSaootiPlayer();
 
