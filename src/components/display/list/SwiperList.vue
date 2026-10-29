@@ -73,6 +73,7 @@ import { computed, getCurrentInstance, nextTick, onMounted, ref, useTemplateRef,
 
 //Props 
 interface BaseProps {
+    /** Elements to display */
     listObject?: Array<unknown>;
 }
 type Props = BaseProps & (

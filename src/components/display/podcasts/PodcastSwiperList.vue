@@ -26,6 +26,7 @@
                     <PodcastItem
                         class="flex-shrink-0 item-phone-margin"
                         :podcast="option"
+                        :show-emission-name="showEmissionName"
                     />
                 </template>
             </SwiperList>
@@ -70,7 +71,9 @@ const props = defineProps({
     /** The podcast from which suggestions are made */
     podcastId: { type: Number },
     /** Hide sort options */
-    noSort: { default: false, type: Boolean }
+    noSort: { default: false, type: Boolean },
+    /** Display emission name in podcast item */
+    showEmissionName: { default: false, type: Boolean }
 })
 
 //Emits

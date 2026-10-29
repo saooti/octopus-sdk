@@ -17,6 +17,7 @@
         :podcast-id="podcastId"
         :last-three-months="lastThreeMonths"
         :title-tag="titleTag"
+        :show-emission-name="showEmissionName"
         @update:is-arrow="updateArrow($event)"
     />
 </template>
@@ -47,6 +48,8 @@ defineProps({
     podcastId: { default: undefined, type: Number },
     lastThreeMonths: { default: false, type: Boolean },
     titleTag: { default: "h2", type: String },
+    /** Display emission name in podcast item */
+    showEmissionName: { default: false, type: Boolean }
 })
 
 //Emits

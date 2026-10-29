@@ -16,6 +16,12 @@
             class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
             :title="t('Episode name page', { name: podcast.title })"
         >
+            <div
+                v-if="showEmissionName"
+                class="emission-name"
+            >
+                {{ podcast.emission.name }}
+            </div>
             <RightsIndicator
                 inline
                 :podcast="podcast"
@@ -68,9 +74,12 @@ const PodcastPlayBar = defineAsyncComponent(
 );
 
 //Props 
-const props = defineProps({
-    podcast: { default: () => ({}), type: Object as () => Podcast },
-})
+const props = defineProps<{
+    /** The podcast to display */
+    podcast: Podcast;
+    /** Also display emission name */
+    showEmissionName?: boolean;
+}>();
 
 //Composables
 const { t } = useI18n();
@@ -110,5 +119,10 @@ const orgaNameDisplay = computed(() =>{
 .podcast-item-status {
     display: flex;
     justify-content: space-between;
+}
+
+.emission-name {
+    font-weight: 500;
+    font-size: 0.8rem;
 }
 </style>
