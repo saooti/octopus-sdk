@@ -12,10 +12,15 @@
                 :allow-slide-prev="loop"
                 :navigation="navigationOptions"
                 :modules="modules"
+                wrapper-tag="ul"
                 @slides-updated="slidesUpdated"
                 @slide-change="slideChange"
             >
-                <swiper-slide v-for="(obj, index) in listObject" :key="index">
+                <swiper-slide
+                    v-for="(obj, index) in listObject"
+                    :key="index"
+                    tag="li"
+                >
                     <slot
                         v-if="composableInit"
                         name="octopusSlide"
@@ -24,11 +29,24 @@
                     />
                 </swiper-slide>
             </swiper>
-            <div :id="prevElId" class="swiper-button-prev" />
-            <div :id="nextElId" class="swiper-button-next" />
+            <!-- Hidden when not looping, as navigation is disabled -->
+            <button
+                v-show="loop"
+                :id="prevElId"
+                type="button"
+                class="swiper-button-prev"
+                :aria-label="$t('SwiperList - Show previous items')"
+            />
+            <button
+                v-show="loop"
+                :id="nextElId"
+                type="button"
+                class="swiper-button-next"
+                :aria-label="$t('SwiperList - Show next items')"
+            />
         </template>
-        <div v-else-if="composableInit" class="element-list-inline">
-            <div
+        <ul v-else-if="composableInit" class="element-list-inline">
+            <li
                 v-for="(obj, index) in listObject"
                 :key="obj"
                 class="element-list-item"
@@ -38,8 +56,8 @@
                     :option="obj"
                     :index="index"
                 />
-            </div>
-        </div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -209,9 +227,20 @@ function slideChange() {
   //height: 100%;
   inset-block:0;
   margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
   width: 40px;
   z-index: 5 !important;
   //background: var(--octopus-background);
+}
+
+// Remove default list style, padding-bottom of .element-list-inline is kept
+ul.swiper-wrapper,
+ul.element-list-inline {
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
 }
 
 .swiper-button-lock {

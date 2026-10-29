@@ -463,6 +463,7 @@
 
   "Generic - Content unavailable - Country blocked - Title": "Contenu indisponible",
   "Generic - Content unavailable - Country blocked - Message": "Ce contenu n'est pas disponible dans votre pays.",
+  "Generic - Continue": "Continuer",
   
   "Generic - Action disabled - Not owner": "Cette action n'est pas disponible car vos droits ne vous permettent pas de modifier ou supprimer des éléments dont vous n'êtes pas propriétaire",
   "RightsIndicator - Podcast - Not owner": "Ce podcast a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
@@ -488,5 +489,8 @@
   "RightsScopeSelector - No filter": "Aucun focus",
   "RightsScopeSelector - Clear filter": "Retirer le focus",
 
-  "SubscribeButtons - Open": "Ouvrir la page {open} de '{name}'"
+  "SubscribeButtons - Open": "Ouvrir la page {open} de '{name}'",
+
+  "SwiperList - Show previous items": "Afficher les éléments précédents",
+  "SwiperList - Show next items": "Afficher les éléments suivants"
 }

@@ -458,5 +458,8 @@
     "Apple podcast - Info - HLS_NOT_READY": "Il podcast non è ancora disponibile in video su ApplePodcast, dovrebbe essere disponibile tra pochi minuti",
     "Filters - Only my episodes": "Mostra solo episodi",
     "Skip to content": "Vai al contenuto",
-    "SubscribeButtons - Open": "Apri la pagina {open} di '{name}'"
+    "SubscribeButtons - Open": "Apri la pagina {open} di '{name}'",
+    "Generic - Continue": "Continuare",
+    "SwiperList - Show previous items": "Mostra gli elementi precedenti",
+    "SwiperList - Show next items": "Mostra quanto segue"
 }

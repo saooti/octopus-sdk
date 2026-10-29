@@ -456,5 +456,8 @@
   "Apple podcast - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na ApplePodcastu, na voljo bi moral biti čez nekaj minut",
   "Filters - Only my episodes": "Prikaži samo epizode",
   "Skip to content": "Pojdi na vsebino",
-  "SubscribeButtons - Open": "Odpri {open} stran '{name}'"
+  "SubscribeButtons - Open": "Odpri {open} stran '{name}'",
+  "Generic - Continue": "Nadaljuj",
+  "SwiperList - Show previous items": "Pokaži prejšnje elemente",
+  "SwiperList - Show next items": "Pokaži naslednje"
 }

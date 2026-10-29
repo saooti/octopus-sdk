@@ -457,5 +457,8 @@
   "Apple podcast - Info - HLS_NOT_READY": "The podcast is not yet available in video on ApplePodcast, it should be available in a few minutes",
   "Filters - Only my episodes": "Show only episodes",
   "Skip to content": "Go to content",
-  "SubscribeButtons - Open": "Open {open} page of '{name}'"
+  "SubscribeButtons - Open": "Open {open} page of '{name}'",
+  "Generic - Continue": "Continue",
+  "SwiperList - Show previous items": "Show previous items",
+  "SwiperList - Show next items": "Show the following"
 }
