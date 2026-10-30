@@ -460,5 +460,9 @@
   "SubscribeButtons - Open": "Öffnen Sie die {open} Seite von „{name}“.",
   "Generic - Continue": "Weitermachen",
   "SwiperList - Show previous items": "Vorherige Artikel anzeigen",
-  "SwiperList - Show next items": "Zeigen Sie Folgendes"
+  "SwiperList - Show next items": "Zeigen Sie Folgendes",
+  "CommentSection - Status Indicator - Connected": "Verbunden, um Live-Feedback zu erhalten",
+  "CommentSection - Status Indicator - Connecting": "Verbinden...",
+  "CommentSection - Status Indicator - Disonnected": "Wenn die Verbindung unterbrochen ist, erhalten Sie keine Live-Kommentare",
+  "CommentSection - Status Indicator - Inactive": "Keine Verbindung für Live-Kommentare"
 }

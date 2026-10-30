@@ -1,52 +1,54 @@
 <template>
-  <div>
-    <button
-      class="btn-like-comment"
-      :class="{
-        'is-active': isActive,
-        'is-dislike': !like,
-      }"
-      :title="titleButton"
-      @click="clickButton"
-    >
-      <template v-if="like">
-        <ThumbUpOutlineIcon v-if="!isActive" />
-        <ThumbUpIcon v-else />
-      </template>
-      <template v-else>
-        <ThumbDownOutlineIcon v-if="!isActive" />
-        <ThumbDownIcon v-else />
-      </template>
-    </button>
-    <SnackBar ref="snackbar" position="bottom-left" />
-  </div>
+    <div>
+        <button
+            class="btn-like-comment"
+            :class="{
+                'is-active': isActive,
+                'is-dislike': !like,
+            }"
+            :title="titleButton"
+            :style="{ '--icon-size': size }"
+            @click="clickButton"
+        >
+            <template v-if="like">
+                <ThumbUpOutlineIcon v-if="!isActive" :size="size" />
+                <ThumbUpIcon v-else :size="size" />
+            </template>
+            <template v-else>
+                <ThumbDownOutlineIcon v-if="!isActive" :size="size" />
+                <ThumbDownIcon v-else :size="size" />
+            </template>
+        </button>
+        <SnackBar ref="snackbar" position="bottom-left" />
+    </div>
 </template>
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 const ThumbUpIcon = defineAsyncComponent(
-  () => import("vue-material-design-icons/ThumbUp.vue"),
+    () => import("vue-material-design-icons/ThumbUp.vue"),
 );
 const ThumbDownIcon = defineAsyncComponent(
-  () => import("vue-material-design-icons/ThumbDown.vue"),
+    () => import("vue-material-design-icons/ThumbDown.vue"),
 );
 const ThumbUpOutlineIcon = defineAsyncComponent(
-  () => import("vue-material-design-icons/ThumbUpOutline.vue"),
+    () => import("vue-material-design-icons/ThumbUpOutline.vue"),
 );
 const ThumbDownOutlineIcon = defineAsyncComponent(
-  () => import("vue-material-design-icons/ThumbDownOutline.vue"),
+    () => import("vue-material-design-icons/ThumbDownOutline.vue"),
 );
 const SnackBar = defineAsyncComponent(
-  () => import("../../../misc/SnackBar.vue"),
+    () => import("../../../misc/SnackBar.vue"),
 );
 
 //Props 
-const props = defineProps({
-  like: { default: true, type: Boolean },
-  isActive: { default: false, type: Boolean },
-  canInteract: { default: false, type: Boolean },
-})
+const props = defineProps<{
+    like: boolean;
+    isActive?: boolean;
+    canInteract: boolean;
+    size?: number;
+}>();
 
 //Emits
 const emit = defineEmits(["like-action"]);
@@ -59,26 +61,27 @@ const { t } = useI18n();
 
 //Computed
 const actionName = computed(() => {
-  if (props.like) {
-    return props.isActive ? "dislike" : "like";
-  }
-  return props.isActive ? "like" : "dislike";
+    if (props.like) {
+        return props.isActive ? "dislike" : "like";
+    }
+    return props.isActive ? "like" : "dislike";
 });
 const titleButton = computed(() => props.like ? t("Like") : t("Dislike"));
 
 //Methods
 function clickButton() {
-  if (props.canInteract) {
-    emit("like-action", actionName.value);
-  } else {
-    (snackBarRef?.value as InstanceType<typeof SnackBar>).open(t("Log in to access this service"));
-  }
+    if (props.canInteract) {
+        emit("like-action", actionName.value);
+    } else {
+        (snackBarRef?.value as InstanceType<typeof SnackBar>).open(t("Log in to access this service"));
+    }
 }
 </script>
-<style lang="scss">
+
+<style scoped lang="scss">
 @use "sass:color";
 
-.octopus-app .btn-like-comment {
+.btn-like-comment {
   $background-color: var(--octopus-primary);
 
   &.is-dislike {
@@ -91,9 +94,8 @@ function clickButton() {
   outline: none;
   z-index: 1;
   color: var(--octopus-color-text);
-  font-size: 1.2rem;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: calc(var(--icon-size) * 1px + 15px);
+  height: calc(var(--icon-size) * 1px + 15px);
   border-radius: 50%;
   background: transparent;
   transition: background 0.2s;

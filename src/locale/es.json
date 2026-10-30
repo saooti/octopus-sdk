@@ -460,5 +460,9 @@
   "SubscribeButtons - Open": "Abrir {open} página de '{name}'",
   "Generic - Continue": "Continuar",
   "SwiperList - Show previous items": "Mostrar elementos anteriores",
-  "SwiperList - Show next items": "Muestra lo siguiente"
+  "SwiperList - Show next items": "Muestra lo siguiente",
+  "CommentSection - Status Indicator - Connected": "Conectado para recibir comentarios en vivo",
+  "CommentSection - Status Indicator - Connecting": "Conectando...",
+  "CommentSection - Status Indicator - Disonnected": "Desconectado, no recibirás comentarios en vivo",
+  "CommentSection - Status Indicator - Inactive": "No hay conexión para comentarios en vivo"
 }

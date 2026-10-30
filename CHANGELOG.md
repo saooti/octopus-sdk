@@ -2,12 +2,17 @@
 
 ## 42.3.2 (En cours)
 
+### Features
+
+- Ajout d'un indicateur de status pour le module de commentaires
+
 ### Fixes
 
 - **[14085]** - Correctif quand aucune publicité par défaut
 - **[14985]** - Correction filtrage focus incorrect
 - **[15012]** - Problème récupération rubrique restreinte quand trop de
   rubriques
+- Correction connexion/reconnexion module de commentaires
 
 ### Misc
 

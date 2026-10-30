@@ -444,6 +444,11 @@
   "Auth error - Couldn't retrieve user info - Title": "Erreur de connexion",
   "Auth error - Couldn't retrieve user info - Message": "Une erreur est survenue lors de la récupération de vos informations d'utilisateur. Veuillez recharger la page. Si le problème persiste, merci de contacter notre support.",
 
+  "CommentSection - Status Indicator - Connected": "Connecté pour la réception de commentaires en direct",
+  "CommentSection - Status Indicator - Connecting": "En cours de connexion...",
+  "CommentSection - Status Indicator - Disonnected": "Déconnecté, vous ne recevrez pas les commentaires en direct",
+  "CommentSection - Status Indicator - Inactive": "Aucune connection pour les commentaires en direct",
+
   "SmartLink - Share link": "Lien de partage SmartLink",
   "SmartLink - Listen to latest episode": "Écouter le dernier épisode",
   "SmartLink - Made by": "Hébergé par",

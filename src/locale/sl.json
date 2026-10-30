@@ -459,5 +459,9 @@
   "SubscribeButtons - Open": "Odpri {open} stran '{name}'",
   "Generic - Continue": "Nadaljuj",
   "SwiperList - Show previous items": "Pokaži prejšnje elemente",
-  "SwiperList - Show next items": "Pokaži naslednje"
+  "SwiperList - Show next items": "Pokaži naslednje",
+  "CommentSection - Status Indicator - Connected": "Povezan za prejemanje povratnih informacij v živo",
+  "CommentSection - Status Indicator - Connecting": "Povezovanje ...",
+  "CommentSection - Status Indicator - Disonnected": "Povezava je prekinjena, ne boste prejemali komentarjev v živo",
+  "CommentSection - Status Indicator - Inactive": "Ni povezave za komentiranje v živo"
 }

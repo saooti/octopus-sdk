@@ -1,66 +1,66 @@
 <template>
-  <div v-if="isAtLeastOneMoreAction">
-    <ReportAbuseModal
-      v-if="isReportAbuse"
-      v-model:comment="commentForVmodel"
-      @close="isReportAbuse = false"
-    />
-    <EditCommentModal
-      v-if="isEdit"
-      v-model:comment="commentForVmodel"
-      :edit-right="editRight"
-      @close="isEdit = false"
-    />
-    <MessageModal
-      v-if="confirmModal"
-      :validatetext="validateText"
-      :canceltext="canceltext"
-      :closable="false"
-      :title="modalTitle"
-      :message="modalMessage"
-      :focus="true"
-      @cancel="confirmModal = false"
-      @validate="actionComment"
-      @close="confirmModal = false"
-    />
-    <button
-      :id="'comment-dropdown' + comment.commentId"
-      class="btn share-btn"
-      :title="t('See more')"
-      :data-selenium="
-        'comment-dropdown-' + seleniumFormat(comment.poster.userName)
-      "
-    >
-      <DotsVerticalIcon />
-    </button>
-    <ClassicPopover
-      :target="'comment-dropdown' + comment.commentId"
-      :only-click="true"
-      :left-pos="true"
-    >
-      <template v-for="action in moreActions" :key="action">
+    <div v-if="isAtLeastOneMoreAction">
+        <ReportAbuseModal
+            v-if="isReportAbuse"
+            v-model:comment="commentForVmodel"
+            @close="isReportAbuse = false"
+        />
+        <EditCommentModal
+            v-if="isEdit"
+            v-model:comment="commentForVmodel"
+            :edit-right="editRight"
+            @close="isEdit = false"
+        />
+        <MessageModal
+            v-if="confirmModal"
+            :validatetext="validateText"
+            :canceltext="canceltext"
+            :closable="false"
+            :title="modalTitle"
+            :message="modalMessage"
+            :focus="true"
+            @cancel="confirmModal = false"
+            @validate="actionComment"
+            @close="confirmModal = false"
+        />
         <button
-          v-if="action.condition"
-          class="octopus-dropdown-item c-hand"
-          @mousedown="action.actionClick"
-          @keydown.enter="action.actionClick"
+            :id="'comment-dropdown' + comment.commentId"
+            class="btn btn-transparent"
+            :title="t('See more')"
+            :data-selenium="
+                'comment-dropdown-' + seleniumFormat(comment.poster.userName)
+            "
         >
-          {{ action.title }}
+            <DotsVerticalIcon />
         </button>
-      </template>
-    </ClassicPopover>
-    <!--
+        <ClassicPopover
+            :target="'comment-dropdown' + comment.commentId"
+            :only-click="true"
+            :left-pos="true"
+        >
+            <template v-for="action in moreActions" :key="action">
+                <button
+                    v-if="action.condition"
+                    class="octopus-dropdown-item c-hand"
+                    @mousedown="action.actionClick"
+                    @keydown.enter="action.actionClick"
+                >
+                    {{ action.title }}
+                </button>
+            </template>
+        </ClassicPopover>
+        <!--
       CommentMoreActionsAdmin is not defined in the SDK: it is resolved at
       runtime from the consuming app's globally registered components
       (app.component()), and renders nothing if the app hasn't registered one
       under that name.
     -->
-    <CommentMoreActionsAdmin
-      v-if="editRight"
-      v-model:comment="commentForVmodel"
-      v-model:actions-admin="actionsAdmin"
-    />
-  </div>
+        <CommentMoreActionsAdmin
+            v-if="editRight"
+            v-model:comment="commentForVmodel"
+            v-model:actions-admin="actionsAdmin"
+        />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -75,24 +75,24 @@ import { defineAsyncComponent, ref, Ref, computed } from "vue";
 import { CommentsConfig } from "@/stores/class/config/commentsConfig";
 import { useI18n } from "vue-i18n";
 const ClassicPopover = defineAsyncComponent(
-  () => import("../../../misc/ClassicPopover.vue"),
+    () => import("../../../misc/ClassicPopover.vue"),
 );
 const ReportAbuseModal = defineAsyncComponent(
-  () => import("../modal/ReportAbuseModal.vue"),
+    () => import("../modal/ReportAbuseModal.vue"),
 );
 const EditCommentModal = defineAsyncComponent(
-  () => import("../modal/EditCommentModal.vue"),
+    () => import("../modal/EditCommentModal.vue"),
 );
 const MessageModal = defineAsyncComponent(
-  () => import("../../../misc/modal/MessageModal.vue"),
+    () => import("../../../misc/modal/MessageModal.vue"),
 );
 
 //Props 
 const props = defineProps({
-  comment: { default: () => ({}), type: Object as () => CommentPodcast },
-  podcast: { default: undefined, type: Object as () => Podcast },
-  config: { default: undefined, type: Object as () => CommentsConfig },
-  editRight: { default: false, type: Boolean },
+    comment: { default: () => ({}), type: Object as () => CommentPodcast },
+    podcast: { default: undefined, type: Object as () => Podcast },
+    config: { default: undefined, type: Object as () => CommentsConfig },
+    editRight: { default: false, type: Boolean },
 })
 
 //Emits
@@ -115,160 +115,160 @@ const commentStore = useCommentStore();
 
 //Computed
 const commentForVmodel = computed({
-  get(): CommentPodcast {
-    return props.comment;
-  },
-  set(value: CommentPodcast) {
-    emit("update:comment", value);
-  },
+    get(): CommentPodcast {
+        return props.comment;
+    },
+    set(value: CommentPodcast) {
+        emit("update:comment", value);
+    },
 });
 const isMyComment = computed(() => {
-  const uuid = authStore.authProfile?.userId ?? commentStore.commentUser?.uuidHash;
-  return uuid === props.comment?.poster.uuid;
+    const uuid = authStore.authProfile?.userId ?? commentStore.commentUser?.uuidHash;
+    return uuid === props.comment?.poster.uuid;
 });
 const isAtLeastOneMoreAction = computed(() => {
-  return moreActions.value.some((el) => {
-    return el.condition;
-  });
+    return moreActions.value.some((el) => {
+        return el.condition;
+    });
 });
 const moreActions = computed(() => {
-  return [
-    {
-      title: t("Report abuse"),
-      actionClick: () => {
-        isReportAbuse.value = true;
-      },
-      condition:
-        commentStore.getCanReportAbuse(
-          props.config,
-          undefined !== authStore.authOrgaId,
-        ) && !isMyComment.value,
-    },
-    {
-      title: t("Managing reported abuses"),
-      actionClick: () => {
-        actionsAdmin.value = "abuse";
-      },
-      condition: props.editRight && props.comment.abuse,
-    },
-    {
-      title: t("Edit comment"),
-      actionClick: () => {
-        isEdit.value = true;
-      },
-      condition: props.editRight || isMyComment.value,
-    },
-    {
-      title: t("Comment information"),
-      actionClick: () => {
-        actionsAdmin.value = "info";
-      },
-      condition: props.editRight && !props.podcast,
-    },
-    {
-      title: t("Validate"),
-      actionClick: () => {
-        actionName.value = "validate";
-        isError.value = false;
-        confirmModal.value = true;
-      },
-      condition:
-        props.editRight &&
-        ("PENDING" === props.comment.state ||
-          "NOT_VALID" === props.comment.state),
-    },
-    {
-      title: t("Invalidate"),
-      actionClick: () => {
-        actionName.value = "invalidate";
-        isError.value = false;
-        confirmModal.value = true;
-      },
-      condition:
-        props.editRight &&
-        ("PENDING" === props.comment.state ||
-          "VALIDATED" === props.comment.state),
-    },
-    {
-      title: t("Delete comment"),
-      actionClick: () => {
-        actionName.value = "delete";
-        isError.value = false;
-        confirmModal.value = true;
-      },
-      condition: props.editRight || isMyComment.value,
-    },
-  ];
+    return [
+        {
+            title: t("Report abuse"),
+            actionClick: () => {
+                isReportAbuse.value = true;
+            },
+            condition:
+                commentStore.getCanReportAbuse(
+                    props.config,
+                    undefined !== authStore.authOrgaId,
+                ) && !isMyComment.value,
+        },
+        {
+            title: t("Managing reported abuses"),
+            actionClick: () => {
+                actionsAdmin.value = "abuse";
+            },
+            condition: props.editRight && props.comment.abuse,
+        },
+        {
+            title: t("Edit comment"),
+            actionClick: () => {
+                isEdit.value = true;
+            },
+            condition: props.editRight || isMyComment.value,
+        },
+        {
+            title: t("Comment information"),
+            actionClick: () => {
+                actionsAdmin.value = "info";
+            },
+            condition: props.editRight && !props.podcast,
+        },
+        {
+            title: t("Validate"),
+            actionClick: () => {
+                actionName.value = "validate";
+                isError.value = false;
+                confirmModal.value = true;
+            },
+            condition:
+                props.editRight &&
+                ("PENDING" === props.comment.state ||
+                    "NOT_VALID" === props.comment.state),
+        },
+        {
+            title: t("Invalidate"),
+            actionClick: () => {
+                actionName.value = "invalidate";
+                isError.value = false;
+                confirmModal.value = true;
+            },
+            condition:
+                props.editRight &&
+                ("PENDING" === props.comment.state ||
+                    "VALIDATED" === props.comment.state),
+        },
+        {
+            title: t("Delete comment"),
+            actionClick: () => {
+                actionName.value = "delete";
+                isError.value = false;
+                confirmModal.value = true;
+            },
+            condition: props.editRight || isMyComment.value,
+        },
+    ];
 });
 const validateText = computed(() => {
-  if (isError.value) {
-    return t("Close");
-  }
-  return actionInProgress.value ? undefined : t("Yes");
+    if (isError.value) {
+        return t("Close");
+    }
+    return actionInProgress.value ? undefined : t("Yes");
 });
 const canceltext = computed(() => isError.value ? undefined : t("No"));
 const modalMessage = computed(() => {
-  if (actionInProgress.value) {
-    return t("Saving");
-  }
-  if (isError.value) {
-    return t("An error occurred");
-  }
-  const name = { name: props.comment.poster.userName };
-  switch (actionName.value) {
+    if (actionInProgress.value) {
+        return t("Saving");
+    }
+    if (isError.value) {
+        return t("An error occurred");
+    }
+    const name = { name: props.comment.poster.userName };
+    switch (actionName.value) {
     case "delete":
-      return t("Confirm comment deletion text", name);
+        return t("Confirm comment deletion text", name);
     case "validate":
-      return t("Confirm comment valid text", name);
+        return t("Confirm comment valid text", name);
     case "invalidate":
-      return t("Confirm comment invalid text", name);
+        return t("Confirm comment invalid text", name);
     default:
-      return "";
-  }
+        return "";
+    }
 });
 const modalTitle = computed(() => {
-  if ("delete" === actionName.value) {
-    return t("Delete comment");
-  }
-  return t("Update comment");
+    if ("delete" === actionName.value) {
+        return t("Delete comment");
+    }
+    return t("Update comment");
 });  
  
 
 //Methods
 async function actionComment() {
-  if (!props.comment) {
-    return;
-  }
-  actionInProgress.value = true;
-  isError.value = false;
-  try {
-    if ("delete" === actionName.value) {
-      await classicApi.deleteData({
-        api: 2,
-        path: "comment/" + props.comment.commentId,
-        parameters: props.editRight
-          ? undefined
-          : { uuid: commentStore.commentUser?.uuid },
-        isNotAuth: !props.editRight,
-      });
-      emit("deleteComment");
-    } else {
-      const commentUpdated = await classicApi.putData({
-        api: 2,
-        path: "comment/",
-        dataToSend: {
-          commentId: props.comment.commentId,
-          content: props.comment.content,
-          name: props.comment.poster.userName,
-          state: "validate" === actionName.value ? "VALIDATED" : "NOT_VALID",
-        },
-      });
-      emit("update:comment", commentUpdated);
+    if (!props.comment) {
+        return;
     }
-    confirmModal.value = false;
-  } catch {
-    isError.value = true;
-  }
-  actionInProgress.value = false;
+    actionInProgress.value = true;
+    isError.value = false;
+    try {
+        if ("delete" === actionName.value) {
+            await classicApi.deleteData({
+                api: 2,
+                path: "comment/" + props.comment.commentId,
+                parameters: props.editRight
+                    ? undefined
+                    : { uuid: commentStore.commentUser?.uuid },
+                isNotAuth: !props.editRight,
+            });
+            emit("deleteComment");
+        } else {
+            const commentUpdated = await classicApi.putData({
+                api: 2,
+                path: "comment/",
+                dataToSend: {
+                    commentId: props.comment.commentId,
+                    content: props.comment.content,
+                    name: props.comment.poster.userName,
+                    state: "validate" === actionName.value ? "VALIDATED" : "NOT_VALID",
+                },
+            });
+            emit("update:comment", commentUpdated);
+        }
+        confirmModal.value = false;
+    } catch {
+        isError.value = true;
+    }
+    actionInProgress.value = false;
 }
 </script>
