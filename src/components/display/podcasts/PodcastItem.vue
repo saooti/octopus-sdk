@@ -27,11 +27,14 @@
       <!-- eslint-enable -->
     </div>
     <div
+      @focusin="debounceShowDescriptionEvent"
       @mouseenter="debounceShowDescriptionEvent"
+      @focusout="debounceHideDescriptionEvent"
       @mouseleave="debounceHideDescriptionEvent"
     >
       <PodcastItemInfo
         :podcast="podcast"
+        :show-emission-name="showEmissionName"
       />
     </div>
   </article>
@@ -52,6 +55,8 @@ import displayHelper from "../../../helper/displayHelper";
 const props = defineProps<{
   podcast: Podcast;
   fetchConference?: Conference;
+  /** Also display emission name */
+  showEmissionName?: boolean;
 }>();
 
 //Data 
