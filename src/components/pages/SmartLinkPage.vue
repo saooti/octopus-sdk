@@ -68,22 +68,23 @@
 
         <!-- Footer -->
         <div class="footer">
-            <a target="_blank" href="/">
+            <ExternalLink href="/" hide-icon>
                 <span>{{ $t('SmartLink - Made by') }}</span>
                 <img
                     src="/img/logo_saooti_play_black.svg"
+                    alt="Saooti Play"
                     height="24"
                     class="ms-2"
                 >
-            </a>
-            <a
+            </ExternalLink>
+            <ExternalLink
                 v-if="podcastmakerElementUrl"
-                target="_blank"
                 :href="podcastmakerElementUrl"
+                hide-icon
             >
                 <span v-if="playlistId">{{ $t('SmartLink - To playlist on podcastmaker', { organisation: organisation.name }) }}</span>
                 <span v-else-if="emissionId">{{ $t('SmartLink - To emission on podcastmaker', { organisation: organisation.name }) }}</span>
-            </a>
+            </ExternalLink>
         </div>
     </article>
 </template>
@@ -93,7 +94,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useSeoTitleUrl } from '../composable/route/useSeoTitleUrl';
 
 import PlayIcon from "vue-material-design-icons/Play.vue";
-import ClassicNotifications from '../misc/ClassicNotifications.vue'; 
+import ClassicNotifications from '../misc/ClassicNotifications.vue';
+import ExternalLink from '../misc/ExternalLink.vue';
 
 import { Emission } from '../../stores/class/general/emission';
 import { Playlist } from '../../stores/class/general/playlist';

@@ -463,5 +463,6 @@
   "CommentSection - Status Indicator - Connected": "Povezan za prejemanje povratnih informacij v živo",
   "CommentSection - Status Indicator - Connecting": "Povezovanje ...",
   "CommentSection - Status Indicator - Disonnected": "Povezava je prekinjena, ne boste prejemali komentarjev v živo",
-  "CommentSection - Status Indicator - Inactive": "Ni povezave za komentiranje v živo"
+  "CommentSection - Status Indicator - Inactive": "Ni povezave za komentiranje v živo",
+  "ExternalLink - New window": "(novo okno)"
 }

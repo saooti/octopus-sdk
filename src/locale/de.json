@@ -464,5 +464,6 @@
   "CommentSection - Status Indicator - Connected": "Verbunden, um Live-Feedback zu erhalten",
   "CommentSection - Status Indicator - Connecting": "Verbinden...",
   "CommentSection - Status Indicator - Disonnected": "Wenn die Verbindung unterbrochen ist, erhalten Sie keine Live-Kommentare",
-  "CommentSection - Status Indicator - Inactive": "Keine Verbindung für Live-Kommentare"
+  "CommentSection - Status Indicator - Inactive": "Keine Verbindung für Live-Kommentare",
+  "ExternalLink - New window": "(neues Fenster)"
 }

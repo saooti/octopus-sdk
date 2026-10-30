@@ -46,13 +46,15 @@ export const getClassicTabs = () => import("./src/components/misc/ClassicTabs.vu
 import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
 import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";
 import SkipToContent from "./src/components/misc/SkipToContent.vue";
+import ExternalLink from "./src/components/misc/ExternalLink.vue";
 export { type Tab } from "./src/components/misc/ClassicTabs.vue";
 
 export {
     ClassicDataTable,
     type ClassicDataTableHeader,
     ClassicNotifications,
-    SkipToContent
+    SkipToContent,
+    ExternalLink
 }
 
 // Buttons

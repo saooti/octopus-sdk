@@ -465,5 +465,6 @@
     "CommentSection - Status Indicator - Connected": "Connesso per ricevere feedback in tempo reale",
     "CommentSection - Status Indicator - Connecting": "Connessione...",
     "CommentSection - Status Indicator - Disonnected": "Disconnesso, non riceverai commenti in tempo reale",
-    "CommentSection - Status Indicator - Inactive": "Nessuna connessione per i commenti dal vivo"
+    "CommentSection - Status Indicator - Inactive": "Nessuna connessione per i commenti dal vivo",
+    "ExternalLink - New window": "(nuova finestra)"
 }

@@ -87,4 +87,18 @@ describe('SmartLinkPage', () => {
             });
         });
     });
+
+    it('opens footer links in a new window with a warning', async() => {
+        const wrapper = await mount(SmartLinkPage, {
+            props: { emissionId: 5 },
+            beforeMount: setupPlayerStore()
+        });
+
+        const links = wrapper.findAll('.footer a');
+        expect(links.length).toBeGreaterThan(0);
+        links.forEach(link => {
+            expect(link.attributes('rel')).toBe('noopener noreferrer');
+            expect(link.find('.visually-hidden').exists()).toBe(true);
+        });
+    });
 });

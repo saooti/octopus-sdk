@@ -55,16 +55,13 @@
                             :key="helpLink.title"
                             class="li-style-none"
                         >
-                            <a
+                            <ExternalLink
                                 :href="helpLink.href"
                                 class="octopus-dropdown-item realLink"
-                                rel="noreferrer noopener"
-                                target="_blank"
-                                :title="t('New window', {text: helpLink.title})"
+                                :icon-size="15"
                             >
                                 {{ helpLink.title }}
-                                <OpenInNewIcon class="ms-1" :size="15" />
-                            </a>
+                            </ExternalLink>
                         </li>
                         <hr>
                     </template>
@@ -89,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import OpenInNewIcon from "vue-material-design-icons/OpenInNew.vue";
+import ExternalLink from "./ExternalLink.vue";
 import { state } from "../../stores/ParamSdkStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { computed } from "vue";

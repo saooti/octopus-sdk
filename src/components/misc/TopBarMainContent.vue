@@ -65,24 +65,20 @@
                     title="Logo"
                     :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
                 >
-                <a
+                <ExternalLink
                     v-else
                     href="https://www.saooti.com/"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    :title="t('New window', {text: 'Saooti'})"
+                    hide-icon
                 >
                     <img
                         :src="logoUrl"
-                        aria-hidden="true"
-                        alt=""
-                        title="Saooti"
+                        alt="Saooti"
                         width="100"
                         height="29"
                         class="ms-2"
                         :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
                     >
-                </a>
+                </ExternalLink>
             </template>
 
             <div role="navigation" class="d-flex align-items-center justify-content-end flex-grow-1">
@@ -184,7 +180,8 @@ import { defineAsyncComponent, computed, ref } from "vue";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
 import RightsScopeSelector from "./RightsScopeSelector.vue";
-import RightsScopeMenu from "./RightsScopeMenu.vue"; 
+import RightsScopeMenu from "./RightsScopeMenu.vue";
+import ExternalLink from "./ExternalLink.vue";
 const MobileMenu = defineAsyncComponent(() => import("./MobileMenu.vue"));
 
 export interface TopBarMainContentOptions {
