@@ -7,8 +7,8 @@
         <h3 class="mb-2">
             {{ t("Share in one click") }}
         </h3>
-        <div class="d-flex align-items-center">
-            <template v-for="button in arrayShareButtons" :key="button.title">
+        <ul class="d-flex align-items-center">
+            <li v-for="button in arrayShareButtons" :key="button.title">
                 <a
                     v-if="button.condition"
                     rel="noreferrer noopener"
@@ -20,9 +20,9 @@
                     <component :is="button.icon" :size="34" />
                     <span class="visually-hidden">{{ t('New window', {text: button.title}) }}</span>
                 </a>
-            </template>
+            </li>
             <slot name="additional-buttons" />
-        </div>
+        </ul>
     </section>
 </template>
 
@@ -53,38 +53,32 @@ const saveFetchStore =useSaveFetchStore();
 
 //Computed
 const arrayShareButtons = computed(() => {
-    return [
-        {
-            title: "Facebook",
-            icon: FacebookIcon,
-            url: `https://www.facebook.com/sharer/sharer.php?u=${urlPage.value}`,
-            condition: true,
-        },
-        {
-            title: "X",
-            icon: XIcon,
-            url: `https://twitter.com/intent/tweet?text=${urlPage.value}`,
-            condition: true,
-        },
-        {
-            title: "Linkedin",
-            icon: LinkedinIcon,
-            url: `https://www.linkedin.com/sharing/share-offsite/?url=${urlPage.value}`,
-            condition: true,
-        },
-        {
-            title: "Bluesky",
-            icon: BlueSkyIcon,
-            url: `https://bsky.app/intent/compose?text=${urlPage.value}`,
-            condition: true,
-        },
-        {
-            title: "Whatsapp",
-            icon: WhatsappIcon,
-            url: `whatsapp://send?text=${urlPage.value}`,
-            condition: window.matchMedia("(hover: none)").matches,
-        },
-    ];
+    return [{
+        title: "Facebook",
+        icon: FacebookIcon,
+        url: `https://www.facebook.com/sharer/sharer.php?u=${urlPage.value}`,
+        condition: true,
+    }, {
+        title: "X",
+        icon: XIcon,
+        url: `https://twitter.com/intent/tweet?text=${urlPage.value}`,
+        condition: true,
+    }, {
+        title: "Linkedin",
+        icon: LinkedinIcon,
+        url: `https://www.linkedin.com/sharing/share-offsite/?url=${urlPage.value}`,
+        condition: true,
+    }, {
+        title: "Bluesky",
+        icon: BlueSkyIcon,
+        url: `https://bsky.app/intent/compose?text=${urlPage.value}`,
+        condition: true,
+    }, {
+        title: "Whatsapp",
+        icon: WhatsappIcon,
+        url: `whatsapp://send?text=${urlPage.value}`,
+        condition: window.matchMedia("(hover: none)").matches,
+    }];
 });
 const urlPage = computed(() =>window.location.href);
 
@@ -101,3 +95,11 @@ async function initShareButtons() {
     isLoading.value = false;
 }
 </script>
+
+<style scoped lang="scss">
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+</style>

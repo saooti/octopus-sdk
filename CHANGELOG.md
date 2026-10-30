@@ -5,6 +5,7 @@
 ### Misc
 
 - Ajout option pour icones monochromes pour les plateformes
+- Ajustements conformité RGAA pour affichage de listes
 
 ## 42.3.2 (30/10/2026)
 

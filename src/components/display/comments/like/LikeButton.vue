@@ -7,7 +7,7 @@
                 'is-dislike': !like,
             }"
             :title="titleButton"
-            :style="{ '--icon-size': size }"
+            :style="{ '--icon-size': size ?? 24 }"
             @click="clickButton"
         >
             <template v-if="like">

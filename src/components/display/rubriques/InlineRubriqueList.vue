@@ -1,23 +1,28 @@
 <template>
     <div
         v-if="rubriqueIds.length && init"
-        class="rubrique-list-component d-flex align-items-center flex-wrap mb-3 small-text"
+        class="rubrique-list-component d-flex align-items-start mb-3 small-text"
     >
-        <div class="fw-bold me-3">
-            {{ t("Rubrics") + " : " }}
-        </div>
-        <router-link
-            v-for="rubriqueId in rubriqueIds"
-            :key="rubriqueId"
-            class="d-flex align-items-center border p-1 m-1 text-dark"
-            :to="{
-                name: 'rubrique',
-                params: { rubriqueId: rubriqueId},
-                query: organisationQuery
-            }"
-        >
-            {{ rubriquagesOrga[rubriqueId]?.name ?? rubriqueId }}
-        </router-link>
+        <span class="label fw-bold py-1 my-1">
+            {{ t("Rubrics") }}&nbsp;:
+        </span>
+        <ul class="d-flex flex-wrap">
+            <li
+                v-for="rubriqueId in rubriqueIds"
+                :key="rubriqueId"
+            >
+                <router-link
+                    class="d-flex align-items-center border p-1 m-1 text-dark"
+                    :to="{
+                        name: 'rubrique',
+                        params: { rubriqueId: rubriqueId},
+                        query: organisationQuery
+                    }"
+                >
+                    {{ rubriquagesOrga[rubriqueId]?.name ?? rubriqueId }}
+                </router-link>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -62,3 +67,17 @@ async function fetchRubriquages(){
     init.value = true;
 }
 </script>
+
+<style scoped lang="scss">
+.rubrique-list-component {
+    .label {
+        border: 1px solid transparent;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+</style>

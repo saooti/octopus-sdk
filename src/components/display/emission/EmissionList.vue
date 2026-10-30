@@ -15,33 +15,36 @@
     :player-responsive="true"
   >
     <template #list>
-      <div v-if="!state.emissionsPage.itemPlayer" class="octopus-element-list two-items-list">
-        <ClassicLazy
+      <ul v-if="!state.emissionsPage.itemPlayer" class="octopus-element-list two-items-list">
+        <li
           v-for="e in displayArray"
           :key="e.emissionId"
-          :min-height="250"
-          class="d-flex flex-column flex-grow-1"
         >
-          <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
-          <template #preview>
-            <router-link
-              :to="{
-                name: 'emission',
-                params: { emissionId: e.emissionId },
-              }"
-              :title="t('Series name page', { name: e.name })"
-            >
-              {{ e.name }}
-            </router-link>
-          </template>
-        </ClassicLazy>
-      </div>
-      <div
+          <ClassicLazy
+            :min-height="250"
+            class="d-flex flex-column flex-grow-1"
+          >
+            <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
+            <template #preview>
+              <router-link
+                :to="{
+                  name: 'emission',
+                  params: { emissionId: e.emissionId },
+                }"
+                :title="t('Series name page', { name: e.name })"
+              >
+                {{ e.name }}
+              </router-link>
+            </template>
+          </ClassicLazy>
+        </li>
+      </ul>
+      <ul
         v-else
         v-show="(displayRubriquage && rubriques) || !displayRubriquage"
         class="d-flex flex-wrap justify-content-around"
       >
-        <template v-for="e in displayArray" :key="e.emissionId">
+        <li v-for="e in displayArray" :key="e.emissionId">
           <EmissionPlayerItem
             v-if="0 !== e.emissionId"
             :emission="e"
@@ -50,8 +53,8 @@
             :nb-podcasts="nbPodcasts"
             :rubrique-name="rubriquesId(e)"
           />
-        </template>
-      </div>
+        </li>
+      </ul>
     </template>
   </ListPaginate>
 </template>
@@ -135,7 +138,7 @@ const changed = computed(() => {
   ${props.emissionGroups}`;
 });
 const sortText = computed(() => {
-  let textSort = "";
+  let textSort: string;
   switch (props.sort) {
     case "SCORE":
       textSort = " " + t("sort by score");
@@ -275,8 +278,10 @@ function rubriquesId(emission: Emission): string | undefined {
     0 === emission.rubriqueIds.length ||
     !rubriques.value ||
     !rubriques.value.length
-  )
+  ) {
     return undefined;
+  }
+  
   const rubrique = rubriques.value.find(
     (element: Rubrique) => element.rubriqueId === emission.rubriqueIds[0],
   );
@@ -286,3 +291,9 @@ function rubriquesId(emission: Emission): string | undefined {
   return rubrique.name;
 }
 </script>
+
+<style scoped lang="scss">
+ul.octopus-element-list {
+  list-style-type: none;
+}
+</style>
