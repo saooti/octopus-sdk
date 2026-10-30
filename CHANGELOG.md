@@ -2,6 +2,10 @@
 
 ## 42.3.3 (En cours)
 
+### Misc
+
+- Ajout option pour icones monochromes pour les plateformes
+
 ## 42.3.2 (30/10/2026)
 
 ### Features

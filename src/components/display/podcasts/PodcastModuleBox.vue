@@ -189,6 +189,7 @@
         <SubscribeButtons
             v-if="isPodcastmaker"
             class="mt-4"
+            :mono="state.podcastPage.monoSubscribeButtons"
             :content="podcast.emission"
             :window-width="1000"
             :justify-center="false"

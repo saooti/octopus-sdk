@@ -41,9 +41,33 @@ const state: ParamStore = {
     }
 };
 
+interface BaseConsultPageParameters {
+    ShareButtons?: boolean;
+    /** If true, hide tags on podcast page */
+    hideTags?: boolean;
+    /** The maximum number of tags that can be displayed */
+    maxTags?: number;
+    /** If true, do not display subtitles on podcast pages */
+    hideSubtitle?: boolean;
+    /** Displays the emission title in the header instead of the generic "Episode" */
+    displayEmissionTitleInHeader?: boolean;
+    /** Display the subscribe buttons in mono */
+    monoSubscribeButtons?: boolean;        
+}
+
+interface PodcastPageParameters extends BaseConsultPageParameters {
+    mainRubrique?: number;
+    downloadButton?:boolean;
+    /** Select whether to display description, summary, or both */
+    descriptionOrSummary?: 'description'|'summary'|'both';
+};
+
+type EmissionPageParameters = BaseConsultPageParameters;
+
+
 export interface ParamStore {
     generalParameters: {
-    /** Automatically filter results by this organisation */
+        /** Automatically filter results by this organisation */
         forceOrganisationId?: string;
         /** Automatically filter results by these rubriques */
         forceRubriqueId?: number|number[];
@@ -61,36 +85,12 @@ export interface ParamStore {
         /** Also show pagination on top of page */
         paginationOnTop?: boolean;
     };
-    podcastPage: {
-        ShareButtons?: boolean;
-        mainRubrique?: number;
-        downloadButton?:boolean;
-        /** If true, hide tags on podcast page */
-        hideTags?: boolean;
-        /** The maximum number of tags that can be displayed */
-        maxTags?: number;
-        /** If true, do not display subtitles on podcast pages */
-        hideSubtitle?: boolean;
-        /** Select whether to display description, summary, or both */
-        descriptionOrSummary?: 'description'|'summary'|'both';
-        /** Displays the emission title in the header instead of the generic "Episode" */
-        displayEmissionTitleInHeader?: boolean;
-    };
+    podcastPage: PodcastPageParameters;
     podcastsPage: {
-    /** Hide the search bar in the page */
+        /** Hide the search bar in the page */
         hideSearch?: boolean;
     };
-    emissionPage: {
-        ShareButtons?: boolean;
-        /** If true, hide tags on emission page */
-        hideTags?: boolean;
-        /** The maximum number of tags that can be displayed */
-        maxTags?: number;
-        /** If true, do not display subtitles on podcast pages */
-        hideSubtitle?: boolean;
-        /** Displays the emission title in the header instead of the generic "Emission" */
-        displayEmissionTitleInHeader?: boolean;
-    };
+    emissionPage: EmissionPageParameters;
     emissionsPage: {
         itemPlayer?: boolean;
         rubriquage?: number;
@@ -106,10 +106,10 @@ export interface ParamStore {
     player: {
         isVideoPage?:boolean;
         /**
-     * Indicates that the play is at the top of the page.
-     * This adapts player settings for properly display.
-     * Currently *does not* position the player.
-     */
+         * Indicates that the play is at the top of the page.
+         * This adapts player settings for properly display.
+         * Currently *does not* position the player.
+         */
         topPlacement?: boolean;
         /** Start with the large version by default */
         startLarge?: boolean;
@@ -119,33 +119,33 @@ export interface ParamStore {
         stayOpenOnFinish?: boolean;
     };
     searchPage: {
-    /** The default sort criteria for search results */
+        /** The default sort criteria for search results */
         sortCriteria?: PodcastSort;
     };
 
     /** Settings for presentation items */
     presentationItems: {
-    /** Type of tags to display on presentation items */
+        /** Type of tags to display on presentation items */
         tags: 'none'|'iab'|'rubrique';
         /**
-     * For rubrique type, the ID of the rubriquage the rubriques must belong to
-     * to be displayed. If not set, will display all rubriques.
-     */
+         * For rubrique type, the ID of the rubriquage the rubriques must belong to
+         * to be displayed. If not set, will display all rubriques.
+         */
         tagsRubriquageId?: number;
         /** Limit number of tags */
         tagsLimit?: number;
         /** Additional infos displayed in presentation item */
         additionalInfo?: Array<'productor'|'date'|'restrictive-rubrique'>;
         /**
-     * ID of the restrictive rubriquage ID, used only when additionalInfo
-     * contains 'restricted-rubrique'
-     */
+         * ID of the restrictive rubriquage ID, used only when additionalInfo
+         * contains 'restricted-rubrique'
+         */
         restrictiveRubriquageId?: number;
     };
 
     /** Smartlink configuration */
     smartLink: {
-    /** Truncate the description to the first paragraph */
+        /** Truncate the description to the first paragraph */
         showOnlyFirstParagraphInDescription?: boolean;
     }
 }

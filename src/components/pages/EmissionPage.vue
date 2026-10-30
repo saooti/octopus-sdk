@@ -95,6 +95,7 @@
                         <SubscribeButtons
                             v-if="isPodcastmaker"
                             class="mt-4"
+                            :mono="state.emissionPage.monoSubscribeButtons"
                             :content="emission"
                             :window-width="1000"
                             :justify-center="false"

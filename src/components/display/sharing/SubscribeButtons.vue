@@ -181,7 +181,7 @@ onMounted(() => {
 
 function fillColor(link?: Link): string|undefined {
     if (props.mono === true) {
-        return 'white';
+        return 'var(--octopus-color-on-primary)';
     } else {
         return link?.color;
     }
