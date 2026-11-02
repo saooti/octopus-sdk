@@ -13,6 +13,7 @@
   - `AnimatorItem`/`SwiperList` : amélioration affichage en cas de CSS désactivé
   - `ClassicMultiselect`/`PlayerCompact` : ajustement CSS pour régler problème
     de contraste avec certaines chartes client
+- Mise à jour dépendances
 
 ## 42.3.2 (30/10/2026)
 
