@@ -1,7 +1,8 @@
 import SwiperList from '@/components/display/list/SwiperList.vue';
 import { mount as testMount } from '@tests/utils';
-import type { VueWrapper } from '@vue/test-utils';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue';
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue';
 import { describe, expect, it } from 'vitest';
 import { nextTick } from 'vue';
 
@@ -36,9 +37,6 @@ describe('SwiperList', () => {
     });
 
     describe('accessibility', () => {
-        const hiddenButtons = (wrapper: VueWrapper) =>
-            wrapper.findAll('button').map(b => b.attributes('style')?.includes('display: none') ?? false);
-
         it('renders items as a list', async () => {
             const wrapper = await mount({ itemCount: 3 });
             expect(wrapper.findComponent(Swiper).props('wrapperTag')).toBe('ul');
@@ -64,12 +62,18 @@ describe('SwiperList', () => {
                 'SwiperList - Show previous items',
                 'SwiperList - Show next items'
             ]);
-            expect(hiddenButtons(wrapper)).toEqual([false, false]);
         });
 
-        it('hides navigation buttons when all items fit', async () => {
+        it('shows arrows pointing in each direction, without relying on CSS', async () => {
+            const wrapper = await mount({ itemCount: 3 });
+            expect(wrapper.findComponent(Swiper).props('navigation')).toMatchObject({ addIcons: false });
+            expect(wrapper.find('.swiper-button-prev').findComponent(ChevronLeftIcon).attributes('aria-hidden')).toBe('true');
+            expect(wrapper.find('.swiper-button-next').findComponent(ChevronRightIcon).attributes('aria-hidden')).toBe('true');
+        });
+
+        it('does not render navigation buttons when all items fit', async () => {
             const wrapper = await mount({ itemCount: listObject.length });
-            expect(hiddenButtons(wrapper)).toEqual([true, true]);
+            expect(wrapper.findAll('button')).toHaveLength(0);
         });
     });
 });

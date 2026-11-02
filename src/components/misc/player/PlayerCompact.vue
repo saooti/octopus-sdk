@@ -1,43 +1,43 @@
 <template>
-  <div class="d-flex align-items-center flex-grow-1 ps-2">
-    <PlayerImage />
-    <PlayerPlayButton :player-error="playerError" />
-    <div class="player-text player-grow-content">
-      <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
-        <PlayerTitle :player-error="playerError" :hls-ready="hlsReady" />
-        <div
-          v-if="!playerError && (!radioUrl || isAdPlaying)"
-          class="hide-phone ps-2 flex-shrink-0"
-        >
-          {{ displayPlayTime }} / {{ displayTotalTime }}
+    <div class="d-flex align-items-center flex-grow-1 ps-2">
+        <PlayerImage />
+        <PlayerPlayButton :player-error="playerError" />
+        <div class="player-text player-grow-content">
+            <div class="d-flex" :class="!radioUrl ? 'mb-1' : ''">
+                <PlayerTitle :player-error="playerError" :hls-ready="hlsReady" />
+                <div
+                    v-if="!playerError && (!radioUrl || isAdPlaying)"
+                    class="hide-phone ps-2 flex-shrink-0"
+                >
+                    {{ displayPlayTime }} / {{ displayTotalTime }}
+                </div>
+            </div>
+            <PlayerChaptering />
+            <PlayerProgressBar
+                :display-alert-bar="displayAlertBar"
+                :percent-live-progress="percentLiveProgress"
+                :duration-live-position="durationLivePosition"
+                :player-error="playerError"
+                :listen-time="listenTime"
+            />
         </div>
-      </div>
-      <PlayerChaptering />
-      <PlayerProgressBar
-        :display-alert-bar="displayAlertBar"
-        :percent-live-progress="percentLiveProgress"
-        :duration-live-position="durationLivePosition"
-        :player-error="playerError"
-        :listen-time="listenTime"
-      />
+        <PlayerSpeedButton v-if="!radioUrl" />
+        <button
+            id="player-up-btn"
+            :title="'' != transcriptText ? t('View transcript') : t('Enlarge')"
+            class="btn play-button-box btn-transparent player-text me-0"
+            @click="changePlayerLargeVersion"
+        >
+            <ChevronUpIcon />
+        </button>
+        <button
+            :title="t('Close')"
+            class="btn play-button-box btn-transparent player-text"
+            @click="stopPlayer"
+        >
+            <WindowCloseIcon />
+        </button>
     </div>
-    <PlayerSpeedButton v-if="!radioUrl" />
-    <button
-      id="player-up-btn"
-      :title="'' != transcriptText ? t('View transcript') : t('Enlarge')"
-      class="btn play-button-box btn-transparent player-text me-0"
-      @click="changePlayerLargeVersion"
-    >
-      <ChevronUpIcon />
-    </button>
-    <button
-      :title="t('Close')"
-      class="btn play-button-box btn-transparent player-text"
-      @click="stopPlayer"
-    >
-      <WindowCloseIcon />
-    </button>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -52,16 +52,16 @@ import PlayerSpeedButton from "./elements/PlayerSpeedButton.vue";
 import { defineAsyncComponent} from "vue";
 import { useI18n } from "vue-i18n";
 const PlayerProgressBar = defineAsyncComponent(
-  () => import("./progressbar/PlayerProgressBar.vue"),
+    () => import("./progressbar/PlayerProgressBar.vue"),
 );
 //Props
 defineProps( {
-  playerError: { default: false, type: Boolean },
-  displayAlertBar: { default: false, type: Boolean },
-  percentLiveProgress: { default: 0, type: Number },
-  durationLivePosition: { default: 0, type: Number },
-  listenTime: { default: 0, type: Number },
-  hlsReady: { default: false, type: Boolean },
+    playerError: { default: false, type: Boolean },
+    displayAlertBar: { default: false, type: Boolean },
+    percentLiveProgress: { default: 0, type: Number },
+    durationLivePosition: { default: 0, type: Number },
+    listenTime: { default: 0, type: Number },
+    hlsReady: { default: false, type: Boolean },
 });
 
 //Emits
@@ -69,21 +69,21 @@ const emit = defineEmits(['stopPlayer', 'changePlayerLargeVersion']);
 
 //Composables
 const { 
-  transcriptText,
-  radioUrl,
-  isAdPlaying,
-  displayPlayTime,
-  displayTotalTime,
- } = usePlayerDisplayTime();
+    transcriptText,
+    radioUrl,
+    isAdPlaying,
+    displayPlayTime,
+    displayTotalTime,
+} = usePlayerDisplayTime();
 const { t } = useI18n();
 
 
 //Methods
 function stopPlayer() {
-  emit("stopPlayer");
+    emit("stopPlayer");
 }
 function changePlayerLargeVersion() {
-  emit("changePlayerLargeVersion");
+    emit("changePlayerLargeVersion");
 }
 </script>
 
@@ -99,6 +99,6 @@ function changePlayerLargeVersion() {
 }
 
 .player-text {
-  color: var(--octopus-player-text-color);
+  color: var(--octopus-player-text-color) !important;
 }
 </style>

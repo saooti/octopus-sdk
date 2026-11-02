@@ -29,21 +29,26 @@
                     />
                 </swiper-slide>
             </swiper>
-            <!-- Hidden when not looping, as navigation is disabled -->
-            <button
-                v-show="loop"
-                :id="prevElId"
-                type="button"
-                class="swiper-button-prev"
-                :aria-label="$t('SwiperList - Show previous items')"
-            />
-            <button
-                v-show="loop"
-                :id="nextElId"
-                type="button"
-                class="swiper-button-next"
-                :aria-label="$t('SwiperList - Show next items')"
-            />
+            <!-- Not rendered when not looping, as navigation is disabled -->
+            <template v-if="loop">
+                <!-- Own icons: Swiper's are identical and only flipped with CSS -->
+                <button
+                    :id="prevElId"
+                    type="button"
+                    class="swiper-button-prev"
+                    :aria-label="$t('SwiperList - Show previous items')"
+                >
+                    <ChevronLeftIcon class="swiper-arrow-icon" aria-hidden="true" />
+                </button>
+                <button
+                    :id="nextElId"
+                    type="button"
+                    class="swiper-button-next"
+                    :aria-label="$t('SwiperList - Show next items')"
+                >
+                    <ChevronRightIcon class="swiper-arrow-icon" aria-hidden="true" />
+                </button>
+            </template>
         </template>
         <ul v-else-if="composableInit" class="element-list-inline">
             <li
@@ -66,6 +71,8 @@ import domHelper from "../../../helper/domHelper";
 import { state } from "../../../stores/ParamSdkStore";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper/modules";
+import ChevronLeftIcon from "vue-material-design-icons/ChevronLeft.vue";
+import ChevronRightIcon from "vue-material-design-icons/ChevronRight.vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import {useResizePhone} from "../../composable/useResizePhone";
@@ -146,7 +153,8 @@ const prevElId = computed((): string => 'swiper-button-prev-' + uid.value);
 const nextElId = computed((): string => 'swiper-button-next-' + uid.value);
 const navigationOptions = computed(() => ({
     prevEl: '#' + prevElId.value,
-    nextEl: '#' + nextElId.value
+    nextEl: '#' + nextElId.value,
+    addIcons: false
 }));
 
 //Watch
@@ -234,6 +242,13 @@ function slideChange() {
   width: 40px;
   z-index: 5 !important;
   //background: var(--octopus-background);
+
+  // Icon fills the button, Swiper's CSS sizes the svg inside it
+  .swiper-arrow-icon {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 // Remove default list style, padding-bottom of .element-list-inline is kept

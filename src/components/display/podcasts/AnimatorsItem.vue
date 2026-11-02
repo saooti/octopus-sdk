@@ -3,6 +3,8 @@
         v-if="animator"
         class="d-flex align-items-center justify-content-start animators-item"
     >
+        <!-- Outside the link, so its name still starts with the visible text -->
+        <span class="visually-hidden">{{ t("Animated by") }}</span>
         <router-link
             :to="{
                 name: 'participant',

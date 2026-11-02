@@ -20,14 +20,14 @@
                 <div>
                     <PaginateParams
                         v-if="!isPhone && !justSizeChosen && totalCount > 0"
-                        :id="id"
+                        :id="id + '-params'"
                         :rows-per-page="rowsPerPage"
                         @update:rows-per-page="changeSize"
                     />
 
                     <PaginateSection
                         v-if="displayTopPaginate"
-                        :id="id"
+                        :id="id + '-top'"
                         class="pt-0 pb-0"
                         :style="pagingStyle"
                         :first="first"
@@ -43,7 +43,7 @@
 
         <PaginateSection
             v-if="!isPhone && !justSizeChosen && totalCount > 0"
-            :id="id"
+            :id="id + '-bottom'"
             :style="pagingStyle"
             :first="first"
             :rows-per-page="rowsPerPage"

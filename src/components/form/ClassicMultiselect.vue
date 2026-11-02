@@ -1,120 +1,128 @@
 <template>
-  <div
-    :class="{
-      'multiselect-in-modal': inModal,
-      'multiselect-no-deselect': noDeselect,
-      'form-margin': displayLabel,
-    }"
-    :style="{ width: width, height: height }"
-  >
-    <div class="d-flex align-items-center">
-      <label :class="displayLabel ? '' : 'd-none'" :for="id" class="form-label">{{
-        label
-      }}
-        <AsteriskIcon v-if="displayRequired" :size="10" class="ms-1 mb-2" :title="t('Mandatory input')"/>
-      </label>
-
-      <template v-if="popover">
-        <button
-          :id="'popover' + id"
-          :title="t('Help')"
-          class="btn-transparent"
-        >
-          <HelpCircleIcon :size="30" />
-        </button>
-        <ClassicPopover
-          :target="'popover' + id"
-          popover-class="popover-z-index"
-          :relative-class="popoverRelativeClass"
-        >
-          <!-- eslint-disable vue/no-v-html -->
-          <div v-html="popover" />
-          <!-- eslint-enable -->
-        </ClassicPopover>
-      </template>
-    </div>
-
-    <vSelect
-      v-model="optionSelected"
-      :input-id="id"
-      :label="optionLabel"
-      :multiple="multiple"
-      :options="options"
-      :disabled="isDisabled"
-      :loading="isLoading"
-      :placeholder="placeholder"
-      :clear-search-on-blur="
-        () => {
-          return true;
-        }
-      "
-      :filter="fakeSearch"
-      :selectable="() => !maxOptionsSelected"
-      :style="{height: height }"
-      :class="{ 'border border-danger': textDanger?.length }"
-      @open="onSearch"
-      @search="onSearch"
-      @close="onClose"
-      @option:selected="onOptionSelected"
-      @option:deselected="onOptionDeselect"
+    <div
+        :class="{
+            'multiselect-in-modal': inModal,
+            'multiselect-no-deselect': noDeselect,
+            'form-margin': displayLabel,
+        }"
+        :style="{ width: width, height: height }"
     >
-      
-      <template v-if="optionCustomTemplating.length" #option="option">
-        <slot :name="optionCustomTemplating" :option="option" />
-      </template>
+        <div class="d-flex align-items-center">
+            <label
+                :class="displayLabel ? '' : 'd-none'"
+                :for="id"
+                class="form-label"
+            >{{
+                 label
+             }}
+                <AsteriskIcon
+                    v-if="displayRequired"
+                    :size="10"
+                    class="ms-1 mb-2"
+                    :title="t('Mandatory input')"
+                />
+            </label>
 
-      <template v-else-if="withSelectAll" #option="option">
-        <strong v-if="option.id === selectAll.id">
-          {{ option[optionLabel] }}
-        </strong>
-        <span v-else>
-          {{ option[optionLabel] }}
-        </span>
-      </template>
-
-      <template
-        v-if="optionSelectedCustomTemplating.length"
-        #selected-option="option"
-      >
-        <slot :name="optionSelectedCustomTemplating" :option="option" />
-      </template>
-
-      <template #selected-option-container="{ option, deselect, disabled, multiple: mul }">
-        <slot name="selected-option-container" v-bind="{ option, deselect, disabled, multiple: mul }" />
-      </template>
-
-      <template #no-options="{ searching }">
-        <span v-if="searching">{{
-          t("No elements found. Consider changing the search query.")
-        }}</span>
-        <span v-else>{{ t("List is empty") }}</span>
-      </template>
-
-      <template #list-footer>
-        <div v-if="remainingElements" class="vs__dropdown-option">
-          {{
-            t(
-              "Count more elements matched your query, please make a more specific search.",
-              { count: remainingElements },
-            )
-          }}
+            <template v-if="popover">
+                <button
+                    :id="'popover' + id"
+                    :title="t('Help')"
+                    class="btn-transparent"
+                >
+                    <HelpCircleIcon :size="30" />
+                </button>
+                <ClassicPopover
+                    :target="'popover' + id"
+                    popover-class="popover-z-index"
+                    :relative-class="popoverRelativeClass"
+                >
+                    <!-- eslint-disable vue/no-v-html -->
+                    <div v-html="popover" />
+                    <!-- eslint-enable -->
+                </ClassicPopover>
+            </template>
         </div>
-      </template>
 
-      <template #list-header>
-        <div v-if="maxOptionsSelected" class="vs__dropdown-option">
-          {{ t("Multiselect max options", { max: maxOptions }) }}
+        <vSelect
+            v-model="optionSelected"
+            :input-id="id"
+            :label="optionLabel"
+            :multiple="multiple"
+            :options="options"
+            :disabled="isDisabled"
+            :loading="isLoading"
+            :placeholder="placeholder"
+            :clear-search-on-blur="
+                () => {
+                    return true;
+                }
+            "
+            :filter="fakeSearch"
+            :selectable="() => !maxOptionsSelected"
+            :style="{ height }"
+            :class="{ 'border border-danger': textDanger?.length }"
+            @open="onSearch"
+            @search="onSearch"
+            @close="onClose"
+            @option:selected="onOptionSelected"
+            @option:deselected="onOptionDeselect"
+        >
+            <template v-if="optionCustomTemplating.length" #option="option">
+                <slot :name="optionCustomTemplating" :option="option" />
+            </template>
+
+            <template v-else-if="withSelectAll" #option="option">
+                <strong v-if="option.id === selectAll.id">
+                    {{ option[optionLabel] }}
+                </strong>
+                <span v-else>
+                    {{ option[optionLabel] }}
+                </span>
+            </template>
+
+            <template
+                v-if="optionSelectedCustomTemplating.length"
+                #selected-option="option"
+            >
+                <slot :name="optionSelectedCustomTemplating" :option="option" />
+            </template>
+
+            <template #selected-option-container="{ option, deselect, disabled, multiple: mul }">
+                <slot name="selected-option-container" v-bind="{ option, deselect, disabled, multiple: mul }" />
+            </template>
+
+            <template #no-options="{ searching }">
+                <span v-if="searching">
+                    {{ t("No elements found. Consider changing the search query.") }}
+                </span>
+                <span v-else>{{ t("List is empty") }}</span>
+            </template>
+
+            <template #list-footer>
+                <div v-if="remainingElements" class="vs__dropdown-option">
+                    {{
+                        t(
+                            "Count more elements matched your query, please make a more specific search.",
+                            { count: remainingElements },
+                        )
+                    }}
+                </div>
+            </template>
+
+            <template #list-header>
+                <div v-if="maxOptionsSelected" class="vs__dropdown-option">
+                    {{ t("Multiselect max options", { max: maxOptions }) }}
+                </div>
+            </template>
+
+            <template #open-indicator="{ attributes }">
+                <ChevronDownIcon v-bind="attributes" />
+            </template>
+        </vSelect>
+        <div v-if="textDanger" class="text-danger">
+            {{ textDanger }}
         </div>
-      </template>
-
-      <template #open-indicator="{ attributes }">
-        <ChevronDownIcon v-bind="attributes" />
-      </template>
-    </vSelect>
-    <div v-if="textDanger" class="text-danger">
-      {{ textDanger }}
     </div>
-  </div>
 </template>
 
 <script setup lang="ts" generic="T">
@@ -125,54 +133,54 @@ import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import vSelect from "vue-select";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
 const ClassicPopover = defineAsyncComponent(
-  () => import("../misc/ClassicPopover.vue"),
+    () => import("../misc/ClassicPopover.vue"),
 );
 
 //Props 
 const {
-  inModal = false, multiple = false, isDisabled = false, width = "100%",
-  maxElement = 50, minSearchLength = 3, noDeselect = true, displayLabel = false,
-  allowEmpty = true, optionChosen, maxOptions = null,
-  optionCustomTemplating = '', optionSelectedCustomTemplating = '',
-  optionLabel,
-  withSelectAll = false
+    inModal = false, multiple = false, isDisabled = false, width = "100%",
+    maxElement = 50, minSearchLength = 3, noDeselect = true, displayLabel = false,
+    allowEmpty = true, optionChosen, maxOptions = null,
+    optionCustomTemplating = '', optionSelectedCustomTemplating = '',
+    optionLabel,
+    withSelectAll = false
 } = defineProps<{
-  id?: string;
-  label?: string;
-  placeholder?: string;
-  optionLabel?: keyof T;
-  inModal?: boolean;
-  multiple?: boolean;
-  isDisabled?: boolean;
-  width?: string;
-  height?: string;
-  maxElement?: number;
-  minSearchLength?: number;
-  /** Currently chosen option */
-  optionChosen?: T|Array<T>;
-  noDeselect?: boolean;
-  optionCustomTemplating?: string;
-  optionSelectedCustomTemplating?: string;
-  displayLabel?: boolean;
-  maxOptions?: number;
-  allowEmpty?: boolean;
-  textDanger ?:string;
-  displayRequired?: boolean;
-  popover?: string;
-  popoverRelativeClass?: string;
-  /**
+    id?: string;
+    label?: string;
+    placeholder?: string;
+    optionLabel?: keyof T;
+    inModal?: boolean;
+    multiple?: boolean;
+    isDisabled?: boolean;
+    width?: string;
+    height?: string;
+    maxElement?: number;
+    minSearchLength?: number;
+    /** Currently chosen option */
+    optionChosen?: T|Array<T>;
+    noDeselect?: boolean;
+    optionCustomTemplating?: string;
+    optionSelectedCustomTemplating?: string;
+    displayLabel?: boolean;
+    maxOptions?: number;
+    allowEmpty?: boolean;
+    textDanger ?:string;
+    displayRequired?: boolean;
+    popover?: string;
+    popoverRelativeClass?: string;
+    /**
    * Add an option to select everything at once
    * If set to a truthy string, the added option will have this value as its
    * label. If set to true, use a generic label.
    */
-  withSelectAll?: boolean|string;
+    withSelectAll?: boolean|string;
 }>();
 
 //Emits
 const emit = defineEmits<{
-  (e: "onSearch", query: string): void;
-  (e: "selected", data: Array<T>|T): void;
-  (e: "onClose", data: string): void;
+    (e: "onSearch", query: string): void;
+    (e: "selected", data: Array<T>|T): void;
+    (e: "onClose", data: string): void;
 }>();
 
 //Composables
@@ -186,88 +194,88 @@ const remainingElements = ref(0);
 const isLoading = ref(false);
 const searchInput = ref("");
 const selectAll = {
-  id: 'SELECT_ALL',
-  [optionLabel]: withSelectAll && typeof withSelectAll === 'string' ? withSelectAll : t('All')
+    id: 'SELECT_ALL',
+    [optionLabel]: withSelectAll && typeof withSelectAll === 'string' ? withSelectAll : t('All')
 } as unknown as T;
 
 //Computed
 const maxOptionsSelected = computed(() => {
-  if (maxOptions !== null && multiple) {
-    return (
-      (optionSelected.value as Array<T>).length >= maxOptions
-    );
-  }
-  return false;
+    if (maxOptions !== null && multiple) {
+        return (
+            (optionSelected.value as Array<T>).length >= maxOptions
+        );
+    }
+    return false;
 });
 
 //Watch
 watch(()=>optionChosen, () => {
-  optionSelected.value = optionChosen;
+    optionSelected.value = optionChosen;
 }, {deep: true, immediate: true});
 watch(optionSelected, () => {
-  if (noDeselect || null !== optionSelected.value) {
-    return;
-  }
-  emit("selected", undefined);
+    if (noDeselect || null !== optionSelected.value) {
+        return;
+    }
+    emit("selected", undefined);
 }, {deep: true});
 
 //Methods
 function fakeSearch(): Array<unknown> {
-  return options.value;
+    return options.value;
 }
 
 function onSearch(search?: string): void {
-  if (search && search.length < minSearchLength) {
-    return;
-  } else if (search) {
-    searchInput.value = search;
-  }
-  isLoading.value = true;
-  emit("onSearch", search);
+    if (search && search.length < minSearchLength) {
+        return;
+    } else if (search) {
+        searchInput.value = search;
+    }
+    isLoading.value = true;
+    emit("onSearch", search);
 }
 
 function onClose() {
-  emit("onClose", searchInput.value);
-  searchInput.value = "";
+    emit("onClose", searchInput.value);
+    searchInput.value = "";
 }
 
 function afterSearch(optionsFetched: Array<T>, count: number): void {
-  if (withSelectAll) {
-    options.value = [selectAll, ...optionsFetched];
-    count += 1;
-  } else {
-    options.value = optionsFetched;
-  }
-  remainingElements.value = Math.max(0, count - maxElement);
-  isLoading.value = false;
+    if (withSelectAll) {
+        options.value = [selectAll, ...optionsFetched];
+        count += 1;
+    } else {
+        options.value = optionsFetched;
+    }
+    remainingElements.value = Math.max(0, count - maxElement);
+    isLoading.value = false;
 }
 
 function onOptionSelected(newValue: Array<T>|T): void {
-  // Check if selectAll is included
-  if (withSelectAll && Array.isArray(newValue) && newValue.find(o => o.id === selectAll.id)) {
-    emit("selected", options.value.slice(1));
-  } else {
-    emit("selected", newValue);
-  }
+    // Check if selectAll is included
+    if (withSelectAll && Array.isArray(newValue) && newValue.find(o => o.id === selectAll.id)) {
+        emit("selected", options.value.slice(1));
+    } else {
+        emit("selected", newValue);
+    }
 }
 
 function onOptionDeselect(event: T): void {
-  if (!multiple) {
-    return;
-  }
-  if (
-    !allowEmpty &&
-    0 === (optionSelected.value as Array<T>).length
-  ) {
-    (optionSelected.value as Array<T>).push(event);
-    return;
-  }
-  emit("selected", (optionSelected.value as Array<T>));
+    if (!multiple) {
+        return;
+    }
+    if (
+        !allowEmpty &&
+        0 === (optionSelected.value as Array<T>).length
+    ) {
+        (optionSelected.value as Array<T>).push(event);
+        return;
+    }
+    emit("selected", (optionSelected.value as Array<T>));
 }
 
 //Expose
 defineExpose({
-  afterSearch
+    afterSearch
 });
 </script>
 
@@ -277,8 +285,8 @@ defineExpose({
 :root {
   --vs-dropdown-z-index: 1405;
   --vs-border-radius: 0.2rem;
-  --vs-dropdown-option--active-bg: var(--octopus-secondary);
-  --vs-dropdown-option--active-color: black;
+  --vs-dropdown-option--active-bg: var(--octopus-select-option-bg);
+  --vs-dropdown-option--active-color: var(--octopus-select-option-fg);
   --vs-font-size: 0.8rem;
   --vs-border-width: 2px;
   --vs-border-color: var(--octopus-border-default);

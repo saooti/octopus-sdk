@@ -5,8 +5,14 @@
 ### Misc
 
 - Ajout option pour icones monochromes pour les plateformes
-- Ajustements conformité RGAA pour affichage de listes
+- `{a11y}` Ajustements conformité RGAA pour affichage de listes
 - `{a11y}` Ajout composant pour ouvrir des liens externes
+- `{a11y}` Ajustements de nombreux composants pour conformité RGAA
+  - `ListPaginate`/`PaginateParams`/`ClassicSelect` : correction validité html
+    généré
+  - `AnimatorItem`/`SwiperList` : amélioration affichage en cas de CSS désactivé
+  - `ClassicMultiselect`/`PlayerCompact` : ajustement CSS pour régler problème
+    de contraste avec certaines chartes client
 
 ## 42.3.2 (30/10/2026)
 
