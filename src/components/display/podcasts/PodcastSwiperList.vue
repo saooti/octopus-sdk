@@ -21,7 +21,11 @@
                 class="loading-size"
                 :loading-text="loading ? t('Loading podcasts ...') : undefined"
             />
-            <SwiperList v-if="!loading" :list-object="allPodcasts">
+            <SwiperList
+                v-if="!loading"
+                :list-object="allPodcasts"
+                :label="title"
+            >
                 <template #octopusSlide="{ option }">
                     <PodcastItem
                         class="flex-shrink-0 item-phone-margin"

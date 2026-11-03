@@ -10,6 +10,7 @@
             v-if="!loading && allParticipants.length"
             :size-item-overload="itemSize"
             :list-object="allParticipants"
+            :label="title"
         >
             <template #octopusSlide="{ option }">
                 <ParticipantItem

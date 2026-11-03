@@ -15,6 +15,7 @@
     de contraste avec certaines chartes client
   - `PodcastImage`/`PodcastItem`/`PodcastPlayButton` : corrections pour critères
     7.x (interactivité des scripts)
+  - `SwiperList` : adaptation pour compatibilité avec technologies d'assistance
 - Mise à jour dépendances
 
 ## 42.3.2 (30/10/2026)

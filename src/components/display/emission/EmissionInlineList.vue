@@ -1,43 +1,44 @@
 <template>
-  <div class="d-flex flex-column list-episode">
-    <h2 v-if="title" class="mb-0">
-      {{ title }}
-    </h2>
-    <ClassicLoading
-      :loading-text="loading ? t('Loading emissions ...') : undefined"
-    />
-    <SwiperList
-      v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)"
-      :size-item-overload="sizeItemOverload"
-      :list-object="allEmissions"
-    >
-      <template #octopusSlide="{ option }">
-        <EmissionPresentationItem
-          v-if="emissionDisplay === 'simple'"
-          :emission="option"
-          class="inline-list-element"
-          is-description
-          :is-vertical="emissionVertical"
+    <div class="d-flex flex-column list-episode">
+        <h2 v-if="title" class="mb-0">
+            {{ title }}
+        </h2>
+        <ClassicLoading
+            :loading-text="loading ? t('Loading emissions ...') : undefined"
         />
+        <SwiperList
+            v-if="(displayRubriquage && rubriques) || !(displayRubriquage && loaded)"
+            :size-item-overload="sizeItemOverload"
+            :list-object="allEmissions"
+            :label="title"
+        >
+            <template #octopusSlide="{ option }">
+                <EmissionPresentationItem
+                    v-if="emissionDisplay === 'simple'"
+                    :emission="option"
+                    class="inline-list-element"
+                    is-description
+                    :is-vertical="emissionVertical"
+                />
 
-        <EmissionPlayerItem
-          v-else
-          class="flex-shrink-0 item-phone-margin"
-          :emission="option"
-          :class="[mainRubriquage(option)]"
-          :nb-podcasts="nbPodcasts"
-          :rubrique-name="rubriquesId(option)"
-        />
-      </template>
-    </SwiperList>
-    <router-link
-      v-if="href"
-      :to="href"
-      class="btn btn-primary align-self-center w-fit-content m-4"
-    >
-      {{ buttonText }}
-    </router-link>
-  </div>
+                <EmissionPlayerItem
+                    v-else
+                    class="flex-shrink-0 item-phone-margin"
+                    :emission="option"
+                    :class="[mainRubriquage(option)]"
+                    :nb-podcasts="nbPodcasts"
+                    :rubrique-name="rubriquesId(option)"
+                />
+            </template>
+        </SwiperList>
+        <router-link
+            v-if="href"
+            :to="href"
+            class="btn btn-primary align-self-center w-fit-content m-4"
+        >
+            {{ buttonText }}
+        </router-link>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -59,28 +60,28 @@ import { RouteParams } from "vue-router";
 
 //Props 
 const props = defineProps<{
-  /**
+    /**
    * Change style of emission item.
    * Simple is what is seen everywhere, player displays a few podcasts that can
    * be played directly
    */
-  emissionDisplay?: 'player'|'simple';
-  /** When set to true with the 'simple' emissionDisplay, display emissions vertically */
-  emissionVertical?: boolean;
-  href?: string|RouteParams;
-  buttonText?: string;
-  /** Number of podcasts shown when using player display */
-  nbPodcasts?: number;
-  /** Size, in **rem**, of the emission items */
-  itemSize?: number;
-  /** Filter on organization */
-  organisationId?: string;
-  /** Filter on rubrique */
-  rubriqueId?: number;
-  /** Filter on rubriquage */
-  rubriquageId?: number;
-  /** Title of the section */
-  title?: string;
+    emissionDisplay?: 'player'|'simple';
+    /** When set to true with the 'simple' emissionDisplay, display emissions vertically */
+    emissionVertical?: boolean;
+    href?: string|RouteParams;
+    buttonText?: string;
+    /** Number of podcasts shown when using player display */
+    nbPodcasts?: number;
+    /** Size, in **rem**, of the emission items */
+    itemSize?: number;
+    /** Filter on organization */
+    organisationId?: string;
+    /** Filter on rubrique */
+    rubriqueId?: number;
+    /** Filter on rubriquage */
+    rubriquageId?: number;
+    /** Title of the section */
+    title?: string;
 }>();
 
 
@@ -99,81 +100,81 @@ const {handle403} = useErrorHandler();
 const displayRubriquage = computed(() => state.emissionsPage.rubriquage);
  
 const sizeItemOverload = computed(() => {
-  if (props.itemSize) {
-    return props.itemSize;
-  } else if (props.emissionDisplay === 'simple') {
-    return 25;
-  } else {
-    return undefined;
-  }
+    if (props.itemSize) {
+        return props.itemSize;
+    } else if (props.emissionDisplay === 'simple') {
+        return 25;
+    } else {
+        return undefined;
+    }
 })
 
 onMounted(()=>{
-  fetchNext();
-  if (displayRubriquage.value) {
-    fetchRubriques();
-  }
+    fetchNext();
+    if (displayRubriquage.value) {
+        fetchRubriques();
+    }
 })
 
 //Methods
 async function fetchNext(): Promise<void> {
-  try {
-    const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
-      api: 0,
-      path: "emission/search",
-      parameters: {
-        first: 0,
-        size: 12,
-        organisationId: props.organisationId,
-        rubriqueId: props.rubriqueId ? [props.rubriqueId] : [],
-        rubriquageId: props.rubriquageId ? [props.rubriquageId] : [],
-        sort: "LAST_PODCAST_DESC",
-      },
-      specialTreatement: true,
-    });
-    allEmissions.value = allEmissions.value.concat(
-      data.result.filter((em: Emission | null) => null !== em),
-    );
-    loading.value = false;
-  } catch (error) {
-    handle403(error as AxiosError);
-  }
+    try {
+        const data = await classicApi.fetchData<ListClassicReturn<Emission>>({
+            api: 0,
+            path: "emission/search",
+            parameters: {
+                first: 0,
+                size: 12,
+                organisationId: props.organisationId,
+                rubriqueId: props.rubriqueId ? [props.rubriqueId] : [],
+                rubriquageId: props.rubriquageId ? [props.rubriquageId] : [],
+                sort: "LAST_PODCAST_DESC",
+            },
+            specialTreatement: true,
+        });
+        allEmissions.value = allEmissions.value.concat(
+            data.result.filter((em: Emission | null) => null !== em),
+        );
+        loading.value = false;
+    } catch (error) {
+        handle403(error as AxiosError);
+    }
 }
 async function fetchRubriques(): Promise<void> {
-  const data = await classicApi.fetchData<Rubriquage>({
-    api: 0,
-    path: "rubriquage/" + displayRubriquage.value,
-  });
-  rubriques.value = data.rubriques;
+    const data = await classicApi.fetchData<Rubriquage>({
+        api: 0,
+        path: "rubriquage/" + displayRubriquage.value,
+    });
+    rubriques.value = data.rubriques;
 }
 
 function rubriquesId(emission: Emission): string | undefined {
-  if (
-    !displayRubriquage.value ||
-    !emission.rubriqueIds ||
-    0 === emission.rubriqueIds.length ||
-    !rubriques.value ||
-    !rubriques.value.length
-  ) {
-    return undefined;
-  }
+    if (
+        !displayRubriquage.value ||
+        !emission.rubriqueIds ||
+        0 === emission.rubriqueIds.length ||
+        !rubriques.value ||
+        !rubriques.value.length
+    ) {
+        return undefined;
+    }
 
-  const rubrique = rubriques.value.find(
-    (element: Rubrique) =>
-      element.rubriqueId &&
-      emission.rubriqueIds.includes(element.rubriqueId) &&
-      element.rubriquageId === displayRubriquage.value,
-  );
-  if (rubrique) {
-    return rubrique.name;
-  }
+    const rubrique = rubriques.value.find(
+        (element: Rubrique) =>
+            element.rubriqueId &&
+            emission.rubriqueIds.includes(element.rubriqueId) &&
+            element.rubriquageId === displayRubriquage.value,
+    );
+    if (rubrique) {
+        return rubrique.name;
+    }
 }
 
 function mainRubriquage(emission: Emission): string {
-  return state.emissionsPage.mainRubrique &&
-    emission.rubriqueIds?.includes(state.emissionsPage.mainRubrique)
-    ? "partenaireRubrique"
-    : "";
+    return state.emissionsPage.mainRubrique &&
+        emission.rubriqueIds?.includes(state.emissionsPage.mainRubrique)
+        ? "partenaireRubrique"
+        : "";
 }
 </script>
 

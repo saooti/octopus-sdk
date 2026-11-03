@@ -498,5 +498,7 @@
   "SubscribeButtons - Open": "Ouvrir la page {open} de '{name}'",
 
   "SwiperList - Show previous items": "Afficher les éléments précédents",
-  "SwiperList - Show next items": "Afficher les éléments suivants"
+  "SwiperList - Show next items": "Afficher les éléments suivants",
+  "SwiperList - Role": "carrousel",
+  "SwiperList - Visible items": "Éléments {first} à {last} sur {count}"
 }

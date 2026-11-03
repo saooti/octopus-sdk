@@ -29,7 +29,11 @@
             :error-text="0 === lives.length ? t('No live currently') : undefined"
         />
         <template v-if="lives.length">
-            <SwiperList v-if="!loading" :list-object="lives">
+            <SwiperList
+                v-if="!loading"
+                :list-object="lives"
+                :label="t('Live')"
+            >
                 <template #octopusSlide="{ option, index }">
                     <LiveItem
                         :fetch-conference="option"
