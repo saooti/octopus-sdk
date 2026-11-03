@@ -53,13 +53,18 @@
             :fetch-conference="fetchConference"
             :show-processing="showProcessing || isAuthenticated"
         />
+        <!-- Disclosure button for the description (RGAA 7.1), available on all devices -->
         <button
-            v-if="displayDescription && isMobile"
-            class="background-icon bg-dark text-white"
-            :title="isDescription ? t('Hide description') : t('Show description')"
-            @click="showDescription"
+            v-if="displayDescription"
+            :id="descriptionId ? `${descriptionId}-toggle` : undefined"
+            type="button"
+            class="background-icon text-white bg-dark"
+            :title="descriptionExpanded ? t('Hide description') : t('Show description')"
+            :aria-expanded="descriptionExpanded"
+            :aria-controls="descriptionId"
+            @click="emit('toggleDescription')"
         >
-            <ChevronDownIcon :class="{ 'arrow-transform': !isDescription }" />
+            <ChevronDownIcon :class="{ 'arrow-transform': !descriptionExpanded }" />
         </button>
     </div>
 </template>
@@ -71,7 +76,7 @@ import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
 import {useImageProxy} from "../../composable/useImageProxy";
-import { computed, onBeforeMount, ref, watch } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../../../stores/AuthStore";
 
@@ -80,18 +85,20 @@ const props = defineProps({
     podcast: { default: () => ({}), type: Object as () => Podcast },
     hidePlay: { default: false, type: Boolean },
     displayDescription: { default: false, type: Boolean },
-    arrowDirection: { default: "up", type: String },
+    /** Whether the description is currently displayed */
+    descriptionExpanded: { default: false, type: Boolean },
+    /** Id of the description element controlled by the button */
+    descriptionId: { default: undefined, type: String },
     isAnimatorLive: { default: false, type: Boolean },
     fetchConference: { default: undefined, type: Object as () => Conference },
     showProcessing: { default: false, type: Boolean }
 })
 
 //Emits
-const emit = defineEmits(["hideDescription", "showDescription"]);
-
-//Data 
-const isDescription = ref(false);
-const isMobile = ref(false);
+const emit = defineEmits<{
+    /** Description button clicked */
+    toggleDescription: [];
+}>();
 
 //Composables
 const { t } = useI18n();
@@ -152,37 +159,10 @@ const statusText = computed(() => {
     }
 });
 
-
-//Watch
-watch(()=>props.arrowDirection, () => {
-    if ("up" === props.arrowDirection) {
-        isDescription.value = true;
-        showDescription();
-    } else {
-        isDescription.value = false;
-        showDescription();
-    }
-});
-
-
-onBeforeMount(()=>{
-    isMobile.value = window.matchMedia("(hover: none)").matches;
-})
-
-//Methods
-function showDescription(): void {
-    if (isDescription.value) {
-        emit("hideDescription");
-    } else {
-        emit("showDescription");
-    }
-    isDescription.value = !isDescription.value;
-}
 </script>
 
-<style lang="scss">
-.octopus-app {
-  .live-image-status {
+<style scoped lang="scss">
+.live-image-status {
     text-align: center;
     width: 100%;
     font-size: 0.6rem;
@@ -193,7 +173,7 @@ function showDescription(): void {
     top: 0;
   }
 
-  .background-icon {
+.background-icon {
     border-radius: 50%;
     width: 44px;
     height: 44px;
@@ -207,6 +187,5 @@ function showDescription(): void {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
 }
 </style>

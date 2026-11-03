@@ -1,5 +1,7 @@
 <template>
     <Teleport to="#app">
+        <!-- Mouse handlers only bridge hover between target and popover; keyboard is handled via focusout/Tab on the target -->
+        <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
         <div
             v-show="displayPopover"
             :id="'popover' + target"

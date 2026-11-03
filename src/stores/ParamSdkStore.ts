@@ -84,6 +84,8 @@ export interface ParamStore {
         podcastItem?: number;
         /** Also show pagination on top of page */
         paginationOnTop?: boolean;
+        /** Disable the description toggle on PodcastItems */
+        disablePodcastDescriptionToggle?: boolean;
     };
     podcastPage: PodcastPageParameters;
     podcastsPage: {
