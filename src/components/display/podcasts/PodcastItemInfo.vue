@@ -1,6 +1,8 @@
 <template>
     <div class="podcast-item-info">
         <div class="podcast-item-status text-secondary h6 mx-2">
+            <!-- Out of the flex layout (absolute), so the row looks the same -->
+            <span class="visually-hidden">{{ t('PodcastItem - Published on') }}</span>
             <time :datetime="podcast.pubDate">
                 {{ date }}
             </time>
@@ -8,27 +10,30 @@
             <PodcastSeasonInfo :podcast="podcast" />
         </div>
 
-        <router-link
-            :to="{
-                name: 'podcast',
-                params: { podcastId: podcast.podcastId },
-            }"
-            class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
-            :title="t('Episode name page', { name: podcast.title })"
-        >
-            <div
-                v-if="showEmissionName"
-                class="emission-name"
+        <!-- Heading: cards can be browsed by title with screen readers (RGAA 9.1) -->
+        <component :is="titleTag" class="podcast-item-heading">
+            <router-link
+                :to="{
+                    name: 'podcast',
+                    params: { podcastId: podcast.podcastId },
+                }"
+                class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
+                :title="t('Episode name page', { name: podcast.title })"
             >
-                {{ podcast.emission.name }}
-            </div>
-            <RightsIndicator
-                inline
-                :podcast="podcast"
-                action="edit"
-            />
-            {{ podcast.title }}
-        </router-link>
+                <div
+                    v-if="showEmissionName"
+                    class="emission-name"
+                >
+                    {{ podcast.emission.name }}
+                </div>
+                <RightsIndicator
+                    inline
+                    :podcast="podcast"
+                    action="edit"
+                />
+                {{ podcast.title }}
+            </router-link>
+        </component>
 
         <PodcastPlayBar
             v-if="state.emissionsPage.progressBar"
@@ -74,12 +79,16 @@ const PodcastPlayBar = defineAsyncComponent(
 );
 
 //Props 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     /** The podcast to display */
     podcast: Podcast;
     /** Also display emission name */
     showEmissionName?: boolean;
-}>();
+    /** Heading tag of the title, depending on the headings around the card */
+    titleTag?: string;
+}>(), {
+    titleTag: 'h3'
+});
 
 //Composables
 const { t } = useI18n();
@@ -101,6 +110,12 @@ const orgaNameDisplay = computed(() =>{
 </script>
 
 <style scoped lang="scss">
+// Heading for the structure only: the link keeps its own look
+.podcast-item-heading {
+    margin: 0;
+    font: inherit;
+}
+
 .title-podcast-item {
     font-weight: 700;
     margin: 0.25rem 0.5rem 0.5rem;

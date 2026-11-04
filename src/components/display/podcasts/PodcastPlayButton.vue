@@ -22,6 +22,7 @@
                 <button 
                     class="d-flex"
                     :title="playingPodcast? t('Pause') : t('Play')"
+                    :aria-label="audioLabel"
                     @mouseenter="hoverType = 'audio'"
                     @focus="hoverType = 'audio'"
                     @mouseleave="hoverType = ''" 
@@ -43,7 +44,8 @@
                 </button>
                 <button 
                     v-if="isVideoPodcast"
-                    :title="t('Video')" 
+                    :title="t('Video')"
+                    :aria-label="videoLabel"
                     :disabled="playerStore.playerVideo"
                     @click.prevent="play(true)"
                     @mouseenter="hoverType = 'video'"
@@ -273,6 +275,17 @@ const durationString = computed(() => {
         Math.round(props.podcast.duration / 1000),
     );
 });
+/** Whether this podcast is currently heard (loaded and not paused) */
+const isPlaying = computed(() => playingPodcast.value && "PLAYING" === playerStore.playerStatus);
+/** Names of the buttons: episode and visible duration, kept for voice control */
+const audioLabel = computed(() => t(isPlaying.value ? "PodcastPlayButton - Pause" : "PodcastPlayButton - Play", {
+    title: props.podcast.title,
+    duration: durationString.value
+}));
+const videoLabel = computed(() => t("PodcastPlayButton - Play video", {
+    title: props.podcast.title,
+    duration: durationString.value
+}));
 const durationIso = computed(() => {
     if (!props.podcast || props.podcast.duration <= 1) {
         return "";

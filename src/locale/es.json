@@ -465,5 +465,11 @@
   "CommentSection - Status Indicator - Connecting": "Conectando...",
   "CommentSection - Status Indicator - Disonnected": "Desconectado, no recibirás comentarios en vivo",
   "CommentSection - Status Indicator - Inactive": "No hay conexión para comentarios en vivo",
-  "ExternalLink - New window": "(nueva ventana)"
+  "ExternalLink - New window": "(nueva ventana)",
+  "SwiperList - Role": "carrusel",
+  "SwiperList - Visible items": "Elementos del {first} al {last} en {count}",
+  "PodcastPlayButton - Play": "Escuche “{title}”, duración {duration}",
+  "PodcastPlayButton - Pause": "Pausa “{title}”, duración {duration}",
+  "PodcastPlayButton - Play video": "Mira “{title}” en video, duración {duration}",
+  "PodcastItem - Published on": "Publicado el"
 }

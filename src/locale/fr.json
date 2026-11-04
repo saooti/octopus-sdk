@@ -500,5 +500,10 @@
   "SwiperList - Show previous items": "Afficher les éléments précédents",
   "SwiperList - Show next items": "Afficher les éléments suivants",
   "SwiperList - Role": "carrousel",
-  "SwiperList - Visible items": "Éléments {first} à {last} sur {count}"
+  "SwiperList - Visible items": "Éléments {first} à {last} sur {count}",
+
+  "PodcastPlayButton - Play": "Écouter « {title} », durée {duration}",
+  "PodcastPlayButton - Pause": "Mettre en pause « {title} », durée {duration}",
+  "PodcastPlayButton - Play video": "Regarder « {title} » en vidéo, durée {duration}",
+  "PodcastItem - Published on": "Publié le"
 }

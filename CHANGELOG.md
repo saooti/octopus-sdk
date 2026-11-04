@@ -14,7 +14,7 @@
   - `ClassicMultiselect`/`PlayerCompact` : ajustement CSS pour régler problème
     de contraste avec certaines chartes client
   - `PodcastImage`/`PodcastItem`/`PodcastPlayButton` : corrections pour critères
-    7.x (interactivité des scripts)
+    7.x (interactivité des scripts) et meilleure compréhension des informations
   - `SwiperList` : adaptation pour compatibilité avec technologies d'assistance
 - Mise à jour dépendances
 

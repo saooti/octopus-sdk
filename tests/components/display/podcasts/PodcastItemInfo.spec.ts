@@ -9,10 +9,10 @@ import { emptyPodcastData, Podcast, PodcastType } from '@/stores/class/general/p
 import { mount as testMount, setupAuthStore } from '@tests/utils';
 import { describe, expect, it, vi } from 'vitest';
 
-const mount = (podcast: Partial<Podcast> = {}, auth?: { roles: string[], scope?: number[] }) => {
+const mount = (podcast: Partial<Podcast> = {}, auth?: { roles: string[], scope?: number[] }, props: Record<string, unknown> = {}) => {
     const base = emptyPodcastData();
     return testMount(PodcastItemInfo, {
-        props: { podcast: { ...base, ...podcast } },
+        props: { podcast: { ...base, ...podcast }, ...props },
         stubs: ['PodcastPlayBar', 'AnimatorsItem', 'BullhornIcon', 'GiftIcon'],
         beforeMount: auth ? async () => {
             await setupAuthStore({ roles: auth.roles, scope: auth.scope })();
@@ -94,6 +94,19 @@ describe('PodcastItemInfo', () => {
             const icon = wrapper.find('.rights-indicator-icon');
             expect(icon.exists()).toBe(true);
             expect(icon.classes()).toContain('invisible');
+        });
+    });
+
+    describe('accessibility', () => {
+        it('puts the title link in a heading, h3 by default', async () => {
+            expect((await mount()).find('h3 > a').exists()).toBe(true);
+            expect((await mount({}, undefined, { titleTag: 'h4' })).find('h4 > a').exists()).toBe(true);
+        });
+
+        it('labels the date as the publication date', async () => {
+            const label = (await mount()).find('.podcast-item-status .visually-hidden');
+            expect(label.text()).toBe('PodcastItem - Published on');
+            expect(label.element.nextElementSibling?.tagName).toBe('TIME');
         });
     });
 });

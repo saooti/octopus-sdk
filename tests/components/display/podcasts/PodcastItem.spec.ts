@@ -7,8 +7,8 @@ import { emptyPodcastData } from '@/stores/class/general/podcast';
 import { mount as testMount } from '@tests/utils';
 import { describe, expect, it, vi } from 'vitest';
 
-const mount = (description = 'Some description') => testMount(PodcastItem, {
-    props: { podcast: { ...emptyPodcastData(), description } },
+const mount = (description = 'Some description', props: Record<string, unknown> = {}) => testMount(PodcastItem, {
+    props: { podcast: { ...emptyPodcastData(), description }, ...props },
     stubs: ['PodcastItemInfo', 'PodcastPlayButton']
 });
 
@@ -68,5 +68,10 @@ describe('PodcastItem', () => {
             expect(button.attributes('aria-expanded')).toBe('true');
             vi.useRealTimers();
         });
+    });
+
+    it('passes the heading tag of the title to the info', async () => {
+        const wrapper = await mount(undefined, { titleTag: 'h4' });
+        expect(wrapper.findComponent({ name: 'PodcastItemInfo' }).props('titleTag')).toBe('h4');
     });
 });

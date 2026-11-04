@@ -35,6 +35,7 @@
             <PodcastItemInfo
                 :podcast="podcast"
                 :show-emission-name="showEmissionName"
+                :title-tag="titleTag"
             />
         </div>
     </article>
@@ -53,12 +54,16 @@ import displayHelper from "../../../helper/displayHelper";
 import ParamSdkStore from '@/stores/ParamSdkStore';
 
 //Props 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     podcast: Podcast;
     fetchConference?: Conference;
     /** Also display emission name */
     showEmissionName?: boolean;
-}>();
+    /** Heading tag of the title, depending on the headings around the card */
+    titleTag?: string;
+}>(), {
+    titleTag: 'h3'
+});
 
 //Data 
 const descriptionId = useId();

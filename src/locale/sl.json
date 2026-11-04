@@ -464,5 +464,11 @@
   "CommentSection - Status Indicator - Connecting": "Povezovanje ...",
   "CommentSection - Status Indicator - Disonnected": "Povezava je prekinjena, ne boste prejemali komentarjev v živo",
   "CommentSection - Status Indicator - Inactive": "Ni povezave za komentiranje v živo",
-  "ExternalLink - New window": "(novo okno)"
+  "ExternalLink - New window": "(novo okno)",
+  "SwiperList - Role": "vrtiljak",
+  "SwiperList - Visible items": "Elementi od {first} do {last} na {count}",
+  "PodcastPlayButton - Play": "Poslušajte »{title}«, trajanje {duration}",
+  "PodcastPlayButton - Pause": "Zaustavi »{title}«, trajanje {duration}",
+  "PodcastPlayButton - Play video": "Oglejte si »{title}« v videu, trajanje {duration}",
+  "PodcastItem - Published on": "Objavljeno dne"
 }
