@@ -12,7 +12,7 @@
                 class="d-flex justify-content-between flex-grow-1 w-100"
                 :class="displayTopPaginate ? 'align-items-end' : 'align-items-center'"
             >
-                <div class="text-secondary me-3 align-items-end">
+                <div class="text-secondary me-3 align-items-end" role="status">
                     <template v-if="textCount">
                         {{ textCount }}
                     </template>

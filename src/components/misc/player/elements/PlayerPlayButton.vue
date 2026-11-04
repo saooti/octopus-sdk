@@ -1,22 +1,22 @@
 <template>
-  <button
-    v-if="!playerError"
-    :title="t('Play')"
-    :class="{
-      'p-0': !displayIsPaused && !displayIsPlaying,
-      'play-button-box': !isBigButton,
-      'play-big-button-box': isBigButton,
-    }"
-    class="btn text-light"
-    @click="switchPausePlay"
-  >
-    <PlayIcon v-if="displayIsPaused" :size="isBigButton ? 60 : 30" />
-    <PauseIcon v-if="displayIsPlaying" :size="isBigButton ? 60 : 30" />
-    <ClassicSpinner
-      v-if="!displayIsPaused && !displayIsPlaying"
-      :small="!isBigButton"
-    />
-  </button>
+    <button
+        v-if="!playerError"
+        :title="displayIsPlaying ? t('Pause') : t('Play')"
+        :class="{
+            'p-0': !displayIsPaused && !displayIsPlaying,
+            'play-button-box': !isBigButton,
+            'play-big-button-box': isBigButton,
+        }"
+        class="btn text-light"
+        @click="switchPausePlay"
+    >
+        <PlayIcon v-if="displayIsPaused" :size="isBigButton ? 60 : 30" />
+        <PauseIcon v-if="displayIsPlaying" :size="isBigButton ? 60 : 30" />
+        <ClassicSpinner
+            v-if="!displayIsPaused && !displayIsPlaying"
+            :small="!isBigButton"
+        />
+    </button>
 </template>
 <script setup lang="ts">
 import PlayIcon from "vue-material-design-icons/Play.vue";
@@ -29,8 +29,8 @@ import { useI18n } from "vue-i18n";
 
 //Props 
 defineProps({
-  playerError: { default: false, type: Boolean },
-  isBigButton: { default: false, type: Boolean },
+    playerError: { default: false, type: Boolean },
+    isBigButton: { default: false, type: Boolean },
 })
 
 //Composables
@@ -41,16 +41,16 @@ const vastStore = useVastStore();
 
 //Computed
 const displayIsPlaying = computed(() => {
-  return (
-    (vastStore.isAdPlaying && !vastStore.isAdPaused) ||
-    (!vastStore.isAdPlaying && playerStore.isPlaying)
-  );
+    return (
+        (vastStore.isAdPlaying && !vastStore.isAdPaused) ||
+        (!vastStore.isAdPlaying && playerStore.isPlaying)
+    );
 });
 const displayIsPaused = computed(() => {
-  return (
-    (vastStore.isAdPlaying && vastStore.isAdPaused) ||
-    (!vastStore.isAdPlaying && playerStore.isPaused)
-  );
+    return (
+        (vastStore.isAdPlaying && vastStore.isAdPaused) ||
+        (!vastStore.isAdPlaying && playerStore.isPaused)
+    );
 });
 
 
@@ -60,50 +60,54 @@ onUnmounted(()=>window.removeEventListener("keydown", addKeyboardControl))
 
 //Methods
 function addKeyboardControl(event: KeyboardEvent): void {
-  if (!event || null === event) {
-    return;
-  }
-  const element = event.target as HTMLElement;
-  if (
-    !element ||
-    "INPUT" == element.tagName.toUpperCase() ||
-    "TEXTAREA" == element.tagName.toUpperCase()
-  ) {
-    return;
-  }
-  if (" " === event.key || "Spacebar" === event.key) {
-    event.preventDefault();
-    switchPausePlay();
-    return;
-  }
-  if (vastStore.isAdPlaying) {
-    return;
-  }
-  if ("ArrowRight" === event.key && event.ctrlKey) {
-    changeCurrentTime(15);
-    return;
-  }
-  if ("ArrowLeft" === event.key && event.ctrlKey) {
-    changeCurrentTime(-15);
-  }
+    if (!event || null === event) {
+        return;
+    }
+    const element = event.target as HTMLElement | null;
+    // RGAA 12.10: shortcuts are only active when focus is inside the player
+    if (
+        !element?.closest("#octopus-player-component") ||
+        null !== element.closest("input, textarea, select")
+    ) {
+        return;
+    }
+    if (" " === event.key || "Spacebar" === event.key) {
+        // Let native activation of focused buttons/links happen
+        if (null !== element.closest("button, a[href]")) {
+            return;
+        }
+        event.preventDefault();
+        switchPausePlay();
+        return;
+    }
+    if (vastStore.isAdPlaying) {
+        return;
+    }
+    if ("ArrowRight" === event.key && event.ctrlKey) {
+        changeCurrentTime(15);
+        return;
+    }
+    if ("ArrowLeft" === event.key && event.ctrlKey) {
+        changeCurrentTime(-15);
+    }
 }
 function changeCurrentTime(delay: number) {
-  const audioPlayer: HTMLAudioElement | null = document.querySelector("#audio-player");
-  if (!audioPlayer) {
-    return;
-  }
-  audioPlayer.currentTime += delay;
+    const audioPlayer: HTMLAudioElement | null = document.querySelector("#audio-player");
+    if (!audioPlayer) {
+        return;
+    }
+    audioPlayer.currentTime += delay;
 }
 function switchPausePlay(): void {
-  if (vastStore.isAdPlaying) {
-    vastStore.updateIsAdPaused(!vastStore.isAdPaused);
-    return;
-  }
-  const audioPlayer: HTMLAudioElement | null =document.querySelector("#audio-player");
-  if (!audioPlayer) {
-    return;
-  }
-  playerStore.playerChangeStatus(!audioPlayer.paused);
+    if (vastStore.isAdPlaying) {
+        vastStore.updateIsAdPaused(!vastStore.isAdPaused);
+        return;
+    }
+    const audioPlayer: HTMLAudioElement | null =document.querySelector("#audio-player");
+    if (!audioPlayer) {
+        return;
+    }
+    playerStore.playerChangeStatus(!audioPlayer.paused);
 }
 </script>
 

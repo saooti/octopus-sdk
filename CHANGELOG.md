@@ -16,6 +16,7 @@
   - `PodcastImage`/`PodcastItem`/`PodcastPlayButton` : corrections pour critères
     7.x (interactivité des scripts) et meilleure compréhension des informations
   - `SwiperList` : adaptation pour compatibilité avec technologies d'assistance
+  - `PlayerPlayButton`/`ListPaginate` : restitution des changements de statut
 - Mise à jour dépendances
 
 ## 42.3.2 (30/10/2026)
