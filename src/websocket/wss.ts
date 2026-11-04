@@ -89,6 +89,8 @@ export default class WssConnection {
             reconnectDelay: 1000,
             maxReconnectDelay: 30000,
             reconnectTimeMode: ReconnectionTimeMode.EXPONENTIAL,
+            // Do not wait for the browser to close a dead socket before reconnecting
+            discardWebsocketOnCommFailure: true,
             beforeConnect: () => this.onStatusChange(WssStatus.CONNECTING),
             onConnect: () => {
                 this.stompSubscriptions.clear();
@@ -101,7 +103,12 @@ export default class WssConnection {
                 this.onStatusChange(
                     this.client?.active ? WssStatus.DISCONNECTED : WssStatus.INACTIVE,
                 ),
-            onStompError: (frame) => console.error(frame.headers.message),
+            // The broker may send an ERROR (e.g. "Connection to broker closed.") without
+            // closing the socket, leaving subscriptions dead: force a reconnection
+            onStompError: (frame) => {
+                console.error(frame.headers.message);
+                this.client?.forceDisconnect();
+            },
         });
         this.client.activate();
     }

@@ -15,9 +15,9 @@
                     :size="buttonSize"
                     @like-action="initiateLikeActions"
                 />
-                <span v-if="section.counter" class="ms-1 me-2">{{
-                    transformInThousands(section.counter)
-                }}</span>
+                <span v-if="section.counter" class="ms-1 me-2">
+                    {{ transformInThousands(section.counter) }}
+                </span>
             </template>
         </template>
     </div>
@@ -39,6 +39,8 @@ const CheckIdentityModal = defineAsyncComponent(
     () => import("../modal/CheckIdentityModal.vue"),
 );
 const LikeButton = defineAsyncComponent(() => import("./LikeButton.vue"));
+
+type Feeling = 'like'|'dislike';
 
 //Props 
 const props = defineProps<{
@@ -137,14 +139,15 @@ function transformInThousands(nb: number) {
     }
     return nb.toString();
 }
-async function initiateLikeActions(actionName: string) {
+async function initiateLikeActions(actionName: Feeling) {
     if (!commentStore.commentUser?.name) {
         isCheckIdentityActions.value = actionName;
         return;
     }
     likeActions(actionName);
 }
-async function likeActions(actionName: string) {
+
+async function likeActions(actionName: Feeling) {
     const prefix = props.comment ? "comment/" : "podcast/";
     const data = await classicApi.putData<{
         [key: number]: CommentFeelings;

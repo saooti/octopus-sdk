@@ -37,6 +37,9 @@ class FakeClient {
         this.connected = false;
         this.config.onWebSocketClose?.({} as never);
     }
+
+    /** Like stompjs, closing the socket triggers onWebSocketClose */
+    forceDisconnect = vi.fn(() => this.drop());
 }
 
 vi.mock('@stomp/stompjs', () => ({
@@ -115,6 +118,26 @@ describe('wss', () => {
             WssStatus.CONNECTED,
             WssStatus.INACTIVE
         ]);
+    });
+
+    it('forces a reconnection and restores subscriptions when the broker sends an ERROR', () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+        FakeClient.instance.open();
+        connection.subscribe('/topic/a', vi.fn());
+        FakeClient.instance.subscribe.mockClear();
+
+        FakeClient.instance.config.onStompError?.({ headers: { message: 'Connection to broker closed.' } } as never);
+
+        expect(FakeClient.instance.forceDisconnect).toHaveBeenCalledOnce();
+        expect(onStatusChange).toHaveBeenLastCalledWith(WssStatus.DISCONNECTED);
+
+        FakeClient.instance.open();
+        expect(subscribedTopics()).toEqual(['/topic/a']);
+        consoleError.mockRestore();
+    });
+
+    it('discards the websocket on communication failure', () => {
+        expect(FakeClient.instance.config.discardWebsocketOnCommFailure).toBe(true);
     });
 
     it('supports stompjs being exposed only as a default export', async () => {

@@ -4,7 +4,9 @@
 
 ### Fixes
 
-- **[15065]** - Correction réponses aux commentaires en mode websocket
+- **[15065]** - Corrections problèmes commentaires
+  - Correction réponses aux commentaires en mode websocket
+  - Correction déconnexions aléatoires non visibles
 
 ### Misc
 
