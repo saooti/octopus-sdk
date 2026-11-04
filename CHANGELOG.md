@@ -2,6 +2,10 @@
 
 ## 42.3.3 (En cours)
 
+### Fixes
+
+- **[15065]** - Correction réponses aux commentaires en mode websocket
+
 ### Misc
 
 - Ajout option pour icones monochromes pour les plateformes
@@ -18,6 +22,8 @@
   - `SwiperList` : adaptation pour compatibilité avec technologies d'assistance
   - `PlayerPlayButton`/`ListPaginate` : restitution des changements de statut
 - Mise à jour dépendances
+
+[15065]: https://trac.saooti.net/ticket/15065
 
 ## 42.3.2 (30/10/2026)
 

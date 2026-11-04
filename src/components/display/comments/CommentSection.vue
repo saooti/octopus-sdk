@@ -146,7 +146,8 @@ watch(()=>commentStore.commentEventToHandle, async () => {
     eventToHandle.value = commentStore.commentEventToHandle[0];
     commentStore.commentEventHandled();
     emit('commentReceived');
-}, {deep: true});
+}, { deep: true });
+
 // Reload comments after a reconnection, as events sent while disconnected are lost
 watch(()=>commentStore.commentConnectionStatus, (status) => {
     if (WssStatus.CONNECTED !== status) {

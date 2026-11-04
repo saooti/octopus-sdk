@@ -116,7 +116,7 @@ const props = defineProps({
     podcast: { default: undefined, type: Object as () => Podcast },
     isFlatList: { default: false, type: Boolean },
     config: { default: undefined, type: Object as () => CommentsConfig },
-    organisationId: { default: undefined, type: String },
+    organisationId: { default: undefined, type: String }
 })
 
 //Emits
@@ -180,6 +180,10 @@ const classes = computed((): Array<string> => {
     if (isMyComment.value) {
         ary.push('my-own');
     }
+
+    if (props.comment.answerTo) {
+        ary.push('response');
+    }
   
     return ary;
 });
@@ -240,10 +244,18 @@ defineExpose({
 
   &.my-own {
     background-color: var(--octopus-comments-item-own-bg);
+
+    &.response {
+        background-color: transparent;
+    }
   }
 
   &:not(.my-own) {
     background-color: var(--octopus-comments-item-other-bg);
+
+    &.response {
+        background-color: transparent;
+    }
   }
 }
 </style>

@@ -56,7 +56,7 @@ export default class CommentEngine {
         }
         if (!podcastId) {
             throw new Error(
-                "Cannot unsubscribe to comments event bus if no id provided",
+                "Cannot unsubscribe to comments event bus if no podcast id provided",
             );
         }
         this.connection.unsubscribe(queueName);
@@ -64,6 +64,6 @@ export default class CommentEngine {
     }
 
     isPodcastCommentEventConnected(podcastId: number): boolean {
-        return podcastId===this.subscribedEventComment;
+        return podcastId === this.subscribedEventComment;
     }
 }

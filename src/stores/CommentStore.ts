@@ -222,17 +222,17 @@ export const useCommentStore = defineStore("CommentStore", {
         },
 
         /*--------------------------------------------------------------------------------------------------------------
-    |                                                                                                              |
-    |                                           Initializing state                                                 |
-    |                                                                                                              |
-    --------------------------------------------------------------------------------------------------------------*/
+        |                                                                                                              |
+        |                                           Initializing state                                                 |
+        |                                                                                                              |
+        --------------------------------------------------------------------------------------------------------------*/
         async initialize() {
             if (this.commentInitialized) {
                 return;
             }
             const apiStore = useApiStore();
             const commentUrl = apiStore.commentUrl?? "https://comments.dev2.saooti.org/";
-            const url =  stringHelper.trimChar(commentUrl.replace("https://", ""),"/");
+            const url = stringHelper.trimChar(commentUrl.replace("https://", ""),"/");
             const engine = markRaw(new WebSocketEngine(url, (status) => {
                 this.commentConnectionStatus = status;
             }));
@@ -249,20 +249,18 @@ export const useCommentStore = defineStore("CommentStore", {
         },
 
         /*--------------------------------------------------------------------------------------------------------------
-    |                                                                                                              |
-    |                                      Comments management methods                                             |
-    |                                                                                                              |
-    --------------------------------------------------------------------------------------------------------------*/
+        |                                                                                                              |
+        |                                      Comments management methods                                             |
+        |                                                                                                              |
+        --------------------------------------------------------------------------------------------------------------*/
         unsubscribeToEvent() {
             if (!this.commentWebsocketengine) {
                 return;
             }
             if (
                 this.commentPodcastId &&
-        this.commentQueueName &&
-        this.commentWebsocketengine.isPodcastCommentEventConnected(
-            this.commentPodcastId,
-        )
+                this.commentQueueName &&
+                this.commentWebsocketengine.isPodcastCommentEventConnected(this.commentPodcastId)
             ) {
                 this.commentWebsocketengine.unsubscribeToPodcastCommentEventBus(
                     this.commentPodcastId,
@@ -300,10 +298,10 @@ export const useCommentStore = defineStore("CommentStore", {
         },
 
         /*--------------------------------------------------------------------------------------------------------------
-    |                                                                                                              |
-    |                              Managing conference WebSocket Event Received                                    |
-    |                                                                                                              |
-    --------------------------------------------------------------------------------------------------------------*/
+        |                                                                                                              |
+        |                              Managing conference WebSocket Event Received                                    |
+        |                                                                                                              |
+        --------------------------------------------------------------------------------------------------------------*/
         commentEventHandled() {
             this.commentEventToHandle.shift();
         },

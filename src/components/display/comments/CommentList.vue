@@ -41,6 +41,7 @@
                 v-for="(c, indexCom) in comments"
                 :id="'comItem' + c.commentId"
                 :key="c.commentId"
+                :ref="(el) => setCommentItemRef(c.commentId, el)"
                 v-model:comment="comments[indexCom]"
                 :podcast="podcast"
                 :is-flat-list="isFlatList"
@@ -111,6 +112,8 @@ const sortType = ref("DATE_DESC");
 const comments: Ref<Array<CommentPodcast>> = ref([]);
 const scrollableSection: Ref<HTMLElement | undefined> = ref(undefined);
 const scrollComponentRef = useTemplateRef('scrollComponent');
+type CommentItemExposed = { receiveEvent: (event: CommentMessage) => void };
+const commentItemRefs = new Map<number, CommentItemExposed>();
 
 //Composables
 const { t } = useI18n();
@@ -126,8 +129,9 @@ const sortChoice = computed(() =>{
 });
 
 //Watch
-watch(totalCount, () => {emit("update:nbComments", totalCount.value)});
-watch(changed, () => {fetchContent(true);});
+watch(totalCount, () => emit("update:nbComments", totalCount.value));
+watch(changed, () => fetchContent(true));
+
 watch(()=>props.eventToHandle, async () => {
     if (!props.eventToHandle) {
         return;
@@ -149,13 +153,11 @@ watch(()=>props.eventToHandle, async () => {
         return;
     }
     if (undefined !== props.eventToHandle.comment.answerTo) {
-        const comItem = scrollComponentRef?.value?.querySelector('#comItem' + props.eventToHandle.comment.answerTo) as InstanceType<typeof CommentItem>;
-        comItem?.receiveEvent(props.eventToHandle);
+        commentItemRefs.get(props.eventToHandle.comment.answerTo)?.receiveEvent(props.eventToHandle);
     }
-}, {deep: true});
+}, { deep: true });
 
-
-onMounted(()=>{
+onMounted(() => {
     fetchContent(true);
     if (isNotAnAnswerList.value) {
         scrollableSection.value = scrollComponentRef?.value as HTMLElement;
@@ -169,8 +171,14 @@ onUnmounted(()=>{
     }
 })
 
-
 //Methods
+function setCommentItemRef(commentId: number, el: unknown) {
+    if (el) {
+        commentItemRefs.set(commentId, el as CommentItemExposed);
+    } else {
+        commentItemRefs.delete(commentId);
+    }
+}
 function changeSort(sortTypeUpdate: string) {
     sortType.value = sortTypeUpdate;
     fetchContent(true);
@@ -253,10 +261,8 @@ async function fetchContent(reset: boolean): Promise<void> {
 </script>
 
 <style scoped lang="scss">
-.octopus-app {
-  .scrolling-comments {
+.scrolling-comments {
     max-height: 715px;
     overflow-y: auto;
-  }
 }
 </style>
