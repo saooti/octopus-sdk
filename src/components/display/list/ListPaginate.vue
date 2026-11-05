@@ -1,45 +1,52 @@
 <template>
-    <div :id="id" class="d-flex flex-column align-items-center">
+    <div
+        :id="id"
+        class="d-flex flex-column align-items-center"
+        tabindex="-1"
+    >
         <ClassicLoading
-            v-if="loading || errorText"
+            v-if="(loading && !totalCount) || errorText"
             :loading-text="loadingText"
             :error-text="errorText"
         />
 
-        <template v-if="!loading">
-            <div
-                v-if="!justSizeChosen"
-                class="d-flex justify-content-between flex-grow-1 w-100"
-                :class="displayTopPaginate ? 'align-items-end' : 'align-items-center'"
-            >
-                <div class="text-secondary me-3 align-items-end" role="status">
-                    <template v-if="textCount">
-                        {{ textCount }}
-                    </template>
-                </div>
-                <div>
-                    <PaginateParams
-                        v-if="!isPhone && !justSizeChosen && totalCount > 0"
-                        :id="id + '-params'"
-                        :rows-per-page="rowsPerPage"
-                        @update:rows-per-page="changeSize"
-                    />
-
-                    <PaginateSection
-                        v-if="displayTopPaginate"
-                        :id="id + '-top'"
-                        class="pt-0 pb-0"
-                        :style="pagingStyle"
-                        :first="first"
-                        :rows-per-page="rowsPerPage"
-                        :total-count="totalCount"
-                        :range-size="rangeSize"
-                        @update:first="changeFirst"
-                    />
-                </div>
+        <div
+            v-if="!justSizeChosen"
+            class="d-flex justify-content-between flex-grow-1 w-100"
+            :class="displayTopPaginate ? 'align-items-end' : 'align-items-center'"
+        >
+            <!-- Always rendered so that assistive technologies announce changes -->
+            <div class="text-secondary me-3 align-items-end" role="status">
+                <span v-if="loading" class="visually-hidden">{{ loadingText }}</span>
+                <template v-else-if="textCount">
+                    {{ textCount }}
+                </template>
             </div>
-        </template>
-        <slot name="list" />
+            <div>
+                <PaginateParams
+                    v-if="!isPhone && !justSizeChosen && totalCount > 0"
+                    :id="id + '-params'"
+                    :rows-per-page="rowsPerPage"
+                    @update:rows-per-page="changeSize"
+                />
+
+                <PaginateSection
+                    v-if="displayTopPaginate"
+                    :id="id + '-top'"
+                    class="pt-0 pb-0"
+                    :style="pagingStyle"
+                    :first="first"
+                    :rows-per-page="rowsPerPage"
+                    :total-count="totalCount"
+                    :range-size="rangeSize"
+                    @update:first="changeFirst"
+                />
+            </div>
+        </div>
+        <div class="position-relative w-100" :aria-busy="loading">
+            <slot name="list" />
+            <LoadingOverlay v-if="loading && totalCount" :loading-text="loadingText" />
+        </div>
 
         <PaginateSection
             v-if="!isPhone && !justSizeChosen && totalCount > 0"
@@ -71,6 +78,7 @@
 import PlusIcon from "vue-material-design-icons/Plus.vue";
 import domHelper from "../../../helper/domHelper";
 import ClassicLoading from "../../form/ClassicLoading.vue";
+import LoadingOverlay from "../../misc/LoadingOverlay.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import PaginateParams from "./PaginateParams.vue";
 import PaginateSection from "./PaginateSection.vue";
@@ -134,21 +142,27 @@ function changeFirst(firstValue: number) {
     scrollToTop();
     emit("update:first", firstValue);
 }
+/** No scroll nor focus change: the value of a control is changed (RGAA 7.4) */
 function changeSize(sizeValue: number) {
-    scrollToTop();
     emit("update:rowsPerPage", sizeValue);
     updatePaginateSize(sizeValue, props.forceUpdateParameters);
 }
+/** Bring focus back to the start of the list, scrolling to it if needed */
 function scrollToTop() {
     const element = document.getElementById(props.id);
-    if (!element || element.getBoundingClientRect().top > 0) {
+    if (!element) {
+        return;
+    }
+    element.focus({ preventScroll: true });
+    if (element.getBoundingClientRect().top > 0) {
         return;
     }
     const y =
         element.getBoundingClientRect().top +
         window.scrollY -
         domHelper.convertRemToPixels(3.5);
-    window.scrollTo({ top: y, behavior: "smooth" });
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: y, behavior: reducedMotion ? "auto" : "smooth" });
 }
 
 /** Style to apply to the paging section */

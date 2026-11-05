@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 42.3.4 (En cours)
+
+### Misc
+
+- Ajout composant d'overlay de chargement
+- `{a11y}` Ajustements de nombreux composants pour conformité RGAA
+  - Suppression de l'autofocus sur la recherche dans les pages qui ne sont pas
+    des pages de recherche
+  - `ListPaginate` : correction critères 7.4 (changement de contexte et
+    changement de focus en changeant la taille des éléments affichés), 7.5 (
+    statut non remonté lors des chargements), et 12.8 (correction ordre de
+    tabulation).
+
 ## 42.3.3 (04/10/2026)
 
 ### Fixes

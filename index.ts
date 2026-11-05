@@ -47,6 +47,7 @@ import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/
 import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue";
 import SkipToContent from "./src/components/misc/SkipToContent.vue";
 import ExternalLink from "./src/components/misc/ExternalLink.vue";
+import LoadingOverlay from "./src/components/misc/LoadingOverlay.vue";
 export { type Tab } from "./src/components/misc/ClassicTabs.vue";
 
 export {
@@ -54,7 +55,8 @@ export {
     type ClassicDataTableHeader,
     ClassicNotifications,
     SkipToContent,
-    ExternalLink
+    ExternalLink,
+    LoadingOverlay
 }
 
 // Buttons

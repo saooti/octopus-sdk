@@ -17,7 +17,7 @@
         v-if="noPagination"
         v-bind="{ ...props, ...$attrs }"
     >
-        <template v-for="(_, name) in $slots" v-slot:[name]="scope">
+        <template v-for="(_, name) in $slots" #[name]="scope">
             <slot :name="name" v-bind="{ ...scope }" />
         </template>
     </ClassicDataTable_Internal>
@@ -30,11 +30,11 @@
         :loading="loading"
         :loading-text="$t('Loading content ...')"
     >
-        <template v-if="!loading" #list>
+        <template #list>
             <ClassicDataTable_Internal 
                 v-bind="{ ...props, ...$attrs }"
             >
-                <template v-for="(_, name) in $slots" v-slot:[name]="scope">
+                <template v-for="(_, name) in $slots" #[name]="scope">
                     <slot :name="name" v-bind="{ ...scope }" />
                 </template>
             </ClassicDataTable_Internal>

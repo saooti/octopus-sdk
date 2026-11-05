@@ -39,7 +39,6 @@
         <ClassicSearch
             :text-init="searchPattern"
             class="w-50-responsive"
-            :autofocus="true"
             id-search="productor-search-input"
             :label="searchText"
             @update:text-init="updateSearchPattern"
