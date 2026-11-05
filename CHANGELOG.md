@@ -12,6 +12,9 @@
     changement de focus en changeant la taille des éléments affichés), 7.5 (
     statut non remonté lors des chargements), et 12.8 (correction ordre de
     tabulation).
+  - `PodcastList`/`PodcastFilterList` : suppression du focus auto
+  - `ShareAnonymous`/`ClassicPopover` : correction navigation au clavier dans
+    les menus
 
 ## 42.3.3 (04/10/2026)
 

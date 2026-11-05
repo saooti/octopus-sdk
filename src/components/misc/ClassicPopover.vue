@@ -1,7 +1,8 @@
 <template>
     <Teleport to="#app">
         <!-- Mouse handlers only bridge hover between target and popover; keyboard is handled via focusout/Tab on the target -->
-        <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
+        <!-- Click/keydown handlers only manage keyboard navigation of onlyClick menus (see onPopoverKeydown/onPopoverClick) -->
+        <!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events, vuejs-accessibility/no-static-element-interactions, vuejs-accessibility/click-events-have-key-events -->
         <div
             v-show="displayPopover"
             :id="'popover' + target"
@@ -14,6 +15,8 @@
                 onlyClick ? 'octopus-dropdown' : '',
                 popoverClass]"
             :style="positionInlineStyle"
+            @keydown="onPopoverKeydown"
+            @click="onPopoverClick"
             @mouseenter="overPopover = true"
             @mouseleave="
                 overPopover = false;
@@ -34,7 +37,21 @@
 import { computed, nextTick, onMounted, onUnmounted, Ref, ref, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-//Props 
+/**
+ * Popover attached to the element with id `target`.
+ *
+ * Keyboard navigation of `onlyClick` menus (the popover is teleported, so it
+ * is not after its target in the tab order):
+ * - opening it with the keyboard focuses its first focusable element
+ * - Shift+Tab on its first element, Tab on its last one, Escape, or activating
+ *   an `.octopus-dropdown-item` with the keyboard closes it and gives focus
+ *   back to the target
+ * - `aria-expanded` and `aria-controls` are set on the target
+ */
+
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+//Props
 const props = defineProps({
     content: { type: String, default: "" },
     title: { type: String, default: "" },
@@ -68,6 +85,8 @@ const posY = ref(0);
 const targetElement: Ref<HTMLElement | null> = ref(null);
 const overPopover = ref(false);
 const isTabAction = ref(false);
+/** Focus is moved by the component into the popover: target focusout must be ignored */
+let isFocusingInside = false;
 const maxHeight = ref('80dvh');
 const clearTimeout: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 const popoverRef = useTemplateRef('popover');
@@ -99,6 +118,9 @@ watch(displayPopover, async () => {
 });
 watch(show, async () => {
     emit("updateVisibility", show.value);
+    if (props.onlyClick) {
+        targetElement.value?.setAttribute("aria-expanded", String(show.value));
+    }
     if (show.value) {
         window.addEventListener("keyup", addAccessibilityControl);
     } else {
@@ -139,6 +161,10 @@ function addAccessibilityControl(event: KeyboardEvent): void {
     if (!event || null === event) {
         return;
     }
+    if (props.onlyClick && "Escape" === event.key) {
+        closeAndRestoreFocus();
+        return;
+    }
     if ("Tab" !== event.key) {
         return;
     }
@@ -161,6 +187,10 @@ function init() {
             targetElement.value.addEventListener("click", setPopoverData);
         }
         targetElement.value.addEventListener("focusout", clearDataBlur);
+        if (props.onlyClick) {
+            targetElement.value.setAttribute("aria-controls", popoverId.value);
+            targetElement.value.setAttribute("aria-expanded", String(show.value));
+        }
     }
 }
 function removeListeners() {
@@ -173,6 +203,10 @@ function removeListeners() {
             targetElement.value.removeEventListener("click", setPopoverData);
         }
         targetElement.value.removeEventListener("focusout", clearDataBlur);
+        if (props.onlyClick) {
+            targetElement.value.removeAttribute("aria-controls");
+            targetElement.value.removeAttribute("aria-expanded");
+        }
     }
 }
 function handleClickEvent(e: MouseEvent | PointerEvent){
@@ -242,9 +276,65 @@ function setPopoverData(e: MouseEvent | PointerEvent) {
         : 5;
     posY.value = Math.max(0, yPosParent + yGap);
     maxHeight.value = (window.innerHeight - posY.value) + "px";
+    // Keyboard activation (Enter/Space) of the target
+    if (props.onlyClick && "click" === e.type && 0 === e.detail) {
+        nextTick(() => focusFirstElement());
+    }
+}
+
+function getFocusableElements(): Array<HTMLElement> {
+    return Array.from(popoverRef.value?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []);
+}
+function focusFirstElement(): void {
+    const first = getFocusableElements()[0] ?? popoverRef.value;
+    // Focus events are synchronous: the flag only covers this focus change
+    isFocusingInside = true;
+    first?.focus();
+    isFocusingInside = false;
+}
+/** Close the popover, giving focus back to the target if it was inside */
+function closeAndRestoreFocus(): void {
+    const isFocusInside = popoverRef.value?.contains(document.activeElement) ?? false;
+    clearClick();
+    if (isFocusInside) {
+        targetElement.value?.focus();
+    }
+}
+function onPopoverKeydown(event: KeyboardEvent): void {
+    if (!props.onlyClick || "Tab" !== event.key) {
+        return;
+    }
+    const popover = popoverRef.value;
+    const focusables = getFocusableElements();
+    const active = document.activeElement;
+    if (event.shiftKey) {
+        if (active === popover || active === focusables[0]) {
+            event.preventDefault();
+            closeAndRestoreFocus();
+        }
+        return;
+    }
+    if (active === (focusables.at(-1) ?? popover)) {
+        // No preventDefault: the browser moves focus from the target to the
+        // next element of the page
+        closeAndRestoreFocus();
+    }
+}
+function onPopoverClick(event: MouseEvent): void {
+    // Only keyboard activation: mouse is handled by the target focusout
+    if (!props.onlyClick || 0 !== event.detail) {
+        return;
+    }
+    if ((event.target as HTMLElement).closest(".octopus-dropdown-item")) {
+        // Let the item handlers run first
+        nextTick(() => closeAndRestoreFocus());
+    }
 }
 
 function clearDataBlur(e: FocusEvent) {
+    if (isFocusingInside) {
+        return;
+    }
     if (isTabAction.value) {
         isTabAction.value = false;
         return;
@@ -310,6 +400,7 @@ function clearData() {
     posX.value = 0;
     posY.value = 0;
     openedByHover.value = false;
+    isTabAction.value = false;
 }
 
 //Expose

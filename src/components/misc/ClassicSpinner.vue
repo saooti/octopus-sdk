@@ -3,14 +3,18 @@
     class="octopus-spinner"
     :style="style"
   >
-    <div v-for="index of 12" :key="index" />
+    <div
+      v-for="index of 12"
+      :key="index"
+      :style="{ '--index': index }"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 
-//Props 
+//Props
 const props = defineProps({
   small: { default: false, type: Boolean },
   color: { default: undefined, type: String }
@@ -98,6 +102,16 @@ const style = computed(() => ({
   div:nth-child(12) {
     transform: rotate(330deg);
     animation-delay: 0s;
+  }
+
+  // Static spinner shape when animations are reduced by the user. The loading
+  // animation itself is essential (WCAG 2.2.2 exception), so it is not stopped
+  // after 5 seconds (RGAA 13.8)
+  @media (prefers-reduced-motion: reduce) {
+    div {
+      animation: none;
+      opacity: calc(var(--index) / 12);
+    }
   }
 
   @keyframes octopus-spinner {

@@ -3,54 +3,55 @@
   DO NOT confuse this with PodcastList from playlist
 -->
 <template>
-  <ListPaginate
-    id="podcastListPaginate"
-    v-model:first="dfirst"
-    v-model:rows-per-page="dsize"
-    v-model:is-mobile="isMobile"
-    :text-count="
-      showCount && podcasts.length > 1
-        ? t('Number podcasts', { nb: totalCount }) + sortText
-        : undefined
-    "
-    :total-count="totalCount"
-    :loading="loading"
-    :loading-text="loading ? t('Loading podcasts ...') : undefined"
-    :error-text="
-      !loading && !podcasts.length
-        ? t(`No podcast match your query`)
-        : undefined
-    "
-    :just-size-chosen="justSizeChosen"
-    :player-responsive="true"
-    :force-update-parameters="forceUpdateParameters"
-  >
-    <template #list>
-      <div class="octopus-element-list">
-        <ClassicLazy
-          v-for="p in displayArray"
-          :key="p.podcastId"
-          :min-height="410"
-        >
-          <PodcastItem
-            v-if="0 !== p.podcastId"
-            :podcast="p"
-          />
-          <template #preview>
-            <router-link
-              :to="{
-                name: 'podcast',
-                params: { podcastId: p.podcastId },
-              }"
-              :title="t('Episode name page', { name: p.title })"
-            >
-              {{ p.title }}
-            </router-link>
-          </template>
-        </ClassicLazy>
-      </div>
-    </template>
-  </ListPaginate>
+    <ListPaginate
+        id="podcastListPaginate"
+        v-model:first="dfirst"
+        v-model:rows-per-page="dsize"
+        v-model:is-mobile="isMobile"
+        :text-count="
+            showCount && podcasts.length > 1
+                ? t('Number podcasts', { nb: totalCount }) + sortText
+                : undefined
+        "
+        :total-count="totalCount"
+        :loading="loading"
+        :loading-text="loading ? t('Loading podcasts ...') : undefined"
+        :error-text="
+            !loading && !podcasts.length
+                ? t(`No podcast match your query`)
+                : undefined
+        "
+        :just-size-chosen="justSizeChosen"
+        :player-responsive="true"
+        :force-update-parameters="forceUpdateParameters"
+    >
+        <template #list>
+            <div class="octopus-element-list">
+                <ClassicLazy
+                    v-for="p in displayArray"
+                    :key="p.podcastId"
+                    :min-height="410"
+                >
+                    <PodcastItem
+                        v-if="0 !== p.podcastId"
+                        :podcast="p"
+                        :title-tag="podcastTitleTag"
+                    />
+                    <template #preview>
+                        <router-link
+                            :to="{
+                                name: 'podcast',
+                                params: { podcastId: p.podcastId },
+                            }"
+                            :title="t('Episode name page', { name: p.title })"
+                        >
+                            {{ p.title }}
+                        </router-link>
+                    </template>
+                </ClassicLazy>
+            </div>
+        </template>
+    </ListPaginate>
 </template>
 
 <script setup lang="ts">
@@ -69,52 +70,55 @@ import { useAuthStore } from "@/stores/AuthStore";
 
 //Props 
 const props = withDefaults(defineProps<{
-  first?: number;
-  size?: number;
-  organisationId?: Array<string>;
-  emissionId?: number;
-  iabId?: number;
-  participantId?: number;
-  query?: string;
-  monetisable?: PodcastMonetisation;
-  popularSort?: boolean;
-  reload?: boolean;
-  before?: string;
-  after?: string;
-  includeHidden?: boolean;
-  /** Enable the display of number of items in ListPaginate */
-  showCount?: boolean;
-  displaySortText?: boolean;
-  /** Criteria to sort on */
-  sortCriteria?: PodcastSort;
-  validity?: 'true'|'false'|''|boolean; // TODO improve this
-  rubriqueId?: Array<number>;
-  rubriquageId?: Array<number>;
-  noRubriquageId?: Array<number>;
-  justSizeChosen?: boolean;
-  withVideo?: boolean;
-  includeTag?: Array<string>;
-  forceUpdateParameters?: boolean;
-  /** The beneficiaries to filter on */
-  beneficiaries?: Array<string>;
-  /** The emission groups to filter on */
-  emissionGroups?: Array<EmissionGroup>;
-  /** Show only episodes created by current user */
-  onlyMyEpisodes?: boolean;
-  /** The seasons to filter on */
-  seasons?: Array<number>;
+    first?: number;
+    size?: number;
+    organisationId?: Array<string>;
+    emissionId?: number;
+    iabId?: number;
+    participantId?: number;
+    query?: string;
+    monetisable?: PodcastMonetisation;
+    popularSort?: boolean;
+    reload?: boolean;
+    before?: string;
+    after?: string;
+    includeHidden?: boolean;
+    /** Enable the display of number of items in ListPaginate */
+    showCount?: boolean;
+    displaySortText?: boolean;
+    /** Criteria to sort on */
+    sortCriteria?: PodcastSort;
+    // eslint-disable-next-line no-warning-comments
+    validity?: 'true'|'false'|''|boolean; // TODO improve this
+    rubriqueId?: Array<number>;
+    rubriquageId?: Array<number>;
+    noRubriquageId?: Array<number>;
+    justSizeChosen?: boolean;
+    withVideo?: boolean;
+    includeTag?: Array<string>;
+    forceUpdateParameters?: boolean;
+    /** The beneficiaries to filter on */
+    beneficiaries?: Array<string>;
+    /** The emission groups to filter on */
+    emissionGroups?: Array<EmissionGroup>;
+    /** Show only episodes created by current user */
+    onlyMyEpisodes?: boolean;
+    /** The seasons to filter on */
+    seasons?: Array<number>;
+    /** */
+    podcastTitleTag?: 'h3'|'h4'|'h5'|'h6';
 }>(), {
-  first: 0,
-  size: 30,
-  popularSort: false,
-  reload: false,
-  includeHidden: false,
-  showCount: false,
-  displaySortText: true,
-  validity: '',
-  justSizeChosen: false,
-  withVideo: undefined,
-  forceUpdateParameters: false
+    first: 0,
+    size: 30,
+    popularSort: false,
+    reload: false,
+    includeHidden: false,
+    showCount: false,
+    displaySortText: true,
+    validity: '',
+    justSizeChosen: false,
+    withVideo: undefined,
+    forceUpdateParameters: false
 });
 
 //Emits
@@ -136,144 +140,144 @@ const authStore = useAuthStore();
 
 //Computed
 const displayArray = computed(() => {
-  if (isMobile.value || props.justSizeChosen) {
-    return podcasts.value;
-  }
-  return podcasts.value.slice(
-    dfirst.value,
-    Math.min(dfirst.value + dsize.value, totalCount.value),
-  );
+    if (isMobile.value || props.justSizeChosen) {
+        return podcasts.value;
+    }
+    return podcasts.value.slice(
+        dfirst.value,
+        Math.min(dfirst.value + dsize.value, totalCount.value),
+    );
 });
 const changePaginate = computed(() => `${props.first}|${props.size}`);
 const changed = computed(() => {
-  return `${organisation.value}|${props.emissionId}|${props.sortCriteria}|${sort.value}
+    return `${organisation.value}|${props.emissionId}|${props.sortCriteria}|${sort.value}
     ${props.iabId}|${props.participantId}|${props.query}|${props.monetisable}|${props.popularSort}|
     ${props.rubriqueId}|${props.rubriquageId}|${props.before}|${props.after}|${props.includeHidden}|${props.noRubriquageId}|${props.validity}|
     ${props.withVideo}|${props.includeTag}|${props.beneficiaries}|${props.emissionGroups}|${props.onlyMyEpisodes}`;
 });
 const organisation = computed(() => {
-  if (props.organisationId) {
-    return props.organisationId;
-  }
-  return filterStore.filterOrgaId ? [filterStore.filterOrgaId] : [];
+    if (props.organisationId) {
+        return props.organisationId;
+    }
+    return filterStore.filterOrgaId ? [filterStore.filterOrgaId] : [];
 });
 const sort = computed(() => props.popularSort ? PodcastSort.POPULARITY : (props.sortCriteria ?? PodcastSort.DATE));
 const sortText = computed(() => {
-  if (!props.displaySortText) {
-    return "";
-  }
-  switch (props.sortCriteria) {
+    if (!props.displaySortText) {
+        return "";
+    }
+    switch (props.sortCriteria) {
     case "SCORE":
-      return " " + t("sort by score");
+        return " " + t("sort by score");
     case "DATE":
-      return " " + t("sort by date");
+        return " " + t("sort by date");
     case "NAME":
-      return " " + t("sort by alphabetical");
+        return " " + t("sort by alphabetical");
     default:
-      return " " + t("sort by date");
-  }
+        return " " + t("sort by date");
+    }
 });
 
 //Watch
 watch(changePaginate, () => {
-  dfirst.value = props.first;
-  dsize.value = props.size;
+    dfirst.value = props.first;
+    dsize.value = props.size;
 });
 watch(changed, () => fetchContent(true));
 watch(()=>props.reload, () => fetchContent(true));
 watch(dsize, () => fetchContent(true));
 watch(dfirst, () => {
-  if (
-    !podcasts.value[dfirst.value] ||
-    0 === podcasts.value[dfirst.value].podcastId
-  ) {
-    fetchContent(false);
-  }
+    if (
+        !podcasts.value[dfirst.value] ||
+        0 === podcasts.value[dfirst.value].podcastId
+    ) {
+        fetchContent(false);
+    }
 });
 
 onBeforeMount(()=>fetchContent(false))
 
 //Methods
 async function fetchContent(reset: boolean): Promise<void> {
-  loading.value = true;
+    loading.value = true;
 
-  // Sadly we kinda have no idea what will be passed as 'validity', we need to
-  // handle multiple cases.
-  let validity: undefined|boolean = undefined;
-  if (props.validity !== undefined && props.validity !== '') {
-    validity = props.validity === 'true' || props.validity === true;
-  }
-  
-  const param: PodcastSearchOptions = {
-    first: reset ? 0 : dfirst.value,
-    size: dsize.value,
-    organisationId: organisation.value,
-    emissionId: props.emissionId,
-    groupId: props.emissionGroups?.map(g => g.groupId),
-    iabId: props.iabId,
-    participantId: props.participantId,
-    query: props.query,
-    monetisable: props.monetisable,
-    sort: sort.value,
-    pubDateBefore: props.before,
-    pubDateAfter: props.after,
-    noRubriquageId: props.noRubriquageId?.length
-      ? props.noRubriquageId
-      : undefined,
-    rubriqueId: props.rubriqueId?.length ? props.rubriqueId : undefined,
-    rubriquageId: props.rubriquageId?.length ? props.rubriquageId : undefined,
-    includeHidden: props.includeHidden,
-    validity,
-    publisherId: props.onlyMyEpisodes ? authStore.authProfile?.userId : undefined,
-    processingStatus: [PodcastProcessingStatus.Ready, PodcastProcessingStatus.Processing],
-    withVideo: props.withVideo,
-    tags: props.includeTag?.length ? props.includeTag : undefined,
-    beneficiaries: props.beneficiaries ?? undefined,
-    season: props.seasons
-  };
-
-  try {
-    const data = await podcastApi.searchFull(param, true);
-    afterFetching(reset, data);
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      handle403(error as AxiosError);
-    } else {
-      console.error('error', error);
+    // Sadly we kinda have no idea what will be passed as 'validity', we need to
+    // handle multiple cases.
+    let validity: undefined|boolean = undefined;
+    if (props.validity !== undefined && props.validity !== '') {
+        validity = props.validity === 'true' || props.validity === true;
     }
-  }
+  
+    const param: PodcastSearchOptions = {
+        first: reset ? 0 : dfirst.value,
+        size: dsize.value,
+        organisationId: organisation.value,
+        emissionId: props.emissionId,
+        groupId: props.emissionGroups?.map(g => g.groupId),
+        iabId: props.iabId,
+        participantId: props.participantId,
+        query: props.query,
+        monetisable: props.monetisable,
+        sort: sort.value,
+        pubDateBefore: props.before,
+        pubDateAfter: props.after,
+        noRubriquageId: props.noRubriquageId?.length
+            ? props.noRubriquageId
+            : undefined,
+        rubriqueId: props.rubriqueId?.length ? props.rubriqueId : undefined,
+        rubriquageId: props.rubriquageId?.length ? props.rubriquageId : undefined,
+        includeHidden: props.includeHidden,
+        validity,
+        publisherId: props.onlyMyEpisodes ? authStore.authProfile?.userId : undefined,
+        processingStatus: [PodcastProcessingStatus.Ready, PodcastProcessingStatus.Processing],
+        withVideo: props.withVideo,
+        tags: props.includeTag?.length ? props.includeTag : undefined,
+        beneficiaries: props.beneficiaries ?? undefined,
+        season: props.seasons
+    };
+
+    try {
+        const data = await podcastApi.searchFull(param, true);
+        afterFetching(reset, data);
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            handle403(error as AxiosError);
+        } else {
+            console.error('error', error);
+        }
+    }
 }
 function afterFetching(
-  reset: boolean,
-  data: { count: number; result: Array<Podcast>; sort: string },
+    reset: boolean,
+    data: { count: number; result: Array<Podcast>; sort: string },
 ): void {
-  if (reset) {
-    dfirst.value = 0;
-    podcasts.value.length = 0;
-  }
-  if (dfirst.value > podcasts.value.length) {
-    for (
-      let i = podcasts.value.length - 1, len = dfirst.value + dsize.value;
-      i < len;
-      i++
-    ) {
-      podcasts.value.push(emptyPodcastData());
+    if (reset) {
+        dfirst.value = 0;
+        podcasts.value.length = 0;
     }
-  }
-  const responsePodcasts = data.result.filter((p: Podcast | null) => {
-    return null !== p;
-  });
-  podcasts.value = podcasts.value
-    .slice(0, dfirst.value)
-    .concat(responsePodcasts)
-    .concat(
-      podcasts.value.slice(dfirst.value + dsize.value, podcasts.value.length),
-    );
-  emit("fetch", podcasts.value);
-  totalCount.value = props.justSizeChosen ? props.size : data.count;
-  if (0 === podcasts.value.length) {
-    emit("emptyList");
-  }
-  loading.value = false;
+    if (dfirst.value > podcasts.value.length) {
+        for (
+            let i = podcasts.value.length - 1, len = dfirst.value + dsize.value;
+            i < len;
+            i++
+        ) {
+            podcasts.value.push(emptyPodcastData());
+        }
+    }
+    const responsePodcasts = data.result.filter((p: Podcast | null) => {
+        return null !== p;
+    });
+    podcasts.value = podcasts.value
+        .slice(0, dfirst.value)
+        .concat(responsePodcasts)
+        .concat(
+            podcasts.value.slice(dfirst.value + dsize.value, podcasts.value.length),
+        );
+    emit("fetch", podcasts.value);
+    totalCount.value = props.justSizeChosen ? props.size : data.count;
+    if (0 === podcasts.value.length) {
+        emit("emptyList");
+    }
+    loading.value = false;
 }
 </script>

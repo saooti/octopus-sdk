@@ -263,6 +263,82 @@ describe('ClassicPopover', () => {
         });
     });
 
+    describe('keyboard navigation (onlyClick=true)', () => {
+        const mountMenu = async () => {
+            wrapper = await testMount(ClassicPopover, {
+                props: { target: 'test-target', onlyClick: true },
+                slots: {
+                    default: '<a href="/first" class="octopus-dropdown-item">First</a>'
+                        + '<button class="octopus-dropdown-item">Last</button>'
+                }
+            });
+            targetElement.focus();
+        };
+        const getItems = () => getPopoverEl().querySelectorAll<HTMLElement>('.octopus-dropdown-item');
+        const pressKey = async (element: Element, key: string, shiftKey = false) => {
+            element.dispatchEvent(new KeyboardEvent('keydown', { key, shiftKey, bubbles: true }));
+            element.dispatchEvent(new KeyboardEvent('keyup', { key, shiftKey, bubbles: true }));
+            await nextTick();
+        };
+
+        it('focuses the first item without navigating when opened by keyboard', async () => {
+            await mountMenu();
+            await openViaClick();
+            await nextTick();
+
+            expect(document.activeElement).toBe(getItems()[0]);
+            expect(routerPush).not.toHaveBeenCalled();
+            expect(isVisible()).toBe(true);
+        });
+
+        it('does not move focus when opened by mouse', async () => {
+            await mountMenu();
+            targetElement.dispatchEvent(new MouseEvent('click', { detail: 1, bubbles: true }));
+            await nextTick();
+            await nextTick();
+
+            expect(document.activeElement).toBe(targetElement);
+        });
+
+        it.each([
+            ['Shift+Tab on first item', 0, 'Tab', true],
+            ['Tab on last item', 1, 'Tab', false],
+            ['Escape', 0, 'Escape', false]
+        ])('closes and focuses the target on %s', async (_, index, key, shiftKey) => {
+            await mountMenu();
+            await openViaClick();
+            await nextTick();
+            getItems()[index].focus();
+
+            await pressKey(getItems()[index], key, shiftKey);
+
+            expect(isVisible()).toBe(false);
+            expect(document.activeElement).toBe(targetElement);
+        });
+
+        it('closes and focuses the target when an item is activated by keyboard', async () => {
+            await mountMenu();
+            await openViaClick();
+            await nextTick();
+
+            getItems()[1].dispatchEvent(new MouseEvent('click', { detail: 0, bubbles: true }));
+            await nextTick();
+            await nextTick();
+
+            expect(isVisible()).toBe(false);
+            expect(document.activeElement).toBe(targetElement);
+        });
+
+        it('sets aria-controls and aria-expanded on the target', async () => {
+            await mountMenu();
+            expect(targetElement.getAttribute('aria-controls')).toBe('popovertest-target');
+            expect(targetElement.getAttribute('aria-expanded')).toBe('false');
+
+            await openViaClick();
+            expect(targetElement.getAttribute('aria-expanded')).toBe('true');
+        });
+    });
+
     describe('expose clearClick method', () => {
         it('exposes clearClick method to close popover programmatically', async () => {
             await mount();

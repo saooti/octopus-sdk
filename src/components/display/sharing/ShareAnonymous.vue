@@ -19,13 +19,14 @@
         :key="button.icon"
         class="d-flex flex-column"
       >
+        <!-- mousedown for mouse (popover closes before click), click with detail 0 for keyboard (Enter/Space) -->
         <button
           v-if="button.condition"
           :key="button.title"
           class="btn-transparent d-flex flex-nowrap justify-content-start align-items-center octopus-dropdown-item py-2"
           :title="button.title"
           @mousedown="clickButton(button.emitName)"
-          @keydown.enter="clickButton(button.emitName)"
+          @click="0 === $event.detail && clickButton(button.emitName)"
         >
           <component :is="button.icon" />
           <span class="ms-1">{{ button.title }}</span>
@@ -254,7 +255,7 @@ function clickButton(name: string) {
       displayHelper.onCopyCode(urlPage.value, afterCopy);
       break;
     case "smartlink":
-      this.openSmartLink();
+      openSmartLink();
       break;
     case "newsletter":
       isNewsletterModal.value = true;
