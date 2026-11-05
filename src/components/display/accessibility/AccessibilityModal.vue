@@ -8,24 +8,20 @@
       <div class="d-flex gap-3 flex-wrap mb-3">
         <div class="d-flex flex-nowrap align-items-center flex-grow-1">
           <div class="form-label me-3">{{ t('Choose background color') }}</div>
-          <VSwatches
-            v-model:model-value="background"
+          <ClassicColorPicker
+            v-model="background"
+            :label="t('Choose background color')"
             class="c-hand"
-            show-fallback
-            fallback-input-type="color"
-            colors="text-advanced"
             popover-x="left"
             :data-color="color"
           />
         </div>
         <div class="d-flex flex-nowrap align-items-center flex-grow-1">
           <div class="form-label me-3">{{ t('Choose text color') }}</div> 
-          <VSwatches
-            v-model:model-value="color"
+          <ClassicColorPicker
+            v-model="color"
+            :label="t('Choose text color')"
             class="c-hand"
-            show-fallback
-            fallback-input-type="color"
-            colors="text-advanced"
             popover-x="left"
             :data-color="color"
           />
@@ -56,8 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { VSwatches } from "vue3-swatches";
-import "vue3-swatches/dist/style.css";
+import ClassicColorPicker from "../../form/ClassicColorPicker.vue";
 import FormatFontSizeIncreaseIcon from "vue-material-design-icons/FormatFontSizeIncrease.vue";
 import FormatFontSizeDecreaseIcon from "vue-material-design-icons/FormatFontSizeDecrease.vue";
 import { computed, defineAsyncComponent, onBeforeMount, ref } from "vue";

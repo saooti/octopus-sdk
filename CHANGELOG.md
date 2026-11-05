@@ -15,6 +15,8 @@
   - `PodcastList`/`PodcastFilterList` : suppression du focus auto
   - `ShareAnonymous`/`ClassicPopover` : correction navigation au clavier dans
     les menus
+  - `AccessibilityModal`/`QrCode`/`ShareNewsletter`/`SharePlayerColors` :
+    correction contrôle par clavier & contraste du toggle de format
 
 ## 42.3.3 (04/10/2026)
 

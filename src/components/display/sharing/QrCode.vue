@@ -4,13 +4,10 @@
             <div class="form-label me-3">
                 {{ t("Color of the QR Code") }}
             </div>
-            <VSwatches
-                v-model:model-value="color"
+            <ClassicColorPicker
+                v-model="color"
+                :label="t('Color of the QR Code')"
                 class="c-hand"
-                show-fallback
-                fallback-input-type="color"
-                colors="text-advanced"
-                popover-to="right"
                 popover-y="bottom"
                 :data-color="color"
             />
@@ -35,8 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { VSwatches } from "vue3-swatches";
-import "vue3-swatches/dist/style.css";
+import ClassicColorPicker from "../../form/ClassicColorPicker.vue";
 import SnackBar from "../../misc/SnackBar.vue";
 import QrcodeVue from "qrcode.vue";
 import FormatSwitch from "./FormatSwitch.vue";

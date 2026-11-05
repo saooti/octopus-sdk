@@ -471,5 +471,6 @@
   "PodcastPlayButton - Play": "Listen to “{title}”, duration {duration}",
   "PodcastPlayButton - Pause": "Pause “{title}”, duration {duration}",
   "PodcastPlayButton - Play video": "Watch “{title}” on video, duration {duration}",
-  "PodcastItem - Published on": "Published on"
+  "PodcastItem - Published on": "Published on",
+  "FormatSwitch - Format": "File format"
 }

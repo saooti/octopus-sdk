@@ -4,13 +4,10 @@
       <div class="h4 mb-2">
         {{ t("Choose color") }}
       </div>
-      <VSwatches
+      <ClassicColorPicker
         :model-value="color"
+        :label="t('Choose color')"
         class="c-hand"
-        show-fallback
-        fallback-input-type="color"
-        colors="text-advanced"
-        popover-to="right"
         :data-color="color"
         @update:model-value="emitColor($event)"
       />
@@ -19,13 +16,10 @@
       <div class="h4 mb-2">
         {{ t("Choose theme") }}
       </div>
-      <VSwatches
+      <ClassicColorPicker
         :model-value="theme"
+        :label="t('Choose theme')"
         class="c-hand"
-        show-fallback
-        fallback-input-type="color"
-        colors="text-advanced"
-        popover-to="right"
         :data-color="theme"
         @update:model-value="emitTheme($event)"
       />
@@ -34,8 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { VSwatches } from "vue3-swatches";
-import "vue3-swatches/dist/style.css";
+import ClassicColorPicker from "../../form/ClassicColorPicker.vue";
 import { useI18n } from "vue-i18n";
 
 //Props 

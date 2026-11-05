@@ -470,5 +470,6 @@
   "PodcastPlayButton - Play": "Poslušajte »{title}«, trajanje {duration}",
   "PodcastPlayButton - Pause": "Zaustavi »{title}«, trajanje {duration}",
   "PodcastPlayButton - Play video": "Oglejte si »{title}« v videu, trajanje {duration}",
-  "PodcastItem - Published on": "Objavljeno dne"
+  "PodcastItem - Published on": "Objavljeno dne",
+  "FormatSwitch - Format": "Format datoteke"
 }

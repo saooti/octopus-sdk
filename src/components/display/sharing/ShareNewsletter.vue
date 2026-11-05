@@ -10,13 +10,10 @@
           :key="colors.mainText"
           class="d-flex align-items-center mb-3"
         >
-          <VSwatches
+          <ClassicColorPicker
             v-model="colors.color"
+            :label="colors.mainText"
             class="c-hand me-2"
-            show-fallback
-            fallback-input-type="color"
-            colors="text-advanced"
-            popover-to="right"
             :data-color="colors.color"
           />
           <div class="d-flex flex-column">
@@ -42,8 +39,7 @@
 
 <script setup lang="ts">
 import ClassicCopyButton from "../../form/ClassicCopyButton.vue";
-import { VSwatches } from "vue3-swatches";
-import "vue3-swatches/dist/style.css";
+import ClassicColorPicker from "../../form/ClassicColorPicker.vue";
 import { Podcast } from "@/stores/class/general/podcast";
 import { computed, onBeforeMount, ref } from "vue";
 import { useSaveFetchStore } from "../../../stores/SaveFetchStore";

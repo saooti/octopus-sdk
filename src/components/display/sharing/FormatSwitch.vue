@@ -1,110 +1,99 @@
 <template>
-    <div class="format-switch">
-      <input 
-        id="format-switch-checkbox"
-        :checked="isSvg"
-        class="format-switch-checkbox" 
-        type="checkbox" 
-        @input="changeIsSvg"/>
-      <label class="format-switch-label" for="format-switch-checkbox">
-        <span class="format-switch-label-span">SVG</span>
+  <fieldset class="format-switch">
+    <legend class="visually-hidden">
+      {{ t("FormatSwitch - Format") }}
+    </legend>
+    <template v-for="format in formats" :key="format.label">
+      <input
+        :id="`${id}-${format.label}`"
+        v-model="isSvg"
+        class="format-switch-input"
+        type="radio"
+        :name="id"
+        :value="format.isSvg"
+      >
+      <label class="format-switch-option" :for="`${id}-${format.label}`">
+        {{ format.label }}
       </label>
-    </div>
-  </template>
-  
+    </template>
+  </fieldset>
+</template>
+
 <script setup lang="ts">
+import { useId } from "vue";
+import { useI18n } from "vue-i18n";
 
-//Props 
-const props = defineProps({
-  isSvg: { default: true, type: Boolean },
-})
+/**
+ * Choice of the file format (SVG or PNG), as a radio group displayed as a
+ * switch
+ */
 
-//Emits
-const emit = defineEmits(['update:isSvg']);
+const isSvg = defineModel<boolean>("isSvg", { default: true });
 
-//Methods
-function changeIsSvg(){
-  emit('update:isSvg', !props.isSvg)
-}
+const { t } = useI18n();
+const id = `format-switch-${useId()}`;
+const formats = [
+  { label: "SVG", isSvg: true },
+  { label: "PNG", isSvg: false }
+];
 </script>
-  <style lang="scss">
-  .octopus-app {
 
-    --format-switch-size:140px;
-    --format-switch-half: calc(var(--format-switch-size) / 2 );
-  
-    .format-switch {
-      background: var(--octopus-secondary);
-      border-radius: 30px;
-      overflow: hidden;
-      width: var(--format-switch-size);
-      text-align: center;
-      color: black;
-      border: 2px solid var(--octopus-secondary);
-      padding-right: var(--format-switch-half);
-      position: relative;
-  
-      &::before {
-        content: "PNG";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: var(--format-switch-half);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 3;
-        pointer-events: none;
-      }
-  
-    
-      &-checkbox {
-        cursor: pointer;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        z-index: 2;
-        margin: 0;
-  
-        & + .format-switch-label {
-          position: relative;
-          padding: 0.5rem 0;
-          display: block;
-          user-select: none;
-          pointer-events: none;
-  
-          &::before {
-            content: "";
-            background: white;
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-            border-radius: 30px;
-            transform: translateX(var(--format-switch-half));
-            transition: transform 300ms;
-          }
-  
-          .format-switch-label-span {
-            position: relative;
-          }
-        }
-  
-        &:checked + .format-switch-label::before {
-          transform: translateX(0px);
-          transition: transform 300ms linear;
-        }
-      }
-  
-      &:has(input:focus-visible){
-        box-shadow: 0 0 10px 1px  var(--octopus-primary) !important;
-      }
-    }
+<style scoped lang="scss">
+.format-switch {
+  --format-switch-size: 140px;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: var(--format-switch-size);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid var(--octopus-secondary);
+  border-radius: 30px;
+  background: var(--octopus-secondary);
+  // Unselected format, on the track: same colors as secondary buttons
+  color: var(--octopus-btn-secondary-fg);
+
+  // Pill behind the selected format
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    border-radius: 30px;
+    background: white;
+    transition: transform 300ms;
   }
-  </style>
+
+  &:has(.format-switch-input:last-of-type:checked)::before {
+    transform: translateX(100%);
+  }
+
+  &:has(.format-switch-input:focus-visible) {
+    box-shadow: 0 0 10px 1px var(--octopus-primary) !important;
+  }
+}
+
+// Hidden but still focusable, the labels are the visible part
+.format-switch-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.format-switch-option {
+  position: relative;
+  padding: 0.5rem 0;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.format-switch-input:checked + .format-switch-option {
+  color: black;
+}
+</style>

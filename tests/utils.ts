@@ -36,7 +36,9 @@ export async function mount(component: Component, options?: {
         /** Values to provide on the test app instance (e.g. to test values resolved at runtime via app.provide()/inject()) */
         provide?: Record<string | symbol, unknown>,
         /** Hook called before mounting with access to Pinia instance for store initialization */
-        beforeMount?: (pinia: Pinia) => void | Promise<void>
+        beforeMount?: (pinia: Pinia) => void | Promise<void>,
+        /** Element to attach the component to, needed e.g. to test focus */
+        attachTo?: HTMLElement | string
     }): Promise<VueWrapper> {
 
     // Component stubbing
@@ -87,7 +89,8 @@ export async function mount(component: Component, options?: {
         },
         props: options?.props,
         slots: options?.slots,
-        shallow: options?.shallow
+        shallow: options?.shallow,
+        attachTo: options?.attachTo
     });
 
     // Wait for dynamic imports
