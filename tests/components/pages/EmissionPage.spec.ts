@@ -138,6 +138,15 @@ describe('EmissionPage', () => {
         });
     });
 
+    describe('accessibility', () => {
+        it('has a decorative image without title', async () => {
+            const wrapper = await mountPage();
+            const img = wrapper.find('img.img-box');
+            expect(img.attributes('alt')).toBe('');
+            expect(img.attributes('title')).toBeUndefined();
+        });
+    });
+
     describe('podcastsFetched podcast selection', () => {
         function makePodcast(seasonMode: SeasonMode, episodeNumber: number, { ready = true, visible = true } = {}) {
             const podcast = makeReadyPodcast(seasonMode);

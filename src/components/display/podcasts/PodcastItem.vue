@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<{
     /** Also display emission name */
     showEmissionName?: boolean;
     /** Heading tag of the title, depending on the headings around the card */
-    titleTag?: string;
+    titleTag?: 'h2'|'h3'|'h4'|'h5'|'h6';
 }>(), {
     titleTag: 'h3'
 });

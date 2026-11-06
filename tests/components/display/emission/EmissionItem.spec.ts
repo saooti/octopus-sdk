@@ -51,4 +51,39 @@ describe('EmissionItem', () => {
             expect(icon.classes()).toContain('invisible');
         });
     });
+
+    describe('accessibility', () => {
+        const emission = { name: 'My emission', description: 'My description' };
+
+        it('renders the name in a h3 by default', async () => {
+            const wrapper = await mount(emission);
+            expect(wrapper.find('h3').text()).toBe('My emission');
+        });
+
+        it('renders the name in the given heading', async () => {
+            const wrapper = await testMount(EmissionItem, {
+                props: { emission: { ...emptyEmissionData(), ...emission }, titleTag: 'h2' }
+            });
+            expect(wrapper.find('h2').text()).toBe('My emission');
+            expect(wrapper.find('h3').exists()).toBe(false);
+        });
+
+        it('limits the link to the name', async () => {
+            const wrapper = await mount(emission);
+            expect(wrapper.find('.element-link').text()).toBe('My emission');
+        });
+
+        it('does not nest links', async () => {
+            const wrapper = await mount(emission);
+            expect(wrapper.findAll('a')).toHaveLength(2);
+            expect(wrapper.find('a a').exists()).toBe(false);
+        });
+
+        it('has a decorative image without title', async () => {
+            const wrapper = await mount(emission);
+            const img = wrapper.find('img');
+            expect(img.attributes('alt')).toBe('');
+            expect(img.attributes('title')).toBeUndefined();
+        });
+    });
 });

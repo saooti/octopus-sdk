@@ -1,10 +1,26 @@
 # CHANGELOG
 
+## 42.4.0 (En cours)
+
+### Features
+
+- **[14959]** - Intégration librairie saooti-player
+
+[14959]: https://trac.saooti.net/ticket/14959
+
 ## 42.3.4 (En cours)
+
+### Fixes
+
+- `PodcastInlineList` : prise en compte de `requirePopularSort` et
+  `lastThreeMonths` dès le premier chargement, la liste affichait les derniers
+  épisodes alors que l'onglet "Les plus populaires" était actif
 
 ### Misc
 
 - Ajout composant d'overlay de chargement
+- `PodcastInlineList` : fusion avec `PodcastSwiperList`, qui est supprimé (non
+  exporté, sans impact pour les projets utilisant `getPodcastInlineList`)
 - `{a11y}` Ajustements de nombreux composants pour conformité RGAA
   - Suppression de l'autofocus sur la recherche dans les pages qui ne sont pas
     des pages de recherche
@@ -13,10 +29,24 @@
     statut non remonté lors des chargements), et 12.8 (correction ordre de
     tabulation).
   - `PodcastList`/`PodcastFilterList` : suppression du focus auto
+  - `PodcastList` : correction de la hierarchie des titres
+  - `EmissionItem`/`PlaylistItem`/`PresentationItem`/`RadioItem` : ajout de
+    titres (critère 9.1), lien limité au titre et étendu à la carte par CSS
+    (critère 8.2, liens et boutons imbriqués), et images décoratives sans
+    `title` (critère 1.2)
   - `ShareAnonymous`/`ClassicPopover` : correction navigation au clavier dans
     les menus
   - `AccessibilityModal`/`QrCode`/`ShareNewsletter`/`SharePlayerColors` :
     correction contrôle par clavier & contraste du toggle de format
+  - `PodcastInlineListTemplate` : état des boutons de tri restitué aux
+    technologies d'assistance (critère 7.1)
+  - `ShareAnonymous`/`SubscribeButtons`/`PlayerSpeedButton`/`CommentList`/
+    `CommentMoreActions` : menus utilisables sans feuilles de styles, avec
+    l'API Popover (critère 10.3)
+  - `SubscribeButtons` : pas de bouton "Voir plus" vide sans feuilles de styles
+    (critère 10.3)
+  - `EmissionPage`/`PlaylistPage` : images décoratives sans `title` (critère
+    1.2)
 
 ## 42.3.3 (04/10/2026)
 

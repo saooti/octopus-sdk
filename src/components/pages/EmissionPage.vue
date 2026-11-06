@@ -26,7 +26,6 @@
                             height="250"
                             aria-hidden="true"
                             alt=""
-                            :title="t('Emission name image', { name })"
                             class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start me-3"
                         >
 

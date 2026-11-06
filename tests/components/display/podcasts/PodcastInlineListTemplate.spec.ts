@@ -21,4 +21,20 @@ describe('PodcastInlineListTemplate', () => {
             expect(wrapper.find('.btn-underline').exists()).toBe(false);
         });
     });
+
+    describe('accessibility', () => {
+        const pressedStates = async (popularSort: boolean) => {
+            const wrapper = await mount({ popularSort });
+            return wrapper.findAll('.btn-underline')
+                .map(button => button.attributes('aria-pressed'));
+        };
+
+        it('exposes the chronological sort as selected', async () => {
+            expect(await pressedStates(false)).toEqual(['true', 'false']);
+        });
+
+        it('exposes the popular sort as selected', async () => {
+            expect(await pressedStates(true)).toEqual(['false', 'true']);
+        });
+    });
 });

@@ -106,11 +106,11 @@ import { SharePlatform, useSharePlatforms } from '../composable/share/useSharePl
 import { Organisation, OrganisationAttributes } from '../../stores/class/general/organisation';
 import { organisationApi } from '../../api/organisationApi';
 import { Podcast } from '@/stores/class/general/podcast';
-import { usePlayerStore } from '../../stores/PlayerStore';
 import { podcastApi, PodcastSort } from '../../api/podcastApi';
 import { useSharePath } from '../composable/share/useSharePath';
 import displayHelper from '../../helper/displayHelper';
 import { state } from '../../stores/ParamSdkStore';
+import { saootiPlayer } from '@saooti/saooti-player';
 
 const { updatePathParams } = useSeoTitleUrl();
 const { useProxyImageUrl } = useImageProxy();
@@ -237,7 +237,6 @@ function openLink(link: string): void {
     window.open(link, '_blank').focus();
 }
 
-const playerStore = usePlayerStore();
 const latestPodcast = ref<Podcast|null>(null);
 
 async function getLatestPodcast(): Promise<void> {
@@ -265,7 +264,7 @@ function playLatestPodcast(): void {
         return;
     }
 
-    playerStore.playerPlay(latestPodcast.value);
+    saootiPlayer.playPodcast(latestPodcast.value.podcastId);
 }
 </script>
 

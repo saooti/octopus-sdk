@@ -16,6 +16,7 @@
         :emission="item"
         :is-vertical="!isPhone && first"
         :is-description="isDescription"
+        :title-tag="title ? 'h3' : 'h2'"
       />
     </template>
   </PresentationLayout>

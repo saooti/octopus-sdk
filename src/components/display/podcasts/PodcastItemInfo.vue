@@ -20,12 +20,13 @@
                 class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
                 :title="t('Episode name page', { name: podcast.title })"
             >
-                <div
+                <span
                     v-if="showEmissionName"
                     class="emission-name"
                 >
                     {{ podcast.emission.name }}
-                </div>
+                    <br>
+                </span>
                 <RightsIndicator
                     inline
                     :podcast="podcast"
@@ -34,13 +35,6 @@
                 {{ podcast.title }}
             </router-link>
         </component>
-
-        <PodcastPlayBar
-            v-if="state.emissionsPage.progressBar"
-            :display-buton-play="true"
-            :podcast="podcast"
-            class="me-2"
-        />
 
         <div class="mx-2 d-flex align-items-center justify-content-between mt-2">
             <div v-if="isPodcastmaker" class="useless-div-for-podcastmaker" />
@@ -67,16 +61,11 @@
 import AnimatorsItem from "./AnimatorsItem.vue";
 import RightsIndicator from "../RightsIndicator.vue"; 
 import {useOrgaComputed} from "../../composable/useOrgaComputed";
-import { computed, defineAsyncComponent } from "vue";
+import { computed } from "vue";
 import { Podcast } from "../../../stores/class/general/podcast";
-import { state } from "../../../stores/ParamSdkStore";
 import { useI18n } from "vue-i18n";
 import PodcastSeasonInfo from "./PodcastSeasonInfo.vue";
 import { useDayjs } from "../../composable/useDayjs";
-
-const PodcastPlayBar = defineAsyncComponent(
-    () => import("./PodcastPlayBar.vue"),
-);
 
 //Props 
 const props = withDefaults(defineProps<{

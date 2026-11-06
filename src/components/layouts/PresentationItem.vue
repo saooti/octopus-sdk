@@ -6,9 +6,8 @@
         class="classic-element-container item-presentation-container mt-3"
         :class="vertical ? 'vertical-item' : ''"
     >
-        <router-link
-            :to="route"
-            class="d-flex-column flex-grow-1 text-dark"
+        <div
+            class="classic-element-content d-flex-column flex-grow-1 text-dark"
             :class="vertical ? 'flex-column' : ''"
         >
             <div
@@ -21,8 +20,7 @@
                     :width="tailleImage"
                     :height="tailleImage"
                     aria-hidden="true"
-                    :alt="name"
-                    :title="name"
+                    alt=""
                 >
 
                 <div class="tags">
@@ -41,9 +39,12 @@
                 class="classic-element-text pb-0"
                 :class="{ 'pt-1': vertical }"
             >
-                <div class="element-name mb-2 basic-line-clamp">
-                    {{ name }}
-                </div>
+                <!-- Heading: cards can be browsed by title with screen readers (RGAA 9.1) -->
+                <component :is="titleTag" class="element-name mb-2 basic-line-clamp">
+                    <router-link :to="route" class="text-dark element-link">
+                        {{ name }}
+                    </router-link>
+                </component>
                 <div
                     v-if="!isPhone && (description || additionalInfo)"
                     ref="descriptionItemContainer"
@@ -67,7 +68,7 @@
                     <!-- eslint-enable -->
                 </div>
             </div>
-        </router-link>
+        </div>
     </article>
 </template>
 
@@ -79,7 +80,7 @@ import { nextTick, useTemplateRef, watch, computed } from "vue";
 import { RouteLocationRaw } from "vue-router";
 
 //Props 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     /** The route to which to redirect when clicking on element */
     route: RouteLocationRaw|string;
     /** The URL to the image */
@@ -94,7 +95,11 @@ const props = defineProps<{
     description?: string;
     /** When true display the card vertically */
     vertical?: boolean;
-}>();
+    /** Tag to use for the name of the element */
+    titleTag?: 'h2'|'h3'|'h4'|'h5'|'h6';
+}>(), {
+    titleTag: 'h3'
+});
 
 //Data
 const descriptionItemRef = useTemplateRef('descriptionItem');

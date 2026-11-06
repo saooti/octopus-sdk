@@ -57,4 +57,15 @@ describe('PlaylistPage', () => {
             expect(wrapper.find('.edit-box-slot').exists()).toBe(false);
         });
     });
+
+    describe('accessibility', () => {
+        it('has a decorative image without title', async () => {
+            vi.mocked(playlistApi.get).mockResolvedValue(makePlaylist());
+            const wrapper = await mount(PlaylistPage, { shallow: true, props: { playlistId: 1 } });
+
+            const img = wrapper.find('img.img-box');
+            expect(img.attributes('alt')).toBe('');
+            expect(img.attributes('title')).toBeUndefined();
+        });
+    });
 });

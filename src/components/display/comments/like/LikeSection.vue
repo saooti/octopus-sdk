@@ -44,9 +44,11 @@ type Feeling = 'like'|'dislike';
 
 //Props 
 const props = defineProps<{
-    comment: CommentPodcast;
+    /** Optional comment to like (at least one of comment or podcast must be specified) */
+    comment?: CommentPodcast;
+    /** Optional podcast to like (at least one of comment or podcast must be specified) */
+    podcast?: Podcast;
     editRight?: boolean;
-    podcast: Podcast;
     buttonSize?: number;
 }>();
 

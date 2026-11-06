@@ -353,4 +353,40 @@ describe('ClassicPopover', () => {
             expect(isVisible()).toBe(false);
         });
     });
+
+    describe('Popover API', () => {
+        const showPopover = vi.fn();
+        const hidePopover = vi.fn();
+
+        beforeEach(() => {
+            vi.clearAllMocks();
+            Object.assign(HTMLElement.prototype, { showPopover, hidePopover });
+        });
+
+        afterEach(() => {
+            const prototype = HTMLElement.prototype as unknown as Record<string, unknown>;
+            delete prototype.showPopover;
+            delete prototype.hidePopover;
+        });
+
+        it('is used to open and close a top layer popover', async () => {
+            await mount({ onlyClick: true, isTopLayer: true });
+
+            await openViaClick();
+            await nextTick();
+            expect(showPopover).toHaveBeenCalledOnce();
+
+            (wrapper!.vm as unknown as { clearClick: () => void }).clearClick();
+            await nextTick();
+            expect(hidePopover).toHaveBeenCalledOnce();
+        });
+
+        it('is not used otherwise', async () => {
+            await mount({ onlyClick: true });
+
+            await openViaClick();
+            await nextTick();
+            expect(showPopover).not.toHaveBeenCalled();
+        });
+    });
 });

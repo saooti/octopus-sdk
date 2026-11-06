@@ -10,6 +10,7 @@
         :vertical="isVertical"
         :tags="tags"
         :additional-info="additionalInfo"
+        :title-tag="titleTag"
     />
 </template>
 
@@ -28,6 +29,8 @@ const props = defineProps<{
     isVertical?: boolean;
     /** When true also display the description */
     isDescription?: boolean;
+    /** Tag to use for the emission title */
+    titleTag?: 'h2'|'h3'|'h4'|'h5'|'h6';
 }>();
 
 const tags = ref([]);

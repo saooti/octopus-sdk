@@ -1,20 +1,23 @@
 <template>
   <article class="classic-element-container">
-    <router-link
-      :to="{
-        name: 'playlist',
-        params: { playlistId: playlist.playlistId },
-      }"
-      :title="t('Playlist name page', { name: name })"
-      class="d-flex flex-grow-1 text-dark"
-    >
+    <div class="classic-element-content d-flex flex-grow-1 text-dark">
       <div class="classic-element-text">
         <div v-if="!activePlaylist" class="sticker-empty-ressource">
           {{ t("Empty playlist") }}
         </div>
-        <div class="d-flex align-items-center element-name basic-line-clamp">
-          {{ name }}
-        </div>
+        <!-- Heading: cards can be browsed by title with screen readers (RGAA 9.1) -->
+        <component :is="titleTag" class="d-flex align-items-center element-name basic-line-clamp">
+          <router-link
+            :to="{
+              name: 'playlist',
+              params: { playlistId: playlist.playlistId },
+            }"
+            :title="t('Playlist name page', { name: name })"
+            class="text-dark element-link"
+          >
+            {{ name }}
+          </router-link>
+        </component>
         <div
           ref="descriptionPlaylistContainer"
           class="element-description html-wysiwyg-content"
@@ -41,11 +44,9 @@
         height="250"
         aria-hidden="true"
         alt=""
-        
-        :title="t('Playlist name image', { name: name })"
         class="img-box"
       />
-    </router-link>
+    </div>
   </article>
 </template>
 
@@ -60,6 +61,8 @@ import { useI18n } from "vue-i18n";
 //Props 
 const props = defineProps({
   playlist: { default: () => ({}), type: Object as () => Playlist },
+  /** Tag to use for the playlist title */
+  titleTag: { default: 'h3', type: String },
 })
 
 //Composables

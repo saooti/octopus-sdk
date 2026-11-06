@@ -26,9 +26,7 @@ const state: ParamStore = {
         progressBar: false
     },
     emissionPage: {},
-    player: {
-        isVideoPage:false,
-    },
+    player: {},
     searchPage: {
         sortCriteria: undefined,
     },
@@ -106,7 +104,6 @@ export interface ParamStore {
         disableIabFiltering?: boolean;
     };
     player: {
-        isVideoPage?:boolean;
         /**
          * Indicates that the play is at the top of the page.
          * This adapts player settings for properly display.

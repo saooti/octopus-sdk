@@ -43,38 +43,40 @@
             <span class="visually-hidden">{{ getTitle(t('Rss feed')) }}</span>
         </a>
 
-        <button
-            v-if="limit === undefined"
-            v-show="hiddenLinks.length"
-            id="subscribe-buttons-dropdown"
-            class="btn share-btn mx-2"
-            :title="t('See more')"
-        >
-            <PlusIcon />
-        </button>
-        <ClassicPopover
-            target="subscribe-buttons-dropdown"
-            popover-class="popover-z-index"
-            :only-click="true"
-            :left-pos="true"
-        >
-            <a
-                v-for="link in hiddenLinks"
-                :key="link.name"
-                rel="noreferrer noopener"
-                target="_blank"
-                class="octopus-dropdown-item justify-content-start d-flex align-items-center realLink"
-                :href="link.url"
-                :title="t('New window', {text: link.title})"
+        <!-- v-if and not v-show: without styles, an empty button would be displayed (RGAA 10.3) -->
+        <template v-if="displayMoreButton">
+            <button
+                id="subscribe-buttons-dropdown"
+                class="btn share-btn mx-2"
+                :title="t('See more')"
             >
-                <component
-                    :is="link.icon"
-                    :fill-color="fillColor(link)"
-                    class="me-1"
-                />
-                {{ link.title }}
-            </a>
-        </ClassicPopover>
+                <PlusIcon />
+            </button>
+            <ClassicPopover
+                target="subscribe-buttons-dropdown"
+                popover-class="popover-z-index"
+                :only-click="true"
+                :left-pos="true"
+                is-top-layer
+            >
+                <a
+                    v-for="link in hiddenLinks"
+                    :key="link.name"
+                    rel="noreferrer noopener"
+                    target="_blank"
+                    class="octopus-dropdown-item justify-content-start d-flex align-items-center realLink"
+                    :href="link.url"
+                    :title="t('New window', {text: link.title})"
+                >
+                    <component
+                        :is="link.icon"
+                        :fill-color="fillColor(link)"
+                        class="me-1"
+                    />
+                    {{ link.title }}
+                </a>
+            </ClassicPopover>
+        </template>
     </div>
 </template>
 
@@ -157,6 +159,10 @@ const shownLinks = computed((): Array<Link> => {
 
 const hiddenLinks = computed((): Array<Link> => {
     return subscriptionsDisplay.value.slice(maxElements.value);
+});
+
+const displayMoreButton = computed((): boolean => {
+    return props.limit === undefined && 0 !== hiddenLinks.value.length;
 });
 
 const rssUrl = computed(() => {

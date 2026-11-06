@@ -105,8 +105,8 @@ const props = withDefaults(defineProps<{
     onlyMyEpisodes?: boolean;
     /** The seasons to filter on */
     seasons?: Array<number>;
-    /** */
-    podcastTitleTag?: 'h3'|'h4'|'h5'|'h6';
+    /** Tag to use for the podcast title */
+    podcastTitleTag?: 'h2'|'h3'|'h4'|'h5'|'h6';
 }>(), {
     first: 0,
     size: 30,
