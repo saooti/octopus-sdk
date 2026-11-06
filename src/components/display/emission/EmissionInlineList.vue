@@ -19,6 +19,7 @@
                     class="inline-list-element"
                     is-description
                     :is-vertical="emissionVertical"
+                    :title-tag="title ? 'h3' : 'h2'"
                 />
 
                 <EmissionPlayerItem

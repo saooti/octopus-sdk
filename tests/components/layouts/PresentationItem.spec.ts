@@ -34,4 +34,38 @@ describe('PresentationItem', () => {
             expect(wrapper.find('.text-secondary').exists()).toBe(true);
         });
     });
+
+    describe('accessibility', () => {
+        it('renders the name in a h3 by default', async () => {
+            const wrapper = await mount({});
+            expect(wrapper.find('h3').text()).toBe('Item name');
+        });
+
+        it('renders the name in the given heading', async () => {
+            const wrapper = await mount({ titleTag: 'h2' });
+            expect(wrapper.find('h2').text()).toBe('Item name');
+            expect(wrapper.find('h3').exists()).toBe(false);
+        });
+
+        it('limits the link to the name', async () => {
+            const wrapper = await mount({ description: 'Some description' });
+            expect(wrapper.find('a').text()).toBe('Item name');
+        });
+
+        it('does not nest the after-image slot in the link', async () => {
+            const wrapper = await testMount(PresentationItem, {
+                props: baseProps,
+                slots: { 'after-image': '<button>Play</button>' }
+            });
+            expect(wrapper.find('button').exists()).toBe(true);
+            expect(wrapper.find('a button').exists()).toBe(false);
+        });
+
+        it('has a decorative image without title', async () => {
+            const wrapper = await mount({});
+            const img = wrapper.find('img');
+            expect(img.attributes('alt')).toBe('');
+            expect(img.attributes('title')).toBeUndefined();
+        });
+    });
 });

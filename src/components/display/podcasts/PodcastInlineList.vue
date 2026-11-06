@@ -1,35 +1,59 @@
 <template>
-    <PodcastSwiperList
-        :organisation-id="organisationId"
-        :emission-id="emissionId"
-        :iab-id="iabId"
+    <PodcastInlineListTemplate
+        v-if="loading || (!loading && 0 !== allPodcasts.length)"
+        :display-arrow="false"
+        :popular-sort="popularSort"
+        :button-text="buttonText"
+        :button-plus="buttonPlus"
         :title="title"
         :title-icon="titleIcon"
         :href="href"
-        :button-text="buttonText"
-        :is-arrow="isArrow"
-        :require-popular-sort="requirePopularSort"
-        :button-plus="buttonPlus"
+        :iab-id="iabId"
         :rubrique-id="rubriqueId"
-        :rubriquage-id="rubriquageId"
         :no-rubriquage-id="noRubriquageId"
-        :query="query"
-        :podcast-id="podcastId"
-        :last-three-months="lastThreeMonths"
         :title-tag="titleTag"
-        :show-emission-name="showEmissionName"
-        @update:is-arrow="updateArrow($event)"
-    />
+        :no-sort="noSort"
+        @sort-chrono="sortChrono"
+        @sort-popular="sortPopular"
+    >
+        <template #list-inline>
+            <ClassicLoading
+                class="loading-size"
+                :loading-text="loading ? t('Loading podcasts ...') : undefined"
+            />
+            <SwiperList
+                v-if="!loading"
+                :list-object="allPodcasts"
+                :label="title"
+            >
+                <template #octopusSlide="{ option }">
+                    <PodcastItem
+                        class="flex-shrink-0 item-phone-margin"
+                        :podcast="option"
+                        :show-emission-name="showEmissionName"
+                        :title-tag="podcastTitleTag"
+                    />
+                </template>
+            </SwiperList>
+        </template>
+    </PodcastInlineListTemplate>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, type Component } from "vue";
-const PodcastSwiperList = defineAsyncComponent(
-    () => import("./PodcastSwiperList.vue"),
-);
+import dayjs from "dayjs";
+import PodcastInlineListTemplate from "./PodcastInlineListTemplate.vue";
+import classicApi from "../../../api/classicApi";
+import PodcastItem from "./PodcastItem.vue";
+import ClassicLoading from "../../form/ClassicLoading.vue";
+import SwiperList from "../list/SwiperList.vue";
+import { useFilterStore } from "../../../stores/FilterStore";
+import { Podcast } from "@/stores/class/general/podcast";
+import { type Component, computed, onBeforeMount, Ref, ref, watch } from "vue";
+import { ListClassicReturn } from "@/stores/class/general/listReturn";
+import { useI18n } from "vue-i18n";
 
 //Props 
-defineProps({
+const props = defineProps({
     organisationId: { default: () => [], type: Array as () => Array<string> },
     emissionId: { default: undefined, type: Number },
     iabId: { default: undefined, type: Number },
@@ -45,9 +69,15 @@ defineProps({
     rubriquageId: { default: () => [], type: Array as () => Array<number> },
     noRubriquageId: { default: () => [], type: Array as () => Array<number> },
     query: { default: undefined, type: String },
-    podcastId: { default: undefined, type: Number },
+    /** Filter on season */
+    season: { default: undefined, type: Number },
     lastThreeMonths: { default: false, type: Boolean },
     titleTag: { default: "h2", type: String },
+    podcastTitleTag: { default: "h3", type: String },
+    /** The podcast from which suggestions are made */
+    podcastId: { type: Number },
+    /** Hide sort options */
+    noSort: { default: false, type: Boolean },
     /** Display emission name in podcast item */
     showEmissionName: { default: false, type: Boolean }
 })
@@ -55,13 +85,88 @@ defineProps({
 //Emits
 const emit = defineEmits(["update:isArrow"]);
 
+//Data 
+const loading = ref(true);
+const popularSort = ref(props.requirePopularSort ?? false);
+const allPodcasts: Ref<Array<Podcast>> = ref([]);
+
+
+//Composables
+const { t } = useI18n();
+const filterStore = useFilterStore();
+
+//Computed
+const organisation = computed(() => {
+    if (props.organisationId.length) {
+        return props.organisationId;
+    }
+    return filterStore.filterOrgaId ? [filterStore.filterOrgaId] : [];
+});
+const watchVariable = computed(() => {
+    return `${props.emissionId}|${props.organisationId}|${filterStore.filterOrgaId}|${props.iabId}|${props.rubriqueId}|${props.rubriquageId}|${props.query}`;
+});
+
+
+//Watch
+watch(watchVariable, () => fetchNext(), {immediate:true});
+
+onBeforeMount(()=>{
+    if (undefined !== props.isArrow) {
+        emit("update:isArrow", true);
+    }
+})
+
 //Methods
-function updateArrow(value: boolean){
-    emit("update:isArrow", value);
+async function fetchNext(): Promise<void> {
+    // eslint-disable-next-line no-warning-comments
+    // TODO use podcastApi
+    const data = await classicApi.fetchData<ListClassicReturn<Podcast>>({
+        api: 0,
+        path: "podcast/search",
+        parameters: {
+            first: 0,
+            size: 12,
+            organisationId: organisation.value,
+            emissionId: props.emissionId,
+            iabId: props.iabId,
+            rubriqueId: props.rubriqueId.length ? props.rubriqueId : undefined,
+            rubriquageId: props.rubriquageId.length
+                ? props.rubriquageId
+                : undefined,
+            noRubriquageId: props.noRubriquageId.length
+                ? props.noRubriquageId
+                : undefined,
+            sort: popularSort.value ? "POPULARITY" : "DATE",
+            query: props.query,
+            includeStatus: ["READY", "PROCESSING"],
+            after: popularSort.value && props.lastThreeMonths
+                ? dayjs().subtract(3, "months").toISOString()
+                : undefined,
+            season: props.season
+        },
+        specialTreatement: true,
+    });
+    loading.value = true;
+    allPodcasts.value = data.result.filter(
+        // Exclude empty podcasts and current podcast
+        (pod: Podcast | null) => null !== pod && pod.podcastId !== props.podcastId
+    );
+    loading.value = false;
+}
+function sortPopular(): void {
+    if (popularSort.value) {return;}
+    popularSort.value = true;
+    fetchNext();
+}
+function sortChrono(): void {
+    if (!popularSort.value) {return;}
+    popularSort.value = false;
+    fetchNext();
 }
 </script>
-<style lang="scss">
-.octopus-app .loading-size {
-  height: 21.4rem;
+
+<style scoped lang="scss">
+.loading-size {
+    height: 21.4rem;
 }
 </style>

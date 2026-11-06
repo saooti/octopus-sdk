@@ -12,6 +12,7 @@
       :organisation-id="orgaArray"
       :query="searchMinSize"
       :sort-criteria="sortOrder ?? 'DATE'"
+      podcast-title-tag="h2"
     />
   </section>
 </template>

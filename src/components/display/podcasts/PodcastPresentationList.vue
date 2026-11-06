@@ -19,6 +19,7 @@
                 :vertical="!isPhone && first"
                 :tags="tags.get(item.podcastId)"
                 :additional-info="additionalInfo.get(item.podcastId)"
+                :title-tag="title ? 'h3' : 'h2'"
             >
                 <template #after-image>
                     <PodcastPlayButton

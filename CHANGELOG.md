@@ -13,6 +13,11 @@
     statut non remonté lors des chargements), et 12.8 (correction ordre de
     tabulation).
   - `PodcastList`/`PodcastFilterList` : suppression du focus auto
+  - `PodcastList` : correction de la hierarchie des titres
+  - `EmissionItem`/`PlaylistItem`/`PresentationItem`/`RadioItem` : ajout de
+    titres (critère 9.1), lien limité au titre et étendu à la carte par CSS
+    (critère 8.2, liens et boutons imbriqués), et images décoratives sans
+    `title` (critère 1.2)
   - `ShareAnonymous`/`ClassicPopover` : correction navigation au clavier dans
     les menus
   - `AccessibilityModal`/`QrCode`/`ShareNewsletter`/`SharePlayerColors` :

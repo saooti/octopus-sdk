@@ -22,17 +22,23 @@
           :min-height="250"
           class="d-flex flex-column flex-grow-1"
         >
-          <PlaylistItem v-if="0 !== p.playlistId" :playlist="p" />
+          <PlaylistItem
+            v-if="0 !== p.playlistId"
+            :playlist="p"
+            title-tag="h2"
+          />
           <template #preview>
-            <router-link
-              :to="{
-                name: 'playlist',
-                params: { playlistId: p.playlistId },
-              }"
-              :title="t('Playlist name page', { name: p.title })"
-            >
-              {{ p.title }}
-            </router-link>
+            <h2>
+              <router-link
+                :to="{
+                  name: 'playlist',
+                  params: { playlistId: p.playlistId },
+                }"
+                :title="t('Playlist name page', { name: p.title })"
+              >
+                {{ p.title }}
+              </router-link>
+            </h2>
           </template>
         </ClassicLazy>
       </div>

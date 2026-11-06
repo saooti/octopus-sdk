@@ -149,10 +149,16 @@
     border-radius: var(--octopus-border-radius);
 
     @media (width <= 960px) {
-      &>a{
+      &>a,
+      &>.classic-element-content{
         flex-direction: column;
         align-items: center;
       }
+    }
+
+    // Absolutely positioned: only needs to be above the element link
+    .multi-buttons-play {
+      z-index: 2;
     }
   }
 
@@ -163,10 +169,29 @@
     max-height: 16.5rem;
     flex-grow: 1;
 
+    // Heading for the structure only: keeps the look of the element
     .element-name {
+      margin: 0;
+      font: inherit;
       font-size: 1.2rem;
       font-weight: 400;
+      letter-spacing: normal;
     }
+  }
+
+  // Title link covering the whole element: its name stays the title, and the
+  // other links and buttons of the element are not nested in it
+  .element-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .element-link > *,
+  .classic-element-text a:not(.element-link) {
+    position: relative;
+    z-index: 2;
   }
 
   .element-description {

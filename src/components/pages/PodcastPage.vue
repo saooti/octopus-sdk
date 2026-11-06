@@ -45,12 +45,14 @@
           :title="t('More episodes of this emission')"
           :button-text="t('All podcast emission button')"
           title-tag="h3"
+          podcast-title-tag="h4"
         />
         <section v-if="!hideSuggestions">
           <ClassicLazy :min-height="550">
             <PodcastInlineList
               class="mt-4"
               title-tag="h3"
+              podcast-title-tag="h4"
               :organisation-id="[podcast.organisation.id]"
               :podcast-id="podcastId"
               :title="t('Suggested listening')"
@@ -60,6 +62,7 @@
             <PodcastInlineList
               class="mt-4"
               title-tag="h3"
+              podcast-title-tag="h4"
               :iab-id="c.id"
               :href="'/main/pub/category/' + c.id"
               :title="t('More episodes of this category : ', { name: c.name })"

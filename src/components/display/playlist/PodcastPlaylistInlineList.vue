@@ -105,3 +105,9 @@ function reset(): void {
     allPodcasts.value.length = 0;
 }
 </script>
+
+<style scoped lang="scss">
+.loading-size {
+    height: 21.4rem;
+}
+</style>

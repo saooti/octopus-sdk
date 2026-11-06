@@ -43,4 +43,10 @@ describe('EmissionPresentationItem', () => {
         const presentationItem = wrapper.findComponent({ name: 'PresentationItem' });
         expect(presentationItem.props('additionalInfo')).toEqual(['Saooti']);
     });
+
+    it('forwards the title tag', async () => {
+        const wrapper = await mount({ emission: emptyEmissionData(), titleTag: 'h2' });
+        const presentationItem = wrapper.findComponent({ name: 'PresentationItem' });
+        expect(presentationItem.props('titleTag')).toBe('h2');
+    });
 });

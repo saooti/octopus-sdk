@@ -24,17 +24,23 @@
             :min-height="250"
             class="d-flex flex-column flex-grow-1"
           >
-            <EmissionItem v-if="0 !== e.emissionId" :emission="e" />
+            <EmissionItem
+              v-if="0 !== e.emissionId"
+              :emission="e"
+              title-tag="h2"
+            />
             <template #preview>
-              <router-link
-                :to="{
-                  name: 'emission',
-                  params: { emissionId: e.emissionId },
-                }"
-                :title="t('Series name page', { name: e.name })"
-              >
-                {{ e.name }}
-              </router-link>
+              <h2>
+                <router-link
+                  :to="{
+                    name: 'emission',
+                    params: { emissionId: e.emissionId },
+                  }"
+                  :title="t('Series name page', { name: e.name })"
+                >
+                  {{ e.name }}
+                </router-link>
+              </h2>
             </template>
           </ClassicLazy>
         </li>

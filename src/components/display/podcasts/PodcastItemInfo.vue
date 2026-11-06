@@ -20,12 +20,13 @@
                 class="text-dark flex-grow-1 title-podcast-item basic-line-clamp three-line"
                 :title="t('Episode name page', { name: podcast.title })"
             >
-                <div
+                <span
                     v-if="showEmissionName"
                     class="emission-name"
                 >
                     {{ podcast.emission.name }}
-                </div>
+                    <br>
+                </span>
                 <RightsIndicator
                     inline
                     :podcast="podcast"

@@ -1,13 +1,6 @@
 <template>
   <article class="classic-element-container">
-    <router-link
-      :to="{
-        name: 'emission',
-        params: { emissionId: emission.emissionId },
-      }"
-      :title="t('Series name page', { name: emission.name })"
-      class="d-flex flex-grow-1 text-dark"
-    >
+    <div class="classic-element-content d-flex flex-grow-1 text-dark">
       <img
         loading="lazy"
         :src="useProxyImageUrl(emission.imageUrl, '250')"
@@ -16,27 +9,36 @@
         class="img-box"
         aria-hidden="true"
         alt=""
-        :title="t('Emission name image', { name: emission.name })"
       >
       <ClassicImageBanner v-if="!emissionVisible">
         {{ t('Emission - Not available for listeners') }}
       </ClassicImageBanner>
 
       <div class="classic-element-text">
-        <div class="d-flex align-items-center element-name">
-          <AlertIcon
-            v-if="!activeEmission && !isPodcastmaker && editRight"
-            :size="16"
-            class="text-danger me-1"
-            :title="t('Emission have not podcasts')"
-          />
-          <RightsIndicator
-            inline
-            :emission="emission"
-            action="edit"
-          />
-          {{ emission.name }}
-        </div>
+        <!-- Heading: cards can be browsed by title with screen readers (RGAA 9.1) -->
+        <component :is="titleTag" class="element-name">
+          <router-link
+            :to="{
+              name: 'emission',
+              params: { emissionId: emission.emissionId },
+            }"
+            :title="t('Series name page', { name: emission.name })"
+            class="d-flex align-items-center text-dark element-link"
+          >
+            <AlertIcon
+              v-if="!activeEmission && !isPodcastmaker && editRight"
+              :size="16"
+              class="text-danger me-1"
+              :title="t('Emission have not podcasts')"
+            />
+            <RightsIndicator
+              inline
+              :emission="emission"
+              action="edit"
+            />
+            {{ emission.name }}
+          </router-link>
+        </component>
         <div
           ref="descriptionEmissionContainer"
           class="element-description htms-wysiwyg-content"
@@ -59,7 +61,7 @@
           © {{ emission.orga.name }}
         </router-link>
       </div>
-    </router-link>
+    </div>
   </article>
 </template>
 
@@ -81,10 +83,14 @@ import { useI18n } from "vue-i18n";
 import { useResizePhone } from "../../composable/useResizePhone";
 
 //Props 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   /** The emission to display */
   emission: Emission;
-}>();
+  /** Tag to use for the emission title */
+  titleTag?: 'h2'|'h3'|'h4'|'h5'|'h6';
+}>(), {
+  titleTag: 'h3'
+});
 
 //Data 
 const activeEmission = ref(true);
@@ -168,7 +174,7 @@ article {
   @media (width <= 960px) {
     max-height: 500px;
 
-    a {
+    .classic-element-content {
       flex-direction: column !important;
       flex-wrap: nowrap !important;
     }

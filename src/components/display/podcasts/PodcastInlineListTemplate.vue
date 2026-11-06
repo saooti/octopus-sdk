@@ -16,6 +16,7 @@
                 <button
                     class="btn btn-underline"
                     :class="{ active: !popularSort }"
+                    :aria-pressed="!popularSort"
                     @click="sortChrono()"
                 >
                     {{ t("Last added") }}
@@ -23,6 +24,7 @@
                 <button
                     class="btn btn-underline"
                     :class="{ active: popularSort }"
+                    :aria-pressed="popularSort"
                     @click="sortPopular()"
                 >
                     {{ t("Most popular") }}
