@@ -89,8 +89,7 @@ describe('SmartLinkPage', () => {
 
     it('opens footer links in a new window with a warning', async() => {
         const wrapper = await mount(SmartLinkPage, {
-            props: { emissionId: 5 },
-            beforeMount: setupPlayerStore()
+            props: { emissionId: 5 }
         });
 
         const links = wrapper.findAll('.footer a');
