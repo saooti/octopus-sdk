@@ -16,7 +16,11 @@
                     {{ t("Sort by") }}
                 </p>
             </button>
-            <ClassicPopover target="sort-by-comments" :only-click="true">
+            <ClassicPopover
+                target="sort-by-comments"
+                :only-click="true"
+                is-top-layer
+            >
                 <button
                     v-for="sortOption in sortChoice"
                     :key="sortOption.value"

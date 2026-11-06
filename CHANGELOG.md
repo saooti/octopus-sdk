@@ -2,9 +2,17 @@
 
 ## 42.3.4 (En cours)
 
+### Fixes
+
+- `PodcastInlineList` : prise en compte de `requirePopularSort` et
+  `lastThreeMonths` dès le premier chargement, la liste affichait les derniers
+  épisodes alors que l'onglet "Les plus populaires" était actif
+
 ### Misc
 
 - Ajout composant d'overlay de chargement
+- `PodcastInlineList` : fusion avec `PodcastSwiperList`, qui est supprimé (non
+  exporté, sans impact pour les projets utilisant `getPodcastInlineList`)
 - `{a11y}` Ajustements de nombreux composants pour conformité RGAA
   - Suppression de l'autofocus sur la recherche dans les pages qui ne sont pas
     des pages de recherche
@@ -22,6 +30,15 @@
     les menus
   - `AccessibilityModal`/`QrCode`/`ShareNewsletter`/`SharePlayerColors` :
     correction contrôle par clavier & contraste du toggle de format
+  - `PodcastInlineListTemplate` : état des boutons de tri restitué aux
+    technologies d'assistance (critère 7.1)
+  - `ShareAnonymous`/`SubscribeButtons`/`PlayerSpeedButton`/`CommentList`/
+    `CommentMoreActions` : menus utilisables sans feuilles de styles, avec
+    l'API Popover (critère 10.3)
+  - `SubscribeButtons` : pas de bouton "Voir plus" vide sans feuilles de styles
+    (critère 10.3)
+  - `EmissionPage`/`PlaylistPage` : images décoratives sans `title` (critère
+    1.2)
 
 ## 42.3.3 (04/10/2026)
 

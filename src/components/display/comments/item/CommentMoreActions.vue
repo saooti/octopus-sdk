@@ -37,6 +37,7 @@
             :target="'comment-dropdown' + comment.commentId"
             :only-click="true"
             :left-pos="true"
+            is-top-layer
         >
             <template v-for="action in moreActions" :key="action">
                 <button

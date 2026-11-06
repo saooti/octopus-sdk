@@ -65,6 +65,7 @@ const props = defineProps({
     leftPos: { type: Boolean, default: false },
     topPos: { type: Boolean, default: false },
     popoverClass: { type: String, default: undefined },
+    /** Open it with the Popover API: unlike the others, it can be opened without styles (RGAA 10.3) */
     isTopLayer: { type: Boolean, default: false },
     /** @deprecated No longer needed. If set to true, max height of popover will not overflow from parent */
     constrainHeight: { type: Boolean, default: true },

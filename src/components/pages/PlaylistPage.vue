@@ -1,76 +1,80 @@
 <template>
-  <section class="page-box">
-    <template v-if="loaded && !error && playlist">
-      <PodcastmakerHeader
-        v-if="isPodcastmaker"
-        :page-title="pageTitle"
-        :img-url="playlist.imageUrl"
-      />
-      <div
-        class="d-flex flex-column page-element"
-        :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
-      >
-        <section class="module-box">
-          <slot
-            v-if="editRight && !isPodcastmaker"
-            name="edit-box"
-            :playlist="playlist"
-          />
-
-          <div class="mb-5 mt-3 description-text">
-            <img
-              loading="lazy"
-              :src="useProxyImageUrl(playlist.imageUrl, '250')"
-              width="250"
-              height="250"
-              aria-hidden="true"
-              alt=""
-              :title="t('Playlist name image', { name: name })"
-              class="img-box float-start me-3 mb-3"
+    <section class="page-box">
+        <template v-if="loaded && !error && playlist">
+            <PodcastmakerHeader
+                v-if="isPodcastmaker"
+                :page-title="pageTitle"
+                :img-url="playlist.imageUrl"
             />
-            <div class="d-flex align-items-center justify-content-between">
-              <h2>{{ name }}</h2>
-              <ShareAnonymous v-if="!editRight" class="d-flex justify-content-end flex-grow-1" :playlist="playlist" :organisation-id="playlist.organisation?.id"/>
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <p class="html-wysiwyg-content" v-html="urlify(description)" />
-            <!-- eslint-enable -->
-          </div>
-          <SubscribeButtons
-            v-if="isPodcastmaker"
-            class="mt-4"
-            :content="playlist"
-            :window-width="1000"
-            :justify-center="false"
-          />
-        </section>
-        <SharePlayer
-          v-if="!isPodcastmaker && editRight"
-          :playlist="playlist"
-          :organisation-id="authOrgaId"
-        />
-        <ShareSocialsButtons
-          v-if="state.podcastPage.ShareButtons"
-          :organisation-id="playlist.organisation.id"
-        />
-        <section class="module-box">
-          <PodcastList 
-            v-if="isInit"
-            v-model:query="searchPattern"
-            :first="paginateFirst"
-            :size="ps"
-            :playlist="playlist"
-          />
-        </section>
-      </div>
+            <div
+                class="d-flex flex-column page-element"
+                :class="isPodcastmaker ? 'page-element-podcastmaker' : ''"
+            >
+                <section class="module-box">
+                    <slot
+                        v-if="editRight && !isPodcastmaker"
+                        name="edit-box"
+                        :playlist="playlist"
+                    />
 
-      <slot name="bottom" v-bind="{ playlist }" />
-    </template>
-    <ClassicLoading
-      :loading-text="!loaded ? t('Loading content ...') : undefined"
-      :error-text="error ? t(`Playlist doesn't exist`) : undefined"
-    />
-  </section>
+                    <div class="mb-5 mt-3 description-text">
+                        <img
+                            loading="lazy"
+                            :src="useProxyImageUrl(playlist.imageUrl, '250')"
+                            width="250"
+                            height="250"
+                            aria-hidden="true"
+                            alt=""
+                            class="img-box float-start me-3 mb-3"
+                        >
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h2>{{ name }}</h2>
+                            <ShareAnonymous
+                                v-if="!editRight"
+                                class="d-flex justify-content-end flex-grow-1"
+                                :playlist="playlist"
+                                :organisation-id="playlist.organisation?.id"
+                            />
+                        </div>
+                        <!-- eslint-disable vue/no-v-html -->
+                        <p class="html-wysiwyg-content" v-html="urlify(description)" />
+                        <!-- eslint-enable -->
+                    </div>
+                    <SubscribeButtons
+                        v-if="isPodcastmaker"
+                        class="mt-4"
+                        :content="playlist"
+                        :window-width="1000"
+                        :justify-center="false"
+                    />
+                </section>
+                <SharePlayer
+                    v-if="!isPodcastmaker && editRight"
+                    :playlist="playlist"
+                    :organisation-id="authOrgaId"
+                />
+                <ShareSocialsButtons
+                    v-if="state.podcastPage.ShareButtons"
+                    :organisation-id="playlist.organisation.id"
+                />
+                <section class="module-box">
+                    <PodcastList 
+                        v-if="isInit"
+                        v-model:query="searchPattern"
+                        :first="paginateFirst"
+                        :size="ps"
+                        :playlist="playlist"
+                    />
+                </section>
+            </div>
+
+            <slot name="bottom" v-bind="{ playlist }" />
+        </template>
+        <ClassicLoading
+            :loading-text="!loaded ? t('Loading content ...') : undefined"
+            :error-text="error ? t(`Playlist doesn't exist`) : undefined"
+        />
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -95,23 +99,23 @@ import { playlistApi } from "../../api/playlistApi";
 
 import SubscribeButtons from "../display/sharing/SubscribeButtons.vue"; 
 const ShareSocialsButtons = defineAsyncComponent(
-  () => import("../display/sharing/ShareSocialsButtons.vue"),
+    () => import("../display/sharing/ShareSocialsButtons.vue"),
 );
 const SharePlayer = defineAsyncComponent(
-  () => import("../display/sharing/SharePlayer.vue"),
+    () => import("../display/sharing/SharePlayer.vue"),
 );
 const PodcastmakerHeader = defineAsyncComponent(
-  () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
+    () => import("../display/podcastmaker/PodcastmakerHeader.vue"),
 );
 const ShareAnonymous = defineAsyncComponent(() => import("../display/sharing/ShareAnonymous.vue"));
 
 
 //Props
 const props = defineProps({
-  playlistId: { default: undefined, type: Number },
-  pr: { default: 0, type: Number },
-  ps: { default: 30, type: Number },
-  routeQuery: { default: "", type: String },
+    playlistId: { default: undefined, type: Number },
+    pr: { default: 0, type: Number },
+    ps: { default: 30, type: Number },
+    routeQuery: { default: "", type: String },
 });
 
 
@@ -132,27 +136,27 @@ const authStore = useAuthStore();
 const filterStore = useFilterStore();
 const generalStore = useGeneralStore();
 const {
-  searchPattern,
-  paginateFirst,
-  isInit
+    searchPattern,
+    paginateFirst,
+    isInit
 } = useSimplePageParam(props, true);
 
 
 //Computed
 const playlistRadio = computed(() =>{
-  return (
-    "AMBIANCE" === playlist.value?.ambianceType ||
-    "AMBIANCE_PROGRAMMED" === playlist.value?.ambianceType
-  );
+    return (
+        "AMBIANCE" === playlist.value?.ambianceType ||
+        "AMBIANCE_PROGRAMMED" === playlist.value?.ambianceType
+    );
 });
 const pageTitle = computed(() =>playlistRadio.value? t("Mix of episodes"): t("Playlist"));
 const name = computed(() =>playlist.value?.title ?? "");
 const description = computed(() =>playlist.value?.description ?? "");
 const editRight = computed(() =>{
-  return isEditRights(
-    playlist.value?.organisation?.id,
-    authStore.isRolePlaylists,
-  );
+    return isEditRights(
+        playlist.value?.organisation?.id,
+        authStore.isRolePlaylists,
+    );
 });
 
 
@@ -161,40 +165,40 @@ watch(()=>props.playlistId, () => {getPlaylistDetails()}, {immediate: true});
 
 
 onBeforeUnmount(() => {
-  generalStore.contentToDisplayUpdate(null);
+    generalStore.contentToDisplayUpdate(null);
 });
 
 
 //Methods
 function urlify(text:string|undefined){
-  return displayHelper.urlify(text);
+    return displayHelper.urlify(text);
 }
 function initError(): void {
-  error.value = true;
-  loaded.value = true;
+    error.value = true;
+    loaded.value = true;
 }
 async function getPlaylistDetails(): Promise<void> {
-  try {
-    loaded.value = false;
-    error.value = false;
-    playlist.value = await playlistApi.get(props.playlistId);
-    filterStore.updateOrgaIfNecessary(playlist.value.organisation?.id);
-    if (
-      (!editRight.value && playlistRadio.value) ||
-      ("PUBLIC" !== playlist.value.organisation?.privacy &&
-      filterStore.filterOrgaId !== playlist.value.organisation?.id &&
-      route.query.productor !== playlist.value.organisation?.id)
-    ) {
-      initError();
-      return;
+    try {
+        loaded.value = false;
+        error.value = false;
+        playlist.value = await playlistApi.get(props.playlistId);
+        filterStore.updateOrgaIfNecessary(playlist.value.organisation?.id);
+        if (
+            (!editRight.value && playlistRadio.value) ||
+            ("PUBLIC" !== playlist.value.organisation?.privacy &&
+                filterStore.filterOrgaId !== playlist.value.organisation?.id &&
+                route.query.productor !== playlist.value.organisation?.id)
+        ) {
+            initError();
+            return;
+        }
+        generalStore.contentToDisplayUpdate(playlist.value);
+        updatePathParams(playlist.value.title);
+    } catch (error) {
+        handle403(error as AxiosError);
+        initError();
     }
-    generalStore.contentToDisplayUpdate(playlist.value);
-    updatePathParams(playlist.value.title);
-  } catch (error) {
-    handle403(error as AxiosError);
-    initError();
-  }
-  loaded.value = true;
+    loaded.value = true;
 }
 
 </script>

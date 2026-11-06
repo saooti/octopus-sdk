@@ -1,30 +1,31 @@
 <template>
-  <button
-    id="player-speed-button"
-    :title="t('Change speed')"
-    class="btn play-button-box small-font btn-transparent text-light me-0"
-  >
-    {{ "×" + speedArray[speedIndex] }}
-  </button>
-  <ClassicPopover
-    target="player-speed-button"
-    relative-class="player-container"
-    class="player-speed-dropdown"
-    :constrain-height="state.player.topPlacement !== true"
-    :top-pos="state.player.topPlacement !== true"
-    only-click
-    is-fixed
-  >
     <button
-      v-for="(speed, index) in speedArray"
-      :key="speed"
-      class="octopus-dropdown-item speed-style"
-      @mousedown="changeSpeed(index)"
-      @keydown.enter="changeSpeed(index)"
+        id="player-speed-button"
+        :title="t('Change speed')"
+        class="btn play-button-box small-font btn-transparent text-light me-0"
     >
-      {{ "×" + speed }}
+        {{ "×" + speedArray[speedIndex] }}
     </button>
-  </ClassicPopover>
+    <ClassicPopover
+        target="player-speed-button"
+        relative-class="player-container"
+        class="player-speed-dropdown"
+        :constrain-height="state.player.topPlacement !== true"
+        :top-pos="state.player.topPlacement !== true"
+        only-click
+        is-fixed
+        is-top-layer
+    >
+        <button
+            v-for="(speed, index) in speedArray"
+            :key="speed"
+            class="octopus-dropdown-item speed-style"
+            @mousedown="changeSpeed(index)"
+            @keydown.enter="changeSpeed(index)"
+        >
+            {{ "×" + speed }}
+        </button>
+    </ClassicPopover>
 </template>
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
@@ -41,15 +42,15 @@ const audioPlayer: Ref<HTMLAudioElement | null> = ref(null);
 const { t } = useI18n();
 
 onMounted(()=>{
-  audioPlayer.value = document.querySelector("#audio-player");
+    audioPlayer.value = document.querySelector("#audio-player");
 })
 
 //Methods
 function changeSpeed(index: number) {
-  speedIndex.value = index;
-  if (audioPlayer.value) {
-    audioPlayer.value.playbackRate = speedArray.value[speedIndex.value];
-  }
+    speedIndex.value = index;
+    if (audioPlayer.value) {
+        audioPlayer.value.playbackRate = speedArray.value[speedIndex.value];
+    }
 }
 </script>
 
