@@ -39,6 +39,7 @@
     (critère 10.3)
   - `EmissionPage`/`PlaylistPage` : images décoratives sans `title` (critère
     1.2)
+- Ajout nouvelles icones réseaux sociaux
 
 ## 42.3.3 (04/10/2026)
 
