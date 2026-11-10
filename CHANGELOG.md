@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 42.3.2-fix (10/11/2026)
+
+### Fixes
+
+- Correction d'une erreur lors de la récupération de la portée des droits de
+  l'utilisateur empêchant l'édition sur tout le contenu
+
 ## 42.3.2 (30/10/2026)
 
 ### Features

@@ -170,9 +170,12 @@ async function listUserScope(userId: string, organisationId?: string): Promise<A
         rubriquagePromise
     ]);
 
-    const rubriquesIds = rubriquage.rubriques.map(r => r.rubriqueId);
-
-    return scope.filter(s => rubriquesIds.includes(s));
+    if (rubriquage) {
+        const rubriquesIds = rubriquage.rubriques.map(r => r.rubriqueId);
+        return scope.filter(s => rubriquesIds.includes(s));
+    } else {
+        return [];
+    }
 }
 
 /**
