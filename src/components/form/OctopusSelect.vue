@@ -20,7 +20,14 @@
             <span
                 v-show="selectedLabel && !isOpen"
                 class="octopus-select-value"
-            >{{ selectedLabel }}</span>
+            >
+                <!-- Only rendered with a value, so the slot always receives an option -->
+                <slot
+                    v-if="value !== undefined"
+                    name="selected"
+                    :option="value"
+                >{{ selectedLabel }}</slot>
+            </span>
             <input
                 v-show="!selectedLabel || isOpen"
                 :id="computedId"
@@ -58,7 +65,9 @@
                         :class="{ selected: isSelected(option) }"
                         @click="selectOption(option)"
                     >
-                        {{ getLabel(option) }}
+                        <slot name="option" :option="option">
+                            {{ getLabel(option) }}
+                        </slot>
                     </button>
                     <span v-if="visibleOptions.length === 0" class="text-indic px-2">
                         {{ t('No elements found. Consider changing the search query.') }}
