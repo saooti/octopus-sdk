@@ -1,4 +1,4 @@
-import { computed, getCurrentInstance, nextTick, ref } from 'vue';
+import { type CSSProperties, computed, getCurrentInstance, nextTick, ref } from 'vue';
 import { type MaybeElementRef, onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
@@ -8,6 +8,29 @@ export interface OctopusDropdownProps<T> {
     optionKey?: keyof T;
     isDisabled?: boolean;
     placeholder?: string;
+}
+
+/**
+ * Fixed position for a teleported dropdown: below `anchor`, or above it when it would
+ * overflow the viewport bottom and there is more room above.
+ */
+export function getDropdownStyle(anchor: HTMLElement, floating: HTMLElement | null): CSSProperties {
+    const rect = anchor.getBoundingClientRect();
+    const gap = 2;
+    const height = floating?.offsetHeight ?? 0;
+    const spaceBelow = window.innerHeight - rect.bottom - gap;
+    const spaceAbove = rect.top - gap;
+    const openUp = height > spaceBelow && spaceAbove > spaceBelow;
+    return {
+        position: 'fixed',
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+        // `bottom` when opening up, so the list stays glued to the field when its height
+        // changes (search filtering) without re-measuring
+        ...(openUp
+            ? { bottom: `${window.innerHeight - rect.top + gap}px` }
+            : { top: `${rect.bottom + gap}px` })
+    };
 }
 
 export function useOctopusDropdown<T>(

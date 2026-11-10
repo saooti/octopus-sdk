@@ -2,6 +2,11 @@
 
 ## 42.3.5 (En cours)
 
+### Features
+
+- `OctopusSelect` et `OctopusMultiselect` s'ouvrent vers le haut s'il n'y a pas
+  assez de place vers le bas
+
 ### Fixes
 
 - Correction fonctionnement de `ClassicEmojiPicker`
