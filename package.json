@@ -104,7 +104,7 @@
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
   "peerDependencies": {
-    "@saooti/saooti-player": "^0.2.0",
+    "@saooti/saooti-player": "^0.3.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "dayjs": "^1.11.0",
     "eslint-plugin-vue": "^10.9.1",
