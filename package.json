@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "42.3.5",
+  "version": "42.4.0-beta5",
   "private": false,
   "description": "Javascript SDK for using octopus",
   "author": "Saooti",
@@ -104,6 +104,7 @@
     "url": "git+https://github.com/saooti/octopus-sdk.git"
   },
   "peerDependencies": {
+    "@saooti/saooti-player": "^0.3.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "dayjs": "^1.11.0",
     "eslint-plugin-vue": "^10.9.1",

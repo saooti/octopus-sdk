@@ -30,10 +30,10 @@
                     @click.prevent="play(false)"
                 >
                     <PlayIcon
-                        v-if="!playingPodcast || (playingPodcast && playerStore.playerVideo)"
+                        v-if="!playingPodcast || (playingPodcast && saootiPlayer.state.isVideo)"
                         :size="playIconSize"
                     />
-                    <PodcastIsPlaying v-if="playingPodcast && !playerStore.playerVideo" />
+                    <PodcastIsPlaying v-if="playingPodcast && !saootiPlayer.state.isVideo" />
                     <time
                         v-if="!isVideoPodcast"
                         class="ms-1 me-2"
@@ -46,14 +46,14 @@
                     v-if="isVideoPodcast"
                     :title="t('Video')"
                     :aria-label="videoLabel"
-                    :disabled="playerStore.playerVideo"
+                    :disabled="saootiPlayer.state.isVideo"
                     @click.prevent="play(true)"
                     @mouseenter="hoverType = 'video'"
                     @focus="hoverType = 'video'"
                     @mouseleave="hoverType = ''"
                     @focusout="hoverType = ''"
                 >
-                    <PodcastIsPlaying v-if="playingPodcast && playerStore.playerVideo" />
+                    <PodcastIsPlaying v-if="playingPodcast && saootiPlayer.state.isVideo" />
                     <PlayVideoIcon
                         v-else
                         :size="'video' === hoverType ? 50 : 40"
@@ -96,17 +96,16 @@ import EyeOffOutlineIcon from "vue-material-design-icons/EyeOffOutline.vue";
 import CancelIcon from "vue-material-design-icons/Cancel.vue";
 import AlertIcon from "vue-material-design-icons/Alert.vue";
 import DurationHelper from "../../../helper/durationHelper";
-import { state } from "../../../stores/ParamSdkStore";
 import { Podcast, PodcastProcessingStatus as ProcessingStatus, SimplifiedPodcast } from "../../../stores/class/general/podcast";
 import { Conference } from "@/stores/class/conference/conference";
-import { usePlayerStore } from "../../../stores/PlayerStore";
+import { saootiPlayer } from "@saooti/saooti-player";
 import { computed, defineAsyncComponent, ref } from "vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { useResizePhone } from "../../composable/useResizePhone";
 import { podcastApi } from "../../../api/podcastApi";
+import { useSaootiPlayer } from "@/components/composable/useSaootiPlayer";
 dayjs.extend(duration);
 const PodcastIsPlaying = defineAsyncComponent(() => import("./PodcastIsPlaying.vue"));
 
@@ -126,9 +125,8 @@ const hoverType = ref("");
 
 //Composables
 const { t } = useI18n();
-const playerStore = usePlayerStore();
-const router = useRouter();
 const { isPhone } = useResizePhone();
+const { livePlaying, playerStatus, podcastPlaying, videoPlaying } = useSaootiPlayer();
 
 //Computed
 const isVideoPodcast = computed(() => {
@@ -139,18 +137,13 @@ const isVideoPodcast = computed(() => {
         ('videoId' in props.podcast && undefined !== props.podcast.videoId)
     );
 });
+
 const playingLive = computed(() => {
-    return (
-        undefined !== props.fetchConference &&
-        "null" !== props.fetchConference.toString() &&
-        playerStore.playerLive?.conferenceId === props.fetchConference.conferenceId
-    );
+    return livePlaying.value !== undefined && livePlaying.value === props.fetchConference?.conferenceId;
 });
+
 const playingPodcast = computed(() => {
-    return (
-        playerStore.playerPodcast?.podcastId === props.podcast.podcastId ||
-        playingLive.value
-    );
+    return podcastPlaying.value === props.podcast.podcastId || playingLive.value;
 });
 const isLiveToBeRecorded = computed(() => undefined === props.fetchConference && isLiveReadyToRecord.value);
 const isLiveReadyToRecord = computed(() => {
@@ -276,7 +269,7 @@ const durationString = computed(() => {
     );
 });
 /** Whether this podcast is currently heard (loaded and not paused) */
-const isPlaying = computed(() => playingPodcast.value && "PLAYING" === playerStore.playerStatus);
+const isPlaying = computed(() => playingPodcast.value && "PLAYING" === playerStatus.value);
 /** Names of the buttons: episode and visible duration, kept for voice control */
 const audioLabel = computed(() => t(isPlaying.value ? "PodcastPlayButton - Pause" : "PodcastPlayButton - Play", {
     title: props.podcast.title,
@@ -298,12 +291,9 @@ async function play(isVideo: boolean): Promise<void> {
     if (isLiveToBeRecorded.value) {
         return;
     }
-    if (playingPodcast.value && isVideo === playerStore.playerVideo) {
-        playerStore.playerChangeStatus("PLAYING" === playerStore.playerStatus);
-        return;
-    }
-    if (isVideo && state.player.isVideoPage) {
-        router.push("/main/pub/video/" + props.podcast.podcastId);
+
+    if (playingPodcast.value && isVideo === videoPlaying.value) {
+        saootiPlayer.togglePlay();
         return;
     }
 
@@ -312,18 +302,7 @@ async function play(isVideo: boolean): Promise<void> {
         podcast = await podcastApi.get(props.podcast.podcastId);
     }
   
-    if (!recordingLive.value) {
-        playerStore.playerPlay(podcast, isVideo);
-    } else {
-        playerStore.playerPlay(
-            {
-                ...podcast,
-                conferenceId: props.fetchConference?.conferenceId,
-                hlsIdentifier: props.fetchConference?.hlsIdentifier,
-            },
-            isVideo
-        );
-    }
+    saootiPlayer.playPodcast(podcast.podcastId, isVideo);
 }
 </script>
 

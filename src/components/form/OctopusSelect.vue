@@ -13,6 +13,7 @@
         </label>
 
         <div
+            ref="fieldRef"
             class="octopus-select-field"
             :class="{ disabled, open: isOpen, noBorder }"
             @click="openDropdown"
@@ -82,7 +83,7 @@
 import { type CSSProperties, computed, nextTick, onMounted, onUnmounted, ref, toRaw, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue';
-import { useOctopusDropdown } from '../composable/form/useOctopusDropdown';
+import { getDropdownStyle, useOctopusDropdown } from '../composable/form/useOctopusDropdown';
 
 const props = withDefaults(defineProps<{
     /** Optional label displayed above the field. */
@@ -148,18 +149,14 @@ const {
     handleInput,
 } = useOctopusDropdown(props, (query) => emit('search', query), 'select', [dropdownRef]);
 
-// Position of the teleported dropdown (position: fixed, anchored below the trigger field)
+// Position of the teleported dropdown (position: fixed, anchored below the trigger field,
+// or above it when cut off by the viewport bottom)
+const fieldRef = ref<HTMLElement | null>(null);
 const dropdownStyle = ref<CSSProperties>({});
 
 function updateDropdownPosition(): void {
-    if (!containerRef.value) { return; }
-    const rect = containerRef.value.getBoundingClientRect();
-    dropdownStyle.value = {
-        position: 'fixed',
-        top: `${rect.bottom + 2}px`,
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-    };
+    if (!fieldRef.value) { return; }
+    dropdownStyle.value = getDropdownStyle(fieldRef.value, dropdownRef.value);
 }
 
 // Value snapshot captured the instant the dropdown opens, used only to freeze the

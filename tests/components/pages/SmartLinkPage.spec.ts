@@ -6,7 +6,7 @@ import { playlistApi } from "@/api/playlistApi";
 import SmartLinkPage from "@/components/pages/SmartLinkPage.vue";
 import { emptyEmissionData } from "@/stores/class/general/emission";
 import { emptyPlaylistData } from "@/stores/class/general/playlist";
-import { mount, setupPlayerStore } from "@tests/utils";
+import { mount } from "@tests/utils";
 import { describe, expect, it, Mock, vi } from "vitest";
 
 vi.mock('@/api/emissionApi', () => ({
@@ -78,8 +78,7 @@ describe('SmartLinkPage', () => {
                 const wrapper = await mount(SmartLinkPage, {
                     props: {
                         [testData.key]: 5
-                    },
-                    beforeMount: setupPlayerStore()
+                    }
                 });
 
                 expect(wrapper.text()).toContain(title);
@@ -90,8 +89,7 @@ describe('SmartLinkPage', () => {
 
     it('opens footer links in a new window with a warning', async() => {
         const wrapper = await mount(SmartLinkPage, {
-            props: { emissionId: 5 },
-            beforeMount: setupPlayerStore()
+            props: { emissionId: 5 }
         });
 
         const links = wrapper.findAll('.footer a');

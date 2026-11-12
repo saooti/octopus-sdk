@@ -1,6 +1,19 @@
 # CHANGELOG
 
+## 42.4.0 (En cours)
+
+### Features
+
+- **[14959]** - Intégration librairie saooti-player
+
+[14959]: https://trac.saooti.net/ticket/14959
+
 ## 42.3.5 (En cours)
+
+### Features
+
+- `OctopusSelect` et `OctopusMultiselect` s'ouvrent vers le haut s'il n'y a pas
+  assez de place vers le bas
 
 ### Fixes
 

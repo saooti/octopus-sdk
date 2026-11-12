@@ -1,3 +1,4 @@
+<!-- TODO may be deleted after saooti-player integration -->
 <template>
   <div
     v-if="!inPlayer || display"
@@ -13,6 +14,7 @@
       :aria-label="t('Live progress bar')"
       :style="'width: ' + secondaryProgress + '%'"
     />
+    <!--
     <template v-if="playerStore.playerMedia">
       <div
         v-if="mediaCueInPercent > 0"
@@ -25,6 +27,7 @@
         :style="{ width: +100 - mediaCueOutPercent + '%' }"
       />
     </template>
+    -->
     <div
       class="octopus-progress-bar current-progress"
       aria-valuenow="0"
@@ -33,6 +36,7 @@
       :aria-label="t('Listening progress bar')"
       :style="'width: ' + mainProgress + '%'"
     />
+    <!--
     <template v-if="playerStore.playerMedia">
       <div
         v-if="mediaCueInPercent > 0"
@@ -45,6 +49,7 @@
         :style="{ right: +100 - mediaCueOutPercent + '%' }"
       />
     </template>
+    -->
     <div
       v-if="alertBar"
       class="octopus-progress-bar octopus-progress-bar-duration bg-danger"
@@ -55,6 +60,7 @@
       class="octopus-progress-bar-cursor"
       :style="'left:' + mainProgress + '%'"
     />
+    <!--
     <template v-if="playerStore.playerChapteringPercent">
       <template v-for="chapter in playerStore.playerChapteringPercent" :key="chapter">
         <div
@@ -65,7 +71,7 @@
             right: 100 - chapter.endPercent + '%',
           }"
         />
-        <!-- If top layer widely available no need to teleport -->
+        <!-- If top layer widely available no need to teleport --
         <Teleport to="#octopus-player-component">
           <ClassicPopover
             :target="'chapter-' + chapter.startPercent"
@@ -79,16 +85,14 @@
         </Teleport>
       </template>
     </template>
+    -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { usePlayerStore } from "../../stores/PlayerStore";
-import { computed, defineAsyncComponent, ref, watch } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-const ClassicPopover = defineAsyncComponent(
-  () => import("../misc/ClassicPopover.vue"),
-);
+import { useSaootiPlayer } from "../composable/useSaootiPlayer";
 
 //Props 
 defineProps({
@@ -101,18 +105,18 @@ defineProps({
 
 
 //Data 
-const mediaCueInPercent = ref(0);
-const mediaCueOutPercent = ref(100);
+//const mediaCueInPercent = ref(0);
+//const mediaCueOutPercent = ref(100);
 
 
 //Composables
 const { t } = useI18n();
-const playerStore = usePlayerStore();
+const { playerStatus } = useSaootiPlayer();
 
 //Computed
-const display = computed(() => "STOPPED" !== playerStore.playerStatus);
+const display = computed(() => "STOPPED" !== playerStatus.value);
 
-
+/*
 //Watch
 watch(()=>playerStore.playerMedia, () => {
   if (playerStore.playerMedia) {
@@ -125,7 +129,6 @@ watch(()=>playerStore.playerMedia, () => {
   }
 }, {deep: true, immediate: true});
 
-
 //Methods
 function timeMediaToPercent(value: number | null): number {
   if (null === value || !playerStore.playerMedia) {
@@ -133,6 +136,7 @@ function timeMediaToPercent(value: number | null): number {
   }
   return (value * 100) / (playerStore.playerMedia?.duration ?? 1);
 }
+*/
 </script>
 
 <style scoped lang="scss">

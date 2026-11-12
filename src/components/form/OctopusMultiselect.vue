@@ -13,6 +13,7 @@
         </label>
 
         <div
+            ref="fieldRef"
             class="octopus-multiselect-field"
             :class="{ disabled, open: isOpen, noBorder }"
             @click="openDropdown"
@@ -55,6 +56,7 @@
         <Teleport :to="teleportTarget">
             <div
                 v-if="expandOnHover && isHovered && !isOpen && overflowCount > 0"
+                ref="tooltipRef"
                 class="octopus-multiselect-hover-tooltip"
                 :style="dropdownStyle"
             >
@@ -103,7 +105,7 @@ import { type CSSProperties, computed, nextTick, onMounted, onUnmounted, ref, wa
 import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue';
 import ClassicCheckbox from './ClassicCheckbox.vue';
-import { useOctopusDropdown } from '../composable/form/useOctopusDropdown';
+import { getDropdownStyle, useOctopusDropdown } from '../composable/form/useOctopusDropdown';
 
 const props = defineProps<{
     /** Optional label displayed above the field. */
@@ -173,21 +175,18 @@ const {
 } = useOctopusDropdown(props, (query) => emit('search', query), 'multiselect', [dropdownRef]);
 
 const selectionRef = ref<HTMLElement | null>(null);
+const tooltipRef = ref<HTMLElement | null>(null);
 
-// Position of the teleported dropdown (position: fixed, anchored below the trigger field)
+// Position of the teleported dropdown (position: fixed, anchored below the trigger field,
+// or above it when cut off by the viewport bottom)
+const fieldRef = ref<HTMLElement | null>(null);
 const dropdownStyle = ref<CSSProperties>({});
 
 // Also used to position the hover tooltip: both are teleported and anchored the same way
-// (fixed, directly below the field, same width), and are never shown at the same time.
+// (fixed, below or above the field, same width), and are never shown at the same time.
 function updateDropdownPosition(): void {
-    if (!containerRef.value) { return; }
-    const rect = containerRef.value.getBoundingClientRect();
-    dropdownStyle.value = {
-        position: 'fixed',
-        top: `${rect.bottom + 2}px`,
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-    };
+    if (!fieldRef.value) { return; }
+    dropdownStyle.value = getDropdownStyle(fieldRef.value, dropdownRef.value ?? tooltipRef.value);
 }
 
 function onFieldMouseEnter(): void {
