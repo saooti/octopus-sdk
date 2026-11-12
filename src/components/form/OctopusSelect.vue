@@ -13,6 +13,7 @@
         </label>
 
         <div
+            ref="fieldRef"
             class="octopus-select-field"
             :class="{ disabled, open: isOpen, noBorder }"
             @click="openDropdown"
@@ -20,7 +21,14 @@
             <span
                 v-show="selectedLabel && !isOpen"
                 class="octopus-select-value"
-            >{{ selectedLabel }}</span>
+            >
+                <!-- Only rendered with a value, so the slot always receives an option -->
+                <slot
+                    v-if="value !== undefined"
+                    name="selected"
+                    :option="value"
+                >{{ selectedLabel }}</slot>
+            </span>
             <input
                 v-show="!selectedLabel || isOpen"
                 :id="computedId"
@@ -58,7 +66,9 @@
                         :class="{ selected: isSelected(option) }"
                         @click="selectOption(option)"
                     >
-                        {{ getLabel(option) }}
+                        <slot name="option" :option="option">
+                            {{ getLabel(option) }}
+                        </slot>
                     </button>
                     <span v-if="visibleOptions.length === 0" class="text-indic px-2">
                         {{ t('No elements found. Consider changing the search query.') }}
@@ -73,7 +83,7 @@
 import { type CSSProperties, computed, nextTick, onMounted, onUnmounted, ref, toRaw, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue';
-import { useOctopusDropdown } from '../composable/form/useOctopusDropdown';
+import { getDropdownStyle, useOctopusDropdown } from '../composable/form/useOctopusDropdown';
 
 const props = withDefaults(defineProps<{
     /** Optional label displayed above the field. */
@@ -139,18 +149,14 @@ const {
     handleInput,
 } = useOctopusDropdown(props, (query) => emit('search', query), 'select', [dropdownRef]);
 
-// Position of the teleported dropdown (position: fixed, anchored below the trigger field)
+// Position of the teleported dropdown (position: fixed, anchored below the trigger field,
+// or above it when cut off by the viewport bottom)
+const fieldRef = ref<HTMLElement | null>(null);
 const dropdownStyle = ref<CSSProperties>({});
 
 function updateDropdownPosition(): void {
-    if (!containerRef.value) { return; }
-    const rect = containerRef.value.getBoundingClientRect();
-    dropdownStyle.value = {
-        position: 'fixed',
-        top: `${rect.bottom + 2}px`,
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-    };
+    if (!fieldRef.value) { return; }
+    dropdownStyle.value = getDropdownStyle(fieldRef.value, dropdownRef.value);
 }
 
 // Value snapshot captured the instant the dropdown opens, used only to freeze the

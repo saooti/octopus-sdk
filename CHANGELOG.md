@@ -8,7 +8,18 @@
 
 [14959]: https://trac.saooti.net/ticket/14959
 
-## 42.3.4 (En cours)
+## 42.3.5 (En cours)
+
+### Features
+
+- `OctopusSelect` et `OctopusMultiselect` s'ouvrent vers le haut s'il n'y a pas
+  assez de place vers le bas
+
+### Fixes
+
+- Correction fonctionnement de `ClassicEmojiPicker`
+
+## 42.3.4 (9/11/2026)
 
 ### Fixes
 
@@ -47,6 +58,7 @@
     (critère 10.3)
   - `EmissionPage`/`PlaylistPage` : images décoratives sans `title` (critère
     1.2)
+- Ajout nouvelles icones réseaux sociaux
 
 ## 42.3.3 (04/10/2026)
 
@@ -74,6 +86,13 @@
 - Mise à jour dépendances
 
 [15065]: https://trac.saooti.net/ticket/15065
+
+## 42.3.2-fix (10/11/2026)
+
+### Fixes
+
+- Correction d'une erreur lors de la récupération de la portée des droits de
+  l'utilisateur empêchant l'édition sur tout le contenu
 
 ## 42.3.2 (30/10/2026)
 

@@ -232,6 +232,8 @@ export const getPodcastAddictIcon = () => import("./src/components/icons/Podcast
 export const getRadiolineIcon = () => import("./src/components/icons/RadiolineIcon.vue");
 export const getTuninIcon = () => import("./src/components/icons/TuninIcon.vue");
 export const getXIcon = () => import("./src/components/icons/XIcon.vue");
+import Icons from "./src/components/icons";
+export { Icons };
 
 // Podcastmaker
 export const PodcastmakerHeader = defineAsyncComponent(() => import("./src/components/display/podcastmaker/PodcastmakerHeader.vue"));
