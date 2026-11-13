@@ -46,4 +46,19 @@ describe('FooterSection', () => {
             );
         });
     });
+
+    describe('version', () => {
+        it('displays the given version', async () => {
+            const wrapper = await mount(FooterSection, {
+                shallow: true,
+                props: { version: '41.16.0 · 1a2b3c4d' }
+            });
+            expect(wrapper.find('.version').text()).toBe('41.16.0 · 1a2b3c4d');
+        });
+
+        it('displays nothing without a version', async () => {
+            const wrapper = await mount(FooterSection, { shallow: true });
+            expect(wrapper.find('.version').exists()).toBe(false);
+        });
+    });
 });

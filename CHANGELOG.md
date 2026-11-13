@@ -14,6 +14,7 @@
 ### Misc
 
 - `{a11y}` Amélioration affichage switch de `ClassicCheckbox`
+- Ajoute de quoi afficher la version actuelle du front dans le footer
 
 ## 42.3.4 (9/11/2026)
 

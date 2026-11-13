@@ -2,7 +2,6 @@
   <footer
     id="footer"
     ref="footer"
-    role="contentinfo"
     class="d-flex align-items-center justify-content-between border-top mt-auto"
   >
     <div
@@ -57,6 +56,7 @@
         @selected="onOrganisationSelected"
       />
     </div>
+
     <div class="d-flex align-items-center">
       <div class="hosted-by">
         {{ t("Hosted by") }}<span class="ms-1 me-1 text-primary">Saooti</span>
@@ -72,6 +72,10 @@
       >
         <AcpmImage />
       </a>
+    </div>
+
+    <div v-if="version" class="version">
+      {{ version }}
     </div>
   </footer>
 </template>
@@ -99,6 +103,13 @@ const OrganisationChooserLight = defineAsyncComponent(
 const FooterGarSection = defineAsyncComponent(
   () => import("./FooterGarSection.vue"),
 );
+
+//Props
+defineProps<{
+  /** App version, displayed at the bottom right of the footer */
+  version?: string;
+}>();
+
 const i18n = useI18n();
 const { t, locale } = useI18n();
 
@@ -184,6 +195,8 @@ async function onOrganisationSelected( organisation: Organisation | undefined): 
 
 <style scoped lang="scss">
 #footer {
+  // Anchors the version to the footer rather than to the viewport
+  position: relative;
   font-size: max(0.6rem, 12px);
   bottom: 0;
   z-index: 10;
@@ -198,6 +211,15 @@ async function onOrganisationSelected( organisation: Organisation | undefined): 
 
   .special-select-align-magic-trick {
     margin-left: 0.16rem;
+  }
+
+  .version {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    // Muted, but with enough contrast (RGAA 3.2): no opacity
+    color: var(--octopus-gray-text);
+    font-weight: 600;
   }
 }
 </style>
