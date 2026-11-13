@@ -11,6 +11,10 @@
 
 - Correction fonctionnement de `ClassicEmojiPicker`
 
+### Misc
+
+- `{a11y}` Amélioration affichage switch de `ClassicCheckbox`
+
 ## 42.3.4 (9/11/2026)
 
 ### Fixes
