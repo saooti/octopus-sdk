@@ -55,4 +55,24 @@ describe('transcriptionApi', () => {
             });
         });
     });
+
+    describe('hasTranscription', () => {
+        it('calls the SPEECHTOTEXT api with the correct path', async () => {
+            await transcriptionApi.hasTranscription(42);
+            expect(classicApi.fetchData).toHaveBeenCalledWith({
+                api: ModuleApi.SPEECHTOTEXT,
+                path: 'transcription/42',
+                parameters: { force: true },
+            });
+        });
+
+        it.each([
+            ['the transcript text', 'Some text', true],
+            ['an empty body (no transcript)', '', false],
+            ['a generation progress', { started: true, percent: 0.5 }, false],
+        ])('returns %s → %s', async (_, response, expected) => {
+            vi.mocked(classicApi.fetchData).mockResolvedValue(response);
+            expect(await transcriptionApi.hasTranscription(42)).toBe(expected);
+        });
+    });
 });

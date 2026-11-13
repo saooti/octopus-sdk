@@ -62,10 +62,9 @@ async function getTranslation(podcastId: number, language: string, mayCreate?: b
         path = `${path}?mayCreateIfNotExists=${mayCreate}`;
     }
 
-    let found = false;
     let timeout = 1000;
     const timeoutStep = 100;
-    while (!found) {
+    while (true) {
         const result = await classicApi.fetchData<string|TranslationProgress>({
             api: ModuleApi.SPEECHTOTEXT,
             path
@@ -73,7 +72,6 @@ async function getTranslation(podcastId: number, language: string, mayCreate?: b
 
         // Stop when we get the proper result
         if (typeof result === 'string') {
-            found = true;
             return result;
         }
 
@@ -99,6 +97,22 @@ async function getRawTranscription(podcastId: number): Promise<string> {
         api: ModuleApi.SPEECHTOTEXT,
         path: `transcription/text/${podcastId}`,
     });
+}
+
+/**
+ * Check whether a transcription is available for the podcast
+ * (a transcription still being generated does not count)
+ * @param podcastId ID of the podcast
+ * @returns True if the transcription is available
+ */
+async function hasTranscription(podcastId: number): Promise<boolean> {
+    // 200: transcript text, 202: generation progress, 204: empty body
+    const result = await classicApi.fetchData<string|TranslationProgress>({
+        api: ModuleApi.SPEECHTOTEXT,
+        path: `transcription/${podcastId}`,
+        parameters: { force: true }
+    });
+    return typeof result === 'string' && result.length > 0;
 }
 
 /**
@@ -181,6 +195,7 @@ export const transcriptionApi = {
     getTranslations,
     getTranslation,
     getRawTranscription,
+    hasTranscription,
     generateTranscription,
     regenerateTranscription,
     updateTranscription,
