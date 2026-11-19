@@ -471,5 +471,6 @@
   "PodcastPlayButton - Pause": "Zaustavi »{title}«, trajanje {duration}",
   "PodcastPlayButton - Play video": "Oglejte si »{title}« v videu, trajanje {duration}",
   "PodcastItem - Published on": "Objavljeno dne",
-  "FormatSwitch - Format": "Format datoteke"
+  "FormatSwitch - Format": "Format datoteke",
+  "Home - Focus has no content": "Trenutno ni vsebine za {name}."
 }

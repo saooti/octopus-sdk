@@ -472,6 +472,9 @@
   "Generic - Continue": "Continuer",
   
   "Generic - Action disabled - Not owner": "Cette action n'est pas disponible car vos droits ne vous permettent pas de modifier ou supprimer des éléments dont vous n'êtes pas propriétaire",
+
+  "Home - Focus has no content": "Il n'y a actuellement aucun contenu pour {name}.",
+  
   "RightsIndicator - Podcast - Not owner": "Ce podcast a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
   "RightsIndicator - Cartouchier - Not owner": "Ce cartouchier a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",
   "RightsIndicator - PlaylistMedia - Not owner": "Ce bac a été créé par un autre utilisateur, vous pouvez le consulter, mais vous ne pouvez pas le modifier.",

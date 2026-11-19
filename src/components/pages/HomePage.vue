@@ -1,6 +1,12 @@
 <template>
     <section class="page-box">
-        <template v-if="0 === rubriquageFilter.length">
+        <ClassicAlert
+            v-if="selectedSubOrganisation && selectedSubOrganisation.podcastCount === 0"
+            type="info"
+        >
+            {{ t('Home - Focus has no content', { name: selectedSubOrganisation.name }) }}
+        </ClassicAlert>
+        <template v-else-if="0 === rubriquageFilter.length">
             <ClassicLazy
                 v-for="(c, index) in categories"
                 :key="c.id"
@@ -80,6 +86,9 @@ import { type Component, computed, Ref, ref, watch } from "vue";
 import { Category } from "@/stores/class/general/category";
 import { useI18n } from "vue-i18n";
 import { useSelectableIcons } from "../composable/useSelectableIcons";
+import { useSubOrganisations } from "../composable/useSubOrganisations";
+import { useAuthStore } from "@/stores/AuthStore";
+import ClassicAlert from "../misc/ClassicAlert.vue";
 
 //Props
 defineProps({
@@ -102,6 +111,8 @@ const { rubriqueQueryParam } = useRubriquesFilterComputed();
 const generalStore = useGeneralStore();
 const filterStore = useFilterStore();
 const { getIcon: _getIcon } = useSelectableIcons();
+const authStore = useAuthStore();
+const { selectedSubOrganisation } = useSubOrganisations(ref(authStore.authOrgaId));
 
 
 //Computed
@@ -123,7 +134,7 @@ const rubriquageFilter = computed(() => {
     return filterStore.filterOrgaId ? filterStore.filterRubriquage : [];
 });
 const categories = computed(() => {
-    let arrayCategories: Array<Category> = [];
+    let arrayCategories: Array<Category>;
     if (filterStore.filterIab) {
         return [filterStore.filterIab];
     }

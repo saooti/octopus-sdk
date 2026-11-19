@@ -473,5 +473,6 @@
     "PodcastPlayButton - Pause": "Metti in pausa “{title}”, durata {duration}",
     "PodcastPlayButton - Play video": "Guarda \"{title}\" in video, durata {duration}",
     "PodcastItem - Published on": "Pubblicato il",
-    "FormatSwitch - Format": "Formato del file"
+    "FormatSwitch - Format": "Formato del file",
+    "Home - Focus has no content": "Al momento non ci sono contenuti per {name}."
 }
