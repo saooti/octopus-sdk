@@ -10,6 +10,7 @@
 ### Fixes
 
 - Correction fonctionnement de `ClassicEmojiPicker`
+- Correction et amélioration a11y de OctopusSelect
 
 ### Misc
 

@@ -18,8 +18,10 @@
             :class="{ disabled, open: isOpen, noBorder }"
             @click="openDropdown"
         >
+            <!-- Hidden when disabled: the focusable input displays the value instead,
+                 so the reason it is disabled can be announced (RGAA 11.10) -->
             <span
-                v-show="selectedLabel && !isOpen"
+                v-show="selectedLabel && !isOpen && !disabled"
                 class="octopus-select-value"
             >
                 <!-- Only rendered with a value, so the slot always receives an option -->
@@ -30,14 +32,16 @@
                 >{{ selectedLabel }}</slot>
             </span>
             <input
-                v-show="!selectedLabel || isOpen"
+                v-show="!selectedLabel || isOpen || disabled"
                 :id="computedId"
                 ref="inputRef"
-                v-model="searchQuery"
+                v-model="inputValue"
                 type="text"
                 class="octopus-select-input"
                 :placeholder="inputPlaceholder"
-                :disabled="disabled"
+                :readonly="disabled"
+                :aria-disabled="disabled ? 'true' : undefined"
+                :aria-describedby="disabled ? disabledDescribedby : undefined"
                 @focus="openDropdown"
                 @input="handleInput"
             >
@@ -96,8 +100,12 @@ const props = withDefaults(defineProps<{
     optionKey?: keyof T;
     /** Key of each option object to use as the display label. */
     optionLabel: keyof T & string;
-    /** Disables the field when true. */
+    /** Disables the field when true. The input stays focusable (readonly + aria-disabled)
+     *  so that screen readers can reach it and announce `disabledDescribedby`. */
     disabled?: boolean;
+    /** ID of the element explaining why the field is disabled, set as `aria-describedby`
+     *  on the input when `disabled` is true. */
+    disabledDescribedby?: string;
     /** Placeholder shown in the input when no item is selected. Defaults to the translated "Search" string. */
     placeholder?: string;
     /** Disable the border around the input. */
@@ -116,6 +124,7 @@ const props = withDefaults(defineProps<{
     optionKey: undefined,
     placeholder: undefined,
     dropdownClass: undefined,
+    disabledDescribedby: undefined,
     allowDeselect: true,
 });
 
@@ -185,6 +194,12 @@ onUnmounted(() => {
 const selectedLabel = computed(() =>
     props.value !== undefined ? getLabel(props.value) : undefined
 );
+
+// When disabled, the (readonly) input displays the selected value instead of the search query
+const inputValue = computed({
+    get: () => props.disabled ? selectedLabel.value ?? '' : searchQuery.value,
+    set: (query: string) => { searchQuery.value = query; },
+});
 
 function isSelected(option: T): boolean {
     if (props.value === undefined) {

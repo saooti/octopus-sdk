@@ -6,7 +6,7 @@ export interface OctopusDropdownProps<T> {
     options: T[];
     optionLabel?: keyof T & string;
     optionKey?: keyof T;
-    isDisabled?: boolean;
+    disabled?: boolean;
     placeholder?: string;
 }
 
@@ -87,7 +87,7 @@ export function useOctopusDropdown<T>(
     }
 
     function openDropdown(): void {
-        if (props.isDisabled) {
+        if (props.disabled) {
             return;
         }
         teleportTarget.value = containerRef.value?.closest<HTMLElement>('.octopus-popover') ?? '.octopus-app';

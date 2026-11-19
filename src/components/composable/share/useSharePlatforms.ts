@@ -158,7 +158,7 @@ export const useSharePlatforms = () => {
             });
         }
     }
-    
+
     /**
      * Helper to retrieve configuration of a specific platform
      * @param platform The ID of the platform

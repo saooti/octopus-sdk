@@ -176,19 +176,52 @@ describe('OctopusSelect', () => {
         expect(wrapper.emitted('update:value')?.[0]).toEqual([options[0]]);
     });
 
-    it('does not open dropdown when disabled', async () => {
-        wrapper = await mount(OctopusSelect, {
-            props: { options, optionLabel: 'name', disabled: true },
+    describe('when disabled', () => {
+        it('does not open dropdown on click or focus', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', disabled: true },
+            });
+            await wrapper.find('.octopus-select-field').trigger('click');
+            await wrapper.find('input').trigger('focus');
+            expect(getDropdown()).toBeNull();
         });
-        await wrapper.find('input').trigger('focus');
-        expect(getDropdown()).toBeNull();
+
+        it('keeps the input focusable, readonly and aria-disabled', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', disabled: true },
+            });
+            const input = wrapper.find('input');
+            expect(input.attributes('disabled')).toBeUndefined();
+            expect(input.attributes('readonly')).toBeDefined();
+            expect(input.attributes('aria-disabled')).toBe('true');
+        });
+
+        it('shows the selected value in the visible input', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', value: options[1], disabled: true },
+            });
+            const input = wrapper.find('input');
+            expect(input.attributes('style')).toBeUndefined();
+            expect(input.element.value).toBe(options[1].name);
+            expect(wrapper.find('.octopus-select-value').attributes('style')).toContain('display: none');
+        });
+
+        it('sets aria-describedby from disabledDescribedby', async () => {
+            wrapper = await mount(OctopusSelect, {
+                props: { options, optionLabel: 'name', disabled: true, disabledDescribedby: 'reason' },
+            });
+            expect(wrapper.find('input').attributes('aria-describedby')).toBe('reason');
+        });
     });
 
-    it('disables input when disabled is true', async () => {
+    it('ignores disabledDescribedby when enabled', async () => {
         wrapper = await mount(OctopusSelect, {
-            props: { options, optionLabel: 'name', disabled: true },
+            props: { options, optionLabel: 'name', disabledDescribedby: 'reason' },
         });
-        expect(wrapper.find('input').attributes('disabled')).toBeDefined();
+        const input = wrapper.find('input');
+        expect(input.attributes('aria-describedby')).toBeUndefined();
+        expect(input.attributes('aria-disabled')).toBeUndefined();
+        expect(input.attributes('readonly')).toBeUndefined();
     });
 
     it('matches by optionKey when checking selection', async () => {
