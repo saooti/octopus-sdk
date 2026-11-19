@@ -7,28 +7,36 @@
         <h3 class="mb-2">
             {{ t("Share in one click") }}
         </h3>
-        <ul class="d-flex align-items-center">
-            <li v-for="button in arrayShareButtons" :key="button.title">
-                <a
-                    v-if="button.condition"
-                    rel="noreferrer noopener"
-                    target="_blank"
-                    :href="button.url"
-                    class="btn share-btn mb-2 me-2"
-                    :title="t('New window', {text: button.title})"
-                >
-                    <component :is="button.icon" :size="34" />
-                    <span class="visually-hidden">{{ t('New window', {text: button.title}) }}</span>
-                </a>
-            </li>
-            <slot name="additional-buttons" />
-        </ul>
+        <div class="d-flex align-items-center">
+            <ul class="d-flex align-items-center gap-2">
+                <li v-for="button in arrayShareButtons" :key="button.title">
+                    <a
+                        rel="noreferrer noopener"
+                        target="_blank"
+                        :href="button.url"
+                        class="btn share-btn"
+                        :title="t('New window', {text: button.title})"
+                    >
+                        <component :is="button.icon" :size="34" />
+                        <span class="visually-hidden">{{ t('New window', {text: button.title}) }}</span>
+                    </a>
+                </li>
+                <!-- Wrapped in a <li>: slot content must not be a direct <ul> child (RGAA 8.2, 9.3).
+                     Not rendered when sharing is disabled, as additional share buttons (e.g.
+                     ShareAnonymous) hide themselves then, which would leave an empty <li> -->
+                <li v-if="$slots['additional-buttons'] && !noSharing">
+                    <slot name="additional-buttons" />
+                </li>
+            </ul>
+            <slot name="after-buttons" />
+        </div>
     </section>
 </template>
 
 <script setup lang="ts">
 import XIcon from "../../icons/XIcon.vue";
 import BlueSkyIcon from "../../icons/BlueSkyIcon.vue";
+import ThreadsIcon from "../../icons/ThreadsIcon.vue";
 import WhatsappIcon from "vue-material-design-icons/Whatsapp.vue";
 import LinkedinIcon from "vue-material-design-icons/Linkedin.vue";
 import FacebookIcon from "vue-material-design-icons/Facebook.vue";
@@ -59,14 +67,14 @@ const arrayShareButtons = computed(() => {
         url: `https://www.facebook.com/sharer/sharer.php?u=${urlPage.value}`,
         condition: true,
     }, {
-        title: "X",
-        icon: XIcon,
-        url: `https://twitter.com/intent/tweet?text=${urlPage.value}`,
-        condition: true,
-    }, {
         title: "Linkedin",
         icon: LinkedinIcon,
         url: `https://www.linkedin.com/sharing/share-offsite/?url=${urlPage.value}`,
+        condition: true,
+    }, {
+        title: "Threads",
+        icon: ThreadsIcon,
+        url: `https://www.threads.net/intent/post?text=${urlPage.value}`,
         condition: true,
     }, {
         title: "Bluesky",
@@ -78,9 +86,15 @@ const arrayShareButtons = computed(() => {
         icon: WhatsappIcon,
         url: `whatsapp://send?text=${urlPage.value}`,
         condition: window.matchMedia("(hover: none)").matches,
-    }];
+    }, {
+        title: "X",
+        icon: XIcon,
+        url: `https://twitter.com/intent/tweet?text=${urlPage.value}`,
+        condition: true,
+    }].filter((button) => button.condition); // No empty <li> for hidden buttons (RGAA 9.3)
 });
-const urlPage = computed(() =>window.location.href);
+// Encoded so that the page's own query string is not mixed with the share URL's
+const urlPage = computed(() => encodeURIComponent(window.location.href));
 
 onMounted(()=>initShareButtons())
 

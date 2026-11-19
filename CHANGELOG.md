@@ -4,6 +4,7 @@
 
 ### Features
 
+- **[14991]** - Ajout nouveaux réseaux sociaux
 - `OctopusSelect` et `OctopusMultiselect` s'ouvrent vers le haut s'il n'y a pas
   assez de place vers le bas
 
@@ -16,6 +17,8 @@
 
 - `{a11y}` Amélioration affichage switch de `ClassicCheckbox`
 - Ajoute de quoi afficher la version actuelle du front dans le footer
+
+[14991]: https://trac.saooti.net/ticket/14991
 
 ## 42.3.4 (9/11/2026)
 
