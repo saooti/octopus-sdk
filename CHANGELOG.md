@@ -5,6 +5,7 @@
 ### Features
 
 - **[14991]** - Ajout nouveaux réseaux sociaux
+- **[15093]** - Activation du mode strict
 - `OctopusSelect` et `OctopusMultiselect` s'ouvrent vers le haut s'il n'y a pas
   assez de place vers le bas
 
@@ -21,6 +22,7 @@
 - Ajoute de quoi afficher la version actuelle du front dans le footer
 
 [14991]: https://trac.saooti.net/ticket/14991
+[15093]: https://trac.saooti.net/ticket/15093
 [15111]: https://trac.saooti.net/ticket/15111
 
 ## 42.3.4 (9/11/2026)
