@@ -1,36 +1,44 @@
 <template>
-  <section class="page-box page-box-absolute bg-white justify-content-evenly">
-    <div class="not-auth-content d-flex-column justify-content-between">
-      <div class="d-flex flex-column justify-content-around">
-        <img
-          width="250"
-          height="auto"
-          class="logo-octopus"
-          src="/img/logo_saooti_play_black.svg"
-          aria-hidden="true"
-        alt=""
-          title="Saooti"
-          
-        />
-        <h2>{{ t("You do not have the right to access this page") }}</h2>
-      </div>
-      <img
-        width="600"
-        height="auto"
-        class="stop-octopus-img"
-        src="/img/403.webp"
-        aria-hidden="true"
-        alt=""
+    <section class="page-box page-box-absolute bg-white justify-content-evenly">
+        <div class="not-auth-content d-flex-column justify-content-between">
+            <div class="d-flex flex-column justify-content-around">
+                <img
+                    width="250"
+                    height="auto"
+                    class="logo-octopus"
+                    src="/img/logo_saooti_play_black.svg"
+                    aria-hidden="true"
+                    alt=""
+                    title="Saooti"
+                >
+                <h2>{{ t("You do not have the right to access this page") }}</h2>
+            </div>
+            <img
+                width="600"
+                height="auto"
+                class="stop-octopus-img"
+                src="/img/403.webp"
+                aria-hidden="true"
+                alt=""
         
-        title="403"
-      />
-    </div>
+                title="403"
+            >
+        </div>
 
-    <a v-if="authStore.authOrgaId" class="btn btn-primary" href="/logout">
-      {{ authText }}
-    </a>
-    <a v-else class="btn btn-primary" :href="pathLogin">{{ authText }}</a>
-  </section>
+        <button
+            v-if="authStore.authOrgaId"
+            type="button"
+            class="btn btn-primary"
+            @click="logoutHelper.logout"
+        >
+            {{ authText }}
+        </button>
+        <a
+            v-else
+            class="btn btn-primary"
+            :href="pathLogin"
+        >{{ authText }}</a>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -39,6 +47,7 @@ import { useApiStore } from "../../stores/ApiStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import logoutHelper from "../../helper/logoutHelper";
 
 //Composables
 const { t } = useI18n();

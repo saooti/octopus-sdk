@@ -69,9 +69,13 @@
                         <hr>
                     </template>
                     <li class="li-style-none">
-                        <a class="octopus-dropdown-item c-hand" href="/logout">
+                        <button
+                            type="button"
+                            class="octopus-dropdown-item c-hand"
+                            @click="logoutHelper.logout"
+                        >
                             {{ t("Logout") }}
-                        </a>
+                        </button>
                     </li>
                 </template>
                 <li class="li-style-none">
@@ -90,6 +94,7 @@
 
 <script setup lang="ts">
 import OpenInNewIcon from "vue-material-design-icons/OpenInNew.vue";
+import logoutHelper from "../../helper/logoutHelper";
 import { state } from "../../stores/ParamSdkStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { computed } from "vue";

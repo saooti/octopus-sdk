@@ -6,6 +6,7 @@
 
 - **[14967]** - Correction téléchargement fichier avec pub
 - **[15125]** - Correction sécurité téléchargement fichiers
+- **[15125]** - Correction risque sur la déconnexion
 
 [14967]: https://trac.saooti.net/ticket/14967
 [15125]: https://trac.saooti.net/ticket/15125
