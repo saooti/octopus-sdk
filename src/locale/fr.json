@@ -286,6 +286,7 @@
   "Share QR Code": "Partage d'un QR Code",
   "Download": "Télécharger",
   "Download started": "Téléchargement lancé",
+  "Download - Error": "Le téléchargement a échoué. Veuillez réessayer plus tard.",
   "From RSS": "Issu d'un flux RSS",
   "User menu": "Menu utilisateur",
   "Podcast tags": "Mots-clés",

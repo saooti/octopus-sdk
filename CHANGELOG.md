@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 42.3.2-fix2 (En cours)
+
+### Fixes
+
+- **[14967]** - Correction téléchargement fichier avec pub
+- **[15125]** - Correction sécurité téléchargement fichiers
+
+[14967]: https://trac.saooti.net/ticket/14967
+[15125]: https://trac.saooti.net/ticket/15125
+
 ## 42.3.2-fix (10/11/2026)
 
 ### Fixes
