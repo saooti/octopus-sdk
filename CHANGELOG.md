@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 42.3.2-fix2 (En cours)
+## 42.3.2-fix2 (20/11/2026)
 
 ### Fixes
 
