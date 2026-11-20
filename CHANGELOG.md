@@ -5,8 +5,11 @@
 ### Fixes
 
 - **[14967]** - Correction téléchargement fichier avec pub
-- **[15125]** - Correction sécurité téléchargement fichiers
-- **[15125]** - Correction risque sur la déconnexion
+- **[15125]** - Correction problèmes de sécurité
+  - Correction sécurité téléchargement fichiers
+  - Correction risque sur la déconnexion
+  - Correction retour à la page courante après connexion quand
+    son URL contient des paramètres
 
 [14967]: https://trac.saooti.net/ticket/14967
 [15125]: https://trac.saooti.net/ticket/15125

@@ -57,7 +57,7 @@ const route = useRoute()
 
 //Computed
 const authText = computed(() => authStore.authOrgaId ? t("Logout") : t("Login"));
-const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
+const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURIComponent(apiStore.frontendUrl + route.fullPath));
 
 </script>
 <style lang="scss">

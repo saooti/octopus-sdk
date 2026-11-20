@@ -126,7 +126,7 @@ const route = useRoute();
 
 //Computed
 const isAuthenticated = computed(() => undefined !== authStore.authProfile?.userId);
-const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
+const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURIComponent(apiStore.frontendUrl + route.fullPath));
 const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
 const organisationsAvailable = computed(() =>  authStore.authProfile?.organisations ?? []);
 
