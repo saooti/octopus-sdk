@@ -473,5 +473,6 @@
   "PodcastPlayButton - Play video": "Watch “{title}” on video, duration {duration}",
   "PodcastItem - Published on": "Published on",
   "FormatSwitch - Format": "File format",
-  "Home - Focus has no content": "There is currently no content for {name}."
+  "Home - Focus has no content": "There is currently no content for {name}.",
+  "Download - Error": "Download failed. Please try again later."
 }

@@ -8,6 +8,7 @@ import { deepEqual } from "../helper/equals";
 import { RouteProps, ROUTE_PARAMS } from "../components/composable/route/types";
 import { type Component } from "vue";
 import { state as sdkParams } from "../stores/ParamSdkStore";
+import logoutHelper from "../helper/logoutHelper";
 
 export function getSimpleRouteProps(route: RouteLocationNormalized): RouteProps {
   return {
@@ -160,10 +161,10 @@ export function setupRouter(router: Router, getMyOrgaActive: (authStore: AuthSto
   // Navigation guard that updates current organisation & may make redirects
   router.beforeEach(async (to, from) => {
 
+    // Only reached by in-app navigation: the backends answer a full page load
+    // of /logout themselves. Logout is POST-only (security-log 2.6)
     if ("/logout" === to.path && "/logout" !== from.path) {
-      setTimeout(() => {
-        window.location.reload(true);
-      }, 500);
+      logoutHelper.logout();
     }
     const authStore = useAuthStore();
     const filterStore = useFilterStore();

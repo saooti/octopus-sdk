@@ -66,9 +66,13 @@
                         <hr>
                     </template>
                     <li class="li-style-none">
-                        <a class="octopus-dropdown-item c-hand" href="/logout">
+                        <button
+                            type="button"
+                            class="octopus-dropdown-item c-hand"
+                            @click="logoutHelper.logout"
+                        >
                             {{ t("Logout") }}
-                        </a>
+                        </button>
                     </li>
                 </template>
                 <li class="li-style-none">
@@ -87,6 +91,7 @@
 
 <script setup lang="ts">
 import ExternalLink from "./ExternalLink.vue";
+import logoutHelper from "../../helper/logoutHelper";
 import { state } from "../../stores/ParamSdkStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import { computed } from "vue";
@@ -118,7 +123,7 @@ const route = useRoute();
 
 //Computed
 const isAuthenticated = computed(() => undefined !== authStore.authProfile?.userId);
-const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURI(apiStore.frontendUrl + route.fullPath));
+const pathLogin = computed(() => "/sso/login?redirect_url="+encodeURIComponent(apiStore.frontendUrl + route.fullPath));
 const isAuthenticatedWithOrga = computed(() => undefined !== authStore.authOrgaId);
 const organisationsAvailable = computed(() =>  authStore.authProfile?.organisations ?? []);
 

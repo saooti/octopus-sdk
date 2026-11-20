@@ -472,5 +472,6 @@
   "PodcastPlayButton - Play video": "Oglejte si »{title}« v videu, trajanje {duration}",
   "PodcastItem - Published on": "Objavljeno dne",
   "FormatSwitch - Format": "Format datoteke",
-  "Home - Focus has no content": "Trenutno ni vsebine za {name}."
+  "Home - Focus has no content": "Trenutno ni vsebine za {name}.",
+  "Download - Error": "Prenos ni uspel. Poskusite znova pozneje."
 }

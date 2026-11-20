@@ -3,6 +3,7 @@ import classicApi from "../api/classicApi";
 import { useAuthStore } from "../stores/AuthStore";
 import { useApiStore } from "../stores/ApiStore";
 import { useFilterStore } from "../stores/FilterStore";
+import logoutHelper from "./logoutHelper";
 import { FetchParam } from "@/stores/class/general/fetchParam";
 import { Media } from "@/stores/class/general/media";
 import { KeycloakRenewToken } from "@/stores/class/user/person";
@@ -78,7 +79,7 @@ export default {
         const filterStore = useFilterStore();
         filterStore.filterOrgaId = undefined;
         filterStore.filterImgUrl = undefined;
-        window.location.href = "/logout";
+        logoutHelper.logout();
       },
     });
     if (response) {
