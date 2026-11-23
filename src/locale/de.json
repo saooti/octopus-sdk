@@ -474,5 +474,6 @@
   "PodcastItem - Published on": "Veröffentlicht am",
   "FormatSwitch - Format": "Dateiformat",
   "Home - Focus has no content": "Derzeit gibt es keinen Inhalt für {name}.",
-  "Download - Error": "Der Download ist fehlgeschlagen. Bitte versuchen Sie es später noch einmal."
+  "Download - Error": "Der Download ist fehlgeschlagen. Bitte versuchen Sie es später noch einmal.",
+  "Search - Show hidden - Help message": "Diese Option kann nur geändert werden, wenn „Zu validierende Episoden“ auf „Keine zu validierenden Episoden anzeigen“ eingestellt ist."
 }

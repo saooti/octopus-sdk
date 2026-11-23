@@ -92,6 +92,7 @@
                         />
                     </div>
 
+                    <!-- See episodes hidden to listeners -->
                     <div
                         v-if="organisation && organisationRight && !isPodcastmaker"
                         class="d-flex flex-column mt-3"
@@ -101,9 +102,18 @@
                             class="flex-shrink-0"
                             id-checkbox="search-future-checkbox"
                             :label="textNotVisible"
-                            :is-disabled="isSelectValidity && 'true'!==validity"
+                            :is-disabled="hiddenDisabled"
+                            disabled-describedby="search-hidden-disabled"
                             @update:text-init="updateIncludeHidden"
-                        />
+                        >
+                            <template v-if="hiddenDisabled" #after-label>
+                                <ClassicHelpButton small>
+                                    <span id="search-hidden-disabled">
+                                        {{ t('Search - Show hidden - Help message') }}
+                                    </span>
+                                </ClassicHelpButton>
+                            </template>
+                        </ClassicCheckbox>
                     </div>
 
                     <ClassicSelect
@@ -155,6 +165,7 @@ import { defineAsyncComponent, ref, computed, watch, onMounted } from "vue";
 import { useGeneralStore } from "../../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
 import { state } from "@/stores/ParamSdkStore";
+import ClassicHelpButton from "@/components/misc/ClassicHelpButton.vue";
 const MonetizableFilter = defineAsyncComponent(
     () => import("./MonetizableFilter.vue"),
 );
@@ -264,6 +275,8 @@ const isSelectValidity = computed(() => {
         props.includeHidden
     );
 });
+/** Hidden episodes can only be toggled when episodes to validate are not displayed */
+const hiddenDisabled = computed(() => isSelectValidity.value && 'true' !== props.validity);
 
 /** The beneficiaries filter is only displayed if beneficiaries are enabled */
 const beneficiariesEnabled = computed(() => {

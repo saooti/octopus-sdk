@@ -474,5 +474,6 @@
   "PodcastItem - Published on": "Published on",
   "FormatSwitch - Format": "File format",
   "Home - Focus has no content": "There is currently no content for {name}.",
-  "Download - Error": "Download failed. Please try again later."
+  "Download - Error": "Download failed. Please try again later.",
+  "Search - Show hidden - Help message": "This option can only be modified when 'Episodes to validate' is 'do not display episodes to validate'"
 }

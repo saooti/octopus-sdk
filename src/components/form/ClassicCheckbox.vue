@@ -14,6 +14,7 @@
                 type="checkbox"
                 :role="isSwitch ? 'switch' : undefined"
                 :disabled="isDisabled"
+                :aria-describedby="isDisabled ? disabledDescribedby : undefined"
                 :title="displayLabel ? '' : label"
                 :data-selenium="selenium"
                 @input="emit('update:textInit', !textInit)"
@@ -49,6 +50,11 @@ const props = defineProps({
     label: { default: "", type: String },
     /** Disables input */
     isDisabled: { default: false, type: Boolean },
+    /**
+     * ID of the element explaining why the field is disabled, set as
+     * `aria-describedby` on the input when `isDisabled` is true
+     */
+    disabledDescribedby: { default: undefined, type: String },
     /** The value of the checkbox */
     textInit: { default: false, type: Boolean },
     /** If true, displays a switch instead of a checkbox */

@@ -473,5 +473,6 @@
   "PodcastItem - Published on": "Objavljeno dne",
   "FormatSwitch - Format": "Format datoteke",
   "Home - Focus has no content": "Trenutno ni vsebine za {name}.",
-  "Download - Error": "Prenos ni uspel. Poskusite znova pozneje."
+  "Download - Error": "Prenos ni uspel. Poskusite znova pozneje.",
+  "Search - Show hidden - Help message": "To možnost je mogoče spremeniti le, če je možnost »Epizode za potrditev« nastavljena na »ne prikaži epizod za potrditev«."
 }

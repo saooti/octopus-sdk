@@ -475,5 +475,6 @@
     "PodcastItem - Published on": "Pubblicato il",
     "FormatSwitch - Format": "Formato del file",
     "Home - Focus has no content": "Al momento non ci sono contenuti per {name}.",
-    "Download - Error": "Download non riuscito. Per favore riprova più tardi."
+    "Download - Error": "Download non riuscito. Per favore riprova più tardi.",
+    "Search - Show hidden - Help message": "Questa opzione può essere modificata solo quando 'Episodi da convalidare' è 'non visualizzare gli episodi da convalidare'"
 }

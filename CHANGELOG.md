@@ -16,11 +16,13 @@
 
 ### Misc
 
+- **[14869]** - Infobulle pour expliquer option désactivée
 - **[15111]** - Affichage d'un message quand la rubrique en focus n'a pas de
   contenu
 - `{a11y}` Amélioration affichage switch de `ClassicCheckbox`
 - Ajoute de quoi afficher la version actuelle du front dans le footer
 
+[14869]: https://trac.saooti.net/ticket/14869
 [14991]: https://trac.saooti.net/ticket/14991
 [15093]: https://trac.saooti.net/ticket/15093
 [15111]: https://trac.saooti.net/ticket/15111

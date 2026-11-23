@@ -3,6 +3,16 @@ import { mount } from '@tests/utils';
 import { describe, expect, it } from 'vitest';
 
 describe('ClassicCheckbox', () => {
+    it('is described by disabledDescribedby only when disabled', async () => {
+        const wrapper = await mount(ClassicCheckbox, {
+            props: { label: 'Option', disabledDescribedby: 'reason', isDisabled: true }
+        });
+        expect(wrapper.find('input').attributes('aria-describedby')).toBe('reason');
+
+        await wrapper.setProps({ isDisabled: false });
+        expect(wrapper.find('input').attributes('aria-describedby')).toBeUndefined();
+    });
+
     it('renders the switch as a checkbox with the switch role', async () => {
         const wrapper = await mount(ClassicCheckbox, {
             props: { label: 'Option', isSwitch: true, textInit: true }

@@ -439,6 +439,7 @@
   "Filters - Emission groups": "Par groupes d'émissions",
   "Filters - Only my episodes": "Afficher uniquement mes épisodes",
   "Search - Emission groups placeholder": "Filtrer les groupes par nom",
+  "Search - Show hidden - Help message": "Cette option ne peut être modifiée que quand 'Épisodes à valider' vaut 'ne pas afficher les épisodes à valider'",
 
   "Apple podcast - Error - Undefined": "Il n'a pas été possible de publier ce podcast en vidéo sur ApplePodcast (status : {status})",
   "Apple podcast - Info - HLS_NOT_READY": "Le podcast n'est pas encore disponible en vidéo sur ApplePodcast, il devrait l'être d'ici quelques minutes",

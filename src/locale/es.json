@@ -474,5 +474,6 @@
   "PodcastItem - Published on": "Publicado el",
   "FormatSwitch - Format": "Formato de archivo",
   "Home - Focus has no content": "Actualmente no hay contenido para {name}.",
-  "Download - Error": "La descarga falló. Inténtelo de nuevo más tarde."
+  "Download - Error": "La descarga falló. Inténtelo de nuevo más tarde.",
+  "Search - Show hidden - Help message": "Esta opción sólo se puede modificar cuando 'Episodios a validar' es 'no mostrar episodios a validar'"
 }
