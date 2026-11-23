@@ -9,7 +9,10 @@ type NotificationType = 'success'|'info'|'warning'|'error';
 interface Notification {
     /** Optional title of the notification */
     title?: string;
-    /** Message displayed by the notification */
+    /**
+     * Message displayed by the notification, as plain text: HTML is escaped,
+     * only URLs are converted to links
+     */
     message: string;
     /** Type of notification, may affect display */
     type: NotificationType;

@@ -1,43 +1,52 @@
 <template>
-  <ClassicModal
-    id-modal="message-modal-frontoffice"
-    :title-modal="title"
-    :closable="closable"
-    @close="closePopup"
-  >
-    <template #body>
-      <!-- eslint-disable vue/no-v-html -->
-      <div v-if="!save && !error" class="content" v-html="displayHelper.urlify(message)" />
-      <!-- eslint-enable -->
-      <ClassicLoading
-        v-if="save || error"
-        :loading-text="save && !error ? t('Loading content ...') : undefined"
-        :error-text="error ? t('An error occurred') : undefined"
-      />
-    </template>
-    <template #footer>
-      <template v-if="validatetext">
-        <button v-if="canceltext" class="btn m-1" @click="onCancel">
-          {{ canceltext }}
-        </button>
-        <button
-          v-if="thirdText"
-          class="btn btn-primary m-1"
-          @click="onThirdAction"
-        >
-          {{ thirdText }}
-        </button>
-        <button
-          v-if="!save"
-          ref="focusElement"
-          class="btn btn-primary m-1"
-          @click="onValid"
-        >
-          {{ validatetext }}
-        </button>
-      </template>
-    </template>
-  </ClassicModal>
+    <ClassicModal
+        id-modal="message-modal-frontoffice"
+        :title-modal="title"
+        :closable="closable"
+        @close="closePopup"
+    >
+        <template #body>
+            <!-- eslint-disable vue/no-v-html -->
+            <!-- URLs are converted to links, the rest is escaped unless `html` is set -->
+            <div
+                v-if="!save && !error"
+                class="content"
+                v-html="displayHelper.urlify(html ? message : stringHelper.escapeHtml(message ?? ''))"
+            />
+            <!-- eslint-enable -->
+            <ClassicLoading
+                v-if="save || error"
+                :loading-text="save && !error ? t('Loading content ...') : undefined"
+                :error-text="error ? t('An error occurred') : undefined"
+            />
+        </template>
+        <template #footer>
+            <template v-if="validatetext">
+                <button
+                    v-if="canceltext"
+                    class="btn m-1"
+                    @click="onCancel"
+                >
+                    {{ canceltext }}
+                </button>
+                <button
+                    v-if="thirdText"
+                    class="btn btn-primary m-1"
+                    @click="onThirdAction"
+                >
+                    {{ thirdText }}
+                </button>
+                <button
+                    v-if="!save"
+                    ref="focusElement"
+                    class="btn btn-primary m-1"
+                    @click="onValid"
+                >
+                    {{ validatetext }}
+                </button>
+            </template>
+        </template>
+    </ClassicModal>
 </template>
 
 <script setup lang="ts">
@@ -46,15 +55,22 @@ import ClassicLoading from "../../form/ClassicLoading.vue";
 import { onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import displayHelper from "../../../helper/displayHelper"; 
+import stringHelper from "../../../helper/stringHelper";
 //Props 
 const props = defineProps({
-  title: { default: undefined, type: String },
-  closable: { default: true, type: Boolean },
-  message: { default: undefined, type: String },
-  validatetext: { default: undefined, type: String },
-  canceltext: { default: undefined, type: String },
-  thirdText: { default: undefined, type: String },
-  focus: { default: true, type: Boolean },
+    title: { default: undefined, type: String },
+    closable: { default: true, type: Boolean },
+    message: { default: undefined, type: String },
+    /**
+   * When true, the message is rendered as HTML *(optional, default: `false`)*.
+   * Only for trusted messages: user input in the message must be escaped
+   * (see `stringHelper.escapeHtml`)
+   */
+    html: { default: false, type: Boolean },
+    validatetext: { default: undefined, type: String },
+    canceltext: { default: undefined, type: String },
+    thirdText: { default: undefined, type: String },
+    focus: { default: true, type: Boolean },
 })
 
 
@@ -73,23 +89,23 @@ const { t } = useI18n();
 
 
 onMounted(()=>{
-  if (props.focus) {
-    (focusElementRef?.value as HTMLElement)?.focus();
-  }
+    if (props.focus) {
+        (focusElementRef?.value as HTMLElement)?.focus();
+    }
 })
 
 //Mehods
 function closePopup(): void {
-  emit("close");
+    emit("close");
 }
 function onValid(): void {
-  save.value = true;
-  emit("validate");
+    save.value = true;
+    emit("validate");
 }
 function onCancel(): void {
-  emit("cancel");
+    emit("cancel");
 }
 function onThirdAction(): void {
-  emit("thirdEvent");
+    emit("thirdEvent");
 }
 </script>
