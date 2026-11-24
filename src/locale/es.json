@@ -475,5 +475,7 @@
   "FormatSwitch - Format": "Formato de archivo",
   "Home - Focus has no content": "Actualmente no hay contenido para {name}.",
   "Download - Error": "La descarga falló. Inténtelo de nuevo más tarde.",
-  "Search - Show hidden - Help message": "Esta opción sólo se puede modificar cuando 'Episodios a validar' es 'no mostrar episodios a validar'"
+  "Search - Show hidden - Help message": "Esta opción sólo se puede modificar cuando 'Episodios a validar' es 'no mostrar episodios a validar'",
+  "Apple podcasts - Error - Undefined": "No fue posible publicar este podcast como vídeo en Apple Podcasts (estado: {status})",
+  "Apple podcasts - Info - HLS_NOT_READY": "El podcast aún no está disponible en vídeo en Apple Podcasts, debería estar disponible en unos minutos"
 }

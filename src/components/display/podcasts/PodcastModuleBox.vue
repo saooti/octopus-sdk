@@ -295,7 +295,7 @@ const alert = computed((): Alert|null => {
     if (isErrorStatus(appleVideoStatus)) {
         return {
             type: 'error',
-            message: t('Apple podcast - Error - Undefined', {
+            message: t('Apple podcasts - Error - Undefined', {
                 status: appleVideoStatus
             }),
             code: toGenericErrorCode(appleVideoStatus)
@@ -310,7 +310,7 @@ const alert = computed((): Alert|null => {
     if (appleVideoStatus === 'HLS_NOT_READY') {
         return {
             type: 'info',
-            message: t('Apple podcast - Info - HLS_NOT_READY'),
+            message: t('Apple podcasts - Info - HLS_NOT_READY'),
             code: toGenericErrorCode(appleVideoStatus)
         };
     }

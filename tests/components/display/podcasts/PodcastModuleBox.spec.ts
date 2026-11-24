@@ -280,9 +280,9 @@ describe('PodcastModuleBox', () => {
 
         it.each<[string, Partial<Podcast>, string|undefined, string, string]>([
             ['processing error', { processingStatus: 'ERROR' }, undefined, 'error', 'Podcast in ERROR, please contact Saooti'],
-            ['apple video error', {}, 'FAILED', 'error', 'Apple podcast - Error - Undefined status:FAILED'],
+            ['apple video error', {}, 'FAILED', 'error', 'Apple podcasts - Error - Undefined status:FAILED'],
             ['not validated', { valid: false }, undefined, 'warning', 'Podcast not validated'],
-            ['HLS not ready', {}, 'HLS_NOT_READY', 'info', 'Apple podcast - Info - HLS_NOT_READY'],
+            ['HLS not ready', {}, 'HLS_NOT_READY', 'info', 'Apple podcasts - Info - HLS_NOT_READY'],
             ['not visible', { availability: { visibility: false } }, undefined, 'warning', 'Podcast is not visible for listeners']
         ])('displays %s', async (_, overrides, appleVideoStatus, type, message) => {
             const alert = await getAlert(makePodcast(overrides, appleVideoStatus));
@@ -297,7 +297,7 @@ describe('PodcastModuleBox', () => {
 
         it('prioritizes apple video error over non validation', async () => {
             const alert = await getAlert(makePodcast({ valid: false }, 'FAILED'));
-            expect(alert.text()).toBe('Apple podcast - Error - Undefined status:FAILED');
+            expect(alert.text()).toBe('Apple podcasts - Error - Undefined status:FAILED');
         });
 
         it('prioritizes non validation over HLS not ready', async () => {

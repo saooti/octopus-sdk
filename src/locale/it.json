@@ -476,5 +476,7 @@
     "FormatSwitch - Format": "Formato del file",
     "Home - Focus has no content": "Al momento non ci sono contenuti per {name}.",
     "Download - Error": "Download non riuscito. Per favore riprova più tardi.",
-    "Search - Show hidden - Help message": "Questa opzione può essere modificata solo quando 'Episodi da convalidare' è 'non visualizzare gli episodi da convalidare'"
+    "Search - Show hidden - Help message": "Questa opzione può essere modificata solo quando 'Episodi da convalidare' è 'non visualizzare gli episodi da convalidare'",
+    "Apple podcasts - Error - Undefined": "Non è stato possibile pubblicare questo podcast come video su Apple Podcasts (stato: {status})",
+    "Apple podcasts - Info - HLS_NOT_READY": "Il podcast non è ancora disponibile in video su Apple Podcasts, dovrebbe essere disponibile tra pochi minuti"
 }

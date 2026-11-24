@@ -474,5 +474,7 @@
   "FormatSwitch - Format": "Format datoteke",
   "Home - Focus has no content": "Trenutno ni vsebine za {name}.",
   "Download - Error": "Prenos ni uspel. Poskusite znova pozneje.",
-  "Search - Show hidden - Help message": "To možnost je mogoče spremeniti le, če je možnost »Epizode za potrditev« nastavljena na »ne prikaži epizod za potrditev«."
+  "Search - Show hidden - Help message": "To možnost je mogoče spremeniti le, če je možnost »Epizode za potrditev« nastavljena na »ne prikaži epizod za potrditev«.",
+  "Apple podcasts - Error - Undefined": "Tega podcasta ni bilo mogoče objaviti kot video v Apple Podcasts (stanje: {status})",
+  "Apple podcasts - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na Apple Podcasts, na voljo bi moral biti čez nekaj minut"
 }
