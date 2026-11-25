@@ -27,6 +27,20 @@ describe('PodcastItem', () => {
             expect(panel.attributes('style') ?? '').not.toContain('display: none');
         });
 
+        it('has a constant name and swaps its icon with the state', async () => {
+            const wrapper = await mount();
+            const button = wrapper.find('button[aria-controls]');
+            expect(button.text()).toBe('PodcastImage - Description');
+            expect(button.attributes('title')).toBeUndefined();
+            expect(button.findComponent({ name: 'InformationVariantIcon' }).exists()).toBe(true);
+            expect(button.findComponent({ name: 'CloseIcon' }).exists()).toBe(false);
+
+            await button.trigger('click');
+            expect(button.text()).toBe('PodcastImage - Description');
+            expect(button.findComponent({ name: 'CloseIcon' }).exists()).toBe(true);
+            expect(button.findComponent({ name: 'InformationVariantIcon' }).exists()).toBe(false);
+        });
+
         it('has no button without description', async () => {
             const wrapper = await mount('');
             expect(wrapper.find('button[aria-controls]').exists()).toBe(false);

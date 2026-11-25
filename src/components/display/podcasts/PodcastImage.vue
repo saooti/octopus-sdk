@@ -9,8 +9,8 @@
         class="img-box img-box-podcast mb-3 flex-column justify-content-start align-items-start position-relative flex-shrink-0 float-start"
     >
         <!--
-      Link is unfocusable to avoid double focusable links with PodcastItemInfo
-    -->
+        Link is unfocusable to avoid double focusable links with PodcastItemInfo
+        -->
         <router-link
             :to="{
                 name: 'podcast',
@@ -58,19 +58,23 @@
             v-if="displayDescription"
             :id="descriptionId ? `${descriptionId}-toggle` : undefined"
             type="button"
-            class="background-icon text-white bg-dark"
-            :title="descriptionExpanded ? t('Hide description') : t('Show description')"
+            class="description-toggle"
             :aria-expanded="descriptionExpanded"
             :aria-controls="descriptionId"
             @click="emit('toggleDescription')"
         >
-            <ChevronDownIcon :class="{ 'arrow-transform': !descriptionExpanded }" />
+            <!-- Constant name, the state is given by aria-expanded only -->
+            <CloseIcon v-if="descriptionExpanded" aria-hidden="true" />
+            <InformationVariantIcon v-else aria-hidden="true" />
+            <!-- Visually collapsed at rest but kept in the accessibility tree, revealed on hover/focus -->
+            <span class="description-toggle-label">{{ t('PodcastImage - Description') }}</span>
         </button>
     </div>
 </template>
 
 <script setup lang="ts">
-import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
+import CloseIcon from "vue-material-design-icons/Close.vue";
+import InformationVariantIcon from "vue-material-design-icons/InformationVariant.vue";
 import PodcastPlayButton from "./PodcastPlayButton.vue";
 import { state } from "../../../stores/ParamSdkStore";
 import { Podcast } from "@/stores/class/general/podcast";
@@ -173,19 +177,58 @@ const statusText = computed(() => {
     top: 0;
   }
 
-.background-icon {
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    font-size: 0.7rem;
+.description-toggle {
+    position: absolute;
     right: 0;
     bottom: 0;
-    margin: 5px;
-    position: absolute;
-    cursor: pointer;
     z-index: 3;
+    margin: 5px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    height: 1.75rem;
+    min-width: 1.75rem;
+    padding: 0 0.3125rem;
+    border: none;
+    border-radius: 0.875rem;
+
+    /* Solid themed colours, and a two-tone ring so the edge is visible on light and dark covers (RGAA 3.3) */
+    color: var(--octopus-primary);
+    background: var(--octopus-color-on-primary);
+    box-shadow: 0 0 0 1px var(--octopus-primary), 0 0 0 2px var(--octopus-color-on-primary);
+
+    font-size: 0.8rem;
+    cursor: pointer;
+
+    /* In rem (like the button) so it follows text resizing (RGAA 10.4) */
+    :deep(svg) {
+        width: 1.125rem;
+        height: 1.125rem;
+    }
+}
+
+.description-toggle-label {
+    /* Not display/visibility: the text must remain the accessible name of the button */
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.img-box:hover .description-toggle,
+.description-toggle:focus-visible {
+    padding-right: 0.5rem;
+
+    .description-toggle-label {
+        max-width: 10rem;
+        margin-left: 0.25rem;
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .description-toggle,
+    .description-toggle-label {
+        transition: max-width 0.2s ease, opacity 0.2s ease, padding 0.2s ease, margin 0.2s ease;
+    }
 }
 </style>

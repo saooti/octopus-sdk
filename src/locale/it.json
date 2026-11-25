@@ -152,8 +152,6 @@
     "Display previous": "Mostra episodi precedenti",
     "Play": "Play",
     "Pause": "Pausa",
-    "Show description": "Mostra descrizione",
-    "Hide description": "Nascondi descrizione",
     "open left Menu": "Apri/Chiudi Menu",
     "Participant": "Speaker",
     "Number of player podcasts": "Numero di podcast nel lettore",
@@ -478,5 +476,6 @@
     "Download - Error": "Download non riuscito. Per favore riprova più tardi.",
     "Search - Show hidden - Help message": "Questa opzione può essere modificata solo quando 'Episodi da convalidare' è 'non visualizzare gli episodi da convalidare'",
     "Apple podcasts - Error - Undefined": "Non è stato possibile pubblicare questo podcast come video su Apple Podcasts (stato: {status})",
-    "Apple podcasts - Info - HLS_NOT_READY": "Il podcast non è ancora disponibile in video su Apple Podcasts, dovrebbe essere disponibile tra pochi minuti"
+    "Apple podcasts - Info - HLS_NOT_READY": "Il podcast non è ancora disponibile in video su Apple Podcasts, dovrebbe essere disponibile tra pochi minuti",
+    "PodcastImage - Description": "Descrizione"
 }

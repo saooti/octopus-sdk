@@ -154,8 +154,6 @@
   "Display previous": "Display previous episodes",
   "Play": "Play",
   "Pause": "Pause",
-  "Show description": "Show the description",
-  "Hide description": "Hide the description",
   "open left Menu": "Open/Close Menu",
   "Participant": "Speaker",
   "Number of player podcasts": "Number of podcasts in the player ",
@@ -477,5 +475,6 @@
   "Download - Error": "Download failed. Please try again later.",
   "Search - Show hidden - Help message": "This option can only be modified when 'Episodes to validate' is 'do not display episodes to validate'",
   "Apple podcasts - Error - Undefined": "It was not possible to publish this podcast as video on Apple Podcasts (status: {status})",
-  "Apple podcasts - Info - HLS_NOT_READY": "The podcast is not yet available in video on Apple Podcasts, it should be available in a few minutes"
+  "Apple podcasts - Info - HLS_NOT_READY": "The podcast is not yet available in video on Apple Podcasts, it should be available in a few minutes",
+  "PodcastImage - Description": "Description"
 }

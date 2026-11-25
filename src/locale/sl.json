@@ -154,8 +154,6 @@
   "Display previous": "Prikaži prejšnjo epizodo",
   "Play": "Predvajaj",
   "Pause": "Premor",
-  "Show description": "Prikaži opis",
-  "Hide description": "Skrij opis",
   "open left Menu": "Meni odpri/zapri",
   "Participant": "Sodelujoči",
   "Number of player podcasts": "Število podkastov v predvajalniku",
@@ -476,5 +474,6 @@
   "Download - Error": "Prenos ni uspel. Poskusite znova pozneje.",
   "Search - Show hidden - Help message": "To možnost je mogoče spremeniti le, če je možnost »Epizode za potrditev« nastavljena na »ne prikaži epizod za potrditev«.",
   "Apple podcasts - Error - Undefined": "Tega podcasta ni bilo mogoče objaviti kot video v Apple Podcasts (stanje: {status})",
-  "Apple podcasts - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na Apple Podcasts, na voljo bi moral biti čez nekaj minut"
+  "Apple podcasts - Info - HLS_NOT_READY": "Podcast še ni na voljo v obliki videa na Apple Podcasts, na voljo bi moral biti čez nekaj minut",
+  "PodcastImage - Description": "Opis"
 }
