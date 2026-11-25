@@ -20,6 +20,8 @@
 - **[14869]** - Infobulle pour expliquer option désactivée
 - **[15111]** - Affichage d'un message quand la rubrique en focus n'a pas de
   contenu
+- **[15116]** - Ajout d'un debounce sur la recherche ClassicMultiselect +
+  OrganisationChooser
 - `{a11y}` Amélioration affichage switch de `ClassicCheckbox`
 - Ajoute de quoi afficher la version actuelle du front dans le footer
 
@@ -27,6 +29,7 @@
 [14991]: https://trac.saooti.net/ticket/14991
 [15093]: https://trac.saooti.net/ticket/15093
 [15111]: https://trac.saooti.net/ticket/15111
+[15116]: https://trac.saooti.net/ticket/15116
 
 ## 42.3.4 (9/11/2026)
 

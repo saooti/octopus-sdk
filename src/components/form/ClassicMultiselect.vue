@@ -132,6 +132,7 @@ import AsteriskIcon from "vue-material-design-icons/Asterisk.vue";
 import ChevronDownIcon from "vue-material-design-icons/ChevronDown.vue";
 import vSelect from "vue-select";
 import HelpCircleIcon from "vue-material-design-icons/HelpCircle.vue";
+import debounce from "@/helper/debounceHelper";
 const ClassicPopover = defineAsyncComponent(
     () => import("../misc/ClassicPopover.vue"),
 );
@@ -143,6 +144,7 @@ const {
     allowEmpty = true, optionChosen, maxOptions = null,
     optionCustomTemplating = '', optionSelectedCustomTemplating = '',
     optionLabel,
+    debounceSearch,
     withSelectAll = false
 } = defineProps<{
     id?: string;
@@ -169,11 +171,15 @@ const {
     popover?: string;
     popoverRelativeClass?: string;
     /**
-   * Add an option to select everything at once
-   * If set to a truthy string, the added option will have this value as its
-   * label. If set to true, use a generic label.
-   */
+     * Add an option to select everything at once
+     * If set to a truthy string, the added option will have this value as its
+     * label. If set to true, use a generic label.
+     */
     withSelectAll?: boolean|string;
+    /**
+     * Add a debounce to the search to avoid multiple requests at once
+     */
+    debounceSearch?: boolean;
 }>();
 
 //Emits
@@ -224,7 +230,16 @@ function fakeSearch(): Array<unknown> {
     return options.value;
 }
 
+const debouncedSearch = debounce(_onSearch, 500);
 function onSearch(search?: string): void {
+    if (debounceSearch) {
+        debouncedSearch(search);
+    } else {
+        _onSearch(search);
+    }
+}
+
+function _onSearch(search?: string): void {
     if (search && search.length < minSearchLength) {
         return;
     } else if (search) {
