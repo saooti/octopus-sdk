@@ -11,6 +11,7 @@
 
 ### Fixes
 
+- **[14985]** - - Correction filtrage sur contenu dans la portée des droits
 - Correction fonctionnement de `ClassicEmojiPicker`
 - Correction et amélioration a11y de OctopusSelect
 - Désactivation risque XSS avec modales
@@ -26,6 +27,7 @@
 - Ajoute de quoi afficher la version actuelle du front dans le footer
 
 [14869]: https://trac.saooti.net/ticket/14869
+[14985]: https://trac.saooti.net/ticket/14985
 [14991]: https://trac.saooti.net/ticket/14991
 [15093]: https://trac.saooti.net/ticket/15093
 [15111]: https://trac.saooti.net/ticket/15111

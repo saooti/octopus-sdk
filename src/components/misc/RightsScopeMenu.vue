@@ -178,7 +178,7 @@ const normalizedSearch = computed((): string => {
 const userSubOrgas = computed((): Array<SubOrganisation> => {
     const userScope = authStore.userScope;
     return subOrganisations.value
-        .filter(sub => sub.name.includes(normalizedSearch.value))
+        .filter(sub => normalize(sub.name).includes(normalizedSearch.value))
         .filter(sub => userScope.includes(sub.id))
         .sort((o1, o2) => o1.name.localeCompare(o2.name))
     ;
