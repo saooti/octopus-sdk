@@ -143,7 +143,6 @@ async function onChange(value: string): Promise<void> {
 
   select.transparent {
     background: transparent !important;
-    outline-color: transparent !important;
     padding: 0;
     border: 0;
     height: unset;

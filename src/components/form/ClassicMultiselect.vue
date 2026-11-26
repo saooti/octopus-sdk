@@ -296,6 +296,7 @@ defineExpose({
 
 <style lang="scss">
 @use "vue-select/dist/vue-select.css";
+@use "../../style/focus";
 /* stylelint-disable */
 :root {
   --vs-dropdown-z-index: 1405;
@@ -319,6 +320,15 @@ defineExpose({
   .vs__dropdown-toggle {
     padding: 0;
     height: 100%;
+
+    // The search input is borderless inside the toggle: show the focus on the toggle itself
+    &:has(.vs__search:focus-visible) {
+      @include focus.focus-ring;
+    }
+  }
+
+  .vs__search:focus-visible {
+    outline: none;
   }
 
   .vs__search, .vs__search:focus{

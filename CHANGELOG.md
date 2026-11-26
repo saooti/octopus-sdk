@@ -2,6 +2,10 @@
 
 ## 42.4.0 (En cours)
 
+### Accessibility
+
+- Amélioration retour visuel pour élément sélectionné
+
 ## 42.3.5 (26/11/2026)
 
 ### Features

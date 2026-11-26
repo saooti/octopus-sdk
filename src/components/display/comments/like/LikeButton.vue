@@ -91,7 +91,6 @@ function clickButton() {
   position: relative;
   cursor: pointer;
   border: none;
-  outline: none;
   z-index: 1;
   color: var(--octopus-color-text);
   width: calc(var(--icon-size) * 1px + 15px);

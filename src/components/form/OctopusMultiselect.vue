@@ -376,6 +376,8 @@ watch(isOpen, (val) => {
 </script>
 
 <style scoped lang="scss">
+@use "../../style/focus";
+
 .octopus-multiselect {
     position: relative;
 
@@ -398,6 +400,11 @@ watch(isOpen, (val) => {
 
         &.noBorder {
             border: none;
+        }
+
+        // The input is borderless inside the field: show the focus on the field itself
+        &:has(.octopus-multiselect-input:focus-visible) {
+            @include focus.focus-ring;
         }
     }
 

@@ -214,9 +214,8 @@ function handleScroll(): void {
     backdrop-filter: blur(8px);
   }
   .header-content{
-    *:focus-visible {
-      box-shadow: 0 0 10px 1px white !important;
-    }
+    // Dark header background
+    --octopus-focus-color: white;
     h1 {
       color: white !important;
       font-size: 1.8rem;

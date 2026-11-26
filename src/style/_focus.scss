@@ -1,0 +1,16 @@
+// Focus indicator shared by the global :focus-visible rule and by components that
+// display it on another element (field wrappers, visually hidden inputs…).
+// Solid outline: kept in forced-colors mode, unlike box-shadow (RGAA 10.7).
+// Two-tone: the box-shadow fills the offset gap with a light inner ring, so the
+// ring stays visible on dark backgrounds too (player, headers, dark themes…).
+// Forced colors drop the box-shadow, the outline alone remains.
+@mixin focus-ring {
+    outline: 2px solid var(--octopus-focus-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--octopus-focus-inner-color);
+
+    // Distinct from selection borders, which become CanvasText
+    @media (forced-colors: active) {
+        outline-color: Highlight;
+    }
+}

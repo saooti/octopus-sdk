@@ -239,6 +239,8 @@ function selectOption(option: T): void {
 </script>
 
 <style scoped lang="scss">
+@use "../../style/focus";
+
 .octopus-select {
     position: relative;
 
@@ -261,6 +263,11 @@ function selectOption(option: T): void {
 
         &.noBorder {
             border: none;
+        }
+
+        // The input is borderless inside the field: show the focus on the field itself
+        &:has(.octopus-select-input:focus-visible) {
+            @include focus.focus-ring;
         }
     }
 

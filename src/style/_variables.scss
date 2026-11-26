@@ -44,7 +44,9 @@
     --table-line-height: 48px;
 
     // Focus
-    --octopus-focus-color: var(--octopus-primary);
+    --octopus-focus-color: var(--octopus-color-text);
+    // Inner ring of the focus indicator, must contrast with --octopus-focus-color
+    --octopus-focus-inner-color: var(--octopus-background);
 
     // Links
     --octopus-link-fg: var(--octopus-primary);

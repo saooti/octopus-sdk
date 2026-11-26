@@ -39,6 +39,8 @@ const formats = [
 </script>
 
 <style scoped lang="scss">
+@use "../../../style/focus";
+
 .format-switch {
   --format-switch-size: 140px;
 
@@ -73,8 +75,9 @@ const formats = [
     transform: translateX(100%);
   }
 
+  // The inputs are hidden: show the focus on the whole switch
   &:has(.format-switch-input:focus-visible) {
-    box-shadow: 0 0 10px 1px var(--octopus-primary) !important;
+    @include focus.focus-ring;
   }
 }
 

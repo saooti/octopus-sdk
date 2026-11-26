@@ -79,6 +79,8 @@ function emitClickAction(): void {
 </script>
 
 <style lang="scss">
+@use "../../style/focus";
+
 .octopus-app {
 
   label.disabled {
@@ -139,7 +141,7 @@ function emitClickAction(): void {
 
     // The input is transparent: show the global focus style on the slider instead
     input:focus-visible + .slider {
-      box-shadow: 0 0 10px 1px var(--octopus-focus-color);
+      @include focus.focus-ring;
     }
 
     input:checked + .slider::before {
