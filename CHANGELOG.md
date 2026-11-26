@@ -2,6 +2,12 @@
 
 ## 42.4.0 (En cours)
 
+### Features
+
+- **[14510]** - Affichage du programme radio sur deux semaines
+
+[14510]: https://trac.saooti.net/ticket/14510
+
 ## 42.3.5 (26/11/2026)
 
 ### Features
