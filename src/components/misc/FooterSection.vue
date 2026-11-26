@@ -74,8 +74,8 @@
       </a>
     </div>
 
-    <div v-if="version" class="version">
-      {{ version }}
+    <div class="version">
+      {{ fullVersion }}
     </div>
   </footer>
 </template>
@@ -105,7 +105,7 @@ const FooterGarSection = defineAsyncComponent(
 );
 
 //Props
-defineProps<{
+const props = defineProps<{
   /** App version, displayed at the bottom right of the footer */
   version?: string;
 }>();
@@ -144,6 +144,16 @@ const routerLinkSecondArray = computed(() => {
   return links;
 });
 
+const fullVersion = computed((): string => {
+  const parts: Array<string> = [];
+  if (props.version) {
+    parts.push(props.version);
+  }
+  if (__SDK_VERSION__) {
+    parts.push(`SDK ${__SDK_VERSION__}`);
+  }
+  return parts.join(' · ');
+});
 
 //Watch
 watch(language, () => changeLanguage());

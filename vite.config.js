@@ -33,12 +33,15 @@ function cleanStaleChunks() {
 }
 
 export default defineConfig(({ mode }) => ({
+  define: {
+    __SDK_VERSION__: JSON.stringify(process.env.npm_package_version)
+  },
   css: {
     preprocessorOptions: {
-        scss: {
-            api: "modern-compiler",
-            silenceDeprecations: ["legacy-js-api"]
-        }
+      scss: {
+        api: "modern-compiler",
+        silenceDeprecations: ["legacy-js-api"]
+      }
     }
   },
   build: {
@@ -79,8 +82,8 @@ export default defineConfig(({ mode }) => ({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@tests': path.resolve(__dirname, './tests'),
-      vue: __dirname+`/node_modules/vue`,
-      "hls.js":__dirname+`/node_modules/hls.js`
+      vue: __dirname + `/node_modules/vue`,
+      "hls.js": __dirname + `/node_modules/hls.js`
 
     },
   },
