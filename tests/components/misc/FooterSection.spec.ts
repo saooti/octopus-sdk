@@ -53,12 +53,12 @@ describe('FooterSection', () => {
                 shallow: true,
                 props: { version: '41.16.0 · 1a2b3c4d' }
             });
-            expect(wrapper.find('.version').text()).toBe('41.16.0 · 1a2b3c4d');
+            expect(wrapper.find('.version').text()).toMatch(/^41\.16\.0 · 1a2b3c4d · SDK/);
         });
 
-        it('displays nothing without a version', async () => {
+        it('displays only SDK version without a version prop', async () => {
             const wrapper = await mount(FooterSection, { shallow: true });
-            expect(wrapper.find('.version').exists()).toBe(false);
+            expect(wrapper.find('.version').text()).toMatch(/^SDK /);
         });
     });
 });
