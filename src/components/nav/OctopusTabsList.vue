@@ -10,13 +10,14 @@
             v-for="_tab in tabs"
             :id="getTabId(prefix, _tab.id)"
             :key="_tab.id"
-            :ref="el => setTabRef(_tab.id, el)"
+            :ref="el => setTabRef(_tab.id, el as HTMLButtonElement)"
             class="tab-item"
             :class="buttonClass"
             type="button"
             role="tab"
-            aria-controls="radio-planning-panel"
+            :aria-controls="getPanelId(prefix)"
             :aria-selected="isSelected(_tab)"
+            :aria-current="_tab.current"
             :tabindex="isSelected(_tab) ? 0 : -1"
             @click="changeTab(_tab)"
             @keydown="moveTab(_tab, $event)"
@@ -30,7 +31,7 @@
 
 <script setup generic="T extends TabItem" lang="ts">
 import { computed, watch } from 'vue';
-import { TabID, TabItem, getTabId } from '../composable/nav/useOctopusTabs';
+import { TabID, TabItem, getPanelId, getTabId } from '../composable/nav/useOctopusTabs';
 
 interface BaseProps {
     /** Currently selected tab */

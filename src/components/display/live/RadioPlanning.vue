@@ -1,33 +1,23 @@
 <template>
     <section class="module-box">
-        <h2 class="mb-3">
+        <h2 id="radio-planning-title" class="mb-3">
             {{ t("Program") }}
         </h2>
         <div class="py-3">
-            <div class="d-flex align-items-center w-100 mb-3">
-                <button
-                    v-for="day in displayArrayDays"
-                    :key="day.date"
-                    class="button-date border"
-                    :class="day.date == daySelected ? 'bg-primary' : ''"
-                    @click="changeDate(day.date)"
-                >
-                    <span class="text-capitalize">{{ day.dayOfWeek }}</span>
-                    <time :datetime="day.iso">{{ day.title }}</time>
-                </button>
-            </div>
-            <button
-                v-if="isPhone"
-                class="btn btn-primary mb-3 mx-0"
-                @click="showAllDays = !showAllDays"
+            <OctopusTabsList
+                v-model:tab="daySelected"
+                :tabs="arrayDays"
+                :prefix
+                labelled-by="radio-planning-title"
+                extend
+                indicator="arrow"
             >
-                <template v-if="!showAllDays">
-                    {{ t('Show more days') }}
+                <template #tab="{ tab }">
+                    <span class="text-capitalize">{{ tab.dayOfWeek }}</span>
+                    <time :datetime="tab.iso">{{ tab.label }}</time>
                 </template>
-                <template v-else>
-                    {{ t('Show fewer days') }}
-                </template>
-            </button>
+            </OctopusTabsList>
+
             <div
                 class="d-flex align-items-center justify-content-center border-bottom"
             >
@@ -44,7 +34,11 @@
                 </button>
             </div>
 
-            <div class="d-flex flex-column p-3">
+            <OctopusTabsPanel
+                :tab="daySelected"
+                :prefix
+                :content-focusable="!loading && !error && !!planningLength[daySelected]"
+            >
                 <ClassicLoading
                     :loading-text="loading ? t('Loading content ...') : undefined"
                     :error-text="error ? t(`Error`) : undefined"
@@ -59,12 +53,12 @@
                         :key="period.id"
                     >
                         <template v-if="planning[daySelected][period.id].length">
-                            <div
+                            <h3
                                 :id="'planning-period-' + period.id"
                                 class="fw-bold my-3 pb-2 border-bottom border-primary text-primary"
                             >
                                 {{ period.title }}
-                            </div>
+                            </h3>
                             <div
                                 v-for="planningItem in planning[daySelected][period.id]"
                                 :id="
@@ -116,7 +110,7 @@
                         </template>
                     </div>
                 </template>
-            </div>
+            </OctopusTabsPanel>
         </div>
     </section>
 </template>
@@ -127,13 +121,21 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 import classicApi from "../../../api/classicApi";
 import {useImageProxy} from "../../composable/useImageProxy";
-import {useResizePhone} from "../../composable/useResizePhone";
 import ClassicLoading from "../../form/ClassicLoading.vue";
 import { computed, nextTick, onMounted, ref, Ref } from "vue";
 import { Canal } from "@/stores/class/radio/canal";
 import { PlanningOccurrence } from "@/stores/class/radio/recurrence";
 import { PlanningLive } from "@/stores/class/radio/live";
 import { useI18n } from "vue-i18n";
+import OctopusTabsList from "@/components/nav/OctopusTabsList.vue";
+import OctopusTabsPanel from "@/components/nav/OctopusTabsPanel.vue";
+import { TabItem, useOctopusTabs } from "@/components/composable/nav/useOctopusTabs";
+
+interface Day extends TabItem {
+    dayOfWeek: string;
+    iso: string;
+    current?: 'date';
+}
 
 //Props 
 const props = defineProps({
@@ -150,58 +152,35 @@ const planning: Ref<{
 }> = ref({});
 const planningLength: Ref<{ [key: number]: number }> = ref({});
 const daySelected = ref(dayjs().valueOf());
-const arrayDays: Ref<Array<{
-    title: string;
-    date: number;
-    dayOfWeek: string;
-    iso: string;
-}>> = ref([]);
+const arrayDays: Ref<Array<Day>> = ref([]);
 const loading = ref(true);
 const error = ref(false);
-const showAllDays = ref(false);
 
 
 //Composables
 const { t } = useI18n();
-const { isPhone } = useResizePhone();
 const { useProxyImageUrl } = useImageProxy();
+const { prefix } = useOctopusTabs();
+
+const MORNING_CUTOFF = 14;
+const AFTERNOON_CUTOFF = 19;
 
 //Computed
 const periodOfDay = computed(() => {
     return [{
         id: "morning",
-        title: t("Morning"),
-        end: dayjs(daySelected.value)
-            .hour(14)
-            .minute(0)
-            .second(0)
-            .millisecond(0),
+        title: t("Morning")
     }, {
         id: "afternoon",
-        title: t("Afternoon"),
-        end: dayjs(daySelected.value)
-            .hour(19)
-            .minute(0)
-            .second(0)
-            .millisecond(0),
+        title: t("Afternoon")
     }, {
         id: "evening",
-        title: t("Evening"),
-        end: dayjs(daySelected.value).endOf("date"),
+        title: t("Evening")
     }];
 });
 
-const displayArrayDays = computed(() => {
-    if(isPhone.value && !showAllDays.value){
-        return arrayDays.value.slice(6, 9);
-    }
-    return arrayDays.value;
-});
-
-onMounted(()=>{
-    createArrayDays();
-    fetchOccurrences();
-});
+createArrayDays();
+onMounted(fetchOccurrences);
 
 //Mounted
 function scrollToElement(id: string) {
@@ -216,8 +195,9 @@ function scrollToElement(id: string) {
 function changePeriodNow() {
     const now = dayjs();
     if (!dayjs(daySelected.value).isSame(now, "day")) {
-        changeDate(arrayDays.value[7].date);
+        daySelected.value = dayjs().startOf('day').valueOf();
     }
+
     nextTick(() => {
         if (!planningLength.value[daySelected.value]) {
             return;
@@ -252,15 +232,17 @@ function createArrayDays() {
     // Display this week, plus the next
     const[start, end] = getPeriod();
     let current = start;
+    const today = dayjs().startOf('day');
 
-    daySelected.value = dayjs().startOf('day').valueOf();
+    daySelected.value = today.valueOf();
 
     while (current.isBefore(end)) {
         arrayDays.value.push({
-            title: current.format("D/MM"),
+            label: current.format("D/MM"),
             dayOfWeek: current.format("dddd"),
-            date: current.valueOf(),
+            id: current.valueOf(),
             iso: current.format("MM-DD"),
+            current: current.isSame(today, 'day') ? 'date' : undefined
         });
 
         current = current.add(1, 'day');
@@ -316,7 +298,6 @@ async function fetchOccurrences(): Promise<void> {
 
     try {
         const occurrences = await fetchOccurrencesAndLives();
-        let periodDayIndex = 0;
         for (const occ of occurrences) {
             // Ignore occurrences with no podcast
             if (!occ.podcastId) {
@@ -324,13 +305,7 @@ async function fetchOccurrences(): Promise<void> {
             }
 
             // Find period of day
-            if (!dayjs(occ.startDate).isBefore(periodOfDay.value[periodDayIndex].end)) {
-                periodDayIndex += 1;
-
-                if (periodDayIndex >= periodOfDay.value.length) {
-                    periodDayIndex = 0;
-                }
-            }
+            const periodDayIndex = getPeriodDayFor(occ.startDate);
 
             // Find day
             const day = dayjs(occ.startDate).startOf('day').valueOf();
@@ -367,9 +342,15 @@ async function fetchOccurrences(): Promise<void> {
     loading.value = false;
 }
 
-function changeDate(date: number) {
-    daySelected.value = date;
-    //fetchOccurrences();
+function getPeriodDayFor(date: string): number {
+    const hour = dayjs(date).hour();
+    if (hour < MORNING_CUTOFF) {
+        return 0;
+    }
+    if (hour < AFTERNOON_CUTOFF) {
+        return 1;
+    }
+    return 2;
 }
 
 function dateDisplay(date: Date): string {
@@ -392,26 +373,6 @@ function dateDisplay(date: Date): string {
         width: 80px;
         height: 80px;
         margin: 0.5rem 0.5rem 0 0 !important;
-    }
-}
-
-.button-date {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
-    padding: 0.5rem;
-
-    &.bg-primary{
-        color: var(--octopus-color-on-primary) !important;
-    }
-
-    &:hover {
-        background: var(--octopus-secondary);
-    }
-
-    @media (width <= 960px) {
-        width: 80px;
     }
 }
 </style>

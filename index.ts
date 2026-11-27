@@ -22,6 +22,7 @@ export const getPageLogout= () => import("./src/components/pages/PageLogout.vue"
 
 //Misc
 export const getAccordion = () => import("./src/components/misc/ClassicAccordion.vue");
+/** @deprecated Use OctopusTabsList & OctopusTabsPanel */
 export const getNav = () => import("./src/components/misc/ClassicNav.vue");
 export const getProgressBar = () => import("./src/components/misc/ProgressBar.vue");
 export const getSpinner = () => import("./src/components/misc/ClassicSpinner.vue");
@@ -41,6 +42,7 @@ export const getClassicModalInBody = () => import("./src/components/misc/modal/C
 export const getClassicHelpButton = () => import("./src/components/misc/ClassicHelpButton.vue");
 export const getClassicAlert = () => import("./src/components/misc/ClassicAlert.vue");
 export const getClassicBigChip = () => import("./src/components/misc/ClassicBigChip.vue");
+/** @deprecated Use OctopusTabsList & OctopusTabsPanel */
 export const getClassicTabs = () => import("./src/components/misc/ClassicTabs.vue");
 
 import ClassicDataTable, { type ClassicDataTableHeader } from "./src/components/misc/ClassicDataTable.vue";
@@ -48,6 +50,7 @@ import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue
 import SkipToContent from "./src/components/misc/SkipToContent.vue";
 import ExternalLink from "./src/components/misc/ExternalLink.vue";
 import LoadingOverlay from "./src/components/misc/LoadingOverlay.vue";
+/** @deprecated Use OctopusTabsList & OctopusTabsPanel */
 export { type Tab } from "./src/components/misc/ClassicTabs.vue";
 
 export {

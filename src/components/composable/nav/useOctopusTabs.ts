@@ -7,10 +7,22 @@ export interface TabItem {
     id: TabID;
     /** Label displayed for the item */
     label: string;
+    /** Indicate this is the current element (current date, step, etc) */
+    current?: 'date'|'step'|'page'|'location'|'time'|'true'|'false';
 }
 
 export function getTabId(prefix: string, tab: TabID): string {
-    return `tab-item-${prefix}-${tab}`;
+    const id = String(tab).replace(/\s+/g, '-');
+    return `tab-item-${prefix}-${id}`;
+}
+
+export function getPanelId(prefix: string, tab?: TabID): string {
+    if (tab === undefined) {
+        return `tab-panel-${prefix}`;
+    } else {
+        const id = String(tab).replace(/\s+/g, '-');
+        return `tab-panel-${prefix}-${id}`;
+    }
 }
 
 export const useOctopusTabs = () => {
@@ -18,6 +30,7 @@ export const useOctopusTabs = () => {
 
     return {
         prefix,
-        getTabId: (tab: TabID) => getTabId(prefix, tab)
-    }
-}
+        getTabId: (tab: TabID) => getTabId(prefix, tab),
+        getPanelId: (tab?: TabID) => getPanelId(prefix, tab)
+    };
+};
