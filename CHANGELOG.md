@@ -2,10 +2,17 @@
 
 ## 42.4.0 (En cours)
 
+### Features
+
+- **[14510]** - Affichage du programme radio sur deux semaines
+
 ### Accessibility
 
 - Amélioration retour visuel pour élément sélectionné
 - Correction petit soucis d'accessibilité avec logo dans TopBar
+- Ajout OctopusTabsList, un composant d'onglets accessible
+
+[14510]: https://trac.saooti.net/ticket/14510
 
 ## 42.3.5 (26/11/2026)
 

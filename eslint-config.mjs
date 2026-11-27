@@ -46,7 +46,7 @@ export default typescriptEslint.config(
       "@stylistic/no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 
       // Number of attributes per line (increase because sometimes two is not a lot)
-      "vue/max-attributes-per-line": ['warn', { singleline: 2 } ],
+      "vue/max-attributes-per-line": ['warn', { singleline: 2 }],
 
       // Disable default values required for props
       "vue/require-default-prop": ['off'],
@@ -57,6 +57,15 @@ export default typescriptEslint.config(
       // Flags every <audio> without <track>, which RGAA does not require;
       // video captions are checked at runtime by rgaa_checker
       "vuejs-accessibility/media-has-caption": ['off'],
+
+      // Indicates some components are deprecated
+      "no-restricted-imports": ['warn', {
+        paths: [{
+          name: '@saooti/octopus-sdk',
+          importNames: ['getNav', 'getClassicTabs', 'Tab'],
+          message: 'Deprecated: use OctopusTabsList / OctopusTabsPanel'
+        }]
+      }],
 
       "@typescript-eslint/no-unused-vars": "warn"
     }
