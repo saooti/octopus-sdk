@@ -50,6 +50,8 @@ import ClassicNotifications from "./src/components/misc/ClassicNotifications.vue
 import SkipToContent from "./src/components/misc/SkipToContent.vue";
 import ExternalLink from "./src/components/misc/ExternalLink.vue";
 import LoadingOverlay from "./src/components/misc/LoadingOverlay.vue";
+import OctopusTabsList from "./src/components/nav/OctopusTabsList.vue";
+import OctopusTabsPanel from "./src/components/nav/OctopusTabsPanel.vue";
 /** @deprecated Use OctopusTabsList & OctopusTabsPanel */
 export { type Tab } from "./src/components/misc/ClassicTabs.vue";
 
@@ -59,7 +61,9 @@ export {
     ClassicNotifications,
     SkipToContent,
     ExternalLink,
-    LoadingOverlay
+    LoadingOverlay,
+    OctopusTabsList,
+    OctopusTabsPanel
 }
 
 // Buttons
@@ -156,6 +160,7 @@ export { useSticky } from "./src/components/composable/useSticky";
 export { useSubOrganisations, type SubOrganisation } from "./src/components/composable/useSubOrganisations";
 export { useAppleVideo } from "./src/components/composable/useAppleVideo";
 export { useSelectableIcons, type IconName } from "./src/components/composable/useSelectableIcons";
+export { useOctopusTabs, getTabId, getPanelId, type TabID, type TabItem } from "./src/components/composable/nav/useOctopusTabs";
 
 //helper
 export { getLanguage } from "./src/helper/language";
