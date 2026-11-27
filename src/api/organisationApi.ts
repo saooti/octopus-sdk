@@ -13,7 +13,7 @@ import { useCacheStore } from "@/stores/CacheStore";
 async function get(organisationId: string): Promise<Organisation> {
     return classicApi.fetchData<Organisation>({
         api: ModuleApi.DEFAULT,
-        path: 'organisation/' + organisationId
+        path: 'organisation/' + encodeURIComponent(organisationId)
     });
 }
 
@@ -35,7 +35,7 @@ async function getAllById(organisationIds: Array<string>): Promise<Record<string
 async function getAttributes(organisationId: string): Promise<OrganisationAttributes> {
     return classicApi.fetchData<OrganisationAttributes>({
         api: ModuleApi.DEFAULT,
-        path: 'organisation/attributes/' + organisationId
+        path: 'organisation/attributes/' + encodeURIComponent(organisationId)
     });
 }
 
@@ -49,7 +49,7 @@ async function getVideoConfig(organisationId: string): Promise<VideoConfig> {
     return cacheStore.getData(`org-video-config-${organisationId}`, () => {
         return classicApi.fetchData<VideoConfig>({
             api: ModuleApi.DEFAULT,
-            path:"video/config/" + encodeURI(organisationId)
+            path:"video/config/" + encodeURIComponent(organisationId)
         });
     });
 }
