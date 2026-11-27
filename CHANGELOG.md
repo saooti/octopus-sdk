@@ -5,6 +5,7 @@
 ### Accessibility
 
 - Amélioration retour visuel pour élément sélectionné
+- Correction petit soucis d'accessibilité avec logo dans TopBar
 
 ## 42.3.5 (26/11/2026)
 

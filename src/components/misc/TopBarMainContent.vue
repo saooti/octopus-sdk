@@ -11,23 +11,22 @@
                 :title="t('Home')"
             >
                 <img
-                    v-if="!filterStore.filterOrgaId || '' === imgUrl"
+                    v-if="showClientLogo"
+                    :src="useProxyImageUrl(imgUrl, '', '80')"
+                    aria-hidden="true"
+                    alt=""
+                    class="client-logo"
+                    :class="generalStore.platformEducation ? 'education-logo' : ''"
+                    @error="clientLogoError = true"
+                >
+                <img
+                    v-else
                     :src="logoUrl"
                     aria-hidden="true"
                     alt=""
                     width="140"
                     height="50"
-                    title="Logo"
                     :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
-                >
-                <img
-                    v-else
-                    :src="useProxyImageUrl(imgUrl, '', '80')"
-                    aria-hidden="true"
-                    alt=""
-                    class="client-logo"
-                    title="Logo"
-                    :class="generalStore.platformEducation ? 'education-logo' : ''"
                 >
             </router-link>
 
@@ -53,7 +52,7 @@
             ]"
         >
             <!-- Logo to the right -->
-            <template v-if="filterStore.filterOrgaId && '' !== imgUrl">
+            <template v-if="showClientLogo">
                 <img
                     v-if="authStore.isGarRole"
                     :src="logoUrl"
@@ -62,7 +61,6 @@
                     width="100"
                     height="29"
                     class="ms-2"
-                    title="Logo"
                     :class="generalStore.platformEducation ? 'education-logo' : 'octopus-logo'"
                 >
                 <ExternalLink
@@ -176,7 +174,7 @@ import {useImageProxy} from "../composable/useImageProxy";
 import { useFilterStore } from "../../stores/FilterStore";
 import { useAuthStore } from "../../stores/AuthStore";
 import ClassicPopover from "../misc/ClassicPopover.vue";
-import { defineAsyncComponent, computed, ref } from "vue";
+import { defineAsyncComponent, computed, ref, watch } from "vue";
 import { useGeneralStore } from "../../stores/GeneralStore";
 import { useI18n } from "vue-i18n";
 import RightsScopeSelector from "./RightsScopeSelector.vue";
@@ -264,12 +262,22 @@ const logoUrl = computed(() =>{
         ? "/img/logo_octopus_bubble.svg"
         : "/img/logo_saooti_play_white.svg";
 });
-const imgUrl = computed(() =>{
-    if (!filterStore.filterImgUrl?.includes("emptypodcast")){
-        return `${filterStore.filterImgUrl}`;
+/** Organisation logo, empty when unknown or a placeholder */
+const imgUrl = computed((): string => {
+    const url = filterStore.filterImgUrl;
+    if (!url || url.includes("emptypodcast")) {
+        return "";
     }
-    return "";
+    return url;
 });
+/** Set when the organisation logo fails to load, to fall back on the default logo */
+const clientLogoError = ref(false);
+watch(imgUrl, () => {
+    clientLogoError.value = false;
+});
+const showClientLogo = computed((): boolean =>
+    !!filterStore.filterOrgaId && '' !== imgUrl.value && !clientLogoError.value
+);
  
 //Methods
 function getQueriesRouter(routeName: string) {
