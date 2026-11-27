@@ -10,6 +10,7 @@
 
 - Amélioration retour visuel pour élément sélectionné
 - Correction petit soucis d'accessibilité avec logo dans TopBar
+- Ajout OctopusTabsList, un composant d'onglets accessible
 
 [14510]: https://trac.saooti.net/ticket/14510
 
